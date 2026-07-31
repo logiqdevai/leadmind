@@ -16,6 +16,7 @@ import { SmtpMailService } from '@/integrations/notifications/smtp/services/mail
 import { CallsService } from '@/integrations/notifications/twillio/services/calls.service';
 import { TwillioSmsService } from '@/integrations/notifications/twillio/services/sms.service';
 import { EmailConfig } from '@/shared/config/email';
+import { hasUsableContactEmail, normalizeContactEmail } from '@/shared/utils/contact-email.util';
 import { sanitizeEmailHtml } from '@/shared/utils/sanitize-html.util';
 import { EmailCredentialsService } from '@/modules/integrations/services/email-credentials.service';
 import { EmailProviderTarget } from '@/modules/integrations/interfaces/email-credentials.interface';
@@ -25,8 +26,8 @@ import {
     parseEmailProviderMetadata,
 } from '@/modules/outreach/utils/email-provider-allocation.util';
 import { parseSenderProfileMetadata } from '@/modules/outreach/utils/sender-profile-metadata.util';
+import { formatSmtpFromAddress } from '@/integrations/notifications/smtp/utils/format-smtp-from-address.util';
 import { OutreachRenderService } from './outreach-render.service';
-
 export interface DeliveredMessage {
     provider_message_id: string | null;
     integration_metadata?: Record<string, string>;
@@ -56,6 +57,13 @@ export class MessageSendService {
             `Deliver outreach message=${message.uuid} channel=${message.channel} user=${message.user_uuid} contact=${message.contact_uuid}`,
         );
 
+        if (message.channel === Channel.EMAIL && !hasUsableContactEmail(message.contact.email)) {
+            this.logger.warn(
+                `Skip email send message=${message.uuid} contact=${message.contact_uuid}: no usable email (raw=${JSON.stringify(message.contact.email)})`,
+            );
+            throw new Error('Contact has no email');
+        }
+
         if (message.channel === Channel.PHONE_CALL) {
             if (!message.contact.phone) {
                 throw new Error('Contact has no phone');
@@ -84,9 +92,7 @@ export class MessageSendService {
         );
 
         if (message.channel === Channel.EMAIL) {
-            if (!message.contact.email) {
-                throw new Error('Contact has no email');
-            }
+            const toEmail = normalizeContactEmail(message.contact.email)!;
             let html = sanitizeEmailHtml(rendered.content);
             if (message.campaign_uuid) {
                 html = await this.appendUnsubscribeFooter(message.contact_uuid, html);
@@ -99,20 +105,23 @@ export class MessageSendService {
             }
             const replyTo = await this.resolveReplyTo(message);
             const createEmail = {
-                to: message.contact.email,
+                to: toEmail,
                 subject: rendered.subject ?? 'Outreach message',
                 html,
                 headers,
                 replyTo,
             };
 
-            const target =
-                providerOverride ??
-                parseEmailProviderMetadata(message.metadata) ??
-                (await this.emailCredentialsService.resolveDefaultTarget(message.user_uuid));
+            const metadataProvider = parseEmailProviderMetadata(message.metadata);
+            const defaultTarget =
+                providerOverride || metadataProvider
+                    ? null
+                    : await this.emailCredentialsService.resolveDefaultTarget(message.user_uuid);
+
+            const target = providerOverride ?? metadataProvider ?? defaultTarget;
 
             this.logger.log(
-                `Email send message=${message.uuid} to=${message.contact.email} subject="${rendered.subject ?? 'Outreach message'}" provider=${target?.provider ?? 'none'} account=${target?.account ?? 'none'} replyTo=${replyTo}`,
+                `Email send message=${message.uuid} to=${toEmail} subject="${rendered.subject ?? 'Outreach message'}" provider=${target?.provider ?? 'none'} account=${target?.account ?? 'none'} replyTo=${replyTo}`,
             );
 
             const { result, deliveryTarget } = await this.sendEmailWithProvider(
@@ -167,15 +176,16 @@ export class MessageSendService {
         target: EmailProviderTarget | null,
     ): Promise<{ result: any; deliveryTarget: EmailProviderTarget }> {
         if (target?.provider === ExternalIntegrationProvider.SMTP) {
-            this.logger.log(
-                `Using SMTP account=${target.account} user=${user_uuid} to=${createEmail.to}`,
-            );
             const smtpConfig = await this.emailCredentialsService.getSmtpConfig(
                 user_uuid,
                 target.account,
             );
+            const from = formatSmtpFromAddress(
+                smtpConfig.fromEmail,
+                smtpConfig.fromName,
+            );
             const result = await this.smtpMailService.sendEmail(
-                { ...createEmail, from: smtpConfig.fromEmail },
+                { ...createEmail, from },
                 smtpConfig,
             );
             return { result, deliveryTarget: target };
@@ -185,11 +195,14 @@ export class MessageSendService {
             this.logger.log(
                 `Using Resend account=${target.account} user=${user_uuid} to=${createEmail.to}`,
             );
-            const apiKey = await this.emailCredentialsService.getResendApiKey(
-                user_uuid,
-                target.account,
+            const [apiKey, fromEmail] = await Promise.all([
+                this.emailCredentialsService.getResendApiKey(user_uuid, target.account),
+                this.emailCredentialsService.getResendFromEmail(user_uuid, target.account),
+            ]);
+            const result = await this.resendMailService.sendEmail(
+                { ...createEmail, from: fromEmail },
+                apiKey,
             );
-            const result = await this.resendMailService.sendEmail(createEmail, apiKey);
             return { result, deliveryTarget: target };
         }
 

@@ -28,6 +28,7 @@ import { AiDraftMessageDto } from './dto/ai-draft-message.dto';
 import { BulkTriggerScoreDto } from './dto/bulk-trigger-score.dto';
 import { CreateContactDto } from './dto/create-contact.dto';
 import { EnrichContactDto } from './dto/enrich-contact.dto';
+import { BulkDeleteContactsDto } from './dto/bulk-delete-contacts.dto';
 import { BulkEnrichContactsDto } from './dto/bulk-enrich-contacts.dto';
 import { BulkScrapeContactEmailsDto } from './dto/bulk-scrape-contact-emails.dto';
 import { ListContactsDto } from './dto/list-contacts.dto';
@@ -78,6 +79,15 @@ import {
     extractEmailsFromCrawledPage,
     pickBestContactEmail,
 } from './utils/contact-website-email.utils';
+import {
+    ensureContactFilterLink,
+    findOwnedContactByEmail,
+    linkContactToFilter,
+    loadLinkedFiltersForScore,
+    combineFiltersForScore,
+    mergeContactsIntoCanonical,
+    shapeContactFilterFields,
+} from './utils/contact-filter-link.utils';
 
 @Injectable()
 export class ContactsService {
@@ -104,11 +114,22 @@ export class ContactsService {
             throw new NotFoundException('Filter not found');
         }
 
+        const email = dto.email?.trim() || undefined;
+        if (email) {
+            const existing = await findOwnedContactByEmail(this.prisma, user_uuid, email);
+            if (existing) {
+                await linkContactToFilter(this.prisma, existing, dto.filter_uuid);
+                await this.applyManualCreateExtras(user_uuid, existing.uuid, dto);
+                await this.reindexContact(existing.uuid);
+                return this.findOne(user_uuid, existing.uuid);
+            }
+        }
+
         const lead = await this.prisma.lead.create({
             data: {
                 source_type: SourceType.MANUAL,
                 name: dto.name,
-                email: dto.email,
+                email,
                 phone: dto.phone,
                 company: dto.company,
                 website: dto.website,
@@ -140,6 +161,8 @@ export class ContactsService {
                     : {}),
             },
         });
+
+        await ensureContactFilterLink(this.prisma, contact.uuid, dto.filter_uuid);
 
         if (dto.notes) {
             await this.prisma.interaction.create({
@@ -191,7 +214,9 @@ export class ContactsService {
         const base: Prisma.ContactWhereInput = {
             user_uuid,
             ...(query.status && { status: query.status }),
-            ...(query.filter_uuid && { filter_uuid: query.filter_uuid }),
+            ...(query.filter_uuid && {
+                contact_filters: { some: { filter_uuid: query.filter_uuid } },
+            }),
             ...(query.lead_uuid && { lead_uuid: query.lead_uuid }),
             ...(query.source_type && { lead: { source_type: query.source_type } }),
             ...(query.search && {
@@ -303,6 +328,10 @@ export class ContactsService {
         const where = this.buildWhereInput(user_uuid, query);
         this.applyAudienceFilters(where, query);
 
+        if (query.contact_list_uuid) {
+            await this.applyContactListIncludeFilter(where, user_uuid, query.contact_list_uuid);
+        }
+
         if (query.exclude_list_uuid) {
             const list = await this.prisma.contactList.findFirst({
                 where: { uuid: query.exclude_list_uuid, user_uuid },
@@ -334,6 +363,10 @@ export class ContactsService {
                 include: {
                     tags: true,
                     lead: true,
+                    filter: { select: { uuid: true, name: true } },
+                    contact_filters: {
+                        include: { filter: { select: { uuid: true, name: true } } },
+                    },
                     contact_scores: {
                         include: { scoring_instruction: { select: { uuid: true, name: true } } },
                     },
@@ -346,10 +379,21 @@ export class ContactsService {
         ]);
 
         return {
-            data: data.map((c) => ({
-                ...c,
-                tags: c.tags.map((t) => t.tag),
-            })),
+            data: data.map((c) => {
+                const { contact_filters, filter, ...rest } = c;
+                const shaped = shapeContactFilterFields({
+                    ...c,
+                    filter,
+                    contact_filters,
+                });
+                return {
+                    ...rest,
+                    filter: shaped.filter,
+                    also_found_by: shaped.also_found_by,
+                    filters: shaped.filters,
+                    tags: c.tags.map((t) => t.tag),
+                };
+            }),
             total,
             page,
             limit,
@@ -377,6 +421,17 @@ export class ContactsService {
                         },
                     },
                 },
+                contact_filters: {
+                    include: {
+                        filter: { select: { uuid: true, name: true } },
+                    },
+                },
+                list_memberships: {
+                    include: {
+                        list: { select: { uuid: true, title: true } },
+                    },
+                    orderBy: { created_at: 'asc' },
+                },
                 interactions: {
                     orderBy: { created_at: 'desc' },
                     take: 20,
@@ -400,7 +455,7 @@ export class ContactsService {
         if (!contact) {
             throw new NotFoundException(`Contact ${uuid} not found`);
         }
-        const { filter: rawFilter, ...rest } = contact;
+        const { filter: rawFilter, contact_filters, list_memberships, ...rest } = contact;
         const filter = rawFilter
             ? (() => {
                   const { filter_scoring_instructions, ...frest } = rawFilter;
@@ -412,39 +467,132 @@ export class ContactsService {
                   };
               })()
             : null;
+        const shaped = shapeContactFilterFields({
+            ...contact,
+            filter: rawFilter,
+            contact_filters,
+        });
         return {
             ...rest,
             filter,
+            also_found_by: shaped.also_found_by,
+            filters: shaped.filters,
+            lists: list_memberships.map((m) => ({
+                uuid: m.list.uuid,
+                title: m.list.title,
+            })),
             tags: contact.tags.map((t) => t.tag),
         };
     }
 
     async update(user_uuid: string, uuid: string, dto: UpdateContactDto) {
         await this.requireOwnedContact(user_uuid, uuid);
+
+        if (dto.email !== undefined) {
+            const email = dto.email.trim() || null;
+            if (email) {
+                const existingByEmail = await findOwnedContactByEmail(
+                    this.prisma,
+                    user_uuid,
+                    email,
+                );
+                if (existingByEmail && existingByEmail.uuid !== uuid) {
+                    await mergeContactsIntoCanonical(
+                        this.prisma,
+                        this.elasticsearchService,
+                        user_uuid,
+                        uuid,
+                        existingByEmail.uuid,
+                    );
+                    const data: Prisma.ContactUpdateInput = { email };
+                    if (dto.notes !== undefined) {
+                        data.notes = dto.notes;
+                    }
+                    await this.prisma.contact.update({
+                        where: { uuid: existingByEmail.uuid },
+                        data,
+                    });
+                    if (dto.list_uuids !== undefined) {
+                        await this.replaceContactListMemberships(
+                            user_uuid,
+                            existingByEmail.uuid,
+                            dto.list_uuids,
+                        );
+                    }
+                    await this.reindexContact(existingByEmail.uuid);
+                    return this.findOne(user_uuid, existingByEmail.uuid);
+                }
+            }
+        }
+
+        return this.applyUpdateToContact(user_uuid, uuid, dto);
+    }
+
+    private async applyUpdateToContact(
+        user_uuid: string,
+        uuid: string,
+        dto: UpdateContactDto,
+    ) {
         const data: Prisma.ContactUpdateInput = {};
         if (dto.notes !== undefined) {
             data.notes = dto.notes;
         }
-        if (dto.filter_uuid !== undefined) {
-            const filter = await this.prisma.filter.findFirst({
-                where: { uuid: dto.filter_uuid, user_uuid },
-            });
-            if (!filter) {
-                throw new NotFoundException('Filter not found');
-            }
-            data.filter = { connect: { uuid: dto.filter_uuid } };
+        if (dto.email !== undefined) {
+            data.email = dto.email.trim() || null;
         }
         for (const key of CONTACT_PROFILE_UPDATE_KEYS) {
+            if (key === 'email') continue;
             if (dto[key] !== undefined) {
                 data[key] = dto[key] as never;
             }
         }
-        await this.prisma.contact.update({
-            where: { uuid },
-            data,
-        });
+        if (Object.keys(data).length > 0) {
+            await this.prisma.contact.update({
+                where: { uuid },
+                data,
+            });
+        }
+        if (dto.list_uuids !== undefined) {
+            await this.replaceContactListMemberships(user_uuid, uuid, dto.list_uuids);
+        }
         await this.reindexContact(uuid);
         return this.findOne(user_uuid, uuid);
+    }
+
+    private async replaceContactListMemberships(
+        user_uuid: string,
+        contact_uuid: string,
+        list_uuids: string[],
+    ): Promise<void> {
+        const unique = [...new Set(list_uuids)];
+        if (unique.length > 0) {
+            const lists = await this.prisma.contactList.findMany({
+                where: { user_uuid, uuid: { in: unique } },
+                select: { uuid: true },
+            });
+            if (lists.length !== unique.length) {
+                const found = new Set(lists.map((l) => l.uuid));
+                const missing = unique.filter((id) => !found.has(id));
+                throw new NotFoundException(`List(s) not found: ${missing.join(', ')}`);
+            }
+        }
+
+        await this.prisma.contactListMember.deleteMany({
+            where: {
+                contact_uuid,
+                ...(unique.length > 0 ? { list_uuid: { notIn: unique } } : {}),
+            },
+        });
+
+        if (unique.length === 0) return;
+
+        await this.prisma.contactListMember.createMany({
+            data: unique.map((list_uuid) => ({
+                list_uuid,
+                contact_uuid,
+            })),
+            skipDuplicates: true,
+        });
     }
 
     async remove(user_uuid: string, uuid: string): Promise<{ uuid: string }> {
@@ -452,6 +600,32 @@ export class ContactsService {
         await this.prisma.contact.delete({ where: { uuid } });
         await this.elasticsearchService.deleteContact(uuid);
         return { uuid };
+    }
+
+    async removeMany(
+        user_uuid: string,
+        dto: BulkDeleteContactsDto,
+    ): Promise<{ deleted: number }> {
+        const unique = [...new Set(dto.uuids)];
+        const rows = await this.prisma.contact.findMany({
+            where: { user_uuid, uuid: { in: unique } },
+            select: { uuid: true },
+        });
+        if (rows.length !== unique.length) {
+            const found = new Set(rows.map((r) => r.uuid));
+            const missing = unique.filter((u) => !found.has(u));
+            throw new NotFoundException(`Contact(s) not found: ${missing.join(', ')}`);
+        }
+
+        await this.prisma.contact.deleteMany({
+            where: { user_uuid, uuid: { in: unique } },
+        });
+
+        await Promise.all(
+            unique.map((uuid) => this.elasticsearchService.deleteContact(uuid)),
+        );
+
+        return { deleted: unique.length };
     }
 
     async updateStatus(
@@ -489,6 +663,41 @@ export class ContactsService {
         await this.reindexContact(uuid);
 
         return updated;
+    }
+
+    buildPromoteToContactedIfNewOps(
+        contact_uuid: string,
+        user_uuid: string,
+        trigger: string,
+        currentStatus: LeadStatus,
+    ): Prisma.PrismaPromise<unknown>[] {
+        if (currentStatus !== LeadStatus.NEW) {
+            return [];
+        }
+
+        return [
+            this.prisma.contact.update({
+                where: { uuid: contact_uuid },
+                data: { status: LeadStatus.CONTACTED },
+            }),
+            this.prisma.interaction.create({
+                data: {
+                    contact_uuid,
+                    user_uuid,
+                    type: InteractionType.STATUS_CHANGE,
+                    status_change: {
+                        from: LeadStatus.NEW,
+                        to: LeadStatus.CONTACTED,
+                        auto: true,
+                        trigger,
+                    },
+                },
+            }),
+        ];
+    }
+
+    async syncContactSearchIndex(contact_uuid: string): Promise<void> {
+        await this.reindexContact(contact_uuid);
     }
 
     async updateTags(
@@ -646,11 +855,19 @@ export class ContactsService {
             throw new NotFoundException(`Lead ${lead_uuid} not found`);
         }
 
-        const existing = await this.prisma.contact.findFirst({
+        const existingByLead = await this.prisma.contact.findFirst({
             where: { user_uuid, lead_uuid },
         });
-        if (existing) {
-            throw new ConflictException(`Contact for lead ${lead_uuid} already exists`);
+        if (existingByLead) {
+            return this.findOne(user_uuid, existingByLead.uuid);
+        }
+
+        const email = lead.email?.trim();
+        if (email) {
+            const existingByEmail = await findOwnedContactByEmail(this.prisma, user_uuid, email);
+            if (existingByEmail) {
+                return this.findOne(user_uuid, existingByEmail.uuid);
+            }
         }
 
         try {
@@ -669,6 +886,12 @@ export class ContactsService {
                 error instanceof Prisma.PrismaClientKnownRequestError &&
                 error.code === 'P2002'
             ) {
+                const raced = await this.prisma.contact.findFirst({
+                    where: { user_uuid, lead_uuid },
+                });
+                if (raced) {
+                    return this.findOne(user_uuid, raced.uuid);
+                }
                 throw new ConflictException(`Contact for lead ${lead_uuid} already exists`);
             }
             throw error;
@@ -682,19 +905,14 @@ export class ContactsService {
     ): Promise<{ jobId: string }> {
         const row = await this.prisma.contact.findFirst({
             where: { uuid, user_uuid },
-            include: {
-                filter: {
-                    include: {
-                        filter_scoring_instructions: { select: { scoring_instruction_uuid: true } },
-                    },
-                },
-            },
         });
         if (!row) {
             throw new NotFoundException(`Contact ${uuid} not found`);
         }
+        const linkedFilters = await loadLinkedFiltersForScore(this.prisma, uuid);
+        const combined = combineFiltersForScore(linkedFilters);
         const allowed =
-            row.filter?.filter_scoring_instructions.map((x) => x.scoring_instruction_uuid) ?? [];
+            combined?.filter_scoring_instructions.map((x) => x.scoring_instruction_uuid) ?? [];
         return enqueueContactScoreJob(
             this.aiProcessQueue,
             this.prisma,
@@ -743,13 +961,6 @@ export class ContactsService {
 
         const contacts = await this.prisma.contact.findMany({
             where: { user_uuid, uuid: { in: contactUuids } },
-            include: {
-                filter: {
-                    include: {
-                        filter_scoring_instructions: { select: { scoring_instruction_uuid: true } },
-                    },
-                },
-            },
         });
         if (contacts.length !== contactUuids.length) {
             const found = new Set(contacts.map((c) => c.uuid));
@@ -757,13 +968,24 @@ export class ContactsService {
             throw new NotFoundException(`Contact(s) not found: ${missing.join(', ')}`);
         }
 
+        const linkedFiltersByContact = await Promise.all(
+            contacts.map(async (c) => ({
+                contact_uuid: c.uuid,
+                filters: await loadLinkedFiltersForScore(this.prisma, c.uuid),
+            })),
+        );
+        const linkedMap = new Map(
+            linkedFiltersByContact.map((row) => [row.contact_uuid, row.filters]),
+        );
+
         const jobIds: string[] = [];
         const batchPlan: Array<{ contact_uuid: string; instruction_uuids: string[] }> = [];
         let skipped_contacts = 0;
 
         for (const c of contacts) {
+            const combined = combineFiltersForScore(linkedMap.get(c.uuid) ?? []);
             const allowed =
-                c.filter?.filter_scoring_instructions.map((x) => x.scoring_instruction_uuid) ?? [];
+                combined?.filter_scoring_instructions.map((x) => x.scoring_instruction_uuid) ?? [];
             const perContactRequested = ruleUuids.filter((id) => allowed.includes(id));
             if (perContactRequested.length === 0) {
                 skipped_contacts += 1;
@@ -787,7 +1009,7 @@ export class ContactsService {
         if (dto.use_batch) {
             if (batchPlan.length === 0) {
                 throw new BadRequestException(
-                    'None of the selected contacts use any of the chosen scoring rules on their filter.',
+                    'None of the selected contacts use any of the chosen scoring rules on their linked filters.',
                 );
             }
             const { batch_id, queued } = await this.contactAiService.submitBatchScore(user_uuid, batchPlan);
@@ -796,7 +1018,7 @@ export class ContactsService {
 
         if (jobIds.length === 0) {
             throw new BadRequestException(
-                'None of the selected contacts use any of the chosen scoring rules on their filter.',
+                'None of the selected contacts use any of the chosen scoring rules on their linked filters.',
             );
         }
 
@@ -1096,6 +1318,14 @@ export class ContactsService {
         contactUuid: string,
         website: string,
     ): Promise<void> {
+        const contact = await this.prisma.contact.findFirst({
+            where: { uuid: contactUuid, user_uuid },
+            select: { uuid: true, lead_uuid: true },
+        });
+        if (!contact) {
+            return;
+        }
+
         const url = normalizeWebsiteUrl(website);
         const page = await this.websiteCrawler.crawlSinglePage(
             user_uuid,
@@ -1113,10 +1343,48 @@ export class ContactsService {
             return;
         }
 
-        await this.prisma.contact.update({
-            where: { uuid: contactUuid },
-            data: { email },
-        });
+        const existingByEmail = await findOwnedContactByEmail(this.prisma, user_uuid, email);
+        if (existingByEmail && existingByEmail.uuid !== contactUuid) {
+            await mergeContactsIntoCanonical(
+                this.prisma,
+                this.elasticsearchService,
+                user_uuid,
+                contactUuid,
+                existingByEmail.uuid,
+            );
+            await this.prisma.lead.update({
+                where: { uuid: existingByEmail.lead_uuid },
+                data: { email },
+            });
+            await this.prisma.contact.update({
+                where: { uuid: existingByEmail.uuid },
+                data: { email },
+            });
+            const lead = await this.prisma.lead.findUnique({
+                where: { uuid: existingByEmail.lead_uuid },
+            });
+            if (lead) {
+                await this.elasticsearchService.indexLead(lead);
+            }
+            await this.reindexContact(existingByEmail.uuid);
+            return;
+        }
+
+        await this.prisma.$transaction([
+            this.prisma.contact.update({
+                where: { uuid: contactUuid },
+                data: { email },
+            }),
+            this.prisma.lead.update({
+                where: { uuid: contact.lead_uuid },
+                data: { email },
+            }),
+        ]);
+
+        const lead = await this.prisma.lead.findUnique({ where: { uuid: contact.lead_uuid } });
+        if (lead) {
+            await this.elasticsearchService.indexLead(lead);
+        }
         await this.reindexContact(contactUuid);
     }
 
@@ -1145,6 +1413,38 @@ export class ContactsService {
             where: { contact_uuid: uuid },
             orderBy: { created_at: 'desc' },
         });
+    }
+
+    private async applyManualCreateExtras(
+        user_uuid: string,
+        contact_uuid: string,
+        dto: CreateContactDto,
+    ): Promise<void> {
+        if (dto.tags && dto.tags.length > 0) {
+            const existingTags = await this.prisma.contactTag.findMany({
+                where: { contact_uuid },
+                select: { tag: true },
+            });
+            const have = new Set(existingTags.map((t) => t.tag));
+            const missing = dto.tags.filter((tag) => !have.has(tag));
+            if (missing.length > 0) {
+                await this.prisma.contactTag.createMany({
+                    data: missing.map((tag) => ({ contact_uuid, tag })),
+                    skipDuplicates: true,
+                });
+            }
+        }
+
+        if (dto.notes?.trim()) {
+            await this.prisma.interaction.create({
+                data: {
+                    contact_uuid,
+                    user_uuid,
+                    type: InteractionType.NOTE,
+                    content: dto.notes.trim(),
+                },
+            });
+        }
     }
 
     private async requireOwnedContact(user_uuid: string, uuid: string): Promise<Contact> {

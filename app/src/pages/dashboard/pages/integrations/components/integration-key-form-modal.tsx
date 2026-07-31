@@ -22,12 +22,19 @@ import {
     providerAllowsMultipleAccounts,
     shouldExposeIntegrationKeyDisplayValue,
     suggestNextAccountLabel,
+    suggestAccountForKeyType,
 } from "@/features/integrations/constants/integration-key-types";
 import type {
     IntegrationKey,
     IntegrationKeyType,
     IntegrationProviderView,
 } from "@/features/integrations/interfaces/integrations.interface";
+import { cn } from "@/lib/utils";
+
+const borderedFieldClass = cn(
+    "rounded-md border border-border bg-surface-primary",
+    "focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/40",
+);
 
 interface IntegrationKeyFormModalProps {
     isOpen: boolean;
@@ -109,7 +116,11 @@ export function IntegrationKeyFormModal({
     useEffect(() => {
         if (!isOpen) return;
         setKeyType(keyItem?.key_type ?? initialKeyType ?? defaultKeyType);
-        setAccount(keyItem?.account ?? initialAccount ?? suggestedAccount);
+        setAccount(
+            keyItem?.account ??
+                initialAccount ??
+                suggestAccountForKeyType(providerView.provider, providerView.keys, keyItem?.key_type ?? initialKeyType ?? defaultKeyType),
+        );
         setSecret(
             keyItem &&
                 shouldExposeIntegrationKeyDisplayValue(
@@ -123,6 +134,15 @@ export function IntegrationKeyFormModal({
         setAccountError(null);
         setSecretError(null);
     }, [isOpen, initialAccount, keyItem, initialKeyType, defaultKeyType, suggestedAccount, providerView.provider]);
+
+    useEffect(() => {
+        if (!isOpen || isEdit) return;
+        if (providerView.provider === "RESEND" && keyType === "FROM_EMAIL") {
+            setAccount(
+                suggestAccountForKeyType(providerView.provider, providerView.keys, keyType),
+            );
+        }
+    }, [isEdit, isOpen, keyType, providerView.keys, providerView.provider]);
 
     const pending = createKey.isPending || updateKey.isPending;
     const envPreview = formatIntegrationKeyEnvName(
@@ -207,7 +227,7 @@ export function IntegrationKeyFormModal({
                                     }
                                 >
                                     <Label>Credential type</Label>
-                                    <Select.Trigger>
+                                    <Select.Trigger className={borderedFieldClass}>
                                         <Select.Value />
                                         <Select.Indicator />
                                     </Select.Trigger>
@@ -238,6 +258,7 @@ export function IntegrationKeyFormModal({
                                     </Label>
                                     <Input
                                         id="integration-key-account"
+                                        className={borderedFieldClass}
                                         disabled={isEdit}
                                         placeholder="1, production, main"
                                         value={account}
@@ -279,6 +300,7 @@ export function IntegrationKeyFormModal({
                                 </Label>
                                 <Input
                                     id="integration-key-secret"
+                                    className={borderedFieldClass}
                                     type={
                                         MASKED_INTEGRATION_KEY_TYPES.has(keyType)
                                             ? "password"

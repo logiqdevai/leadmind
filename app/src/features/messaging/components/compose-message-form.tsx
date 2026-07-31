@@ -10,6 +10,7 @@ import {
     createDraftMessage,
 } from "@/features/outreach/services/outreach.service";
 import { sendHistoryQueryKeys } from "@/features/outreach/hooks/use-send-history";
+import { syncCachesAfterOutreachSend } from "@/features/outreach/utils/sync-contact-caches-after-send";
 import type {
     EmailProviderAllocation,
     EmailProviderTarget,
@@ -76,6 +77,7 @@ export function ComposeMessageForm({
     const [isBulkSubmitting, setIsBulkSubmitting] = useState(false);
     const [isSingleSubmitting, setIsSingleSubmitting] = useState(false);
     const [composerKey, setComposerKey] = useState(0);
+    const [emailSubjectError, setEmailSubjectError] = useState<string | null>(null);
 
     const aiDraft = useAiDraftMessage();
 
@@ -86,6 +88,7 @@ export function ComposeMessageForm({
 
     const isPending = aiDraft.isPending || isBulkSubmitting || isSingleSubmitting;
     const contentEmpty = isComposerContentEmpty(activeChannel, value);
+    const emailSubjectMissing = showEmailProviders && value.emailSubject.trim().length === 0;
 
     const invalidateContacts = (uuids: string[]) => {
         queryClient.invalidateQueries({ queryKey: contactsQueryKeys.all });
@@ -95,6 +98,10 @@ export function ComposeMessageForm({
             queryClient.invalidateQueries({ queryKey: contactsQueryKeys.messages(uuid) });
         }
     };
+
+    const syncAfterSend = (uuids: string[]) => syncCachesAfterOutreachSend(queryClient, {
+        contact_uuids: uuids,
+    });
 
     const handleAi = async (args: AiGenerateArgs) => {
         if (!aiContactUuid) {
@@ -124,6 +131,10 @@ export function ComposeMessageForm({
     const runBulk = async (send: boolean) => {
         if (contentEmpty || isPending) return;
         if (!senderProfileUuid) return;
+        if (emailSubjectMissing) {
+            setEmailSubjectError("Subject is required.");
+            return;
+        }
         if (showEmailProviders && isBulk && !isEmailProviderAllocationValid(emailAllocations, bulkCount)) {
             return;
         }
@@ -159,7 +170,11 @@ export function ComposeMessageForm({
                 }
             }
 
-            invalidateContacts(contactUuids);
+            if (send) {
+                await syncAfterSend(contactUuids);
+            } else {
+                invalidateContacts(contactUuids);
+            }
             toast({
                 title: send ? "Messages queued" : "Drafts saved",
                 description: formatBulkResult(created, failed, send),
@@ -181,6 +196,10 @@ export function ComposeMessageForm({
             return;
         }
         if (contentEmpty || isPending || !contactUuid) return;
+        if (emailSubjectMissing) {
+            setEmailSubjectError("Subject is required.");
+            return;
+        }
         if (showEmailProviders && !emailProvider) return;
         if (!senderProfileUuid) return;
         setIsSingleSubmitting(true);
@@ -215,6 +234,10 @@ export function ComposeMessageForm({
             return;
         }
         if (contentEmpty || isPending || !contactUuid) return;
+        if (emailSubjectMissing) {
+            setEmailSubjectError("Subject is required.");
+            return;
+        }
         if (showEmailProviders && !emailProvider) return;
         if (!senderProfileUuid) return;
         setIsSingleSubmitting(true);
@@ -228,7 +251,7 @@ export function ComposeMessageForm({
                     senderProfileUuid,
                 ),
             );
-            invalidateContacts([contactUuid]);
+            await syncAfterSend([contactUuid]);
             toast({
                 title: "Message queued for send",
                 description: "We'll update its status when delivery completes.",
@@ -289,13 +312,20 @@ export function ComposeMessageForm({
                             onActiveChannelChange={(c) => {
                                 if (isPending) return;
                                 setActiveChannel(c);
+                                setEmailSubjectError(null);
                             }}
                             value={value}
-                            onChange={(patch) => setValue((v) => ({ ...v, ...patch }))}
+                            onChange={(patch) => {
+                                setValue((v) => ({ ...v, ...patch }));
+                                if (typeof patch.emailSubject === "string" && patch.emailSubject.trim().length > 0) {
+                                    setEmailSubjectError(null);
+                                }
+                            }}
                             onAiGenerate={aiContactUuid ? handleAi : undefined}
                             aiActions={DEFAULT_CAMPAIGN_ACTIONS}
                             isAiPending={aiDraft.isPending}
                             disabled={isPending}
+                            emailSubjectError={showEmailProviders ? emailSubjectError : null}
                         />
                         {showEmailProviders ? (
                             isBulk ? (

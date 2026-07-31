@@ -1,6 +1,8 @@
 import { useMemo, useState } from "react";
-import { Button, Chip, Input, Label, ListBox, Select, TextArea } from "@heroui/react";
+import { useNavigate } from "react-router-dom";
+import { Button, Chip, Input, Label, TextArea } from "@heroui/react";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
+import { MultiSelect } from "@/components/ui/multi-select";
 import {
     AtSign,
     Briefcase,
@@ -17,6 +19,7 @@ import type { Contact } from "@/features/contacts/interfaces/contact.interface";
 import { useUpdateContact } from "@/features/contacts/hooks/use-contacts";
 import type { UpdateContactPayload } from "@/features/contacts/interfaces/contact.interface";
 import { useFilters } from "@/features/filters/hooks/use-filters";
+import { useContactLists } from "@/features/contact-lists/hooks/use-contact-lists";
 import { SourceBadge } from "@/components/ui/source-badge";
 import { OverviewUrlField } from "@/components/ui/overview-url-field";
 import { EnrichmentSnapshotPanel } from "@/components/ui/enrichment-snapshot-panel";
@@ -24,14 +27,16 @@ import { SectionCard, Row, ProfileValue } from "@/components/ui/profile-section"
 import { GemiLeadSourcePanel } from "@/components/ui/gemi-lead-source-panel";
 import { initialsFromName, formatShortDate, normalizeUrl } from "@/lib/profile";
 import { StatusChip } from "@/pages/dashboard/pages/leads/components/badges";
+import { Routes } from "@/routes/routes";
 import type { ProfileDraft } from "../types";
-import { profileDraftFromContact } from "../utils/profile-draft";
+import { profileDraftFromContact, sameUuidSet } from "../utils/profile-draft";
 
 interface OverviewTabProps {
     contact: Contact;
+    onNavigationLockChange?: (locked: boolean) => void;
 }
 
-export function OverviewTab({ contact }: OverviewTabProps) {
+export function OverviewTab({ contact, onNavigationLockChange }: OverviewTabProps) {
     const [editing, setEditing] = useState(false);
 
     return (
@@ -39,9 +44,21 @@ export function OverviewTab({ contact }: OverviewTabProps) {
             <IdentitySidebar contact={contact} />
             <div className="flex-1 min-w-0">
                 {editing ? (
-                    <EditForm contact={contact} onDone={() => setEditing(false)} />
+                    <EditForm
+                        contact={contact}
+                        onDone={() => {
+                            setEditing(false);
+                            onNavigationLockChange?.(false);
+                        }}
+                    />
                 ) : (
-                    <DetailPanel contact={contact} onEdit={() => setEditing(true)} />
+                    <DetailPanel
+                        contact={contact}
+                        onEdit={() => {
+                            setEditing(true);
+                            onNavigationLockChange?.(true);
+                        }}
+                    />
                 )}
             </div>
         </div>
@@ -158,8 +175,11 @@ function IdentitySidebar({ contact }: { contact: Contact }) {
 function DetailPanel({ contact, onEdit }: { contact: Contact; onEdit: () => void }) {
     const { data: filters = [] } = useFilters();
     const filterName = useMemo(
-        () => filters.find((f) => f.uuid === contact.filter_uuid)?.name ?? null,
-        [filters, contact.filter_uuid],
+        () =>
+            contact.filter?.name ??
+            filters.find((f) => f.uuid === contact.filter_uuid)?.name ??
+            null,
+        [contact.filter?.name, contact.filter_uuid, filters],
     );
 
     const websiteHref = contact.website?.trim() ? normalizeUrl(contact.website.trim()) : undefined;
@@ -225,8 +245,30 @@ function DetailPanel({ contact, onEdit }: { contact: Contact; onEdit: () => void
 
             <SectionCard title="Context" icon={Tag}>
                 {filterName ? (
-                    <Row label="Filter">
+                    <Row label="Primary source filter">
                         <ProfileValue value={filterName} />
+                    </Row>
+                ) : null}
+                {(contact.also_found_by?.length ?? 0) > 0 ? (
+                    <Row label="Also found by">
+                        <div className="flex flex-wrap gap-1.5">
+                            {contact.also_found_by!.map((f) => (
+                                <Chip key={f.uuid} size="sm" variant="secondary">
+                                    {f.name}
+                                </Chip>
+                            ))}
+                        </div>
+                    </Row>
+                ) : null}
+                {(contact.lists?.length ?? 0) > 0 ? (
+                    <Row label="Lists">
+                        <div className="flex flex-wrap gap-1.5">
+                            {contact.lists!.map((l) => (
+                                <Chip key={l.uuid} size="sm" variant="secondary">
+                                    {l.title}
+                                </Chip>
+                            ))}
+                        </div>
                     </Row>
                 ) : null}
                 <Row label="About">
@@ -245,20 +287,28 @@ function DetailPanel({ contact, onEdit }: { contact: Contact; onEdit: () => void
 }
 
 function EditForm({ contact, onDone }: { contact: Contact; onDone: () => void }) {
+    const navigate = useNavigate();
     const updateProfile = useUpdateContact();
     const { data: filters = [] } = useFilters();
+    const { data: listsPage, isLoading: listsLoading } = useContactLists({ limit: 100 });
+    const allLists = listsPage?.data ?? [];
     const [draft, setDraft] = useState<ProfileDraft>(() => profileDraftFromContact(contact));
 
-    const filterOptions = useMemo(() => {
-        const enabled = filters.filter((f) => f.enabled);
-        return enabled.length > 0 ? enabled : filters;
-    }, [filters]);
+    const filterName = useMemo(
+        () =>
+            contact.filter?.name ??
+            filters.find((f) => f.uuid === contact.filter_uuid)?.name ??
+            null,
+        [contact.filter?.name, contact.filter_uuid, filters],
+    );
 
     const dirty = useMemo(() => {
         const prev = profileDraftFromContact(contact);
-        return (Object.keys(prev) as (keyof ProfileDraft)[]).some(
-            (k) => draft[k].trim() !== prev[k].trim(),
-        );
+        if (!sameUuidSet(draft.list_uuids, prev.list_uuids)) return true;
+        return (Object.keys(prev) as (keyof ProfileDraft)[]).some((k) => {
+            if (k === "list_uuids") return false;
+            return draft[k].trim() !== prev[k].trim();
+        });
     }, [contact, draft]);
 
     const setField = <K extends keyof ProfileDraft>(key: K, value: ProfileDraft[K]) =>
@@ -271,7 +321,12 @@ function EditForm({ contact, onDone }: { contact: Contact; onDone: () => void })
             email: t(draft.email) || undefined,
             phone: t(draft.phone) || undefined,
             company: t(draft.company) || undefined,
-            website: t(draft.website) || undefined,
+            website: (() => {
+                const next = t(draft.website);
+                const prev = (contact.website ?? "").trim();
+                if (next === prev) return undefined;
+                return next ? next : null;
+            })(),
             google_maps_url: t(draft.google_maps_url) || undefined,
             title: t(draft.title) || undefined,
             location: t(draft.location) || undefined,
@@ -279,11 +334,23 @@ function EditForm({ contact, onDone }: { contact: Contact; onDone: () => void })
             industry: t(draft.industry) || undefined,
             description: t(draft.description) || undefined,
         };
-        const filterTrim = t(draft.filter_uuid);
-        if (filterTrim && filterTrim !== (contact.filter_uuid ?? "")) {
-            payload.filter_uuid = filterTrim;
+        const prev = profileDraftFromContact(contact);
+        if (!sameUuidSet(draft.list_uuids, prev.list_uuids)) {
+            payload.list_uuids = draft.list_uuids;
         }
-        updateProfile.mutate({ uuid: contact.uuid, payload }, { onSuccess: onDone });
+        updateProfile.mutate(
+            { uuid: contact.uuid, payload },
+            {
+                onSuccess: (updated) => {
+                    onDone();
+                    if (updated.uuid !== contact.uuid) {
+                        navigate(
+                            Routes.dashboard.contacts_detail.replace(":uuid", updated.uuid),
+                        );
+                    }
+                },
+            },
+        );
     };
 
     return (
@@ -307,30 +374,36 @@ function EditForm({ contact, onDone }: { contact: Contact; onDone: () => void })
             </div>
 
             <div className="grid gap-3 sm:grid-cols-2">
+                {filterName ? (
+                    <div className="flex flex-col gap-1.5 sm:col-span-2">
+                        <Label>Primary source filter</Label>
+                        <p className="rounded-lg border border-border bg-surface-secondary/50 px-3 py-2 text-sm text-foreground">
+                            {filterName}
+                        </p>
+                        <p className="text-xs text-muted">
+                            Set by the scrape that found this contact. Cannot be changed.
+                        </p>
+                    </div>
+                ) : null}
                 <div className="flex flex-col gap-1.5 sm:col-span-2">
-                    <Select
-                        className="w-full"
-                        placeholder={filterOptions.length === 0 ? "No filters yet" : "Select a filter"}
-                        value={draft.filter_uuid || null}
-                        onChange={(v) => setField("filter_uuid", (v as string) ?? "")}
-                        isDisabled={filterOptions.length === 0}
-                    >
-                        <Label>Filter</Label>
-                        <Select.Trigger>
-                            <Select.Value />
-                            <Select.Indicator />
-                        </Select.Trigger>
-                        <Select.Popover>
-                            <ListBox>
-                                {filterOptions.map((f) => (
-                                    <ListBox.Item key={f.uuid} id={f.uuid} textValue={f.name}>
-                                        {f.name}
-                                        <ListBox.ItemIndicator />
-                                    </ListBox.Item>
-                                ))}
-                            </ListBox>
-                        </Select.Popover>
-                    </Select>
+                    <Label>Lists</Label>
+                    <MultiSelect
+                        aria-label="Lists"
+                        placeholder={
+                            listsLoading
+                                ? "Loading lists…"
+                                : allLists.length === 0
+                                  ? "No lists yet"
+                                  : "Select lists"
+                        }
+                        searchPlaceholder="Search lists…"
+                        disabled={listsLoading || allLists.length === 0}
+                        options={[...allLists]
+                            .toSorted((a, b) => a.title.localeCompare(b.title))
+                            .map((l) => ({ value: l.uuid, label: l.title }))}
+                        value={draft.list_uuids}
+                        onChange={(next) => setField("list_uuids", next)}
+                    />
                 </div>
                 <div className="flex flex-col gap-1.5 sm:col-span-2">
                     <Label htmlFor="pf-name">Name</Label>

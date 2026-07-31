@@ -10,10 +10,12 @@ import {
     allocationKey,
     buildEqualAllocations,
     groupSendableEmailAccounts,
+    listReadyEmailAccounts,
     resolveDefaultEmailTarget,
     validateAllocations,
 } from "@/features/integrations/utils/email-provider-utils";
 import { Routes } from "@/routes/routes";
+import { cn } from "@/lib/utils";
 
 type EmailProviderSelectBaseProps = {
     disabled?: boolean;
@@ -45,30 +47,36 @@ function EmailProviderSingleSelect({
     onChange,
     disabled,
     groupedAccounts,
-    sendableAccounts,
+    visibleAccounts,
+    readyAccounts,
     integrations,
 }: {
     value: EmailProviderTarget | null;
     onChange: (target: EmailProviderTarget) => void;
     disabled: boolean;
     groupedAccounts: ReturnType<typeof groupSendableEmailAccounts>;
-    sendableAccounts: ReturnType<typeof groupSendableEmailAccounts>[number]["accounts"];
+    visibleAccounts: ReturnType<typeof groupSendableEmailAccounts>[number]["accounts"];
+    readyAccounts: ReturnType<typeof groupSendableEmailAccounts>[number]["accounts"];
     integrations: ReturnType<typeof useIntegrations>["data"];
 }) {
     const selectedKey = value ? allocationKey(value) : null;
 
     useEffect(() => {
-        if (sendableAccounts.length === 0) return;
-        if (value && sendableAccounts.some((row) => allocationKey(row) === selectedKey)) {
+        if (readyAccounts.length === 0) return;
+        if (
+            value &&
+            readyAccounts.some((row) => allocationKey(row) === selectedKey && row.canSend)
+        ) {
             return;
         }
         const defaultTarget = resolveDefaultEmailTarget(integrations);
         if (defaultTarget) {
             onChange(defaultTarget);
         }
-    }, [integrations, onChange, selectedKey, sendableAccounts, value]);
+    }, [integrations, onChange, readyAccounts, selectedKey, value]);
 
-    const selectedAccount = sendableAccounts.find((row) => allocationKey(row) === selectedKey);
+    const selectedAccount = visibleAccounts.find((row) => allocationKey(row) === selectedKey);
+    const incompleteCount = visibleAccounts.filter((row) => !row.canSend).length;
 
     return (
         <div className="space-y-1.5">
@@ -77,27 +85,37 @@ function EmailProviderSingleSelect({
                 aria-label="Email provider account"
                 selectedKey={selectedKey}
                 onSelectionChange={(key) => {
-                    const match = sendableAccounts.find((row) => allocationKey(row) === key);
-                    if (match) {
+                    const match = visibleAccounts.find((row) => allocationKey(row) === key);
+                    if (match?.canSend) {
                         onChange({ provider: match.provider, account: match.account });
                     }
                 }}
-                isDisabled={disabled}
+                isDisabled={disabled || readyAccounts.length === 0}
+                fullWidth
             >
-                <Select.Trigger>
-                    <Select.Value>
+                <Select.Trigger
+                    className={cn(
+                        "grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 rounded-md border border-border bg-surface-primary",
+                        "focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/40",
+                    )}
+                >
+                    <Select.Value className="min-w-0 flex-1 overflow-hidden">
                         {selectedAccount ? (
-                            <span className="flex items-center gap-2 min-w-0">
-                                <span className="truncate">{selectedAccount.label}</span>
+                            <span className="flex min-w-0 items-center gap-2">
+                                <span className="truncate">
+                                    {selectedAccount.detail?.startsWith("from ")
+                                        ? selectedAccount.detail.slice(5)
+                                        : selectedAccount.label}
+                                </span>
                                 {selectedAccount.isDefault ? (
-                                    <Chip size="sm" variant="soft" color="warning">
+                                    <Chip size="sm" variant="soft" color="warning" className="shrink-0">
                                         <Chip.Label>Default</Chip.Label>
                                     </Chip>
                                 ) : null}
                             </span>
                         ) : null}
                     </Select.Value>
-                    <Select.Indicator />
+                    <Select.Indicator className="shrink-0" />
                 </Select.Trigger>
                 <Select.Popover>
                     <ListBox>
@@ -108,28 +126,59 @@ function EmailProviderSingleSelect({
                                 </Header>
                                 {group.accounts.map((account) => {
                                     const key = allocationKey(account);
+                                    const isIncomplete = !account.canSend;
                                     return (
                                         <ListBox.Item
                                             key={key}
                                             id={key}
                                             textValue={account.label}
+                                            isDisabled={isIncomplete}
+                                            className={cn(
+                                                "grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3",
+                                                isIncomplete && "opacity-60",
+                                            )}
                                         >
-                                            <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-                                                <span className="truncate text-sm">
-                                                    Account {account.account}
-                                                </span>
-                                                {account.detail ? (
-                                                    <span className="truncate font-mono text-xs text-muted">
-                                                        {account.detail}
+                                            <div className="min-w-0 overflow-hidden">
+                                                <div className="flex items-center gap-2">
+                                                    <span
+                                                        className={cn(
+                                                            "truncate text-sm",
+                                                            isIncomplete && "text-muted",
+                                                        )}
+                                                    >
+                                                        {account.detail?.startsWith("from ")
+                                                            ? account.detail.slice(5)
+                                                            : account.detail === "from address missing"
+                                                              ? "From address missing"
+                                                              : `Account ${account.account}`}
                                                     </span>
-                                                ) : null}
+                                                    {account.isDefault ? (
+                                                        <Chip
+                                                            size="sm"
+                                                            variant="soft"
+                                                            color="warning"
+                                                            className="shrink-0"
+                                                        >
+                                                            <Chip.Label>Default</Chip.Label>
+                                                        </Chip>
+                                                    ) : null}
+                                                </div>
+                                                <span
+                                                    className={cn(
+                                                        "truncate font-mono text-xs",
+                                                        account.detail === "from address missing"
+                                                            ? "text-danger"
+                                                            : "text-muted",
+                                                    )}
+                                                >
+                                                    {account.detail?.startsWith("from ")
+                                                        ? `Account ${account.account}`
+                                                        : account.detail === "from address missing"
+                                                          ? `Account ${account.account} · add from address in Integrations`
+                                                          : account.detail ?? null}
+                                                </span>
                                             </div>
-                                            {account.isDefault ? (
-                                                <Chip size="sm" variant="soft" color="warning">
-                                                    <Chip.Label>Default</Chip.Label>
-                                                </Chip>
-                                            ) : null}
-                                            <ListBox.ItemIndicator />
+                                            <ListBox.ItemIndicator className="shrink-0" />
                                         </ListBox.Item>
                                     );
                                 })}
@@ -139,10 +188,24 @@ function EmailProviderSingleSelect({
                 </Select.Popover>
             </Select>
             <p className="text-xs text-muted">
-                {sendableAccounts.length} sendable account
-                {sendableAccounts.length === 1 ? "" : "s"} across Resend and SMTP.
-                SMTP sends won&apos;t receive delivery or open webhooks.
+                {readyAccounts.length} ready account
+                {readyAccounts.length === 1 ? "" : "s"} across Resend and SMTP.
+                {incompleteCount > 0
+                    ? ` ${incompleteCount} Resend account${incompleteCount === 1 ? " needs" : "s need"} a from address in Integrations.`
+                    : " SMTP sends won't receive delivery or open webhooks."}
             </p>
+            {readyAccounts.length === 0 ? (
+                <p className="text-xs text-danger">
+                    Add a from address to your Resend account in{" "}
+                    <Link
+                        to={Routes.dashboard.integrations}
+                        className="font-medium underline-offset-2 hover:underline"
+                    >
+                        Integrations
+                    </Link>{" "}
+                    before sending.
+                </p>
+            ) : null}
         </div>
     );
 }
@@ -208,9 +271,9 @@ function EmailProviderAllocationSelect({
     const allocated = value.reduce((sum, row) => sum + row.count, 0);
 
     const resendAccounts =
-        groupedAccounts.find((group) => group.provider === "RESEND")?.accounts ?? [];
+        groupedAccounts.find((group) => group.provider === "RESEND")?.accounts.filter((row) => row.canSend) ?? [];
     const smtpAccounts =
-        groupedAccounts.find((group) => group.provider === "SMTP")?.accounts ?? [];
+        groupedAccounts.find((group) => group.provider === "SMTP")?.accounts.filter((row) => row.canSend) ?? [];
 
     const toggleAccount = (account: (typeof sendableAccounts)[number], checked: boolean) => {
         const key = allocationKey(account);
@@ -328,16 +391,20 @@ export function EmailProviderSelect(props: EmailProviderSelectProps) {
         () => groupSendableEmailAccounts(integrations),
         [integrations],
     );
-    const sendableAccounts = useMemo(
+    const visibleAccounts = useMemo(
         () => groupedAccounts.flatMap((group) => group.accounts),
         [groupedAccounts],
+    );
+    const readyAccounts = useMemo(
+        () => listReadyEmailAccounts(integrations),
+        [integrations],
     );
 
     if (isLoading) {
         return <p className="text-sm text-muted">Loading email providers…</p>;
     }
 
-    if (sendableAccounts.length === 0) {
+    if (visibleAccounts.length === 0) {
         return (
             <div className="rounded-xl border border-border bg-surface-secondary/40 px-4 py-3 text-sm text-muted">
                 No sendable Resend or SMTP accounts found.{" "}
@@ -360,7 +427,7 @@ export function EmailProviderSelect(props: EmailProviderSelectProps) {
                 onChange={props.onChange}
                 disabled={disabled}
                 groupedAccounts={groupedAccounts}
-                sendableAccounts={sendableAccounts}
+                sendableAccounts={readyAccounts}
             />
         );
     }
@@ -371,7 +438,8 @@ export function EmailProviderSelect(props: EmailProviderSelectProps) {
             onChange={props.onChange}
             disabled={disabled}
             groupedAccounts={groupedAccounts}
-            sendableAccounts={sendableAccounts}
+            visibleAccounts={visibleAccounts}
+            readyAccounts={readyAccounts}
             integrations={integrations}
         />
     );

@@ -22,6 +22,7 @@ export const IntegrationKeyTypes = {
     USERNAME: "USERNAME",
     PASSWORD: "PASSWORD",
     FROM_EMAIL: "FROM_EMAIL",
+    FROM_NAME: "FROM_NAME",
 } as const;
 
 export type IntegrationKeyType =
@@ -77,6 +78,16 @@ export interface CreateIntegrationKeyPayload {
     key_type: IntegrationKeyType;
     account: string;
     secret: string;
+}
+
+export interface CreateSmtpAccountPayload {
+    account: string;
+    host: string;
+    port: number;
+    username: string;
+    password: string;
+    from_email: string;
+    from_name?: string;
 }
 
 export interface UpdateIntegrationKeyPayload {

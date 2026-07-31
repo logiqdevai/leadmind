@@ -240,6 +240,12 @@ exports.Prisma.ContactScalarFieldEnum = {
   updated_at: 'updated_at'
 };
 
+exports.Prisma.ContactFilterScalarFieldEnum = {
+  contact_uuid: 'contact_uuid',
+  filter_uuid: 'filter_uuid',
+  created_at: 'created_at'
+};
+
 exports.Prisma.ContactEnrichmentScalarFieldEnum = {
   id: 'id',
   uuid: 'uuid',
@@ -745,7 +751,8 @@ exports.JobStatus = exports.$Enums.JobStatus = {
   PENDING: 'PENDING',
   RUNNING: 'RUNNING',
   COMPLETED: 'COMPLETED',
-  FAILED: 'FAILED'
+  FAILED: 'FAILED',
+  CANCELLED: 'CANCELLED'
 };
 
 exports.JobTrigger = exports.$Enums.JobTrigger = {
@@ -806,7 +813,8 @@ exports.IntegrationKeyType = exports.$Enums.IntegrationKeyType = {
   PORT: 'PORT',
   USERNAME: 'USERNAME',
   PASSWORD: 'PASSWORD',
-  FROM_EMAIL: 'FROM_EMAIL'
+  FROM_EMAIL: 'FROM_EMAIL',
+  FROM_NAME: 'FROM_NAME'
 };
 
 exports.ReminderStatus = exports.$Enums.ReminderStatus = {
@@ -889,6 +897,7 @@ exports.Prisma.ModelName = {
   Lead: 'Lead',
   LeadEnrichment: 'LeadEnrichment',
   Contact: 'Contact',
+  ContactFilter: 'ContactFilter',
   ContactEnrichment: 'ContactEnrichment',
   ContactScore: 'ContactScore',
   ContactList: 'ContactList',

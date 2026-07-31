@@ -1,5 +1,5 @@
 import type { Contact } from "@/features/contacts/interfaces/contact.interface";
-import type { ContactFilters } from "@/interfaces/contact-filters.interface";
+import type { CampaignFilters } from "@/features/marketing-campaigns/interfaces/campaign.interface";
 
 export interface ContactList {
     uuid: string;
@@ -64,9 +64,13 @@ export interface AddListContactsPayload {
 }
 
 export interface BulkAddListContactsPayload {
-    filters: ContactFilters;
+    filters: CampaignFilters;
 }
 
 export interface AddListContactsResult {
     added: number;
+}
+
+export interface RemoveListContactsResult {
+    removed: number;
 }

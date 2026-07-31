@@ -11,13 +11,17 @@ import {
     CampaignContactStatus,
     CampaignStatus,
     Channel,
+    ExternalIntegrationProvider,
     InteractionType,
+    LeadStatus,
     MsgStatus,
     Prisma,
 } from '@/generated/prisma';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { MARKETING_MESSAGE_SEND_QUEUE } from '@/core/queues/queues.constants';
+import { hasUsableContactEmail } from '@/shared/utils/contact-email.util';
 import { sanitizeEmailHtml } from '@/shared/utils/sanitize-html.util';
+import { ContactsService } from '@/modules/contacts/contacts.service';
 import { MessageSendService } from '@/modules/outreach/services/message-send.service';
 import { EmailProviderTarget } from '@/modules/integrations/interfaces/email-credentials.interface';
 import { EmailCredentialsService } from '@/modules/integrations/services/email-credentials.service';
@@ -28,7 +32,6 @@ import {
 } from '@/modules/outreach/utils/email-provider-allocation.util';
 import { mergeSenderProfileMetadata } from '@/modules/outreach/utils/sender-profile-metadata.util';
 import { SenderProfilesService } from '@/modules/sender-profiles/sender-profiles.service';
-
 interface SendResult {
     status: 'sent' | 'failed' | 'skipped' | 'noop';
     reason?: string;
@@ -43,6 +46,7 @@ export class CampaignMessageSendService {
         private readonly messageSendService: MessageSendService,
         private readonly emailCredentialsService: EmailCredentialsService,
         private readonly senderProfilesService: SenderProfilesService,
+        private readonly contactsService: ContactsService,
         @InjectQueue(MARKETING_MESSAGE_SEND_QUEUE)
         private readonly messageSendQueue: Queue,
     ) { }
@@ -70,7 +74,10 @@ export class CampaignMessageSendService {
             return { status: 'skipped', reason: 'cancelled' };
         }
 
-        if (mcc.channel === Channel.EMAIL && !mcc.contact.email) {
+        if (mcc.channel === Channel.EMAIL && !hasUsableContactEmail(mcc.contact.email)) {
+            this.logger.warn(
+                `MCC ${mcc.uuid} skipped: no usable email (raw=${JSON.stringify(mcc.contact.email)})`,
+            );
             await this.markSkipped(mcc.uuid, mcc.campaign_uuid, 'no_email');
             return { status: 'skipped', reason: 'no_email' };
         }
@@ -178,6 +185,9 @@ export class CampaignMessageSendService {
                 providerOverride,
             );
 
+            const shouldPromoteOnSend =
+                mcc.channel === Channel.EMAIL && mcc.contact.status === LeadStatus.NEW;
+
             await this.prisma.$transaction([
                 this.messageSendService.messageSentOperation(
                     message.uuid,
@@ -211,7 +221,19 @@ export class CampaignMessageSendService {
                         queued_count: { decrement: 1 },
                     },
                 }),
+                ...(shouldPromoteOnSend
+                    ? this.contactsService.buildPromoteToContactedIfNewOps(
+                          mcc.contact_uuid,
+                          mcc.campaign.user_uuid,
+                          'email_sent',
+                          mcc.contact.status,
+                      )
+                    : []),
             ]);
+
+            if (shouldPromoteOnSend) {
+                await this.contactsService.syncContactSearchIndex(mcc.contact_uuid);
+            }
 
             await this.checkCompletion(mcc.campaign_uuid);
             this.logger.log(
@@ -310,7 +332,7 @@ export class CampaignMessageSendService {
             throw new ConflictException('Message is already queued for send');
         }
 
-        if (message.channel === Channel.EMAIL && !message.contact.email) {
+        if (message.channel === Channel.EMAIL && !hasUsableContactEmail(message.contact.email)) {
             throw new BadRequestException('Contact has no email');
         }
         if (message.channel === Channel.SMS && !message.contact.phone) {

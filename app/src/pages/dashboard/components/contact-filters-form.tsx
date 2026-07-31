@@ -103,7 +103,7 @@ export function ContactFiltersForm({
                             <Select.Value />
                             <Select.Indicator />
                         </Select.Trigger>
-                        <Select.Popover>
+                        <Select.Popover className="max-h-72">
                             <ListBox>
                                 <ListBox.Item id="" textValue="Any filter">
                                     Any filter
@@ -119,7 +119,7 @@ export function ContactFiltersForm({
                         </Select.Popover>
                     </Select>
                     <p className="text-xs text-muted mt-1">
-                        Restrict to contacts sourced from a specific filter.
+                        Restrict to contacts linked to a specific filter (primary source or also found by).
                     </p>
                 </div>
                 ) : null}

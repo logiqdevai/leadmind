@@ -136,12 +136,12 @@ export function LeadFilters({
                     value={filterUuid ?? null}
                     onChange={(v) => onFilterUuidChange((v as string) || undefined)}
                 >
-                    <Label>Filter</Label>
+                    <Label>Source filter</Label>
                     <Select.Trigger>
                         <Select.Value />
                         <Select.Indicator />
                     </Select.Trigger>
-                    <Select.Popover>
+                    <Select.Popover className="max-h-72">
                         <ListBox>
                             <ListBox.Item id="" textValue="All filters">
                                 All filters

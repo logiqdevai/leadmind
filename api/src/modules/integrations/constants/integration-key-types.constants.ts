@@ -14,6 +14,7 @@ export const PROVIDER_KEY_TYPES: Record<
     [ExternalIntegrationProvider.ANTHROPIC]: [IntegrationKeyType.API_KEY],
     [ExternalIntegrationProvider.RESEND]: [
         IntegrationKeyType.API_KEY,
+        IntegrationKeyType.FROM_EMAIL,
         IntegrationKeyType.WEBHOOK_SECRET,
     ],
     [ExternalIntegrationProvider.SMTP]: [
@@ -22,6 +23,7 @@ export const PROVIDER_KEY_TYPES: Record<
         IntegrationKeyType.USERNAME,
         IntegrationKeyType.PASSWORD,
         IntegrationKeyType.FROM_EMAIL,
+        IntegrationKeyType.FROM_NAME,
     ],
     [ExternalIntegrationProvider.TWILIO]: [
         IntegrationKeyType.ACCOUNT_SID,
@@ -42,6 +44,7 @@ export const KEY_TYPE_LABELS: Record<IntegrationKeyType, string> = {
     [IntegrationKeyType.USERNAME]: 'Username',
     [IntegrationKeyType.PASSWORD]: 'Password',
     [IntegrationKeyType.FROM_EMAIL]: 'From email',
+    [IntegrationKeyType.FROM_NAME]: 'Sender name',
 };
 
 export const KEY_TYPE_PLACEHOLDERS: Record<IntegrationKeyType, string> = {
@@ -55,7 +58,21 @@ export const KEY_TYPE_PLACEHOLDERS: Record<IntegrationKeyType, string> = {
     [IntegrationKeyType.USERNAME]: 'user@example.com',
     [IntegrationKeyType.PASSWORD]: 'App password',
     [IntegrationKeyType.FROM_EMAIL]: 'noreply@example.com',
+    [IntegrationKeyType.FROM_NAME]: 'Acme Sales',
 };
+
+export const OPTIONAL_PROVIDER_KEY_TYPES: Partial<
+    Record<ExternalIntegrationProvider, IntegrationKeyType[]>
+> = {
+    [ExternalIntegrationProvider.SMTP]: [IntegrationKeyType.FROM_NAME],
+};
+
+export function requiredKeyTypesForProvider(
+    provider: ExternalIntegrationProvider,
+): IntegrationKeyType[] {
+    const optional = new Set(OPTIONAL_PROVIDER_KEY_TYPES[provider] ?? []);
+    return PROVIDER_KEY_TYPES[provider].filter((key_type) => !optional.has(key_type));
+}
 
 export function isKeyTypeAllowedForProvider(
     provider: ExternalIntegrationProvider,
@@ -69,15 +86,26 @@ const SMTP_DISPLAYABLE_KEY_TYPES = new Set<IntegrationKeyType>([
     IntegrationKeyType.PORT,
     IntegrationKeyType.USERNAME,
     IntegrationKeyType.FROM_EMAIL,
+    IntegrationKeyType.FROM_NAME,
+]);
+
+const RESEND_DISPLAYABLE_KEY_TYPES = new Set<IntegrationKeyType>([
+    IntegrationKeyType.FROM_EMAIL,
 ]);
 
 export function shouldExposeIntegrationKeyDisplayValue(
     provider: ExternalIntegrationProvider,
     key_type: IntegrationKeyType,
 ): boolean {
-    return (
+    if (
         provider === ExternalIntegrationProvider.SMTP &&
         SMTP_DISPLAYABLE_KEY_TYPES.has(key_type)
+    ) {
+        return true;
+    }
+    return (
+        provider === ExternalIntegrationProvider.RESEND &&
+        RESEND_DISPLAYABLE_KEY_TYPES.has(key_type)
     );
 }
 

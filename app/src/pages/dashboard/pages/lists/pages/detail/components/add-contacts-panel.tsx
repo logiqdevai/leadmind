@@ -9,7 +9,7 @@ import {
     useAddListContacts,
     useBulkAddListContacts,
 } from "@/features/contact-lists/hooks/use-contact-lists";
-import type { ContactFilters } from "@/interfaces/contact-filters.interface";
+import type { CampaignFilters } from "@/features/marketing-campaigns/interfaces/campaign.interface";
 import { contactFiltersToListQuery } from "@/lib/contact-filter-params";
 import { useDebouncedValue } from "@/hooks/use-debounced-value";
 
@@ -26,7 +26,7 @@ export function AddContactsPanel({
     showHeader = true,
     onAdded,
 }: AddContactsPanelProps) {
-    const [filters, setFilters] = useState<ContactFilters>({});
+    const [filters, setFilters] = useState<CampaignFilters>({});
     const [selected, setSelected] = useState<Set<string>>(new Set());
     const [pickerPage, setPickerPage] = useState(1);
 
@@ -50,7 +50,7 @@ export function AddContactsPanel({
     const total = contactsPage?.total ?? 0;
     const totalPages = contactsPage?.totalPages ?? 1;
 
-    const handleFilterChange = (patch: Partial<ContactFilters>) => {
+    const handleFilterChange = (patch: Partial<CampaignFilters>) => {
         setFilters((prev) => ({ ...prev, ...patch }));
         setPickerPage(1);
         setSelected(new Set());
@@ -110,12 +110,16 @@ export function AddContactsPanel({
                 <div>
                     <h2 className="text-base font-semibold text-foreground">Add contacts</h2>
                     <p className="text-sm text-muted mt-1">
-                        Filter your contacts, then add selected rows or all matching results.
+                        Filter your contacts (including by another list), then add selected rows or all matching results.
                     </p>
                 </div>
             ) : null}
 
-            <AudienceFilterForm value={filters} onChange={handleFilterChange} />
+            <AudienceFilterForm
+                value={filters}
+                onChange={handleFilterChange}
+                showContactListFilter
+            />
 
             <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-surface p-3">
                 <div className="flex items-center gap-3">

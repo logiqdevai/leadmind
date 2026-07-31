@@ -21,6 +21,7 @@ import { ContactsService } from './contacts.service';
 import { AddNoteDto } from './dto/add-note.dto';
 import { AiDraftMessageDto } from './dto/ai-draft-message.dto';
 import { BulkAiDraftMessagesDto } from './dto/bulk-ai-draft-messages.dto';
+import { BulkDeleteContactsDto } from './dto/bulk-delete-contacts.dto';
 import { BulkEnrichContactsDto } from './dto/bulk-enrich-contacts.dto';
 import { BulkScrapeContactEmailsDto } from './dto/bulk-scrape-contact-emails.dto';
 import { BulkTriggerScoreDto } from './dto/bulk-trigger-score.dto';
@@ -45,7 +46,10 @@ export class ContactsController {
     constructor(private readonly contactsService: ContactsService) { }
 
     @Post()
-    @ApiOperation({ summary: 'Create a contact (creates a MANUAL Lead behind the scenes)' })
+    @ApiOperation({
+        summary:
+            'Create a contact (creates a MANUAL Lead behind the scenes). If email already exists for this user, links the selected filter to that contact and returns it.',
+    })
     @ApiResponse({ status: 201 })
     create(@CurrentUser('uuid') user_uuid: string, @Body() dto: CreateContactDto) {
         return this.contactsService.create(user_uuid, dto);
@@ -58,10 +62,12 @@ export class ContactsController {
     }
 
     @Post('from-lead/:lead_uuid')
-    @ApiOperation({ summary: 'Adopt a public Lead as a Contact for the current user' })
+    @ApiOperation({
+        summary:
+            'Adopt a public Lead as a Contact for the current user. Returns existing contact if already adopted or email already matches.',
+    })
     @ApiResponse({ status: 201 })
     @ApiResponse({ status: 404, description: 'Lead not found' })
-    @ApiResponse({ status: 409, description: 'Contact already exists for this lead' })
     convertFromLead(
         @CurrentUser('uuid') user_uuid: string,
         @Param('lead_uuid') lead_uuid: string,
@@ -125,6 +131,17 @@ export class ContactsController {
         return this.contactsService.triggerBulkScrapeEmailsFromWebsites(user_uuid, dto);
     }
 
+    @Post('bulk-delete')
+    @ApiOperation({ summary: 'Delete multiple contacts' })
+    @ApiResponse({ status: 201 })
+    @ApiResponse({ status: 404 })
+    removeMany(
+        @CurrentUser('uuid') user_uuid: string,
+        @Body() dto: BulkDeleteContactsDto,
+    ) {
+        return this.contactsService.removeMany(user_uuid, dto);
+    }
+
     @Get(':uuid')
     @ApiOperation({ summary: 'Get a contact with tags, interactions, lead, and outreach messages' })
     @ApiResponse({ status: 404, description: 'Contact not found' })
@@ -133,7 +150,10 @@ export class ContactsController {
     }
 
     @Put(':uuid')
-    @ApiOperation({ summary: 'Update contact profile fields and notes' })
+    @ApiOperation({
+        summary:
+            'Update contact profile fields and notes. If email already belongs to another contact, merges into that contact and returns it (keeps the higher status).',
+    })
     update(
         @CurrentUser('uuid') user_uuid: string,
         @Param('uuid') uuid: string,

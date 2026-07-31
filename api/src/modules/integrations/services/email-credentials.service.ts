@@ -7,9 +7,10 @@ import { IntegrationsService } from '../integrations.service';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import {
     listDistinctIntegrationAccounts,
-    PROVIDER_KEY_TYPES,
+    requiredKeyTypesForProvider,
     resolveEffectiveDefaultAccount,
 } from '../constants/integration-key-types.constants';
+import { formatSmtpFromAddress } from '@/integrations/notifications/smtp/utils/format-smtp-from-address.util';
 import {
     EmailProviderTarget,
     SendableEmailAccount,
@@ -29,6 +30,17 @@ export class EmailCredentialsService {
         private readonly integrationsService: IntegrationsService,
         private readonly prisma: PrismaService,
     ) {}
+
+    async getResendFromEmail(user_uuid: string, account: string): Promise<string> {
+        await this.assertSendableAccount(user_uuid, ExternalIntegrationProvider.RESEND, account);
+        const fromEmail = await this.integrationsService.getDecryptedSecret(
+            user_uuid,
+            ExternalIntegrationProvider.RESEND,
+            IntegrationKeyType.FROM_EMAIL,
+            account,
+        );
+        return fromEmail.trim();
+    }
 
     async getResendApiKey(user_uuid: string, account: string): Promise<string> {
         this.logger.log(`Loading Resend API key user=${user_uuid} account=${account}`);
@@ -95,9 +107,8 @@ export class EmailCredentialsService {
     }
 
     async getSmtpConfig(user_uuid: string, account: string): Promise<SmtpConfig> {
-        this.logger.log(`Loading SMTP config user=${user_uuid} account=${account}`);
         await this.assertSendableAccount(user_uuid, ExternalIntegrationProvider.SMTP, account);
-        const [host, port, username, password, fromEmail] = await Promise.all([
+        const [host, port, username, password, fromEmail, fromName] = await Promise.all([
             this.integrationsService.getDecryptedSecret(
                 user_uuid,
                 ExternalIntegrationProvider.SMTP,
@@ -128,6 +139,7 @@ export class EmailCredentialsService {
                 IntegrationKeyType.FROM_EMAIL,
                 account,
             ),
+            this.tryGetSmtpFromName(user_uuid, account),
         ]);
 
         const parsedPort = parseInt(port, 10);
@@ -135,17 +147,33 @@ export class EmailCredentialsService {
             throw new BadRequestException(`Invalid SMTP port for account ${account}`);
         }
 
-        const config = {
+        return {
             host: host.trim(),
             port: parsedPort,
             username: username.trim(),
             password,
             fromEmail: fromEmail.trim(),
+            fromName: fromName?.trim() || null,
         };
-        this.logger.log(
-            `SMTP config loaded user=${user_uuid} account=${account} host=${config.host}:${config.port} from=${config.fromEmail} smtpUser=${config.username}`,
-        );
-        return config;
+    }
+
+    private async tryGetSmtpFromName(
+        user_uuid: string,
+        account: string,
+    ): Promise<string | null> {
+        try {
+            return await this.integrationsService.getDecryptedSecret(
+                user_uuid,
+                ExternalIntegrationProvider.SMTP,
+                IntegrationKeyType.FROM_NAME,
+                account,
+            );
+        } catch (error) {
+            if (error instanceof NotFoundException) {
+                return null;
+            }
+            throw error;
+        }
     }
 
     async assertSendableAccount(
@@ -158,16 +186,10 @@ export class EmailCredentialsService {
             (row) => row.provider === provider && row.account === account.trim(),
         );
         if (!match) {
-            this.logger.warn(
-                `Sendable account check failed user=${user_uuid} provider=${provider} account=${account} available=${sendable.map((row) => `${row.provider}:${row.account}`).join(',') || 'none'}`,
-            );
             throw new BadRequestException(
                 `${provider} account "${account}" is not configured or incomplete`,
             );
         }
-        this.logger.log(
-            `Sendable account verified user=${user_uuid} provider=${provider} account=${account}`,
-        );
     }
 
     async resolveSendableAccounts(user_uuid: string): Promise<SendableEmailAccount[]> {
@@ -221,14 +243,12 @@ export class EmailCredentialsService {
                 integration.keys,
             );
             if (!account) continue;
-            if (!this.isAccountComplete(provider, integration.keys, account)) continue;
-            this.logger.log(
-                `Default email target user=${user_uuid} provider=${provider} account=${account}`,
-            );
+            if (!this.isAccountComplete(provider, integration.keys, account)) {
+                continue;
+            }
             return { provider, account };
         }
 
-        this.logger.warn(`No default email target user=${user_uuid}`);
         return null;
     }
 
@@ -239,10 +259,16 @@ export class EmailCredentialsService {
     ): boolean {
         const accountKeys = keys.filter((key) => key.account.trim() === account.trim());
         if (provider === ExternalIntegrationProvider.RESEND) {
-            return accountKeys.some((key) => key.key_type === IntegrationKeyType.API_KEY);
+            const required = [
+                IntegrationKeyType.API_KEY,
+                IntegrationKeyType.FROM_EMAIL,
+            ];
+            return required.every((key_type) =>
+                accountKeys.some((key) => key.key_type === key_type),
+            );
         }
         if (provider === ExternalIntegrationProvider.SMTP) {
-            const required = PROVIDER_KEY_TYPES[ExternalIntegrationProvider.SMTP];
+            const required = requiredKeyTypesForProvider(ExternalIntegrationProvider.SMTP);
             return required.every((key_type) =>
                 accountKeys.some((key) => key.key_type === key_type),
             );

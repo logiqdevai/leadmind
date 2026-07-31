@@ -12,6 +12,7 @@ import {
     getMissingKeyTypesForAccount,
     groupKeysByAccount,
     isEmailAccountSendable,
+    OPTIONAL_PROVIDER_KEY_TYPES,
     providerAllowsMultipleAccounts,
     providerSupportsDefaultAccountSelection,
     suggestNextAccountLabel,
@@ -22,6 +23,7 @@ import type {
     IntegrationProviderView,
 } from "@/features/integrations/interfaces/integrations.interface";
 import { IntegrationKeyFormModal } from "./integration-key-form-modal";
+import { ResendAccountFormModal } from "./resend-account-form-modal";
 import { SmtpAccountFormModal } from "./smtp-account-form-modal";
 
 interface IntegrationDetailModalProps {
@@ -40,6 +42,7 @@ export function IntegrationDetailModal({
 
     const [formOpen, setFormOpen] = useState(false);
     const [smtpFormOpen, setSmtpFormOpen] = useState(false);
+    const [resendFormOpen, setResendFormOpen] = useState(false);
     const [editingKey, setEditingKey] = useState<IntegrationKey | null>(null);
     const [initialKeyType, setInitialKeyType] = useState<
         IntegrationKeyType | undefined
@@ -94,11 +97,15 @@ export function IntegrationDetailModal({
 
     const openAddAccount = () => {
         if (!providerView) return;
-        const nextAccount = suggestNextAccountLabel(providerView.keys);
         if (providerView.provider === "SMTP") {
             setSmtpFormOpen(true);
             return;
         }
+        if (providerView.provider === "RESEND") {
+            setResendFormOpen(true);
+            return;
+        }
+        const nextAccount = suggestNextAccountLabel(providerView.keys);
         openCreate("API_KEY", nextAccount);
     };
 
@@ -204,6 +211,17 @@ export function IntegrationDetailModal({
                                                     providerView.keys,
                                                     group.account,
                                                 );
+                                            const optionalMissingTypes = (
+                                                OPTIONAL_PROVIDER_KEY_TYPES[
+                                                    providerView.provider
+                                                ] ?? []
+                                            ).filter((keyType) =>
+                                                missingTypes.includes(keyType),
+                                            );
+                                            const requiredMissingTypes = missingTypes.filter(
+                                                (keyType) =>
+                                                    !optionalMissingTypes.includes(keyType),
+                                            );
 
                                             return (
                                                 <section
@@ -223,7 +241,7 @@ export function IntegrationDetailModal({
                                                                     <p className="text-xs text-muted mt-0.5">
                                                                         {sendable
                                                                             ? "Ready to send email"
-                                                                            : `Missing: ${missingTypes.join(", ").toLowerCase()}`}
+                                                                            : `Missing: ${requiredMissingTypes.join(", ").toLowerCase()}`}
                                                                     </p>
                                                                 ) : null}
                                                             </div>
@@ -319,6 +337,41 @@ export function IntegrationDetailModal({
                                                             </li>
                                                             );
                                                         })}
+                                                        {optionalMissingTypes.map((keyType) => {
+                                                            const meta = providerView.keyTypes.find(
+                                                                (row) => row.key_type === keyType,
+                                                            );
+                                                            return (
+                                                                <li
+                                                                    key={`missing-${group.account}-${keyType}`}
+                                                                    className="flex items-center gap-3 px-3 py-2.5"
+                                                                >
+                                                                    <KeyRound className="size-4 text-muted shrink-0" />
+                                                                    <div className="flex-1 min-w-0">
+                                                                        <p className="text-sm font-medium text-foreground truncate">
+                                                                            {meta?.label ?? keyType}
+                                                                        </p>
+                                                                        <p className="text-xs text-muted">
+                                                                            Not set yet — recipients
+                                                                            see only the from email.
+                                                                        </p>
+                                                                    </div>
+                                                                    <Button
+                                                                        size="sm"
+                                                                        variant="secondary"
+                                                                        onPress={() =>
+                                                                            openCreate(
+                                                                                keyType,
+                                                                                group.account,
+                                                                            )
+                                                                        }
+                                                                    >
+                                                                        <Plus className="size-3.5" />
+                                                                        Add
+                                                                    </Button>
+                                                                </li>
+                                                            );
+                                                        })}
                                                     </ul>
                                                 </section>
                                             );
@@ -351,6 +404,12 @@ export function IntegrationDetailModal({
             <SmtpAccountFormModal
                 isOpen={smtpFormOpen}
                 onOpenChange={setSmtpFormOpen}
+                providerView={providerView}
+            />
+
+            <ResendAccountFormModal
+                isOpen={resendFormOpen}
+                onOpenChange={setResendFormOpen}
                 providerView={providerView}
             />
 

@@ -5,6 +5,7 @@ import {
     createContact,
     createContactFromLead,
     deleteContact,
+    deleteContactsBulk,
     enrichContact,
     getContact,
     getContactTags,
@@ -43,6 +44,7 @@ import type {
 } from "../interfaces/contact.interface";
 import { enrichmentQueryKeys } from "@/features/enrichment/hooks/use-enrichment";
 import { contactListQueryKeys } from "@/features/contact-lists/hooks/use-contact-lists";
+import type { PaginatedListMembers } from "@/features/contact-lists/interfaces/contact-list.interface";
 import type { EnrichmentSource } from "@/features/enrichment/constants/enrichment-sources";
 import { toast } from "@/hooks/use-toast";
 
@@ -121,11 +123,11 @@ export function useCreateContact() {
         mutationFn: (payload: CreateContactPayload) => createContact(payload),
         onSuccess: () => {
             qc.invalidateQueries({ queryKey: contactsQueryKeys.all });
-            toast({ title: "Lead added", duration: 1500 });
+            toast({ title: "Contact saved", duration: 1500 });
         },
         onError: (error: Error) => {
             toast({
-                title: "Could not add lead",
+                title: "Could not save contact",
                 description: error.message,
                 duration: 3000,
                 variant: "error",
@@ -140,11 +142,39 @@ export function useDeleteContact() {
         mutationFn: (uuid: string) => deleteContact(uuid),
         onSuccess: () => {
             qc.invalidateQueries({ queryKey: contactsQueryKeys.all });
+            qc.invalidateQueries({ queryKey: ["contact-lists"] });
             toast({ title: "Contact deleted", duration: 1500 });
         },
         onError: (error: Error) => {
             toast({
                 title: "Could not delete contact",
+                description: error.message,
+                duration: 3000,
+                variant: "error",
+            });
+        },
+    });
+}
+
+export function useDeleteContactsBulk() {
+    const qc = useQueryClient();
+    return useMutation({
+        mutationFn: (uuids: string[]) => deleteContactsBulk(uuids),
+        onSuccess: (data) => {
+            qc.invalidateQueries({ queryKey: contactsQueryKeys.all });
+            qc.invalidateQueries({ queryKey: ["contact-lists"] });
+            toast({
+                title: data.deleted === 1 ? "Contact deleted" : "Contacts deleted",
+                description:
+                    data.deleted === 1
+                        ? undefined
+                        : `${data.deleted} contacts removed from your CRM.`,
+                duration: 2000,
+            });
+        },
+        onError: (error: Error) => {
+            toast({
+                title: "Could not delete contacts",
                 description: error.message,
                 duration: 3000,
                 variant: "error",
@@ -187,9 +217,21 @@ export function useUpdateContactStatus() {
         onMutate: async (vars) => {
             await qc.cancelQueries({ queryKey: contactsQueryKeys.all });
             const lists = qc.getQueriesData<PaginatedContacts>({ queryKey: ["contacts", "list"] });
+            const listMembers = qc.getQueriesData<PaginatedListMembers>({
+                queryKey: ["contact-lists", "members"],
+            });
             for (const [key, value] of lists) {
                 if (!value) continue;
                 qc.setQueryData<PaginatedContacts>(key, {
+                    ...value,
+                    data: value.data.map((c) =>
+                        c.uuid === vars.uuid ? { ...c, status: vars.status } : c,
+                    ),
+                });
+            }
+            for (const [key, value] of listMembers) {
+                if (!value) continue;
+                qc.setQueryData<PaginatedListMembers>(key, {
                     ...value,
                     data: value.data.map((c) =>
                         c.uuid === vars.uuid ? { ...c, status: vars.status } : c,
@@ -203,10 +245,13 @@ export function useUpdateContactStatus() {
                     status: vars.status,
                 });
             }
-            return { lists, detail };
+            return { lists, listMembers, detail };
         },
         onError: (error: Error, _vars, ctx) => {
             for (const [key, value] of ctx?.lists ?? []) {
+                qc.setQueryData(key, value);
+            }
+            for (const [key, value] of ctx?.listMembers ?? []) {
                 qc.setQueryData(key, value);
             }
             if (ctx?.detail) {
@@ -221,6 +266,7 @@ export function useUpdateContactStatus() {
         },
         onSettled: (_data, _error, vars) => {
             qc.invalidateQueries({ queryKey: contactsQueryKeys.all });
+            qc.invalidateQueries({ queryKey: contactListQueryKeys.all });
             qc.invalidateQueries({ queryKey: contactsQueryKeys.interactions(vars.uuid) });
         },
     });
@@ -265,10 +311,52 @@ export function useUpdateContact() {
     return useMutation({
         mutationFn: (vars: { uuid: string; payload: UpdateContactPayload }) =>
             updateContact(vars.uuid, vars.payload),
-        onSuccess: (_data, vars) => {
-            qc.invalidateQueries({ queryKey: contactsQueryKeys.detail(vars.uuid) });
+        onMutate: async (vars) => {
+            await qc.cancelQueries({ queryKey: contactsQueryKeys.all });
+            await qc.cancelQueries({ queryKey: contactsQueryKeys.detail(vars.uuid) });
+            const lists = qc.getQueriesData<PaginatedContacts>({ queryKey: ["contacts", "list"] });
+            const listMembers = qc.getQueriesData<PaginatedListMembers>({
+                queryKey: ["contact-lists", "members"],
+            });
+            for (const [key, value] of lists) {
+                if (!value) continue;
+                qc.setQueryData<PaginatedContacts>(key, {
+                    ...value,
+                    data: value.data.map((c) =>
+                        c.uuid === vars.uuid ? ({ ...c, ...vars.payload } as Contact) : c,
+                    ),
+                });
+            }
+            for (const [key, value] of listMembers) {
+                if (!value) continue;
+                qc.setQueryData<PaginatedListMembers>(key, {
+                    ...value,
+                    data: value.data.map((c) =>
+                        c.uuid === vars.uuid ? ({ ...c, ...vars.payload } as Contact) : c,
+                    ),
+                });
+            }
+            const detail = qc.getQueryData<Contact>(contactsQueryKeys.detail(vars.uuid));
+            if (detail) {
+                qc.setQueryData<Contact>(contactsQueryKeys.detail(vars.uuid), {
+                    ...detail,
+                    ...vars.payload,
+                } as Contact);
+            }
+            return { lists, listMembers, detail };
+        },
+        onSuccess: (data, vars) => {
+            if (data.uuid !== vars.uuid) {
+                qc.removeQueries({ queryKey: contactsQueryKeys.detail(vars.uuid) });
+                qc.setQueryData(contactsQueryKeys.detail(data.uuid), data);
+            }
+            qc.invalidateQueries({ queryKey: contactsQueryKeys.detail(data.uuid) });
             qc.invalidateQueries({ queryKey: contactsQueryKeys.all });
-            toast({ title: "Contact updated", duration: 1500 });
+            qc.invalidateQueries({ queryKey: contactListQueryKeys.all });
+            toast({
+                title: data.uuid !== vars.uuid ? "Merged into existing contact" : "Contact updated",
+                duration: 2000,
+            });
         },
         onError: (error: Error) => {
             toast({

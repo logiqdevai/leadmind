@@ -8,12 +8,18 @@ import {
 } from "@heroui/react";
 import { Save } from "lucide-react";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
-import { createIntegrationKey } from "@/features/integrations/services/integrations.service";
+import { createSmtpAccount } from "@/features/integrations/services/integrations.service";
 import { suggestNextAccountLabel } from "@/features/integrations/constants/integration-key-types";
 import type { IntegrationProviderView } from "@/features/integrations/interfaces/integrations.interface";
 import { useQueryClient } from "@tanstack/react-query";
 import { integrationsQueryKeys } from "@/features/integrations/hooks/use-integrations";
 import { toast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
+
+const borderedFieldClass = cn(
+    "rounded-md border border-border bg-surface-primary",
+    "focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/40",
+);
 
 interface SmtpAccountFormModalProps {
     isOpen: boolean;
@@ -39,6 +45,7 @@ export function SmtpAccountFormModal({
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [fromEmail, setFromEmail] = useState("");
+    const [fromName, setFromName] = useState("");
     const [formError, setFormError] = useState<string | null>(null);
 
     useEffect(() => {
@@ -49,11 +56,13 @@ export function SmtpAccountFormModal({
         setUsername("");
         setPassword("");
         setFromEmail("");
+        setFromName("");
         setFormError(null);
     }, [defaultAccount, isOpen]);
 
     const handleSubmit = async () => {
         const trimmedAccount = account.trim();
+        const trimmedFromName = fromName.trim();
         const fields = {
             HOST: host.trim(),
             PORT: port.trim(),
@@ -76,16 +85,15 @@ export function SmtpAccountFormModal({
         setFormError(null);
 
         try {
-            const entries = Object.entries(fields) as Array<
-                ["HOST" | "PORT" | "USERNAME" | "PASSWORD" | "FROM_EMAIL", string]
-            >;
-            for (const [key_type, secret] of entries) {
-                await createIntegrationKey("SMTP", {
-                    key_type,
-                    account: trimmedAccount,
-                    secret,
-                });
-            }
+            await createSmtpAccount({
+                account: trimmedAccount,
+                host: fields.HOST,
+                port: Number.parseInt(fields.PORT, 10),
+                username: fields.USERNAME,
+                password: fields.PASSWORD,
+                from_email: fields.FROM_EMAIL,
+                ...(trimmedFromName ? { from_name: trimmedFromName } : {}),
+            });
             await qc.invalidateQueries({ queryKey: integrationsQueryKeys.all });
             toast({ title: "SMTP account saved", duration: 1500 });
             onOpenChange(false);
@@ -110,6 +118,7 @@ export function SmtpAccountFormModal({
                                 <Label htmlFor="smtp-account-label">Account label</Label>
                                 <Input
                                     id="smtp-account-label"
+                                    className={borderedFieldClass}
                                     value={account}
                                     onChange={(e) => setAccount(e.target.value)}
                                     placeholder="1, production, sales"
@@ -124,6 +133,7 @@ export function SmtpAccountFormModal({
                                     <Label htmlFor="smtp-host">Host</Label>
                                     <Input
                                         id="smtp-host"
+                                        className={borderedFieldClass}
                                         value={host}
                                         onChange={(e) => setHost(e.target.value)}
                                         placeholder="smtp.example.com"
@@ -133,6 +143,7 @@ export function SmtpAccountFormModal({
                                     <Label htmlFor="smtp-port">Port</Label>
                                     <Input
                                         id="smtp-port"
+                                        className={borderedFieldClass}
                                         value={port}
                                         onChange={(e) => setPort(e.target.value)}
                                         placeholder="587"
@@ -142,15 +153,30 @@ export function SmtpAccountFormModal({
                                     <Label htmlFor="smtp-from">From email</Label>
                                     <Input
                                         id="smtp-from"
+                                        className={borderedFieldClass}
                                         value={fromEmail}
                                         onChange={(e) => setFromEmail(e.target.value)}
                                         placeholder="noreply@example.com"
                                     />
                                 </div>
                                 <div className="flex flex-col gap-1.5 sm:col-span-2">
+                                    <Label htmlFor="smtp-from-name">Sender name</Label>
+                                    <Input
+                                        id="smtp-from-name"
+                                        className={borderedFieldClass}
+                                        value={fromName}
+                                        onChange={(e) => setFromName(e.target.value)}
+                                        placeholder="Acme Sales"
+                                    />
+                                    <p className="text-xs text-muted">
+                                        Shown to recipients as the From display name (optional).
+                                    </p>
+                                </div>
+                                <div className="flex flex-col gap-1.5 sm:col-span-2">
                                     <Label htmlFor="smtp-username">Username</Label>
                                     <Input
                                         id="smtp-username"
+                                        className={borderedFieldClass}
                                         value={username}
                                         onChange={(e) => setUsername(e.target.value)}
                                         placeholder="user@example.com"
@@ -160,6 +186,7 @@ export function SmtpAccountFormModal({
                                     <Label htmlFor="smtp-password">Password</Label>
                                     <Input
                                         id="smtp-password"
+                                        className={borderedFieldClass}
                                         type="password"
                                         autoComplete="off"
                                         value={password}

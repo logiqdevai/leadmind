@@ -198,6 +198,11 @@ export interface ContactScoreRow {
     };
 }
 
+export interface ContactFilterRef {
+    uuid: string;
+    name: string;
+}
+
 export interface Contact {
     uuid: string;
     user_uuid: string;
@@ -225,16 +230,25 @@ export interface Contact {
     lead: Lead;
     filter?: {
         uuid: string;
-        enrichment_sources: EnrichmentSource[];
-        scoring_instructions: Array<{
+        name?: string;
+        enrichment_sources?: EnrichmentSource[];
+        scoring_instructions?: Array<{
             uuid: string;
             name: string;
             instructions: string;
         }>;
-        outreach_instructions: string | null;
+        outreach_instructions?: string | null;
     } | null;
+    also_found_by?: ContactFilterRef[];
+    filters?: ContactFilterRef[];
+    lists?: ContactListRef[];
     outreach_messages?: OutreachMessage[];
     interactions?: Interaction[];
+}
+
+export interface ContactListRef {
+    uuid: string;
+    title: string;
 }
 
 export interface ListContactsQuery {
@@ -250,6 +264,7 @@ export interface ListContactsQuery {
     profile_field?: ContactProfileField;
     has_profile_field?: boolean;
     exclude_list_uuid?: string;
+    contact_list_uuid?: string;
     last_interaction_after?: string;
     last_interaction_before?: string;
     never_contacted?: boolean;
@@ -335,12 +350,12 @@ export interface CreateContactPayload {
 }
 
 export interface UpdateContactPayload {
-    filter_uuid?: string;
+    list_uuids?: string[];
     name?: string;
     email?: string;
     phone?: string;
     company?: string;
-    website?: string;
+    website?: string | null;
     google_maps_url?: string;
     title?: string;
     location?: string;

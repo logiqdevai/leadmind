@@ -1,11 +1,9 @@
 import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { Logger } from '@nestjs/common';
 import { Job } from 'bullmq';
-import { Channel } from '@/generated/prisma';
 import { MARKETING_MESSAGE_SEND_QUEUE } from '@/core/queues/queues.constants';
 import { CampaignMessageSendService } from '@/modules/marketing-campaigns/services/campaign-message-send.service';
 import { EmailProviderTarget } from '@/modules/integrations/interfaces/email-credentials.interface';
-
 export interface MessageSendJobData {
     campaign_uuid: string;
     mcc_uuid: string;

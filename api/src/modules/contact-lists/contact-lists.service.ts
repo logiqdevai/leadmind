@@ -6,6 +6,7 @@ import {
 import { Prisma } from '@/generated/prisma';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { ContactsService } from '@/modules/contacts/contacts.service';
+import { shapeContactFilterFields } from '@/modules/contacts/utils/contact-filter-link.utils';
 import { CampaignContactResolverService } from '@/modules/marketing-campaigns/services/campaign-contact-resolver.service';
 import { CampaignFiltersDto } from '@/modules/marketing-campaigns/dto/campaign-filters.dto';
 import { CreateContactListDto } from './dto/create-contact-list.dto';
@@ -165,6 +166,10 @@ export class ContactListsService {
                         include: {
                             tags: true,
                             lead: true,
+                            filter: { select: { uuid: true, name: true } },
+                            contact_filters: {
+                                include: { filter: { select: { uuid: true, name: true } } },
+                            },
                             contact_scores: {
                                 include: {
                                     scoring_instruction: { select: { uuid: true, name: true } },
@@ -181,12 +186,23 @@ export class ContactListsService {
         ]);
 
         return {
-            data: members.map((m) => ({
-                ...m.contact,
-                tags: m.contact.tags.map((t) => t.tag),
-                member_uuid: m.uuid,
-                added_at: m.created_at,
-            })),
+            data: members.map((m) => {
+                const { contact_filters, filter, tags, ...rest } = m.contact;
+                const shaped = shapeContactFilterFields({
+                    ...m.contact,
+                    filter,
+                    contact_filters,
+                });
+                return {
+                    ...rest,
+                    filter: shaped.filter,
+                    also_found_by: shaped.also_found_by,
+                    filters: shaped.filters,
+                    tags: tags.map((t) => t.tag),
+                    member_uuid: m.uuid,
+                    added_at: m.created_at,
+                };
+            }),
             total,
             page,
             limit,
@@ -242,6 +258,13 @@ export class ContactListsService {
         const where = this.campaignContactResolver.buildWhereInput(user_uuid, filters, {
             mode: 'preview',
         });
+        if (filters.contact_list_uuid) {
+            await this.contactsService.applyContactListIncludeFilter(
+                where,
+                user_uuid,
+                filters.contact_list_uuid,
+            );
+        }
         const matching = await this.prisma.contact.findMany({
             where,
             select: { uuid: true },
@@ -284,6 +307,29 @@ export class ContactListsService {
         });
 
         return { contact_uuid: contactUuid };
+    }
+
+    async removeContacts(user_uuid: string, listUuid: string, contactUuids: string[]) {
+        await this.ensureListOwned(user_uuid, listUuid);
+
+        const unique = [...new Set(contactUuids)];
+        const result = await this.prisma.contactListMember.deleteMany({
+            where: {
+                list_uuid: listUuid,
+                contact_uuid: { in: unique },
+            },
+        });
+
+        if (result.count === 0) {
+            throw new NotFoundException('None of the contacts are in this list');
+        }
+
+        await this.prisma.contactList.update({
+            where: { uuid: listUuid },
+            data: { updated_at: new Date() },
+        });
+
+        return { removed: result.count };
     }
 
     async getMemberContactUuids(listUuid: string): Promise<string[]> {

@@ -49,6 +49,7 @@ export interface MessageComposerProps {
     disabled?: boolean;
     /** Hint text under the message body referencing placeholders. */
     placeholderHint?: React.ReactNode;
+    emailSubjectError?: string | null;
 }
 
 export function MessageComposer({
@@ -62,14 +63,17 @@ export function MessageComposer({
     isAiPending = false,
     disabled = false,
     placeholderHint,
+    emailSubjectError = null,
 }: MessageComposerProps) {
     const [prompt, setPrompt] = useState("");
     const [language, setLanguage] = useState<OutreachLanguage>(DEFAULT_LANGUAGE);
+    const [pendingAiAction, setPendingAiAction] = useState<AiAction | null>(null);
 
     const isEmail = activeChannel === Channel.EMAIL;
     const isLinkedIn = activeChannel === Channel.LINKEDIN;
     const isCall = activeChannel === Channel.PHONE_CALL;
-    const promptEmpty = prompt.trim().length === 0;
+    const trimmedPrompt = prompt.trim();
+    const promptEmpty = trimmedPrompt.length === 0;
 
     const plainBody = isLinkedIn
         ? value.linkedinContent
@@ -80,6 +84,8 @@ export function MessageComposer({
     const channelHasExisting = isEmail
         ? !isEmailHtmlEmpty(value.emailContent)
         : plainBody.trim().length > 0;
+
+    const hasTransformSource = channelHasExisting || !promptEmpty;
 
     const setPlainBody = (content: string) => {
         if (isLinkedIn) {
@@ -92,19 +98,26 @@ export function MessageComposer({
     };
 
     const runAction = async (action: AiAction) => {
-        if (!onAiGenerate || isAiPending) return;
+        if (!onAiGenerate || isAiPending || disabled) return;
         const meta = AI_ACTION_META[action];
-        if (meta.requiresExisting && !channelHasExisting) return;
+        if (meta.requiresExisting && !hasTransformSource) return;
         if (action === "generate" && promptEmpty) return;
 
+        const currentContent = channelHasExisting
+            ? isEmail
+                ? value.emailContent
+                : plainBody
+            : trimmedPrompt;
+
+        setPendingAiAction(action);
         try {
             const result = await onAiGenerate({
                 channel: activeChannel,
                 action,
-                prompt: prompt.trim(),
+                prompt: trimmedPrompt,
                 language,
                 currentSubject: isEmail ? value.emailSubject : undefined,
-                currentContent: isEmail ? value.emailContent : plainBody,
+                currentContent,
             });
             if (isEmail) {
                 onChange({
@@ -115,7 +128,8 @@ export function MessageComposer({
                 setPlainBody(result.content);
             }
         } catch {
-            // toast surfaced by caller hook
+        } finally {
+            setPendingAiAction(null);
         }
     };
 
@@ -191,13 +205,14 @@ export function MessageComposer({
                         {aiActions.map((action) => {
                             const meta = AI_ACTION_META[action];
                             const Icon = meta.icon;
-                            const requiresExisting = meta.requiresExisting && !channelHasExisting;
+                            const requiresExisting = meta.requiresExisting && !hasTransformSource;
                             const requiresPrompt = action === "generate" && promptEmpty;
-                            const disabledAction = requiresExisting || requiresPrompt || isAiPending;
-                            const tooltip = requiresExisting
-                                ? "Write or generate a draft first"
-                                : requiresPrompt
-                                  ? "Enter a prompt above"
+                            const disabledAction =
+                                requiresExisting || requiresPrompt || isAiPending || disabled;
+                            const tooltip = requiresPrompt
+                                ? "Enter a prompt above"
+                                : requiresExisting
+                                  ? "Write a draft below or enter a prompt above"
                                   : meta.description;
                             return (
                                 <span key={action} title={tooltip} className="inline-flex">
@@ -205,7 +220,7 @@ export function MessageComposer({
                                         size="sm"
                                         variant={action === "generate" ? "primary" : "secondary"}
                                         isDisabled={disabledAction}
-                                        isPending={isAiPending && action === "generate"}
+                                        isPending={isAiPending && pendingAiAction === action}
                                         onPress={() => runAction(action)}
                                         idleLeading={<Icon className="size-3.5" />}
                                     >
@@ -222,11 +237,20 @@ export function MessageComposer({
                 <TextField className="w-full" name="composer-subject">
                     <Label>Subject</Label>
                     <Input
+                        className={cn(
+                            "rounded-md border border-border bg-surface-primary",
+                            "focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/40",
+                            emailSubjectError && "border-danger",
+                        )}
                         placeholder="Email subject"
                         value={value.emailSubject}
                         onChange={(e) => onChange({ emailSubject: e.target.value })}
                         disabled={disabled || isAiPending}
+                        aria-invalid={Boolean(emailSubjectError) || undefined}
                     />
+                    {emailSubjectError ? (
+                        <p className="mt-1 text-xs text-danger">{emailSubjectError}</p>
+                    ) : null}
                 </TextField>
             )}
 
