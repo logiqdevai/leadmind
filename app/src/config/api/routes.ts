@@ -232,6 +232,8 @@ export const ApiRoutes = {
             `/organisations/${uuid}/members/${userUuid}`,
         invitations: (uuid: string) => `/organisations/${uuid}/invitations`,
         createInvitation: (uuid: string) => `/organisations/${uuid}/invitations`,
+        resendInvitation: (uuid: string, invitationUuid: string) =>
+            `/organisations/${uuid}/invitations/${invitationUuid}/resend`,
         revokeInvitation: (uuid: string, invitationUuid: string) =>
             `/organisations/${uuid}/invitations/${invitationUuid}`,
         previewInvitation: (token: string) => `/organisations/invitations/${token}`,

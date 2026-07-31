@@ -341,7 +341,7 @@ export class ContactAiService {
             return [];
         }
 
-        const sender_business_description = await this.resolveSenderBusinessDescription(
+        const sender = await this.resolveSenderPromptContext(
             contact.organisation_uuid,
         );
 
@@ -369,7 +369,8 @@ export class ContactAiService {
                     lead,
                     filter.outreach_instructions,
                     undefined,
-                    sender_business_description,
+                    sender.business_description,
+                    sender.has_sender_profile,
                 );
 
                 const content =
@@ -404,7 +405,7 @@ export class ContactAiService {
         language?: string,
         campaign_uuid?: string,
     ): Promise<{ generated: number; skipped: number; failed: number; message_uuids: string[] }> {
-        const sender_business_description = await this.resolveSenderBusinessDescription(organisation_uuid);
+        const sender = await this.resolveSenderPromptContext(organisation_uuid);
         let generated = 0;
         let skipped = 0;
         let failed = 0;
@@ -436,7 +437,8 @@ export class ContactAiService {
                     item.lead,
                     prompt,
                     language,
-                    sender_business_description,
+                    sender.business_description,
+                    sender.has_sender_profile,
                 );
                 const sanitizedContent =
                     sanitizeAiDraftContent(draft.content, channel);
@@ -481,7 +483,7 @@ export class ContactAiService {
         prompt: string,
         language?: string,
     ): Promise<{ batch_id: string; queued: number }> {
-        const sender_business_description = await this.resolveSenderBusinessDescription(organisation_uuid);
+        const sender = await this.resolveSenderPromptContext(organisation_uuid);
         const systemContent =
             'You are an expert B2B outreach copywriter. Produce drafts ready for human review.';
 
@@ -508,7 +510,8 @@ export class ContactAiService {
                 contact.lead,
                 prompt,
                 language,
-                sender_business_description,
+                sender.business_description,
+                sender.has_sender_profile,
             );
 
             requests.push({
@@ -741,12 +744,13 @@ export class ContactAiService {
             throw new ForbiddenException(`Contact ${dto.contact_uuid} not found`);
         }
 
-        const sender_business_description = await this.resolveSenderBusinessDescription(organisation_uuid);
+        const sender = await this.resolveSenderPromptContext(organisation_uuid);
         const action = dto.action ?? 'generate';
 
         if (action !== 'generate') {
             return generateWithCampaignPrompt(this.aiService, organisation_uuid, dto.channel, action, {
-                sender_business_description,
+                sender_business_description: sender.business_description,
+                has_sender_profile: sender.has_sender_profile,
                 user_prompt: dto.prompt,
                 current_subject: dto.current_subject,
                 current_content: dto.current_content,
@@ -760,7 +764,8 @@ export class ContactAiService {
             contact.lead,
             dto.prompt ?? '',
             dto.language,
-            sender_business_description,
+            sender.business_description,
+            sender.has_sender_profile,
         );
         const content = sanitizeAiDraftContent(draft.content, dto.channel);
 
@@ -784,18 +789,27 @@ export class ContactAiService {
         );
     }
 
-    private async resolveSenderBusinessDescription(organisation_uuid: string): Promise<string | undefined> {
-        const profile = await this.prisma.senderProfile.findFirst({
-            where: { organisation_uuid, is_default: true },
-            select: { business_description: true },
-        });
-        if (profile?.business_description) return profile.business_description;
-        const fallback = await this.prisma.senderProfile.findFirst({
-            where: { organisation_uuid },
-            orderBy: { created_at: 'desc' },
-            select: { business_description: true },
-        });
-        return fallback?.business_description ?? undefined;
+    private async resolveSenderPromptContext(organisation_uuid: string): Promise<{
+        has_sender_profile: boolean;
+        business_description?: string;
+    }> {
+        const profile =
+            (await this.prisma.senderProfile.findFirst({
+                where: { organisation_uuid, is_default: true },
+                select: { business_description: true },
+            })) ??
+            (await this.prisma.senderProfile.findFirst({
+                where: { organisation_uuid },
+                orderBy: { created_at: 'desc' },
+                select: { business_description: true },
+            }));
+        if (!profile) {
+            return { has_sender_profile: false };
+        }
+        return {
+            has_sender_profile: true,
+            business_description: profile.business_description ?? undefined,
+        };
     }
 
     private async draftForChannel(
@@ -805,6 +819,7 @@ export class ContactAiService {
         outreach_instructions: string,
         language?: string,
         sender_business_description?: string,
+        has_sender_profile = true,
     ): Promise<{ subject: string | null; content: string }> {
         const prompt = this.promptForChannel(
             channel,
@@ -813,6 +828,7 @@ export class ContactAiService {
             outreach_instructions,
             language,
             sender_business_description,
+            has_sender_profile,
         );
 
         const { response } = await this.aiService.generateText({
@@ -820,8 +836,7 @@ export class ContactAiService {
             provider: AiProviders.openai,
             model: AiModels.openai.gpt4o,
             prompt,
-            system:
-                'You are an expert B2B outreach copywriter. Produce drafts ready for human review. Never write square-bracket fill-in blanks like [full name] or [address]. Use only {{snake_case}} placeholders from the instructions, or omit the field.',
+            system: 'You are an expert B2B outreach copywriter. Produce drafts ready for human review.',
             usage: {
                 operation: 'CONTACT_DRAFT',
                 reference_type: 'contact',
@@ -842,16 +857,45 @@ export class ContactAiService {
         outreach_instructions: string,
         language?: string,
         sender_business_description?: string,
+        has_sender_profile = true,
     ): string {
         switch (channel) {
             case Channel.EMAIL:
-                return buildEmailPrompt(contact, lead, outreach_instructions, language, sender_business_description);
+                return buildEmailPrompt(
+                    contact,
+                    lead,
+                    outreach_instructions,
+                    language,
+                    sender_business_description,
+                    has_sender_profile,
+                );
             case Channel.SMS:
-                return buildSmsPrompt(contact, lead, outreach_instructions, language, sender_business_description);
+                return buildSmsPrompt(
+                    contact,
+                    lead,
+                    outreach_instructions,
+                    language,
+                    sender_business_description,
+                    has_sender_profile,
+                );
             case Channel.LINKEDIN:
-                return buildLinkedInPrompt(contact, lead, outreach_instructions, language, sender_business_description);
+                return buildLinkedInPrompt(
+                    contact,
+                    lead,
+                    outreach_instructions,
+                    language,
+                    sender_business_description,
+                    has_sender_profile,
+                );
             case Channel.PHONE_CALL:
-                return buildPhoneCallPrompt(contact, lead, outreach_instructions, language, sender_business_description);
+                return buildPhoneCallPrompt(
+                    contact,
+                    lead,
+                    outreach_instructions,
+                    language,
+                    sender_business_description,
+                    has_sender_profile,
+                );
             default:
                 throw new Error(`Unsupported channel: ${channel}`);
         }

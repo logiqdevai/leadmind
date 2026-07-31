@@ -773,31 +773,43 @@ export class MarketingCampaignsService {
         dto: GenerateCampaignMessageDto,
     ): Promise<{ subject: string | null; content: string }> {
         const campaign = await this.requireOwned(organisation_uuid, uuid);
-        const senderDescription = await this.resolveSenderBusinessDescription(
+        const sender = await this.resolveSenderPromptContext(
             organisation_uuid,
             campaign.sender_profile_uuid,
         );
         return this.aiService.generate(organisation_uuid, dto, {
             campaign_name: campaign.name,
             campaign_description: campaign.description ?? undefined,
-            sender_business_description: senderDescription,
+            sender_business_description: sender.business_description,
+            has_sender_profile: sender.has_sender_profile,
         });
     }
 
-    private async resolveSenderBusinessDescription(
+    private async resolveSenderPromptContext(
         organisation_uuid: string,
         sender_profile_uuid: string | null,
-    ): Promise<string | undefined> {
+    ): Promise<{ has_sender_profile: boolean; business_description?: string }> {
         const profile = sender_profile_uuid
             ? await this.prisma.senderProfile.findFirst({
                 where: { uuid: sender_profile_uuid, organisation_uuid },
                 select: { business_description: true },
             })
-            : await this.prisma.senderProfile.findFirst({
+            : (await this.prisma.senderProfile.findFirst({
                 where: { organisation_uuid, is_default: true },
                 select: { business_description: true },
-            });
-        return profile?.business_description ?? undefined;
+            })) ??
+              (await this.prisma.senderProfile.findFirst({
+                where: { organisation_uuid },
+                orderBy: { created_at: 'desc' },
+                select: { business_description: true },
+            }));
+        if (!profile) {
+            return { has_sender_profile: false };
+        }
+        return {
+            has_sender_profile: true,
+            business_description: profile.business_description ?? undefined,
+        };
     }
 
     private async requireOwned(organisation_uuid: string, uuid: string): Promise<MarketingCampaign> {

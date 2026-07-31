@@ -15,12 +15,14 @@ export class CampaignAiService {
             campaign_name?: string;
             campaign_description?: string;
             sender_business_description?: string;
+            has_sender_profile?: boolean;
         },
     ): Promise<{ subject: string | null; content: string }> {
         return generateWithCampaignPrompt(this.aiService, organisation_uuid, dto.channel, dto.action, {
             campaign_name: ctx.campaign_name,
             campaign_description: ctx.campaign_description,
             sender_business_description: ctx.sender_business_description,
+            has_sender_profile: ctx.has_sender_profile,
             user_prompt: dto.prompt,
             current_subject: dto.current_subject,
             current_content: dto.current_content,

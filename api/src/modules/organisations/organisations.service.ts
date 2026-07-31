@@ -3,6 +3,8 @@ import {
     ConflictException,
     ForbiddenException,
     Injectable,
+    InternalServerErrorException,
+    Logger,
     NotFoundException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -26,6 +28,8 @@ const INVITE_EXPIRY_DAYS = 7;
 
 @Injectable()
 export class OrganisationsService {
+    private readonly logger = new Logger(OrganisationsService.name);
+
     constructor(
         private readonly prisma: PrismaService,
         private readonly jwtService: CreateJwtService,
@@ -173,6 +177,10 @@ export class OrganisationsService {
             OrganisationRole.ADMIN,
         ]);
 
+        if (actorUuid === targetUserUuid) {
+            throw new BadRequestException('Cannot change your own role');
+        }
+
         if (dto.role === OrganisationRole.OWNER) {
             throw new BadRequestException('Cannot assign OWNER via role update');
         }
@@ -283,20 +291,20 @@ export class OrganisationsService {
             },
         });
 
-        const appUrl = this.configService.get<string>('APP_URL') || 'http://localhost:5173';
-        const inviteUrl = `${appUrl}/auth/invite/${invitation.token}`;
-
-        setImmediate(async () => {
-            try {
-                await this.mailService.create({
-                    to: email,
-                    from: EmailConfig.email_addresses.confirmation,
-                    subject: `Join ${organisation.name} on Leadmind`,
-                    text: `You have been invited to join ${organisation.name}. Open this link to accept: ${inviteUrl}`,
-                    html: `<p>You have been invited to join <strong>${organisation.name}</strong>.</p><p><a href="${inviteUrl}">Accept invitation</a></p><p>This link expires in ${INVITE_EXPIRY_DAYS} days.</p>`,
-                });
-            } catch {}
-        });
+        try {
+            await this.sendInvitationEmail(organisation.name, invitation.email, invitation.token);
+        } catch (error) {
+            this.logger.error(
+                `Failed to send invite email to=${email} invitation=${invitation.uuid}`,
+                error instanceof Error ? error.stack : String(error),
+            );
+            await this.prisma.organisationInvitation.delete({
+                where: { uuid: invitation.uuid },
+            });
+            throw new InternalServerErrorException(
+                'Failed to send invitation email. Please try again.',
+            );
+        }
 
         return invitation;
     }
@@ -316,6 +324,60 @@ export class OrganisationsService {
         });
     }
 
+    async resendInvitation(
+        organisationUuid: string,
+        actorUuid: string,
+        invitationUuid: string,
+    ) {
+        await this.requireMembership(organisationUuid, actorUuid, [
+            OrganisationRole.OWNER,
+            OrganisationRole.ADMIN,
+        ]);
+
+        const invitation = await this.prisma.organisationInvitation.findFirst({
+            where: {
+                uuid: invitationUuid,
+                organisation_uuid: organisationUuid,
+                status: OrganisationInviteStatus.PENDING,
+            },
+        });
+
+        if (!invitation) {
+            throw new NotFoundException('Invitation not found');
+        }
+
+        const organisation = await this.prisma.organisation.findUnique({
+            where: { uuid: organisationUuid },
+        });
+
+        if (!organisation) {
+            throw new NotFoundException('Organisation not found');
+        }
+
+        const expiresAt = new Date();
+        expiresAt.setDate(expiresAt.getDate() + INVITE_EXPIRY_DAYS);
+        const token = randomBytes(32).toString('hex');
+
+        const updated = await this.prisma.organisationInvitation.update({
+            where: { uuid: invitationUuid },
+            data: { token, expires_at: expiresAt },
+        });
+
+        try {
+            await this.sendInvitationEmail(organisation.name, updated.email, updated.token);
+        } catch (error) {
+            this.logger.error(
+                `Failed to resend invite email to=${updated.email} invitation=${updated.uuid}`,
+                error instanceof Error ? error.stack : String(error),
+            );
+            throw new InternalServerErrorException(
+                'Failed to resend invitation email. Please try again.',
+            );
+        }
+
+        return updated;
+    }
+
     async revokeInvitation(organisationUuid: string, actorUuid: string, invitationUuid: string) {
         await this.requireMembership(organisationUuid, actorUuid, [
             OrganisationRole.OWNER,
@@ -333,6 +395,25 @@ export class OrganisationsService {
         return this.prisma.organisationInvitation.update({
             where: { uuid: invitationUuid },
             data: { status: OrganisationInviteStatus.REVOKED },
+        });
+    }
+
+    private async sendInvitationEmail(
+        organisationName: string,
+        email: string,
+        token: string,
+    ) {
+        const appUrl = (
+            this.configService.get<string>('APP_URL') || 'http://localhost:5173'
+        ).replace(/^["']|["']$/g, '');
+        const inviteUrl = `${appUrl}/auth/invite/${token}`;
+
+        await this.mailService.create({
+            to: email,
+            from: `Leadmind <${EmailConfig.email_addresses.confirmation}>`,
+            subject: `Join ${organisationName} on Leadmind`,
+            text: `You have been invited to join ${organisationName}. Open this link to accept: ${inviteUrl}`,
+            html: `<p>You have been invited to join <strong>${organisationName}</strong>.</p><p><a href="${inviteUrl}">Accept invitation</a></p><p>This link expires in ${INVITE_EXPIRY_DAYS} days.</p>`,
         });
     }
 

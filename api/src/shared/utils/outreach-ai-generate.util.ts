@@ -8,6 +8,7 @@ import { CampaignAiAction } from '@/modules/marketing-campaigns/dto/generate-cam
 
 export interface OutreachAiGenerateContext {
     sender_business_description?: string;
+    has_sender_profile?: boolean;
     campaign_name?: string;
     campaign_description?: string;
     user_prompt?: string;

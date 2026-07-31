@@ -167,6 +167,22 @@ export class OrganisationsController {
         return this.organisationsService.listInvitations(uuid, actorUuid);
     }
 
+    @Post(':uuid/invitations/:invitationUuid/resend')
+    @ApiBearerAuth()
+    @UseGuards(JwtGuard)
+    @ApiOperation({ summary: 'Resend invitation email' })
+    resendInvitation(
+        @Param('uuid') uuid: string,
+        @Param('invitationUuid') invitationUuid: string,
+        @CurrentUser('uuid') actorUuid: string,
+    ) {
+        return this.organisationsService.resendInvitation(
+            uuid,
+            actorUuid,
+            invitationUuid,
+        );
+    }
+
     @Delete(':uuid/invitations/:invitationUuid')
     @ApiBearerAuth()
     @UseGuards(JwtGuard)

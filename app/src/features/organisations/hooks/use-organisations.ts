@@ -13,6 +13,7 @@ import {
     listOrganisations,
     previewInvitation,
     removeMember,
+    resendInvitation,
     revokeInvitation,
     switchOrganisation,
     updateMemberRole,
@@ -171,6 +172,27 @@ export function useCreateInvitation(orgUuid: string) {
         onError: (error: Error) => {
             toast({
                 title: "Could not send invitation",
+                description: error.message,
+                variant: "error",
+            });
+        },
+    });
+}
+
+export function useResendInvitation(orgUuid: string) {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: (invitationUuid: string) => resendInvitation(orgUuid, invitationUuid),
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: organisationQueryKeys.invitations(orgUuid),
+            });
+            toast({ title: "Invitation resent", duration: 2000 });
+        },
+        onError: (error: Error) => {
+            toast({
+                title: "Could not resend invitation",
                 description: error.message,
                 variant: "error",
             });

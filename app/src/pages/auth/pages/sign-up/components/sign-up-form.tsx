@@ -59,7 +59,7 @@ export function SignUpForm({
 
   function onSubmit(data: SignUpFormValues) {
     mutate({
-      email: data.email,
+      email: emailLocked && resolvedEmail ? resolvedEmail : data.email,
       full_name: data.full_name,
       password: data.password,
       invite_token: resolvedInviteToken || undefined,
@@ -98,7 +98,7 @@ export function SignUpForm({
           type="email"
           autoComplete="email"
           fullWidth
-          isReadOnly={emailLocked}
+          isDisabled={emailLocked}
         />
         {errors.email && <FieldError>{errors.email.message}</FieldError>}
       </div>

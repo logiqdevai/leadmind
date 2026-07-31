@@ -16,6 +16,7 @@ import {
     useOrganisationMembers,
     useOrganisations,
     useRemoveMember,
+    useResendInvitation,
     useRevokeInvitation,
     useUpdateMemberRole,
     useUpdateOrganisation,
@@ -55,6 +56,7 @@ const SettingsOrganisationPage: FC = () => {
         canInvite ? organisationUuid : "",
     );
     const createInvitation = useCreateInvitation(organisationUuid);
+    const resendInvitation = useResendInvitation(organisationUuid);
     const revokeInvitation = useRevokeInvitation(organisationUuid);
     const updateRole = useUpdateMemberRole(organisationUuid);
     const removeMember = useRemoveMember(organisationUuid);
@@ -208,7 +210,9 @@ const SettingsOrganisationPage: FC = () => {
                                     </p>
                                     <p className="text-[11px] text-muted">{member.role}</p>
                                 </div>
-                                {canManage && member.role !== OrganisationRoles.OWNER ? (
+                                {canManage &&
+                                member.role !== OrganisationRoles.OWNER &&
+                                member.user_uuid !== currentUserUuid ? (
                                     <div className="flex items-center gap-2 shrink-0">
                                         <Select
                                             aria-label="Role"
@@ -245,17 +249,15 @@ const SettingsOrganisationPage: FC = () => {
                                                 </ListBox>
                                             </Select.Popover>
                                         </Select>
-                                        {member.user_uuid !== currentUserUuid ? (
-                                            <Button
-                                                size="sm"
-                                                variant="ghost"
-                                                onPress={() =>
-                                                    removeMember.mutate(member.user_uuid)
-                                                }
-                                            >
-                                                Remove
-                                            </Button>
-                                        ) : null}
+                                        <Button
+                                            size="sm"
+                                            variant="ghost"
+                                            onPress={() =>
+                                                removeMember.mutate(member.user_uuid)
+                                            }
+                                        >
+                                            Remove
+                                        </Button>
                                     </div>
                                 ) : null}
                             </li>
@@ -287,13 +289,34 @@ const SettingsOrganisationPage: FC = () => {
                                             {new Date(invite.expires_at).toLocaleDateString()}
                                         </p>
                                     </div>
-                                    <Button
-                                        size="sm"
-                                        variant="secondary"
-                                        onPress={() => revokeInvitation.mutate(invite.uuid)}
-                                    >
-                                        Revoke
-                                    </Button>
+                                    <div className="flex items-center gap-1.5 shrink-0">
+                                        <Button
+                                            size="sm"
+                                            variant="ghost"
+                                            isDisabled={
+                                                resendInvitation.isPending ||
+                                                revokeInvitation.isPending
+                                            }
+                                            onPress={() =>
+                                                resendInvitation.mutate(invite.uuid)
+                                            }
+                                        >
+                                            Resend
+                                        </Button>
+                                        <Button
+                                            size="sm"
+                                            variant="secondary"
+                                            isDisabled={
+                                                resendInvitation.isPending ||
+                                                revokeInvitation.isPending
+                                            }
+                                            onPress={() =>
+                                                revokeInvitation.mutate(invite.uuid)
+                                            }
+                                        >
+                                            Revoke
+                                        </Button>
+                                    </div>
                                 </li>
                             ))}
                         </ul>

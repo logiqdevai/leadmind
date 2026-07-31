@@ -129,6 +129,20 @@ export const createInvitation = async (uuid: string, dto: CreateInvitationDto) =
     }
 };
 
+export const resendInvitation = async (orgUuid: string, invitationUuid: string) => {
+    try {
+        const response = await axiosInstance.post(
+            ApiRoutes.organisations.resendInvitation(orgUuid, invitationUuid),
+        );
+        return response.data;
+    } catch (error: unknown) {
+        const message =
+            (error as { response?: { data?: { message?: string } } })?.response?.data
+                ?.message || "Failed to resend invitation. Please try again.";
+        throw new Error(Array.isArray(message) ? message.join(", ") : message);
+    }
+};
+
 export const revokeInvitation = async (orgUuid: string, invitationUuid: string) => {
     try {
         const response = await axiosInstance.delete(

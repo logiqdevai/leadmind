@@ -32,7 +32,6 @@ export class EmailAuthService {
             }
 
             const hashedPassword = await bcrypt.hash(dto.password, 10);
-            const workspaceName = `${dto.email.split('@')[0]}'s workspace`;
 
             const user = await this.prisma.user.create({
                 data: {
@@ -45,7 +44,7 @@ export class EmailAuthService {
 
             const organisation = await this.organisationsService.createForUser(
                 user.uuid,
-                workspaceName,
+                'Default Organisation',
             );
 
             return this.organisationsService.buildAuthResponse(user.uuid, organisation.uuid);
@@ -83,7 +82,7 @@ export class EmailAuthService {
             if (!membership) {
                 const organisation = await this.organisationsService.createForUser(
                     user.uuid,
-                    `${user.email.split('@')[0]}'s workspace`,
+                    'Default Organisation',
                 );
                 membership = await this.prisma.organisationMember.findFirst({
                     where: {
