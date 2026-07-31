@@ -11,8 +11,10 @@ import { TwilioWebhookController } from './twilio-webhook.controller';
 import { UnsubscribeController } from './unsubscribe.controller';
 import { OpenAiWebhookController } from './openai-webhook.controller';
 import { UtmAnalyticsWebhookController } from './utm-analytics-webhook.controller';
+import { EmailTrackingController } from './email-tracking.controller';
 import { WebhookEventService } from './services/webhook-event.service';
 import { CampaignUtmAnalyticsService } from './services/campaign-utm-analytics.service';
+import { EmailTrackingService } from './services/email-tracking.service';
 
 import { OpenAiBatchDispatchService } from './services/openai-batch-dispatch.service';
 
@@ -32,8 +34,14 @@ import { OpenAiBatchDispatchService } from './services/openai-batch-dispatch.ser
         UnsubscribeController,
         OpenAiWebhookController,
         UtmAnalyticsWebhookController,
+        EmailTrackingController,
     ],
-    providers: [WebhookEventService, CampaignUtmAnalyticsService, OpenAiBatchDispatchService],
+    providers: [
+        WebhookEventService,
+        CampaignUtmAnalyticsService,
+        OpenAiBatchDispatchService,
+        EmailTrackingService,
+    ],
     exports: [WebhookEventService, CampaignUtmAnalyticsService, OpenAiBatchDispatchService],
 })
 export class WebhooksModule { }

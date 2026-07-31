@@ -18,6 +18,7 @@ import { TwillioSmsService } from '@/integrations/notifications/twillio/services
 import { EmailConfig } from '@/shared/config/email';
 import { hasUsableContactEmail, normalizeContactEmail } from '@/shared/utils/contact-email.util';
 import { sanitizeEmailHtml } from '@/shared/utils/sanitize-html.util';
+import { applySmtpEmailTracking } from '@/shared/utils/email-tracking.util';
 import { EmailCredentialsService } from '@/modules/integrations/services/email-credentials.service';
 import { EmailProviderTarget } from '@/modules/integrations/interfaces/email-credentials.interface';
 import { SenderProfilesService } from '@/modules/sender-profiles/sender-profiles.service';
@@ -119,6 +120,10 @@ export class MessageSendService {
                     : await this.emailCredentialsService.resolveDefaultTarget(message.organisation_uuid);
 
             const target = providerOverride ?? metadataProvider ?? defaultTarget;
+
+            if (target?.provider === ExternalIntegrationProvider.SMTP) {
+                createEmail.html = this.applySmtpTracking(message.uuid, createEmail.html);
+            }
 
             this.logger.log(
                 `Email send message=${message.uuid} to=${toEmail} subject="${rendered.subject ?? 'Outreach message'}" provider=${target?.provider ?? 'none'} account=${target?.account ?? 'none'} replyTo=${replyTo}`,
@@ -416,5 +421,25 @@ export class MessageSendService {
         const base = process.env.PUBLIC_APP_URL || process.env.APP_URL || '';
         const url = `${base.replace(/\/$/, '')}/unsubscribe/${token}`;
         return `${html}<hr style="margin-top:24px;border:none;border-top:1px solid #eee"/><p style="font-size:12px;color:#888;text-align:center;margin-top:12px">Don't want these emails? <a href="${url}" style="color:#888">Unsubscribe</a>.</p>`;
+    }
+
+    private applySmtpTracking(messageUuid: string, html: string): string {
+        const apiBase =
+            this.configService.get<string>('API_URL') ||
+            this.configService.get<string>('PUBLIC_API_URL') ||
+            '';
+        const secret = this.configService.get<string>('JWT_SECRET') || '';
+        if (!apiBase || !secret) {
+            this.logger.warn(
+                `SMTP tracking skipped message=${messageUuid}: missing API_URL or JWT_SECRET`,
+            );
+            return html;
+        }
+        return applySmtpEmailTracking({
+            html,
+            messageUuid,
+            apiBase,
+            secret,
+        });
     }
 }
