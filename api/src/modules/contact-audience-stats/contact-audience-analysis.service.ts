@@ -53,18 +53,18 @@ export class ContactAudienceAnalysisService {
     ) {}
 
     async createFilterAnalysis(
-        user_uuid: string,
+        organisation_uuid: string,
         filterUuid: string,
     ): Promise<ContactAudienceAnalysisRecord> {
         const filter = await this.prisma.filter.findFirst({
-            where: { uuid: filterUuid, user_uuid },
+            where: { uuid: filterUuid, organisation_uuid },
             select: { uuid: true, name: true },
         });
         if (!filter) throw new NotFoundException('Filter not found');
 
-        const stats = await this.contactAudienceStatsService.getFilterStats(user_uuid, filterUuid, {});
+        const stats = await this.contactAudienceStatsService.getFilterStats(organisation_uuid, filterUuid, {});
         return this.runAnalysis({
-            user_uuid,
+            organisation_uuid,
             scope: ContactAudienceAnalysisScope.FILTER,
             filter_uuid: filter.uuid,
             contact_list_uuid: null,
@@ -75,18 +75,18 @@ export class ContactAudienceAnalysisService {
     }
 
     async createListAnalysis(
-        user_uuid: string,
+        organisation_uuid: string,
         listUuid: string,
     ): Promise<ContactAudienceAnalysisRecord> {
         const list = await this.prisma.contactList.findFirst({
-            where: { uuid: listUuid, user_uuid },
+            where: { uuid: listUuid, organisation_uuid },
             select: { uuid: true, title: true },
         });
         if (!list) throw new NotFoundException('Contact list not found');
 
-        const stats = await this.contactAudienceStatsService.getListStats(user_uuid, listUuid, {});
+        const stats = await this.contactAudienceStatsService.getListStats(organisation_uuid, listUuid, {});
         return this.runAnalysis({
-            user_uuid,
+            organisation_uuid,
             scope: ContactAudienceAnalysisScope.LIST,
             filter_uuid: null,
             contact_list_uuid: list.uuid,
@@ -97,55 +97,55 @@ export class ContactAudienceAnalysisService {
     }
 
     async listFilterAnalyses(
-        user_uuid: string,
+        organisation_uuid: string,
         filterUuid: string,
         query: ListContactAudienceAnalysesDto,
     ): Promise<PaginatedContactAudienceAnalyses> {
-        await this.assertFilterOwnership(user_uuid, filterUuid);
-        return this.listAnalyses(user_uuid, {
+        await this.assertFilterOwnership(organisation_uuid, filterUuid);
+        return this.listAnalyses(organisation_uuid, {
             scope: ContactAudienceAnalysisScope.FILTER,
             filter_uuid: filterUuid,
         }, query);
     }
 
     async listListAnalyses(
-        user_uuid: string,
+        organisation_uuid: string,
         listUuid: string,
         query: ListContactAudienceAnalysesDto,
     ): Promise<PaginatedContactAudienceAnalyses> {
-        await this.assertListOwnership(user_uuid, listUuid);
-        return this.listAnalyses(user_uuid, {
+        await this.assertListOwnership(organisation_uuid, listUuid);
+        return this.listAnalyses(organisation_uuid, {
             scope: ContactAudienceAnalysisScope.LIST,
             contact_list_uuid: listUuid,
         }, query);
     }
 
     async deleteFilterAnalysis(
-        user_uuid: string,
+        organisation_uuid: string,
         filterUuid: string,
         analysisUuid: string,
     ): Promise<{ uuid: string }> {
-        await this.assertFilterOwnership(user_uuid, filterUuid);
-        return this.deleteAnalysis(user_uuid, analysisUuid, {
+        await this.assertFilterOwnership(organisation_uuid, filterUuid);
+        return this.deleteAnalysis(organisation_uuid, analysisUuid, {
             scope: ContactAudienceAnalysisScope.FILTER,
             filter_uuid: filterUuid,
         });
     }
 
     async deleteListAnalysis(
-        user_uuid: string,
+        organisation_uuid: string,
         listUuid: string,
         analysisUuid: string,
     ): Promise<{ uuid: string }> {
-        await this.assertListOwnership(user_uuid, listUuid);
-        return this.deleteAnalysis(user_uuid, analysisUuid, {
+        await this.assertListOwnership(organisation_uuid, listUuid);
+        return this.deleteAnalysis(organisation_uuid, analysisUuid, {
             scope: ContactAudienceAnalysisScope.LIST,
             contact_list_uuid: listUuid,
         });
     }
 
     private async runAnalysis(input: {
-        user_uuid: string;
+        organisation_uuid: string;
         scope: ContactAudienceAnalysisScope;
         filter_uuid: string | null;
         contact_list_uuid: string | null;
@@ -154,7 +154,7 @@ export class ContactAudienceAnalysisService {
         scopeLabel: 'filter' | 'list';
     }): Promise<ContactAudienceAnalysisRecord> {
         const previous = await this.findPreviousCompletedAnalysis(
-            input.user_uuid,
+            input.organisation_uuid,
             input.scope,
             input.filter_uuid,
             input.contact_list_uuid,
@@ -170,7 +170,7 @@ export class ContactAudienceAnalysisService {
 
         const row = await this.prisma.contactAudienceAnalysis.create({
             data: {
-                user_uuid: input.user_uuid,
+                organisation_uuid: input.organisation_uuid,
                 scope: input.scope,
                 filter_uuid: input.filter_uuid,
                 contact_list_uuid: input.contact_list_uuid,
@@ -183,7 +183,7 @@ export class ContactAudienceAnalysisService {
 
         try {
             const { response, usage } = await this.aiService.generateObjectWithSchema({
-                user_uuid: input.user_uuid,
+                organisation_uuid: input.organisation_uuid,
                 provider: AiProviders.openai,
                 model: AiModels.openai.gpt4oMini,
                 system: AUDIENCE_ANALYSIS_SYSTEM_PROMPT,
@@ -231,7 +231,7 @@ export class ContactAudienceAnalysisService {
     }
 
     private async listAnalyses(
-        user_uuid: string,
+        organisation_uuid: string,
         where: Prisma.ContactAudienceAnalysisWhereInput,
         query: ListContactAudienceAnalysesDto,
     ): Promise<PaginatedContactAudienceAnalyses> {
@@ -241,14 +241,14 @@ export class ContactAudienceAnalysisService {
 
         const [items, total] = await Promise.all([
             this.prisma.contactAudienceAnalysis.findMany({
-                where: { ...where, user_uuid },
+                where: { ...where, organisation_uuid },
                 orderBy: { created_at: 'desc' },
                 skip,
                 take: limit,
                 select: analysisSelect,
             }),
             this.prisma.contactAudienceAnalysis.count({
-                where: { ...where, user_uuid },
+                where: { ...where, organisation_uuid },
             }),
         ]);
 
@@ -262,14 +262,14 @@ export class ContactAudienceAnalysisService {
     }
 
     private async findPreviousCompletedAnalysis(
-        user_uuid: string,
+        organisation_uuid: string,
         scope: ContactAudienceAnalysisScope,
         filter_uuid: string | null,
         contact_list_uuid: string | null,
     ): Promise<AnalysisRow | null> {
         return this.prisma.contactAudienceAnalysis.findFirst({
             where: {
-                user_uuid,
+                organisation_uuid,
                 scope,
                 status: ContactAudienceAnalysisStatus.COMPLETED,
                 ...(filter_uuid ? { filter_uuid } : {}),
@@ -280,29 +280,29 @@ export class ContactAudienceAnalysisService {
         });
     }
 
-    private async assertFilterOwnership(user_uuid: string, filterUuid: string): Promise<void> {
+    private async assertFilterOwnership(organisation_uuid: string, filterUuid: string): Promise<void> {
         const filter = await this.prisma.filter.findFirst({
-            where: { uuid: filterUuid, user_uuid },
+            where: { uuid: filterUuid, organisation_uuid },
             select: { uuid: true },
         });
         if (!filter) throw new NotFoundException('Filter not found');
     }
 
-    private async assertListOwnership(user_uuid: string, listUuid: string): Promise<void> {
+    private async assertListOwnership(organisation_uuid: string, listUuid: string): Promise<void> {
         const list = await this.prisma.contactList.findFirst({
-            where: { uuid: listUuid, user_uuid },
+            where: { uuid: listUuid, organisation_uuid },
             select: { uuid: true },
         });
         if (!list) throw new NotFoundException('Contact list not found');
     }
 
     private async deleteAnalysis(
-        user_uuid: string,
+        organisation_uuid: string,
         analysisUuid: string,
         where: Prisma.ContactAudienceAnalysisWhereInput,
     ): Promise<{ uuid: string }> {
         const existing = await this.prisma.contactAudienceAnalysis.findFirst({
-            where: { ...where, user_uuid, uuid: analysisUuid },
+            where: { ...where, organisation_uuid, uuid: analysisUuid },
             select: { uuid: true },
         });
         if (!existing) throw new NotFoundException('Analysis not found');

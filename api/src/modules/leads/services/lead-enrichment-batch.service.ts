@@ -60,7 +60,7 @@ export class LeadEnrichmentBatchService {
     }
 
     async prepareAndSubmitBulk(
-        user_uuid: string,
+        organisation_uuid: string,
         leadUuids: string[],
         sources?: EnrichmentSource[],
     ): Promise<{ batch_id: string; queued: number; gemi_only?: boolean }> {
@@ -105,11 +105,11 @@ export class LeadEnrichmentBatchService {
             );
         }
 
-        const result = await this.openAiBatchService.createBatch(user_uuid, requests);
+        const result = await this.openAiBatchService.createBatch(organisation_uuid, requests);
 
         const context: LeadEnrichmentBatchContext = {
             phase: 'source_summaries',
-            user_uuid,
+            organisation_uuid,
             lead_uuids: processedLeadUuids.length ? processedLeadUuids : leadUuids,
             sources: enrichment_sources,
             staging,
@@ -118,7 +118,7 @@ export class LeadEnrichmentBatchService {
         await this.prisma.openAiBatchJob.create({
             data: {
                 batch_id: result.batch_id,
-                user_uuid,
+                organisation_uuid,
                 type: OpenAiBatchJobType.LEAD_ENRICH,
                 status: OpenAiBatchStatus.IN_PROGRESS,
                 total_requests: requests.length,
@@ -155,24 +155,24 @@ export class LeadEnrichmentBatchService {
             return;
         }
 
-        const batchStatus = prefetchedStatus ?? (await this.openAiBatchService.waitForBatchReady(job.user_uuid, batchId));
+        const batchStatus = prefetchedStatus ?? (await this.openAiBatchService.waitForBatchReady(job.organisation_uuid, batchId));
         if (!batchStatus.output_file_id) {
             this.logger.warn(`Batch ${batchId} has no output file yet (status may still be finalizing)`);
             return;
         }
 
-        const results = await this.openAiBatchService.getBatchResults(job.user_uuid, batchStatus.output_file_id);
+        const results = await this.openAiBatchService.getBatchResults(job.organisation_uuid, batchStatus.output_file_id);
         const storedContext = job.context as unknown as LeadEnrichmentBatchContext | null;
         const phase = storedContext?.phase ?? this.inferBatchPhase(results);
 
         if (phase === 'combined_summaries') {
-            await this.processCombinedBatchResults(batchId, job.user_uuid, storedContext, batchStatus, results);
+            await this.processCombinedBatchResults(batchId, job.organisation_uuid, storedContext, batchStatus, results);
             return;
         }
 
         const context: LeadEnrichmentBatchContext = storedContext ?? {
             phase: 'source_summaries',
-            user_uuid: job.user_uuid,
+            organisation_uuid: job.organisation_uuid,
             lead_uuids: [],
             sources: [],
             staging: {},
@@ -184,7 +184,7 @@ export class LeadEnrichmentBatchService {
             if (!result.content || result.error) {
                 this.logger.warn(`Batch result ${result.custom_id} failed: ${result.error}`);
                 this.logLeadBatchUsage(
-                    job.user_uuid,
+                    job.organisation_uuid,
                     batchId,
                     result,
                     AiUsageStatus.ERROR,
@@ -211,7 +211,7 @@ export class LeadEnrichmentBatchService {
                     leadsForCombined.add(lead_uuid);
                 }
                 this.logLeadBatchUsage(
-                    job.user_uuid,
+                    job.organisation_uuid,
                     batchId,
                     result,
                     AiUsageStatus.SUCCESS,
@@ -240,7 +240,7 @@ export class LeadEnrichmentBatchService {
 
         if (leadsForCombined.size > 0) {
             await this.submitCombinedSummaryBatch(
-                job.user_uuid,
+                job.organisation_uuid,
                 [...leadsForCombined],
                 context,
                 batchId,
@@ -265,12 +265,12 @@ export class LeadEnrichmentBatchService {
     }
 
     private async submitCombinedSummaryBatch(
-        user_uuid: string,
+        organisation_uuid: string,
         leadUuids: string[],
         parentContext: LeadEnrichmentBatchContext,
         parentBatchId: string,
     ): Promise<void> {
-        if (!(await this.aiConfig.isOpenAiConfigured(user_uuid))) {
+        if (!(await this.aiConfig.isOpenAiConfigured(organisation_uuid))) {
             for (const leadUuid of leadUuids) {
                 await this.summaryService.regenerate(leadUuid);
             }
@@ -307,10 +307,10 @@ export class LeadEnrichmentBatchService {
             return;
         }
 
-        const result = await this.openAiBatchService.createBatch(user_uuid, requests);
+        const result = await this.openAiBatchService.createBatch(organisation_uuid, requests);
         const context: LeadEnrichmentBatchContext = {
             phase: 'combined_summaries',
-            user_uuid,
+            organisation_uuid,
             lead_uuids: leadUuids,
             sources: parentContext.sources,
             staging: {},
@@ -320,7 +320,7 @@ export class LeadEnrichmentBatchService {
         await this.prisma.openAiBatchJob.create({
             data: {
                 batch_id: result.batch_id,
-                user_uuid,
+                organisation_uuid,
                 type: OpenAiBatchJobType.LEAD_ENRICH,
                 status: OpenAiBatchStatus.IN_PROGRESS,
                 total_requests: requests.length,
@@ -337,7 +337,7 @@ export class LeadEnrichmentBatchService {
 
     private async processCombinedBatchResults(
         batchId: string,
-        user_uuid: string,
+        organisation_uuid: string,
         context: LeadEnrichmentBatchContext | null,
         batchStatus: {
             output_file_id: string | null;
@@ -350,12 +350,12 @@ export class LeadEnrichmentBatchService {
     ): Promise<void> {
         const results =
             prefetchedResults ??
-            (await this.openAiBatchService.getBatchResults(user_uuid, batchStatus.output_file_id!));
+            (await this.openAiBatchService.getBatchResults(organisation_uuid, batchStatus.output_file_id!));
 
         for (const result of results) {
             if (!result.content || result.error) {
                 this.logLeadBatchUsage(
-                    user_uuid,
+                    organisation_uuid,
                     batchId,
                     result,
                     AiUsageStatus.ERROR,
@@ -398,7 +398,7 @@ export class LeadEnrichmentBatchService {
             }
 
             this.logLeadBatchUsage(
-                user_uuid,
+                organisation_uuid,
                 batchId,
                 result,
                 AiUsageStatus.SUCCESS,
@@ -666,7 +666,7 @@ export class LeadEnrichmentBatchService {
     }
 
     private logLeadBatchUsage(
-        user_uuid: string,
+        organisation_uuid: string,
         batchId: string,
         result: OpenAiBatchResult,
         status: AiUsageStatus,
@@ -686,7 +686,7 @@ export class LeadEnrichmentBatchService {
                 : null;
 
         this.aiUsageService.logBatchResult({
-            user_uuid,
+            organisation_uuid,
             model,
             operation: AiUsageOperation.LEAD_ENRICH,
             input_tokens: result.input_tokens,

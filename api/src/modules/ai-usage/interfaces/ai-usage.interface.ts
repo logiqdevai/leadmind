@@ -6,7 +6,7 @@ import {
 } from '@/generated/prisma';
 
 export interface CreateAiUsageLogInput {
-    user_uuid: string;
+    organisation_uuid: string;
     provider: string;
     model: string;
     operation: AiUsageOperation;

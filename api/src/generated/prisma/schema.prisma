@@ -23,6 +23,26 @@ model User {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
+  memberships      OrganisationMember[]
+  invitations_sent OrganisationInvitation[] @relation("InvitationInvitedBy")
+  form_completions FormCompletion[]         @relation("CompletedByUser")
+
+  @@index([email])
+  @@index([phone])
+  @@index([uuid])
+  @@map("users")
+}
+
+model Organisation {
+  id         Int      @id @default(autoincrement())
+  uuid       String   @unique @default(uuid())
+  name       String
+  slug       String   @unique
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  members                   OrganisationMember[]
+  invitations               OrganisationInvitation[]
   filters                   Filter[]
   contacts                  Contact[]
   outreach_messages         OutreachMessage[]
@@ -35,23 +55,63 @@ model User {
   integrations              Integration[]
   reminders                 Reminder[]
   forms                     Form[]
-  form_completions          FormCompletion[]          @relation("CompletedByUser")
   contact_lists             ContactList[]
   contact_audience_analyses ContactAudienceAnalysis[]
   ai_usage_logs             AiUsageLog[]
   apify_usage_logs          ApifyUsageLog[]
   message_templates         MessageTemplate[]
 
-  @@index([email])
-  @@index([phone])
   @@index([uuid])
-  @@map("users")
+  @@index([slug])
+  @@map("organisations")
+}
+
+model OrganisationMember {
+  id                Int              @id @default(autoincrement())
+  uuid              String           @unique @default(uuid())
+  organisation_uuid String
+  user_uuid         String
+  role              OrganisationRole @default(MEMBER)
+  created_at        DateTime         @default(now())
+  updated_at        DateTime         @updatedAt
+
+  organisation Organisation @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  user         User         @relation(fields: [user_uuid], references: [uuid], onDelete: Cascade)
+
+  @@unique([organisation_uuid, user_uuid])
+  @@index([organisation_uuid])
+  @@index([user_uuid])
+  @@map("organisation_members")
+}
+
+model OrganisationInvitation {
+  id                   Int                      @id @default(autoincrement())
+  uuid                 String                   @unique @default(uuid())
+  organisation_uuid    String
+  email                String
+  role                 OrganisationInviteRole   @default(MEMBER)
+  token                String                   @unique @default(uuid())
+  status               OrganisationInviteStatus @default(PENDING)
+  invited_by_user_uuid String
+  expires_at           DateTime
+  accepted_at          DateTime?
+  created_at           DateTime                 @default(now())
+  updated_at           DateTime                 @updatedAt
+
+  organisation Organisation @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  invited_by   User         @relation("InvitationInvitedBy", fields: [invited_by_user_uuid], references: [uuid], onDelete: Cascade)
+
+  @@index([organisation_uuid])
+  @@index([email])
+  @@index([token])
+  @@index([status])
+  @@map("organisation_invitations")
 }
 
 model Filter {
   id                    Int                @id @default(autoincrement())
   uuid                  String             @unique @default(uuid())
-  user_uuid             String
+  organisation_uuid     String
   name                  String
   source_type           SourceType
   query_config          Json
@@ -63,7 +123,7 @@ model Filter {
   created_at            DateTime           @default(now())
   updated_at            DateTime           @updatedAt
 
-  user                        User                       @relation(fields: [user_uuid], references: [uuid], onDelete: Cascade)
+  organisation                Organisation               @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
   raw_leads                   RawLead[]
   contacts                    Contact[]
   contact_filters             ContactFilter[]
@@ -71,23 +131,23 @@ model Filter {
   filter_scoring_instructions FilterScoringInstruction[]
   audience_analyses           ContactAudienceAnalysis[]
 
-  @@index([user_uuid])
+  @@index([organisation_uuid])
 }
 
 model ScoringInstruction {
-  id           Int      @id @default(autoincrement())
-  uuid         String   @unique @default(uuid())
-  user_uuid    String
-  name         String
-  instructions String   @db.Text
-  created_at   DateTime @default(now())
-  updated_at   DateTime @updatedAt
+  id                Int      @id @default(autoincrement())
+  uuid              String   @unique @default(uuid())
+  organisation_uuid String
+  name              String
+  instructions      String   @db.Text
+  created_at        DateTime @default(now())
+  updated_at        DateTime @updatedAt
 
-  user           User                       @relation(fields: [user_uuid], references: [uuid], onDelete: Cascade)
+  organisation   Organisation               @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
   filter_links   FilterScoringInstruction[]
   contact_scores ContactScore[]
 
-  @@index([user_uuid])
+  @@index([organisation_uuid])
   @@map("scoring_instructions")
 }
 
@@ -178,7 +238,7 @@ model LeadEnrichment {
 model Contact {
   id                  Int        @id @default(autoincrement())
   uuid                String     @unique @default(uuid())
-  user_uuid           String
+  organisation_uuid   String
   lead_uuid           String
   filter_uuid         String?
   status              LeadStatus @default(NEW)
@@ -202,7 +262,7 @@ model Contact {
   created_at          DateTime   @default(now())
   updated_at          DateTime   @updatedAt
 
-  user              User                       @relation(fields: [user_uuid], references: [uuid], onDelete: Cascade)
+  organisation      Organisation               @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
   lead              Lead                       @relation(fields: [lead_uuid], references: [uuid], onDelete: Cascade)
   filter            Filter?                    @relation(fields: [filter_uuid], references: [uuid], onDelete: SetNull)
   contact_filters   ContactFilter[]
@@ -217,8 +277,8 @@ model Contact {
   list_memberships  ContactListMember[]
   enrichments       ContactEnrichment[]
 
-  @@unique([user_uuid, lead_uuid])
-  @@index([user_uuid])
+  @@unique([organisation_uuid, lead_uuid])
+  @@index([organisation_uuid])
   @@index([status])
   @@index([lead_uuid])
   @@index([email])
@@ -293,22 +353,22 @@ model ContactScore {
 }
 
 model ContactList {
-  id               Int      @id @default(autoincrement())
-  uuid             String   @unique @default(uuid())
-  user_uuid        String
-  parent_list_uuid String?
-  title            String
-  description      String?
-  created_at       DateTime @default(now())
-  updated_at       DateTime @updatedAt
+  id                Int      @id @default(autoincrement())
+  uuid              String   @unique @default(uuid())
+  organisation_uuid String
+  parent_list_uuid  String?
+  title             String
+  description       String?
+  created_at        DateTime @default(now())
+  updated_at        DateTime @updatedAt
 
-  user              User                      @relation(fields: [user_uuid], references: [uuid], onDelete: Cascade)
+  organisation      Organisation              @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
   parent            ContactList?              @relation("ContactListHierarchy", fields: [parent_list_uuid], references: [uuid], onDelete: Cascade)
   children          ContactList[]             @relation("ContactListHierarchy")
   members           ContactListMember[]
   audience_analyses ContactAudienceAnalysis[]
 
-  @@index([user_uuid])
+  @@index([organisation_uuid])
   @@index([parent_list_uuid])
   @@map("contact_lists")
 }
@@ -345,7 +405,7 @@ model Interaction {
   id                    Int             @id @default(autoincrement())
   uuid                  String          @unique @default(uuid())
   contact_uuid          String
-  user_uuid             String
+  organisation_uuid     String
   campaign_uuid         String?
   type                  InteractionType
   content               String?
@@ -356,12 +416,12 @@ model Interaction {
   updated_at            DateTime        @updatedAt
 
   contact          Contact            @relation(fields: [contact_uuid], references: [uuid], onDelete: Cascade)
-  user             User               @relation(fields: [user_uuid], references: [uuid], onDelete: Cascade)
+  organisation     Organisation       @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
   outreach_message OutreachMessage?   @relation(fields: [outreach_message_uuid], references: [uuid], onDelete: SetNull)
   campaign         MarketingCampaign? @relation(fields: [campaign_uuid], references: [uuid], onDelete: SetNull)
 
   @@index([contact_uuid])
-  @@index([user_uuid])
+  @@index([organisation_uuid])
   @@index([campaign_uuid])
   @@index([type])
   @@index([created_at])
@@ -370,7 +430,7 @@ model Interaction {
 model OutreachMessage {
   id                  Int                          @id @default(autoincrement())
   uuid                String                       @unique @default(uuid())
-  user_uuid           String
+  organisation_uuid   String
   contact_uuid        String
   campaign_uuid       String?
   channel             Channel
@@ -393,12 +453,12 @@ model OutreachMessage {
   created_at          DateTime                     @default(now())
   updated_at          DateTime                     @updatedAt
 
-  user        User               @relation(fields: [user_uuid], references: [uuid], onDelete: Cascade)
-  contact     Contact            @relation(fields: [contact_uuid], references: [uuid], onDelete: Cascade)
-  campaign    MarketingCampaign? @relation(fields: [campaign_uuid], references: [uuid], onDelete: SetNull)
-  interaction Interaction?
+  organisation Organisation       @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  contact      Contact            @relation(fields: [contact_uuid], references: [uuid], onDelete: Cascade)
+  campaign     MarketingCampaign? @relation(fields: [campaign_uuid], references: [uuid], onDelete: SetNull)
+  interaction  Interaction?
 
-  @@index([user_uuid])
+  @@index([organisation_uuid])
   @@index([contact_uuid])
   @@index([status])
   @@index([campaign_uuid])
@@ -408,17 +468,17 @@ model OutreachMessage {
 }
 
 model OutreachSequence {
-  id         Int      @id @default(autoincrement())
-  uuid       String   @unique @default(uuid())
-  user_uuid  String
-  name       String
-  steps      Json
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  id                Int      @id @default(autoincrement())
+  uuid              String   @unique @default(uuid())
+  organisation_uuid String
+  name              String
+  steps             Json
+  created_at        DateTime @default(now())
+  updated_at        DateTime @updatedAt
 
-  user User @relation(fields: [user_uuid], references: [uuid], onDelete: Cascade)
+  organisation Organisation @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
 
-  @@index([user_uuid])
+  @@index([organisation_uuid])
 }
 
 model FilterJob {
@@ -444,7 +504,7 @@ model FilterJob {
 model SenderProfile {
   id                   Int      @id @default(autoincrement())
   uuid                 String   @unique @default(uuid())
-  user_uuid            String
+  organisation_uuid    String
   name                 String
   company_name         String?
   title                String?
@@ -467,17 +527,17 @@ model SenderProfile {
   created_at           DateTime @default(now())
   updated_at           DateTime @updatedAt
 
-  user                User                @relation(fields: [user_uuid], references: [uuid], onDelete: Cascade)
+  organisation        Organisation        @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
   marketing_campaigns MarketingCampaign[]
 
-  @@index([user_uuid])
+  @@index([organisation_uuid])
   @@map("sender_profiles")
 }
 
 model MessageTemplate {
   id                   Int       @id @default(autoincrement())
   uuid                 String    @unique @default(uuid())
-  user_uuid            String
+  organisation_uuid    String
   name                 String
   channels             Channel[] @default([EMAIL])
   email_subject        String?
@@ -488,16 +548,16 @@ model MessageTemplate {
   created_at           DateTime  @default(now())
   updated_at           DateTime  @updatedAt
 
-  user User @relation(fields: [user_uuid], references: [uuid], onDelete: Cascade)
+  organisation Organisation @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
 
-  @@index([user_uuid])
+  @@index([organisation_uuid])
   @@map("message_templates")
 }
 
 model MarketingCampaign {
   id                         Int            @id @default(autoincrement())
   uuid                       String         @unique @default(uuid())
-  user_uuid                  String
+  organisation_uuid          String
   name                       String
   description                String?
   status                     CampaignStatus @default(DRAFT)
@@ -536,13 +596,13 @@ model MarketingCampaign {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  user              User                       @relation(fields: [user_uuid], references: [uuid], onDelete: Cascade)
+  organisation      Organisation               @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
   sender_profile    SenderProfile?             @relation(fields: [sender_profile_uuid], references: [uuid], onDelete: SetNull)
   campaign_contacts MarketingCampaignContact[]
   outreach_messages OutreachMessage[]
   interactions      Interaction[]
 
-  @@index([user_uuid])
+  @@index([organisation_uuid])
   @@index([status])
   @@index([scheduled_at])
   @@map("marketing_campaigns")
@@ -577,6 +637,24 @@ enum AuthRole {
   ADMIN
   SUPER_ADMIN
   SUPPORT
+}
+
+enum OrganisationRole {
+  OWNER
+  ADMIN
+  MEMBER
+}
+
+enum OrganisationInviteRole {
+  ADMIN
+  MEMBER
+}
+
+enum OrganisationInviteStatus {
+  PENDING
+  ACCEPTED
+  REVOKED
+  EXPIRED
 }
 
 enum SourceType {
@@ -716,7 +794,7 @@ enum CampaignContactStatus {
 model OpenAiBatchJob {
   id                 String             @id @default(uuid())
   batch_id           String             @unique
-  user_uuid          String
+  organisation_uuid  String
   type               OpenAiBatchJobType
   status             OpenAiBatchStatus  @default(IN_PROGRESS)
   total_requests     Int                @default(0)
@@ -730,7 +808,7 @@ model OpenAiBatchJob {
   context            Json?
   created_at         DateTime           @default(now())
   updated_at         DateTime           @updatedAt
-  user               User               @relation(fields: [user_uuid], references: [uuid])
+  organisation       Organisation       @relation(fields: [organisation_uuid], references: [uuid])
 
   @@map("openai_batch_jobs")
 }
@@ -774,21 +852,21 @@ enum IntegrationKeyType {
 }
 
 model Integration {
-  id              Int                         @id @default(autoincrement())
-  uuid            String                      @unique @default(uuid())
-  user_uuid       String
-  provider        ExternalIntegrationProvider
-  title           String
-  default_account String?
-  created_at      DateTime                    @default(now())
-  updated_at      DateTime                    @updatedAt
+  id                Int                         @id @default(autoincrement())
+  uuid              String                      @unique @default(uuid())
+  organisation_uuid String
+  provider          ExternalIntegrationProvider
+  title             String
+  default_account   String?
+  created_at        DateTime                    @default(now())
+  updated_at        DateTime                    @updatedAt
 
-  user     User                 @relation(fields: [user_uuid], references: [uuid], onDelete: Cascade)
-  keys     IntegrationKey[]
-  accounts IntegrationAccount[]
+  organisation Organisation         @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  keys         IntegrationKey[]
+  accounts     IntegrationAccount[]
 
-  @@unique([user_uuid, provider])
-  @@index([user_uuid])
+  @@unique([organisation_uuid, provider])
+  @@index([organisation_uuid])
   @@index([provider])
   @@map("integrations")
 }
@@ -834,28 +912,28 @@ enum ReminderStatus {
 }
 
 model Reminder {
-  id           Int            @id @default(autoincrement())
-  uuid         String         @unique @default(uuid())
-  user_uuid    String
-  contact_uuid String
-  title        String?
-  notes        String?        @db.Text
-  remind_at    DateTime
-  status       ReminderStatus @default(PENDING)
-  job_id       String?        @unique
+  id                Int            @id @default(autoincrement())
+  uuid              String         @unique @default(uuid())
+  organisation_uuid String
+  contact_uuid      String
+  title             String?
+  notes             String?        @db.Text
+  remind_at         DateTime
+  status            ReminderStatus @default(PENDING)
+  job_id            String?        @unique
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  user    User    @relation(fields: [user_uuid], references: [uuid], onDelete: Cascade)
-  contact Contact @relation(fields: [contact_uuid], references: [uuid], onDelete: Cascade)
+  organisation Organisation @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  contact      Contact      @relation(fields: [contact_uuid], references: [uuid], onDelete: Cascade)
 
-  @@index([user_uuid])
+  @@index([organisation_uuid])
   @@index([contact_uuid])
   @@index([remind_at])
   @@index([status])
-  @@index([user_uuid, status])
-  @@index([user_uuid, remind_at])
+  @@index([organisation_uuid, status])
+  @@index([organisation_uuid, remind_at])
   @@map("reminders")
 }
 
@@ -875,20 +953,20 @@ enum FieldType {
 }
 
 model Form {
-  id          Int     @id @default(autoincrement())
-  uuid        String  @unique @default(uuid())
-  user_uuid   String
-  name        String
-  description String? @db.Text
+  id                Int     @id @default(autoincrement())
+  uuid              String  @unique @default(uuid())
+  organisation_uuid String
+  name              String
+  description       String? @db.Text
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  user        User             @relation(fields: [user_uuid], references: [uuid], onDelete: Cascade)
-  fields      FormField[]
-  completions FormCompletion[]
+  organisation Organisation     @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  fields       FormField[]
+  completions  FormCompletion[]
 
-  @@index([user_uuid])
+  @@index([organisation_uuid])
   @@map("forms")
 }
 
@@ -969,7 +1047,7 @@ enum ContactAudienceAnalysisStatus {
 model ContactAudienceAnalysis {
   id                Int                           @id @default(autoincrement())
   uuid              String                        @unique @default(uuid())
-  user_uuid         String
+  organisation_uuid String
   scope             ContactAudienceAnalysisScope
   filter_uuid       String?
   contact_list_uuid String?
@@ -986,11 +1064,11 @@ model ContactAudienceAnalysis {
   created_at        DateTime                      @default(now())
   updated_at        DateTime                      @updatedAt
 
-  user        User         @relation(fields: [user_uuid], references: [uuid], onDelete: Cascade)
-  filter      Filter?      @relation(fields: [filter_uuid], references: [uuid], onDelete: Cascade)
-  contactList ContactList? @relation(fields: [contact_list_uuid], references: [uuid], onDelete: Cascade)
+  organisation Organisation @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  filter       Filter?      @relation(fields: [filter_uuid], references: [uuid], onDelete: Cascade)
+  contactList  ContactList? @relation(fields: [contact_list_uuid], references: [uuid], onDelete: Cascade)
 
-  @@index([user_uuid])
+  @@index([organisation_uuid])
   @@index([filter_uuid])
   @@index([contact_list_uuid])
   @@index([scope])
@@ -1022,32 +1100,32 @@ enum AiUsageStatus {
 }
 
 model AiUsageLog {
-  uuid            String             @id @default(uuid())
-  user_uuid       String
-  provider        String
-  model           String
-  operation       AiUsageOperation
-  request_mode    AiUsageRequestMode @default(SYNC)
-  status          AiUsageStatus
-  input_tokens    Int?
-  output_tokens   Int?
-  total_tokens    Int?
-  input_cost_usd  Decimal?           @db.Decimal(12, 8)
-  output_cost_usd Decimal?           @db.Decimal(12, 8)
-  total_cost_usd  Decimal?           @db.Decimal(12, 8)
-  duration_ms     Int?
-  reference_type  String?
-  reference_uuid  String?
-  batch_id        String?
-  custom_id       String?
-  error_message   String?            @db.Text
-  metadata        Json?
-  created_at      DateTime           @default(now())
+  uuid              String             @id @default(uuid())
+  organisation_uuid String
+  provider          String
+  model             String
+  operation         AiUsageOperation
+  request_mode      AiUsageRequestMode @default(SYNC)
+  status            AiUsageStatus
+  input_tokens      Int?
+  output_tokens     Int?
+  total_tokens      Int?
+  input_cost_usd    Decimal?           @db.Decimal(12, 8)
+  output_cost_usd   Decimal?           @db.Decimal(12, 8)
+  total_cost_usd    Decimal?           @db.Decimal(12, 8)
+  duration_ms       Int?
+  reference_type    String?
+  reference_uuid    String?
+  batch_id          String?
+  custom_id         String?
+  error_message     String?            @db.Text
+  metadata          Json?
+  created_at        DateTime           @default(now())
 
-  user User @relation(fields: [user_uuid], references: [uuid], onDelete: Cascade)
+  organisation Organisation @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
 
-  @@index([user_uuid, created_at])
-  @@index([user_uuid, provider])
+  @@index([organisation_uuid, created_at])
+  @@index([organisation_uuid, provider])
   @@index([batch_id])
   @@map("ai_usage_logs")
 }
@@ -1068,27 +1146,27 @@ enum ApifyUsageStatus {
 }
 
 model ApifyUsageLog {
-  uuid           String              @id @default(uuid())
-  user_uuid      String
-  actor_id       String
-  operation      ApifyUsageOperation
-  status         ApifyUsageStatus
-  result_count   Int?
-  duration_ms    Int?
-  compute_units  Decimal?            @db.Decimal(12, 6)
-  total_cost_usd Decimal?            @db.Decimal(12, 8)
-  run_id         String?
-  reference_type String?
-  reference_uuid String?
-  error_message  String?             @db.Text
-  metadata       Json?
-  created_at     DateTime            @default(now())
+  uuid              String              @id @default(uuid())
+  organisation_uuid String
+  actor_id          String
+  operation         ApifyUsageOperation
+  status            ApifyUsageStatus
+  result_count      Int?
+  duration_ms       Int?
+  compute_units     Decimal?            @db.Decimal(12, 6)
+  total_cost_usd    Decimal?            @db.Decimal(12, 8)
+  run_id            String?
+  reference_type    String?
+  reference_uuid    String?
+  error_message     String?             @db.Text
+  metadata          Json?
+  created_at        DateTime            @default(now())
 
-  user User @relation(fields: [user_uuid], references: [uuid], onDelete: Cascade)
+  organisation Organisation @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
 
-  @@index([user_uuid, created_at])
-  @@index([user_uuid, operation])
-  @@index([user_uuid, actor_id])
+  @@index([organisation_uuid, created_at])
+  @@index([organisation_uuid, operation])
+  @@index([organisation_uuid, actor_id])
   @@index([run_id])
   @@map("apify_usage_logs")
 }

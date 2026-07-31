@@ -68,17 +68,17 @@ export class MarketingCampaignsService {
         private readonly messageSendQueue: Queue,
     ) { }
 
-    async create(user_uuid: string, dto: CreateCampaignDto): Promise<MarketingCampaign> {
+    async create(organisation_uuid: string, dto: CreateCampaignDto): Promise<MarketingCampaign> {
         // Drafts are loose: only enforce shape/length. Full content validation runs at start().
         const type = dto.campaign_type ?? CampaignType.STANDARD;
         this.validateContentLoose(dto.channels, dto.email_subject, dto.email_content, dto.sms_content, dto.linkedin_content, type);
         if (dto.sender_profile_uuid) {
-            await this.assertOwnedSenderProfile(user_uuid, dto.sender_profile_uuid);
+            await this.assertOwnedSenderProfile(organisation_uuid, dto.sender_profile_uuid);
         }
 
         return this.prisma.marketingCampaign.create({
             data: {
-                user_uuid,
+                organisation_uuid,
                 name: dto.name,
                 description: dto.description,
                 campaign_type: dto.campaign_type ?? CampaignType.STANDARD,
@@ -103,11 +103,11 @@ export class MarketingCampaignsService {
     }
 
     async update(
-        user_uuid: string,
+        organisation_uuid: string,
         uuid: string,
         dto: UpdateCampaignDto,
     ): Promise<MarketingCampaign> {
-        const existing = await this.requireOwned(user_uuid, uuid);
+        const existing = await this.requireOwned(organisation_uuid, uuid);
         if (existing.status !== CampaignStatus.DRAFT) {
             return existing;
         }
@@ -137,7 +137,7 @@ export class MarketingCampaignsService {
         }
 
         if (dto.sender_profile_uuid) {
-            await this.assertOwnedSenderProfile(user_uuid, dto.sender_profile_uuid);
+            await this.assertOwnedSenderProfile(organisation_uuid, dto.sender_profile_uuid);
         }
 
         return this.prisma.marketingCampaign.update({
@@ -173,8 +173,8 @@ export class MarketingCampaignsService {
         });
     }
 
-    async remove(user_uuid: string, uuid: string): Promise<{ uuid: string }> {
-        const existing = await this.requireOwned(user_uuid, uuid);
+    async remove(organisation_uuid: string, uuid: string): Promise<{ uuid: string }> {
+        const existing = await this.requireOwned(organisation_uuid, uuid);
         if (
             existing.status !== CampaignStatus.DRAFT &&
             existing.status !== CampaignStatus.DRAFTS_READY &&
@@ -188,13 +188,13 @@ export class MarketingCampaignsService {
         return { uuid };
     }
 
-    async list(user_uuid: string, query: ListCampaignsDto) {
+    async list(organisation_uuid: string, query: ListCampaignsDto) {
         const page = query.page ?? 1;
         const limit = query.limit ?? 20;
         const skip = (page - 1) * limit;
 
         const where: Prisma.MarketingCampaignWhereInput = {
-            user_uuid,
+            organisation_uuid,
             ...(query.status && { status: query.status }),
             ...(query.search && {
                 OR: [
@@ -231,12 +231,12 @@ export class MarketingCampaignsService {
         };
     }
 
-    async findOne(user_uuid: string, uuid: string): Promise<MarketingCampaign> {
-        return this.requireOwned(user_uuid, uuid);
+    async findOne(organisation_uuid: string, uuid: string): Promise<MarketingCampaign> {
+        return this.requireOwned(organisation_uuid, uuid);
     }
 
-    async listContacts(user_uuid: string, uuid: string, query: ListCampaignContactsDto) {
-        await this.requireOwned(user_uuid, uuid);
+    async listContacts(organisation_uuid: string, uuid: string, query: ListCampaignContactsDto) {
+        await this.requireOwned(organisation_uuid, uuid);
 
         const page = query.page ?? 1;
         const limit = query.limit ?? 20;
@@ -278,20 +278,20 @@ export class MarketingCampaignsService {
     }
 
     async previewContacts(
-        user_uuid: string,
+        organisation_uuid: string,
         uuid: string,
         dto: PreviewContactsDto,
     ): Promise<{ total: number; sample: any[]; with_email: number; with_phone: number }> {
-        await this.requireOwned(user_uuid, uuid);
-        return this.resolver.previewContacts(user_uuid, dto.filters, 50);
+        await this.requireOwned(organisation_uuid, uuid);
+        return this.resolver.previewContacts(organisation_uuid, dto.filters, 50);
     }
 
     async start(
-        user_uuid: string,
+        organisation_uuid: string,
         uuid: string,
         dto?: StartCampaignDto,
     ): Promise<MarketingCampaign> {
-        const campaign = await this.requireOwned(user_uuid, uuid);
+        const campaign = await this.requireOwned(organisation_uuid, uuid);
         if (campaign.status !== CampaignStatus.DRAFT) {
             throw new ConflictException(`Only DRAFT campaigns can be started (is ${campaign.status})`);
         }
@@ -302,13 +302,13 @@ export class MarketingCampaignsService {
 
         if (campaign.campaign_type === CampaignType.PERSONALIZED) {
             if (dto?.sender_profile_uuid) {
-                await this.assertOwnedSenderProfile(user_uuid, dto.sender_profile_uuid);
+                await this.assertOwnedSenderProfile(organisation_uuid, dto.sender_profile_uuid);
                 await this.prisma.marketingCampaign.update({
                     where: { uuid },
                     data: { sender_profile_uuid: dto.sender_profile_uuid },
                 });
             }
-            return this.startPersonalized(user_uuid, campaign);
+            return this.startPersonalized(organisation_uuid, campaign);
         }
 
         this.validateContent(
@@ -320,12 +320,12 @@ export class MarketingCampaignsService {
         );
 
         const filters = campaign.filters_snapshot as unknown as CampaignFiltersDto;
-        const contactUuids = await this.resolver.resolveContactUuids(user_uuid, filters, {
+        const contactUuids = await this.resolver.resolveContactUuids(organisation_uuid, filters, {
             channels: campaign.channels as Channel[],
         });
 
         const allocations = await this.resolveCampaignEmailAllocations(
-            user_uuid,
+            organisation_uuid,
             campaign.channels as Channel[],
             contactUuids.length,
             dto?.email_provider_allocations ?? parseStoredEmailProviderAllocations(
@@ -334,7 +334,7 @@ export class MarketingCampaignsService {
         );
 
         if (dto?.sender_profile_uuid) {
-            await this.assertOwnedSenderProfile(user_uuid, dto.sender_profile_uuid);
+            await this.assertOwnedSenderProfile(organisation_uuid, dto.sender_profile_uuid);
         }
 
         const now = new Date();
@@ -380,7 +380,7 @@ export class MarketingCampaignsService {
     }
 
     private async startPersonalized(
-        user_uuid: string,
+        organisation_uuid: string,
         campaign: MarketingCampaign,
     ): Promise<MarketingCampaign> {
         if (!campaign.ai_prompt || campaign.ai_prompt.trim().length === 0) {
@@ -393,7 +393,7 @@ export class MarketingCampaignsService {
         const channel = campaign.channels[0];
         const filters = campaign.filters_snapshot as any;
 
-        const contactUuids = await this.resolver.resolveContactUuids(user_uuid, filters, {
+        const contactUuids = await this.resolver.resolveContactUuids(organisation_uuid, filters, {
             limit: 201,
             channels: campaign.channels as Channel[],
         });
@@ -424,7 +424,7 @@ export class MarketingCampaignsService {
 
         if (campaign.use_openai_batch) {
             const { batch_id, queued } = await this.contactAiService.submitBatchCampaignDrafts(
-                user_uuid,
+                organisation_uuid,
                 campaign.uuid,
                 contacts as Array<Contact & { lead: Lead }>,
                 channel,
@@ -446,7 +446,7 @@ export class MarketingCampaignsService {
         }
 
         const { generated, skipped, failed } = await this.contactAiService.draftBulkMessages(
-            user_uuid,
+            organisation_uuid,
             contacts as any,
             channel,
             campaign.ai_prompt,
@@ -469,11 +469,11 @@ export class MarketingCampaignsService {
     }
 
     async sendPersonalizedDrafts(
-        user_uuid: string,
+        organisation_uuid: string,
         uuid: string,
         dto?: SendCampaignDraftsDto,
     ): Promise<MarketingCampaign> {
-        const campaign = await this.requireOwned(user_uuid, uuid);
+        const campaign = await this.requireOwned(organisation_uuid, uuid);
         if (campaign.campaign_type !== CampaignType.PERSONALIZED) {
             throw new ConflictException('Only PERSONALIZED campaigns support this action');
         }
@@ -492,12 +492,12 @@ export class MarketingCampaignsService {
         }
 
         if (dto?.sender_profile_uuid) {
-            await this.assertOwnedSenderProfile(user_uuid, dto.sender_profile_uuid);
+            await this.assertOwnedSenderProfile(organisation_uuid, dto.sender_profile_uuid);
         }
 
         const emailMccs = mccs.filter((mcc) => mcc.channel === Channel.EMAIL);
         const allocations = await this.resolveCampaignEmailAllocations(
-            user_uuid,
+            organisation_uuid,
             campaign.channels as Channel[],
             emailMccs.length,
             dto?.email_provider_allocations ?? parseStoredEmailProviderAllocations(
@@ -569,8 +569,8 @@ export class MarketingCampaignsService {
         });
     }
 
-    async listDraftMessages(user_uuid: string, uuid: string, query: { page?: number; limit?: number }) {
-        await this.requireOwned(user_uuid, uuid);
+    async listDraftMessages(organisation_uuid: string, uuid: string, query: { page?: number; limit?: number }) {
+        await this.requireOwned(organisation_uuid, uuid);
 
         const page = query.page ?? 1;
         const limit = query.limit ?? 20;
@@ -593,25 +593,25 @@ export class MarketingCampaignsService {
     }
 
     async deleteDraftMessage(
-        user_uuid: string,
+        organisation_uuid: string,
         campaign_uuid: string,
         message_uuid: string,
     ): Promise<{ deleted: true }> {
-        await this.requireOwned(user_uuid, campaign_uuid);
+        await this.requireOwned(organisation_uuid, campaign_uuid);
         return this.campaignMessageSend.removeCampaignOutreachMessage(
-            user_uuid,
+            organisation_uuid,
             campaign_uuid,
             message_uuid,
         );
     }
 
     async sendDraftMessage(
-        user_uuid: string,
+        organisation_uuid: string,
         campaign_uuid: string,
         message_uuid: string,
         dto: SendExistingMessageDto = {},
     ): Promise<{ jobId: string }> {
-        await this.requireOwned(user_uuid, campaign_uuid);
+        await this.requireOwned(organisation_uuid, campaign_uuid);
         const providerOverride =
             dto.email_provider && dto.email_account
                 ? {
@@ -620,7 +620,7 @@ export class MarketingCampaignsService {
                   }
                 : undefined;
         return this.campaignMessageSend.queueDraftMessageSend(
-            user_uuid,
+            organisation_uuid,
             campaign_uuid,
             message_uuid,
             providerOverride,
@@ -629,11 +629,11 @@ export class MarketingCampaignsService {
     }
 
     async schedule(
-        user_uuid: string,
+        organisation_uuid: string,
         uuid: string,
         dto: ScheduleCampaignDto,
     ): Promise<MarketingCampaign> {
-        const campaign = await this.requireOwned(user_uuid, uuid);
+        const campaign = await this.requireOwned(organisation_uuid, uuid);
         if (campaign.status !== CampaignStatus.DRAFT) {
             throw new ConflictException('Only DRAFT campaigns can be scheduled');
         }
@@ -641,14 +641,14 @@ export class MarketingCampaignsService {
             where: { uuid },
             data: { scheduled_at: new Date(dto.scheduled_at) },
         });
-        return this.start(user_uuid, uuid);
+        return this.start(organisation_uuid, uuid);
     }
 
-    async duplicate(user_uuid: string, uuid: string): Promise<MarketingCampaign> {
-        const campaign = await this.requireOwned(user_uuid, uuid);
+    async duplicate(organisation_uuid: string, uuid: string): Promise<MarketingCampaign> {
+        const campaign = await this.requireOwned(organisation_uuid, uuid);
         return this.prisma.marketingCampaign.create({
             data: {
-                user_uuid,
+                organisation_uuid,
                 name: `Copy of ${campaign.name}`,
                 description: campaign.description,
                 campaign_type: campaign.campaign_type,
@@ -665,8 +665,8 @@ export class MarketingCampaignsService {
         });
     }
 
-    async rerun(user_uuid: string, uuid: string): Promise<MarketingCampaign> {
-        const campaign = await this.requireOwned(user_uuid, uuid);
+    async rerun(organisation_uuid: string, uuid: string): Promise<MarketingCampaign> {
+        const campaign = await this.requireOwned(organisation_uuid, uuid);
         const rerunnableStatuses = [
             CampaignStatus.COMPLETED,
             CampaignStatus.CANCELLED,
@@ -709,11 +709,11 @@ export class MarketingCampaignsService {
             },
         });
 
-        return this.start(user_uuid, uuid);
+        return this.start(organisation_uuid, uuid);
     }
 
-    async cancel(user_uuid: string, uuid: string): Promise<MarketingCampaign> {
-        const campaign = await this.requireOwned(user_uuid, uuid);
+    async cancel(organisation_uuid: string, uuid: string): Promise<MarketingCampaign> {
+        const campaign = await this.requireOwned(organisation_uuid, uuid);
         if (
             campaign.status === CampaignStatus.COMPLETED ||
             campaign.status === CampaignStatus.CANCELLED ||
@@ -764,20 +764,20 @@ export class MarketingCampaignsService {
             },
         });
 
-        return this.requireOwned(user_uuid, uuid);
+        return this.requireOwned(organisation_uuid, uuid);
     }
 
     async generateMessage(
-        user_uuid: string,
+        organisation_uuid: string,
         uuid: string,
         dto: GenerateCampaignMessageDto,
     ): Promise<{ subject: string | null; content: string }> {
-        const campaign = await this.requireOwned(user_uuid, uuid);
+        const campaign = await this.requireOwned(organisation_uuid, uuid);
         const senderDescription = await this.resolveSenderBusinessDescription(
-            user_uuid,
+            organisation_uuid,
             campaign.sender_profile_uuid,
         );
-        return this.aiService.generate(user_uuid, dto, {
+        return this.aiService.generate(organisation_uuid, dto, {
             campaign_name: campaign.name,
             campaign_description: campaign.description ?? undefined,
             sender_business_description: senderDescription,
@@ -785,24 +785,24 @@ export class MarketingCampaignsService {
     }
 
     private async resolveSenderBusinessDescription(
-        user_uuid: string,
+        organisation_uuid: string,
         sender_profile_uuid: string | null,
     ): Promise<string | undefined> {
         const profile = sender_profile_uuid
             ? await this.prisma.senderProfile.findFirst({
-                where: { uuid: sender_profile_uuid, user_uuid },
+                where: { uuid: sender_profile_uuid, organisation_uuid },
                 select: { business_description: true },
             })
             : await this.prisma.senderProfile.findFirst({
-                where: { user_uuid, is_default: true },
+                where: { organisation_uuid, is_default: true },
                 select: { business_description: true },
             });
         return profile?.business_description ?? undefined;
     }
 
-    private async requireOwned(user_uuid: string, uuid: string): Promise<MarketingCampaign> {
+    private async requireOwned(organisation_uuid: string, uuid: string): Promise<MarketingCampaign> {
         const campaign = await this.prisma.marketingCampaign.findFirst({
-            where: { uuid, user_uuid },
+            where: { uuid, organisation_uuid },
         });
         if (!campaign) {
             throw new NotFoundException(`Campaign ${uuid} not found`);
@@ -810,9 +810,9 @@ export class MarketingCampaignsService {
         return campaign;
     }
 
-    private async assertOwnedSenderProfile(user_uuid: string, uuid: string): Promise<void> {
+    private async assertOwnedSenderProfile(organisation_uuid: string, uuid: string): Promise<void> {
         const profile = await this.prisma.senderProfile.findFirst({
-            where: { uuid, user_uuid },
+            where: { uuid, organisation_uuid },
             select: { uuid: true },
         });
         if (!profile) {
@@ -821,7 +821,7 @@ export class MarketingCampaignsService {
     }
 
     private async resolveCampaignEmailAllocations(
-        user_uuid: string,
+        organisation_uuid: string,
         channels: Channel[],
         emailRecipientCount: number,
         provided?: EmailProviderAllocationDto[],
@@ -834,7 +834,7 @@ export class MarketingCampaignsService {
             const validated = validateEmailProviderAllocations(provided, emailRecipientCount);
             for (const row of validated ?? []) {
                 await this.emailCredentialsService.assertSendableAccount(
-                    user_uuid,
+                    organisation_uuid,
                     row.provider,
                     row.account,
                 );
@@ -842,7 +842,7 @@ export class MarketingCampaignsService {
             return validated ?? null;
         }
 
-        const accounts = await this.emailCredentialsService.resolveSendableAccounts(user_uuid);
+        const accounts = await this.emailCredentialsService.resolveSendableAccounts(organisation_uuid);
         if (accounts.length === 0) {
             return null;
         }

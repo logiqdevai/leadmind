@@ -40,139 +40,139 @@ export class MarketingCampaignsController {
     @Post()
     @ApiOperation({ summary: 'Create a draft marketing campaign' })
     @ApiResponse({ status: 201 })
-    create(@CurrentUser('uuid') user_uuid: string, @Body() dto: CreateCampaignDto) {
-        return this.service.create(user_uuid, dto);
+    create(@CurrentUser('organisation_uuid') organisation_uuid: string, @Body() dto: CreateCampaignDto) {
+        return this.service.create(organisation_uuid, dto);
     }
 
     @Get()
     @ApiOperation({ summary: 'List marketing campaigns' })
-    list(@CurrentUser('uuid') user_uuid: string, @Query() query: ListCampaignsDto) {
-        return this.service.list(user_uuid, query);
+    list(@CurrentUser('organisation_uuid') organisation_uuid: string, @Query() query: ListCampaignsDto) {
+        return this.service.list(organisation_uuid, query);
     }
 
     @Get(':uuid')
     @ApiOperation({ summary: 'Get campaign detail with full stats' })
     findOne(
-        @CurrentUser('uuid') user_uuid: string,
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid', ParseUUIDPipe) uuid: string,
     ) {
-        return this.service.findOne(user_uuid, uuid);
+        return this.service.findOne(organisation_uuid, uuid);
     }
 
     @Patch(':uuid')
     @ApiOperation({ summary: 'Update DRAFT campaign' })
     update(
-        @CurrentUser('uuid') user_uuid: string,
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid', ParseUUIDPipe) uuid: string,
         @Body() dto: UpdateCampaignDto,
     ) {
-        return this.service.update(user_uuid, uuid, dto);
+        return this.service.update(organisation_uuid, uuid, dto);
     }
 
     @Delete(':uuid')
     @ApiOperation({ summary: 'Delete a draft / cancelled / completed / failed campaign' })
     remove(
-        @CurrentUser('uuid') user_uuid: string,
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid', ParseUUIDPipe) uuid: string,
     ) {
-        return this.service.remove(user_uuid, uuid);
+        return this.service.remove(organisation_uuid, uuid);
     }
 
     @Get(':uuid/contacts')
     @ApiOperation({ summary: 'List campaign recipients with statuses' })
     listContacts(
-        @CurrentUser('uuid') user_uuid: string,
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid', ParseUUIDPipe) uuid: string,
         @Query() query: ListCampaignContactsDto,
     ) {
-        return this.service.listContacts(user_uuid, uuid, query);
+        return this.service.listContacts(organisation_uuid, uuid, query);
     }
 
     @Post(':uuid/preview-contacts')
     @ApiOperation({ summary: 'Preview the matched contact set for a filter (no persistence)' })
     previewContacts(
-        @CurrentUser('uuid') user_uuid: string,
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid', ParseUUIDPipe) uuid: string,
         @Body() dto: PreviewContactsDto,
     ) {
-        return this.service.previewContacts(user_uuid, uuid, dto);
+        return this.service.previewContacts(organisation_uuid, uuid, dto);
     }
 
     @Post(':uuid/start')
     @ApiOperation({ summary: 'Start a draft campaign (immediate or at scheduled_at)' })
     start(
-        @CurrentUser('uuid') user_uuid: string,
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid', ParseUUIDPipe) uuid: string,
         @Body() dto: StartCampaignDto,
     ) {
-        return this.service.start(user_uuid, uuid, dto);
+        return this.service.start(organisation_uuid, uuid, dto);
     }
 
     @Post(':uuid/schedule')
     @ApiOperation({ summary: 'Set scheduled_at and queue dispatch' })
     schedule(
-        @CurrentUser('uuid') user_uuid: string,
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid', ParseUUIDPipe) uuid: string,
         @Body() dto: ScheduleCampaignDto,
     ) {
-        return this.service.schedule(user_uuid, uuid, dto);
+        return this.service.schedule(organisation_uuid, uuid, dto);
     }
 
     @Post(':uuid/duplicate')
     @ApiOperation({ summary: 'Duplicate a campaign as a new DRAFT' })
     duplicate(
-        @CurrentUser('uuid') user_uuid: string,
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid', ParseUUIDPipe) uuid: string,
     ) {
-        return this.service.duplicate(user_uuid, uuid);
+        return this.service.duplicate(organisation_uuid, uuid);
     }
 
     @Post(':uuid/rerun')
     @ApiOperation({ summary: 'Re-run a completed, cancelled, or failed campaign from scratch' })
     rerun(
-        @CurrentUser('uuid') user_uuid: string,
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid', ParseUUIDPipe) uuid: string,
     ) {
-        return this.service.rerun(user_uuid, uuid);
+        return this.service.rerun(organisation_uuid, uuid);
     }
 
     @Post(':uuid/cancel')
     @ApiOperation({ summary: 'Cancel a sending or scheduled campaign' })
     cancel(
-        @CurrentUser('uuid') user_uuid: string,
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid', ParseUUIDPipe) uuid: string,
     ) {
-        return this.service.cancel(user_uuid, uuid);
+        return this.service.cancel(organisation_uuid, uuid);
     }
 
     @Post(':uuid/ai/generate')
     @ApiOperation({ summary: 'AI generate / improve / shorten / re-tone a campaign message' })
     generate(
-        @CurrentUser('uuid') user_uuid: string,
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid', ParseUUIDPipe) uuid: string,
         @Body() dto: GenerateCampaignMessageDto,
     ) {
-        return this.service.generateMessage(user_uuid, uuid, dto);
+        return this.service.generateMessage(organisation_uuid, uuid, dto);
     }
 
     @Post(':uuid/send-drafts')
     @ApiOperation({ summary: 'Send pre-generated personalized drafts for a DRAFTS_READY campaign' })
     sendPersonalizedDrafts(
-        @CurrentUser('uuid') user_uuid: string,
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid', ParseUUIDPipe) uuid: string,
         @Body() dto: SendCampaignDraftsDto,
     ) {
-        return this.service.sendPersonalizedDrafts(user_uuid, uuid, dto);
+        return this.service.sendPersonalizedDrafts(organisation_uuid, uuid, dto);
     }
 
     @Get(':uuid/draft-messages')
     @ApiOperation({ summary: 'List per-contact draft messages for a PERSONALIZED campaign' })
     listDraftMessages(
-        @CurrentUser('uuid') user_uuid: string,
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid', ParseUUIDPipe) uuid: string,
         @Query() query: ListDraftMessagesDto,
     ) {
-        return this.service.listDraftMessages(user_uuid, uuid, query);
+        return this.service.listDraftMessages(organisation_uuid, uuid, query);
     }
 
     @Delete(':uuid/draft-messages/:message_uuid')
@@ -180,11 +180,11 @@ export class MarketingCampaignsController {
     @ApiResponse({ status: 200 })
     @ApiResponse({ status: 404 })
     deleteDraftMessage(
-        @CurrentUser('uuid') user_uuid: string,
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid', ParseUUIDPipe) uuid: string,
         @Param('message_uuid', ParseUUIDPipe) message_uuid: string,
     ) {
-        return this.service.deleteDraftMessage(user_uuid, uuid, message_uuid);
+        return this.service.deleteDraftMessage(organisation_uuid, uuid, message_uuid);
     }
 
     @Post(':uuid/draft-messages/:message_uuid/send')
@@ -193,11 +193,11 @@ export class MarketingCampaignsController {
     @ApiResponse({ status: 404 })
     @ApiResponse({ status: 409 })
     sendDraftMessage(
-        @CurrentUser('uuid') user_uuid: string,
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid', ParseUUIDPipe) uuid: string,
         @Param('message_uuid', ParseUUIDPipe) message_uuid: string,
         @Body() dto: SendExistingMessageDto = {},
     ) {
-        return this.service.sendDraftMessage(user_uuid, uuid, message_uuid, dto);
+        return this.service.sendDraftMessage(organisation_uuid, uuid, message_uuid, dto);
     }
 }

@@ -23,8 +23,8 @@ export interface RenderedMessage {
 export class OutreachRenderService {
     constructor(private readonly senderProfilesService: SenderProfilesService) { }
 
-    async buildVarsForUser(user_uuid: string): Promise<PlaceholderVars> {
-        const profile = await this.senderProfilesService.findDefault(user_uuid);
+    async buildVarsForUser(organisation_uuid: string): Promise<PlaceholderVars> {
+        const profile = await this.senderProfilesService.findDefault(organisation_uuid);
         return this.buildVarsForProfile(profile);
     }
 
@@ -36,31 +36,31 @@ export class OutreachRenderService {
     }
 
     async buildVarsForOutreachMessage(
-        user_uuid: string,
+        organisation_uuid: string,
         campaign_uuid?: string | null,
         messageMetadata?: unknown,
     ): Promise<PlaceholderVars> {
         const metadataUuid = parseSenderProfileMetadata(messageMetadata);
         if (metadataUuid) {
             try {
-                const profile = await this.senderProfilesService.findOne(user_uuid, metadataUuid);
+                const profile = await this.senderProfilesService.findOne(organisation_uuid, metadataUuid);
                 return senderProfileToPlaceholders(profile, { campaignUuid: campaign_uuid });
             } catch {
                 // fall through if profile was deleted
             }
         }
         const profile = campaign_uuid
-            ? await this.senderProfilesService.findForCampaign(user_uuid, campaign_uuid)
-            : await this.senderProfilesService.findDefault(user_uuid);
+            ? await this.senderProfilesService.findForCampaign(organisation_uuid, campaign_uuid)
+            : await this.senderProfilesService.findDefault(organisation_uuid);
         return senderProfileToPlaceholders(profile, { campaignUuid: campaign_uuid });
     }
 
     async buildVarsForCampaignDraft(
-        user_uuid: string,
+        organisation_uuid: string,
         campaign_uuid: string,
         contact: Contact,
     ): Promise<PlaceholderVars> {
-        const senderVars = await this.buildVarsForOutreachMessage(user_uuid, campaign_uuid);
+        const senderVars = await this.buildVarsForOutreachMessage(organisation_uuid, campaign_uuid);
         return { ...senderVars, ...contactToPlaceholders(contact) };
     }
 
@@ -71,18 +71,18 @@ export class OutreachRenderService {
         };
     }
 
-    async renderForUser(user_uuid: string, message: RenderableMessage): Promise<RenderedMessage> {
-        const vars = await this.buildVarsForUser(user_uuid);
+    async renderForUser(organisation_uuid: string, message: RenderableMessage): Promise<RenderedMessage> {
+        const vars = await this.buildVarsForUser(organisation_uuid);
         return this.render(message, vars);
     }
 
     async renderForOutreachMessage(
-        user_uuid: string,
+        organisation_uuid: string,
         message: RenderableMessage & { campaign_uuid?: string | null; metadata?: unknown },
         contact?: Contact | null,
     ): Promise<RenderedMessage> {
         const senderVars = await this.buildVarsForOutreachMessage(
-            user_uuid,
+            organisation_uuid,
             message.campaign_uuid,
             message.metadata,
         );
@@ -91,12 +91,12 @@ export class OutreachRenderService {
     }
 
     async renderForCampaignDraft(
-        user_uuid: string,
+        organisation_uuid: string,
         campaign_uuid: string,
         contact: Contact,
         message: RenderableMessage,
     ): Promise<RenderedMessage> {
-        const vars = await this.buildVarsForCampaignDraft(user_uuid, campaign_uuid, contact);
+        const vars = await this.buildVarsForCampaignDraft(organisation_uuid, campaign_uuid, contact);
         return this.render(message, vars);
     }
 }

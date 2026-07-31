@@ -14,13 +14,13 @@ export class AiUsageController {
 
     @Get()
     @ApiOperation({ summary: 'List AI usage logs for the current user' })
-    findAll(@CurrentUser('uuid') user_uuid: string, @Query() query: ListAiUsageDto) {
-        return this.aiUsageService.findAll(user_uuid, query);
+    findAll(@CurrentUser('organisation_uuid') organisation_uuid: string, @Query() query: ListAiUsageDto) {
+        return this.aiUsageService.findAll(organisation_uuid, query);
     }
 
     @Get('summary')
     @ApiOperation({ summary: 'Get AI usage summary for the current user' })
-    getSummary(@CurrentUser('uuid') user_uuid: string, @Query() query: AiUsageSummaryDto) {
-        return this.aiUsageService.getSummary(user_uuid, query);
+    getSummary(@CurrentUser('organisation_uuid') organisation_uuid: string, @Query() query: AiUsageSummaryDto) {
+        return this.aiUsageService.getSummary(organisation_uuid, query);
     }
 }

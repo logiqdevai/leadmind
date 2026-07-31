@@ -9,14 +9,14 @@ type PrismaClient = PrismaService | Prisma.TransactionClient;
 
 export async function findOwnedContactByEmail(
     prisma: PrismaClient,
-    user_uuid: string,
+    organisation_uuid: string,
     email: string,
 ): Promise<Contact | null> {
     const trimmed = email.trim();
     if (!trimmed) return null;
     return prisma.contact.findFirst({
         where: {
-            user_uuid,
+            organisation_uuid,
             email: { equals: trimmed, mode: 'insensitive' },
         },
     });
@@ -24,7 +24,7 @@ export async function findOwnedContactByEmail(
 
 export async function findOwnedContactByWebsite(
     prisma: PrismaClient,
-    user_uuid: string,
+    organisation_uuid: string,
     website: string | null | undefined,
 ): Promise<Contact | null> {
     const host = normalizeWebsiteHost(website);
@@ -32,7 +32,7 @@ export async function findOwnedContactByWebsite(
 
     const candidates = await prisma.contact.findMany({
         where: {
-            user_uuid,
+            organisation_uuid,
             website: { contains: host, mode: 'insensitive' },
         },
         orderBy: { created_at: 'asc' },
@@ -104,15 +104,15 @@ export function shapeContactFilterFields(
 export async function mergeContactsIntoCanonical(
     prisma: PrismaService,
     elasticsearchService: ElasticsearchService,
-    user_uuid: string,
+    organisation_uuid: string,
     source_uuid: string,
     target_uuid: string,
 ): Promise<string> {
     if (source_uuid === target_uuid) return target_uuid;
 
     const [source, target] = await Promise.all([
-        prisma.contact.findFirst({ where: { uuid: source_uuid, user_uuid } }),
-        prisma.contact.findFirst({ where: { uuid: target_uuid, user_uuid } }),
+        prisma.contact.findFirst({ where: { uuid: source_uuid, organisation_uuid } }),
+        prisma.contact.findFirst({ where: { uuid: target_uuid, organisation_uuid } }),
     ]);
     if (!source) return target_uuid;
     if (!target) throw new Error('Target contact not found');
@@ -145,7 +145,7 @@ export async function mergeContactsIntoCanonical(
             await tx.interaction.create({
                 data: {
                     contact_uuid: target_uuid,
-                    user_uuid,
+                    organisation_uuid,
                     type: InteractionType.STATUS_CHANGE,
                     status_change: {
                         from: target.status,

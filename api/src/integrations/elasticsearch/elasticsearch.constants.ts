@@ -32,7 +32,7 @@ export const LEADS_MAPPING = {
 export const CONTACTS_MAPPING = {
     properties: {
         uuid: { type: 'keyword' },
-        user_uuid: { type: 'keyword' },
+        organisation_uuid: { type: 'keyword' },
         lead_uuid: { type: 'keyword' },
         status: { type: 'keyword' },
         scores: {

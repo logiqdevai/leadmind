@@ -1,7 +1,7 @@
 import { adminLoginToAccount, refreshAccountToken, signIn, signUp } from "../services/auth";
 import { useMutation } from "@tanstack/react-query";
 import { useAuthStore } from "@/stores/auth";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import type { SignInUser, SignUpUser } from "../interfaces/auth.interface";
 import { Routes } from "@/routes/routes";
 import type { LoggedInUser } from "@/features/user/interfaces/user.interface";
@@ -13,9 +13,15 @@ function errMessage(err: unknown): string {
     return "An unexpected error occurred";
 }
 
+function invitePath(token: string | null) {
+    if (!token) return Routes.dashboard.root;
+    return Routes.auth.invite.replace(":token", token);
+}
+
 export function useSignin() {
     const { login } = useAuthStore((state) => state);
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
 
     return useMutation({
         mutationFn: (data: SignInUser) => signIn(data),
@@ -29,7 +35,7 @@ export function useSignin() {
                 description: "You have successfully logged in",
                 duration: 2000,
             });
-            navigate(Routes.dashboard.root);
+            navigate(invitePath(searchParams.get("invite")));
         },
         onError: (error: unknown) => {
             toast({
@@ -46,6 +52,7 @@ export function useSignin() {
 export function useSignup() {
     const { login } = useAuthStore((state) => state);
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
 
     return useMutation({
         mutationFn: (data: SignUpUser) => signUp(data),
@@ -59,7 +66,7 @@ export function useSignup() {
                 description: "You have successfully registered in",
                 duration: 2000,
             });
-            navigate(Routes.dashboard.root);
+            navigate(invitePath(searchParams.get("invite")));
         },
         onError: (error: unknown) => {
             toast({

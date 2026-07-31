@@ -28,13 +28,13 @@ export class SearchController {
 
     @Get('contacts')
     @ApiOperation({
-        summary: "Search the current user's contacts — `q` runs semantic kNN, always pinned to user_uuid",
+        summary: "Search the current user's contacts — `q` runs semantic kNN, always pinned to organisation_uuid",
     })
     @ApiResponse({ status: 200 })
     searchContacts(
-        @CurrentUser('uuid') user_uuid: string,
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Query() query: SearchDto,
     ) {
-        return this.searchService.searchContacts(user_uuid, query);
+        return this.searchService.searchContacts(organisation_uuid, query);
     }
 }

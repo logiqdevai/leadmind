@@ -117,9 +117,9 @@ export class LeadEnrichmentOrchestrator extends EnrichmentOrchestrator {
         if (!url) {
             throw new Error('Lead has no linkedin_url');
         }
-        const user_uuid = await this.resolveUserUuidForTarget({ kind: 'lead', uuid: lead.uuid });
-        if (!user_uuid) {
-            throw new Error('Lead has no user context for Apify');
+        const organisation_uuid = await this.resolveOrganisationUuidForTarget({ kind: 'lead', uuid: lead.uuid });
+        if (!organisation_uuid) {
+            throw new Error('Lead has no organisation context for Apify');
         }
         const apifyUsage = {
             operation: ApifyUsageOperation.ENRICHMENT_LINKEDIN,
@@ -129,13 +129,13 @@ export class LeadEnrichmentOrchestrator extends EnrichmentOrchestrator {
         let plain: Record<string, unknown> | null = null;
         let subtype: 'profile' | 'company' = 'profile';
         if (isLinkedInCompanyUrl(url)) {
-            plain = toPlainRecord(await this.linkedInCompany.fetchCompany(user_uuid, url, apifyUsage));
+            plain = toPlainRecord(await this.linkedInCompany.fetchCompany(organisation_uuid, url, apifyUsage));
             subtype = 'company';
         } else if (isLinkedInProfileUrl(url)) {
-            plain = toPlainRecord(await this.linkedInProfile.fetchProfile(user_uuid, url, apifyUsage));
+            plain = toPlainRecord(await this.linkedInProfile.fetchProfile(organisation_uuid, url, apifyUsage));
             subtype = 'profile';
         } else {
-            plain = toPlainRecord(await this.linkedInProfile.fetchProfile(user_uuid, url, apifyUsage));
+            plain = toPlainRecord(await this.linkedInProfile.fetchProfile(organisation_uuid, url, apifyUsage));
             subtype = 'profile';
         }
         if (!plain) {
@@ -166,12 +166,12 @@ export class LeadEnrichmentOrchestrator extends EnrichmentOrchestrator {
             throw new Error('Lead has no website for crawl');
         }
         const url = normalizeWebsiteUrl(w);
-        const user_uuid = await this.resolveUserUuidForTarget({ kind: 'lead', uuid: lead.uuid });
-        if (!user_uuid) {
-            throw new Error('Lead has no user context for Apify');
+        const organisation_uuid = await this.resolveOrganisationUuidForTarget({ kind: 'lead', uuid: lead.uuid });
+        if (!organisation_uuid) {
+            throw new Error('Lead has no organisation context for Apify');
         }
         const page = await this.websiteCrawler.crawlSinglePage(
-            user_uuid,
+            organisation_uuid,
             url,
             {},
             {
@@ -222,12 +222,12 @@ export class LeadEnrichmentOrchestrator extends EnrichmentOrchestrator {
         if (!query) {
             throw new Error('Lead has no company/name for Google Search');
         }
-        const user_uuid = await this.resolveUserUuidForTarget({ kind: 'lead', uuid: lead.uuid });
-        if (!user_uuid) {
-            throw new Error('Lead has no user context for Apify');
+        const organisation_uuid = await this.resolveOrganisationUuidForTarget({ kind: 'lead', uuid: lead.uuid });
+        if (!organisation_uuid) {
+            throw new Error('Lead has no organisation context for Apify');
         }
         const raw = await this.googleSearch.fetchRawItems(
-            user_uuid,
+            organisation_uuid,
             {
                 queries: query,
                 results_per_page: 8,

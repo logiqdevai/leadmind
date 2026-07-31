@@ -11,7 +11,7 @@ export class SearchService {
         return this.elasticsearchService.searchLeads(query);
     }
 
-    searchContacts(userUuid: string, query: SearchDto): Promise<SearchResult> {
-        return this.elasticsearchService.searchContacts(userUuid, query);
+    searchContacts(organisation_uuid: string, query: SearchDto): Promise<SearchResult> {
+        return this.elasticsearchService.searchContacts(organisation_uuid, query);
     }
 }

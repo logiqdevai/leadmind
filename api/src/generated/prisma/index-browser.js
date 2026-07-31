@@ -131,10 +131,44 @@ exports.Prisma.UserScalarFieldEnum = {
   updated_at: 'updated_at'
 };
 
+exports.Prisma.OrganisationScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  name: 'name',
+  slug: 'slug',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.OrganisationMemberScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  organisation_uuid: 'organisation_uuid',
+  user_uuid: 'user_uuid',
+  role: 'role',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.OrganisationInvitationScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  organisation_uuid: 'organisation_uuid',
+  email: 'email',
+  role: 'role',
+  token: 'token',
+  status: 'status',
+  invited_by_user_uuid: 'invited_by_user_uuid',
+  expires_at: 'expires_at',
+  accepted_at: 'accepted_at',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
 exports.Prisma.FilterScalarFieldEnum = {
   id: 'id',
   uuid: 'uuid',
-  user_uuid: 'user_uuid',
+  organisation_uuid: 'organisation_uuid',
   name: 'name',
   source_type: 'source_type',
   query_config: 'query_config',
@@ -150,7 +184,7 @@ exports.Prisma.FilterScalarFieldEnum = {
 exports.Prisma.ScoringInstructionScalarFieldEnum = {
   id: 'id',
   uuid: 'uuid',
-  user_uuid: 'user_uuid',
+  organisation_uuid: 'organisation_uuid',
   name: 'name',
   instructions: 'instructions',
   created_at: 'created_at',
@@ -215,7 +249,7 @@ exports.Prisma.LeadEnrichmentScalarFieldEnum = {
 exports.Prisma.ContactScalarFieldEnum = {
   id: 'id',
   uuid: 'uuid',
-  user_uuid: 'user_uuid',
+  organisation_uuid: 'organisation_uuid',
   lead_uuid: 'lead_uuid',
   filter_uuid: 'filter_uuid',
   status: 'status',
@@ -282,7 +316,7 @@ exports.Prisma.ContactScoreScalarFieldEnum = {
 exports.Prisma.ContactListScalarFieldEnum = {
   id: 'id',
   uuid: 'uuid',
-  user_uuid: 'user_uuid',
+  organisation_uuid: 'organisation_uuid',
   parent_list_uuid: 'parent_list_uuid',
   title: 'title',
   description: 'description',
@@ -309,7 +343,7 @@ exports.Prisma.InteractionScalarFieldEnum = {
   id: 'id',
   uuid: 'uuid',
   contact_uuid: 'contact_uuid',
-  user_uuid: 'user_uuid',
+  organisation_uuid: 'organisation_uuid',
   campaign_uuid: 'campaign_uuid',
   type: 'type',
   content: 'content',
@@ -323,7 +357,7 @@ exports.Prisma.InteractionScalarFieldEnum = {
 exports.Prisma.OutreachMessageScalarFieldEnum = {
   id: 'id',
   uuid: 'uuid',
-  user_uuid: 'user_uuid',
+  organisation_uuid: 'organisation_uuid',
   contact_uuid: 'contact_uuid',
   campaign_uuid: 'campaign_uuid',
   channel: 'channel',
@@ -350,7 +384,7 @@ exports.Prisma.OutreachMessageScalarFieldEnum = {
 exports.Prisma.OutreachSequenceScalarFieldEnum = {
   id: 'id',
   uuid: 'uuid',
-  user_uuid: 'user_uuid',
+  organisation_uuid: 'organisation_uuid',
   name: 'name',
   steps: 'steps',
   created_at: 'created_at',
@@ -375,7 +409,7 @@ exports.Prisma.FilterJobScalarFieldEnum = {
 exports.Prisma.SenderProfileScalarFieldEnum = {
   id: 'id',
   uuid: 'uuid',
-  user_uuid: 'user_uuid',
+  organisation_uuid: 'organisation_uuid',
   name: 'name',
   company_name: 'company_name',
   title: 'title',
@@ -402,7 +436,7 @@ exports.Prisma.SenderProfileScalarFieldEnum = {
 exports.Prisma.MessageTemplateScalarFieldEnum = {
   id: 'id',
   uuid: 'uuid',
-  user_uuid: 'user_uuid',
+  organisation_uuid: 'organisation_uuid',
   name: 'name',
   channels: 'channels',
   email_subject: 'email_subject',
@@ -417,7 +451,7 @@ exports.Prisma.MessageTemplateScalarFieldEnum = {
 exports.Prisma.MarketingCampaignScalarFieldEnum = {
   id: 'id',
   uuid: 'uuid',
-  user_uuid: 'user_uuid',
+  organisation_uuid: 'organisation_uuid',
   name: 'name',
   description: 'description',
   status: 'status',
@@ -472,7 +506,7 @@ exports.Prisma.MarketingCampaignContactScalarFieldEnum = {
 exports.Prisma.OpenAiBatchJobScalarFieldEnum = {
   id: 'id',
   batch_id: 'batch_id',
-  user_uuid: 'user_uuid',
+  organisation_uuid: 'organisation_uuid',
   type: 'type',
   status: 'status',
   total_requests: 'total_requests',
@@ -491,7 +525,7 @@ exports.Prisma.OpenAiBatchJobScalarFieldEnum = {
 exports.Prisma.IntegrationScalarFieldEnum = {
   id: 'id',
   uuid: 'uuid',
-  user_uuid: 'user_uuid',
+  organisation_uuid: 'organisation_uuid',
   provider: 'provider',
   title: 'title',
   default_account: 'default_account',
@@ -524,7 +558,7 @@ exports.Prisma.IntegrationKeyScalarFieldEnum = {
 exports.Prisma.ReminderScalarFieldEnum = {
   id: 'id',
   uuid: 'uuid',
-  user_uuid: 'user_uuid',
+  organisation_uuid: 'organisation_uuid',
   contact_uuid: 'contact_uuid',
   title: 'title',
   notes: 'notes',
@@ -538,7 +572,7 @@ exports.Prisma.ReminderScalarFieldEnum = {
 exports.Prisma.FormScalarFieldEnum = {
   id: 'id',
   uuid: 'uuid',
-  user_uuid: 'user_uuid',
+  organisation_uuid: 'organisation_uuid',
   name: 'name',
   description: 'description',
   created_at: 'created_at',
@@ -585,7 +619,7 @@ exports.Prisma.FormCompletionValueScalarFieldEnum = {
 exports.Prisma.ContactAudienceAnalysisScalarFieldEnum = {
   id: 'id',
   uuid: 'uuid',
-  user_uuid: 'user_uuid',
+  organisation_uuid: 'organisation_uuid',
   scope: 'scope',
   filter_uuid: 'filter_uuid',
   contact_list_uuid: 'contact_list_uuid',
@@ -605,7 +639,7 @@ exports.Prisma.ContactAudienceAnalysisScalarFieldEnum = {
 
 exports.Prisma.AiUsageLogScalarFieldEnum = {
   uuid: 'uuid',
-  user_uuid: 'user_uuid',
+  organisation_uuid: 'organisation_uuid',
   provider: 'provider',
   model: 'model',
   operation: 'operation',
@@ -629,7 +663,7 @@ exports.Prisma.AiUsageLogScalarFieldEnum = {
 
 exports.Prisma.ApifyUsageLogScalarFieldEnum = {
   uuid: 'uuid',
-  user_uuid: 'user_uuid',
+  organisation_uuid: 'organisation_uuid',
   actor_id: 'actor_id',
   operation: 'operation',
   status: 'status',
@@ -679,6 +713,24 @@ exports.AuthRole = exports.$Enums.AuthRole = {
   ADMIN: 'ADMIN',
   SUPER_ADMIN: 'SUPER_ADMIN',
   SUPPORT: 'SUPPORT'
+};
+
+exports.OrganisationRole = exports.$Enums.OrganisationRole = {
+  OWNER: 'OWNER',
+  ADMIN: 'ADMIN',
+  MEMBER: 'MEMBER'
+};
+
+exports.OrganisationInviteRole = exports.$Enums.OrganisationInviteRole = {
+  ADMIN: 'ADMIN',
+  MEMBER: 'MEMBER'
+};
+
+exports.OrganisationInviteStatus = exports.$Enums.OrganisationInviteStatus = {
+  PENDING: 'PENDING',
+  ACCEPTED: 'ACCEPTED',
+  REVOKED: 'REVOKED',
+  EXPIRED: 'EXPIRED'
 };
 
 exports.SourceType = exports.$Enums.SourceType = {
@@ -926,6 +978,9 @@ exports.ApifyUsageStatus = exports.$Enums.ApifyUsageStatus = {
 
 exports.Prisma.ModelName = {
   User: 'User',
+  Organisation: 'Organisation',
+  OrganisationMember: 'OrganisationMember',
+  OrganisationInvitation: 'OrganisationInvitation',
   Filter: 'Filter',
   ScoringInstruction: 'ScoringInstruction',
   FilterScoringInstruction: 'FilterScoringInstruction',

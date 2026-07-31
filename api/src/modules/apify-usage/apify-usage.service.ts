@@ -15,7 +15,7 @@ export class ApifyUsageService {
             try {
                 await this.prisma.apifyUsageLog.create({
                     data: {
-                        user_uuid: input.user_uuid,
+                        organisation_uuid: input.organisation_uuid,
                         actor_id: input.actor_id,
                         operation: input.operation,
                         status: input.status,
@@ -37,13 +37,13 @@ export class ApifyUsageService {
         });
     }
 
-    async findAll(user_uuid: string, dto: ListApifyUsageDto) {
+    async findAll(organisation_uuid: string, dto: ListApifyUsageDto) {
         const page = dto.page ?? 1;
         const limit = dto.limit ?? 20;
         const skip = (page - 1) * limit;
 
         const where: Prisma.ApifyUsageLogWhereInput = {
-            user_uuid,
+            organisation_uuid,
             ...(dto.actor_id ? { actor_id: dto.actor_id } : {}),
             ...(dto.operation ? { operation: dto.operation } : {}),
             ...(dto.status ? { status: dto.status } : {}),
@@ -86,9 +86,9 @@ export class ApifyUsageService {
         };
     }
 
-    async getSummary(user_uuid: string, dto: ApifyUsageSummaryDto): Promise<ApifyUsageSummaryResponse> {
+    async getSummary(organisation_uuid: string, dto: ApifyUsageSummaryDto): Promise<ApifyUsageSummaryResponse> {
         const where: Prisma.ApifyUsageLogWhereInput = {
-            user_uuid,
+            organisation_uuid,
             ...(dto.from || dto.to
                 ? {
                       created_at: {

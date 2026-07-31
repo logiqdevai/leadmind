@@ -65,14 +65,14 @@ export class CampaignUtmAnalyticsService {
         if (payload.contact_uuid) {
             const contact = await this.prisma.contact.findUnique({
                 where: { uuid: payload.contact_uuid },
-                select: { uuid: true, user_uuid: true },
+                select: { uuid: true, organisation_uuid: true },
             });
             if (contact) {
                 ops.push(
                     this.prisma.interaction.create({
                         data: {
                             contact_uuid: contact.uuid,
-                            user_uuid: contact.user_uuid,
+                            organisation_uuid: contact.organisation_uuid,
                             campaign_uuid,
                             type: interactionType,
                             metadata: {

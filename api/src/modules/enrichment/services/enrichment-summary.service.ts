@@ -44,9 +44,9 @@ export class EnrichmentSummaryService {
 
         const contact = await this.prisma.contact.findFirst({
             where: { lead_uuid: leadUuid },
-            select: { user_uuid: true },
+            select: { organisation_uuid: true },
         });
-        const user_uuid = contact?.user_uuid ?? null;
+        const organisation_uuid = contact?.organisation_uuid ?? null;
 
         const rows = await this.prisma.leadEnrichment.findMany({
             where: { lead_uuid: leadUuid },
@@ -55,7 +55,7 @@ export class EnrichmentSummaryService {
         return this.regenerateFromRows(
             lead,
             rows,
-            user_uuid,
+            organisation_uuid,
             async (summary, metadata) => {
                 await this.prisma.lead.update({
                     where: { uuid: leadUuid },
@@ -99,7 +99,7 @@ export class EnrichmentSummaryService {
         return this.regenerateFromRows(
             leadLike,
             rows,
-            contact.user_uuid,
+            contact.organisation_uuid,
             async (summary, metadata) => {
                 await this.prisma.contact.update({
                     where: { uuid: contactUuid },
@@ -120,7 +120,7 @@ export class EnrichmentSummaryService {
             metadata: Prisma.JsonValue | null;
             created_at: Date;
         }>,
-        user_uuid: string | null,
+        organisation_uuid: string | null,
         persist: (summary: string | null, metadata: Prisma.InputJsonValue | null) => Promise<void>,
         entityLabel: string,
     ): Promise<string | null> {
@@ -131,7 +131,7 @@ export class EnrichmentSummaryService {
             return null;
         }
 
-        if (!user_uuid || !(await this.aiConfig.isOpenAiConfigured(user_uuid))) {
+        if (!organisation_uuid || !(await this.aiConfig.isOpenAiConfigured(organisation_uuid))) {
             await persist(fallback, null);
             return fallback;
         }
@@ -141,7 +141,7 @@ export class EnrichmentSummaryService {
             const model = LEAD_ENRICHMENT_SUMMARY_MODEL;
             const prompt = buildLeadEnrichmentSummaryPrompt(leadLike, sourceContext);
             const { response } = await this.aiService.generateObjectWithSchema({
-                user_uuid,
+                organisation_uuid,
                 provider: AiProviders.openai,
                 model,
                 prompt,

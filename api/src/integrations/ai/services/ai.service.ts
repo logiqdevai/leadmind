@@ -29,7 +29,7 @@ export class AiService {
         const model = options.model ?? 'gpt-4o';
 
         try {
-            const modelAdapter = await this.aiConfig.getModelAdapter(options.user_uuid, provider, model);
+            const modelAdapter = await this.aiConfig.getModelAdapter(options.organisation_uuid, provider, model);
 
             const { text, usage } = await generateText({
                 prompt: options.prompt,
@@ -50,7 +50,7 @@ export class AiService {
             });
 
             this.aiUsageService.logFromSyncCall({
-                user_uuid: options.user_uuid,
+                organisation_uuid: options.organisation_uuid,
                 provider,
                 model,
                 usage: cost,
@@ -66,7 +66,7 @@ export class AiService {
         } catch (error) {
             const message = error instanceof Error ? error.message : String(error);
             this.aiUsageService.logFromSyncCall({
-                user_uuid: options.user_uuid,
+                organisation_uuid: options.organisation_uuid,
                 provider,
                 model,
                 usageContext: options.usage,
@@ -84,7 +84,7 @@ export class AiService {
         const model = options.model ?? 'gpt-4o-mini';
 
         try {
-            const openAi = await this.aiConfig.getOpenAiProvider(options.user_uuid);
+            const openAi = await this.aiConfig.getOpenAiProvider(options.organisation_uuid);
             const modelAdapter = openAi.responses(model);
 
             const { text, usage, sources } = await generateText({
@@ -106,7 +106,7 @@ export class AiService {
             });
 
             this.aiUsageService.logFromSyncCall({
-                user_uuid: options.user_uuid,
+                organisation_uuid: options.organisation_uuid,
                 provider: AiProviders.openai,
                 model,
                 usage: cost,
@@ -127,7 +127,7 @@ export class AiService {
         } catch (error) {
             const message = error instanceof Error ? error.message : String(error);
             this.aiUsageService.logFromSyncCall({
-                user_uuid: options.user_uuid,
+                organisation_uuid: options.organisation_uuid,
                 provider: AiProviders.openai,
                 model,
                 usageContext: options.usage,
@@ -151,7 +151,7 @@ export class AiService {
         for (let attempt = 1; attempt <= maxRetries; attempt++) {
             const startedAt = Date.now();
             try {
-                const modelAdapter = await this.aiConfig.getModelAdapter(options.user_uuid, provider, model);
+                const modelAdapter = await this.aiConfig.getModelAdapter(options.organisation_uuid, provider, model);
 
                 const { object, usage } = await generateObject({
                     model: modelAdapter,
@@ -170,7 +170,7 @@ export class AiService {
                 });
 
                 this.aiUsageService.logFromSyncCall({
-                    user_uuid: options.user_uuid,
+                    organisation_uuid: options.organisation_uuid,
                     provider,
                     model,
                     usage: cost,
@@ -194,7 +194,7 @@ export class AiService {
                 }
 
                 this.aiUsageService.logFromSyncCall({
-                    user_uuid: options.user_uuid,
+                    organisation_uuid: options.organisation_uuid,
                     provider,
                     model,
                     usageContext: options.usage,
@@ -219,7 +219,7 @@ export class AiService {
         for (let attempt = 1; attempt <= maxRetries; attempt++) {
             const startedAt = Date.now();
             try {
-                const modelAdapter = await this.aiConfig.getModelAdapter(options.user_uuid, provider, model);
+                const modelAdapter = await this.aiConfig.getModelAdapter(options.organisation_uuid, provider, model);
 
                 const { object, usage } = await generateObject({
                     model: modelAdapter,
@@ -237,7 +237,7 @@ export class AiService {
                 });
 
                 this.aiUsageService.logFromSyncCall({
-                    user_uuid: options.user_uuid,
+                    organisation_uuid: options.organisation_uuid,
                     provider,
                     model,
                     usage: cost,
@@ -261,7 +261,7 @@ export class AiService {
                 }
 
                 this.aiUsageService.logFromSyncCall({
-                    user_uuid: options.user_uuid,
+                    organisation_uuid: options.organisation_uuid,
                     provider,
                     model,
                     usageContext: options.usage,
@@ -282,7 +282,7 @@ export class AiService {
             this.aiConfig.validateProviderAndModel(options.provider ?? AiProviders.openai, options.model ?? 'gpt-4o');
 
             const modelAdapter = await this.aiConfig.getModelAdapter(
-                options.user_uuid,
+                options.organisation_uuid,
                 options.provider,
                 options.model,
             );
@@ -317,12 +317,12 @@ export class AiService {
         }
     }
 
-    async embedText(user_uuid: string, text: string, usageContext?: AIGenerateOptions['usage']): Promise<number[]> {
+    async embedText(organisation_uuid: string, text: string, usageContext?: AIGenerateOptions['usage']): Promise<number[]> {
         const startedAt = Date.now();
         const model = 'text-embedding-3-small';
 
         try {
-            const openAi = await this.aiConfig.getOpenAiProvider(user_uuid);
+            const openAi = await this.aiConfig.getOpenAiProvider(organisation_uuid);
             const embeddingModel = openAi.embedding(model);
             const { embedding, usage } = await embed({
                 model: embeddingModel,
@@ -337,7 +337,7 @@ export class AiService {
             });
 
             this.aiUsageService.logFromSyncCall({
-                user_uuid,
+                organisation_uuid,
                 provider: AiProviders.openai,
                 model,
                 usage: cost,
@@ -350,7 +350,7 @@ export class AiService {
         } catch (error) {
             const message = error instanceof Error ? error.message : String(error);
             this.aiUsageService.logFromSyncCall({
-                user_uuid,
+                organisation_uuid,
                 provider: AiProviders.openai,
                 model,
                 usageContext: { ...usageContext, operation: usageContext?.operation ?? 'EMBEDDING' },

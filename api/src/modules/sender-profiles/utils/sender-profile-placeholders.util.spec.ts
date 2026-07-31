@@ -5,7 +5,7 @@ describe('senderProfileToPlaceholders', () => {
         const vars = senderProfileToPlaceholders({
             id: 1,
             uuid: 'profile-1',
-            user_uuid: 'user-1',
+            organisation_uuid: 'user-1',
             name: 'Acme',
             company_name: null,
             title: null,
@@ -40,7 +40,7 @@ describe('senderProfileToPlaceholders', () => {
             {
                 id: 1,
                 uuid: 'profile-1',
-                user_uuid: 'user-1',
+                organisation_uuid: 'user-1',
                 name: 'Acme',
                 company_name: null,
                 title: null,

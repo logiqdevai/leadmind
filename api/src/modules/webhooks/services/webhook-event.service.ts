@@ -220,7 +220,7 @@ export class WebhookEventService {
                 this.prisma.interaction.create({
                     data: {
                         contact_uuid: message.contact_uuid,
-                        user_uuid: message.user_uuid,
+                        organisation_uuid: message.organisation_uuid,
                         campaign_uuid: message.campaign_uuid,
                         outreach_message_uuid: null, // unique 1:1 FK already taken by the original send interaction
                         type: interactionType,
@@ -296,7 +296,7 @@ export class WebhookEventService {
                 ops.push(
                     ...this.contactsService.buildPromoteToContactedIfNewOps(
                         message.contact_uuid,
-                        message.user_uuid,
+                        message.organisation_uuid,
                         event.kind === 'delivered' ? 'email_delivered' : 'email_replied',
                         contact.status,
                     ),

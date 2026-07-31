@@ -44,9 +44,9 @@ export class OpenAiWebhookController {
             return;
         }
 
-        const webhookSecret = await this.aiCredentials.tryGetOpenAiWebhookSecret(job.user_uuid);
+        const webhookSecret = await this.aiCredentials.tryGetOpenAiWebhookSecret(job.organisation_uuid);
         if (!webhookSecret) {
-            this.logger.warn(`OpenAI webhook: no webhook secret for user ${job.user_uuid}`);
+            this.logger.warn(`OpenAI webhook: no webhook secret for organisation ${job.organisation_uuid}`);
             return;
         }
 

@@ -43,11 +43,11 @@ export class MessageTemplatesService {
         private readonly templateAiService: TemplateAiService,
     ) {}
 
-    async create(user_uuid: string, dto: CreateMessageTemplateDto) {
+    async create(organisation_uuid: string, dto: CreateMessageTemplateDto) {
         const { emailSubject, emailContent, smsContent } = normalizeTemplateData(dto);
         return this.prisma.messageTemplate.create({
             data: {
-                user_uuid,
+                organisation_uuid,
                 name: dto.name.trim(),
                 channels: dto.channels,
                 email_subject: emailSubject,
@@ -57,23 +57,23 @@ export class MessageTemplatesService {
         });
     }
 
-    async findAll(user_uuid: string) {
+    async findAll(organisation_uuid: string) {
         return this.prisma.messageTemplate.findMany({
-            where: { user_uuid },
+            where: { organisation_uuid },
             orderBy: { updated_at: 'desc' },
         });
     }
 
-    async findOne(user_uuid: string, uuid: string) {
+    async findOne(organisation_uuid: string, uuid: string) {
         const row = await this.prisma.messageTemplate.findFirst({
-            where: { uuid, user_uuid },
+            where: { uuid, organisation_uuid },
         });
         if (!row) throw new NotFoundException(`Message template ${uuid} not found`);
         return row;
     }
 
-    async update(user_uuid: string, uuid: string, dto: UpdateMessageTemplateDto) {
-        const existing = await this.findOne(user_uuid, uuid);
+    async update(organisation_uuid: string, uuid: string, dto: UpdateMessageTemplateDto) {
+        const existing = await this.findOne(organisation_uuid, uuid);
         const merged: CreateMessageTemplateDto = {
             name: dto.name ?? existing.name,
             channels: dto.channels ?? existing.channels,
@@ -95,18 +95,18 @@ export class MessageTemplatesService {
         });
     }
 
-    async remove(user_uuid: string, uuid: string) {
-        await this.findOne(user_uuid, uuid);
+    async remove(organisation_uuid: string, uuid: string) {
+        await this.findOne(organisation_uuid, uuid);
         await this.prisma.messageTemplate.delete({ where: { uuid } });
         return { uuid };
     }
 
-    async generateAi(user_uuid: string, dto: GenerateTemplateMessageDto) {
-        return this.templateAiService.generate(user_uuid, dto, {});
+    async generateAi(organisation_uuid: string, dto: GenerateTemplateMessageDto) {
+        return this.templateAiService.generate(organisation_uuid, dto, {});
     }
 
     private async resolveCampaignTemplateContent(
-        user_uuid: string,
+        organisation_uuid: string,
         campaign: MarketingCampaign,
     ): Promise<{
         emailSubject: string | null;
@@ -124,7 +124,7 @@ export class MessageTemplatesService {
             const emailDraft = await this.prisma.outreachMessage.findFirst({
                 where: {
                     campaign_uuid: campaign.uuid,
-                    user_uuid,
+                    organisation_uuid,
                     channel: Channel.EMAIL,
                     content: { not: '' },
                 },
@@ -141,7 +141,7 @@ export class MessageTemplatesService {
             const smsDraft = await this.prisma.outreachMessage.findFirst({
                 where: {
                     campaign_uuid: campaign.uuid,
-                    user_uuid,
+                    organisation_uuid,
                     channel: Channel.SMS,
                     content: { not: '' },
                 },
@@ -157,17 +157,17 @@ export class MessageTemplatesService {
     }
 
     async createFromCampaign(
-        user_uuid: string,
+        organisation_uuid: string,
         campaign_uuid: string,
         dto: CreateTemplateFromSourceDto,
     ) {
         const campaign = await this.prisma.marketingCampaign.findFirst({
-            where: { uuid: campaign_uuid, user_uuid },
+            where: { uuid: campaign_uuid, organisation_uuid },
         });
         if (!campaign) throw new NotFoundException(`Campaign ${campaign_uuid} not found`);
 
         const { emailSubject, emailContent, smsContent } = await this.resolveCampaignTemplateContent(
-            user_uuid,
+            organisation_uuid,
             campaign,
         );
 
@@ -180,7 +180,7 @@ export class MessageTemplatesService {
 
         return this.prisma.messageTemplate.create({
             data: {
-                user_uuid,
+                organisation_uuid,
                 name,
                 channels,
                 email_subject: channels.includes(Channel.EMAIL) ? emailSubject : null,
@@ -192,12 +192,12 @@ export class MessageTemplatesService {
     }
 
     async createFromMessage(
-        user_uuid: string,
+        organisation_uuid: string,
         message_uuid: string,
         dto: CreateTemplateFromSourceDto,
     ) {
         const message = await this.prisma.outreachMessage.findFirst({
-            where: { uuid: message_uuid, user_uuid },
+            where: { uuid: message_uuid, organisation_uuid },
             include: { campaign: { select: { name: true } } },
         });
         if (!message) throw new NotFoundException(`Message ${message_uuid} not found`);
@@ -218,7 +218,7 @@ export class MessageTemplatesService {
 
         return this.prisma.messageTemplate.create({
             data: {
-                user_uuid,
+                organisation_uuid,
                 name,
                 channels: [message.channel],
                 email_subject: message.channel === Channel.EMAIL ? message.subject?.trim() || null : null,

@@ -52,37 +52,37 @@ export class ContactAudienceStatsService {
     ) {}
 
     async getFilterStats(
-        user_uuid: string,
+        organisation_uuid: string,
         filterUuid: string,
         query: ContactAudienceStatsQueryDto,
     ): Promise<ContactAudienceStats> {
         const filter = await this.prisma.filter.findFirst({
-            where: { uuid: filterUuid, user_uuid },
+            where: { uuid: filterUuid, organisation_uuid },
             select: { uuid: true },
         });
         if (!filter) throw new NotFoundException('Filter not found');
-        return this.aggregateStats(user_uuid, { type: 'filter', uuid: filterUuid }, query);
+        return this.aggregateStats(organisation_uuid, { type: 'filter', uuid: filterUuid }, query);
     }
 
     async getListStats(
-        user_uuid: string,
+        organisation_uuid: string,
         listUuid: string,
         query: ContactAudienceStatsQueryDto,
     ): Promise<ContactAudienceStats> {
         const list = await this.prisma.contactList.findFirst({
-            where: { uuid: listUuid, user_uuid },
+            where: { uuid: listUuid, organisation_uuid },
             select: { uuid: true },
         });
         if (!list) throw new NotFoundException('Contact list not found');
-        return this.aggregateStats(user_uuid, { type: 'list', uuid: listUuid }, query);
+        return this.aggregateStats(organisation_uuid, { type: 'list', uuid: listUuid }, query);
     }
 
     private async buildContactWhere(
-        user_uuid: string,
+        organisation_uuid: string,
         scope: { type: 'filter' | 'list'; uuid: string },
         query: ContactAudienceStatsQueryDto,
     ): Promise<Prisma.ContactWhereInput> {
-        const where = this.contactsService.buildWhereInput(user_uuid, {
+        const where = this.contactsService.buildWhereInput(organisation_uuid, {
             status: query.status,
             tags: query.tags,
             search: query.search,
@@ -131,11 +131,11 @@ export class ContactAudienceStatsService {
     }
 
     private async aggregateStats(
-        user_uuid: string,
+        organisation_uuid: string,
         scope: { type: 'filter' | 'list'; uuid: string },
         query: ContactAudienceStatsQueryDto,
     ): Promise<ContactAudienceStats> {
-        const contactWhere = await this.buildContactWhere(user_uuid, scope, query);
+        const contactWhere = await this.buildContactWhere(organisation_uuid, scope, query);
         const interactionDate = this.buildInteractionDateFilter(query);
         const interactionWhere: Prisma.InteractionWhereInput = {
             contact: contactWhere,

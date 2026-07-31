@@ -58,15 +58,15 @@ export class FiltersService {
         @InjectQueue(FILTER_SCRAPE_QUEUE) private readonly scrapeQueue: Queue,
     ) {}
 
-    async create(user_uuid: string, dto: CreateFilterDto): Promise<FilterResponse> {
+    async create(organisation_uuid: string, dto: CreateFilterDto): Promise<FilterResponse> {
         this.validateQueryConfig(dto.source_type, dto.query_config);
-        await this.assertApifyForSourceType(user_uuid, dto.source_type);
+        await this.assertApifyForSourceType(organisation_uuid, dto.source_type);
         const uuids = dto.scoring_instruction_uuids ?? [];
-        await this.scoringInstructionsService.assertAllOwnedByUser(user_uuid, uuids);
+        await this.scoringInstructionsService.assertAllOwnedByUser(organisation_uuid, uuids);
 
         const filter = await this.prisma.filter.create({
             data: {
-                user_uuid,
+                organisation_uuid,
                 name: dto.name,
                 source_type: dto.source_type,
                 query_config: dto.query_config,
@@ -93,38 +93,38 @@ export class FiltersService {
         return mapFilter(filter);
     }
 
-    async findAll(user_uuid: string): Promise<FilterResponse[]> {
+    async findAll(organisation_uuid: string): Promise<FilterResponse[]> {
         const rows = await this.prisma.filter.findMany({
-            where: { user_uuid },
+            where: { organisation_uuid },
             orderBy: { created_at: 'desc' },
             include: filterScoringInclude,
         });
         return rows.map(mapFilter);
     }
 
-    async findOne(user_uuid: string, uuid: string): Promise<FilterResponse> {
+    async findOne(organisation_uuid: string, uuid: string): Promise<FilterResponse> {
         const filter = await this.prisma.filter.findFirst({
-            where: { uuid, user_uuid },
+            where: { uuid, organisation_uuid },
             include: filterScoringInclude,
         });
         if (!filter) throw new NotFoundException(`Filter ${uuid} not found`);
         return mapFilter(filter);
     }
 
-    async update(user_uuid: string, uuid: string, dto: UpdateFilterDto): Promise<FilterResponse> {
-        const existing = await this.prisma.filter.findFirst({ where: { uuid, user_uuid } });
+    async update(organisation_uuid: string, uuid: string, dto: UpdateFilterDto): Promise<FilterResponse> {
+        const existing = await this.prisma.filter.findFirst({ where: { uuid, organisation_uuid } });
         if (!existing) throw new NotFoundException(`Filter ${uuid} not found`);
 
         const next_source_type = dto.source_type ?? existing.source_type;
         const next_query_config = dto.query_config ?? (existing.query_config as Record<string, any>);
         if (dto.source_type !== undefined || dto.query_config !== undefined) {
             this.validateQueryConfig(next_source_type, next_query_config);
-            await this.assertApifyForSourceType(user_uuid, next_source_type);
+            await this.assertApifyForSourceType(organisation_uuid, next_source_type);
         }
 
         if (dto.scoring_instruction_uuids !== undefined) {
             await this.scoringInstructionsService.assertAllOwnedByUser(
-                user_uuid,
+                organisation_uuid,
                 dto.scoring_instruction_uuids,
             );
         }
@@ -157,11 +157,11 @@ export class FiltersService {
 
         await this.syncRepeatable(existing, updated);
 
-        return this.findOne(user_uuid, uuid);
+        return this.findOne(organisation_uuid, uuid);
     }
 
-    async remove(user_uuid: string, uuid: string): Promise<{ uuid: string }> {
-        const existing = await this.prisma.filter.findFirst({ where: { uuid, user_uuid } });
+    async remove(organisation_uuid: string, uuid: string): Promise<{ uuid: string }> {
+        const existing = await this.prisma.filter.findFirst({ where: { uuid, organisation_uuid } });
         if (!existing) throw new NotFoundException(`Filter ${uuid} not found`);
 
         if (existing.cron_schedule) {
@@ -173,12 +173,12 @@ export class FiltersService {
         return { uuid };
     }
 
-    async manualRun(user_uuid: string, uuid: string): Promise<{
+    async manualRun(organisation_uuid: string, uuid: string): Promise<{
         queue_job_id: string;
         filter_uuid: string;
         status: 'queued';
     }> {
-        const filter = await this.prisma.filter.findFirst({ where: { uuid, user_uuid } });
+        const filter = await this.prisma.filter.findFirst({ where: { uuid, organisation_uuid } });
         if (!filter) throw new NotFoundException(`Filter ${uuid} not found`);
 
         if (filter.source_type === SourceType.MANUAL) {
@@ -212,13 +212,13 @@ export class FiltersService {
         };
     }
 
-    async stop(user_uuid: string, uuid: string): Promise<{
+    async stop(organisation_uuid: string, uuid: string): Promise<{
         filter_uuid: string;
         status: 'stopped';
         cancelled_jobs: number;
         removed_queue_jobs: number;
     }> {
-        const filter = await this.prisma.filter.findFirst({ where: { uuid, user_uuid } });
+        const filter = await this.prisma.filter.findFirst({ where: { uuid, organisation_uuid } });
         if (!filter) throw new NotFoundException(`Filter ${uuid} not found`);
 
         const activeJobs = await this.prisma.filterJob.findMany({
@@ -262,8 +262,8 @@ export class FiltersService {
         };
     }
 
-    async findJobs(user_uuid: string, uuid: string, query: ListJobsDto) {
-        await this.findOne(user_uuid, uuid);
+    async findJobs(organisation_uuid: string, uuid: string, query: ListJobsDto) {
+        await this.findOne(organisation_uuid, uuid);
 
         const page = query.page ?? 1;
         const limit = query.limit ?? 20;
@@ -402,7 +402,7 @@ export class FiltersService {
     }
 
     private async assertApifyForSourceType(
-        user_uuid: string,
+        organisation_uuid: string,
         source_type: SourceType,
     ): Promise<void> {
         const apify_sources: SourceType[] = [
@@ -413,7 +413,7 @@ export class FiltersService {
             SourceType.WEBSITE_CRAWLER,
         ];
         if (apify_sources.includes(source_type)) {
-            await this.apifyCredentials.assertApifyConfigured(user_uuid);
+            await this.apifyCredentials.assertApifyConfigured(organisation_uuid);
         }
     }
 

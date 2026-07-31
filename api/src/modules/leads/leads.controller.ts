@@ -43,8 +43,8 @@ export class LeadsController {
     @ApiOperation({ summary: 'Enqueue AI enrichment for multiple leads (admin only)' })
     @ApiResponse({ status: 201, description: 'Enrichment jobs enqueued' })
     @ApiResponse({ status: 404, description: 'One or more leads not found' })
-    triggerBulkEnrich(@CurrentUser('uuid') user_uuid: string, @Body() dto: BulkEnrichLeadsDto) {
-        return this.leadsService.triggerBulkEnrich(user_uuid, dto);
+    triggerBulkEnrich(@CurrentUser('organisation_uuid') organisation_uuid: string, @Body() dto: BulkEnrichLeadsDto) {
+        return this.leadsService.triggerBulkEnrich(organisation_uuid, dto);
     }
 
     @Get(':uuid/enrichments')
@@ -92,10 +92,10 @@ export class LeadsController {
     @ApiResponse({ status: 201, description: 'Enrichment job enqueued' })
     @ApiResponse({ status: 404, description: 'Lead not found' })
     triggerEnrich(
-        @CurrentUser('uuid') user_uuid: string,
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') uuid: string,
         @Body() dto: EnrichLeadDto,
     ) {
-        return this.leadsService.triggerEnrich(user_uuid, uuid, dto);
+        return this.leadsService.triggerEnrich(organisation_uuid, uuid, dto);
     }
 }

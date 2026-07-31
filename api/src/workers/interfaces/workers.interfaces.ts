@@ -18,7 +18,7 @@ export interface LeadJobData {
 
 export interface LeadBatchEnrichPrepareJobData {
     job_kind: 'lead_batch_enrich_prepare';
-    user_uuid: string;
+    organisation_uuid: string;
     lead_uuids: string[];
     enrichment_sources?: EnrichmentSource[];
 }

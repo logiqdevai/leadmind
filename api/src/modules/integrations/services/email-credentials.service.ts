@@ -31,10 +31,10 @@ export class EmailCredentialsService {
         private readonly prisma: PrismaService,
     ) {}
 
-    async getResendFromEmail(user_uuid: string, account: string): Promise<string> {
-        await this.assertSendableAccount(user_uuid, ExternalIntegrationProvider.RESEND, account);
+    async getResendFromEmail(organisation_uuid: string, account: string): Promise<string> {
+        await this.assertSendableAccount(organisation_uuid, ExternalIntegrationProvider.RESEND, account);
         const fromEmail = await this.integrationsService.getDecryptedSecret(
-            user_uuid,
+            organisation_uuid,
             ExternalIntegrationProvider.RESEND,
             IntegrationKeyType.FROM_EMAIL,
             account,
@@ -42,24 +42,24 @@ export class EmailCredentialsService {
         return fromEmail.trim();
     }
 
-    async getResendApiKey(user_uuid: string, account: string): Promise<string> {
-        this.logger.log(`Loading Resend API key user=${user_uuid} account=${account}`);
-        await this.assertSendableAccount(user_uuid, ExternalIntegrationProvider.RESEND, account);
+    async getResendApiKey(organisation_uuid: string, account: string): Promise<string> {
+        this.logger.log(`Loading Resend API key user=${organisation_uuid} account=${account}`);
+        await this.assertSendableAccount(organisation_uuid, ExternalIntegrationProvider.RESEND, account);
         const secret = await this.integrationsService.getDecryptedSecret(
-            user_uuid,
+            organisation_uuid,
             ExternalIntegrationProvider.RESEND,
             IntegrationKeyType.API_KEY,
             account,
         );
         this.logger.log(
-            `Resend API key loaded user=${user_uuid} account=${account} last4=${secret.slice(-4)}`,
+            `Resend API key loaded user=${organisation_uuid} account=${account} last4=${secret.slice(-4)}`,
         );
         return secret;
     }
 
-    async getResendWebhookSecret(user_uuid: string, account: string): Promise<string> {
+    async getResendWebhookSecret(organisation_uuid: string, account: string): Promise<string> {
         return this.integrationsService.getDecryptedSecret(
-            user_uuid,
+            organisation_uuid,
             ExternalIntegrationProvider.RESEND,
             IntegrationKeyType.WEBHOOK_SECRET,
             account,
@@ -67,11 +67,11 @@ export class EmailCredentialsService {
     }
 
     async tryGetResendWebhookSecret(
-        user_uuid: string,
+        organisation_uuid: string,
         account: string,
     ): Promise<string | null> {
         try {
-            return await this.getResendWebhookSecret(user_uuid, account);
+            return await this.getResendWebhookSecret(organisation_uuid, account);
         } catch (error) {
             if (error instanceof NotFoundException) {
                 return null;
@@ -80,11 +80,11 @@ export class EmailCredentialsService {
         }
     }
 
-    async listResendWebhookSecrets(user_uuid: string): Promise<string[]> {
+    async listResendWebhookSecrets(organisation_uuid: string): Promise<string[]> {
         const integration = await this.prisma.integration.findUnique({
             where: {
-                user_uuid_provider: {
-                    user_uuid,
+                organisation_uuid_provider: {
+                    organisation_uuid,
                     provider: ExternalIntegrationProvider.RESEND,
                 },
             },
@@ -100,46 +100,46 @@ export class EmailCredentialsService {
 
         const secrets = await Promise.all(
             integration.keys.map((key) =>
-                this.tryGetResendWebhookSecret(user_uuid, key.account),
+                this.tryGetResendWebhookSecret(organisation_uuid, key.account),
             ),
         );
         return secrets.filter((secret): secret is string => Boolean(secret));
     }
 
-    async getSmtpConfig(user_uuid: string, account: string): Promise<SmtpConfig> {
-        await this.assertSendableAccount(user_uuid, ExternalIntegrationProvider.SMTP, account);
+    async getSmtpConfig(organisation_uuid: string, account: string): Promise<SmtpConfig> {
+        await this.assertSendableAccount(organisation_uuid, ExternalIntegrationProvider.SMTP, account);
         const [host, port, username, password, fromEmail, fromName] = await Promise.all([
             this.integrationsService.getDecryptedSecret(
-                user_uuid,
+                organisation_uuid,
                 ExternalIntegrationProvider.SMTP,
                 IntegrationKeyType.HOST,
                 account,
             ),
             this.integrationsService.getDecryptedSecret(
-                user_uuid,
+                organisation_uuid,
                 ExternalIntegrationProvider.SMTP,
                 IntegrationKeyType.PORT,
                 account,
             ),
             this.integrationsService.getDecryptedSecret(
-                user_uuid,
+                organisation_uuid,
                 ExternalIntegrationProvider.SMTP,
                 IntegrationKeyType.USERNAME,
                 account,
             ),
             this.integrationsService.getDecryptedSecret(
-                user_uuid,
+                organisation_uuid,
                 ExternalIntegrationProvider.SMTP,
                 IntegrationKeyType.PASSWORD,
                 account,
             ),
             this.integrationsService.getDecryptedSecret(
-                user_uuid,
+                organisation_uuid,
                 ExternalIntegrationProvider.SMTP,
                 IntegrationKeyType.FROM_EMAIL,
                 account,
             ),
-            this.tryGetSmtpFromName(user_uuid, account),
+            this.tryGetSmtpFromName(organisation_uuid, account),
         ]);
 
         const parsedPort = parseInt(port, 10);
@@ -158,12 +158,12 @@ export class EmailCredentialsService {
     }
 
     private async tryGetSmtpFromName(
-        user_uuid: string,
+        organisation_uuid: string,
         account: string,
     ): Promise<string | null> {
         try {
             return await this.integrationsService.getDecryptedSecret(
-                user_uuid,
+                organisation_uuid,
                 ExternalIntegrationProvider.SMTP,
                 IntegrationKeyType.FROM_NAME,
                 account,
@@ -177,11 +177,11 @@ export class EmailCredentialsService {
     }
 
     async assertSendableAccount(
-        user_uuid: string,
+        organisation_uuid: string,
         provider: EmailProviderTarget['provider'],
         account: string,
     ): Promise<void> {
-        const sendable = await this.resolveSendableAccounts(user_uuid);
+        const sendable = await this.resolveSendableAccounts(organisation_uuid);
         const match = sendable.find(
             (row) => row.provider === provider && row.account === account.trim(),
         );
@@ -192,10 +192,10 @@ export class EmailCredentialsService {
         }
     }
 
-    async resolveSendableAccounts(user_uuid: string): Promise<SendableEmailAccount[]> {
+    async resolveSendableAccounts(organisation_uuid: string): Promise<SendableEmailAccount[]> {
         const integrations = await this.prisma.integration.findMany({
             where: {
-                user_uuid,
+                organisation_uuid,
                 provider: { in: [...EMAIL_PROVIDERS] },
             },
             include: { keys: true, accounts: true },
@@ -229,11 +229,11 @@ export class EmailCredentialsService {
         );
     }
 
-    async resolveDefaultTarget(user_uuid: string): Promise<EmailProviderTarget | null> {
-        this.logger.log(`Resolving default email target user=${user_uuid}`);
+    async resolveDefaultTarget(organisation_uuid: string): Promise<EmailProviderTarget | null> {
+        this.logger.log(`Resolving default email target user=${organisation_uuid}`);
         const integrations = await this.prisma.integration.findMany({
             where: {
-                user_uuid,
+                organisation_uuid,
                 provider: { in: [...EMAIL_PROVIDERS] },
             },
             include: { keys: true },

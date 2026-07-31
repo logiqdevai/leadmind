@@ -17,17 +17,17 @@ export class DashboardController {
         summary:
             'Aggregated dashboard counters: totals, conversion rate, status breakdown, etc.',
     })
-    getStats(@CurrentUser('uuid') user_uuid: string) {
-        return this.dashboardService.getStats(user_uuid);
+    getStats(@CurrentUser('organisation_uuid') organisation_uuid: string) {
+        return this.dashboardService.getStats(organisation_uuid);
     }
 
     @Get('top-contacts')
     @ApiOperation({ summary: 'Top scored contacts for the dashboard widget' })
     getTopContacts(
-        @CurrentUser('uuid') user_uuid: string,
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Query() query: DashboardListQueryDto,
     ) {
-        return this.dashboardService.getTopContacts(user_uuid, query.limit ?? 5);
+        return this.dashboardService.getTopContacts(organisation_uuid, query.limit ?? 5);
     }
 
     @Get('pending-drafts')
@@ -35,9 +35,9 @@ export class DashboardController {
         summary: 'Contacts that have at least one PENDING outreach message',
     })
     getPendingDrafts(
-        @CurrentUser('uuid') user_uuid: string,
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Query() query: DashboardListQueryDto,
     ) {
-        return this.dashboardService.getPendingDrafts(user_uuid, query.limit ?? 5);
+        return this.dashboardService.getPendingDrafts(organisation_uuid, query.limit ?? 5);
     }
 }

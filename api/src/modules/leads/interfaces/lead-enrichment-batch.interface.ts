@@ -35,7 +35,7 @@ export interface LeadEnrichmentBatchLeadStaging {
 
 export interface LeadEnrichmentBatchContext {
     phase: LeadEnrichmentBatchPhase;
-    user_uuid: string;
+    organisation_uuid: string;
     lead_uuids: string[];
     sources: EnrichmentSource[];
     staging: Record<string, LeadEnrichmentBatchLeadStaging>;

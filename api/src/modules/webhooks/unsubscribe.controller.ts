@@ -37,7 +37,7 @@ export class UnsubscribeController {
                 this.prisma.interaction.create({
                     data: {
                         contact_uuid: contact.uuid,
-                        user_uuid: contact.user_uuid,
+                        organisation_uuid: contact.organisation_uuid,
                         type: InteractionType.UNSUBSCRIBED,
                         content: 'Contact clicked the unsubscribe link',
                     },

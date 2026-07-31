@@ -9,9 +9,9 @@ import { UpdateSenderProfileDto } from './dto/update-sender-profile.dto';
 export class SenderProfilesService {
     constructor(private readonly prisma: PrismaService) { }
 
-    async create(user_uuid: string, dto: CreateSenderProfileDto): Promise<SenderProfile> {
+    async create(organisation_uuid: string, dto: CreateSenderProfileDto): Promise<SenderProfile> {
         const data: Prisma.SenderProfileUncheckedCreateInput = {
-            user_uuid,
+            organisation_uuid,
             name: dto.name,
             company_name: dto.company_name,
             title: dto.title,
@@ -36,7 +36,7 @@ export class SenderProfilesService {
         if (data.is_default) {
             const [, profile] = await this.prisma.$transaction([
                 this.prisma.senderProfile.updateMany({
-                    where: { user_uuid, is_default: true },
+                    where: { organisation_uuid, is_default: true },
                     data: { is_default: false },
                 }),
                 this.prisma.senderProfile.create({ data }),
@@ -47,50 +47,50 @@ export class SenderProfilesService {
         return this.prisma.senderProfile.create({ data });
     }
 
-    async findAll(user_uuid: string): Promise<SenderProfile[]> {
+    async findAll(organisation_uuid: string): Promise<SenderProfile[]> {
         return this.prisma.senderProfile.findMany({
-            where: { user_uuid },
+            where: { organisation_uuid },
             orderBy: [{ is_default: 'desc' }, { created_at: 'desc' }],
         });
     }
 
-    async findOne(user_uuid: string, uuid: string): Promise<SenderProfile> {
-        return this.requireOwnedProfile(user_uuid, uuid);
+    async findOne(organisation_uuid: string, uuid: string): Promise<SenderProfile> {
+        return this.requireOwnedProfile(organisation_uuid, uuid);
     }
 
-    async findDefault(user_uuid: string): Promise<SenderProfile | null> {
+    async findDefault(organisation_uuid: string): Promise<SenderProfile | null> {
         const defaultProfile = await this.prisma.senderProfile.findFirst({
-            where: { user_uuid, is_default: true },
+            where: { organisation_uuid, is_default: true },
         });
         if (defaultProfile) return defaultProfile;
         return this.prisma.senderProfile.findFirst({
-            where: { user_uuid },
+            where: { organisation_uuid },
             orderBy: { created_at: 'desc' },
         });
     }
 
-    async findForCampaign(user_uuid: string, campaign_uuid: string): Promise<SenderProfile | null> {
+    async findForCampaign(organisation_uuid: string, campaign_uuid: string): Promise<SenderProfile | null> {
         const campaign = await this.prisma.marketingCampaign.findFirst({
-            where: { uuid: campaign_uuid, user_uuid },
+            where: { uuid: campaign_uuid, organisation_uuid },
             select: { sender_profile_uuid: true },
         });
         if (campaign?.sender_profile_uuid) {
             const profile = await this.prisma.senderProfile.findFirst({
-                where: { uuid: campaign.sender_profile_uuid, user_uuid },
+                where: { uuid: campaign.sender_profile_uuid, organisation_uuid },
             });
             if (profile) {
                 return profile;
             }
         }
-        return this.findDefault(user_uuid);
+        return this.findDefault(organisation_uuid);
     }
 
     async update(
-        user_uuid: string,
+        organisation_uuid: string,
         uuid: string,
         dto: UpdateSenderProfileDto,
     ): Promise<SenderProfile> {
-        await this.requireOwnedProfile(user_uuid, uuid);
+        await this.requireOwnedProfile(organisation_uuid, uuid);
 
         const data: Prisma.SenderProfileUpdateInput = {};
         const writable: (keyof UpdateSenderProfileDto)[] = [
@@ -128,7 +128,7 @@ export class SenderProfilesService {
         if (dto.is_default === true) {
             const [, updated] = await this.prisma.$transaction([
                 this.prisma.senderProfile.updateMany({
-                    where: { user_uuid, is_default: true, NOT: { uuid } },
+                    where: { organisation_uuid, is_default: true, NOT: { uuid } },
                     data: { is_default: false },
                 }),
                 this.prisma.senderProfile.update({
@@ -145,8 +145,8 @@ export class SenderProfilesService {
         });
     }
 
-    async remove(user_uuid: string, uuid: string): Promise<{ uuid: string }> {
-        await this.requireOwnedProfile(user_uuid, uuid);
+    async remove(organisation_uuid: string, uuid: string): Promise<{ uuid: string }> {
+        await this.requireOwnedProfile(organisation_uuid, uuid);
         await this.prisma.senderProfile.delete({ where: { uuid } });
         return { uuid };
     }
@@ -165,11 +165,11 @@ export class SenderProfilesService {
     }
 
     private async requireOwnedProfile(
-        user_uuid: string,
+        organisation_uuid: string,
         uuid: string,
     ): Promise<SenderProfile> {
         const profile = await this.prisma.senderProfile.findFirst({
-            where: { uuid, user_uuid },
+            where: { uuid, organisation_uuid },
         });
         if (!profile) {
             throw new NotFoundException(`Sender profile ${uuid} not found`);

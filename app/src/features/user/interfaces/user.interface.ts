@@ -19,6 +19,9 @@ export interface LoggedInUser {
     avatar?: string | null;
     full_name?: string | null;
     isLoggedIn?: boolean | null;
+    organisation_uuid?: string | null;
+    organisation_role?: string | null;
+    organisation_name?: string | null;
 }
 
 

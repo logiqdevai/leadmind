@@ -4,13 +4,13 @@ import type { LeadBatchEnrichPrepareJobData } from '@/workers/interfaces/workers
 
 export async function enqueueLeadBatchEnrichPrepareJob(
     queue: Queue,
-    user_uuid: string,
+    organisation_uuid: string,
     lead_uuids: string[],
     enrichment_sources: EnrichmentSource[],
 ): Promise<{ jobId: string }> {
     const payload: LeadBatchEnrichPrepareJobData = {
         job_kind: 'lead_batch_enrich_prepare',
-        user_uuid,
+        organisation_uuid,
         lead_uuids,
         enrichment_sources,
     };

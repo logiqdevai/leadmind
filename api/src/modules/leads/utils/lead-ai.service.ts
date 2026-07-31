@@ -97,7 +97,7 @@ export class LeadAiService {
     }
 
     async summarizeLinkedInEnrichment(
-        user_uuid: string | null,
+        organisation_uuid: string | null,
         plain: Record<string, unknown>,
         subtype: 'profile' | 'company',
     ): Promise<{
@@ -110,7 +110,7 @@ export class LeadAiService {
             buildLinkedInDeterministicSummary(plain, subtype).trim() ||
             summarizeLinkedInPlain(plain).trim() ||
             '(LinkedIn)';
-        if (!user_uuid || !(await this.aiConfig.isOpenAiConfigured(user_uuid))) {
+        if (!organisation_uuid || !(await this.aiConfig.isOpenAiConfigured(organisation_uuid))) {
             return {
                 summary: fallback,
                 cost_usd: null,
@@ -121,7 +121,7 @@ export class LeadAiService {
         try {
             const context = linkedInPlainForAiContext(plain, subtype);
             const { response, usage } = await this.aiService.generateText({
-                user_uuid,
+                organisation_uuid,
                 provider: AiProviders.openai,
                 model: LEAD_ENRICHMENT_SUMMARY_MODEL,
                 prompt: buildLinkedInEnrichmentSummaryUserPrompt(context),
@@ -152,7 +152,7 @@ export class LeadAiService {
     }
 
     async summarizeWebsiteEnrichment(
-        user_uuid: string | null,
+        organisation_uuid: string | null,
         input: {
         url: string;
         title: string | null;
@@ -171,7 +171,7 @@ export class LeadAiService {
                 textSample: input.textSample,
                 markdownSample: input.markdownSample,
             }).trim() || input.url.trim();
-        if (!user_uuid || !(await this.aiConfig.isOpenAiConfigured(user_uuid))) {
+        if (!organisation_uuid || !(await this.aiConfig.isOpenAiConfigured(organisation_uuid))) {
             return {
                 summary: fallback,
                 cost_usd: null,
@@ -187,7 +187,7 @@ export class LeadAiService {
                 markdownSample: input.markdownSample,
             });
             const { response, usage } = await this.aiService.generateText({
-                user_uuid,
+                organisation_uuid,
                 provider: AiProviders.openai,
                 model: LEAD_ENRICHMENT_SUMMARY_MODEL,
                 prompt: buildWebsiteEnrichmentSummaryUserPrompt(context),
@@ -218,7 +218,7 @@ export class LeadAiService {
     }
 
     async summarizeGoogleSearchEnrichment(
-        user_uuid: string | null,
+        organisation_uuid: string | null,
         input: {
         query: string;
         results: { title?: string; url?: string; snippet?: string }[];
@@ -230,7 +230,7 @@ export class LeadAiService {
     }> {
         const fallback =
             buildGoogleDeterministicSummary(input.query, input.results).trim() || '(Google Search)';
-        if (!user_uuid || !(await this.aiConfig.isOpenAiConfigured(user_uuid))) {
+        if (!organisation_uuid || !(await this.aiConfig.isOpenAiConfigured(organisation_uuid))) {
             return {
                 summary: fallback,
                 cost_usd: null,
@@ -242,7 +242,7 @@ export class LeadAiService {
             const resultsContext =
                 googleSearchPayloadToContext({ results: input.results }) ?? '';
             const { response, usage } = await this.aiService.generateText({
-                user_uuid,
+                organisation_uuid,
                 provider: AiProviders.openai,
                 model: LEAD_ENRICHMENT_SUMMARY_MODEL,
                 prompt: buildGoogleEnrichmentSummaryUserPrompt(input.query, resultsContext),
@@ -283,9 +283,9 @@ export class LeadAiService {
     ): Promise<LeadEnrichmentSourceResult | null> {
         const historyTarget: EnrichmentHistoryTarget =
             opts.historyTarget ?? { kind: 'lead', uuid: lead.uuid };
-        const user_uuid = await this.resolveUserUuidForLead(lead.uuid, historyTarget);
+        const organisation_uuid = await this.resolveOrganisationUuidForLead(lead.uuid, historyTarget);
         const provider = this.aiConfig.resolveLeadEnrichmentAiProvider();
-        if (!(await this.aiConfig.isLeadEnrichmentAiConfigured(user_uuid ?? '', provider))) {
+        if (!(await this.aiConfig.isLeadEnrichmentAiConfigured(organisation_uuid ?? '', provider))) {
             const keyHint =
                 provider === AiProviders.openai
                     ? 'OpenAI integration API key'
@@ -296,8 +296,8 @@ export class LeadAiService {
             return null;
         }
 
-        if (provider === AiProviders.openai && !user_uuid) {
-            this.logger.warn(`Lead ${lead.uuid}: no user context for OpenAI enrichment`);
+        if (provider === AiProviders.openai && !organisation_uuid) {
+            this.logger.warn(`Lead ${lead.uuid}: no organisation context for OpenAI enrichment`);
             return null;
         }
 
@@ -305,7 +305,7 @@ export class LeadAiService {
             lead,
             opts,
             historyTarget,
-            user_uuid,
+            organisation_uuid,
         );
 
         const linkedinExcerpt = await this.resolveLinkedinExcerpt(historyTarget, opts);
@@ -338,7 +338,7 @@ export class LeadAiService {
                 : this.aiService.generateText.bind(this.aiService);
 
         const { response, usage, sources } = await generate({
-            user_uuid: user_uuid!,
+            organisation_uuid: organisation_uuid!,
             provider,
             model,
             prompt,
@@ -379,16 +379,16 @@ export class LeadAiService {
         };
     }
 
-    async fetchWebsiteText(user_uuid: string, url: string): Promise<string | null> {
+    async fetchWebsiteText(organisation_uuid: string, url: string): Promise<string | null> {
         const normalized = url.startsWith('http') ? url : `https://${url}`;
-        return this.getPageTextFromApifyCrawl(user_uuid, normalized);
+        return this.getPageTextFromApifyCrawl(organisation_uuid, normalized);
     }
 
     private async resolveWebsiteExcerpt(
         lead: Lead,
         opts: { prefetchedPageText?: string | null },
         historyTarget: EnrichmentHistoryTarget,
-        user_uuid: string | null,
+        organisation_uuid: string | null,
     ): Promise<string | null> {
         if (opts.prefetchedPageText !== undefined) {
             const t = opts.prefetchedPageText?.trim();
@@ -407,10 +407,10 @@ export class LeadAiService {
         if (lead.website?.trim()) {
             const w = lead.website.trim();
             const url = w.startsWith('http') ? w : `https://${w}`;
-            if (!user_uuid) {
+            if (!organisation_uuid) {
                 return null;
             }
-            return this.getPageTextFromApifyCrawl(user_uuid, url);
+            return this.getPageTextFromApifyCrawl(organisation_uuid, url);
         }
         return null;
     }
@@ -456,16 +456,16 @@ export class LeadAiService {
     }
 
     private async getPageTextFromApifyCrawl(
-        user_uuid: string,
+        organisation_uuid: string,
         url: string,
     ): Promise<string | null> {
         try {
-            if (!(await this.apifyCredentials.hasApifyApiKey(user_uuid))) {
-                this.logger.warn(`Apify not configured for user ${user_uuid}, skipping crawl for ${url}`);
+            if (!(await this.apifyCredentials.hasApifyApiKey(organisation_uuid))) {
+                this.logger.warn(`Apify not configured for organisation ${organisation_uuid}, skipping crawl for ${url}`);
                 return null;
             }
             const page = await this.websiteCrawler.crawlSinglePage(
-                user_uuid,
+                organisation_uuid,
                 url,
                 {},
                 {
@@ -485,21 +485,21 @@ export class LeadAiService {
         }
     }
 
-    private async resolveUserUuidForLead(
+    private async resolveOrganisationUuidForLead(
         leadUuid: string,
         historyTarget?: EnrichmentHistoryTarget,
     ): Promise<string | null> {
         if (historyTarget?.kind === 'contact') {
             const contact = await this.prisma.contact.findUnique({
                 where: { uuid: historyTarget.uuid },
-                select: { user_uuid: true },
+                select: { organisation_uuid: true },
             });
-            return contact?.user_uuid ?? null;
+            return contact?.organisation_uuid ?? null;
         }
         const contact = await this.prisma.contact.findFirst({
             where: { lead_uuid: leadUuid },
-            select: { user_uuid: true },
+            select: { organisation_uuid: true },
         });
-        return contact?.user_uuid ?? null;
+        return contact?.organisation_uuid ?? null;
     }
 }

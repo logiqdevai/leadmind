@@ -119,7 +119,7 @@ export class FilterScrapeWorker extends WorkerHost {
                     cancelSignal,
                 )
                 : await this.apifyService.scrapeLeads(
-                    filter.user_uuid,
+                    filter.organisation_uuid,
                     filter.source_type,
                     filter.query_config as Record<string, any>,
                     {
@@ -287,7 +287,7 @@ export class FilterScrapeWorker extends WorkerHost {
                 normalized.email
                     ? await findOwnedContactByEmail(
                           this.prisma,
-                          filter.user_uuid,
+                          filter.organisation_uuid,
                           normalized.email,
                       )
                     : null;
@@ -295,8 +295,8 @@ export class FilterScrapeWorker extends WorkerHost {
             if (!existing_contact) {
                 existing_contact = await this.prisma.contact.findUnique({
                     where: {
-                        user_uuid_lead_uuid: {
-                            user_uuid: filter.user_uuid,
+                        organisation_uuid_lead_uuid: {
+                            organisation_uuid: filter.organisation_uuid,
                             lead_uuid: lead.uuid,
                         },
                     },
@@ -306,7 +306,7 @@ export class FilterScrapeWorker extends WorkerHost {
             if (!existing_contact) {
                 existing_contact = await findOwnedContactByWebsite(
                     this.prisma,
-                    filter.user_uuid,
+                    filter.organisation_uuid,
                     lead.website ?? normalized.website,
                 );
             }
@@ -317,8 +317,8 @@ export class FilterScrapeWorker extends WorkerHost {
                 if (existing_contact.lead_uuid !== lead.uuid) {
                     const conflict = await this.prisma.contact.findUnique({
                         where: {
-                            user_uuid_lead_uuid: {
-                                user_uuid: filter.user_uuid,
+                            organisation_uuid_lead_uuid: {
+                                organisation_uuid: filter.organisation_uuid,
                                 lead_uuid: lead.uuid,
                             },
                         },
@@ -348,7 +348,7 @@ export class FilterScrapeWorker extends WorkerHost {
                 try {
                     const contact = await this.prisma.contact.create({
                         data: {
-                            user_uuid: filter.user_uuid,
+                            organisation_uuid: filter.organisation_uuid,
                             lead_uuid: lead.uuid,
                             filter_uuid: filter.uuid,
                             ...contactProfileFromLead(lead),
@@ -370,14 +370,14 @@ export class FilterScrapeWorker extends WorkerHost {
                         (normalized.email
                             ? await findOwnedContactByEmail(
                                   this.prisma,
-                                  filter.user_uuid,
+                                  filter.organisation_uuid,
                                   normalized.email,
                               )
                             : null) ??
                         (await this.prisma.contact.findUnique({
                             where: {
-                                user_uuid_lead_uuid: {
-                                    user_uuid: filter.user_uuid,
+                                organisation_uuid_lead_uuid: {
+                                    organisation_uuid: filter.organisation_uuid,
                                     lead_uuid: lead.uuid,
                                 },
                             },

@@ -15,13 +15,13 @@ export class AiCredentialsService {
         private readonly prisma: PrismaService,
     ) {}
 
-    async hasOpenAiApiKey(user_uuid: string): Promise<boolean> {
+    async hasOpenAiApiKey(organisation_uuid: string): Promise<boolean> {
         const key = await this.prisma.integrationKey.findFirst({
             where: {
                 key_type: IntegrationKeyType.API_KEY,
                 account: OPENAI_ACCOUNT,
                 integration: {
-                    user_uuid,
+                    organisation_uuid,
                     provider: ExternalIntegrationProvider.OPENAI,
                 },
             },
@@ -30,26 +30,26 @@ export class AiCredentialsService {
         return Boolean(key);
     }
 
-    async getOpenAiApiKey(user_uuid: string): Promise<string> {
+    async getOpenAiApiKey(organisation_uuid: string): Promise<string> {
         return this.integrationsService.getDecryptedSecret(
-            user_uuid,
+            organisation_uuid,
             ExternalIntegrationProvider.OPENAI,
             IntegrationKeyType.API_KEY,
             OPENAI_ACCOUNT,
         );
     }
 
-    async getOpenAiWebhookSecret(user_uuid: string): Promise<string> {
+    async getOpenAiWebhookSecret(organisation_uuid: string): Promise<string> {
         return this.integrationsService.getDecryptedSecret(
-            user_uuid,
+            organisation_uuid,
             ExternalIntegrationProvider.OPENAI,
             IntegrationKeyType.WEBHOOK_SECRET,
             OPENAI_ACCOUNT,
         );
     }
 
-    async assertOpenAiConfigured(user_uuid: string): Promise<void> {
-        const configured = await this.hasOpenAiApiKey(user_uuid);
+    async assertOpenAiConfigured(organisation_uuid: string): Promise<void> {
+        const configured = await this.hasOpenAiApiKey(organisation_uuid);
         if (!configured) {
             throw new BadRequestException(
                 'OpenAI is not configured. Add your OpenAI API key under Integrations.',
@@ -57,9 +57,9 @@ export class AiCredentialsService {
         }
     }
 
-    async tryGetOpenAiWebhookSecret(user_uuid: string): Promise<string | null> {
+    async tryGetOpenAiWebhookSecret(organisation_uuid: string): Promise<string | null> {
         try {
-            return await this.getOpenAiWebhookSecret(user_uuid);
+            return await this.getOpenAiWebhookSecret(organisation_uuid);
         } catch (error) {
             if (error instanceof NotFoundException) {
                 return null;

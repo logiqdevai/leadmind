@@ -30,47 +30,47 @@ export class RemindersController {
 
     @Post()
     @ApiOperation({ summary: 'Create a reminder for a contact' })
-    create(@CurrentUser('uuid') user_uuid: string, @Body() dto: CreateReminderDto) {
-        return this.remindersService.create(user_uuid, dto);
+    create(@CurrentUser('organisation_uuid') organisation_uuid: string, @Body() dto: CreateReminderDto) {
+        return this.remindersService.create(organisation_uuid, dto);
     }
 
     @Get()
     @ApiOperation({ summary: 'List reminders with optional filters' })
-    findAll(@CurrentUser('uuid') user_uuid: string, @Query() query: ListRemindersDto) {
-        return this.remindersService.findAll(user_uuid, query);
+    findAll(@CurrentUser('organisation_uuid') organisation_uuid: string, @Query() query: ListRemindersDto) {
+        return this.remindersService.findAll(organisation_uuid, query);
     }
 
     @Get('stats')
     @ApiOperation({ summary: 'Reminder statistics: pending, due today, overdue, completed this week' })
-    getStats(@CurrentUser('uuid') user_uuid: string) {
-        return this.remindersService.getUpcomingStats(user_uuid);
+    getStats(@CurrentUser('organisation_uuid') organisation_uuid: string) {
+        return this.remindersService.getUpcomingStats(organisation_uuid);
     }
 
     @Get(':uuid')
     @ApiOperation({ summary: 'Get a single reminder' })
-    findOne(@CurrentUser('uuid') user_uuid: string, @Param('uuid') uuid: string) {
-        return this.remindersService.findOne(user_uuid, uuid);
+    findOne(@CurrentUser('organisation_uuid') organisation_uuid: string, @Param('uuid') uuid: string) {
+        return this.remindersService.findOne(organisation_uuid, uuid);
     }
 
     @Put(':uuid')
     @ApiOperation({ summary: 'Update a reminder (reschedule, edit title/notes, change status)' })
     update(
-        @CurrentUser('uuid') user_uuid: string,
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') uuid: string,
         @Body() dto: UpdateReminderDto,
     ) {
-        return this.remindersService.update(user_uuid, uuid, dto);
+        return this.remindersService.update(organisation_uuid, uuid, dto);
     }
 
     @Put(':uuid/complete')
     @ApiOperation({ summary: 'Mark a reminder as completed' })
-    complete(@CurrentUser('uuid') user_uuid: string, @Param('uuid') uuid: string) {
-        return this.remindersService.complete(user_uuid, uuid);
+    complete(@CurrentUser('organisation_uuid') organisation_uuid: string, @Param('uuid') uuid: string) {
+        return this.remindersService.complete(organisation_uuid, uuid);
     }
 
     @Delete(':uuid')
     @ApiOperation({ summary: 'Delete a reminder and cancel its scheduled job' })
-    remove(@CurrentUser('uuid') user_uuid: string, @Param('uuid') uuid: string) {
-        return this.remindersService.remove(user_uuid, uuid);
+    remove(@CurrentUser('organisation_uuid') organisation_uuid: string, @Param('uuid') uuid: string) {
+        return this.remindersService.remove(organisation_uuid, uuid);
     }
 }

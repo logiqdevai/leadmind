@@ -15,22 +15,22 @@ function maxContactScore(c: { contact_scores?: { score: number }[] }): number {
 export class DashboardService {
     constructor(private readonly prisma: PrismaService) {}
 
-    async getStats(user_uuid: string): Promise<DashboardStats> {
+    async getStats(organisation_uuid: string): Promise<DashboardStats> {
         const since = new Date(Date.now() - 7 * DAY_MS);
 
         const [statusGroups, newThisWeek, pendingDrafts, activeFilters] = await Promise.all([
             this.prisma.contact.groupBy({
                 by: ['status'],
-                where: { user_uuid },
+                where: { organisation_uuid },
                 _count: { _all: true },
             }),
             this.prisma.contact.count({
-                where: { user_uuid, created_at: { gte: since } },
+                where: { organisation_uuid, created_at: { gte: since } },
             }),
             this.prisma.outreachMessage.count({
-                where: { user_uuid, status: MsgStatus.PENDING },
+                where: { organisation_uuid, status: MsgStatus.PENDING },
             }),
-            this.prisma.filter.count({ where: { user_uuid, enabled: true } }),
+            this.prisma.filter.count({ where: { organisation_uuid, enabled: true } }),
         ]);
 
         const by_status = emptyLeadStatusCounts();
@@ -61,9 +61,9 @@ export class DashboardService {
         };
     }
 
-    async getTopContacts(user_uuid: string, limit: number) {
+    async getTopContacts(organisation_uuid: string, limit: number) {
         const contacts = await this.prisma.contact.findMany({
-            where: { user_uuid, contact_scores: { some: {} } },
+            where: { organisation_uuid, contact_scores: { some: {} } },
             include: { lead: true, tags: true, contact_scores: true },
             orderBy: { updated_at: 'desc' },
             take: Math.max(limit * 20, 80),
@@ -77,9 +77,9 @@ export class DashboardService {
         }));
     }
 
-    async getPendingDrafts(user_uuid: string, limit: number) {
+    async getPendingDrafts(organisation_uuid: string, limit: number) {
         const drafts = await this.prisma.outreachMessage.findMany({
-            where: { user_uuid, status: MsgStatus.PENDING },
+            where: { organisation_uuid, status: MsgStatus.PENDING },
             orderBy: { created_at: 'desc' },
             include: {
                 contact: {

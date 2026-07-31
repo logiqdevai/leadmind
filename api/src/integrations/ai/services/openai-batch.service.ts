@@ -10,13 +10,13 @@ export class OpenAiBatchService {
 
     constructor(private readonly aiCredentials: AiCredentialsService) {}
 
-    private async getClient(user_uuid: string): Promise<OpenAI> {
-        const apiKey = await this.aiCredentials.getOpenAiApiKey(user_uuid);
+    private async getClient(organisation_uuid: string): Promise<OpenAI> {
+        const apiKey = await this.aiCredentials.getOpenAiApiKey(organisation_uuid);
         return new OpenAI({ apiKey });
     }
 
-    async createBatch(user_uuid: string, requests: OpenAiBatchRequest[]): Promise<OpenAiBatchCreateResult> {
-        const client = await this.getClient(user_uuid);
+    async createBatch(organisation_uuid: string, requests: OpenAiBatchRequest[]): Promise<OpenAiBatchCreateResult> {
+        const client = await this.getClient(organisation_uuid);
         const jsonl = requests
             .map((req) =>
                 JSON.stringify({
@@ -58,7 +58,7 @@ export class OpenAiBatchService {
         };
     }
 
-    async getBatchStatus(user_uuid: string, batchId: string): Promise<{
+    async getBatchStatus(organisation_uuid: string, batchId: string): Promise<{
         status: string;
         output_file_id: string | null;
         error_file_id: string | null;
@@ -66,7 +66,7 @@ export class OpenAiBatchService {
         failed_requests: number;
         total_requests: number;
     }> {
-        const client = await this.getClient(user_uuid);
+        const client = await this.getClient(organisation_uuid);
         const batch = await client.batches.retrieve(batchId);
         return {
             status: batch.status,
@@ -79,7 +79,7 @@ export class OpenAiBatchService {
     }
 
     async waitForBatchReady(
-        user_uuid: string,
+        organisation_uuid: string,
         batchId: string,
         maxAttempts = 8,
         delayMs = 1500,
@@ -91,7 +91,7 @@ export class OpenAiBatchService {
         failed_requests: number;
         total_requests: number;
     }> {
-        let last = await this.getBatchStatus(user_uuid, batchId);
+        let last = await this.getBatchStatus(organisation_uuid, batchId);
         for (let attempt = 1; attempt < maxAttempts; attempt += 1) {
             if (last.output_file_id) {
                 return last;
@@ -103,13 +103,13 @@ export class OpenAiBatchService {
                 return last;
             }
             await new Promise((resolve) => setTimeout(resolve, delayMs));
-            last = await this.getBatchStatus(user_uuid, batchId);
+            last = await this.getBatchStatus(organisation_uuid, batchId);
         }
         return last;
     }
 
-    async getBatchResults(user_uuid: string, outputFileId: string): Promise<OpenAiBatchResult[]> {
-        const client = await this.getClient(user_uuid);
+    async getBatchResults(organisation_uuid: string, outputFileId: string): Promise<OpenAiBatchResult[]> {
+        const client = await this.getClient(organisation_uuid);
         const fileResponse = await client.files.content(outputFileId);
         const text = await fileResponse.text();
 

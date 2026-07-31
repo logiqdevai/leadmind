@@ -42,13 +42,13 @@ export class GoogleSearchAdapter
     }
 
     async fetchRawItems(
-        user_uuid: string,
+        organisation_uuid: string,
         query_config: GoogleSearchQueryConfig,
         usage?: ApifyUsageOptions,
     ): Promise<GoogleSearchRawItem[]> {
         const input = this.buildInput(query_config);
         return this.runActorWithUserToken(
-            user_uuid,
+            organisation_uuid,
             APIFY_ACTORS.GOOGLE_SEARCH,
             input,
             usage ?? { operation: ApifyUsageOperation.ENRICHMENT_GOOGLE_SEARCH },
@@ -70,13 +70,13 @@ export class GoogleSearchAdapter
     }
 
     private async runActorWithUserToken<T>(
-        user_uuid: string,
+        organisation_uuid: string,
         actor_id: string,
         input: ApifyRunInput,
         usage: ApifyUsageOptions,
     ): Promise<T[]> {
-        const token = await this.credentials.getApifyApiToken(user_uuid);
-        return this.apifyClient.runActor<T>(token, actor_id, input, { user_uuid, ...usage });
+        const token = await this.credentials.getApifyApiToken(organisation_uuid);
+        return this.apifyClient.runActor<T>(token, actor_id, input, { organisation_uuid, ...usage });
     }
 
     private mapResult(result: GoogleSearchOrganicResult): NormalizedLead {

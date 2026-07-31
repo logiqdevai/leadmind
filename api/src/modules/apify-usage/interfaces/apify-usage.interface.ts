@@ -1,7 +1,7 @@
 import { ApifyUsageOperation, ApifyUsageStatus, Prisma } from '@/generated/prisma';
 
 export interface CreateApifyUsageLogInput {
-    user_uuid: string;
+    organisation_uuid: string;
     actor_id: string;
     operation: ApifyUsageOperation;
     status: ApifyUsageStatus;

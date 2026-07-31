@@ -104,7 +104,7 @@ export class LeadsService {
     }
 
     async triggerEnrich(
-        user_uuid: string,
+        organisation_uuid: string,
         uuid: string,
         dto: EnrichLeadDto,
     ): Promise<
@@ -117,7 +117,7 @@ export class LeadsService {
 
         if (dto.use_batch) {
             const result = await this.leadEnrichmentBatchService.prepareAndSubmitBulk(
-                user_uuid,
+                organisation_uuid,
                 [uuid],
                 enrichment_sources,
             );
@@ -132,7 +132,7 @@ export class LeadsService {
     }
 
     async triggerBulkEnrich(
-        user_uuid: string,
+        organisation_uuid: string,
         dto: BulkEnrichLeadsDto,
     ): Promise<
         | { jobIds: string[]; queued: number; is_batch: false }
@@ -155,7 +155,7 @@ export class LeadsService {
         if (dto.use_batch) {
             if (unique.length === 1) {
                 const result = await this.leadEnrichmentBatchService.prepareAndSubmitBulk(
-                    user_uuid,
+                    organisation_uuid,
                     unique,
                     enrichment_sources,
                 );
@@ -167,7 +167,7 @@ export class LeadsService {
 
             const job = await enqueueLeadBatchEnrichPrepareJob(
                 this.aiProcessQueue,
-                user_uuid,
+                organisation_uuid,
                 unique,
                 enrichment_sources,
             );

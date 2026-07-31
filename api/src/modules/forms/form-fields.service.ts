@@ -8,14 +8,14 @@ import { ReorderFormFieldsDto } from './dto/reorder-form-fields.dto';
 export class FormFieldsService {
     constructor(private readonly prisma: PrismaService) {}
 
-    private async assertFormOwnership(user_uuid: string, form_uuid: string) {
-        const form = await this.prisma.form.findFirst({ where: { uuid: form_uuid, user_uuid } });
+    private async assertFormOwnership(organisation_uuid: string, form_uuid: string) {
+        const form = await this.prisma.form.findFirst({ where: { uuid: form_uuid, organisation_uuid } });
         if (!form) throw new NotFoundException('Form not found');
         return form;
     }
 
-    async create(user_uuid: string, form_uuid: string, dto: CreateFormFieldDto) {
-        await this.assertFormOwnership(user_uuid, form_uuid);
+    async create(organisation_uuid: string, form_uuid: string, dto: CreateFormFieldDto) {
+        await this.assertFormOwnership(organisation_uuid, form_uuid);
 
         let order_index = dto.order_index;
         if (order_index === undefined) {
@@ -43,8 +43,8 @@ export class FormFieldsService {
         });
     }
 
-    async update(user_uuid: string, form_uuid: string, field_uuid: string, dto: UpdateFormFieldDto) {
-        await this.assertFormOwnership(user_uuid, form_uuid);
+    async update(organisation_uuid: string, form_uuid: string, field_uuid: string, dto: UpdateFormFieldDto) {
+        await this.assertFormOwnership(organisation_uuid, form_uuid);
 
         const field = await this.prisma.formField.findFirst({ where: { uuid: field_uuid, form_uuid } });
         if (!field) throw new NotFoundException('Field not found');
@@ -58,8 +58,8 @@ export class FormFieldsService {
         });
     }
 
-    async remove(user_uuid: string, form_uuid: string, field_uuid: string) {
-        await this.assertFormOwnership(user_uuid, form_uuid);
+    async remove(organisation_uuid: string, form_uuid: string, field_uuid: string) {
+        await this.assertFormOwnership(organisation_uuid, form_uuid);
 
         const field = await this.prisma.formField.findFirst({ where: { uuid: field_uuid, form_uuid } });
         if (!field) throw new NotFoundException('Field not found');
@@ -68,8 +68,8 @@ export class FormFieldsService {
         return { uuid: field_uuid };
     }
 
-    async reorder(user_uuid: string, form_uuid: string, dto: ReorderFormFieldsDto) {
-        await this.assertFormOwnership(user_uuid, form_uuid);
+    async reorder(organisation_uuid: string, form_uuid: string, dto: ReorderFormFieldsDto) {
+        await this.assertFormOwnership(organisation_uuid, form_uuid);
 
         await this.prisma.$transaction(
             dto.fields.map((item) =>

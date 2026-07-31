@@ -35,11 +35,13 @@ import { GatewaysModule } from './gateways/gateways.module';
 import { AiUsageModule } from './modules/ai-usage/ai-usage.module';
 import { ApifyUsageModule } from './modules/apify-usage/apify-usage.module';
 import { MessageTemplatesModule } from './modules/message-templates/message-templates.module';
+import { OrganisationsModule } from './modules/organisations/organisations.module';
 
 @Module({
   imports: [
     ConfigModule,
     MailModule,
+    OrganisationsModule,
     SmsModule,
     AiModule,
     RedisModule,

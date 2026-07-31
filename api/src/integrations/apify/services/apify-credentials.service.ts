@@ -15,13 +15,13 @@ export class ApifyCredentialsService {
         private readonly prisma: PrismaService,
     ) {}
 
-    async hasApifyApiKey(user_uuid: string): Promise<boolean> {
+    async hasApifyApiKey(organisation_uuid: string): Promise<boolean> {
         const key = await this.prisma.integrationKey.findFirst({
             where: {
                 key_type: IntegrationKeyType.API_KEY,
                 account: APIFY_ACCOUNT,
                 integration: {
-                    user_uuid,
+                    organisation_uuid,
                     provider: ExternalIntegrationProvider.APIFY,
                 },
             },
@@ -30,17 +30,17 @@ export class ApifyCredentialsService {
         return Boolean(key);
     }
 
-    async getApifyApiToken(user_uuid: string): Promise<string> {
+    async getApifyApiToken(organisation_uuid: string): Promise<string> {
         return this.integrationsService.getDecryptedSecret(
-            user_uuid,
+            organisation_uuid,
             ExternalIntegrationProvider.APIFY,
             IntegrationKeyType.API_KEY,
             APIFY_ACCOUNT,
         );
     }
 
-    async assertApifyConfigured(user_uuid: string): Promise<void> {
-        const configured = await this.hasApifyApiKey(user_uuid);
+    async assertApifyConfigured(organisation_uuid: string): Promise<void> {
+        const configured = await this.hasApifyApiKey(organisation_uuid);
         if (!configured) {
             throw new BadRequestException(
                 'Apify is not configured. Add your Apify API token under Integrations.',

@@ -24,35 +24,35 @@ export class ScoringInstructionsController {
 
     @Post()
     @ApiOperation({ summary: 'Create a scoring instruction' })
-    create(@CurrentUser('uuid') user_uuid: string, @Body() dto: CreateScoringInstructionDto) {
-        return this.scoringInstructionsService.create(user_uuid, dto);
+    create(@CurrentUser('organisation_uuid') organisation_uuid: string, @Body() dto: CreateScoringInstructionDto) {
+        return this.scoringInstructionsService.create(organisation_uuid, dto);
     }
 
     @Get()
     @ApiOperation({ summary: 'List scoring instructions for the current user' })
-    findAll(@CurrentUser('uuid') user_uuid: string) {
-        return this.scoringInstructionsService.findAll(user_uuid);
+    findAll(@CurrentUser('organisation_uuid') organisation_uuid: string) {
+        return this.scoringInstructionsService.findAll(organisation_uuid);
     }
 
     @Get(':uuid')
     @ApiOperation({ summary: 'Get a scoring instruction by uuid' })
-    findOne(@CurrentUser('uuid') user_uuid: string, @Param('uuid') uuid: string) {
-        return this.scoringInstructionsService.findOne(user_uuid, uuid);
+    findOne(@CurrentUser('organisation_uuid') organisation_uuid: string, @Param('uuid') uuid: string) {
+        return this.scoringInstructionsService.findOne(organisation_uuid, uuid);
     }
 
     @Put(':uuid')
     @ApiOperation({ summary: 'Update a scoring instruction' })
     update(
-        @CurrentUser('uuid') user_uuid: string,
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') uuid: string,
         @Body() dto: UpdateScoringInstructionDto,
     ) {
-        return this.scoringInstructionsService.update(user_uuid, uuid, dto);
+        return this.scoringInstructionsService.update(organisation_uuid, uuid, dto);
     }
 
     @Delete(':uuid')
     @ApiOperation({ summary: 'Delete a scoring instruction' })
-    remove(@CurrentUser('uuid') user_uuid: string, @Param('uuid') uuid: string) {
-        return this.scoringInstructionsService.remove(user_uuid, uuid);
+    remove(@CurrentUser('organisation_uuid') organisation_uuid: string, @Param('uuid') uuid: string) {
+        return this.scoringInstructionsService.remove(organisation_uuid, uuid);
     }
 }

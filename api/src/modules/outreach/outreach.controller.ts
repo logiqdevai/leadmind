@@ -39,8 +39,8 @@ export class OutreachController {
     @ApiQuery({ name: 'contact_uuid', required: false, type: String })
     @ApiQuery({ name: 'status', required: false, enum: MsgStatus })
     @ApiResponse({ status: 200 })
-    listMessages(@CurrentUser('uuid') user_uuid: string, @Query() query: ListMessagesDto) {
-        return this.outreachService.listMessages(user_uuid, query);
+    listMessages(@CurrentUser('organisation_uuid') organisation_uuid: string, @Query() query: ListMessagesDto) {
+        return this.outreachService.listMessages(organisation_uuid, query);
     }
 
     @Put('messages/:uuid')
@@ -48,11 +48,11 @@ export class OutreachController {
     @ApiResponse({ status: 200 })
     @ApiResponse({ status: 409, description: 'Only pending messages can be edited' })
     updateMessage(
-        @CurrentUser('uuid') user_uuid: string,
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') message_uuid: string,
         @Body() dto: UpdateMessageDto,
     ) {
-        return this.outreachService.updateMessage(user_uuid, message_uuid, dto);
+        return this.outreachService.updateMessage(organisation_uuid, message_uuid, dto);
     }
 
     @Post('messages/:uuid/send')
@@ -60,58 +60,58 @@ export class OutreachController {
     @ApiResponse({ status: 201 })
     @ApiResponse({ status: 409, description: 'Only pending or failed messages can be sent' })
     sendMessage(
-        @CurrentUser('uuid') user_uuid: string,
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') message_uuid: string,
         @Body() dto: SendExistingMessageDto = {},
     ) {
-        return this.outreachService.sendMessage(user_uuid, message_uuid, dto);
+        return this.outreachService.sendMessage(organisation_uuid, message_uuid, dto);
     }
 
     @Delete('messages/:uuid')
     @ApiOperation({ summary: 'Delete pending outreach message' })
     @ApiResponse({ status: 200 })
     @ApiResponse({ status: 409, description: 'Only pending messages can be deleted' })
-    async deleteMessage(@CurrentUser('uuid') user_uuid: string, @Param('uuid') message_uuid: string) {
-        await this.outreachService.deleteMessage(user_uuid, message_uuid);
+    async deleteMessage(@CurrentUser('organisation_uuid') organisation_uuid: string, @Param('uuid') message_uuid: string) {
+        await this.outreachService.deleteMessage(organisation_uuid, message_uuid);
         return { deleted: true };
     }
 
     @Post('messages')
     @ApiOperation({ summary: 'Create and enqueue outreach message' })
     @ApiResponse({ status: 201 })
-    createAndQueue(@CurrentUser('uuid') user_uuid: string, @Body() dto: SendOutreachDto) {
-        return this.outreachService.createAndQueue(user_uuid, dto);
+    createAndQueue(@CurrentUser('organisation_uuid') organisation_uuid: string, @Body() dto: SendOutreachDto) {
+        return this.outreachService.createAndQueue(organisation_uuid, dto);
     }
 
     @Post('messages/draft')
     @ApiOperation({ summary: 'Create a PENDING outreach message without queueing it for send' })
     @ApiResponse({ status: 201 })
-    createDraft(@CurrentUser('uuid') user_uuid: string, @Body() dto: SendOutreachDto) {
-        return this.outreachService.createDraft(user_uuid, dto);
+    createDraft(@CurrentUser('organisation_uuid') organisation_uuid: string, @Body() dto: SendOutreachDto) {
+        return this.outreachService.createDraft(organisation_uuid, dto);
     }
 
     @Post('sequences')
     @ApiOperation({ summary: 'Create outreach sequence' })
     @ApiResponse({ status: 201 })
-    createSequence(@CurrentUser('uuid') user_uuid: string, @Body() dto: CreateSequenceDto) {
-        return this.outreachService.createSequence(user_uuid, dto);
+    createSequence(@CurrentUser('organisation_uuid') organisation_uuid: string, @Body() dto: CreateSequenceDto) {
+        return this.outreachService.createSequence(organisation_uuid, dto);
     }
 
     @Get('sequences')
     @ApiOperation({ summary: 'List outreach sequences for current user' })
     @ApiResponse({ status: 200 })
-    listSequences(@CurrentUser('uuid') user_uuid: string) {
-        return this.outreachService.listSequences(user_uuid);
+    listSequences(@CurrentUser('organisation_uuid') organisation_uuid: string) {
+        return this.outreachService.listSequences(organisation_uuid);
     }
 
     @Post('sequences/:uuid/assign')
     @ApiOperation({ summary: 'Assign sequence to contact and enqueue messages' })
     @ApiResponse({ status: 201 })
     assignSequence(
-        @CurrentUser('uuid') user_uuid: string,
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') sequence_uuid: string,
         @Body() dto: AssignSequenceDto,
     ) {
-        return this.outreachService.assignSequence(user_uuid, sequence_uuid, dto);
+        return this.outreachService.assignSequence(organisation_uuid, sequence_uuid, dto);
     }
 }

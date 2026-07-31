@@ -32,6 +32,9 @@ const CampaignDetailPage = lazy(() => import("@/pages/dashboard/pages/campaigns/
 const SendHistoryPage = lazy(() => import("@/pages/dashboard/pages/send-history"));
 const MessageTemplatesPage = lazy(() => import("@/pages/dashboard/pages/message-templates"));
 const SettingsUsagePage = lazy(() => import("@/pages/dashboard/pages/settings/usage"));
+const SettingsOrganisationPage = lazy(() => import("@/pages/dashboard/pages/settings/organisation"));
+const SettingsTeamPage = lazy(() => import("@/pages/dashboard/pages/settings/team"));
+const InviteAcceptPage = lazy(() => import("@/pages/auth/pages/invite"));
 
 const DashboardFiltersLayout = lazy(() => import("@/pages/dashboard/pages/filters/layout"));
 const FiltersPage = lazy(() => import("@/pages/dashboard/pages/filters"));
@@ -105,6 +108,24 @@ export default function AppRoutes() {
           }
         />
         <Route index element={<Navigate to={Routes.auth.sign_in} replace />} />
+      </Route>
+
+      <Route
+        path="/auth/invite/:token"
+        element={
+          <Lazy>
+            <AuthLayout />
+          </Lazy>
+        }
+      >
+        <Route
+          index
+          element={
+            <Lazy>
+              <InviteAcceptPage />
+            </Lazy>
+          }
+        />
       </Route>
 
       {/* Dashboard routes */}
@@ -225,7 +246,23 @@ export default function AppRoutes() {
             </Lazy>
           }
         />
-        <Route path="settings" element={<Navigate to={Routes.dashboard.settings_usage} replace />} />
+        <Route path="settings" element={<Navigate to={Routes.dashboard.settings_organisation} replace />} />
+        <Route
+          path="settings/organisation"
+          element={
+            <Lazy>
+              <SettingsOrganisationPage />
+            </Lazy>
+          }
+        />
+        <Route
+          path="settings/team"
+          element={
+            <Lazy>
+              <SettingsTeamPage />
+            </Lazy>
+          }
+        />
         <Route
           path="settings/usage"
           element={

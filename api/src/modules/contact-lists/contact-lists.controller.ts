@@ -38,124 +38,124 @@ export class ContactListsController {
 
     @Post()
     @ApiOperation({ summary: 'Create a contact list' })
-    create(@CurrentUser('uuid') user_uuid: string, @Body() dto: CreateContactListDto) {
-        return this.contactListsService.create(user_uuid, dto);
+    create(@CurrentUser('organisation_uuid') organisation_uuid: string, @Body() dto: CreateContactListDto) {
+        return this.contactListsService.create(organisation_uuid, dto);
     }
 
     @Get()
     @ApiOperation({ summary: 'List contact lists' })
-    findAll(@CurrentUser('uuid') user_uuid: string, @Query() query: ListContactListsDto) {
-        return this.contactListsService.findAll(user_uuid, query);
+    findAll(@CurrentUser('organisation_uuid') organisation_uuid: string, @Query() query: ListContactListsDto) {
+        return this.contactListsService.findAll(organisation_uuid, query);
     }
 
     @Get(':uuid')
     @ApiOperation({ summary: 'Get a contact list' })
-    findOne(@CurrentUser('uuid') user_uuid: string, @Param('uuid') uuid: string) {
-        return this.contactListsService.findOne(user_uuid, uuid);
+    findOne(@CurrentUser('organisation_uuid') organisation_uuid: string, @Param('uuid') uuid: string) {
+        return this.contactListsService.findOne(organisation_uuid, uuid);
     }
 
     @Patch(':uuid')
     @ApiOperation({ summary: 'Update a contact list' })
     update(
-        @CurrentUser('uuid') user_uuid: string,
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') uuid: string,
         @Body() dto: UpdateContactListDto,
     ) {
-        return this.contactListsService.update(user_uuid, uuid, dto);
+        return this.contactListsService.update(organisation_uuid, uuid, dto);
     }
 
     @Delete(':uuid')
     @ApiOperation({ summary: 'Delete a contact list' })
-    remove(@CurrentUser('uuid') user_uuid: string, @Param('uuid') uuid: string) {
-        return this.contactListsService.remove(user_uuid, uuid);
+    remove(@CurrentUser('organisation_uuid') organisation_uuid: string, @Param('uuid') uuid: string) {
+        return this.contactListsService.remove(organisation_uuid, uuid);
     }
 
     @Get(':uuid/contacts')
     @ApiOperation({ summary: 'List contacts in a contact list' })
     findMembers(
-        @CurrentUser('uuid') user_uuid: string,
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') uuid: string,
         @Query() query: ListContactListMembersDto,
     ) {
-        return this.contactListsService.findMembers(user_uuid, uuid, query);
+        return this.contactListsService.findMembers(organisation_uuid, uuid, query);
     }
 
     @Post(':uuid/contacts')
     @ApiOperation({ summary: 'Add contacts to a list' })
     addContacts(
-        @CurrentUser('uuid') user_uuid: string,
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') uuid: string,
         @Body() dto: AddListContactsDto,
     ) {
-        return this.contactListsService.addContacts(user_uuid, uuid, dto);
+        return this.contactListsService.addContacts(organisation_uuid, uuid, dto);
     }
 
     @Post(':uuid/contacts/bulk')
     @ApiOperation({ summary: 'Add all contacts matching filters to a list' })
     bulkAddContacts(
-        @CurrentUser('uuid') user_uuid: string,
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') uuid: string,
         @Body() dto: BulkAddListContactsDto,
     ) {
-        return this.contactListsService.bulkAddContacts(user_uuid, uuid, dto);
+        return this.contactListsService.bulkAddContacts(organisation_uuid, uuid, dto);
     }
 
     @Post(':uuid/contacts/bulk-remove')
     @ApiOperation({ summary: 'Remove multiple contacts from a list' })
     removeContacts(
-        @CurrentUser('uuid') user_uuid: string,
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') uuid: string,
         @Body() dto: BulkRemoveListContactsDto,
     ) {
-        return this.contactListsService.removeContacts(user_uuid, uuid, dto.contact_uuids);
+        return this.contactListsService.removeContacts(organisation_uuid, uuid, dto.contact_uuids);
     }
 
     @Delete(':uuid/contacts/:contactUuid')
     @ApiOperation({ summary: 'Remove a contact from a list' })
     removeContact(
-        @CurrentUser('uuid') user_uuid: string,
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') uuid: string,
         @Param('contactUuid') contactUuid: string,
     ) {
-        return this.contactListsService.removeContact(user_uuid, uuid, contactUuid);
+        return this.contactListsService.removeContact(organisation_uuid, uuid, contactUuid);
     }
 
     @Get(':uuid/stats')
     @ApiOperation({ summary: 'CRM and activity analytics for contacts in a list' })
     getStats(
-        @CurrentUser('uuid') user_uuid: string,
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') uuid: string,
         @Query() query: ContactAudienceStatsQueryDto,
     ) {
-        return this.contactAudienceStatsService.getListStats(user_uuid, uuid, query);
+        return this.contactAudienceStatsService.getListStats(organisation_uuid, uuid, query);
     }
 
     @Get(':uuid/analyses')
     @ApiOperation({ summary: 'List AI audience analyses for a contact list' })
     listAnalyses(
-        @CurrentUser('uuid') user_uuid: string,
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') uuid: string,
         @Query() query: ListContactAudienceAnalysesDto,
     ) {
-        return this.contactAudienceAnalysisService.listListAnalyses(user_uuid, uuid, query);
+        return this.contactAudienceAnalysisService.listListAnalyses(organisation_uuid, uuid, query);
     }
 
     @Post(':uuid/analyses')
     @ApiOperation({ summary: 'Run a new AI audience analysis for a contact list (full history stats)' })
     createAnalysis(
-        @CurrentUser('uuid') user_uuid: string,
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') uuid: string,
     ) {
-        return this.contactAudienceAnalysisService.createListAnalysis(user_uuid, uuid);
+        return this.contactAudienceAnalysisService.createListAnalysis(organisation_uuid, uuid);
     }
 
     @Delete(':uuid/analyses/:analysisUuid')
     @ApiOperation({ summary: 'Delete an AI audience analysis for a contact list' })
     deleteAnalysis(
-        @CurrentUser('uuid') user_uuid: string,
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') uuid: string,
         @Param('analysisUuid') analysisUuid: string,
     ) {
-        return this.contactAudienceAnalysisService.deleteListAnalysis(user_uuid, uuid, analysisUuid);
+        return this.contactAudienceAnalysisService.deleteListAnalysis(organisation_uuid, uuid, analysisUuid);
     }
 }

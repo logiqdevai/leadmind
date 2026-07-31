@@ -109,7 +109,7 @@ describe('CampaignUtmAnalyticsService', () => {
             contact: {
                 findUnique: jest.fn().mockResolvedValue({
                     uuid: contactUuid,
-                    user_uuid: 'user-1',
+                    organisation_uuid: 'user-1',
                 }),
                 update: jest.fn().mockResolvedValue({}),
             },

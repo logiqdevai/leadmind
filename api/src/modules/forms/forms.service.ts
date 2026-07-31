@@ -12,10 +12,10 @@ export class FormsService {
         private readonly gateway: NotificationsGateway,
     ) {}
 
-    async create(user_uuid: string, dto: CreateFormDto) {
+    async create(organisation_uuid: string, user_uuid: string, dto: CreateFormDto) {
         const form = await this.prisma.form.create({
             data: {
-                user_uuid,
+                organisation_uuid,
                 name: dto.name,
                 description: dto.description,
             },
@@ -28,12 +28,12 @@ export class FormsService {
         return form;
     }
 
-    async findAll(user_uuid: string, query: ListFormsDto) {
+    async findAll(organisation_uuid: string, query: ListFormsDto) {
         const page = query.page ?? 1;
         const limit = query.limit ?? 20;
         const skip = (page - 1) * limit;
 
-        const where: any = { user_uuid };
+        const where: any = { organisation_uuid };
 
         if (query.search) {
             where.OR = [
@@ -64,9 +64,9 @@ export class FormsService {
         };
     }
 
-    async findOne(user_uuid: string, uuid: string) {
+    async findOne(organisation_uuid: string, uuid: string) {
         const form = await this.prisma.form.findFirst({
-            where: { uuid, user_uuid },
+            where: { uuid, organisation_uuid },
             include: {
                 fields: { orderBy: { order_index: 'asc' } },
                 _count: { select: { completions: true } },
@@ -77,8 +77,8 @@ export class FormsService {
         return form;
     }
 
-    async update(user_uuid: string, uuid: string, dto: UpdateFormDto) {
-        const form = await this.prisma.form.findFirst({ where: { uuid, user_uuid } });
+    async update(organisation_uuid: string, user_uuid: string, uuid: string, dto: UpdateFormDto) {
+        const form = await this.prisma.form.findFirst({ where: { uuid, organisation_uuid } });
         if (!form) throw new NotFoundException('Form not found');
 
         const updated = await this.prisma.form.update({
@@ -93,8 +93,8 @@ export class FormsService {
         return updated;
     }
 
-    async remove(user_uuid: string, uuid: string) {
-        const form = await this.prisma.form.findFirst({ where: { uuid, user_uuid } });
+    async remove(organisation_uuid: string, user_uuid: string, uuid: string) {
+        const form = await this.prisma.form.findFirst({ where: { uuid, organisation_uuid } });
         if (!form) throw new NotFoundException('Form not found');
 
         await this.prisma.form.delete({ where: { uuid } });
@@ -102,9 +102,9 @@ export class FormsService {
         return { uuid };
     }
 
-    async duplicate(user_uuid: string, uuid: string) {
+    async duplicate(organisation_uuid: string, user_uuid: string, uuid: string) {
         const form = await this.prisma.form.findFirst({
-            where: { uuid, user_uuid },
+            where: { uuid, organisation_uuid },
             include: { fields: { orderBy: { order_index: 'asc' } } },
         });
         if (!form) throw new NotFoundException('Form not found');
@@ -112,7 +112,7 @@ export class FormsService {
         const newForm = await this.prisma.$transaction(async (tx) => {
             const created = await tx.form.create({
                 data: {
-                    user_uuid,
+                    organisation_uuid,
                     name: `Copy of ${form.name}`,
                     description: form.description,
                 },

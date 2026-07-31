@@ -17,52 +17,66 @@ export class FormCompletionsController {
     @Post()
     @ApiOperation({ summary: 'Create a form completion' })
     create(
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
         @CurrentUser('uuid') user_uuid: string,
         @Param('uuid') form_uuid: string,
         @Body() dto: CreateFormCompletionDto,
     ) {
-        return this.formCompletionsService.create(user_uuid, form_uuid, dto);
+        return this.formCompletionsService.create(organisation_uuid, user_uuid, form_uuid, dto);
     }
 
     @Get()
     @ApiOperation({ summary: 'List completions for a form' })
     findAll(
-        @CurrentUser('uuid') user_uuid: string,
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') form_uuid: string,
         @Query() query: ListFormCompletionsDto,
     ) {
-        return this.formCompletionsService.findAll(user_uuid, form_uuid, query);
+        return this.formCompletionsService.findAll(organisation_uuid, form_uuid, query);
     }
 
     @Get(':completionUuid')
     @ApiOperation({ summary: 'Get a single completion with all values' })
     findOne(
-        @CurrentUser('uuid') user_uuid: string,
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') form_uuid: string,
         @Param('completionUuid') completion_uuid: string,
     ) {
-        return this.formCompletionsService.findOne(user_uuid, form_uuid, completion_uuid);
+        return this.formCompletionsService.findOne(organisation_uuid, form_uuid, completion_uuid);
     }
 
     @Put(':completionUuid')
     @ApiOperation({ summary: 'Update completion values' })
     update(
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
         @CurrentUser('uuid') user_uuid: string,
         @Param('uuid') form_uuid: string,
         @Param('completionUuid') completion_uuid: string,
         @Body() dto: UpdateFormCompletionDto,
     ) {
-        return this.formCompletionsService.update(user_uuid, form_uuid, completion_uuid, dto);
+        return this.formCompletionsService.update(
+            organisation_uuid,
+            user_uuid,
+            form_uuid,
+            completion_uuid,
+            dto,
+        );
     }
 
     @Delete(':completionUuid')
     @ApiOperation({ summary: 'Delete a form completion' })
     remove(
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
         @CurrentUser('uuid') user_uuid: string,
         @Param('uuid') form_uuid: string,
         @Param('completionUuid') completion_uuid: string,
     ) {
-        return this.formCompletionsService.remove(user_uuid, form_uuid, completion_uuid);
+        return this.formCompletionsService.remove(
+            organisation_uuid,
+            user_uuid,
+            form_uuid,
+            completion_uuid,
+        );
     }
 }
 
@@ -76,9 +90,9 @@ export class FormCompletionsByContactController {
     @Get('contact/:contactUuid')
     @ApiOperation({ summary: 'Get all form completions for a contact (across all forms)' })
     findByContact(
-        @CurrentUser('uuid') user_uuid: string,
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('contactUuid') contact_uuid: string,
     ) {
-        return this.formCompletionsService.findByContact(user_uuid, contact_uuid);
+        return this.formCompletionsService.findByContact(organisation_uuid, contact_uuid);
     }
 }

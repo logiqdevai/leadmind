@@ -42,8 +42,8 @@ export class AiConfig {
         return DEFAULT_LEAD_ENRICHMENT_AI_PROVIDER;
     }
 
-    async isOpenAiConfigured(user_uuid: string): Promise<boolean> {
-        return this.aiCredentials.hasOpenAiApiKey(user_uuid);
+    async isOpenAiConfigured(organisation_uuid: string): Promise<boolean> {
+        return this.aiCredentials.hasOpenAiApiKey(organisation_uuid);
     }
 
     isPerplexityConfigured(): boolean {
@@ -54,9 +54,9 @@ export class AiConfig {
         return Boolean(this.configService.get<string>('ANTHROPIC_API_KEY')?.trim());
     }
 
-    async isLeadEnrichmentAiConfigured(user_uuid: string, provider: AiProvider): Promise<boolean> {
+    async isLeadEnrichmentAiConfigured(organisation_uuid: string, provider: AiProvider): Promise<boolean> {
         if (provider === AiProviders.openai) {
-            return this.isOpenAiConfigured(user_uuid);
+            return this.isOpenAiConfigured(organisation_uuid);
         }
         if (provider === AiProviders.perplexity) {
             return this.isPerplexityConfigured();
@@ -68,13 +68,13 @@ export class AiConfig {
     }
 
     async getModelAdapter(
-        user_uuid: string,
+        organisation_uuid: string,
         provider: AiProvider = AiProviders.openai,
         model: string = AiModels.openai.gpt4o,
     ) {
         switch (provider) {
             case AiProviders.openai: {
-                const apiKey = await this.aiCredentials.getOpenAiApiKey(user_uuid);
+                const apiKey = await this.aiCredentials.getOpenAiApiKey(organisation_uuid);
                 const openAi = createOpenAI({ apiKey });
                 return openAi(model);
             }
@@ -107,8 +107,8 @@ export class AiConfig {
         }
     }
 
-    async getOpenAiProvider(user_uuid: string) {
-        const apiKey = await this.aiCredentials.getOpenAiApiKey(user_uuid);
+    async getOpenAiProvider(organisation_uuid: string) {
+        const apiKey = await this.aiCredentials.getOpenAiApiKey(organisation_uuid);
         return createOpenAI({ apiKey });
     }
 

@@ -22,14 +22,14 @@ export class CampaignContactResolverService {
     ) { }
 
     buildWhereInput(
-        user_uuid: string,
+        organisation_uuid: string,
         filters: CampaignFiltersDto,
         options: BuildCampaignAudienceOptions = {},
     ): Prisma.ContactWhereInput {
         const mode = options.mode ?? 'send';
         const channels = options.channels ?? [];
 
-        const base = this.contactsService.buildWhereInput(user_uuid, {
+        const base = this.contactsService.buildWhereInput(organisation_uuid, {
             status: filters.status,
             tags: filters.tags,
             search: filters.search,
@@ -68,15 +68,15 @@ export class CampaignContactResolverService {
     }
 
     private async resolveWhere(
-        user_uuid: string,
+        organisation_uuid: string,
         filters: CampaignFiltersDto,
         options: BuildCampaignAudienceOptions = {},
     ): Promise<Prisma.ContactWhereInput> {
-        const where = this.buildWhereInput(user_uuid, filters, options);
+        const where = this.buildWhereInput(organisation_uuid, filters, options);
         if (filters.contact_list_uuid) {
             await this.contactsService.applyContactListIncludeFilter(
                 where,
-                user_uuid,
+                organisation_uuid,
                 filters.contact_list_uuid,
             );
         }
@@ -84,11 +84,11 @@ export class CampaignContactResolverService {
     }
 
     async previewContacts(
-        user_uuid: string,
+        organisation_uuid: string,
         filters: CampaignFiltersDto,
         limit = 50,
     ): Promise<{ total: number; sample: any[]; with_email: number; with_phone: number }> {
-        const where = await this.resolveWhere(user_uuid, filters, { mode: 'preview' });
+        const where = await this.resolveWhere(organisation_uuid, filters, { mode: 'preview' });
         const emailWhere = mergeContactWhereClauses(where, [
             buildContactProfileFieldWhere(CampaignProfileField.EMAIL, true),
         ]);
@@ -116,11 +116,11 @@ export class CampaignContactResolverService {
     }
 
     async resolveContactUuids(
-        user_uuid: string,
+        organisation_uuid: string,
         filters: CampaignFiltersDto,
         options?: { limit?: number; channels?: Channel[] },
     ): Promise<string[]> {
-        const where = await this.resolveWhere(user_uuid, filters, {
+        const where = await this.resolveWhere(organisation_uuid, filters, {
             mode: 'send',
             channels: options?.channels,
         });

@@ -1,4 +1,8 @@
 import { RoleTypes, type RoleType } from "@/features/user/interfaces/user.interface";
+import {
+    OrganisationRoles,
+    type OrganisationRole,
+} from "@/features/organisations/interfaces/organisation.interfaces";
 
 export const Permissions = {
   admin_nav: [RoleTypes.ADMIN, RoleTypes.SUPER_ADMIN],
@@ -10,3 +14,12 @@ export const Permissions = {
 } as const satisfies Record<string, RoleType[]>;
 
 export type PermissionKey = keyof typeof Permissions;
+
+export const OrganisationPermissions = {
+  org_settings: [OrganisationRoles.OWNER, OrganisationRoles.ADMIN],
+  org_invite: [OrganisationRoles.OWNER, OrganisationRoles.ADMIN],
+  org_manage_members: [OrganisationRoles.OWNER, OrganisationRoles.ADMIN],
+  org_delete: [OrganisationRoles.OWNER],
+} as const satisfies Record<string, OrganisationRole[]>;
+
+export type OrganisationPermissionKey = keyof typeof OrganisationPermissions;

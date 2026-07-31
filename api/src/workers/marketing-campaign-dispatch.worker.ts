@@ -68,7 +68,7 @@ export class MarketingCampaignDispatchWorker extends WorkerHost {
         const filters = (campaign.filters_snapshot ?? {}) as unknown as CampaignFiltersDto;
         const channels = campaign.channels as Channel[];
         const contact_uuids = await this.resolver.resolveContactUuids(
-            campaign.user_uuid,
+            campaign.organisation_uuid,
             filters,
             { channels },
         );

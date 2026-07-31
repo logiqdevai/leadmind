@@ -46,7 +46,14 @@ export class ReminderTriggerWorker extends WorkerHost {
             return;
         }
 
-        this.gateway.emitToUser(reminder.user_uuid, 'reminder.triggered', reminder);
-        this.logger.log(`Reminder triggered: ${reminder.uuid} for user ${reminder.user_uuid}`);
+        const members = await this.prisma.organisationMember.findMany({
+            where: { organisation_uuid: reminder.organisation_uuid },
+            select: { user_uuid: true },
+        });
+
+        for (const member of members) {
+            this.gateway.emitToUser(member.user_uuid, 'reminder.triggered', reminder);
+        }
+        this.logger.log(`Reminder triggered: ${reminder.uuid} for organisation ${reminder.organisation_uuid}`);
     }
 }

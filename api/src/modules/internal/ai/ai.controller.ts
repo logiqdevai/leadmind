@@ -20,7 +20,7 @@ export class AiController {
   @ApiResponse({ status: 201, description: 'AI operation triggered successfully' })
   @ApiResponse({ status: 401, description: 'Unauthorized — missing or invalid JWT' })
   @ApiResponse({ status: 403, description: 'Forbidden — admin role required' })
-  create(@CurrentUser('uuid') user_uuid: string, @Body() createAiDto: CreateAiDto) {
-    return this.aiService.create(user_uuid, createAiDto);
+  create(@CurrentUser('organisation_uuid') organisation_uuid: string, @Body() createAiDto: CreateAiDto) {
+    return this.aiService.create(organisation_uuid, createAiDto);
   }
 }

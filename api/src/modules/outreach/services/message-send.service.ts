@@ -54,7 +54,7 @@ export class MessageSendService {
         providerOverride?: EmailProviderTarget,
     ): Promise<DeliveredMessage> {
         this.logger.log(
-            `Deliver outreach message=${message.uuid} channel=${message.channel} user=${message.user_uuid} contact=${message.contact_uuid}`,
+            `Deliver outreach message=${message.uuid} channel=${message.channel} user=${message.organisation_uuid} contact=${message.contact_uuid}`,
         );
 
         if (message.channel === Channel.EMAIL && !hasUsableContactEmail(message.contact.email)) {
@@ -81,7 +81,7 @@ export class MessageSendService {
         }
 
         const rendered = await this.outreachRenderService.renderForOutreachMessage(
-            message.user_uuid,
+            message.organisation_uuid,
             {
                 subject: message.subject,
                 content: message.content,
@@ -116,7 +116,7 @@ export class MessageSendService {
             const defaultTarget =
                 providerOverride || metadataProvider
                     ? null
-                    : await this.emailCredentialsService.resolveDefaultTarget(message.user_uuid);
+                    : await this.emailCredentialsService.resolveDefaultTarget(message.organisation_uuid);
 
             const target = providerOverride ?? metadataProvider ?? defaultTarget;
 
@@ -125,7 +125,7 @@ export class MessageSendService {
             );
 
             const { result, deliveryTarget } = await this.sendEmailWithProvider(
-                message.user_uuid,
+                message.organisation_uuid,
                 createEmail,
                 target,
             );
@@ -165,7 +165,7 @@ export class MessageSendService {
     }
 
     private async sendEmailWithProvider(
-        user_uuid: string,
+        organisation_uuid: string,
         createEmail: {
             to: string;
             subject: string;
@@ -177,7 +177,7 @@ export class MessageSendService {
     ): Promise<{ result: any; deliveryTarget: EmailProviderTarget }> {
         if (target?.provider === ExternalIntegrationProvider.SMTP) {
             const smtpConfig = await this.emailCredentialsService.getSmtpConfig(
-                user_uuid,
+                organisation_uuid,
                 target.account,
             );
             const from = formatSmtpFromAddress(
@@ -193,11 +193,11 @@ export class MessageSendService {
 
         if (target?.provider === ExternalIntegrationProvider.RESEND) {
             this.logger.log(
-                `Using Resend account=${target.account} user=${user_uuid} to=${createEmail.to}`,
+                `Using Resend account=${target.account} user=${organisation_uuid} to=${createEmail.to}`,
             );
             const [apiKey, fromEmail] = await Promise.all([
-                this.emailCredentialsService.getResendApiKey(user_uuid, target.account),
-                this.emailCredentialsService.getResendFromEmail(user_uuid, target.account),
+                this.emailCredentialsService.getResendApiKey(organisation_uuid, target.account),
+                this.emailCredentialsService.getResendFromEmail(organisation_uuid, target.account),
             ]);
             const result = await this.resendMailService.sendEmail(
                 { ...createEmail, from: fromEmail },
@@ -222,7 +222,7 @@ export class MessageSendService {
         }
 
         this.logger.error(
-            `No email provider configured user=${user_uuid} to=${createEmail.to} target=${JSON.stringify(target)} envResend=${envKey ? 'set' : 'missing'}`,
+            `No email provider configured user=${organisation_uuid} to=${createEmail.to} target=${JSON.stringify(target)} envResend=${envKey ? 'set' : 'missing'}`,
         );
         throw new Error('No email provider configured');
     }
@@ -337,7 +337,7 @@ export class MessageSendService {
 
     interactionCreateOperation(data: {
         contact_uuid: string;
-        user_uuid: string;
+        organisation_uuid: string;
         type: InteractionType;
         outreach_message_uuid?: string;
         campaign_uuid?: string;
@@ -380,7 +380,7 @@ export class MessageSendService {
         if (metadataUuid) {
             try {
                 const profile = await this.senderProfilesService.findOne(
-                    message.user_uuid,
+                    message.organisation_uuid,
                     metadataUuid,
                 );
                 if (profile.email?.trim()) {
@@ -401,7 +401,7 @@ export class MessageSendService {
             }
         }
 
-        const defaultProfile = await this.senderProfilesService.findDefault(message.user_uuid);
+        const defaultProfile = await this.senderProfilesService.findDefault(message.organisation_uuid);
         if (defaultProfile?.email?.trim()) {
             return defaultProfile.email.trim();
         }

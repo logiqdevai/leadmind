@@ -17,14 +17,14 @@ export interface OutreachAiGenerateContext {
 
 export async function generateWithCampaignPrompt(
     aiService: AiService,
-    user_uuid: string,
+    organisation_uuid: string,
     channel: Channel,
     action: CampaignAiAction,
     ctx: OutreachAiGenerateContext,
 ): Promise<{ subject: string | null; content: string }> {
     const { prompt, system } = buildCampaignPrompt(channel, action, ctx);
     const { response } = await aiService.generateText({
-        user_uuid,
+        organisation_uuid,
         provider: AiProviders.openai,
         model: channel === Channel.EMAIL ? AiModels.openai.gpt4o : AiModels.openai.gpt4oMini,
         prompt,

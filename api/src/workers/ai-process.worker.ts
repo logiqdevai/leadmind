@@ -54,7 +54,7 @@ export class AiProcessWorker extends WorkerHost {
         const sources = resolveLeadEnrichmentSources(data.enrichment_sources);
         try {
             await this.leadEnrichmentBatchService.prepareAndSubmitBulk(
-                data.user_uuid,
+                data.organisation_uuid,
                 data.lead_uuids,
                 sources,
             );

@@ -14,13 +14,13 @@ export class ApifyUsageController {
 
     @Get()
     @ApiOperation({ summary: 'List Apify usage logs for the current user' })
-    findAll(@CurrentUser('uuid') user_uuid: string, @Query() query: ListApifyUsageDto) {
-        return this.apifyUsageService.findAll(user_uuid, query);
+    findAll(@CurrentUser('organisation_uuid') organisation_uuid: string, @Query() query: ListApifyUsageDto) {
+        return this.apifyUsageService.findAll(organisation_uuid, query);
     }
 
     @Get('summary')
     @ApiOperation({ summary: 'Get Apify usage summary for the current user' })
-    getSummary(@CurrentUser('uuid') user_uuid: string, @Query() query: ApifyUsageSummaryDto) {
-        return this.apifyUsageService.getSummary(user_uuid, query);
+    getSummary(@CurrentUser('organisation_uuid') organisation_uuid: string, @Query() query: ApifyUsageSummaryDto) {
+        return this.apifyUsageService.getSummary(organisation_uuid, query);
     }
 }

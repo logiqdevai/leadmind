@@ -26,7 +26,7 @@ export class ApifyService {
     ) { }
 
     async scrapeLeads(
-        user_uuid: string,
+        organisation_uuid: string,
         source_type: SourceType,
         query_config: object,
         usage?: ApifyUsageOptions,
@@ -37,13 +37,13 @@ export class ApifyService {
         const input = adapter.buildInput(query_config as never);
         this.logger.debug(`Running Apify actor ${actor_id} for source ${source_type}`);
 
-        const token = await this.credentials.getApifyApiToken(user_uuid);
+        const token = await this.credentials.getApifyApiToken(organisation_uuid);
         const raw_items = await this.client.runActor(
             token,
             actor_id,
             input,
             {
-                user_uuid,
+                organisation_uuid,
                 operation: usage?.operation ?? ApifyUsageOperation.FILTER_SCRAPE,
                 reference_type: usage?.reference_type,
                 reference_uuid: usage?.reference_uuid,

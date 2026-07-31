@@ -217,4 +217,23 @@ export const ApiRoutes = {
         list: "/apify-usage",
         summary: "/apify-usage/summary",
     },
+    organisations: {
+        list: "/organisations",
+        create: "/organisations",
+        current: "/organisations/current",
+        update: (uuid: string) => `/organisations/${uuid}`,
+        remove: (uuid: string) => `/organisations/${uuid}`,
+        switch: (uuid: string) => `/organisations/${uuid}/switch`,
+        members: (uuid: string) => `/organisations/${uuid}/members`,
+        updateMember: (uuid: string, userUuid: string) =>
+            `/organisations/${uuid}/members/${userUuid}`,
+        removeMember: (uuid: string, userUuid: string) =>
+            `/organisations/${uuid}/members/${userUuid}`,
+        invitations: (uuid: string) => `/organisations/${uuid}/invitations`,
+        createInvitation: (uuid: string) => `/organisations/${uuid}/invitations`,
+        revokeInvitation: (uuid: string, invitationUuid: string) =>
+            `/organisations/${uuid}/invitations/${invitationUuid}`,
+        previewInvitation: (token: string) => `/organisations/invitations/${token}`,
+        acceptInvitation: (token: string) => `/organisations/invitations/${token}/accept`,
+    },
 }

@@ -106,7 +106,7 @@ export class OutreachSendWorker extends WorkerHost implements OnModuleInit {
                 ),
                 this.messageSendService.interactionCreateOperation({
                     contact_uuid: message.contact_uuid,
-                    user_uuid: message.user_uuid,
+                    organisation_uuid: message.organisation_uuid,
                     type: this.toInteractionType(message.channel),
                     outreach_message_uuid: message.uuid,
                 }),
@@ -114,7 +114,7 @@ export class OutreachSendWorker extends WorkerHost implements OnModuleInit {
                 ...(shouldPromoteOnSend
                     ? this.contactsService.buildPromoteToContactedIfNewOps(
                           message.contact_uuid,
-                          message.user_uuid,
+                          message.organisation_uuid,
                           'email_sent',
                           message.contact.status,
                       )

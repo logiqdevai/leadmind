@@ -28,9 +28,9 @@ export class RemindersService {
         @InjectQueue(REMINDER_TRIGGER_QUEUE) private readonly reminderQueue: Queue,
     ) {}
 
-    async create(user_uuid: string, dto: CreateReminderDto) {
+    async create(organisation_uuid: string, dto: CreateReminderDto) {
         const contact = await this.prisma.contact.findFirst({
-            where: { uuid: dto.contact_uuid, user_uuid },
+            where: { uuid: dto.contact_uuid, organisation_uuid },
         });
         if (!contact) throw new NotFoundException('Contact not found');
 
@@ -41,7 +41,7 @@ export class RemindersService {
 
         const reminder = await this.prisma.reminder.create({
             data: {
-                user_uuid,
+                organisation_uuid,
                 contact_uuid: dto.contact_uuid,
                 title: dto.title,
                 notes: dto.notes,
@@ -69,13 +69,13 @@ export class RemindersService {
             data: { job_id: jobId },
         });
 
-        this.gateway.emitToUser(user_uuid, 'reminder.created', reminder);
+        this.gateway.emitToUser(organisation_uuid, 'reminder.created', reminder);
         return reminder;
     }
 
-    async findAll(user_uuid: string, query: ListRemindersDto) {
+    async findAll(organisation_uuid: string, query: ListRemindersDto) {
         const now = new Date();
-        const where: Prisma.ReminderWhereInput = { user_uuid };
+        const where: Prisma.ReminderWhereInput = { organisation_uuid };
 
         if (query.contact_uuid) where.contact_uuid = query.contact_uuid;
         if (query.status) where.status = query.status;
@@ -127,18 +127,18 @@ export class RemindersService {
         return { data, total, page, limit, totalPages: Math.ceil(total / limit) };
     }
 
-    async findOne(user_uuid: string, uuid: string) {
+    async findOne(organisation_uuid: string, uuid: string) {
         const reminder = await this.prisma.reminder.findFirst({
-            where: { uuid, user_uuid },
+            where: { uuid, organisation_uuid },
             include: { contact: { select: CONTACT_SELECT } },
         });
         if (!reminder) throw new NotFoundException('Reminder not found');
         return reminder;
     }
 
-    async update(user_uuid: string, uuid: string, dto: UpdateReminderDto) {
+    async update(organisation_uuid: string, uuid: string, dto: UpdateReminderDto) {
         const existing = await this.prisma.reminder.findFirst({
-            where: { uuid, user_uuid },
+            where: { uuid, organisation_uuid },
         });
         if (!existing) throw new NotFoundException('Reminder not found');
 
@@ -187,52 +187,52 @@ export class RemindersService {
             dto.status === ReminderStatus.COMPLETED
                 ? 'reminder.completed'
                 : 'reminder.updated';
-        this.gateway.emitToUser(user_uuid, event, reminder);
+        this.gateway.emitToUser(organisation_uuid, event, reminder);
         return reminder;
     }
 
-    async complete(user_uuid: string, uuid: string) {
-        return this.update(user_uuid, uuid, { status: ReminderStatus.COMPLETED });
+    async complete(organisation_uuid: string, uuid: string) {
+        return this.update(organisation_uuid, uuid, { status: ReminderStatus.COMPLETED });
     }
 
-    async remove(user_uuid: string, uuid: string) {
+    async remove(organisation_uuid: string, uuid: string) {
         const existing = await this.prisma.reminder.findFirst({
-            where: { uuid, user_uuid },
+            where: { uuid, organisation_uuid },
         });
         if (!existing) throw new NotFoundException('Reminder not found');
 
         await this.cancelJob(existing.job_id);
         await this.prisma.reminder.delete({ where: { uuid } });
-        this.gateway.emitToUser(user_uuid, 'reminder.deleted', { uuid });
+        this.gateway.emitToUser(organisation_uuid, 'reminder.deleted', { uuid });
         return { uuid };
     }
 
-    async getUpcomingStats(user_uuid: string) {
+    async getUpcomingStats(organisation_uuid: string) {
         const now = new Date();
         const todayEnd = new Date(now);
         todayEnd.setHours(23, 59, 59, 999);
 
         const [pending, due_today, overdue, completed_this_week] = await Promise.all([
             this.prisma.reminder.count({
-                where: { user_uuid, status: ReminderStatus.PENDING },
+                where: { organisation_uuid, status: ReminderStatus.PENDING },
             }),
             this.prisma.reminder.count({
                 where: {
-                    user_uuid,
+                    organisation_uuid,
                     status: ReminderStatus.PENDING,
                     remind_at: { gte: now, lte: todayEnd },
                 },
             }),
             this.prisma.reminder.count({
                 where: {
-                    user_uuid,
+                    organisation_uuid,
                     status: ReminderStatus.PENDING,
                     remind_at: { lt: now },
                 },
             }),
             this.prisma.reminder.count({
                 where: {
-                    user_uuid,
+                    organisation_uuid,
                     status: ReminderStatus.COMPLETED,
                     updated_at: { gte: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000) },
                 },

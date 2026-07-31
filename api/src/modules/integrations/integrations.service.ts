@@ -65,9 +65,9 @@ export class IntegrationsService {
         private readonly config: ConfigService,
     ) {}
 
-    async findAll(user_uuid: string): Promise<IntegrationResponse[]> {
+    async findAll(organisation_uuid: string): Promise<IntegrationResponse[]> {
         const integrations = await this.prisma.integration.findMany({
-            where: { user_uuid },
+            where: { organisation_uuid },
             include: {
                 keys: {
                     orderBy: [{ account: 'asc' }, { key_type: 'asc' }],
@@ -87,7 +87,7 @@ export class IntegrationsService {
     }
 
     async createKey(
-        user_uuid: string,
+        organisation_uuid: string,
         provider: ExternalIntegrationProvider,
         dto: CreateIntegrationKeyDto,
     ): Promise<IntegrationKeyResponse> {
@@ -113,7 +113,7 @@ export class IntegrationsService {
             );
         }
 
-        const integration = await this.ensureIntegration(user_uuid, provider);
+        const integration = await this.ensureIntegration(organisation_uuid, provider);
         const integrationWithKeys = await this.prisma.integration.findUnique({
             where: { uuid: integration.uuid },
             include: { keys: true, accounts: true },
@@ -201,7 +201,7 @@ export class IntegrationsService {
     }
 
     async createSmtpAccount(
-        user_uuid: string,
+        organisation_uuid: string,
         dto: CreateSmtpAccountDto,
     ): Promise<IntegrationResponse> {
         const provider = ExternalIntegrationProvider.SMTP;
@@ -232,7 +232,7 @@ export class IntegrationsService {
             });
         }
 
-        const integration = await this.ensureIntegration(user_uuid, provider);
+        const integration = await this.ensureIntegration(organisation_uuid, provider);
         const integrationWithKeys = await this.prisma.integration.findUnique({
             where: { uuid: integration.uuid },
             include: { keys: true },
@@ -293,7 +293,7 @@ export class IntegrationsService {
     }
 
     async updateAccountTitle(
-        user_uuid: string,
+        organisation_uuid: string,
         provider: ExternalIntegrationProvider,
         account: string,
         dto: UpdateIntegrationAccountDto,
@@ -306,7 +306,7 @@ export class IntegrationsService {
 
         const trimmedAccount = account.trim();
         const integration = await this.prisma.integration.findUnique({
-            where: { user_uuid_provider: { user_uuid, provider } },
+            where: { organisation_uuid_provider: { organisation_uuid, provider } },
             include: { keys: true, accounts: true },
         });
         if (!integration) {
@@ -344,11 +344,11 @@ export class IntegrationsService {
     }
 
     async updateKey(
-        user_uuid: string,
+        organisation_uuid: string,
         key_uuid: string,
         dto: UpdateIntegrationKeyDto,
     ): Promise<IntegrationKeyResponse> {
-        const owned = await this.requireOwnedKey(user_uuid, key_uuid);
+        const owned = await this.requireOwnedKey(organisation_uuid, key_uuid);
         const key = await this.prisma.integrationKey.update({
             where: { uuid: key_uuid },
             data: {
@@ -363,10 +363,10 @@ export class IntegrationsService {
     }
 
     async removeKey(
-        user_uuid: string,
+        organisation_uuid: string,
         key_uuid: string,
     ): Promise<{ uuid: string }> {
-        const owned = await this.requireOwnedKey(user_uuid, key_uuid);
+        const owned = await this.requireOwnedKey(organisation_uuid, key_uuid);
         const account = owned.account;
         await this.prisma.integrationKey.delete({ where: { uuid: key_uuid } });
 
@@ -394,7 +394,7 @@ export class IntegrationsService {
     }
 
     async setDefaultAccount(
-        user_uuid: string,
+        organisation_uuid: string,
         provider: ExternalIntegrationProvider,
         dto: SetDefaultIntegrationAccountDto,
     ): Promise<IntegrationResponse> {
@@ -406,7 +406,7 @@ export class IntegrationsService {
 
         const account = dto.account.trim();
         const integration = await this.prisma.integration.findUnique({
-            where: { user_uuid_provider: { user_uuid, provider } },
+            where: { organisation_uuid_provider: { organisation_uuid, provider } },
             include: { keys: true },
         });
         if (!integration) {
@@ -439,11 +439,11 @@ export class IntegrationsService {
     }
 
     async getDefaultAccount(
-        user_uuid: string,
+        organisation_uuid: string,
         provider: ExternalIntegrationProvider,
     ): Promise<string | null> {
         const integration = await this.prisma.integration.findUnique({
-            where: { user_uuid_provider: { user_uuid, provider } },
+            where: { organisation_uuid_provider: { organisation_uuid, provider } },
             include: { keys: true },
         });
         if (!integration) {
@@ -456,13 +456,13 @@ export class IntegrationsService {
     }
 
     async getDecryptedSecret(
-        user_uuid: string,
+        organisation_uuid: string,
         provider: ExternalIntegrationProvider,
         key_type: IntegrationKeyType,
         account?: string,
     ): Promise<string> {
         const integration = await this.prisma.integration.findUnique({
-            where: { user_uuid_provider: { user_uuid, provider } },
+            where: { organisation_uuid_provider: { organisation_uuid, provider } },
             include: { keys: true },
         });
         if (!integration) {
@@ -490,28 +490,28 @@ export class IntegrationsService {
         });
         if (!key) {
             this.logger.error(
-                `Integration credential not found user=${user_uuid} env=${formatIntegrationKeyEnvName(provider, key_type, resolvedAccount)}`,
+                `Integration credential not found user=${organisation_uuid} env=${formatIntegrationKeyEnvName(provider, key_type, resolvedAccount)}`,
             );
             throw new NotFoundException(
                 `Credential ${formatIntegrationKeyEnvName(provider, key_type, resolvedAccount)} not found`,
             );
         }
         this.logger.log(
-            `Integration credential loaded user=${user_uuid} env=${formatIntegrationKeyEnvName(provider, key_type, resolvedAccount)} last4=${key.last4 ?? 'n/a'}`,
+            `Integration credential loaded user=${organisation_uuid} env=${formatIntegrationKeyEnvName(provider, key_type, resolvedAccount)} last4=${key.last4 ?? 'n/a'}`,
         );
         return decryptIntegrationSecret(key.secret, this.encryptionKey());
     }
 
     private async ensureIntegration(
-        user_uuid: string,
+        organisation_uuid: string,
         provider: ExternalIntegrationProvider,
     ): Promise<Integration> {
         return this.prisma.integration.upsert({
             where: {
-                user_uuid_provider: { user_uuid, provider },
+                organisation_uuid_provider: { organisation_uuid, provider },
             },
             create: {
-                user_uuid,
+                organisation_uuid,
                 provider,
                 title: INTEGRATION_PROVIDER_LABELS[provider],
             },
@@ -543,11 +543,11 @@ export class IntegrationsService {
     }
 
     private async requireOwnedKey(
-        user_uuid: string,
+        organisation_uuid: string,
         key_uuid: string,
     ): Promise<IntegrationKey & { integration: Integration }> {
         const key = await this.prisma.integrationKey.findFirst({
-            where: { uuid: key_uuid, integration: { user_uuid } },
+            where: { uuid: key_uuid, integration: { organisation_uuid } },
             include: { integration: true },
         });
         if (!key) {

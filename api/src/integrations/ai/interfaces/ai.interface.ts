@@ -11,7 +11,7 @@ export interface AiUsageContext {
 }
 
 export interface AIGenerateOptions {
-    user_uuid: string;
+    organisation_uuid: string;
     provider?: AiProvider;
     model?: AiModel;
     system?: string;

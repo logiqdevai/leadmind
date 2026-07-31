@@ -110,13 +110,13 @@ export class WebsiteContentCrawlerAdapter
 
     /** Run the actor and return the unmodified dataset items. */
     async run(
-        user_uuid: string,
+        organisation_uuid: string,
         query_config: WebsiteContentCrawlerQueryConfig,
         usage?: ApifyUsageOptions,
     ): Promise<WebsiteContentCrawlerRawItem[]> {
         const input = this.buildInput(query_config);
         return this.runActorWithUserToken(
-            user_uuid,
+            organisation_uuid,
             APIFY_ACTORS.WEBSITE_CONTENT_CRAWLER,
             input,
             usage ?? { operation: ApifyUsageOperation.ENRICHMENT_WEBSITE },
@@ -125,23 +125,23 @@ export class WebsiteContentCrawlerAdapter
 
     /** Run the actor and return typed `CrawledPage` records (one per dataset item). */
     async crawlPages(
-        user_uuid: string,
+        organisation_uuid: string,
         query_config: WebsiteContentCrawlerQueryConfig,
         usage?: ApifyUsageOptions,
     ): Promise<CrawledPage[]> {
-        const items = await this.run(user_uuid, query_config, usage);
+        const items = await this.run(organisation_uuid, query_config, usage);
         return items.map((item) => this.toCrawledPage(item)).filter((p): p is CrawledPage => p !== null);
     }
 
     /** Convenience: crawl a single URL with depth 0 / one page. */
     async crawlSinglePage(
-        user_uuid: string,
+        organisation_uuid: string,
         url: string,
         options: CrawlSinglePageOptions = {},
         usage?: ApifyUsageOptions,
     ): Promise<CrawledPage | null> {
         const pages = await this.crawlPages(
-            user_uuid,
+            organisation_uuid,
             {
                 save_html: false,
                 save_markdown: true,
@@ -159,11 +159,11 @@ export class WebsiteContentCrawlerAdapter
 
     /** Convenience: extract all unique emails found across crawled pages. */
     async extractEmails(
-        user_uuid: string,
+        organisation_uuid: string,
         query_config: WebsiteContentCrawlerQueryConfig,
         usage?: ApifyUsageOptions,
     ): Promise<string[]> {
-        const items = await this.run(user_uuid, query_config, usage);
+        const items = await this.run(organisation_uuid, query_config, usage);
         const set = new Set<string>();
         for (const item of items) {
             for (const email of this.matchAll(item, EMAIL_REGEX)) set.add(email.toLowerCase());
@@ -173,11 +173,11 @@ export class WebsiteContentCrawlerAdapter
 
     /** Convenience: extract all unique LinkedIn URLs found across crawled pages. */
     async extractLinkedInUrls(
-        user_uuid: string,
+        organisation_uuid: string,
         query_config: WebsiteContentCrawlerQueryConfig,
         usage?: ApifyUsageOptions,
     ): Promise<string[]> {
-        const items = await this.run(user_uuid, query_config, usage);
+        const items = await this.run(organisation_uuid, query_config, usage);
         const set = new Set<string>();
         for (const item of items) {
             for (const url of this.matchAll(item, LINKEDIN_REGEX)) set.add(url);
@@ -190,11 +190,11 @@ export class WebsiteContentCrawlerAdapter
      * LinkedIn URLs, and phone numbers found in its content.
      */
     async extractContacts(
-        user_uuid: string,
+        organisation_uuid: string,
         query_config: WebsiteContentCrawlerQueryConfig,
         usage?: ApifyUsageOptions,
     ): Promise<ExtractedContact[]> {
-        const items = await this.run(user_uuid, query_config, usage);
+        const items = await this.run(organisation_uuid, query_config, usage);
         return items
             .map((item) => this.toExtractedContact(item))
             .filter((c) => c.emails.length || c.linkedin_urls.length || c.phones.length);
@@ -205,22 +205,22 @@ export class WebsiteContentCrawlerAdapter
      * one email or LinkedIn URL — the same shape produced by `normalize()`.
      */
     async extractLeads(
-        user_uuid: string,
+        organisation_uuid: string,
         query_config: WebsiteContentCrawlerQueryConfig,
         usage?: ApifyUsageOptions,
     ): Promise<NormalizedLead[]> {
-        const items = await this.run(user_uuid, query_config, usage);
+        const items = await this.run(organisation_uuid, query_config, usage);
         return this.normalize(items);
     }
 
     private async runActorWithUserToken<T>(
-        user_uuid: string,
+        organisation_uuid: string,
         actor_id: string,
         input: ApifyRunInput,
         usage: ApifyUsageOptions,
     ): Promise<T[]> {
-        const token = await this.credentials.getApifyApiToken(user_uuid);
-        return this.apifyClient.runActor<T>(token, actor_id, input, { user_uuid, ...usage });
+        const token = await this.credentials.getApifyApiToken(organisation_uuid);
+        return this.apifyClient.runActor<T>(token, actor_id, input, { organisation_uuid, ...usage });
     }
 
     private toCrawledPage(item: WebsiteContentCrawlerRawItem): CrawledPage | null {

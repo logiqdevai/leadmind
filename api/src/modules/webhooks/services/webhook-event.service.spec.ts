@@ -13,7 +13,7 @@ describe('WebhookEventService', () => {
     const provider_message_id = 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee';
     const baseMessage = {
         uuid: 'msg-uuid',
-        user_uuid: 'user-uuid',
+        organisation_uuid: 'user-uuid',
         contact_uuid: 'contact-uuid',
         campaign_uuid: 'campaign-uuid',
         channel: Channel.EMAIL,
@@ -76,7 +76,7 @@ describe('WebhookEventService', () => {
                 prisma.interaction.create({
                     data: {
                         contact_uuid: 'contact-uuid',
-                        user_uuid: 'user-uuid',
+                        organisation_uuid: 'user-uuid',
                         type: InteractionType.STATUS_CHANGE,
                     },
                 }),

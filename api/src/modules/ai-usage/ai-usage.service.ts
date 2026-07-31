@@ -22,7 +22,7 @@ export class AiUsageService {
             try {
                 await this.prisma.aiUsageLog.create({
                     data: {
-                        user_uuid: input.user_uuid,
+                        organisation_uuid: input.organisation_uuid,
                         provider: input.provider,
                         model: input.model,
                         operation: input.operation,
@@ -51,7 +51,7 @@ export class AiUsageService {
     }
 
     logFromSyncCall(params: {
-        user_uuid: string;
+        organisation_uuid: string;
         provider?: AiProvider;
         model?: string;
         usage?: AICostResponse;
@@ -62,7 +62,7 @@ export class AiUsageService {
     }): void {
         const operation = this.resolveOperation(params.usageContext?.operation);
         this.log({
-            user_uuid: params.user_uuid,
+            organisation_uuid: params.organisation_uuid,
             provider: params.provider ?? 'openai',
             model: params.model ?? 'unknown',
             operation,
@@ -85,7 +85,7 @@ export class AiUsageService {
     }
 
     logBatchResult(params: {
-        user_uuid: string;
+        organisation_uuid: string;
         model: string;
         operation: AiUsageOperation;
         input_tokens?: number | null;
@@ -101,7 +101,7 @@ export class AiUsageService {
         metadata?: Prisma.InputJsonValue;
     }): void {
         this.log({
-            user_uuid: params.user_uuid,
+            organisation_uuid: params.organisation_uuid,
             provider: 'openai',
             model: params.model,
             operation: params.operation,
@@ -120,13 +120,13 @@ export class AiUsageService {
         });
     }
 
-    async findAll(user_uuid: string, dto: ListAiUsageDto) {
+    async findAll(organisation_uuid: string, dto: ListAiUsageDto) {
         const page = dto.page ?? 1;
         const limit = dto.limit ?? 20;
         const skip = (page - 1) * limit;
 
         const where: Prisma.AiUsageLogWhereInput = {
-            user_uuid,
+            organisation_uuid,
             ...(dto.provider ? { provider: dto.provider } : {}),
             ...(dto.operation ? { operation: dto.operation } : {}),
             ...(dto.status ? { status: dto.status } : {}),
@@ -170,9 +170,9 @@ export class AiUsageService {
         };
     }
 
-    async getSummary(user_uuid: string, dto: AiUsageSummaryDto): Promise<AiUsageSummaryResponse> {
+    async getSummary(organisation_uuid: string, dto: AiUsageSummaryDto): Promise<AiUsageSummaryResponse> {
         const where: Prisma.AiUsageLogWhereInput = {
-            user_uuid,
+            organisation_uuid,
             ...(dto.from || dto.to
                 ? {
                       created_at: {

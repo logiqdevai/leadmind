@@ -38,7 +38,7 @@ describe('LeadEnrichmentOrchestrator', () => {
                 findUnique: jest.fn().mockResolvedValue(lead),
             },
             contact: {
-                findFirst: jest.fn().mockResolvedValue({ user_uuid: 'user-1' }),
+                findFirst: jest.fn().mockResolvedValue({ organisation_uuid: 'user-1' }),
             },
             leadEnrichment: {
                 findFirst: jest.fn().mockResolvedValue(null),
@@ -127,7 +127,7 @@ describe('LeadEnrichmentOrchestrator', () => {
     it('persists contact enrichment rows to contact_enrichments', async () => {
         const contact = {
             uuid: 'contact-1',
-            user_uuid: 'user-1',
+            organisation_uuid: 'user-1',
             name: 'Grace Hopper',
             email: null,
             phone: null,

@@ -16,41 +16,54 @@ export class FormsController {
 
     @Post()
     @ApiOperation({ summary: 'Create a form' })
-    create(@CurrentUser('uuid') user_uuid: string, @Body() dto: CreateFormDto) {
-        return this.formsService.create(user_uuid, dto);
+    create(
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
+        @CurrentUser('uuid') user_uuid: string,
+        @Body() dto: CreateFormDto,
+    ) {
+        return this.formsService.create(organisation_uuid, user_uuid, dto);
     }
 
     @Get()
     @ApiOperation({ summary: 'List forms' })
-    findAll(@CurrentUser('uuid') user_uuid: string, @Query() query: ListFormsDto) {
-        return this.formsService.findAll(user_uuid, query);
+    findAll(@CurrentUser('organisation_uuid') organisation_uuid: string, @Query() query: ListFormsDto) {
+        return this.formsService.findAll(organisation_uuid, query);
     }
 
     @Get(':uuid')
     @ApiOperation({ summary: 'Get a form with its fields' })
-    findOne(@CurrentUser('uuid') user_uuid: string, @Param('uuid') uuid: string) {
-        return this.formsService.findOne(user_uuid, uuid);
+    findOne(@CurrentUser('organisation_uuid') organisation_uuid: string, @Param('uuid') uuid: string) {
+        return this.formsService.findOne(organisation_uuid, uuid);
     }
 
     @Put(':uuid')
     @ApiOperation({ summary: 'Update a form' })
     update(
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
         @CurrentUser('uuid') user_uuid: string,
         @Param('uuid') uuid: string,
         @Body() dto: UpdateFormDto,
     ) {
-        return this.formsService.update(user_uuid, uuid, dto);
+        return this.formsService.update(organisation_uuid, user_uuid, uuid, dto);
     }
 
     @Delete(':uuid')
     @ApiOperation({ summary: 'Delete a form' })
-    remove(@CurrentUser('uuid') user_uuid: string, @Param('uuid') uuid: string) {
-        return this.formsService.remove(user_uuid, uuid);
+    remove(
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
+        @CurrentUser('uuid') user_uuid: string,
+        @Param('uuid') uuid: string,
+    ) {
+        return this.formsService.remove(organisation_uuid, user_uuid, uuid);
     }
 
     @Post(':uuid/duplicate')
     @ApiOperation({ summary: 'Duplicate a form with all its fields' })
-    duplicate(@CurrentUser('uuid') user_uuid: string, @Param('uuid') uuid: string) {
-        return this.formsService.duplicate(user_uuid, uuid);
+    duplicate(
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
+        @CurrentUser('uuid') user_uuid: string,
+        @Param('uuid') uuid: string,
+    ) {
+        return this.formsService.duplicate(organisation_uuid, user_uuid, uuid);
     }
 }

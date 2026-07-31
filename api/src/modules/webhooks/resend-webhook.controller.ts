@@ -71,17 +71,17 @@ export class ResendWebhookController {
         );
 
         const raw = req.rawBody ? req.rawBody.toString('utf8') : JSON.stringify(body);
-        const userUuid = await this.resolveUserUuid(body);
+        const userUuid = await this.resolveOrganisationUuid(body);
         if (!userUuid) {
             this.logger.warn(
-                `Resend webhook: could not resolve user for type=${body.type} email_id=${body.data?.email_id ?? 'none'}`,
+                `Resend webhook: could not resolve organisation for type=${body.type} email_id=${body.data?.email_id ?? 'none'}`,
             );
             return { ok: true };
         }
 
         const webhookSecrets = await this.emailCredentials.listResendWebhookSecrets(userUuid);
         if (webhookSecrets.length === 0) {
-            this.logger.warn(`Resend webhook: no webhook secret for user ${userUuid}`);
+            this.logger.warn(`Resend webhook: no webhook secret for organisation ${userUuid}`);
             return { ok: true };
         }
 
@@ -94,7 +94,7 @@ export class ResendWebhookController {
         );
         if (!verified) {
             this.logger.error(
-                `Resend webhook signature verification failed for user ${userUuid}`,
+                `Resend webhook signature verification failed for organisation ${userUuid}`,
             );
             throw new UnauthorizedException('Invalid svix signature');
         }
@@ -127,7 +127,7 @@ export class ResendWebhookController {
         return { ok: true };
     }
 
-    private async resolveUserUuid(body: ResendWebhookBody): Promise<string | null> {
+    private async resolveOrganisationUuid(body: ResendWebhookBody): Promise<string | null> {
         if (body.type === 'email.received') {
             const from = parseFromAddress(body.data?.from);
             if (!from) {
@@ -135,9 +135,9 @@ export class ResendWebhookController {
             }
             const contact = await this.prisma.contact.findFirst({
                 where: { email: { equals: from, mode: 'insensitive' } },
-                select: { user_uuid: true },
+                select: { organisation_uuid: true },
             });
-            return contact?.user_uuid ?? null;
+            return contact?.organisation_uuid ?? null;
         }
 
         const providerMessageId = body.data?.email_id;
@@ -147,9 +147,9 @@ export class ResendWebhookController {
 
         const message = await this.prisma.outreachMessage.findFirst({
             where: { provider_message_id: providerMessageId },
-            select: { user_uuid: true },
+            select: { organisation_uuid: true },
         });
-        return message?.user_uuid ?? null;
+        return message?.organisation_uuid ?? null;
     }
 
     private async handleReceived(body: ResendWebhookBody): Promise<void> {

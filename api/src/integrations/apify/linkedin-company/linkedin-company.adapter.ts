@@ -54,13 +54,13 @@ export class LinkedInCompanyAdapter
 
     /** Run the actor and return the unmodified dataset items. */
     async run(
-        user_uuid: string,
+        organisation_uuid: string,
         query_config: LinkedInCompanyQueryConfig,
         usage?: ApifyUsageOptions,
     ): Promise<LinkedInCompanyRawItem[]> {
         const input = this.buildInput(query_config);
         return this.runActorWithUserToken(
-            user_uuid,
+            organisation_uuid,
             APIFY_ACTORS.LINKEDIN_COMPANY,
             input,
             usage ?? { operation: ApifyUsageOperation.ENRICHMENT_LINKEDIN },
@@ -69,22 +69,22 @@ export class LinkedInCompanyAdapter
 
     /** Run the actor and return typed `NormalizedCompany` records. */
     async fetchCompanies(
-        user_uuid: string,
+        organisation_uuid: string,
         query_config: LinkedInCompanyQueryConfig,
         usage?: ApifyUsageOptions,
     ): Promise<NormalizedCompany[]> {
-        const items = await this.run(user_uuid, query_config, usage);
+        const items = await this.run(organisation_uuid, query_config, usage);
         return items.map((item) => this.toNormalizedCompany(item));
     }
 
     /** Convenience: fetch a single company by URL or username. */
     async fetchCompany(
-        user_uuid: string,
+        organisation_uuid: string,
         url_or_username: string,
         usage?: ApifyUsageOptions,
     ): Promise<NormalizedCompany | null> {
         const companies = await this.fetchCompanies(
-            user_uuid,
+            organisation_uuid,
             { company_urls: [url_or_username] },
             usage,
         );
@@ -92,13 +92,13 @@ export class LinkedInCompanyAdapter
     }
 
     private async runActorWithUserToken<T>(
-        user_uuid: string,
+        organisation_uuid: string,
         actor_id: string,
         input: ApifyRunInput,
         usage: ApifyUsageOptions,
     ): Promise<T[]> {
-        const token = await this.credentials.getApifyApiToken(user_uuid);
-        return this.apifyClient.runActor<T>(token, actor_id, input, { user_uuid, ...usage });
+        const token = await this.credentials.getApifyApiToken(organisation_uuid);
+        return this.apifyClient.runActor<T>(token, actor_id, input, { organisation_uuid, ...usage });
     }
 
     private toNormalizedCompany(item: LinkedInCompanyRawItem): NormalizedCompany {

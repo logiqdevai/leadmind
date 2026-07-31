@@ -261,7 +261,7 @@ export class ApifyClient {
         }
 
         this.apifyUsageService.log({
-            user_uuid: params.usage.user_uuid,
+            organisation_uuid: params.usage.organisation_uuid,
             actor_id: params.actor_id,
             operation: params.usage.operation,
             status: params.status,

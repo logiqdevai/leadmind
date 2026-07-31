@@ -80,8 +80,8 @@ export class ElasticsearchService implements OnModuleInit {
         if (!this.enabled) return;
         try {
             const metadata = this.buildLeadMetadata(lead);
-            const user_uuid = await this.resolveUserUuidForLead(lead.uuid);
-            const embedding = user_uuid ? await this.embed(user_uuid, metadata) : [];
+            const organisation_uuid = await this.resolveOrganisationUuidForLead(lead.uuid);
+            const embedding = organisation_uuid ? await this.embed(organisation_uuid, metadata) : [];
             await this.client.index({
                 index: LEADS_INDEX,
                 id: lead.uuid,
@@ -111,7 +111,7 @@ export class ElasticsearchService implements OnModuleInit {
         try {
             const tags = contact.tags.map((t) => t.tag);
             const metadata = this.buildContactMetadata(contact, tags);
-            const embedding = await this.embed(contact.user_uuid, metadata);
+            const embedding = await this.embed(contact.organisation_uuid, metadata);
             const scores =
                 contact.contact_scores?.map((cs) => ({
                     scoring_instruction_uuid: cs.scoring_instruction_uuid,
@@ -122,7 +122,7 @@ export class ElasticsearchService implements OnModuleInit {
                 id: contact.uuid,
                 document: {
                     uuid: contact.uuid,
-                    user_uuid: contact.user_uuid,
+                    organisation_uuid: contact.organisation_uuid,
                     lead_uuid: contact.lead_uuid,
                     status: contact.status,
                     scores,
@@ -176,12 +176,12 @@ export class ElasticsearchService implements OnModuleInit {
     }
 
     async searchContacts(
-        userUuid: string,
+        organisationUuid: string,
         query: SearchQuery,
     ): Promise<SearchResult> {
         if (!this.enabled) return { hits: [], total: 0 };
 
-        const filter: any[] = [{ term: { user_uuid: userUuid } }];
+        const filter: any[] = [{ term: { organisation_uuid: organisationUuid } }];
         if (query.status) filter.push({ term: { status: query.status } });
         if (query.score_rules && query.score_rules.length > 0) {
             for (const rule of query.score_rules) {
@@ -207,14 +207,14 @@ export class ElasticsearchService implements OnModuleInit {
         }
         if (query.tags && query.tags.length > 0) filter.push({ terms: { tags: query.tags } });
 
-        return this.runSearch(CONTACTS_INDEX, query, filter, userUuid);
+        return this.runSearch(CONTACTS_INDEX, query, filter, organisationUuid);
     }
 
     private async runSearch(
         index: string,
         query: SearchQuery,
         filter: any[],
-        userUuid?: string,
+        organisationUuid?: string,
     ): Promise<SearchResult> {
         if (!this.enabled) return { hits: [], total: 0 };
 
@@ -222,8 +222,8 @@ export class ElasticsearchService implements OnModuleInit {
         const page = query.page ?? 1;
         const from = (page - 1) * limit;
 
-        if (query.q && userUuid && ELASTICSEARCH_CONFIG.create_embedding) {
-            const vector = await this.embed(userUuid, query.q);
+        if (query.q && organisationUuid && ELASTICSEARCH_CONFIG.create_embedding) {
+            const vector = await this.embed(organisationUuid, query.q);
             const response = await this.client.search({
                 index,
                 from,
@@ -312,22 +312,22 @@ export class ElasticsearchService implements OnModuleInit {
         return parts.filter(Boolean).join('\n');
     }
 
-    private async embed(user_uuid: string, text: string): Promise<number[]> {
+    private async embed(organisation_uuid: string, text: string): Promise<number[]> {
         if (!ELASTICSEARCH_CONFIG.create_embedding) {
             return [];
         }
 
-        return this.aiService.embedText(user_uuid, text.trim() || ' ', {
+        return this.aiService.embedText(organisation_uuid, text.trim() || ' ', {
             operation: 'EMBEDDING',
         });
     }
 
-    private async resolveUserUuidForLead(leadUuid: string): Promise<string | null> {
+    private async resolveOrganisationUuidForLead(leadUuid: string): Promise<string | null> {
         const contact = await this.prisma.contact.findFirst({
             where: { lead_uuid: leadUuid },
-            select: { user_uuid: true },
+            select: { organisation_uuid: true },
         });
-        return contact?.user_uuid ?? null;
+        return contact?.organisation_uuid ?? null;
     }
 
     private formatResponse(response: any): SearchResult {

@@ -42,13 +42,13 @@ export class LinkedInProfileAdapter
 
     /** Run the actor and return the unmodified dataset items. */
     async run(
-        user_uuid: string,
+        organisation_uuid: string,
         query_config: LinkedInProfileQueryConfig,
         usage?: ApifyUsageOptions,
     ): Promise<LinkedInProfileRawItem[]> {
         const input = this.buildInput(query_config);
         return this.runActorWithUserToken(
-            user_uuid,
+            organisation_uuid,
             APIFY_ACTORS.LINKEDIN_PROFILE,
             input,
             usage ?? { operation: ApifyUsageOperation.ENRICHMENT_LINKEDIN },
@@ -57,11 +57,11 @@ export class LinkedInProfileAdapter
 
     /** Run the actor and return typed `NormalizedProfile` records. */
     async fetchProfiles(
-        user_uuid: string,
+        organisation_uuid: string,
         query_config: LinkedInProfileQueryConfig,
         usage?: ApifyUsageOptions,
     ): Promise<NormalizedProfile[]> {
-        const items = await this.run(user_uuid, query_config, usage);
+        const items = await this.run(organisation_uuid, query_config, usage);
         const resolved_urls = query_config.profile_urls
             .map((entry) => this.toProfileUrl(entry))
             .filter((url): url is string => Boolean(url));
@@ -72,12 +72,12 @@ export class LinkedInProfileAdapter
 
     /** Convenience: fetch a single profile by URL or username. */
     async fetchProfile(
-        user_uuid: string,
+        organisation_uuid: string,
         url_or_username: string,
         usage?: ApifyUsageOptions,
     ): Promise<NormalizedProfile | null> {
         const profiles = await this.fetchProfiles(
-            user_uuid,
+            organisation_uuid,
             { profile_urls: [url_or_username] },
             usage,
         );
@@ -85,13 +85,13 @@ export class LinkedInProfileAdapter
     }
 
     private async runActorWithUserToken<T>(
-        user_uuid: string,
+        organisation_uuid: string,
         actor_id: string,
         input: ApifyRunInput,
         usage: ApifyUsageOptions,
     ): Promise<T[]> {
-        const token = await this.credentials.getApifyApiToken(user_uuid);
-        return this.apifyClient.runActor<T>(token, actor_id, input, { user_uuid, ...usage });
+        const token = await this.credentials.getApifyApiToken(organisation_uuid);
+        return this.apifyClient.runActor<T>(token, actor_id, input, { organisation_uuid, ...usage });
     }
 
     private toNormalizedProfile(

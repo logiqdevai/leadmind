@@ -8,11 +8,11 @@ export class TemplateAiService {
     constructor(private readonly aiService: AiService) {}
 
     generate(
-        user_uuid: string,
+        organisation_uuid: string,
         dto: GenerateTemplateMessageDto,
         ctx: { template_name?: string },
     ): Promise<{ subject: string | null; content: string }> {
-        return generateWithCampaignPrompt(this.aiService, user_uuid, dto.channel, dto.action, {
+        return generateWithCampaignPrompt(this.aiService, organisation_uuid, dto.channel, dto.action, {
             campaign_name: ctx.template_name,
             user_prompt: dto.prompt,
             current_subject: dto.current_subject,

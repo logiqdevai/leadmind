@@ -12,17 +12,22 @@ export class FormCompletionsService {
         private readonly gateway: NotificationsGateway,
     ) {}
 
-    private async assertFormOwnership(user_uuid: string, form_uuid: string) {
-        const form = await this.prisma.form.findFirst({ where: { uuid: form_uuid, user_uuid } });
+    private async assertFormOwnership(organisation_uuid: string, form_uuid: string) {
+        const form = await this.prisma.form.findFirst({ where: { uuid: form_uuid, organisation_uuid } });
         if (!form) throw new NotFoundException('Form not found');
         return form;
     }
 
-    async create(user_uuid: string, form_uuid: string, dto: CreateFormCompletionDto) {
-        await this.assertFormOwnership(user_uuid, form_uuid);
+    async create(
+        organisation_uuid: string,
+        user_uuid: string,
+        form_uuid: string,
+        dto: CreateFormCompletionDto,
+    ) {
+        await this.assertFormOwnership(organisation_uuid, form_uuid);
 
         const contact = await this.prisma.contact.findFirst({
-            where: { uuid: dto.contact_uuid, user_uuid },
+            where: { uuid: dto.contact_uuid, organisation_uuid },
         });
         if (!contact) throw new NotFoundException('Contact not found');
 
@@ -54,8 +59,8 @@ export class FormCompletionsService {
         return completion;
     }
 
-    async findAll(user_uuid: string, form_uuid: string, query: ListFormCompletionsDto) {
-        await this.assertFormOwnership(user_uuid, form_uuid);
+    async findAll(organisation_uuid: string, form_uuid: string, query: ListFormCompletionsDto) {
+        await this.assertFormOwnership(organisation_uuid, form_uuid);
 
         const page = query.page ?? 1;
         const limit = query.limit ?? 20;
@@ -91,8 +96,8 @@ export class FormCompletionsService {
         };
     }
 
-    async findOne(user_uuid: string, form_uuid: string, completion_uuid: string) {
-        await this.assertFormOwnership(user_uuid, form_uuid);
+    async findOne(organisation_uuid: string, form_uuid: string, completion_uuid: string) {
+        await this.assertFormOwnership(organisation_uuid, form_uuid);
 
         const completion = await this.prisma.formCompletion.findFirst({
             where: { uuid: completion_uuid, form_uuid },
@@ -111,12 +116,13 @@ export class FormCompletionsService {
     }
 
     async update(
+        organisation_uuid: string,
         user_uuid: string,
         form_uuid: string,
         completion_uuid: string,
         dto: UpdateFormCompletionDto,
     ) {
-        await this.assertFormOwnership(user_uuid, form_uuid);
+        await this.assertFormOwnership(organisation_uuid, form_uuid);
 
         const completion = await this.prisma.formCompletion.findFirst({
             where: { uuid: completion_uuid, form_uuid },
@@ -151,8 +157,13 @@ export class FormCompletionsService {
         return updated;
     }
 
-    async remove(user_uuid: string, form_uuid: string, completion_uuid: string) {
-        await this.assertFormOwnership(user_uuid, form_uuid);
+    async remove(
+        organisation_uuid: string,
+        user_uuid: string,
+        form_uuid: string,
+        completion_uuid: string,
+    ) {
+        await this.assertFormOwnership(organisation_uuid, form_uuid);
 
         const completion = await this.prisma.formCompletion.findFirst({
             where: { uuid: completion_uuid, form_uuid },
@@ -167,16 +178,16 @@ export class FormCompletionsService {
         return { uuid: completion_uuid };
     }
 
-    async findByContact(user_uuid: string, contact_uuid: string) {
+    async findByContact(organisation_uuid: string, contact_uuid: string) {
         const contact = await this.prisma.contact.findFirst({
-            where: { uuid: contact_uuid, user_uuid },
+            where: { uuid: contact_uuid, organisation_uuid },
         });
         if (!contact) throw new NotFoundException('Contact not found');
 
         return this.prisma.formCompletion.findMany({
             where: {
                 contact_uuid,
-                form: { user_uuid },
+                form: { organisation_uuid },
             },
             include: {
                 form: { select: { uuid: true, name: true } },

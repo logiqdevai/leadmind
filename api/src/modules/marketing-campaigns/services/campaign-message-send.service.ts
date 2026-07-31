@@ -113,7 +113,7 @@ export class CampaignMessageSendService {
             try {
                 message = await this.prisma.outreachMessage.create({
                     data: {
-                        user_uuid: mcc.campaign.user_uuid,
+                        organisation_uuid: mcc.campaign.organisation_uuid,
                         contact_uuid: mcc.contact_uuid,
                         campaign_uuid: mcc.campaign_uuid,
                         channel: mcc.channel,
@@ -205,7 +205,7 @@ export class CampaignMessageSendService {
                 }),
                 this.messageSendService.interactionCreateOperation({
                     contact_uuid: mcc.contact_uuid,
-                    user_uuid: mcc.campaign.user_uuid,
+                    organisation_uuid: mcc.campaign.organisation_uuid,
                     campaign_uuid: mcc.campaign_uuid,
                     outreach_message_uuid: message.uuid,
                     type:
@@ -224,7 +224,7 @@ export class CampaignMessageSendService {
                 ...(shouldPromoteOnSend
                     ? this.contactsService.buildPromoteToContactedIfNewOps(
                           mcc.contact_uuid,
-                          mcc.campaign.user_uuid,
+                          mcc.campaign.organisation_uuid,
                           'email_sent',
                           mcc.contact.status,
                       )
@@ -257,7 +257,7 @@ export class CampaignMessageSendService {
                 }),
                 this.messageSendService.interactionCreateOperation({
                     contact_uuid: mcc.contact_uuid,
-                    user_uuid: mcc.campaign.user_uuid,
+                    organisation_uuid: mcc.campaign.organisation_uuid,
                     campaign_uuid: mcc.campaign_uuid,
                     outreach_message_uuid: message.uuid,
                     type:
@@ -281,14 +281,14 @@ export class CampaignMessageSendService {
     }
 
     async queueDraftMessageSend(
-        user_uuid: string,
+        organisation_uuid: string,
         campaign_uuid: string,
         message_uuid: string,
         providerOverride?: EmailProviderTarget,
         senderProfileUuid?: string,
     ): Promise<{ jobId: string }> {
         let message = await this.prisma.outreachMessage.findFirst({
-            where: { uuid: message_uuid, campaign_uuid, user_uuid },
+            where: { uuid: message_uuid, campaign_uuid, organisation_uuid },
             include: {
                 contact: { select: { email: true, phone: true, unsubscribed_at: true } },
             },
@@ -302,7 +302,7 @@ export class CampaignMessageSendService {
         }
 
         const campaign = await this.prisma.marketingCampaign.findFirst({
-            where: { uuid: campaign_uuid, user_uuid },
+            where: { uuid: campaign_uuid, organisation_uuid },
         });
         if (!campaign) {
             throw new NotFoundException('Message not found on this campaign');
@@ -341,7 +341,7 @@ export class CampaignMessageSendService {
 
         if (providerOverride && message.channel === Channel.EMAIL) {
             await this.emailCredentialsService.assertSendableAccount(
-                user_uuid,
+                organisation_uuid,
                 providerOverride.provider,
                 providerOverride.account,
             );
@@ -360,7 +360,7 @@ export class CampaignMessageSendService {
         }
 
         if (senderProfileUuid) {
-            await this.senderProfilesService.findOne(user_uuid, senderProfileUuid);
+            await this.senderProfilesService.findOne(organisation_uuid, senderProfileUuid);
             message = await this.prisma.outreachMessage.update({
                 where: { uuid: message_uuid },
                 data: {
@@ -477,12 +477,12 @@ export class CampaignMessageSendService {
     }
 
     async removeCampaignOutreachMessage(
-        user_uuid: string,
+        organisation_uuid: string,
         campaign_uuid: string,
         message_uuid: string,
     ): Promise<{ deleted: true }> {
         const message = await this.prisma.outreachMessage.findFirst({
-            where: { uuid: message_uuid, campaign_uuid, user_uuid },
+            where: { uuid: message_uuid, campaign_uuid, organisation_uuid },
         });
         if (!message) {
             throw new NotFoundException('Message not found on this campaign');
@@ -517,14 +517,14 @@ export class CampaignMessageSendService {
 
         await this.prisma.$transaction(async (tx) => {
             const m = await tx.outreachMessage.findFirst({
-                where: { uuid: message_uuid, campaign_uuid, user_uuid },
+                where: { uuid: message_uuid, campaign_uuid, organisation_uuid },
             });
             if (!m) {
                 throw new NotFoundException('Message not found on this campaign');
             }
 
             const c = await tx.marketingCampaign.findFirst({
-                where: { uuid: campaign_uuid, user_uuid },
+                where: { uuid: campaign_uuid, organisation_uuid },
             });
             if (!c) {
                 throw new NotFoundException('Message not found on this campaign');

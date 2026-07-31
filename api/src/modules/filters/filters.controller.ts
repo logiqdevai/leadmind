@@ -34,96 +34,96 @@ export class FiltersController {
 
     @Post()
     @ApiOperation({ summary: 'Create a filter' })
-    create(@CurrentUser('uuid') user_uuid: string, @Body() dto: CreateFilterDto) {
-        return this.filtersService.create(user_uuid, dto);
+    create(@CurrentUser('organisation_uuid') organisation_uuid: string, @Body() dto: CreateFilterDto) {
+        return this.filtersService.create(organisation_uuid, dto);
     }
 
     @Get()
     @ApiOperation({ summary: 'List filters for the current user' })
-    findAll(@CurrentUser('uuid') user_uuid: string) {
-        return this.filtersService.findAll(user_uuid);
+    findAll(@CurrentUser('organisation_uuid') organisation_uuid: string) {
+        return this.filtersService.findAll(organisation_uuid);
     }
 
     @Get(':uuid')
     @ApiOperation({ summary: 'Get a filter by uuid' })
-    findOne(@CurrentUser('uuid') user_uuid: string, @Param('uuid') uuid: string) {
-        return this.filtersService.findOne(user_uuid, uuid);
+    findOne(@CurrentUser('organisation_uuid') organisation_uuid: string, @Param('uuid') uuid: string) {
+        return this.filtersService.findOne(organisation_uuid, uuid);
     }
 
     @Put(':uuid')
     @ApiOperation({ summary: 'Update a filter' })
     update(
-        @CurrentUser('uuid') user_uuid: string,
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') uuid: string,
         @Body() dto: UpdateFilterDto,
     ) {
-        return this.filtersService.update(user_uuid, uuid, dto);
+        return this.filtersService.update(organisation_uuid, uuid, dto);
     }
 
     @Delete(':uuid')
     @ApiOperation({ summary: 'Delete a filter' })
-    remove(@CurrentUser('uuid') user_uuid: string, @Param('uuid') uuid: string) {
-        return this.filtersService.remove(user_uuid, uuid);
+    remove(@CurrentUser('organisation_uuid') organisation_uuid: string, @Param('uuid') uuid: string) {
+        return this.filtersService.remove(organisation_uuid, uuid);
     }
 
     @Post(':uuid/run')
     @ApiOperation({ summary: 'Manually enqueue a scrape job for a filter' })
-    manualRun(@CurrentUser('uuid') user_uuid: string, @Param('uuid') uuid: string) {
-        return this.filtersService.manualRun(user_uuid, uuid);
+    manualRun(@CurrentUser('organisation_uuid') organisation_uuid: string, @Param('uuid') uuid: string) {
+        return this.filtersService.manualRun(organisation_uuid, uuid);
     }
 
     @Post(':uuid/stop')
     @ApiOperation({ summary: 'Stop a running or queued scrape job for a filter' })
-    stop(@CurrentUser('uuid') user_uuid: string, @Param('uuid') uuid: string) {
-        return this.filtersService.stop(user_uuid, uuid);
+    stop(@CurrentUser('organisation_uuid') organisation_uuid: string, @Param('uuid') uuid: string) {
+        return this.filtersService.stop(organisation_uuid, uuid);
     }
 
     @Get(':uuid/jobs')
     @ApiOperation({ summary: 'List FilterJob records for a filter (paginated)' })
     findJobs(
-        @CurrentUser('uuid') user_uuid: string,
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') uuid: string,
         @Query() query: ListJobsDto,
     ) {
-        return this.filtersService.findJobs(user_uuid, uuid, query);
+        return this.filtersService.findJobs(organisation_uuid, uuid, query);
     }
 
     @Get(':uuid/stats')
     @ApiOperation({ summary: 'CRM and activity analytics for contacts in a filter' })
     getStats(
-        @CurrentUser('uuid') user_uuid: string,
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') uuid: string,
         @Query() query: ContactAudienceStatsQueryDto,
     ) {
-        return this.contactAudienceStatsService.getFilterStats(user_uuid, uuid, query);
+        return this.contactAudienceStatsService.getFilterStats(organisation_uuid, uuid, query);
     }
 
     @Get(':uuid/analyses')
     @ApiOperation({ summary: 'List AI audience analyses for a filter' })
     listAnalyses(
-        @CurrentUser('uuid') user_uuid: string,
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') uuid: string,
         @Query() query: ListContactAudienceAnalysesDto,
     ) {
-        return this.contactAudienceAnalysisService.listFilterAnalyses(user_uuid, uuid, query);
+        return this.contactAudienceAnalysisService.listFilterAnalyses(organisation_uuid, uuid, query);
     }
 
     @Post(':uuid/analyses')
     @ApiOperation({ summary: 'Run a new AI audience analysis for a filter (full history stats)' })
     createAnalysis(
-        @CurrentUser('uuid') user_uuid: string,
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') uuid: string,
     ) {
-        return this.contactAudienceAnalysisService.createFilterAnalysis(user_uuid, uuid);
+        return this.contactAudienceAnalysisService.createFilterAnalysis(organisation_uuid, uuid);
     }
 
     @Delete(':uuid/analyses/:analysisUuid')
     @ApiOperation({ summary: 'Delete an AI audience analysis for a filter' })
     deleteAnalysis(
-        @CurrentUser('uuid') user_uuid: string,
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') uuid: string,
         @Param('analysisUuid') analysisUuid: string,
     ) {
-        return this.contactAudienceAnalysisService.deleteFilterAnalysis(user_uuid, uuid, analysisUuid);
+        return this.contactAudienceAnalysisService.deleteFilterAnalysis(organisation_uuid, uuid, analysisUuid);
     }
 }

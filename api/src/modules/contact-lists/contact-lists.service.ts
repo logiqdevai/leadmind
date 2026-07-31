@@ -40,15 +40,15 @@ export class ContactListsService {
         };
     }
 
-    async create(user_uuid: string, dto: CreateContactListDto) {
+    async create(organisation_uuid: string, dto: CreateContactListDto) {
         const parent_list_uuid = dto.parent_list_uuid ?? null;
         if (parent_list_uuid) {
-            await this.assertValidParent(user_uuid, parent_list_uuid);
+            await this.assertValidParent(organisation_uuid, parent_list_uuid);
         }
 
         const list = await this.prisma.contactList.create({
             data: {
-                user_uuid,
+                organisation_uuid,
                 title: dto.title.trim(),
                 description: dto.description?.trim() || null,
                 parent_list_uuid,
@@ -59,12 +59,12 @@ export class ContactListsService {
         return this.mapListWithCounts(list);
     }
 
-    async findAll(user_uuid: string, query: ListContactListsDto) {
+    async findAll(organisation_uuid: string, query: ListContactListsDto) {
         const page = query.page ?? 1;
         const limit = query.limit ?? 20;
         const skip = (page - 1) * limit;
 
-        const where: Prisma.ContactListWhereInput = { user_uuid };
+        const where: Prisma.ContactListWhereInput = { organisation_uuid };
 
         if (query.parent_list_uuid) {
             where.parent_list_uuid = query.parent_list_uuid;
@@ -100,9 +100,9 @@ export class ContactListsService {
         };
     }
 
-    async findOne(user_uuid: string, uuid: string) {
+    async findOne(organisation_uuid: string, uuid: string) {
         const list = await this.prisma.contactList.findFirst({
-            where: { uuid, user_uuid },
+            where: { uuid, organisation_uuid },
             include: this.listCountInclude,
         });
 
@@ -111,11 +111,11 @@ export class ContactListsService {
         return this.mapListWithCounts(list);
     }
 
-    async update(user_uuid: string, uuid: string, dto: UpdateContactListDto) {
-        await this.ensureListOwned(user_uuid, uuid);
+    async update(organisation_uuid: string, uuid: string, dto: UpdateContactListDto) {
+        await this.ensureListOwned(organisation_uuid, uuid);
 
         if (dto.parent_list_uuid) {
-            await this.assertValidParent(user_uuid, dto.parent_list_uuid, uuid);
+            await this.assertValidParent(organisation_uuid, dto.parent_list_uuid, uuid);
         }
 
         const parentData =
@@ -138,20 +138,20 @@ export class ContactListsService {
         return this.mapListWithCounts(list);
     }
 
-    async remove(user_uuid: string, uuid: string) {
-        await this.ensureListOwned(user_uuid, uuid);
+    async remove(organisation_uuid: string, uuid: string) {
+        await this.ensureListOwned(organisation_uuid, uuid);
         await this.prisma.contactList.delete({ where: { uuid } });
         return { uuid };
     }
 
-    async findMembers(user_uuid: string, listUuid: string, query: ListContactListMembersDto) {
-        await this.ensureListOwned(user_uuid, listUuid);
+    async findMembers(organisation_uuid: string, listUuid: string, query: ListContactListMembersDto) {
+        await this.ensureListOwned(organisation_uuid, listUuid);
 
         const page = query.page ?? 1;
         const limit = query.limit ?? 20;
         const skip = (page - 1) * limit;
 
-        const contactWhere = this.contactsService.buildWhereInput(user_uuid, query);
+        const contactWhere = this.contactsService.buildWhereInput(organisation_uuid, query);
 
         const where: Prisma.ContactListMemberWhereInput = {
             list_uuid: listUuid,
@@ -210,12 +210,12 @@ export class ContactListsService {
         };
     }
 
-    async addContacts(user_uuid: string, listUuid: string, dto: AddListContactsDto) {
-        await this.ensureListOwned(user_uuid, listUuid);
+    async addContacts(organisation_uuid: string, listUuid: string, dto: AddListContactsDto) {
+        await this.ensureListOwned(organisation_uuid, listUuid);
 
         const ownedContacts = await this.prisma.contact.findMany({
             where: {
-                user_uuid,
+                organisation_uuid,
                 uuid: { in: dto.contact_uuids },
             },
             select: { uuid: true },
@@ -241,8 +241,8 @@ export class ContactListsService {
         return { added: result.count };
     }
 
-    async bulkAddContacts(user_uuid: string, listUuid: string, dto: BulkAddListContactsDto) {
-        await this.ensureListOwned(user_uuid, listUuid);
+    async bulkAddContacts(organisation_uuid: string, listUuid: string, dto: BulkAddListContactsDto) {
+        await this.ensureListOwned(organisation_uuid, listUuid);
 
         const existingMemberUuids = await this.getMemberContactUuids(listUuid);
         const filters: CampaignFiltersDto = {
@@ -255,13 +255,13 @@ export class ContactListsService {
             ],
         };
 
-        const where = this.campaignContactResolver.buildWhereInput(user_uuid, filters, {
+        const where = this.campaignContactResolver.buildWhereInput(organisation_uuid, filters, {
             mode: 'preview',
         });
         if (filters.contact_list_uuid) {
             await this.contactsService.applyContactListIncludeFilter(
                 where,
-                user_uuid,
+                organisation_uuid,
                 filters.contact_list_uuid,
             );
         }
@@ -290,8 +290,8 @@ export class ContactListsService {
         return { added: result.count };
     }
 
-    async removeContact(user_uuid: string, listUuid: string, contactUuid: string) {
-        await this.ensureListOwned(user_uuid, listUuid);
+    async removeContact(organisation_uuid: string, listUuid: string, contactUuid: string) {
+        await this.ensureListOwned(organisation_uuid, listUuid);
 
         const member = await this.prisma.contactListMember.findFirst({
             where: { list_uuid: listUuid, contact_uuid: contactUuid },
@@ -309,8 +309,8 @@ export class ContactListsService {
         return { contact_uuid: contactUuid };
     }
 
-    async removeContacts(user_uuid: string, listUuid: string, contactUuids: string[]) {
-        await this.ensureListOwned(user_uuid, listUuid);
+    async removeContacts(organisation_uuid: string, listUuid: string, contactUuids: string[]) {
+        await this.ensureListOwned(organisation_uuid, listUuid);
 
         const unique = [...new Set(contactUuids)];
         const result = await this.prisma.contactListMember.deleteMany({
@@ -340,9 +340,9 @@ export class ContactListsService {
         return rows.map((r) => r.contact_uuid);
     }
 
-    private async ensureListOwned(user_uuid: string, uuid: string) {
+    private async ensureListOwned(organisation_uuid: string, uuid: string) {
         const list = await this.prisma.contactList.findFirst({
-            where: { uuid, user_uuid },
+            where: { uuid, organisation_uuid },
             select: { uuid: true },
         });
         if (!list) throw new NotFoundException('Contact list not found');
@@ -350,7 +350,7 @@ export class ContactListsService {
     }
 
     private async assertValidParent(
-        user_uuid: string,
+        organisation_uuid: string,
         parent_list_uuid: string,
         listUuid?: string,
     ) {
@@ -359,7 +359,7 @@ export class ContactListsService {
         }
 
         const parent = await this.prisma.contactList.findFirst({
-            where: { uuid: parent_list_uuid, user_uuid },
+            where: { uuid: parent_list_uuid, organisation_uuid },
             select: { uuid: true, parent_list_uuid: true },
         });
 
@@ -375,7 +375,7 @@ export class ContactListsService {
                 throw new BadRequestException('Cannot set a descendant as parent');
             }
             const ancestor = await this.prisma.contactList.findFirst({
-                where: { uuid: cursor, user_uuid },
+                where: { uuid: cursor, organisation_uuid },
                 select: { parent_list_uuid: true },
             });
             cursor = ancestor?.parent_list_uuid ?? null;

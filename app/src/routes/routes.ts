@@ -3,6 +3,7 @@ export const Routes = {
     auth: {
         sign_in: "/auth/sign-in",
         sign_up: "/auth/sign-up",
+        invite: "/auth/invite/:token",
     },
     admin: {
         users: "/admin/users",
@@ -24,6 +25,8 @@ export const Routes = {
         analytics: "/dashboard/analytics",
         settings: "/dashboard/settings",
         settings_usage: "/dashboard/settings/usage",
+        settings_organisation: "/dashboard/settings/organisation",
+        settings_team: "/dashboard/settings/team",
         sender_profiles: "/dashboard/sender-profiles",
         integrations: "/dashboard/integrations",
         campaigns: "/dashboard/campaigns",

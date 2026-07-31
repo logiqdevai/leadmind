@@ -9,7 +9,7 @@ export class CampaignAiService {
     constructor(private readonly aiService: AiService) {}
 
     generate(
-        user_uuid: string,
+        organisation_uuid: string,
         dto: GenerateCampaignMessageDto,
         ctx: {
             campaign_name?: string;
@@ -17,7 +17,7 @@ export class CampaignAiService {
             sender_business_description?: string;
         },
     ): Promise<{ subject: string | null; content: string }> {
-        return generateWithCampaignPrompt(this.aiService, user_uuid, dto.channel, dto.action, {
+        return generateWithCampaignPrompt(this.aiService, organisation_uuid, dto.channel, dto.action, {
             campaign_name: ctx.campaign_name,
             campaign_description: ctx.campaign_description,
             sender_business_description: ctx.sender_business_description,

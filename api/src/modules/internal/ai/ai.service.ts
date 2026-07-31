@@ -6,10 +6,10 @@ import { AiService } from '@/integrations/ai/services/ai.service';
 export class InternalAiService {
     constructor(private readonly aiService: AiService) {}
 
-    create(user_uuid: string, createAiDto: CreateAiDto) {
+    create(organisation_uuid: string, createAiDto: CreateAiDto) {
         try {
             return this.aiService.generateText({
-                user_uuid,
+                organisation_uuid,
                 provider: createAiDto.provider,
                 model: createAiDto.model,
                 system: createAiDto.system,

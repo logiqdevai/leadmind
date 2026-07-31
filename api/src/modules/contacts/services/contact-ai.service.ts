@@ -92,7 +92,7 @@ export class ContactAiService {
             if (done.has(instr.uuid)) continue;
 
             const { response, usage } = await this.aiService.generateObjectWithSchema<ContactAiScoreResult>({
-                user_uuid: contact.user_uuid,
+                organisation_uuid: contact.organisation_uuid,
                 provider: AiProviders.openai,
                 model: AiModels.openai.gpt4oMini,
                 schema: CONTACT_AI_SCORE_SCHEMA,
@@ -142,7 +142,7 @@ export class ContactAiService {
     }
 
     async submitBatchScore(
-        user_uuid: string,
+        organisation_uuid: string,
         plan: ContactBatchScoringItem[],
     ): Promise<{ batch_id: string; queued: number }> {
         const allInstrUuids = [...new Set(plan.flatMap((p) => p.instruction_uuids))];
@@ -195,12 +195,12 @@ export class ContactAiService {
             throw new BadRequestException('All selected contacts are already scored for the chosen rules.');
         }
 
-        const result = await this.openAiBatchService.createBatch(user_uuid, requests);
+        const result = await this.openAiBatchService.createBatch(organisation_uuid, requests);
 
         await this.prisma.openAiBatchJob.create({
             data: {
                 batch_id: result.batch_id,
-                user_uuid,
+                organisation_uuid,
                 type: OpenAiBatchJobType.CONTACT_SCORE,
                 status: OpenAiBatchStatus.IN_PROGRESS,
                 total_requests: requests.length,
@@ -224,13 +224,13 @@ export class ContactAiService {
             return;
         }
 
-        const batchStatus = await this.openAiBatchService.getBatchStatus(job.user_uuid, batchId);
+        const batchStatus = await this.openAiBatchService.getBatchStatus(job.organisation_uuid, batchId);
         if (!batchStatus.output_file_id) {
             this.logger.warn(`Batch ${batchId} has no output file yet`);
             return;
         }
 
-        const results = await this.openAiBatchService.getBatchResults(job.user_uuid, batchStatus.output_file_id);
+        const results = await this.openAiBatchService.getBatchResults(job.organisation_uuid, batchStatus.output_file_id);
         const updatedContactUuids = new Set<string>();
 
         for (const result of results) {
@@ -248,7 +248,7 @@ export class ContactAiService {
             if (!result.content || result.error) {
                 this.logger.warn(`Batch result ${result.custom_id} failed: ${result.error}`);
                 this.aiUsageService.logBatchResult({
-                    user_uuid: job.user_uuid,
+                    organisation_uuid: job.organisation_uuid,
                     model,
                     operation: AiUsageOperation.CONTACT_SCORE,
                     input_tokens: result.input_tokens,
@@ -279,7 +279,7 @@ export class ContactAiService {
                 });
                 updatedContactUuids.add(contact_uuid);
                 this.aiUsageService.logBatchResult({
-                    user_uuid: job.user_uuid,
+                    organisation_uuid: job.organisation_uuid,
                     model,
                     operation: AiUsageOperation.CONTACT_SCORE,
                     input_tokens: result.input_tokens,
@@ -339,7 +339,7 @@ export class ContactAiService {
         }
 
         const sender_business_description = await this.resolveSenderBusinessDescription(
-            contact.user_uuid,
+            contact.organisation_uuid,
         );
 
         const created: OutreachMessage[] = [];
@@ -374,7 +374,7 @@ export class ContactAiService {
 
                 const message = await this.prisma.outreachMessage.create({
                     data: {
-                        user_uuid: contact.user_uuid,
+                        organisation_uuid: contact.organisation_uuid,
                         contact_uuid: contact.uuid,
                         channel,
                         subject: draft.subject ?? null,
@@ -394,14 +394,14 @@ export class ContactAiService {
     }
 
     async draftBulkMessages(
-        user_uuid: string,
+        organisation_uuid: string,
         contacts: Array<Contact & { lead: Lead }>,
         channel: Channel,
         prompt: string,
         language?: string,
         campaign_uuid?: string,
     ): Promise<{ generated: number; skipped: number; failed: number; message_uuids: string[] }> {
-        const sender_business_description = await this.resolveSenderBusinessDescription(user_uuid);
+        const sender_business_description = await this.resolveSenderBusinessDescription(organisation_uuid);
         let generated = 0;
         let skipped = 0;
         let failed = 0;
@@ -439,7 +439,7 @@ export class ContactAiService {
                     channel === Channel.EMAIL ? sanitizeEmailHtml(draft.content) : draft.content;
                 const resolved = campaign_uuid
                     ? await this.resolveCampaignDraftContent(
-                          user_uuid,
+                          organisation_uuid,
                           campaign_uuid,
                           item,
                           channel,
@@ -448,7 +448,7 @@ export class ContactAiService {
                     : { subject: draft.subject ?? null, content: sanitizedContent };
                 const message = await this.prisma.outreachMessage.create({
                     data: {
-                        user_uuid,
+                        organisation_uuid,
                         contact_uuid: item.uuid,
                         channel,
                         subject: resolved.subject ?? null,
@@ -471,14 +471,14 @@ export class ContactAiService {
     }
 
     async submitBatchCampaignDrafts(
-        user_uuid: string,
+        organisation_uuid: string,
         campaign_uuid: string,
         contacts: Array<Contact & { lead: Lead }>,
         channel: Channel,
         prompt: string,
         language?: string,
     ): Promise<{ batch_id: string; queued: number }> {
-        const sender_business_description = await this.resolveSenderBusinessDescription(user_uuid);
+        const sender_business_description = await this.resolveSenderBusinessDescription(organisation_uuid);
         const systemContent =
             'You are an expert B2B outreach copywriter. Produce drafts ready for human review.';
 
@@ -524,12 +524,12 @@ export class ContactAiService {
             );
         }
 
-        const result = await this.openAiBatchService.createBatch(user_uuid, requests);
+        const result = await this.openAiBatchService.createBatch(organisation_uuid, requests);
 
         await this.prisma.openAiBatchJob.create({
             data: {
                 batch_id: result.batch_id,
-                user_uuid,
+                organisation_uuid,
                 type: OpenAiBatchJobType.MESSAGE_CREATE,
                 status: OpenAiBatchStatus.IN_PROGRESS,
                 total_requests: requests.length,
@@ -571,13 +571,13 @@ export class ContactAiService {
             return;
         }
 
-        const batchStatus = await this.openAiBatchService.getBatchStatus(job.user_uuid, batchId);
+        const batchStatus = await this.openAiBatchService.getBatchStatus(job.organisation_uuid, batchId);
         if (!batchStatus.output_file_id) {
             this.logger.warn(`Batch ${batchId} has no output file yet`);
             return;
         }
 
-        const results = await this.openAiBatchService.getBatchResults(job.user_uuid, batchStatus.output_file_id);
+        const results = await this.openAiBatchService.getBatchResults(job.organisation_uuid, batchStatus.output_file_id);
         let generated = 0;
         let campaign_uuid: string | null = null;
 
@@ -596,7 +596,7 @@ export class ContactAiService {
             if (!result.content || result.error) {
                 this.logger.warn(`Batch result ${result.custom_id} failed: ${result.error}`);
                 this.aiUsageService.logBatchResult({
-                    user_uuid: job.user_uuid,
+                    organisation_uuid: job.organisation_uuid,
                     model,
                     operation: AiUsageOperation.CONTACT_DRAFT,
                     input_tokens: result.input_tokens,
@@ -625,7 +625,7 @@ export class ContactAiService {
                 const contact = await this.prisma.contact.findUnique({
                     where: { uuid: contact_uuid },
                 });
-                if (!contact || contact.user_uuid !== job.user_uuid) continue;
+                if (!contact || contact.organisation_uuid !== job.organisation_uuid) continue;
 
                 const existing = await this.prisma.outreachMessage.findFirst({
                     where: {
@@ -642,7 +642,7 @@ export class ContactAiService {
                         ? parseEmailDraft(result.content)
                         : { subject: null, content: result.content.trim() };
                 const resolved = await this.resolveCampaignDraftContent(
-                    job.user_uuid,
+                    job.organisation_uuid,
                     campUuid,
                     contact,
                     channel,
@@ -652,7 +652,7 @@ export class ContactAiService {
 
                 await this.prisma.outreachMessage.create({
                     data: {
-                        user_uuid: job.user_uuid,
+                        organisation_uuid: job.organisation_uuid,
                         contact_uuid,
                         channel,
                         subject: resolved.subject ?? null,
@@ -664,7 +664,7 @@ export class ContactAiService {
                 });
                 generated++;
                 this.aiUsageService.logBatchResult({
-                    user_uuid: job.user_uuid,
+                    organisation_uuid: job.organisation_uuid,
                     model,
                     operation: AiUsageOperation.CONTACT_DRAFT,
                     input_tokens: result.input_tokens,
@@ -727,22 +727,22 @@ export class ContactAiService {
     }
 
     async draftAdHocMessage(
-        user_uuid: string,
+        organisation_uuid: string,
         dto: AiDraftMessageDto,
     ): Promise<{ subject: string | null; content: string }> {
         const contact = await this.prisma.contact.findFirst({
-            where: { uuid: dto.contact_uuid, user_uuid },
+            where: { uuid: dto.contact_uuid, organisation_uuid },
             include: { lead: true },
         });
         if (!contact) {
             throw new ForbiddenException(`Contact ${dto.contact_uuid} not found`);
         }
 
-        const sender_business_description = await this.resolveSenderBusinessDescription(user_uuid);
+        const sender_business_description = await this.resolveSenderBusinessDescription(organisation_uuid);
         const action = dto.action ?? 'generate';
 
         if (action !== 'generate') {
-            return generateWithCampaignPrompt(this.aiService, user_uuid, dto.channel, action, {
+            return generateWithCampaignPrompt(this.aiService, organisation_uuid, dto.channel, action, {
                 sender_business_description,
                 user_prompt: dto.prompt,
                 current_subject: dto.current_subject,
@@ -766,7 +766,7 @@ export class ContactAiService {
     }
 
     private async resolveCampaignDraftContent(
-        user_uuid: string,
+        organisation_uuid: string,
         campaign_uuid: string,
         contact: Contact,
         channel: Channel,
@@ -775,21 +775,21 @@ export class ContactAiService {
         const sanitized =
             channel === Channel.EMAIL ? sanitizeEmailHtml(draft.content) : draft.content;
         return this.outreachRenderService.renderForCampaignDraft(
-            user_uuid,
+            organisation_uuid,
             campaign_uuid,
             contact,
             { subject: draft.subject, content: sanitized },
         );
     }
 
-    private async resolveSenderBusinessDescription(user_uuid: string): Promise<string | undefined> {
+    private async resolveSenderBusinessDescription(organisation_uuid: string): Promise<string | undefined> {
         const profile = await this.prisma.senderProfile.findFirst({
-            where: { user_uuid, is_default: true },
+            where: { organisation_uuid, is_default: true },
             select: { business_description: true },
         });
         if (profile?.business_description) return profile.business_description;
         const fallback = await this.prisma.senderProfile.findFirst({
-            where: { user_uuid },
+            where: { organisation_uuid },
             orderBy: { created_at: 'desc' },
             select: { business_description: true },
         });
@@ -814,7 +814,7 @@ export class ContactAiService {
         );
 
         const { response } = await this.aiService.generateText({
-            user_uuid: contact.user_uuid,
+            organisation_uuid: contact.organisation_uuid,
             provider: AiProviders.openai,
             model: AiModels.openai.gpt4o,
             prompt,
