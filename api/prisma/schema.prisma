@@ -458,6 +458,8 @@ model OutreachMessage {
   opened_at           DateTime?
   clicked_at          DateTime?
   replied_at          DateTime?
+  bounced_at          DateTime?
+  failed_at           DateTime?
   email_provider      ExternalIntegrationProvider?
   email_account       String?
   sms_provider        String?

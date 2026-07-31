@@ -295,6 +295,7 @@ export class MessageSendService {
             where: { uuid: message_uuid },
             data: {
                 status: MsgStatus.FAILED,
+                failed_at: new Date(),
                 sent_at: null,
                 provider_message_id: null,
                 metadata: { error: error_message } as Prisma.InputJsonValue,
@@ -320,6 +321,7 @@ export class MessageSendService {
             where: { uuid: message_uuid },
             data: {
                 status: MsgStatus.FAILED,
+                failed_at: new Date(),
                 sent_at: null,
                 provider_message_id: null,
                 metadata: metadata as Prisma.InputJsonValue,

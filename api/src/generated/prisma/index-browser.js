@@ -376,6 +376,8 @@ exports.Prisma.OutreachMessageScalarFieldEnum = {
   opened_at: 'opened_at',
   clicked_at: 'clicked_at',
   replied_at: 'replied_at',
+  bounced_at: 'bounced_at',
+  failed_at: 'failed_at',
   email_provider: 'email_provider',
   email_account: 'email_account',
   sms_provider: 'sms_provider',

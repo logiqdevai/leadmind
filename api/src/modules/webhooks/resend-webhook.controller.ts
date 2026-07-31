@@ -24,7 +24,13 @@ interface ResendWebhookBody {
         subject?: string;
         from?: string;
         link?: string;
-        bounce?: { reason?: string };
+        bounce?: {
+            message?: string;
+            type?: string;
+            subType?: string;
+            diagnosticCode?: string[];
+        };
+        failed?: { reason?: string };
         click?: { link?: string };
         headers?: Array<{ name: string; value: string }>;
     };
@@ -209,7 +215,12 @@ export class ResendWebhookController {
                 return {
                     kind: 'bounced',
                     provider_message_id,
-                    metadata: { reason: body.data?.bounce?.reason, outreach_message_uuid },
+                    metadata: {
+                        reason: body.data?.bounce?.message,
+                        bounce_type: body.data?.bounce?.type,
+                        bounce_sub_type: body.data?.bounce?.subType,
+                        outreach_message_uuid,
+                    },
                 };
             case 'email.complained':
                 return { kind: 'complained', provider_message_id, metadata: { outreach_message_uuid } };
@@ -218,7 +229,10 @@ export class ResendWebhookController {
                     kind: 'failed',
                     channel: 'email',
                     provider_message_id,
-                    metadata: { outreach_message_uuid },
+                    metadata: {
+                        reason: body.data?.failed?.reason,
+                        outreach_message_uuid,
+                    },
                 };
             default:
                 return null;

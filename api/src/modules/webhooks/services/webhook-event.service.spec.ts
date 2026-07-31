@@ -195,6 +195,69 @@ describe('WebhookEventService', () => {
         expect(prisma.contact.update).toHaveBeenCalled();
     });
 
+    it('records email bounce with timestamp and MCC error', async () => {
+        const { service, prisma } = createService({
+            message: { status: MsgStatus.SENT },
+            mcc: { uuid: 'mcc-uuid', status: CampaignContactStatus.SENT },
+        });
+
+        await service.ingest({
+            kind: 'bounced',
+            provider_message_id,
+            metadata: { reason: 'Hard bounce' },
+        });
+
+        expect(prisma.outreachMessage.update).toHaveBeenCalledWith(
+            expect.objectContaining({
+                data: expect.objectContaining({
+                    status: MsgStatus.BOUNCED,
+                    bounced_at: expect.any(Date),
+                }),
+            }),
+        );
+        expect(prisma.marketingCampaignContact.update).toHaveBeenCalledWith(
+            expect.objectContaining({
+                data: expect.objectContaining({
+                    status: CampaignContactStatus.BOUNCED,
+                    error_message: 'Hard bounce',
+                }),
+            }),
+        );
+        expect(prisma.marketingCampaign.update).toHaveBeenCalledWith(
+            expect.objectContaining({
+                data: { bounced_count: { increment: 1 } },
+            }),
+        );
+    });
+
+    it('records email failure with timestamp', async () => {
+        const { service, prisma } = createService({
+            message: { status: MsgStatus.SENT },
+            mcc: { uuid: 'mcc-uuid', status: CampaignContactStatus.SENT },
+        });
+
+        await service.ingest({
+            kind: 'failed',
+            channel: 'email',
+            provider_message_id,
+            metadata: { reason: 'reached_daily_quota' },
+        });
+
+        expect(prisma.outreachMessage.update).toHaveBeenCalledWith(
+            expect.objectContaining({
+                data: expect.objectContaining({
+                    status: MsgStatus.FAILED,
+                    failed_at: expect.any(Date),
+                }),
+            }),
+        );
+        expect(prisma.interaction.create).toHaveBeenCalledWith(
+            expect.objectContaining({
+                data: expect.objectContaining({ type: InteractionType.EMAIL_FAILED }),
+            }),
+        );
+    });
+
     it('resolves outbound message from received email headers', async () => {
         const { service, prisma } = createService({
             receivedEmail: {

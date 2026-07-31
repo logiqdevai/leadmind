@@ -183,12 +183,14 @@ export class WebhookEventService {
                 break;
             case 'bounced':
                 updates.status = MsgStatus.BOUNCED;
+                updates.bounced_at = now;
                 interactionType = InteractionType.EMAIL_BOUNCED;
                 mccStatus = CampaignContactStatus.BOUNCED;
                 counterField = 'bounced_count';
                 break;
             case 'failed':
                 updates.status = MsgStatus.FAILED;
+                updates.failed_at = now;
                 interactionType =
                     event.channel === 'email'
                         ? InteractionType.EMAIL_FAILED
@@ -256,12 +258,21 @@ export class WebhookEventService {
                     `[ingest] MCC progressing: ${existingMcc.status} → ${mccStatus}, incrementing ${counterField}`,
                 );
 
+                const errorMessage =
+                    typeof event.metadata?.reason === 'string'
+                        ? event.metadata.reason
+                        : typeof event.metadata?.error_message === 'string'
+                          ? event.metadata.error_message
+                          : undefined;
+
                 ops.push(
                     this.prisma.marketingCampaignContact.update({
                         where: { uuid: existingMcc.uuid },
                         data: {
                             status: mccStatus,
                             ...(event.kind === 'delivered' && { delivered_at: now }),
+                            ...((event.kind === 'bounced' || event.kind === 'failed') &&
+                                errorMessage && { error_message: errorMessage }),
                         },
                     }),
                     this.prisma.marketingCampaign.update({
