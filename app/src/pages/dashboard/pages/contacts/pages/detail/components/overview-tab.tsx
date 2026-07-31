@@ -12,6 +12,7 @@ import {
     Globe,
     MapPin,
     Pencil,
+    Plus,
     Tag,
     X,
 } from "lucide-react";
@@ -20,6 +21,7 @@ import { useUpdateContact } from "@/features/contacts/hooks/use-contacts";
 import type { UpdateContactPayload } from "@/features/contacts/interfaces/contact.interface";
 import { useFilters } from "@/features/filters/hooks/use-filters";
 import { useContactLists } from "@/features/contact-lists/hooks/use-contact-lists";
+import type { ContactList } from "@/features/contact-lists/interfaces/contact-list.interface";
 import { SourceBadge } from "@/components/ui/source-badge";
 import { OverviewUrlField } from "@/components/ui/overview-url-field";
 import { EnrichmentSnapshotPanel } from "@/components/ui/enrichment-snapshot-panel";
@@ -27,6 +29,7 @@ import { SectionCard, Row, ProfileValue } from "@/components/ui/profile-section"
 import { GemiLeadSourcePanel } from "@/components/ui/gemi-lead-source-panel";
 import { initialsFromName, formatShortDate, normalizeUrl } from "@/lib/profile";
 import { StatusChip } from "@/pages/dashboard/pages/leads/components/badges";
+import { ContactListFormModal } from "@/pages/dashboard/pages/lists/components/contact-list-form-modal";
 import { Routes } from "@/routes/routes";
 import type { ProfileDraft } from "../types";
 import { profileDraftFromContact, sameUuidSet } from "../utils/profile-draft";
@@ -293,6 +296,7 @@ function EditForm({ contact, onDone }: { contact: Contact; onDone: () => void })
     const { data: listsPage, isLoading: listsLoading } = useContactLists({ limit: 100 });
     const allLists = listsPage?.data ?? [];
     const [draft, setDraft] = useState<ProfileDraft>(() => profileDraftFromContact(contact));
+    const [createListOpen, setCreateListOpen] = useState(false);
 
     const filterName = useMemo(
         () =>
@@ -354,6 +358,7 @@ function EditForm({ contact, onDone }: { contact: Contact; onDone: () => void })
     };
 
     return (
+        <>
         <div className="space-y-4">
             <div className="flex items-center justify-between gap-2">
                 <h3 className="text-sm font-semibold text-foreground">Edit contact</h3>
@@ -404,6 +409,14 @@ function EditForm({ contact, onDone }: { contact: Contact; onDone: () => void })
                         value={draft.list_uuids}
                         onChange={(next) => setField("list_uuids", next)}
                     />
+                    <button
+                        type="button"
+                        className="inline-flex w-fit items-center gap-1 text-xs font-medium text-primary hover:underline"
+                        onClick={() => setCreateListOpen(true)}
+                    >
+                        <Plus className="size-3" />
+                        Create list
+                    </button>
                 </div>
                 <div className="flex flex-col gap-1.5 sm:col-span-2">
                     <Label htmlFor="pf-name">Name</Label>
@@ -472,5 +485,17 @@ function EditForm({ contact, onDone }: { contact: Contact; onDone: () => void })
                 />
             </div>
         </div>
+        <ContactListFormModal
+            isOpen={createListOpen}
+            onOpenChange={setCreateListOpen}
+            onCreated={(list: ContactList) => {
+                setDraft((prev) =>
+                    prev.list_uuids.includes(list.uuid)
+                        ? prev
+                        : { ...prev, list_uuids: [...prev.list_uuids, list.uuid] },
+                );
+            }}
+        />
+        </>
     );
 }

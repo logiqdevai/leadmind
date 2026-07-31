@@ -11,6 +11,7 @@ interface ContactListFormModalProps {
   onOpenChange: (open: boolean) => void;
   editing?: ContactList | null;
   parentListUuid?: string;
+  onCreated?: (list: ContactList) => void;
 }
 
 export function ContactListFormModal({
@@ -18,6 +19,7 @@ export function ContactListFormModal({
   onOpenChange,
   editing,
   parentListUuid,
+  onCreated,
 }: ContactListFormModalProps) {
   const navigate = useNavigate();
   const createList = useCreateContactList();
@@ -51,6 +53,10 @@ export function ContactListFormModal({
       createList.mutate(payload, {
         onSuccess: (list) => {
           onOpenChange(false);
+          if (onCreated) {
+            onCreated(list);
+            return;
+          }
           navigate(Routes.dashboard.lists_detail.replace(":uuid", list.uuid));
         },
       });
