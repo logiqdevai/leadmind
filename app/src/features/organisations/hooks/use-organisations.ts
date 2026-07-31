@@ -6,6 +6,7 @@ import {
     acceptInvitation,
     createInvitation,
     createOrganisation,
+    deleteOrganisation,
     getCurrentOrganisation,
     listInvitations,
     listMembers,
@@ -80,7 +81,7 @@ export function useCreateOrganisation() {
         mutationFn: (dto: CreateOrganisationDto) => createOrganisation(dto),
         onSuccess: (data) => {
             login({ ...formatAuthUser(data), isLoggedIn: true });
-            queryClient.invalidateQueries({ queryKey: organisationQueryKeys.all });
+            queryClient.clear();
             toast({ title: "Organisation created", duration: 2000 });
         },
         onError: (error: Error) => {
@@ -107,6 +108,27 @@ export function useUpdateOrganisation(uuid: string) {
         onError: (error: Error) => {
             toast({
                 title: "Could not update organisation",
+                description: error.message,
+                variant: "error",
+            });
+        },
+    });
+}
+
+export function useDeleteOrganisation() {
+    const queryClient = useQueryClient();
+    const login = useAuthStore((s) => s.login);
+
+    return useMutation({
+        mutationFn: (uuid: string) => deleteOrganisation(uuid),
+        onSuccess: (data) => {
+            login({ ...formatAuthUser(data), isLoggedIn: true });
+            queryClient.clear();
+            toast({ title: "Organisation deleted", duration: 2000 });
+        },
+        onError: (error: Error) => {
+            toast({
+                title: "Could not delete organisation",
                 description: error.message,
                 variant: "error",
             });

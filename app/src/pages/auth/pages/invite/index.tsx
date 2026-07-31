@@ -7,6 +7,7 @@ import {
     useAcceptInvitation,
     useInvitationPreview,
 } from "@/features/organisations/hooks/use-organisations";
+import { SignUpForm } from "@/pages/auth/pages/sign-up/components/sign-up-form";
 
 const InviteAcceptPage: FC = () => {
     const { token = "" } = useParams<{ token: string }>();
@@ -26,7 +27,9 @@ const InviteAcceptPage: FC = () => {
             <div className="flex flex-col gap-1 text-left mb-6">
                 <p className="text-2xl font-semibold">Organisation invite</p>
                 <p className="text-sm text-muted">
-                    Accept an invitation to join a workspace
+                    {isLoggedIn
+                        ? "Accept an invitation to join a workspace"
+                        : "Create an account to join this workspace"}
                 </p>
             </div>
 
@@ -59,23 +62,21 @@ const InviteAcceptPage: FC = () => {
                             Accept invitation
                         </Button>
                     ) : (
-                        <div className="space-y-2 text-sm text-muted">
-                            <p>Sign in or create an account with {data.email} to join.</p>
-                            <div className="flex gap-2">
+                        <div className="space-y-4">
+                            <SignUpForm
+                                defaultEmail={data.email}
+                                lockEmail
+                                inviteToken={token}
+                            />
+                            <p className="text-center text-sm text-muted">
+                                Already have an account?{" "}
                                 <Link
                                     to={`${Routes.auth.sign_in}?invite=${token}`}
-                                    className="underline underline-offset-4"
+                                    className="underline underline-offset-4 hover:opacity-80"
                                 >
                                     Sign in
                                 </Link>
-                                <span>·</span>
-                                <Link
-                                    to={`${Routes.auth.sign_up}?invite=${token}`}
-                                    className="underline underline-offset-4"
-                                >
-                                    Sign up
-                                </Link>
-                            </div>
+                            </p>
                         </div>
                     )}
                 </div>

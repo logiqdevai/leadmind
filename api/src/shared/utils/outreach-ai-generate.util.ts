@@ -2,6 +2,7 @@ import { Channel } from '@/generated/prisma';
 import { AiService } from '@/integrations/ai/services/ai.service';
 import { AiModels, AiProviders } from '@/integrations/ai/interfaces/ai.interface';
 import { sanitizeEmailHtml } from './sanitize-html.util';
+import { stripBracketPlaceholders } from './strip-bracket-placeholders.util';
 import { buildCampaignPrompt } from '@/modules/marketing-campaigns/constants/campaign-prompts';
 import { CampaignAiAction } from '@/modules/marketing-campaigns/dto/generate-campaign-message.dto';
 
@@ -13,6 +14,11 @@ export interface OutreachAiGenerateContext {
     current_subject?: string;
     current_content?: string;
     language?: string;
+}
+
+export function sanitizeAiDraftContent(content: string, channel: Channel): string {
+    const stripped = stripBracketPlaceholders(content);
+    return channel === Channel.EMAIL ? sanitizeEmailHtml(stripped) : stripped;
 }
 
 export async function generateWithCampaignPrompt(
@@ -33,9 +39,12 @@ export async function generateWithCampaignPrompt(
     });
     if (channel === Channel.EMAIL) {
         const parsed = parseEmailDraft(response);
-        return { subject: parsed.subject, content: sanitizeEmailHtml(parsed.content) };
+        return {
+            subject: parsed.subject,
+            content: sanitizeAiDraftContent(parsed.content, channel),
+        };
     }
-    return { subject: null, content: response.trim() };
+    return { subject: null, content: sanitizeAiDraftContent(response.trim(), channel) };
 }
 
 export function parseEmailDraft(raw: string): { subject: string | null; content: string } {

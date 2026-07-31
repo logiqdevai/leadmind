@@ -809,7 +809,7 @@ model OpenAiBatchJob {
   context            Json?
   created_at         DateTime           @default(now())
   updated_at         DateTime           @updatedAt
-  organisation       Organisation       @relation(fields: [organisation_uuid], references: [uuid])
+  organisation       Organisation       @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
 
   @@map("openai_batch_jobs")
 }

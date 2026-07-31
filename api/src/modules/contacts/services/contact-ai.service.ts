@@ -33,9 +33,12 @@ import {
     buildScorePrompt,
     buildSmsPrompt,
 } from '../constants/contact-ai-prompts';
-import { generateWithCampaignPrompt, parseEmailDraft } from '@/shared/utils/outreach-ai-generate.util';
+import {
+    generateWithCampaignPrompt,
+    parseEmailDraft,
+    sanitizeAiDraftContent,
+} from '@/shared/utils/outreach-ai-generate.util';
 import { CONTACT_AI_SCORE_SCHEMA, type ContactAiScoreResult } from '../schemas/contact-ai-score.schema';
-import { sanitizeEmailHtml } from '@/shared/utils/sanitize-html.util';
 import { OutreachRenderService } from '@/modules/outreach/services/outreach-render.service';
 import { AiUsageService } from '@/modules/ai-usage/ai-usage.service';
 import { calculateAiCost } from '@/integrations/ai/utils/ai-cost';
@@ -370,7 +373,7 @@ export class ContactAiService {
                 );
 
                 const content =
-                    channel === Channel.EMAIL ? sanitizeEmailHtml(draft.content) : draft.content;
+                    sanitizeAiDraftContent(draft.content, channel);
 
                 const message = await this.prisma.outreachMessage.create({
                     data: {
@@ -436,7 +439,7 @@ export class ContactAiService {
                     sender_business_description,
                 );
                 const sanitizedContent =
-                    channel === Channel.EMAIL ? sanitizeEmailHtml(draft.content) : draft.content;
+                    sanitizeAiDraftContent(draft.content, channel);
                 const resolved = campaign_uuid
                     ? await this.resolveCampaignDraftContent(
                           organisation_uuid,
@@ -759,8 +762,7 @@ export class ContactAiService {
             dto.language,
             sender_business_description,
         );
-        const content =
-            dto.channel === Channel.EMAIL ? sanitizeEmailHtml(draft.content) : draft.content;
+        const content = sanitizeAiDraftContent(draft.content, dto.channel);
 
         return { subject: draft.subject, content };
     }
@@ -773,7 +775,7 @@ export class ContactAiService {
         draft: { subject: string | null; content: string },
     ): Promise<{ subject: string | null; content: string }> {
         const sanitized =
-            channel === Channel.EMAIL ? sanitizeEmailHtml(draft.content) : draft.content;
+            sanitizeAiDraftContent(draft.content, channel);
         return this.outreachRenderService.renderForCampaignDraft(
             organisation_uuid,
             campaign_uuid,
@@ -818,7 +820,8 @@ export class ContactAiService {
             provider: AiProviders.openai,
             model: AiModels.openai.gpt4o,
             prompt,
-            system: 'You are an expert B2B outreach copywriter. Produce drafts ready for human review.',
+            system:
+                'You are an expert B2B outreach copywriter. Produce drafts ready for human review. Never write square-bracket fill-in blanks like [full name] or [address]. Use only {{snake_case}} placeholders from the instructions, or omit the field.',
             usage: {
                 operation: 'CONTACT_DRAFT',
                 reference_type: 'contact',

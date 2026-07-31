@@ -1,32 +1,94 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff } from "lucide-react";
-import { Form, Label, Input, FieldError } from "@heroui/react";
+import { Form, Label, Input, FieldError, Spinner } from "@heroui/react";
+import { useSearchParams } from "react-router-dom";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
 import { SignUpSchema, type SignUpFormValues } from "../../../validation-schemas/auth";
 import { useSignup } from "@/features/auth/hooks/use-auth";
+import { useInvitationPreview } from "@/features/organisations/hooks/use-organisations";
 
-export function SignUpForm() {
+interface SignUpFormProps {
+  defaultEmail?: string;
+  lockEmail?: boolean;
+  inviteToken?: string;
+}
+
+export function SignUpForm({
+  defaultEmail = "",
+  lockEmail = false,
+  inviteToken,
+}: SignUpFormProps) {
   const { mutate, isPending } = useSignup();
+  const [searchParams] = useSearchParams();
+  const inviteFromQuery = searchParams.get("invite") ?? "";
+  const resolvedInviteToken = inviteToken ?? inviteFromQuery;
+  const { data: invitePreview, isLoading: inviteLoading } = useInvitationPreview(
+    resolvedInviteToken,
+  );
+
+  const resolvedEmail = defaultEmail || invitePreview?.email || "";
+  const emailLocked = lockEmail || !!invitePreview?.email;
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
 
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<SignUpFormValues>({
     resolver: zodResolver(SignUpSchema),
-    defaultValues: { email: "", password: "", confirm_password: "" },
+    defaultValues: {
+      full_name: "",
+      email: defaultEmail,
+      password: "",
+      confirm_password: "",
+    },
   });
 
+  useEffect(() => {
+    if (!resolvedEmail) return;
+    reset((current) => ({
+      ...current,
+      email: resolvedEmail,
+    }));
+  }, [resolvedEmail, reset]);
+
   function onSubmit(data: SignUpFormValues) {
-    mutate({ email: data.email, password: data.password });
+    mutate({
+      email: data.email,
+      full_name: data.full_name,
+      password: data.password,
+      invite_token: resolvedInviteToken || undefined,
+    });
+  }
+
+  if (resolvedInviteToken && inviteLoading) {
+    return (
+      <div className="flex justify-center py-8">
+        <Spinner />
+      </div>
+    );
   }
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)} className="grid gap-4 text-left">
+      <div className="flex flex-col gap-1">
+        <Label htmlFor="signup-full-name">Full name</Label>
+        <Input
+          id="signup-full-name"
+          {...register("full_name")}
+          placeholder="Jane Doe"
+          type="text"
+          autoComplete="name"
+          fullWidth
+        />
+        {errors.full_name && <FieldError>{errors.full_name.message}</FieldError>}
+      </div>
+
       <div className="flex flex-col gap-1">
         <Label htmlFor="signup-email">Email</Label>
         <Input
@@ -34,7 +96,9 @@ export function SignUpForm() {
           {...register("email")}
           placeholder="name@example.com"
           type="email"
+          autoComplete="email"
           fullWidth
+          isReadOnly={emailLocked}
         />
         {errors.email && <FieldError>{errors.email.message}</FieldError>}
       </div>
@@ -47,6 +111,7 @@ export function SignUpForm() {
             {...register("password")}
             type={showPassword ? "text" : "password"}
             placeholder="********"
+            autoComplete="new-password"
             fullWidth
             className="pr-10"
           />
@@ -70,6 +135,7 @@ export function SignUpForm() {
             {...register("confirm_password")}
             type={showConfirm ? "text" : "password"}
             placeholder="********"
+            autoComplete="new-password"
             fullWidth
             className="pr-10"
           />

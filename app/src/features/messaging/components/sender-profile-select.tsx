@@ -40,12 +40,12 @@ export function SenderProfileSelect({
     if (!profiles?.length) {
         return (
             <div className="rounded-xl border border-border bg-surface-secondary/40 px-4 py-3 text-sm text-muted">
-                No sender profiles found.{" "}
+                Add a sender profile so signatures fill in automatically.{" "}
                 <Link
                     to={Routes.dashboard.sender_profiles}
                     className="font-medium text-foreground underline-offset-2 hover:underline"
                 >
-                    Create a sender profile
+                    Create one
                 </Link>
                 .
             </div>
@@ -101,7 +101,7 @@ export function SenderProfileSelect({
                 </Select.Popover>
             </Select>
             <p className="text-xs text-muted">
-                Used for placeholders like signature, company, and reply-to email.
+                Fills in your signature, company, and contact details in the message.
             </p>
         </div>
     );

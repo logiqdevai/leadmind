@@ -56,7 +56,7 @@ export function useSignup() {
 
     return useMutation({
         mutationFn: (data: SignUpUser) => signUp(data),
-        onSuccess: (data) => {
+        onSuccess: (data, variables) => {
             login({
                 ...data,
                 isLoggedIn: true,
@@ -66,7 +66,9 @@ export function useSignup() {
                 description: "You have successfully registered in",
                 duration: 2000,
             });
-            navigate(invitePath(searchParams.get("invite")));
+            navigate(
+                invitePath(searchParams.get("invite") ?? variables.invite_token ?? null),
+            );
         },
         onError: (error: unknown) => {
             toast({

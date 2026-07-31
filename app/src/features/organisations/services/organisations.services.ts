@@ -48,6 +48,18 @@ export const updateOrganisation = async (uuid: string, dto: UpdateOrganisationDt
     }
 };
 
+export const deleteOrganisation = async (uuid: string) => {
+    try {
+        const response = await axiosInstance.delete(ApiRoutes.organisations.remove(uuid));
+        return response.data;
+    } catch (error: any) {
+        throw new Error(
+            error?.response?.data?.message ||
+                "Failed to delete organisation. Please try again.",
+        );
+    }
+};
+
 export const switchOrganisation = async (uuid: string) => {
     try {
         const response = await axiosInstance.post(ApiRoutes.organisations.switch(uuid));

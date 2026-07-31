@@ -113,16 +113,26 @@ export class OrganisationsService {
     async remove(organisationUuid: string, userUuid: string) {
         await this.requireMembership(organisationUuid, userUuid, [OrganisationRole.OWNER]);
 
-        const membershipCount = await this.prisma.organisationMember.count({
-            where: { user_uuid: userUuid },
+        const fallbackMembership = await this.prisma.organisationMember.findFirst({
+            where: {
+                user_uuid: userUuid,
+                organisation_uuid: { not: organisationUuid },
+            },
+            orderBy: { created_at: 'asc' },
         });
 
-        if (membershipCount <= 1) {
+        if (!fallbackMembership) {
             throw new BadRequestException('Cannot delete your only organisation');
         }
 
-        await this.prisma.organisation.delete({ where: { uuid: organisationUuid } });
-        return { success: true };
+        await this.prisma.$transaction(async (tx) => {
+            await tx.openAiBatchJob.deleteMany({
+                where: { organisation_uuid: organisationUuid },
+            });
+            await tx.organisation.delete({ where: { uuid: organisationUuid } });
+        });
+
+        return this.buildAuthResponse(userUuid, fallbackMembership.organisation_uuid);
     }
 
     async switchOrganisation(organisationUuid: string, userUuid: string) {

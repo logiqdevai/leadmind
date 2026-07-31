@@ -23,6 +23,14 @@ const LINKEDIN_FOOTER_PLACEHOLDERS =
 const CONTACT_PLACEHOLDERS =
     '{{contact_first_name}}, {{contact_last_name}}, {{contact_name}}, {{contact_company}}, {{contact_title}}';
 
+const NO_BLANK_PLACEHOLDERS_RULE = `
+FORBIDDEN FILL-IN BLANKS — STRICT (MOST IMPORTANT):
+- NEVER write square-bracket blanks such as [full name], [address], [Your Name], [Company], [phone], [email], [title], or any other [like this].
+- NEVER write angle/paren blanks such as <name>, (address), or underscore blanks like ___name___.
+- The ONLY allowed tokens are the {{snake_case}} placeholders listed in the rules below (exactly as written, including double curly braces).
+- If a sender or contact detail is unknown or would look empty, OMIT that line or field entirely. Do not invent a blank for the user to fill in.
+`.trim();
+
 function languageBlock(language?: string, preservePlaceholders = true): string {
     if (!language) return '';
     const placeholderLine = preservePlaceholders
@@ -62,7 +70,8 @@ HTML BODY RULES — STRICT:
 PLACEHOLDER RULES — STRICT:
 - Sender placeholders (replaced at send time): ${EMAIL_FOOTER_PLACEHOLDERS}.
 - Contact placeholders (replaced at send time): ${CONTACT_PLACEHOLDERS}.
-- Use placeholders verbatim, including the double curly braces. Do NOT invent placeholders. Do NOT use square brackets like [Your Name]. Do NOT write any real or made-up sender/contact info.
+- Use placeholders verbatim, including the double curly braces. Never invent tokens. Never write real or made-up sender/contact info.
+- Prefer a short sender footer ({{full_name}}, {{company_name}}, {{email}}, optional website link). Omit phone/address/city/country unless the message truly needs them.
 - Anchors with placeholders: write {{website}} only inside href and {{website_display}} only as link text. {{booking_url}} only inside href.
 - Placeholders are NOT allowed in the subject line.
 `.trim();
@@ -75,7 +84,7 @@ SMS RULES — STRICT:
 - No subject line.
 - If you sign off, use ONLY: ${SMS_FOOTER_PLACEHOLDERS}.
 - For contact name, use: ${CONTACT_PLACEHOLDERS}.
-- Placeholders are replaced at send time. Do NOT invent placeholders. Do NOT use square brackets. Do NOT write real or made-up info.
+- Placeholders are replaced at send time. Never invent tokens. Never write real or made-up info.
 - CTA URLs use {{booking_url}} as a bare URL (no anchor): e.g. "Book: {{booking_url}}".
 `.trim();
 }
@@ -88,7 +97,7 @@ LINKEDIN DM RULES — STRICT:
 - Open with a relevant, specific hook, then one clear value point, then a light CTA (e.g. a quick chat or a question).
 - For contact name, use: ${CONTACT_PLACEHOLDERS}.
 - If you sign off, use ONLY: ${LINKEDIN_FOOTER_PLACEHOLDERS}.
-- Placeholders are replaced at send time. Do NOT invent placeholders. Do NOT use square brackets. Do NOT write real or made-up info.
+- Placeholders are replaced at send time. Never invent tokens. Never write real or made-up info.
 - A CTA link uses {{booking_url}} as a bare URL (no anchor): e.g. "Grab a slot: {{booking_url}}".
 `.trim();
 }
@@ -100,7 +109,6 @@ PHONE CALL SCRIPT RULES — STRICT:
 - Use short labeled sections: Opening, Value hook, Discovery questions, Objection handling, Close / next step.
 - Conversational spoken language. No HTML. No subject line.
 - Personalize with concrete names and details. Do NOT use curly-brace placeholders (e.g. {{first_name}}, {{booking_url}}).
-- Do NOT use square brackets like [Your Name].
 `.trim();
 }
 
@@ -185,6 +193,8 @@ ${ctx.current_subject ? `Subject: ${ctx.current_subject}\n\n` : ''}${ctx.current
         '',
         `TARGET CHANNEL: ${channelLabel}`,
         '',
+        NO_BLANK_PLACEHOLDERS_RULE,
+        '',
         lang,
         '',
         senderCtx,
@@ -200,13 +210,15 @@ ${ctx.current_subject ? `Subject: ${ctx.current_subject}\n\n` : ''}${ctx.current
         .filter((s) => s.length > 0)
         .join('\n');
 
+    const noBlanks =
+        ' Never write square-bracket fill-in blanks like [full name] or [address]. Use only {{snake_case}} placeholders from the instructions, or omit the field.';
     const system = isEmail
-        ? 'You are an expert B2B outreach copywriter for email marketing campaigns. Produce drafts ready for human review.'
+        ? `You are an expert B2B outreach copywriter for email marketing campaigns. Produce drafts ready for human review.${noBlanks}`
         : isLinkedIn
-          ? 'You are an expert B2B outreach copywriter for LinkedIn DM campaigns. Produce drafts ready for human review.'
+          ? `You are an expert B2B outreach copywriter for LinkedIn DM campaigns. Produce drafts ready for human review.${noBlanks}`
           : isPhoneCall
-            ? 'You are an expert B2B outreach copywriter for phone call scripts. Produce drafts ready for human review.'
-            : 'You are an expert B2B outreach copywriter for SMS marketing campaigns. Produce drafts ready for human review.';
+            ? `You are an expert B2B outreach copywriter for phone call scripts. Produce drafts ready for human review.${noBlanks}`
+            : `You are an expert B2B outreach copywriter for SMS marketing campaigns. Produce drafts ready for human review.${noBlanks}`;
 
     return { prompt, system };
 }

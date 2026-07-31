@@ -56,9 +56,9 @@ export default function SenderProfilesPage() {
                         Sender profiles
                     </h1>
                     <p className="text-sm text-muted max-w-xl">
-                        Identities used in your outreach footers. Add one profile per
-                        company or persona — pick which one to use later when you draft a
-                        message.
+                        Your name, company, and contact details for message signatures.
+                        Add one profile per company or persona, then choose which to use
+                        when you send.
                     </p>
                 </div>
                 <Button onPress={openCreate}>
@@ -257,11 +257,11 @@ function EmptyState({ onCreate }: { onCreate: () => void }) {
             </div>
             <div className="space-y-1">
                 <h2 className="text-base font-semibold text-foreground">
-                    No sender profiles yet
+                    Add your first sender profile
                 </h2>
                 <p className="text-sm text-muted max-w-md mx-auto">
-                    Create a profile so the AI stops leaving placeholder fields like
-                    “[full name]” or “[address]” in your messages.
+                    Save your name, company, and contact details once. Outreach
+                    signatures will fill them in automatically.
                 </p>
             </div>
             <Button onPress={onCreate}>

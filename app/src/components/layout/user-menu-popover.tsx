@@ -1,5 +1,5 @@
 import { Popover } from "@heroui/react";
-import { User, CreditCard, LogOut, ChevronsUpDown, Building2, Check } from "lucide-react";
+import { User, CreditCard, LogOut, ChevronsUpDown, Building2, Check, Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "@/stores/auth";
 import { cn } from "@/lib/utils";
@@ -102,34 +102,42 @@ export default function UserMenuPopover({ collapsed = false, placement = "top" }
             </div>
           </div>
 
-          {organisations.length > 0 ? (
-            <div className="py-1.5 border-b border-border">
-              <p className="px-2 pb-1 text-[10px] uppercase tracking-wide text-muted">
-                Organisations
-              </p>
-              {organisations.map((org) => {
-                const isActive = org.uuid === organisation_uuid;
-                return (
-                  <button
-                    key={org.uuid}
-                    type="button"
-                    disabled={isActive || switchOrganisation.isPending}
-                    onClick={() => switchOrganisation.mutate(org.uuid)}
-                    className={cn(
-                      "w-full flex items-center gap-2 px-2 py-1.5 rounded-lg text-sm transition-colors duration-100",
-                      isActive
-                        ? "bg-surface-secondary text-foreground"
-                        : "text-foreground hover:bg-surface-secondary",
-                    )}
-                  >
-                    <Building2 className="h-3.5 w-3.5 text-muted shrink-0" />
-                    <span className="flex-1 min-w-0 truncate text-left">{org.name}</span>
-                    {isActive ? <Check className="h-3.5 w-3.5 text-accent shrink-0" /> : null}
-                  </button>
-                );
-              })}
-            </div>
-          ) : null}
+          <div className="py-1.5 border-b border-border">
+            <p className="px-2 pb-1 text-[10px] uppercase tracking-wide text-muted">
+              Organisations
+            </p>
+            {organisations.map((org) => {
+              const isActive = org.uuid === organisation_uuid;
+              return (
+                <button
+                  key={org.uuid}
+                  type="button"
+                  disabled={isActive || switchOrganisation.isPending}
+                  onClick={() => switchOrganisation.mutate(org.uuid)}
+                  className={cn(
+                    "w-full flex items-center gap-2 px-2 py-1.5 rounded-lg text-sm transition-colors duration-100",
+                    isActive
+                      ? "bg-surface-secondary text-foreground"
+                      : "text-foreground hover:bg-surface-secondary",
+                  )}
+                >
+                  <Building2 className="h-3.5 w-3.5 text-muted shrink-0" />
+                  <span className="flex-1 min-w-0 truncate text-left">{org.name}</span>
+                  {isActive ? <Check className="h-3.5 w-3.5 text-accent shrink-0" /> : null}
+                </button>
+              );
+            })}
+            <button
+              type="button"
+              onClick={() =>
+                navigate(`${Routes.dashboard.settings_organisation}?create=1`)
+              }
+              className="w-full flex items-center gap-2 px-2 py-1.5 rounded-lg text-sm text-foreground hover:bg-surface-secondary transition-colors duration-100"
+            >
+              <Plus className="h-3.5 w-3.5 text-muted shrink-0" />
+              Create organisation
+            </button>
+          </div>
 
           <div className="py-1.5">
             {menuItems.map(({ label, icon: Icon, onClick }) => (
