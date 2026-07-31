@@ -37,6 +37,7 @@ export const Routes = {
         send_history: "/dashboard/send-history",
         message_templates: "/dashboard/message-templates",
         reminders: "/dashboard/reminders",
+        goals: "/dashboard/goals",
         forms: "/dashboard/forms",
         forms_detail: "/dashboard/forms/:uuid",
         lists: "/dashboard/lists",

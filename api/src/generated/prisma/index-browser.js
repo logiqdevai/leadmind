@@ -137,6 +137,7 @@ exports.Prisma.OrganisationScalarFieldEnum = {
   uuid: 'uuid',
   name: 'name',
   slug: 'slug',
+  timezone: 'timezone',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };
@@ -681,6 +682,42 @@ exports.Prisma.ApifyUsageLogScalarFieldEnum = {
   created_at: 'created_at'
 };
 
+exports.Prisma.MessagingGoalScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  organisation_uuid: 'organisation_uuid',
+  user_uuid: 'user_uuid',
+  period: 'period',
+  target_count: 'target_count',
+  is_active: 'is_active',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.GoalAchievementScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  organisation_uuid: 'organisation_uuid',
+  user_uuid: 'user_uuid',
+  goal_uuid: 'goal_uuid',
+  type: 'type',
+  period_key: 'period_key',
+  payload: 'payload',
+  seen_at: 'seen_at',
+  created_at: 'created_at'
+};
+
+exports.Prisma.GoalPersonalBestScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  organisation_uuid: 'organisation_uuid',
+  user_uuid: 'user_uuid',
+  period: 'period',
+  best_count: 'best_count',
+  achieved_at: 'achieved_at',
+  updated_at: 'updated_at'
+};
+
 exports.Prisma.ActivityLogScalarFieldEnum = {
   id: 'id',
   uuid: 'uuid',
@@ -991,6 +1028,21 @@ exports.ApifyUsageStatus = exports.$Enums.ApifyUsageStatus = {
   ERROR: 'ERROR'
 };
 
+exports.GoalPeriod = exports.$Enums.GoalPeriod = {
+  DAY: 'DAY',
+  WEEK: 'WEEK',
+  MONTH: 'MONTH'
+};
+
+exports.GoalAchievementType = exports.$Enums.GoalAchievementType = {
+  MILESTONE_25: 'MILESTONE_25',
+  MILESTONE_50: 'MILESTONE_50',
+  MILESTONE_75: 'MILESTONE_75',
+  GOAL_COMPLETE: 'GOAL_COMPLETE',
+  PERSONAL_RECORD: 'PERSONAL_RECORD',
+  LEADERBOARD_FIRST: 'LEADERBOARD_FIRST'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   Organisation: 'Organisation',
@@ -1030,6 +1082,9 @@ exports.Prisma.ModelName = {
   ContactAudienceAnalysis: 'ContactAudienceAnalysis',
   AiUsageLog: 'AiUsageLog',
   ApifyUsageLog: 'ApifyUsageLog',
+  MessagingGoal: 'MessagingGoal',
+  GoalAchievement: 'GoalAchievement',
+  GoalPersonalBest: 'GoalPersonalBest',
   ActivityLog: 'ActivityLog'
 };
 

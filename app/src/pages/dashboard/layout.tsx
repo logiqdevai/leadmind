@@ -11,6 +11,7 @@ import {
   useDashboardNavbarSlots,
 } from "@/components/providers/dashboard-navbar-provider";
 import { useReminderNotifications } from "@/features/reminders/hooks/use-reminder-notifications";
+import { GoalCelebrationsHost } from "@/pages/dashboard/components/goal-celebrations-host";
 import { environments } from "@/config/environments";
 import { Routes } from "@/routes/routes";
 
@@ -31,6 +32,7 @@ function DashboardShell() {
         </main>
       </div>
 
+      <GoalCelebrationsHost />
       <Drawer state={drawerState}>
         <Drawer.Backdrop
           isDismissable

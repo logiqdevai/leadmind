@@ -11,6 +11,7 @@ import { ResendModule } from '@/integrations/notifications/resend/resend.module'
 import { SmtpModule } from '@/integrations/notifications/smtp/smtp.module';
 import { TwillioModule } from '@/integrations/notifications/twillio/twillio.module';
 import { GatewaysModule } from '@/gateways/gateways.module';
+import { MessagingGoalsModule } from '@/modules/messaging-goals/messaging-goals.module';
 import {
     AI_PROCESS_QUEUE,
     FILTER_SCRAPE_QUEUE,
@@ -39,6 +40,7 @@ import { ReminderTriggerWorker } from './reminder-trigger.worker';
         SmtpModule,
         TwillioModule,
         GatewaysModule,
+        MessagingGoalsModule,
         BullModule.registerQueue(
             { name: FILTER_SCRAPE_QUEUE },
             { name: AI_PROCESS_QUEUE },

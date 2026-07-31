@@ -69,6 +69,7 @@ export class OrganisationsService {
             uuid: m.organisation.uuid,
             name: m.organisation.name,
             slug: m.organisation.slug,
+            timezone: m.organisation.timezone,
             role: m.role,
             created_at: m.organisation.created_at,
             updated_at: m.organisation.updated_at,
@@ -102,10 +103,13 @@ export class OrganisationsService {
             OrganisationRole.ADMIN,
         ]);
 
-        const data: { name?: string; slug?: string } = {};
+        const data: { name?: string; slug?: string; timezone?: string } = {};
         if (dto.name) {
             data.name = dto.name;
             data.slug = slugifyOrganisationName(dto.name, randomBytes(4).toString('hex'));
+        }
+        if (dto.timezone) {
+            data.timezone = dto.timezone;
         }
 
         return this.prisma.organisation.update({

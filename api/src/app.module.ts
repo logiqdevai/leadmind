@@ -38,6 +38,7 @@ import { MessageTemplatesModule } from './modules/message-templates/message-temp
 import { OrganisationsModule } from './modules/organisations/organisations.module';
 import { UsersModule } from './modules/users/users.module';
 import { ActivityLogsModule } from './modules/activity-logs/activity-logs.module';
+import { MessagingGoalsModule } from './modules/messaging-goals/messaging-goals.module';
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import { ActivityLogsModule } from './modules/activity-logs/activity-logs.module
     OrganisationsModule,
     UsersModule,
     ActivityLogsModule,
+    MessagingGoalsModule,
     SmsModule,
     AiModule,
     RedisModule,

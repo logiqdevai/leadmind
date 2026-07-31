@@ -34,6 +34,11 @@ export const WEBSOCKET_EVENTS = {
         UPDATED: 'form_completion.updated',
         DELETED: 'form_completion.deleted',
     },
+    GOAL: {
+        ACHIEVEMENT: 'goal.achievement',
+        PROGRESS_UPDATED: 'goal.progress_updated',
+        LEADERBOARD_UPDATED: 'goal.leaderboard_updated',
+    },
 } as const;
 
 export type WebsocketEventCategory = keyof typeof WEBSOCKET_EVENTS;

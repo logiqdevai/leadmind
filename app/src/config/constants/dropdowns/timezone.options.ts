@@ -1,4 +1,6 @@
 export const TimezoneOptions = [
+    { value: "UTC", label: "UTC (Coordinated Universal Time)" },
+    { value: "Europe/London", label: "Greenwich Mean Time - London" },
     { value: "Europe/Dublin", label: "Western European Time - Dublin" },
     { value: "Europe/Lisbon", label: "Western European Time - Lisbon" },
     { value: "Europe/Paris", label: "Central European Time - Paris" },
@@ -26,4 +28,8 @@ export const TimezoneOptions = [
     { value: "Europe/Riga", label: "Eastern European Time - Riga" },
     { value: "Europe/Vilnius", label: "Eastern European Time - Vilnius" },
     { value: "Europe/Bucharest", label: "Eastern European Time - Bucharest" },
-];
+] as const;
+
+export const TIMEZONE_VALUES = TimezoneOptions.map((o) => o.value);
+
+export type TimezoneValue = (typeof TimezoneOptions)[number]["value"];

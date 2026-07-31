@@ -19,6 +19,7 @@ export interface OrganisationSummary {
     uuid: string;
     name: string;
     slug: string;
+    timezone: string;
     role: OrganisationRole;
     created_at: string;
     updated_at: string;
@@ -60,6 +61,7 @@ export interface CreateOrganisationDto {
 
 export interface UpdateOrganisationDto {
     name?: string;
+    timezone?: string;
 }
 
 export interface CreateInvitationDto {

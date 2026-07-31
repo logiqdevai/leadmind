@@ -242,4 +242,14 @@ export const ApiRoutes = {
         previewInvitation: (token: string) => `/organisations/invitations/${token}`,
         acceptInvitation: (token: string) => `/organisations/invitations/${token}/accept`,
     },
+    messaging_goals: {
+        prefix: "/messaging-goals",
+        me: "/messaging-goals/me",
+        bulk: "/messaging-goals/bulk",
+        leaderboard: "/messaging-goals/leaderboard",
+        achievements: "/messaging-goals/achievements",
+        achievementSeen: (uuid: string) => `/messaging-goals/achievements/${uuid}/seen`,
+        update: (uuid: string) => `/messaging-goals/${uuid}`,
+        remove: (uuid: string) => `/messaging-goals/${uuid}`,
+    },
 }

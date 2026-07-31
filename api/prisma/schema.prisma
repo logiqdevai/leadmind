@@ -29,6 +29,9 @@ model User {
   form_completions         FormCompletion[]         @relation("CompletedByUser")
   outreach_messages_sent   OutreachMessage[]        @relation("OutreachMessageSentBy")
   activity_logs            ActivityLog[]            @relation("ActivityLogActor")
+  messaging_goals          MessagingGoal[]
+  goal_achievements        GoalAchievement[]
+  goal_personal_bests      GoalPersonalBest[]
 
   @@index([email])
   @@index([phone])
@@ -41,6 +44,7 @@ model Organisation {
   uuid       String   @unique @default(uuid())
   name       String
   slug       String   @unique
+  timezone   String   @default("UTC")
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
@@ -64,6 +68,9 @@ model Organisation {
   apify_usage_logs         ApifyUsageLog[]
   message_templates        MessageTemplate[]
   activity_logs            ActivityLog[]
+  messaging_goals          MessagingGoal[]
+  goal_achievements        GoalAchievement[]
+  goal_personal_bests      GoalPersonalBest[]
 
   @@index([uuid])
   @@index([slug])
@@ -472,6 +479,7 @@ model OutreachMessage {
   @@index([email_provider])
   @@index([sent_by_user_uuid])
   @@index([campaign_uuid, contact_uuid, channel])
+  @@index([organisation_uuid, sent_by_user_uuid, sent_at])
 }
 
 model OutreachSequence {
@@ -1176,6 +1184,82 @@ model ApifyUsageLog {
   @@index([organisation_uuid, actor_id])
   @@index([run_id])
   @@map("apify_usage_logs")
+}
+
+enum GoalPeriod {
+  DAY
+  WEEK
+  MONTH
+}
+
+enum GoalAchievementType {
+  MILESTONE_25
+  MILESTONE_50
+  MILESTONE_75
+  GOAL_COMPLETE
+  PERSONAL_RECORD
+  LEADERBOARD_FIRST
+}
+
+model MessagingGoal {
+  id                Int        @id @default(autoincrement())
+  uuid              String     @unique @default(uuid())
+  organisation_uuid String
+  user_uuid         String
+  period            GoalPeriod
+  target_count      Int
+  is_active         Boolean    @default(true)
+  created_at        DateTime   @default(now())
+  updated_at        DateTime   @updatedAt
+
+  organisation Organisation      @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  user         User              @relation(fields: [user_uuid], references: [uuid], onDelete: Cascade)
+  achievements GoalAchievement[]
+
+  @@unique([organisation_uuid, user_uuid, period])
+  @@index([organisation_uuid, is_active])
+  @@index([user_uuid, is_active])
+  @@map("messaging_goals")
+}
+
+model GoalAchievement {
+  id                Int                 @id @default(autoincrement())
+  uuid              String              @unique @default(uuid())
+  organisation_uuid String
+  user_uuid         String
+  goal_uuid         String
+  type              GoalAchievementType
+  period_key        String
+  payload           Json?
+  seen_at           DateTime?
+  created_at        DateTime            @default(now())
+
+  organisation Organisation @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  user         User         @relation(fields: [user_uuid], references: [uuid], onDelete: Cascade)
+  goal         MessagingGoal @relation(fields: [goal_uuid], references: [uuid], onDelete: Cascade)
+
+  @@unique([user_uuid, goal_uuid, type, period_key])
+  @@index([organisation_uuid, user_uuid, seen_at])
+  @@index([user_uuid, seen_at])
+  @@map("goal_achievements")
+}
+
+model GoalPersonalBest {
+  id                Int        @id @default(autoincrement())
+  uuid              String     @unique @default(uuid())
+  organisation_uuid String
+  user_uuid         String
+  period            GoalPeriod
+  best_count        Int        @default(0)
+  achieved_at       DateTime   @default(now())
+  updated_at        DateTime   @updatedAt
+
+  organisation Organisation @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  user         User         @relation(fields: [user_uuid], references: [uuid], onDelete: Cascade)
+
+  @@unique([organisation_uuid, user_uuid, period])
+  @@index([organisation_uuid, user_uuid])
+  @@map("goal_personal_bests")
 }
 
 model ActivityLog {

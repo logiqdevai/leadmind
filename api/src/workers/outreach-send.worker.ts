@@ -6,6 +6,7 @@ import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { OUTREACH_SEND_QUEUE } from '@/core/queues/queues.constants';
 import { ContactsService } from '@/modules/contacts/contacts.service';
 import { MessageSendService } from '@/modules/outreach/services/message-send.service';
+import { MessagingGoalsService } from '@/modules/messaging-goals/messaging-goals.service';
 import { hasUsableContactEmail } from '@/shared/utils/contact-email.util';
 
 interface OutreachSendJobData {
@@ -20,6 +21,7 @@ export class OutreachSendWorker extends WorkerHost implements OnModuleInit {
         private readonly prisma: PrismaService,
         private readonly messageSendService: MessageSendService,
         private readonly contactsService: ContactsService,
+        private readonly messagingGoalsService: MessagingGoalsService,
     ) {
         super();
     }
@@ -124,6 +126,17 @@ export class OutreachSendWorker extends WorkerHost implements OnModuleInit {
             if (shouldPromoteOnSend) {
                 await this.contactsService.syncContactSearchIndex(message.contact_uuid);
             }
+
+            if (message.sent_by_user_uuid) {
+                setImmediate(() => {
+                    void this.messagingGoalsService.onMessageSent({
+                        organisation_uuid: message.organisation_uuid,
+                        user_uuid: message.sent_by_user_uuid!,
+                        sent_at: new Date(),
+                    });
+                });
+            }
+
             this.logger.log(
                 `Outreach send succeeded message=${message.uuid} providerMessageId=${provider_message_id}`,
             );

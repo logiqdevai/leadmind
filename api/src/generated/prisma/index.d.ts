@@ -204,6 +204,21 @@ export type AiUsageLog = $Result.DefaultSelection<Prisma.$AiUsageLogPayload>
  */
 export type ApifyUsageLog = $Result.DefaultSelection<Prisma.$ApifyUsageLogPayload>
 /**
+ * Model MessagingGoal
+ * 
+ */
+export type MessagingGoal = $Result.DefaultSelection<Prisma.$MessagingGoalPayload>
+/**
+ * Model GoalAchievement
+ * 
+ */
+export type GoalAchievement = $Result.DefaultSelection<Prisma.$GoalAchievementPayload>
+/**
+ * Model GoalPersonalBest
+ * 
+ */
+export type GoalPersonalBest = $Result.DefaultSelection<Prisma.$GoalPersonalBestPayload>
+/**
  * Model ActivityLog
  * 
  */
@@ -570,6 +585,27 @@ export const ApifyUsageStatus: {
 
 export type ApifyUsageStatus = (typeof ApifyUsageStatus)[keyof typeof ApifyUsageStatus]
 
+
+export const GoalPeriod: {
+  DAY: 'DAY',
+  WEEK: 'WEEK',
+  MONTH: 'MONTH'
+};
+
+export type GoalPeriod = (typeof GoalPeriod)[keyof typeof GoalPeriod]
+
+
+export const GoalAchievementType: {
+  MILESTONE_25: 'MILESTONE_25',
+  MILESTONE_50: 'MILESTONE_50',
+  MILESTONE_75: 'MILESTONE_75',
+  GOAL_COMPLETE: 'GOAL_COMPLETE',
+  PERSONAL_RECORD: 'PERSONAL_RECORD',
+  LEADERBOARD_FIRST: 'LEADERBOARD_FIRST'
+};
+
+export type GoalAchievementType = (typeof GoalAchievementType)[keyof typeof GoalAchievementType]
+
 }
 
 export type AuthRole = $Enums.AuthRole
@@ -691,6 +727,14 @@ export const ApifyUsageOperation: typeof $Enums.ApifyUsageOperation
 export type ApifyUsageStatus = $Enums.ApifyUsageStatus
 
 export const ApifyUsageStatus: typeof $Enums.ApifyUsageStatus
+
+export type GoalPeriod = $Enums.GoalPeriod
+
+export const GoalPeriod: typeof $Enums.GoalPeriod
+
+export type GoalAchievementType = $Enums.GoalAchievementType
+
+export const GoalAchievementType: typeof $Enums.GoalAchievementType
 
 /**
  * ##  Prisma Client ʲˢ
@@ -1190,6 +1234,36 @@ export class PrismaClient<
   get apifyUsageLog(): Prisma.ApifyUsageLogDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.messagingGoal`: Exposes CRUD operations for the **MessagingGoal** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more MessagingGoals
+    * const messagingGoals = await prisma.messagingGoal.findMany()
+    * ```
+    */
+  get messagingGoal(): Prisma.MessagingGoalDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.goalAchievement`: Exposes CRUD operations for the **GoalAchievement** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more GoalAchievements
+    * const goalAchievements = await prisma.goalAchievement.findMany()
+    * ```
+    */
+  get goalAchievement(): Prisma.GoalAchievementDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.goalPersonalBest`: Exposes CRUD operations for the **GoalPersonalBest** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more GoalPersonalBests
+    * const goalPersonalBests = await prisma.goalPersonalBest.findMany()
+    * ```
+    */
+  get goalPersonalBest(): Prisma.GoalPersonalBestDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.activityLog`: Exposes CRUD operations for the **ActivityLog** model.
     * Example usage:
     * ```ts
@@ -1670,6 +1744,9 @@ export namespace Prisma {
     ContactAudienceAnalysis: 'ContactAudienceAnalysis',
     AiUsageLog: 'AiUsageLog',
     ApifyUsageLog: 'ApifyUsageLog',
+    MessagingGoal: 'MessagingGoal',
+    GoalAchievement: 'GoalAchievement',
+    GoalPersonalBest: 'GoalPersonalBest',
     ActivityLog: 'ActivityLog'
   };
 
@@ -1686,7 +1763,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "organisation" | "organisationMember" | "organisationInvitation" | "filter" | "scoringInstruction" | "filterScoringInstruction" | "rawLead" | "lead" | "leadEnrichment" | "contact" | "contactInfo" | "contactFilter" | "contactEnrichment" | "contactScore" | "contactList" | "contactListMember" | "contactTag" | "interaction" | "outreachMessage" | "outreachSequence" | "filterJob" | "senderProfile" | "messageTemplate" | "marketingCampaign" | "marketingCampaignContact" | "openAiBatchJob" | "integration" | "integrationAccount" | "integrationKey" | "reminder" | "form" | "formField" | "formCompletion" | "formCompletionValue" | "contactAudienceAnalysis" | "aiUsageLog" | "apifyUsageLog" | "activityLog"
+      modelProps: "user" | "organisation" | "organisationMember" | "organisationInvitation" | "filter" | "scoringInstruction" | "filterScoringInstruction" | "rawLead" | "lead" | "leadEnrichment" | "contact" | "contactInfo" | "contactFilter" | "contactEnrichment" | "contactScore" | "contactList" | "contactListMember" | "contactTag" | "interaction" | "outreachMessage" | "outreachSequence" | "filterJob" | "senderProfile" | "messageTemplate" | "marketingCampaign" | "marketingCampaignContact" | "openAiBatchJob" | "integration" | "integrationAccount" | "integrationKey" | "reminder" | "form" | "formField" | "formCompletion" | "formCompletionValue" | "contactAudienceAnalysis" | "aiUsageLog" | "apifyUsageLog" | "messagingGoal" | "goalAchievement" | "goalPersonalBest" | "activityLog"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -4502,6 +4579,228 @@ export namespace Prisma {
           }
         }
       }
+      MessagingGoal: {
+        payload: Prisma.$MessagingGoalPayload<ExtArgs>
+        fields: Prisma.MessagingGoalFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.MessagingGoalFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MessagingGoalPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.MessagingGoalFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MessagingGoalPayload>
+          }
+          findFirst: {
+            args: Prisma.MessagingGoalFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MessagingGoalPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.MessagingGoalFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MessagingGoalPayload>
+          }
+          findMany: {
+            args: Prisma.MessagingGoalFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MessagingGoalPayload>[]
+          }
+          create: {
+            args: Prisma.MessagingGoalCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MessagingGoalPayload>
+          }
+          createMany: {
+            args: Prisma.MessagingGoalCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.MessagingGoalCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MessagingGoalPayload>[]
+          }
+          delete: {
+            args: Prisma.MessagingGoalDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MessagingGoalPayload>
+          }
+          update: {
+            args: Prisma.MessagingGoalUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MessagingGoalPayload>
+          }
+          deleteMany: {
+            args: Prisma.MessagingGoalDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.MessagingGoalUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.MessagingGoalUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MessagingGoalPayload>[]
+          }
+          upsert: {
+            args: Prisma.MessagingGoalUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MessagingGoalPayload>
+          }
+          aggregate: {
+            args: Prisma.MessagingGoalAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMessagingGoal>
+          }
+          groupBy: {
+            args: Prisma.MessagingGoalGroupByArgs<ExtArgs>
+            result: $Utils.Optional<MessagingGoalGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.MessagingGoalCountArgs<ExtArgs>
+            result: $Utils.Optional<MessagingGoalCountAggregateOutputType> | number
+          }
+        }
+      }
+      GoalAchievement: {
+        payload: Prisma.$GoalAchievementPayload<ExtArgs>
+        fields: Prisma.GoalAchievementFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.GoalAchievementFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GoalAchievementPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.GoalAchievementFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GoalAchievementPayload>
+          }
+          findFirst: {
+            args: Prisma.GoalAchievementFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GoalAchievementPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.GoalAchievementFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GoalAchievementPayload>
+          }
+          findMany: {
+            args: Prisma.GoalAchievementFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GoalAchievementPayload>[]
+          }
+          create: {
+            args: Prisma.GoalAchievementCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GoalAchievementPayload>
+          }
+          createMany: {
+            args: Prisma.GoalAchievementCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.GoalAchievementCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GoalAchievementPayload>[]
+          }
+          delete: {
+            args: Prisma.GoalAchievementDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GoalAchievementPayload>
+          }
+          update: {
+            args: Prisma.GoalAchievementUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GoalAchievementPayload>
+          }
+          deleteMany: {
+            args: Prisma.GoalAchievementDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.GoalAchievementUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.GoalAchievementUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GoalAchievementPayload>[]
+          }
+          upsert: {
+            args: Prisma.GoalAchievementUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GoalAchievementPayload>
+          }
+          aggregate: {
+            args: Prisma.GoalAchievementAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateGoalAchievement>
+          }
+          groupBy: {
+            args: Prisma.GoalAchievementGroupByArgs<ExtArgs>
+            result: $Utils.Optional<GoalAchievementGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.GoalAchievementCountArgs<ExtArgs>
+            result: $Utils.Optional<GoalAchievementCountAggregateOutputType> | number
+          }
+        }
+      }
+      GoalPersonalBest: {
+        payload: Prisma.$GoalPersonalBestPayload<ExtArgs>
+        fields: Prisma.GoalPersonalBestFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.GoalPersonalBestFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GoalPersonalBestPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.GoalPersonalBestFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GoalPersonalBestPayload>
+          }
+          findFirst: {
+            args: Prisma.GoalPersonalBestFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GoalPersonalBestPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.GoalPersonalBestFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GoalPersonalBestPayload>
+          }
+          findMany: {
+            args: Prisma.GoalPersonalBestFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GoalPersonalBestPayload>[]
+          }
+          create: {
+            args: Prisma.GoalPersonalBestCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GoalPersonalBestPayload>
+          }
+          createMany: {
+            args: Prisma.GoalPersonalBestCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.GoalPersonalBestCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GoalPersonalBestPayload>[]
+          }
+          delete: {
+            args: Prisma.GoalPersonalBestDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GoalPersonalBestPayload>
+          }
+          update: {
+            args: Prisma.GoalPersonalBestUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GoalPersonalBestPayload>
+          }
+          deleteMany: {
+            args: Prisma.GoalPersonalBestDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.GoalPersonalBestUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.GoalPersonalBestUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GoalPersonalBestPayload>[]
+          }
+          upsert: {
+            args: Prisma.GoalPersonalBestUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GoalPersonalBestPayload>
+          }
+          aggregate: {
+            args: Prisma.GoalPersonalBestAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateGoalPersonalBest>
+          }
+          groupBy: {
+            args: Prisma.GoalPersonalBestGroupByArgs<ExtArgs>
+            result: $Utils.Optional<GoalPersonalBestGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.GoalPersonalBestCountArgs<ExtArgs>
+            result: $Utils.Optional<GoalPersonalBestCountAggregateOutputType> | number
+          }
+        }
+      }
       ActivityLog: {
         payload: Prisma.$ActivityLogPayload<ExtArgs>
         fields: Prisma.ActivityLogFieldRefs
@@ -4722,6 +5021,9 @@ export namespace Prisma {
     contactAudienceAnalysis?: ContactAudienceAnalysisOmit
     aiUsageLog?: AiUsageLogOmit
     apifyUsageLog?: ApifyUsageLogOmit
+    messagingGoal?: MessagingGoalOmit
+    goalAchievement?: GoalAchievementOmit
+    goalPersonalBest?: GoalPersonalBestOmit
     activityLog?: ActivityLogOmit
   }
 
@@ -4808,6 +5110,9 @@ export namespace Prisma {
     form_completions: number
     outreach_messages_sent: number
     activity_logs: number
+    messaging_goals: number
+    goal_achievements: number
+    goal_personal_bests: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4816,6 +5121,9 @@ export namespace Prisma {
     form_completions?: boolean | UserCountOutputTypeCountForm_completionsArgs
     outreach_messages_sent?: boolean | UserCountOutputTypeCountOutreach_messages_sentArgs
     activity_logs?: boolean | UserCountOutputTypeCountActivity_logsArgs
+    messaging_goals?: boolean | UserCountOutputTypeCountMessaging_goalsArgs
+    goal_achievements?: boolean | UserCountOutputTypeCountGoal_achievementsArgs
+    goal_personal_bests?: boolean | UserCountOutputTypeCountGoal_personal_bestsArgs
   }
 
   // Custom InputTypes
@@ -4864,6 +5172,27 @@ export namespace Prisma {
     where?: ActivityLogWhereInput
   }
 
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountMessaging_goalsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MessagingGoalWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountGoal_achievementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GoalAchievementWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountGoal_personal_bestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GoalPersonalBestWhereInput
+  }
+
 
   /**
    * Count Type OrganisationCountOutputType
@@ -4890,6 +5219,9 @@ export namespace Prisma {
     apify_usage_logs: number
     message_templates: number
     activity_logs: number
+    messaging_goals: number
+    goal_achievements: number
+    goal_personal_bests: number
   }
 
   export type OrganisationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4913,6 +5245,9 @@ export namespace Prisma {
     apify_usage_logs?: boolean | OrganisationCountOutputTypeCountApify_usage_logsArgs
     message_templates?: boolean | OrganisationCountOutputTypeCountMessage_templatesArgs
     activity_logs?: boolean | OrganisationCountOutputTypeCountActivity_logsArgs
+    messaging_goals?: boolean | OrganisationCountOutputTypeCountMessaging_goalsArgs
+    goal_achievements?: boolean | OrganisationCountOutputTypeCountGoal_achievementsArgs
+    goal_personal_bests?: boolean | OrganisationCountOutputTypeCountGoal_personal_bestsArgs
   }
 
   // Custom InputTypes
@@ -5064,6 +5399,27 @@ export namespace Prisma {
    */
   export type OrganisationCountOutputTypeCountActivity_logsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ActivityLogWhereInput
+  }
+
+  /**
+   * OrganisationCountOutputType without action
+   */
+  export type OrganisationCountOutputTypeCountMessaging_goalsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MessagingGoalWhereInput
+  }
+
+  /**
+   * OrganisationCountOutputType without action
+   */
+  export type OrganisationCountOutputTypeCountGoal_achievementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GoalAchievementWhereInput
+  }
+
+  /**
+   * OrganisationCountOutputType without action
+   */
+  export type OrganisationCountOutputTypeCountGoal_personal_bestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GoalPersonalBestWhereInput
   }
 
 
@@ -5616,6 +5972,37 @@ export namespace Prisma {
 
 
   /**
+   * Count Type MessagingGoalCountOutputType
+   */
+
+  export type MessagingGoalCountOutputType = {
+    achievements: number
+  }
+
+  export type MessagingGoalCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    achievements?: boolean | MessagingGoalCountOutputTypeCountAchievementsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * MessagingGoalCountOutputType without action
+   */
+  export type MessagingGoalCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessagingGoalCountOutputType
+     */
+    select?: MessagingGoalCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * MessagingGoalCountOutputType without action
+   */
+  export type MessagingGoalCountOutputTypeCountAchievementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GoalAchievementWhereInput
+  }
+
+
+  /**
    * Models
    */
 
@@ -5854,6 +6241,9 @@ export namespace Prisma {
     form_completions?: boolean | User$form_completionsArgs<ExtArgs>
     outreach_messages_sent?: boolean | User$outreach_messages_sentArgs<ExtArgs>
     activity_logs?: boolean | User$activity_logsArgs<ExtArgs>
+    messaging_goals?: boolean | User$messaging_goalsArgs<ExtArgs>
+    goal_achievements?: boolean | User$goal_achievementsArgs<ExtArgs>
+    goal_personal_bests?: boolean | User$goal_personal_bestsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -5900,6 +6290,9 @@ export namespace Prisma {
     form_completions?: boolean | User$form_completionsArgs<ExtArgs>
     outreach_messages_sent?: boolean | User$outreach_messages_sentArgs<ExtArgs>
     activity_logs?: boolean | User$activity_logsArgs<ExtArgs>
+    messaging_goals?: boolean | User$messaging_goalsArgs<ExtArgs>
+    goal_achievements?: boolean | User$goal_achievementsArgs<ExtArgs>
+    goal_personal_bests?: boolean | User$goal_personal_bestsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -5913,6 +6306,9 @@ export namespace Prisma {
       form_completions: Prisma.$FormCompletionPayload<ExtArgs>[]
       outreach_messages_sent: Prisma.$OutreachMessagePayload<ExtArgs>[]
       activity_logs: Prisma.$ActivityLogPayload<ExtArgs>[]
+      messaging_goals: Prisma.$MessagingGoalPayload<ExtArgs>[]
+      goal_achievements: Prisma.$GoalAchievementPayload<ExtArgs>[]
+      goal_personal_bests: Prisma.$GoalPersonalBestPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -6323,6 +6719,9 @@ export namespace Prisma {
     form_completions<T extends User$form_completionsArgs<ExtArgs> = {}>(args?: Subset<T, User$form_completionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FormCompletionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     outreach_messages_sent<T extends User$outreach_messages_sentArgs<ExtArgs> = {}>(args?: Subset<T, User$outreach_messages_sentArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OutreachMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     activity_logs<T extends User$activity_logsArgs<ExtArgs> = {}>(args?: Subset<T, User$activity_logsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ActivityLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    messaging_goals<T extends User$messaging_goalsArgs<ExtArgs> = {}>(args?: Subset<T, User$messaging_goalsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessagingGoalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    goal_achievements<T extends User$goal_achievementsArgs<ExtArgs> = {}>(args?: Subset<T, User$goal_achievementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GoalAchievementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    goal_personal_bests<T extends User$goal_personal_bestsArgs<ExtArgs> = {}>(args?: Subset<T, User$goal_personal_bestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GoalPersonalBestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6869,6 +7268,78 @@ export namespace Prisma {
   }
 
   /**
+   * User.messaging_goals
+   */
+  export type User$messaging_goalsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessagingGoal
+     */
+    select?: MessagingGoalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MessagingGoal
+     */
+    omit?: MessagingGoalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessagingGoalInclude<ExtArgs> | null
+    where?: MessagingGoalWhereInput
+    orderBy?: MessagingGoalOrderByWithRelationInput | MessagingGoalOrderByWithRelationInput[]
+    cursor?: MessagingGoalWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MessagingGoalScalarFieldEnum | MessagingGoalScalarFieldEnum[]
+  }
+
+  /**
+   * User.goal_achievements
+   */
+  export type User$goal_achievementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GoalAchievement
+     */
+    select?: GoalAchievementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GoalAchievement
+     */
+    omit?: GoalAchievementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GoalAchievementInclude<ExtArgs> | null
+    where?: GoalAchievementWhereInput
+    orderBy?: GoalAchievementOrderByWithRelationInput | GoalAchievementOrderByWithRelationInput[]
+    cursor?: GoalAchievementWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: GoalAchievementScalarFieldEnum | GoalAchievementScalarFieldEnum[]
+  }
+
+  /**
+   * User.goal_personal_bests
+   */
+  export type User$goal_personal_bestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GoalPersonalBest
+     */
+    select?: GoalPersonalBestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GoalPersonalBest
+     */
+    omit?: GoalPersonalBestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GoalPersonalBestInclude<ExtArgs> | null
+    where?: GoalPersonalBestWhereInput
+    orderBy?: GoalPersonalBestOrderByWithRelationInput | GoalPersonalBestOrderByWithRelationInput[]
+    cursor?: GoalPersonalBestWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: GoalPersonalBestScalarFieldEnum | GoalPersonalBestScalarFieldEnum[]
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6912,6 +7383,7 @@ export namespace Prisma {
     uuid: string | null
     name: string | null
     slug: string | null
+    timezone: string | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -6921,6 +7393,7 @@ export namespace Prisma {
     uuid: string | null
     name: string | null
     slug: string | null
+    timezone: string | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -6930,6 +7403,7 @@ export namespace Prisma {
     uuid: number
     name: number
     slug: number
+    timezone: number
     created_at: number
     updated_at: number
     _all: number
@@ -6949,6 +7423,7 @@ export namespace Prisma {
     uuid?: true
     name?: true
     slug?: true
+    timezone?: true
     created_at?: true
     updated_at?: true
   }
@@ -6958,6 +7433,7 @@ export namespace Prisma {
     uuid?: true
     name?: true
     slug?: true
+    timezone?: true
     created_at?: true
     updated_at?: true
   }
@@ -6967,6 +7443,7 @@ export namespace Prisma {
     uuid?: true
     name?: true
     slug?: true
+    timezone?: true
     created_at?: true
     updated_at?: true
     _all?: true
@@ -7063,6 +7540,7 @@ export namespace Prisma {
     uuid: string
     name: string
     slug: string
+    timezone: string
     created_at: Date
     updated_at: Date
     _count: OrganisationCountAggregateOutputType | null
@@ -7091,6 +7569,7 @@ export namespace Prisma {
     uuid?: boolean
     name?: boolean
     slug?: boolean
+    timezone?: boolean
     created_at?: boolean
     updated_at?: boolean
     members?: boolean | Organisation$membersArgs<ExtArgs>
@@ -7113,6 +7592,9 @@ export namespace Prisma {
     apify_usage_logs?: boolean | Organisation$apify_usage_logsArgs<ExtArgs>
     message_templates?: boolean | Organisation$message_templatesArgs<ExtArgs>
     activity_logs?: boolean | Organisation$activity_logsArgs<ExtArgs>
+    messaging_goals?: boolean | Organisation$messaging_goalsArgs<ExtArgs>
+    goal_achievements?: boolean | Organisation$goal_achievementsArgs<ExtArgs>
+    goal_personal_bests?: boolean | Organisation$goal_personal_bestsArgs<ExtArgs>
     _count?: boolean | OrganisationCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["organisation"]>
 
@@ -7121,6 +7603,7 @@ export namespace Prisma {
     uuid?: boolean
     name?: boolean
     slug?: boolean
+    timezone?: boolean
     created_at?: boolean
     updated_at?: boolean
   }, ExtArgs["result"]["organisation"]>
@@ -7130,6 +7613,7 @@ export namespace Prisma {
     uuid?: boolean
     name?: boolean
     slug?: boolean
+    timezone?: boolean
     created_at?: boolean
     updated_at?: boolean
   }, ExtArgs["result"]["organisation"]>
@@ -7139,11 +7623,12 @@ export namespace Prisma {
     uuid?: boolean
     name?: boolean
     slug?: boolean
+    timezone?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
-  export type OrganisationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "name" | "slug" | "created_at" | "updated_at", ExtArgs["result"]["organisation"]>
+  export type OrganisationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "name" | "slug" | "timezone" | "created_at" | "updated_at", ExtArgs["result"]["organisation"]>
   export type OrganisationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     members?: boolean | Organisation$membersArgs<ExtArgs>
     invitations?: boolean | Organisation$invitationsArgs<ExtArgs>
@@ -7165,6 +7650,9 @@ export namespace Prisma {
     apify_usage_logs?: boolean | Organisation$apify_usage_logsArgs<ExtArgs>
     message_templates?: boolean | Organisation$message_templatesArgs<ExtArgs>
     activity_logs?: boolean | Organisation$activity_logsArgs<ExtArgs>
+    messaging_goals?: boolean | Organisation$messaging_goalsArgs<ExtArgs>
+    goal_achievements?: boolean | Organisation$goal_achievementsArgs<ExtArgs>
+    goal_personal_bests?: boolean | Organisation$goal_personal_bestsArgs<ExtArgs>
     _count?: boolean | OrganisationCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type OrganisationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -7193,12 +7681,16 @@ export namespace Prisma {
       apify_usage_logs: Prisma.$ApifyUsageLogPayload<ExtArgs>[]
       message_templates: Prisma.$MessageTemplatePayload<ExtArgs>[]
       activity_logs: Prisma.$ActivityLogPayload<ExtArgs>[]
+      messaging_goals: Prisma.$MessagingGoalPayload<ExtArgs>[]
+      goal_achievements: Prisma.$GoalAchievementPayload<ExtArgs>[]
+      goal_personal_bests: Prisma.$GoalPersonalBestPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
       uuid: string
       name: string
       slug: string
+      timezone: string
       created_at: Date
       updated_at: Date
     }, ExtArgs["result"]["organisation"]>
@@ -7615,6 +8107,9 @@ export namespace Prisma {
     apify_usage_logs<T extends Organisation$apify_usage_logsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$apify_usage_logsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApifyUsageLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     message_templates<T extends Organisation$message_templatesArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$message_templatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessageTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     activity_logs<T extends Organisation$activity_logsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$activity_logsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ActivityLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    messaging_goals<T extends Organisation$messaging_goalsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$messaging_goalsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessagingGoalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    goal_achievements<T extends Organisation$goal_achievementsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$goal_achievementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GoalAchievementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    goal_personal_bests<T extends Organisation$goal_personal_bestsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$goal_personal_bestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GoalPersonalBestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7648,6 +8143,7 @@ export namespace Prisma {
     readonly uuid: FieldRef<"Organisation", 'String'>
     readonly name: FieldRef<"Organisation", 'String'>
     readonly slug: FieldRef<"Organisation", 'String'>
+    readonly timezone: FieldRef<"Organisation", 'String'>
     readonly created_at: FieldRef<"Organisation", 'DateTime'>
     readonly updated_at: FieldRef<"Organisation", 'DateTime'>
   }
@@ -8515,6 +9011,78 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ActivityLogScalarFieldEnum | ActivityLogScalarFieldEnum[]
+  }
+
+  /**
+   * Organisation.messaging_goals
+   */
+  export type Organisation$messaging_goalsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessagingGoal
+     */
+    select?: MessagingGoalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MessagingGoal
+     */
+    omit?: MessagingGoalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessagingGoalInclude<ExtArgs> | null
+    where?: MessagingGoalWhereInput
+    orderBy?: MessagingGoalOrderByWithRelationInput | MessagingGoalOrderByWithRelationInput[]
+    cursor?: MessagingGoalWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MessagingGoalScalarFieldEnum | MessagingGoalScalarFieldEnum[]
+  }
+
+  /**
+   * Organisation.goal_achievements
+   */
+  export type Organisation$goal_achievementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GoalAchievement
+     */
+    select?: GoalAchievementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GoalAchievement
+     */
+    omit?: GoalAchievementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GoalAchievementInclude<ExtArgs> | null
+    where?: GoalAchievementWhereInput
+    orderBy?: GoalAchievementOrderByWithRelationInput | GoalAchievementOrderByWithRelationInput[]
+    cursor?: GoalAchievementWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: GoalAchievementScalarFieldEnum | GoalAchievementScalarFieldEnum[]
+  }
+
+  /**
+   * Organisation.goal_personal_bests
+   */
+  export type Organisation$goal_personal_bestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GoalPersonalBest
+     */
+    select?: GoalPersonalBestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GoalPersonalBest
+     */
+    omit?: GoalPersonalBestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GoalPersonalBestInclude<ExtArgs> | null
+    where?: GoalPersonalBestWhereInput
+    orderBy?: GoalPersonalBestOrderByWithRelationInput | GoalPersonalBestOrderByWithRelationInput[]
+    cursor?: GoalPersonalBestWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: GoalPersonalBestScalarFieldEnum | GoalPersonalBestScalarFieldEnum[]
   }
 
   /**
@@ -52495,6 +53063,3504 @@ export namespace Prisma {
 
 
   /**
+   * Model MessagingGoal
+   */
+
+  export type AggregateMessagingGoal = {
+    _count: MessagingGoalCountAggregateOutputType | null
+    _avg: MessagingGoalAvgAggregateOutputType | null
+    _sum: MessagingGoalSumAggregateOutputType | null
+    _min: MessagingGoalMinAggregateOutputType | null
+    _max: MessagingGoalMaxAggregateOutputType | null
+  }
+
+  export type MessagingGoalAvgAggregateOutputType = {
+    id: number | null
+    target_count: number | null
+  }
+
+  export type MessagingGoalSumAggregateOutputType = {
+    id: number | null
+    target_count: number | null
+  }
+
+  export type MessagingGoalMinAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    organisation_uuid: string | null
+    user_uuid: string | null
+    period: $Enums.GoalPeriod | null
+    target_count: number | null
+    is_active: boolean | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type MessagingGoalMaxAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    organisation_uuid: string | null
+    user_uuid: string | null
+    period: $Enums.GoalPeriod | null
+    target_count: number | null
+    is_active: boolean | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type MessagingGoalCountAggregateOutputType = {
+    id: number
+    uuid: number
+    organisation_uuid: number
+    user_uuid: number
+    period: number
+    target_count: number
+    is_active: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type MessagingGoalAvgAggregateInputType = {
+    id?: true
+    target_count?: true
+  }
+
+  export type MessagingGoalSumAggregateInputType = {
+    id?: true
+    target_count?: true
+  }
+
+  export type MessagingGoalMinAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    user_uuid?: true
+    period?: true
+    target_count?: true
+    is_active?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type MessagingGoalMaxAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    user_uuid?: true
+    period?: true
+    target_count?: true
+    is_active?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type MessagingGoalCountAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    user_uuid?: true
+    period?: true
+    target_count?: true
+    is_active?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type MessagingGoalAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MessagingGoal to aggregate.
+     */
+    where?: MessagingGoalWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MessagingGoals to fetch.
+     */
+    orderBy?: MessagingGoalOrderByWithRelationInput | MessagingGoalOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: MessagingGoalWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MessagingGoals from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MessagingGoals.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned MessagingGoals
+    **/
+    _count?: true | MessagingGoalCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: MessagingGoalAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: MessagingGoalSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: MessagingGoalMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: MessagingGoalMaxAggregateInputType
+  }
+
+  export type GetMessagingGoalAggregateType<T extends MessagingGoalAggregateArgs> = {
+        [P in keyof T & keyof AggregateMessagingGoal]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMessagingGoal[P]>
+      : GetScalarType<T[P], AggregateMessagingGoal[P]>
+  }
+
+
+
+
+  export type MessagingGoalGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MessagingGoalWhereInput
+    orderBy?: MessagingGoalOrderByWithAggregationInput | MessagingGoalOrderByWithAggregationInput[]
+    by: MessagingGoalScalarFieldEnum[] | MessagingGoalScalarFieldEnum
+    having?: MessagingGoalScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: MessagingGoalCountAggregateInputType | true
+    _avg?: MessagingGoalAvgAggregateInputType
+    _sum?: MessagingGoalSumAggregateInputType
+    _min?: MessagingGoalMinAggregateInputType
+    _max?: MessagingGoalMaxAggregateInputType
+  }
+
+  export type MessagingGoalGroupByOutputType = {
+    id: number
+    uuid: string
+    organisation_uuid: string
+    user_uuid: string
+    period: $Enums.GoalPeriod
+    target_count: number
+    is_active: boolean
+    created_at: Date
+    updated_at: Date
+    _count: MessagingGoalCountAggregateOutputType | null
+    _avg: MessagingGoalAvgAggregateOutputType | null
+    _sum: MessagingGoalSumAggregateOutputType | null
+    _min: MessagingGoalMinAggregateOutputType | null
+    _max: MessagingGoalMaxAggregateOutputType | null
+  }
+
+  type GetMessagingGoalGroupByPayload<T extends MessagingGoalGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<MessagingGoalGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof MessagingGoalGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], MessagingGoalGroupByOutputType[P]>
+            : GetScalarType<T[P], MessagingGoalGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type MessagingGoalSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    user_uuid?: boolean
+    period?: boolean
+    target_count?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    achievements?: boolean | MessagingGoal$achievementsArgs<ExtArgs>
+    _count?: boolean | MessagingGoalCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["messagingGoal"]>
+
+  export type MessagingGoalSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    user_uuid?: boolean
+    period?: boolean
+    target_count?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["messagingGoal"]>
+
+  export type MessagingGoalSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    user_uuid?: boolean
+    period?: boolean
+    target_count?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["messagingGoal"]>
+
+  export type MessagingGoalSelectScalar = {
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    user_uuid?: boolean
+    period?: boolean
+    target_count?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type MessagingGoalOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "user_uuid" | "period" | "target_count" | "is_active" | "created_at" | "updated_at", ExtArgs["result"]["messagingGoal"]>
+  export type MessagingGoalInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    achievements?: boolean | MessagingGoal$achievementsArgs<ExtArgs>
+    _count?: boolean | MessagingGoalCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type MessagingGoalIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type MessagingGoalIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $MessagingGoalPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "MessagingGoal"
+    objects: {
+      organisation: Prisma.$OrganisationPayload<ExtArgs>
+      user: Prisma.$UserPayload<ExtArgs>
+      achievements: Prisma.$GoalAchievementPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      uuid: string
+      organisation_uuid: string
+      user_uuid: string
+      period: $Enums.GoalPeriod
+      target_count: number
+      is_active: boolean
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["messagingGoal"]>
+    composites: {}
+  }
+
+  type MessagingGoalGetPayload<S extends boolean | null | undefined | MessagingGoalDefaultArgs> = $Result.GetResult<Prisma.$MessagingGoalPayload, S>
+
+  type MessagingGoalCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<MessagingGoalFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: MessagingGoalCountAggregateInputType | true
+    }
+
+  export interface MessagingGoalDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['MessagingGoal'], meta: { name: 'MessagingGoal' } }
+    /**
+     * Find zero or one MessagingGoal that matches the filter.
+     * @param {MessagingGoalFindUniqueArgs} args - Arguments to find a MessagingGoal
+     * @example
+     * // Get one MessagingGoal
+     * const messagingGoal = await prisma.messagingGoal.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends MessagingGoalFindUniqueArgs>(args: SelectSubset<T, MessagingGoalFindUniqueArgs<ExtArgs>>): Prisma__MessagingGoalClient<$Result.GetResult<Prisma.$MessagingGoalPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one MessagingGoal that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {MessagingGoalFindUniqueOrThrowArgs} args - Arguments to find a MessagingGoal
+     * @example
+     * // Get one MessagingGoal
+     * const messagingGoal = await prisma.messagingGoal.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends MessagingGoalFindUniqueOrThrowArgs>(args: SelectSubset<T, MessagingGoalFindUniqueOrThrowArgs<ExtArgs>>): Prisma__MessagingGoalClient<$Result.GetResult<Prisma.$MessagingGoalPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first MessagingGoal that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MessagingGoalFindFirstArgs} args - Arguments to find a MessagingGoal
+     * @example
+     * // Get one MessagingGoal
+     * const messagingGoal = await prisma.messagingGoal.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends MessagingGoalFindFirstArgs>(args?: SelectSubset<T, MessagingGoalFindFirstArgs<ExtArgs>>): Prisma__MessagingGoalClient<$Result.GetResult<Prisma.$MessagingGoalPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first MessagingGoal that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MessagingGoalFindFirstOrThrowArgs} args - Arguments to find a MessagingGoal
+     * @example
+     * // Get one MessagingGoal
+     * const messagingGoal = await prisma.messagingGoal.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends MessagingGoalFindFirstOrThrowArgs>(args?: SelectSubset<T, MessagingGoalFindFirstOrThrowArgs<ExtArgs>>): Prisma__MessagingGoalClient<$Result.GetResult<Prisma.$MessagingGoalPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more MessagingGoals that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MessagingGoalFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all MessagingGoals
+     * const messagingGoals = await prisma.messagingGoal.findMany()
+     * 
+     * // Get first 10 MessagingGoals
+     * const messagingGoals = await prisma.messagingGoal.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const messagingGoalWithIdOnly = await prisma.messagingGoal.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends MessagingGoalFindManyArgs>(args?: SelectSubset<T, MessagingGoalFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessagingGoalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a MessagingGoal.
+     * @param {MessagingGoalCreateArgs} args - Arguments to create a MessagingGoal.
+     * @example
+     * // Create one MessagingGoal
+     * const MessagingGoal = await prisma.messagingGoal.create({
+     *   data: {
+     *     // ... data to create a MessagingGoal
+     *   }
+     * })
+     * 
+     */
+    create<T extends MessagingGoalCreateArgs>(args: SelectSubset<T, MessagingGoalCreateArgs<ExtArgs>>): Prisma__MessagingGoalClient<$Result.GetResult<Prisma.$MessagingGoalPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many MessagingGoals.
+     * @param {MessagingGoalCreateManyArgs} args - Arguments to create many MessagingGoals.
+     * @example
+     * // Create many MessagingGoals
+     * const messagingGoal = await prisma.messagingGoal.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends MessagingGoalCreateManyArgs>(args?: SelectSubset<T, MessagingGoalCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many MessagingGoals and returns the data saved in the database.
+     * @param {MessagingGoalCreateManyAndReturnArgs} args - Arguments to create many MessagingGoals.
+     * @example
+     * // Create many MessagingGoals
+     * const messagingGoal = await prisma.messagingGoal.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many MessagingGoals and only return the `id`
+     * const messagingGoalWithIdOnly = await prisma.messagingGoal.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends MessagingGoalCreateManyAndReturnArgs>(args?: SelectSubset<T, MessagingGoalCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessagingGoalPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a MessagingGoal.
+     * @param {MessagingGoalDeleteArgs} args - Arguments to delete one MessagingGoal.
+     * @example
+     * // Delete one MessagingGoal
+     * const MessagingGoal = await prisma.messagingGoal.delete({
+     *   where: {
+     *     // ... filter to delete one MessagingGoal
+     *   }
+     * })
+     * 
+     */
+    delete<T extends MessagingGoalDeleteArgs>(args: SelectSubset<T, MessagingGoalDeleteArgs<ExtArgs>>): Prisma__MessagingGoalClient<$Result.GetResult<Prisma.$MessagingGoalPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one MessagingGoal.
+     * @param {MessagingGoalUpdateArgs} args - Arguments to update one MessagingGoal.
+     * @example
+     * // Update one MessagingGoal
+     * const messagingGoal = await prisma.messagingGoal.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends MessagingGoalUpdateArgs>(args: SelectSubset<T, MessagingGoalUpdateArgs<ExtArgs>>): Prisma__MessagingGoalClient<$Result.GetResult<Prisma.$MessagingGoalPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more MessagingGoals.
+     * @param {MessagingGoalDeleteManyArgs} args - Arguments to filter MessagingGoals to delete.
+     * @example
+     * // Delete a few MessagingGoals
+     * const { count } = await prisma.messagingGoal.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends MessagingGoalDeleteManyArgs>(args?: SelectSubset<T, MessagingGoalDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MessagingGoals.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MessagingGoalUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many MessagingGoals
+     * const messagingGoal = await prisma.messagingGoal.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends MessagingGoalUpdateManyArgs>(args: SelectSubset<T, MessagingGoalUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MessagingGoals and returns the data updated in the database.
+     * @param {MessagingGoalUpdateManyAndReturnArgs} args - Arguments to update many MessagingGoals.
+     * @example
+     * // Update many MessagingGoals
+     * const messagingGoal = await prisma.messagingGoal.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more MessagingGoals and only return the `id`
+     * const messagingGoalWithIdOnly = await prisma.messagingGoal.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends MessagingGoalUpdateManyAndReturnArgs>(args: SelectSubset<T, MessagingGoalUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessagingGoalPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one MessagingGoal.
+     * @param {MessagingGoalUpsertArgs} args - Arguments to update or create a MessagingGoal.
+     * @example
+     * // Update or create a MessagingGoal
+     * const messagingGoal = await prisma.messagingGoal.upsert({
+     *   create: {
+     *     // ... data to create a MessagingGoal
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the MessagingGoal we want to update
+     *   }
+     * })
+     */
+    upsert<T extends MessagingGoalUpsertArgs>(args: SelectSubset<T, MessagingGoalUpsertArgs<ExtArgs>>): Prisma__MessagingGoalClient<$Result.GetResult<Prisma.$MessagingGoalPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of MessagingGoals.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MessagingGoalCountArgs} args - Arguments to filter MessagingGoals to count.
+     * @example
+     * // Count the number of MessagingGoals
+     * const count = await prisma.messagingGoal.count({
+     *   where: {
+     *     // ... the filter for the MessagingGoals we want to count
+     *   }
+     * })
+    **/
+    count<T extends MessagingGoalCountArgs>(
+      args?: Subset<T, MessagingGoalCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], MessagingGoalCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a MessagingGoal.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MessagingGoalAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends MessagingGoalAggregateArgs>(args: Subset<T, MessagingGoalAggregateArgs>): Prisma.PrismaPromise<GetMessagingGoalAggregateType<T>>
+
+    /**
+     * Group by MessagingGoal.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MessagingGoalGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends MessagingGoalGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: MessagingGoalGroupByArgs['orderBy'] }
+        : { orderBy?: MessagingGoalGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, MessagingGoalGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMessagingGoalGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the MessagingGoal model
+   */
+  readonly fields: MessagingGoalFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for MessagingGoal.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__MessagingGoalClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    organisation<T extends OrganisationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganisationDefaultArgs<ExtArgs>>): Prisma__OrganisationClient<$Result.GetResult<Prisma.$OrganisationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    achievements<T extends MessagingGoal$achievementsArgs<ExtArgs> = {}>(args?: Subset<T, MessagingGoal$achievementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GoalAchievementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the MessagingGoal model
+   */
+  interface MessagingGoalFieldRefs {
+    readonly id: FieldRef<"MessagingGoal", 'Int'>
+    readonly uuid: FieldRef<"MessagingGoal", 'String'>
+    readonly organisation_uuid: FieldRef<"MessagingGoal", 'String'>
+    readonly user_uuid: FieldRef<"MessagingGoal", 'String'>
+    readonly period: FieldRef<"MessagingGoal", 'GoalPeriod'>
+    readonly target_count: FieldRef<"MessagingGoal", 'Int'>
+    readonly is_active: FieldRef<"MessagingGoal", 'Boolean'>
+    readonly created_at: FieldRef<"MessagingGoal", 'DateTime'>
+    readonly updated_at: FieldRef<"MessagingGoal", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * MessagingGoal findUnique
+   */
+  export type MessagingGoalFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessagingGoal
+     */
+    select?: MessagingGoalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MessagingGoal
+     */
+    omit?: MessagingGoalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessagingGoalInclude<ExtArgs> | null
+    /**
+     * Filter, which MessagingGoal to fetch.
+     */
+    where: MessagingGoalWhereUniqueInput
+  }
+
+  /**
+   * MessagingGoal findUniqueOrThrow
+   */
+  export type MessagingGoalFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessagingGoal
+     */
+    select?: MessagingGoalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MessagingGoal
+     */
+    omit?: MessagingGoalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessagingGoalInclude<ExtArgs> | null
+    /**
+     * Filter, which MessagingGoal to fetch.
+     */
+    where: MessagingGoalWhereUniqueInput
+  }
+
+  /**
+   * MessagingGoal findFirst
+   */
+  export type MessagingGoalFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessagingGoal
+     */
+    select?: MessagingGoalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MessagingGoal
+     */
+    omit?: MessagingGoalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessagingGoalInclude<ExtArgs> | null
+    /**
+     * Filter, which MessagingGoal to fetch.
+     */
+    where?: MessagingGoalWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MessagingGoals to fetch.
+     */
+    orderBy?: MessagingGoalOrderByWithRelationInput | MessagingGoalOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MessagingGoals.
+     */
+    cursor?: MessagingGoalWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MessagingGoals from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MessagingGoals.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MessagingGoals.
+     */
+    distinct?: MessagingGoalScalarFieldEnum | MessagingGoalScalarFieldEnum[]
+  }
+
+  /**
+   * MessagingGoal findFirstOrThrow
+   */
+  export type MessagingGoalFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessagingGoal
+     */
+    select?: MessagingGoalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MessagingGoal
+     */
+    omit?: MessagingGoalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessagingGoalInclude<ExtArgs> | null
+    /**
+     * Filter, which MessagingGoal to fetch.
+     */
+    where?: MessagingGoalWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MessagingGoals to fetch.
+     */
+    orderBy?: MessagingGoalOrderByWithRelationInput | MessagingGoalOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MessagingGoals.
+     */
+    cursor?: MessagingGoalWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MessagingGoals from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MessagingGoals.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MessagingGoals.
+     */
+    distinct?: MessagingGoalScalarFieldEnum | MessagingGoalScalarFieldEnum[]
+  }
+
+  /**
+   * MessagingGoal findMany
+   */
+  export type MessagingGoalFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessagingGoal
+     */
+    select?: MessagingGoalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MessagingGoal
+     */
+    omit?: MessagingGoalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessagingGoalInclude<ExtArgs> | null
+    /**
+     * Filter, which MessagingGoals to fetch.
+     */
+    where?: MessagingGoalWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MessagingGoals to fetch.
+     */
+    orderBy?: MessagingGoalOrderByWithRelationInput | MessagingGoalOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing MessagingGoals.
+     */
+    cursor?: MessagingGoalWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MessagingGoals from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MessagingGoals.
+     */
+    skip?: number
+    distinct?: MessagingGoalScalarFieldEnum | MessagingGoalScalarFieldEnum[]
+  }
+
+  /**
+   * MessagingGoal create
+   */
+  export type MessagingGoalCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessagingGoal
+     */
+    select?: MessagingGoalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MessagingGoal
+     */
+    omit?: MessagingGoalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessagingGoalInclude<ExtArgs> | null
+    /**
+     * The data needed to create a MessagingGoal.
+     */
+    data: XOR<MessagingGoalCreateInput, MessagingGoalUncheckedCreateInput>
+  }
+
+  /**
+   * MessagingGoal createMany
+   */
+  export type MessagingGoalCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many MessagingGoals.
+     */
+    data: MessagingGoalCreateManyInput | MessagingGoalCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * MessagingGoal createManyAndReturn
+   */
+  export type MessagingGoalCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessagingGoal
+     */
+    select?: MessagingGoalSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the MessagingGoal
+     */
+    omit?: MessagingGoalOmit<ExtArgs> | null
+    /**
+     * The data used to create many MessagingGoals.
+     */
+    data: MessagingGoalCreateManyInput | MessagingGoalCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessagingGoalIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * MessagingGoal update
+   */
+  export type MessagingGoalUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessagingGoal
+     */
+    select?: MessagingGoalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MessagingGoal
+     */
+    omit?: MessagingGoalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessagingGoalInclude<ExtArgs> | null
+    /**
+     * The data needed to update a MessagingGoal.
+     */
+    data: XOR<MessagingGoalUpdateInput, MessagingGoalUncheckedUpdateInput>
+    /**
+     * Choose, which MessagingGoal to update.
+     */
+    where: MessagingGoalWhereUniqueInput
+  }
+
+  /**
+   * MessagingGoal updateMany
+   */
+  export type MessagingGoalUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update MessagingGoals.
+     */
+    data: XOR<MessagingGoalUpdateManyMutationInput, MessagingGoalUncheckedUpdateManyInput>
+    /**
+     * Filter which MessagingGoals to update
+     */
+    where?: MessagingGoalWhereInput
+    /**
+     * Limit how many MessagingGoals to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * MessagingGoal updateManyAndReturn
+   */
+  export type MessagingGoalUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessagingGoal
+     */
+    select?: MessagingGoalSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the MessagingGoal
+     */
+    omit?: MessagingGoalOmit<ExtArgs> | null
+    /**
+     * The data used to update MessagingGoals.
+     */
+    data: XOR<MessagingGoalUpdateManyMutationInput, MessagingGoalUncheckedUpdateManyInput>
+    /**
+     * Filter which MessagingGoals to update
+     */
+    where?: MessagingGoalWhereInput
+    /**
+     * Limit how many MessagingGoals to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessagingGoalIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * MessagingGoal upsert
+   */
+  export type MessagingGoalUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessagingGoal
+     */
+    select?: MessagingGoalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MessagingGoal
+     */
+    omit?: MessagingGoalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessagingGoalInclude<ExtArgs> | null
+    /**
+     * The filter to search for the MessagingGoal to update in case it exists.
+     */
+    where: MessagingGoalWhereUniqueInput
+    /**
+     * In case the MessagingGoal found by the `where` argument doesn't exist, create a new MessagingGoal with this data.
+     */
+    create: XOR<MessagingGoalCreateInput, MessagingGoalUncheckedCreateInput>
+    /**
+     * In case the MessagingGoal was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<MessagingGoalUpdateInput, MessagingGoalUncheckedUpdateInput>
+  }
+
+  /**
+   * MessagingGoal delete
+   */
+  export type MessagingGoalDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessagingGoal
+     */
+    select?: MessagingGoalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MessagingGoal
+     */
+    omit?: MessagingGoalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessagingGoalInclude<ExtArgs> | null
+    /**
+     * Filter which MessagingGoal to delete.
+     */
+    where: MessagingGoalWhereUniqueInput
+  }
+
+  /**
+   * MessagingGoal deleteMany
+   */
+  export type MessagingGoalDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MessagingGoals to delete
+     */
+    where?: MessagingGoalWhereInput
+    /**
+     * Limit how many MessagingGoals to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * MessagingGoal.achievements
+   */
+  export type MessagingGoal$achievementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GoalAchievement
+     */
+    select?: GoalAchievementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GoalAchievement
+     */
+    omit?: GoalAchievementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GoalAchievementInclude<ExtArgs> | null
+    where?: GoalAchievementWhereInput
+    orderBy?: GoalAchievementOrderByWithRelationInput | GoalAchievementOrderByWithRelationInput[]
+    cursor?: GoalAchievementWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: GoalAchievementScalarFieldEnum | GoalAchievementScalarFieldEnum[]
+  }
+
+  /**
+   * MessagingGoal without action
+   */
+  export type MessagingGoalDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessagingGoal
+     */
+    select?: MessagingGoalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MessagingGoal
+     */
+    omit?: MessagingGoalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessagingGoalInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model GoalAchievement
+   */
+
+  export type AggregateGoalAchievement = {
+    _count: GoalAchievementCountAggregateOutputType | null
+    _avg: GoalAchievementAvgAggregateOutputType | null
+    _sum: GoalAchievementSumAggregateOutputType | null
+    _min: GoalAchievementMinAggregateOutputType | null
+    _max: GoalAchievementMaxAggregateOutputType | null
+  }
+
+  export type GoalAchievementAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type GoalAchievementSumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type GoalAchievementMinAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    organisation_uuid: string | null
+    user_uuid: string | null
+    goal_uuid: string | null
+    type: $Enums.GoalAchievementType | null
+    period_key: string | null
+    seen_at: Date | null
+    created_at: Date | null
+  }
+
+  export type GoalAchievementMaxAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    organisation_uuid: string | null
+    user_uuid: string | null
+    goal_uuid: string | null
+    type: $Enums.GoalAchievementType | null
+    period_key: string | null
+    seen_at: Date | null
+    created_at: Date | null
+  }
+
+  export type GoalAchievementCountAggregateOutputType = {
+    id: number
+    uuid: number
+    organisation_uuid: number
+    user_uuid: number
+    goal_uuid: number
+    type: number
+    period_key: number
+    payload: number
+    seen_at: number
+    created_at: number
+    _all: number
+  }
+
+
+  export type GoalAchievementAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type GoalAchievementSumAggregateInputType = {
+    id?: true
+  }
+
+  export type GoalAchievementMinAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    user_uuid?: true
+    goal_uuid?: true
+    type?: true
+    period_key?: true
+    seen_at?: true
+    created_at?: true
+  }
+
+  export type GoalAchievementMaxAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    user_uuid?: true
+    goal_uuid?: true
+    type?: true
+    period_key?: true
+    seen_at?: true
+    created_at?: true
+  }
+
+  export type GoalAchievementCountAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    user_uuid?: true
+    goal_uuid?: true
+    type?: true
+    period_key?: true
+    payload?: true
+    seen_at?: true
+    created_at?: true
+    _all?: true
+  }
+
+  export type GoalAchievementAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which GoalAchievement to aggregate.
+     */
+    where?: GoalAchievementWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GoalAchievements to fetch.
+     */
+    orderBy?: GoalAchievementOrderByWithRelationInput | GoalAchievementOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: GoalAchievementWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GoalAchievements from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GoalAchievements.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned GoalAchievements
+    **/
+    _count?: true | GoalAchievementCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: GoalAchievementAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: GoalAchievementSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: GoalAchievementMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: GoalAchievementMaxAggregateInputType
+  }
+
+  export type GetGoalAchievementAggregateType<T extends GoalAchievementAggregateArgs> = {
+        [P in keyof T & keyof AggregateGoalAchievement]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateGoalAchievement[P]>
+      : GetScalarType<T[P], AggregateGoalAchievement[P]>
+  }
+
+
+
+
+  export type GoalAchievementGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GoalAchievementWhereInput
+    orderBy?: GoalAchievementOrderByWithAggregationInput | GoalAchievementOrderByWithAggregationInput[]
+    by: GoalAchievementScalarFieldEnum[] | GoalAchievementScalarFieldEnum
+    having?: GoalAchievementScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: GoalAchievementCountAggregateInputType | true
+    _avg?: GoalAchievementAvgAggregateInputType
+    _sum?: GoalAchievementSumAggregateInputType
+    _min?: GoalAchievementMinAggregateInputType
+    _max?: GoalAchievementMaxAggregateInputType
+  }
+
+  export type GoalAchievementGroupByOutputType = {
+    id: number
+    uuid: string
+    organisation_uuid: string
+    user_uuid: string
+    goal_uuid: string
+    type: $Enums.GoalAchievementType
+    period_key: string
+    payload: JsonValue | null
+    seen_at: Date | null
+    created_at: Date
+    _count: GoalAchievementCountAggregateOutputType | null
+    _avg: GoalAchievementAvgAggregateOutputType | null
+    _sum: GoalAchievementSumAggregateOutputType | null
+    _min: GoalAchievementMinAggregateOutputType | null
+    _max: GoalAchievementMaxAggregateOutputType | null
+  }
+
+  type GetGoalAchievementGroupByPayload<T extends GoalAchievementGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<GoalAchievementGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof GoalAchievementGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], GoalAchievementGroupByOutputType[P]>
+            : GetScalarType<T[P], GoalAchievementGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type GoalAchievementSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    user_uuid?: boolean
+    goal_uuid?: boolean
+    type?: boolean
+    period_key?: boolean
+    payload?: boolean
+    seen_at?: boolean
+    created_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    goal?: boolean | MessagingGoalDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["goalAchievement"]>
+
+  export type GoalAchievementSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    user_uuid?: boolean
+    goal_uuid?: boolean
+    type?: boolean
+    period_key?: boolean
+    payload?: boolean
+    seen_at?: boolean
+    created_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    goal?: boolean | MessagingGoalDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["goalAchievement"]>
+
+  export type GoalAchievementSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    user_uuid?: boolean
+    goal_uuid?: boolean
+    type?: boolean
+    period_key?: boolean
+    payload?: boolean
+    seen_at?: boolean
+    created_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    goal?: boolean | MessagingGoalDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["goalAchievement"]>
+
+  export type GoalAchievementSelectScalar = {
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    user_uuid?: boolean
+    goal_uuid?: boolean
+    type?: boolean
+    period_key?: boolean
+    payload?: boolean
+    seen_at?: boolean
+    created_at?: boolean
+  }
+
+  export type GoalAchievementOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "user_uuid" | "goal_uuid" | "type" | "period_key" | "payload" | "seen_at" | "created_at", ExtArgs["result"]["goalAchievement"]>
+  export type GoalAchievementInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    goal?: boolean | MessagingGoalDefaultArgs<ExtArgs>
+  }
+  export type GoalAchievementIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    goal?: boolean | MessagingGoalDefaultArgs<ExtArgs>
+  }
+  export type GoalAchievementIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    goal?: boolean | MessagingGoalDefaultArgs<ExtArgs>
+  }
+
+  export type $GoalAchievementPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "GoalAchievement"
+    objects: {
+      organisation: Prisma.$OrganisationPayload<ExtArgs>
+      user: Prisma.$UserPayload<ExtArgs>
+      goal: Prisma.$MessagingGoalPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      uuid: string
+      organisation_uuid: string
+      user_uuid: string
+      goal_uuid: string
+      type: $Enums.GoalAchievementType
+      period_key: string
+      payload: Prisma.JsonValue | null
+      seen_at: Date | null
+      created_at: Date
+    }, ExtArgs["result"]["goalAchievement"]>
+    composites: {}
+  }
+
+  type GoalAchievementGetPayload<S extends boolean | null | undefined | GoalAchievementDefaultArgs> = $Result.GetResult<Prisma.$GoalAchievementPayload, S>
+
+  type GoalAchievementCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<GoalAchievementFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: GoalAchievementCountAggregateInputType | true
+    }
+
+  export interface GoalAchievementDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['GoalAchievement'], meta: { name: 'GoalAchievement' } }
+    /**
+     * Find zero or one GoalAchievement that matches the filter.
+     * @param {GoalAchievementFindUniqueArgs} args - Arguments to find a GoalAchievement
+     * @example
+     * // Get one GoalAchievement
+     * const goalAchievement = await prisma.goalAchievement.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends GoalAchievementFindUniqueArgs>(args: SelectSubset<T, GoalAchievementFindUniqueArgs<ExtArgs>>): Prisma__GoalAchievementClient<$Result.GetResult<Prisma.$GoalAchievementPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one GoalAchievement that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {GoalAchievementFindUniqueOrThrowArgs} args - Arguments to find a GoalAchievement
+     * @example
+     * // Get one GoalAchievement
+     * const goalAchievement = await prisma.goalAchievement.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends GoalAchievementFindUniqueOrThrowArgs>(args: SelectSubset<T, GoalAchievementFindUniqueOrThrowArgs<ExtArgs>>): Prisma__GoalAchievementClient<$Result.GetResult<Prisma.$GoalAchievementPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first GoalAchievement that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GoalAchievementFindFirstArgs} args - Arguments to find a GoalAchievement
+     * @example
+     * // Get one GoalAchievement
+     * const goalAchievement = await prisma.goalAchievement.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends GoalAchievementFindFirstArgs>(args?: SelectSubset<T, GoalAchievementFindFirstArgs<ExtArgs>>): Prisma__GoalAchievementClient<$Result.GetResult<Prisma.$GoalAchievementPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first GoalAchievement that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GoalAchievementFindFirstOrThrowArgs} args - Arguments to find a GoalAchievement
+     * @example
+     * // Get one GoalAchievement
+     * const goalAchievement = await prisma.goalAchievement.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends GoalAchievementFindFirstOrThrowArgs>(args?: SelectSubset<T, GoalAchievementFindFirstOrThrowArgs<ExtArgs>>): Prisma__GoalAchievementClient<$Result.GetResult<Prisma.$GoalAchievementPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more GoalAchievements that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GoalAchievementFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all GoalAchievements
+     * const goalAchievements = await prisma.goalAchievement.findMany()
+     * 
+     * // Get first 10 GoalAchievements
+     * const goalAchievements = await prisma.goalAchievement.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const goalAchievementWithIdOnly = await prisma.goalAchievement.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends GoalAchievementFindManyArgs>(args?: SelectSubset<T, GoalAchievementFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GoalAchievementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a GoalAchievement.
+     * @param {GoalAchievementCreateArgs} args - Arguments to create a GoalAchievement.
+     * @example
+     * // Create one GoalAchievement
+     * const GoalAchievement = await prisma.goalAchievement.create({
+     *   data: {
+     *     // ... data to create a GoalAchievement
+     *   }
+     * })
+     * 
+     */
+    create<T extends GoalAchievementCreateArgs>(args: SelectSubset<T, GoalAchievementCreateArgs<ExtArgs>>): Prisma__GoalAchievementClient<$Result.GetResult<Prisma.$GoalAchievementPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many GoalAchievements.
+     * @param {GoalAchievementCreateManyArgs} args - Arguments to create many GoalAchievements.
+     * @example
+     * // Create many GoalAchievements
+     * const goalAchievement = await prisma.goalAchievement.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends GoalAchievementCreateManyArgs>(args?: SelectSubset<T, GoalAchievementCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many GoalAchievements and returns the data saved in the database.
+     * @param {GoalAchievementCreateManyAndReturnArgs} args - Arguments to create many GoalAchievements.
+     * @example
+     * // Create many GoalAchievements
+     * const goalAchievement = await prisma.goalAchievement.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many GoalAchievements and only return the `id`
+     * const goalAchievementWithIdOnly = await prisma.goalAchievement.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends GoalAchievementCreateManyAndReturnArgs>(args?: SelectSubset<T, GoalAchievementCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GoalAchievementPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a GoalAchievement.
+     * @param {GoalAchievementDeleteArgs} args - Arguments to delete one GoalAchievement.
+     * @example
+     * // Delete one GoalAchievement
+     * const GoalAchievement = await prisma.goalAchievement.delete({
+     *   where: {
+     *     // ... filter to delete one GoalAchievement
+     *   }
+     * })
+     * 
+     */
+    delete<T extends GoalAchievementDeleteArgs>(args: SelectSubset<T, GoalAchievementDeleteArgs<ExtArgs>>): Prisma__GoalAchievementClient<$Result.GetResult<Prisma.$GoalAchievementPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one GoalAchievement.
+     * @param {GoalAchievementUpdateArgs} args - Arguments to update one GoalAchievement.
+     * @example
+     * // Update one GoalAchievement
+     * const goalAchievement = await prisma.goalAchievement.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends GoalAchievementUpdateArgs>(args: SelectSubset<T, GoalAchievementUpdateArgs<ExtArgs>>): Prisma__GoalAchievementClient<$Result.GetResult<Prisma.$GoalAchievementPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more GoalAchievements.
+     * @param {GoalAchievementDeleteManyArgs} args - Arguments to filter GoalAchievements to delete.
+     * @example
+     * // Delete a few GoalAchievements
+     * const { count } = await prisma.goalAchievement.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends GoalAchievementDeleteManyArgs>(args?: SelectSubset<T, GoalAchievementDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more GoalAchievements.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GoalAchievementUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many GoalAchievements
+     * const goalAchievement = await prisma.goalAchievement.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends GoalAchievementUpdateManyArgs>(args: SelectSubset<T, GoalAchievementUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more GoalAchievements and returns the data updated in the database.
+     * @param {GoalAchievementUpdateManyAndReturnArgs} args - Arguments to update many GoalAchievements.
+     * @example
+     * // Update many GoalAchievements
+     * const goalAchievement = await prisma.goalAchievement.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more GoalAchievements and only return the `id`
+     * const goalAchievementWithIdOnly = await prisma.goalAchievement.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends GoalAchievementUpdateManyAndReturnArgs>(args: SelectSubset<T, GoalAchievementUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GoalAchievementPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one GoalAchievement.
+     * @param {GoalAchievementUpsertArgs} args - Arguments to update or create a GoalAchievement.
+     * @example
+     * // Update or create a GoalAchievement
+     * const goalAchievement = await prisma.goalAchievement.upsert({
+     *   create: {
+     *     // ... data to create a GoalAchievement
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the GoalAchievement we want to update
+     *   }
+     * })
+     */
+    upsert<T extends GoalAchievementUpsertArgs>(args: SelectSubset<T, GoalAchievementUpsertArgs<ExtArgs>>): Prisma__GoalAchievementClient<$Result.GetResult<Prisma.$GoalAchievementPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of GoalAchievements.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GoalAchievementCountArgs} args - Arguments to filter GoalAchievements to count.
+     * @example
+     * // Count the number of GoalAchievements
+     * const count = await prisma.goalAchievement.count({
+     *   where: {
+     *     // ... the filter for the GoalAchievements we want to count
+     *   }
+     * })
+    **/
+    count<T extends GoalAchievementCountArgs>(
+      args?: Subset<T, GoalAchievementCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], GoalAchievementCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a GoalAchievement.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GoalAchievementAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends GoalAchievementAggregateArgs>(args: Subset<T, GoalAchievementAggregateArgs>): Prisma.PrismaPromise<GetGoalAchievementAggregateType<T>>
+
+    /**
+     * Group by GoalAchievement.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GoalAchievementGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends GoalAchievementGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: GoalAchievementGroupByArgs['orderBy'] }
+        : { orderBy?: GoalAchievementGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, GoalAchievementGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetGoalAchievementGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the GoalAchievement model
+   */
+  readonly fields: GoalAchievementFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for GoalAchievement.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__GoalAchievementClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    organisation<T extends OrganisationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganisationDefaultArgs<ExtArgs>>): Prisma__OrganisationClient<$Result.GetResult<Prisma.$OrganisationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    goal<T extends MessagingGoalDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MessagingGoalDefaultArgs<ExtArgs>>): Prisma__MessagingGoalClient<$Result.GetResult<Prisma.$MessagingGoalPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the GoalAchievement model
+   */
+  interface GoalAchievementFieldRefs {
+    readonly id: FieldRef<"GoalAchievement", 'Int'>
+    readonly uuid: FieldRef<"GoalAchievement", 'String'>
+    readonly organisation_uuid: FieldRef<"GoalAchievement", 'String'>
+    readonly user_uuid: FieldRef<"GoalAchievement", 'String'>
+    readonly goal_uuid: FieldRef<"GoalAchievement", 'String'>
+    readonly type: FieldRef<"GoalAchievement", 'GoalAchievementType'>
+    readonly period_key: FieldRef<"GoalAchievement", 'String'>
+    readonly payload: FieldRef<"GoalAchievement", 'Json'>
+    readonly seen_at: FieldRef<"GoalAchievement", 'DateTime'>
+    readonly created_at: FieldRef<"GoalAchievement", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * GoalAchievement findUnique
+   */
+  export type GoalAchievementFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GoalAchievement
+     */
+    select?: GoalAchievementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GoalAchievement
+     */
+    omit?: GoalAchievementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GoalAchievementInclude<ExtArgs> | null
+    /**
+     * Filter, which GoalAchievement to fetch.
+     */
+    where: GoalAchievementWhereUniqueInput
+  }
+
+  /**
+   * GoalAchievement findUniqueOrThrow
+   */
+  export type GoalAchievementFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GoalAchievement
+     */
+    select?: GoalAchievementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GoalAchievement
+     */
+    omit?: GoalAchievementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GoalAchievementInclude<ExtArgs> | null
+    /**
+     * Filter, which GoalAchievement to fetch.
+     */
+    where: GoalAchievementWhereUniqueInput
+  }
+
+  /**
+   * GoalAchievement findFirst
+   */
+  export type GoalAchievementFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GoalAchievement
+     */
+    select?: GoalAchievementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GoalAchievement
+     */
+    omit?: GoalAchievementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GoalAchievementInclude<ExtArgs> | null
+    /**
+     * Filter, which GoalAchievement to fetch.
+     */
+    where?: GoalAchievementWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GoalAchievements to fetch.
+     */
+    orderBy?: GoalAchievementOrderByWithRelationInput | GoalAchievementOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for GoalAchievements.
+     */
+    cursor?: GoalAchievementWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GoalAchievements from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GoalAchievements.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of GoalAchievements.
+     */
+    distinct?: GoalAchievementScalarFieldEnum | GoalAchievementScalarFieldEnum[]
+  }
+
+  /**
+   * GoalAchievement findFirstOrThrow
+   */
+  export type GoalAchievementFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GoalAchievement
+     */
+    select?: GoalAchievementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GoalAchievement
+     */
+    omit?: GoalAchievementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GoalAchievementInclude<ExtArgs> | null
+    /**
+     * Filter, which GoalAchievement to fetch.
+     */
+    where?: GoalAchievementWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GoalAchievements to fetch.
+     */
+    orderBy?: GoalAchievementOrderByWithRelationInput | GoalAchievementOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for GoalAchievements.
+     */
+    cursor?: GoalAchievementWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GoalAchievements from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GoalAchievements.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of GoalAchievements.
+     */
+    distinct?: GoalAchievementScalarFieldEnum | GoalAchievementScalarFieldEnum[]
+  }
+
+  /**
+   * GoalAchievement findMany
+   */
+  export type GoalAchievementFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GoalAchievement
+     */
+    select?: GoalAchievementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GoalAchievement
+     */
+    omit?: GoalAchievementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GoalAchievementInclude<ExtArgs> | null
+    /**
+     * Filter, which GoalAchievements to fetch.
+     */
+    where?: GoalAchievementWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GoalAchievements to fetch.
+     */
+    orderBy?: GoalAchievementOrderByWithRelationInput | GoalAchievementOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing GoalAchievements.
+     */
+    cursor?: GoalAchievementWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GoalAchievements from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GoalAchievements.
+     */
+    skip?: number
+    distinct?: GoalAchievementScalarFieldEnum | GoalAchievementScalarFieldEnum[]
+  }
+
+  /**
+   * GoalAchievement create
+   */
+  export type GoalAchievementCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GoalAchievement
+     */
+    select?: GoalAchievementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GoalAchievement
+     */
+    omit?: GoalAchievementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GoalAchievementInclude<ExtArgs> | null
+    /**
+     * The data needed to create a GoalAchievement.
+     */
+    data: XOR<GoalAchievementCreateInput, GoalAchievementUncheckedCreateInput>
+  }
+
+  /**
+   * GoalAchievement createMany
+   */
+  export type GoalAchievementCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many GoalAchievements.
+     */
+    data: GoalAchievementCreateManyInput | GoalAchievementCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * GoalAchievement createManyAndReturn
+   */
+  export type GoalAchievementCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GoalAchievement
+     */
+    select?: GoalAchievementSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the GoalAchievement
+     */
+    omit?: GoalAchievementOmit<ExtArgs> | null
+    /**
+     * The data used to create many GoalAchievements.
+     */
+    data: GoalAchievementCreateManyInput | GoalAchievementCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GoalAchievementIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * GoalAchievement update
+   */
+  export type GoalAchievementUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GoalAchievement
+     */
+    select?: GoalAchievementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GoalAchievement
+     */
+    omit?: GoalAchievementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GoalAchievementInclude<ExtArgs> | null
+    /**
+     * The data needed to update a GoalAchievement.
+     */
+    data: XOR<GoalAchievementUpdateInput, GoalAchievementUncheckedUpdateInput>
+    /**
+     * Choose, which GoalAchievement to update.
+     */
+    where: GoalAchievementWhereUniqueInput
+  }
+
+  /**
+   * GoalAchievement updateMany
+   */
+  export type GoalAchievementUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update GoalAchievements.
+     */
+    data: XOR<GoalAchievementUpdateManyMutationInput, GoalAchievementUncheckedUpdateManyInput>
+    /**
+     * Filter which GoalAchievements to update
+     */
+    where?: GoalAchievementWhereInput
+    /**
+     * Limit how many GoalAchievements to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * GoalAchievement updateManyAndReturn
+   */
+  export type GoalAchievementUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GoalAchievement
+     */
+    select?: GoalAchievementSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the GoalAchievement
+     */
+    omit?: GoalAchievementOmit<ExtArgs> | null
+    /**
+     * The data used to update GoalAchievements.
+     */
+    data: XOR<GoalAchievementUpdateManyMutationInput, GoalAchievementUncheckedUpdateManyInput>
+    /**
+     * Filter which GoalAchievements to update
+     */
+    where?: GoalAchievementWhereInput
+    /**
+     * Limit how many GoalAchievements to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GoalAchievementIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * GoalAchievement upsert
+   */
+  export type GoalAchievementUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GoalAchievement
+     */
+    select?: GoalAchievementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GoalAchievement
+     */
+    omit?: GoalAchievementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GoalAchievementInclude<ExtArgs> | null
+    /**
+     * The filter to search for the GoalAchievement to update in case it exists.
+     */
+    where: GoalAchievementWhereUniqueInput
+    /**
+     * In case the GoalAchievement found by the `where` argument doesn't exist, create a new GoalAchievement with this data.
+     */
+    create: XOR<GoalAchievementCreateInput, GoalAchievementUncheckedCreateInput>
+    /**
+     * In case the GoalAchievement was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<GoalAchievementUpdateInput, GoalAchievementUncheckedUpdateInput>
+  }
+
+  /**
+   * GoalAchievement delete
+   */
+  export type GoalAchievementDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GoalAchievement
+     */
+    select?: GoalAchievementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GoalAchievement
+     */
+    omit?: GoalAchievementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GoalAchievementInclude<ExtArgs> | null
+    /**
+     * Filter which GoalAchievement to delete.
+     */
+    where: GoalAchievementWhereUniqueInput
+  }
+
+  /**
+   * GoalAchievement deleteMany
+   */
+  export type GoalAchievementDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which GoalAchievements to delete
+     */
+    where?: GoalAchievementWhereInput
+    /**
+     * Limit how many GoalAchievements to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * GoalAchievement without action
+   */
+  export type GoalAchievementDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GoalAchievement
+     */
+    select?: GoalAchievementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GoalAchievement
+     */
+    omit?: GoalAchievementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GoalAchievementInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model GoalPersonalBest
+   */
+
+  export type AggregateGoalPersonalBest = {
+    _count: GoalPersonalBestCountAggregateOutputType | null
+    _avg: GoalPersonalBestAvgAggregateOutputType | null
+    _sum: GoalPersonalBestSumAggregateOutputType | null
+    _min: GoalPersonalBestMinAggregateOutputType | null
+    _max: GoalPersonalBestMaxAggregateOutputType | null
+  }
+
+  export type GoalPersonalBestAvgAggregateOutputType = {
+    id: number | null
+    best_count: number | null
+  }
+
+  export type GoalPersonalBestSumAggregateOutputType = {
+    id: number | null
+    best_count: number | null
+  }
+
+  export type GoalPersonalBestMinAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    organisation_uuid: string | null
+    user_uuid: string | null
+    period: $Enums.GoalPeriod | null
+    best_count: number | null
+    achieved_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type GoalPersonalBestMaxAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    organisation_uuid: string | null
+    user_uuid: string | null
+    period: $Enums.GoalPeriod | null
+    best_count: number | null
+    achieved_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type GoalPersonalBestCountAggregateOutputType = {
+    id: number
+    uuid: number
+    organisation_uuid: number
+    user_uuid: number
+    period: number
+    best_count: number
+    achieved_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type GoalPersonalBestAvgAggregateInputType = {
+    id?: true
+    best_count?: true
+  }
+
+  export type GoalPersonalBestSumAggregateInputType = {
+    id?: true
+    best_count?: true
+  }
+
+  export type GoalPersonalBestMinAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    user_uuid?: true
+    period?: true
+    best_count?: true
+    achieved_at?: true
+    updated_at?: true
+  }
+
+  export type GoalPersonalBestMaxAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    user_uuid?: true
+    period?: true
+    best_count?: true
+    achieved_at?: true
+    updated_at?: true
+  }
+
+  export type GoalPersonalBestCountAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    user_uuid?: true
+    period?: true
+    best_count?: true
+    achieved_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type GoalPersonalBestAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which GoalPersonalBest to aggregate.
+     */
+    where?: GoalPersonalBestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GoalPersonalBests to fetch.
+     */
+    orderBy?: GoalPersonalBestOrderByWithRelationInput | GoalPersonalBestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: GoalPersonalBestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GoalPersonalBests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GoalPersonalBests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned GoalPersonalBests
+    **/
+    _count?: true | GoalPersonalBestCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: GoalPersonalBestAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: GoalPersonalBestSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: GoalPersonalBestMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: GoalPersonalBestMaxAggregateInputType
+  }
+
+  export type GetGoalPersonalBestAggregateType<T extends GoalPersonalBestAggregateArgs> = {
+        [P in keyof T & keyof AggregateGoalPersonalBest]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateGoalPersonalBest[P]>
+      : GetScalarType<T[P], AggregateGoalPersonalBest[P]>
+  }
+
+
+
+
+  export type GoalPersonalBestGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GoalPersonalBestWhereInput
+    orderBy?: GoalPersonalBestOrderByWithAggregationInput | GoalPersonalBestOrderByWithAggregationInput[]
+    by: GoalPersonalBestScalarFieldEnum[] | GoalPersonalBestScalarFieldEnum
+    having?: GoalPersonalBestScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: GoalPersonalBestCountAggregateInputType | true
+    _avg?: GoalPersonalBestAvgAggregateInputType
+    _sum?: GoalPersonalBestSumAggregateInputType
+    _min?: GoalPersonalBestMinAggregateInputType
+    _max?: GoalPersonalBestMaxAggregateInputType
+  }
+
+  export type GoalPersonalBestGroupByOutputType = {
+    id: number
+    uuid: string
+    organisation_uuid: string
+    user_uuid: string
+    period: $Enums.GoalPeriod
+    best_count: number
+    achieved_at: Date
+    updated_at: Date
+    _count: GoalPersonalBestCountAggregateOutputType | null
+    _avg: GoalPersonalBestAvgAggregateOutputType | null
+    _sum: GoalPersonalBestSumAggregateOutputType | null
+    _min: GoalPersonalBestMinAggregateOutputType | null
+    _max: GoalPersonalBestMaxAggregateOutputType | null
+  }
+
+  type GetGoalPersonalBestGroupByPayload<T extends GoalPersonalBestGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<GoalPersonalBestGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof GoalPersonalBestGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], GoalPersonalBestGroupByOutputType[P]>
+            : GetScalarType<T[P], GoalPersonalBestGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type GoalPersonalBestSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    user_uuid?: boolean
+    period?: boolean
+    best_count?: boolean
+    achieved_at?: boolean
+    updated_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["goalPersonalBest"]>
+
+  export type GoalPersonalBestSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    user_uuid?: boolean
+    period?: boolean
+    best_count?: boolean
+    achieved_at?: boolean
+    updated_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["goalPersonalBest"]>
+
+  export type GoalPersonalBestSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    user_uuid?: boolean
+    period?: boolean
+    best_count?: boolean
+    achieved_at?: boolean
+    updated_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["goalPersonalBest"]>
+
+  export type GoalPersonalBestSelectScalar = {
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    user_uuid?: boolean
+    period?: boolean
+    best_count?: boolean
+    achieved_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type GoalPersonalBestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "user_uuid" | "period" | "best_count" | "achieved_at" | "updated_at", ExtArgs["result"]["goalPersonalBest"]>
+  export type GoalPersonalBestInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type GoalPersonalBestIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type GoalPersonalBestIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $GoalPersonalBestPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "GoalPersonalBest"
+    objects: {
+      organisation: Prisma.$OrganisationPayload<ExtArgs>
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      uuid: string
+      organisation_uuid: string
+      user_uuid: string
+      period: $Enums.GoalPeriod
+      best_count: number
+      achieved_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["goalPersonalBest"]>
+    composites: {}
+  }
+
+  type GoalPersonalBestGetPayload<S extends boolean | null | undefined | GoalPersonalBestDefaultArgs> = $Result.GetResult<Prisma.$GoalPersonalBestPayload, S>
+
+  type GoalPersonalBestCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<GoalPersonalBestFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: GoalPersonalBestCountAggregateInputType | true
+    }
+
+  export interface GoalPersonalBestDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['GoalPersonalBest'], meta: { name: 'GoalPersonalBest' } }
+    /**
+     * Find zero or one GoalPersonalBest that matches the filter.
+     * @param {GoalPersonalBestFindUniqueArgs} args - Arguments to find a GoalPersonalBest
+     * @example
+     * // Get one GoalPersonalBest
+     * const goalPersonalBest = await prisma.goalPersonalBest.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends GoalPersonalBestFindUniqueArgs>(args: SelectSubset<T, GoalPersonalBestFindUniqueArgs<ExtArgs>>): Prisma__GoalPersonalBestClient<$Result.GetResult<Prisma.$GoalPersonalBestPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one GoalPersonalBest that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {GoalPersonalBestFindUniqueOrThrowArgs} args - Arguments to find a GoalPersonalBest
+     * @example
+     * // Get one GoalPersonalBest
+     * const goalPersonalBest = await prisma.goalPersonalBest.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends GoalPersonalBestFindUniqueOrThrowArgs>(args: SelectSubset<T, GoalPersonalBestFindUniqueOrThrowArgs<ExtArgs>>): Prisma__GoalPersonalBestClient<$Result.GetResult<Prisma.$GoalPersonalBestPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first GoalPersonalBest that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GoalPersonalBestFindFirstArgs} args - Arguments to find a GoalPersonalBest
+     * @example
+     * // Get one GoalPersonalBest
+     * const goalPersonalBest = await prisma.goalPersonalBest.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends GoalPersonalBestFindFirstArgs>(args?: SelectSubset<T, GoalPersonalBestFindFirstArgs<ExtArgs>>): Prisma__GoalPersonalBestClient<$Result.GetResult<Prisma.$GoalPersonalBestPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first GoalPersonalBest that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GoalPersonalBestFindFirstOrThrowArgs} args - Arguments to find a GoalPersonalBest
+     * @example
+     * // Get one GoalPersonalBest
+     * const goalPersonalBest = await prisma.goalPersonalBest.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends GoalPersonalBestFindFirstOrThrowArgs>(args?: SelectSubset<T, GoalPersonalBestFindFirstOrThrowArgs<ExtArgs>>): Prisma__GoalPersonalBestClient<$Result.GetResult<Prisma.$GoalPersonalBestPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more GoalPersonalBests that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GoalPersonalBestFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all GoalPersonalBests
+     * const goalPersonalBests = await prisma.goalPersonalBest.findMany()
+     * 
+     * // Get first 10 GoalPersonalBests
+     * const goalPersonalBests = await prisma.goalPersonalBest.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const goalPersonalBestWithIdOnly = await prisma.goalPersonalBest.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends GoalPersonalBestFindManyArgs>(args?: SelectSubset<T, GoalPersonalBestFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GoalPersonalBestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a GoalPersonalBest.
+     * @param {GoalPersonalBestCreateArgs} args - Arguments to create a GoalPersonalBest.
+     * @example
+     * // Create one GoalPersonalBest
+     * const GoalPersonalBest = await prisma.goalPersonalBest.create({
+     *   data: {
+     *     // ... data to create a GoalPersonalBest
+     *   }
+     * })
+     * 
+     */
+    create<T extends GoalPersonalBestCreateArgs>(args: SelectSubset<T, GoalPersonalBestCreateArgs<ExtArgs>>): Prisma__GoalPersonalBestClient<$Result.GetResult<Prisma.$GoalPersonalBestPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many GoalPersonalBests.
+     * @param {GoalPersonalBestCreateManyArgs} args - Arguments to create many GoalPersonalBests.
+     * @example
+     * // Create many GoalPersonalBests
+     * const goalPersonalBest = await prisma.goalPersonalBest.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends GoalPersonalBestCreateManyArgs>(args?: SelectSubset<T, GoalPersonalBestCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many GoalPersonalBests and returns the data saved in the database.
+     * @param {GoalPersonalBestCreateManyAndReturnArgs} args - Arguments to create many GoalPersonalBests.
+     * @example
+     * // Create many GoalPersonalBests
+     * const goalPersonalBest = await prisma.goalPersonalBest.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many GoalPersonalBests and only return the `id`
+     * const goalPersonalBestWithIdOnly = await prisma.goalPersonalBest.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends GoalPersonalBestCreateManyAndReturnArgs>(args?: SelectSubset<T, GoalPersonalBestCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GoalPersonalBestPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a GoalPersonalBest.
+     * @param {GoalPersonalBestDeleteArgs} args - Arguments to delete one GoalPersonalBest.
+     * @example
+     * // Delete one GoalPersonalBest
+     * const GoalPersonalBest = await prisma.goalPersonalBest.delete({
+     *   where: {
+     *     // ... filter to delete one GoalPersonalBest
+     *   }
+     * })
+     * 
+     */
+    delete<T extends GoalPersonalBestDeleteArgs>(args: SelectSubset<T, GoalPersonalBestDeleteArgs<ExtArgs>>): Prisma__GoalPersonalBestClient<$Result.GetResult<Prisma.$GoalPersonalBestPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one GoalPersonalBest.
+     * @param {GoalPersonalBestUpdateArgs} args - Arguments to update one GoalPersonalBest.
+     * @example
+     * // Update one GoalPersonalBest
+     * const goalPersonalBest = await prisma.goalPersonalBest.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends GoalPersonalBestUpdateArgs>(args: SelectSubset<T, GoalPersonalBestUpdateArgs<ExtArgs>>): Prisma__GoalPersonalBestClient<$Result.GetResult<Prisma.$GoalPersonalBestPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more GoalPersonalBests.
+     * @param {GoalPersonalBestDeleteManyArgs} args - Arguments to filter GoalPersonalBests to delete.
+     * @example
+     * // Delete a few GoalPersonalBests
+     * const { count } = await prisma.goalPersonalBest.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends GoalPersonalBestDeleteManyArgs>(args?: SelectSubset<T, GoalPersonalBestDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more GoalPersonalBests.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GoalPersonalBestUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many GoalPersonalBests
+     * const goalPersonalBest = await prisma.goalPersonalBest.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends GoalPersonalBestUpdateManyArgs>(args: SelectSubset<T, GoalPersonalBestUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more GoalPersonalBests and returns the data updated in the database.
+     * @param {GoalPersonalBestUpdateManyAndReturnArgs} args - Arguments to update many GoalPersonalBests.
+     * @example
+     * // Update many GoalPersonalBests
+     * const goalPersonalBest = await prisma.goalPersonalBest.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more GoalPersonalBests and only return the `id`
+     * const goalPersonalBestWithIdOnly = await prisma.goalPersonalBest.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends GoalPersonalBestUpdateManyAndReturnArgs>(args: SelectSubset<T, GoalPersonalBestUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GoalPersonalBestPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one GoalPersonalBest.
+     * @param {GoalPersonalBestUpsertArgs} args - Arguments to update or create a GoalPersonalBest.
+     * @example
+     * // Update or create a GoalPersonalBest
+     * const goalPersonalBest = await prisma.goalPersonalBest.upsert({
+     *   create: {
+     *     // ... data to create a GoalPersonalBest
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the GoalPersonalBest we want to update
+     *   }
+     * })
+     */
+    upsert<T extends GoalPersonalBestUpsertArgs>(args: SelectSubset<T, GoalPersonalBestUpsertArgs<ExtArgs>>): Prisma__GoalPersonalBestClient<$Result.GetResult<Prisma.$GoalPersonalBestPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of GoalPersonalBests.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GoalPersonalBestCountArgs} args - Arguments to filter GoalPersonalBests to count.
+     * @example
+     * // Count the number of GoalPersonalBests
+     * const count = await prisma.goalPersonalBest.count({
+     *   where: {
+     *     // ... the filter for the GoalPersonalBests we want to count
+     *   }
+     * })
+    **/
+    count<T extends GoalPersonalBestCountArgs>(
+      args?: Subset<T, GoalPersonalBestCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], GoalPersonalBestCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a GoalPersonalBest.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GoalPersonalBestAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends GoalPersonalBestAggregateArgs>(args: Subset<T, GoalPersonalBestAggregateArgs>): Prisma.PrismaPromise<GetGoalPersonalBestAggregateType<T>>
+
+    /**
+     * Group by GoalPersonalBest.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GoalPersonalBestGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends GoalPersonalBestGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: GoalPersonalBestGroupByArgs['orderBy'] }
+        : { orderBy?: GoalPersonalBestGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, GoalPersonalBestGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetGoalPersonalBestGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the GoalPersonalBest model
+   */
+  readonly fields: GoalPersonalBestFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for GoalPersonalBest.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__GoalPersonalBestClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    organisation<T extends OrganisationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganisationDefaultArgs<ExtArgs>>): Prisma__OrganisationClient<$Result.GetResult<Prisma.$OrganisationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the GoalPersonalBest model
+   */
+  interface GoalPersonalBestFieldRefs {
+    readonly id: FieldRef<"GoalPersonalBest", 'Int'>
+    readonly uuid: FieldRef<"GoalPersonalBest", 'String'>
+    readonly organisation_uuid: FieldRef<"GoalPersonalBest", 'String'>
+    readonly user_uuid: FieldRef<"GoalPersonalBest", 'String'>
+    readonly period: FieldRef<"GoalPersonalBest", 'GoalPeriod'>
+    readonly best_count: FieldRef<"GoalPersonalBest", 'Int'>
+    readonly achieved_at: FieldRef<"GoalPersonalBest", 'DateTime'>
+    readonly updated_at: FieldRef<"GoalPersonalBest", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * GoalPersonalBest findUnique
+   */
+  export type GoalPersonalBestFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GoalPersonalBest
+     */
+    select?: GoalPersonalBestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GoalPersonalBest
+     */
+    omit?: GoalPersonalBestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GoalPersonalBestInclude<ExtArgs> | null
+    /**
+     * Filter, which GoalPersonalBest to fetch.
+     */
+    where: GoalPersonalBestWhereUniqueInput
+  }
+
+  /**
+   * GoalPersonalBest findUniqueOrThrow
+   */
+  export type GoalPersonalBestFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GoalPersonalBest
+     */
+    select?: GoalPersonalBestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GoalPersonalBest
+     */
+    omit?: GoalPersonalBestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GoalPersonalBestInclude<ExtArgs> | null
+    /**
+     * Filter, which GoalPersonalBest to fetch.
+     */
+    where: GoalPersonalBestWhereUniqueInput
+  }
+
+  /**
+   * GoalPersonalBest findFirst
+   */
+  export type GoalPersonalBestFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GoalPersonalBest
+     */
+    select?: GoalPersonalBestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GoalPersonalBest
+     */
+    omit?: GoalPersonalBestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GoalPersonalBestInclude<ExtArgs> | null
+    /**
+     * Filter, which GoalPersonalBest to fetch.
+     */
+    where?: GoalPersonalBestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GoalPersonalBests to fetch.
+     */
+    orderBy?: GoalPersonalBestOrderByWithRelationInput | GoalPersonalBestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for GoalPersonalBests.
+     */
+    cursor?: GoalPersonalBestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GoalPersonalBests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GoalPersonalBests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of GoalPersonalBests.
+     */
+    distinct?: GoalPersonalBestScalarFieldEnum | GoalPersonalBestScalarFieldEnum[]
+  }
+
+  /**
+   * GoalPersonalBest findFirstOrThrow
+   */
+  export type GoalPersonalBestFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GoalPersonalBest
+     */
+    select?: GoalPersonalBestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GoalPersonalBest
+     */
+    omit?: GoalPersonalBestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GoalPersonalBestInclude<ExtArgs> | null
+    /**
+     * Filter, which GoalPersonalBest to fetch.
+     */
+    where?: GoalPersonalBestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GoalPersonalBests to fetch.
+     */
+    orderBy?: GoalPersonalBestOrderByWithRelationInput | GoalPersonalBestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for GoalPersonalBests.
+     */
+    cursor?: GoalPersonalBestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GoalPersonalBests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GoalPersonalBests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of GoalPersonalBests.
+     */
+    distinct?: GoalPersonalBestScalarFieldEnum | GoalPersonalBestScalarFieldEnum[]
+  }
+
+  /**
+   * GoalPersonalBest findMany
+   */
+  export type GoalPersonalBestFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GoalPersonalBest
+     */
+    select?: GoalPersonalBestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GoalPersonalBest
+     */
+    omit?: GoalPersonalBestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GoalPersonalBestInclude<ExtArgs> | null
+    /**
+     * Filter, which GoalPersonalBests to fetch.
+     */
+    where?: GoalPersonalBestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GoalPersonalBests to fetch.
+     */
+    orderBy?: GoalPersonalBestOrderByWithRelationInput | GoalPersonalBestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing GoalPersonalBests.
+     */
+    cursor?: GoalPersonalBestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GoalPersonalBests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GoalPersonalBests.
+     */
+    skip?: number
+    distinct?: GoalPersonalBestScalarFieldEnum | GoalPersonalBestScalarFieldEnum[]
+  }
+
+  /**
+   * GoalPersonalBest create
+   */
+  export type GoalPersonalBestCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GoalPersonalBest
+     */
+    select?: GoalPersonalBestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GoalPersonalBest
+     */
+    omit?: GoalPersonalBestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GoalPersonalBestInclude<ExtArgs> | null
+    /**
+     * The data needed to create a GoalPersonalBest.
+     */
+    data: XOR<GoalPersonalBestCreateInput, GoalPersonalBestUncheckedCreateInput>
+  }
+
+  /**
+   * GoalPersonalBest createMany
+   */
+  export type GoalPersonalBestCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many GoalPersonalBests.
+     */
+    data: GoalPersonalBestCreateManyInput | GoalPersonalBestCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * GoalPersonalBest createManyAndReturn
+   */
+  export type GoalPersonalBestCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GoalPersonalBest
+     */
+    select?: GoalPersonalBestSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the GoalPersonalBest
+     */
+    omit?: GoalPersonalBestOmit<ExtArgs> | null
+    /**
+     * The data used to create many GoalPersonalBests.
+     */
+    data: GoalPersonalBestCreateManyInput | GoalPersonalBestCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GoalPersonalBestIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * GoalPersonalBest update
+   */
+  export type GoalPersonalBestUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GoalPersonalBest
+     */
+    select?: GoalPersonalBestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GoalPersonalBest
+     */
+    omit?: GoalPersonalBestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GoalPersonalBestInclude<ExtArgs> | null
+    /**
+     * The data needed to update a GoalPersonalBest.
+     */
+    data: XOR<GoalPersonalBestUpdateInput, GoalPersonalBestUncheckedUpdateInput>
+    /**
+     * Choose, which GoalPersonalBest to update.
+     */
+    where: GoalPersonalBestWhereUniqueInput
+  }
+
+  /**
+   * GoalPersonalBest updateMany
+   */
+  export type GoalPersonalBestUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update GoalPersonalBests.
+     */
+    data: XOR<GoalPersonalBestUpdateManyMutationInput, GoalPersonalBestUncheckedUpdateManyInput>
+    /**
+     * Filter which GoalPersonalBests to update
+     */
+    where?: GoalPersonalBestWhereInput
+    /**
+     * Limit how many GoalPersonalBests to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * GoalPersonalBest updateManyAndReturn
+   */
+  export type GoalPersonalBestUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GoalPersonalBest
+     */
+    select?: GoalPersonalBestSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the GoalPersonalBest
+     */
+    omit?: GoalPersonalBestOmit<ExtArgs> | null
+    /**
+     * The data used to update GoalPersonalBests.
+     */
+    data: XOR<GoalPersonalBestUpdateManyMutationInput, GoalPersonalBestUncheckedUpdateManyInput>
+    /**
+     * Filter which GoalPersonalBests to update
+     */
+    where?: GoalPersonalBestWhereInput
+    /**
+     * Limit how many GoalPersonalBests to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GoalPersonalBestIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * GoalPersonalBest upsert
+   */
+  export type GoalPersonalBestUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GoalPersonalBest
+     */
+    select?: GoalPersonalBestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GoalPersonalBest
+     */
+    omit?: GoalPersonalBestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GoalPersonalBestInclude<ExtArgs> | null
+    /**
+     * The filter to search for the GoalPersonalBest to update in case it exists.
+     */
+    where: GoalPersonalBestWhereUniqueInput
+    /**
+     * In case the GoalPersonalBest found by the `where` argument doesn't exist, create a new GoalPersonalBest with this data.
+     */
+    create: XOR<GoalPersonalBestCreateInput, GoalPersonalBestUncheckedCreateInput>
+    /**
+     * In case the GoalPersonalBest was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<GoalPersonalBestUpdateInput, GoalPersonalBestUncheckedUpdateInput>
+  }
+
+  /**
+   * GoalPersonalBest delete
+   */
+  export type GoalPersonalBestDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GoalPersonalBest
+     */
+    select?: GoalPersonalBestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GoalPersonalBest
+     */
+    omit?: GoalPersonalBestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GoalPersonalBestInclude<ExtArgs> | null
+    /**
+     * Filter which GoalPersonalBest to delete.
+     */
+    where: GoalPersonalBestWhereUniqueInput
+  }
+
+  /**
+   * GoalPersonalBest deleteMany
+   */
+  export type GoalPersonalBestDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which GoalPersonalBests to delete
+     */
+    where?: GoalPersonalBestWhereInput
+    /**
+     * Limit how many GoalPersonalBests to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * GoalPersonalBest without action
+   */
+  export type GoalPersonalBestDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GoalPersonalBest
+     */
+    select?: GoalPersonalBestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GoalPersonalBest
+     */
+    omit?: GoalPersonalBestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GoalPersonalBestInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model ActivityLog
    */
 
@@ -53708,6 +57774,7 @@ export namespace Prisma {
     uuid: 'uuid',
     name: 'name',
     slug: 'slug',
+    timezone: 'timezone',
     created_at: 'created_at',
     updated_at: 'updated_at'
   };
@@ -54363,6 +58430,51 @@ export namespace Prisma {
   export type ApifyUsageLogScalarFieldEnum = (typeof ApifyUsageLogScalarFieldEnum)[keyof typeof ApifyUsageLogScalarFieldEnum]
 
 
+  export const MessagingGoalScalarFieldEnum: {
+    id: 'id',
+    uuid: 'uuid',
+    organisation_uuid: 'organisation_uuid',
+    user_uuid: 'user_uuid',
+    period: 'period',
+    target_count: 'target_count',
+    is_active: 'is_active',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type MessagingGoalScalarFieldEnum = (typeof MessagingGoalScalarFieldEnum)[keyof typeof MessagingGoalScalarFieldEnum]
+
+
+  export const GoalAchievementScalarFieldEnum: {
+    id: 'id',
+    uuid: 'uuid',
+    organisation_uuid: 'organisation_uuid',
+    user_uuid: 'user_uuid',
+    goal_uuid: 'goal_uuid',
+    type: 'type',
+    period_key: 'period_key',
+    payload: 'payload',
+    seen_at: 'seen_at',
+    created_at: 'created_at'
+  };
+
+  export type GoalAchievementScalarFieldEnum = (typeof GoalAchievementScalarFieldEnum)[keyof typeof GoalAchievementScalarFieldEnum]
+
+
+  export const GoalPersonalBestScalarFieldEnum: {
+    id: 'id',
+    uuid: 'uuid',
+    organisation_uuid: 'organisation_uuid',
+    user_uuid: 'user_uuid',
+    period: 'period',
+    best_count: 'best_count',
+    achieved_at: 'achieved_at',
+    updated_at: 'updated_at'
+  };
+
+  export type GoalPersonalBestScalarFieldEnum = (typeof GoalPersonalBestScalarFieldEnum)[keyof typeof GoalPersonalBestScalarFieldEnum]
+
+
   export const ActivityLogScalarFieldEnum: {
     id: 'id',
     uuid: 'uuid',
@@ -54941,6 +59053,34 @@ export namespace Prisma {
    */
   export type ListEnumApifyUsageStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ApifyUsageStatus[]'>
     
+
+
+  /**
+   * Reference to a field of type 'GoalPeriod'
+   */
+  export type EnumGoalPeriodFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GoalPeriod'>
+    
+
+
+  /**
+   * Reference to a field of type 'GoalPeriod[]'
+   */
+  export type ListEnumGoalPeriodFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GoalPeriod[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'GoalAchievementType'
+   */
+  export type EnumGoalAchievementTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GoalAchievementType'>
+    
+
+
+  /**
+   * Reference to a field of type 'GoalAchievementType[]'
+   */
+  export type ListEnumGoalAchievementTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GoalAchievementType[]'>
+    
   /**
    * Deep Input Types
    */
@@ -54964,6 +59104,9 @@ export namespace Prisma {
     form_completions?: FormCompletionListRelationFilter
     outreach_messages_sent?: OutreachMessageListRelationFilter
     activity_logs?: ActivityLogListRelationFilter
+    messaging_goals?: MessagingGoalListRelationFilter
+    goal_achievements?: GoalAchievementListRelationFilter
+    goal_personal_bests?: GoalPersonalBestListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -54981,6 +59124,9 @@ export namespace Prisma {
     form_completions?: FormCompletionOrderByRelationAggregateInput
     outreach_messages_sent?: OutreachMessageOrderByRelationAggregateInput
     activity_logs?: ActivityLogOrderByRelationAggregateInput
+    messaging_goals?: MessagingGoalOrderByRelationAggregateInput
+    goal_achievements?: GoalAchievementOrderByRelationAggregateInput
+    goal_personal_bests?: GoalPersonalBestOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -55001,6 +59147,9 @@ export namespace Prisma {
     form_completions?: FormCompletionListRelationFilter
     outreach_messages_sent?: OutreachMessageListRelationFilter
     activity_logs?: ActivityLogListRelationFilter
+    messaging_goals?: MessagingGoalListRelationFilter
+    goal_achievements?: GoalAchievementListRelationFilter
+    goal_personal_bests?: GoalPersonalBestListRelationFilter
   }, "id" | "uuid" | "email" | "phone">
 
   export type UserOrderByWithAggregationInput = {
@@ -55043,6 +59192,7 @@ export namespace Prisma {
     uuid?: StringFilter<"Organisation"> | string
     name?: StringFilter<"Organisation"> | string
     slug?: StringFilter<"Organisation"> | string
+    timezone?: StringFilter<"Organisation"> | string
     created_at?: DateTimeFilter<"Organisation"> | Date | string
     updated_at?: DateTimeFilter<"Organisation"> | Date | string
     members?: OrganisationMemberListRelationFilter
@@ -55065,6 +59215,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogListRelationFilter
     message_templates?: MessageTemplateListRelationFilter
     activity_logs?: ActivityLogListRelationFilter
+    messaging_goals?: MessagingGoalListRelationFilter
+    goal_achievements?: GoalAchievementListRelationFilter
+    goal_personal_bests?: GoalPersonalBestListRelationFilter
   }
 
   export type OrganisationOrderByWithRelationInput = {
@@ -55072,6 +59225,7 @@ export namespace Prisma {
     uuid?: SortOrder
     name?: SortOrder
     slug?: SortOrder
+    timezone?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     members?: OrganisationMemberOrderByRelationAggregateInput
@@ -55094,6 +59248,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogOrderByRelationAggregateInput
     message_templates?: MessageTemplateOrderByRelationAggregateInput
     activity_logs?: ActivityLogOrderByRelationAggregateInput
+    messaging_goals?: MessagingGoalOrderByRelationAggregateInput
+    goal_achievements?: GoalAchievementOrderByRelationAggregateInput
+    goal_personal_bests?: GoalPersonalBestOrderByRelationAggregateInput
   }
 
   export type OrganisationWhereUniqueInput = Prisma.AtLeast<{
@@ -55104,6 +59261,7 @@ export namespace Prisma {
     OR?: OrganisationWhereInput[]
     NOT?: OrganisationWhereInput | OrganisationWhereInput[]
     name?: StringFilter<"Organisation"> | string
+    timezone?: StringFilter<"Organisation"> | string
     created_at?: DateTimeFilter<"Organisation"> | Date | string
     updated_at?: DateTimeFilter<"Organisation"> | Date | string
     members?: OrganisationMemberListRelationFilter
@@ -55126,6 +59284,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogListRelationFilter
     message_templates?: MessageTemplateListRelationFilter
     activity_logs?: ActivityLogListRelationFilter
+    messaging_goals?: MessagingGoalListRelationFilter
+    goal_achievements?: GoalAchievementListRelationFilter
+    goal_personal_bests?: GoalPersonalBestListRelationFilter
   }, "id" | "uuid" | "slug">
 
   export type OrganisationOrderByWithAggregationInput = {
@@ -55133,6 +59294,7 @@ export namespace Prisma {
     uuid?: SortOrder
     name?: SortOrder
     slug?: SortOrder
+    timezone?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     _count?: OrganisationCountOrderByAggregateInput
@@ -55150,6 +59312,7 @@ export namespace Prisma {
     uuid?: StringWithAggregatesFilter<"Organisation"> | string
     name?: StringWithAggregatesFilter<"Organisation"> | string
     slug?: StringWithAggregatesFilter<"Organisation"> | string
+    timezone?: StringWithAggregatesFilter<"Organisation"> | string
     created_at?: DateTimeWithAggregatesFilter<"Organisation"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"Organisation"> | Date | string
   }
@@ -58650,6 +62813,255 @@ export namespace Prisma {
     created_at?: DateTimeWithAggregatesFilter<"ApifyUsageLog"> | Date | string
   }
 
+  export type MessagingGoalWhereInput = {
+    AND?: MessagingGoalWhereInput | MessagingGoalWhereInput[]
+    OR?: MessagingGoalWhereInput[]
+    NOT?: MessagingGoalWhereInput | MessagingGoalWhereInput[]
+    id?: IntFilter<"MessagingGoal"> | number
+    uuid?: StringFilter<"MessagingGoal"> | string
+    organisation_uuid?: StringFilter<"MessagingGoal"> | string
+    user_uuid?: StringFilter<"MessagingGoal"> | string
+    period?: EnumGoalPeriodFilter<"MessagingGoal"> | $Enums.GoalPeriod
+    target_count?: IntFilter<"MessagingGoal"> | number
+    is_active?: BoolFilter<"MessagingGoal"> | boolean
+    created_at?: DateTimeFilter<"MessagingGoal"> | Date | string
+    updated_at?: DateTimeFilter<"MessagingGoal"> | Date | string
+    organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    achievements?: GoalAchievementListRelationFilter
+  }
+
+  export type MessagingGoalOrderByWithRelationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    user_uuid?: SortOrder
+    period?: SortOrder
+    target_count?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    organisation?: OrganisationOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
+    achievements?: GoalAchievementOrderByRelationAggregateInput
+  }
+
+  export type MessagingGoalWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    uuid?: string
+    organisation_uuid_user_uuid_period?: MessagingGoalOrganisation_uuidUser_uuidPeriodCompoundUniqueInput
+    AND?: MessagingGoalWhereInput | MessagingGoalWhereInput[]
+    OR?: MessagingGoalWhereInput[]
+    NOT?: MessagingGoalWhereInput | MessagingGoalWhereInput[]
+    organisation_uuid?: StringFilter<"MessagingGoal"> | string
+    user_uuid?: StringFilter<"MessagingGoal"> | string
+    period?: EnumGoalPeriodFilter<"MessagingGoal"> | $Enums.GoalPeriod
+    target_count?: IntFilter<"MessagingGoal"> | number
+    is_active?: BoolFilter<"MessagingGoal"> | boolean
+    created_at?: DateTimeFilter<"MessagingGoal"> | Date | string
+    updated_at?: DateTimeFilter<"MessagingGoal"> | Date | string
+    organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    achievements?: GoalAchievementListRelationFilter
+  }, "id" | "uuid" | "organisation_uuid_user_uuid_period">
+
+  export type MessagingGoalOrderByWithAggregationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    user_uuid?: SortOrder
+    period?: SortOrder
+    target_count?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: MessagingGoalCountOrderByAggregateInput
+    _avg?: MessagingGoalAvgOrderByAggregateInput
+    _max?: MessagingGoalMaxOrderByAggregateInput
+    _min?: MessagingGoalMinOrderByAggregateInput
+    _sum?: MessagingGoalSumOrderByAggregateInput
+  }
+
+  export type MessagingGoalScalarWhereWithAggregatesInput = {
+    AND?: MessagingGoalScalarWhereWithAggregatesInput | MessagingGoalScalarWhereWithAggregatesInput[]
+    OR?: MessagingGoalScalarWhereWithAggregatesInput[]
+    NOT?: MessagingGoalScalarWhereWithAggregatesInput | MessagingGoalScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"MessagingGoal"> | number
+    uuid?: StringWithAggregatesFilter<"MessagingGoal"> | string
+    organisation_uuid?: StringWithAggregatesFilter<"MessagingGoal"> | string
+    user_uuid?: StringWithAggregatesFilter<"MessagingGoal"> | string
+    period?: EnumGoalPeriodWithAggregatesFilter<"MessagingGoal"> | $Enums.GoalPeriod
+    target_count?: IntWithAggregatesFilter<"MessagingGoal"> | number
+    is_active?: BoolWithAggregatesFilter<"MessagingGoal"> | boolean
+    created_at?: DateTimeWithAggregatesFilter<"MessagingGoal"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"MessagingGoal"> | Date | string
+  }
+
+  export type GoalAchievementWhereInput = {
+    AND?: GoalAchievementWhereInput | GoalAchievementWhereInput[]
+    OR?: GoalAchievementWhereInput[]
+    NOT?: GoalAchievementWhereInput | GoalAchievementWhereInput[]
+    id?: IntFilter<"GoalAchievement"> | number
+    uuid?: StringFilter<"GoalAchievement"> | string
+    organisation_uuid?: StringFilter<"GoalAchievement"> | string
+    user_uuid?: StringFilter<"GoalAchievement"> | string
+    goal_uuid?: StringFilter<"GoalAchievement"> | string
+    type?: EnumGoalAchievementTypeFilter<"GoalAchievement"> | $Enums.GoalAchievementType
+    period_key?: StringFilter<"GoalAchievement"> | string
+    payload?: JsonNullableFilter<"GoalAchievement">
+    seen_at?: DateTimeNullableFilter<"GoalAchievement"> | Date | string | null
+    created_at?: DateTimeFilter<"GoalAchievement"> | Date | string
+    organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    goal?: XOR<MessagingGoalScalarRelationFilter, MessagingGoalWhereInput>
+  }
+
+  export type GoalAchievementOrderByWithRelationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    user_uuid?: SortOrder
+    goal_uuid?: SortOrder
+    type?: SortOrder
+    period_key?: SortOrder
+    payload?: SortOrderInput | SortOrder
+    seen_at?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    organisation?: OrganisationOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
+    goal?: MessagingGoalOrderByWithRelationInput
+  }
+
+  export type GoalAchievementWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    uuid?: string
+    user_uuid_goal_uuid_type_period_key?: GoalAchievementUser_uuidGoal_uuidTypePeriod_keyCompoundUniqueInput
+    AND?: GoalAchievementWhereInput | GoalAchievementWhereInput[]
+    OR?: GoalAchievementWhereInput[]
+    NOT?: GoalAchievementWhereInput | GoalAchievementWhereInput[]
+    organisation_uuid?: StringFilter<"GoalAchievement"> | string
+    user_uuid?: StringFilter<"GoalAchievement"> | string
+    goal_uuid?: StringFilter<"GoalAchievement"> | string
+    type?: EnumGoalAchievementTypeFilter<"GoalAchievement"> | $Enums.GoalAchievementType
+    period_key?: StringFilter<"GoalAchievement"> | string
+    payload?: JsonNullableFilter<"GoalAchievement">
+    seen_at?: DateTimeNullableFilter<"GoalAchievement"> | Date | string | null
+    created_at?: DateTimeFilter<"GoalAchievement"> | Date | string
+    organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    goal?: XOR<MessagingGoalScalarRelationFilter, MessagingGoalWhereInput>
+  }, "id" | "uuid" | "user_uuid_goal_uuid_type_period_key">
+
+  export type GoalAchievementOrderByWithAggregationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    user_uuid?: SortOrder
+    goal_uuid?: SortOrder
+    type?: SortOrder
+    period_key?: SortOrder
+    payload?: SortOrderInput | SortOrder
+    seen_at?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    _count?: GoalAchievementCountOrderByAggregateInput
+    _avg?: GoalAchievementAvgOrderByAggregateInput
+    _max?: GoalAchievementMaxOrderByAggregateInput
+    _min?: GoalAchievementMinOrderByAggregateInput
+    _sum?: GoalAchievementSumOrderByAggregateInput
+  }
+
+  export type GoalAchievementScalarWhereWithAggregatesInput = {
+    AND?: GoalAchievementScalarWhereWithAggregatesInput | GoalAchievementScalarWhereWithAggregatesInput[]
+    OR?: GoalAchievementScalarWhereWithAggregatesInput[]
+    NOT?: GoalAchievementScalarWhereWithAggregatesInput | GoalAchievementScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"GoalAchievement"> | number
+    uuid?: StringWithAggregatesFilter<"GoalAchievement"> | string
+    organisation_uuid?: StringWithAggregatesFilter<"GoalAchievement"> | string
+    user_uuid?: StringWithAggregatesFilter<"GoalAchievement"> | string
+    goal_uuid?: StringWithAggregatesFilter<"GoalAchievement"> | string
+    type?: EnumGoalAchievementTypeWithAggregatesFilter<"GoalAchievement"> | $Enums.GoalAchievementType
+    period_key?: StringWithAggregatesFilter<"GoalAchievement"> | string
+    payload?: JsonNullableWithAggregatesFilter<"GoalAchievement">
+    seen_at?: DateTimeNullableWithAggregatesFilter<"GoalAchievement"> | Date | string | null
+    created_at?: DateTimeWithAggregatesFilter<"GoalAchievement"> | Date | string
+  }
+
+  export type GoalPersonalBestWhereInput = {
+    AND?: GoalPersonalBestWhereInput | GoalPersonalBestWhereInput[]
+    OR?: GoalPersonalBestWhereInput[]
+    NOT?: GoalPersonalBestWhereInput | GoalPersonalBestWhereInput[]
+    id?: IntFilter<"GoalPersonalBest"> | number
+    uuid?: StringFilter<"GoalPersonalBest"> | string
+    organisation_uuid?: StringFilter<"GoalPersonalBest"> | string
+    user_uuid?: StringFilter<"GoalPersonalBest"> | string
+    period?: EnumGoalPeriodFilter<"GoalPersonalBest"> | $Enums.GoalPeriod
+    best_count?: IntFilter<"GoalPersonalBest"> | number
+    achieved_at?: DateTimeFilter<"GoalPersonalBest"> | Date | string
+    updated_at?: DateTimeFilter<"GoalPersonalBest"> | Date | string
+    organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type GoalPersonalBestOrderByWithRelationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    user_uuid?: SortOrder
+    period?: SortOrder
+    best_count?: SortOrder
+    achieved_at?: SortOrder
+    updated_at?: SortOrder
+    organisation?: OrganisationOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type GoalPersonalBestWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    uuid?: string
+    organisation_uuid_user_uuid_period?: GoalPersonalBestOrganisation_uuidUser_uuidPeriodCompoundUniqueInput
+    AND?: GoalPersonalBestWhereInput | GoalPersonalBestWhereInput[]
+    OR?: GoalPersonalBestWhereInput[]
+    NOT?: GoalPersonalBestWhereInput | GoalPersonalBestWhereInput[]
+    organisation_uuid?: StringFilter<"GoalPersonalBest"> | string
+    user_uuid?: StringFilter<"GoalPersonalBest"> | string
+    period?: EnumGoalPeriodFilter<"GoalPersonalBest"> | $Enums.GoalPeriod
+    best_count?: IntFilter<"GoalPersonalBest"> | number
+    achieved_at?: DateTimeFilter<"GoalPersonalBest"> | Date | string
+    updated_at?: DateTimeFilter<"GoalPersonalBest"> | Date | string
+    organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "uuid" | "organisation_uuid_user_uuid_period">
+
+  export type GoalPersonalBestOrderByWithAggregationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    user_uuid?: SortOrder
+    period?: SortOrder
+    best_count?: SortOrder
+    achieved_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: GoalPersonalBestCountOrderByAggregateInput
+    _avg?: GoalPersonalBestAvgOrderByAggregateInput
+    _max?: GoalPersonalBestMaxOrderByAggregateInput
+    _min?: GoalPersonalBestMinOrderByAggregateInput
+    _sum?: GoalPersonalBestSumOrderByAggregateInput
+  }
+
+  export type GoalPersonalBestScalarWhereWithAggregatesInput = {
+    AND?: GoalPersonalBestScalarWhereWithAggregatesInput | GoalPersonalBestScalarWhereWithAggregatesInput[]
+    OR?: GoalPersonalBestScalarWhereWithAggregatesInput[]
+    NOT?: GoalPersonalBestScalarWhereWithAggregatesInput | GoalPersonalBestScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"GoalPersonalBest"> | number
+    uuid?: StringWithAggregatesFilter<"GoalPersonalBest"> | string
+    organisation_uuid?: StringWithAggregatesFilter<"GoalPersonalBest"> | string
+    user_uuid?: StringWithAggregatesFilter<"GoalPersonalBest"> | string
+    period?: EnumGoalPeriodWithAggregatesFilter<"GoalPersonalBest"> | $Enums.GoalPeriod
+    best_count?: IntWithAggregatesFilter<"GoalPersonalBest"> | number
+    achieved_at?: DateTimeWithAggregatesFilter<"GoalPersonalBest"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"GoalPersonalBest"> | Date | string
+  }
+
   export type ActivityLogWhereInput = {
     AND?: ActivityLogWhereInput | ActivityLogWhereInput[]
     OR?: ActivityLogWhereInput[]
@@ -58749,6 +63161,9 @@ export namespace Prisma {
     form_completions?: FormCompletionCreateNestedManyWithoutCompleted_byInput
     outreach_messages_sent?: OutreachMessageCreateNestedManyWithoutSent_byInput
     activity_logs?: ActivityLogCreateNestedManyWithoutActorInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutUserInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutUserInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -58766,6 +63181,9 @@ export namespace Prisma {
     form_completions?: FormCompletionUncheckedCreateNestedManyWithoutCompleted_byInput
     outreach_messages_sent?: OutreachMessageUncheckedCreateNestedManyWithoutSent_byInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutActorInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutUserInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutUserInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -58782,6 +63200,9 @@ export namespace Prisma {
     form_completions?: FormCompletionUpdateManyWithoutCompleted_byNestedInput
     outreach_messages_sent?: OutreachMessageUpdateManyWithoutSent_byNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutActorNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutUserNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutUserNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -58799,6 +63220,9 @@ export namespace Prisma {
     form_completions?: FormCompletionUncheckedUpdateManyWithoutCompleted_byNestedInput
     outreach_messages_sent?: OutreachMessageUncheckedUpdateManyWithoutSent_byNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutActorNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutUserNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutUserNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -58840,6 +63264,7 @@ export namespace Prisma {
     uuid?: string
     name: string
     slug: string
+    timezone?: string
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
@@ -58862,6 +63287,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateInput = {
@@ -58869,6 +63297,7 @@ export namespace Prisma {
     uuid?: string
     name: string
     slug: string
+    timezone?: string
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
@@ -58891,12 +63320,16 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUpdateInput = {
     uuid?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
@@ -58919,6 +63352,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateInput = {
@@ -58926,6 +63362,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -58948,6 +63385,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateManyInput = {
@@ -58955,6 +63395,7 @@ export namespace Prisma {
     uuid?: string
     name: string
     slug: string
+    timezone?: string
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -58963,6 +63404,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -58972,6 +63414,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -62748,6 +67191,246 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type MessagingGoalCreateInput = {
+    uuid?: string
+    period: $Enums.GoalPeriod
+    target_count: number
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutMessaging_goalsInput
+    user: UserCreateNestedOneWithoutMessaging_goalsInput
+    achievements?: GoalAchievementCreateNestedManyWithoutGoalInput
+  }
+
+  export type MessagingGoalUncheckedCreateInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    user_uuid: string
+    period: $Enums.GoalPeriod
+    target_count: number
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    achievements?: GoalAchievementUncheckedCreateNestedManyWithoutGoalInput
+  }
+
+  export type MessagingGoalUpdateInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    target_count?: IntFieldUpdateOperationsInput | number
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutMessaging_goalsNestedInput
+    user?: UserUpdateOneRequiredWithoutMessaging_goalsNestedInput
+    achievements?: GoalAchievementUpdateManyWithoutGoalNestedInput
+  }
+
+  export type MessagingGoalUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    user_uuid?: StringFieldUpdateOperationsInput | string
+    period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    target_count?: IntFieldUpdateOperationsInput | number
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    achievements?: GoalAchievementUncheckedUpdateManyWithoutGoalNestedInput
+  }
+
+  export type MessagingGoalCreateManyInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    user_uuid: string
+    period: $Enums.GoalPeriod
+    target_count: number
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type MessagingGoalUpdateManyMutationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    target_count?: IntFieldUpdateOperationsInput | number
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MessagingGoalUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    user_uuid?: StringFieldUpdateOperationsInput | string
+    period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    target_count?: IntFieldUpdateOperationsInput | number
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GoalAchievementCreateInput = {
+    uuid?: string
+    type: $Enums.GoalAchievementType
+    period_key: string
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    seen_at?: Date | string | null
+    created_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutGoal_achievementsInput
+    user: UserCreateNestedOneWithoutGoal_achievementsInput
+    goal: MessagingGoalCreateNestedOneWithoutAchievementsInput
+  }
+
+  export type GoalAchievementUncheckedCreateInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    user_uuid: string
+    goal_uuid: string
+    type: $Enums.GoalAchievementType
+    period_key: string
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    seen_at?: Date | string | null
+    created_at?: Date | string
+  }
+
+  export type GoalAchievementUpdateInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    type?: EnumGoalAchievementTypeFieldUpdateOperationsInput | $Enums.GoalAchievementType
+    period_key?: StringFieldUpdateOperationsInput | string
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    seen_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutGoal_achievementsNestedInput
+    user?: UserUpdateOneRequiredWithoutGoal_achievementsNestedInput
+    goal?: MessagingGoalUpdateOneRequiredWithoutAchievementsNestedInput
+  }
+
+  export type GoalAchievementUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    user_uuid?: StringFieldUpdateOperationsInput | string
+    goal_uuid?: StringFieldUpdateOperationsInput | string
+    type?: EnumGoalAchievementTypeFieldUpdateOperationsInput | $Enums.GoalAchievementType
+    period_key?: StringFieldUpdateOperationsInput | string
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    seen_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GoalAchievementCreateManyInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    user_uuid: string
+    goal_uuid: string
+    type: $Enums.GoalAchievementType
+    period_key: string
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    seen_at?: Date | string | null
+    created_at?: Date | string
+  }
+
+  export type GoalAchievementUpdateManyMutationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    type?: EnumGoalAchievementTypeFieldUpdateOperationsInput | $Enums.GoalAchievementType
+    period_key?: StringFieldUpdateOperationsInput | string
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    seen_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GoalAchievementUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    user_uuid?: StringFieldUpdateOperationsInput | string
+    goal_uuid?: StringFieldUpdateOperationsInput | string
+    type?: EnumGoalAchievementTypeFieldUpdateOperationsInput | $Enums.GoalAchievementType
+    period_key?: StringFieldUpdateOperationsInput | string
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    seen_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GoalPersonalBestCreateInput = {
+    uuid?: string
+    period: $Enums.GoalPeriod
+    best_count?: number
+    achieved_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutGoal_personal_bestsInput
+    user: UserCreateNestedOneWithoutGoal_personal_bestsInput
+  }
+
+  export type GoalPersonalBestUncheckedCreateInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    user_uuid: string
+    period: $Enums.GoalPeriod
+    best_count?: number
+    achieved_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type GoalPersonalBestUpdateInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    best_count?: IntFieldUpdateOperationsInput | number
+    achieved_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutGoal_personal_bestsNestedInput
+    user?: UserUpdateOneRequiredWithoutGoal_personal_bestsNestedInput
+  }
+
+  export type GoalPersonalBestUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    user_uuid?: StringFieldUpdateOperationsInput | string
+    period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    best_count?: IntFieldUpdateOperationsInput | number
+    achieved_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GoalPersonalBestCreateManyInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    user_uuid: string
+    period: $Enums.GoalPeriod
+    best_count?: number
+    achieved_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type GoalPersonalBestUpdateManyMutationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    best_count?: IntFieldUpdateOperationsInput | number
+    achieved_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GoalPersonalBestUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    user_uuid?: StringFieldUpdateOperationsInput | string
+    period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    best_count?: IntFieldUpdateOperationsInput | number
+    achieved_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type ActivityLogCreateInput = {
     uuid?: string
     entity_type: string
@@ -62923,6 +67606,24 @@ export namespace Prisma {
     none?: ActivityLogWhereInput
   }
 
+  export type MessagingGoalListRelationFilter = {
+    every?: MessagingGoalWhereInput
+    some?: MessagingGoalWhereInput
+    none?: MessagingGoalWhereInput
+  }
+
+  export type GoalAchievementListRelationFilter = {
+    every?: GoalAchievementWhereInput
+    some?: GoalAchievementWhereInput
+    none?: GoalAchievementWhereInput
+  }
+
+  export type GoalPersonalBestListRelationFilter = {
+    every?: GoalPersonalBestWhereInput
+    some?: GoalPersonalBestWhereInput
+    none?: GoalPersonalBestWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -62945,6 +67646,18 @@ export namespace Prisma {
   }
 
   export type ActivityLogOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type MessagingGoalOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type GoalAchievementOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type GoalPersonalBestOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -63233,6 +67946,7 @@ export namespace Prisma {
     uuid?: SortOrder
     name?: SortOrder
     slug?: SortOrder
+    timezone?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -63246,6 +67960,7 @@ export namespace Prisma {
     uuid?: SortOrder
     name?: SortOrder
     slug?: SortOrder
+    timezone?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -63255,6 +67970,7 @@ export namespace Prisma {
     uuid?: SortOrder
     name?: SortOrder
     slug?: SortOrder
+    timezone?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -66232,6 +70948,198 @@ export namespace Prisma {
     _max?: NestedEnumApifyUsageStatusFilter<$PrismaModel>
   }
 
+  export type EnumGoalPeriodFilter<$PrismaModel = never> = {
+    equals?: $Enums.GoalPeriod | EnumGoalPeriodFieldRefInput<$PrismaModel>
+    in?: $Enums.GoalPeriod[] | ListEnumGoalPeriodFieldRefInput<$PrismaModel>
+    notIn?: $Enums.GoalPeriod[] | ListEnumGoalPeriodFieldRefInput<$PrismaModel>
+    not?: NestedEnumGoalPeriodFilter<$PrismaModel> | $Enums.GoalPeriod
+  }
+
+  export type MessagingGoalOrganisation_uuidUser_uuidPeriodCompoundUniqueInput = {
+    organisation_uuid: string
+    user_uuid: string
+    period: $Enums.GoalPeriod
+  }
+
+  export type MessagingGoalCountOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    user_uuid?: SortOrder
+    period?: SortOrder
+    target_count?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type MessagingGoalAvgOrderByAggregateInput = {
+    id?: SortOrder
+    target_count?: SortOrder
+  }
+
+  export type MessagingGoalMaxOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    user_uuid?: SortOrder
+    period?: SortOrder
+    target_count?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type MessagingGoalMinOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    user_uuid?: SortOrder
+    period?: SortOrder
+    target_count?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type MessagingGoalSumOrderByAggregateInput = {
+    id?: SortOrder
+    target_count?: SortOrder
+  }
+
+  export type EnumGoalPeriodWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.GoalPeriod | EnumGoalPeriodFieldRefInput<$PrismaModel>
+    in?: $Enums.GoalPeriod[] | ListEnumGoalPeriodFieldRefInput<$PrismaModel>
+    notIn?: $Enums.GoalPeriod[] | ListEnumGoalPeriodFieldRefInput<$PrismaModel>
+    not?: NestedEnumGoalPeriodWithAggregatesFilter<$PrismaModel> | $Enums.GoalPeriod
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumGoalPeriodFilter<$PrismaModel>
+    _max?: NestedEnumGoalPeriodFilter<$PrismaModel>
+  }
+
+  export type EnumGoalAchievementTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.GoalAchievementType | EnumGoalAchievementTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.GoalAchievementType[] | ListEnumGoalAchievementTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.GoalAchievementType[] | ListEnumGoalAchievementTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumGoalAchievementTypeFilter<$PrismaModel> | $Enums.GoalAchievementType
+  }
+
+  export type MessagingGoalScalarRelationFilter = {
+    is?: MessagingGoalWhereInput
+    isNot?: MessagingGoalWhereInput
+  }
+
+  export type GoalAchievementUser_uuidGoal_uuidTypePeriod_keyCompoundUniqueInput = {
+    user_uuid: string
+    goal_uuid: string
+    type: $Enums.GoalAchievementType
+    period_key: string
+  }
+
+  export type GoalAchievementCountOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    user_uuid?: SortOrder
+    goal_uuid?: SortOrder
+    type?: SortOrder
+    period_key?: SortOrder
+    payload?: SortOrder
+    seen_at?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type GoalAchievementAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type GoalAchievementMaxOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    user_uuid?: SortOrder
+    goal_uuid?: SortOrder
+    type?: SortOrder
+    period_key?: SortOrder
+    seen_at?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type GoalAchievementMinOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    user_uuid?: SortOrder
+    goal_uuid?: SortOrder
+    type?: SortOrder
+    period_key?: SortOrder
+    seen_at?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type GoalAchievementSumOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type EnumGoalAchievementTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.GoalAchievementType | EnumGoalAchievementTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.GoalAchievementType[] | ListEnumGoalAchievementTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.GoalAchievementType[] | ListEnumGoalAchievementTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumGoalAchievementTypeWithAggregatesFilter<$PrismaModel> | $Enums.GoalAchievementType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumGoalAchievementTypeFilter<$PrismaModel>
+    _max?: NestedEnumGoalAchievementTypeFilter<$PrismaModel>
+  }
+
+  export type GoalPersonalBestOrganisation_uuidUser_uuidPeriodCompoundUniqueInput = {
+    organisation_uuid: string
+    user_uuid: string
+    period: $Enums.GoalPeriod
+  }
+
+  export type GoalPersonalBestCountOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    user_uuid?: SortOrder
+    period?: SortOrder
+    best_count?: SortOrder
+    achieved_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type GoalPersonalBestAvgOrderByAggregateInput = {
+    id?: SortOrder
+    best_count?: SortOrder
+  }
+
+  export type GoalPersonalBestMaxOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    user_uuid?: SortOrder
+    period?: SortOrder
+    best_count?: SortOrder
+    achieved_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type GoalPersonalBestMinOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    user_uuid?: SortOrder
+    period?: SortOrder
+    best_count?: SortOrder
+    achieved_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type GoalPersonalBestSumOrderByAggregateInput = {
+    id?: SortOrder
+    best_count?: SortOrder
+  }
+
   export type ActivityLogCountOrderByAggregateInput = {
     id?: SortOrder
     uuid?: SortOrder
@@ -66312,6 +71220,27 @@ export namespace Prisma {
     connect?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
   }
 
+  export type MessagingGoalCreateNestedManyWithoutUserInput = {
+    create?: XOR<MessagingGoalCreateWithoutUserInput, MessagingGoalUncheckedCreateWithoutUserInput> | MessagingGoalCreateWithoutUserInput[] | MessagingGoalUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: MessagingGoalCreateOrConnectWithoutUserInput | MessagingGoalCreateOrConnectWithoutUserInput[]
+    createMany?: MessagingGoalCreateManyUserInputEnvelope
+    connect?: MessagingGoalWhereUniqueInput | MessagingGoalWhereUniqueInput[]
+  }
+
+  export type GoalAchievementCreateNestedManyWithoutUserInput = {
+    create?: XOR<GoalAchievementCreateWithoutUserInput, GoalAchievementUncheckedCreateWithoutUserInput> | GoalAchievementCreateWithoutUserInput[] | GoalAchievementUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: GoalAchievementCreateOrConnectWithoutUserInput | GoalAchievementCreateOrConnectWithoutUserInput[]
+    createMany?: GoalAchievementCreateManyUserInputEnvelope
+    connect?: GoalAchievementWhereUniqueInput | GoalAchievementWhereUniqueInput[]
+  }
+
+  export type GoalPersonalBestCreateNestedManyWithoutUserInput = {
+    create?: XOR<GoalPersonalBestCreateWithoutUserInput, GoalPersonalBestUncheckedCreateWithoutUserInput> | GoalPersonalBestCreateWithoutUserInput[] | GoalPersonalBestUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: GoalPersonalBestCreateOrConnectWithoutUserInput | GoalPersonalBestCreateOrConnectWithoutUserInput[]
+    createMany?: GoalPersonalBestCreateManyUserInputEnvelope
+    connect?: GoalPersonalBestWhereUniqueInput | GoalPersonalBestWhereUniqueInput[]
+  }
+
   export type OrganisationMemberUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<OrganisationMemberCreateWithoutUserInput, OrganisationMemberUncheckedCreateWithoutUserInput> | OrganisationMemberCreateWithoutUserInput[] | OrganisationMemberUncheckedCreateWithoutUserInput[]
     connectOrCreate?: OrganisationMemberCreateOrConnectWithoutUserInput | OrganisationMemberCreateOrConnectWithoutUserInput[]
@@ -66345,6 +71274,27 @@ export namespace Prisma {
     connectOrCreate?: ActivityLogCreateOrConnectWithoutActorInput | ActivityLogCreateOrConnectWithoutActorInput[]
     createMany?: ActivityLogCreateManyActorInputEnvelope
     connect?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
+  }
+
+  export type MessagingGoalUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<MessagingGoalCreateWithoutUserInput, MessagingGoalUncheckedCreateWithoutUserInput> | MessagingGoalCreateWithoutUserInput[] | MessagingGoalUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: MessagingGoalCreateOrConnectWithoutUserInput | MessagingGoalCreateOrConnectWithoutUserInput[]
+    createMany?: MessagingGoalCreateManyUserInputEnvelope
+    connect?: MessagingGoalWhereUniqueInput | MessagingGoalWhereUniqueInput[]
+  }
+
+  export type GoalAchievementUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<GoalAchievementCreateWithoutUserInput, GoalAchievementUncheckedCreateWithoutUserInput> | GoalAchievementCreateWithoutUserInput[] | GoalAchievementUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: GoalAchievementCreateOrConnectWithoutUserInput | GoalAchievementCreateOrConnectWithoutUserInput[]
+    createMany?: GoalAchievementCreateManyUserInputEnvelope
+    connect?: GoalAchievementWhereUniqueInput | GoalAchievementWhereUniqueInput[]
+  }
+
+  export type GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<GoalPersonalBestCreateWithoutUserInput, GoalPersonalBestUncheckedCreateWithoutUserInput> | GoalPersonalBestCreateWithoutUserInput[] | GoalPersonalBestUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: GoalPersonalBestCreateOrConnectWithoutUserInput | GoalPersonalBestCreateOrConnectWithoutUserInput[]
+    createMany?: GoalPersonalBestCreateManyUserInputEnvelope
+    connect?: GoalPersonalBestWhereUniqueInput | GoalPersonalBestWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -66433,6 +71383,48 @@ export namespace Prisma {
     deleteMany?: ActivityLogScalarWhereInput | ActivityLogScalarWhereInput[]
   }
 
+  export type MessagingGoalUpdateManyWithoutUserNestedInput = {
+    create?: XOR<MessagingGoalCreateWithoutUserInput, MessagingGoalUncheckedCreateWithoutUserInput> | MessagingGoalCreateWithoutUserInput[] | MessagingGoalUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: MessagingGoalCreateOrConnectWithoutUserInput | MessagingGoalCreateOrConnectWithoutUserInput[]
+    upsert?: MessagingGoalUpsertWithWhereUniqueWithoutUserInput | MessagingGoalUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: MessagingGoalCreateManyUserInputEnvelope
+    set?: MessagingGoalWhereUniqueInput | MessagingGoalWhereUniqueInput[]
+    disconnect?: MessagingGoalWhereUniqueInput | MessagingGoalWhereUniqueInput[]
+    delete?: MessagingGoalWhereUniqueInput | MessagingGoalWhereUniqueInput[]
+    connect?: MessagingGoalWhereUniqueInput | MessagingGoalWhereUniqueInput[]
+    update?: MessagingGoalUpdateWithWhereUniqueWithoutUserInput | MessagingGoalUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: MessagingGoalUpdateManyWithWhereWithoutUserInput | MessagingGoalUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: MessagingGoalScalarWhereInput | MessagingGoalScalarWhereInput[]
+  }
+
+  export type GoalAchievementUpdateManyWithoutUserNestedInput = {
+    create?: XOR<GoalAchievementCreateWithoutUserInput, GoalAchievementUncheckedCreateWithoutUserInput> | GoalAchievementCreateWithoutUserInput[] | GoalAchievementUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: GoalAchievementCreateOrConnectWithoutUserInput | GoalAchievementCreateOrConnectWithoutUserInput[]
+    upsert?: GoalAchievementUpsertWithWhereUniqueWithoutUserInput | GoalAchievementUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: GoalAchievementCreateManyUserInputEnvelope
+    set?: GoalAchievementWhereUniqueInput | GoalAchievementWhereUniqueInput[]
+    disconnect?: GoalAchievementWhereUniqueInput | GoalAchievementWhereUniqueInput[]
+    delete?: GoalAchievementWhereUniqueInput | GoalAchievementWhereUniqueInput[]
+    connect?: GoalAchievementWhereUniqueInput | GoalAchievementWhereUniqueInput[]
+    update?: GoalAchievementUpdateWithWhereUniqueWithoutUserInput | GoalAchievementUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: GoalAchievementUpdateManyWithWhereWithoutUserInput | GoalAchievementUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: GoalAchievementScalarWhereInput | GoalAchievementScalarWhereInput[]
+  }
+
+  export type GoalPersonalBestUpdateManyWithoutUserNestedInput = {
+    create?: XOR<GoalPersonalBestCreateWithoutUserInput, GoalPersonalBestUncheckedCreateWithoutUserInput> | GoalPersonalBestCreateWithoutUserInput[] | GoalPersonalBestUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: GoalPersonalBestCreateOrConnectWithoutUserInput | GoalPersonalBestCreateOrConnectWithoutUserInput[]
+    upsert?: GoalPersonalBestUpsertWithWhereUniqueWithoutUserInput | GoalPersonalBestUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: GoalPersonalBestCreateManyUserInputEnvelope
+    set?: GoalPersonalBestWhereUniqueInput | GoalPersonalBestWhereUniqueInput[]
+    disconnect?: GoalPersonalBestWhereUniqueInput | GoalPersonalBestWhereUniqueInput[]
+    delete?: GoalPersonalBestWhereUniqueInput | GoalPersonalBestWhereUniqueInput[]
+    connect?: GoalPersonalBestWhereUniqueInput | GoalPersonalBestWhereUniqueInput[]
+    update?: GoalPersonalBestUpdateWithWhereUniqueWithoutUserInput | GoalPersonalBestUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: GoalPersonalBestUpdateManyWithWhereWithoutUserInput | GoalPersonalBestUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: GoalPersonalBestScalarWhereInput | GoalPersonalBestScalarWhereInput[]
+  }
+
   export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
@@ -66509,6 +71501,48 @@ export namespace Prisma {
     update?: ActivityLogUpdateWithWhereUniqueWithoutActorInput | ActivityLogUpdateWithWhereUniqueWithoutActorInput[]
     updateMany?: ActivityLogUpdateManyWithWhereWithoutActorInput | ActivityLogUpdateManyWithWhereWithoutActorInput[]
     deleteMany?: ActivityLogScalarWhereInput | ActivityLogScalarWhereInput[]
+  }
+
+  export type MessagingGoalUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<MessagingGoalCreateWithoutUserInput, MessagingGoalUncheckedCreateWithoutUserInput> | MessagingGoalCreateWithoutUserInput[] | MessagingGoalUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: MessagingGoalCreateOrConnectWithoutUserInput | MessagingGoalCreateOrConnectWithoutUserInput[]
+    upsert?: MessagingGoalUpsertWithWhereUniqueWithoutUserInput | MessagingGoalUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: MessagingGoalCreateManyUserInputEnvelope
+    set?: MessagingGoalWhereUniqueInput | MessagingGoalWhereUniqueInput[]
+    disconnect?: MessagingGoalWhereUniqueInput | MessagingGoalWhereUniqueInput[]
+    delete?: MessagingGoalWhereUniqueInput | MessagingGoalWhereUniqueInput[]
+    connect?: MessagingGoalWhereUniqueInput | MessagingGoalWhereUniqueInput[]
+    update?: MessagingGoalUpdateWithWhereUniqueWithoutUserInput | MessagingGoalUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: MessagingGoalUpdateManyWithWhereWithoutUserInput | MessagingGoalUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: MessagingGoalScalarWhereInput | MessagingGoalScalarWhereInput[]
+  }
+
+  export type GoalAchievementUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<GoalAchievementCreateWithoutUserInput, GoalAchievementUncheckedCreateWithoutUserInput> | GoalAchievementCreateWithoutUserInput[] | GoalAchievementUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: GoalAchievementCreateOrConnectWithoutUserInput | GoalAchievementCreateOrConnectWithoutUserInput[]
+    upsert?: GoalAchievementUpsertWithWhereUniqueWithoutUserInput | GoalAchievementUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: GoalAchievementCreateManyUserInputEnvelope
+    set?: GoalAchievementWhereUniqueInput | GoalAchievementWhereUniqueInput[]
+    disconnect?: GoalAchievementWhereUniqueInput | GoalAchievementWhereUniqueInput[]
+    delete?: GoalAchievementWhereUniqueInput | GoalAchievementWhereUniqueInput[]
+    connect?: GoalAchievementWhereUniqueInput | GoalAchievementWhereUniqueInput[]
+    update?: GoalAchievementUpdateWithWhereUniqueWithoutUserInput | GoalAchievementUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: GoalAchievementUpdateManyWithWhereWithoutUserInput | GoalAchievementUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: GoalAchievementScalarWhereInput | GoalAchievementScalarWhereInput[]
+  }
+
+  export type GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<GoalPersonalBestCreateWithoutUserInput, GoalPersonalBestUncheckedCreateWithoutUserInput> | GoalPersonalBestCreateWithoutUserInput[] | GoalPersonalBestUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: GoalPersonalBestCreateOrConnectWithoutUserInput | GoalPersonalBestCreateOrConnectWithoutUserInput[]
+    upsert?: GoalPersonalBestUpsertWithWhereUniqueWithoutUserInput | GoalPersonalBestUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: GoalPersonalBestCreateManyUserInputEnvelope
+    set?: GoalPersonalBestWhereUniqueInput | GoalPersonalBestWhereUniqueInput[]
+    disconnect?: GoalPersonalBestWhereUniqueInput | GoalPersonalBestWhereUniqueInput[]
+    delete?: GoalPersonalBestWhereUniqueInput | GoalPersonalBestWhereUniqueInput[]
+    connect?: GoalPersonalBestWhereUniqueInput | GoalPersonalBestWhereUniqueInput[]
+    update?: GoalPersonalBestUpdateWithWhereUniqueWithoutUserInput | GoalPersonalBestUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: GoalPersonalBestUpdateManyWithWhereWithoutUserInput | GoalPersonalBestUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: GoalPersonalBestScalarWhereInput | GoalPersonalBestScalarWhereInput[]
   }
 
   export type OrganisationMemberCreateNestedManyWithoutOrganisationInput = {
@@ -66651,6 +71685,27 @@ export namespace Prisma {
     connect?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
   }
 
+  export type MessagingGoalCreateNestedManyWithoutOrganisationInput = {
+    create?: XOR<MessagingGoalCreateWithoutOrganisationInput, MessagingGoalUncheckedCreateWithoutOrganisationInput> | MessagingGoalCreateWithoutOrganisationInput[] | MessagingGoalUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: MessagingGoalCreateOrConnectWithoutOrganisationInput | MessagingGoalCreateOrConnectWithoutOrganisationInput[]
+    createMany?: MessagingGoalCreateManyOrganisationInputEnvelope
+    connect?: MessagingGoalWhereUniqueInput | MessagingGoalWhereUniqueInput[]
+  }
+
+  export type GoalAchievementCreateNestedManyWithoutOrganisationInput = {
+    create?: XOR<GoalAchievementCreateWithoutOrganisationInput, GoalAchievementUncheckedCreateWithoutOrganisationInput> | GoalAchievementCreateWithoutOrganisationInput[] | GoalAchievementUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: GoalAchievementCreateOrConnectWithoutOrganisationInput | GoalAchievementCreateOrConnectWithoutOrganisationInput[]
+    createMany?: GoalAchievementCreateManyOrganisationInputEnvelope
+    connect?: GoalAchievementWhereUniqueInput | GoalAchievementWhereUniqueInput[]
+  }
+
+  export type GoalPersonalBestCreateNestedManyWithoutOrganisationInput = {
+    create?: XOR<GoalPersonalBestCreateWithoutOrganisationInput, GoalPersonalBestUncheckedCreateWithoutOrganisationInput> | GoalPersonalBestCreateWithoutOrganisationInput[] | GoalPersonalBestUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: GoalPersonalBestCreateOrConnectWithoutOrganisationInput | GoalPersonalBestCreateOrConnectWithoutOrganisationInput[]
+    createMany?: GoalPersonalBestCreateManyOrganisationInputEnvelope
+    connect?: GoalPersonalBestWhereUniqueInput | GoalPersonalBestWhereUniqueInput[]
+  }
+
   export type OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput = {
     create?: XOR<OrganisationMemberCreateWithoutOrganisationInput, OrganisationMemberUncheckedCreateWithoutOrganisationInput> | OrganisationMemberCreateWithoutOrganisationInput[] | OrganisationMemberUncheckedCreateWithoutOrganisationInput[]
     connectOrCreate?: OrganisationMemberCreateOrConnectWithoutOrganisationInput | OrganisationMemberCreateOrConnectWithoutOrganisationInput[]
@@ -66789,6 +71844,27 @@ export namespace Prisma {
     connectOrCreate?: ActivityLogCreateOrConnectWithoutOrganisationInput | ActivityLogCreateOrConnectWithoutOrganisationInput[]
     createMany?: ActivityLogCreateManyOrganisationInputEnvelope
     connect?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
+  }
+
+  export type MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput = {
+    create?: XOR<MessagingGoalCreateWithoutOrganisationInput, MessagingGoalUncheckedCreateWithoutOrganisationInput> | MessagingGoalCreateWithoutOrganisationInput[] | MessagingGoalUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: MessagingGoalCreateOrConnectWithoutOrganisationInput | MessagingGoalCreateOrConnectWithoutOrganisationInput[]
+    createMany?: MessagingGoalCreateManyOrganisationInputEnvelope
+    connect?: MessagingGoalWhereUniqueInput | MessagingGoalWhereUniqueInput[]
+  }
+
+  export type GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput = {
+    create?: XOR<GoalAchievementCreateWithoutOrganisationInput, GoalAchievementUncheckedCreateWithoutOrganisationInput> | GoalAchievementCreateWithoutOrganisationInput[] | GoalAchievementUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: GoalAchievementCreateOrConnectWithoutOrganisationInput | GoalAchievementCreateOrConnectWithoutOrganisationInput[]
+    createMany?: GoalAchievementCreateManyOrganisationInputEnvelope
+    connect?: GoalAchievementWhereUniqueInput | GoalAchievementWhereUniqueInput[]
+  }
+
+  export type GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput = {
+    create?: XOR<GoalPersonalBestCreateWithoutOrganisationInput, GoalPersonalBestUncheckedCreateWithoutOrganisationInput> | GoalPersonalBestCreateWithoutOrganisationInput[] | GoalPersonalBestUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: GoalPersonalBestCreateOrConnectWithoutOrganisationInput | GoalPersonalBestCreateOrConnectWithoutOrganisationInput[]
+    createMany?: GoalPersonalBestCreateManyOrganisationInputEnvelope
+    connect?: GoalPersonalBestWhereUniqueInput | GoalPersonalBestWhereUniqueInput[]
   }
 
   export type OrganisationMemberUpdateManyWithoutOrganisationNestedInput = {
@@ -67071,6 +72147,48 @@ export namespace Prisma {
     deleteMany?: ActivityLogScalarWhereInput | ActivityLogScalarWhereInput[]
   }
 
+  export type MessagingGoalUpdateManyWithoutOrganisationNestedInput = {
+    create?: XOR<MessagingGoalCreateWithoutOrganisationInput, MessagingGoalUncheckedCreateWithoutOrganisationInput> | MessagingGoalCreateWithoutOrganisationInput[] | MessagingGoalUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: MessagingGoalCreateOrConnectWithoutOrganisationInput | MessagingGoalCreateOrConnectWithoutOrganisationInput[]
+    upsert?: MessagingGoalUpsertWithWhereUniqueWithoutOrganisationInput | MessagingGoalUpsertWithWhereUniqueWithoutOrganisationInput[]
+    createMany?: MessagingGoalCreateManyOrganisationInputEnvelope
+    set?: MessagingGoalWhereUniqueInput | MessagingGoalWhereUniqueInput[]
+    disconnect?: MessagingGoalWhereUniqueInput | MessagingGoalWhereUniqueInput[]
+    delete?: MessagingGoalWhereUniqueInput | MessagingGoalWhereUniqueInput[]
+    connect?: MessagingGoalWhereUniqueInput | MessagingGoalWhereUniqueInput[]
+    update?: MessagingGoalUpdateWithWhereUniqueWithoutOrganisationInput | MessagingGoalUpdateWithWhereUniqueWithoutOrganisationInput[]
+    updateMany?: MessagingGoalUpdateManyWithWhereWithoutOrganisationInput | MessagingGoalUpdateManyWithWhereWithoutOrganisationInput[]
+    deleteMany?: MessagingGoalScalarWhereInput | MessagingGoalScalarWhereInput[]
+  }
+
+  export type GoalAchievementUpdateManyWithoutOrganisationNestedInput = {
+    create?: XOR<GoalAchievementCreateWithoutOrganisationInput, GoalAchievementUncheckedCreateWithoutOrganisationInput> | GoalAchievementCreateWithoutOrganisationInput[] | GoalAchievementUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: GoalAchievementCreateOrConnectWithoutOrganisationInput | GoalAchievementCreateOrConnectWithoutOrganisationInput[]
+    upsert?: GoalAchievementUpsertWithWhereUniqueWithoutOrganisationInput | GoalAchievementUpsertWithWhereUniqueWithoutOrganisationInput[]
+    createMany?: GoalAchievementCreateManyOrganisationInputEnvelope
+    set?: GoalAchievementWhereUniqueInput | GoalAchievementWhereUniqueInput[]
+    disconnect?: GoalAchievementWhereUniqueInput | GoalAchievementWhereUniqueInput[]
+    delete?: GoalAchievementWhereUniqueInput | GoalAchievementWhereUniqueInput[]
+    connect?: GoalAchievementWhereUniqueInput | GoalAchievementWhereUniqueInput[]
+    update?: GoalAchievementUpdateWithWhereUniqueWithoutOrganisationInput | GoalAchievementUpdateWithWhereUniqueWithoutOrganisationInput[]
+    updateMany?: GoalAchievementUpdateManyWithWhereWithoutOrganisationInput | GoalAchievementUpdateManyWithWhereWithoutOrganisationInput[]
+    deleteMany?: GoalAchievementScalarWhereInput | GoalAchievementScalarWhereInput[]
+  }
+
+  export type GoalPersonalBestUpdateManyWithoutOrganisationNestedInput = {
+    create?: XOR<GoalPersonalBestCreateWithoutOrganisationInput, GoalPersonalBestUncheckedCreateWithoutOrganisationInput> | GoalPersonalBestCreateWithoutOrganisationInput[] | GoalPersonalBestUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: GoalPersonalBestCreateOrConnectWithoutOrganisationInput | GoalPersonalBestCreateOrConnectWithoutOrganisationInput[]
+    upsert?: GoalPersonalBestUpsertWithWhereUniqueWithoutOrganisationInput | GoalPersonalBestUpsertWithWhereUniqueWithoutOrganisationInput[]
+    createMany?: GoalPersonalBestCreateManyOrganisationInputEnvelope
+    set?: GoalPersonalBestWhereUniqueInput | GoalPersonalBestWhereUniqueInput[]
+    disconnect?: GoalPersonalBestWhereUniqueInput | GoalPersonalBestWhereUniqueInput[]
+    delete?: GoalPersonalBestWhereUniqueInput | GoalPersonalBestWhereUniqueInput[]
+    connect?: GoalPersonalBestWhereUniqueInput | GoalPersonalBestWhereUniqueInput[]
+    update?: GoalPersonalBestUpdateWithWhereUniqueWithoutOrganisationInput | GoalPersonalBestUpdateWithWhereUniqueWithoutOrganisationInput[]
+    updateMany?: GoalPersonalBestUpdateManyWithWhereWithoutOrganisationInput | GoalPersonalBestUpdateManyWithWhereWithoutOrganisationInput[]
+    deleteMany?: GoalPersonalBestScalarWhereInput | GoalPersonalBestScalarWhereInput[]
+  }
+
   export type OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput = {
     create?: XOR<OrganisationMemberCreateWithoutOrganisationInput, OrganisationMemberUncheckedCreateWithoutOrganisationInput> | OrganisationMemberCreateWithoutOrganisationInput[] | OrganisationMemberUncheckedCreateWithoutOrganisationInput[]
     connectOrCreate?: OrganisationMemberCreateOrConnectWithoutOrganisationInput | OrganisationMemberCreateOrConnectWithoutOrganisationInput[]
@@ -67349,6 +72467,48 @@ export namespace Prisma {
     update?: ActivityLogUpdateWithWhereUniqueWithoutOrganisationInput | ActivityLogUpdateWithWhereUniqueWithoutOrganisationInput[]
     updateMany?: ActivityLogUpdateManyWithWhereWithoutOrganisationInput | ActivityLogUpdateManyWithWhereWithoutOrganisationInput[]
     deleteMany?: ActivityLogScalarWhereInput | ActivityLogScalarWhereInput[]
+  }
+
+  export type MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput = {
+    create?: XOR<MessagingGoalCreateWithoutOrganisationInput, MessagingGoalUncheckedCreateWithoutOrganisationInput> | MessagingGoalCreateWithoutOrganisationInput[] | MessagingGoalUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: MessagingGoalCreateOrConnectWithoutOrganisationInput | MessagingGoalCreateOrConnectWithoutOrganisationInput[]
+    upsert?: MessagingGoalUpsertWithWhereUniqueWithoutOrganisationInput | MessagingGoalUpsertWithWhereUniqueWithoutOrganisationInput[]
+    createMany?: MessagingGoalCreateManyOrganisationInputEnvelope
+    set?: MessagingGoalWhereUniqueInput | MessagingGoalWhereUniqueInput[]
+    disconnect?: MessagingGoalWhereUniqueInput | MessagingGoalWhereUniqueInput[]
+    delete?: MessagingGoalWhereUniqueInput | MessagingGoalWhereUniqueInput[]
+    connect?: MessagingGoalWhereUniqueInput | MessagingGoalWhereUniqueInput[]
+    update?: MessagingGoalUpdateWithWhereUniqueWithoutOrganisationInput | MessagingGoalUpdateWithWhereUniqueWithoutOrganisationInput[]
+    updateMany?: MessagingGoalUpdateManyWithWhereWithoutOrganisationInput | MessagingGoalUpdateManyWithWhereWithoutOrganisationInput[]
+    deleteMany?: MessagingGoalScalarWhereInput | MessagingGoalScalarWhereInput[]
+  }
+
+  export type GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput = {
+    create?: XOR<GoalAchievementCreateWithoutOrganisationInput, GoalAchievementUncheckedCreateWithoutOrganisationInput> | GoalAchievementCreateWithoutOrganisationInput[] | GoalAchievementUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: GoalAchievementCreateOrConnectWithoutOrganisationInput | GoalAchievementCreateOrConnectWithoutOrganisationInput[]
+    upsert?: GoalAchievementUpsertWithWhereUniqueWithoutOrganisationInput | GoalAchievementUpsertWithWhereUniqueWithoutOrganisationInput[]
+    createMany?: GoalAchievementCreateManyOrganisationInputEnvelope
+    set?: GoalAchievementWhereUniqueInput | GoalAchievementWhereUniqueInput[]
+    disconnect?: GoalAchievementWhereUniqueInput | GoalAchievementWhereUniqueInput[]
+    delete?: GoalAchievementWhereUniqueInput | GoalAchievementWhereUniqueInput[]
+    connect?: GoalAchievementWhereUniqueInput | GoalAchievementWhereUniqueInput[]
+    update?: GoalAchievementUpdateWithWhereUniqueWithoutOrganisationInput | GoalAchievementUpdateWithWhereUniqueWithoutOrganisationInput[]
+    updateMany?: GoalAchievementUpdateManyWithWhereWithoutOrganisationInput | GoalAchievementUpdateManyWithWhereWithoutOrganisationInput[]
+    deleteMany?: GoalAchievementScalarWhereInput | GoalAchievementScalarWhereInput[]
+  }
+
+  export type GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput = {
+    create?: XOR<GoalPersonalBestCreateWithoutOrganisationInput, GoalPersonalBestUncheckedCreateWithoutOrganisationInput> | GoalPersonalBestCreateWithoutOrganisationInput[] | GoalPersonalBestUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: GoalPersonalBestCreateOrConnectWithoutOrganisationInput | GoalPersonalBestCreateOrConnectWithoutOrganisationInput[]
+    upsert?: GoalPersonalBestUpsertWithWhereUniqueWithoutOrganisationInput | GoalPersonalBestUpsertWithWhereUniqueWithoutOrganisationInput[]
+    createMany?: GoalPersonalBestCreateManyOrganisationInputEnvelope
+    set?: GoalPersonalBestWhereUniqueInput | GoalPersonalBestWhereUniqueInput[]
+    disconnect?: GoalPersonalBestWhereUniqueInput | GoalPersonalBestWhereUniqueInput[]
+    delete?: GoalPersonalBestWhereUniqueInput | GoalPersonalBestWhereUniqueInput[]
+    connect?: GoalPersonalBestWhereUniqueInput | GoalPersonalBestWhereUniqueInput[]
+    update?: GoalPersonalBestUpdateWithWhereUniqueWithoutOrganisationInput | GoalPersonalBestUpdateWithWhereUniqueWithoutOrganisationInput[]
+    updateMany?: GoalPersonalBestUpdateManyWithWhereWithoutOrganisationInput | GoalPersonalBestUpdateManyWithWhereWithoutOrganisationInput[]
+    deleteMany?: GoalPersonalBestScalarWhereInput | GoalPersonalBestScalarWhereInput[]
   }
 
   export type OrganisationCreateNestedOneWithoutMembersInput = {
@@ -69877,6 +75037,154 @@ export namespace Prisma {
     update?: XOR<XOR<OrganisationUpdateToOneWithWhereWithoutApify_usage_logsInput, OrganisationUpdateWithoutApify_usage_logsInput>, OrganisationUncheckedUpdateWithoutApify_usage_logsInput>
   }
 
+  export type OrganisationCreateNestedOneWithoutMessaging_goalsInput = {
+    create?: XOR<OrganisationCreateWithoutMessaging_goalsInput, OrganisationUncheckedCreateWithoutMessaging_goalsInput>
+    connectOrCreate?: OrganisationCreateOrConnectWithoutMessaging_goalsInput
+    connect?: OrganisationWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutMessaging_goalsInput = {
+    create?: XOR<UserCreateWithoutMessaging_goalsInput, UserUncheckedCreateWithoutMessaging_goalsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutMessaging_goalsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type GoalAchievementCreateNestedManyWithoutGoalInput = {
+    create?: XOR<GoalAchievementCreateWithoutGoalInput, GoalAchievementUncheckedCreateWithoutGoalInput> | GoalAchievementCreateWithoutGoalInput[] | GoalAchievementUncheckedCreateWithoutGoalInput[]
+    connectOrCreate?: GoalAchievementCreateOrConnectWithoutGoalInput | GoalAchievementCreateOrConnectWithoutGoalInput[]
+    createMany?: GoalAchievementCreateManyGoalInputEnvelope
+    connect?: GoalAchievementWhereUniqueInput | GoalAchievementWhereUniqueInput[]
+  }
+
+  export type GoalAchievementUncheckedCreateNestedManyWithoutGoalInput = {
+    create?: XOR<GoalAchievementCreateWithoutGoalInput, GoalAchievementUncheckedCreateWithoutGoalInput> | GoalAchievementCreateWithoutGoalInput[] | GoalAchievementUncheckedCreateWithoutGoalInput[]
+    connectOrCreate?: GoalAchievementCreateOrConnectWithoutGoalInput | GoalAchievementCreateOrConnectWithoutGoalInput[]
+    createMany?: GoalAchievementCreateManyGoalInputEnvelope
+    connect?: GoalAchievementWhereUniqueInput | GoalAchievementWhereUniqueInput[]
+  }
+
+  export type EnumGoalPeriodFieldUpdateOperationsInput = {
+    set?: $Enums.GoalPeriod
+  }
+
+  export type OrganisationUpdateOneRequiredWithoutMessaging_goalsNestedInput = {
+    create?: XOR<OrganisationCreateWithoutMessaging_goalsInput, OrganisationUncheckedCreateWithoutMessaging_goalsInput>
+    connectOrCreate?: OrganisationCreateOrConnectWithoutMessaging_goalsInput
+    upsert?: OrganisationUpsertWithoutMessaging_goalsInput
+    connect?: OrganisationWhereUniqueInput
+    update?: XOR<XOR<OrganisationUpdateToOneWithWhereWithoutMessaging_goalsInput, OrganisationUpdateWithoutMessaging_goalsInput>, OrganisationUncheckedUpdateWithoutMessaging_goalsInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutMessaging_goalsNestedInput = {
+    create?: XOR<UserCreateWithoutMessaging_goalsInput, UserUncheckedCreateWithoutMessaging_goalsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutMessaging_goalsInput
+    upsert?: UserUpsertWithoutMessaging_goalsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutMessaging_goalsInput, UserUpdateWithoutMessaging_goalsInput>, UserUncheckedUpdateWithoutMessaging_goalsInput>
+  }
+
+  export type GoalAchievementUpdateManyWithoutGoalNestedInput = {
+    create?: XOR<GoalAchievementCreateWithoutGoalInput, GoalAchievementUncheckedCreateWithoutGoalInput> | GoalAchievementCreateWithoutGoalInput[] | GoalAchievementUncheckedCreateWithoutGoalInput[]
+    connectOrCreate?: GoalAchievementCreateOrConnectWithoutGoalInput | GoalAchievementCreateOrConnectWithoutGoalInput[]
+    upsert?: GoalAchievementUpsertWithWhereUniqueWithoutGoalInput | GoalAchievementUpsertWithWhereUniqueWithoutGoalInput[]
+    createMany?: GoalAchievementCreateManyGoalInputEnvelope
+    set?: GoalAchievementWhereUniqueInput | GoalAchievementWhereUniqueInput[]
+    disconnect?: GoalAchievementWhereUniqueInput | GoalAchievementWhereUniqueInput[]
+    delete?: GoalAchievementWhereUniqueInput | GoalAchievementWhereUniqueInput[]
+    connect?: GoalAchievementWhereUniqueInput | GoalAchievementWhereUniqueInput[]
+    update?: GoalAchievementUpdateWithWhereUniqueWithoutGoalInput | GoalAchievementUpdateWithWhereUniqueWithoutGoalInput[]
+    updateMany?: GoalAchievementUpdateManyWithWhereWithoutGoalInput | GoalAchievementUpdateManyWithWhereWithoutGoalInput[]
+    deleteMany?: GoalAchievementScalarWhereInput | GoalAchievementScalarWhereInput[]
+  }
+
+  export type GoalAchievementUncheckedUpdateManyWithoutGoalNestedInput = {
+    create?: XOR<GoalAchievementCreateWithoutGoalInput, GoalAchievementUncheckedCreateWithoutGoalInput> | GoalAchievementCreateWithoutGoalInput[] | GoalAchievementUncheckedCreateWithoutGoalInput[]
+    connectOrCreate?: GoalAchievementCreateOrConnectWithoutGoalInput | GoalAchievementCreateOrConnectWithoutGoalInput[]
+    upsert?: GoalAchievementUpsertWithWhereUniqueWithoutGoalInput | GoalAchievementUpsertWithWhereUniqueWithoutGoalInput[]
+    createMany?: GoalAchievementCreateManyGoalInputEnvelope
+    set?: GoalAchievementWhereUniqueInput | GoalAchievementWhereUniqueInput[]
+    disconnect?: GoalAchievementWhereUniqueInput | GoalAchievementWhereUniqueInput[]
+    delete?: GoalAchievementWhereUniqueInput | GoalAchievementWhereUniqueInput[]
+    connect?: GoalAchievementWhereUniqueInput | GoalAchievementWhereUniqueInput[]
+    update?: GoalAchievementUpdateWithWhereUniqueWithoutGoalInput | GoalAchievementUpdateWithWhereUniqueWithoutGoalInput[]
+    updateMany?: GoalAchievementUpdateManyWithWhereWithoutGoalInput | GoalAchievementUpdateManyWithWhereWithoutGoalInput[]
+    deleteMany?: GoalAchievementScalarWhereInput | GoalAchievementScalarWhereInput[]
+  }
+
+  export type OrganisationCreateNestedOneWithoutGoal_achievementsInput = {
+    create?: XOR<OrganisationCreateWithoutGoal_achievementsInput, OrganisationUncheckedCreateWithoutGoal_achievementsInput>
+    connectOrCreate?: OrganisationCreateOrConnectWithoutGoal_achievementsInput
+    connect?: OrganisationWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutGoal_achievementsInput = {
+    create?: XOR<UserCreateWithoutGoal_achievementsInput, UserUncheckedCreateWithoutGoal_achievementsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutGoal_achievementsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type MessagingGoalCreateNestedOneWithoutAchievementsInput = {
+    create?: XOR<MessagingGoalCreateWithoutAchievementsInput, MessagingGoalUncheckedCreateWithoutAchievementsInput>
+    connectOrCreate?: MessagingGoalCreateOrConnectWithoutAchievementsInput
+    connect?: MessagingGoalWhereUniqueInput
+  }
+
+  export type EnumGoalAchievementTypeFieldUpdateOperationsInput = {
+    set?: $Enums.GoalAchievementType
+  }
+
+  export type OrganisationUpdateOneRequiredWithoutGoal_achievementsNestedInput = {
+    create?: XOR<OrganisationCreateWithoutGoal_achievementsInput, OrganisationUncheckedCreateWithoutGoal_achievementsInput>
+    connectOrCreate?: OrganisationCreateOrConnectWithoutGoal_achievementsInput
+    upsert?: OrganisationUpsertWithoutGoal_achievementsInput
+    connect?: OrganisationWhereUniqueInput
+    update?: XOR<XOR<OrganisationUpdateToOneWithWhereWithoutGoal_achievementsInput, OrganisationUpdateWithoutGoal_achievementsInput>, OrganisationUncheckedUpdateWithoutGoal_achievementsInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutGoal_achievementsNestedInput = {
+    create?: XOR<UserCreateWithoutGoal_achievementsInput, UserUncheckedCreateWithoutGoal_achievementsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutGoal_achievementsInput
+    upsert?: UserUpsertWithoutGoal_achievementsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutGoal_achievementsInput, UserUpdateWithoutGoal_achievementsInput>, UserUncheckedUpdateWithoutGoal_achievementsInput>
+  }
+
+  export type MessagingGoalUpdateOneRequiredWithoutAchievementsNestedInput = {
+    create?: XOR<MessagingGoalCreateWithoutAchievementsInput, MessagingGoalUncheckedCreateWithoutAchievementsInput>
+    connectOrCreate?: MessagingGoalCreateOrConnectWithoutAchievementsInput
+    upsert?: MessagingGoalUpsertWithoutAchievementsInput
+    connect?: MessagingGoalWhereUniqueInput
+    update?: XOR<XOR<MessagingGoalUpdateToOneWithWhereWithoutAchievementsInput, MessagingGoalUpdateWithoutAchievementsInput>, MessagingGoalUncheckedUpdateWithoutAchievementsInput>
+  }
+
+  export type OrganisationCreateNestedOneWithoutGoal_personal_bestsInput = {
+    create?: XOR<OrganisationCreateWithoutGoal_personal_bestsInput, OrganisationUncheckedCreateWithoutGoal_personal_bestsInput>
+    connectOrCreate?: OrganisationCreateOrConnectWithoutGoal_personal_bestsInput
+    connect?: OrganisationWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutGoal_personal_bestsInput = {
+    create?: XOR<UserCreateWithoutGoal_personal_bestsInput, UserUncheckedCreateWithoutGoal_personal_bestsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutGoal_personal_bestsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type OrganisationUpdateOneRequiredWithoutGoal_personal_bestsNestedInput = {
+    create?: XOR<OrganisationCreateWithoutGoal_personal_bestsInput, OrganisationUncheckedCreateWithoutGoal_personal_bestsInput>
+    connectOrCreate?: OrganisationCreateOrConnectWithoutGoal_personal_bestsInput
+    upsert?: OrganisationUpsertWithoutGoal_personal_bestsInput
+    connect?: OrganisationWhereUniqueInput
+    update?: XOR<XOR<OrganisationUpdateToOneWithWhereWithoutGoal_personal_bestsInput, OrganisationUpdateWithoutGoal_personal_bestsInput>, OrganisationUncheckedUpdateWithoutGoal_personal_bestsInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutGoal_personal_bestsNestedInput = {
+    create?: XOR<UserCreateWithoutGoal_personal_bestsInput, UserUncheckedCreateWithoutGoal_personal_bestsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutGoal_personal_bestsInput
+    upsert?: UserUpsertWithoutGoal_personal_bestsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutGoal_personal_bestsInput, UserUpdateWithoutGoal_personal_bestsInput>, UserUncheckedUpdateWithoutGoal_personal_bestsInput>
+  }
+
   export type OrganisationCreateNestedOneWithoutActivity_logsInput = {
     create?: XOR<OrganisationCreateWithoutActivity_logsInput, OrganisationUncheckedCreateWithoutActivity_logsInput>
     connectOrCreate?: OrganisationCreateOrConnectWithoutActivity_logsInput
@@ -70724,6 +76032,40 @@ export namespace Prisma {
     _max?: NestedEnumApifyUsageStatusFilter<$PrismaModel>
   }
 
+  export type NestedEnumGoalPeriodFilter<$PrismaModel = never> = {
+    equals?: $Enums.GoalPeriod | EnumGoalPeriodFieldRefInput<$PrismaModel>
+    in?: $Enums.GoalPeriod[] | ListEnumGoalPeriodFieldRefInput<$PrismaModel>
+    notIn?: $Enums.GoalPeriod[] | ListEnumGoalPeriodFieldRefInput<$PrismaModel>
+    not?: NestedEnumGoalPeriodFilter<$PrismaModel> | $Enums.GoalPeriod
+  }
+
+  export type NestedEnumGoalPeriodWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.GoalPeriod | EnumGoalPeriodFieldRefInput<$PrismaModel>
+    in?: $Enums.GoalPeriod[] | ListEnumGoalPeriodFieldRefInput<$PrismaModel>
+    notIn?: $Enums.GoalPeriod[] | ListEnumGoalPeriodFieldRefInput<$PrismaModel>
+    not?: NestedEnumGoalPeriodWithAggregatesFilter<$PrismaModel> | $Enums.GoalPeriod
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumGoalPeriodFilter<$PrismaModel>
+    _max?: NestedEnumGoalPeriodFilter<$PrismaModel>
+  }
+
+  export type NestedEnumGoalAchievementTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.GoalAchievementType | EnumGoalAchievementTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.GoalAchievementType[] | ListEnumGoalAchievementTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.GoalAchievementType[] | ListEnumGoalAchievementTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumGoalAchievementTypeFilter<$PrismaModel> | $Enums.GoalAchievementType
+  }
+
+  export type NestedEnumGoalAchievementTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.GoalAchievementType | EnumGoalAchievementTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.GoalAchievementType[] | ListEnumGoalAchievementTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.GoalAchievementType[] | ListEnumGoalAchievementTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumGoalAchievementTypeWithAggregatesFilter<$PrismaModel> | $Enums.GoalAchievementType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumGoalAchievementTypeFilter<$PrismaModel>
+    _max?: NestedEnumGoalAchievementTypeFilter<$PrismaModel>
+  }
+
   export type OrganisationMemberCreateWithoutUserInput = {
     uuid?: string
     role?: $Enums.OrganisationRole
@@ -70915,6 +76257,101 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type MessagingGoalCreateWithoutUserInput = {
+    uuid?: string
+    period: $Enums.GoalPeriod
+    target_count: number
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutMessaging_goalsInput
+    achievements?: GoalAchievementCreateNestedManyWithoutGoalInput
+  }
+
+  export type MessagingGoalUncheckedCreateWithoutUserInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    period: $Enums.GoalPeriod
+    target_count: number
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    achievements?: GoalAchievementUncheckedCreateNestedManyWithoutGoalInput
+  }
+
+  export type MessagingGoalCreateOrConnectWithoutUserInput = {
+    where: MessagingGoalWhereUniqueInput
+    create: XOR<MessagingGoalCreateWithoutUserInput, MessagingGoalUncheckedCreateWithoutUserInput>
+  }
+
+  export type MessagingGoalCreateManyUserInputEnvelope = {
+    data: MessagingGoalCreateManyUserInput | MessagingGoalCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type GoalAchievementCreateWithoutUserInput = {
+    uuid?: string
+    type: $Enums.GoalAchievementType
+    period_key: string
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    seen_at?: Date | string | null
+    created_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutGoal_achievementsInput
+    goal: MessagingGoalCreateNestedOneWithoutAchievementsInput
+  }
+
+  export type GoalAchievementUncheckedCreateWithoutUserInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    goal_uuid: string
+    type: $Enums.GoalAchievementType
+    period_key: string
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    seen_at?: Date | string | null
+    created_at?: Date | string
+  }
+
+  export type GoalAchievementCreateOrConnectWithoutUserInput = {
+    where: GoalAchievementWhereUniqueInput
+    create: XOR<GoalAchievementCreateWithoutUserInput, GoalAchievementUncheckedCreateWithoutUserInput>
+  }
+
+  export type GoalAchievementCreateManyUserInputEnvelope = {
+    data: GoalAchievementCreateManyUserInput | GoalAchievementCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type GoalPersonalBestCreateWithoutUserInput = {
+    uuid?: string
+    period: $Enums.GoalPeriod
+    best_count?: number
+    achieved_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutGoal_personal_bestsInput
+  }
+
+  export type GoalPersonalBestUncheckedCreateWithoutUserInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    period: $Enums.GoalPeriod
+    best_count?: number
+    achieved_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type GoalPersonalBestCreateOrConnectWithoutUserInput = {
+    where: GoalPersonalBestWhereUniqueInput
+    create: XOR<GoalPersonalBestCreateWithoutUserInput, GoalPersonalBestUncheckedCreateWithoutUserInput>
+  }
+
+  export type GoalPersonalBestCreateManyUserInputEnvelope = {
+    data: GoalPersonalBestCreateManyUserInput | GoalPersonalBestCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type OrganisationMemberUpsertWithWhereUniqueWithoutUserInput = {
     where: OrganisationMemberWhereUniqueInput
     update: XOR<OrganisationMemberUpdateWithoutUserInput, OrganisationMemberUncheckedUpdateWithoutUserInput>
@@ -71084,6 +76521,99 @@ export namespace Prisma {
     summary?: StringNullableFilter<"ActivityLog"> | string | null
     metadata?: JsonNullableFilter<"ActivityLog">
     created_at?: DateTimeFilter<"ActivityLog"> | Date | string
+  }
+
+  export type MessagingGoalUpsertWithWhereUniqueWithoutUserInput = {
+    where: MessagingGoalWhereUniqueInput
+    update: XOR<MessagingGoalUpdateWithoutUserInput, MessagingGoalUncheckedUpdateWithoutUserInput>
+    create: XOR<MessagingGoalCreateWithoutUserInput, MessagingGoalUncheckedCreateWithoutUserInput>
+  }
+
+  export type MessagingGoalUpdateWithWhereUniqueWithoutUserInput = {
+    where: MessagingGoalWhereUniqueInput
+    data: XOR<MessagingGoalUpdateWithoutUserInput, MessagingGoalUncheckedUpdateWithoutUserInput>
+  }
+
+  export type MessagingGoalUpdateManyWithWhereWithoutUserInput = {
+    where: MessagingGoalScalarWhereInput
+    data: XOR<MessagingGoalUpdateManyMutationInput, MessagingGoalUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type MessagingGoalScalarWhereInput = {
+    AND?: MessagingGoalScalarWhereInput | MessagingGoalScalarWhereInput[]
+    OR?: MessagingGoalScalarWhereInput[]
+    NOT?: MessagingGoalScalarWhereInput | MessagingGoalScalarWhereInput[]
+    id?: IntFilter<"MessagingGoal"> | number
+    uuid?: StringFilter<"MessagingGoal"> | string
+    organisation_uuid?: StringFilter<"MessagingGoal"> | string
+    user_uuid?: StringFilter<"MessagingGoal"> | string
+    period?: EnumGoalPeriodFilter<"MessagingGoal"> | $Enums.GoalPeriod
+    target_count?: IntFilter<"MessagingGoal"> | number
+    is_active?: BoolFilter<"MessagingGoal"> | boolean
+    created_at?: DateTimeFilter<"MessagingGoal"> | Date | string
+    updated_at?: DateTimeFilter<"MessagingGoal"> | Date | string
+  }
+
+  export type GoalAchievementUpsertWithWhereUniqueWithoutUserInput = {
+    where: GoalAchievementWhereUniqueInput
+    update: XOR<GoalAchievementUpdateWithoutUserInput, GoalAchievementUncheckedUpdateWithoutUserInput>
+    create: XOR<GoalAchievementCreateWithoutUserInput, GoalAchievementUncheckedCreateWithoutUserInput>
+  }
+
+  export type GoalAchievementUpdateWithWhereUniqueWithoutUserInput = {
+    where: GoalAchievementWhereUniqueInput
+    data: XOR<GoalAchievementUpdateWithoutUserInput, GoalAchievementUncheckedUpdateWithoutUserInput>
+  }
+
+  export type GoalAchievementUpdateManyWithWhereWithoutUserInput = {
+    where: GoalAchievementScalarWhereInput
+    data: XOR<GoalAchievementUpdateManyMutationInput, GoalAchievementUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type GoalAchievementScalarWhereInput = {
+    AND?: GoalAchievementScalarWhereInput | GoalAchievementScalarWhereInput[]
+    OR?: GoalAchievementScalarWhereInput[]
+    NOT?: GoalAchievementScalarWhereInput | GoalAchievementScalarWhereInput[]
+    id?: IntFilter<"GoalAchievement"> | number
+    uuid?: StringFilter<"GoalAchievement"> | string
+    organisation_uuid?: StringFilter<"GoalAchievement"> | string
+    user_uuid?: StringFilter<"GoalAchievement"> | string
+    goal_uuid?: StringFilter<"GoalAchievement"> | string
+    type?: EnumGoalAchievementTypeFilter<"GoalAchievement"> | $Enums.GoalAchievementType
+    period_key?: StringFilter<"GoalAchievement"> | string
+    payload?: JsonNullableFilter<"GoalAchievement">
+    seen_at?: DateTimeNullableFilter<"GoalAchievement"> | Date | string | null
+    created_at?: DateTimeFilter<"GoalAchievement"> | Date | string
+  }
+
+  export type GoalPersonalBestUpsertWithWhereUniqueWithoutUserInput = {
+    where: GoalPersonalBestWhereUniqueInput
+    update: XOR<GoalPersonalBestUpdateWithoutUserInput, GoalPersonalBestUncheckedUpdateWithoutUserInput>
+    create: XOR<GoalPersonalBestCreateWithoutUserInput, GoalPersonalBestUncheckedCreateWithoutUserInput>
+  }
+
+  export type GoalPersonalBestUpdateWithWhereUniqueWithoutUserInput = {
+    where: GoalPersonalBestWhereUniqueInput
+    data: XOR<GoalPersonalBestUpdateWithoutUserInput, GoalPersonalBestUncheckedUpdateWithoutUserInput>
+  }
+
+  export type GoalPersonalBestUpdateManyWithWhereWithoutUserInput = {
+    where: GoalPersonalBestScalarWhereInput
+    data: XOR<GoalPersonalBestUpdateManyMutationInput, GoalPersonalBestUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type GoalPersonalBestScalarWhereInput = {
+    AND?: GoalPersonalBestScalarWhereInput | GoalPersonalBestScalarWhereInput[]
+    OR?: GoalPersonalBestScalarWhereInput[]
+    NOT?: GoalPersonalBestScalarWhereInput | GoalPersonalBestScalarWhereInput[]
+    id?: IntFilter<"GoalPersonalBest"> | number
+    uuid?: StringFilter<"GoalPersonalBest"> | string
+    organisation_uuid?: StringFilter<"GoalPersonalBest"> | string
+    user_uuid?: StringFilter<"GoalPersonalBest"> | string
+    period?: EnumGoalPeriodFilter<"GoalPersonalBest"> | $Enums.GoalPeriod
+    best_count?: IntFilter<"GoalPersonalBest"> | number
+    achieved_at?: DateTimeFilter<"GoalPersonalBest"> | Date | string
+    updated_at?: DateTimeFilter<"GoalPersonalBest"> | Date | string
   }
 
   export type OrganisationMemberCreateWithoutOrganisationInput = {
@@ -72003,6 +77533,101 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type MessagingGoalCreateWithoutOrganisationInput = {
+    uuid?: string
+    period: $Enums.GoalPeriod
+    target_count: number
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    user: UserCreateNestedOneWithoutMessaging_goalsInput
+    achievements?: GoalAchievementCreateNestedManyWithoutGoalInput
+  }
+
+  export type MessagingGoalUncheckedCreateWithoutOrganisationInput = {
+    id?: number
+    uuid?: string
+    user_uuid: string
+    period: $Enums.GoalPeriod
+    target_count: number
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    achievements?: GoalAchievementUncheckedCreateNestedManyWithoutGoalInput
+  }
+
+  export type MessagingGoalCreateOrConnectWithoutOrganisationInput = {
+    where: MessagingGoalWhereUniqueInput
+    create: XOR<MessagingGoalCreateWithoutOrganisationInput, MessagingGoalUncheckedCreateWithoutOrganisationInput>
+  }
+
+  export type MessagingGoalCreateManyOrganisationInputEnvelope = {
+    data: MessagingGoalCreateManyOrganisationInput | MessagingGoalCreateManyOrganisationInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type GoalAchievementCreateWithoutOrganisationInput = {
+    uuid?: string
+    type: $Enums.GoalAchievementType
+    period_key: string
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    seen_at?: Date | string | null
+    created_at?: Date | string
+    user: UserCreateNestedOneWithoutGoal_achievementsInput
+    goal: MessagingGoalCreateNestedOneWithoutAchievementsInput
+  }
+
+  export type GoalAchievementUncheckedCreateWithoutOrganisationInput = {
+    id?: number
+    uuid?: string
+    user_uuid: string
+    goal_uuid: string
+    type: $Enums.GoalAchievementType
+    period_key: string
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    seen_at?: Date | string | null
+    created_at?: Date | string
+  }
+
+  export type GoalAchievementCreateOrConnectWithoutOrganisationInput = {
+    where: GoalAchievementWhereUniqueInput
+    create: XOR<GoalAchievementCreateWithoutOrganisationInput, GoalAchievementUncheckedCreateWithoutOrganisationInput>
+  }
+
+  export type GoalAchievementCreateManyOrganisationInputEnvelope = {
+    data: GoalAchievementCreateManyOrganisationInput | GoalAchievementCreateManyOrganisationInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type GoalPersonalBestCreateWithoutOrganisationInput = {
+    uuid?: string
+    period: $Enums.GoalPeriod
+    best_count?: number
+    achieved_at?: Date | string
+    updated_at?: Date | string
+    user: UserCreateNestedOneWithoutGoal_personal_bestsInput
+  }
+
+  export type GoalPersonalBestUncheckedCreateWithoutOrganisationInput = {
+    id?: number
+    uuid?: string
+    user_uuid: string
+    period: $Enums.GoalPeriod
+    best_count?: number
+    achieved_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type GoalPersonalBestCreateOrConnectWithoutOrganisationInput = {
+    where: GoalPersonalBestWhereUniqueInput
+    create: XOR<GoalPersonalBestCreateWithoutOrganisationInput, GoalPersonalBestUncheckedCreateWithoutOrganisationInput>
+  }
+
+  export type GoalPersonalBestCreateManyOrganisationInputEnvelope = {
+    data: GoalPersonalBestCreateManyOrganisationInput | GoalPersonalBestCreateManyOrganisationInput[]
+    skipDuplicates?: boolean
+  }
+
   export type OrganisationMemberUpsertWithWhereUniqueWithoutOrganisationInput = {
     where: OrganisationMemberWhereUniqueInput
     update: XOR<OrganisationMemberUpdateWithoutOrganisationInput, OrganisationMemberUncheckedUpdateWithoutOrganisationInput>
@@ -72661,10 +78286,59 @@ export namespace Prisma {
     data: XOR<ActivityLogUpdateManyMutationInput, ActivityLogUncheckedUpdateManyWithoutOrganisationInput>
   }
 
+  export type MessagingGoalUpsertWithWhereUniqueWithoutOrganisationInput = {
+    where: MessagingGoalWhereUniqueInput
+    update: XOR<MessagingGoalUpdateWithoutOrganisationInput, MessagingGoalUncheckedUpdateWithoutOrganisationInput>
+    create: XOR<MessagingGoalCreateWithoutOrganisationInput, MessagingGoalUncheckedCreateWithoutOrganisationInput>
+  }
+
+  export type MessagingGoalUpdateWithWhereUniqueWithoutOrganisationInput = {
+    where: MessagingGoalWhereUniqueInput
+    data: XOR<MessagingGoalUpdateWithoutOrganisationInput, MessagingGoalUncheckedUpdateWithoutOrganisationInput>
+  }
+
+  export type MessagingGoalUpdateManyWithWhereWithoutOrganisationInput = {
+    where: MessagingGoalScalarWhereInput
+    data: XOR<MessagingGoalUpdateManyMutationInput, MessagingGoalUncheckedUpdateManyWithoutOrganisationInput>
+  }
+
+  export type GoalAchievementUpsertWithWhereUniqueWithoutOrganisationInput = {
+    where: GoalAchievementWhereUniqueInput
+    update: XOR<GoalAchievementUpdateWithoutOrganisationInput, GoalAchievementUncheckedUpdateWithoutOrganisationInput>
+    create: XOR<GoalAchievementCreateWithoutOrganisationInput, GoalAchievementUncheckedCreateWithoutOrganisationInput>
+  }
+
+  export type GoalAchievementUpdateWithWhereUniqueWithoutOrganisationInput = {
+    where: GoalAchievementWhereUniqueInput
+    data: XOR<GoalAchievementUpdateWithoutOrganisationInput, GoalAchievementUncheckedUpdateWithoutOrganisationInput>
+  }
+
+  export type GoalAchievementUpdateManyWithWhereWithoutOrganisationInput = {
+    where: GoalAchievementScalarWhereInput
+    data: XOR<GoalAchievementUpdateManyMutationInput, GoalAchievementUncheckedUpdateManyWithoutOrganisationInput>
+  }
+
+  export type GoalPersonalBestUpsertWithWhereUniqueWithoutOrganisationInput = {
+    where: GoalPersonalBestWhereUniqueInput
+    update: XOR<GoalPersonalBestUpdateWithoutOrganisationInput, GoalPersonalBestUncheckedUpdateWithoutOrganisationInput>
+    create: XOR<GoalPersonalBestCreateWithoutOrganisationInput, GoalPersonalBestUncheckedCreateWithoutOrganisationInput>
+  }
+
+  export type GoalPersonalBestUpdateWithWhereUniqueWithoutOrganisationInput = {
+    where: GoalPersonalBestWhereUniqueInput
+    data: XOR<GoalPersonalBestUpdateWithoutOrganisationInput, GoalPersonalBestUncheckedUpdateWithoutOrganisationInput>
+  }
+
+  export type GoalPersonalBestUpdateManyWithWhereWithoutOrganisationInput = {
+    where: GoalPersonalBestScalarWhereInput
+    data: XOR<GoalPersonalBestUpdateManyMutationInput, GoalPersonalBestUncheckedUpdateManyWithoutOrganisationInput>
+  }
+
   export type OrganisationCreateWithoutMembersInput = {
     uuid?: string
     name: string
     slug: string
+    timezone?: string
     created_at?: Date | string
     updated_at?: Date | string
     invitations?: OrganisationInvitationCreateNestedManyWithoutOrganisationInput
@@ -72686,6 +78360,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutMembersInput = {
@@ -72693,6 +78370,7 @@ export namespace Prisma {
     uuid?: string
     name: string
     slug: string
+    timezone?: string
     created_at?: Date | string
     updated_at?: Date | string
     invitations?: OrganisationInvitationUncheckedCreateNestedManyWithoutOrganisationInput
@@ -72714,6 +78392,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutMembersInput = {
@@ -72734,6 +78415,9 @@ export namespace Prisma {
     form_completions?: FormCompletionCreateNestedManyWithoutCompleted_byInput
     outreach_messages_sent?: OutreachMessageCreateNestedManyWithoutSent_byInput
     activity_logs?: ActivityLogCreateNestedManyWithoutActorInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutUserInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutUserInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutMembershipsInput = {
@@ -72750,6 +78434,9 @@ export namespace Prisma {
     form_completions?: FormCompletionUncheckedCreateNestedManyWithoutCompleted_byInput
     outreach_messages_sent?: OutreachMessageUncheckedCreateNestedManyWithoutSent_byInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutActorInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutUserInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutUserInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutMembershipsInput = {
@@ -72772,6 +78459,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     invitations?: OrganisationInvitationUpdateManyWithoutOrganisationNestedInput
@@ -72793,6 +78481,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutMembersInput = {
@@ -72800,6 +78491,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     invitations?: OrganisationInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -72821,6 +78513,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutMembershipsInput = {
@@ -72847,6 +78542,9 @@ export namespace Prisma {
     form_completions?: FormCompletionUpdateManyWithoutCompleted_byNestedInput
     outreach_messages_sent?: OutreachMessageUpdateManyWithoutSent_byNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutActorNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutUserNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutUserNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMembershipsInput = {
@@ -72863,12 +78561,16 @@ export namespace Prisma {
     form_completions?: FormCompletionUncheckedUpdateManyWithoutCompleted_byNestedInput
     outreach_messages_sent?: OutreachMessageUncheckedUpdateManyWithoutSent_byNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutActorNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutUserNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutUserNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganisationCreateWithoutInvitationsInput = {
     uuid?: string
     name: string
     slug: string
+    timezone?: string
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
@@ -72890,6 +78592,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutInvitationsInput = {
@@ -72897,6 +78602,7 @@ export namespace Prisma {
     uuid?: string
     name: string
     slug: string
+    timezone?: string
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
@@ -72918,6 +78624,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutInvitationsInput = {
@@ -72938,6 +78647,9 @@ export namespace Prisma {
     form_completions?: FormCompletionCreateNestedManyWithoutCompleted_byInput
     outreach_messages_sent?: OutreachMessageCreateNestedManyWithoutSent_byInput
     activity_logs?: ActivityLogCreateNestedManyWithoutActorInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutUserInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutUserInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutInvitations_sentInput = {
@@ -72954,6 +78666,9 @@ export namespace Prisma {
     form_completions?: FormCompletionUncheckedCreateNestedManyWithoutCompleted_byInput
     outreach_messages_sent?: OutreachMessageUncheckedCreateNestedManyWithoutSent_byInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutActorInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutUserInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutUserInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutInvitations_sentInput = {
@@ -72976,6 +78691,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
@@ -72997,6 +78713,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutInvitationsInput = {
@@ -73004,6 +78723,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -73025,6 +78745,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutInvitations_sentInput = {
@@ -73051,6 +78774,9 @@ export namespace Prisma {
     form_completions?: FormCompletionUpdateManyWithoutCompleted_byNestedInput
     outreach_messages_sent?: OutreachMessageUpdateManyWithoutSent_byNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutActorNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutUserNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutUserNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInvitations_sentInput = {
@@ -73067,12 +78793,16 @@ export namespace Prisma {
     form_completions?: FormCompletionUncheckedUpdateManyWithoutCompleted_byNestedInput
     outreach_messages_sent?: OutreachMessageUncheckedUpdateManyWithoutSent_byNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutActorNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutUserNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutUserNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganisationCreateWithoutFiltersInput = {
     uuid?: string
     name: string
     slug: string
+    timezone?: string
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
@@ -73094,6 +78824,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutFiltersInput = {
@@ -73101,6 +78834,7 @@ export namespace Prisma {
     uuid?: string
     name: string
     slug: string
+    timezone?: string
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
@@ -73122,6 +78856,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutFiltersInput = {
@@ -73386,6 +79123,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
@@ -73407,6 +79145,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutFiltersInput = {
@@ -73414,6 +79155,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -73435,6 +79177,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type RawLeadUpsertWithWhereUniqueWithoutFilterInput = {
@@ -73587,6 +79332,7 @@ export namespace Prisma {
     uuid?: string
     name: string
     slug: string
+    timezone?: string
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
@@ -73608,6 +79354,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutScoring_instructionsInput = {
@@ -73615,6 +79364,7 @@ export namespace Prisma {
     uuid?: string
     name: string
     slug: string
+    timezone?: string
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
@@ -73636,6 +79386,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutScoring_instructionsInput = {
@@ -73701,6 +79454,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
@@ -73722,6 +79476,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutScoring_instructionsInput = {
@@ -73729,6 +79486,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -73750,6 +79508,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type FilterScoringInstructionUpsertWithWhereUniqueWithoutScoring_instructionInput = {
@@ -74503,6 +80264,7 @@ export namespace Prisma {
     uuid?: string
     name: string
     slug: string
+    timezone?: string
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
@@ -74524,6 +80286,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutContactsInput = {
@@ -74531,6 +80296,7 @@ export namespace Prisma {
     uuid?: string
     name: string
     slug: string
+    timezone?: string
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
@@ -74552,6 +80318,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutContactsInput = {
@@ -75024,6 +80793,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
@@ -75045,6 +80815,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutContactsInput = {
@@ -75052,6 +80825,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -75073,6 +80847,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type LeadUpsertWithoutContactsInput = {
@@ -76254,6 +82031,7 @@ export namespace Prisma {
     uuid?: string
     name: string
     slug: string
+    timezone?: string
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
@@ -76275,6 +82053,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutContact_listsInput = {
@@ -76282,6 +82063,7 @@ export namespace Prisma {
     uuid?: string
     name: string
     slug: string
+    timezone?: string
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
@@ -76303,6 +82085,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutContact_listsInput = {
@@ -76462,6 +82247,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
@@ -76483,6 +82269,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutContact_listsInput = {
@@ -76490,6 +82279,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -76511,6 +82301,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type ContactListUpsertWithoutChildrenInput = {
@@ -77079,6 +82872,7 @@ export namespace Prisma {
     uuid?: string
     name: string
     slug: string
+    timezone?: string
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
@@ -77100,6 +82894,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutInteractionsInput = {
@@ -77107,6 +82904,7 @@ export namespace Prisma {
     uuid?: string
     name: string
     slug: string
+    timezone?: string
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
@@ -77128,6 +82926,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutInteractionsInput = {
@@ -77386,6 +83187,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
@@ -77407,6 +83209,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutInteractionsInput = {
@@ -77414,6 +83219,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -77435,6 +83241,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OutreachMessageUpsertWithoutInteractionInput = {
@@ -77603,6 +83412,7 @@ export namespace Prisma {
     uuid?: string
     name: string
     slug: string
+    timezone?: string
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
@@ -77624,6 +83434,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutOutreach_messagesInput = {
@@ -77631,6 +83444,7 @@ export namespace Prisma {
     uuid?: string
     name: string
     slug: string
+    timezone?: string
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
@@ -77652,6 +83466,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutOutreach_messagesInput = {
@@ -77842,6 +83659,9 @@ export namespace Prisma {
     invitations_sent?: OrganisationInvitationCreateNestedManyWithoutInvited_byInput
     form_completions?: FormCompletionCreateNestedManyWithoutCompleted_byInput
     activity_logs?: ActivityLogCreateNestedManyWithoutActorInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutUserInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutUserInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutOutreach_messages_sentInput = {
@@ -77858,6 +83678,9 @@ export namespace Prisma {
     invitations_sent?: OrganisationInvitationUncheckedCreateNestedManyWithoutInvited_byInput
     form_completions?: FormCompletionUncheckedCreateNestedManyWithoutCompleted_byInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutActorInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutUserInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutUserInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutOutreach_messages_sentInput = {
@@ -77912,6 +83735,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
@@ -77933,6 +83757,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutOutreach_messagesInput = {
@@ -77940,6 +83767,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -77961,6 +83789,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type ContactUpsertWithoutOutreach_messagesInput = {
@@ -78169,6 +84000,9 @@ export namespace Prisma {
     invitations_sent?: OrganisationInvitationUpdateManyWithoutInvited_byNestedInput
     form_completions?: FormCompletionUpdateManyWithoutCompleted_byNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutActorNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutUserNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutUserNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOutreach_messages_sentInput = {
@@ -78185,6 +84019,9 @@ export namespace Prisma {
     invitations_sent?: OrganisationInvitationUncheckedUpdateManyWithoutInvited_byNestedInput
     form_completions?: FormCompletionUncheckedUpdateManyWithoutCompleted_byNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutActorNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutUserNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutUserNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type InteractionUpsertWithoutOutreach_messageInput = {
@@ -78229,6 +84066,7 @@ export namespace Prisma {
     uuid?: string
     name: string
     slug: string
+    timezone?: string
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
@@ -78250,6 +84088,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutOutreach_sequencesInput = {
@@ -78257,6 +84098,7 @@ export namespace Prisma {
     uuid?: string
     name: string
     slug: string
+    timezone?: string
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
@@ -78278,6 +84120,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutOutreach_sequencesInput = {
@@ -78300,6 +84145,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
@@ -78321,6 +84167,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutOutreach_sequencesInput = {
@@ -78328,6 +84177,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -78349,6 +84199,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type FilterCreateWithoutJobsInput = {
@@ -78453,6 +84306,7 @@ export namespace Prisma {
     uuid?: string
     name: string
     slug: string
+    timezone?: string
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
@@ -78474,6 +84328,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutSender_profilesInput = {
@@ -78481,6 +84338,7 @@ export namespace Prisma {
     uuid?: string
     name: string
     slug: string
+    timezone?: string
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
@@ -78502,6 +84360,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutSender_profilesInput = {
@@ -78619,6 +84480,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
@@ -78640,6 +84502,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutSender_profilesInput = {
@@ -78647,6 +84512,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -78668,6 +84534,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type MarketingCampaignUpsertWithWhereUniqueWithoutSender_profileInput = {
@@ -78690,6 +84559,7 @@ export namespace Prisma {
     uuid?: string
     name: string
     slug: string
+    timezone?: string
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
@@ -78711,6 +84581,9 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutMessage_templatesInput = {
@@ -78718,6 +84591,7 @@ export namespace Prisma {
     uuid?: string
     name: string
     slug: string
+    timezone?: string
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
@@ -78739,6 +84613,9 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutMessage_templatesInput = {
@@ -78761,6 +84638,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
@@ -78782,6 +84660,9 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutMessage_templatesInput = {
@@ -78789,6 +84670,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -78810,12 +84692,16 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutMarketing_campaignsInput = {
     uuid?: string
     name: string
     slug: string
+    timezone?: string
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
@@ -78837,6 +84723,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutMarketing_campaignsInput = {
@@ -78844,6 +84733,7 @@ export namespace Prisma {
     uuid?: string
     name: string
     slug: string
+    timezone?: string
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
@@ -78865,6 +84755,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutMarketing_campaignsInput = {
@@ -79082,6 +84975,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
@@ -79103,6 +84997,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutMarketing_campaignsInput = {
@@ -79110,6 +85007,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -79131,6 +85029,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type SenderProfileUpsertWithoutMarketing_campaignsInput = {
@@ -79601,6 +85502,7 @@ export namespace Prisma {
     uuid?: string
     name: string
     slug: string
+    timezone?: string
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
@@ -79622,6 +85524,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutOpenai_batch_jobsInput = {
@@ -79629,6 +85534,7 @@ export namespace Prisma {
     uuid?: string
     name: string
     slug: string
+    timezone?: string
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
@@ -79650,6 +85556,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutOpenai_batch_jobsInput = {
@@ -79672,6 +85581,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
@@ -79693,6 +85603,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutOpenai_batch_jobsInput = {
@@ -79700,6 +85613,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -79721,12 +85635,16 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutIntegrationsInput = {
     uuid?: string
     name: string
     slug: string
+    timezone?: string
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
@@ -79748,6 +85666,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutIntegrationsInput = {
@@ -79755,6 +85676,7 @@ export namespace Prisma {
     uuid?: string
     name: string
     slug: string
+    timezone?: string
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
@@ -79776,6 +85698,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutIntegrationsInput = {
@@ -79856,6 +85781,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
@@ -79877,6 +85803,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutIntegrationsInput = {
@@ -79884,6 +85813,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -79905,6 +85835,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type IntegrationKeyUpsertWithWhereUniqueWithoutIntegrationInput = {
@@ -80095,6 +86028,7 @@ export namespace Prisma {
     uuid?: string
     name: string
     slug: string
+    timezone?: string
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
@@ -80116,6 +86050,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutRemindersInput = {
@@ -80123,6 +86060,7 @@ export namespace Prisma {
     uuid?: string
     name: string
     slug: string
+    timezone?: string
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
@@ -80144,6 +86082,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutRemindersInput = {
@@ -80246,6 +86187,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
@@ -80267,6 +86209,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutRemindersInput = {
@@ -80274,6 +86219,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -80295,6 +86241,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type ContactUpsertWithoutRemindersInput = {
@@ -80387,6 +86336,7 @@ export namespace Prisma {
     uuid?: string
     name: string
     slug: string
+    timezone?: string
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
@@ -80408,6 +86358,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutFormsInput = {
@@ -80415,6 +86368,7 @@ export namespace Prisma {
     uuid?: string
     name: string
     slug: string
+    timezone?: string
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
@@ -80436,6 +86390,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutFormsInput = {
@@ -80530,6 +86487,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
@@ -80551,6 +86509,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutFormsInput = {
@@ -80558,6 +86519,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -80579,6 +86541,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type FormFieldUpsertWithWhereUniqueWithoutFormInput = {
@@ -80866,6 +86831,9 @@ export namespace Prisma {
     invitations_sent?: OrganisationInvitationCreateNestedManyWithoutInvited_byInput
     outreach_messages_sent?: OutreachMessageCreateNestedManyWithoutSent_byInput
     activity_logs?: ActivityLogCreateNestedManyWithoutActorInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutUserInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutUserInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutForm_completionsInput = {
@@ -80882,6 +86850,9 @@ export namespace Prisma {
     invitations_sent?: OrganisationInvitationUncheckedCreateNestedManyWithoutInvited_byInput
     outreach_messages_sent?: OutreachMessageUncheckedCreateNestedManyWithoutSent_byInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutActorInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutUserInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutUserInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutForm_completionsInput = {
@@ -81058,6 +87029,9 @@ export namespace Prisma {
     invitations_sent?: OrganisationInvitationUpdateManyWithoutInvited_byNestedInput
     outreach_messages_sent?: OutreachMessageUpdateManyWithoutSent_byNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutActorNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutUserNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutUserNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutForm_completionsInput = {
@@ -81074,6 +87048,9 @@ export namespace Prisma {
     invitations_sent?: OrganisationInvitationUncheckedUpdateManyWithoutInvited_byNestedInput
     outreach_messages_sent?: OutreachMessageUncheckedUpdateManyWithoutSent_byNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutActorNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutUserNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutUserNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type FormCompletionValueUpsertWithWhereUniqueWithoutCompletionInput = {
@@ -81232,6 +87209,7 @@ export namespace Prisma {
     uuid?: string
     name: string
     slug: string
+    timezone?: string
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
@@ -81253,6 +87231,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutContact_audience_analysesInput = {
@@ -81260,6 +87241,7 @@ export namespace Prisma {
     uuid?: string
     name: string
     slug: string
+    timezone?: string
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
@@ -81281,6 +87263,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutContact_audience_analysesInput = {
@@ -81379,6 +87364,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
@@ -81400,6 +87386,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutContact_audience_analysesInput = {
@@ -81407,6 +87396,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -81428,6 +87418,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type FilterUpsertWithoutAudience_analysesInput = {
@@ -81522,6 +87515,7 @@ export namespace Prisma {
     uuid?: string
     name: string
     slug: string
+    timezone?: string
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
@@ -81543,6 +87537,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutAi_usage_logsInput = {
@@ -81550,6 +87547,7 @@ export namespace Prisma {
     uuid?: string
     name: string
     slug: string
+    timezone?: string
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
@@ -81571,6 +87569,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutAi_usage_logsInput = {
@@ -81593,6 +87594,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
@@ -81614,6 +87616,9 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutAi_usage_logsInput = {
@@ -81621,6 +87626,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -81642,12 +87648,16 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutApify_usage_logsInput = {
     uuid?: string
     name: string
     slug: string
+    timezone?: string
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
@@ -81669,6 +87679,9 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutApify_usage_logsInput = {
@@ -81676,6 +87689,7 @@ export namespace Prisma {
     uuid?: string
     name: string
     slug: string
+    timezone?: string
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
@@ -81697,6 +87711,9 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutApify_usage_logsInput = {
@@ -81719,6 +87736,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
@@ -81740,6 +87758,9 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutApify_usage_logsInput = {
@@ -81747,6 +87768,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -81768,12 +87790,16 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
-  export type OrganisationCreateWithoutActivity_logsInput = {
+  export type OrganisationCreateWithoutMessaging_goalsInput = {
     uuid?: string
     name: string
     slug: string
+    timezone?: string
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
@@ -81795,13 +87821,17 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
   }
 
-  export type OrganisationUncheckedCreateWithoutActivity_logsInput = {
+  export type OrganisationUncheckedCreateWithoutMessaging_goalsInput = {
     id?: number
     uuid?: string
     name: string
     slug: string
+    timezone?: string
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
@@ -81823,6 +87853,816 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+  }
+
+  export type OrganisationCreateOrConnectWithoutMessaging_goalsInput = {
+    where: OrganisationWhereUniqueInput
+    create: XOR<OrganisationCreateWithoutMessaging_goalsInput, OrganisationUncheckedCreateWithoutMessaging_goalsInput>
+  }
+
+  export type UserCreateWithoutMessaging_goalsInput = {
+    uuid?: string
+    email: string
+    phone?: string | null
+    full_name?: string | null
+    password: string
+    role?: $Enums.AuthRole
+    created_at?: Date | string
+    updated_at?: Date | string
+    memberships?: OrganisationMemberCreateNestedManyWithoutUserInput
+    invitations_sent?: OrganisationInvitationCreateNestedManyWithoutInvited_byInput
+    form_completions?: FormCompletionCreateNestedManyWithoutCompleted_byInput
+    outreach_messages_sent?: OutreachMessageCreateNestedManyWithoutSent_byInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutActorInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutUserInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutMessaging_goalsInput = {
+    id?: number
+    uuid?: string
+    email: string
+    phone?: string | null
+    full_name?: string | null
+    password: string
+    role?: $Enums.AuthRole
+    created_at?: Date | string
+    updated_at?: Date | string
+    memberships?: OrganisationMemberUncheckedCreateNestedManyWithoutUserInput
+    invitations_sent?: OrganisationInvitationUncheckedCreateNestedManyWithoutInvited_byInput
+    form_completions?: FormCompletionUncheckedCreateNestedManyWithoutCompleted_byInput
+    outreach_messages_sent?: OutreachMessageUncheckedCreateNestedManyWithoutSent_byInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutActorInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutUserInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutMessaging_goalsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutMessaging_goalsInput, UserUncheckedCreateWithoutMessaging_goalsInput>
+  }
+
+  export type GoalAchievementCreateWithoutGoalInput = {
+    uuid?: string
+    type: $Enums.GoalAchievementType
+    period_key: string
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    seen_at?: Date | string | null
+    created_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutGoal_achievementsInput
+    user: UserCreateNestedOneWithoutGoal_achievementsInput
+  }
+
+  export type GoalAchievementUncheckedCreateWithoutGoalInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    user_uuid: string
+    type: $Enums.GoalAchievementType
+    period_key: string
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    seen_at?: Date | string | null
+    created_at?: Date | string
+  }
+
+  export type GoalAchievementCreateOrConnectWithoutGoalInput = {
+    where: GoalAchievementWhereUniqueInput
+    create: XOR<GoalAchievementCreateWithoutGoalInput, GoalAchievementUncheckedCreateWithoutGoalInput>
+  }
+
+  export type GoalAchievementCreateManyGoalInputEnvelope = {
+    data: GoalAchievementCreateManyGoalInput | GoalAchievementCreateManyGoalInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type OrganisationUpsertWithoutMessaging_goalsInput = {
+    update: XOR<OrganisationUpdateWithoutMessaging_goalsInput, OrganisationUncheckedUpdateWithoutMessaging_goalsInput>
+    create: XOR<OrganisationCreateWithoutMessaging_goalsInput, OrganisationUncheckedCreateWithoutMessaging_goalsInput>
+    where?: OrganisationWhereInput
+  }
+
+  export type OrganisationUpdateToOneWithWhereWithoutMessaging_goalsInput = {
+    where?: OrganisationWhereInput
+    data: XOR<OrganisationUpdateWithoutMessaging_goalsInput, OrganisationUncheckedUpdateWithoutMessaging_goalsInput>
+  }
+
+  export type OrganisationUpdateWithoutMessaging_goalsInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
+    invitations?: OrganisationInvitationUpdateManyWithoutOrganisationNestedInput
+    filters?: FilterUpdateManyWithoutOrganisationNestedInput
+    contacts?: ContactUpdateManyWithoutOrganisationNestedInput
+    outreach_messages?: OutreachMessageUpdateManyWithoutOrganisationNestedInput
+    outreach_sequences?: OutreachSequenceUpdateManyWithoutOrganisationNestedInput
+    interactions?: InteractionUpdateManyWithoutOrganisationNestedInput
+    sender_profiles?: SenderProfileUpdateManyWithoutOrganisationNestedInput
+    marketing_campaigns?: MarketingCampaignUpdateManyWithoutOrganisationNestedInput
+    scoring_instructions?: ScoringInstructionUpdateManyWithoutOrganisationNestedInput
+    openai_batch_jobs?: OpenAiBatchJobUpdateManyWithoutOrganisationNestedInput
+    integrations?: IntegrationUpdateManyWithoutOrganisationNestedInput
+    reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
+    forms?: FormUpdateManyWithoutOrganisationNestedInput
+    contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
+    ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
+    apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
+    message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+  }
+
+  export type OrganisationUncheckedUpdateWithoutMessaging_goalsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
+    invitations?: OrganisationInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
+    filters?: FilterUncheckedUpdateManyWithoutOrganisationNestedInput
+    contacts?: ContactUncheckedUpdateManyWithoutOrganisationNestedInput
+    outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutOrganisationNestedInput
+    outreach_sequences?: OutreachSequenceUncheckedUpdateManyWithoutOrganisationNestedInput
+    interactions?: InteractionUncheckedUpdateManyWithoutOrganisationNestedInput
+    sender_profiles?: SenderProfileUncheckedUpdateManyWithoutOrganisationNestedInput
+    marketing_campaigns?: MarketingCampaignUncheckedUpdateManyWithoutOrganisationNestedInput
+    scoring_instructions?: ScoringInstructionUncheckedUpdateManyWithoutOrganisationNestedInput
+    openai_batch_jobs?: OpenAiBatchJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    integrations?: IntegrationUncheckedUpdateManyWithoutOrganisationNestedInput
+    reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
+    forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
+    contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
+    ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+  }
+
+  export type UserUpsertWithoutMessaging_goalsInput = {
+    update: XOR<UserUpdateWithoutMessaging_goalsInput, UserUncheckedUpdateWithoutMessaging_goalsInput>
+    create: XOR<UserCreateWithoutMessaging_goalsInput, UserUncheckedCreateWithoutMessaging_goalsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutMessaging_goalsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutMessaging_goalsInput, UserUncheckedUpdateWithoutMessaging_goalsInput>
+  }
+
+  export type UserUpdateWithoutMessaging_goalsInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    full_name?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumAuthRoleFieldUpdateOperationsInput | $Enums.AuthRole
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: OrganisationMemberUpdateManyWithoutUserNestedInput
+    invitations_sent?: OrganisationInvitationUpdateManyWithoutInvited_byNestedInput
+    form_completions?: FormCompletionUpdateManyWithoutCompleted_byNestedInput
+    outreach_messages_sent?: OutreachMessageUpdateManyWithoutSent_byNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutActorNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutUserNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutMessaging_goalsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    full_name?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumAuthRoleFieldUpdateOperationsInput | $Enums.AuthRole
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: OrganisationMemberUncheckedUpdateManyWithoutUserNestedInput
+    invitations_sent?: OrganisationInvitationUncheckedUpdateManyWithoutInvited_byNestedInput
+    form_completions?: FormCompletionUncheckedUpdateManyWithoutCompleted_byNestedInput
+    outreach_messages_sent?: OutreachMessageUncheckedUpdateManyWithoutSent_byNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutActorNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutUserNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type GoalAchievementUpsertWithWhereUniqueWithoutGoalInput = {
+    where: GoalAchievementWhereUniqueInput
+    update: XOR<GoalAchievementUpdateWithoutGoalInput, GoalAchievementUncheckedUpdateWithoutGoalInput>
+    create: XOR<GoalAchievementCreateWithoutGoalInput, GoalAchievementUncheckedCreateWithoutGoalInput>
+  }
+
+  export type GoalAchievementUpdateWithWhereUniqueWithoutGoalInput = {
+    where: GoalAchievementWhereUniqueInput
+    data: XOR<GoalAchievementUpdateWithoutGoalInput, GoalAchievementUncheckedUpdateWithoutGoalInput>
+  }
+
+  export type GoalAchievementUpdateManyWithWhereWithoutGoalInput = {
+    where: GoalAchievementScalarWhereInput
+    data: XOR<GoalAchievementUpdateManyMutationInput, GoalAchievementUncheckedUpdateManyWithoutGoalInput>
+  }
+
+  export type OrganisationCreateWithoutGoal_achievementsInput = {
+    uuid?: string
+    name: string
+    slug: string
+    timezone?: string
+    created_at?: Date | string
+    updated_at?: Date | string
+    members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
+    invitations?: OrganisationInvitationCreateNestedManyWithoutOrganisationInput
+    filters?: FilterCreateNestedManyWithoutOrganisationInput
+    contacts?: ContactCreateNestedManyWithoutOrganisationInput
+    outreach_messages?: OutreachMessageCreateNestedManyWithoutOrganisationInput
+    outreach_sequences?: OutreachSequenceCreateNestedManyWithoutOrganisationInput
+    interactions?: InteractionCreateNestedManyWithoutOrganisationInput
+    sender_profiles?: SenderProfileCreateNestedManyWithoutOrganisationInput
+    marketing_campaigns?: MarketingCampaignCreateNestedManyWithoutOrganisationInput
+    scoring_instructions?: ScoringInstructionCreateNestedManyWithoutOrganisationInput
+    openai_batch_jobs?: OpenAiBatchJobCreateNestedManyWithoutOrganisationInput
+    integrations?: IntegrationCreateNestedManyWithoutOrganisationInput
+    reminders?: ReminderCreateNestedManyWithoutOrganisationInput
+    forms?: FormCreateNestedManyWithoutOrganisationInput
+    contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
+    ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
+    apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
+    message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+  }
+
+  export type OrganisationUncheckedCreateWithoutGoal_achievementsInput = {
+    id?: number
+    uuid?: string
+    name: string
+    slug: string
+    timezone?: string
+    created_at?: Date | string
+    updated_at?: Date | string
+    members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
+    invitations?: OrganisationInvitationUncheckedCreateNestedManyWithoutOrganisationInput
+    filters?: FilterUncheckedCreateNestedManyWithoutOrganisationInput
+    contacts?: ContactUncheckedCreateNestedManyWithoutOrganisationInput
+    outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutOrganisationInput
+    outreach_sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutOrganisationInput
+    interactions?: InteractionUncheckedCreateNestedManyWithoutOrganisationInput
+    sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutOrganisationInput
+    marketing_campaigns?: MarketingCampaignUncheckedCreateNestedManyWithoutOrganisationInput
+    scoring_instructions?: ScoringInstructionUncheckedCreateNestedManyWithoutOrganisationInput
+    openai_batch_jobs?: OpenAiBatchJobUncheckedCreateNestedManyWithoutOrganisationInput
+    integrations?: IntegrationUncheckedCreateNestedManyWithoutOrganisationInput
+    reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
+    forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
+    contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
+    ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
+    apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
+    message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+  }
+
+  export type OrganisationCreateOrConnectWithoutGoal_achievementsInput = {
+    where: OrganisationWhereUniqueInput
+    create: XOR<OrganisationCreateWithoutGoal_achievementsInput, OrganisationUncheckedCreateWithoutGoal_achievementsInput>
+  }
+
+  export type UserCreateWithoutGoal_achievementsInput = {
+    uuid?: string
+    email: string
+    phone?: string | null
+    full_name?: string | null
+    password: string
+    role?: $Enums.AuthRole
+    created_at?: Date | string
+    updated_at?: Date | string
+    memberships?: OrganisationMemberCreateNestedManyWithoutUserInput
+    invitations_sent?: OrganisationInvitationCreateNestedManyWithoutInvited_byInput
+    form_completions?: FormCompletionCreateNestedManyWithoutCompleted_byInput
+    outreach_messages_sent?: OutreachMessageCreateNestedManyWithoutSent_byInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutActorInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutUserInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutGoal_achievementsInput = {
+    id?: number
+    uuid?: string
+    email: string
+    phone?: string | null
+    full_name?: string | null
+    password: string
+    role?: $Enums.AuthRole
+    created_at?: Date | string
+    updated_at?: Date | string
+    memberships?: OrganisationMemberUncheckedCreateNestedManyWithoutUserInput
+    invitations_sent?: OrganisationInvitationUncheckedCreateNestedManyWithoutInvited_byInput
+    form_completions?: FormCompletionUncheckedCreateNestedManyWithoutCompleted_byInput
+    outreach_messages_sent?: OutreachMessageUncheckedCreateNestedManyWithoutSent_byInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutActorInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutUserInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutGoal_achievementsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutGoal_achievementsInput, UserUncheckedCreateWithoutGoal_achievementsInput>
+  }
+
+  export type MessagingGoalCreateWithoutAchievementsInput = {
+    uuid?: string
+    period: $Enums.GoalPeriod
+    target_count: number
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutMessaging_goalsInput
+    user: UserCreateNestedOneWithoutMessaging_goalsInput
+  }
+
+  export type MessagingGoalUncheckedCreateWithoutAchievementsInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    user_uuid: string
+    period: $Enums.GoalPeriod
+    target_count: number
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type MessagingGoalCreateOrConnectWithoutAchievementsInput = {
+    where: MessagingGoalWhereUniqueInput
+    create: XOR<MessagingGoalCreateWithoutAchievementsInput, MessagingGoalUncheckedCreateWithoutAchievementsInput>
+  }
+
+  export type OrganisationUpsertWithoutGoal_achievementsInput = {
+    update: XOR<OrganisationUpdateWithoutGoal_achievementsInput, OrganisationUncheckedUpdateWithoutGoal_achievementsInput>
+    create: XOR<OrganisationCreateWithoutGoal_achievementsInput, OrganisationUncheckedCreateWithoutGoal_achievementsInput>
+    where?: OrganisationWhereInput
+  }
+
+  export type OrganisationUpdateToOneWithWhereWithoutGoal_achievementsInput = {
+    where?: OrganisationWhereInput
+    data: XOR<OrganisationUpdateWithoutGoal_achievementsInput, OrganisationUncheckedUpdateWithoutGoal_achievementsInput>
+  }
+
+  export type OrganisationUpdateWithoutGoal_achievementsInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
+    invitations?: OrganisationInvitationUpdateManyWithoutOrganisationNestedInput
+    filters?: FilterUpdateManyWithoutOrganisationNestedInput
+    contacts?: ContactUpdateManyWithoutOrganisationNestedInput
+    outreach_messages?: OutreachMessageUpdateManyWithoutOrganisationNestedInput
+    outreach_sequences?: OutreachSequenceUpdateManyWithoutOrganisationNestedInput
+    interactions?: InteractionUpdateManyWithoutOrganisationNestedInput
+    sender_profiles?: SenderProfileUpdateManyWithoutOrganisationNestedInput
+    marketing_campaigns?: MarketingCampaignUpdateManyWithoutOrganisationNestedInput
+    scoring_instructions?: ScoringInstructionUpdateManyWithoutOrganisationNestedInput
+    openai_batch_jobs?: OpenAiBatchJobUpdateManyWithoutOrganisationNestedInput
+    integrations?: IntegrationUpdateManyWithoutOrganisationNestedInput
+    reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
+    forms?: FormUpdateManyWithoutOrganisationNestedInput
+    contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
+    ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
+    apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
+    message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+  }
+
+  export type OrganisationUncheckedUpdateWithoutGoal_achievementsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
+    invitations?: OrganisationInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
+    filters?: FilterUncheckedUpdateManyWithoutOrganisationNestedInput
+    contacts?: ContactUncheckedUpdateManyWithoutOrganisationNestedInput
+    outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutOrganisationNestedInput
+    outreach_sequences?: OutreachSequenceUncheckedUpdateManyWithoutOrganisationNestedInput
+    interactions?: InteractionUncheckedUpdateManyWithoutOrganisationNestedInput
+    sender_profiles?: SenderProfileUncheckedUpdateManyWithoutOrganisationNestedInput
+    marketing_campaigns?: MarketingCampaignUncheckedUpdateManyWithoutOrganisationNestedInput
+    scoring_instructions?: ScoringInstructionUncheckedUpdateManyWithoutOrganisationNestedInput
+    openai_batch_jobs?: OpenAiBatchJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    integrations?: IntegrationUncheckedUpdateManyWithoutOrganisationNestedInput
+    reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
+    forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
+    contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
+    ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+  }
+
+  export type UserUpsertWithoutGoal_achievementsInput = {
+    update: XOR<UserUpdateWithoutGoal_achievementsInput, UserUncheckedUpdateWithoutGoal_achievementsInput>
+    create: XOR<UserCreateWithoutGoal_achievementsInput, UserUncheckedCreateWithoutGoal_achievementsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutGoal_achievementsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutGoal_achievementsInput, UserUncheckedUpdateWithoutGoal_achievementsInput>
+  }
+
+  export type UserUpdateWithoutGoal_achievementsInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    full_name?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumAuthRoleFieldUpdateOperationsInput | $Enums.AuthRole
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: OrganisationMemberUpdateManyWithoutUserNestedInput
+    invitations_sent?: OrganisationInvitationUpdateManyWithoutInvited_byNestedInput
+    form_completions?: FormCompletionUpdateManyWithoutCompleted_byNestedInput
+    outreach_messages_sent?: OutreachMessageUpdateManyWithoutSent_byNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutActorNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutUserNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutGoal_achievementsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    full_name?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumAuthRoleFieldUpdateOperationsInput | $Enums.AuthRole
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: OrganisationMemberUncheckedUpdateManyWithoutUserNestedInput
+    invitations_sent?: OrganisationInvitationUncheckedUpdateManyWithoutInvited_byNestedInput
+    form_completions?: FormCompletionUncheckedUpdateManyWithoutCompleted_byNestedInput
+    outreach_messages_sent?: OutreachMessageUncheckedUpdateManyWithoutSent_byNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutActorNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutUserNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type MessagingGoalUpsertWithoutAchievementsInput = {
+    update: XOR<MessagingGoalUpdateWithoutAchievementsInput, MessagingGoalUncheckedUpdateWithoutAchievementsInput>
+    create: XOR<MessagingGoalCreateWithoutAchievementsInput, MessagingGoalUncheckedCreateWithoutAchievementsInput>
+    where?: MessagingGoalWhereInput
+  }
+
+  export type MessagingGoalUpdateToOneWithWhereWithoutAchievementsInput = {
+    where?: MessagingGoalWhereInput
+    data: XOR<MessagingGoalUpdateWithoutAchievementsInput, MessagingGoalUncheckedUpdateWithoutAchievementsInput>
+  }
+
+  export type MessagingGoalUpdateWithoutAchievementsInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    target_count?: IntFieldUpdateOperationsInput | number
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutMessaging_goalsNestedInput
+    user?: UserUpdateOneRequiredWithoutMessaging_goalsNestedInput
+  }
+
+  export type MessagingGoalUncheckedUpdateWithoutAchievementsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    user_uuid?: StringFieldUpdateOperationsInput | string
+    period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    target_count?: IntFieldUpdateOperationsInput | number
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OrganisationCreateWithoutGoal_personal_bestsInput = {
+    uuid?: string
+    name: string
+    slug: string
+    timezone?: string
+    created_at?: Date | string
+    updated_at?: Date | string
+    members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
+    invitations?: OrganisationInvitationCreateNestedManyWithoutOrganisationInput
+    filters?: FilterCreateNestedManyWithoutOrganisationInput
+    contacts?: ContactCreateNestedManyWithoutOrganisationInput
+    outreach_messages?: OutreachMessageCreateNestedManyWithoutOrganisationInput
+    outreach_sequences?: OutreachSequenceCreateNestedManyWithoutOrganisationInput
+    interactions?: InteractionCreateNestedManyWithoutOrganisationInput
+    sender_profiles?: SenderProfileCreateNestedManyWithoutOrganisationInput
+    marketing_campaigns?: MarketingCampaignCreateNestedManyWithoutOrganisationInput
+    scoring_instructions?: ScoringInstructionCreateNestedManyWithoutOrganisationInput
+    openai_batch_jobs?: OpenAiBatchJobCreateNestedManyWithoutOrganisationInput
+    integrations?: IntegrationCreateNestedManyWithoutOrganisationInput
+    reminders?: ReminderCreateNestedManyWithoutOrganisationInput
+    forms?: FormCreateNestedManyWithoutOrganisationInput
+    contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
+    ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
+    apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
+    message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
+  }
+
+  export type OrganisationUncheckedCreateWithoutGoal_personal_bestsInput = {
+    id?: number
+    uuid?: string
+    name: string
+    slug: string
+    timezone?: string
+    created_at?: Date | string
+    updated_at?: Date | string
+    members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
+    invitations?: OrganisationInvitationUncheckedCreateNestedManyWithoutOrganisationInput
+    filters?: FilterUncheckedCreateNestedManyWithoutOrganisationInput
+    contacts?: ContactUncheckedCreateNestedManyWithoutOrganisationInput
+    outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutOrganisationInput
+    outreach_sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutOrganisationInput
+    interactions?: InteractionUncheckedCreateNestedManyWithoutOrganisationInput
+    sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutOrganisationInput
+    marketing_campaigns?: MarketingCampaignUncheckedCreateNestedManyWithoutOrganisationInput
+    scoring_instructions?: ScoringInstructionUncheckedCreateNestedManyWithoutOrganisationInput
+    openai_batch_jobs?: OpenAiBatchJobUncheckedCreateNestedManyWithoutOrganisationInput
+    integrations?: IntegrationUncheckedCreateNestedManyWithoutOrganisationInput
+    reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
+    forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
+    contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
+    ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
+    apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
+    message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
+  }
+
+  export type OrganisationCreateOrConnectWithoutGoal_personal_bestsInput = {
+    where: OrganisationWhereUniqueInput
+    create: XOR<OrganisationCreateWithoutGoal_personal_bestsInput, OrganisationUncheckedCreateWithoutGoal_personal_bestsInput>
+  }
+
+  export type UserCreateWithoutGoal_personal_bestsInput = {
+    uuid?: string
+    email: string
+    phone?: string | null
+    full_name?: string | null
+    password: string
+    role?: $Enums.AuthRole
+    created_at?: Date | string
+    updated_at?: Date | string
+    memberships?: OrganisationMemberCreateNestedManyWithoutUserInput
+    invitations_sent?: OrganisationInvitationCreateNestedManyWithoutInvited_byInput
+    form_completions?: FormCompletionCreateNestedManyWithoutCompleted_byInput
+    outreach_messages_sent?: OutreachMessageCreateNestedManyWithoutSent_byInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutActorInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutUserInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutGoal_personal_bestsInput = {
+    id?: number
+    uuid?: string
+    email: string
+    phone?: string | null
+    full_name?: string | null
+    password: string
+    role?: $Enums.AuthRole
+    created_at?: Date | string
+    updated_at?: Date | string
+    memberships?: OrganisationMemberUncheckedCreateNestedManyWithoutUserInput
+    invitations_sent?: OrganisationInvitationUncheckedCreateNestedManyWithoutInvited_byInput
+    form_completions?: FormCompletionUncheckedCreateNestedManyWithoutCompleted_byInput
+    outreach_messages_sent?: OutreachMessageUncheckedCreateNestedManyWithoutSent_byInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutActorInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutUserInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutGoal_personal_bestsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutGoal_personal_bestsInput, UserUncheckedCreateWithoutGoal_personal_bestsInput>
+  }
+
+  export type OrganisationUpsertWithoutGoal_personal_bestsInput = {
+    update: XOR<OrganisationUpdateWithoutGoal_personal_bestsInput, OrganisationUncheckedUpdateWithoutGoal_personal_bestsInput>
+    create: XOR<OrganisationCreateWithoutGoal_personal_bestsInput, OrganisationUncheckedCreateWithoutGoal_personal_bestsInput>
+    where?: OrganisationWhereInput
+  }
+
+  export type OrganisationUpdateToOneWithWhereWithoutGoal_personal_bestsInput = {
+    where?: OrganisationWhereInput
+    data: XOR<OrganisationUpdateWithoutGoal_personal_bestsInput, OrganisationUncheckedUpdateWithoutGoal_personal_bestsInput>
+  }
+
+  export type OrganisationUpdateWithoutGoal_personal_bestsInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
+    invitations?: OrganisationInvitationUpdateManyWithoutOrganisationNestedInput
+    filters?: FilterUpdateManyWithoutOrganisationNestedInput
+    contacts?: ContactUpdateManyWithoutOrganisationNestedInput
+    outreach_messages?: OutreachMessageUpdateManyWithoutOrganisationNestedInput
+    outreach_sequences?: OutreachSequenceUpdateManyWithoutOrganisationNestedInput
+    interactions?: InteractionUpdateManyWithoutOrganisationNestedInput
+    sender_profiles?: SenderProfileUpdateManyWithoutOrganisationNestedInput
+    marketing_campaigns?: MarketingCampaignUpdateManyWithoutOrganisationNestedInput
+    scoring_instructions?: ScoringInstructionUpdateManyWithoutOrganisationNestedInput
+    openai_batch_jobs?: OpenAiBatchJobUpdateManyWithoutOrganisationNestedInput
+    integrations?: IntegrationUpdateManyWithoutOrganisationNestedInput
+    reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
+    forms?: FormUpdateManyWithoutOrganisationNestedInput
+    contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
+    ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
+    apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
+    message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
+  }
+
+  export type OrganisationUncheckedUpdateWithoutGoal_personal_bestsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
+    invitations?: OrganisationInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
+    filters?: FilterUncheckedUpdateManyWithoutOrganisationNestedInput
+    contacts?: ContactUncheckedUpdateManyWithoutOrganisationNestedInput
+    outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutOrganisationNestedInput
+    outreach_sequences?: OutreachSequenceUncheckedUpdateManyWithoutOrganisationNestedInput
+    interactions?: InteractionUncheckedUpdateManyWithoutOrganisationNestedInput
+    sender_profiles?: SenderProfileUncheckedUpdateManyWithoutOrganisationNestedInput
+    marketing_campaigns?: MarketingCampaignUncheckedUpdateManyWithoutOrganisationNestedInput
+    scoring_instructions?: ScoringInstructionUncheckedUpdateManyWithoutOrganisationNestedInput
+    openai_batch_jobs?: OpenAiBatchJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    integrations?: IntegrationUncheckedUpdateManyWithoutOrganisationNestedInput
+    reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
+    forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
+    contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
+    ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
+  }
+
+  export type UserUpsertWithoutGoal_personal_bestsInput = {
+    update: XOR<UserUpdateWithoutGoal_personal_bestsInput, UserUncheckedUpdateWithoutGoal_personal_bestsInput>
+    create: XOR<UserCreateWithoutGoal_personal_bestsInput, UserUncheckedCreateWithoutGoal_personal_bestsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutGoal_personal_bestsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutGoal_personal_bestsInput, UserUncheckedUpdateWithoutGoal_personal_bestsInput>
+  }
+
+  export type UserUpdateWithoutGoal_personal_bestsInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    full_name?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumAuthRoleFieldUpdateOperationsInput | $Enums.AuthRole
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: OrganisationMemberUpdateManyWithoutUserNestedInput
+    invitations_sent?: OrganisationInvitationUpdateManyWithoutInvited_byNestedInput
+    form_completions?: FormCompletionUpdateManyWithoutCompleted_byNestedInput
+    outreach_messages_sent?: OutreachMessageUpdateManyWithoutSent_byNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutActorNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutUserNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutGoal_personal_bestsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    full_name?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumAuthRoleFieldUpdateOperationsInput | $Enums.AuthRole
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: OrganisationMemberUncheckedUpdateManyWithoutUserNestedInput
+    invitations_sent?: OrganisationInvitationUncheckedUpdateManyWithoutInvited_byNestedInput
+    form_completions?: FormCompletionUncheckedUpdateManyWithoutCompleted_byNestedInput
+    outreach_messages_sent?: OutreachMessageUncheckedUpdateManyWithoutSent_byNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutActorNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutUserNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type OrganisationCreateWithoutActivity_logsInput = {
+    uuid?: string
+    name: string
+    slug: string
+    timezone?: string
+    created_at?: Date | string
+    updated_at?: Date | string
+    members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
+    invitations?: OrganisationInvitationCreateNestedManyWithoutOrganisationInput
+    filters?: FilterCreateNestedManyWithoutOrganisationInput
+    contacts?: ContactCreateNestedManyWithoutOrganisationInput
+    outreach_messages?: OutreachMessageCreateNestedManyWithoutOrganisationInput
+    outreach_sequences?: OutreachSequenceCreateNestedManyWithoutOrganisationInput
+    interactions?: InteractionCreateNestedManyWithoutOrganisationInput
+    sender_profiles?: SenderProfileCreateNestedManyWithoutOrganisationInput
+    marketing_campaigns?: MarketingCampaignCreateNestedManyWithoutOrganisationInput
+    scoring_instructions?: ScoringInstructionCreateNestedManyWithoutOrganisationInput
+    openai_batch_jobs?: OpenAiBatchJobCreateNestedManyWithoutOrganisationInput
+    integrations?: IntegrationCreateNestedManyWithoutOrganisationInput
+    reminders?: ReminderCreateNestedManyWithoutOrganisationInput
+    forms?: FormCreateNestedManyWithoutOrganisationInput
+    contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
+    ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
+    apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
+    message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+  }
+
+  export type OrganisationUncheckedCreateWithoutActivity_logsInput = {
+    id?: number
+    uuid?: string
+    name: string
+    slug: string
+    timezone?: string
+    created_at?: Date | string
+    updated_at?: Date | string
+    members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
+    invitations?: OrganisationInvitationUncheckedCreateNestedManyWithoutOrganisationInput
+    filters?: FilterUncheckedCreateNestedManyWithoutOrganisationInput
+    contacts?: ContactUncheckedCreateNestedManyWithoutOrganisationInput
+    outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutOrganisationInput
+    outreach_sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutOrganisationInput
+    interactions?: InteractionUncheckedCreateNestedManyWithoutOrganisationInput
+    sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutOrganisationInput
+    marketing_campaigns?: MarketingCampaignUncheckedCreateNestedManyWithoutOrganisationInput
+    scoring_instructions?: ScoringInstructionUncheckedCreateNestedManyWithoutOrganisationInput
+    openai_batch_jobs?: OpenAiBatchJobUncheckedCreateNestedManyWithoutOrganisationInput
+    integrations?: IntegrationUncheckedCreateNestedManyWithoutOrganisationInput
+    reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
+    forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
+    contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
+    ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
+    apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
+    message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutActivity_logsInput = {
@@ -81843,6 +88683,9 @@ export namespace Prisma {
     invitations_sent?: OrganisationInvitationCreateNestedManyWithoutInvited_byInput
     form_completions?: FormCompletionCreateNestedManyWithoutCompleted_byInput
     outreach_messages_sent?: OutreachMessageCreateNestedManyWithoutSent_byInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutUserInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutUserInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutActivity_logsInput = {
@@ -81859,6 +88702,9 @@ export namespace Prisma {
     invitations_sent?: OrganisationInvitationUncheckedCreateNestedManyWithoutInvited_byInput
     form_completions?: FormCompletionUncheckedCreateNestedManyWithoutCompleted_byInput
     outreach_messages_sent?: OutreachMessageUncheckedCreateNestedManyWithoutSent_byInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutUserInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutUserInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutActivity_logsInput = {
@@ -81881,6 +88727,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
@@ -81902,6 +88749,9 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutActivity_logsInput = {
@@ -81909,6 +88759,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -81930,6 +88781,9 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutActivity_logsInput = {
@@ -81956,6 +88810,9 @@ export namespace Prisma {
     invitations_sent?: OrganisationInvitationUpdateManyWithoutInvited_byNestedInput
     form_completions?: FormCompletionUpdateManyWithoutCompleted_byNestedInput
     outreach_messages_sent?: OutreachMessageUpdateManyWithoutSent_byNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutUserNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutUserNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutActivity_logsInput = {
@@ -81972,6 +88829,9 @@ export namespace Prisma {
     invitations_sent?: OrganisationInvitationUncheckedUpdateManyWithoutInvited_byNestedInput
     form_completions?: FormCompletionUncheckedUpdateManyWithoutCompleted_byNestedInput
     outreach_messages_sent?: OutreachMessageUncheckedUpdateManyWithoutSent_byNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutUserNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutUserNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganisationMemberCreateManyUserInput = {
@@ -82043,6 +88903,39 @@ export namespace Prisma {
     summary?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
+  }
+
+  export type MessagingGoalCreateManyUserInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    period: $Enums.GoalPeriod
+    target_count: number
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type GoalAchievementCreateManyUserInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    goal_uuid: string
+    type: $Enums.GoalAchievementType
+    period_key: string
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    seen_at?: Date | string | null
+    created_at?: Date | string
+  }
+
+  export type GoalPersonalBestCreateManyUserInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    period: $Enums.GoalPeriod
+    best_count?: number
+    achieved_at?: Date | string
+    updated_at?: Date | string
   }
 
   export type OrganisationMemberUpdateWithoutUserInput = {
@@ -82255,6 +89148,104 @@ export namespace Prisma {
     summary?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MessagingGoalUpdateWithoutUserInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    target_count?: IntFieldUpdateOperationsInput | number
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutMessaging_goalsNestedInput
+    achievements?: GoalAchievementUpdateManyWithoutGoalNestedInput
+  }
+
+  export type MessagingGoalUncheckedUpdateWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    target_count?: IntFieldUpdateOperationsInput | number
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    achievements?: GoalAchievementUncheckedUpdateManyWithoutGoalNestedInput
+  }
+
+  export type MessagingGoalUncheckedUpdateManyWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    target_count?: IntFieldUpdateOperationsInput | number
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GoalAchievementUpdateWithoutUserInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    type?: EnumGoalAchievementTypeFieldUpdateOperationsInput | $Enums.GoalAchievementType
+    period_key?: StringFieldUpdateOperationsInput | string
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    seen_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutGoal_achievementsNestedInput
+    goal?: MessagingGoalUpdateOneRequiredWithoutAchievementsNestedInput
+  }
+
+  export type GoalAchievementUncheckedUpdateWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    goal_uuid?: StringFieldUpdateOperationsInput | string
+    type?: EnumGoalAchievementTypeFieldUpdateOperationsInput | $Enums.GoalAchievementType
+    period_key?: StringFieldUpdateOperationsInput | string
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    seen_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GoalAchievementUncheckedUpdateManyWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    goal_uuid?: StringFieldUpdateOperationsInput | string
+    type?: EnumGoalAchievementTypeFieldUpdateOperationsInput | $Enums.GoalAchievementType
+    period_key?: StringFieldUpdateOperationsInput | string
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    seen_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GoalPersonalBestUpdateWithoutUserInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    best_count?: IntFieldUpdateOperationsInput | number
+    achieved_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutGoal_personal_bestsNestedInput
+  }
+
+  export type GoalPersonalBestUncheckedUpdateWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    best_count?: IntFieldUpdateOperationsInput | number
+    achieved_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GoalPersonalBestUncheckedUpdateManyWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    best_count?: IntFieldUpdateOperationsInput | number
+    achieved_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type OrganisationMemberCreateManyOrganisationInput = {
@@ -82591,6 +89582,39 @@ export namespace Prisma {
     summary?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
+  }
+
+  export type MessagingGoalCreateManyOrganisationInput = {
+    id?: number
+    uuid?: string
+    user_uuid: string
+    period: $Enums.GoalPeriod
+    target_count: number
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type GoalAchievementCreateManyOrganisationInput = {
+    id?: number
+    uuid?: string
+    user_uuid: string
+    goal_uuid: string
+    type: $Enums.GoalAchievementType
+    period_key: string
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    seen_at?: Date | string | null
+    created_at?: Date | string
+  }
+
+  export type GoalPersonalBestCreateManyOrganisationInput = {
+    id?: number
+    uuid?: string
+    user_uuid: string
+    period: $Enums.GoalPeriod
+    best_count?: number
+    achieved_at?: Date | string
+    updated_at?: Date | string
   }
 
   export type OrganisationMemberUpdateWithoutOrganisationInput = {
@@ -83644,6 +90668,104 @@ export namespace Prisma {
     summary?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MessagingGoalUpdateWithoutOrganisationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    target_count?: IntFieldUpdateOperationsInput | number
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutMessaging_goalsNestedInput
+    achievements?: GoalAchievementUpdateManyWithoutGoalNestedInput
+  }
+
+  export type MessagingGoalUncheckedUpdateWithoutOrganisationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    user_uuid?: StringFieldUpdateOperationsInput | string
+    period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    target_count?: IntFieldUpdateOperationsInput | number
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    achievements?: GoalAchievementUncheckedUpdateManyWithoutGoalNestedInput
+  }
+
+  export type MessagingGoalUncheckedUpdateManyWithoutOrganisationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    user_uuid?: StringFieldUpdateOperationsInput | string
+    period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    target_count?: IntFieldUpdateOperationsInput | number
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GoalAchievementUpdateWithoutOrganisationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    type?: EnumGoalAchievementTypeFieldUpdateOperationsInput | $Enums.GoalAchievementType
+    period_key?: StringFieldUpdateOperationsInput | string
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    seen_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutGoal_achievementsNestedInput
+    goal?: MessagingGoalUpdateOneRequiredWithoutAchievementsNestedInput
+  }
+
+  export type GoalAchievementUncheckedUpdateWithoutOrganisationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    user_uuid?: StringFieldUpdateOperationsInput | string
+    goal_uuid?: StringFieldUpdateOperationsInput | string
+    type?: EnumGoalAchievementTypeFieldUpdateOperationsInput | $Enums.GoalAchievementType
+    period_key?: StringFieldUpdateOperationsInput | string
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    seen_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GoalAchievementUncheckedUpdateManyWithoutOrganisationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    user_uuid?: StringFieldUpdateOperationsInput | string
+    goal_uuid?: StringFieldUpdateOperationsInput | string
+    type?: EnumGoalAchievementTypeFieldUpdateOperationsInput | $Enums.GoalAchievementType
+    period_key?: StringFieldUpdateOperationsInput | string
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    seen_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GoalPersonalBestUpdateWithoutOrganisationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    best_count?: IntFieldUpdateOperationsInput | number
+    achieved_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutGoal_personal_bestsNestedInput
+  }
+
+  export type GoalPersonalBestUncheckedUpdateWithoutOrganisationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    user_uuid?: StringFieldUpdateOperationsInput | string
+    period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    best_count?: IntFieldUpdateOperationsInput | number
+    achieved_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GoalPersonalBestUncheckedUpdateManyWithoutOrganisationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    user_uuid?: StringFieldUpdateOperationsInput | string
+    period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    best_count?: IntFieldUpdateOperationsInput | number
+    achieved_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type RawLeadCreateManyFilterInput = {
@@ -85490,6 +92612,53 @@ export namespace Prisma {
     value?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GoalAchievementCreateManyGoalInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    user_uuid: string
+    type: $Enums.GoalAchievementType
+    period_key: string
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    seen_at?: Date | string | null
+    created_at?: Date | string
+  }
+
+  export type GoalAchievementUpdateWithoutGoalInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    type?: EnumGoalAchievementTypeFieldUpdateOperationsInput | $Enums.GoalAchievementType
+    period_key?: StringFieldUpdateOperationsInput | string
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    seen_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutGoal_achievementsNestedInput
+    user?: UserUpdateOneRequiredWithoutGoal_achievementsNestedInput
+  }
+
+  export type GoalAchievementUncheckedUpdateWithoutGoalInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    user_uuid?: StringFieldUpdateOperationsInput | string
+    type?: EnumGoalAchievementTypeFieldUpdateOperationsInput | $Enums.GoalAchievementType
+    period_key?: StringFieldUpdateOperationsInput | string
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    seen_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GoalAchievementUncheckedUpdateManyWithoutGoalInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    user_uuid?: StringFieldUpdateOperationsInput | string
+    type?: EnumGoalAchievementTypeFieldUpdateOperationsInput | $Enums.GoalAchievementType
+    period_key?: StringFieldUpdateOperationsInput | string
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    seen_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

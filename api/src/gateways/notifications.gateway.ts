@@ -95,4 +95,10 @@ export class NotificationsGateway
             this.server.to(socketId).emit(event, data);
         }
     }
+
+    emitToUsers(user_uuids: string[], event: string, data: unknown) {
+        for (const user_uuid of user_uuids) {
+            this.emitToUser(user_uuid, event, data);
+        }
+    }
 }

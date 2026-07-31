@@ -8,9 +8,11 @@ import { useAuthStore } from "@/stores/auth";
 import { Routes } from "@/routes/routes";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { useOrganisationPermission } from "@/hooks/use-organisation-permission";
+import { TimezoneOptions } from "@/config/constants/dropdowns/timezone.options";
 import {
     useCreateInvitation,
     useCreateOrganisation,
+    useCurrentOrganisation,
     useDeleteOrganisation,
     useOrganisationInvitations,
     useOrganisationMembers,
@@ -47,6 +49,7 @@ const SettingsOrganisationPage: FC = () => {
     const canDelete = useOrganisationPermission("org_delete");
 
     const { data: organisations = [] } = useOrganisations();
+    const { data: currentOrganisation } = useCurrentOrganisation();
     const createOrganisation = useCreateOrganisation();
     const deleteOrganisation = useDeleteOrganisation();
     const updateOrganisation = useUpdateOrganisation(organisationUuid);
@@ -77,8 +80,13 @@ const SettingsOrganisationPage: FC = () => {
 
     const settingsForm = useForm<UpdateOrganisationFormData>({
         resolver: zodResolver(updateOrganisationSchema),
-        values: { name: organisationName ?? "" },
+        values: {
+            name: currentOrganisation?.name ?? organisationName ?? "",
+            timezone: currentOrganisation?.timezone ?? "UTC",
+        },
     });
+
+    const timezoneValue = settingsForm.watch("timezone");
 
     const createForm = useForm<CreateOrganisationFormData>({
         resolver: zodResolver(createOrganisationSchema),
@@ -175,6 +183,46 @@ const SettingsOrganisationPage: FC = () => {
                     {settingsForm.formState.errors.name ? (
                         <p className="text-xs text-danger">
                             {settingsForm.formState.errors.name.message}
+                        </p>
+                    ) : null}
+                </div>
+                <div className="space-y-1.5">
+                    <Label>Timezone</Label>
+                    <Select
+                        aria-label="Timezone"
+                        value={timezoneValue}
+                        onChange={(v) => {
+                            if (!v) return;
+                            settingsForm.setValue(
+                                "timezone",
+                                v as UpdateOrganisationFormData["timezone"],
+                                { shouldDirty: true },
+                            );
+                        }}
+                        isDisabled={!canEdit || updateOrganisation.isPending}
+                    >
+                        <Select.Trigger className="w-full">
+                            <Select.Value />
+                            <Select.Indicator />
+                        </Select.Trigger>
+                        <Select.Popover>
+                            <ListBox>
+                                {TimezoneOptions.map((option) => (
+                                    <ListBox.Item
+                                        key={option.value}
+                                        id={option.value}
+                                        textValue={option.label}
+                                    >
+                                        {option.label}
+                                        <ListBox.ItemIndicator />
+                                    </ListBox.Item>
+                                ))}
+                            </ListBox>
+                        </Select.Popover>
+                    </Select>
+                    {settingsForm.formState.errors.timezone ? (
+                        <p className="text-xs text-danger">
+                            {settingsForm.formState.errors.timezone.message}
                         </p>
                     ) : null}
                 </div>
