@@ -2,7 +2,30 @@ import { useEffect, useRef, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { Disclosure } from "@heroui/react";
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, Users, Globe, Filter, IdCard, Megaphone, Layers, ShieldCheck, ChevronDown, Plug, Bell, ClipboardList, List, Settings, BarChart2, Activity, Mail, FileText, Building2, User, History, Trophy } from "lucide-react";
+import {
+  LayoutDashboard,
+  Users,
+  Globe,
+  Filter,
+  IdCard,
+  Megaphone,
+  Layers,
+  ShieldCheck,
+  ChevronDown,
+  Plug,
+  Bell,
+  ClipboardList,
+  List,
+  Settings,
+  BarChart2,
+  Activity,
+  Mail,
+  FileText,
+  Building2,
+  User,
+  History,
+  Trophy,
+} from "lucide-react";
 import { Routes } from "@/routes/routes";
 import { usePermission } from "@/hooks/use-permission";
 
@@ -11,28 +34,64 @@ interface SidebarContentProps {
   onNavigate?: () => void;
 }
 
-const navItems = [
-  { label: "Dashboard", icon: LayoutDashboard, href: Routes.dashboard.root, end: true },
-  { label: "Filters", icon: Filter, href: Routes.dashboard.filters, end: false },
-  { label: "Contacts", icon: Users, href: Routes.dashboard.contacts, end: false },
-  { label: "Lists", icon: List, href: Routes.dashboard.lists, end: false },
-  { label: "Reminders", icon: Bell, href: Routes.dashboard.reminders, end: false },
-  { label: "Goals", icon: Trophy, href: Routes.dashboard.goals, end: false },
-  { label: "Forms", icon: ClipboardList, href: Routes.dashboard.forms, end: false },
-  { label: "Leads Directory", icon: Globe, href: Routes.dashboard.leads_directory, end: false },
-  { label: "Sender Profiles", icon: IdCard, href: Routes.dashboard.sender_profiles, end: false },
-  { label: "Integrations", icon: Plug, href: Routes.dashboard.integrations, end: false },
-  { label: "Campaigns", icon: Megaphone, href: Routes.dashboard.campaigns, end: false },
-  { label: "Templates", icon: FileText, href: Routes.dashboard.message_templates, end: false },
-  { label: "Send history", icon: Mail, href: Routes.dashboard.send_history, end: false },
+type NavItemConfig = {
+  label: string;
+  icon: React.ElementType;
+  href: string;
+  end: boolean;
+};
+
+type NavGroup = {
+  label?: string;
+  items: NavItemConfig[];
+};
+
+const navGroups: NavGroup[] = [
+  {
+    items: [
+      { label: "Dashboard", icon: LayoutDashboard, href: Routes.dashboard.root, end: true },
+    ],
+  },
+  {
+    label: "CRM",
+    items: [
+      { label: "Contacts", icon: Users, href: Routes.dashboard.contacts, end: false },
+      { label: "Lists", icon: List, href: Routes.dashboard.lists, end: false },
+      { label: "Reminders", icon: Bell, href: Routes.dashboard.reminders, end: false },
+      { label: "Goals", icon: Trophy, href: Routes.dashboard.goals, end: false },
+      { label: "Forms", icon: ClipboardList, href: Routes.dashboard.forms, end: false },
+    ],
+  },
+  {
+    label: "Find leads",
+    items: [
+      { label: "Filters", icon: Filter, href: Routes.dashboard.filters, end: false },
+      { label: "Leads Directory", icon: Globe, href: Routes.dashboard.leads_directory, end: false },
+    ],
+  },
+  {
+    label: "Outreach",
+    items: [
+      { label: "Campaigns", icon: Megaphone, href: Routes.dashboard.campaigns, end: false },
+      { label: "Templates", icon: FileText, href: Routes.dashboard.message_templates, end: false },
+      { label: "Send history", icon: Mail, href: Routes.dashboard.send_history, end: false },
+      { label: "Sender Profiles", icon: IdCard, href: Routes.dashboard.sender_profiles, end: false },
+    ],
+  },
+  {
+    label: "Connect",
+    items: [
+      { label: "Integrations", icon: Plug, href: Routes.dashboard.integrations, end: false },
+    ],
+  },
 ];
 
-const adminSubItems = [
+const adminSubItems: NavItemConfig[] = [
   { label: "Batch Jobs", icon: Layers, href: Routes.dashboard.admin_batch_jobs, end: false },
   { label: "System Status", icon: Activity, href: Routes.dashboard.admin_system_status, end: false },
 ];
 
-const settingsSubItems = [
+const settingsSubItems: NavItemConfig[] = [
   { label: "Account", icon: User, href: Routes.dashboard.settings_account, end: false },
   { label: "Organisation", icon: Building2, href: Routes.dashboard.settings_organisation, end: false },
   { label: "Activity", icon: History, href: Routes.dashboard.settings_activity, end: false },
@@ -76,20 +135,20 @@ function NavItem({
         onClick={onNavigate}
         className={({ isActive }) =>
           cn(
-            'group flex items-center w-full rounded-xl transition-all duration-200 outline-none',
-            'focus-visible:ring-1 focus-visible:ring-accent/50',
-            collapsed ? 'justify-center py-2.5 px-0' : 'gap-2.5 px-2.5 py-[8px]',
-            indent && !collapsed && 'ml-3 w-[calc(100%-12px)]',
+            "group flex items-center w-full rounded-xl transition-all duration-200 outline-none",
+            "focus-visible:ring-1 focus-visible:ring-accent/50",
+            collapsed ? "justify-center py-2.5 px-0" : "gap-2.5 px-2.5 py-[8px]",
+            indent && !collapsed && "ml-3 w-[calc(100%-12px)]",
             isActive
-              ? 'text-foreground'
-              : 'text-muted hover:text-foreground hover:bg-surface-secondary',
+              ? "text-foreground"
+              : "text-muted hover:text-foreground hover:bg-surface-secondary",
           )
         }
         style={({ isActive }) =>
           isActive
             ? {
-                background: 'color-mix(in oklch, var(--accent) 12%, transparent)',
-                boxShadow: 'inset 0 0 0 1px color-mix(in oklch, var(--accent) 22%, transparent)',
+                background: "color-mix(in oklch, var(--accent) 12%, transparent)",
+                boxShadow: "inset 0 0 0 1px color-mix(in oklch, var(--accent) 22%, transparent)",
               }
             : {}
         }
@@ -98,12 +157,12 @@ function NavItem({
           <>
             <Icon
               className="shrink-0 transition-transform duration-200 group-hover:scale-[1.07]"
-              style={{ width: 16, height: 16, color: isActive ? 'var(--accent)' : undefined }}
+              style={{ width: 16, height: 16, color: isActive ? "var(--accent)" : undefined }}
             />
             {!collapsed && (
               <span
                 className="text-[13px] font-medium truncate leading-none"
-                style={{ letterSpacing: '-0.005em' }}
+                style={{ letterSpacing: "-0.005em" }}
               >
                 {label}
               </span>
@@ -111,6 +170,43 @@ function NavItem({
           </>
         )}
       </NavLink>
+    </li>
+  );
+}
+
+function NavGroupSection({
+  label,
+  items,
+  collapsed,
+  onNavigate,
+  showDivider,
+}: {
+  label?: string;
+  items: NavItemConfig[];
+  collapsed: boolean;
+  onNavigate?: () => void;
+  showDivider: boolean;
+}) {
+  return (
+    <li className={cn(showDivider && "pt-2.5 mt-2.5 border-t border-border")}>
+      {label && !collapsed && (
+        <p className="px-2.5 pb-1.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-muted">
+          {label}
+        </p>
+      )}
+      <ul className="space-y-0.5">
+        {items.map((item) => (
+          <NavItem
+            key={item.href}
+            label={item.label}
+            icon={item.icon}
+            href={item.href}
+            end={item.end}
+            collapsed={collapsed}
+            onNavigate={onNavigate}
+          />
+        ))}
+      </ul>
     </li>
   );
 }
@@ -137,16 +233,16 @@ export default function SidebarContent({ collapsed, onNavigate }: SidebarContent
   }, [pathname]);
 
   const disclosureTriggerClass = cn(
-    'group flex w-full rounded-xl transition-all duration-200 outline-none',
-    'focus-visible:ring-1 focus-visible:ring-accent/50',
-    'text-muted hover:text-foreground hover:bg-surface-secondary',
-    collapsed ? 'justify-center py-2.5 px-0' : 'items-center justify-between gap-2 px-2.5 py-[8px]',
+    "group flex w-full rounded-xl transition-all duration-200 outline-none",
+    "focus-visible:ring-1 focus-visible:ring-accent/50",
+    "text-muted hover:text-foreground hover:bg-surface-secondary",
+    collapsed ? "justify-center py-2.5 px-0" : "items-center justify-between gap-2 px-2.5 py-[8px]",
   );
 
   return (
-    <ul className="space-y-0.5">
+    <ul className="space-y-0">
       {canViewAdminNav && (
-        <li>
+        <li className="pb-2.5 mb-2.5 border-b border-border">
           <Disclosure
             isExpanded={adminOpen}
             onExpandedChange={setAdminOpen}
@@ -159,15 +255,15 @@ export default function SidebarContent({ collapsed, onNavigate }: SidebarContent
               >
                 <span
                   className={cn(
-                    'flex items-center min-w-0',
-                    collapsed ? 'justify-center' : 'gap-2.5 flex-1',
+                    "flex items-center min-w-0",
+                    collapsed ? "justify-center" : "gap-2.5 flex-1",
                   )}
                 >
                   <ShieldCheck style={{ width: 16, height: 16 }} className="shrink-0" />
                   {!collapsed && (
                     <span
                       className="text-[13px] font-medium truncate leading-none"
-                      style={{ letterSpacing: '-0.005em' }}
+                      style={{ letterSpacing: "-0.005em" }}
                     >
                       Admin
                     </span>
@@ -176,8 +272,8 @@ export default function SidebarContent({ collapsed, onNavigate }: SidebarContent
                 {!collapsed && (
                   <ChevronDown
                     className={cn(
-                      'size-4 shrink-0 text-muted transition-transform duration-200',
-                      adminOpen && 'rotate-180',
+                      "size-4 shrink-0 text-muted transition-transform duration-200",
+                      adminOpen && "rotate-180",
                     )}
                   />
                 )}
@@ -205,19 +301,18 @@ export default function SidebarContent({ collapsed, onNavigate }: SidebarContent
         </li>
       )}
 
-      {navItems.map(({ label, icon, href, end }) => (
-        <NavItem
-          key={href}
-          label={label}
-          icon={icon}
-          href={href}
-          end={end}
+      {navGroups.map((group, index) => (
+        <NavGroupSection
+          key={group.label ?? group.items[0]?.href ?? index}
+          label={group.label}
+          items={group.items}
           collapsed={collapsed}
           onNavigate={onNavigate}
+          showDivider={index > 0}
         />
       ))}
 
-      <li>
+      <li className="pt-2.5 mt-2.5 border-t border-border">
         <Disclosure
           isExpanded={settingsOpen}
           onExpandedChange={setSettingsOpen}
@@ -230,15 +325,15 @@ export default function SidebarContent({ collapsed, onNavigate }: SidebarContent
             >
               <span
                 className={cn(
-                  'flex items-center min-w-0',
-                  collapsed ? 'justify-center' : 'gap-2.5 flex-1',
+                  "flex items-center min-w-0",
+                  collapsed ? "justify-center" : "gap-2.5 flex-1",
                 )}
               >
                 <Settings style={{ width: 16, height: 16 }} className="shrink-0" />
                 {!collapsed && (
                   <span
                     className="text-[13px] font-medium truncate leading-none"
-                    style={{ letterSpacing: '-0.005em' }}
+                    style={{ letterSpacing: "-0.005em" }}
                   >
                     Settings
                   </span>
@@ -247,8 +342,8 @@ export default function SidebarContent({ collapsed, onNavigate }: SidebarContent
               {!collapsed && (
                 <ChevronDown
                   className={cn(
-                    'size-4 shrink-0 text-muted transition-transform duration-200',
-                    settingsOpen && 'rotate-180',
+                    "size-4 shrink-0 text-muted transition-transform duration-200",
+                    settingsOpen && "rotate-180",
                   )}
                 />
               )}
