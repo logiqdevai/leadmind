@@ -404,6 +404,7 @@ export class ContactAiService {
         prompt: string,
         language?: string,
         campaign_uuid?: string,
+        sent_by_user_uuid?: string,
     ): Promise<{ generated: number; skipped: number; failed: number; message_uuids: string[] }> {
         const sender = await this.resolveSenderPromptContext(organisation_uuid);
         let generated = 0;
@@ -459,6 +460,7 @@ export class ContactAiService {
                         subject: resolved.subject ?? null,
                         content: resolved.content,
                         status: MsgStatus.PENDING,
+                        ...(sent_by_user_uuid ? { sent_by_user_uuid } : {}),
                         ...(campaign_uuid ? { campaign_uuid, idempotency_key: idempotencyKey } : {}),
                     },
                 });

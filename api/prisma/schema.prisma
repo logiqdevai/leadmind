@@ -27,6 +27,7 @@ model User {
   memberships              OrganisationMember[]
   invitations_sent         OrganisationInvitation[] @relation("InvitationInvitedBy")
   form_completions         FormCompletion[]         @relation("CompletedByUser")
+  outreach_messages_sent   OutreachMessage[]        @relation("OutreachMessageSentBy")
 
   @@index([email])
   @@index([phone])
@@ -434,6 +435,7 @@ model OutreachMessage {
   organisation_uuid   String
   contact_uuid        String
   campaign_uuid       String?
+  sent_by_user_uuid   String?
   channel             Channel
   direction           MsgDirection @default(OUTBOUND)
   subject             String?
@@ -457,6 +459,7 @@ model OutreachMessage {
   organisation Organisation       @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
   contact      Contact            @relation(fields: [contact_uuid], references: [uuid], onDelete: Cascade)
   campaign     MarketingCampaign? @relation(fields: [campaign_uuid], references: [uuid], onDelete: SetNull)
+  sent_by      User?              @relation("OutreachMessageSentBy", fields: [sent_by_user_uuid], references: [uuid], onDelete: SetNull)
   interaction  Interaction?
 
   @@index([organisation_uuid])
@@ -465,6 +468,7 @@ model OutreachMessage {
   @@index([campaign_uuid])
   @@index([provider_message_id])
   @@index([email_provider])
+  @@index([sent_by_user_uuid])
   @@index([campaign_uuid, contact_uuid, channel])
 }
 

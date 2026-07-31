@@ -27,11 +27,18 @@ export interface SendHistoryCampaign {
     name: string;
 }
 
+export interface SendHistorySentBy {
+    uuid: string;
+    full_name: string | null;
+    email: string;
+}
+
 export interface SendHistoryMessage {
     uuid: string;
-    user_uuid: string;
+    organisation_uuid: string;
     contact_uuid: string;
     campaign_uuid: string | null;
+    sent_by_user_uuid: string | null;
     channel: Channel;
     subject: string | null;
     content: string;
@@ -47,6 +54,7 @@ export interface SendHistoryMessage {
     updated_at: string;
     contact: SendHistoryContact;
     campaign: SendHistoryCampaign | null;
+    sent_by: SendHistorySentBy | null;
 }
 
 export interface ListSendHistoryQuery {

@@ -91,9 +91,10 @@ export class ContactsController {
     @ApiResponse({ status: 404 })
     triggerBulkAiDraftMessages(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
+        @CurrentUser('uuid') user_uuid: string,
         @Body() dto: BulkAiDraftMessagesDto,
     ) {
-        return this.contactsService.triggerBulkAiDraftMessages(organisation_uuid, dto);
+        return this.contactsService.triggerBulkAiDraftMessages(organisation_uuid, dto, user_uuid);
     }
 
     @Post('bulk-enrich')

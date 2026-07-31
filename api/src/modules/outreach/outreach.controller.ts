@@ -61,10 +61,11 @@ export class OutreachController {
     @ApiResponse({ status: 409, description: 'Only pending or failed messages can be sent' })
     sendMessage(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
+        @CurrentUser('uuid') user_uuid: string,
         @Param('uuid') message_uuid: string,
         @Body() dto: SendExistingMessageDto = {},
     ) {
-        return this.outreachService.sendMessage(organisation_uuid, message_uuid, dto);
+        return this.outreachService.sendMessage(organisation_uuid, message_uuid, dto, user_uuid);
     }
 
     @Delete('messages/:uuid')
@@ -79,15 +80,23 @@ export class OutreachController {
     @Post('messages')
     @ApiOperation({ summary: 'Create and enqueue outreach message' })
     @ApiResponse({ status: 201 })
-    createAndQueue(@CurrentUser('organisation_uuid') organisation_uuid: string, @Body() dto: SendOutreachDto) {
-        return this.outreachService.createAndQueue(organisation_uuid, dto);
+    createAndQueue(
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
+        @CurrentUser('uuid') user_uuid: string,
+        @Body() dto: SendOutreachDto,
+    ) {
+        return this.outreachService.createAndQueue(organisation_uuid, dto, user_uuid);
     }
 
     @Post('messages/draft')
     @ApiOperation({ summary: 'Create a PENDING outreach message without queueing it for send' })
     @ApiResponse({ status: 201 })
-    createDraft(@CurrentUser('organisation_uuid') organisation_uuid: string, @Body() dto: SendOutreachDto) {
-        return this.outreachService.createDraft(organisation_uuid, dto);
+    createDraft(
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
+        @CurrentUser('uuid') user_uuid: string,
+        @Body() dto: SendOutreachDto,
+    ) {
+        return this.outreachService.createDraft(organisation_uuid, dto, user_uuid);
     }
 
     @Post('sequences')
@@ -109,9 +118,10 @@ export class OutreachController {
     @ApiResponse({ status: 201 })
     assignSequence(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
+        @CurrentUser('uuid') user_uuid: string,
         @Param('uuid') sequence_uuid: string,
         @Body() dto: AssignSequenceDto,
     ) {
-        return this.outreachService.assignSequence(organisation_uuid, sequence_uuid, dto);
+        return this.outreachService.assignSequence(organisation_uuid, sequence_uuid, dto, user_uuid);
     }
 }

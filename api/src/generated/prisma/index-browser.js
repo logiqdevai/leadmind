@@ -361,6 +361,7 @@ exports.Prisma.OutreachMessageScalarFieldEnum = {
   organisation_uuid: 'organisation_uuid',
   contact_uuid: 'contact_uuid',
   campaign_uuid: 'campaign_uuid',
+  sent_by_user_uuid: 'sent_by_user_uuid',
   channel: 'channel',
   direction: 'direction',
   subject: 'subject',

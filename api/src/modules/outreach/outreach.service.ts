@@ -46,7 +46,11 @@ export class OutreachService {
         @InjectQueue(OUTREACH_SEND_QUEUE) private readonly outreachSendQueue: Queue,
     ) { }
 
-    async createAndQueue(organisation_uuid: string, dto: SendOutreachDto): Promise<OutreachMessage> {
+    async createAndQueue(
+        organisation_uuid: string,
+        dto: SendOutreachDto,
+        sent_by_user_uuid: string,
+    ): Promise<OutreachMessage> {
         const { content } = this.normalizeContentForChannel(dto.channel, dto.content);
         const contact = await this.requireOwnedContact(organisation_uuid, dto.contact_uuid);
         this.assertContactCanReceiveChannel(contact, dto.channel);
@@ -56,6 +60,7 @@ export class OutreachService {
             data: {
                 organisation_uuid,
                 contact_uuid: contact.uuid,
+                sent_by_user_uuid,
                 channel: dto.channel,
                 subject: dto.subject,
                 content,
@@ -68,7 +73,11 @@ export class OutreachService {
         return message;
     }
 
-    async createDraft(organisation_uuid: string, dto: SendOutreachDto): Promise<OutreachMessage> {
+    async createDraft(
+        organisation_uuid: string,
+        dto: SendOutreachDto,
+        sent_by_user_uuid: string,
+    ): Promise<OutreachMessage> {
         const { content } = this.normalizeContentForChannel(dto.channel, dto.content);
         const contact = await this.requireOwnedContact(organisation_uuid, dto.contact_uuid);
         this.assertContactCanReceiveChannel(contact, dto.channel);
@@ -77,6 +86,7 @@ export class OutreachService {
             data: {
                 organisation_uuid,
                 contact_uuid: contact.uuid,
+                sent_by_user_uuid,
                 channel: dto.channel,
                 subject: dto.subject,
                 content,
@@ -173,6 +183,7 @@ export class OutreachService {
         organisation_uuid: string,
         message_uuid: string,
         dto: SendExistingMessageDto = {},
+        sent_by_user_uuid?: string,
     ): Promise<{ jobId: string }> {
         let message = await this.requireOwnedMessage(organisation_uuid, message_uuid);
 
@@ -180,6 +191,8 @@ export class OutreachService {
             const contact = await this.requireOwnedContact(organisation_uuid, message.contact_uuid);
             this.assertContactCanReceiveChannel(contact, message.channel);
         }
+
+        const data: Prisma.OutreachMessageUpdateInput = {};
 
         if (
             message.channel === Channel.EMAIL &&
@@ -191,27 +204,32 @@ export class OutreachService {
                 dto.email_provider,
                 dto.email_account,
             );
-            message = await this.prisma.outreachMessage.update({
-                where: { uuid: message_uuid },
-                data: {
-                    metadata: mergeEmailProviderMetadata(message.metadata, {
-                        provider: dto.email_provider,
-                        account: dto.email_account.trim(),
-                    }) as Prisma.InputJsonValue,
-                },
-            });
+            data.metadata = mergeEmailProviderMetadata(message.metadata, {
+                provider: dto.email_provider,
+                account: dto.email_account.trim(),
+            }) as Prisma.InputJsonValue;
+            message = {
+                ...message,
+                metadata: data.metadata as OutreachMessage['metadata'],
+            };
         }
 
         if (dto.sender_profile_uuid) {
             await this.senderProfilesService.findOne(organisation_uuid, dto.sender_profile_uuid);
+            data.metadata = mergeSenderProfileMetadata(
+                message.metadata,
+                dto.sender_profile_uuid,
+            ) as Prisma.InputJsonValue;
+        }
+
+        if (sent_by_user_uuid) {
+            data.sent_by = { connect: { uuid: sent_by_user_uuid } };
+        }
+
+        if (Object.keys(data).length > 0) {
             message = await this.prisma.outreachMessage.update({
                 where: { uuid: message_uuid },
-                data: {
-                    metadata: mergeSenderProfileMetadata(
-                        message.metadata,
-                        dto.sender_profile_uuid,
-                    ) as Prisma.InputJsonValue,
-                },
+                data,
             });
         }
 
@@ -233,6 +251,9 @@ export class OutreachService {
                     status: MsgStatus.PENDING,
                     sent_at: null,
                     metadata: preservedMetadata,
+                    ...(sent_by_user_uuid
+                        ? { sent_by: { connect: { uuid: sent_by_user_uuid } } }
+                        : {}),
                 },
             });
             const fresh = await this.requireOwnedMessage(organisation_uuid, message_uuid);
@@ -305,6 +326,13 @@ export class OutreachService {
                             name: true,
                         },
                     },
+                    sent_by: {
+                        select: {
+                            uuid: true,
+                            full_name: true,
+                            email: true,
+                        },
+                    },
                 },
                 orderBy: [{ sent_at: 'desc' }, { created_at: 'desc' }],
                 skip,
@@ -336,6 +364,7 @@ export class OutreachService {
         organisation_uuid: string,
         sequence_uuid: string,
         dto: AssignSequenceDto,
+        sent_by_user_uuid: string,
     ): Promise<{ created: number }> {
         const [sequence, contact] = await Promise.all([
             this.requireOwnedSequence(organisation_uuid, sequence_uuid),
@@ -351,6 +380,7 @@ export class OutreachService {
                     data: {
                         organisation_uuid,
                         contact_uuid: contact.uuid,
+                        sent_by_user_uuid,
                         channel: step.channel,
                         content,
                         status: MsgStatus.PENDING,

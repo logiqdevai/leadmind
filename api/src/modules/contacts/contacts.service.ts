@@ -1094,6 +1094,7 @@ export class ContactsService {
     async triggerBulkAiDraftMessages(
         organisation_uuid: string,
         dto: BulkAiDraftMessagesDto,
+        sent_by_user_uuid: string,
     ): Promise<{ created: number; skipped: number; failed: number; queued?: number }> {
         const contactUuids = [...new Set(dto.contact_uuids)];
         const contacts = await this.prisma.contact.findMany({
@@ -1113,6 +1114,8 @@ export class ContactsService {
                 dto.channel,
                 dto.prompt,
                 dto.language,
+                undefined,
+                sent_by_user_uuid,
             );
 
         let queued = 0;
@@ -1187,7 +1190,12 @@ export class ContactsService {
                             data: { metadata: metadataUpdates },
                         });
                     }
-                    await this.outreachService.sendMessage(organisation_uuid, message.uuid);
+                    await this.outreachService.sendMessage(
+                        organisation_uuid,
+                        message.uuid,
+                        {},
+                        sent_by_user_uuid,
+                    );
                     queued++;
                 } catch (error) {
                     this.logger.error(
