@@ -25,6 +25,7 @@ import {
     INTEGRATION_PROVIDER_DESCRIPTIONS,
     INTEGRATION_PROVIDER_LABELS,
     INTEGRATION_PROVIDERS,
+    INTEGRATION_WEBHOOK_PATHS,
 } from './constants/integrations.constants';
 import {
     formatIntegrationKeyEnvName,
@@ -644,7 +645,22 @@ export class IntegrationsService {
             accounts: this.toAccountResponses(keys, accounts),
             keyTypes: this.keyTypeOptions(provider),
             keys: keys.map((key) => this.toKeyResponse(key, provider)),
+            webhook_url: this.resolveWebhookUrl(provider),
         };
+    }
+
+    private resolveWebhookUrl(
+        provider: ExternalIntegrationProvider,
+    ): string | null {
+        const path = INTEGRATION_WEBHOOK_PATHS[provider];
+        if (!path) {
+            return null;
+        }
+        const apiUrl = this.config.get<string>('API_URL')?.replace(/\/$/, '');
+        if (!apiUrl) {
+            return null;
+        }
+        return `${apiUrl}${path}`;
     }
 
     private toKeyResponse(

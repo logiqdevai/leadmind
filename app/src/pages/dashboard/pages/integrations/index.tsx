@@ -37,7 +37,8 @@ const FALLBACK_PROVIDERS: IntegrationProviderView[] = [
         provider: "OPENAI",
         uuid: null,
         label: "OpenAI",
-        description: "GPT models for enrichment, scoring, and message drafting.",
+        description:
+            "GPT models for enrichment, scoring, and message drafting. Add your API key and webhook secret, then paste the webhook URL into the OpenAI dashboard.",
         default_account: null,
         accounts: [],
         keyTypes: [
@@ -49,6 +50,7 @@ const FALLBACK_PROVIDERS: IntegrationProviderView[] = [
             },
         ],
         keys: [],
+        webhook_url: null,
     },
     {
         provider: "RESEND",

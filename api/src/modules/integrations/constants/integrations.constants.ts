@@ -14,6 +14,13 @@ export const DISABLED_INTEGRATION_PROVIDERS: ExternalIntegrationProvider[] = [
     ExternalIntegrationProvider.HUBSPOT,
 ];
 
+export const INTEGRATION_WEBHOOK_PATHS: Partial<
+    Record<ExternalIntegrationProvider, string>
+> = {
+    [ExternalIntegrationProvider.OPENAI]: '/webhooks/openai',
+    [ExternalIntegrationProvider.RESEND]: '/webhooks/resend',
+};
+
 export const INTEGRATION_PROVIDER_LABELS: Record<
     ExternalIntegrationProvider,
     string
@@ -32,7 +39,7 @@ export const INTEGRATION_PROVIDER_DESCRIPTIONS: Record<
     string
 > = {
     [ExternalIntegrationProvider.OPENAI]:
-        'GPT models for enrichment, scoring, and message drafting.',
+        'GPT models for enrichment, scoring, and message drafting. Add your API key and webhook secret, then paste the webhook URL into the OpenAI dashboard.',
     [ExternalIntegrationProvider.ANTHROPIC]: 'Claude models for AI workflows.',
     [ExternalIntegrationProvider.RESEND]:
         'Transactional email and inbound webhooks. Add API key and from address per account.',

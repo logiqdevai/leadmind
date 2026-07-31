@@ -63,6 +63,7 @@ export interface IntegrationProviderView {
     accounts?: IntegrationAccountView[];
     keyTypes: IntegrationKeyTypeOption[];
     keys: IntegrationKey[];
+    webhook_url?: string | null;
 }
 
 export interface SetDefaultIntegrationAccountPayload {

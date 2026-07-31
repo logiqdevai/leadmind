@@ -38,4 +38,5 @@ export interface IntegrationResponse {
     accounts: IntegrationAccountResponse[];
     keyTypes: IntegrationKeyTypeOption[];
     keys: IntegrationKeyResponse[];
+    webhook_url: string | null;
 }

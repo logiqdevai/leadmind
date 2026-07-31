@@ -1,6 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
 import { Button, Chip, Input, Modal } from "@heroui/react";
-import { CheckCircle2, KeyRound, Pencil, Plus, Star, Trash2 } from "lucide-react";
+import {
+    Check,
+    CheckCircle2,
+    Copy,
+    KeyRound,
+    Pencil,
+    Plus,
+    Star,
+    Trash2,
+} from "lucide-react";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
 import {
@@ -24,6 +33,7 @@ import type {
     IntegrationKeyType,
     IntegrationProviderView,
 } from "@/features/integrations/interfaces/integrations.interface";
+import { toast } from "@/hooks/use-toast";
 import { IntegrationKeyFormModal } from "./integration-key-form-modal";
 import { ResendAccountFormModal } from "./resend-account-form-modal";
 import { SmtpAccountFormModal } from "./smtp-account-form-modal";
@@ -60,6 +70,7 @@ export function IntegrationDetailModal({
     const [keyToDelete, setKeyToDelete] = useState<IntegrationKey | null>(null);
     const [renamingAccount, setRenamingAccount] = useState<string | null>(null);
     const [renameTitle, setRenameTitle] = useState("");
+    const [webhookUrlCopied, setWebhookUrlCopied] = useState(false);
 
     const groupedKeys = useMemo(
         () => (providerView ? groupKeysByAccount(providerView.keys) : []),
@@ -74,6 +85,7 @@ export function IntegrationDetailModal({
         setKeyToDelete(null);
         setRenamingAccount(null);
         setRenameTitle("");
+        setWebhookUrlCopied(false);
     }, [isOpen]);
 
     if (!providerView) {
@@ -180,6 +192,24 @@ export function IntegrationDetailModal({
         return isEmailAccountSendable(providerView.provider, providerView.keys, account);
     };
 
+    const webhookUrl = providerView.webhook_url ?? null;
+
+    const handleCopyWebhookUrl = async () => {
+        if (!webhookUrl) return;
+        try {
+            await navigator.clipboard.writeText(webhookUrl);
+            setWebhookUrlCopied(true);
+            toast({ title: "Webhook URL copied", duration: 1500 });
+            window.setTimeout(() => setWebhookUrlCopied(false), 2000);
+        } catch {
+            toast({
+                title: "Could not copy webhook URL",
+                variant: "error",
+                duration: 2000,
+            });
+        }
+    };
+
     return (
         <>
             <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
@@ -194,6 +224,42 @@ export function IntegrationDetailModal({
                                 </p>
                             </Modal.Header>
                             <Modal.Body className="space-y-5">
+                                {webhookUrl ? (
+                                    <div className="rounded-lg border border-border bg-surface-secondary/20 p-3 space-y-2">
+                                        <div>
+                                            <p className="text-sm font-semibold text-foreground">
+                                                Webhook URL
+                                            </p>
+                                            <p className="text-xs text-muted mt-0.5">
+                                                Paste this URL in the{" "}
+                                                {providerView.provider === "OPENAI"
+                                                    ? "OpenAI"
+                                                    : providerView.label}{" "}
+                                                dashboard webhook settings, then store the
+                                                signing secret below.
+                                            </p>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <code className="flex-1 min-w-0 truncate rounded-md border border-border bg-surface-primary px-2.5 py-1.5 text-xs font-mono text-foreground">
+                                                {webhookUrl}
+                                            </code>
+                                            <Button
+                                                size="sm"
+                                                variant="secondary"
+                                                onPress={handleCopyWebhookUrl}
+                                                aria-label="Copy webhook URL"
+                                            >
+                                                {webhookUrlCopied ? (
+                                                    <Check className="size-3.5" />
+                                                ) : (
+                                                    <Copy className="size-3.5" />
+                                                )}
+                                                Copy
+                                            </Button>
+                                        </div>
+                                    </div>
+                                ) : null}
+
                                 <div className="flex items-center justify-between gap-3 flex-wrap">
                                     <h3 className="text-sm font-semibold text-foreground">
                                         Keys
