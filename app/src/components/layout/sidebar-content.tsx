@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { Disclosure } from "@heroui/react";
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, Users, Globe, Filter, IdCard, Megaphone, Layers, ShieldCheck, ChevronDown, Plug, Bell, ClipboardList, List, Settings, BarChart2, Activity, Mail, FileText, Building2 } from "lucide-react";
+import { LayoutDashboard, Users, Globe, Filter, IdCard, Megaphone, Layers, ShieldCheck, ChevronDown, Plug, Bell, ClipboardList, List, Settings, BarChart2, Activity, Mail, FileText, Building2, User } from "lucide-react";
 import { Routes } from "@/routes/routes";
 import { usePermission } from "@/hooks/use-permission";
 
@@ -32,8 +32,8 @@ const adminSubItems = [
 ];
 
 const settingsSubItems = [
+  { label: "Account", icon: User, href: Routes.dashboard.settings_account, end: false },
   { label: "Organisation", icon: Building2, href: Routes.dashboard.settings_organisation, end: false },
-  { label: "Team", icon: Users, href: Routes.dashboard.settings_team, end: false },
   { label: "Usage", icon: BarChart2, href: Routes.dashboard.settings_usage, end: false },
 ];
 

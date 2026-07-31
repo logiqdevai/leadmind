@@ -15,6 +15,7 @@ const initialValues: UserStore = {
     role: null,
     full_name: "",
     email: null,
+    phone: null,
     access_token: null,
     expires_in: null,
     avatar: null,

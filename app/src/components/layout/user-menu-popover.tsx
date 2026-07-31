@@ -41,7 +41,7 @@ export default function UserMenuPopover({ collapsed = false, placement = "top" }
     {
       label: "Account",
       icon: User,
-      onClick: () => {},
+      onClick: () => navigate(Routes.dashboard.settings_account),
     },
     {
       label: "Billing",

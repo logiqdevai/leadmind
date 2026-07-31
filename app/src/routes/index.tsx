@@ -33,7 +33,7 @@ const SendHistoryPage = lazy(() => import("@/pages/dashboard/pages/send-history"
 const MessageTemplatesPage = lazy(() => import("@/pages/dashboard/pages/message-templates"));
 const SettingsUsagePage = lazy(() => import("@/pages/dashboard/pages/settings/usage"));
 const SettingsOrganisationPage = lazy(() => import("@/pages/dashboard/pages/settings/organisation"));
-const SettingsTeamPage = lazy(() => import("@/pages/dashboard/pages/settings/team"));
+const SettingsAccountPage = lazy(() => import("@/pages/dashboard/pages/settings/account"));
 const InviteAcceptPage = lazy(() => import("@/pages/auth/pages/invite"));
 
 const DashboardFiltersLayout = lazy(() => import("@/pages/dashboard/pages/filters/layout"));
@@ -246,7 +246,15 @@ export default function AppRoutes() {
             </Lazy>
           }
         />
-        <Route path="settings" element={<Navigate to={Routes.dashboard.settings_organisation} replace />} />
+        <Route path="settings" element={<Navigate to={Routes.dashboard.settings_account} replace />} />
+        <Route
+          path="settings/account"
+          element={
+            <Lazy>
+              <SettingsAccountPage />
+            </Lazy>
+          }
+        />
         <Route
           path="settings/organisation"
           element={
@@ -257,11 +265,7 @@ export default function AppRoutes() {
         />
         <Route
           path="settings/team"
-          element={
-            <Lazy>
-              <SettingsTeamPage />
-            </Lazy>
-          }
+          element={<Navigate to={Routes.dashboard.settings_organisation} replace />}
         />
         <Route
           path="settings/usage"

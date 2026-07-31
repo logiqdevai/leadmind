@@ -11,6 +11,7 @@ export const formatAuthUser = (data: any): LoggedInUser => {
     return {
         user_uuid: data.user.uuid,
         email: data.user.email,
+        phone: data?.user?.phone ?? null,
         access_token: data.access_token,
         expires_in: data.expires_in,
         avatar: data?.user?.avatar?.url ?? null,

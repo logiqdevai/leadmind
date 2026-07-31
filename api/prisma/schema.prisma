@@ -18,6 +18,7 @@ model User {
   uuid       String   @unique @default(uuid())
   email      String   @unique
   phone      String?  @unique
+  full_name  String?
   password   String
   role       AuthRole @default(USER)
   created_at DateTime @default(now())
