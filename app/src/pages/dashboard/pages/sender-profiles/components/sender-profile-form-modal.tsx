@@ -294,7 +294,7 @@ export function SenderProfileFormModal({
                         onSubmit={handleSubmit}
                         className="flex min-h-0 flex-1 flex-col"
                     >
-                        <Modal.Body className="p-6 space-y-6">
+                        <Modal.Body className="space-y-6">
                             <section className="space-y-3">
                                 <h3 className="text-sm font-semibold text-foreground">
                                     Identity

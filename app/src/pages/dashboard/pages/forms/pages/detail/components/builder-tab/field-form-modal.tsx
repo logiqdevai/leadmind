@@ -96,7 +96,7 @@ export function FieldFormModal({ formUuid, isOpen, onOpenChange, editing }: Fiel
                     <Modal.Header>
                         <Modal.Heading>{editing ? "Edit Field" : "Add Field"}</Modal.Heading>
                     </Modal.Header>
-                    <Modal.Body className="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
+                    <Modal.Body className="space-y-4 max-h-[70vh] overflow-y-auto">
                         <div className="flex flex-col gap-1.5">
                             <Label htmlFor="field-label">
                                 Label <span className="text-danger">*</span>

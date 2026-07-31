@@ -76,7 +76,7 @@ export const EditCampaignDraftMessageModal: FC<EditCampaignDraftMessageModalProp
                     <Modal.Header>
                         <Modal.Heading>Edit draft</Modal.Heading>
                     </Modal.Header>
-                    <Modal.Body className="p-6 gap-4">
+                    <Modal.Body className="gap-4">
                         <MessageComposer
                             channels={[msg.channel]}
                             activeChannel={msg.channel}
@@ -86,7 +86,7 @@ export const EditCampaignDraftMessageModal: FC<EditCampaignDraftMessageModalProp
                             disabled={update.isPending}
                         />
                     </Modal.Body>
-                    <Modal.Footer className="gap-2 justify-end p-6 pt-0">
+                    <Modal.Footer className="gap-2 justify-end">
                         <ActionButtonWithPending variant="tertiary" onPress={onClose} isDisabled={update.isPending}>
                             Cancel
                         </ActionButtonWithPending>

@@ -27,7 +27,7 @@ export const JobErrorModal: FC<JobErrorModalProps> = ({
                             </p>
                         )}
                     </Modal.Header>
-                    <Modal.Body className="p-6">
+                    <Modal.Body>
                         <pre className="text-sm text-danger whitespace-pre-wrap break-words font-mono max-h-[min(60vh,480px)] overflow-y-auto rounded-lg border border-border bg-surface-secondary p-4">
                             {error}
                         </pre>

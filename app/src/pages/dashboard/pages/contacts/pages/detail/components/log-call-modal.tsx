@@ -86,7 +86,7 @@ export function LogCallModal({ contactUuid, isOpen, onOpenChange }: LogCallModal
           <Modal.Header>
             <Modal.Heading>Log call</Modal.Heading>
           </Modal.Header>
-          <Modal.Body className="p-6 space-y-4">
+          <Modal.Body className="space-y-4">
             <div className="flex flex-col gap-1.5">
               <Label>Outcome</Label>
               <div className="grid grid-cols-2 gap-2">

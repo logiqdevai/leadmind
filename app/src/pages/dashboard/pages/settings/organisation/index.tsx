@@ -440,7 +440,7 @@ const SettingsOrganisationPage: FC = () => {
                         <Modal.Header>
                             <Modal.Heading>Create organisation</Modal.Heading>
                         </Modal.Header>
-                        <Modal.Body className="p-6 space-y-4">
+                        <Modal.Body className="space-y-4">
                             <p className="text-xs text-muted">
                                 Starts a new empty workspace. You become the owner and can
                                 switch between organisations anytime.
@@ -490,7 +490,7 @@ const SettingsOrganisationPage: FC = () => {
                         <Modal.Header>
                             <Modal.Heading>Invite teammate</Modal.Heading>
                         </Modal.Header>
-                        <Modal.Body className="p-6 space-y-4">
+                        <Modal.Body className="space-y-4">
                             <form id="invite-form" onSubmit={onInvite} className="space-y-3">
                                 <div className="flex flex-col gap-1.5">
                                     <Label htmlFor="invite-email">Email</Label>

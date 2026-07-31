@@ -298,7 +298,7 @@ export function ComposeMessageForm({
                 <Modal.Heading>{heading}</Modal.Heading>
             </Modal.Header>
             <div className="flex min-h-0 flex-1 flex-col">
-                <Modal.Body className="p-6">
+                <Modal.Body>
                     <div className="flex flex-col gap-5">
                         <MessageTemplateSelect
                             allowedChannels={BULK_CHANNELS}

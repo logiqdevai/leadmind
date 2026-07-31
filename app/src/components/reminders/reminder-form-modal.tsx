@@ -121,7 +121,7 @@ export function ReminderFormModal({
                     <Modal.Header>
                         <Modal.Heading>{editing ? "Edit reminder" : "New reminder"}</Modal.Heading>
                     </Modal.Header>
-                    <Modal.Body className="p-6 space-y-4">
+                    <Modal.Body className="space-y-4">
                         {showContactSelector && (
                             <div className="flex flex-col gap-2">
                                 <Label>

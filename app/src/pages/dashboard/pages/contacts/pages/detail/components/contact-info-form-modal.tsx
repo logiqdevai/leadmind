@@ -88,7 +88,7 @@ export function ContactInfoFormModal({
                             {editing ? "Edit contact info" : "Add contact info"}
                         </Modal.Heading>
                     </Modal.Header>
-                    <Modal.Body className="p-6 space-y-4">
+                    <Modal.Body className="space-y-4">
                         <div className="flex flex-col gap-1.5">
                             <Label>Type</Label>
                             <Select

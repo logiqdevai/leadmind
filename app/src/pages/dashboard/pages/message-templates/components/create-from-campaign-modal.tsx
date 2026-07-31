@@ -68,7 +68,7 @@ export const CreateFromCampaignModal: FC<CreateFromCampaignModalProps> = ({
                     <Modal.Header>
                         <Modal.Heading>Create from campaign</Modal.Heading>
                     </Modal.Header>
-                    <Modal.Body className="p-6 space-y-4">
+                    <Modal.Body className="space-y-4">
                         <p className="text-sm text-muted">
                             Copy email or SMS content from an existing campaign into a reusable template.
                         </p>

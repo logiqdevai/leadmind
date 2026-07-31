@@ -16,7 +16,7 @@ export function AddContactsModal({ listUuid, isOpen, onOpenChange }: AddContacts
                     <Modal.Header>
                         <Modal.Heading>Add contacts</Modal.Heading>
                     </Modal.Header>
-                    <Modal.Body className="p-6 max-h-[70vh] overflow-y-auto space-y-6">
+                    <Modal.Body className="max-h-[70vh] overflow-y-auto space-y-6">
                         <p className="text-sm text-muted">
                             Filter your contacts, then add selected rows or all matching results.
                         </p>

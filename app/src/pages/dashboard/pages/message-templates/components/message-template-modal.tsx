@@ -165,7 +165,7 @@ export const MessageTemplateModal: FC<MessageTemplateModalProps> = ({
                     <Modal.Header>
                         <Modal.Heading>{initial ? "Edit template" : "New template"}</Modal.Heading>
                     </Modal.Header>
-                    <Modal.Body className="p-6 space-y-5 overflow-y-auto flex-1">
+                    <Modal.Body className="space-y-5 overflow-y-auto flex-1">
                         <div className="flex flex-col gap-1.5">
                             <Label htmlFor="template-name">Name</Label>
                             <Input

@@ -121,7 +121,7 @@ export function CreateContactModal({ isOpen, onOpenChange }: CreateContactModalP
             <Modal.Heading>Add contact manually</Modal.Heading>
           </Modal.Header>
           <form onSubmit={handleSubmit} className="flex min-h-0 flex-1 flex-col">
-            <Modal.Body className="min-h-0 flex-1 overflow-y-auto p-6">
+            <Modal.Body className="min-h-0 flex-1 overflow-y-auto">
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="flex flex-col gap-1.5 sm:col-span-2">
                   <Label>Filter</Label>

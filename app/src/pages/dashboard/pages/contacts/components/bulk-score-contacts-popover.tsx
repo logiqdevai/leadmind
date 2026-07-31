@@ -88,7 +88,7 @@ export function BulkScoreContactsPopover({
                     <Modal.Header>
                         <Modal.Heading>Bulk scoring</Modal.Heading>
                     </Modal.Header>
-                    <Modal.Body className="p-6 space-y-3">
+                    <Modal.Body className="space-y-3">
                         <p className="text-[11px] text-muted leading-snug">
                             {selectedContactUuids.length} contact
                             {selectedContactUuids.length === 1 ? "" : "s"} selected. Choose filters, then scoring

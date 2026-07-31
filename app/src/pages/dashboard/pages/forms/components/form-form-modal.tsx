@@ -57,7 +57,7 @@ export function FormFormModal({ isOpen, onOpenChange, editing }: FormFormModalPr
                     <Modal.Header>
                         <Modal.Heading>{editing ? "Edit Form" : "New Form"}</Modal.Heading>
                     </Modal.Header>
-                    <Modal.Body className="p-6 space-y-4">
+                    <Modal.Body className="space-y-4">
                         <div className="flex flex-col gap-1.5">
                             <Label htmlFor="form-name">
                                 Name <span className="text-danger">*</span>

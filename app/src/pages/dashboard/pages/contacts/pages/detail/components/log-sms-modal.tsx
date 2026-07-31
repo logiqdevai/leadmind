@@ -65,7 +65,7 @@ export function LogSmsModal({ contactUuid, isOpen, onOpenChange }: LogSmsModalPr
           <Modal.Header>
             <Modal.Heading>Log SMS</Modal.Heading>
           </Modal.Header>
-          <Modal.Body className="p-6 space-y-4">
+          <Modal.Body className="space-y-4">
             <div className="flex flex-col gap-1.5">
               <Label>Direction</Label>
               <div className="grid grid-cols-2 gap-2">

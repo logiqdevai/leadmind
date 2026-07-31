@@ -159,7 +159,11 @@ export function ListMembersTable({
                     const contact = info.row.original;
 
                     return (
-                        <div className="flex justify-end items-center gap-1">
+                        <div
+                            onClick={(e) => e.stopPropagation()}
+                            onPointerDown={(e) => e.stopPropagation()}
+                            className="flex justify-end items-center gap-1"
+                        >
                             <ContactTableQuickViewButton
                                 contactUuid={contact.uuid}
                                 contactName={contact.name}

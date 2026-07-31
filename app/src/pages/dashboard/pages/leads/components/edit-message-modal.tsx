@@ -112,7 +112,7 @@ function MessageForm({ message, contact_uuid, onClose }: MessageFormProps) {
             <Modal.Header>
                 <Modal.Heading>Edit {message.channel.toLowerCase()} draft</Modal.Heading>
             </Modal.Header>
-            <Modal.Body className="p-6">
+            <Modal.Body>
                 <div className="flex flex-col gap-4">
                     {isEmail && (
                         <TextField className="w-full" name="subject">

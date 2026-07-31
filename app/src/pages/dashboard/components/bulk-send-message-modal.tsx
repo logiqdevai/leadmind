@@ -78,7 +78,7 @@ export function BulkSendMessageModal({
                                     Review recipients before composing your message.
                                 </p>
                             </Modal.Header>
-                            <Modal.Body className="p-6">
+                            <Modal.Body>
                                 <div className="flex flex-col gap-3">
                                     <p className="text-sm text-muted">
                                         {selected.size} of {contacts.length} contact

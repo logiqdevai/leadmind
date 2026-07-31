@@ -73,7 +73,7 @@ export function ContactListFormModal({
               {editing ? "Edit List" : isSublist ? "New Sublist" : "New List"}
             </Modal.Heading>
           </Modal.Header>
-          <Modal.Body className="p-6 space-y-4">
+          <Modal.Body className="space-y-4">
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="list-title">
                 Title <span className="text-danger">*</span>

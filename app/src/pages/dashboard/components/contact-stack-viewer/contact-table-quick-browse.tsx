@@ -21,7 +21,11 @@ export const ContactTableNameCell: FC<ContactTableNameCellProps> = ({
         return (
             <button
                 type="button"
-                onClick={() => onOpen(contactUuid)}
+                onPointerDown={(e) => e.stopPropagation()}
+                onClick={(e) => {
+                    e.stopPropagation();
+                    onOpen(contactUuid);
+                }}
                 className="font-medium text-foreground truncate text-left hover:text-accent transition-colors max-w-full"
             >
                 {label}
@@ -73,6 +77,8 @@ export const ContactTableDetailLink: FC<ContactTableDetailLinkProps> = ({
     return (
         <Link
             to={detailHref}
+            onPointerDown={(e) => e.stopPropagation()}
+            onClick={(e) => e.stopPropagation()}
             aria-label={`Open ${contactName ?? "contact"} in full page`}
             className="inline-flex items-center justify-center rounded-md p-1.5 text-muted hover:text-accent hover:bg-surface-secondary transition-colors"
         >

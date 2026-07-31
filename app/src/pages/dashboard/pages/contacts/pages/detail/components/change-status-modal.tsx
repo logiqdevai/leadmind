@@ -33,7 +33,7 @@ export function ChangeStatusModal({
           <Modal.Header>
             <Modal.Heading>Change status</Modal.Heading>
           </Modal.Header>
-          <Modal.Body className="p-6 space-y-4">
+          <Modal.Body className="space-y-4">
             <p className="text-sm text-foreground">
               Set status to <span className="font-medium">{pendingStatusLabel}</span>. This is recorded on the contact timeline.
             </p>

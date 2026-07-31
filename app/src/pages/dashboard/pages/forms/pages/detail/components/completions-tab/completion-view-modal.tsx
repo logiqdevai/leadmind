@@ -94,7 +94,7 @@ export function CompletionViewModal({
                             {contactLabel} — {formatDate(completion.created_at)}
                         </p>
                     </Modal.Header>
-                    <Modal.Body className="p-6 space-y-4 max-h-[65vh] overflow-y-auto">
+                    <Modal.Body className="space-y-4 max-h-[65vh] overflow-y-auto">
                         {sortedValues.map((v) => {
                             const field = v.field ?? fields.find((f) => f.uuid === v.field_uuid);
                             const label = field?.label ?? "(deleted field)";

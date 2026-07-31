@@ -65,7 +65,7 @@ export const ScoringInstructionModal: FC<ScoringInstructionModalProps> = ({
                         </Modal.Heading>
                     </Modal.Header>
                     <Form onSubmit={onSubmit} className="contents">
-                        <Modal.Body className="p-6 space-y-4">
+                        <Modal.Body className="space-y-4">
                             <div className="flex flex-col gap-1.5">
                                 <Label htmlFor="si-name">Name</Label>
                                 <Input
