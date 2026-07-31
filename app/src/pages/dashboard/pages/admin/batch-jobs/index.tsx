@@ -158,7 +158,7 @@ export default function AdminBatchJobsPage() {
                                 <Table.Column id="status">Status</Table.Column>
                                 <Table.Column id="requests">Requests</Table.Column>
                                 <Table.Column id="duration">Duration</Table.Column>
-                                <Table.Column id="user">User</Table.Column>
+                                <Table.Column id="organisation">Organisation</Table.Column>
                                 <Table.Column id="expires">Expires</Table.Column>
                                 <Table.Column id="created">Created</Table.Column>
                             </Table.Header>
@@ -216,7 +216,7 @@ export default function AdminBatchJobsPage() {
                                                   </span>
                                               </Table.Cell>
                                               <Table.Cell>
-                                                  <span className="text-xs text-muted">{job.user.email}</span>
+                                                  <span className="text-xs text-muted">{job.organisation?.name ?? "—"}</span>
                                               </Table.Cell>
                                               <Table.Cell>
                                                   <span className="text-xs text-muted tabular-nums">{formatDate(job.expires_at)}</span>

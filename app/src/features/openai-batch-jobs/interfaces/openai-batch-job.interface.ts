@@ -17,7 +17,7 @@ export type OpenAiBatchStatus = (typeof OpenAiBatchStatus)[keyof typeof OpenAiBa
 export interface OpenAiBatchJob {
     id: string;
     batch_id: string;
-    user_uuid: string;
+    organisation_uuid: string;
     type: OpenAiBatchJobType;
     status: OpenAiBatchStatus;
     total_requests: number;
@@ -30,7 +30,7 @@ export interface OpenAiBatchJob {
     finished_at: string | null;
     created_at: string;
     updated_at: string;
-    user: { uuid: string; email: string };
+    organisation: { uuid: string; name: string };
 }
 
 export interface ListBatchJobsQuery {
