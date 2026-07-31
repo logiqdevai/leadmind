@@ -1,10 +1,13 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Input, Label, ListBox, Select, TextArea, TextField } from "@heroui/react";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
 import { Link2, Mail, MessageSquare, Phone, Sparkles } from "lucide-react";
 import { Channel } from "@/features/contacts/interfaces/contact.interface";
 import { OUTREACH_LANGUAGES, type OutreachLanguage } from "@/features/contacts/constants/outreach-languages";
-import { RichTextEditor } from "@/components/ui/rich-text-editor";
+import {
+    RichTextEditor,
+    type RichTextEditorHandle,
+} from "@/components/ui/rich-text-editor";
 import { PlaceholderInsertPopover } from "@/components/ui/placeholder-insert-popover";
 import { isEmailHtmlEmpty } from "@/lib/sanitize-html";
 import { cn } from "@/lib/utils";
@@ -68,6 +71,7 @@ export function MessageComposer({
     const [prompt, setPrompt] = useState("");
     const [language, setLanguage] = useState<OutreachLanguage>(DEFAULT_LANGUAGE);
     const [pendingAiAction, setPendingAiAction] = useState<AiAction | null>(null);
+    const emailEditorRef = useRef<RichTextEditorHandle>(null);
 
     const isEmail = activeChannel === Channel.EMAIL;
     const isLinkedIn = activeChannel === Channel.LINKEDIN;
@@ -257,10 +261,22 @@ export function MessageComposer({
             <div className="flex flex-col gap-1.5">
                 <div className="flex items-center justify-between gap-2">
                     <Label htmlFor="composer-content">Message</Label>
-                    {!isCall && <PlaceholderInsertPopover />}
+                    {!isCall && (
+                        <PlaceholderInsertPopover
+                            onInsertHtml={
+                                isEmail
+                                    ? (html) => {
+                                          emailEditorRef.current?.insertHtml(html);
+                                          return true;
+                                      }
+                                    : undefined
+                            }
+                        />
+                    )}
                 </div>
                 {isEmail ? (
                     <RichTextEditor
+                        ref={emailEditorRef}
                         aria-label="Message content"
                         value={value.emailContent}
                         onChange={(v) => onChange({ emailContent: v })}

@@ -1,5 +1,25 @@
 import { useEffect, useState } from "react";
-import { Button, Input, Label, ListBox, Modal, Select, TextArea } from "@heroui/react";
+import {
+    Button,
+    Calendar,
+    DateField,
+    DatePicker,
+    Input,
+    Label,
+    ListBox,
+    Modal,
+    Select,
+    TextArea,
+    TimeField,
+    type TimeValue,
+} from "@heroui/react";
+import {
+    fromDate,
+    getLocalTimeZone,
+    now,
+    type DateValue,
+    type ZonedDateTime,
+} from "@internationalized/date";
 import { ChevronDown, Filter, Search, User } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
@@ -17,15 +37,19 @@ interface ReminderFormModalProps {
     editing?: Reminder | null;
 }
 
-function toLocalDatetimeValue(d: Date): string {
-    const pad = (n: number) => String(n).padStart(2, "0");
-    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+function defaultRemindAt(): ZonedDateTime {
+    return now(getLocalTimeZone());
 }
 
-function defaultRemindAt(): string {
-    const d = new Date(Date.now() + 24 * 60 * 60 * 1000);
-    d.setMinutes(0, 0, 0);
-    return toLocalDatetimeValue(d);
+function toDateValue(d: Date): ZonedDateTime {
+    return fromDate(d, getLocalTimeZone());
+}
+
+function toJsDate(value: DateValue): Date {
+    if ("timeZone" in value) {
+        return (value as ZonedDateTime).toDate();
+    }
+    return value.toDate(getLocalTimeZone());
 }
 
 export function ReminderFormModal({
@@ -40,7 +64,7 @@ export function ReminderFormModal({
 
     const [title, setTitle] = useState("");
     const [notes, setNotes] = useState("");
-    const [remindAt, setRemindAt] = useState(defaultRemindAt);
+    const [remindAt, setRemindAt] = useState<DateValue | null>(defaultRemindAt);
 
     const [selectedContact, setSelectedContact] = useState<ReminderContact | null>(null);
     const [selectedFilterUuid, setSelectedFilterUuid] = useState<string>("");
@@ -70,7 +94,7 @@ export function ReminderFormModal({
         if (editing) {
             setTitle(editing.title ?? "");
             setNotes(editing.notes ?? "");
-            setRemindAt(toLocalDatetimeValue(new Date(editing.remind_at)));
+            setRemindAt(toDateValue(new Date(editing.remind_at)));
         } else {
             setTitle("");
             setNotes("");
@@ -85,8 +109,9 @@ export function ReminderFormModal({
     const canSubmit = !!remindAt && !!resolvedContactUuid && !isPending;
 
     const handleConfirm = () => {
-        const dt = new Date(remindAt);
-        if (isNaN(dt.getTime()) || !resolvedContactUuid) return;
+        if (!remindAt || !resolvedContactUuid) return;
+        const dt = toJsDate(remindAt);
+        if (isNaN(dt.getTime())) return;
 
         if (editing) {
             updateReminder.mutate(
@@ -255,17 +280,75 @@ export function ReminderFormModal({
                             />
                         </div>
 
-                        <div className="flex flex-col gap-1.5">
-                            <Label htmlFor="reminder-date">
-                                Date & Time <span className="text-red-500">*</span>
-                            </Label>
-                            <Input
-                                id="reminder-date"
-                                type="datetime-local"
-                                value={remindAt}
-                                onChange={(e) => setRemindAt(e.target.value)}
-                            />
-                        </div>
+                        <DatePicker
+                            className="w-full"
+                            granularity="minute"
+                            hourCycle={24}
+                            hideTimeZone
+                            value={remindAt}
+                            onChange={setRemindAt}
+                            aria-label="Date and time"
+                        >
+                            {({ state }) => (
+                                <>
+                                    <Label>
+                                        Date & Time <span className="text-red-500">*</span>
+                                    </Label>
+                                    <DateField.Group fullWidth>
+                                        <DateField.Input>
+                                            {(segment) => <DateField.Segment segment={segment} />}
+                                        </DateField.Input>
+                                        <DateField.Suffix>
+                                            <DatePicker.Trigger>
+                                                <DatePicker.TriggerIndicator />
+                                            </DatePicker.Trigger>
+                                        </DateField.Suffix>
+                                    </DateField.Group>
+                                    <DatePicker.Popover className="flex flex-col gap-3">
+                                        <Calendar aria-label="Choose date">
+                                            <Calendar.Header>
+                                                <Calendar.YearPickerTrigger>
+                                                    <Calendar.YearPickerTriggerHeading />
+                                                    <Calendar.YearPickerTriggerIndicator />
+                                                </Calendar.YearPickerTrigger>
+                                                <Calendar.NavButton slot="previous" />
+                                                <Calendar.NavButton slot="next" />
+                                            </Calendar.Header>
+                                            <Calendar.Grid>
+                                                <Calendar.GridHeader>
+                                                    {(day) => <Calendar.HeaderCell>{day}</Calendar.HeaderCell>}
+                                                </Calendar.GridHeader>
+                                                <Calendar.GridBody>
+                                                    {(date) => <Calendar.Cell date={date} />}
+                                                </Calendar.GridBody>
+                                            </Calendar.Grid>
+                                            <Calendar.YearPickerGrid>
+                                                <Calendar.YearPickerGridBody>
+                                                    {({ year }) => <Calendar.YearPickerCell year={year} />}
+                                                </Calendar.YearPickerGridBody>
+                                            </Calendar.YearPickerGrid>
+                                        </Calendar>
+                                        <div className="flex items-center justify-between gap-3">
+                                            <Label>Time</Label>
+                                            <TimeField
+                                                aria-label="Time"
+                                                granularity="minute"
+                                                hourCycle={24}
+                                                hideTimeZone
+                                                value={state.timeValue}
+                                                onChange={(v) => state.setTimeValue(v as TimeValue)}
+                                            >
+                                                <TimeField.Group variant="secondary">
+                                                    <TimeField.Input>
+                                                        {(segment) => <TimeField.Segment segment={segment} />}
+                                                    </TimeField.Input>
+                                                </TimeField.Group>
+                                            </TimeField>
+                                        </div>
+                                    </DatePicker.Popover>
+                                </>
+                            )}
+                        </DatePicker>
 
                         <div className="flex flex-col gap-1.5">
                             <Label htmlFor="reminder-notes">Notes</Label>

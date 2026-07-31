@@ -102,12 +102,7 @@ function EmailProviderSingleSelect({
                     <Select.Value className="min-w-0 flex-1 overflow-hidden">
                         {selectedAccount ? (
                             <span className="flex min-w-0 items-center gap-2">
-                                <span className="truncate">
-                                    {selectedAccount.title}
-                                    {selectedAccount.detail?.startsWith("from ")
-                                        ? ` · ${selectedAccount.detail.slice(5)}`
-                                        : ""}
-                                </span>
+                                <span className="truncate">{selectedAccount.title}</span>
                                 {selectedAccount.isDefault ? (
                                     <Chip size="sm" variant="soft" color="warning" className="shrink-0">
                                         <Chip.Label>Default</Chip.Label>
@@ -132,7 +127,7 @@ function EmailProviderSingleSelect({
                                         <ListBox.Item
                                             key={key}
                                             id={key}
-                                            textValue={account.label}
+                                            textValue={account.title}
                                             isDisabled={isIncomplete}
                                             className={cn(
                                                 "grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3",
@@ -160,20 +155,11 @@ function EmailProviderSingleSelect({
                                                         </Chip>
                                                     ) : null}
                                                 </div>
-                                                <span
-                                                    className={cn(
-                                                        "truncate text-xs",
-                                                        account.detail === "from address missing"
-                                                            ? "text-danger"
-                                                            : "text-muted",
-                                                    )}
-                                                >
-                                                    {account.detail?.startsWith("from ")
-                                                        ? account.detail.slice(5)
-                                                        : account.detail === "from address missing"
-                                                          ? "Add from address in Integrations"
-                                                          : account.detail ?? null}
-                                                </span>
+                                                {account.detail === "from address missing" ? (
+                                                    <span className="truncate text-xs text-danger">
+                                                        Add from address in Integrations
+                                                    </span>
+                                                ) : null}
                                             </div>
                                             <ListBox.ItemIndicator className="shrink-0" />
                                         </ListBox.Item>
@@ -326,22 +312,11 @@ function EmailProviderAllocationSelect({
                                     <Checkbox.Control>
                                         <Checkbox.Indicator />
                                     </Checkbox.Control>
-                                    <span className="text-sm text-foreground">
-                                        {account.title}
-                                        {account.detail?.startsWith("from ") ? (
-                                            <span className="ml-1 text-xs text-muted">
-                                                {account.detail.slice(5)}
-                                            </span>
-                                        ) : account.last4 ? (
-                                            <span className="ml-1 font-mono text-xs text-muted">
-                                                {account.last4}
-                                            </span>
-                                        ) : null}
-                                    </span>
+                                    <span className="text-sm text-foreground">{account.title}</span>
                                 </Checkbox>
                                 {selected ? (
                                     <TextField
-                                        aria-label={`Allocation for ${account.label}`}
+                                        aria-label={`Allocation for ${account.title}`}
                                         className="ml-auto w-24"
                                     >
                                         <Label className="sr-only">Count</Label>

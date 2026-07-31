@@ -13,7 +13,7 @@ interface PromptContext {
 }
 
 const EMAIL_FOOTER_PLACEHOLDERS =
-    '{{first_name}}, {{last_name}}, {{full_name}}, {{title}}, {{company_name}}, {{email}}, {{phone}}, {{website}}, {{website_display}}, {{booking_url}}, {{address}}, {{city}}, {{country}}, {{signature}}';
+    '{{first_name}}, {{last_name}}, {{full_name}}, {{title}}, {{company_name}}, {{email}}, {{phone}}, {{website}}, {{website_display}}, {{booking_url}}, {{address}}, {{city}}, {{country}}, {{logo_url}}, {{signature}}';
 
 const SMS_FOOTER_PLACEHOLDERS =
     '{{first_name}}, {{full_name}}, {{company_name}}, {{booking_url}}';
@@ -81,17 +81,18 @@ PLACEHOLDER RULES — STRICT:
     }
     return `
 HTML BODY RULES — STRICT:
-- Use ONLY these tags: <p>, <br>, <strong>, <em>, <u>, <ul>, <ol>, <li>, <a href="...">, <h1>, <h2>, <h3>.
+- Use ONLY these tags: <p>, <br>, <strong>, <em>, <u>, <ul>, <ol>, <li>, <a href="...">, <img src="..." alt="..." width="...">, <h1>, <h2>, <h3>.
 - Wrap each paragraph in <p>...</p>. Use <br> only for intentional intra-paragraph line breaks.
 - Do NOT include inline styles, class, id, data-* attributes, or any on* handlers.
-- Do NOT include <script>, <iframe>, <img>, <style>, <html>, <body>, <head>, <meta>.
+- Do NOT include <script>, <iframe>, <style>, <html>, <body>, <head>, <meta>.
 - Do NOT wrap in <html>/<body> or in a markdown code block.
+- Logo images MUST use {{logo_url}} as src only, footer-sized: <img src="{{logo_url}}" alt="Logo" width="96" style="max-width:96px;width:96px;height:auto;display:inline-block;border:0;outline:none">. Never invent image URLs.
 
 PLACEHOLDER RULES — STRICT:
 - Sender placeholders (replaced at send time): ${EMAIL_FOOTER_PLACEHOLDERS}.
 - Contact placeholders (replaced at send time): ${CONTACT_PLACEHOLDERS}.
 - Use placeholders verbatim, including the double curly braces. Do NOT invent placeholders. Do NOT use square brackets like [Your Name]. Do NOT write any real or made-up sender/contact info.
-- Anchors with placeholders: write {{website}} only inside href and {{website_display}} only as link text. {{booking_url}} only inside href.
+- Anchors with placeholders: write {{website}} only inside href and {{website_display}} only as link text. {{booking_url}} only inside href. {{logo_url}} only inside img src.
 - Placeholders are NOT allowed in the subject line.
 `.trim();
 }

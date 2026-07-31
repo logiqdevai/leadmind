@@ -23,6 +23,7 @@ export const SENDER_PROFILE_PLACEHOLDER_KEYS = [
     'address',
     'city',
     'country',
+    'logo_url',
     'booking_url',
     'signature',
     'sender_id',
@@ -52,6 +53,7 @@ export function senderProfileToPlaceholders(
     const full = [first, last].filter(Boolean).join(' ').trim();
     const rawWebsite = profile.website ?? '';
     const rawBookingUrl = profile.booking_url ?? '';
+    const rawLogoUrl = profile.logo_url ?? '';
     const websiteUtm = mergeOutboundUtmParams(
         parseUtmParams(profile.website_utm),
         options?.campaignUuid,
@@ -76,6 +78,7 @@ export function senderProfileToPlaceholders(
         address: profile.address ?? '',
         city: profile.city ?? '',
         country: profile.country ?? '',
+        logo_url: ensureProtocol(rawLogoUrl),
         booking_url: bookingWithUtm,
         signature: profile.signature ?? '',
         sender_id: profile.sender_id ?? '',

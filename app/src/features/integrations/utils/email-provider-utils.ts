@@ -84,14 +84,7 @@ function buildAccountDetail(
     return null;
 }
 
-function buildAccountLabel(
-    integrationLabel: string,
-    title: string,
-    detail: string | null,
-): string {
-    if (detail) {
-        return `${integrationLabel} · ${title} (${detail})`;
-    }
+function buildAccountLabel(integrationLabel: string, title: string): string {
     return `${integrationLabel} · ${title}`;
 }
 
@@ -139,7 +132,7 @@ export function listSendableEmailAccounts(
                 provider,
                 account,
                 title,
-                label: buildAccountLabel(integration.label, title, detail),
+                label: buildAccountLabel(integration.label, title),
                 detail,
                 last4: keyValueHint(
                     integration.keys,

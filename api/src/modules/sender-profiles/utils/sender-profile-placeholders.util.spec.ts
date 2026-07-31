@@ -32,6 +32,38 @@ describe('senderProfileToPlaceholders', () => {
         expect(vars.website).toContain('utm_source=email');
         expect(vars.website).toContain('utm_medium=outreach');
         expect(vars.booking_url).toContain('utm_campaign=spring');
+        expect(vars.logo_url).toBe('');
+    });
+
+    it('maps logo_url with https protocol', () => {
+        const vars = senderProfileToPlaceholders({
+            id: 1,
+            uuid: 'profile-1',
+            organisation_uuid: 'user-1',
+            name: 'Acme',
+            company_name: null,
+            title: null,
+            first_name: null,
+            last_name: null,
+            email: null,
+            phone: null,
+            website: null,
+            website_utm: null,
+            address: null,
+            city: null,
+            country: null,
+            logo_url: 'cdn.acme.com/logo.png',
+            booking_url: null,
+            booking_utm: null,
+            sender_id: null,
+            signature: null,
+            business_description: null,
+            is_default: false,
+            created_at: new Date(),
+            updated_at: new Date(),
+        });
+
+        expect(vars.logo_url).toBe('https://cdn.acme.com/logo.png');
     });
 
     it('overrides utm_campaign with campaign uuid at send time', () => {

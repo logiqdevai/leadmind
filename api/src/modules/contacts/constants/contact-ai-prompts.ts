@@ -38,6 +38,7 @@ const EMAIL_FOOTER_PLACEHOLDERS = [
     '{{address}}',
     '{{city}}',
     '{{country}}',
+    '{{logo_url}}',
     '{{signature}}',
 ].join(', ');
 
@@ -73,8 +74,8 @@ SIGN-OFF / FOOTER RULES — STRICT:
   ${EMAIL_FOOTER_PLACEHOLDERS}
 - Placeholders are replaced with the sender's real profile data at send time. Do NOT invent placeholders, do NOT use square brackets like [Your Name], do NOT write any real or made-up personal/contact info.
 - A good footer looks like:
-  <p>Best,<br><strong>{{full_name}}</strong><br>{{title}} · {{company_name}}<br>{{email}} · {{phone}}<br><a href="{{website}}">{{website_display}}</a></p>
-- It is fine to omit any placeholder that would not naturally appear (e.g. drop {{phone}} for a more text-only feel). Do not pad with placeholders for their own sake.
+  <p>Best,<br><img src="{{logo_url}}" alt="Logo" width="96" style="max-width:96px;width:96px;height:auto;display:inline-block;border:0;outline:none"><br><strong>{{full_name}}</strong><br>{{title}} · {{company_name}}<br>{{email}} · {{phone}}<br><a href="{{website}}">{{website_display}}</a></p>
+- It is fine to omit any placeholder that would not naturally appear (e.g. drop {{phone}} or {{logo_url}} for a more text-only feel). Do not pad with placeholders for their own sake.
 - Body usage: signing off with {{first_name}} inline is fine, and the CTA may use the {{booking_url}} anchor pattern above. Placeholders are NOT allowed in the subject line.
 `.trim();
 }
@@ -99,7 +100,10 @@ URL / LINK RULES — STRICT (MOST IMPORTANT):
 - A "book a call" / CTA link MUST be written EXACTLY like this (only the link text can vary):
     <a href="{{booking_url}}">grab a slot on my calendar</a>
   - {{booking_url}} goes ONLY inside href. NEVER as visible link text. NEVER as a bare URL.
-- The href value is a literal placeholder string (e.g. href="{{booking_url}}") — do NOT replace, translate, prefix, suffix, or interpolate it.
+- A company logo MUST be written EXACTLY like this when included:
+    <img src="{{logo_url}}" alt="Logo" width="96" style="max-width:96px;width:96px;height:auto;display:inline-block;border:0;outline:none">
+  - {{logo_url}} goes ONLY inside img src. NEVER as visible text. NEVER invent an image URL. Keep width at 96 (footer-sized).
+- The href/src value is a literal placeholder string (e.g. href="{{booking_url}}" or src="{{logo_url}}") — do NOT replace, translate, prefix, suffix, or interpolate it.
 `.trim();
 }
 
@@ -195,12 +199,12 @@ Subject: <subject line, under 80 chars>
 ${ctaLine}
 
 HTML BODY RULES — STRICT:
-- Use ONLY these tags: <p>, <br>, <strong>, <em>, <u>, <ul>, <ol>, <li>, <a href="...">, <h1>, <h2>, <h3>.
+- Use ONLY these tags: <p>, <br>, <strong>, <em>, <u>, <ul>, <ol>, <li>, <a href="...">, <h1>, <h2>, <h3>${has_sender_profile ? ', <img src="..." alt="..." width="..."' : ''}.
 - Wrap each paragraph in <p>...</p>. Use <br> only for intentional intra-paragraph line breaks.
 - Do NOT include inline styles, class, id, data-* attributes, or any on* event handlers.
-- Do NOT include <script>, <iframe>, <img>, <style>, <html>, <body>, <head>, or <meta>.
+- Do NOT include <script>, <iframe>, ${has_sender_profile ? '' : '<img>, '}<style>, <html>, <body>, <head>, or <meta>.
 - Anchor href values must be either http/https/mailto URLs${has_sender_profile ? ' OR one of the URL placeholders below ({{website}}, {{booking_url}})' : ''}. NEVER use other schemes.
-- Do NOT wrap the output in <html>/<body> or in a markdown code block.
+${has_sender_profile ? '- Logo images MUST use {{logo_url}} as src only, footer-sized: <img src="{{logo_url}}" alt="Logo" width="96" style="max-width:96px;width:96px;height:auto;display:inline-block;border:0;outline:none">. Never invent image URLs.\n' : ''}- Do NOT wrap the output in <html>/<body> or in a markdown code block.
 
 ${emailUrlRules(has_sender_profile)}
 

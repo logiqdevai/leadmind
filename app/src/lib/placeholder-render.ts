@@ -1,4 +1,5 @@
 import type { SenderProfile } from "@/features/sender-profiles/interfaces/sender-profile.interface";
+import { EMAIL_FOOTER_LOGO_IMG_HTML } from "@/lib/sanitize-html";
 
 const PLACEHOLDER_PATTERN = /\{\{\s*([a-zA-Z0-9_]+)\s*\}\}/g;
 
@@ -8,6 +9,7 @@ export interface PlaceholderOption {
     key: string;
     label: string;
     description: string;
+    copyValue?: string;
 }
 
 export const PLACEHOLDER_OPTIONS: readonly PlaceholderOption[] = [
@@ -23,6 +25,12 @@ export const PLACEHOLDER_OPTIONS: readonly PlaceholderOption[] = [
     { key: "address", label: "Address", description: "Street address" },
     { key: "city", label: "City", description: "City" },
     { key: "country", label: "Country", description: "Country" },
+    {
+        key: "logo_url",
+        label: "Logo",
+        description: "Footer-sized company logo",
+        copyValue: EMAIL_FOOTER_LOGO_IMG_HTML,
+    },
     { key: "booking_url", label: "Booking URL", description: "Calendar booking link" },
     { key: "signature", label: "Signature", description: "Email signature block" },
     { key: "sender_id", label: "Sender ID", description: "SMS sender ID" },
@@ -61,6 +69,7 @@ export function senderProfileToPlaceholders(
             address: "",
             city: "",
             country: "",
+            logo_url: "",
             booking_url: "",
             signature: "",
             sender_id: "",
@@ -72,6 +81,7 @@ export function senderProfileToPlaceholders(
     const full = [first, last].filter(Boolean).join(" ").trim();
     const rawWebsite = profile.website ?? "";
     const rawBookingUrl = profile.booking_url ?? "";
+    const rawLogoUrl = profile.logo_url ?? "";
 
     return {
         first_name: first,
@@ -86,6 +96,7 @@ export function senderProfileToPlaceholders(
         address: profile.address ?? "",
         city: profile.city ?? "",
         country: profile.country ?? "",
+        logo_url: ensureProtocol(rawLogoUrl),
         booking_url: ensureProtocol(rawBookingUrl),
         signature: profile.signature ?? "",
         sender_id: profile.sender_id ?? "",
