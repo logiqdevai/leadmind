@@ -1,6 +1,6 @@
 import { type FC } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { Button, Card, Spinner } from "@heroui/react";
+import { Button, Card } from "@heroui/react";
 import { Routes } from "@/routes/routes";
 import { useAuthStore } from "@/stores/auth";
 import {
@@ -8,6 +8,7 @@ import {
     useInvitationPreview,
 } from "@/features/organisations/hooks/use-organisations";
 import { SignUpForm } from "@/pages/auth/pages/sign-up/components/sign-up-form";
+import { InvitePreviewSkeleton } from "./components/invite-preview-skeleton";
 
 const InviteAcceptPage: FC = () => {
     const { token = "" } = useParams<{ token: string }>();
@@ -34,9 +35,7 @@ const InviteAcceptPage: FC = () => {
             </div>
 
             {isLoading ? (
-                <div className="flex justify-center py-8">
-                    <Spinner />
-                </div>
+                <InvitePreviewSkeleton />
             ) : isError ? (
                 <p className="text-sm text-danger">
                     {(error as Error)?.message || "Invalid invitation"}

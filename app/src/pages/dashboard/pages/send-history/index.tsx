@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
-import { Button, Spinner } from "@heroui/react";
+import { Button } from "@heroui/react";
 import { Channel, MsgStatus } from "@/features/contacts/interfaces/contact.interface";
 import { useSendHistory } from "@/features/outreach/hooks/use-send-history";
 import {
@@ -16,6 +16,7 @@ import {
 import { useDashboardNavbarTitle } from "@/components/providers/dashboard-navbar-provider";
 import { ContactsToolbar } from "@/pages/dashboard/pages/contacts/components/contacts-toolbar";
 import { SendHistoryTable } from "./components/send-history-table";
+import { SendHistoryTableSkeleton } from "./components/send-history-table-skeleton";
 import { SendHistoryFiltersBar } from "./components/send-history-filters-bar";
 
 const PAGE_SIZE = 25;
@@ -210,9 +211,7 @@ export default function SendHistoryPage() {
             />
 
             {isLoading ? (
-                <div className="flex justify-center py-16">
-                    <Spinner size="lg" />
-                </div>
+                <SendHistoryTableSkeleton />
             ) : (
                 <div className="space-y-3">
                     <div className="flex items-center justify-between gap-3">

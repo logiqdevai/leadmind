@@ -283,15 +283,16 @@ export class OutreachService {
             organisation_uuid,
             ...(filters.contact_uuid && { contact_uuid: filters.contact_uuid }),
             ...(filters.campaign_uuid && { campaign_uuid: filters.campaign_uuid }),
-            ...(filters.status && { status: filters.status }),
+            ...(filters.status
+                ? { status: filters.status }
+                : filters.history_only
+                  ? { status: { notIn: [MsgStatus.PENDING, MsgStatus.QUEUED] } }
+                  : {}),
             ...(filters.channel && { channel: filters.channel }),
             ...(filters.source === SendSource.DIRECT && { campaign_uuid: null }),
             ...(filters.source === SendSource.CAMPAIGN && { campaign_uuid: { not: null } }),
             ...(filters.email_provider && { email_provider: filters.email_provider }),
             ...(filters.sent_by_user_uuid && { sent_by_user_uuid: filters.sent_by_user_uuid }),
-            ...(filters.history_only && {
-                status: { notIn: [MsgStatus.PENDING, MsgStatus.QUEUED] },
-            }),
             ...((filters.date_from || filters.date_to) && {
                 sent_at: {
                     ...(filters.date_from && { gte: new Date(filters.date_from) }),

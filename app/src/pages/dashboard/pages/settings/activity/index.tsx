@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
-import { Button, Input, Label, ListBox, Select, Spinner, TextField } from "@heroui/react";
+import { Button, Input, Label, ListBox, Select, TextField } from "@heroui/react";
 import { useActivityLogs } from "@/features/activity-logs/hooks/use-activity-logs";
 import {
     useCurrentOrganisation,
@@ -11,6 +11,7 @@ import { useDashboardNavbarTitle } from "@/components/providers/dashboard-navbar
 import { AppDatePicker } from "@/components/ui/date-picker";
 import { ContactsToolbar } from "@/pages/dashboard/pages/contacts/components/contacts-toolbar";
 import { ActivityLogTable } from "./components/activity-log-table";
+import { ActivityLogTableSkeleton } from "./components/activity-log-table-skeleton";
 import { ACTIVITY_ENTITY_FILTER_OPTIONS } from "./utils/activity-log.utils";
 
 const PAGE_SIZE = 25;
@@ -143,9 +144,7 @@ export default function SettingsActivityPage() {
             </div>
 
             {isLoading ? (
-                <div className="flex justify-center py-16">
-                    <Spinner size="lg" />
-                </div>
+                <ActivityLogTableSkeleton />
             ) : (
                 <div className="space-y-3">
                     <ActivityLogTable rows={rows} />

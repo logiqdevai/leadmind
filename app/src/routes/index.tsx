@@ -1,10 +1,10 @@
 import type { ReactNode } from "react";
 import { Suspense, lazy } from "react";
-import { Spinner } from "@heroui/react";
 import { Routes as ReactRoutes, Route, Navigate, useParams } from "react-router-dom";
 import { FilterDetailTabIds, ListDetailTabIds, Routes } from "@/routes/routes";
 import ProtectedRoute from "@/routes/protected-route";
 import { Permissions } from "@/config/permissions";
+import { RouteFallbackSkeleton } from "./components/route-fallback-skeleton";
 
 const LandingPage = lazy(() => import("@/pages/landing"));
 const AuthLayout = lazy(() => import("@/pages/auth/layout"));
@@ -47,16 +47,8 @@ const ScoringInstructionsPage = lazy(() => import("@/pages/dashboard/pages/filte
 const AdminBatchJobsPage = lazy(() => import("@/pages/dashboard/pages/admin/batch-jobs"));
 const AdminSystemStatusPage = lazy(() => import("@/pages/dashboard/pages/admin/system-status"));
 
-function RouteFallback() {
-  return (
-    <div className="flex h-full min-h-0 flex-1 items-center justify-center p-6">
-      <Spinner size="lg" />
-    </div>
-  );
-}
-
 function Lazy({ children }: { children: ReactNode }) {
-  return <Suspense fallback={<RouteFallback />}>{children}</Suspense>;
+  return <Suspense fallback={<RouteFallbackSkeleton />}>{children}</Suspense>;
 }
 
 function NavigateToFilterTab({ tab }: { tab: (typeof FilterDetailTabIds)[keyof typeof FilterDetailTabIds] }) {

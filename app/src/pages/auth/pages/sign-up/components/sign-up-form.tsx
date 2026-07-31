@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff } from "lucide-react";
-import { Form, Label, Input, FieldError, Spinner } from "@heroui/react";
+import { Form, Label, Input, FieldError } from "@heroui/react";
 import { useSearchParams } from "react-router-dom";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
 import { SignUpSchema, type SignUpFormValues } from "../../../validation-schemas/auth";
 import { useSignup } from "@/features/auth/hooks/use-auth";
 import { useInvitationPreview } from "@/features/organisations/hooks/use-organisations";
+import { SignUpFormSkeleton } from "./sign-up-form-skeleton";
 
 interface SignUpFormProps {
   defaultEmail?: string;
@@ -67,11 +68,7 @@ export function SignUpForm({
   }
 
   if (resolvedInviteToken && inviteLoading) {
-    return (
-      <div className="flex justify-center py-8">
-        <Spinner />
-      </div>
-    );
+    return <SignUpFormSkeleton />;
   }
 
   return (

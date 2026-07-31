@@ -2,7 +2,7 @@ import { type FC, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { User } from "lucide-react";
-import { Button, Input, Label, Spinner } from "@heroui/react";
+import { Button, Input, Label } from "@heroui/react";
 import { useAuthStore } from "@/stores/auth";
 import { useChangePassword, useGetMe, useUpdateMe } from "@/features/user/hooks/use-user";
 import {
@@ -11,6 +11,7 @@ import {
     type ChangePasswordFormData,
     type UpdateProfileFormData,
 } from "@/features/user/validation-schemas/user.schema";
+import { AccountPageSkeleton } from "./components/account-page-skeleton";
 
 const SettingsAccountPage: FC = () => {
     const authEmail = useAuthStore((s) => s.email);
@@ -76,11 +77,7 @@ const SettingsAccountPage: FC = () => {
     });
 
     if (isLoading && !authEmail) {
-        return (
-            <div className="flex items-center justify-center py-16">
-                <Spinner size="lg" />
-            </div>
-        );
+        return <AccountPageSkeleton />;
     }
 
     return (
