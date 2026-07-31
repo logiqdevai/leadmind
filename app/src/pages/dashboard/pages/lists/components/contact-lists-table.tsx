@@ -48,7 +48,11 @@ function RowActions({ list }: { list: ContactList }) {
                 isOpen={deleteOpen}
                 onOpenChange={setDeleteOpen}
                 title="Delete this list?"
-                description="Contacts will not be deleted — only their membership in this list."
+                description={
+                    (list.child_count ?? list._count?.children ?? 0) > 0
+                        ? "This list and all nested sublists will be deleted. Contacts will not be deleted — only their membership in these lists."
+                        : "Contacts will not be deleted — only their membership in this list."
+                }
                 confirmLabel="Delete"
                 cancelLabel="Cancel"
                 variant="danger"
@@ -70,6 +74,9 @@ interface ContactListsTableProps {
     total: number;
     totalPages: number;
     onPageChange: (page: number) => void;
+    emptyTitle?: string;
+    emptyDescription?: string;
+    paginationLabel?: string;
 }
 
 export function ContactListsTable({
@@ -81,6 +88,9 @@ export function ContactListsTable({
     total,
     totalPages,
     onPageChange,
+    emptyTitle = "No lists found.",
+    emptyDescription = "Create your first list to organize contacts.",
+    paginationLabel = "lists",
 }: ContactListsTableProps) {
     const columns = useMemo(
         () => [
@@ -103,6 +113,16 @@ export function ContactListsTable({
                     );
                 },
             }),
+            columnHelper.accessor(
+                (row) => row.child_count ?? row._count?.children ?? 0,
+                {
+                    id: "sublists",
+                    header: "Sublists",
+                    cell: (info) => (
+                        <span className="text-sm text-muted">{info.getValue()}</span>
+                    ),
+                },
+            ),
             columnHelper.accessor(
                 (row) => row.contact_count ?? row._count?.members ?? 0,
                 {
@@ -163,10 +183,8 @@ export function ContactListsTable({
                             renderEmptyState={() =>
                                 isLoading ? null : (
                                     <div className="flex flex-col items-center justify-center gap-2 py-12 text-center text-muted">
-                                        <p className="text-sm">No lists found.</p>
-                                        <p className="text-xs">
-                                            Create your first list to organize contacts.
-                                        </p>
+                                        <p className="text-sm">{emptyTitle}</p>
+                                        <p className="text-xs">{emptyDescription}</p>
                                     </div>
                                 )
                             }
@@ -221,7 +239,7 @@ export function ContactListsTable({
                         onPageChange={onPageChange}
                         isFetching={isFetching}
                         isLoading={isLoading}
-                        label="lists"
+                        label={paginationLabel}
                     />
                 </Table.Footer>
             </Table>

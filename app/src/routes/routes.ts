@@ -51,6 +51,7 @@ export const FilterDetailTabIds = {
 } as const;
 
 export const ListDetailTabIds = {
+    SUBLISTS: "sublists",
     CONTACTS: "contacts",
     ANALYTICS: "analytics",
 } as const;

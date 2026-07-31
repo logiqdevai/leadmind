@@ -4,18 +4,22 @@ import type { ContactFilters } from "@/interfaces/contact-filters.interface";
 export interface ContactList {
     uuid: string;
     user_uuid: string;
+    parent_list_uuid: string | null;
     title: string;
     description: string | null;
     created_at: string;
     updated_at: string;
     contact_count?: number;
-    _count?: { members: number };
+    child_count?: number;
+    _count?: { members: number; children?: number };
 }
 
 export interface ListContactListsQuery {
     page?: number;
     limit?: number;
     search?: string;
+    parent_list_uuid?: string;
+    root_only?: boolean;
 }
 
 export interface PaginatedContactLists {
@@ -29,11 +33,13 @@ export interface PaginatedContactLists {
 export interface CreateContactListPayload {
     title: string;
     description?: string;
+    parent_list_uuid?: string;
 }
 
 export interface UpdateContactListPayload {
     title?: string;
     description?: string;
+    parent_list_uuid?: string | null;
 }
 
 export interface ListContactListMembersQuery {

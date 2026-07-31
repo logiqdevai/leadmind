@@ -31,6 +31,7 @@ export default function ListsPage() {
         page,
         limit: PAGE_SIZE,
         search: debouncedSearch || undefined,
+        root_only: true,
     });
 
     const lists = listsPage?.data ?? [];

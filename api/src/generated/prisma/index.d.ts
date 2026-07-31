@@ -4536,11 +4536,13 @@ export namespace Prisma {
    */
 
   export type ContactListCountOutputType = {
+    children: number
     members: number
     audience_analyses: number
   }
 
   export type ContactListCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    children?: boolean | ContactListCountOutputTypeCountChildrenArgs
     members?: boolean | ContactListCountOutputTypeCountMembersArgs
     audience_analyses?: boolean | ContactListCountOutputTypeCountAudience_analysesArgs
   }
@@ -4554,6 +4556,13 @@ export namespace Prisma {
      * Select specific fields to fetch from the ContactListCountOutputType
      */
     select?: ContactListCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ContactListCountOutputType without action
+   */
+  export type ContactListCountOutputTypeCountChildrenArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ContactListWhereInput
   }
 
   /**
@@ -17594,6 +17603,7 @@ export namespace Prisma {
     id: number | null
     uuid: string | null
     user_uuid: string | null
+    parent_list_uuid: string | null
     title: string | null
     description: string | null
     created_at: Date | null
@@ -17604,6 +17614,7 @@ export namespace Prisma {
     id: number | null
     uuid: string | null
     user_uuid: string | null
+    parent_list_uuid: string | null
     title: string | null
     description: string | null
     created_at: Date | null
@@ -17614,6 +17625,7 @@ export namespace Prisma {
     id: number
     uuid: number
     user_uuid: number
+    parent_list_uuid: number
     title: number
     description: number
     created_at: number
@@ -17634,6 +17646,7 @@ export namespace Prisma {
     id?: true
     uuid?: true
     user_uuid?: true
+    parent_list_uuid?: true
     title?: true
     description?: true
     created_at?: true
@@ -17644,6 +17657,7 @@ export namespace Prisma {
     id?: true
     uuid?: true
     user_uuid?: true
+    parent_list_uuid?: true
     title?: true
     description?: true
     created_at?: true
@@ -17654,6 +17668,7 @@ export namespace Prisma {
     id?: true
     uuid?: true
     user_uuid?: true
+    parent_list_uuid?: true
     title?: true
     description?: true
     created_at?: true
@@ -17751,6 +17766,7 @@ export namespace Prisma {
     id: number
     uuid: string
     user_uuid: string
+    parent_list_uuid: string | null
     title: string
     description: string | null
     created_at: Date
@@ -17780,11 +17796,14 @@ export namespace Prisma {
     id?: boolean
     uuid?: boolean
     user_uuid?: boolean
+    parent_list_uuid?: boolean
     title?: boolean
     description?: boolean
     created_at?: boolean
     updated_at?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
+    parent?: boolean | ContactList$parentArgs<ExtArgs>
+    children?: boolean | ContactList$childrenArgs<ExtArgs>
     members?: boolean | ContactList$membersArgs<ExtArgs>
     audience_analyses?: boolean | ContactList$audience_analysesArgs<ExtArgs>
     _count?: boolean | ContactListCountOutputTypeDefaultArgs<ExtArgs>
@@ -17794,52 +17813,63 @@ export namespace Prisma {
     id?: boolean
     uuid?: boolean
     user_uuid?: boolean
+    parent_list_uuid?: boolean
     title?: boolean
     description?: boolean
     created_at?: boolean
     updated_at?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
+    parent?: boolean | ContactList$parentArgs<ExtArgs>
   }, ExtArgs["result"]["contactList"]>
 
   export type ContactListSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     uuid?: boolean
     user_uuid?: boolean
+    parent_list_uuid?: boolean
     title?: boolean
     description?: boolean
     created_at?: boolean
     updated_at?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
+    parent?: boolean | ContactList$parentArgs<ExtArgs>
   }, ExtArgs["result"]["contactList"]>
 
   export type ContactListSelectScalar = {
     id?: boolean
     uuid?: boolean
     user_uuid?: boolean
+    parent_list_uuid?: boolean
     title?: boolean
     description?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
-  export type ContactListOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "user_uuid" | "title" | "description" | "created_at" | "updated_at", ExtArgs["result"]["contactList"]>
+  export type ContactListOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "user_uuid" | "parent_list_uuid" | "title" | "description" | "created_at" | "updated_at", ExtArgs["result"]["contactList"]>
   export type ContactListInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
+    parent?: boolean | ContactList$parentArgs<ExtArgs>
+    children?: boolean | ContactList$childrenArgs<ExtArgs>
     members?: boolean | ContactList$membersArgs<ExtArgs>
     audience_analyses?: boolean | ContactList$audience_analysesArgs<ExtArgs>
     _count?: boolean | ContactListCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ContactListIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
+    parent?: boolean | ContactList$parentArgs<ExtArgs>
   }
   export type ContactListIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
+    parent?: boolean | ContactList$parentArgs<ExtArgs>
   }
 
   export type $ContactListPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "ContactList"
     objects: {
       user: Prisma.$UserPayload<ExtArgs>
+      parent: Prisma.$ContactListPayload<ExtArgs> | null
+      children: Prisma.$ContactListPayload<ExtArgs>[]
       members: Prisma.$ContactListMemberPayload<ExtArgs>[]
       audience_analyses: Prisma.$ContactAudienceAnalysisPayload<ExtArgs>[]
     }
@@ -17847,6 +17877,7 @@ export namespace Prisma {
       id: number
       uuid: string
       user_uuid: string
+      parent_list_uuid: string | null
       title: string
       description: string | null
       created_at: Date
@@ -18246,6 +18277,8 @@ export namespace Prisma {
   export interface Prisma__ContactListClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    parent<T extends ContactList$parentArgs<ExtArgs> = {}>(args?: Subset<T, ContactList$parentArgs<ExtArgs>>): Prisma__ContactListClient<$Result.GetResult<Prisma.$ContactListPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    children<T extends ContactList$childrenArgs<ExtArgs> = {}>(args?: Subset<T, ContactList$childrenArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactListPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     members<T extends ContactList$membersArgs<ExtArgs> = {}>(args?: Subset<T, ContactList$membersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactListMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     audience_analyses<T extends ContactList$audience_analysesArgs<ExtArgs> = {}>(args?: Subset<T, ContactList$audience_analysesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactAudienceAnalysisPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
@@ -18280,6 +18313,7 @@ export namespace Prisma {
     readonly id: FieldRef<"ContactList", 'Int'>
     readonly uuid: FieldRef<"ContactList", 'String'>
     readonly user_uuid: FieldRef<"ContactList", 'String'>
+    readonly parent_list_uuid: FieldRef<"ContactList", 'String'>
     readonly title: FieldRef<"ContactList", 'String'>
     readonly description: FieldRef<"ContactList", 'String'>
     readonly created_at: FieldRef<"ContactList", 'DateTime'>
@@ -18677,6 +18711,49 @@ export namespace Prisma {
      * Limit how many ContactLists to delete.
      */
     limit?: number
+  }
+
+  /**
+   * ContactList.parent
+   */
+  export type ContactList$parentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactList
+     */
+    select?: ContactListSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactList
+     */
+    omit?: ContactListOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactListInclude<ExtArgs> | null
+    where?: ContactListWhereInput
+  }
+
+  /**
+   * ContactList.children
+   */
+  export type ContactList$childrenArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactList
+     */
+    select?: ContactListSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactList
+     */
+    omit?: ContactListOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactListInclude<ExtArgs> | null
+    where?: ContactListWhereInput
+    orderBy?: ContactListOrderByWithRelationInput | ContactListOrderByWithRelationInput[]
+    cursor?: ContactListWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ContactListScalarFieldEnum | ContactListScalarFieldEnum[]
   }
 
   /**
@@ -44743,6 +44820,7 @@ export namespace Prisma {
     id: 'id',
     uuid: 'uuid',
     user_uuid: 'user_uuid',
+    parent_list_uuid: 'parent_list_uuid',
     title: 'title',
     description: 'description',
     created_at: 'created_at',
@@ -46684,11 +46762,14 @@ export namespace Prisma {
     id?: IntFilter<"ContactList"> | number
     uuid?: StringFilter<"ContactList"> | string
     user_uuid?: StringFilter<"ContactList"> | string
+    parent_list_uuid?: StringNullableFilter<"ContactList"> | string | null
     title?: StringFilter<"ContactList"> | string
     description?: StringNullableFilter<"ContactList"> | string | null
     created_at?: DateTimeFilter<"ContactList"> | Date | string
     updated_at?: DateTimeFilter<"ContactList"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    parent?: XOR<ContactListNullableScalarRelationFilter, ContactListWhereInput> | null
+    children?: ContactListListRelationFilter
     members?: ContactListMemberListRelationFilter
     audience_analyses?: ContactAudienceAnalysisListRelationFilter
   }
@@ -46697,11 +46778,14 @@ export namespace Prisma {
     id?: SortOrder
     uuid?: SortOrder
     user_uuid?: SortOrder
+    parent_list_uuid?: SortOrderInput | SortOrder
     title?: SortOrder
     description?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     user?: UserOrderByWithRelationInput
+    parent?: ContactListOrderByWithRelationInput
+    children?: ContactListOrderByRelationAggregateInput
     members?: ContactListMemberOrderByRelationAggregateInput
     audience_analyses?: ContactAudienceAnalysisOrderByRelationAggregateInput
   }
@@ -46713,11 +46797,14 @@ export namespace Prisma {
     OR?: ContactListWhereInput[]
     NOT?: ContactListWhereInput | ContactListWhereInput[]
     user_uuid?: StringFilter<"ContactList"> | string
+    parent_list_uuid?: StringNullableFilter<"ContactList"> | string | null
     title?: StringFilter<"ContactList"> | string
     description?: StringNullableFilter<"ContactList"> | string | null
     created_at?: DateTimeFilter<"ContactList"> | Date | string
     updated_at?: DateTimeFilter<"ContactList"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    parent?: XOR<ContactListNullableScalarRelationFilter, ContactListWhereInput> | null
+    children?: ContactListListRelationFilter
     members?: ContactListMemberListRelationFilter
     audience_analyses?: ContactAudienceAnalysisListRelationFilter
   }, "id" | "uuid">
@@ -46726,6 +46813,7 @@ export namespace Prisma {
     id?: SortOrder
     uuid?: SortOrder
     user_uuid?: SortOrder
+    parent_list_uuid?: SortOrderInput | SortOrder
     title?: SortOrder
     description?: SortOrderInput | SortOrder
     created_at?: SortOrder
@@ -46744,6 +46832,7 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"ContactList"> | number
     uuid?: StringWithAggregatesFilter<"ContactList"> | string
     user_uuid?: StringWithAggregatesFilter<"ContactList"> | string
+    parent_list_uuid?: StringNullableWithAggregatesFilter<"ContactList"> | string | null
     title?: StringWithAggregatesFilter<"ContactList"> | string
     description?: StringNullableWithAggregatesFilter<"ContactList"> | string | null
     created_at?: DateTimeWithAggregatesFilter<"ContactList"> | Date | string
@@ -50025,6 +50114,8 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     user: UserCreateNestedOneWithoutContact_listsInput
+    parent?: ContactListCreateNestedOneWithoutChildrenInput
+    children?: ContactListCreateNestedManyWithoutParentInput
     members?: ContactListMemberCreateNestedManyWithoutListInput
     audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutContactListInput
   }
@@ -50033,10 +50124,12 @@ export namespace Prisma {
     id?: number
     uuid?: string
     user_uuid: string
+    parent_list_uuid?: string | null
     title: string
     description?: string | null
     created_at?: Date | string
     updated_at?: Date | string
+    children?: ContactListUncheckedCreateNestedManyWithoutParentInput
     members?: ContactListMemberUncheckedCreateNestedManyWithoutListInput
     audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutContactListInput
   }
@@ -50048,6 +50141,8 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutContact_listsNestedInput
+    parent?: ContactListUpdateOneWithoutChildrenNestedInput
+    children?: ContactListUpdateManyWithoutParentNestedInput
     members?: ContactListMemberUpdateManyWithoutListNestedInput
     audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutContactListNestedInput
   }
@@ -50056,10 +50151,12 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     uuid?: StringFieldUpdateOperationsInput | string
     user_uuid?: StringFieldUpdateOperationsInput | string
+    parent_list_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    children?: ContactListUncheckedUpdateManyWithoutParentNestedInput
     members?: ContactListMemberUncheckedUpdateManyWithoutListNestedInput
     audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutContactListNestedInput
   }
@@ -50068,6 +50165,7 @@ export namespace Prisma {
     id?: number
     uuid?: string
     user_uuid: string
+    parent_list_uuid?: string | null
     title: string
     description?: string | null
     created_at?: Date | string
@@ -50086,6 +50184,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     uuid?: StringFieldUpdateOperationsInput | string
     user_uuid?: StringFieldUpdateOperationsInput | string
+    parent_list_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -53673,10 +53772,16 @@ export namespace Prisma {
     score?: SortOrder
   }
 
+  export type ContactListNullableScalarRelationFilter = {
+    is?: ContactListWhereInput | null
+    isNot?: ContactListWhereInput | null
+  }
+
   export type ContactListCountOrderByAggregateInput = {
     id?: SortOrder
     uuid?: SortOrder
     user_uuid?: SortOrder
+    parent_list_uuid?: SortOrder
     title?: SortOrder
     description?: SortOrder
     created_at?: SortOrder
@@ -53691,6 +53796,7 @@ export namespace Prisma {
     id?: SortOrder
     uuid?: SortOrder
     user_uuid?: SortOrder
+    parent_list_uuid?: SortOrder
     title?: SortOrder
     description?: SortOrder
     created_at?: SortOrder
@@ -53701,6 +53807,7 @@ export namespace Prisma {
     id?: SortOrder
     uuid?: SortOrder
     user_uuid?: SortOrder
+    parent_list_uuid?: SortOrder
     title?: SortOrder
     description?: SortOrder
     created_at?: SortOrder
@@ -55117,11 +55224,6 @@ export namespace Prisma {
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
-  }
-
-  export type ContactListNullableScalarRelationFilter = {
-    is?: ContactListWhereInput | null
-    isNot?: ContactListWhereInput | null
   }
 
   export type ContactAudienceAnalysisCountOrderByAggregateInput = {
@@ -57288,6 +57390,19 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
+  export type ContactListCreateNestedOneWithoutChildrenInput = {
+    create?: XOR<ContactListCreateWithoutChildrenInput, ContactListUncheckedCreateWithoutChildrenInput>
+    connectOrCreate?: ContactListCreateOrConnectWithoutChildrenInput
+    connect?: ContactListWhereUniqueInput
+  }
+
+  export type ContactListCreateNestedManyWithoutParentInput = {
+    create?: XOR<ContactListCreateWithoutParentInput, ContactListUncheckedCreateWithoutParentInput> | ContactListCreateWithoutParentInput[] | ContactListUncheckedCreateWithoutParentInput[]
+    connectOrCreate?: ContactListCreateOrConnectWithoutParentInput | ContactListCreateOrConnectWithoutParentInput[]
+    createMany?: ContactListCreateManyParentInputEnvelope
+    connect?: ContactListWhereUniqueInput | ContactListWhereUniqueInput[]
+  }
+
   export type ContactListMemberCreateNestedManyWithoutListInput = {
     create?: XOR<ContactListMemberCreateWithoutListInput, ContactListMemberUncheckedCreateWithoutListInput> | ContactListMemberCreateWithoutListInput[] | ContactListMemberUncheckedCreateWithoutListInput[]
     connectOrCreate?: ContactListMemberCreateOrConnectWithoutListInput | ContactListMemberCreateOrConnectWithoutListInput[]
@@ -57300,6 +57415,13 @@ export namespace Prisma {
     connectOrCreate?: ContactAudienceAnalysisCreateOrConnectWithoutContactListInput | ContactAudienceAnalysisCreateOrConnectWithoutContactListInput[]
     createMany?: ContactAudienceAnalysisCreateManyContactListInputEnvelope
     connect?: ContactAudienceAnalysisWhereUniqueInput | ContactAudienceAnalysisWhereUniqueInput[]
+  }
+
+  export type ContactListUncheckedCreateNestedManyWithoutParentInput = {
+    create?: XOR<ContactListCreateWithoutParentInput, ContactListUncheckedCreateWithoutParentInput> | ContactListCreateWithoutParentInput[] | ContactListUncheckedCreateWithoutParentInput[]
+    connectOrCreate?: ContactListCreateOrConnectWithoutParentInput | ContactListCreateOrConnectWithoutParentInput[]
+    createMany?: ContactListCreateManyParentInputEnvelope
+    connect?: ContactListWhereUniqueInput | ContactListWhereUniqueInput[]
   }
 
   export type ContactListMemberUncheckedCreateNestedManyWithoutListInput = {
@@ -57322,6 +57444,30 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutContact_listsInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutContact_listsInput, UserUpdateWithoutContact_listsInput>, UserUncheckedUpdateWithoutContact_listsInput>
+  }
+
+  export type ContactListUpdateOneWithoutChildrenNestedInput = {
+    create?: XOR<ContactListCreateWithoutChildrenInput, ContactListUncheckedCreateWithoutChildrenInput>
+    connectOrCreate?: ContactListCreateOrConnectWithoutChildrenInput
+    upsert?: ContactListUpsertWithoutChildrenInput
+    disconnect?: ContactListWhereInput | boolean
+    delete?: ContactListWhereInput | boolean
+    connect?: ContactListWhereUniqueInput
+    update?: XOR<XOR<ContactListUpdateToOneWithWhereWithoutChildrenInput, ContactListUpdateWithoutChildrenInput>, ContactListUncheckedUpdateWithoutChildrenInput>
+  }
+
+  export type ContactListUpdateManyWithoutParentNestedInput = {
+    create?: XOR<ContactListCreateWithoutParentInput, ContactListUncheckedCreateWithoutParentInput> | ContactListCreateWithoutParentInput[] | ContactListUncheckedCreateWithoutParentInput[]
+    connectOrCreate?: ContactListCreateOrConnectWithoutParentInput | ContactListCreateOrConnectWithoutParentInput[]
+    upsert?: ContactListUpsertWithWhereUniqueWithoutParentInput | ContactListUpsertWithWhereUniqueWithoutParentInput[]
+    createMany?: ContactListCreateManyParentInputEnvelope
+    set?: ContactListWhereUniqueInput | ContactListWhereUniqueInput[]
+    disconnect?: ContactListWhereUniqueInput | ContactListWhereUniqueInput[]
+    delete?: ContactListWhereUniqueInput | ContactListWhereUniqueInput[]
+    connect?: ContactListWhereUniqueInput | ContactListWhereUniqueInput[]
+    update?: ContactListUpdateWithWhereUniqueWithoutParentInput | ContactListUpdateWithWhereUniqueWithoutParentInput[]
+    updateMany?: ContactListUpdateManyWithWhereWithoutParentInput | ContactListUpdateManyWithWhereWithoutParentInput[]
+    deleteMany?: ContactListScalarWhereInput | ContactListScalarWhereInput[]
   }
 
   export type ContactListMemberUpdateManyWithoutListNestedInput = {
@@ -57350,6 +57496,20 @@ export namespace Prisma {
     update?: ContactAudienceAnalysisUpdateWithWhereUniqueWithoutContactListInput | ContactAudienceAnalysisUpdateWithWhereUniqueWithoutContactListInput[]
     updateMany?: ContactAudienceAnalysisUpdateManyWithWhereWithoutContactListInput | ContactAudienceAnalysisUpdateManyWithWhereWithoutContactListInput[]
     deleteMany?: ContactAudienceAnalysisScalarWhereInput | ContactAudienceAnalysisScalarWhereInput[]
+  }
+
+  export type ContactListUncheckedUpdateManyWithoutParentNestedInput = {
+    create?: XOR<ContactListCreateWithoutParentInput, ContactListUncheckedCreateWithoutParentInput> | ContactListCreateWithoutParentInput[] | ContactListUncheckedCreateWithoutParentInput[]
+    connectOrCreate?: ContactListCreateOrConnectWithoutParentInput | ContactListCreateOrConnectWithoutParentInput[]
+    upsert?: ContactListUpsertWithWhereUniqueWithoutParentInput | ContactListUpsertWithWhereUniqueWithoutParentInput[]
+    createMany?: ContactListCreateManyParentInputEnvelope
+    set?: ContactListWhereUniqueInput | ContactListWhereUniqueInput[]
+    disconnect?: ContactListWhereUniqueInput | ContactListWhereUniqueInput[]
+    delete?: ContactListWhereUniqueInput | ContactListWhereUniqueInput[]
+    connect?: ContactListWhereUniqueInput | ContactListWhereUniqueInput[]
+    update?: ContactListUpdateWithWhereUniqueWithoutParentInput | ContactListUpdateWithWhereUniqueWithoutParentInput[]
+    updateMany?: ContactListUpdateManyWithWhereWithoutParentInput | ContactListUpdateManyWithWhereWithoutParentInput[]
+    deleteMany?: ContactListScalarWhereInput | ContactListScalarWhereInput[]
   }
 
   export type ContactListMemberUncheckedUpdateManyWithoutListNestedInput = {
@@ -59783,6 +59943,8 @@ export namespace Prisma {
     description?: string | null
     created_at?: Date | string
     updated_at?: Date | string
+    parent?: ContactListCreateNestedOneWithoutChildrenInput
+    children?: ContactListCreateNestedManyWithoutParentInput
     members?: ContactListMemberCreateNestedManyWithoutListInput
     audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutContactListInput
   }
@@ -59790,10 +59952,12 @@ export namespace Prisma {
   export type ContactListUncheckedCreateWithoutUserInput = {
     id?: number
     uuid?: string
+    parent_list_uuid?: string | null
     title: string
     description?: string | null
     created_at?: Date | string
     updated_at?: Date | string
+    children?: ContactListUncheckedCreateNestedManyWithoutParentInput
     members?: ContactListMemberUncheckedCreateNestedManyWithoutListInput
     audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutContactListInput
   }
@@ -60502,6 +60666,7 @@ export namespace Prisma {
     id?: IntFilter<"ContactList"> | number
     uuid?: StringFilter<"ContactList"> | string
     user_uuid?: StringFilter<"ContactList"> | string
+    parent_list_uuid?: StringNullableFilter<"ContactList"> | string | null
     title?: StringFilter<"ContactList"> | string
     description?: StringNullableFilter<"ContactList"> | string | null
     created_at?: DateTimeFilter<"ContactList"> | Date | string
@@ -63298,6 +63463,71 @@ export namespace Prisma {
     create: XOR<UserCreateWithoutContact_listsInput, UserUncheckedCreateWithoutContact_listsInput>
   }
 
+  export type ContactListCreateWithoutChildrenInput = {
+    uuid?: string
+    title: string
+    description?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    user: UserCreateNestedOneWithoutContact_listsInput
+    parent?: ContactListCreateNestedOneWithoutChildrenInput
+    members?: ContactListMemberCreateNestedManyWithoutListInput
+    audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutContactListInput
+  }
+
+  export type ContactListUncheckedCreateWithoutChildrenInput = {
+    id?: number
+    uuid?: string
+    user_uuid: string
+    parent_list_uuid?: string | null
+    title: string
+    description?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    members?: ContactListMemberUncheckedCreateNestedManyWithoutListInput
+    audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutContactListInput
+  }
+
+  export type ContactListCreateOrConnectWithoutChildrenInput = {
+    where: ContactListWhereUniqueInput
+    create: XOR<ContactListCreateWithoutChildrenInput, ContactListUncheckedCreateWithoutChildrenInput>
+  }
+
+  export type ContactListCreateWithoutParentInput = {
+    uuid?: string
+    title: string
+    description?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    user: UserCreateNestedOneWithoutContact_listsInput
+    children?: ContactListCreateNestedManyWithoutParentInput
+    members?: ContactListMemberCreateNestedManyWithoutListInput
+    audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutContactListInput
+  }
+
+  export type ContactListUncheckedCreateWithoutParentInput = {
+    id?: number
+    uuid?: string
+    user_uuid: string
+    title: string
+    description?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    children?: ContactListUncheckedCreateNestedManyWithoutParentInput
+    members?: ContactListMemberUncheckedCreateNestedManyWithoutListInput
+    audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutContactListInput
+  }
+
+  export type ContactListCreateOrConnectWithoutParentInput = {
+    where: ContactListWhereUniqueInput
+    create: XOR<ContactListCreateWithoutParentInput, ContactListUncheckedCreateWithoutParentInput>
+  }
+
+  export type ContactListCreateManyParentInputEnvelope = {
+    data: ContactListCreateManyParentInput | ContactListCreateManyParentInput[]
+    skipDuplicates?: boolean
+  }
+
   export type ContactListMemberCreateWithoutListInput = {
     uuid?: string
     created_at?: Date | string
@@ -63436,6 +63666,58 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutUserNestedInput
   }
 
+  export type ContactListUpsertWithoutChildrenInput = {
+    update: XOR<ContactListUpdateWithoutChildrenInput, ContactListUncheckedUpdateWithoutChildrenInput>
+    create: XOR<ContactListCreateWithoutChildrenInput, ContactListUncheckedCreateWithoutChildrenInput>
+    where?: ContactListWhereInput
+  }
+
+  export type ContactListUpdateToOneWithWhereWithoutChildrenInput = {
+    where?: ContactListWhereInput
+    data: XOR<ContactListUpdateWithoutChildrenInput, ContactListUncheckedUpdateWithoutChildrenInput>
+  }
+
+  export type ContactListUpdateWithoutChildrenInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutContact_listsNestedInput
+    parent?: ContactListUpdateOneWithoutChildrenNestedInput
+    members?: ContactListMemberUpdateManyWithoutListNestedInput
+    audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutContactListNestedInput
+  }
+
+  export type ContactListUncheckedUpdateWithoutChildrenInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    user_uuid?: StringFieldUpdateOperationsInput | string
+    parent_list_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: ContactListMemberUncheckedUpdateManyWithoutListNestedInput
+    audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutContactListNestedInput
+  }
+
+  export type ContactListUpsertWithWhereUniqueWithoutParentInput = {
+    where: ContactListWhereUniqueInput
+    update: XOR<ContactListUpdateWithoutParentInput, ContactListUncheckedUpdateWithoutParentInput>
+    create: XOR<ContactListCreateWithoutParentInput, ContactListUncheckedCreateWithoutParentInput>
+  }
+
+  export type ContactListUpdateWithWhereUniqueWithoutParentInput = {
+    where: ContactListWhereUniqueInput
+    data: XOR<ContactListUpdateWithoutParentInput, ContactListUncheckedUpdateWithoutParentInput>
+  }
+
+  export type ContactListUpdateManyWithWhereWithoutParentInput = {
+    where: ContactListScalarWhereInput
+    data: XOR<ContactListUpdateManyMutationInput, ContactListUncheckedUpdateManyWithoutParentInput>
+  }
+
   export type ContactListMemberUpsertWithWhereUniqueWithoutListInput = {
     where: ContactListMemberWhereUniqueInput
     update: XOR<ContactListMemberUpdateWithoutListInput, ContactListMemberUncheckedUpdateWithoutListInput>
@@ -63475,6 +63757,8 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     user: UserCreateNestedOneWithoutContact_listsInput
+    parent?: ContactListCreateNestedOneWithoutChildrenInput
+    children?: ContactListCreateNestedManyWithoutParentInput
     audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutContactListInput
   }
 
@@ -63482,10 +63766,12 @@ export namespace Prisma {
     id?: number
     uuid?: string
     user_uuid: string
+    parent_list_uuid?: string | null
     title: string
     description?: string | null
     created_at?: Date | string
     updated_at?: Date | string
+    children?: ContactListUncheckedCreateNestedManyWithoutParentInput
     audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutContactListInput
   }
 
@@ -63588,6 +63874,8 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutContact_listsNestedInput
+    parent?: ContactListUpdateOneWithoutChildrenNestedInput
+    children?: ContactListUpdateManyWithoutParentNestedInput
     audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutContactListNestedInput
   }
 
@@ -63595,10 +63883,12 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     uuid?: StringFieldUpdateOperationsInput | string
     user_uuid?: StringFieldUpdateOperationsInput | string
+    parent_list_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    children?: ContactListUncheckedUpdateManyWithoutParentNestedInput
     audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutContactListNestedInput
   }
 
@@ -67984,6 +68274,8 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     user: UserCreateNestedOneWithoutContact_listsInput
+    parent?: ContactListCreateNestedOneWithoutChildrenInput
+    children?: ContactListCreateNestedManyWithoutParentInput
     members?: ContactListMemberCreateNestedManyWithoutListInput
   }
 
@@ -67991,10 +68283,12 @@ export namespace Prisma {
     id?: number
     uuid?: string
     user_uuid: string
+    parent_list_uuid?: string | null
     title: string
     description?: string | null
     created_at?: Date | string
     updated_at?: Date | string
+    children?: ContactListUncheckedCreateNestedManyWithoutParentInput
     members?: ContactListMemberUncheckedCreateNestedManyWithoutListInput
   }
 
@@ -68137,6 +68431,8 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutContact_listsNestedInput
+    parent?: ContactListUpdateOneWithoutChildrenNestedInput
+    children?: ContactListUpdateManyWithoutParentNestedInput
     members?: ContactListMemberUpdateManyWithoutListNestedInput
   }
 
@@ -68144,10 +68440,12 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     uuid?: StringFieldUpdateOperationsInput | string
     user_uuid?: StringFieldUpdateOperationsInput | string
+    parent_list_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    children?: ContactListUncheckedUpdateManyWithoutParentNestedInput
     members?: ContactListMemberUncheckedUpdateManyWithoutListNestedInput
   }
 
@@ -68631,6 +68929,7 @@ export namespace Prisma {
   export type ContactListCreateManyUserInput = {
     id?: number
     uuid?: string
+    parent_list_uuid?: string | null
     title: string
     description?: string | null
     created_at?: Date | string
@@ -69430,6 +69729,8 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    parent?: ContactListUpdateOneWithoutChildrenNestedInput
+    children?: ContactListUpdateManyWithoutParentNestedInput
     members?: ContactListMemberUpdateManyWithoutListNestedInput
     audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutContactListNestedInput
   }
@@ -69437,10 +69738,12 @@ export namespace Prisma {
   export type ContactListUncheckedUpdateWithoutUserInput = {
     id?: IntFieldUpdateOperationsInput | number
     uuid?: StringFieldUpdateOperationsInput | string
+    parent_list_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    children?: ContactListUncheckedUpdateManyWithoutParentNestedInput
     members?: ContactListMemberUncheckedUpdateManyWithoutListNestedInput
     audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutContactListNestedInput
   }
@@ -69448,6 +69751,7 @@ export namespace Prisma {
   export type ContactListUncheckedUpdateManyWithoutUserInput = {
     id?: IntFieldUpdateOperationsInput | number
     uuid?: StringFieldUpdateOperationsInput | string
+    parent_list_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -70652,6 +70956,16 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type ContactListCreateManyParentInput = {
+    id?: number
+    uuid?: string
+    user_uuid: string
+    title: string
+    description?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
   export type ContactListMemberCreateManyListInput = {
     id?: number
     uuid?: string
@@ -70677,6 +70991,41 @@ export namespace Prisma {
     cost_usd?: number | null
     created_at?: Date | string
     updated_at?: Date | string
+  }
+
+  export type ContactListUpdateWithoutParentInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutContact_listsNestedInput
+    children?: ContactListUpdateManyWithoutParentNestedInput
+    members?: ContactListMemberUpdateManyWithoutListNestedInput
+    audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutContactListNestedInput
+  }
+
+  export type ContactListUncheckedUpdateWithoutParentInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    user_uuid?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    children?: ContactListUncheckedUpdateManyWithoutParentNestedInput
+    members?: ContactListMemberUncheckedUpdateManyWithoutListNestedInput
+    audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutContactListNestedInput
+  }
+
+  export type ContactListUncheckedUpdateManyWithoutParentInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    user_uuid?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ContactListMemberUpdateWithoutListInput = {

@@ -1,6 +1,7 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsInt, IsOptional, IsString, Max, Min } from 'class-validator';
+import { IsBoolean, IsInt, IsOptional, IsString, IsUUID, Max, Min } from 'class-validator';
+import { QueryBooleanTransform } from '@/shared/transforms/query-boolean.transform';
 
 export class ListContactListsDto {
     @ApiPropertyOptional()
@@ -22,4 +23,15 @@ export class ListContactListsDto {
     @Min(1)
     @Max(100)
     limit?: number = 20;
+
+    @ApiPropertyOptional({ description: 'Filter to direct children of this list' })
+    @IsOptional()
+    @IsUUID()
+    parent_list_uuid?: string;
+
+    @ApiPropertyOptional({ description: 'When true, only root lists (no parent)' })
+    @IsOptional()
+    @QueryBooleanTransform
+    @IsBoolean()
+    root_only?: boolean;
 }

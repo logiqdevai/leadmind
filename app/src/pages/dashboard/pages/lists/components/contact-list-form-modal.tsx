@@ -10,13 +10,20 @@ interface ContactListFormModalProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
   editing?: ContactList | null;
+  parentListUuid?: string;
 }
 
-export function ContactListFormModal({ isOpen, onOpenChange, editing }: ContactListFormModalProps) {
+export function ContactListFormModal({
+  isOpen,
+  onOpenChange,
+  editing,
+  parentListUuid,
+}: ContactListFormModalProps) {
   const navigate = useNavigate();
   const createList = useCreateContactList();
   const updateList = useUpdateContactList();
   const isPending = createList.isPending || updateList.isPending;
+  const isSublist = !editing && !!parentListUuid;
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -36,6 +43,7 @@ export function ContactListFormModal({ isOpen, onOpenChange, editing }: ContactL
     const payload = {
       title: title.trim(),
       description: description.trim() || undefined,
+      ...(parentListUuid && !editing ? { parent_list_uuid: parentListUuid } : {}),
     };
     if (editing) {
       updateList.mutate({ uuid: editing.uuid, payload }, { onSuccess: () => onOpenChange(false) });
@@ -55,26 +63,43 @@ export function ContactListFormModal({ isOpen, onOpenChange, editing }: ContactL
         <Modal.Dialog className="sm:max-w-lg">
           <Modal.CloseTrigger />
           <Modal.Header>
-            <Modal.Heading>{editing ? "Edit List" : "New List"}</Modal.Heading>
+            <Modal.Heading>
+              {editing ? "Edit List" : isSublist ? "New Sublist" : "New List"}
+            </Modal.Heading>
           </Modal.Header>
           <Modal.Body className="p-6 space-y-4">
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="list-title">
                 Title <span className="text-danger">*</span>
               </Label>
-              <Input id="list-title" placeholder="e.g. Accountants List" value={title} onChange={(e) => setTitle(e.target.value)} />
+              <Input
+                id="list-title"
+                placeholder="e.g. Accountants List"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
             </div>
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="list-description">Description</Label>
-              <TextArea id="list-description" placeholder="Optional notes about this list…" value={description} onChange={(e) => setDescription(e.target.value)} rows={3} />
+              <TextArea
+                id="list-description"
+                placeholder="Optional notes about this list…"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                rows={3}
+              />
             </div>
           </Modal.Body>
           <Modal.Footer className="gap-2 justify-end">
             <Button variant="tertiary" onPress={() => onOpenChange(false)}>
               Cancel
             </Button>
-            <ActionButtonWithPending isPending={isPending} isDisabled={!title.trim() || isPending} onPress={handleConfirm}>
-              {editing ? "Save" : "Create List"}
+            <ActionButtonWithPending
+              isPending={isPending}
+              isDisabled={!title.trim() || isPending}
+              onPress={handleConfirm}
+            >
+              {editing ? "Save" : isSublist ? "Create Sublist" : "Create List"}
             </ActionButtonWithPending>
           </Modal.Footer>
         </Modal.Dialog>

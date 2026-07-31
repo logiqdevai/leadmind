@@ -1,14 +1,16 @@
 import { useMemo, useState, type Key } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
-import { Tabs } from "@heroui/react";
-import { ArrowLeft, List } from "lucide-react";
+import { Button, Tabs } from "@heroui/react";
+import { ArrowLeft, List, Plus } from "lucide-react";
 import { Routes, ListDetailTabIds } from "@/routes/routes";
 import {
     useContactList,
     useContactListMembers,
+    useContactLists,
 } from "@/features/contact-lists/hooks/use-contact-lists";
 import { useBulkScrapeContactEmails } from "@/features/contacts/hooks/use-contacts";
 import { ContactListFormModal } from "../../components/contact-list-form-modal";
+import { ContactListsTable } from "../../components/contact-lists-table";
 import { ListMembersTable } from "./components/list-members-table";
 import { AddContactsModal } from "./components/add-contacts-modal";
 import { ListActionsDropdown } from "./components/list-actions-dropdown";
@@ -19,8 +21,10 @@ import { ContactStackViewerScope } from "@/pages/dashboard/components/contact-st
 import { ListDetailSkeleton } from "./components/list-detail-skeleton";
 
 const MEMBERS_PAGE_SIZE = 20;
+const SUBLISTS_PAGE_SIZE = 20;
 
 const TABS = [
+    { id: ListDetailTabIds.SUBLISTS, label: "Sublists" },
     { id: ListDetailTabIds.CONTACTS, label: "Contacts" },
     { id: ListDetailTabIds.ANALYTICS, label: "Analytics" },
 ] as const;
@@ -29,6 +33,7 @@ export default function ListDetailPage() {
     const { uuid = "" } = useParams<{ uuid: string }>();
     const [searchParams, setSearchParams] = useSearchParams();
     const [editOpen, setEditOpen] = useState(false);
+    const [createSublistOpen, setCreateSublistOpen] = useState(false);
     const [addContactsOpen, setAddContactsOpen] = useState(false);
     const [selectedKeys, setSelectedKeys] = useState<Set<string>>(new Set());
     const [scrapeConfirmOpen, setScrapeConfirmOpen] = useState(false);
@@ -38,9 +43,9 @@ export default function ListDetailPage() {
 
     const allowedTabIds = new Set<string>(TABS.map((t) => t.id));
     const rawTab = searchParams.get(Routes.dashboard.lists_detail_tab_query);
-    const currentTab = rawTab && allowedTabIds.has(rawTab) ? rawTab : ListDetailTabIds.CONTACTS;
 
     const membersPage = Math.max(1, Number(searchParams.get("page") ?? 1));
+    const sublistsPage = Math.max(1, Number(searchParams.get("sublists_page") ?? 1));
 
     const { data: list, isLoading: listLoading } = useContactList(uuid);
     const {
@@ -52,6 +57,26 @@ export default function ListDetailPage() {
         limit: MEMBERS_PAGE_SIZE,
     });
 
+    const {
+        data: childrenPage,
+        isLoading: childrenLoading,
+        isFetching: childrenFetching,
+    } = useContactLists(
+        {
+            page: sublistsPage,
+            limit: SUBLISTS_PAGE_SIZE,
+            parent_list_uuid: uuid,
+        },
+        !!uuid,
+    );
+
+    const defaultTab =
+        (list?.child_count ?? 0) > 0
+            ? ListDetailTabIds.SUBLISTS
+            : ListDetailTabIds.CONTACTS;
+    const currentTab =
+        rawTab && allowedTabIds.has(rawTab) ? rawTab : defaultTab;
+
     const members = membersData?.data ?? [];
     const selectedMembers = useMemo(
         () => members.filter((m) => selectedKeys.has(m.uuid)),
@@ -61,9 +86,24 @@ export default function ListDetailPage() {
     const totalPages = membersData?.totalPages ?? 1;
     const memberUuids = members.map((member) => member.uuid);
 
+    const children = childrenPage?.data ?? [];
+    const childrenTotal = childrenPage?.total ?? 0;
+    const childrenTotalPages = childrenPage?.totalPages ?? 1;
+
+    const backHref = list?.parent_list_uuid
+        ? Routes.dashboard.lists_detail.replace(":uuid", list.parent_list_uuid)
+        : Routes.dashboard.lists;
+    const backLabel = list?.parent_list_uuid ? "Back to parent list" : "Back to lists";
+
     const handleMembersPageChange = (p: number) => {
         const params = new URLSearchParams(searchParams);
         params.set("page", String(p));
+        setSearchParams(params, { replace: true });
+    };
+
+    const handleSublistsPageChange = (p: number) => {
+        const params = new URLSearchParams(searchParams);
+        params.set("sublists_page", String(p));
         setSearchParams(params, { replace: true });
     };
 
@@ -126,11 +166,11 @@ export default function ListDetailPage() {
                 <div className="flex flex-col gap-8">
                     <div className="flex flex-col gap-4">
                         <Link
-                            to={Routes.dashboard.lists}
+                            to={backHref}
                             className="inline-flex items-center gap-1.5 text-sm text-muted hover:text-foreground w-fit"
                         >
                             <ArrowLeft className="size-4" />
-                            Back to lists
+                            {backLabel}
                         </Link>
 
                         <div className="flex flex-wrap items-start justify-between gap-3">
@@ -142,6 +182,9 @@ export default function ListDetailPage() {
                                         <p className="text-sm text-muted mt-1">{list.description}</p>
                                     ) : null}
                                     <p className="text-xs text-muted mt-2">
+                                        {list.child_count ?? 0} sublist
+                                        {(list.child_count ?? 0) === 1 ? "" : "s"}
+                                        {" · "}
                                         {list.contact_count ?? total} contact
                                         {(list.contact_count ?? total) === 1 ? "" : "s"}
                                     </p>
@@ -193,6 +236,39 @@ export default function ListDetailPage() {
                     </Tabs>
 
                     <div className="pt-2">
+                        {currentTab === ListDetailTabIds.SUBLISTS && (
+                            <section className="flex flex-col gap-4">
+                                <div className="flex flex-wrap items-start justify-between gap-3">
+                                    <div className="flex flex-col gap-1">
+                                        <h2 className="text-base font-semibold text-foreground">Sublists</h2>
+                                        <p className="text-xs text-muted">
+                                            Nested lists under this list. Click a row to open it.
+                                        </p>
+                                    </div>
+                                    <Button
+                                        size="sm"
+                                        variant="secondary"
+                                        onPress={() => setCreateSublistOpen(true)}
+                                    >
+                                        <Plus className="size-4" />
+                                        New sublist
+                                    </Button>
+                                </div>
+                                <ContactListsTable
+                                    lists={children}
+                                    isLoading={childrenLoading}
+                                    isFetching={childrenFetching}
+                                    page={sublistsPage}
+                                    pageSize={SUBLISTS_PAGE_SIZE}
+                                    total={childrenTotal}
+                                    totalPages={childrenTotalPages}
+                                    onPageChange={handleSublistsPageChange}
+                                    emptyTitle="No sublists yet."
+                                    emptyDescription="Create a sublist to nest lists under this one."
+                                    paginationLabel="sublists"
+                                />
+                            </section>
+                        )}
                         {currentTab === ListDetailTabIds.CONTACTS && (
                             <section className="flex flex-col gap-4">
                                 <div className="flex flex-col gap-1">
@@ -223,6 +299,11 @@ export default function ListDetailPage() {
                     </div>
 
                     <ContactListFormModal isOpen={editOpen} onOpenChange={setEditOpen} editing={list} />
+                    <ContactListFormModal
+                        isOpen={createSublistOpen}
+                        onOpenChange={setCreateSublistOpen}
+                        parentListUuid={uuid}
+                    />
                     <AddContactsModal
                         listUuid={uuid}
                         isOpen={addContactsOpen}

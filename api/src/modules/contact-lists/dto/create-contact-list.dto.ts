@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
+import { IsOptional, IsString, IsUUID, MaxLength, MinLength } from 'class-validator';
 
 export class CreateContactListDto {
     @ApiProperty({ maxLength: 200 })
@@ -13,4 +13,9 @@ export class CreateContactListDto {
     @IsString()
     @MaxLength(2000)
     description?: string;
+
+    @ApiPropertyOptional({ description: 'Parent list UUID for nested sublists' })
+    @IsOptional()
+    @IsUUID()
+    parent_list_uuid?: string;
 }

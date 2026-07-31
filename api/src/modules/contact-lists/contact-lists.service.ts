@@ -23,17 +23,39 @@ export class ContactListsService {
         private readonly campaignContactResolver: CampaignContactResolverService,
     ) {}
 
+    private readonly listCountInclude = {
+        _count: { select: { members: true, children: true } },
+    } as const;
+
+    private mapListWithCounts<
+        T extends {
+            _count: { members: number; children: number };
+        },
+    >(list: T) {
+        return {
+            ...list,
+            contact_count: list._count.members,
+            child_count: list._count.children,
+        };
+    }
+
     async create(user_uuid: string, dto: CreateContactListDto) {
-        return this.prisma.contactList.create({
+        const parent_list_uuid = dto.parent_list_uuid ?? null;
+        if (parent_list_uuid) {
+            await this.assertValidParent(user_uuid, parent_list_uuid);
+        }
+
+        const list = await this.prisma.contactList.create({
             data: {
                 user_uuid,
                 title: dto.title.trim(),
                 description: dto.description?.trim() || null,
+                parent_list_uuid,
             },
-            include: {
-                _count: { select: { members: true } },
-            },
+            include: this.listCountInclude,
         });
+
+        return this.mapListWithCounts(list);
     }
 
     async findAll(user_uuid: string, query: ListContactListsDto) {
@@ -42,6 +64,12 @@ export class ContactListsService {
         const skip = (page - 1) * limit;
 
         const where: Prisma.ContactListWhereInput = { user_uuid };
+
+        if (query.parent_list_uuid) {
+            where.parent_list_uuid = query.parent_list_uuid;
+        } else if (query.root_only) {
+            where.parent_list_uuid = null;
+        }
 
         if (query.search?.trim()) {
             const search = query.search.trim();
@@ -57,18 +85,13 @@ export class ContactListsService {
                 skip,
                 take: limit,
                 orderBy: { updated_at: 'desc' },
-                include: {
-                    _count: { select: { members: true } },
-                },
+                include: this.listCountInclude,
             }),
             this.prisma.contactList.count({ where }),
         ]);
 
         return {
-            data: data.map((list) => ({
-                ...list,
-                contact_count: list._count.members,
-            })),
+            data: data.map((list) => this.mapListWithCounts(list)),
             total,
             page,
             limit,
@@ -79,34 +102,39 @@ export class ContactListsService {
     async findOne(user_uuid: string, uuid: string) {
         const list = await this.prisma.contactList.findFirst({
             where: { uuid, user_uuid },
-            include: {
-                _count: { select: { members: true } },
-            },
+            include: this.listCountInclude,
         });
 
         if (!list) throw new NotFoundException('Contact list not found');
 
-        return {
-            ...list,
-            contact_count: list._count.members,
-        };
+        return this.mapListWithCounts(list);
     }
 
     async update(user_uuid: string, uuid: string, dto: UpdateContactListDto) {
         await this.ensureListOwned(user_uuid, uuid);
 
-        return this.prisma.contactList.update({
+        if (dto.parent_list_uuid) {
+            await this.assertValidParent(user_uuid, dto.parent_list_uuid, uuid);
+        }
+
+        const parentData =
+            dto.parent_list_uuid === undefined
+                ? {}
+                : { parent_list_uuid: dto.parent_list_uuid };
+
+        const list = await this.prisma.contactList.update({
             where: { uuid },
             data: {
                 ...(dto.title !== undefined && { title: dto.title.trim() }),
                 ...(dto.description !== undefined && {
                     description: dto.description?.trim() || null,
                 }),
+                ...parentData,
             },
-            include: {
-                _count: { select: { members: true } },
-            },
+            include: this.listCountInclude,
         });
+
+        return this.mapListWithCounts(list);
     }
 
     async remove(user_uuid: string, uuid: string) {
@@ -273,5 +301,38 @@ export class ContactListsService {
         });
         if (!list) throw new NotFoundException('Contact list not found');
         return list;
+    }
+
+    private async assertValidParent(
+        user_uuid: string,
+        parent_list_uuid: string,
+        listUuid?: string,
+    ) {
+        if (listUuid && parent_list_uuid === listUuid) {
+            throw new BadRequestException('A list cannot be its own parent');
+        }
+
+        const parent = await this.prisma.contactList.findFirst({
+            where: { uuid: parent_list_uuid, user_uuid },
+            select: { uuid: true, parent_list_uuid: true },
+        });
+
+        if (!parent) {
+            throw new BadRequestException('Parent list not found');
+        }
+
+        if (!listUuid) return;
+
+        let cursor: string | null = parent.parent_list_uuid;
+        while (cursor) {
+            if (cursor === listUuid) {
+                throw new BadRequestException('Cannot set a descendant as parent');
+            }
+            const ancestor = await this.prisma.contactList.findFirst({
+                where: { uuid: cursor, user_uuid },
+                select: { parent_list_uuid: true },
+            });
+            cursor = ancestor?.parent_list_uuid ?? null;
+        }
     }
 }

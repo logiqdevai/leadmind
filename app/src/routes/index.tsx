@@ -90,6 +90,7 @@ export default function AppRoutes() {
         <Route path="lists" element={<ListsPage />} />
         <Route path="lists/:uuid/analytics" element={<NavigateToListTab tab={ListDetailTabIds.ANALYTICS} />} />
         <Route path="lists/:uuid/contacts" element={<NavigateToListTab tab={ListDetailTabIds.CONTACTS} />} />
+        <Route path="lists/:uuid/sublists" element={<NavigateToListTab tab={ListDetailTabIds.SUBLISTS} />} />
         <Route path="lists/:uuid" element={<ListDetailPage />} />
         <Route path="reminders" element={<RemindersPage />} />
         <Route path="forms" element={<FormsPage />} />
