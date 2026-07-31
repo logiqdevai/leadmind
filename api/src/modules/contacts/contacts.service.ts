@@ -54,6 +54,8 @@ import { LogSmsDto } from './dto/log-sms.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
 import { UpdateStatusDto } from './dto/update-status.dto';
 import { UpdateTagsDto } from './dto/update-tags.dto';
+import { CreateContactInfoDto } from './dto/create-contact-info.dto';
+import { UpdateContactInfoDto } from './dto/update-contact-info.dto';
 import { CONTACT_PROFILE_UPDATE_KEYS } from './constants/contact-profile.constants';
 import { contactProfileFromLead } from './utils/contact-profile.utils';
 import { ContactAiService } from './services/contact-ai.service';
@@ -406,6 +408,9 @@ export class ContactsService {
             where: { uuid, user_uuid },
             include: {
                 tags: true,
+                contact_infos: {
+                    orderBy: [{ type: 'asc' }, { created_at: 'asc' }],
+                },
                 lead: true,
                 contact_scores: {
                     include: { scoring_instruction: { select: { uuid: true, name: true } } },
@@ -723,6 +728,67 @@ export class ContactsService {
         await this.reindexContact(uuid);
 
         return { tags: unique };
+    }
+
+    async listContactInfos(user_uuid: string, uuid: string) {
+        await this.requireOwnedContact(user_uuid, uuid);
+        return this.prisma.contactInfo.findMany({
+            where: { contact_uuid: uuid },
+            orderBy: [{ type: 'asc' }, { created_at: 'asc' }],
+        });
+    }
+
+    async createContactInfo(
+        user_uuid: string,
+        uuid: string,
+        dto: CreateContactInfoDto,
+    ) {
+        await this.requireOwnedContact(user_uuid, uuid);
+        return this.prisma.contactInfo.create({
+            data: {
+                contact_uuid: uuid,
+                type: dto.type,
+                value: dto.value.trim(),
+            },
+        });
+    }
+
+    async updateContactInfo(
+        user_uuid: string,
+        uuid: string,
+        infoUuid: string,
+        dto: UpdateContactInfoDto,
+    ) {
+        await this.requireOwnedContact(user_uuid, uuid);
+        const existing = await this.prisma.contactInfo.findFirst({
+            where: { uuid: infoUuid, contact_uuid: uuid },
+        });
+        if (!existing) {
+            throw new NotFoundException(`Contact info ${infoUuid} not found`);
+        }
+        return this.prisma.contactInfo.update({
+            where: { uuid: infoUuid },
+            data: {
+                ...(dto.type !== undefined && { type: dto.type }),
+                ...(dto.value !== undefined && { value: dto.value.trim() }),
+            },
+        });
+    }
+
+    async removeContactInfo(
+        user_uuid: string,
+        uuid: string,
+        infoUuid: string,
+    ): Promise<{ uuid: string }> {
+        await this.requireOwnedContact(user_uuid, uuid);
+        const existing = await this.prisma.contactInfo.findFirst({
+            where: { uuid: infoUuid, contact_uuid: uuid },
+        });
+        if (!existing) {
+            throw new NotFoundException(`Contact info ${infoUuid} not found`);
+        }
+        await this.prisma.contactInfo.delete({ where: { uuid: infoUuid } });
+        return { uuid: infoUuid };
     }
 
     async addNote(

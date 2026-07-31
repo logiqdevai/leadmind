@@ -1,4 +1,5 @@
 import type { ContactProfileField } from "../constants/contact-profile-fields.constants";
+import type { ContactInfoType } from "../constants/contact-info-types.constants";
 import type { Lead, SourceType } from "@/features/leads/interfaces/lead.interface";
 import type { EnrichmentSource } from "@/features/lead-enrichment/constants/enrichment-sources";
 import type { EmailProviderAllocation } from "@/features/integrations/interfaces/integrations.interface";
@@ -227,6 +228,7 @@ export interface Contact {
     created_at: string;
     updated_at: string;
     tags: string[];
+    contact_infos?: ContactInfo[];
     lead: Lead;
     filter?: {
         uuid: string;
@@ -249,6 +251,25 @@ export interface Contact {
 export interface ContactListRef {
     uuid: string;
     title: string;
+}
+
+export interface ContactInfo {
+    uuid: string;
+    contact_uuid: string;
+    type: ContactInfoType;
+    value: string;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface CreateContactInfoPayload {
+    type: ContactInfoType;
+    value: string;
+}
+
+export interface UpdateContactInfoPayload {
+    type?: ContactInfoType;
+    value?: string;
 }
 
 export interface ListContactsQuery {

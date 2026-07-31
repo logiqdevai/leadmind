@@ -22,6 +22,9 @@ import type {
     OutreachMessage,
     PaginatedContacts,
     UpdateContactPayload,
+    ContactInfo,
+    CreateContactInfoPayload,
+    UpdateContactInfoPayload,
 } from "../interfaces/contact.interface";
 import type { LeadStatus } from "../interfaces/contact.interface";
 
@@ -296,5 +299,56 @@ export const logSms = async (
         return response.data;
     } catch (error: any) {
         throw new Error(error?.response?.data?.message || "Failed to log SMS.");
+    }
+};
+
+export const listContactInfos = async (uuid: string): Promise<ContactInfo[]> => {
+    try {
+        const response = await axiosInstance.get(ApiRoutes.contacts.list_info(uuid));
+        return response.data;
+    } catch (error: any) {
+        throw new Error(error?.response?.data?.message || "Failed to load contact info.");
+    }
+};
+
+export const createContactInfo = async (
+    uuid: string,
+    payload: CreateContactInfoPayload,
+): Promise<ContactInfo> => {
+    try {
+        const response = await axiosInstance.post(ApiRoutes.contacts.create_info(uuid), payload);
+        return response.data;
+    } catch (error: any) {
+        throw new Error(error?.response?.data?.message || "Failed to add contact info.");
+    }
+};
+
+export const updateContactInfo = async (
+    uuid: string,
+    infoUuid: string,
+    payload: UpdateContactInfoPayload,
+): Promise<ContactInfo> => {
+    try {
+        const response = await axiosInstance.put(
+            ApiRoutes.contacts.update_info(uuid, infoUuid),
+            payload,
+        );
+        return response.data;
+    } catch (error: any) {
+        throw new Error(error?.response?.data?.message || "Failed to update contact info.");
+    }
+};
+
+export const deleteContactInfo = async (
+    uuid: string,
+    infoUuid: string,
+): Promise<{ uuid: string }> => {
+    try {
+        const response = await axiosInstance.delete(
+            ApiRoutes.contacts.remove_info(uuid, infoUuid),
+        );
+        return response.data;
+    } catch (error: any) {
+        throw new Error(error?.response?.data?.message || "Failed to delete contact info.");
     }
 };

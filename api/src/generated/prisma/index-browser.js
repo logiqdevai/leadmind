@@ -240,6 +240,16 @@ exports.Prisma.ContactScalarFieldEnum = {
   updated_at: 'updated_at'
 };
 
+exports.Prisma.ContactInfoScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  contact_uuid: 'contact_uuid',
+  type: 'type',
+  value: 'value',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
 exports.Prisma.ContactFilterScalarFieldEnum = {
   contact_uuid: 'contact_uuid',
   filter_uuid: 'filter_uuid',
@@ -706,6 +716,22 @@ exports.LeadStatus = exports.$Enums.LeadStatus = {
   ARCHIVED: 'ARCHIVED'
 };
 
+exports.ContactInfoType = exports.$Enums.ContactInfoType = {
+  EMAIL: 'EMAIL',
+  PHONE: 'PHONE',
+  SMS: 'SMS',
+  WEBSITE: 'WEBSITE',
+  LINKEDIN: 'LINKEDIN',
+  FACEBOOK: 'FACEBOOK',
+  INSTAGRAM: 'INSTAGRAM',
+  TWITTER: 'TWITTER',
+  WHATSAPP: 'WHATSAPP',
+  TELEGRAM: 'TELEGRAM',
+  YOUTUBE: 'YOUTUBE',
+  GOOGLE_MAPS: 'GOOGLE_MAPS',
+  OTHER: 'OTHER'
+};
+
 exports.InteractionType = exports.$Enums.InteractionType = {
   NOTE: 'NOTE',
   CALL: 'CALL',
@@ -907,6 +933,7 @@ exports.Prisma.ModelName = {
   Lead: 'Lead',
   LeadEnrichment: 'LeadEnrichment',
   Contact: 'Contact',
+  ContactInfo: 'ContactInfo',
   ContactFilter: 'ContactFilter',
   ContactEnrichment: 'ContactEnrichment',
   ContactScore: 'ContactScore',

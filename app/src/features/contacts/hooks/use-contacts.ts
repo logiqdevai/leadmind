@@ -4,7 +4,9 @@ import {
     bulkAiDraftMessages,
     createContact,
     createContactFromLead,
+    createContactInfo,
     deleteContact,
+    deleteContactInfo,
     deleteContactsBulk,
     enrichContact,
     getContact,
@@ -21,6 +23,7 @@ import {
     bulkScrapeContactEmails,
     triggerDraftMessages,
     updateContact,
+    updateContactInfo,
     updateContactNotes,
     updateContactStatus,
     updateContactTags,
@@ -32,6 +35,7 @@ import type {
     BulkTriggerContactScorePayload,
     BulkScrapeContactEmailsPayload,
     Contact,
+    CreateContactInfoPayload,
     CreateContactPayload,
     LeadStatus,
     ListContactsQuery,
@@ -40,6 +44,7 @@ import type {
     LogMeetingPayload,
     LogSmsPayload,
     PaginatedContacts,
+    UpdateContactInfoPayload,
     UpdateContactPayload,
 } from "../interfaces/contact.interface";
 import { enrichmentQueryKeys } from "@/features/enrichment/hooks/use-enrichment";
@@ -668,6 +673,84 @@ export function useEnrichContact() {
         onError: (error: Error) => {
             toast({
                 title: "Could not queue enrichment",
+                description: error.message,
+                duration: 3000,
+                variant: "error",
+            });
+        },
+    });
+}
+
+export function useCreateContactInfo(contactUuid: string) {
+    const qc = useQueryClient();
+    return useMutation({
+        mutationFn: (payload: CreateContactInfoPayload) =>
+            createContactInfo(contactUuid, payload),
+        onSuccess: (created) => {
+            qc.setQueryData<Contact>(contactsQueryKeys.detail(contactUuid), (prev) => {
+                if (!prev) return prev;
+                const infos = [...(prev.contact_infos ?? []), created];
+                return { ...prev, contact_infos: infos };
+            });
+            qc.invalidateQueries({ queryKey: contactsQueryKeys.detail(contactUuid) });
+            toast({ title: "Contact info added", duration: 1500 });
+        },
+        onError: (error: Error) => {
+            toast({
+                title: "Could not add contact info",
+                description: error.message,
+                duration: 3000,
+                variant: "error",
+            });
+        },
+    });
+}
+
+export function useUpdateContactInfo(contactUuid: string) {
+    const qc = useQueryClient();
+    return useMutation({
+        mutationFn: (vars: { infoUuid: string; payload: UpdateContactInfoPayload }) =>
+            updateContactInfo(contactUuid, vars.infoUuid, vars.payload),
+        onSuccess: (updated) => {
+            qc.setQueryData<Contact>(contactsQueryKeys.detail(contactUuid), (prev) => {
+                if (!prev) return prev;
+                const infos = (prev.contact_infos ?? []).map((i) =>
+                    i.uuid === updated.uuid ? updated : i,
+                );
+                return { ...prev, contact_infos: infos };
+            });
+            qc.invalidateQueries({ queryKey: contactsQueryKeys.detail(contactUuid) });
+            toast({ title: "Contact info updated", duration: 1500 });
+        },
+        onError: (error: Error) => {
+            toast({
+                title: "Could not update contact info",
+                description: error.message,
+                duration: 3000,
+                variant: "error",
+            });
+        },
+    });
+}
+
+export function useDeleteContactInfo(contactUuid: string) {
+    const qc = useQueryClient();
+    return useMutation({
+        mutationFn: (infoUuid: string) => deleteContactInfo(contactUuid, infoUuid),
+        onSuccess: (_data, infoUuid) => {
+            qc.setQueryData<Contact>(contactsQueryKeys.detail(contactUuid), (prev) => {
+                if (!prev) return prev;
+                return {
+                    ...prev,
+                    contact_infos: (prev.contact_infos ?? []).filter((i) => i.uuid !== infoUuid),
+                };
+            });
+            qc.invalidateQueries({ queryKey: contactsQueryKeys.detail(contactUuid) });
+            toast({ title: "Contact info deleted", duration: 1500 });
+        },
+        onError: (error: Error) => {
+            toast({
+                title: "Could not delete contact info",
                 description: error.message,
                 duration: 3000,
                 variant: "error",

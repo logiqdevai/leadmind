@@ -33,6 +33,7 @@ import { ContactListFormModal } from "@/pages/dashboard/pages/lists/components/c
 import { Routes } from "@/routes/routes";
 import type { ProfileDraft } from "../types";
 import { profileDraftFromContact, sameUuidSet } from "../utils/profile-draft";
+import { ContactInfosSection } from "./contact-infos-section";
 
 interface OverviewTabProps {
     contact: Contact;
@@ -202,6 +203,11 @@ function DetailPanel({ contact, onEdit }: { contact: Contact; onEdit: () => void
                 summary={contact.enrichment_summary ?? contact.lead.enrichment_summary}
                 metadata={contact.enrichment_metadata ?? contact.lead.enrichment_metadata}
                 hideWhenEmpty
+            />
+
+            <ContactInfosSection
+                contactUuid={contact.uuid}
+                infos={contact.contact_infos ?? []}
             />
 
             <SectionCard title="Contact" icon={AtSign}>

@@ -207,6 +207,7 @@ model Contact {
   filter            Filter?                    @relation(fields: [filter_uuid], references: [uuid], onDelete: SetNull)
   contact_filters   ContactFilter[]
   tags              ContactTag[]
+  contact_infos     ContactInfo[]
   interactions      Interaction[]
   outreach_messages OutreachMessage[]
   campaign_contacts MarketingCampaignContact[]
@@ -223,6 +224,22 @@ model Contact {
   @@index([email])
   @@index([unsubscribed_at])
   @@index([last_interaction_at])
+}
+
+model ContactInfo {
+  id           Int             @id @default(autoincrement())
+  uuid         String          @unique @default(uuid())
+  contact_uuid String
+  type         ContactInfoType
+  value        String
+  created_at   DateTime        @default(now())
+  updated_at   DateTime        @updatedAt
+
+  contact Contact @relation(fields: [contact_uuid], references: [uuid], onDelete: Cascade)
+
+  @@index([contact_uuid])
+  @@index([contact_uuid, type])
+  @@map("contact_infos")
 }
 
 model ContactFilter {
@@ -585,6 +602,22 @@ enum Channel {
   SMS
   PHONE_CALL
   LINKEDIN
+}
+
+enum ContactInfoType {
+  EMAIL
+  PHONE
+  SMS
+  WEBSITE
+  LINKEDIN
+  FACEBOOK
+  INSTAGRAM
+  TWITTER
+  WHATSAPP
+  TELEGRAM
+  YOUTUBE
+  GOOGLE_MAPS
+  OTHER
 }
 
 enum LeadStatus {

@@ -34,6 +34,8 @@ import { LogSmsDto } from './dto/log-sms.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
 import { UpdateStatusDto } from './dto/update-status.dto';
 import { UpdateTagsDto } from './dto/update-tags.dto';
+import { CreateContactInfoDto } from './dto/create-contact-info.dto';
+import { UpdateContactInfoDto } from './dto/update-contact-info.dto';
 import { EnrichContactDto } from './dto/enrich-contact.dto';
 import { TriggerScoreDto } from './dto/trigger-score.dto';
 import { ListEnrichmentsDto } from '@/modules/enrichment/dto/list-enrichments.dto';
@@ -186,6 +188,47 @@ export class ContactsController {
         @Body() dto: UpdateTagsDto,
     ) {
         return this.contactsService.updateTags(user_uuid, uuid, dto);
+    }
+
+    @Get(':uuid/info')
+    @ApiOperation({ summary: 'List contact info entries (email, phone, social links, etc.)' })
+    listContactInfos(
+        @CurrentUser('uuid') user_uuid: string,
+        @Param('uuid') uuid: string,
+    ) {
+        return this.contactsService.listContactInfos(user_uuid, uuid);
+    }
+
+    @Post(':uuid/info')
+    @ApiOperation({ summary: 'Add a contact info entry' })
+    @ApiResponse({ status: 201 })
+    createContactInfo(
+        @CurrentUser('uuid') user_uuid: string,
+        @Param('uuid') uuid: string,
+        @Body() dto: CreateContactInfoDto,
+    ) {
+        return this.contactsService.createContactInfo(user_uuid, uuid, dto);
+    }
+
+    @Put(':uuid/info/:infoUuid')
+    @ApiOperation({ summary: 'Update a contact info entry' })
+    updateContactInfo(
+        @CurrentUser('uuid') user_uuid: string,
+        @Param('uuid') uuid: string,
+        @Param('infoUuid') infoUuid: string,
+        @Body() dto: UpdateContactInfoDto,
+    ) {
+        return this.contactsService.updateContactInfo(user_uuid, uuid, infoUuid, dto);
+    }
+
+    @Delete(':uuid/info/:infoUuid')
+    @ApiOperation({ summary: 'Delete a contact info entry' })
+    removeContactInfo(
+        @CurrentUser('uuid') user_uuid: string,
+        @Param('uuid') uuid: string,
+        @Param('infoUuid') infoUuid: string,
+    ) {
+        return this.contactsService.removeContactInfo(user_uuid, uuid, infoUuid);
     }
 
     @Post(':uuid/notes')
