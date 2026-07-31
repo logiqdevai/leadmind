@@ -98,7 +98,7 @@ export function SignUpForm({
           type="email"
           autoComplete="email"
           fullWidth
-          isDisabled={emailLocked}
+          disabled={emailLocked}
         />
         {errors.email && <FieldError>{errors.email.message}</FieldError>}
       </div>
