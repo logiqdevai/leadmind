@@ -17,6 +17,12 @@ export class CreateSmtpAccountDto {
     @Matches(/^[a-zA-Z0-9_-]+$/)
     account!: string;
 
+    @ApiProperty({ example: 'Sales Gmail', description: 'Display title shown in send menus' })
+    @IsString()
+    @MinLength(1)
+    @MaxLength(80)
+    title!: string;
+
     @ApiProperty({ example: 'smtp.example.com' })
     @IsString()
     @MinLength(1)

@@ -750,13 +750,30 @@ model Integration {
   created_at       DateTime                    @default(now())
   updated_at       DateTime                    @updatedAt
 
-  user User             @relation(fields: [user_uuid], references: [uuid], onDelete: Cascade)
-  keys IntegrationKey[]
+  user     User                 @relation(fields: [user_uuid], references: [uuid], onDelete: Cascade)
+  keys     IntegrationKey[]
+  accounts IntegrationAccount[]
 
   @@unique([user_uuid, provider])
   @@index([user_uuid])
   @@index([provider])
   @@map("integrations")
+}
+
+model IntegrationAccount {
+  id               Int      @id @default(autoincrement())
+  uuid             String   @unique @default(uuid())
+  integration_uuid String
+  account          String
+  title            String
+  created_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt
+
+  integration Integration @relation(fields: [integration_uuid], references: [uuid], onDelete: Cascade)
+
+  @@unique([integration_uuid, account])
+  @@index([integration_uuid])
+  @@map("integration_accounts")
 }
 
 model IntegrationKey {

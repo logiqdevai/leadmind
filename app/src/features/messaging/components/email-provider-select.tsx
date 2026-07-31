@@ -103,9 +103,10 @@ function EmailProviderSingleSelect({
                         {selectedAccount ? (
                             <span className="flex min-w-0 items-center gap-2">
                                 <span className="truncate">
+                                    {selectedAccount.title}
                                     {selectedAccount.detail?.startsWith("from ")
-                                        ? selectedAccount.detail.slice(5)
-                                        : selectedAccount.label}
+                                        ? ` · ${selectedAccount.detail.slice(5)}`
+                                        : ""}
                                 </span>
                                 {selectedAccount.isDefault ? (
                                     <Chip size="sm" variant="soft" color="warning" className="shrink-0">
@@ -146,11 +147,7 @@ function EmailProviderSingleSelect({
                                                             isIncomplete && "text-muted",
                                                         )}
                                                     >
-                                                        {account.detail?.startsWith("from ")
-                                                            ? account.detail.slice(5)
-                                                            : account.detail === "from address missing"
-                                                              ? "From address missing"
-                                                              : `Account ${account.account}`}
+                                                        {account.title}
                                                     </span>
                                                     {account.isDefault ? (
                                                         <Chip
@@ -165,16 +162,16 @@ function EmailProviderSingleSelect({
                                                 </div>
                                                 <span
                                                     className={cn(
-                                                        "truncate font-mono text-xs",
+                                                        "truncate text-xs",
                                                         account.detail === "from address missing"
                                                             ? "text-danger"
                                                             : "text-muted",
                                                     )}
                                                 >
                                                     {account.detail?.startsWith("from ")
-                                                        ? `Account ${account.account}`
+                                                        ? account.detail.slice(5)
                                                         : account.detail === "from address missing"
-                                                          ? `Account ${account.account} · add from address in Integrations`
+                                                          ? "Add from address in Integrations"
                                                           : account.detail ?? null}
                                                 </span>
                                             </div>
@@ -330,8 +327,12 @@ function EmailProviderAllocationSelect({
                                         <Checkbox.Indicator />
                                     </Checkbox.Control>
                                     <span className="text-sm text-foreground">
-                                        {account.label}
-                                        {account.last4 ? (
+                                        {account.title}
+                                        {account.detail?.startsWith("from ") ? (
+                                            <span className="ml-1 text-xs text-muted">
+                                                {account.detail.slice(5)}
+                                            </span>
+                                        ) : account.last4 ? (
                                             <span className="ml-1 font-mono text-xs text-muted">
                                                 {account.last4}
                                             </span>

@@ -40,6 +40,7 @@ export function SmtpAccountFormModal({
     );
 
     const [account, setAccount] = useState(defaultAccount);
+    const [title, setTitle] = useState("");
     const [host, setHost] = useState("");
     const [port, setPort] = useState("587");
     const [username, setUsername] = useState("");
@@ -51,6 +52,7 @@ export function SmtpAccountFormModal({
     useEffect(() => {
         if (!isOpen) return;
         setAccount(defaultAccount);
+        setTitle("");
         setHost("");
         setPort("587");
         setUsername("");
@@ -62,6 +64,7 @@ export function SmtpAccountFormModal({
 
     const handleSubmit = async () => {
         const trimmedAccount = account.trim();
+        const trimmedTitle = title.trim();
         const trimmedFromName = fromName.trim();
         const fields = {
             HOST: host.trim(),
@@ -70,6 +73,11 @@ export function SmtpAccountFormModal({
             PASSWORD: password.trim(),
             FROM_EMAIL: fromEmail.trim(),
         };
+
+        if (!trimmedTitle) {
+            setFormError("Title is required.");
+            return;
+        }
 
         if (!/^[a-zA-Z0-9_-]+$/.test(trimmedAccount)) {
             setFormError("Account label may only use letters, numbers, underscores, or hyphens.");
@@ -87,6 +95,7 @@ export function SmtpAccountFormModal({
         try {
             await createSmtpAccount({
                 account: trimmedAccount,
+                title: trimmedTitle,
                 host: fields.HOST,
                 port: Number.parseInt(fields.PORT, 10),
                 username: fields.USERNAME,
@@ -115,6 +124,20 @@ export function SmtpAccountFormModal({
                         </Modal.Header>
                         <Modal.Body className="space-y-4">
                             <div className="flex flex-col gap-1.5">
+                                <Label htmlFor="smtp-account-title">Title</Label>
+                                <Input
+                                    id="smtp-account-title"
+                                    className={borderedFieldClass}
+                                    value={title}
+                                    onChange={(e) => setTitle(e.target.value)}
+                                    placeholder="Sales Gmail, Marketing SMTP"
+                                />
+                                <p className="text-xs text-muted">
+                                    Shown in send menus so you can tell accounts apart.
+                                </p>
+                            </div>
+
+                            <div className="flex flex-col gap-1.5">
                                 <Label htmlFor="smtp-account-label">Account label</Label>
                                 <Input
                                     id="smtp-account-label"
@@ -124,7 +147,7 @@ export function SmtpAccountFormModal({
                                     placeholder="1, production, sales"
                                 />
                                 <p className="text-xs text-muted">
-                                    Use one label for all SMTP credentials in this account.
+                                    Internal ID for this credential set. Letters, numbers, underscores, or hyphens.
                                 </p>
                             </div>
 

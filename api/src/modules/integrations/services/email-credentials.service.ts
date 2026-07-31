@@ -198,19 +198,23 @@ export class EmailCredentialsService {
                 user_uuid,
                 provider: { in: [...EMAIL_PROVIDERS] },
             },
-            include: { keys: true },
+            include: { keys: true, accounts: true },
         });
 
         const accounts: SendableEmailAccount[] = [];
 
         for (const integration of integrations) {
+            const titleByAccount = new Map(
+                integration.accounts.map((row) => [row.account, row.title]),
+            );
             const distinctAccounts = listDistinctIntegrationAccounts(integration.keys);
             for (const account of distinctAccounts) {
                 if (this.isAccountComplete(integration.provider, integration.keys, account)) {
+                    const title = titleByAccount.get(account) ?? account;
                     accounts.push({
                         provider: integration.provider as EmailProviderTarget['provider'],
                         account,
-                        label: `${integration.provider} · ${account}`,
+                        label: `${integration.provider} · ${title}`,
                     });
                 }
             }

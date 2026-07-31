@@ -1,4 +1,5 @@
 import type { SendHistoryMessage } from "@/features/outreach/interfaces/send-history.interface";
+import type { IntegrationProviderView } from "@/features/integrations/interfaces/integrations.interface";
 
 export function formatSendHistoryDate(iso: string | null | undefined): string {
     if (!iso) return "—";
@@ -11,20 +12,45 @@ export function formatSendHistoryDate(iso: string | null | undefined): string {
     });
 }
 
-export function getSendIntegrationLabel(message: SendHistoryMessage): string {
+function resolveAccountTitle(
+    integrations: IntegrationProviderView[] | undefined,
+    provider: "RESEND" | "SMTP",
+    account: string,
+): string {
+    const integration = integrations?.find((row) => row.provider === provider);
+    return (
+        integration?.accounts?.find((row) => row.account === account)?.title ??
+        account
+    );
+}
+
+export function getSendIntegrationLabel(
+    message: SendHistoryMessage,
+    integrations?: IntegrationProviderView[],
+): string {
     if (message.channel === "SMS") {
         return message.sms_provider === "TWILIO" ? "Twilio" : "—";
     }
 
     if (message.email_provider === "SMTP") {
-        return message.email_account ? `SMTP · Account ${message.email_account}` : "SMTP";
+        if (!message.email_account) return "SMTP";
+        const title = resolveAccountTitle(
+            integrations,
+            "SMTP",
+            message.email_account,
+        );
+        return `SMTP · ${title}`;
     }
 
     if (message.email_provider === "RESEND") {
         if (message.email_account === "env") return "Resend (env)";
-        return message.email_account
-            ? `Resend · Account ${message.email_account}`
-            : "Resend";
+        if (!message.email_account) return "Resend";
+        const title = resolveAccountTitle(
+            integrations,
+            "RESEND",
+            message.email_account,
+        );
+        return `Resend · ${title}`;
     }
 
     return "—";

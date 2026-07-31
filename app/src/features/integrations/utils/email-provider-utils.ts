@@ -10,6 +10,7 @@ import type {
 } from "@/features/integrations/interfaces/integrations.interface";
 
 export interface SendableEmailAccount extends EmailProviderTarget {
+    title: string;
     label: string;
     detail: string | null;
     last4: string | null;
@@ -85,13 +86,23 @@ function buildAccountDetail(
 
 function buildAccountLabel(
     integrationLabel: string,
-    account: string,
+    title: string,
     detail: string | null,
 ): string {
     if (detail) {
-        return `${integrationLabel} · Account ${account} (${detail})`;
+        return `${integrationLabel} · ${title} (${detail})`;
     }
-    return `${integrationLabel} · Account ${account}`;
+    return `${integrationLabel} · ${title}`;
+}
+
+function resolveAccountTitle(
+    integration: IntegrationProviderView,
+    account: string,
+): string {
+    return (
+        integration.accounts?.find((row) => row.account === account)?.title ??
+        account
+    );
 }
 
 function listProviderAccounts(
@@ -123,10 +134,12 @@ export function listSendableEmailAccounts(
             }
             const canSend = isEmailAccountSendable(provider, integration.keys, account);
             const detail = buildAccountDetail(provider, integration.keys, account);
+            const title = resolveAccountTitle(integration, account);
             accounts.push({
                 provider,
                 account,
-                label: buildAccountLabel(integration.label, account, detail),
+                title,
+                label: buildAccountLabel(integration.label, title, detail),
                 detail,
                 last4: keyValueHint(
                     integration.keys,

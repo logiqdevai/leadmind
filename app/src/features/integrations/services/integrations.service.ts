@@ -8,6 +8,7 @@ import type {
     IntegrationProvider,
     IntegrationProviderView,
     SetDefaultIntegrationAccountPayload,
+    UpdateIntegrationAccountPayload,
     UpdateIntegrationKeyPayload,
 } from "../interfaces/integrations.interface";
 
@@ -101,6 +102,24 @@ export const setDefaultIntegrationAccount = async (
     } catch (error) {
         throw new Error(
             apiErrorMessage(error, "Failed to set default account."),
+        );
+    }
+};
+
+export const updateIntegrationAccount = async (
+    provider: IntegrationProvider,
+    account: string,
+    payload: UpdateIntegrationAccountPayload,
+): Promise<IntegrationProviderView> => {
+    try {
+        const response = await axiosInstance.patch(
+            ApiRoutes.integrations.updateAccount(provider, account),
+            payload,
+        );
+        return response.data;
+    } catch (error) {
+        throw new Error(
+            apiErrorMessage(error, "Failed to update account title."),
         );
     }
 };

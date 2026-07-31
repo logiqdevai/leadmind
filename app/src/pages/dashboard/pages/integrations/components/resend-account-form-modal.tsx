@@ -40,6 +40,7 @@ export function ResendAccountFormModal({
     );
 
     const [account, setAccount] = useState(defaultAccount);
+    const [title, setTitle] = useState("");
     const [apiKey, setApiKey] = useState("");
     const [fromEmail, setFromEmail] = useState("");
     const [formError, setFormError] = useState<string | null>(null);
@@ -47,6 +48,7 @@ export function ResendAccountFormModal({
     useEffect(() => {
         if (!isOpen) return;
         setAccount(defaultAccount);
+        setTitle("");
         setApiKey("");
         setFromEmail("");
         setFormError(null);
@@ -54,10 +56,16 @@ export function ResendAccountFormModal({
 
     const handleSubmit = async () => {
         const trimmedAccount = account.trim();
+        const trimmedTitle = title.trim();
         const fields = {
             API_KEY: apiKey.trim(),
             FROM_EMAIL: fromEmail.trim(),
         };
+
+        if (!trimmedTitle) {
+            setFormError("Title is required.");
+            return;
+        }
 
         if (!/^[a-zA-Z0-9_-]+$/.test(trimmedAccount)) {
             setFormError("Account label may only use letters, numbers, underscores, or hyphens.");
@@ -76,11 +84,12 @@ export function ResendAccountFormModal({
             const entries = Object.entries(fields) as Array<
                 ["API_KEY" | "FROM_EMAIL", string]
             >;
-            for (const [key_type, secret] of entries) {
+            for (const [index, [key_type, secret]] of entries.entries()) {
                 await createIntegrationKey("RESEND", {
                     key_type,
                     account: trimmedAccount,
                     secret,
+                    ...(index === 0 ? { title: trimmedTitle } : {}),
                 });
             }
             await qc.invalidateQueries({ queryKey: integrationsQueryKeys.all });
@@ -104,6 +113,20 @@ export function ResendAccountFormModal({
                         </Modal.Header>
                         <Modal.Body className="space-y-4">
                             <div className="flex flex-col gap-1.5">
+                                <Label htmlFor="resend-account-title">Title</Label>
+                                <Input
+                                    id="resend-account-title"
+                                    className={borderedFieldClass}
+                                    value={title}
+                                    onChange={(e) => setTitle(e.target.value)}
+                                    placeholder="Marketing Resend, Product emails"
+                                />
+                                <p className="text-xs text-muted">
+                                    Shown in send menus so you can tell accounts apart.
+                                </p>
+                            </div>
+
+                            <div className="flex flex-col gap-1.5">
                                 <Label htmlFor="resend-account-label">Account label</Label>
                                 <Input
                                     id="resend-account-label"
@@ -113,7 +136,7 @@ export function ResendAccountFormModal({
                                     placeholder="1, production, sales"
                                 />
                                 <p className="text-xs text-muted">
-                                    Use one label for all Resend credentials in this account.
+                                    Internal ID for this credential set. Letters, numbers, underscores, or hyphens.
                                 </p>
                             </div>
 

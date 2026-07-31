@@ -21,6 +21,11 @@ export interface IntegrationKeyResponse {
     updated_at: Date;
 }
 
+export interface IntegrationAccountResponse {
+    account: string;
+    title: string;
+}
+
 export interface IntegrationResponse {
     provider: ExternalIntegrationProvider;
     uuid: string | null;
@@ -30,6 +35,7 @@ export interface IntegrationResponse {
     allows_multiple_accounts: boolean;
     supports_default_account_selection: boolean;
     default_account: string | null;
+    accounts: IntegrationAccountResponse[];
     keyTypes: IntegrationKeyTypeOption[];
     keys: IntegrationKeyResponse[];
 }

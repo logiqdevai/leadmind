@@ -1,6 +1,7 @@
 import { Chip } from "@heroui/react";
 import { Link } from "react-router-dom";
 import type { MsgStatus } from "@/features/contacts/interfaces/contact.interface";
+import { useIntegrations } from "@/features/integrations/hooks/use-integrations";
 import type { SendHistoryMessage } from "@/features/outreach/interfaces/send-history.interface";
 import { Routes } from "@/routes/routes";
 import {
@@ -27,6 +28,8 @@ const STATUS_COLOR: Record<
 };
 
 export function SendHistoryTable({ rows }: { rows: SendHistoryMessage[] }) {
+    const { data: integrations } = useIntegrations();
+
     if (rows.length === 0) {
         return (
             <div className="rounded-xl border border-dashed border-border bg-surface-secondary/30 p-8 text-center text-sm text-muted">
@@ -65,7 +68,7 @@ export function SendHistoryTable({ rows }: { rows: SendHistoryMessage[] }) {
                             </td>
                             <td className="px-3 py-2 align-top text-foreground/90">{row.channel}</td>
                             <td className="px-3 py-2 align-top text-foreground/90">
-                                {getSendIntegrationLabel(row)}
+                                {getSendIntegrationLabel(row, integrations)}
                             </td>
                             <td className="px-3 py-2 align-top">
                                 <Chip size="sm" variant="soft" color={STATUS_COLOR[row.status]}>

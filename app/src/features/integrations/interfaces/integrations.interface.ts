@@ -46,6 +46,11 @@ export interface IntegrationKey {
     updated_at: string;
 }
 
+export interface IntegrationAccountView {
+    account: string;
+    title: string;
+}
+
 export interface IntegrationProviderView {
     provider: IntegrationProvider;
     uuid: string | null;
@@ -55,12 +60,17 @@ export interface IntegrationProviderView {
     allows_multiple_accounts?: boolean;
     supports_default_account_selection?: boolean;
     default_account: string | null;
+    accounts?: IntegrationAccountView[];
     keyTypes: IntegrationKeyTypeOption[];
     keys: IntegrationKey[];
 }
 
 export interface SetDefaultIntegrationAccountPayload {
     account: string;
+}
+
+export interface UpdateIntegrationAccountPayload {
+    title: string;
 }
 
 export type EmailDeliveryProvider = "RESEND" | "SMTP";
@@ -77,11 +87,13 @@ export interface EmailProviderAllocation extends EmailProviderTarget {
 export interface CreateIntegrationKeyPayload {
     key_type: IntegrationKeyType;
     account: string;
+    title?: string;
     secret: string;
 }
 
 export interface CreateSmtpAccountPayload {
     account: string;
+    title: string;
     host: string;
     port: number;
     username: string;

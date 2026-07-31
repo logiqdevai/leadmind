@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
-import { Button, Chip, Modal } from "@heroui/react";
+import { Button, Chip, Input, Modal } from "@heroui/react";
 import { CheckCircle2, KeyRound, Pencil, Plus, Star, Trash2 } from "lucide-react";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
+import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
 import {
     useDeleteIntegrationKey,
     useSetDefaultIntegrationAccount,
+    useUpdateIntegrationAccount,
 } from "@/features/integrations/hooks/use-integrations";
 import {
     canShowAddKeyButton,
@@ -25,6 +27,12 @@ import type {
 import { IntegrationKeyFormModal } from "./integration-key-form-modal";
 import { ResendAccountFormModal } from "./resend-account-form-modal";
 import { SmtpAccountFormModal } from "./smtp-account-form-modal";
+import { cn } from "@/lib/utils";
+
+const borderedFieldClass = cn(
+    "rounded-md border border-border bg-surface-primary",
+    "focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/40",
+);
 
 interface IntegrationDetailModalProps {
     isOpen: boolean;
@@ -39,6 +47,7 @@ export function IntegrationDetailModal({
 }: IntegrationDetailModalProps) {
     const deleteKey = useDeleteIntegrationKey();
     const setDefaultAccount = useSetDefaultIntegrationAccount();
+    const updateAccount = useUpdateIntegrationAccount();
 
     const [formOpen, setFormOpen] = useState(false);
     const [smtpFormOpen, setSmtpFormOpen] = useState(false);
@@ -49,6 +58,8 @@ export function IntegrationDetailModal({
     >();
     const [initialAccount, setInitialAccount] = useState<string | undefined>();
     const [keyToDelete, setKeyToDelete] = useState<IntegrationKey | null>(null);
+    const [renamingAccount, setRenamingAccount] = useState<string | null>(null);
+    const [renameTitle, setRenameTitle] = useState("");
 
     const groupedKeys = useMemo(
         () => (providerView ? groupKeysByAccount(providerView.keys) : []),
@@ -61,6 +72,8 @@ export function IntegrationDetailModal({
         setInitialKeyType(undefined);
         setInitialAccount(undefined);
         setKeyToDelete(null);
+        setRenamingAccount(null);
+        setRenameTitle("");
     }, [isOpen]);
 
     if (!providerView) {
@@ -132,6 +145,30 @@ export function IntegrationDetailModal({
                 provider: providerView.provider,
                 payload: { account },
             });
+        } catch {
+        }
+    };
+
+    const startRename = (account: string) => {
+        const current =
+            providerView?.accounts?.find((row) => row.account === account)
+                ?.title ?? account;
+        setRenamingAccount(account);
+        setRenameTitle(current);
+    };
+
+    const handleRename = async () => {
+        if (!providerView || !renamingAccount) return;
+        const trimmed = renameTitle.trim();
+        if (!trimmed) return;
+        try {
+            await updateAccount.mutateAsync({
+                provider: providerView.provider,
+                account: renamingAccount,
+                payload: { title: trimmed },
+            });
+            setRenamingAccount(null);
+            setRenameTitle("");
         } catch {
         }
     };
@@ -230,11 +267,71 @@ export function IntegrationDetailModal({
                                                 >
                                                     {allowsMultipleAccounts && (
                                                         <div className="px-3 py-2 border-b border-border flex items-center justify-between gap-2">
-                                                            <div>
+                                                            <div className="min-w-0 flex-1">
                                                                 <p className="text-xs font-medium uppercase tracking-wide text-muted">
                                                                     Account
                                                                 </p>
-                                                                <p className="text-sm font-semibold text-foreground">
+                                                                {renamingAccount ===
+                                                                group.account ? (
+                                                                    <div className="mt-1 flex flex-wrap items-center gap-2">
+                                                                        <Input
+                                                                            aria-label="Account title"
+                                                                            className={cn(
+                                                                                borderedFieldClass,
+                                                                                "max-w-xs",
+                                                                            )}
+                                                                            value={renameTitle}
+                                                                            onChange={(e) =>
+                                                                                setRenameTitle(
+                                                                                    e.target.value,
+                                                                                )
+                                                                            }
+                                                                        />
+                                                                        <ActionButtonWithPending
+                                                                            size="sm"
+                                                                            isPending={
+                                                                                updateAccount.isPending
+                                                                            }
+                                                                            onPress={handleRename}
+                                                                        >
+                                                                            Save
+                                                                        </ActionButtonWithPending>
+                                                                        <Button
+                                                                            size="sm"
+                                                                            variant="ghost"
+                                                                            onPress={() =>
+                                                                                setRenamingAccount(
+                                                                                    null,
+                                                                                )
+                                                                            }
+                                                                        >
+                                                                            Cancel
+                                                                        </Button>
+                                                                    </div>
+                                                                ) : (
+                                                                    <div className="flex items-center gap-1.5">
+                                                                        <p className="text-sm font-semibold text-foreground">
+                                                                            {providerView.accounts?.find(
+                                                                                (row) =>
+                                                                                    row.account ===
+                                                                                    group.account,
+                                                                            )?.title ??
+                                                                                group.account}
+                                                                        </p>
+                                                                        <Button
+                                                                            size="sm"
+                                                                            variant="ghost"
+                                                                            onPress={() =>
+                                                                                startRename(
+                                                                                    group.account,
+                                                                                )
+                                                                            }
+                                                                        >
+                                                                            <Pencil className="size-3.5" />
+                                                                        </Button>
+                                                                    </div>
+                                                                )}
+                                                                <p className="text-xs text-muted font-mono mt-0.5">
                                                                     {group.account}
                                                                 </p>
                                                                 {sendable !== null ? (

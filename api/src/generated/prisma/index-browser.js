@@ -489,6 +489,16 @@ exports.Prisma.IntegrationScalarFieldEnum = {
   updated_at: 'updated_at'
 };
 
+exports.Prisma.IntegrationAccountScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  integration_uuid: 'integration_uuid',
+  account: 'account',
+  title: 'title',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
 exports.Prisma.IntegrationKeyScalarFieldEnum = {
   id: 'id',
   uuid: 'uuid',
@@ -913,6 +923,7 @@ exports.Prisma.ModelName = {
   MarketingCampaignContact: 'MarketingCampaignContact',
   OpenAiBatchJob: 'OpenAiBatchJob',
   Integration: 'Integration',
+  IntegrationAccount: 'IntegrationAccount',
   IntegrationKey: 'IntegrationKey',
   Reminder: 'Reminder',
   Form: 'Form',

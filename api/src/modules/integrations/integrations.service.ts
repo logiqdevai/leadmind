@@ -9,6 +9,7 @@ import { ConfigService } from '@nestjs/config';
 import {
     ExternalIntegrationProvider,
     Integration,
+    IntegrationAccount,
     IntegrationKey,
     IntegrationKeyType,
     Prisma,
@@ -41,12 +42,20 @@ import {
 import { CreateIntegrationKeyDto } from './dto/create-integration-key.dto';
 import { CreateSmtpAccountDto } from './dto/create-smtp-account.dto';
 import { SetDefaultIntegrationAccountDto } from './dto/set-default-integration-account.dto';
+import { UpdateIntegrationAccountDto } from './dto/update-integration-account.dto';
 import { UpdateIntegrationKeyDto } from './dto/update-integration-key.dto';
 import {
+    IntegrationAccountResponse,
     IntegrationKeyResponse,
     IntegrationKeyTypeOption,
     IntegrationResponse,
 } from './interfaces/integration.interface';
+
+type IntegrationWithRelations = Integration & {
+    keys: IntegrationKey[];
+    accounts: IntegrationAccount[];
+};
+
 @Injectable()
 export class IntegrationsService {
     private readonly logger = new Logger(IntegrationsService.name);
@@ -62,6 +71,9 @@ export class IntegrationsService {
             include: {
                 keys: {
                     orderBy: [{ account: 'asc' }, { key_type: 'asc' }],
+                },
+                accounts: {
+                    orderBy: { account: 'asc' },
                 },
             },
         });
@@ -93,6 +105,7 @@ export class IntegrationsService {
 
         const allowsMultipleAccounts = providerAllowsMultipleAccounts(provider);
         const account = allowsMultipleAccounts ? dto.account.trim() : '1';
+        const title = dto.title?.trim();
 
         if (!allowsMultipleAccounts && dto.account.trim() !== '1') {
             throw new BadRequestException(
@@ -103,9 +116,19 @@ export class IntegrationsService {
         const integration = await this.ensureIntegration(user_uuid, provider);
         const integrationWithKeys = await this.prisma.integration.findUnique({
             where: { uuid: integration.uuid },
-            include: { keys: true },
+            include: { keys: true, accounts: true },
         });
         const existingKeys = integrationWithKeys?.keys ?? [];
+        const existingAccounts = integrationWithKeys?.accounts ?? [];
+        const accountExists =
+            existingKeys.some((key) => key.account === account) ||
+            existingAccounts.some((row) => row.account === account);
+
+        if (allowsMultipleAccounts && !accountExists && !title) {
+            throw new BadRequestException(
+                'Title is required when creating a new integration account',
+            );
+        }
 
         if (!allowsMultipleAccounts) {
             const existing = await this.prisma.integrationKey.findFirst({
@@ -154,6 +177,10 @@ export class IntegrationsService {
                 },
             });
 
+            if (allowsMultipleAccounts && title) {
+                await this.ensureAccount(integration.uuid, account, title);
+            }
+
             await this.ensureDefaultAccountAfterKeyChange(
                 integration.uuid,
                 provider,
@@ -179,16 +206,30 @@ export class IntegrationsService {
     ): Promise<IntegrationResponse> {
         const provider = ExternalIntegrationProvider.SMTP;
         const account = dto.account.trim();
+        const title = dto.title.trim();
         const fromName = dto.from_name?.trim();
-        const entries: Array<{ key_type: IntegrationKeyType; secret: string }> = [
-            { key_type: IntegrationKeyType.HOST, secret: dto.host.trim() },
-            { key_type: IntegrationKeyType.PORT, secret: String(dto.port) },
-            { key_type: IntegrationKeyType.USERNAME, secret: dto.username.trim() },
-            { key_type: IntegrationKeyType.PASSWORD, secret: dto.password },
-            { key_type: IntegrationKeyType.FROM_EMAIL, secret: dto.from_email.trim() },
-        ];
+        const entries: Array<{ key_type: IntegrationKeyType; secret: string }> =
+            [
+                { key_type: IntegrationKeyType.HOST, secret: dto.host.trim() },
+                {
+                    key_type: IntegrationKeyType.PORT,
+                    secret: String(dto.port),
+                },
+                {
+                    key_type: IntegrationKeyType.USERNAME,
+                    secret: dto.username.trim(),
+                },
+                { key_type: IntegrationKeyType.PASSWORD, secret: dto.password },
+                {
+                    key_type: IntegrationKeyType.FROM_EMAIL,
+                    secret: dto.from_email.trim(),
+                },
+            ];
         if (fromName) {
-            entries.push({ key_type: IntegrationKeyType.FROM_NAME, secret: fromName });
+            entries.push({
+                key_type: IntegrationKeyType.FROM_NAME,
+                secret: fromName,
+            });
         }
 
         const integration = await this.ensureIntegration(user_uuid, provider);
@@ -197,9 +238,12 @@ export class IntegrationsService {
             include: { keys: true },
         });
         const existingKeys = integrationWithKeys?.keys ?? [];
-        const hasAccountKeys = existingKeys.some((key) => key.account === account);
+        const hasAccountKeys = existingKeys.some(
+            (key) => key.account === account,
+        );
         if (hasAccountKeys) {
-            const suggestedAccount = suggestNextIntegrationAccount(existingKeys);
+            const suggestedAccount =
+                suggestNextIntegrationAccount(existingKeys);
             throw new ConflictException(
                 `SMTP account "${account}" already exists. Use a different account label (for example "${suggestedAccount}").`,
             );
@@ -207,8 +251,15 @@ export class IntegrationsService {
 
         const encryptionKey = this.encryptionKey();
 
-        await this.prisma.$transaction(
-            entries.map(({ key_type, secret }) =>
+        await this.prisma.$transaction([
+            this.prisma.integrationAccount.create({
+                data: {
+                    integration_uuid: integration.uuid,
+                    account,
+                    title,
+                },
+            }),
+            ...entries.map(({ key_type, secret }) =>
                 this.prisma.integrationKey.create({
                     data: {
                         integration_uuid: integration.uuid,
@@ -219,15 +270,72 @@ export class IntegrationsService {
                     },
                 }),
             ),
-        );
+        ]);
 
-        await this.ensureDefaultAccountAfterKeyChange(integration.uuid, provider);
+        await this.ensureDefaultAccountAfterKeyChange(
+            integration.uuid,
+            provider,
+        );
 
         const refreshed = await this.prisma.integration.findUnique({
             where: { uuid: integration.uuid },
             include: {
                 keys: {
                     orderBy: [{ account: 'asc' }, { key_type: 'asc' }],
+                },
+                accounts: {
+                    orderBy: { account: 'asc' },
+                },
+            },
+        });
+
+        return this.toIntegrationResponse(provider, refreshed ?? undefined);
+    }
+
+    async updateAccountTitle(
+        user_uuid: string,
+        provider: ExternalIntegrationProvider,
+        account: string,
+        dto: UpdateIntegrationAccountDto,
+    ): Promise<IntegrationResponse> {
+        if (!providerAllowsMultipleAccounts(provider)) {
+            throw new BadRequestException(
+                `${INTEGRATION_PROVIDER_LABELS[provider]} does not support account titles`,
+            );
+        }
+
+        const trimmedAccount = account.trim();
+        const integration = await this.prisma.integration.findUnique({
+            where: { user_uuid_provider: { user_uuid, provider } },
+            include: { keys: true, accounts: true },
+        });
+        if (!integration) {
+            throw new NotFoundException(
+                `${INTEGRATION_PROVIDER_LABELS[provider]} integration is not configured`,
+            );
+        }
+
+        const accounts = listDistinctIntegrationAccounts(integration.keys);
+        if (!accounts.includes(trimmedAccount)) {
+            throw new BadRequestException(
+                `Account "${trimmedAccount}" has no stored keys for ${INTEGRATION_PROVIDER_LABELS[provider]}`,
+            );
+        }
+
+        await this.ensureAccount(
+            integration.uuid,
+            trimmedAccount,
+            dto.title.trim(),
+        );
+
+        const refreshed = await this.prisma.integration.findUnique({
+            where: { uuid: integration.uuid },
+            include: {
+                keys: {
+                    orderBy: [{ account: 'asc' }, { key_type: 'asc' }],
+                },
+                accounts: {
+                    orderBy: { account: 'asc' },
                 },
             },
         });
@@ -259,7 +367,23 @@ export class IntegrationsService {
         key_uuid: string,
     ): Promise<{ uuid: string }> {
         const owned = await this.requireOwnedKey(user_uuid, key_uuid);
+        const account = owned.account;
         await this.prisma.integrationKey.delete({ where: { uuid: key_uuid } });
+
+        const remainingForAccount = await this.prisma.integrationKey.count({
+            where: {
+                integration_uuid: owned.integration.uuid,
+                account,
+            },
+        });
+        if (remainingForAccount === 0) {
+            await this.prisma.integrationAccount.deleteMany({
+                where: {
+                    integration_uuid: owned.integration.uuid,
+                    account,
+                },
+            });
+        }
 
         await this.ensureDefaultAccountAfterKeyChange(
             owned.integration.uuid,
@@ -304,6 +428,9 @@ export class IntegrationsService {
             include: {
                 keys: {
                     orderBy: [{ account: 'asc' }, { key_type: 'asc' }],
+                },
+                accounts: {
+                    orderBy: { account: 'asc' },
                 },
             },
         });
@@ -392,6 +519,29 @@ export class IntegrationsService {
         });
     }
 
+    private async ensureAccount(
+        integration_uuid: string,
+        account: string,
+        title: string,
+    ): Promise<IntegrationAccount> {
+        return this.prisma.integrationAccount.upsert({
+            where: {
+                integration_uuid_account: {
+                    integration_uuid,
+                    account,
+                },
+            },
+            create: {
+                integration_uuid,
+                account,
+                title,
+            },
+            update: {
+                title,
+            },
+        });
+    }
+
     private async requireOwnedKey(
         user_uuid: string,
         key_uuid: string,
@@ -459,11 +609,25 @@ export class IntegrationsService {
         }));
     }
 
+    private toAccountResponses(
+        keys: IntegrationKey[],
+        accounts: IntegrationAccount[],
+    ): IntegrationAccountResponse[] {
+        const titleByAccount = new Map(
+            accounts.map((row) => [row.account, row.title]),
+        );
+        return listDistinctIntegrationAccounts(keys).map((account) => ({
+            account,
+            title: titleByAccount.get(account) ?? account,
+        }));
+    }
+
     private toIntegrationResponse(
         provider: ExternalIntegrationProvider,
-        row?: Integration & { keys: IntegrationKey[] },
+        row?: IntegrationWithRelations,
     ): IntegrationResponse {
         const keys = row?.keys ?? [];
+        const accounts = row?.accounts ?? [];
         return {
             provider,
             uuid: row?.uuid ?? null,
@@ -477,6 +641,7 @@ export class IntegrationsService {
                 row?.default_account,
                 keys,
             ),
+            accounts: this.toAccountResponses(keys, accounts),
             keyTypes: this.keyTypeOptions(provider),
             keys: keys.map((key) => this.toKeyResponse(key, provider)),
         };
@@ -510,4 +675,3 @@ export class IntegrationsService {
         };
     }
 }
-

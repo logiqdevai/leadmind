@@ -38,6 +38,7 @@ const FALLBACK_PROVIDERS: IntegrationProviderView[] = [
         label: "OpenAI",
         description: "GPT models for enrichment, scoring, and message drafting.",
         default_account: null,
+        accounts: [],
         keyTypes: [
             { key_type: "API_KEY", label: "API key", placeholder: "sk-..." },
             {
@@ -57,6 +58,7 @@ const FALLBACK_PROVIDERS: IntegrationProviderView[] = [
         allows_multiple_accounts: true,
         supports_default_account_selection: true,
         default_account: null,
+        accounts: [],
         keyTypes: [
             { key_type: "API_KEY", label: "API key", placeholder: "re_..." },
             {
@@ -81,6 +83,7 @@ const FALLBACK_PROVIDERS: IntegrationProviderView[] = [
         allows_multiple_accounts: true,
         supports_default_account_selection: true,
         default_account: null,
+        accounts: [],
         keyTypes: [
             { key_type: "HOST", label: "Host", placeholder: "smtp.example.com" },
             { key_type: "PORT", label: "Port", placeholder: "587" },
@@ -106,6 +109,7 @@ const FALLBACK_PROVIDERS: IntegrationProviderView[] = [
         description: "SMS outreach credentials.",
         disabled: true,
         default_account: null,
+        accounts: [],
         keyTypes: [
             { key_type: "ACCOUNT_SID", label: "Account SID", placeholder: "AC..." },
             { key_type: "AUTH_TOKEN", label: "Auth token", placeholder: "Auth token" },
@@ -118,6 +122,7 @@ const FALLBACK_PROVIDERS: IntegrationProviderView[] = [
         label: "Apify",
         description: "Lead scraping from LinkedIn, Google Maps, and more.",
         default_account: null,
+        accounts: [],
         keyTypes: [{ key_type: "API_KEY", label: "API token", placeholder: "apify_api_..." }],
         keys: [],
     },
@@ -128,6 +133,7 @@ const FALLBACK_PROVIDERS: IntegrationProviderView[] = [
         description: "CRM sync and marketing automation.",
         disabled: true,
         default_account: null,
+        accounts: [],
         keyTypes: [
             {
                 key_type: "ACCESS_TOKEN",

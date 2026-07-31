@@ -114,6 +114,8 @@ export const ApiRoutes = {
         createSmtpAccount: "/integrations/SMTP/accounts",
         setDefaultAccount: (provider: string) =>
             `/integrations/${provider}/default-account`,
+        updateAccount: (provider: string, account: string) =>
+            `/integrations/${provider}/accounts/${encodeURIComponent(account)}`,
         updateKey: (uuid: string) => `/integrations/keys/${uuid}`,
         removeKey: (uuid: string) => `/integrations/keys/${uuid}`,
     },

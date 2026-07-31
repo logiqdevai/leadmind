@@ -22,6 +22,7 @@ import { IntegrationsService } from './integrations.service';
 import { CreateIntegrationKeyDto } from './dto/create-integration-key.dto';
 import { CreateSmtpAccountDto } from './dto/create-smtp-account.dto';
 import { SetDefaultIntegrationAccountDto } from './dto/set-default-integration-account.dto';
+import { UpdateIntegrationAccountDto } from './dto/update-integration-account.dto';
 import { UpdateIntegrationKeyDto } from './dto/update-integration-key.dto';
 
 @ApiTags('integrations')
@@ -78,6 +79,24 @@ export class IntegrationsController {
         @Body() dto: SetDefaultIntegrationAccountDto,
     ) {
         return this.integrationsService.setDefaultAccount(user_uuid, provider, dto);
+    }
+
+    @Patch(':provider/accounts/:account')
+    @ApiOperation({ summary: 'Update the display title for an integration account' })
+    @ApiResponse({ status: 404, description: 'Integration not found' })
+    updateAccountTitle(
+        @CurrentUser('uuid') user_uuid: string,
+        @Param('provider', new ParseEnumPipe(ExternalIntegrationProvider))
+        provider: ExternalIntegrationProvider,
+        @Param('account') account: string,
+        @Body() dto: UpdateIntegrationAccountDto,
+    ) {
+        return this.integrationsService.updateAccountTitle(
+            user_uuid,
+            provider,
+            account,
+            dto,
+        );
     }
 
     @Delete('keys/:uuid')

@@ -103,9 +103,11 @@ export function IntegrationKeyFormModal({
 
     const [keyType, setKeyType] = useState<IntegrationKeyType>(defaultKeyType);
     const [account, setAccount] = useState("1");
+    const [title, setTitle] = useState("");
     const [secret, setSecret] = useState("");
     const [keyTypeError, setKeyTypeError] = useState<string | null>(null);
     const [accountError, setAccountError] = useState<string | null>(null);
+    const [titleError, setTitleError] = useState<string | null>(null);
     const [secretError, setSecretError] = useState<string | null>(null);
 
     const keyTypeMeta = useMemo(
@@ -121,6 +123,7 @@ export function IntegrationKeyFormModal({
                 initialAccount ??
                 suggestAccountForKeyType(providerView.provider, providerView.keys, keyItem?.key_type ?? initialKeyType ?? defaultKeyType),
         );
+        setTitle("");
         setSecret(
             keyItem &&
                 shouldExposeIntegrationKeyDisplayValue(
@@ -132,6 +135,7 @@ export function IntegrationKeyFormModal({
         );
         setKeyTypeError(null);
         setAccountError(null);
+        setTitleError(null);
         setSecretError(null);
     }, [isOpen, initialAccount, keyItem, initialKeyType, defaultKeyType, suggestedAccount, providerView.provider]);
 
@@ -150,9 +154,14 @@ export function IntegrationKeyFormModal({
         keyType,
         account,
     );
+    const isNewAccount =
+        allowsMultipleAccounts &&
+        !isEdit &&
+        !providerView.keys.some((key) => key.account === account.trim());
 
     const handleSubmit = async () => {
         const trimmedAccount = allowsMultipleAccounts ? account.trim() : "1";
+        const trimmedTitle = title.trim();
         const trimmedSecret = secret.trim();
         let valid = true;
 
@@ -172,6 +181,13 @@ export function IntegrationKeyFormModal({
             }
         } else {
             setAccountError(null);
+        }
+
+        if (isNewAccount && !trimmedTitle) {
+            setTitleError("Title is required for a new account");
+            valid = false;
+        } else {
+            setTitleError(null);
         }
 
         if (!trimmedSecret) {
@@ -194,6 +210,7 @@ export function IntegrationKeyFormModal({
                     key_type: keyType,
                     account: trimmedAccount,
                     secret: trimmedSecret,
+                    ...(isNewAccount ? { title: trimmedTitle } : {}),
                 });
             }
             onOpenChange(false);
@@ -283,6 +300,27 @@ export function IntegrationKeyFormModal({
                                     </p>
                                     {accountError && (
                                         <FieldError>{accountError}</FieldError>
+                                    )}
+                                </div>
+                            )}
+
+                            {isNewAccount && (
+                                <div className="flex flex-col gap-1.5">
+                                    <Label htmlFor="integration-key-title">
+                                        Title
+                                    </Label>
+                                    <Input
+                                        id="integration-key-title"
+                                        className={borderedFieldClass}
+                                        placeholder="Sales inbox, Marketing Resend"
+                                        value={title}
+                                        onChange={(e) => setTitle(e.target.value)}
+                                    />
+                                    <p className="text-xs text-muted">
+                                        Shown in send menus so you can tell accounts apart.
+                                    </p>
+                                    {titleError && (
+                                        <FieldError>{titleError}</FieldError>
                                     )}
                                 </div>
                             )}

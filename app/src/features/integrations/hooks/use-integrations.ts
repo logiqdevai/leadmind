@@ -5,12 +5,14 @@ import {
     deleteIntegrationKey,
     listIntegrations,
     setDefaultIntegrationAccount,
+    updateIntegrationAccount,
     updateIntegrationKey,
 } from "../services/integrations.service";
 import type {
     CreateIntegrationKeyPayload,
     IntegrationProvider,
     SetDefaultIntegrationAccountPayload,
+    UpdateIntegrationAccountPayload,
     UpdateIntegrationKeyPayload,
 } from "../interfaces/integrations.interface";
 
@@ -101,6 +103,34 @@ export function useSetDefaultIntegrationAccount() {
         onError: (error: Error) => {
             toast({
                 title: "Could not set default account",
+                description: error.message,
+                variant: "error",
+                duration: 4000,
+            });
+        },
+    });
+}
+
+export function useUpdateIntegrationAccount() {
+    const qc = useQueryClient();
+    return useMutation({
+        mutationFn: (vars: {
+            provider: IntegrationProvider;
+            account: string;
+            payload: UpdateIntegrationAccountPayload;
+        }) =>
+            updateIntegrationAccount(
+                vars.provider,
+                vars.account,
+                vars.payload,
+            ),
+        onSuccess: () => {
+            qc.invalidateQueries({ queryKey: integrationsQueryKeys.all });
+            toast({ title: "Account title updated", duration: 1500 });
+        },
+        onError: (error: Error) => {
+            toast({
+                title: "Could not update account title",
                 description: error.message,
                 variant: "error",
                 duration: 4000,

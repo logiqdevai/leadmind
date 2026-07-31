@@ -1,6 +1,13 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IntegrationKeyType } from '@/generated/prisma';
-import { IsEnum, IsString, Matches, MaxLength, MinLength } from 'class-validator';
+import {
+    IsEnum,
+    IsOptional,
+    IsString,
+    Matches,
+    MaxLength,
+    MinLength,
+} from 'class-validator';
 
 export class CreateIntegrationKeyDto {
     @ApiProperty({ enum: IntegrationKeyType, example: IntegrationKeyType.API_KEY })
@@ -17,6 +24,17 @@ export class CreateIntegrationKeyDto {
     @MaxLength(32)
     @Matches(/^[a-zA-Z0-9_-]+$/)
     account!: string;
+
+    @ApiPropertyOptional({
+        example: 'Marketing Resend',
+        description:
+            'Display title for this account. Required when creating the first key for a new multi-account integration account.',
+    })
+    @IsOptional()
+    @IsString()
+    @MinLength(1)
+    @MaxLength(80)
+    title?: string;
 
     @ApiProperty()
     @IsString()
