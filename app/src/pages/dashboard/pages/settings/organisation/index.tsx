@@ -83,6 +83,7 @@ const SettingsOrganisationPage: FC = () => {
         values: {
             name: currentOrganisation?.name ?? organisationName ?? "",
             timezone: currentOrganisation?.timezone ?? "UTC",
+            reply_to_email: currentOrganisation?.reply_to_email ?? "",
         },
     });
 
@@ -105,7 +106,11 @@ const SettingsOrganisationPage: FC = () => {
 
     const onSaveSettings = settingsForm.handleSubmit((data) => {
         if (!organisationUuid) return;
-        updateOrganisation.mutate(data);
+        updateOrganisation.mutate({
+            name: data.name,
+            timezone: data.timezone,
+            reply_to_email: data.reply_to_email?.trim() || null,
+        });
     });
 
     const onCreateOrganisation = createForm.handleSubmit((data) => {
@@ -223,6 +228,25 @@ const SettingsOrganisationPage: FC = () => {
                     {settingsForm.formState.errors.timezone ? (
                         <p className="text-xs text-danger">
                             {settingsForm.formState.errors.timezone.message}
+                        </p>
+                    ) : null}
+                </div>
+                <div className="space-y-1.5">
+                    <Label>Reply-to email</Label>
+                    <Input
+                        {...settingsForm.register("reply_to_email")}
+                        type="email"
+                        disabled={!canEdit || updateOrganisation.isPending}
+                        placeholder="replies@yourcompany.com"
+                        fullWidth
+                    />
+                    <p className="text-xs text-muted">
+                        When contacts reply to outreach emails, replies go to this
+                        address.
+                    </p>
+                    {settingsForm.formState.errors.reply_to_email ? (
+                        <p className="text-xs text-danger">
+                            {settingsForm.formState.errors.reply_to_email.message}
                         </p>
                     ) : null}
                 </div>

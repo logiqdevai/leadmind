@@ -378,9 +378,12 @@ export class MessageSendService {
     }
 
     private async resolveReplyTo(message: OutreachMessage): Promise<string> {
-        const inbound = this.configService.get<string>('RESEND_INBOUND_REPLY_TO');
-        if (inbound?.trim()) {
-            return inbound.trim();
+        const organisation = await this.prisma.organisation.findUnique({
+            where: { uuid: message.organisation_uuid },
+            select: { reply_to_email: true },
+        });
+        if (organisation?.reply_to_email?.trim()) {
+            return organisation.reply_to_email.trim();
         }
 
         const metadataUuid = parseSenderProfileMetadata(message.metadata);

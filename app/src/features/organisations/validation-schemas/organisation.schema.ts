@@ -16,6 +16,10 @@ export type CreateOrganisationFormData = z.infer<typeof createOrganisationSchema
 export const updateOrganisationSchema = z.object({
     name: z.string().min(1, "Name is required").max(100),
     timezone: timezoneSchema,
+    reply_to_email: z.union([
+        z.literal(""),
+        z.string().trim().email("Valid email required").max(320),
+    ]),
 });
 
 export type UpdateOrganisationFormData = z.infer<typeof updateOrganisationSchema>;

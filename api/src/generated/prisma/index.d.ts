@@ -7384,6 +7384,7 @@ export namespace Prisma {
     name: string | null
     slug: string | null
     timezone: string | null
+    reply_to_email: string | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -7394,6 +7395,7 @@ export namespace Prisma {
     name: string | null
     slug: string | null
     timezone: string | null
+    reply_to_email: string | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -7404,6 +7406,7 @@ export namespace Prisma {
     name: number
     slug: number
     timezone: number
+    reply_to_email: number
     created_at: number
     updated_at: number
     _all: number
@@ -7424,6 +7427,7 @@ export namespace Prisma {
     name?: true
     slug?: true
     timezone?: true
+    reply_to_email?: true
     created_at?: true
     updated_at?: true
   }
@@ -7434,6 +7438,7 @@ export namespace Prisma {
     name?: true
     slug?: true
     timezone?: true
+    reply_to_email?: true
     created_at?: true
     updated_at?: true
   }
@@ -7444,6 +7449,7 @@ export namespace Prisma {
     name?: true
     slug?: true
     timezone?: true
+    reply_to_email?: true
     created_at?: true
     updated_at?: true
     _all?: true
@@ -7541,6 +7547,7 @@ export namespace Prisma {
     name: string
     slug: string
     timezone: string
+    reply_to_email: string | null
     created_at: Date
     updated_at: Date
     _count: OrganisationCountAggregateOutputType | null
@@ -7570,6 +7577,7 @@ export namespace Prisma {
     name?: boolean
     slug?: boolean
     timezone?: boolean
+    reply_to_email?: boolean
     created_at?: boolean
     updated_at?: boolean
     members?: boolean | Organisation$membersArgs<ExtArgs>
@@ -7604,6 +7612,7 @@ export namespace Prisma {
     name?: boolean
     slug?: boolean
     timezone?: boolean
+    reply_to_email?: boolean
     created_at?: boolean
     updated_at?: boolean
   }, ExtArgs["result"]["organisation"]>
@@ -7614,6 +7623,7 @@ export namespace Prisma {
     name?: boolean
     slug?: boolean
     timezone?: boolean
+    reply_to_email?: boolean
     created_at?: boolean
     updated_at?: boolean
   }, ExtArgs["result"]["organisation"]>
@@ -7624,11 +7634,12 @@ export namespace Prisma {
     name?: boolean
     slug?: boolean
     timezone?: boolean
+    reply_to_email?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
-  export type OrganisationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "name" | "slug" | "timezone" | "created_at" | "updated_at", ExtArgs["result"]["organisation"]>
+  export type OrganisationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "name" | "slug" | "timezone" | "reply_to_email" | "created_at" | "updated_at", ExtArgs["result"]["organisation"]>
   export type OrganisationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     members?: boolean | Organisation$membersArgs<ExtArgs>
     invitations?: boolean | Organisation$invitationsArgs<ExtArgs>
@@ -7691,6 +7702,7 @@ export namespace Prisma {
       name: string
       slug: string
       timezone: string
+      reply_to_email: string | null
       created_at: Date
       updated_at: Date
     }, ExtArgs["result"]["organisation"]>
@@ -8144,6 +8156,7 @@ export namespace Prisma {
     readonly name: FieldRef<"Organisation", 'String'>
     readonly slug: FieldRef<"Organisation", 'String'>
     readonly timezone: FieldRef<"Organisation", 'String'>
+    readonly reply_to_email: FieldRef<"Organisation", 'String'>
     readonly created_at: FieldRef<"Organisation", 'DateTime'>
     readonly updated_at: FieldRef<"Organisation", 'DateTime'>
   }
@@ -57801,6 +57814,7 @@ export namespace Prisma {
     name: 'name',
     slug: 'slug',
     timezone: 'timezone',
+    reply_to_email: 'reply_to_email',
     created_at: 'created_at',
     updated_at: 'updated_at'
   };
@@ -59221,6 +59235,7 @@ export namespace Prisma {
     name?: StringFilter<"Organisation"> | string
     slug?: StringFilter<"Organisation"> | string
     timezone?: StringFilter<"Organisation"> | string
+    reply_to_email?: StringNullableFilter<"Organisation"> | string | null
     created_at?: DateTimeFilter<"Organisation"> | Date | string
     updated_at?: DateTimeFilter<"Organisation"> | Date | string
     members?: OrganisationMemberListRelationFilter
@@ -59254,6 +59269,7 @@ export namespace Prisma {
     name?: SortOrder
     slug?: SortOrder
     timezone?: SortOrder
+    reply_to_email?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     members?: OrganisationMemberOrderByRelationAggregateInput
@@ -59290,6 +59306,7 @@ export namespace Prisma {
     NOT?: OrganisationWhereInput | OrganisationWhereInput[]
     name?: StringFilter<"Organisation"> | string
     timezone?: StringFilter<"Organisation"> | string
+    reply_to_email?: StringNullableFilter<"Organisation"> | string | null
     created_at?: DateTimeFilter<"Organisation"> | Date | string
     updated_at?: DateTimeFilter<"Organisation"> | Date | string
     members?: OrganisationMemberListRelationFilter
@@ -59323,6 +59340,7 @@ export namespace Prisma {
     name?: SortOrder
     slug?: SortOrder
     timezone?: SortOrder
+    reply_to_email?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     _count?: OrganisationCountOrderByAggregateInput
@@ -59341,6 +59359,7 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"Organisation"> | string
     slug?: StringWithAggregatesFilter<"Organisation"> | string
     timezone?: StringWithAggregatesFilter<"Organisation"> | string
+    reply_to_email?: StringNullableWithAggregatesFilter<"Organisation"> | string | null
     created_at?: DateTimeWithAggregatesFilter<"Organisation"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"Organisation"> | Date | string
   }
@@ -63303,6 +63322,7 @@ export namespace Prisma {
     name: string
     slug: string
     timezone?: string
+    reply_to_email?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
@@ -63336,6 +63356,7 @@ export namespace Prisma {
     name: string
     slug: string
     timezone?: string
+    reply_to_email?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
@@ -63368,6 +63389,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
@@ -63401,6 +63423,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -63434,6 +63457,7 @@ export namespace Prisma {
     name: string
     slug: string
     timezone?: string
+    reply_to_email?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -63443,6 +63467,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -63453,6 +63478,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -67999,6 +68025,7 @@ export namespace Prisma {
     name?: SortOrder
     slug?: SortOrder
     timezone?: SortOrder
+    reply_to_email?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -68013,6 +68040,7 @@ export namespace Prisma {
     name?: SortOrder
     slug?: SortOrder
     timezone?: SortOrder
+    reply_to_email?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -68023,6 +68051,7 @@ export namespace Prisma {
     name?: SortOrder
     slug?: SortOrder
     timezone?: SortOrder
+    reply_to_email?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -78407,6 +78436,7 @@ export namespace Prisma {
     name: string
     slug: string
     timezone?: string
+    reply_to_email?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     invitations?: OrganisationInvitationCreateNestedManyWithoutOrganisationInput
@@ -78439,6 +78469,7 @@ export namespace Prisma {
     name: string
     slug: string
     timezone?: string
+    reply_to_email?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     invitations?: OrganisationInvitationUncheckedCreateNestedManyWithoutOrganisationInput
@@ -78528,6 +78559,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     invitations?: OrganisationInvitationUpdateManyWithoutOrganisationNestedInput
@@ -78560,6 +78592,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     invitations?: OrganisationInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -78639,6 +78672,7 @@ export namespace Prisma {
     name: string
     slug: string
     timezone?: string
+    reply_to_email?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
@@ -78671,6 +78705,7 @@ export namespace Prisma {
     name: string
     slug: string
     timezone?: string
+    reply_to_email?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
@@ -78760,6 +78795,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
@@ -78792,6 +78828,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -78871,6 +78908,7 @@ export namespace Prisma {
     name: string
     slug: string
     timezone?: string
+    reply_to_email?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
@@ -78903,6 +78941,7 @@ export namespace Prisma {
     name: string
     slug: string
     timezone?: string
+    reply_to_email?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
@@ -79192,6 +79231,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
@@ -79224,6 +79264,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -79401,6 +79442,7 @@ export namespace Prisma {
     name: string
     slug: string
     timezone?: string
+    reply_to_email?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
@@ -79433,6 +79475,7 @@ export namespace Prisma {
     name: string
     slug: string
     timezone?: string
+    reply_to_email?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
@@ -79523,6 +79566,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
@@ -79555,6 +79599,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -80333,6 +80378,7 @@ export namespace Prisma {
     name: string
     slug: string
     timezone?: string
+    reply_to_email?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
@@ -80365,6 +80411,7 @@ export namespace Prisma {
     name: string
     slug: string
     timezone?: string
+    reply_to_email?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
@@ -80866,6 +80913,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
@@ -80898,6 +80946,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -82104,6 +82153,7 @@ export namespace Prisma {
     name: string
     slug: string
     timezone?: string
+    reply_to_email?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
@@ -82136,6 +82186,7 @@ export namespace Prisma {
     name: string
     slug: string
     timezone?: string
+    reply_to_email?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
@@ -82320,6 +82371,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
@@ -82352,6 +82404,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -82945,6 +82998,7 @@ export namespace Prisma {
     name: string
     slug: string
     timezone?: string
+    reply_to_email?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
@@ -82977,6 +83031,7 @@ export namespace Prisma {
     name: string
     slug: string
     timezone?: string
+    reply_to_email?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
@@ -83264,6 +83319,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
@@ -83296,6 +83352,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -83493,6 +83550,7 @@ export namespace Prisma {
     name: string
     slug: string
     timezone?: string
+    reply_to_email?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
@@ -83525,6 +83583,7 @@ export namespace Prisma {
     name: string
     slug: string
     timezone?: string
+    reply_to_email?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
@@ -83816,6 +83875,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
@@ -83848,6 +83908,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -84147,6 +84208,7 @@ export namespace Prisma {
     name: string
     slug: string
     timezone?: string
+    reply_to_email?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
@@ -84179,6 +84241,7 @@ export namespace Prisma {
     name: string
     slug: string
     timezone?: string
+    reply_to_email?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
@@ -84226,6 +84289,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
@@ -84258,6 +84322,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -84387,6 +84452,7 @@ export namespace Prisma {
     name: string
     slug: string
     timezone?: string
+    reply_to_email?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
@@ -84419,6 +84485,7 @@ export namespace Prisma {
     name: string
     slug: string
     timezone?: string
+    reply_to_email?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
@@ -84561,6 +84628,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
@@ -84593,6 +84661,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -84640,6 +84709,7 @@ export namespace Prisma {
     name: string
     slug: string
     timezone?: string
+    reply_to_email?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
@@ -84672,6 +84742,7 @@ export namespace Prisma {
     name: string
     slug: string
     timezone?: string
+    reply_to_email?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
@@ -84719,6 +84790,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
@@ -84751,6 +84823,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -84782,6 +84855,7 @@ export namespace Prisma {
     name: string
     slug: string
     timezone?: string
+    reply_to_email?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
@@ -84814,6 +84888,7 @@ export namespace Prisma {
     name: string
     slug: string
     timezone?: string
+    reply_to_email?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
@@ -85060,6 +85135,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
@@ -85092,6 +85168,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -85587,6 +85664,7 @@ export namespace Prisma {
     name: string
     slug: string
     timezone?: string
+    reply_to_email?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
@@ -85619,6 +85697,7 @@ export namespace Prisma {
     name: string
     slug: string
     timezone?: string
+    reply_to_email?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
@@ -85666,6 +85745,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
@@ -85698,6 +85778,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -85729,6 +85810,7 @@ export namespace Prisma {
     name: string
     slug: string
     timezone?: string
+    reply_to_email?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
@@ -85761,6 +85843,7 @@ export namespace Prisma {
     name: string
     slug: string
     timezone?: string
+    reply_to_email?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
@@ -85866,6 +85949,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
@@ -85898,6 +85982,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -86113,6 +86198,7 @@ export namespace Prisma {
     name: string
     slug: string
     timezone?: string
+    reply_to_email?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
@@ -86145,6 +86231,7 @@ export namespace Prisma {
     name: string
     slug: string
     timezone?: string
+    reply_to_email?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
@@ -86272,6 +86359,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
@@ -86304,6 +86392,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -86421,6 +86510,7 @@ export namespace Prisma {
     name: string
     slug: string
     timezone?: string
+    reply_to_email?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
@@ -86453,6 +86543,7 @@ export namespace Prisma {
     name: string
     slug: string
     timezone?: string
+    reply_to_email?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
@@ -86572,6 +86663,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
@@ -86604,6 +86696,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -87294,6 +87387,7 @@ export namespace Prisma {
     name: string
     slug: string
     timezone?: string
+    reply_to_email?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
@@ -87326,6 +87420,7 @@ export namespace Prisma {
     name: string
     slug: string
     timezone?: string
+    reply_to_email?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
@@ -87449,6 +87544,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
@@ -87481,6 +87577,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -87600,6 +87697,7 @@ export namespace Prisma {
     name: string
     slug: string
     timezone?: string
+    reply_to_email?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
@@ -87632,6 +87730,7 @@ export namespace Prisma {
     name: string
     slug: string
     timezone?: string
+    reply_to_email?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
@@ -87679,6 +87778,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
@@ -87711,6 +87811,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -87742,6 +87843,7 @@ export namespace Prisma {
     name: string
     slug: string
     timezone?: string
+    reply_to_email?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
@@ -87774,6 +87876,7 @@ export namespace Prisma {
     name: string
     slug: string
     timezone?: string
+    reply_to_email?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
@@ -87821,6 +87924,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
@@ -87853,6 +87957,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -87884,6 +87989,7 @@ export namespace Prisma {
     name: string
     slug: string
     timezone?: string
+    reply_to_email?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
@@ -87916,6 +88022,7 @@ export namespace Prisma {
     name: string
     slug: string
     timezone?: string
+    reply_to_email?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
@@ -88038,6 +88145,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
@@ -88070,6 +88178,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -88165,6 +88274,7 @@ export namespace Prisma {
     name: string
     slug: string
     timezone?: string
+    reply_to_email?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
@@ -88197,6 +88307,7 @@ export namespace Prisma {
     name: string
     slug: string
     timezone?: string
+    reply_to_email?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
@@ -88314,6 +88425,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
@@ -88346,6 +88458,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -88459,6 +88572,7 @@ export namespace Prisma {
     name: string
     slug: string
     timezone?: string
+    reply_to_email?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
@@ -88491,6 +88605,7 @@ export namespace Prisma {
     name: string
     slug: string
     timezone?: string
+    reply_to_email?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
@@ -88580,6 +88695,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
@@ -88612,6 +88728,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -88691,6 +88808,7 @@ export namespace Prisma {
     name: string
     slug: string
     timezone?: string
+    reply_to_email?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
@@ -88723,6 +88841,7 @@ export namespace Prisma {
     name: string
     slug: string
     timezone?: string
+    reply_to_email?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
@@ -88812,6 +88931,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
@@ -88844,6 +88964,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
