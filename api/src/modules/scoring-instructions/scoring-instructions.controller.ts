@@ -14,6 +14,11 @@ import { CurrentUser } from '@/shared/decorators/current-user.decorator';
 import { ScoringInstructionsService } from './scoring-instructions.service';
 import { CreateScoringInstructionDto } from './dto/create-scoring-instruction.dto';
 import { UpdateScoringInstructionDto } from './dto/update-scoring-instruction.dto';
+import { ActivityLog } from '@/modules/activity-logs/decorators/activity-log.decorator';
+import {
+    ActivityAction,
+    ActivityEntityType,
+} from '@/modules/activity-logs/constants/activity-log.constants';
 
 @ApiTags('scoring-instructions')
 @ApiBearerAuth()
@@ -22,6 +27,7 @@ import { UpdateScoringInstructionDto } from './dto/update-scoring-instruction.dt
 export class ScoringInstructionsController {
     constructor(private readonly scoringInstructionsService: ScoringInstructionsService) {}
 
+    @ActivityLog({ entityType: ActivityEntityType.SCORING_INSTRUCTION, action: ActivityAction.CREATED })
     @Post()
     @ApiOperation({ summary: 'Create a scoring instruction' })
     create(@CurrentUser('organisation_uuid') organisation_uuid: string, @Body() dto: CreateScoringInstructionDto) {
@@ -40,6 +46,7 @@ export class ScoringInstructionsController {
         return this.scoringInstructionsService.findOne(organisation_uuid, uuid);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.SCORING_INSTRUCTION, action: ActivityAction.UPDATED, entityUuidFrom: 'params.uuid' })
     @Put(':uuid')
     @ApiOperation({ summary: 'Update a scoring instruction' })
     update(
@@ -50,6 +57,7 @@ export class ScoringInstructionsController {
         return this.scoringInstructionsService.update(organisation_uuid, uuid, dto);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.SCORING_INSTRUCTION, action: ActivityAction.DELETED, entityUuidFrom: 'params.uuid' })
     @Delete(':uuid')
     @ApiOperation({ summary: 'Delete a scoring instruction' })
     remove(@CurrentUser('organisation_uuid') organisation_uuid: string, @Param('uuid') uuid: string) {

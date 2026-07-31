@@ -66,6 +66,7 @@ export interface ListSendHistoryQuery {
     campaign_uuid?: string;
     source?: SendSource;
     email_provider?: EmailIntegrationProvider;
+    sent_by_user_uuid?: string;
     search?: string;
     date_from?: string;
     date_to?: string;

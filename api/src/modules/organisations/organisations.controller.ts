@@ -16,6 +16,11 @@ import { CreateOrganisationDto } from './dto/create-organisation.dto';
 import { UpdateOrganisationDto } from './dto/update-organisation.dto';
 import { CreateInvitationDto } from './dto/create-invitation.dto';
 import { UpdateMemberRoleDto } from './dto/update-member-role.dto';
+import { ActivityLog } from '@/modules/activity-logs/decorators/activity-log.decorator';
+import {
+    ActivityAction,
+    ActivityEntityType,
+} from '@/modules/activity-logs/constants/activity-log.constants';
 
 @ApiTags('organisations')
 @Controller('organisations')
@@ -28,6 +33,7 @@ export class OrganisationsController {
         return this.organisationsService.previewInvitation(token);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.ORGANISATION_INVITATION, action: ActivityAction.INVITATION_ACCEPTED })
     @Post('invitations/:token/accept')
     @ApiBearerAuth()
     @UseGuards(JwtGuard)
@@ -47,6 +53,7 @@ export class OrganisationsController {
         return this.organisationsService.listForUser(userUuid);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.ORGANISATION, action: ActivityAction.CREATED, includeBodyKeys: ['name'] })
     @Post()
     @ApiBearerAuth()
     @UseGuards(JwtGuard)
@@ -69,6 +76,7 @@ export class OrganisationsController {
         return this.organisationsService.getCurrent(organisationUuid, userUuid);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.ORGANISATION, action: ActivityAction.UPDATED, entityUuidFrom: 'params.uuid', organisationUuidFrom: 'params.uuid' })
     @Patch(':uuid')
     @ApiBearerAuth()
     @UseGuards(JwtGuard)
@@ -81,6 +89,7 @@ export class OrganisationsController {
         return this.organisationsService.update(uuid, userUuid, dto);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.ORGANISATION, action: ActivityAction.DELETED, entityUuidFrom: 'params.uuid', organisationUuidFrom: 'params.uuid' })
     @Delete(':uuid')
     @ApiBearerAuth()
     @UseGuards(JwtGuard)
@@ -92,6 +101,7 @@ export class OrganisationsController {
         return this.organisationsService.remove(uuid, userUuid);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.ORGANISATION, action: ActivityAction.SWITCHED, entityUuidFrom: 'params.uuid', organisationUuidFrom: 'params.uuid' })
     @Post(':uuid/switch')
     @ApiBearerAuth()
     @UseGuards(JwtGuard)
@@ -114,6 +124,7 @@ export class OrganisationsController {
         return this.organisationsService.listMembers(uuid, userUuid);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.ORGANISATION_MEMBER, action: ActivityAction.MEMBER_ROLE_UPDATED, entityUuidFrom: 'params.userUuid', organisationUuidFrom: 'params.uuid' })
     @Patch(':uuid/members/:userUuid')
     @ApiBearerAuth()
     @UseGuards(JwtGuard)
@@ -132,6 +143,7 @@ export class OrganisationsController {
         );
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.ORGANISATION_MEMBER, action: ActivityAction.MEMBER_REMOVED, entityUuidFrom: 'params.userUuid', organisationUuidFrom: 'params.uuid' })
     @Delete(':uuid/members/:userUuid')
     @ApiBearerAuth()
     @UseGuards(JwtGuard)
@@ -144,6 +156,7 @@ export class OrganisationsController {
         return this.organisationsService.removeMember(uuid, actorUuid, targetUserUuid);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.ORGANISATION_INVITATION, action: ActivityAction.INVITATION_CREATED, organisationUuidFrom: 'params.uuid' })
     @Post(':uuid/invitations')
     @ApiBearerAuth()
     @UseGuards(JwtGuard)
@@ -167,6 +180,7 @@ export class OrganisationsController {
         return this.organisationsService.listInvitations(uuid, actorUuid);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.ORGANISATION_INVITATION, action: ActivityAction.INVITATION_RESENT, entityUuidFrom: 'params.invitationUuid', organisationUuidFrom: 'params.uuid' })
     @Post(':uuid/invitations/:invitationUuid/resend')
     @ApiBearerAuth()
     @UseGuards(JwtGuard)
@@ -183,6 +197,7 @@ export class OrganisationsController {
         );
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.ORGANISATION_INVITATION, action: ActivityAction.INVITATION_REVOKED, entityUuidFrom: 'params.invitationUuid', organisationUuidFrom: 'params.uuid' })
     @Delete(':uuid/invitations/:invitationUuid')
     @ApiBearerAuth()
     @UseGuards(JwtGuard)

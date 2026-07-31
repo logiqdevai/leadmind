@@ -33,6 +33,7 @@ const SendHistoryPage = lazy(() => import("@/pages/dashboard/pages/send-history"
 const MessageTemplatesPage = lazy(() => import("@/pages/dashboard/pages/message-templates"));
 const SettingsUsagePage = lazy(() => import("@/pages/dashboard/pages/settings/usage"));
 const SettingsOrganisationPage = lazy(() => import("@/pages/dashboard/pages/settings/organisation"));
+const SettingsActivityPage = lazy(() => import("@/pages/dashboard/pages/settings/activity"));
 const SettingsAccountPage = lazy(() => import("@/pages/dashboard/pages/settings/account"));
 const InviteAcceptPage = lazy(() => import("@/pages/auth/pages/invite"));
 
@@ -260,6 +261,14 @@ export default function AppRoutes() {
           element={
             <Lazy>
               <SettingsOrganisationPage />
+            </Lazy>
+          }
+        />
+        <Route
+          path="settings/activity"
+          element={
+            <Lazy>
+              <SettingsActivityPage />
             </Lazy>
           }
         />

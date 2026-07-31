@@ -39,6 +39,11 @@ import { UpdateContactInfoDto } from './dto/update-contact-info.dto';
 import { EnrichContactDto } from './dto/enrich-contact.dto';
 import { TriggerScoreDto } from './dto/trigger-score.dto';
 import { ListEnrichmentsDto } from '@/modules/enrichment/dto/list-enrichments.dto';
+import { ActivityLog } from '@/modules/activity-logs/decorators/activity-log.decorator';
+import {
+    ActivityAction,
+    ActivityEntityType,
+} from '@/modules/activity-logs/constants/activity-log.constants';
 
 @ApiTags('contacts')
 @ApiBearerAuth()
@@ -47,6 +52,7 @@ import { ListEnrichmentsDto } from '@/modules/enrichment/dto/list-enrichments.dt
 export class ContactsController {
     constructor(private readonly contactsService: ContactsService) { }
 
+    @ActivityLog({ entityType: ActivityEntityType.CONTACT, action: ActivityAction.CREATED, includeBodyKeys: ['name'] })
     @Post()
     @ApiOperation({
         summary:
@@ -63,6 +69,7 @@ export class ContactsController {
         return this.contactsService.findAll(organisation_uuid, query);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.CONTACT, action: ActivityAction.CONVERTED_FROM_LEAD })
     @Post('from-lead/:lead_uuid')
     @ApiOperation({
         summary:
@@ -83,6 +90,7 @@ export class ContactsController {
         return this.contactsService.getUserTags(organisation_uuid);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.CONTACT, action: ActivityAction.BULK_DRAFT_GENERATED, entityUuidFrom: 'none' })
     @Post('bulk-ai-draft-messages')
     @ApiOperation({
         summary: 'Generate personalized AI drafts for multiple contacts (one message per contact)',
@@ -97,6 +105,7 @@ export class ContactsController {
         return this.contactsService.triggerBulkAiDraftMessages(organisation_uuid, dto, user_uuid);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.CONTACT, action: ActivityAction.BULK_ENRICHED, entityUuidFrom: 'none' })
     @Post('bulk-enrich')
     @ApiOperation({ summary: 'Queue enrichment for multiple contacts (same sources for all)' })
     @ApiResponse({ status: 201 })
@@ -108,6 +117,7 @@ export class ContactsController {
         return this.contactsService.triggerBulkEnrich(organisation_uuid, dto);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.CONTACT, action: ActivityAction.BULK_SCORED, entityUuidFrom: 'none' })
     @Post('bulk-score')
     @ApiOperation({ summary: 'Trigger AI scoring for multiple contacts (rules scoped to selected filters)' })
     @ApiResponse({ status: 201 })
@@ -120,6 +130,7 @@ export class ContactsController {
         return this.contactsService.triggerBulkScore(organisation_uuid, dto);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.CONTACT, action: ActivityAction.EMAIL_SCRAPED, entityUuidFrom: 'none' })
     @Post('bulk-scrape-emails')
     @ApiOperation({
         summary: 'Scrape contact websites to find missing emails (no email + has website only)',
@@ -134,6 +145,7 @@ export class ContactsController {
         return this.contactsService.triggerBulkScrapeEmailsFromWebsites(organisation_uuid, dto);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.CONTACT, action: ActivityAction.BULK_DELETED, entityUuidFrom: 'none' })
     @Post('bulk-delete')
     @ApiOperation({ summary: 'Delete multiple contacts' })
     @ApiResponse({ status: 201 })
@@ -152,6 +164,7 @@ export class ContactsController {
         return this.contactsService.findOne(organisation_uuid, uuid);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.CONTACT, action: ActivityAction.UPDATED, entityUuidFrom: 'params.uuid' })
     @Put(':uuid')
     @ApiOperation({
         summary:
@@ -165,12 +178,14 @@ export class ContactsController {
         return this.contactsService.update(organisation_uuid, uuid, dto);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.CONTACT, action: ActivityAction.DELETED, entityUuidFrom: 'params.uuid' })
     @Delete(':uuid')
     @ApiOperation({ summary: 'Delete a contact' })
     remove(@CurrentUser('organisation_uuid') organisation_uuid: string, @Param('uuid') uuid: string) {
         return this.contactsService.remove(organisation_uuid, uuid);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.CONTACT, action: ActivityAction.STATUS_UPDATED, entityUuidFrom: 'params.uuid', includeBodyKeys: ['status'] })
     @Put(':uuid/status')
     @ApiOperation({ summary: 'Update contact status (records an Interaction)' })
     updateStatus(
@@ -181,6 +196,7 @@ export class ContactsController {
         return this.contactsService.updateStatus(organisation_uuid, uuid, dto);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.CONTACT, action: ActivityAction.TAGS_UPDATED, entityUuidFrom: 'params.uuid' })
     @Put(':uuid/tags')
     @ApiOperation({ summary: 'Replace the contact tag set' })
     updateTags(
@@ -200,6 +216,7 @@ export class ContactsController {
         return this.contactsService.listContactInfos(organisation_uuid, uuid);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.CONTACT_INFO, action: ActivityAction.CREATED })
     @Post(':uuid/info')
     @ApiOperation({ summary: 'Add a contact info entry' })
     @ApiResponse({ status: 201 })
@@ -211,6 +228,7 @@ export class ContactsController {
         return this.contactsService.createContactInfo(organisation_uuid, uuid, dto);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.CONTACT_INFO, action: ActivityAction.UPDATED, entityUuidFrom: 'params.infoUuid' })
     @Put(':uuid/info/:infoUuid')
     @ApiOperation({ summary: 'Update a contact info entry' })
     updateContactInfo(
@@ -222,6 +240,7 @@ export class ContactsController {
         return this.contactsService.updateContactInfo(organisation_uuid, uuid, infoUuid, dto);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.CONTACT_INFO, action: ActivityAction.DELETED, entityUuidFrom: 'params.infoUuid' })
     @Delete(':uuid/info/:infoUuid')
     @ApiOperation({ summary: 'Delete a contact info entry' })
     removeContactInfo(
@@ -232,6 +251,7 @@ export class ContactsController {
         return this.contactsService.removeContactInfo(organisation_uuid, uuid, infoUuid);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.CONTACT, action: ActivityAction.NOTE_ADDED, entityUuidFrom: 'params.uuid' })
     @Post(':uuid/notes')
     @ApiOperation({ summary: 'Add a note (creates an Interaction of type NOTE)' })
     @ApiResponse({ status: 201 })
@@ -243,6 +263,7 @@ export class ContactsController {
         return this.contactsService.addNote(organisation_uuid, uuid, dto);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.CONTACT, action: ActivityAction.CALL_LOGGED, entityUuidFrom: 'params.uuid' })
     @Post(':uuid/calls')
     @ApiOperation({ summary: 'Log a call (creates an Interaction of type CALL)' })
     @ApiResponse({ status: 201 })
@@ -254,6 +275,7 @@ export class ContactsController {
         return this.contactsService.logCall(organisation_uuid, uuid, dto);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.CONTACT, action: ActivityAction.MEETING_LOGGED, entityUuidFrom: 'params.uuid' })
     @Post(':uuid/meetings')
     @ApiOperation({ summary: 'Log a meeting (creates an Interaction of type MEETING)' })
     @ApiResponse({ status: 201 })
@@ -265,6 +287,7 @@ export class ContactsController {
         return this.contactsService.logMeeting(organisation_uuid, uuid, dto);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.CONTACT, action: ActivityAction.EMAIL_LOGGED, entityUuidFrom: 'params.uuid' })
     @Post(':uuid/emails')
     @ApiOperation({ summary: 'Log an email (creates an Interaction of type EMAIL)' })
     @ApiResponse({ status: 201 })
@@ -276,6 +299,7 @@ export class ContactsController {
         return this.contactsService.logEmail(organisation_uuid, uuid, dto);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.CONTACT, action: ActivityAction.SMS_LOGGED, entityUuidFrom: 'params.uuid' })
     @Post(':uuid/sms')
     @ApiOperation({ summary: 'Log an SMS (creates an Interaction of type SMS)' })
     @ApiResponse({ status: 201 })
@@ -296,6 +320,7 @@ export class ContactsController {
         return this.contactsService.getInteractions(organisation_uuid, uuid);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.CONTACT, action: ActivityAction.SCORED, entityUuidFrom: 'params.uuid' })
     @Post(':uuid/score')
     @ApiOperation({ summary: 'Trigger AI scoring for the contact' })
     @ApiResponse({ status: 201 })
@@ -307,6 +332,7 @@ export class ContactsController {
         return this.contactsService.triggerScore(organisation_uuid, uuid, dto);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.CONTACT, action: ActivityAction.DRAFT_GENERATED, entityUuidFrom: 'params.uuid' })
     @Post(':uuid/draft-messages')
     @ApiOperation({ summary: 'Trigger AI to (re)draft OutreachMessage rows per filter channel' })
     @ApiResponse({ status: 201 })
@@ -329,6 +355,7 @@ export class ContactsController {
         return this.contactsService.draftAdHocMessage(organisation_uuid, dto);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.CONTACT, action: ActivityAction.ENRICHED, entityUuidFrom: 'params.uuid' })
     @Post(':uuid/enrich')
     @ApiOperation({ summary: 'Queue contact-scoped enrichment (selected sources or filter defaults)' })
     @ApiResponse({ status: 201 })

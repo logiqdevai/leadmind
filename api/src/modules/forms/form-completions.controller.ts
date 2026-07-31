@@ -6,6 +6,11 @@ import { FormCompletionsService } from './form-completions.service';
 import { CreateFormCompletionDto } from './dto/create-form-completion.dto';
 import { UpdateFormCompletionDto } from './dto/update-form-completion.dto';
 import { ListFormCompletionsDto } from './dto/list-form-completions.dto';
+import { ActivityLog } from '@/modules/activity-logs/decorators/activity-log.decorator';
+import {
+    ActivityAction,
+    ActivityEntityType,
+} from '@/modules/activity-logs/constants/activity-log.constants';
 
 @ApiTags('forms')
 @ApiBearerAuth()
@@ -14,6 +19,7 @@ import { ListFormCompletionsDto } from './dto/list-form-completions.dto';
 export class FormCompletionsController {
     constructor(private readonly formCompletionsService: FormCompletionsService) {}
 
+    @ActivityLog({ entityType: ActivityEntityType.FORM_COMPLETION, action: ActivityAction.CREATED })
     @Post()
     @ApiOperation({ summary: 'Create a form completion' })
     create(
@@ -45,6 +51,7 @@ export class FormCompletionsController {
         return this.formCompletionsService.findOne(organisation_uuid, form_uuid, completion_uuid);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.FORM_COMPLETION, action: ActivityAction.UPDATED, entityUuidFrom: 'params.completionUuid' })
     @Put(':completionUuid')
     @ApiOperation({ summary: 'Update completion values' })
     update(
@@ -63,6 +70,7 @@ export class FormCompletionsController {
         );
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.FORM_COMPLETION, action: ActivityAction.DELETED, entityUuidFrom: 'params.completionUuid' })
     @Delete(':completionUuid')
     @ApiOperation({ summary: 'Delete a form completion' })
     remove(

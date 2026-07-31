@@ -28,6 +28,7 @@ model User {
   invitations_sent         OrganisationInvitation[] @relation("InvitationInvitedBy")
   form_completions         FormCompletion[]         @relation("CompletedByUser")
   outreach_messages_sent   OutreachMessage[]        @relation("OutreachMessageSentBy")
+  activity_logs            ActivityLog[]            @relation("ActivityLogActor")
 
   @@index([email])
   @@index([phone])
@@ -62,6 +63,7 @@ model Organisation {
   ai_usage_logs            AiUsageLog[]
   apify_usage_logs         ApifyUsageLog[]
   message_templates        MessageTemplate[]
+  activity_logs            ActivityLog[]
 
   @@index([uuid])
   @@index([slug])
@@ -1174,4 +1176,27 @@ model ApifyUsageLog {
   @@index([organisation_uuid, actor_id])
   @@index([run_id])
   @@map("apify_usage_logs")
+}
+
+model ActivityLog {
+  id                Int      @id @default(autoincrement())
+  uuid              String   @unique @default(uuid())
+  organisation_uuid String
+  actor_user_uuid   String?
+  entity_type       String
+  entity_uuid       String?
+  action            String
+  summary           String?
+  metadata          Json?
+  created_at        DateTime @default(now())
+
+  organisation Organisation @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  actor        User?        @relation("ActivityLogActor", fields: [actor_user_uuid], references: [uuid], onDelete: SetNull)
+
+  @@index([organisation_uuid, created_at])
+  @@index([organisation_uuid, entity_type])
+  @@index([organisation_uuid, action])
+  @@index([organisation_uuid, actor_user_uuid])
+  @@index([entity_uuid])
+  @@map("activity_logs")
 }

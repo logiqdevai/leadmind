@@ -6,6 +6,11 @@ import { FormFieldsService } from './form-fields.service';
 import { CreateFormFieldDto } from './dto/create-form-field.dto';
 import { UpdateFormFieldDto } from './dto/update-form-field.dto';
 import { ReorderFormFieldsDto } from './dto/reorder-form-fields.dto';
+import { ActivityLog } from '@/modules/activity-logs/decorators/activity-log.decorator';
+import {
+    ActivityAction,
+    ActivityEntityType,
+} from '@/modules/activity-logs/constants/activity-log.constants';
 
 @ApiTags('forms')
 @ApiBearerAuth()
@@ -14,6 +19,7 @@ import { ReorderFormFieldsDto } from './dto/reorder-form-fields.dto';
 export class FormFieldsController {
     constructor(private readonly formFieldsService: FormFieldsService) {}
 
+    @ActivityLog({ entityType: ActivityEntityType.FORM_FIELD, action: ActivityAction.CREATED })
     @Post()
     @ApiOperation({ summary: 'Add a field to a form' })
     create(
@@ -25,6 +31,7 @@ export class FormFieldsController {
     }
 
     // IMPORTANT: /reorder must be declared before /:fieldUuid to prevent NestJS from matching "reorder" as a UUID param
+    @ActivityLog({ entityType: ActivityEntityType.FORM_FIELD, action: ActivityAction.REORDERED, entityUuidFrom: 'none' })
     @Put('reorder')
     @ApiOperation({ summary: 'Reorder fields in a form' })
     reorder(
@@ -35,6 +42,7 @@ export class FormFieldsController {
         return this.formFieldsService.reorder(organisation_uuid, form_uuid, dto);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.FORM_FIELD, action: ActivityAction.UPDATED, entityUuidFrom: 'params.fieldUuid' })
     @Put(':fieldUuid')
     @ApiOperation({ summary: 'Update a form field' })
     update(
@@ -46,6 +54,7 @@ export class FormFieldsController {
         return this.formFieldsService.update(organisation_uuid, form_uuid, field_uuid, dto);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.FORM_FIELD, action: ActivityAction.DELETED, entityUuidFrom: 'params.fieldUuid' })
     @Delete(':fieldUuid')
     @ApiOperation({ summary: 'Delete a form field' })
     remove(

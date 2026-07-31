@@ -19,6 +19,11 @@ import { JwtGuard } from '@/shared/guards/jwt.guard';
 import { SenderProfilesService } from './sender-profiles.service';
 import { CreateSenderProfileDto } from './dto/create-sender-profile.dto';
 import { UpdateSenderProfileDto } from './dto/update-sender-profile.dto';
+import { ActivityLog } from '@/modules/activity-logs/decorators/activity-log.decorator';
+import {
+    ActivityAction,
+    ActivityEntityType,
+} from '@/modules/activity-logs/constants/activity-log.constants';
 
 @ApiTags('sender-profiles')
 @ApiBearerAuth()
@@ -27,6 +32,7 @@ import { UpdateSenderProfileDto } from './dto/update-sender-profile.dto';
 export class SenderProfilesController {
     constructor(private readonly senderProfilesService: SenderProfilesService) { }
 
+    @ActivityLog({ entityType: ActivityEntityType.SENDER_PROFILE, action: ActivityAction.CREATED })
     @Post()
     @ApiOperation({ summary: 'Create a sender profile for the current user' })
     @ApiResponse({ status: 201 })
@@ -53,6 +59,7 @@ export class SenderProfilesController {
         return this.senderProfilesService.findOne(organisation_uuid, uuid);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.SENDER_PROFILE, action: ActivityAction.UPDATED, entityUuidFrom: 'params.uuid' })
     @Put(':uuid')
     @ApiOperation({ summary: 'Update a sender profile' })
     @ApiResponse({ status: 404, description: 'Sender profile not found' })
@@ -64,6 +71,7 @@ export class SenderProfilesController {
         return this.senderProfilesService.update(organisation_uuid, uuid, dto);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.SENDER_PROFILE, action: ActivityAction.DELETED, entityUuidFrom: 'params.uuid' })
     @Delete(':uuid')
     @ApiOperation({ summary: 'Delete a sender profile' })
     @ApiResponse({ status: 404, description: 'Sender profile not found' })

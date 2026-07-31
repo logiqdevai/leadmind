@@ -26,6 +26,11 @@ import { SendOutreachDto } from './dto/send-outreach.dto';
 import { SendExistingMessageDto } from './dto/email-provider.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
 import { OutreachService } from './outreach.service';
+import { ActivityLog } from '@/modules/activity-logs/decorators/activity-log.decorator';
+import {
+    ActivityAction,
+    ActivityEntityType,
+} from '@/modules/activity-logs/constants/activity-log.constants';
 
 @ApiTags('outreach')
 @ApiBearerAuth()
@@ -43,6 +48,7 @@ export class OutreachController {
         return this.outreachService.listMessages(organisation_uuid, query);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.OUTREACH_MESSAGE, action: ActivityAction.MESSAGE_UPDATED, entityUuidFrom: 'params.uuid' })
     @Put('messages/:uuid')
     @ApiOperation({ summary: 'Update pending outreach message' })
     @ApiResponse({ status: 200 })
@@ -55,6 +61,7 @@ export class OutreachController {
         return this.outreachService.updateMessage(organisation_uuid, message_uuid, dto);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.OUTREACH_MESSAGE, action: ActivityAction.MESSAGE_SENT, entityUuidFrom: 'params.uuid' })
     @Post('messages/:uuid/send')
     @ApiOperation({ summary: 'Enqueue outreach message for sending (or retry a failed message)' })
     @ApiResponse({ status: 201 })
@@ -68,6 +75,7 @@ export class OutreachController {
         return this.outreachService.sendMessage(organisation_uuid, message_uuid, dto, user_uuid);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.OUTREACH_MESSAGE, action: ActivityAction.MESSAGE_DELETED, entityUuidFrom: 'params.uuid' })
     @Delete('messages/:uuid')
     @ApiOperation({ summary: 'Delete pending outreach message' })
     @ApiResponse({ status: 200 })
@@ -77,6 +85,7 @@ export class OutreachController {
         return { deleted: true };
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.OUTREACH_MESSAGE, action: ActivityAction.MESSAGE_CREATED })
     @Post('messages')
     @ApiOperation({ summary: 'Create and enqueue outreach message' })
     @ApiResponse({ status: 201 })
@@ -88,6 +97,7 @@ export class OutreachController {
         return this.outreachService.createAndQueue(organisation_uuid, dto, user_uuid);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.OUTREACH_MESSAGE, action: ActivityAction.MESSAGE_DRAFTED })
     @Post('messages/draft')
     @ApiOperation({ summary: 'Create a PENDING outreach message without queueing it for send' })
     @ApiResponse({ status: 201 })
@@ -99,6 +109,7 @@ export class OutreachController {
         return this.outreachService.createDraft(organisation_uuid, dto, user_uuid);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.OUTREACH_SEQUENCE, action: ActivityAction.SEQUENCE_CREATED })
     @Post('sequences')
     @ApiOperation({ summary: 'Create outreach sequence' })
     @ApiResponse({ status: 201 })
@@ -113,6 +124,7 @@ export class OutreachController {
         return this.outreachService.listSequences(organisation_uuid);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.OUTREACH_SEQUENCE, action: ActivityAction.SEQUENCE_ASSIGNED, entityUuidFrom: 'params.uuid' })
     @Post('sequences/:uuid/assign')
     @ApiOperation({ summary: 'Assign sequence to contact and enqueue messages' })
     @ApiResponse({ status: 201 })

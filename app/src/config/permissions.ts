@@ -19,6 +19,7 @@ export const OrganisationPermissions = {
   org_settings: [OrganisationRoles.OWNER, OrganisationRoles.ADMIN],
   org_invite: [OrganisationRoles.OWNER, OrganisationRoles.ADMIN],
   org_manage_members: [OrganisationRoles.OWNER, OrganisationRoles.ADMIN],
+  org_manage_integrations: [OrganisationRoles.OWNER, OrganisationRoles.ADMIN],
   org_delete: [OrganisationRoles.OWNER],
 } as const satisfies Record<string, OrganisationRole[]>;
 

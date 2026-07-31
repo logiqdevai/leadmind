@@ -203,6 +203,11 @@ export type AiUsageLog = $Result.DefaultSelection<Prisma.$AiUsageLogPayload>
  * 
  */
 export type ApifyUsageLog = $Result.DefaultSelection<Prisma.$ApifyUsageLogPayload>
+/**
+ * Model ActivityLog
+ * 
+ */
+export type ActivityLog = $Result.DefaultSelection<Prisma.$ActivityLogPayload>
 
 /**
  * Enums
@@ -1183,6 +1188,16 @@ export class PrismaClient<
     * ```
     */
   get apifyUsageLog(): Prisma.ApifyUsageLogDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.activityLog`: Exposes CRUD operations for the **ActivityLog** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ActivityLogs
+    * const activityLogs = await prisma.activityLog.findMany()
+    * ```
+    */
+  get activityLog(): Prisma.ActivityLogDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1654,7 +1669,8 @@ export namespace Prisma {
     FormCompletionValue: 'FormCompletionValue',
     ContactAudienceAnalysis: 'ContactAudienceAnalysis',
     AiUsageLog: 'AiUsageLog',
-    ApifyUsageLog: 'ApifyUsageLog'
+    ApifyUsageLog: 'ApifyUsageLog',
+    ActivityLog: 'ActivityLog'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1670,7 +1686,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "organisation" | "organisationMember" | "organisationInvitation" | "filter" | "scoringInstruction" | "filterScoringInstruction" | "rawLead" | "lead" | "leadEnrichment" | "contact" | "contactInfo" | "contactFilter" | "contactEnrichment" | "contactScore" | "contactList" | "contactListMember" | "contactTag" | "interaction" | "outreachMessage" | "outreachSequence" | "filterJob" | "senderProfile" | "messageTemplate" | "marketingCampaign" | "marketingCampaignContact" | "openAiBatchJob" | "integration" | "integrationAccount" | "integrationKey" | "reminder" | "form" | "formField" | "formCompletion" | "formCompletionValue" | "contactAudienceAnalysis" | "aiUsageLog" | "apifyUsageLog"
+      modelProps: "user" | "organisation" | "organisationMember" | "organisationInvitation" | "filter" | "scoringInstruction" | "filterScoringInstruction" | "rawLead" | "lead" | "leadEnrichment" | "contact" | "contactInfo" | "contactFilter" | "contactEnrichment" | "contactScore" | "contactList" | "contactListMember" | "contactTag" | "interaction" | "outreachMessage" | "outreachSequence" | "filterJob" | "senderProfile" | "messageTemplate" | "marketingCampaign" | "marketingCampaignContact" | "openAiBatchJob" | "integration" | "integrationAccount" | "integrationKey" | "reminder" | "form" | "formField" | "formCompletion" | "formCompletionValue" | "contactAudienceAnalysis" | "aiUsageLog" | "apifyUsageLog" | "activityLog"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -4486,6 +4502,80 @@ export namespace Prisma {
           }
         }
       }
+      ActivityLog: {
+        payload: Prisma.$ActivityLogPayload<ExtArgs>
+        fields: Prisma.ActivityLogFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ActivityLogFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActivityLogPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ActivityLogFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActivityLogPayload>
+          }
+          findFirst: {
+            args: Prisma.ActivityLogFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActivityLogPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ActivityLogFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActivityLogPayload>
+          }
+          findMany: {
+            args: Prisma.ActivityLogFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActivityLogPayload>[]
+          }
+          create: {
+            args: Prisma.ActivityLogCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActivityLogPayload>
+          }
+          createMany: {
+            args: Prisma.ActivityLogCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ActivityLogCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActivityLogPayload>[]
+          }
+          delete: {
+            args: Prisma.ActivityLogDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActivityLogPayload>
+          }
+          update: {
+            args: Prisma.ActivityLogUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActivityLogPayload>
+          }
+          deleteMany: {
+            args: Prisma.ActivityLogDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ActivityLogUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ActivityLogUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActivityLogPayload>[]
+          }
+          upsert: {
+            args: Prisma.ActivityLogUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActivityLogPayload>
+          }
+          aggregate: {
+            args: Prisma.ActivityLogAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateActivityLog>
+          }
+          groupBy: {
+            args: Prisma.ActivityLogGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ActivityLogGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ActivityLogCountArgs<ExtArgs>
+            result: $Utils.Optional<ActivityLogCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -4632,6 +4722,7 @@ export namespace Prisma {
     contactAudienceAnalysis?: ContactAudienceAnalysisOmit
     aiUsageLog?: AiUsageLogOmit
     apifyUsageLog?: ApifyUsageLogOmit
+    activityLog?: ActivityLogOmit
   }
 
   /* Types for Logging */
@@ -4716,6 +4807,7 @@ export namespace Prisma {
     invitations_sent: number
     form_completions: number
     outreach_messages_sent: number
+    activity_logs: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4723,6 +4815,7 @@ export namespace Prisma {
     invitations_sent?: boolean | UserCountOutputTypeCountInvitations_sentArgs
     form_completions?: boolean | UserCountOutputTypeCountForm_completionsArgs
     outreach_messages_sent?: boolean | UserCountOutputTypeCountOutreach_messages_sentArgs
+    activity_logs?: boolean | UserCountOutputTypeCountActivity_logsArgs
   }
 
   // Custom InputTypes
@@ -4764,6 +4857,13 @@ export namespace Prisma {
     where?: OutreachMessageWhereInput
   }
 
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountActivity_logsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ActivityLogWhereInput
+  }
+
 
   /**
    * Count Type OrganisationCountOutputType
@@ -4789,6 +4889,7 @@ export namespace Prisma {
     ai_usage_logs: number
     apify_usage_logs: number
     message_templates: number
+    activity_logs: number
   }
 
   export type OrganisationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4811,6 +4912,7 @@ export namespace Prisma {
     ai_usage_logs?: boolean | OrganisationCountOutputTypeCountAi_usage_logsArgs
     apify_usage_logs?: boolean | OrganisationCountOutputTypeCountApify_usage_logsArgs
     message_templates?: boolean | OrganisationCountOutputTypeCountMessage_templatesArgs
+    activity_logs?: boolean | OrganisationCountOutputTypeCountActivity_logsArgs
   }
 
   // Custom InputTypes
@@ -4955,6 +5057,13 @@ export namespace Prisma {
    */
   export type OrganisationCountOutputTypeCountMessage_templatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: MessageTemplateWhereInput
+  }
+
+  /**
+   * OrganisationCountOutputType without action
+   */
+  export type OrganisationCountOutputTypeCountActivity_logsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ActivityLogWhereInput
   }
 
 
@@ -5744,6 +5853,7 @@ export namespace Prisma {
     invitations_sent?: boolean | User$invitations_sentArgs<ExtArgs>
     form_completions?: boolean | User$form_completionsArgs<ExtArgs>
     outreach_messages_sent?: boolean | User$outreach_messages_sentArgs<ExtArgs>
+    activity_logs?: boolean | User$activity_logsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -5789,6 +5899,7 @@ export namespace Prisma {
     invitations_sent?: boolean | User$invitations_sentArgs<ExtArgs>
     form_completions?: boolean | User$form_completionsArgs<ExtArgs>
     outreach_messages_sent?: boolean | User$outreach_messages_sentArgs<ExtArgs>
+    activity_logs?: boolean | User$activity_logsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -5801,6 +5912,7 @@ export namespace Prisma {
       invitations_sent: Prisma.$OrganisationInvitationPayload<ExtArgs>[]
       form_completions: Prisma.$FormCompletionPayload<ExtArgs>[]
       outreach_messages_sent: Prisma.$OutreachMessagePayload<ExtArgs>[]
+      activity_logs: Prisma.$ActivityLogPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -6210,6 +6322,7 @@ export namespace Prisma {
     invitations_sent<T extends User$invitations_sentArgs<ExtArgs> = {}>(args?: Subset<T, User$invitations_sentArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrganisationInvitationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     form_completions<T extends User$form_completionsArgs<ExtArgs> = {}>(args?: Subset<T, User$form_completionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FormCompletionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     outreach_messages_sent<T extends User$outreach_messages_sentArgs<ExtArgs> = {}>(args?: Subset<T, User$outreach_messages_sentArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OutreachMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    activity_logs<T extends User$activity_logsArgs<ExtArgs> = {}>(args?: Subset<T, User$activity_logsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ActivityLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6732,6 +6845,30 @@ export namespace Prisma {
   }
 
   /**
+   * User.activity_logs
+   */
+  export type User$activity_logsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActivityLog
+     */
+    select?: ActivityLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActivityLog
+     */
+    omit?: ActivityLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActivityLogInclude<ExtArgs> | null
+    where?: ActivityLogWhereInput
+    orderBy?: ActivityLogOrderByWithRelationInput | ActivityLogOrderByWithRelationInput[]
+    cursor?: ActivityLogWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ActivityLogScalarFieldEnum | ActivityLogScalarFieldEnum[]
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6975,6 +7112,7 @@ export namespace Prisma {
     ai_usage_logs?: boolean | Organisation$ai_usage_logsArgs<ExtArgs>
     apify_usage_logs?: boolean | Organisation$apify_usage_logsArgs<ExtArgs>
     message_templates?: boolean | Organisation$message_templatesArgs<ExtArgs>
+    activity_logs?: boolean | Organisation$activity_logsArgs<ExtArgs>
     _count?: boolean | OrganisationCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["organisation"]>
 
@@ -7026,6 +7164,7 @@ export namespace Prisma {
     ai_usage_logs?: boolean | Organisation$ai_usage_logsArgs<ExtArgs>
     apify_usage_logs?: boolean | Organisation$apify_usage_logsArgs<ExtArgs>
     message_templates?: boolean | Organisation$message_templatesArgs<ExtArgs>
+    activity_logs?: boolean | Organisation$activity_logsArgs<ExtArgs>
     _count?: boolean | OrganisationCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type OrganisationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -7053,6 +7192,7 @@ export namespace Prisma {
       ai_usage_logs: Prisma.$AiUsageLogPayload<ExtArgs>[]
       apify_usage_logs: Prisma.$ApifyUsageLogPayload<ExtArgs>[]
       message_templates: Prisma.$MessageTemplatePayload<ExtArgs>[]
+      activity_logs: Prisma.$ActivityLogPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -7474,6 +7614,7 @@ export namespace Prisma {
     ai_usage_logs<T extends Organisation$ai_usage_logsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$ai_usage_logsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AiUsageLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     apify_usage_logs<T extends Organisation$apify_usage_logsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$apify_usage_logsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApifyUsageLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     message_templates<T extends Organisation$message_templatesArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$message_templatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessageTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    activity_logs<T extends Organisation$activity_logsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$activity_logsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ActivityLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -8350,6 +8491,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: MessageTemplateScalarFieldEnum | MessageTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * Organisation.activity_logs
+   */
+  export type Organisation$activity_logsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActivityLog
+     */
+    select?: ActivityLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActivityLog
+     */
+    omit?: ActivityLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActivityLogInclude<ExtArgs> | null
+    where?: ActivityLogWhereInput
+    orderBy?: ActivityLogOrderByWithRelationInput | ActivityLogOrderByWithRelationInput[]
+    cursor?: ActivityLogWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ActivityLogScalarFieldEnum | ActivityLogScalarFieldEnum[]
   }
 
   /**
@@ -52330,6 +52495,1186 @@ export namespace Prisma {
 
 
   /**
+   * Model ActivityLog
+   */
+
+  export type AggregateActivityLog = {
+    _count: ActivityLogCountAggregateOutputType | null
+    _avg: ActivityLogAvgAggregateOutputType | null
+    _sum: ActivityLogSumAggregateOutputType | null
+    _min: ActivityLogMinAggregateOutputType | null
+    _max: ActivityLogMaxAggregateOutputType | null
+  }
+
+  export type ActivityLogAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type ActivityLogSumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type ActivityLogMinAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    organisation_uuid: string | null
+    actor_user_uuid: string | null
+    entity_type: string | null
+    entity_uuid: string | null
+    action: string | null
+    summary: string | null
+    created_at: Date | null
+  }
+
+  export type ActivityLogMaxAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    organisation_uuid: string | null
+    actor_user_uuid: string | null
+    entity_type: string | null
+    entity_uuid: string | null
+    action: string | null
+    summary: string | null
+    created_at: Date | null
+  }
+
+  export type ActivityLogCountAggregateOutputType = {
+    id: number
+    uuid: number
+    organisation_uuid: number
+    actor_user_uuid: number
+    entity_type: number
+    entity_uuid: number
+    action: number
+    summary: number
+    metadata: number
+    created_at: number
+    _all: number
+  }
+
+
+  export type ActivityLogAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type ActivityLogSumAggregateInputType = {
+    id?: true
+  }
+
+  export type ActivityLogMinAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    actor_user_uuid?: true
+    entity_type?: true
+    entity_uuid?: true
+    action?: true
+    summary?: true
+    created_at?: true
+  }
+
+  export type ActivityLogMaxAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    actor_user_uuid?: true
+    entity_type?: true
+    entity_uuid?: true
+    action?: true
+    summary?: true
+    created_at?: true
+  }
+
+  export type ActivityLogCountAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    actor_user_uuid?: true
+    entity_type?: true
+    entity_uuid?: true
+    action?: true
+    summary?: true
+    metadata?: true
+    created_at?: true
+    _all?: true
+  }
+
+  export type ActivityLogAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ActivityLog to aggregate.
+     */
+    where?: ActivityLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ActivityLogs to fetch.
+     */
+    orderBy?: ActivityLogOrderByWithRelationInput | ActivityLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ActivityLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ActivityLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ActivityLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ActivityLogs
+    **/
+    _count?: true | ActivityLogCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ActivityLogAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ActivityLogSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ActivityLogMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ActivityLogMaxAggregateInputType
+  }
+
+  export type GetActivityLogAggregateType<T extends ActivityLogAggregateArgs> = {
+        [P in keyof T & keyof AggregateActivityLog]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateActivityLog[P]>
+      : GetScalarType<T[P], AggregateActivityLog[P]>
+  }
+
+
+
+
+  export type ActivityLogGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ActivityLogWhereInput
+    orderBy?: ActivityLogOrderByWithAggregationInput | ActivityLogOrderByWithAggregationInput[]
+    by: ActivityLogScalarFieldEnum[] | ActivityLogScalarFieldEnum
+    having?: ActivityLogScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ActivityLogCountAggregateInputType | true
+    _avg?: ActivityLogAvgAggregateInputType
+    _sum?: ActivityLogSumAggregateInputType
+    _min?: ActivityLogMinAggregateInputType
+    _max?: ActivityLogMaxAggregateInputType
+  }
+
+  export type ActivityLogGroupByOutputType = {
+    id: number
+    uuid: string
+    organisation_uuid: string
+    actor_user_uuid: string | null
+    entity_type: string
+    entity_uuid: string | null
+    action: string
+    summary: string | null
+    metadata: JsonValue | null
+    created_at: Date
+    _count: ActivityLogCountAggregateOutputType | null
+    _avg: ActivityLogAvgAggregateOutputType | null
+    _sum: ActivityLogSumAggregateOutputType | null
+    _min: ActivityLogMinAggregateOutputType | null
+    _max: ActivityLogMaxAggregateOutputType | null
+  }
+
+  type GetActivityLogGroupByPayload<T extends ActivityLogGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ActivityLogGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ActivityLogGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ActivityLogGroupByOutputType[P]>
+            : GetScalarType<T[P], ActivityLogGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ActivityLogSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    actor_user_uuid?: boolean
+    entity_type?: boolean
+    entity_uuid?: boolean
+    action?: boolean
+    summary?: boolean
+    metadata?: boolean
+    created_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    actor?: boolean | ActivityLog$actorArgs<ExtArgs>
+  }, ExtArgs["result"]["activityLog"]>
+
+  export type ActivityLogSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    actor_user_uuid?: boolean
+    entity_type?: boolean
+    entity_uuid?: boolean
+    action?: boolean
+    summary?: boolean
+    metadata?: boolean
+    created_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    actor?: boolean | ActivityLog$actorArgs<ExtArgs>
+  }, ExtArgs["result"]["activityLog"]>
+
+  export type ActivityLogSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    actor_user_uuid?: boolean
+    entity_type?: boolean
+    entity_uuid?: boolean
+    action?: boolean
+    summary?: boolean
+    metadata?: boolean
+    created_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    actor?: boolean | ActivityLog$actorArgs<ExtArgs>
+  }, ExtArgs["result"]["activityLog"]>
+
+  export type ActivityLogSelectScalar = {
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    actor_user_uuid?: boolean
+    entity_type?: boolean
+    entity_uuid?: boolean
+    action?: boolean
+    summary?: boolean
+    metadata?: boolean
+    created_at?: boolean
+  }
+
+  export type ActivityLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "actor_user_uuid" | "entity_type" | "entity_uuid" | "action" | "summary" | "metadata" | "created_at", ExtArgs["result"]["activityLog"]>
+  export type ActivityLogInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    actor?: boolean | ActivityLog$actorArgs<ExtArgs>
+  }
+  export type ActivityLogIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    actor?: boolean | ActivityLog$actorArgs<ExtArgs>
+  }
+  export type ActivityLogIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    actor?: boolean | ActivityLog$actorArgs<ExtArgs>
+  }
+
+  export type $ActivityLogPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ActivityLog"
+    objects: {
+      organisation: Prisma.$OrganisationPayload<ExtArgs>
+      actor: Prisma.$UserPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      uuid: string
+      organisation_uuid: string
+      actor_user_uuid: string | null
+      entity_type: string
+      entity_uuid: string | null
+      action: string
+      summary: string | null
+      metadata: Prisma.JsonValue | null
+      created_at: Date
+    }, ExtArgs["result"]["activityLog"]>
+    composites: {}
+  }
+
+  type ActivityLogGetPayload<S extends boolean | null | undefined | ActivityLogDefaultArgs> = $Result.GetResult<Prisma.$ActivityLogPayload, S>
+
+  type ActivityLogCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ActivityLogFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ActivityLogCountAggregateInputType | true
+    }
+
+  export interface ActivityLogDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ActivityLog'], meta: { name: 'ActivityLog' } }
+    /**
+     * Find zero or one ActivityLog that matches the filter.
+     * @param {ActivityLogFindUniqueArgs} args - Arguments to find a ActivityLog
+     * @example
+     * // Get one ActivityLog
+     * const activityLog = await prisma.activityLog.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ActivityLogFindUniqueArgs>(args: SelectSubset<T, ActivityLogFindUniqueArgs<ExtArgs>>): Prisma__ActivityLogClient<$Result.GetResult<Prisma.$ActivityLogPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ActivityLog that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ActivityLogFindUniqueOrThrowArgs} args - Arguments to find a ActivityLog
+     * @example
+     * // Get one ActivityLog
+     * const activityLog = await prisma.activityLog.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ActivityLogFindUniqueOrThrowArgs>(args: SelectSubset<T, ActivityLogFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ActivityLogClient<$Result.GetResult<Prisma.$ActivityLogPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ActivityLog that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ActivityLogFindFirstArgs} args - Arguments to find a ActivityLog
+     * @example
+     * // Get one ActivityLog
+     * const activityLog = await prisma.activityLog.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ActivityLogFindFirstArgs>(args?: SelectSubset<T, ActivityLogFindFirstArgs<ExtArgs>>): Prisma__ActivityLogClient<$Result.GetResult<Prisma.$ActivityLogPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ActivityLog that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ActivityLogFindFirstOrThrowArgs} args - Arguments to find a ActivityLog
+     * @example
+     * // Get one ActivityLog
+     * const activityLog = await prisma.activityLog.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ActivityLogFindFirstOrThrowArgs>(args?: SelectSubset<T, ActivityLogFindFirstOrThrowArgs<ExtArgs>>): Prisma__ActivityLogClient<$Result.GetResult<Prisma.$ActivityLogPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ActivityLogs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ActivityLogFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ActivityLogs
+     * const activityLogs = await prisma.activityLog.findMany()
+     * 
+     * // Get first 10 ActivityLogs
+     * const activityLogs = await prisma.activityLog.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const activityLogWithIdOnly = await prisma.activityLog.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ActivityLogFindManyArgs>(args?: SelectSubset<T, ActivityLogFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ActivityLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ActivityLog.
+     * @param {ActivityLogCreateArgs} args - Arguments to create a ActivityLog.
+     * @example
+     * // Create one ActivityLog
+     * const ActivityLog = await prisma.activityLog.create({
+     *   data: {
+     *     // ... data to create a ActivityLog
+     *   }
+     * })
+     * 
+     */
+    create<T extends ActivityLogCreateArgs>(args: SelectSubset<T, ActivityLogCreateArgs<ExtArgs>>): Prisma__ActivityLogClient<$Result.GetResult<Prisma.$ActivityLogPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ActivityLogs.
+     * @param {ActivityLogCreateManyArgs} args - Arguments to create many ActivityLogs.
+     * @example
+     * // Create many ActivityLogs
+     * const activityLog = await prisma.activityLog.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ActivityLogCreateManyArgs>(args?: SelectSubset<T, ActivityLogCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ActivityLogs and returns the data saved in the database.
+     * @param {ActivityLogCreateManyAndReturnArgs} args - Arguments to create many ActivityLogs.
+     * @example
+     * // Create many ActivityLogs
+     * const activityLog = await prisma.activityLog.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ActivityLogs and only return the `id`
+     * const activityLogWithIdOnly = await prisma.activityLog.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ActivityLogCreateManyAndReturnArgs>(args?: SelectSubset<T, ActivityLogCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ActivityLogPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ActivityLog.
+     * @param {ActivityLogDeleteArgs} args - Arguments to delete one ActivityLog.
+     * @example
+     * // Delete one ActivityLog
+     * const ActivityLog = await prisma.activityLog.delete({
+     *   where: {
+     *     // ... filter to delete one ActivityLog
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ActivityLogDeleteArgs>(args: SelectSubset<T, ActivityLogDeleteArgs<ExtArgs>>): Prisma__ActivityLogClient<$Result.GetResult<Prisma.$ActivityLogPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ActivityLog.
+     * @param {ActivityLogUpdateArgs} args - Arguments to update one ActivityLog.
+     * @example
+     * // Update one ActivityLog
+     * const activityLog = await prisma.activityLog.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ActivityLogUpdateArgs>(args: SelectSubset<T, ActivityLogUpdateArgs<ExtArgs>>): Prisma__ActivityLogClient<$Result.GetResult<Prisma.$ActivityLogPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ActivityLogs.
+     * @param {ActivityLogDeleteManyArgs} args - Arguments to filter ActivityLogs to delete.
+     * @example
+     * // Delete a few ActivityLogs
+     * const { count } = await prisma.activityLog.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ActivityLogDeleteManyArgs>(args?: SelectSubset<T, ActivityLogDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ActivityLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ActivityLogUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ActivityLogs
+     * const activityLog = await prisma.activityLog.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ActivityLogUpdateManyArgs>(args: SelectSubset<T, ActivityLogUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ActivityLogs and returns the data updated in the database.
+     * @param {ActivityLogUpdateManyAndReturnArgs} args - Arguments to update many ActivityLogs.
+     * @example
+     * // Update many ActivityLogs
+     * const activityLog = await prisma.activityLog.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ActivityLogs and only return the `id`
+     * const activityLogWithIdOnly = await prisma.activityLog.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ActivityLogUpdateManyAndReturnArgs>(args: SelectSubset<T, ActivityLogUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ActivityLogPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ActivityLog.
+     * @param {ActivityLogUpsertArgs} args - Arguments to update or create a ActivityLog.
+     * @example
+     * // Update or create a ActivityLog
+     * const activityLog = await prisma.activityLog.upsert({
+     *   create: {
+     *     // ... data to create a ActivityLog
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ActivityLog we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ActivityLogUpsertArgs>(args: SelectSubset<T, ActivityLogUpsertArgs<ExtArgs>>): Prisma__ActivityLogClient<$Result.GetResult<Prisma.$ActivityLogPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ActivityLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ActivityLogCountArgs} args - Arguments to filter ActivityLogs to count.
+     * @example
+     * // Count the number of ActivityLogs
+     * const count = await prisma.activityLog.count({
+     *   where: {
+     *     // ... the filter for the ActivityLogs we want to count
+     *   }
+     * })
+    **/
+    count<T extends ActivityLogCountArgs>(
+      args?: Subset<T, ActivityLogCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ActivityLogCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ActivityLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ActivityLogAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ActivityLogAggregateArgs>(args: Subset<T, ActivityLogAggregateArgs>): Prisma.PrismaPromise<GetActivityLogAggregateType<T>>
+
+    /**
+     * Group by ActivityLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ActivityLogGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ActivityLogGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ActivityLogGroupByArgs['orderBy'] }
+        : { orderBy?: ActivityLogGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ActivityLogGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetActivityLogGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ActivityLog model
+   */
+  readonly fields: ActivityLogFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ActivityLog.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ActivityLogClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    organisation<T extends OrganisationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganisationDefaultArgs<ExtArgs>>): Prisma__OrganisationClient<$Result.GetResult<Prisma.$OrganisationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    actor<T extends ActivityLog$actorArgs<ExtArgs> = {}>(args?: Subset<T, ActivityLog$actorArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ActivityLog model
+   */
+  interface ActivityLogFieldRefs {
+    readonly id: FieldRef<"ActivityLog", 'Int'>
+    readonly uuid: FieldRef<"ActivityLog", 'String'>
+    readonly organisation_uuid: FieldRef<"ActivityLog", 'String'>
+    readonly actor_user_uuid: FieldRef<"ActivityLog", 'String'>
+    readonly entity_type: FieldRef<"ActivityLog", 'String'>
+    readonly entity_uuid: FieldRef<"ActivityLog", 'String'>
+    readonly action: FieldRef<"ActivityLog", 'String'>
+    readonly summary: FieldRef<"ActivityLog", 'String'>
+    readonly metadata: FieldRef<"ActivityLog", 'Json'>
+    readonly created_at: FieldRef<"ActivityLog", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ActivityLog findUnique
+   */
+  export type ActivityLogFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActivityLog
+     */
+    select?: ActivityLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActivityLog
+     */
+    omit?: ActivityLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActivityLogInclude<ExtArgs> | null
+    /**
+     * Filter, which ActivityLog to fetch.
+     */
+    where: ActivityLogWhereUniqueInput
+  }
+
+  /**
+   * ActivityLog findUniqueOrThrow
+   */
+  export type ActivityLogFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActivityLog
+     */
+    select?: ActivityLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActivityLog
+     */
+    omit?: ActivityLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActivityLogInclude<ExtArgs> | null
+    /**
+     * Filter, which ActivityLog to fetch.
+     */
+    where: ActivityLogWhereUniqueInput
+  }
+
+  /**
+   * ActivityLog findFirst
+   */
+  export type ActivityLogFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActivityLog
+     */
+    select?: ActivityLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActivityLog
+     */
+    omit?: ActivityLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActivityLogInclude<ExtArgs> | null
+    /**
+     * Filter, which ActivityLog to fetch.
+     */
+    where?: ActivityLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ActivityLogs to fetch.
+     */
+    orderBy?: ActivityLogOrderByWithRelationInput | ActivityLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ActivityLogs.
+     */
+    cursor?: ActivityLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ActivityLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ActivityLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ActivityLogs.
+     */
+    distinct?: ActivityLogScalarFieldEnum | ActivityLogScalarFieldEnum[]
+  }
+
+  /**
+   * ActivityLog findFirstOrThrow
+   */
+  export type ActivityLogFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActivityLog
+     */
+    select?: ActivityLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActivityLog
+     */
+    omit?: ActivityLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActivityLogInclude<ExtArgs> | null
+    /**
+     * Filter, which ActivityLog to fetch.
+     */
+    where?: ActivityLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ActivityLogs to fetch.
+     */
+    orderBy?: ActivityLogOrderByWithRelationInput | ActivityLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ActivityLogs.
+     */
+    cursor?: ActivityLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ActivityLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ActivityLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ActivityLogs.
+     */
+    distinct?: ActivityLogScalarFieldEnum | ActivityLogScalarFieldEnum[]
+  }
+
+  /**
+   * ActivityLog findMany
+   */
+  export type ActivityLogFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActivityLog
+     */
+    select?: ActivityLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActivityLog
+     */
+    omit?: ActivityLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActivityLogInclude<ExtArgs> | null
+    /**
+     * Filter, which ActivityLogs to fetch.
+     */
+    where?: ActivityLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ActivityLogs to fetch.
+     */
+    orderBy?: ActivityLogOrderByWithRelationInput | ActivityLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ActivityLogs.
+     */
+    cursor?: ActivityLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ActivityLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ActivityLogs.
+     */
+    skip?: number
+    distinct?: ActivityLogScalarFieldEnum | ActivityLogScalarFieldEnum[]
+  }
+
+  /**
+   * ActivityLog create
+   */
+  export type ActivityLogCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActivityLog
+     */
+    select?: ActivityLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActivityLog
+     */
+    omit?: ActivityLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActivityLogInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ActivityLog.
+     */
+    data: XOR<ActivityLogCreateInput, ActivityLogUncheckedCreateInput>
+  }
+
+  /**
+   * ActivityLog createMany
+   */
+  export type ActivityLogCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ActivityLogs.
+     */
+    data: ActivityLogCreateManyInput | ActivityLogCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ActivityLog createManyAndReturn
+   */
+  export type ActivityLogCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActivityLog
+     */
+    select?: ActivityLogSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActivityLog
+     */
+    omit?: ActivityLogOmit<ExtArgs> | null
+    /**
+     * The data used to create many ActivityLogs.
+     */
+    data: ActivityLogCreateManyInput | ActivityLogCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActivityLogIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ActivityLog update
+   */
+  export type ActivityLogUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActivityLog
+     */
+    select?: ActivityLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActivityLog
+     */
+    omit?: ActivityLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActivityLogInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ActivityLog.
+     */
+    data: XOR<ActivityLogUpdateInput, ActivityLogUncheckedUpdateInput>
+    /**
+     * Choose, which ActivityLog to update.
+     */
+    where: ActivityLogWhereUniqueInput
+  }
+
+  /**
+   * ActivityLog updateMany
+   */
+  export type ActivityLogUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ActivityLogs.
+     */
+    data: XOR<ActivityLogUpdateManyMutationInput, ActivityLogUncheckedUpdateManyInput>
+    /**
+     * Filter which ActivityLogs to update
+     */
+    where?: ActivityLogWhereInput
+    /**
+     * Limit how many ActivityLogs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ActivityLog updateManyAndReturn
+   */
+  export type ActivityLogUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActivityLog
+     */
+    select?: ActivityLogSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActivityLog
+     */
+    omit?: ActivityLogOmit<ExtArgs> | null
+    /**
+     * The data used to update ActivityLogs.
+     */
+    data: XOR<ActivityLogUpdateManyMutationInput, ActivityLogUncheckedUpdateManyInput>
+    /**
+     * Filter which ActivityLogs to update
+     */
+    where?: ActivityLogWhereInput
+    /**
+     * Limit how many ActivityLogs to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActivityLogIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ActivityLog upsert
+   */
+  export type ActivityLogUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActivityLog
+     */
+    select?: ActivityLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActivityLog
+     */
+    omit?: ActivityLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActivityLogInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ActivityLog to update in case it exists.
+     */
+    where: ActivityLogWhereUniqueInput
+    /**
+     * In case the ActivityLog found by the `where` argument doesn't exist, create a new ActivityLog with this data.
+     */
+    create: XOR<ActivityLogCreateInput, ActivityLogUncheckedCreateInput>
+    /**
+     * In case the ActivityLog was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ActivityLogUpdateInput, ActivityLogUncheckedUpdateInput>
+  }
+
+  /**
+   * ActivityLog delete
+   */
+  export type ActivityLogDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActivityLog
+     */
+    select?: ActivityLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActivityLog
+     */
+    omit?: ActivityLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActivityLogInclude<ExtArgs> | null
+    /**
+     * Filter which ActivityLog to delete.
+     */
+    where: ActivityLogWhereUniqueInput
+  }
+
+  /**
+   * ActivityLog deleteMany
+   */
+  export type ActivityLogDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ActivityLogs to delete
+     */
+    where?: ActivityLogWhereInput
+    /**
+     * Limit how many ActivityLogs to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ActivityLog.actor
+   */
+  export type ActivityLog$actorArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * ActivityLog without action
+   */
+  export type ActivityLogDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActivityLog
+     */
+    select?: ActivityLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActivityLog
+     */
+    omit?: ActivityLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActivityLogInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -53018,6 +54363,22 @@ export namespace Prisma {
   export type ApifyUsageLogScalarFieldEnum = (typeof ApifyUsageLogScalarFieldEnum)[keyof typeof ApifyUsageLogScalarFieldEnum]
 
 
+  export const ActivityLogScalarFieldEnum: {
+    id: 'id',
+    uuid: 'uuid',
+    organisation_uuid: 'organisation_uuid',
+    actor_user_uuid: 'actor_user_uuid',
+    entity_type: 'entity_type',
+    entity_uuid: 'entity_uuid',
+    action: 'action',
+    summary: 'summary',
+    metadata: 'metadata',
+    created_at: 'created_at'
+  };
+
+  export type ActivityLogScalarFieldEnum = (typeof ActivityLogScalarFieldEnum)[keyof typeof ActivityLogScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -53602,6 +54963,7 @@ export namespace Prisma {
     invitations_sent?: OrganisationInvitationListRelationFilter
     form_completions?: FormCompletionListRelationFilter
     outreach_messages_sent?: OutreachMessageListRelationFilter
+    activity_logs?: ActivityLogListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -53618,6 +54980,7 @@ export namespace Prisma {
     invitations_sent?: OrganisationInvitationOrderByRelationAggregateInput
     form_completions?: FormCompletionOrderByRelationAggregateInput
     outreach_messages_sent?: OutreachMessageOrderByRelationAggregateInput
+    activity_logs?: ActivityLogOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -53637,6 +55000,7 @@ export namespace Prisma {
     invitations_sent?: OrganisationInvitationListRelationFilter
     form_completions?: FormCompletionListRelationFilter
     outreach_messages_sent?: OutreachMessageListRelationFilter
+    activity_logs?: ActivityLogListRelationFilter
   }, "id" | "uuid" | "email" | "phone">
 
   export type UserOrderByWithAggregationInput = {
@@ -53700,6 +55064,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogListRelationFilter
     apify_usage_logs?: ApifyUsageLogListRelationFilter
     message_templates?: MessageTemplateListRelationFilter
+    activity_logs?: ActivityLogListRelationFilter
   }
 
   export type OrganisationOrderByWithRelationInput = {
@@ -53728,6 +55093,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogOrderByRelationAggregateInput
     apify_usage_logs?: ApifyUsageLogOrderByRelationAggregateInput
     message_templates?: MessageTemplateOrderByRelationAggregateInput
+    activity_logs?: ActivityLogOrderByRelationAggregateInput
   }
 
   export type OrganisationWhereUniqueInput = Prisma.AtLeast<{
@@ -53759,6 +55125,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogListRelationFilter
     apify_usage_logs?: ApifyUsageLogListRelationFilter
     message_templates?: MessageTemplateListRelationFilter
+    activity_logs?: ActivityLogListRelationFilter
   }, "id" | "uuid" | "slug">
 
   export type OrganisationOrderByWithAggregationInput = {
@@ -57283,6 +58650,91 @@ export namespace Prisma {
     created_at?: DateTimeWithAggregatesFilter<"ApifyUsageLog"> | Date | string
   }
 
+  export type ActivityLogWhereInput = {
+    AND?: ActivityLogWhereInput | ActivityLogWhereInput[]
+    OR?: ActivityLogWhereInput[]
+    NOT?: ActivityLogWhereInput | ActivityLogWhereInput[]
+    id?: IntFilter<"ActivityLog"> | number
+    uuid?: StringFilter<"ActivityLog"> | string
+    organisation_uuid?: StringFilter<"ActivityLog"> | string
+    actor_user_uuid?: StringNullableFilter<"ActivityLog"> | string | null
+    entity_type?: StringFilter<"ActivityLog"> | string
+    entity_uuid?: StringNullableFilter<"ActivityLog"> | string | null
+    action?: StringFilter<"ActivityLog"> | string
+    summary?: StringNullableFilter<"ActivityLog"> | string | null
+    metadata?: JsonNullableFilter<"ActivityLog">
+    created_at?: DateTimeFilter<"ActivityLog"> | Date | string
+    organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+    actor?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }
+
+  export type ActivityLogOrderByWithRelationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    actor_user_uuid?: SortOrderInput | SortOrder
+    entity_type?: SortOrder
+    entity_uuid?: SortOrderInput | SortOrder
+    action?: SortOrder
+    summary?: SortOrderInput | SortOrder
+    metadata?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    organisation?: OrganisationOrderByWithRelationInput
+    actor?: UserOrderByWithRelationInput
+  }
+
+  export type ActivityLogWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    uuid?: string
+    AND?: ActivityLogWhereInput | ActivityLogWhereInput[]
+    OR?: ActivityLogWhereInput[]
+    NOT?: ActivityLogWhereInput | ActivityLogWhereInput[]
+    organisation_uuid?: StringFilter<"ActivityLog"> | string
+    actor_user_uuid?: StringNullableFilter<"ActivityLog"> | string | null
+    entity_type?: StringFilter<"ActivityLog"> | string
+    entity_uuid?: StringNullableFilter<"ActivityLog"> | string | null
+    action?: StringFilter<"ActivityLog"> | string
+    summary?: StringNullableFilter<"ActivityLog"> | string | null
+    metadata?: JsonNullableFilter<"ActivityLog">
+    created_at?: DateTimeFilter<"ActivityLog"> | Date | string
+    organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+    actor?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }, "id" | "uuid">
+
+  export type ActivityLogOrderByWithAggregationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    actor_user_uuid?: SortOrderInput | SortOrder
+    entity_type?: SortOrder
+    entity_uuid?: SortOrderInput | SortOrder
+    action?: SortOrder
+    summary?: SortOrderInput | SortOrder
+    metadata?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    _count?: ActivityLogCountOrderByAggregateInput
+    _avg?: ActivityLogAvgOrderByAggregateInput
+    _max?: ActivityLogMaxOrderByAggregateInput
+    _min?: ActivityLogMinOrderByAggregateInput
+    _sum?: ActivityLogSumOrderByAggregateInput
+  }
+
+  export type ActivityLogScalarWhereWithAggregatesInput = {
+    AND?: ActivityLogScalarWhereWithAggregatesInput | ActivityLogScalarWhereWithAggregatesInput[]
+    OR?: ActivityLogScalarWhereWithAggregatesInput[]
+    NOT?: ActivityLogScalarWhereWithAggregatesInput | ActivityLogScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"ActivityLog"> | number
+    uuid?: StringWithAggregatesFilter<"ActivityLog"> | string
+    organisation_uuid?: StringWithAggregatesFilter<"ActivityLog"> | string
+    actor_user_uuid?: StringNullableWithAggregatesFilter<"ActivityLog"> | string | null
+    entity_type?: StringWithAggregatesFilter<"ActivityLog"> | string
+    entity_uuid?: StringNullableWithAggregatesFilter<"ActivityLog"> | string | null
+    action?: StringWithAggregatesFilter<"ActivityLog"> | string
+    summary?: StringNullableWithAggregatesFilter<"ActivityLog"> | string | null
+    metadata?: JsonNullableWithAggregatesFilter<"ActivityLog">
+    created_at?: DateTimeWithAggregatesFilter<"ActivityLog"> | Date | string
+  }
+
   export type UserCreateInput = {
     uuid?: string
     email: string
@@ -57296,6 +58748,7 @@ export namespace Prisma {
     invitations_sent?: OrganisationInvitationCreateNestedManyWithoutInvited_byInput
     form_completions?: FormCompletionCreateNestedManyWithoutCompleted_byInput
     outreach_messages_sent?: OutreachMessageCreateNestedManyWithoutSent_byInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutActorInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -57312,6 +58765,7 @@ export namespace Prisma {
     invitations_sent?: OrganisationInvitationUncheckedCreateNestedManyWithoutInvited_byInput
     form_completions?: FormCompletionUncheckedCreateNestedManyWithoutCompleted_byInput
     outreach_messages_sent?: OutreachMessageUncheckedCreateNestedManyWithoutSent_byInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutActorInput
   }
 
   export type UserUpdateInput = {
@@ -57327,6 +58781,7 @@ export namespace Prisma {
     invitations_sent?: OrganisationInvitationUpdateManyWithoutInvited_byNestedInput
     form_completions?: FormCompletionUpdateManyWithoutCompleted_byNestedInput
     outreach_messages_sent?: OutreachMessageUpdateManyWithoutSent_byNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutActorNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -57343,6 +58798,7 @@ export namespace Prisma {
     invitations_sent?: OrganisationInvitationUncheckedUpdateManyWithoutInvited_byNestedInput
     form_completions?: FormCompletionUncheckedUpdateManyWithoutCompleted_byNestedInput
     outreach_messages_sent?: OutreachMessageUncheckedUpdateManyWithoutSent_byNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutActorNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -57405,6 +58861,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateInput = {
@@ -57433,6 +58890,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUpdateInput = {
@@ -57460,6 +58918,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateInput = {
@@ -57488,6 +58947,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateManyInput = {
@@ -61288,6 +62748,92 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type ActivityLogCreateInput = {
+    uuid?: string
+    entity_type: string
+    entity_uuid?: string | null
+    action: string
+    summary?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutActivity_logsInput
+    actor?: UserCreateNestedOneWithoutActivity_logsInput
+  }
+
+  export type ActivityLogUncheckedCreateInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    actor_user_uuid?: string | null
+    entity_type: string
+    entity_uuid?: string | null
+    action: string
+    summary?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: Date | string
+  }
+
+  export type ActivityLogUpdateInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    entity_type?: StringFieldUpdateOperationsInput | string
+    entity_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    action?: StringFieldUpdateOperationsInput | string
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutActivity_logsNestedInput
+    actor?: UserUpdateOneWithoutActivity_logsNestedInput
+  }
+
+  export type ActivityLogUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    actor_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    entity_type?: StringFieldUpdateOperationsInput | string
+    entity_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    action?: StringFieldUpdateOperationsInput | string
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ActivityLogCreateManyInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    actor_user_uuid?: string | null
+    entity_type: string
+    entity_uuid?: string | null
+    action: string
+    summary?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: Date | string
+  }
+
+  export type ActivityLogUpdateManyMutationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    entity_type?: StringFieldUpdateOperationsInput | string
+    entity_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    action?: StringFieldUpdateOperationsInput | string
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ActivityLogUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    actor_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    entity_type?: StringFieldUpdateOperationsInput | string
+    entity_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    action?: StringFieldUpdateOperationsInput | string
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type IntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -61371,6 +62917,12 @@ export namespace Prisma {
     none?: OutreachMessageWhereInput
   }
 
+  export type ActivityLogListRelationFilter = {
+    every?: ActivityLogWhereInput
+    some?: ActivityLogWhereInput
+    none?: ActivityLogWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -61389,6 +62941,10 @@ export namespace Prisma {
   }
 
   export type OutreachMessageOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ActivityLogOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -64676,6 +66232,51 @@ export namespace Prisma {
     _max?: NestedEnumApifyUsageStatusFilter<$PrismaModel>
   }
 
+  export type ActivityLogCountOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    actor_user_uuid?: SortOrder
+    entity_type?: SortOrder
+    entity_uuid?: SortOrder
+    action?: SortOrder
+    summary?: SortOrder
+    metadata?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type ActivityLogAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type ActivityLogMaxOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    actor_user_uuid?: SortOrder
+    entity_type?: SortOrder
+    entity_uuid?: SortOrder
+    action?: SortOrder
+    summary?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type ActivityLogMinOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    actor_user_uuid?: SortOrder
+    entity_type?: SortOrder
+    entity_uuid?: SortOrder
+    action?: SortOrder
+    summary?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type ActivityLogSumOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
   export type OrganisationMemberCreateNestedManyWithoutUserInput = {
     create?: XOR<OrganisationMemberCreateWithoutUserInput, OrganisationMemberUncheckedCreateWithoutUserInput> | OrganisationMemberCreateWithoutUserInput[] | OrganisationMemberUncheckedCreateWithoutUserInput[]
     connectOrCreate?: OrganisationMemberCreateOrConnectWithoutUserInput | OrganisationMemberCreateOrConnectWithoutUserInput[]
@@ -64704,6 +66305,13 @@ export namespace Prisma {
     connect?: OutreachMessageWhereUniqueInput | OutreachMessageWhereUniqueInput[]
   }
 
+  export type ActivityLogCreateNestedManyWithoutActorInput = {
+    create?: XOR<ActivityLogCreateWithoutActorInput, ActivityLogUncheckedCreateWithoutActorInput> | ActivityLogCreateWithoutActorInput[] | ActivityLogUncheckedCreateWithoutActorInput[]
+    connectOrCreate?: ActivityLogCreateOrConnectWithoutActorInput | ActivityLogCreateOrConnectWithoutActorInput[]
+    createMany?: ActivityLogCreateManyActorInputEnvelope
+    connect?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
+  }
+
   export type OrganisationMemberUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<OrganisationMemberCreateWithoutUserInput, OrganisationMemberUncheckedCreateWithoutUserInput> | OrganisationMemberCreateWithoutUserInput[] | OrganisationMemberUncheckedCreateWithoutUserInput[]
     connectOrCreate?: OrganisationMemberCreateOrConnectWithoutUserInput | OrganisationMemberCreateOrConnectWithoutUserInput[]
@@ -64730,6 +66338,13 @@ export namespace Prisma {
     connectOrCreate?: OutreachMessageCreateOrConnectWithoutSent_byInput | OutreachMessageCreateOrConnectWithoutSent_byInput[]
     createMany?: OutreachMessageCreateManySent_byInputEnvelope
     connect?: OutreachMessageWhereUniqueInput | OutreachMessageWhereUniqueInput[]
+  }
+
+  export type ActivityLogUncheckedCreateNestedManyWithoutActorInput = {
+    create?: XOR<ActivityLogCreateWithoutActorInput, ActivityLogUncheckedCreateWithoutActorInput> | ActivityLogCreateWithoutActorInput[] | ActivityLogUncheckedCreateWithoutActorInput[]
+    connectOrCreate?: ActivityLogCreateOrConnectWithoutActorInput | ActivityLogCreateOrConnectWithoutActorInput[]
+    createMany?: ActivityLogCreateManyActorInputEnvelope
+    connect?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -64804,6 +66419,20 @@ export namespace Prisma {
     deleteMany?: OutreachMessageScalarWhereInput | OutreachMessageScalarWhereInput[]
   }
 
+  export type ActivityLogUpdateManyWithoutActorNestedInput = {
+    create?: XOR<ActivityLogCreateWithoutActorInput, ActivityLogUncheckedCreateWithoutActorInput> | ActivityLogCreateWithoutActorInput[] | ActivityLogUncheckedCreateWithoutActorInput[]
+    connectOrCreate?: ActivityLogCreateOrConnectWithoutActorInput | ActivityLogCreateOrConnectWithoutActorInput[]
+    upsert?: ActivityLogUpsertWithWhereUniqueWithoutActorInput | ActivityLogUpsertWithWhereUniqueWithoutActorInput[]
+    createMany?: ActivityLogCreateManyActorInputEnvelope
+    set?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
+    disconnect?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
+    delete?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
+    connect?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
+    update?: ActivityLogUpdateWithWhereUniqueWithoutActorInput | ActivityLogUpdateWithWhereUniqueWithoutActorInput[]
+    updateMany?: ActivityLogUpdateManyWithWhereWithoutActorInput | ActivityLogUpdateManyWithWhereWithoutActorInput[]
+    deleteMany?: ActivityLogScalarWhereInput | ActivityLogScalarWhereInput[]
+  }
+
   export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
@@ -64866,6 +66495,20 @@ export namespace Prisma {
     update?: OutreachMessageUpdateWithWhereUniqueWithoutSent_byInput | OutreachMessageUpdateWithWhereUniqueWithoutSent_byInput[]
     updateMany?: OutreachMessageUpdateManyWithWhereWithoutSent_byInput | OutreachMessageUpdateManyWithWhereWithoutSent_byInput[]
     deleteMany?: OutreachMessageScalarWhereInput | OutreachMessageScalarWhereInput[]
+  }
+
+  export type ActivityLogUncheckedUpdateManyWithoutActorNestedInput = {
+    create?: XOR<ActivityLogCreateWithoutActorInput, ActivityLogUncheckedCreateWithoutActorInput> | ActivityLogCreateWithoutActorInput[] | ActivityLogUncheckedCreateWithoutActorInput[]
+    connectOrCreate?: ActivityLogCreateOrConnectWithoutActorInput | ActivityLogCreateOrConnectWithoutActorInput[]
+    upsert?: ActivityLogUpsertWithWhereUniqueWithoutActorInput | ActivityLogUpsertWithWhereUniqueWithoutActorInput[]
+    createMany?: ActivityLogCreateManyActorInputEnvelope
+    set?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
+    disconnect?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
+    delete?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
+    connect?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
+    update?: ActivityLogUpdateWithWhereUniqueWithoutActorInput | ActivityLogUpdateWithWhereUniqueWithoutActorInput[]
+    updateMany?: ActivityLogUpdateManyWithWhereWithoutActorInput | ActivityLogUpdateManyWithWhereWithoutActorInput[]
+    deleteMany?: ActivityLogScalarWhereInput | ActivityLogScalarWhereInput[]
   }
 
   export type OrganisationMemberCreateNestedManyWithoutOrganisationInput = {
@@ -65001,6 +66644,13 @@ export namespace Prisma {
     connect?: MessageTemplateWhereUniqueInput | MessageTemplateWhereUniqueInput[]
   }
 
+  export type ActivityLogCreateNestedManyWithoutOrganisationInput = {
+    create?: XOR<ActivityLogCreateWithoutOrganisationInput, ActivityLogUncheckedCreateWithoutOrganisationInput> | ActivityLogCreateWithoutOrganisationInput[] | ActivityLogUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: ActivityLogCreateOrConnectWithoutOrganisationInput | ActivityLogCreateOrConnectWithoutOrganisationInput[]
+    createMany?: ActivityLogCreateManyOrganisationInputEnvelope
+    connect?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
+  }
+
   export type OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput = {
     create?: XOR<OrganisationMemberCreateWithoutOrganisationInput, OrganisationMemberUncheckedCreateWithoutOrganisationInput> | OrganisationMemberCreateWithoutOrganisationInput[] | OrganisationMemberUncheckedCreateWithoutOrganisationInput[]
     connectOrCreate?: OrganisationMemberCreateOrConnectWithoutOrganisationInput | OrganisationMemberCreateOrConnectWithoutOrganisationInput[]
@@ -65132,6 +66782,13 @@ export namespace Prisma {
     connectOrCreate?: MessageTemplateCreateOrConnectWithoutOrganisationInput | MessageTemplateCreateOrConnectWithoutOrganisationInput[]
     createMany?: MessageTemplateCreateManyOrganisationInputEnvelope
     connect?: MessageTemplateWhereUniqueInput | MessageTemplateWhereUniqueInput[]
+  }
+
+  export type ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput = {
+    create?: XOR<ActivityLogCreateWithoutOrganisationInput, ActivityLogUncheckedCreateWithoutOrganisationInput> | ActivityLogCreateWithoutOrganisationInput[] | ActivityLogUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: ActivityLogCreateOrConnectWithoutOrganisationInput | ActivityLogCreateOrConnectWithoutOrganisationInput[]
+    createMany?: ActivityLogCreateManyOrganisationInputEnvelope
+    connect?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
   }
 
   export type OrganisationMemberUpdateManyWithoutOrganisationNestedInput = {
@@ -65400,6 +67057,20 @@ export namespace Prisma {
     deleteMany?: MessageTemplateScalarWhereInput | MessageTemplateScalarWhereInput[]
   }
 
+  export type ActivityLogUpdateManyWithoutOrganisationNestedInput = {
+    create?: XOR<ActivityLogCreateWithoutOrganisationInput, ActivityLogUncheckedCreateWithoutOrganisationInput> | ActivityLogCreateWithoutOrganisationInput[] | ActivityLogUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: ActivityLogCreateOrConnectWithoutOrganisationInput | ActivityLogCreateOrConnectWithoutOrganisationInput[]
+    upsert?: ActivityLogUpsertWithWhereUniqueWithoutOrganisationInput | ActivityLogUpsertWithWhereUniqueWithoutOrganisationInput[]
+    createMany?: ActivityLogCreateManyOrganisationInputEnvelope
+    set?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
+    disconnect?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
+    delete?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
+    connect?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
+    update?: ActivityLogUpdateWithWhereUniqueWithoutOrganisationInput | ActivityLogUpdateWithWhereUniqueWithoutOrganisationInput[]
+    updateMany?: ActivityLogUpdateManyWithWhereWithoutOrganisationInput | ActivityLogUpdateManyWithWhereWithoutOrganisationInput[]
+    deleteMany?: ActivityLogScalarWhereInput | ActivityLogScalarWhereInput[]
+  }
+
   export type OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput = {
     create?: XOR<OrganisationMemberCreateWithoutOrganisationInput, OrganisationMemberUncheckedCreateWithoutOrganisationInput> | OrganisationMemberCreateWithoutOrganisationInput[] | OrganisationMemberUncheckedCreateWithoutOrganisationInput[]
     connectOrCreate?: OrganisationMemberCreateOrConnectWithoutOrganisationInput | OrganisationMemberCreateOrConnectWithoutOrganisationInput[]
@@ -65664,6 +67335,20 @@ export namespace Prisma {
     update?: MessageTemplateUpdateWithWhereUniqueWithoutOrganisationInput | MessageTemplateUpdateWithWhereUniqueWithoutOrganisationInput[]
     updateMany?: MessageTemplateUpdateManyWithWhereWithoutOrganisationInput | MessageTemplateUpdateManyWithWhereWithoutOrganisationInput[]
     deleteMany?: MessageTemplateScalarWhereInput | MessageTemplateScalarWhereInput[]
+  }
+
+  export type ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput = {
+    create?: XOR<ActivityLogCreateWithoutOrganisationInput, ActivityLogUncheckedCreateWithoutOrganisationInput> | ActivityLogCreateWithoutOrganisationInput[] | ActivityLogUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: ActivityLogCreateOrConnectWithoutOrganisationInput | ActivityLogCreateOrConnectWithoutOrganisationInput[]
+    upsert?: ActivityLogUpsertWithWhereUniqueWithoutOrganisationInput | ActivityLogUpsertWithWhereUniqueWithoutOrganisationInput[]
+    createMany?: ActivityLogCreateManyOrganisationInputEnvelope
+    set?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
+    disconnect?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
+    delete?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
+    connect?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
+    update?: ActivityLogUpdateWithWhereUniqueWithoutOrganisationInput | ActivityLogUpdateWithWhereUniqueWithoutOrganisationInput[]
+    updateMany?: ActivityLogUpdateManyWithWhereWithoutOrganisationInput | ActivityLogUpdateManyWithWhereWithoutOrganisationInput[]
+    deleteMany?: ActivityLogScalarWhereInput | ActivityLogScalarWhereInput[]
   }
 
   export type OrganisationCreateNestedOneWithoutMembersInput = {
@@ -68192,6 +69877,36 @@ export namespace Prisma {
     update?: XOR<XOR<OrganisationUpdateToOneWithWhereWithoutApify_usage_logsInput, OrganisationUpdateWithoutApify_usage_logsInput>, OrganisationUncheckedUpdateWithoutApify_usage_logsInput>
   }
 
+  export type OrganisationCreateNestedOneWithoutActivity_logsInput = {
+    create?: XOR<OrganisationCreateWithoutActivity_logsInput, OrganisationUncheckedCreateWithoutActivity_logsInput>
+    connectOrCreate?: OrganisationCreateOrConnectWithoutActivity_logsInput
+    connect?: OrganisationWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutActivity_logsInput = {
+    create?: XOR<UserCreateWithoutActivity_logsInput, UserUncheckedCreateWithoutActivity_logsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutActivity_logsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type OrganisationUpdateOneRequiredWithoutActivity_logsNestedInput = {
+    create?: XOR<OrganisationCreateWithoutActivity_logsInput, OrganisationUncheckedCreateWithoutActivity_logsInput>
+    connectOrCreate?: OrganisationCreateOrConnectWithoutActivity_logsInput
+    upsert?: OrganisationUpsertWithoutActivity_logsInput
+    connect?: OrganisationWhereUniqueInput
+    update?: XOR<XOR<OrganisationUpdateToOneWithWhereWithoutActivity_logsInput, OrganisationUpdateWithoutActivity_logsInput>, OrganisationUncheckedUpdateWithoutActivity_logsInput>
+  }
+
+  export type UserUpdateOneWithoutActivity_logsNestedInput = {
+    create?: XOR<UserCreateWithoutActivity_logsInput, UserUncheckedCreateWithoutActivity_logsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutActivity_logsInput
+    upsert?: UserUpsertWithoutActivity_logsInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutActivity_logsInput, UserUpdateWithoutActivity_logsInput>, UserUncheckedUpdateWithoutActivity_logsInput>
+  }
+
   export type NestedIntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -69167,6 +70882,39 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ActivityLogCreateWithoutActorInput = {
+    uuid?: string
+    entity_type: string
+    entity_uuid?: string | null
+    action: string
+    summary?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutActivity_logsInput
+  }
+
+  export type ActivityLogUncheckedCreateWithoutActorInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    entity_type: string
+    entity_uuid?: string | null
+    action: string
+    summary?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: Date | string
+  }
+
+  export type ActivityLogCreateOrConnectWithoutActorInput = {
+    where: ActivityLogWhereUniqueInput
+    create: XOR<ActivityLogCreateWithoutActorInput, ActivityLogUncheckedCreateWithoutActorInput>
+  }
+
+  export type ActivityLogCreateManyActorInputEnvelope = {
+    data: ActivityLogCreateManyActorInput | ActivityLogCreateManyActorInput[]
+    skipDuplicates?: boolean
+  }
+
   export type OrganisationMemberUpsertWithWhereUniqueWithoutUserInput = {
     where: OrganisationMemberWhereUniqueInput
     update: XOR<OrganisationMemberUpdateWithoutUserInput, OrganisationMemberUncheckedUpdateWithoutUserInput>
@@ -69304,6 +71052,38 @@ export namespace Prisma {
     metadata?: JsonNullableFilter<"OutreachMessage">
     created_at?: DateTimeFilter<"OutreachMessage"> | Date | string
     updated_at?: DateTimeFilter<"OutreachMessage"> | Date | string
+  }
+
+  export type ActivityLogUpsertWithWhereUniqueWithoutActorInput = {
+    where: ActivityLogWhereUniqueInput
+    update: XOR<ActivityLogUpdateWithoutActorInput, ActivityLogUncheckedUpdateWithoutActorInput>
+    create: XOR<ActivityLogCreateWithoutActorInput, ActivityLogUncheckedCreateWithoutActorInput>
+  }
+
+  export type ActivityLogUpdateWithWhereUniqueWithoutActorInput = {
+    where: ActivityLogWhereUniqueInput
+    data: XOR<ActivityLogUpdateWithoutActorInput, ActivityLogUncheckedUpdateWithoutActorInput>
+  }
+
+  export type ActivityLogUpdateManyWithWhereWithoutActorInput = {
+    where: ActivityLogScalarWhereInput
+    data: XOR<ActivityLogUpdateManyMutationInput, ActivityLogUncheckedUpdateManyWithoutActorInput>
+  }
+
+  export type ActivityLogScalarWhereInput = {
+    AND?: ActivityLogScalarWhereInput | ActivityLogScalarWhereInput[]
+    OR?: ActivityLogScalarWhereInput[]
+    NOT?: ActivityLogScalarWhereInput | ActivityLogScalarWhereInput[]
+    id?: IntFilter<"ActivityLog"> | number
+    uuid?: StringFilter<"ActivityLog"> | string
+    organisation_uuid?: StringFilter<"ActivityLog"> | string
+    actor_user_uuid?: StringNullableFilter<"ActivityLog"> | string | null
+    entity_type?: StringFilter<"ActivityLog"> | string
+    entity_uuid?: StringNullableFilter<"ActivityLog"> | string | null
+    action?: StringFilter<"ActivityLog"> | string
+    summary?: StringNullableFilter<"ActivityLog"> | string | null
+    metadata?: JsonNullableFilter<"ActivityLog">
+    created_at?: DateTimeFilter<"ActivityLog"> | Date | string
   }
 
   export type OrganisationMemberCreateWithoutOrganisationInput = {
@@ -70190,6 +71970,39 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ActivityLogCreateWithoutOrganisationInput = {
+    uuid?: string
+    entity_type: string
+    entity_uuid?: string | null
+    action: string
+    summary?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: Date | string
+    actor?: UserCreateNestedOneWithoutActivity_logsInput
+  }
+
+  export type ActivityLogUncheckedCreateWithoutOrganisationInput = {
+    id?: number
+    uuid?: string
+    actor_user_uuid?: string | null
+    entity_type: string
+    entity_uuid?: string | null
+    action: string
+    summary?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: Date | string
+  }
+
+  export type ActivityLogCreateOrConnectWithoutOrganisationInput = {
+    where: ActivityLogWhereUniqueInput
+    create: XOR<ActivityLogCreateWithoutOrganisationInput, ActivityLogUncheckedCreateWithoutOrganisationInput>
+  }
+
+  export type ActivityLogCreateManyOrganisationInputEnvelope = {
+    data: ActivityLogCreateManyOrganisationInput | ActivityLogCreateManyOrganisationInput[]
+    skipDuplicates?: boolean
+  }
+
   export type OrganisationMemberUpsertWithWhereUniqueWithoutOrganisationInput = {
     where: OrganisationMemberWhereUniqueInput
     update: XOR<OrganisationMemberUpdateWithoutOrganisationInput, OrganisationMemberUncheckedUpdateWithoutOrganisationInput>
@@ -70832,6 +72645,22 @@ export namespace Prisma {
     updated_at?: DateTimeFilter<"MessageTemplate"> | Date | string
   }
 
+  export type ActivityLogUpsertWithWhereUniqueWithoutOrganisationInput = {
+    where: ActivityLogWhereUniqueInput
+    update: XOR<ActivityLogUpdateWithoutOrganisationInput, ActivityLogUncheckedUpdateWithoutOrganisationInput>
+    create: XOR<ActivityLogCreateWithoutOrganisationInput, ActivityLogUncheckedCreateWithoutOrganisationInput>
+  }
+
+  export type ActivityLogUpdateWithWhereUniqueWithoutOrganisationInput = {
+    where: ActivityLogWhereUniqueInput
+    data: XOR<ActivityLogUpdateWithoutOrganisationInput, ActivityLogUncheckedUpdateWithoutOrganisationInput>
+  }
+
+  export type ActivityLogUpdateManyWithWhereWithoutOrganisationInput = {
+    where: ActivityLogScalarWhereInput
+    data: XOR<ActivityLogUpdateManyMutationInput, ActivityLogUncheckedUpdateManyWithoutOrganisationInput>
+  }
+
   export type OrganisationCreateWithoutMembersInput = {
     uuid?: string
     name: string
@@ -70856,6 +72685,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutMembersInput = {
@@ -70883,6 +72713,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutMembersInput = {
@@ -70902,6 +72733,7 @@ export namespace Prisma {
     invitations_sent?: OrganisationInvitationCreateNestedManyWithoutInvited_byInput
     form_completions?: FormCompletionCreateNestedManyWithoutCompleted_byInput
     outreach_messages_sent?: OutreachMessageCreateNestedManyWithoutSent_byInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutActorInput
   }
 
   export type UserUncheckedCreateWithoutMembershipsInput = {
@@ -70917,6 +72749,7 @@ export namespace Prisma {
     invitations_sent?: OrganisationInvitationUncheckedCreateNestedManyWithoutInvited_byInput
     form_completions?: FormCompletionUncheckedCreateNestedManyWithoutCompleted_byInput
     outreach_messages_sent?: OutreachMessageUncheckedCreateNestedManyWithoutSent_byInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutActorInput
   }
 
   export type UserCreateOrConnectWithoutMembershipsInput = {
@@ -70959,6 +72792,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutMembersInput = {
@@ -70986,6 +72820,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutMembershipsInput = {
@@ -71011,6 +72846,7 @@ export namespace Prisma {
     invitations_sent?: OrganisationInvitationUpdateManyWithoutInvited_byNestedInput
     form_completions?: FormCompletionUpdateManyWithoutCompleted_byNestedInput
     outreach_messages_sent?: OutreachMessageUpdateManyWithoutSent_byNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutActorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMembershipsInput = {
@@ -71026,6 +72862,7 @@ export namespace Prisma {
     invitations_sent?: OrganisationInvitationUncheckedUpdateManyWithoutInvited_byNestedInput
     form_completions?: FormCompletionUncheckedUpdateManyWithoutCompleted_byNestedInput
     outreach_messages_sent?: OutreachMessageUncheckedUpdateManyWithoutSent_byNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutActorNestedInput
   }
 
   export type OrganisationCreateWithoutInvitationsInput = {
@@ -71052,6 +72889,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutInvitationsInput = {
@@ -71079,6 +72917,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutInvitationsInput = {
@@ -71098,6 +72937,7 @@ export namespace Prisma {
     memberships?: OrganisationMemberCreateNestedManyWithoutUserInput
     form_completions?: FormCompletionCreateNestedManyWithoutCompleted_byInput
     outreach_messages_sent?: OutreachMessageCreateNestedManyWithoutSent_byInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutActorInput
   }
 
   export type UserUncheckedCreateWithoutInvitations_sentInput = {
@@ -71113,6 +72953,7 @@ export namespace Prisma {
     memberships?: OrganisationMemberUncheckedCreateNestedManyWithoutUserInput
     form_completions?: FormCompletionUncheckedCreateNestedManyWithoutCompleted_byInput
     outreach_messages_sent?: OutreachMessageUncheckedCreateNestedManyWithoutSent_byInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutActorInput
   }
 
   export type UserCreateOrConnectWithoutInvitations_sentInput = {
@@ -71155,6 +72996,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutInvitationsInput = {
@@ -71182,6 +73024,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutInvitations_sentInput = {
@@ -71207,6 +73050,7 @@ export namespace Prisma {
     memberships?: OrganisationMemberUpdateManyWithoutUserNestedInput
     form_completions?: FormCompletionUpdateManyWithoutCompleted_byNestedInput
     outreach_messages_sent?: OutreachMessageUpdateManyWithoutSent_byNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutActorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInvitations_sentInput = {
@@ -71222,6 +73066,7 @@ export namespace Prisma {
     memberships?: OrganisationMemberUncheckedUpdateManyWithoutUserNestedInput
     form_completions?: FormCompletionUncheckedUpdateManyWithoutCompleted_byNestedInput
     outreach_messages_sent?: OutreachMessageUncheckedUpdateManyWithoutSent_byNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutActorNestedInput
   }
 
   export type OrganisationCreateWithoutFiltersInput = {
@@ -71248,6 +73093,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutFiltersInput = {
@@ -71275,6 +73121,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutFiltersInput = {
@@ -71559,6 +73406,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutFiltersInput = {
@@ -71586,6 +73434,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type RawLeadUpsertWithWhereUniqueWithoutFilterInput = {
@@ -71758,6 +73607,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutScoring_instructionsInput = {
@@ -71785,6 +73635,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutScoring_instructionsInput = {
@@ -71870,6 +73721,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutScoring_instructionsInput = {
@@ -71897,6 +73749,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type FilterScoringInstructionUpsertWithWhereUniqueWithoutScoring_instructionInput = {
@@ -72670,6 +74523,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutContactsInput = {
@@ -72697,6 +74551,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutContactsInput = {
@@ -73189,6 +75044,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutContactsInput = {
@@ -73216,6 +75072,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type LeadUpsertWithoutContactsInput = {
@@ -74417,6 +76274,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutContact_listsInput = {
@@ -74444,6 +76302,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutContact_listsInput = {
@@ -74623,6 +76482,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutContact_listsInput = {
@@ -74650,6 +76510,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type ContactListUpsertWithoutChildrenInput = {
@@ -75238,6 +77099,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutInteractionsInput = {
@@ -75265,6 +77127,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutInteractionsInput = {
@@ -75543,6 +77406,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutInteractionsInput = {
@@ -75570,6 +77434,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OutreachMessageUpsertWithoutInteractionInput = {
@@ -75758,6 +77623,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutOutreach_messagesInput = {
@@ -75785,6 +77651,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutOutreach_messagesInput = {
@@ -75974,6 +77841,7 @@ export namespace Prisma {
     memberships?: OrganisationMemberCreateNestedManyWithoutUserInput
     invitations_sent?: OrganisationInvitationCreateNestedManyWithoutInvited_byInput
     form_completions?: FormCompletionCreateNestedManyWithoutCompleted_byInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutActorInput
   }
 
   export type UserUncheckedCreateWithoutOutreach_messages_sentInput = {
@@ -75989,6 +77857,7 @@ export namespace Prisma {
     memberships?: OrganisationMemberUncheckedCreateNestedManyWithoutUserInput
     invitations_sent?: OrganisationInvitationUncheckedCreateNestedManyWithoutInvited_byInput
     form_completions?: FormCompletionUncheckedCreateNestedManyWithoutCompleted_byInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutActorInput
   }
 
   export type UserCreateOrConnectWithoutOutreach_messages_sentInput = {
@@ -76063,6 +77932,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutOutreach_messagesInput = {
@@ -76090,6 +77960,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type ContactUpsertWithoutOutreach_messagesInput = {
@@ -76297,6 +78168,7 @@ export namespace Prisma {
     memberships?: OrganisationMemberUpdateManyWithoutUserNestedInput
     invitations_sent?: OrganisationInvitationUpdateManyWithoutInvited_byNestedInput
     form_completions?: FormCompletionUpdateManyWithoutCompleted_byNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutActorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOutreach_messages_sentInput = {
@@ -76312,6 +78184,7 @@ export namespace Prisma {
     memberships?: OrganisationMemberUncheckedUpdateManyWithoutUserNestedInput
     invitations_sent?: OrganisationInvitationUncheckedUpdateManyWithoutInvited_byNestedInput
     form_completions?: FormCompletionUncheckedUpdateManyWithoutCompleted_byNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutActorNestedInput
   }
 
   export type InteractionUpsertWithoutOutreach_messageInput = {
@@ -76376,6 +78249,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutOutreach_sequencesInput = {
@@ -76403,6 +78277,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutOutreach_sequencesInput = {
@@ -76445,6 +78320,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutOutreach_sequencesInput = {
@@ -76472,6 +78348,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type FilterCreateWithoutJobsInput = {
@@ -76596,6 +78473,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutSender_profilesInput = {
@@ -76623,6 +78501,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutSender_profilesInput = {
@@ -76760,6 +78639,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutSender_profilesInput = {
@@ -76787,6 +78667,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type MarketingCampaignUpsertWithWhereUniqueWithoutSender_profileInput = {
@@ -76829,6 +78710,7 @@ export namespace Prisma {
     contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutMessage_templatesInput = {
@@ -76856,6 +78738,7 @@ export namespace Prisma {
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutMessage_templatesInput = {
@@ -76898,6 +78781,7 @@ export namespace Prisma {
     contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutMessage_templatesInput = {
@@ -76925,6 +78809,7 @@ export namespace Prisma {
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutMarketing_campaignsInput = {
@@ -76951,6 +78836,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutMarketing_campaignsInput = {
@@ -76978,6 +78864,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutMarketing_campaignsInput = {
@@ -77215,6 +79102,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutMarketing_campaignsInput = {
@@ -77242,6 +79130,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type SenderProfileUpsertWithoutMarketing_campaignsInput = {
@@ -77732,6 +79621,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutOpenai_batch_jobsInput = {
@@ -77759,6 +79649,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutOpenai_batch_jobsInput = {
@@ -77801,6 +79692,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutOpenai_batch_jobsInput = {
@@ -77828,6 +79720,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutIntegrationsInput = {
@@ -77854,6 +79747,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutIntegrationsInput = {
@@ -77881,6 +79775,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutIntegrationsInput = {
@@ -77981,6 +79876,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutIntegrationsInput = {
@@ -78008,6 +79904,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type IntegrationKeyUpsertWithWhereUniqueWithoutIntegrationInput = {
@@ -78218,6 +80115,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutRemindersInput = {
@@ -78245,6 +80143,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutRemindersInput = {
@@ -78367,6 +80266,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutRemindersInput = {
@@ -78394,6 +80294,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type ContactUpsertWithoutRemindersInput = {
@@ -78506,6 +80407,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutFormsInput = {
@@ -78533,6 +80435,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutFormsInput = {
@@ -78647,6 +80550,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutFormsInput = {
@@ -78674,6 +80578,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type FormFieldUpsertWithWhereUniqueWithoutFormInput = {
@@ -78960,6 +80865,7 @@ export namespace Prisma {
     memberships?: OrganisationMemberCreateNestedManyWithoutUserInput
     invitations_sent?: OrganisationInvitationCreateNestedManyWithoutInvited_byInput
     outreach_messages_sent?: OutreachMessageCreateNestedManyWithoutSent_byInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutActorInput
   }
 
   export type UserUncheckedCreateWithoutForm_completionsInput = {
@@ -78975,6 +80881,7 @@ export namespace Prisma {
     memberships?: OrganisationMemberUncheckedCreateNestedManyWithoutUserInput
     invitations_sent?: OrganisationInvitationUncheckedCreateNestedManyWithoutInvited_byInput
     outreach_messages_sent?: OutreachMessageUncheckedCreateNestedManyWithoutSent_byInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutActorInput
   }
 
   export type UserCreateOrConnectWithoutForm_completionsInput = {
@@ -79150,6 +81057,7 @@ export namespace Prisma {
     memberships?: OrganisationMemberUpdateManyWithoutUserNestedInput
     invitations_sent?: OrganisationInvitationUpdateManyWithoutInvited_byNestedInput
     outreach_messages_sent?: OutreachMessageUpdateManyWithoutSent_byNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutActorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutForm_completionsInput = {
@@ -79165,6 +81073,7 @@ export namespace Prisma {
     memberships?: OrganisationMemberUncheckedUpdateManyWithoutUserNestedInput
     invitations_sent?: OrganisationInvitationUncheckedUpdateManyWithoutInvited_byNestedInput
     outreach_messages_sent?: OutreachMessageUncheckedUpdateManyWithoutSent_byNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutActorNestedInput
   }
 
   export type FormCompletionValueUpsertWithWhereUniqueWithoutCompletionInput = {
@@ -79343,6 +81252,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutContact_audience_analysesInput = {
@@ -79370,6 +81280,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutContact_audience_analysesInput = {
@@ -79488,6 +81399,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutContact_audience_analysesInput = {
@@ -79515,6 +81427,7 @@ export namespace Prisma {
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type FilterUpsertWithoutAudience_analysesInput = {
@@ -79629,6 +81542,7 @@ export namespace Prisma {
     contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutAi_usage_logsInput = {
@@ -79656,6 +81570,7 @@ export namespace Prisma {
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutAi_usage_logsInput = {
@@ -79698,6 +81613,7 @@ export namespace Prisma {
     contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutAi_usage_logsInput = {
@@ -79725,6 +81641,7 @@ export namespace Prisma {
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutApify_usage_logsInput = {
@@ -79751,6 +81668,7 @@ export namespace Prisma {
     contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutApify_usage_logsInput = {
@@ -79778,6 +81696,7 @@ export namespace Prisma {
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutApify_usage_logsInput = {
@@ -79820,6 +81739,7 @@ export namespace Prisma {
     contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutApify_usage_logsInput = {
@@ -79847,6 +81767,211 @@ export namespace Prisma {
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
+  }
+
+  export type OrganisationCreateWithoutActivity_logsInput = {
+    uuid?: string
+    name: string
+    slug: string
+    created_at?: Date | string
+    updated_at?: Date | string
+    members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
+    invitations?: OrganisationInvitationCreateNestedManyWithoutOrganisationInput
+    filters?: FilterCreateNestedManyWithoutOrganisationInput
+    contacts?: ContactCreateNestedManyWithoutOrganisationInput
+    outreach_messages?: OutreachMessageCreateNestedManyWithoutOrganisationInput
+    outreach_sequences?: OutreachSequenceCreateNestedManyWithoutOrganisationInput
+    interactions?: InteractionCreateNestedManyWithoutOrganisationInput
+    sender_profiles?: SenderProfileCreateNestedManyWithoutOrganisationInput
+    marketing_campaigns?: MarketingCampaignCreateNestedManyWithoutOrganisationInput
+    scoring_instructions?: ScoringInstructionCreateNestedManyWithoutOrganisationInput
+    openai_batch_jobs?: OpenAiBatchJobCreateNestedManyWithoutOrganisationInput
+    integrations?: IntegrationCreateNestedManyWithoutOrganisationInput
+    reminders?: ReminderCreateNestedManyWithoutOrganisationInput
+    forms?: FormCreateNestedManyWithoutOrganisationInput
+    contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
+    ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
+    apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
+    message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
+  }
+
+  export type OrganisationUncheckedCreateWithoutActivity_logsInput = {
+    id?: number
+    uuid?: string
+    name: string
+    slug: string
+    created_at?: Date | string
+    updated_at?: Date | string
+    members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
+    invitations?: OrganisationInvitationUncheckedCreateNestedManyWithoutOrganisationInput
+    filters?: FilterUncheckedCreateNestedManyWithoutOrganisationInput
+    contacts?: ContactUncheckedCreateNestedManyWithoutOrganisationInput
+    outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutOrganisationInput
+    outreach_sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutOrganisationInput
+    interactions?: InteractionUncheckedCreateNestedManyWithoutOrganisationInput
+    sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutOrganisationInput
+    marketing_campaigns?: MarketingCampaignUncheckedCreateNestedManyWithoutOrganisationInput
+    scoring_instructions?: ScoringInstructionUncheckedCreateNestedManyWithoutOrganisationInput
+    openai_batch_jobs?: OpenAiBatchJobUncheckedCreateNestedManyWithoutOrganisationInput
+    integrations?: IntegrationUncheckedCreateNestedManyWithoutOrganisationInput
+    reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
+    forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
+    contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
+    ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
+    apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
+    message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
+  }
+
+  export type OrganisationCreateOrConnectWithoutActivity_logsInput = {
+    where: OrganisationWhereUniqueInput
+    create: XOR<OrganisationCreateWithoutActivity_logsInput, OrganisationUncheckedCreateWithoutActivity_logsInput>
+  }
+
+  export type UserCreateWithoutActivity_logsInput = {
+    uuid?: string
+    email: string
+    phone?: string | null
+    full_name?: string | null
+    password: string
+    role?: $Enums.AuthRole
+    created_at?: Date | string
+    updated_at?: Date | string
+    memberships?: OrganisationMemberCreateNestedManyWithoutUserInput
+    invitations_sent?: OrganisationInvitationCreateNestedManyWithoutInvited_byInput
+    form_completions?: FormCompletionCreateNestedManyWithoutCompleted_byInput
+    outreach_messages_sent?: OutreachMessageCreateNestedManyWithoutSent_byInput
+  }
+
+  export type UserUncheckedCreateWithoutActivity_logsInput = {
+    id?: number
+    uuid?: string
+    email: string
+    phone?: string | null
+    full_name?: string | null
+    password: string
+    role?: $Enums.AuthRole
+    created_at?: Date | string
+    updated_at?: Date | string
+    memberships?: OrganisationMemberUncheckedCreateNestedManyWithoutUserInput
+    invitations_sent?: OrganisationInvitationUncheckedCreateNestedManyWithoutInvited_byInput
+    form_completions?: FormCompletionUncheckedCreateNestedManyWithoutCompleted_byInput
+    outreach_messages_sent?: OutreachMessageUncheckedCreateNestedManyWithoutSent_byInput
+  }
+
+  export type UserCreateOrConnectWithoutActivity_logsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutActivity_logsInput, UserUncheckedCreateWithoutActivity_logsInput>
+  }
+
+  export type OrganisationUpsertWithoutActivity_logsInput = {
+    update: XOR<OrganisationUpdateWithoutActivity_logsInput, OrganisationUncheckedUpdateWithoutActivity_logsInput>
+    create: XOR<OrganisationCreateWithoutActivity_logsInput, OrganisationUncheckedCreateWithoutActivity_logsInput>
+    where?: OrganisationWhereInput
+  }
+
+  export type OrganisationUpdateToOneWithWhereWithoutActivity_logsInput = {
+    where?: OrganisationWhereInput
+    data: XOR<OrganisationUpdateWithoutActivity_logsInput, OrganisationUncheckedUpdateWithoutActivity_logsInput>
+  }
+
+  export type OrganisationUpdateWithoutActivity_logsInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
+    invitations?: OrganisationInvitationUpdateManyWithoutOrganisationNestedInput
+    filters?: FilterUpdateManyWithoutOrganisationNestedInput
+    contacts?: ContactUpdateManyWithoutOrganisationNestedInput
+    outreach_messages?: OutreachMessageUpdateManyWithoutOrganisationNestedInput
+    outreach_sequences?: OutreachSequenceUpdateManyWithoutOrganisationNestedInput
+    interactions?: InteractionUpdateManyWithoutOrganisationNestedInput
+    sender_profiles?: SenderProfileUpdateManyWithoutOrganisationNestedInput
+    marketing_campaigns?: MarketingCampaignUpdateManyWithoutOrganisationNestedInput
+    scoring_instructions?: ScoringInstructionUpdateManyWithoutOrganisationNestedInput
+    openai_batch_jobs?: OpenAiBatchJobUpdateManyWithoutOrganisationNestedInput
+    integrations?: IntegrationUpdateManyWithoutOrganisationNestedInput
+    reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
+    forms?: FormUpdateManyWithoutOrganisationNestedInput
+    contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
+    ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
+    apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
+    message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
+  }
+
+  export type OrganisationUncheckedUpdateWithoutActivity_logsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
+    invitations?: OrganisationInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
+    filters?: FilterUncheckedUpdateManyWithoutOrganisationNestedInput
+    contacts?: ContactUncheckedUpdateManyWithoutOrganisationNestedInput
+    outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutOrganisationNestedInput
+    outreach_sequences?: OutreachSequenceUncheckedUpdateManyWithoutOrganisationNestedInput
+    interactions?: InteractionUncheckedUpdateManyWithoutOrganisationNestedInput
+    sender_profiles?: SenderProfileUncheckedUpdateManyWithoutOrganisationNestedInput
+    marketing_campaigns?: MarketingCampaignUncheckedUpdateManyWithoutOrganisationNestedInput
+    scoring_instructions?: ScoringInstructionUncheckedUpdateManyWithoutOrganisationNestedInput
+    openai_batch_jobs?: OpenAiBatchJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    integrations?: IntegrationUncheckedUpdateManyWithoutOrganisationNestedInput
+    reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
+    forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
+    contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
+    ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
+  }
+
+  export type UserUpsertWithoutActivity_logsInput = {
+    update: XOR<UserUpdateWithoutActivity_logsInput, UserUncheckedUpdateWithoutActivity_logsInput>
+    create: XOR<UserCreateWithoutActivity_logsInput, UserUncheckedCreateWithoutActivity_logsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutActivity_logsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutActivity_logsInput, UserUncheckedUpdateWithoutActivity_logsInput>
+  }
+
+  export type UserUpdateWithoutActivity_logsInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    full_name?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumAuthRoleFieldUpdateOperationsInput | $Enums.AuthRole
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: OrganisationMemberUpdateManyWithoutUserNestedInput
+    invitations_sent?: OrganisationInvitationUpdateManyWithoutInvited_byNestedInput
+    form_completions?: FormCompletionUpdateManyWithoutCompleted_byNestedInput
+    outreach_messages_sent?: OutreachMessageUpdateManyWithoutSent_byNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutActivity_logsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    full_name?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumAuthRoleFieldUpdateOperationsInput | $Enums.AuthRole
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: OrganisationMemberUncheckedUpdateManyWithoutUserNestedInput
+    invitations_sent?: OrganisationInvitationUncheckedUpdateManyWithoutInvited_byNestedInput
+    form_completions?: FormCompletionUncheckedUpdateManyWithoutCompleted_byNestedInput
+    outreach_messages_sent?: OutreachMessageUncheckedUpdateManyWithoutSent_byNestedInput
   }
 
   export type OrganisationMemberCreateManyUserInput = {
@@ -79906,6 +82031,18 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
     updated_at?: Date | string
+  }
+
+  export type ActivityLogCreateManyActorInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    entity_type: string
+    entity_uuid?: string | null
+    action: string
+    summary?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: Date | string
   }
 
   export type OrganisationMemberUpdateWithoutUserInput = {
@@ -80083,6 +82220,41 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ActivityLogUpdateWithoutActorInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    entity_type?: StringFieldUpdateOperationsInput | string
+    entity_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    action?: StringFieldUpdateOperationsInput | string
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutActivity_logsNestedInput
+  }
+
+  export type ActivityLogUncheckedUpdateWithoutActorInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    entity_type?: StringFieldUpdateOperationsInput | string
+    entity_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    action?: StringFieldUpdateOperationsInput | string
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ActivityLogUncheckedUpdateManyWithoutActorInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    entity_type?: StringFieldUpdateOperationsInput | string
+    entity_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    action?: StringFieldUpdateOperationsInput | string
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type OrganisationMemberCreateManyOrganisationInput = {
@@ -80407,6 +82579,18 @@ export namespace Prisma {
     source_message_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
+  }
+
+  export type ActivityLogCreateManyOrganisationInput = {
+    id?: number
+    uuid?: string
+    actor_user_uuid?: string | null
+    entity_type: string
+    entity_uuid?: string | null
+    action: string
+    summary?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: Date | string
   }
 
   export type OrganisationMemberUpdateWithoutOrganisationInput = {
@@ -81425,6 +83609,41 @@ export namespace Prisma {
     source_message_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ActivityLogUpdateWithoutOrganisationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    entity_type?: StringFieldUpdateOperationsInput | string
+    entity_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    action?: StringFieldUpdateOperationsInput | string
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    actor?: UserUpdateOneWithoutActivity_logsNestedInput
+  }
+
+  export type ActivityLogUncheckedUpdateWithoutOrganisationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    actor_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    entity_type?: StringFieldUpdateOperationsInput | string
+    entity_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    action?: StringFieldUpdateOperationsInput | string
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ActivityLogUncheckedUpdateManyWithoutOrganisationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    actor_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    entity_type?: StringFieldUpdateOperationsInput | string
+    entity_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    action?: StringFieldUpdateOperationsInput | string
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type RawLeadCreateManyFilterInput = {

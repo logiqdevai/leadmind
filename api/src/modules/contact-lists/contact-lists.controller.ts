@@ -24,6 +24,11 @@ import { ContactAudienceStatsService } from '@/modules/contact-audience-stats/co
 import { ContactAudienceAnalysisService } from '@/modules/contact-audience-stats/contact-audience-analysis.service';
 import { ContactAudienceStatsQueryDto } from '@/modules/contact-audience-stats/dto/contact-audience-stats-query.dto';
 import { ListContactAudienceAnalysesDto } from '@/modules/contact-audience-stats/dto/list-contact-audience-analyses.dto';
+import { ActivityLog } from '@/modules/activity-logs/decorators/activity-log.decorator';
+import {
+    ActivityAction,
+    ActivityEntityType,
+} from '@/modules/activity-logs/constants/activity-log.constants';
 
 @ApiTags('contact-lists')
 @ApiBearerAuth()
@@ -36,6 +41,7 @@ export class ContactListsController {
         private readonly contactAudienceAnalysisService: ContactAudienceAnalysisService,
     ) {}
 
+    @ActivityLog({ entityType: ActivityEntityType.CONTACT_LIST, action: ActivityAction.CREATED, includeBodyKeys: ['name'] })
     @Post()
     @ApiOperation({ summary: 'Create a contact list' })
     create(@CurrentUser('organisation_uuid') organisation_uuid: string, @Body() dto: CreateContactListDto) {
@@ -54,6 +60,7 @@ export class ContactListsController {
         return this.contactListsService.findOne(organisation_uuid, uuid);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.CONTACT_LIST, action: ActivityAction.UPDATED, entityUuidFrom: 'params.uuid' })
     @Patch(':uuid')
     @ApiOperation({ summary: 'Update a contact list' })
     update(
@@ -64,6 +71,7 @@ export class ContactListsController {
         return this.contactListsService.update(organisation_uuid, uuid, dto);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.CONTACT_LIST, action: ActivityAction.DELETED, entityUuidFrom: 'params.uuid' })
     @Delete(':uuid')
     @ApiOperation({ summary: 'Delete a contact list' })
     remove(@CurrentUser('organisation_uuid') organisation_uuid: string, @Param('uuid') uuid: string) {
@@ -80,6 +88,7 @@ export class ContactListsController {
         return this.contactListsService.findMembers(organisation_uuid, uuid, query);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.CONTACT_LIST, action: ActivityAction.CONTACTS_ADDED, entityUuidFrom: 'params.uuid' })
     @Post(':uuid/contacts')
     @ApiOperation({ summary: 'Add contacts to a list' })
     addContacts(
@@ -90,6 +99,7 @@ export class ContactListsController {
         return this.contactListsService.addContacts(organisation_uuid, uuid, dto);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.CONTACT_LIST, action: ActivityAction.CONTACTS_BULK_ADDED, entityUuidFrom: 'params.uuid' })
     @Post(':uuid/contacts/bulk')
     @ApiOperation({ summary: 'Add all contacts matching filters to a list' })
     bulkAddContacts(
@@ -100,6 +110,7 @@ export class ContactListsController {
         return this.contactListsService.bulkAddContacts(organisation_uuid, uuid, dto);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.CONTACT_LIST, action: ActivityAction.CONTACTS_REMOVED, entityUuidFrom: 'params.uuid' })
     @Post(':uuid/contacts/bulk-remove')
     @ApiOperation({ summary: 'Remove multiple contacts from a list' })
     removeContacts(
@@ -110,6 +121,7 @@ export class ContactListsController {
         return this.contactListsService.removeContacts(organisation_uuid, uuid, dto.contact_uuids);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.CONTACT_LIST, action: ActivityAction.CONTACTS_REMOVED, entityUuidFrom: 'params.uuid' })
     @Delete(':uuid/contacts/:contactUuid')
     @ApiOperation({ summary: 'Remove a contact from a list' })
     removeContact(
@@ -140,6 +152,7 @@ export class ContactListsController {
         return this.contactAudienceAnalysisService.listListAnalyses(organisation_uuid, uuid, query);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.AUDIENCE_ANALYSIS, action: ActivityAction.ANALYSIS_CREATED })
     @Post(':uuid/analyses')
     @ApiOperation({ summary: 'Run a new AI audience analysis for a contact list (full history stats)' })
     createAnalysis(
@@ -149,6 +162,7 @@ export class ContactListsController {
         return this.contactAudienceAnalysisService.createListAnalysis(organisation_uuid, uuid);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.AUDIENCE_ANALYSIS, action: ActivityAction.ANALYSIS_DELETED, entityUuidFrom: 'params.analysisUuid' })
     @Delete(':uuid/analyses/:analysisUuid')
     @ApiOperation({ summary: 'Delete an AI audience analysis for a contact list' })
     deleteAnalysis(

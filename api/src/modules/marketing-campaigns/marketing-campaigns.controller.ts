@@ -29,6 +29,11 @@ import { ListDraftMessagesDto } from './dto/list-draft-messages.dto';
 import { StartCampaignDto, SendCampaignDraftsDto } from './dto/email-provider-campaign.dto';
 import { SendExistingMessageDto } from '@/modules/outreach/dto/email-provider.dto';
 import { MarketingCampaignsService } from './services/marketing-campaigns.service';
+import { ActivityLog } from '@/modules/activity-logs/decorators/activity-log.decorator';
+import {
+    ActivityAction,
+    ActivityEntityType,
+} from '@/modules/activity-logs/constants/activity-log.constants';
 
 @ApiTags('marketing-campaigns')
 @ApiBearerAuth()
@@ -37,6 +42,7 @@ import { MarketingCampaignsService } from './services/marketing-campaigns.servic
 export class MarketingCampaignsController {
     constructor(private readonly service: MarketingCampaignsService) { }
 
+    @ActivityLog({ entityType: ActivityEntityType.MARKETING_CAMPAIGN, action: ActivityAction.CREATED, includeBodyKeys: ['name'] })
     @Post()
     @ApiOperation({ summary: 'Create a draft marketing campaign' })
     @ApiResponse({ status: 201 })
@@ -59,6 +65,7 @@ export class MarketingCampaignsController {
         return this.service.findOne(organisation_uuid, uuid);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.MARKETING_CAMPAIGN, action: ActivityAction.UPDATED, entityUuidFrom: 'params.uuid' })
     @Patch(':uuid')
     @ApiOperation({ summary: 'Update DRAFT campaign' })
     update(
@@ -69,6 +76,7 @@ export class MarketingCampaignsController {
         return this.service.update(organisation_uuid, uuid, dto);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.MARKETING_CAMPAIGN, action: ActivityAction.DELETED, entityUuidFrom: 'params.uuid' })
     @Delete(':uuid')
     @ApiOperation({ summary: 'Delete a draft / cancelled / completed / failed campaign' })
     remove(
@@ -98,6 +106,7 @@ export class MarketingCampaignsController {
         return this.service.previewContacts(organisation_uuid, uuid, dto);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.MARKETING_CAMPAIGN, action: ActivityAction.STARTED, entityUuidFrom: 'params.uuid' })
     @Post(':uuid/start')
     @ApiOperation({ summary: 'Start a draft campaign (immediate or at scheduled_at)' })
     start(
@@ -108,6 +117,7 @@ export class MarketingCampaignsController {
         return this.service.start(organisation_uuid, uuid, dto);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.MARKETING_CAMPAIGN, action: ActivityAction.SCHEDULED, entityUuidFrom: 'params.uuid' })
     @Post(':uuid/schedule')
     @ApiOperation({ summary: 'Set scheduled_at and queue dispatch' })
     schedule(
@@ -118,6 +128,7 @@ export class MarketingCampaignsController {
         return this.service.schedule(organisation_uuid, uuid, dto);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.MARKETING_CAMPAIGN, action: ActivityAction.DUPLICATED })
     @Post(':uuid/duplicate')
     @ApiOperation({ summary: 'Duplicate a campaign as a new DRAFT' })
     duplicate(
@@ -127,6 +138,7 @@ export class MarketingCampaignsController {
         return this.service.duplicate(organisation_uuid, uuid);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.MARKETING_CAMPAIGN, action: ActivityAction.RERUN, entityUuidFrom: 'params.uuid' })
     @Post(':uuid/rerun')
     @ApiOperation({ summary: 'Re-run a completed, cancelled, or failed campaign from scratch' })
     rerun(
@@ -136,6 +148,7 @@ export class MarketingCampaignsController {
         return this.service.rerun(organisation_uuid, uuid);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.MARKETING_CAMPAIGN, action: ActivityAction.CANCELLED, entityUuidFrom: 'params.uuid' })
     @Post(':uuid/cancel')
     @ApiOperation({ summary: 'Cancel a sending or scheduled campaign' })
     cancel(
@@ -145,6 +158,7 @@ export class MarketingCampaignsController {
         return this.service.cancel(organisation_uuid, uuid);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.MARKETING_CAMPAIGN, action: ActivityAction.AI_GENERATED, entityUuidFrom: 'params.uuid' })
     @Post(':uuid/ai/generate')
     @ApiOperation({ summary: 'AI generate / improve / shorten / re-tone a campaign message' })
     generate(
@@ -155,6 +169,7 @@ export class MarketingCampaignsController {
         return this.service.generateMessage(organisation_uuid, uuid, dto);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.MARKETING_CAMPAIGN, action: ActivityAction.DRAFTS_SENT, entityUuidFrom: 'params.uuid' })
     @Post(':uuid/send-drafts')
     @ApiOperation({ summary: 'Send pre-generated personalized drafts for a DRAFTS_READY campaign' })
     sendPersonalizedDrafts(
@@ -175,6 +190,7 @@ export class MarketingCampaignsController {
         return this.service.listDraftMessages(organisation_uuid, uuid, query);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.OUTREACH_MESSAGE, action: ActivityAction.DRAFT_MESSAGE_DELETED, entityUuidFrom: 'params.message_uuid' })
     @Delete(':uuid/draft-messages/:message_uuid')
     @ApiOperation({ summary: 'Delete a campaign outreach row (any status, e.g. remove bad or sent rows from the list)' })
     @ApiResponse({ status: 200 })
@@ -187,6 +203,7 @@ export class MarketingCampaignsController {
         return this.service.deleteDraftMessage(organisation_uuid, uuid, message_uuid);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.OUTREACH_MESSAGE, action: ActivityAction.DRAFT_MESSAGE_SENT, entityUuidFrom: 'params.message_uuid' })
     @Post(':uuid/draft-messages/:message_uuid/send')
     @ApiOperation({ summary: 'Queue a single campaign draft message for send' })
     @ApiResponse({ status: 200 })

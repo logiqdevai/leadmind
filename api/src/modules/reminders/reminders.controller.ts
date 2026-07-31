@@ -20,6 +20,11 @@ import { RemindersService } from './reminders.service';
 import { CreateReminderDto } from './dto/create-reminder.dto';
 import { UpdateReminderDto } from './dto/update-reminder.dto';
 import { ListRemindersDto } from './dto/list-reminders.dto';
+import { ActivityLog } from '@/modules/activity-logs/decorators/activity-log.decorator';
+import {
+    ActivityAction,
+    ActivityEntityType,
+} from '@/modules/activity-logs/constants/activity-log.constants';
 
 @ApiTags('reminders')
 @ApiBearerAuth()
@@ -28,6 +33,7 @@ import { ListRemindersDto } from './dto/list-reminders.dto';
 export class RemindersController {
     constructor(private readonly remindersService: RemindersService) {}
 
+    @ActivityLog({ entityType: ActivityEntityType.REMINDER, action: ActivityAction.CREATED })
     @Post()
     @ApiOperation({ summary: 'Create a reminder for a contact' })
     create(@CurrentUser('organisation_uuid') organisation_uuid: string, @Body() dto: CreateReminderDto) {
@@ -52,6 +58,7 @@ export class RemindersController {
         return this.remindersService.findOne(organisation_uuid, uuid);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.REMINDER, action: ActivityAction.UPDATED, entityUuidFrom: 'params.uuid' })
     @Put(':uuid')
     @ApiOperation({ summary: 'Update a reminder (reschedule, edit title/notes, change status)' })
     update(
@@ -62,12 +69,14 @@ export class RemindersController {
         return this.remindersService.update(organisation_uuid, uuid, dto);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.REMINDER, action: ActivityAction.COMPLETED, entityUuidFrom: 'params.uuid' })
     @Put(':uuid/complete')
     @ApiOperation({ summary: 'Mark a reminder as completed' })
     complete(@CurrentUser('organisation_uuid') organisation_uuid: string, @Param('uuid') uuid: string) {
         return this.remindersService.complete(organisation_uuid, uuid);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.REMINDER, action: ActivityAction.DELETED, entityUuidFrom: 'params.uuid' })
     @Delete(':uuid')
     @ApiOperation({ summary: 'Delete a reminder and cancel its scheduled job' })
     remove(@CurrentUser('organisation_uuid') organisation_uuid: string, @Param('uuid') uuid: string) {

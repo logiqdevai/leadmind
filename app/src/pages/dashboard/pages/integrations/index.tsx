@@ -17,6 +17,7 @@ import {
 } from "@/features/integrations/constants/integration-key-types";
 import { useIntegrations } from "@/features/integrations/hooks/use-integrations";
 import type { IntegrationProviderView } from "@/features/integrations/interfaces/integrations.interface";
+import { useOrganisationPermission } from "@/hooks/use-organisation-permission";
 import { IntegrationDetailModal } from "./components/integration-detail-modal";
 import { IntegrationKeyFormModal } from "./components/integration-key-form-modal";
 import { ResendAccountFormModal } from "./components/resend-account-form-modal";
@@ -154,6 +155,7 @@ function isProviderDisabled(providerView: IntegrationProviderView): boolean {
 
 export default function IntegrationsPage() {
     const { data, isLoading } = useIntegrations();
+    const canManage = useOrganisationPermission("org_manage_integrations");
     const [selected, setSelected] = useState<IntegrationProviderView | null>(null);
     const [detailOpen, setDetailOpen] = useState(false);
     const [quickAdd, setQuickAdd] = useState<IntegrationProviderView | null>(null);
@@ -168,7 +170,7 @@ export default function IntegrationsPage() {
         providers.find((row) => row.provider === provider.provider) ?? provider;
 
     const openDetail = (providerView: IntegrationProviderView) => {
-        if (isProviderDisabled(providerView)) return;
+        if (!canManage || isProviderDisabled(providerView)) return;
         setSelected(resolveProvider(providerView));
         setDetailOpen(true);
     };
@@ -180,12 +182,19 @@ export default function IntegrationsPage() {
                     Integrations
                 </h1>
                 <p className="text-sm text-muted max-w-2xl">
-                    Connect API keys for AI, email, and scraping. Resend and SMTP
-                    support multiple accounts — use account labels like{" "}
-                    <span className="font-mono">1</span>,{" "}
-                    <span className="font-mono">2</span>, or{" "}
-                    <span className="font-mono">production</span>. Pick a default
-                    account for outbound email, or choose a provider when sending.
+                    {canManage ? (
+                        <>
+                            Connect API keys for AI, email, and scraping. Resend
+                            and SMTP support multiple accounts — use account
+                            labels like <span className="font-mono">1</span>,{" "}
+                            <span className="font-mono">2</span>, or{" "}
+                            <span className="font-mono">production</span>. Pick a
+                            default account for outbound email, or choose a
+                            provider when sending.
+                        </>
+                    ) : (
+                        "View connected AI, email, and scraping providers. Only organisation owners and admins can manage keys and accounts."
+                    )}
                 </p>
             </header>
 
@@ -198,9 +207,11 @@ export default function IntegrationsPage() {
                             key={providerView.provider}
                             providerView={providerView}
                             disabled={isProviderDisabled(providerView)}
+                            canManage={canManage}
                             onOpen={() => openDetail(providerView)}
                             onQuickAdd={() => {
-                                if (isProviderDisabled(providerView)) return;
+                                if (!canManage || isProviderDisabled(providerView))
+                                    return;
                                 const resolved = resolveProvider(providerView);
                                 if (resolved.provider === "SMTP") {
                                     setSmtpQuickAdd(resolved);
@@ -217,45 +228,49 @@ export default function IntegrationsPage() {
                 </div>
             )}
 
-            <IntegrationDetailModal
-                isOpen={detailOpen}
-                onOpenChange={(open) => {
-                    setDetailOpen(open);
-                    if (!open) setSelected(null);
-                }}
-                providerView={selected ? resolveProvider(selected) : null}
-            />
+            {canManage ? (
+                <>
+                    <IntegrationDetailModal
+                        isOpen={detailOpen}
+                        onOpenChange={(open) => {
+                            setDetailOpen(open);
+                            if (!open) setSelected(null);
+                        }}
+                        providerView={selected ? resolveProvider(selected) : null}
+                    />
 
-            {quickAdd && (
-                <IntegrationKeyFormModal
-                    isOpen={!!quickAdd}
-                    onOpenChange={(open) => {
-                        if (!open) setQuickAdd(null);
-                    }}
-                    providerView={quickAdd}
-                    initialAccount={suggestNextAccountLabel(quickAdd.keys)}
-                />
-            )}
+                    {quickAdd && (
+                        <IntegrationKeyFormModal
+                            isOpen={!!quickAdd}
+                            onOpenChange={(open) => {
+                                if (!open) setQuickAdd(null);
+                            }}
+                            providerView={quickAdd}
+                            initialAccount={suggestNextAccountLabel(quickAdd.keys)}
+                        />
+                    )}
 
-            {resendQuickAdd && (
-                <ResendAccountFormModal
-                    isOpen={!!resendQuickAdd}
-                    onOpenChange={(open) => {
-                        if (!open) setResendQuickAdd(null);
-                    }}
-                    providerView={resendQuickAdd}
-                />
-            )}
+                    {resendQuickAdd && (
+                        <ResendAccountFormModal
+                            isOpen={!!resendQuickAdd}
+                            onOpenChange={(open) => {
+                                if (!open) setResendQuickAdd(null);
+                            }}
+                            providerView={resendQuickAdd}
+                        />
+                    )}
 
-            {smtpQuickAdd && (
-                <SmtpAccountFormModal
-                    isOpen={!!smtpQuickAdd}
-                    onOpenChange={(open) => {
-                        if (!open) setSmtpQuickAdd(null);
-                    }}
-                    providerView={smtpQuickAdd}
-                />
-            )}
+                    {smtpQuickAdd && (
+                        <SmtpAccountFormModal
+                            isOpen={!!smtpQuickAdd}
+                            onOpenChange={(open) => {
+                                if (!open) setSmtpQuickAdd(null);
+                            }}
+                            providerView={smtpQuickAdd}
+                        />
+                    )}
+                </>
+            ) : null}
         </div>
     );
 }
@@ -263,11 +278,13 @@ export default function IntegrationsPage() {
 function IntegrationCard({
     providerView,
     disabled,
+    canManage,
     onOpen,
     onQuickAdd,
 }: {
     providerView: IntegrationProviderView;
     disabled: boolean;
+    canManage: boolean;
     onOpen: () => void;
     onQuickAdd: () => void;
 }) {
@@ -276,29 +293,32 @@ function IntegrationCard({
     const accountCount = new Set(providerView.keys.map((row) => row.account)).size;
     const sendableAccountCount = countSendableEmailAccounts(providerView);
     const configured = keyCount > 0;
-    const showAddKey = canShowAddKeyButton(providerView);
+    const showAddKey = canManage && canShowAddKeyButton(providerView);
+    const isInteractive = canManage && !disabled;
     const isEmailProvider =
         providerView.provider === "RESEND" || providerView.provider === "SMTP";
 
     return (
         <article
-            role={disabled ? undefined : "button"}
-            tabIndex={disabled ? undefined : 0}
-            onClick={disabled ? undefined : onOpen}
+            role={isInteractive ? "button" : undefined}
+            tabIndex={isInteractive ? 0 : undefined}
+            onClick={isInteractive ? onOpen : undefined}
             onKeyDown={
-                disabled
-                    ? undefined
-                    : (e) => {
+                isInteractive
+                    ? (e) => {
                           if (e.key === "Enter" || e.key === " ") {
                               e.preventDefault();
                               onOpen();
                           }
                       }
+                    : undefined
             }
             className={`rounded-xl border border-border bg-surface p-4 flex flex-col gap-4 transition-all text-left ${
                 disabled
                     ? "opacity-60 cursor-not-allowed"
-                    : "hover:shadow-sm hover:border-accent/30 cursor-pointer"
+                    : isInteractive
+                      ? "hover:shadow-sm hover:border-accent/30 cursor-pointer"
+                      : "cursor-default"
             }`}
         >
             <div className="flex items-start gap-3">
@@ -347,7 +367,7 @@ function IntegrationCard({
                             ? `${sendableAccountCount} sendable account${sendableAccountCount === 1 ? "" : "s"} · ${keyCount} key${keyCount === 1 ? "" : "s"}`
                             : `${keyCount} key${keyCount === 1 ? "" : "s"} · ${accountCount} account${accountCount === 1 ? "" : "s"}`}
                 </span>
-                {!disabled && showAddKey && (
+                {showAddKey && (
                     <span onClick={(e) => e.stopPropagation()}>
                         <Button size="sm" variant="secondary" onPress={onQuickAdd}>
                             {providerView.provider === "SMTP"

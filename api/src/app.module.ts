@@ -37,6 +37,7 @@ import { ApifyUsageModule } from './modules/apify-usage/apify-usage.module';
 import { MessageTemplatesModule } from './modules/message-templates/message-templates.module';
 import { OrganisationsModule } from './modules/organisations/organisations.module';
 import { UsersModule } from './modules/users/users.module';
+import { ActivityLogsModule } from './modules/activity-logs/activity-logs.module';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { UsersModule } from './modules/users/users.module';
     MailModule,
     OrganisationsModule,
     UsersModule,
+    ActivityLogsModule,
     SmsModule,
     AiModule,
     RedisModule,

@@ -18,6 +18,11 @@ import { ListLeadEnrichmentsDto } from './dto/list-lead-enrichments.dto';
 import { ListLeadsDto } from './dto/list-leads.dto';
 import { UpdateLeadDto } from './dto/update-lead.dto';
 import { LeadsService } from './leads.service';
+import { ActivityLog } from '@/modules/activity-logs/decorators/activity-log.decorator';
+import {
+    ActivityAction,
+    ActivityEntityType,
+} from '@/modules/activity-logs/constants/activity-log.constants';
 
 @ApiTags('leads')
 @ApiBearerAuth()
@@ -37,6 +42,7 @@ export class LeadsController {
         return this.leadsService.findAll(query);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.LEAD, action: ActivityAction.BULK_ENRICHED, entityUuidFrom: 'none' })
     @Post('bulk-enrich')
     @UseGuards(RolesGuard)
     @Roles(AuthRoles.ADMIN, AuthRoles.SUPER_ADMIN)
@@ -59,6 +65,7 @@ export class LeadsController {
         return this.leadsService.findEnrichmentsForLead(uuid, query);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.LEAD, action: ActivityAction.UPDATED, entityUuidFrom: 'params.uuid' })
     @Put(':uuid')
     @UseGuards(RolesGuard)
     @Roles(AuthRoles.ADMIN, AuthRoles.SUPER_ADMIN)
@@ -69,6 +76,7 @@ export class LeadsController {
         return this.leadsService.update(uuid, dto);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.LEAD, action: ActivityAction.DELETED, entityUuidFrom: 'params.uuid' })
     @Delete(':uuid')
     @UseGuards(RolesGuard)
     @Roles(AuthRoles.ADMIN, AuthRoles.SUPER_ADMIN)
@@ -87,6 +95,7 @@ export class LeadsController {
         return this.leadsService.findOne(uuid);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.LEAD, action: ActivityAction.ENRICHED, entityUuidFrom: 'params.uuid' })
     @Post(':uuid/enrich')
     @ApiOperation({ summary: 'Enqueue AI enrichment for a lead' })
     @ApiResponse({ status: 201, description: 'Enrichment job enqueued' })

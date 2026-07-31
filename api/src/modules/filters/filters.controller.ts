@@ -20,6 +20,11 @@ import { ContactAudienceStatsService } from '@/modules/contact-audience-stats/co
 import { ContactAudienceAnalysisService } from '@/modules/contact-audience-stats/contact-audience-analysis.service';
 import { ContactAudienceStatsQueryDto } from '@/modules/contact-audience-stats/dto/contact-audience-stats-query.dto';
 import { ListContactAudienceAnalysesDto } from '@/modules/contact-audience-stats/dto/list-contact-audience-analyses.dto';
+import { ActivityLog } from '@/modules/activity-logs/decorators/activity-log.decorator';
+import {
+    ActivityAction,
+    ActivityEntityType,
+} from '@/modules/activity-logs/constants/activity-log.constants';
 
 @ApiTags('filters')
 @ApiBearerAuth()
@@ -32,6 +37,7 @@ export class FiltersController {
         private readonly contactAudienceAnalysisService: ContactAudienceAnalysisService,
     ) { }
 
+    @ActivityLog({ entityType: ActivityEntityType.FILTER, action: ActivityAction.CREATED, includeBodyKeys: ['name'] })
     @Post()
     @ApiOperation({ summary: 'Create a filter' })
     create(@CurrentUser('organisation_uuid') organisation_uuid: string, @Body() dto: CreateFilterDto) {
@@ -50,6 +56,7 @@ export class FiltersController {
         return this.filtersService.findOne(organisation_uuid, uuid);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.FILTER, action: ActivityAction.UPDATED, entityUuidFrom: 'params.uuid' })
     @Put(':uuid')
     @ApiOperation({ summary: 'Update a filter' })
     update(
@@ -60,18 +67,21 @@ export class FiltersController {
         return this.filtersService.update(organisation_uuid, uuid, dto);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.FILTER, action: ActivityAction.DELETED, entityUuidFrom: 'params.uuid' })
     @Delete(':uuid')
     @ApiOperation({ summary: 'Delete a filter' })
     remove(@CurrentUser('organisation_uuid') organisation_uuid: string, @Param('uuid') uuid: string) {
         return this.filtersService.remove(organisation_uuid, uuid);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.FILTER, action: ActivityAction.RUN_STARTED, entityUuidFrom: 'params.uuid' })
     @Post(':uuid/run')
     @ApiOperation({ summary: 'Manually enqueue a scrape job for a filter' })
     manualRun(@CurrentUser('organisation_uuid') organisation_uuid: string, @Param('uuid') uuid: string) {
         return this.filtersService.manualRun(organisation_uuid, uuid);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.FILTER, action: ActivityAction.RUN_STOPPED, entityUuidFrom: 'params.uuid' })
     @Post(':uuid/stop')
     @ApiOperation({ summary: 'Stop a running or queued scrape job for a filter' })
     stop(@CurrentUser('organisation_uuid') organisation_uuid: string, @Param('uuid') uuid: string) {
@@ -108,6 +118,7 @@ export class FiltersController {
         return this.contactAudienceAnalysisService.listFilterAnalyses(organisation_uuid, uuid, query);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.AUDIENCE_ANALYSIS, action: ActivityAction.ANALYSIS_CREATED })
     @Post(':uuid/analyses')
     @ApiOperation({ summary: 'Run a new AI audience analysis for a filter (full history stats)' })
     createAnalysis(
@@ -117,6 +128,7 @@ export class FiltersController {
         return this.contactAudienceAnalysisService.createFilterAnalysis(organisation_uuid, uuid);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.AUDIENCE_ANALYSIS, action: ActivityAction.ANALYSIS_DELETED, entityUuidFrom: 'params.analysisUuid' })
     @Delete(':uuid/analyses/:analysisUuid')
     @ApiOperation({ summary: 'Delete an AI audience analysis for a filter' })
     deleteAnalysis(

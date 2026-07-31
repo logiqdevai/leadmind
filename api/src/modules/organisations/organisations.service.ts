@@ -151,7 +151,7 @@ export class OrganisationsService {
             where: { organisation_uuid: organisationUuid },
             include: {
                 user: {
-                    select: { uuid: true, email: true, created_at: true },
+                    select: { uuid: true, email: true, full_name: true, created_at: true },
                 },
             },
             orderBy: { created_at: 'asc' },
@@ -162,6 +162,7 @@ export class OrganisationsService {
             role: m.role,
             user_uuid: m.user_uuid,
             email: m.user.email,
+            full_name: m.user.full_name,
             created_at: m.created_at,
         }));
     }

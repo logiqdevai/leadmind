@@ -681,6 +681,19 @@ exports.Prisma.ApifyUsageLogScalarFieldEnum = {
   created_at: 'created_at'
 };
 
+exports.Prisma.ActivityLogScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  organisation_uuid: 'organisation_uuid',
+  actor_user_uuid: 'actor_user_uuid',
+  entity_type: 'entity_type',
+  entity_uuid: 'entity_uuid',
+  action: 'action',
+  summary: 'summary',
+  metadata: 'metadata',
+  created_at: 'created_at'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1016,7 +1029,8 @@ exports.Prisma.ModelName = {
   FormCompletionValue: 'FormCompletionValue',
   ContactAudienceAnalysis: 'ContactAudienceAnalysis',
   AiUsageLog: 'AiUsageLog',
-  ApifyUsageLog: 'ApifyUsageLog'
+  ApifyUsageLog: 'ApifyUsageLog',
+  ActivityLog: 'ActivityLog'
 };
 
 /**

@@ -9,6 +9,10 @@ import {
 } from "@/features/outreach/interfaces/send-history.interface";
 import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import { useCampaigns } from "@/features/marketing-campaigns/hooks/use-marketing-campaigns";
+import {
+    useCurrentOrganisation,
+    useOrganisationMembers,
+} from "@/features/organisations/hooks/use-organisations";
 import { useDashboardNavbarTitle } from "@/components/providers/dashboard-navbar-provider";
 import { ContactsToolbar } from "@/pages/dashboard/pages/contacts/components/contacts-toolbar";
 import { SendHistoryTable } from "./components/send-history-table";
@@ -65,12 +69,16 @@ export default function SendHistoryPage() {
     const status = searchParams.get("status") ?? "";
     const emailProvider = searchParams.get("email_provider") ?? "";
     const campaignUuid = searchParams.get("campaign_uuid") ?? "";
+    const sentByUserUuid = searchParams.get("sent_by_user_uuid") ?? "";
     const dateFrom = searchParams.get("date_from") ?? "";
     const dateTo = searchParams.get("date_to") ?? "";
 
     const debouncedSearch = useDebouncedValue(search, 300);
 
     useDashboardNavbarTitle("Send history");
+
+    const { data: currentOrg } = useCurrentOrganisation();
+    const { data: members } = useOrganisationMembers(currentOrg?.uuid ?? "");
 
     const updateParams = (next: Record<string, string | undefined | null>) => {
         const params = new URLSearchParams(searchParams);
@@ -86,7 +94,15 @@ export default function SendHistoryPage() {
     };
 
     const hasActiveFilters = Boolean(
-        search || channel || source || status || emailProvider || campaignUuid || dateFrom || dateTo,
+        search ||
+            channel ||
+            source ||
+            status ||
+            emailProvider ||
+            campaignUuid ||
+            sentByUserUuid ||
+            dateFrom ||
+            dateTo,
     );
 
     const query = useMemo(
@@ -101,6 +117,7 @@ export default function SendHistoryPage() {
             email_provider:
                 (emailProvider as typeof EmailIntegrationProvider.RESEND) || undefined,
             campaign_uuid: campaignUuid || undefined,
+            sent_by_user_uuid: sentByUserUuid || undefined,
             date_from: dateFrom ? dateToStartIso(dateFrom) : undefined,
             date_to: dateTo ? dateToEndIso(dateTo) : undefined,
         }),
@@ -112,6 +129,7 @@ export default function SendHistoryPage() {
             status,
             emailProvider,
             campaignUuid,
+            sentByUserUuid,
             dateFrom,
             dateTo,
         ],
@@ -135,6 +153,17 @@ export default function SendHistoryPage() {
         [campaignsData?.data],
     );
 
+    const userOptions = useMemo(
+        () => [
+            { id: "", label: "All users" },
+            ...(members ?? []).map((member) => ({
+                id: member.user_uuid,
+                label: member.full_name?.trim() || member.email,
+            })),
+        ],
+        [members],
+    );
+
     const meta = isLoading
         ? undefined
         : `${total} send${total === 1 ? "" : "s"}${isFetching ? " · Updating…" : ""}`;
@@ -150,6 +179,7 @@ export default function SendHistoryPage() {
                 status={status}
                 emailProvider={emailProvider}
                 campaignUuid={campaignUuid}
+                sentByUserUuid={sentByUserUuid}
                 dateFrom={dateFrom}
                 dateTo={dateTo}
                 channelOptions={CHANNEL_OPTIONS}
@@ -157,6 +187,7 @@ export default function SendHistoryPage() {
                 statusOptions={STATUS_OPTIONS}
                 providerOptions={PROVIDER_OPTIONS}
                 campaignOptions={campaignOptions}
+                userOptions={userOptions}
                 hasActiveFilters={hasActiveFilters}
                 onSearchChange={(value) => updateParams({ search: value || null, page: "1" })}
                 onChannelChange={(value) => updateParams({ channel: value || null, page: "1" })}
@@ -167,6 +198,9 @@ export default function SendHistoryPage() {
                 }
                 onCampaignChange={(value) =>
                     updateParams({ campaign_uuid: value || null, page: "1" })
+                }
+                onSentByUserChange={(value) =>
+                    updateParams({ sent_by_user_uuid: value || null, page: "1" })
                 }
                 onDateFromChange={(value) =>
                     updateParams({ date_from: value || null, page: "1" })

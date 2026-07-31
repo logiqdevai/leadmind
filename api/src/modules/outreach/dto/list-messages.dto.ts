@@ -54,6 +54,11 @@ export class ListMessagesDto {
 
     @ApiPropertyOptional()
     @IsOptional()
+    @IsUUID()
+    sent_by_user_uuid?: string;
+
+    @ApiPropertyOptional()
+    @IsOptional()
     @IsString()
     search?: string;
 

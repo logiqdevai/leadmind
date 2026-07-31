@@ -1,6 +1,7 @@
 import { Button, Input, ListBox, Select, TextField } from "@heroui/react";
-import { CalendarDays, Search, X } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Search, X } from "lucide-react";
+import { AppDatePicker } from "@/components/ui/date-picker";
+
 
 export interface SendHistoryFilterOption {
     id: string;
@@ -14,6 +15,7 @@ interface SendHistoryFiltersBarProps {
     status: string;
     emailProvider: string;
     campaignUuid: string;
+    sentByUserUuid: string;
     dateFrom: string;
     dateTo: string;
     channelOptions: SendHistoryFilterOption[];
@@ -21,6 +23,7 @@ interface SendHistoryFiltersBarProps {
     statusOptions: SendHistoryFilterOption[];
     providerOptions: SendHistoryFilterOption[];
     campaignOptions: SendHistoryFilterOption[];
+    userOptions: SendHistoryFilterOption[];
     hasActiveFilters: boolean;
     onSearchChange: (value: string) => void;
     onChannelChange: (value: string) => void;
@@ -28,6 +31,7 @@ interface SendHistoryFiltersBarProps {
     onStatusChange: (value: string) => void;
     onEmailProviderChange: (value: string) => void;
     onCampaignChange: (value: string) => void;
+    onSentByUserChange: (value: string) => void;
     onDateFromChange: (value: string) => void;
     onDateToChange: (value: string) => void;
     onClear: () => void;
@@ -40,6 +44,7 @@ export function SendHistoryFiltersBar({
     status,
     emailProvider,
     campaignUuid,
+    sentByUserUuid,
     dateFrom,
     dateTo,
     channelOptions,
@@ -47,6 +52,7 @@ export function SendHistoryFiltersBar({
     statusOptions,
     providerOptions,
     campaignOptions,
+    userOptions,
     hasActiveFilters,
     onSearchChange,
     onChannelChange,
@@ -54,6 +60,7 @@ export function SendHistoryFiltersBar({
     onStatusChange,
     onEmailProviderChange,
     onCampaignChange,
+    onSentByUserChange,
     onDateFromChange,
     onDateToChange,
     onClear,
@@ -110,36 +117,30 @@ export function SendHistoryFiltersBar({
                 onChange={onCampaignChange}
                 className="w-[11rem]"
             />
+            <FilterSelect
+                label="Sent by"
+                value={sentByUserUuid}
+                options={userOptions}
+                onChange={onSentByUserChange}
+                className="w-[11rem]"
+            />
 
-            <div
-                className={cn(
-                    "inline-flex h-8 items-center gap-1.5 rounded-lg border border-border bg-surface px-2",
-                    "focus-within:border-accent/40",
-                )}
-            >
-                <CalendarDays className="size-3.5 text-muted shrink-0" aria-hidden />
-                <TextField name="date_from" className="w-[7.75rem]">
-                    <Input
-                        type="date"
-                        className="h-7 border-0 bg-transparent px-1 text-[12px] shadow-none"
-                        aria-label="Sent from"
-                        value={dateFrom}
-                        max={dateTo || undefined}
-                        onChange={(e) => onDateFromChange(e.target.value)}
-                    />
-                </TextField>
-                <span className="text-[11px] text-muted shrink-0">–</span>
-                <TextField name="date_to" className="w-[7.75rem]">
-                    <Input
-                        type="date"
-                        className="h-7 border-0 bg-transparent px-1 text-[12px] shadow-none"
-                        aria-label="Sent to"
-                        value={dateTo}
-                        min={dateFrom || undefined}
-                        onChange={(e) => onDateToChange(e.target.value)}
-                    />
-                </TextField>
-            </div>
+            <AppDatePicker
+                name="date_from"
+                className="w-[10.5rem] [&_[data-slot=input]]:h-8 [&_[data-slot=input]]:text-[12px]"
+                aria-label="Sent from"
+                value={dateFrom}
+                maxValue={dateTo || undefined}
+                onChange={onDateFromChange}
+            />
+            <AppDatePicker
+                name="date_to"
+                className="w-[10.5rem] [&_[data-slot=input]]:h-8 [&_[data-slot=input]]:text-[12px]"
+                aria-label="Sent to"
+                value={dateTo}
+                minValue={dateFrom || undefined}
+                onChange={onDateToChange}
+            />
 
             {hasActiveFilters ? (
                 <Button

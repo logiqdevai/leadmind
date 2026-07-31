@@ -27,6 +27,7 @@ export const Routes = {
         settings_account: "/dashboard/settings/account",
         settings_usage: "/dashboard/settings/usage",
         settings_organisation: "/dashboard/settings/organisation",
+        settings_activity: "/dashboard/settings/activity",
         sender_profiles: "/dashboard/sender-profiles",
         integrations: "/dashboard/integrations",
         campaigns: "/dashboard/campaigns",

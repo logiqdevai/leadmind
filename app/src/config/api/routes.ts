@@ -218,6 +218,9 @@ export const ApiRoutes = {
         list: "/apify-usage",
         summary: "/apify-usage/summary",
     },
+    activity_logs: {
+        list: "/activity-logs",
+    },
     organisations: {
         list: "/organisations",
         create: "/organisations",

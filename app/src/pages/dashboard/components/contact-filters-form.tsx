@@ -11,6 +11,7 @@ import { STATUS_OPTIONS } from "@/features/contacts/constants/contacts.constants
 import { useFilters } from "@/features/filters/hooks/use-filters";
 import { useContactTags } from "@/features/contacts/hooks/use-contacts";
 import { useContactLists } from "@/features/contact-lists/hooks/use-contact-lists";
+import { AppDatePicker } from "@/components/ui/date-picker";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { ScoreRulesFilter } from "@/pages/dashboard/components/score-rules-filter";
 import { SOURCE_OPTIONS } from "@/features/filters/constants/source-options";
@@ -283,45 +284,41 @@ export function ContactFiltersForm({
                     title="Engagement history"
                     description="Limit contacts by when they last interacted with you."
                 >
-                    <TextField name="last_after" className="w-full">
-                        <Label>Last interaction after</Label>
-                        <Input
-                            type="date"
-                            value={
-                                value.last_interaction_after
-                                    ? value.last_interaction_after.slice(0, 10)
-                                    : ""
-                            }
-                            onChange={(e) =>
-                                onChange({
-                                    last_interaction_after: e.target.value
-                                        ? new Date(e.target.value).toISOString()
-                                        : undefined,
-                                })
-                            }
-                            disabled={disabled}
-                        />
-                    </TextField>
+                    <AppDatePicker
+                        name="last_after"
+                        label="Last interaction after"
+                        value={
+                            value.last_interaction_after
+                                ? value.last_interaction_after.slice(0, 10)
+                                : ""
+                        }
+                        isDisabled={disabled}
+                        onChange={(next) =>
+                            onChange({
+                                last_interaction_after: next
+                                    ? new Date(next).toISOString()
+                                    : undefined,
+                            })
+                        }
+                    />
 
-                    <TextField name="last_before" className="w-full">
-                        <Label>Last interaction before</Label>
-                        <Input
-                            type="date"
-                            value={
-                                value.last_interaction_before
-                                    ? value.last_interaction_before.slice(0, 10)
-                                    : ""
-                            }
-                            onChange={(e) =>
-                                onChange({
-                                    last_interaction_before: e.target.value
-                                        ? new Date(e.target.value).toISOString()
-                                        : undefined,
-                                })
-                            }
-                            disabled={disabled}
-                        />
-                    </TextField>
+                    <AppDatePicker
+                        name="last_before"
+                        label="Last interaction before"
+                        value={
+                            value.last_interaction_before
+                                ? value.last_interaction_before.slice(0, 10)
+                                : ""
+                        }
+                        isDisabled={disabled}
+                        onChange={(next) =>
+                            onChange({
+                                last_interaction_before: next
+                                    ? new Date(next).toISOString()
+                                    : undefined,
+                            })
+                        }
+                    />
                 </FilterSection>
             ) : null}
 

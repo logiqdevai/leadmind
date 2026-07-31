@@ -20,6 +20,7 @@ const pageTitles: Record<string, string> = {
   [Routes.dashboard.settings_account]: "Account",
   [Routes.dashboard.settings_usage]: "Usage",
   [Routes.dashboard.settings_organisation]: "Organisation",
+  [Routes.dashboard.settings_activity]: "Activity",
   [Routes.dashboard.lists]: "Lists",
   [Routes.dashboard.send_history]: "Send history",
   [Routes.dashboard.campaigns]: "Campaigns",

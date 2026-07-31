@@ -6,6 +6,11 @@ import { FormsService } from './forms.service';
 import { CreateFormDto } from './dto/create-form.dto';
 import { UpdateFormDto } from './dto/update-form.dto';
 import { ListFormsDto } from './dto/list-forms.dto';
+import { ActivityLog } from '@/modules/activity-logs/decorators/activity-log.decorator';
+import {
+    ActivityAction,
+    ActivityEntityType,
+} from '@/modules/activity-logs/constants/activity-log.constants';
 
 @ApiTags('forms')
 @ApiBearerAuth()
@@ -14,6 +19,7 @@ import { ListFormsDto } from './dto/list-forms.dto';
 export class FormsController {
     constructor(private readonly formsService: FormsService) {}
 
+    @ActivityLog({ entityType: ActivityEntityType.FORM, action: ActivityAction.CREATED, includeBodyKeys: ['name'] })
     @Post()
     @ApiOperation({ summary: 'Create a form' })
     create(
@@ -36,6 +42,7 @@ export class FormsController {
         return this.formsService.findOne(organisation_uuid, uuid);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.FORM, action: ActivityAction.UPDATED, entityUuidFrom: 'params.uuid' })
     @Put(':uuid')
     @ApiOperation({ summary: 'Update a form' })
     update(
@@ -47,6 +54,7 @@ export class FormsController {
         return this.formsService.update(organisation_uuid, user_uuid, uuid, dto);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.FORM, action: ActivityAction.DELETED, entityUuidFrom: 'params.uuid' })
     @Delete(':uuid')
     @ApiOperation({ summary: 'Delete a form' })
     remove(
@@ -57,6 +65,7 @@ export class FormsController {
         return this.formsService.remove(organisation_uuid, user_uuid, uuid);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.FORM, action: ActivityAction.DUPLICATED })
     @Post(':uuid/duplicate')
     @ApiOperation({ summary: 'Duplicate a form with all its fields' })
     duplicate(

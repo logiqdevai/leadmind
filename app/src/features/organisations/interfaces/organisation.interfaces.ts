@@ -31,6 +31,7 @@ export interface OrganisationMember {
     role: OrganisationRole;
     user_uuid: string;
     email: string;
+    full_name: string | null;
     created_at: string;
 }
 
