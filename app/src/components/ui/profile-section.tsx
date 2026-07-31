@@ -3,10 +3,12 @@ import type { ComponentType, ReactNode } from "react";
 export function SectionCard({
     title,
     icon: Icon,
+    action,
     children,
 }: {
     title: string;
     icon: ComponentType<{ className?: string; strokeWidth?: number }>;
+    action?: ReactNode;
     children: ReactNode;
 }) {
     return (
@@ -15,7 +17,10 @@ export function SectionCard({
                 <span className="flex size-8 items-center justify-center rounded-lg bg-accent/10 text-accent">
                     <Icon className="size-4" strokeWidth={1.75} />
                 </span>
-                <h2 className="text-xs font-semibold uppercase tracking-[0.12em] text-muted">{title}</h2>
+                <h2 className="min-w-0 flex-1 text-xs font-semibold uppercase tracking-[0.12em] text-muted">
+                    {title}
+                </h2>
+                {action ? <div className="shrink-0">{action}</div> : null}
             </div>
             <div className="p-4 space-y-4">{children}</div>
         </section>

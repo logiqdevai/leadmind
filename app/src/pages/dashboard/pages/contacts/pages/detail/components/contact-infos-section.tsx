@@ -64,19 +64,31 @@ export function ContactInfosSection({ contactUuid, infos }: ContactInfosSectionP
 
     return (
         <>
-            <SectionCard title="Contact info" icon={AtSign}>
-                <div className="flex justify-end">
-                    <Button size="sm" variant="secondary" onPress={openCreate}>
+            <SectionCard
+                title="Contact info"
+                icon={AtSign}
+                action={
+                    <Button size="sm" variant="tertiary" onPress={openCreate}>
                         <Plus className="size-3.5" />
                         Add
                     </Button>
-                </div>
+                }
+            >
                 {infos.length === 0 ? (
-                    <p className="px-1 text-sm text-muted">
-                        No contact info yet. Add emails, phones, or social links.
-                    </p>
+                    <button
+                        type="button"
+                        onClick={openCreate}
+                        className="flex w-full flex-col items-center gap-1 rounded-xl border border-dashed border-border/80 px-4 py-6 text-center transition-colors hover:border-accent/40 hover:bg-accent/5"
+                    >
+                        <span className="text-sm font-medium text-foreground">
+                            Add contact info
+                        </span>
+                        <span className="text-xs text-muted">
+                            Email, phone, social links, and more
+                        </span>
+                    </button>
                 ) : (
-                    <ul className="divide-y divide-border/50">
+                    <ul className="space-y-1">
                         {infos.map((info) => {
                             const href = contactInfoHref(info);
                             const isDirectLink =
@@ -87,28 +99,30 @@ export function ContactInfosSection({ contactUuid, infos }: ContactInfosSectionP
                             return (
                                 <li
                                     key={info.uuid}
-                                    className="flex items-center gap-3 py-2.5 first:pt-0 last:pb-0"
+                                    className="grid grid-cols-[6.5rem_minmax(0,1fr)_auto] items-center gap-3 rounded-lg px-2 py-2 transition-colors hover:bg-surface-secondary/60"
                                 >
-                                    <div className="min-w-0 flex-1">
-                                        <p className="text-xs font-medium uppercase tracking-wide text-muted">
-                                            {CONTACT_INFO_TYPE_LABELS[info.type]}
+                                    <p className="truncate text-xs font-medium text-muted">
+                                        {CONTACT_INFO_TYPE_LABELS[info.type]}
+                                    </p>
+                                    {href ? (
+                                        <a
+                                            href={href}
+                                            target={isDirectLink ? undefined : "_blank"}
+                                            rel={
+                                                isDirectLink
+                                                    ? undefined
+                                                    : "noopener noreferrer"
+                                            }
+                                            className="min-w-0 truncate text-sm font-medium text-foreground hover:text-link hover:underline"
+                                        >
+                                            {info.value}
+                                        </a>
+                                    ) : (
+                                        <p className="min-w-0 truncate text-sm font-medium text-foreground">
+                                            {info.value}
                                         </p>
-                                        {href ? (
-                                            <a
-                                                href={href}
-                                                target={isDirectLink ? undefined : "_blank"}
-                                                rel={isDirectLink ? undefined : "noopener noreferrer"}
-                                                className="block truncate text-sm text-foreground hover:text-accent hover:underline"
-                                            >
-                                                {info.value}
-                                            </a>
-                                        ) : (
-                                            <p className="truncate text-sm text-foreground">
-                                                {info.value}
-                                            </p>
-                                        )}
-                                    </div>
-                                    <div className="flex shrink-0 items-center gap-1">
+                                    )}
+                                    <div className="flex shrink-0 items-center gap-0.5">
                                         <Button
                                             size="sm"
                                             variant="tertiary"
