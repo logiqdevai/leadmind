@@ -504,6 +504,10 @@ export function IntegrationDetailModal({
                                                             const meta = providerView.keyTypes.find(
                                                                 (row) => row.key_type === keyType,
                                                             );
+                                                            const missingHint =
+                                                                keyType === "WEBHOOK_SECRET"
+                                                                    ? "Optional — needed to verify Resend delivery events."
+                                                                    : "Not set yet — recipients see only the from email.";
                                                             return (
                                                                 <li
                                                                     key={`missing-${group.account}-${keyType}`}
@@ -515,8 +519,7 @@ export function IntegrationDetailModal({
                                                                             {meta?.label ?? keyType}
                                                                         </p>
                                                                         <p className="text-xs text-muted">
-                                                                            Not set yet — recipients
-                                                                            see only the from email.
+                                                                            {missingHint}
                                                                         </p>
                                                                     </div>
                                                                     <Button

@@ -57,7 +57,7 @@ const FALLBACK_PROVIDERS: IntegrationProviderView[] = [
         uuid: null,
         label: "Resend",
         description:
-            "Transactional email and inbound webhooks. Add API key and from address per account.",
+            "Transactional email and inbound webhooks. Add API key and from address per account, then paste the webhook URL into Resend and store the signing secret.",
         allows_multiple_accounts: true,
         supports_default_account_selection: true,
         default_account: null,
@@ -76,6 +76,7 @@ const FALLBACK_PROVIDERS: IntegrationProviderView[] = [
             },
         ],
         keys: [],
+        webhook_url: null,
     },
     {
         provider: "SMTP",

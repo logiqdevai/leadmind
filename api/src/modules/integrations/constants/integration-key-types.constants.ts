@@ -64,6 +64,7 @@ export const KEY_TYPE_PLACEHOLDERS: Record<IntegrationKeyType, string> = {
 export const OPTIONAL_PROVIDER_KEY_TYPES: Partial<
     Record<ExternalIntegrationProvider, IntegrationKeyType[]>
 > = {
+    [ExternalIntegrationProvider.RESEND]: [IntegrationKeyType.WEBHOOK_SECRET],
     [ExternalIntegrationProvider.SMTP]: [IntegrationKeyType.FROM_NAME],
 };
 

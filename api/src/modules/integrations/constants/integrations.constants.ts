@@ -42,7 +42,7 @@ export const INTEGRATION_PROVIDER_DESCRIPTIONS: Record<
         'GPT models for enrichment, scoring, and message drafting. Add your API key and webhook secret, then paste the webhook URL into the OpenAI dashboard.',
     [ExternalIntegrationProvider.ANTHROPIC]: 'Claude models for AI workflows.',
     [ExternalIntegrationProvider.RESEND]:
-        'Transactional email and inbound webhooks. Add API key and from address per account.',
+        'Transactional email and inbound webhooks. Add API key and from address per account, then paste the webhook URL into Resend and store the signing secret.',
     [ExternalIntegrationProvider.SMTP]:
         'Custom SMTP servers for outbound email. Add multiple accounts with host, port, username, password, and from address.',
     [ExternalIntegrationProvider.TWILIO]: 'SMS outreach credentials.',
