@@ -6,6 +6,9 @@ import type { SignInUser, SignUpUser } from "../interfaces/auth.interface";
 import { Routes } from "@/routes/routes";
 import type { LoggedInUser } from "@/features/user/interfaces/user.interface";
 import { toast } from "@/hooks/use-toast";
+import { formatAuthUser } from "@/features/auth/utils/auth.utils";
+import { switchOrganisation } from "@/features/organisations/services/organisations.services";
+import { getPreferredOrganisationUuid } from "@/lib/preferred-organisation";
 
 function errMessage(err: unknown): string {
     if (err instanceof Error) return err.message;
@@ -25,11 +28,28 @@ export function useSignin() {
 
     return useMutation({
         mutationFn: (data: SignInUser) => signIn(data),
-        onSuccess: (data: LoggedInUser) => {
+        onSuccess: async (data: LoggedInUser) => {
+            const preferredOrganisationUuid = data.user_uuid
+                ? getPreferredOrganisationUuid(data.user_uuid)
+                : null;
+
             login({
                 ...data,
                 isLoggedIn: true,
             });
+
+            if (
+                preferredOrganisationUuid &&
+                preferredOrganisationUuid !== data.organisation_uuid
+            ) {
+                try {
+                    const switched = await switchOrganisation(
+                        preferredOrganisationUuid,
+                    );
+                    login({ ...formatAuthUser(switched), isLoggedIn: true });
+                } catch {}
+            }
+
             toast({
                 title: "Login successful",
                 description: "You have successfully logged in",

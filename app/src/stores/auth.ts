@@ -1,4 +1,5 @@
 import type { LoggedInUser } from "@/features/user/interfaces/user.interface";
+import { setPreferredOrganisationUuid } from "@/lib/preferred-organisation";
 import { Routes } from "@/routes/routes";
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
@@ -39,6 +40,12 @@ export const useAuthStore = create<UserStore>()(
                         ...state,
                         ...user,
                     }));
+                    if (user.user_uuid && user.organisation_uuid) {
+                        setPreferredOrganisationUuid(
+                            user.user_uuid,
+                            user.organisation_uuid,
+                        );
+                    }
                 },
                 logout: () => {
                     set(initialValues);
