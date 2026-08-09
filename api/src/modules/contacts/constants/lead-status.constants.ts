@@ -5,9 +5,11 @@ const LEAD_STATUS_RANK: Record<LeadStatus, number> = {
     [LeadStatus.LOST]: 1,
     [LeadStatus.NEW]: 2,
     [LeadStatus.CONTACTED]: 3,
-    [LeadStatus.QUALIFIED]: 4,
-    [LeadStatus.NURTURING]: 5,
-    [LeadStatus.CONVERTED]: 6,
+    [LeadStatus.ENGAGED]: 4,
+    [LeadStatus.QUALIFIED]: 5,
+    [LeadStatus.NURTURING]: 6,
+    [LeadStatus.OFFER_MADE]: 7,
+    [LeadStatus.CONVERTED]: 8,
 };
 
 export function emptyLeadStatusCounts(): Record<LeadStatus, number> {

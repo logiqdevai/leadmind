@@ -719,8 +719,10 @@ enum ContactInfoType {
 enum LeadStatus {
   NEW
   CONTACTED
+  ENGAGED
   QUALIFIED
   NURTURING
+  OFFER_MADE
   CONVERTED
   LOST
   ARCHIVED

@@ -29,6 +29,14 @@ export const CONTACT_STATUS_OPTIONS: readonly ContactStatusOption[] = [
         barColor: "bg-warning",
     },
     {
+        id: LeadStatus.ENGAGED,
+        label: "Engaged",
+        pipeline: true,
+        pipelineTone: "bg-accent/15",
+        chipColor: "default",
+        barColor: "bg-accent/60",
+    },
+    {
         id: LeadStatus.QUALIFIED,
         label: "Qualified",
         pipeline: true,
@@ -43,6 +51,14 @@ export const CONTACT_STATUS_OPTIONS: readonly ContactStatusOption[] = [
         pipelineTone: "bg-warning-soft/20",
         chipColor: "warning",
         barColor: "bg-warning/70",
+    },
+    {
+        id: LeadStatus.OFFER_MADE,
+        label: "Offer Made",
+        pipeline: true,
+        pipelineTone: "bg-success-soft/20",
+        chipColor: "success",
+        barColor: "bg-success/70",
     },
     {
         id: LeadStatus.CONVERTED,

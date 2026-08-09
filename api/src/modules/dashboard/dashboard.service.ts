@@ -43,8 +43,10 @@ export class DashboardService {
         const considered =
             by_status[LeadStatus.NEW] +
             by_status[LeadStatus.CONTACTED] +
+            by_status[LeadStatus.ENGAGED] +
             by_status[LeadStatus.QUALIFIED] +
             by_status[LeadStatus.NURTURING] +
+            by_status[LeadStatus.OFFER_MADE] +
             by_status[LeadStatus.CONVERTED];
         const conversion_rate =
             considered > 0

@@ -321,8 +321,10 @@ export type ContactInfoType = (typeof ContactInfoType)[keyof typeof ContactInfoT
 export const LeadStatus: {
   NEW: 'NEW',
   CONTACTED: 'CONTACTED',
+  ENGAGED: 'ENGAGED',
   QUALIFIED: 'QUALIFIED',
   NURTURING: 'NURTURING',
+  OFFER_MADE: 'OFFER_MADE',
   CONVERTED: 'CONVERTED',
   LOST: 'LOST',
   ARCHIVED: 'ARCHIVED'
