@@ -2,6 +2,11 @@ import { useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Button } from "@heroui/react";
 import { Channel, MsgStatus } from "@/features/contacts/interfaces/contact.interface";
+import { useIntegrations } from "@/features/integrations/hooks/use-integrations";
+import {
+    allocationKey,
+    listSendableEmailAccounts,
+} from "@/features/integrations/utils/email-provider-utils";
 import { useSendHistory } from "@/features/outreach/hooks/use-send-history";
 import {
     EmailIntegrationProvider,
@@ -69,6 +74,7 @@ export default function SendHistoryPage() {
     const source = searchParams.get("source") ?? "";
     const status = searchParams.get("status") ?? "";
     const emailProvider = searchParams.get("email_provider") ?? "";
+    const emailAccount = searchParams.get("email_account") ?? "";
     const campaignUuid = searchParams.get("campaign_uuid") ?? "";
     const sentByUserUuid = searchParams.get("sent_by_user_uuid") ?? "";
     const dateFrom = searchParams.get("date_from") ?? "";
@@ -80,6 +86,7 @@ export default function SendHistoryPage() {
 
     const { data: currentOrg } = useCurrentOrganisation();
     const { data: members } = useOrganisationMembers(currentOrg?.uuid ?? "");
+    const { data: integrations } = useIntegrations();
 
     const updateParams = (next: Record<string, string | undefined | null>) => {
         const params = new URLSearchParams(searchParams);
@@ -100,6 +107,7 @@ export default function SendHistoryPage() {
             source ||
             status ||
             emailProvider ||
+            emailAccount ||
             campaignUuid ||
             sentByUserUuid ||
             dateFrom ||
@@ -117,6 +125,7 @@ export default function SendHistoryPage() {
             status: (status as typeof MsgStatus.SENT) || undefined,
             email_provider:
                 (emailProvider as typeof EmailIntegrationProvider.RESEND) || undefined,
+            email_account: emailAccount || undefined,
             campaign_uuid: campaignUuid || undefined,
             sent_by_user_uuid: sentByUserUuid || undefined,
             date_from: dateFrom ? dateToStartIso(dateFrom) : undefined,
@@ -129,6 +138,7 @@ export default function SendHistoryPage() {
             source,
             status,
             emailProvider,
+            emailAccount,
             campaignUuid,
             sentByUserUuid,
             dateFrom,
@@ -142,6 +152,33 @@ export default function SendHistoryPage() {
     const rows = data?.data ?? [];
     const total = data?.total ?? 0;
     const totalPages = data?.totalPages ?? 1;
+
+    const emailAccounts = useMemo(
+        () => listSendableEmailAccounts(integrations),
+        [integrations],
+    );
+
+    const emailAccountOptions = useMemo(() => {
+        const filtered = emailProvider
+            ? emailAccounts.filter((row) => row.provider === emailProvider)
+            : emailAccounts;
+        return [
+            { id: "", label: "All emails" },
+            ...filtered.map((row) => ({
+                id: allocationKey(row),
+                label: emailProvider ? row.title : row.label,
+            })),
+        ];
+    }, [emailAccounts, emailProvider]);
+
+    const selectedEmailAccountKey = useMemo(() => {
+        if (!emailProvider || !emailAccount) return "";
+        const key = allocationKey({
+            provider: emailProvider as typeof EmailIntegrationProvider.RESEND,
+            account: emailAccount,
+        });
+        return emailAccountOptions.some((option) => option.id === key) ? key : "";
+    }, [emailProvider, emailAccount, emailAccountOptions]);
 
     const campaignOptions = useMemo(
         () => [
@@ -179,6 +216,7 @@ export default function SendHistoryPage() {
                 source={source}
                 status={status}
                 emailProvider={emailProvider}
+                emailAccount={selectedEmailAccountKey}
                 campaignUuid={campaignUuid}
                 sentByUserUuid={sentByUserUuid}
                 dateFrom={dateFrom}
@@ -187,6 +225,7 @@ export default function SendHistoryPage() {
                 sourceOptions={SOURCE_OPTIONS}
                 statusOptions={STATUS_OPTIONS}
                 providerOptions={PROVIDER_OPTIONS}
+                emailAccountOptions={emailAccountOptions}
                 campaignOptions={campaignOptions}
                 userOptions={userOptions}
                 hasActiveFilters={hasActiveFilters}
@@ -195,8 +234,28 @@ export default function SendHistoryPage() {
                 onSourceChange={(value) => updateParams({ source: value || null, page: "1" })}
                 onStatusChange={(value) => updateParams({ status: value || null, page: "1" })}
                 onEmailProviderChange={(value) =>
-                    updateParams({ email_provider: value || null, page: "1" })
+                    updateParams({
+                        email_provider: value || null,
+                        email_account: null,
+                        page: "1",
+                    })
                 }
+                onEmailAccountChange={(value) => {
+                    if (!value) {
+                        updateParams({ email_account: null, page: "1" });
+                        return;
+                    }
+                    const match = emailAccounts.find((row) => allocationKey(row) === value);
+                    if (!match) {
+                        updateParams({ email_account: null, page: "1" });
+                        return;
+                    }
+                    updateParams({
+                        email_provider: match.provider,
+                        email_account: match.account,
+                        page: "1",
+                    });
+                }}
                 onCampaignChange={(value) =>
                     updateParams({ campaign_uuid: value || null, page: "1" })
                 }

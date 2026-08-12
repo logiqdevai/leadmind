@@ -21,19 +21,24 @@ export const ContactTableNameCell: FC<ContactTableNameCellProps> = ({
         return (
             <button
                 type="button"
+                title={name ?? undefined}
                 onPointerDown={(e) => e.stopPropagation()}
                 onClick={(e) => {
                     e.stopPropagation();
                     onOpen(contactUuid);
                 }}
-                className="font-medium text-foreground truncate text-left hover:text-accent transition-colors max-w-full"
+                className="block w-full min-w-0 truncate text-left font-medium text-foreground hover:text-accent transition-colors"
             >
                 {label}
             </button>
         );
     }
 
-    return <span className="font-medium text-foreground truncate">{label}</span>;
+    return (
+        <span title={name ?? undefined} className="block w-full min-w-0 truncate font-medium text-foreground">
+            {label}
+        </span>
+    );
 };
 
 interface ContactTableQuickViewButtonProps {

@@ -17,6 +17,8 @@ import {
     ContactTableQuickViewButton,
 } from "@/pages/dashboard/components/contact-stack-viewer";
 import { ContactAlsoFoundByHint } from "@/pages/dashboard/components/contact-also-found-by-hint";
+import { contactTableColumnClass } from "@/pages/dashboard/components/contact-table-column-classes";
+import { cn } from "@/lib/utils";
 
 const columnHelper = createColumnHelper<Contact>();
 
@@ -72,12 +74,28 @@ export function ListMembersTable({
             columnHelper.accessor((row) => row.company, {
                 id: "company",
                 header: "Company",
-                cell: (info) => info.getValue() ?? "—",
+                cell: (info) => {
+                    const company = info.getValue();
+                    if (!company) return "—";
+                    return (
+                        <span title={company} className="block w-full min-w-0 truncate">
+                            {company}
+                        </span>
+                    );
+                },
             }),
             columnHelper.accessor((row) => row.email, {
                 id: "email",
                 header: "Email",
-                cell: (info) => info.getValue() ?? "—",
+                cell: (info) => {
+                    const email = info.getValue();
+                    if (!email) return "—";
+                    return (
+                        <span title={email} className="block w-full min-w-0 truncate">
+                            {email}
+                        </span>
+                    );
+                },
             }),
             columnHelper.accessor((row) => row.website, {
                 id: "website",
@@ -90,12 +108,14 @@ export function ListMembersTable({
                         <div
                             onPointerDown={(e) => e.stopPropagation()}
                             onClick={(e) => e.stopPropagation()}
+                            className="min-w-0"
                         >
                             <a
                                 href={href}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="text-accent hover:underline truncate block max-w-48"
+                                title={website}
+                                className="text-accent hover:underline truncate block w-full min-w-0"
                             >
                                 {website}
                             </a>
@@ -109,7 +129,7 @@ export function ListMembersTable({
                 cell: (info) => {
                     const contact = info.row.original;
                     return (
-                        <div onClick={(e) => e.stopPropagation()}>
+                        <div onClick={(e) => e.stopPropagation()} className="min-w-0">
                             <Select
                                 aria-label="CRM status"
                                 value={contact.status}
@@ -120,7 +140,7 @@ export function ListMembersTable({
                                     })
                                 }
                             >
-                                <Select.Trigger className="min-w-32">
+                                <Select.Trigger className="w-full min-w-0 max-w-36">
                                     <Select.Value />
                                     <Select.Indicator />
                                 </Select.Trigger>
@@ -208,12 +228,12 @@ export function ListMembersTable({
     };
 
     return (
-        <div className="bg-surface rounded-xl border border-border overflow-hidden">
+        <div className="bg-surface rounded-xl border border-border overflow-hidden min-w-0 w-full">
             <Table>
-                <Table.ScrollContainer>
+                <Table.ScrollContainer className="w-full max-w-full overflow-x-hidden">
                     <Table.Content
                         aria-label="List members"
-                        className="min-w-[960px]"
+                        className="w-full table-fixed"
                         selectionMode="multiple"
                         selectionBehavior="toggle"
                         selectedKeys={selectedKeys}
@@ -232,6 +252,7 @@ export function ListMembersTable({
                                     key={header.id}
                                     id={header.id}
                                     isRowHeader={header.id === "name"}
+                                    className={contactTableColumnClass(header.id)}
                                 >
                                     {flexRender(header.column.columnDef.header, header.getContext())}
                                 </Table.Column>
@@ -288,11 +309,12 @@ export function ListMembersTable({
                                               return (
                                                   <Table.Cell
                                                       key={cell.id}
-                                                      className={
+                                                      className={cn(
+                                                          contactTableColumnClass(cell.column.id),
                                                           isInteractive
                                                               ? tableNavInteractiveCellClassName
-                                                              : undefined
-                                                      }
+                                                              : undefined,
+                                                      )}
                                                   >
                                                       {content}
                                                   </Table.Cell>

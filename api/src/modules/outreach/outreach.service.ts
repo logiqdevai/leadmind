@@ -292,6 +292,9 @@ export class OutreachService {
             ...(filters.source === SendSource.DIRECT && { campaign_uuid: null }),
             ...(filters.source === SendSource.CAMPAIGN && { campaign_uuid: { not: null } }),
             ...(filters.email_provider && { email_provider: filters.email_provider }),
+            ...(filters.email_account?.trim() && {
+                email_account: filters.email_account.trim(),
+            }),
             ...(filters.sent_by_user_uuid && { sent_by_user_uuid: filters.sent_by_user_uuid }),
             ...((filters.date_from || filters.date_to) && {
                 sent_at: {

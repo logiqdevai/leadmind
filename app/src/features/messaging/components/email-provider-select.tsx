@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef } from "react";
-import { Checkbox, Chip, Header, Input, Label, ListBox, Select, TextField } from "@heroui/react";
+import { Checkbox, Input, Label, TextField } from "@heroui/react";
 import { Link } from "react-router-dom";
 import { useIntegrations } from "@/features/integrations/hooks/use-integrations";
 import type {
@@ -14,8 +14,9 @@ import {
     resolveDefaultEmailTarget,
     validateAllocations,
 } from "@/features/integrations/utils/email-provider-utils";
+import { EmailAccountCombobox } from "@/features/messaging/components/email-account-combobox";
 import { Routes } from "@/routes/routes";
-import { cn } from "@/lib/utils";
+import { usePreferredEmailProviderStore } from "@/stores/preferred-email-provider";
 
 type EmailProviderSelectBaseProps = {
     disabled?: boolean;
@@ -46,7 +47,6 @@ function EmailProviderSingleSelect({
     value,
     onChange,
     disabled,
-    groupedAccounts,
     visibleAccounts,
     readyAccounts,
     integrations,
@@ -54,12 +54,14 @@ function EmailProviderSingleSelect({
     value: EmailProviderTarget | null;
     onChange: (target: EmailProviderTarget) => void;
     disabled: boolean;
-    groupedAccounts: ReturnType<typeof groupSendableEmailAccounts>;
     visibleAccounts: ReturnType<typeof groupSendableEmailAccounts>[number]["accounts"];
     readyAccounts: ReturnType<typeof groupSendableEmailAccounts>[number]["accounts"];
     integrations: ReturnType<typeof useIntegrations>["data"];
 }) {
+    const preferred = usePreferredEmailProviderStore((s) => s.target);
+    const setPreferred = usePreferredEmailProviderStore((s) => s.setTarget);
     const selectedKey = value ? allocationKey(value) : null;
+    const incompleteCount = visibleAccounts.filter((row) => !row.canSend).length;
 
     useEffect(() => {
         if (readyAccounts.length === 0) return;
@@ -69,107 +71,29 @@ function EmailProviderSingleSelect({
         ) {
             return;
         }
-        const defaultTarget = resolveDefaultEmailTarget(integrations);
+        const defaultTarget = resolveDefaultEmailTarget(integrations, preferred);
         if (defaultTarget) {
             onChange(defaultTarget);
         }
-    }, [integrations, onChange, readyAccounts, selectedKey, value]);
+    }, [integrations, onChange, preferred, readyAccounts, selectedKey, value]);
 
-    const selectedAccount = visibleAccounts.find((row) => allocationKey(row) === selectedKey);
-    const incompleteCount = visibleAccounts.filter((row) => !row.canSend).length;
+    const handleChange = (target: EmailProviderTarget) => {
+        setPreferred(target);
+        onChange(target);
+    };
 
     return (
         <div className="space-y-1.5">
             <Label className="text-sm text-foreground">Send from</Label>
-            <Select
+            <EmailAccountCombobox
+                accounts={visibleAccounts}
+                value={value}
+                onChange={handleChange}
+                disabled={disabled || readyAccounts.length === 0}
+                placeholder="Choose send-from email…"
+                searchPlaceholder="Search emails…"
                 aria-label="Email provider account"
-                selectedKey={selectedKey}
-                onSelectionChange={(key) => {
-                    const match = visibleAccounts.find((row) => allocationKey(row) === key);
-                    if (match?.canSend) {
-                        onChange({ provider: match.provider, account: match.account });
-                    }
-                }}
-                isDisabled={disabled || readyAccounts.length === 0}
-                fullWidth
-            >
-                <Select.Trigger
-                    className={cn(
-                        "grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 rounded-md border border-border bg-surface-primary",
-                        "focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/40",
-                    )}
-                >
-                    <Select.Value className="min-w-0 flex-1 overflow-hidden">
-                        {selectedAccount ? (
-                            <span className="flex min-w-0 items-center gap-2">
-                                <span className="truncate">{selectedAccount.title}</span>
-                                {selectedAccount.isDefault ? (
-                                    <Chip size="sm" variant="soft" color="warning" className="shrink-0">
-                                        <Chip.Label>Default</Chip.Label>
-                                    </Chip>
-                                ) : null}
-                            </span>
-                        ) : null}
-                    </Select.Value>
-                    <Select.Indicator className="shrink-0" />
-                </Select.Trigger>
-                <Select.Popover>
-                    <ListBox>
-                        {groupedAccounts.map((group) => (
-                            <ListBox.Section key={group.provider}>
-                                <Header className="text-xs font-medium uppercase tracking-wide text-muted">
-                                    {group.label}
-                                </Header>
-                                {group.accounts.map((account) => {
-                                    const key = allocationKey(account);
-                                    const isIncomplete = !account.canSend;
-                                    return (
-                                        <ListBox.Item
-                                            key={key}
-                                            id={key}
-                                            textValue={account.title}
-                                            isDisabled={isIncomplete}
-                                            className={cn(
-                                                "grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3",
-                                                isIncomplete && "opacity-60",
-                                            )}
-                                        >
-                                            <div className="min-w-0 overflow-hidden">
-                                                <div className="flex items-center gap-2">
-                                                    <span
-                                                        className={cn(
-                                                            "truncate text-sm",
-                                                            isIncomplete && "text-muted",
-                                                        )}
-                                                    >
-                                                        {account.title}
-                                                    </span>
-                                                    {account.isDefault ? (
-                                                        <Chip
-                                                            size="sm"
-                                                            variant="soft"
-                                                            color="warning"
-                                                            className="shrink-0"
-                                                        >
-                                                            <Chip.Label>Default</Chip.Label>
-                                                        </Chip>
-                                                    ) : null}
-                                                </div>
-                                                {account.detail === "from address missing" ? (
-                                                    <span className="truncate text-xs text-danger">
-                                                        Add from address in Integrations
-                                                    </span>
-                                                ) : null}
-                                            </div>
-                                            <ListBox.ItemIndicator className="shrink-0" />
-                                        </ListBox.Item>
-                                    );
-                                })}
-                            </ListBox.Section>
-                        ))}
-                    </ListBox>
-                </Select.Popover>
-            </Select>
+            />
             <p className="text-xs text-muted">
                 {readyAccounts.length} ready account
                 {readyAccounts.length === 1 ? "" : "s"} across Resend and SMTP.
@@ -413,7 +337,6 @@ export function EmailProviderSelect(props: EmailProviderSelectProps) {
             value={props.value}
             onChange={props.onChange}
             disabled={disabled}
-            groupedAccounts={groupedAccounts}
             visibleAccounts={visibleAccounts}
             readyAccounts={readyAccounts}
             integrations={integrations}

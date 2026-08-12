@@ -14,6 +14,8 @@ import { ContactScoresCompact } from "./badges";
 import { STATUS_OPTIONS } from "@/features/contacts/constants/contacts.constants";
 import { Routes } from "@/routes/routes";
 import { ContactAlsoFoundByHint } from "@/pages/dashboard/components/contact-also-found-by-hint";
+import { contactTableColumnClass } from "@/pages/dashboard/components/contact-table-column-classes";
+import { cn } from "@/lib/utils";
 
 const columnHelper = createColumnHelper<Contact>();
 
@@ -40,17 +42,40 @@ export function LeadsTable({ contacts, isLoading, isFetching, page, pageSize, to
       columnHelper.accessor((row) => row.name, {
         id: "name",
         header: "Name",
-        cell: (info) => <span className="font-medium text-foreground">{info.getValue() ?? "—"}</span>,
+        cell: (info) => {
+          const name = info.getValue();
+          return (
+            <span title={name ?? undefined} className="block w-full min-w-0 truncate font-medium text-foreground">
+              {name ?? "—"}
+            </span>
+          );
+        },
       }),
       columnHelper.accessor((row) => row.company, {
         id: "company",
         header: "Company",
-        cell: (info) => info.getValue() ?? "—",
+        cell: (info) => {
+          const company = info.getValue();
+          if (!company) return "—";
+          return (
+            <span title={company} className="block w-full min-w-0 truncate">
+              {company}
+            </span>
+          );
+        },
       }),
       columnHelper.accessor((row) => row.email, {
         id: "email",
         header: "Email",
-        cell: (info) => info.getValue() ?? "—",
+        cell: (info) => {
+          const email = info.getValue();
+          if (!email) return "—";
+          return (
+            <span title={email} className="block w-full min-w-0 truncate">
+              {email}
+            </span>
+          );
+        },
       }),
       columnHelper.display({
         id: "score",
@@ -76,7 +101,7 @@ export function LeadsTable({ contacts, isLoading, isFetching, page, pageSize, to
         cell: (info) => {
           const contact = info.row.original;
           return (
-            <div onClick={(e) => e.stopPropagation()}>
+            <div onClick={(e) => e.stopPropagation()} className="min-w-0">
               <Select
                 aria-label="Status"
                 value={contact.status}
@@ -87,7 +112,7 @@ export function LeadsTable({ contacts, isLoading, isFetching, page, pageSize, to
                   })
                 }
               >
-                <Select.Trigger className="min-w-32">
+                <Select.Trigger className="w-full min-w-0 max-w-36">
                   <Select.Value />
                   <Select.Indicator />
                 </Select.Trigger>
@@ -157,12 +182,12 @@ export function LeadsTable({ contacts, isLoading, isFetching, page, pageSize, to
   };
 
   return (
-    <div className="bg-surface rounded-xl border border-border overflow-hidden">
+    <div className="bg-surface rounded-xl border border-border overflow-hidden min-w-0 w-full">
       <Table>
-        <Table.ScrollContainer>
+        <Table.ScrollContainer className="w-full max-w-full overflow-x-hidden">
           <Table.Content
             aria-label="My leads (contacts)"
-            className="min-w-[1000px]"
+            className="w-full table-fixed"
             selectionMode="multiple"
             selectionBehavior="toggle"
             selectedKeys={selectedKeys}
@@ -177,7 +202,12 @@ export function LeadsTable({ contacts, isLoading, isFetching, page, pageSize, to
                 </Checkbox>
               </Table.Column>
               {table.getHeaderGroups()[0]!.headers.map((header) => (
-                <Table.Column key={header.id} id={header.id} isRowHeader={header.id === "name"}>
+                <Table.Column
+                  key={header.id}
+                  id={header.id}
+                  isRowHeader={header.id === "name"}
+                  className={contactTableColumnClass(header.id)}
+                >
                   {flexRender(header.column.columnDef.header, header.getContext())}
                 </Table.Column>
               ))}
@@ -225,7 +255,10 @@ export function LeadsTable({ contacts, isLoading, isFetching, page, pageSize, to
                         return (
                         <Table.Cell
                           key={cell.id}
-                          className={isInteractive ? tableNavInteractiveCellClassName : undefined}
+                          className={cn(
+                            contactTableColumnClass(cell.column.id),
+                            isInteractive ? tableNavInteractiveCellClassName : undefined,
+                          )}
                         >
                           {renderTableNavCellContent(cell.column.id, rowHref, content, {
                             interactiveColumnIds: ["status", "actions"],

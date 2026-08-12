@@ -19,6 +19,8 @@ import {
 import { STATUS_OPTIONS } from "@/features/contacts/constants/contacts.constants";
 import { Routes } from "@/routes/routes";
 import { ContactAlsoFoundByHint } from "@/pages/dashboard/components/contact-also-found-by-hint";
+import { contactTableColumnClass } from "@/pages/dashboard/components/contact-table-column-classes";
+import { cn } from "@/lib/utils";
 
 const lastInteractionAt = (contact: Contact): string | null => {
   const interactions = contact.interactions ?? [];
@@ -70,17 +72,41 @@ export function ContactsTable({ contacts, isLoading, isFetching, page, pageSize,
       columnHelper.accessor((row) => row.company, {
         id: "company",
         header: "Company",
-        cell: (info) => info.getValue() ?? "—",
+        cell: (info) => {
+          const company = info.getValue();
+          if (!company) return "—";
+          return (
+            <span title={company} className="block w-full min-w-0 truncate">
+              {company}
+            </span>
+          );
+        },
       }),
       columnHelper.accessor((row) => row.email, {
         id: "email",
         header: "Email",
-        cell: (info) => info.getValue() ?? "—",
+        cell: (info) => {
+          const email = info.getValue();
+          if (!email) return "—";
+          return (
+            <span title={email} className="block w-full min-w-0 truncate">
+              {email}
+            </span>
+          );
+        },
       }),
       columnHelper.accessor((row) => row.phone, {
         id: "phone",
         header: "Phone",
-        cell: (info) => info.getValue() ?? "—",
+        cell: (info) => {
+          const phone = info.getValue();
+          if (!phone) return "—";
+          return (
+            <span title={phone} className="block w-full min-w-0 truncate">
+              {phone}
+            </span>
+          );
+        },
       }),
       columnHelper.accessor("status", {
         id: "status",
@@ -88,7 +114,7 @@ export function ContactsTable({ contacts, isLoading, isFetching, page, pageSize,
         cell: (info) => {
           const contact = info.row.original;
           return (
-            <div onClick={(e) => e.stopPropagation()}>
+            <div onClick={(e) => e.stopPropagation()} className="min-w-0">
               <Select
                 aria-label="Status"
                 value={contact.status}
@@ -99,7 +125,7 @@ export function ContactsTable({ contacts, isLoading, isFetching, page, pageSize,
                   })
                 }
               >
-                <Select.Trigger className="min-w-32">
+                <Select.Trigger className="w-full min-w-0 max-w-36">
                   <Select.Value />
                   <Select.Indicator />
                 </Select.Trigger>
@@ -140,7 +166,7 @@ export function ContactsTable({ contacts, isLoading, isFetching, page, pageSize,
             return <span className="text-muted">—</span>;
           }
           return (
-            <div className="flex flex-wrap gap-1 max-w-48">
+            <div className="flex flex-wrap gap-1 max-w-full min-w-0">
               {tags.slice(0, 3).map((t) => (
                 <Chip key={t} size="sm" variant="soft">
                   <Chip.Label>{t}</Chip.Label>
@@ -210,12 +236,12 @@ export function ContactsTable({ contacts, isLoading, isFetching, page, pageSize,
   };
 
   return (
-    <div className="bg-surface rounded-xl border border-border overflow-hidden">
+    <div className="bg-surface rounded-xl border border-border overflow-hidden min-w-0 w-full">
       <Table>
-        <Table.ScrollContainer>
+        <Table.ScrollContainer className="w-full max-w-full">
           <Table.Content
             aria-label="Contacts"
-            className="min-w-[1100px]"
+            className="w-full table-fixed"
             selectionMode="multiple"
             selectionBehavior="toggle"
             selectedKeys={selectedKeys}
@@ -230,7 +256,12 @@ export function ContactsTable({ contacts, isLoading, isFetching, page, pageSize,
                 </Checkbox>
               </Table.Column>
               {table.getHeaderGroups()[0]!.headers.map((header) => (
-                <Table.Column key={header.id} id={header.id} isRowHeader={header.id === "name"}>
+                <Table.Column
+                  key={header.id}
+                  id={header.id}
+                  isRowHeader={header.id === "name"}
+                  className={contactTableColumnClass(header.id)}
+                >
                   {flexRender(header.column.columnDef.header, header.getContext())}
                 </Table.Column>
               ))}
@@ -281,7 +312,10 @@ export function ContactsTable({ contacts, isLoading, isFetching, page, pageSize,
                         return (
                         <Table.Cell
                           key={cell.id}
-                          className={isInteractive ? tableNavInteractiveCellClassName : undefined}
+                          className={cn(
+                            contactTableColumnClass(cell.column.id),
+                            isInteractive ? tableNavInteractiveCellClassName : undefined,
+                          )}
                         >
                           {isInteractive
                             ? content

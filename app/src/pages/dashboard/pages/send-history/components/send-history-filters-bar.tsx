@@ -14,6 +14,7 @@ interface SendHistoryFiltersBarProps {
     source: string;
     status: string;
     emailProvider: string;
+    emailAccount: string;
     campaignUuid: string;
     sentByUserUuid: string;
     dateFrom: string;
@@ -22,6 +23,7 @@ interface SendHistoryFiltersBarProps {
     sourceOptions: SendHistoryFilterOption[];
     statusOptions: SendHistoryFilterOption[];
     providerOptions: SendHistoryFilterOption[];
+    emailAccountOptions: SendHistoryFilterOption[];
     campaignOptions: SendHistoryFilterOption[];
     userOptions: SendHistoryFilterOption[];
     hasActiveFilters: boolean;
@@ -30,6 +32,7 @@ interface SendHistoryFiltersBarProps {
     onSourceChange: (value: string) => void;
     onStatusChange: (value: string) => void;
     onEmailProviderChange: (value: string) => void;
+    onEmailAccountChange: (value: string) => void;
     onCampaignChange: (value: string) => void;
     onSentByUserChange: (value: string) => void;
     onDateFromChange: (value: string) => void;
@@ -43,6 +46,7 @@ export function SendHistoryFiltersBar({
     source,
     status,
     emailProvider,
+    emailAccount,
     campaignUuid,
     sentByUserUuid,
     dateFrom,
@@ -51,6 +55,7 @@ export function SendHistoryFiltersBar({
     sourceOptions,
     statusOptions,
     providerOptions,
+    emailAccountOptions,
     campaignOptions,
     userOptions,
     hasActiveFilters,
@@ -59,6 +64,7 @@ export function SendHistoryFiltersBar({
     onSourceChange,
     onStatusChange,
     onEmailProviderChange,
+    onEmailAccountChange,
     onCampaignChange,
     onSentByUserChange,
     onDateFromChange,
@@ -109,6 +115,13 @@ export function SendHistoryFiltersBar({
                 options={providerOptions}
                 onChange={onEmailProviderChange}
                 className="w-[9.5rem]"
+            />
+            <FilterSelect
+                label="Email"
+                value={emailAccount}
+                options={emailAccountOptions}
+                onChange={onEmailAccountChange}
+                className="w-[16rem]"
             />
             <FilterSelect
                 label="Campaign"
@@ -179,16 +192,23 @@ function FilterSelect({
             selectedKey={selected.id}
             onSelectionChange={(key) => onChange(String(key ?? ""))}
         >
-            <Select.Trigger className="h-8 w-full text-[13px]">
-                <Select.Value />
-                <Select.Indicator />
+            <Select.Trigger className="grid h-8 w-full grid-cols-[minmax(0,1fr)_auto] items-center gap-1.5 overflow-hidden text-[13px]">
+                <Select.Value className="min-w-0 truncate">
+                    <span className="block truncate">{selected.label}</span>
+                </Select.Value>
+                <Select.Indicator className="shrink-0" />
             </Select.Trigger>
-            <Select.Popover>
+            <Select.Popover className="min-w-[var(--trigger-width)]">
                 <ListBox>
                     {options.map((option) => (
-                        <ListBox.Item key={option.id} id={option.id} textValue={option.label}>
-                            {option.label}
-                            <ListBox.ItemIndicator />
+                        <ListBox.Item
+                            key={option.id}
+                            id={option.id}
+                            textValue={option.label}
+                            className="gap-2"
+                        >
+                            <span className="min-w-0 truncate">{option.label}</span>
+                            <ListBox.ItemIndicator className="shrink-0" />
                         </ListBox.Item>
                     ))}
                 </ListBox>

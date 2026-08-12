@@ -209,8 +209,20 @@ export function validateAllocations(
 
 export function resolveDefaultEmailTarget(
     integrations: IntegrationProviderView[] | undefined,
+    preferred?: EmailProviderTarget | null,
 ): EmailProviderTarget | null {
     if (!integrations?.length) return null;
+
+    const ready = listReadyEmailAccounts(integrations);
+
+    if (preferred) {
+        const match = ready.find(
+            (row) => row.provider === preferred.provider && row.account === preferred.account,
+        );
+        if (match) {
+            return { provider: match.provider, account: match.account };
+        }
+    }
 
     for (const provider of EMAIL_PROVIDERS) {
         const integration = integrations.find((row) => row.provider === provider);
@@ -222,8 +234,7 @@ export function resolveDefaultEmailTarget(
         return { provider, account };
     }
 
-    const sendable = listReadyEmailAccounts(integrations);
-    return sendable[0] ?? null;
+    return ready[0] ?? null;
 }
 
 export function allocationKey(row: EmailProviderTarget): string {

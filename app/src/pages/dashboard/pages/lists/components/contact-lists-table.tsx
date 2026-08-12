@@ -98,7 +98,9 @@ export function ContactListsTable({
                 id: "title",
                 header: "Title",
                 cell: (info) => (
-                    <span className="font-medium text-foreground">{info.getValue()}</span>
+                    <span title={info.getValue()} className="block w-full min-w-0 truncate font-medium text-foreground">
+                        {info.getValue()}
+                    </span>
                 ),
             }),
             columnHelper.accessor("description", {
@@ -107,7 +109,7 @@ export function ContactListsTable({
                 cell: (info) => {
                     const val = info.getValue();
                     return (
-                        <span className="text-sm text-muted line-clamp-1 max-w-xs">
+                        <span title={val ?? undefined} className="block w-full min-w-0 truncate text-sm text-muted">
                             {val ?? "—"}
                         </span>
                     );
@@ -161,12 +163,12 @@ export function ContactListsTable({
     });
 
     return (
-        <div className="bg-surface rounded-xl border border-border overflow-hidden">
+        <div className="bg-surface rounded-xl border border-border overflow-hidden min-w-0 w-full">
             <Table>
-                <Table.ScrollContainer>
+                <Table.ScrollContainer className="w-full max-w-full">
                     <Table.Content
                         aria-label="Contact lists"
-                        className="min-w-[700px]"
+                        className="w-full table-fixed"
                     >
                         <Table.Header>
                             {table.getHeaderGroups()[0]!.headers.map((header) => (
@@ -174,6 +176,15 @@ export function ContactListsTable({
                                     key={header.id}
                                     id={header.id}
                                     isRowHeader={header.id === "title"}
+                                    className={
+                                        header.id === "description"
+                                            ? "min-w-0 hidden sm:table-cell"
+                                            : header.id === "sublists" || header.id === "updated_at"
+                                              ? "hidden md:table-cell"
+                                              : header.id === "actions"
+                                                ? "w-24"
+                                                : "min-w-0"
+                                    }
                                 >
                                     {flexRender(header.column.columnDef.header, header.getContext())}
                                 </Table.Column>
@@ -211,11 +222,24 @@ export function ContactListsTable({
                                                   cell.getContext(),
                                               );
                                               const isInteractive = isTableNavInteractiveCell(cell.column.id);
+                                              const columnClass =
+                                                  cell.column.id === "description"
+                                                      ? "min-w-0 hidden sm:table-cell"
+                                                      : cell.column.id === "sublists" ||
+                                                          cell.column.id === "updated_at"
+                                                        ? "hidden md:table-cell"
+                                                        : cell.column.id === "actions"
+                                                          ? "w-24"
+                                                          : "min-w-0";
 
                                               return (
                                               <Table.Cell
                                                   key={cell.id}
-                                                  className={isInteractive ? tableNavInteractiveCellClassName : undefined}
+                                                  className={
+                                                      isInteractive
+                                                          ? `${columnClass} ${tableNavInteractiveCellClassName}`
+                                                          : columnClass
+                                                  }
                                               >
                                                   {renderTableNavCellContent(cell.column.id, rowHref, content, {
                                                       primaryColumnId: "title",
