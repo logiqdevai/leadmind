@@ -80,6 +80,7 @@ export const RichTextEditor = forwardRef<RichTextEditorHandle, RichTextEditorPro
     ) {
         const suppressUpdateRef = useRef(false);
         const acceptsEmptyUpdateRef = useRef(false);
+        const lastEmittedHtmlRef = useRef<string>("");
         const onChangeRef = useRef(onChange);
         const editorRef = useRef<Editor | null>(null);
         onChangeRef.current = onChange;
@@ -123,15 +124,10 @@ export const RichTextEditor = forwardRef<RichTextEditorHandle, RichTextEditorPro
             },
             onUpdate: ({ editor: activeEditor }) => {
                 if (suppressUpdateRef.current) return;
-                const raw = activeEditor.getHTML();
-                const html = sanitizeEmailHtml(raw);
-                if (html !== raw) {
-                    suppressUpdateRef.current = true;
-                    activeEditor.commands.setContent(html, { emitUpdate: false });
-                    suppressUpdateRef.current = false;
-                }
+                const html = sanitizeEmailHtml(activeEditor.getHTML());
                 if (!acceptsEmptyUpdateRef.current && isEmailHtmlEmpty(html)) return;
                 acceptsEmptyUpdateRef.current = true;
+                lastEmittedHtmlRef.current = html;
                 onChangeRef.current(html);
             },
         });
@@ -157,13 +153,19 @@ export const RichTextEditor = forwardRef<RichTextEditorHandle, RichTextEditorPro
         useEffect(() => {
             if (!editor) return;
             const next = sanitizeEmailHtml(value || "");
+            if (next === lastEmittedHtmlRef.current) return;
+
             const current = editor.getHTML();
-            if (next === current) return;
-            if (next === sanitizeEmailHtml(current) && current === next) return;
+            if (next === current || next === sanitizeEmailHtml(current)) {
+                lastEmittedHtmlRef.current = next;
+                return;
+            }
+
             suppressUpdateRef.current = true;
             editor.commands.setContent(next, { emitUpdate: false });
             suppressUpdateRef.current = false;
-            acceptsEmptyUpdateRef.current = isEmailHtmlEmpty(next);
+            lastEmittedHtmlRef.current = next;
+            acceptsEmptyUpdateRef.current = !isEmailHtmlEmpty(next);
         }, [value, editor]);
 
         useEffect(() => {
