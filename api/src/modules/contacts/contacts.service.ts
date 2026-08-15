@@ -9,6 +9,8 @@ import {
 import { Queue } from 'bullmq';
 import {
     ApifyUsageOperation,
+    BulkJobStatus,
+    BulkJobType,
     CampaignContactStatus,
     Channel,
     Contact,
@@ -22,6 +24,7 @@ import {
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { ElasticsearchService } from '@/integrations/elasticsearch/elasticsearch.service';
 import { AI_PROCESS_QUEUE } from '@/core/queues/queues.constants';
+import { BulkJobsService } from '@/modules/bulk-jobs/bulk-jobs.service';
 import { resolveContactEnrichmentSources } from '@/modules/leads/utils/enrichment-sources.utils';
 import { AddNoteDto } from './dto/add-note.dto';
 import { AiDraftMessageDto } from './dto/ai-draft-message.dto';
@@ -105,6 +108,7 @@ export class ContactsService {
         private readonly emailCredentialsService: EmailCredentialsService,
         private readonly senderProfilesService: SenderProfilesService,
         private readonly websiteCrawler: WebsiteContentCrawlerAdapter,
+        private readonly bulkJobsService: BulkJobsService,
         @InjectQueue(AI_PROCESS_QUEUE) private readonly aiProcessQueue: Queue,
     ) { }
 
@@ -1289,7 +1293,8 @@ export class ContactsService {
     async triggerBulkScrapeEmailsFromWebsites(
         organisation_uuid: string,
         dto: BulkScrapeContactEmailsDto,
-    ): Promise<{ queued: number; skipped: number }> {
+        created_by_user_uuid?: string,
+    ): Promise<{ queued: number; skipped: number; bulk_job_uuid: string | null }> {
         const hasUuids = Boolean(dto.contact_uuids?.length);
         const hasList = Boolean(dto.list_uuid);
         const hasFilters = dto.filters !== undefined && dto.filters !== null;
@@ -1359,7 +1364,7 @@ export class ContactsService {
         }
 
         if (candidateUuids.length === 0) {
-            return { queued: 0, skipped: 0 };
+            return { queued: 0, skipped: 0, bulk_job_uuid: null };
         }
 
         const resolved = await this.prisma.contact.findMany({
@@ -1373,20 +1378,83 @@ export class ContactsService {
                 (!row.email || row.email.trim() === ''),
         );
 
-        for (const row of eligible) {
-            void this.scrapeAndSaveContactEmail(organisation_uuid, row.uuid, row.website!.trim()).catch(
-                (error) => {
-                    this.logger.error(
-                        `Contact ${row.uuid} website email scrape failed: ${error instanceof Error ? error.message : error}`,
-                    );
-                },
-            );
+        const skipped = resolved.length - eligible.length;
+        if (eligible.length === 0) {
+            return { queued: 0, skipped, bulk_job_uuid: null };
         }
+
+        const title = `Find emails from websites (${eligible.length})`;
+
+        const bulkJob = await this.bulkJobsService.create({
+            organisation_uuid,
+            created_by_user_uuid,
+            title,
+            type: BulkJobType.CONTACT_EMAIL_SCRAPE,
+            status: BulkJobStatus.RUNNING,
+            progress_total: eligible.length,
+            progress_current: 0,
+            reference_type: hasList ? 'contact_list' : 'contacts',
+            reference_uuid: hasList ? dto.list_uuid! : undefined,
+            metadata: {
+                contact_count: eligible.length,
+                skipped,
+            },
+            started_at: new Date(),
+        });
+
+        void this.runBulkWebsiteEmailScrape(organisation_uuid, bulkJob.uuid, eligible).catch(
+            (error) => {
+                this.logger.error(
+                    `Bulk email scrape job ${bulkJob.uuid} failed: ${error instanceof Error ? error.message : error}`,
+                );
+            },
+        );
 
         return {
             queued: eligible.length,
-            skipped: resolved.length - eligible.length,
+            skipped,
+            bulk_job_uuid: bulkJob.uuid,
         };
+    }
+
+    private async runBulkWebsiteEmailScrape(
+        organisation_uuid: string,
+        bulk_job_uuid: string,
+        eligible: Array<{ uuid: string; website: string | null }>,
+    ): Promise<void> {
+        let failures = 0;
+
+        await Promise.all(
+            eligible.map(async (row) => {
+                try {
+                    await this.scrapeAndSaveContactEmail(
+                        organisation_uuid,
+                        row.uuid,
+                        row.website!.trim(),
+                    );
+                } catch (error) {
+                    failures += 1;
+                    this.logger.error(
+                        `Contact ${row.uuid} website email scrape failed: ${error instanceof Error ? error.message : error}`,
+                    );
+                } finally {
+                    await this.bulkJobsService.incrementProgress(bulk_job_uuid);
+                }
+            }),
+        );
+
+        if (failures === eligible.length) {
+            await this.bulkJobsService.fail(
+                bulk_job_uuid,
+                `All ${failures} contact email scrapes failed`,
+            );
+            return;
+        }
+
+        await this.bulkJobsService.complete(
+            bulk_job_uuid,
+            failures > 0 ? `${failures}/${eligible.length} contacts failed` : null,
+        );
     }
 
     private async scrapeAndSaveContactEmail(

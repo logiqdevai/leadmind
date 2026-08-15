@@ -412,6 +412,30 @@ exports.Prisma.FilterJobScalarFieldEnum = {
   updated_at: 'updated_at'
 };
 
+exports.Prisma.BulkJobScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  organisation_uuid: 'organisation_uuid',
+  created_by_user_uuid: 'created_by_user_uuid',
+  title: 'title',
+  type: 'type',
+  status: 'status',
+  error: 'error',
+  retries: 'retries',
+  max_retries: 'max_retries',
+  progress_current: 'progress_current',
+  progress_total: 'progress_total',
+  queue_name: 'queue_name',
+  queue_job_id: 'queue_job_id',
+  reference_type: 'reference_type',
+  reference_uuid: 'reference_uuid',
+  metadata: 'metadata',
+  started_at: 'started_at',
+  completed_at: 'completed_at',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
 exports.Prisma.SenderProfileScalarFieldEnum = {
   id: 'id',
   uuid: 'uuid',
@@ -905,6 +929,28 @@ exports.JobTrigger = exports.$Enums.JobTrigger = {
   SCHEDULED: 'SCHEDULED'
 };
 
+exports.BulkJobType = exports.$Enums.BulkJobType = {
+  CONTACT_EMAIL_SCRAPE: 'CONTACT_EMAIL_SCRAPE',
+  FILTER_SCRAPE: 'FILTER_SCRAPE',
+  CONTACT_SCORE: 'CONTACT_SCORE',
+  CONTACT_ENRICH: 'CONTACT_ENRICH',
+  LEAD_ENRICH: 'LEAD_ENRICH',
+  AI_DRAFT_MESSAGES: 'AI_DRAFT_MESSAGES',
+  CAMPAIGN_DISPATCH: 'CAMPAIGN_DISPATCH',
+  CAMPAIGN_MESSAGE_SEND: 'CAMPAIGN_MESSAGE_SEND',
+  OPENAI_BATCH: 'OPENAI_BATCH',
+  OTHER: 'OTHER'
+};
+
+exports.BulkJobStatus = exports.$Enums.BulkJobStatus = {
+  PENDING: 'PENDING',
+  QUEUED: 'QUEUED',
+  RUNNING: 'RUNNING',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED',
+  CANCELLED: 'CANCELLED'
+};
+
 exports.CampaignStatus = exports.$Enums.CampaignStatus = {
   DRAFT: 'DRAFT',
   DRAFTS_READY: 'DRAFTS_READY',
@@ -1071,6 +1117,7 @@ exports.Prisma.ModelName = {
   OutreachMessage: 'OutreachMessage',
   OutreachSequence: 'OutreachSequence',
   FilterJob: 'FilterJob',
+  BulkJob: 'BulkJob',
   SenderProfile: 'SenderProfile',
   MessageTemplate: 'MessageTemplate',
   MarketingCampaign: 'MarketingCampaign',

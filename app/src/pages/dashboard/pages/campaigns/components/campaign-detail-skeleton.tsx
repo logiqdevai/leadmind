@@ -47,7 +47,7 @@ export function CampaignDetailSkeleton() {
             {/* recipients section */}
             <div className="space-y-3">
                 <div className="h-4 w-24 rounded bg-surface-secondary" />
-                <div className="overflow-hidden rounded-xl border border-border">
+                <div className="overflow-hidden rounded-xl">
                     {/* table header */}
                     <div className="bg-surface-secondary/40 px-3 py-2 flex gap-4">
                         {[100, 60, 60, 80, 80, 60].map((w, i) => (

@@ -21,7 +21,7 @@ interface DraftedMessagesTableProps {
 
 function DraftedMessagesTableSkeleton() {
     return (
-        <div className="rounded-xl border border-border overflow-hidden animate-pulse">
+        <div className="rounded-xl overflow-hidden animate-pulse">
             <table className="w-full text-sm">
                 <thead>
                     <tr className="border-b border-border bg-surface-secondary/50">
@@ -180,7 +180,7 @@ export function DraftedMessagesTable({ campaignUuid }: DraftedMessagesTableProps
                 }}
             />
 
-            <div className="rounded-xl border border-border overflow-hidden">
+            <div className="rounded-xl overflow-hidden">
                 <table className="w-full text-sm">
                     <thead>
                         <tr className="border-b border-border bg-surface-secondary/50">

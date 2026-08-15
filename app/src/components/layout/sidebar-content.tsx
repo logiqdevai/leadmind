@@ -25,6 +25,7 @@ import {
   User,
   History,
   Trophy,
+  ListTodo,
 } from "lucide-react";
 import { Routes } from "@/routes/routes";
 import { usePermission } from "@/hooks/use-permission";
@@ -58,6 +59,7 @@ const navGroups: NavGroup[] = [
       { label: "Contacts", icon: Users, href: Routes.dashboard.contacts, end: false },
       { label: "Lists", icon: List, href: Routes.dashboard.lists, end: false },
       { label: "Reminders", icon: Bell, href: Routes.dashboard.reminders, end: false },
+      { label: "Jobs", icon: ListTodo, href: Routes.dashboard.jobs, end: false },
       { label: "Goals", icon: Trophy, href: Routes.dashboard.goals, end: false },
       { label: "Forms", icon: ClipboardList, href: Routes.dashboard.forms, end: false },
     ],

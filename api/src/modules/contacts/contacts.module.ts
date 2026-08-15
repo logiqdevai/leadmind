@@ -9,6 +9,7 @@ import { IntegrationsModule } from '@/modules/integrations/integrations.module';
 import { SenderProfilesModule } from '@/modules/sender-profiles/sender-profiles.module';
 import { EnrichmentModule } from '@/modules/enrichment/enrichment.module';
 import { AiUsageModule } from '@/modules/ai-usage/ai-usage.module';
+import { BulkJobsModule } from '@/modules/bulk-jobs/bulk-jobs.module';
 import { ContactsController } from './contacts.controller';
 import { ContactsService } from './contacts.service';
 import { ContactAiService } from './services/contact-ai.service';
@@ -24,6 +25,7 @@ import { ContactAiService } from './services/contact-ai.service';
         EnrichmentModule,
         BullModule.registerQueue({ name: AI_PROCESS_QUEUE }),
         AiUsageModule,
+        BulkJobsModule,
     ],
     controllers: [ContactsController],
     providers: [ContactsService, ContactAiService],

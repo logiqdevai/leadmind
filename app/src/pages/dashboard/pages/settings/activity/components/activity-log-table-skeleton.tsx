@@ -1,7 +1,7 @@
 export function ActivityLogTableSkeleton() {
     return (
         <div className="space-y-3 animate-pulse">
-            <div className="overflow-hidden rounded-xl border border-border">
+            <div className="overflow-hidden rounded-xl">
                 <div className="bg-surface-secondary/40 px-3 py-2 flex gap-4">
                     {[48, 72, 96, 64, 56].map((w, i) => (
                         <div

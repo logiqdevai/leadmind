@@ -12,6 +12,7 @@ import { SmtpModule } from '@/integrations/notifications/smtp/smtp.module';
 import { TwillioModule } from '@/integrations/notifications/twillio/twillio.module';
 import { GatewaysModule } from '@/gateways/gateways.module';
 import { MessagingGoalsModule } from '@/modules/messaging-goals/messaging-goals.module';
+import { BulkJobsModule } from '@/modules/bulk-jobs/bulk-jobs.module';
 import {
     AI_PROCESS_QUEUE,
     FILTER_SCRAPE_QUEUE,
@@ -41,6 +42,7 @@ import { ReminderTriggerWorker } from './reminder-trigger.worker';
         TwillioModule,
         GatewaysModule,
         MessagingGoalsModule,
+        BulkJobsModule,
         BullModule.registerQueue(
             { name: FILTER_SCRAPE_QUEUE },
             { name: AI_PROCESS_QUEUE },

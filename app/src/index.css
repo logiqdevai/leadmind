@@ -73,9 +73,14 @@ body {
   --field-background:  oklch(0.255 0.005 192);
   --field-border:      oklch(0.400 0.008 192);
   --field-placeholder: oklch(0.52 0.008 192);
+  --field-border-width: 0px;
 
   --focus: var(--accent);
   --link:  oklch(0.82 0.09 192);
+
+  --surface-shadow: inset 0 0 0 1px oklch(1 0 0 / 0.1);
+  --overlay-shadow: inset 0 0 0 1px oklch(1 0 0 / 0.12);
+  --field-shadow: inset 0 0 0 1px oklch(1 0 0 / 0.1);
 }
 
 [data-theme="light"] {
@@ -107,4 +112,183 @@ body {
 
 [data-theme="light"] .checkbox__control {
   border-color: var(--field-border);
+}
+
+:where(
+  .rounded-sm,
+  .rounded,
+  .rounded-md,
+  .rounded-lg,
+  .rounded-xl,
+  .rounded-2xl,
+  .rounded-3xl,
+  .rounded-4xl,
+  .rounded-field
+):where(.border):not(
+  :where(
+    .border-0,
+    .border-2,
+    .border-4,
+    .border-8,
+    .border-t,
+    .border-b,
+    .border-l,
+    .border-r,
+    .border-x,
+    .border-y,
+    .border-dashed,
+    .border-dotted,
+    .border-double,
+    .border-none
+  )
+) {
+  border-color: transparent;
+  outline: 1px solid var(--color-border);
+  outline-offset: -1px;
+}
+
+:where(
+  .rounded-sm,
+  .rounded,
+  .rounded-md,
+  .rounded-lg,
+  .rounded-xl,
+  .rounded-2xl,
+  .rounded-3xl,
+  .rounded-4xl,
+  .rounded-field
+):where(.border):is(
+  :where(.hover\:border-accent\/30):hover
+) {
+  outline-color: color-mix(in oklab, var(--color-accent) 30%, transparent);
+}
+
+:where(
+  .rounded-sm,
+  .rounded,
+  .rounded-md,
+  .rounded-lg,
+  .rounded-xl,
+  .rounded-2xl,
+  .rounded-3xl,
+  .rounded-4xl,
+  .rounded-field
+):where(.border):is(
+  :where(.hover\:border-accent\/40):hover
+) {
+  outline-color: color-mix(in oklab, var(--color-accent) 40%, transparent);
+}
+
+:where(
+  .rounded-sm,
+  .rounded,
+  .rounded-md,
+  .rounded-lg,
+  .rounded-xl,
+  .rounded-2xl,
+  .rounded-3xl,
+  .rounded-4xl,
+  .rounded-field
+):where(.border):is(
+  :where(.hover\:border-accent\/50):hover
+) {
+  outline-color: color-mix(in oklab, var(--color-accent) 50%, transparent);
+}
+
+:where(
+  .rounded-sm,
+  .rounded,
+  .rounded-md,
+  .rounded-lg,
+  .rounded-xl,
+  .rounded-2xl,
+  .rounded-3xl,
+  .rounded-4xl,
+  .rounded-field
+):where(.border):where(.border-border\/80) {
+  outline-color: color-mix(in oklab, var(--color-border) 80%, transparent);
+}
+
+:where(
+  .rounded-sm,
+  .rounded,
+  .rounded-md,
+  .rounded-lg,
+  .rounded-xl,
+  .rounded-2xl,
+  .rounded-3xl,
+  .rounded-4xl,
+  .rounded-field
+):where(.border):where(.border-border\/70) {
+  outline-color: color-mix(in oklab, var(--color-border) 70%, transparent);
+}
+
+:where(
+  .rounded-sm,
+  .rounded,
+  .rounded-md,
+  .rounded-lg,
+  .rounded-xl,
+  .rounded-2xl,
+  .rounded-3xl,
+  .rounded-4xl,
+  .rounded-field
+):where(.border):where(.border-border\/60) {
+  outline-color: color-mix(in oklab, var(--color-border) 60%, transparent);
+}
+
+:where(
+  .rounded-sm,
+  .rounded,
+  .rounded-md,
+  .rounded-lg,
+  .rounded-xl,
+  .rounded-2xl,
+  .rounded-3xl,
+  .rounded-4xl,
+  .rounded-field
+):where(.border):where(.border-border\/50) {
+  outline-color: color-mix(in oklab, var(--color-border) 50%, transparent);
+}
+
+:where(
+  .rounded-sm,
+  .rounded,
+  .rounded-md,
+  .rounded-lg,
+  .rounded-xl,
+  .rounded-2xl,
+  .rounded-3xl,
+  .rounded-4xl,
+  .rounded-field
+):where(.border):where(.border-accent\/20) {
+  outline-color: color-mix(in oklab, var(--color-accent) 20%, transparent);
+}
+
+:where(
+  .rounded-sm,
+  .rounded,
+  .rounded-md,
+  .rounded-lg,
+  .rounded-xl,
+  .rounded-2xl,
+  .rounded-3xl,
+  .rounded-4xl,
+  .rounded-field
+):where(.border):where(.border-accent\/40) {
+  outline-color: color-mix(in oklab, var(--color-accent) 40%, transparent);
+}
+
+:where(
+  .rounded-sm,
+  .rounded,
+  .rounded-md,
+  .rounded-lg,
+  .rounded-xl,
+  .rounded-2xl,
+  .rounded-3xl,
+  .rounded-4xl,
+  .rounded-field
+):where(.border):where(.border-danger\/30) {
+  outline-color: color-mix(in oklab, var(--color-danger) 30%, transparent);
 }

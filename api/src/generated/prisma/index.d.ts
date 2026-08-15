@@ -124,6 +124,11 @@ export type OutreachSequence = $Result.DefaultSelection<Prisma.$OutreachSequence
  */
 export type FilterJob = $Result.DefaultSelection<Prisma.$FilterJobPayload>
 /**
+ * Model BulkJob
+ * 
+ */
+export type BulkJob = $Result.DefaultSelection<Prisma.$BulkJobPayload>
+/**
  * Model SenderProfile
  * 
  */
@@ -342,6 +347,34 @@ export const JobStatus: {
 };
 
 export type JobStatus = (typeof JobStatus)[keyof typeof JobStatus]
+
+
+export const BulkJobStatus: {
+  PENDING: 'PENDING',
+  QUEUED: 'QUEUED',
+  RUNNING: 'RUNNING',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED',
+  CANCELLED: 'CANCELLED'
+};
+
+export type BulkJobStatus = (typeof BulkJobStatus)[keyof typeof BulkJobStatus]
+
+
+export const BulkJobType: {
+  CONTACT_EMAIL_SCRAPE: 'CONTACT_EMAIL_SCRAPE',
+  FILTER_SCRAPE: 'FILTER_SCRAPE',
+  CONTACT_SCORE: 'CONTACT_SCORE',
+  CONTACT_ENRICH: 'CONTACT_ENRICH',
+  LEAD_ENRICH: 'LEAD_ENRICH',
+  AI_DRAFT_MESSAGES: 'AI_DRAFT_MESSAGES',
+  CAMPAIGN_DISPATCH: 'CAMPAIGN_DISPATCH',
+  CAMPAIGN_MESSAGE_SEND: 'CAMPAIGN_MESSAGE_SEND',
+  OPENAI_BATCH: 'OPENAI_BATCH',
+  OTHER: 'OTHER'
+};
+
+export type BulkJobType = (typeof BulkJobType)[keyof typeof BulkJobType]
 
 
 export const JobTrigger: {
@@ -649,6 +682,14 @@ export const LeadStatus: typeof $Enums.LeadStatus
 export type JobStatus = $Enums.JobStatus
 
 export const JobStatus: typeof $Enums.JobStatus
+
+export type BulkJobStatus = $Enums.BulkJobStatus
+
+export const BulkJobStatus: typeof $Enums.BulkJobStatus
+
+export type BulkJobType = $Enums.BulkJobType
+
+export const BulkJobType: typeof $Enums.BulkJobType
 
 export type JobTrigger = $Enums.JobTrigger
 
@@ -1074,6 +1115,16 @@ export class PrismaClient<
     * ```
     */
   get filterJob(): Prisma.FilterJobDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.bulkJob`: Exposes CRUD operations for the **BulkJob** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more BulkJobs
+    * const bulkJobs = await prisma.bulkJob.findMany()
+    * ```
+    */
+  get bulkJob(): Prisma.BulkJobDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.senderProfile`: Exposes CRUD operations for the **SenderProfile** model.
@@ -1730,6 +1781,7 @@ export namespace Prisma {
     OutreachMessage: 'OutreachMessage',
     OutreachSequence: 'OutreachSequence',
     FilterJob: 'FilterJob',
+    BulkJob: 'BulkJob',
     SenderProfile: 'SenderProfile',
     MessageTemplate: 'MessageTemplate',
     MarketingCampaign: 'MarketingCampaign',
@@ -1765,7 +1817,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "organisation" | "organisationMember" | "organisationInvitation" | "filter" | "scoringInstruction" | "filterScoringInstruction" | "rawLead" | "lead" | "leadEnrichment" | "contact" | "contactInfo" | "contactFilter" | "contactEnrichment" | "contactScore" | "contactList" | "contactListMember" | "contactTag" | "interaction" | "outreachMessage" | "outreachSequence" | "filterJob" | "senderProfile" | "messageTemplate" | "marketingCampaign" | "marketingCampaignContact" | "openAiBatchJob" | "integration" | "integrationAccount" | "integrationKey" | "reminder" | "form" | "formField" | "formCompletion" | "formCompletionValue" | "contactAudienceAnalysis" | "aiUsageLog" | "apifyUsageLog" | "messagingGoal" | "goalAchievement" | "goalPersonalBest" | "activityLog"
+      modelProps: "user" | "organisation" | "organisationMember" | "organisationInvitation" | "filter" | "scoringInstruction" | "filterScoringInstruction" | "rawLead" | "lead" | "leadEnrichment" | "contact" | "contactInfo" | "contactFilter" | "contactEnrichment" | "contactScore" | "contactList" | "contactListMember" | "contactTag" | "interaction" | "outreachMessage" | "outreachSequence" | "filterJob" | "bulkJob" | "senderProfile" | "messageTemplate" | "marketingCampaign" | "marketingCampaignContact" | "openAiBatchJob" | "integration" | "integrationAccount" | "integrationKey" | "reminder" | "form" | "formField" | "formCompletion" | "formCompletionValue" | "contactAudienceAnalysis" | "aiUsageLog" | "apifyUsageLog" | "messagingGoal" | "goalAchievement" | "goalPersonalBest" | "activityLog"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -3397,6 +3449,80 @@ export namespace Prisma {
           }
         }
       }
+      BulkJob: {
+        payload: Prisma.$BulkJobPayload<ExtArgs>
+        fields: Prisma.BulkJobFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.BulkJobFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BulkJobPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.BulkJobFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BulkJobPayload>
+          }
+          findFirst: {
+            args: Prisma.BulkJobFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BulkJobPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.BulkJobFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BulkJobPayload>
+          }
+          findMany: {
+            args: Prisma.BulkJobFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BulkJobPayload>[]
+          }
+          create: {
+            args: Prisma.BulkJobCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BulkJobPayload>
+          }
+          createMany: {
+            args: Prisma.BulkJobCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.BulkJobCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BulkJobPayload>[]
+          }
+          delete: {
+            args: Prisma.BulkJobDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BulkJobPayload>
+          }
+          update: {
+            args: Prisma.BulkJobUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BulkJobPayload>
+          }
+          deleteMany: {
+            args: Prisma.BulkJobDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.BulkJobUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.BulkJobUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BulkJobPayload>[]
+          }
+          upsert: {
+            args: Prisma.BulkJobUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BulkJobPayload>
+          }
+          aggregate: {
+            args: Prisma.BulkJobAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateBulkJob>
+          }
+          groupBy: {
+            args: Prisma.BulkJobGroupByArgs<ExtArgs>
+            result: $Utils.Optional<BulkJobGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.BulkJobCountArgs<ExtArgs>
+            result: $Utils.Optional<BulkJobCountAggregateOutputType> | number
+          }
+        }
+      }
       SenderProfile: {
         payload: Prisma.$SenderProfilePayload<ExtArgs>
         fields: Prisma.SenderProfileFieldRefs
@@ -5007,6 +5133,7 @@ export namespace Prisma {
     outreachMessage?: OutreachMessageOmit
     outreachSequence?: OutreachSequenceOmit
     filterJob?: FilterJobOmit
+    bulkJob?: BulkJobOmit
     senderProfile?: SenderProfileOmit
     messageTemplate?: MessageTemplateOmit
     marketingCampaign?: MarketingCampaignOmit
@@ -5115,6 +5242,7 @@ export namespace Prisma {
     messaging_goals: number
     goal_achievements: number
     goal_personal_bests: number
+    bulk_jobs_created: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5126,6 +5254,7 @@ export namespace Prisma {
     messaging_goals?: boolean | UserCountOutputTypeCountMessaging_goalsArgs
     goal_achievements?: boolean | UserCountOutputTypeCountGoal_achievementsArgs
     goal_personal_bests?: boolean | UserCountOutputTypeCountGoal_personal_bestsArgs
+    bulk_jobs_created?: boolean | UserCountOutputTypeCountBulk_jobs_createdArgs
   }
 
   // Custom InputTypes
@@ -5195,6 +5324,13 @@ export namespace Prisma {
     where?: GoalPersonalBestWhereInput
   }
 
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountBulk_jobs_createdArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BulkJobWhereInput
+  }
+
 
   /**
    * Count Type OrganisationCountOutputType
@@ -5224,6 +5360,7 @@ export namespace Prisma {
     messaging_goals: number
     goal_achievements: number
     goal_personal_bests: number
+    bulk_jobs: number
   }
 
   export type OrganisationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5250,6 +5387,7 @@ export namespace Prisma {
     messaging_goals?: boolean | OrganisationCountOutputTypeCountMessaging_goalsArgs
     goal_achievements?: boolean | OrganisationCountOutputTypeCountGoal_achievementsArgs
     goal_personal_bests?: boolean | OrganisationCountOutputTypeCountGoal_personal_bestsArgs
+    bulk_jobs?: boolean | OrganisationCountOutputTypeCountBulk_jobsArgs
   }
 
   // Custom InputTypes
@@ -5422,6 +5560,13 @@ export namespace Prisma {
    */
   export type OrganisationCountOutputTypeCountGoal_personal_bestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: GoalPersonalBestWhereInput
+  }
+
+  /**
+   * OrganisationCountOutputType without action
+   */
+  export type OrganisationCountOutputTypeCountBulk_jobsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BulkJobWhereInput
   }
 
 
@@ -6246,6 +6391,7 @@ export namespace Prisma {
     messaging_goals?: boolean | User$messaging_goalsArgs<ExtArgs>
     goal_achievements?: boolean | User$goal_achievementsArgs<ExtArgs>
     goal_personal_bests?: boolean | User$goal_personal_bestsArgs<ExtArgs>
+    bulk_jobs_created?: boolean | User$bulk_jobs_createdArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -6295,6 +6441,7 @@ export namespace Prisma {
     messaging_goals?: boolean | User$messaging_goalsArgs<ExtArgs>
     goal_achievements?: boolean | User$goal_achievementsArgs<ExtArgs>
     goal_personal_bests?: boolean | User$goal_personal_bestsArgs<ExtArgs>
+    bulk_jobs_created?: boolean | User$bulk_jobs_createdArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -6311,6 +6458,7 @@ export namespace Prisma {
       messaging_goals: Prisma.$MessagingGoalPayload<ExtArgs>[]
       goal_achievements: Prisma.$GoalAchievementPayload<ExtArgs>[]
       goal_personal_bests: Prisma.$GoalPersonalBestPayload<ExtArgs>[]
+      bulk_jobs_created: Prisma.$BulkJobPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -6724,6 +6872,7 @@ export namespace Prisma {
     messaging_goals<T extends User$messaging_goalsArgs<ExtArgs> = {}>(args?: Subset<T, User$messaging_goalsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessagingGoalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     goal_achievements<T extends User$goal_achievementsArgs<ExtArgs> = {}>(args?: Subset<T, User$goal_achievementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GoalAchievementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     goal_personal_bests<T extends User$goal_personal_bestsArgs<ExtArgs> = {}>(args?: Subset<T, User$goal_personal_bestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GoalPersonalBestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    bulk_jobs_created<T extends User$bulk_jobs_createdArgs<ExtArgs> = {}>(args?: Subset<T, User$bulk_jobs_createdArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BulkJobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7342,6 +7491,30 @@ export namespace Prisma {
   }
 
   /**
+   * User.bulk_jobs_created
+   */
+  export type User$bulk_jobs_createdArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BulkJob
+     */
+    select?: BulkJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BulkJob
+     */
+    omit?: BulkJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BulkJobInclude<ExtArgs> | null
+    where?: BulkJobWhereInput
+    orderBy?: BulkJobOrderByWithRelationInput | BulkJobOrderByWithRelationInput[]
+    cursor?: BulkJobWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BulkJobScalarFieldEnum | BulkJobScalarFieldEnum[]
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7605,6 +7778,7 @@ export namespace Prisma {
     messaging_goals?: boolean | Organisation$messaging_goalsArgs<ExtArgs>
     goal_achievements?: boolean | Organisation$goal_achievementsArgs<ExtArgs>
     goal_personal_bests?: boolean | Organisation$goal_personal_bestsArgs<ExtArgs>
+    bulk_jobs?: boolean | Organisation$bulk_jobsArgs<ExtArgs>
     _count?: boolean | OrganisationCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["organisation"]>
 
@@ -7666,6 +7840,7 @@ export namespace Prisma {
     messaging_goals?: boolean | Organisation$messaging_goalsArgs<ExtArgs>
     goal_achievements?: boolean | Organisation$goal_achievementsArgs<ExtArgs>
     goal_personal_bests?: boolean | Organisation$goal_personal_bestsArgs<ExtArgs>
+    bulk_jobs?: boolean | Organisation$bulk_jobsArgs<ExtArgs>
     _count?: boolean | OrganisationCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type OrganisationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -7697,6 +7872,7 @@ export namespace Prisma {
       messaging_goals: Prisma.$MessagingGoalPayload<ExtArgs>[]
       goal_achievements: Prisma.$GoalAchievementPayload<ExtArgs>[]
       goal_personal_bests: Prisma.$GoalPersonalBestPayload<ExtArgs>[]
+      bulk_jobs: Prisma.$BulkJobPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -8124,6 +8300,7 @@ export namespace Prisma {
     messaging_goals<T extends Organisation$messaging_goalsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$messaging_goalsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessagingGoalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     goal_achievements<T extends Organisation$goal_achievementsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$goal_achievementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GoalAchievementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     goal_personal_bests<T extends Organisation$goal_personal_bestsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$goal_personal_bestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GoalPersonalBestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    bulk_jobs<T extends Organisation$bulk_jobsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$bulk_jobsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BulkJobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9098,6 +9275,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: GoalPersonalBestScalarFieldEnum | GoalPersonalBestScalarFieldEnum[]
+  }
+
+  /**
+   * Organisation.bulk_jobs
+   */
+  export type Organisation$bulk_jobsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BulkJob
+     */
+    select?: BulkJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BulkJob
+     */
+    omit?: BulkJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BulkJobInclude<ExtArgs> | null
+    where?: BulkJobWhereInput
+    orderBy?: BulkJobOrderByWithRelationInput | BulkJobOrderByWithRelationInput[]
+    cursor?: BulkJobWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BulkJobScalarFieldEnum | BulkJobScalarFieldEnum[]
   }
 
   /**
@@ -33262,6 +33463,1345 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: FilterJobInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model BulkJob
+   */
+
+  export type AggregateBulkJob = {
+    _count: BulkJobCountAggregateOutputType | null
+    _avg: BulkJobAvgAggregateOutputType | null
+    _sum: BulkJobSumAggregateOutputType | null
+    _min: BulkJobMinAggregateOutputType | null
+    _max: BulkJobMaxAggregateOutputType | null
+  }
+
+  export type BulkJobAvgAggregateOutputType = {
+    id: number | null
+    retries: number | null
+    max_retries: number | null
+    progress_current: number | null
+    progress_total: number | null
+  }
+
+  export type BulkJobSumAggregateOutputType = {
+    id: number | null
+    retries: number | null
+    max_retries: number | null
+    progress_current: number | null
+    progress_total: number | null
+  }
+
+  export type BulkJobMinAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    organisation_uuid: string | null
+    created_by_user_uuid: string | null
+    title: string | null
+    type: $Enums.BulkJobType | null
+    status: $Enums.BulkJobStatus | null
+    error: string | null
+    retries: number | null
+    max_retries: number | null
+    progress_current: number | null
+    progress_total: number | null
+    queue_name: string | null
+    queue_job_id: string | null
+    reference_type: string | null
+    reference_uuid: string | null
+    started_at: Date | null
+    completed_at: Date | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type BulkJobMaxAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    organisation_uuid: string | null
+    created_by_user_uuid: string | null
+    title: string | null
+    type: $Enums.BulkJobType | null
+    status: $Enums.BulkJobStatus | null
+    error: string | null
+    retries: number | null
+    max_retries: number | null
+    progress_current: number | null
+    progress_total: number | null
+    queue_name: string | null
+    queue_job_id: string | null
+    reference_type: string | null
+    reference_uuid: string | null
+    started_at: Date | null
+    completed_at: Date | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type BulkJobCountAggregateOutputType = {
+    id: number
+    uuid: number
+    organisation_uuid: number
+    created_by_user_uuid: number
+    title: number
+    type: number
+    status: number
+    error: number
+    retries: number
+    max_retries: number
+    progress_current: number
+    progress_total: number
+    queue_name: number
+    queue_job_id: number
+    reference_type: number
+    reference_uuid: number
+    metadata: number
+    started_at: number
+    completed_at: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type BulkJobAvgAggregateInputType = {
+    id?: true
+    retries?: true
+    max_retries?: true
+    progress_current?: true
+    progress_total?: true
+  }
+
+  export type BulkJobSumAggregateInputType = {
+    id?: true
+    retries?: true
+    max_retries?: true
+    progress_current?: true
+    progress_total?: true
+  }
+
+  export type BulkJobMinAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    created_by_user_uuid?: true
+    title?: true
+    type?: true
+    status?: true
+    error?: true
+    retries?: true
+    max_retries?: true
+    progress_current?: true
+    progress_total?: true
+    queue_name?: true
+    queue_job_id?: true
+    reference_type?: true
+    reference_uuid?: true
+    started_at?: true
+    completed_at?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type BulkJobMaxAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    created_by_user_uuid?: true
+    title?: true
+    type?: true
+    status?: true
+    error?: true
+    retries?: true
+    max_retries?: true
+    progress_current?: true
+    progress_total?: true
+    queue_name?: true
+    queue_job_id?: true
+    reference_type?: true
+    reference_uuid?: true
+    started_at?: true
+    completed_at?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type BulkJobCountAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    created_by_user_uuid?: true
+    title?: true
+    type?: true
+    status?: true
+    error?: true
+    retries?: true
+    max_retries?: true
+    progress_current?: true
+    progress_total?: true
+    queue_name?: true
+    queue_job_id?: true
+    reference_type?: true
+    reference_uuid?: true
+    metadata?: true
+    started_at?: true
+    completed_at?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type BulkJobAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BulkJob to aggregate.
+     */
+    where?: BulkJobWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BulkJobs to fetch.
+     */
+    orderBy?: BulkJobOrderByWithRelationInput | BulkJobOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: BulkJobWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BulkJobs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BulkJobs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned BulkJobs
+    **/
+    _count?: true | BulkJobCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: BulkJobAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: BulkJobSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: BulkJobMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: BulkJobMaxAggregateInputType
+  }
+
+  export type GetBulkJobAggregateType<T extends BulkJobAggregateArgs> = {
+        [P in keyof T & keyof AggregateBulkJob]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateBulkJob[P]>
+      : GetScalarType<T[P], AggregateBulkJob[P]>
+  }
+
+
+
+
+  export type BulkJobGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BulkJobWhereInput
+    orderBy?: BulkJobOrderByWithAggregationInput | BulkJobOrderByWithAggregationInput[]
+    by: BulkJobScalarFieldEnum[] | BulkJobScalarFieldEnum
+    having?: BulkJobScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: BulkJobCountAggregateInputType | true
+    _avg?: BulkJobAvgAggregateInputType
+    _sum?: BulkJobSumAggregateInputType
+    _min?: BulkJobMinAggregateInputType
+    _max?: BulkJobMaxAggregateInputType
+  }
+
+  export type BulkJobGroupByOutputType = {
+    id: number
+    uuid: string
+    organisation_uuid: string
+    created_by_user_uuid: string | null
+    title: string
+    type: $Enums.BulkJobType
+    status: $Enums.BulkJobStatus
+    error: string | null
+    retries: number
+    max_retries: number
+    progress_current: number
+    progress_total: number
+    queue_name: string | null
+    queue_job_id: string | null
+    reference_type: string | null
+    reference_uuid: string | null
+    metadata: JsonValue | null
+    started_at: Date | null
+    completed_at: Date | null
+    created_at: Date
+    updated_at: Date
+    _count: BulkJobCountAggregateOutputType | null
+    _avg: BulkJobAvgAggregateOutputType | null
+    _sum: BulkJobSumAggregateOutputType | null
+    _min: BulkJobMinAggregateOutputType | null
+    _max: BulkJobMaxAggregateOutputType | null
+  }
+
+  type GetBulkJobGroupByPayload<T extends BulkJobGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<BulkJobGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof BulkJobGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], BulkJobGroupByOutputType[P]>
+            : GetScalarType<T[P], BulkJobGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type BulkJobSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    created_by_user_uuid?: boolean
+    title?: boolean
+    type?: boolean
+    status?: boolean
+    error?: boolean
+    retries?: boolean
+    max_retries?: boolean
+    progress_current?: boolean
+    progress_total?: boolean
+    queue_name?: boolean
+    queue_job_id?: boolean
+    reference_type?: boolean
+    reference_uuid?: boolean
+    metadata?: boolean
+    started_at?: boolean
+    completed_at?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    created_by?: boolean | BulkJob$created_byArgs<ExtArgs>
+  }, ExtArgs["result"]["bulkJob"]>
+
+  export type BulkJobSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    created_by_user_uuid?: boolean
+    title?: boolean
+    type?: boolean
+    status?: boolean
+    error?: boolean
+    retries?: boolean
+    max_retries?: boolean
+    progress_current?: boolean
+    progress_total?: boolean
+    queue_name?: boolean
+    queue_job_id?: boolean
+    reference_type?: boolean
+    reference_uuid?: boolean
+    metadata?: boolean
+    started_at?: boolean
+    completed_at?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    created_by?: boolean | BulkJob$created_byArgs<ExtArgs>
+  }, ExtArgs["result"]["bulkJob"]>
+
+  export type BulkJobSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    created_by_user_uuid?: boolean
+    title?: boolean
+    type?: boolean
+    status?: boolean
+    error?: boolean
+    retries?: boolean
+    max_retries?: boolean
+    progress_current?: boolean
+    progress_total?: boolean
+    queue_name?: boolean
+    queue_job_id?: boolean
+    reference_type?: boolean
+    reference_uuid?: boolean
+    metadata?: boolean
+    started_at?: boolean
+    completed_at?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    created_by?: boolean | BulkJob$created_byArgs<ExtArgs>
+  }, ExtArgs["result"]["bulkJob"]>
+
+  export type BulkJobSelectScalar = {
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    created_by_user_uuid?: boolean
+    title?: boolean
+    type?: boolean
+    status?: boolean
+    error?: boolean
+    retries?: boolean
+    max_retries?: boolean
+    progress_current?: boolean
+    progress_total?: boolean
+    queue_name?: boolean
+    queue_job_id?: boolean
+    reference_type?: boolean
+    reference_uuid?: boolean
+    metadata?: boolean
+    started_at?: boolean
+    completed_at?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type BulkJobOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "created_by_user_uuid" | "title" | "type" | "status" | "error" | "retries" | "max_retries" | "progress_current" | "progress_total" | "queue_name" | "queue_job_id" | "reference_type" | "reference_uuid" | "metadata" | "started_at" | "completed_at" | "created_at" | "updated_at", ExtArgs["result"]["bulkJob"]>
+  export type BulkJobInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    created_by?: boolean | BulkJob$created_byArgs<ExtArgs>
+  }
+  export type BulkJobIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    created_by?: boolean | BulkJob$created_byArgs<ExtArgs>
+  }
+  export type BulkJobIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    created_by?: boolean | BulkJob$created_byArgs<ExtArgs>
+  }
+
+  export type $BulkJobPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "BulkJob"
+    objects: {
+      organisation: Prisma.$OrganisationPayload<ExtArgs>
+      created_by: Prisma.$UserPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      uuid: string
+      organisation_uuid: string
+      created_by_user_uuid: string | null
+      title: string
+      type: $Enums.BulkJobType
+      status: $Enums.BulkJobStatus
+      error: string | null
+      retries: number
+      max_retries: number
+      progress_current: number
+      progress_total: number
+      queue_name: string | null
+      queue_job_id: string | null
+      reference_type: string | null
+      reference_uuid: string | null
+      metadata: Prisma.JsonValue | null
+      started_at: Date | null
+      completed_at: Date | null
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["bulkJob"]>
+    composites: {}
+  }
+
+  type BulkJobGetPayload<S extends boolean | null | undefined | BulkJobDefaultArgs> = $Result.GetResult<Prisma.$BulkJobPayload, S>
+
+  type BulkJobCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<BulkJobFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: BulkJobCountAggregateInputType | true
+    }
+
+  export interface BulkJobDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['BulkJob'], meta: { name: 'BulkJob' } }
+    /**
+     * Find zero or one BulkJob that matches the filter.
+     * @param {BulkJobFindUniqueArgs} args - Arguments to find a BulkJob
+     * @example
+     * // Get one BulkJob
+     * const bulkJob = await prisma.bulkJob.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends BulkJobFindUniqueArgs>(args: SelectSubset<T, BulkJobFindUniqueArgs<ExtArgs>>): Prisma__BulkJobClient<$Result.GetResult<Prisma.$BulkJobPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one BulkJob that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {BulkJobFindUniqueOrThrowArgs} args - Arguments to find a BulkJob
+     * @example
+     * // Get one BulkJob
+     * const bulkJob = await prisma.bulkJob.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends BulkJobFindUniqueOrThrowArgs>(args: SelectSubset<T, BulkJobFindUniqueOrThrowArgs<ExtArgs>>): Prisma__BulkJobClient<$Result.GetResult<Prisma.$BulkJobPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first BulkJob that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BulkJobFindFirstArgs} args - Arguments to find a BulkJob
+     * @example
+     * // Get one BulkJob
+     * const bulkJob = await prisma.bulkJob.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends BulkJobFindFirstArgs>(args?: SelectSubset<T, BulkJobFindFirstArgs<ExtArgs>>): Prisma__BulkJobClient<$Result.GetResult<Prisma.$BulkJobPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first BulkJob that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BulkJobFindFirstOrThrowArgs} args - Arguments to find a BulkJob
+     * @example
+     * // Get one BulkJob
+     * const bulkJob = await prisma.bulkJob.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends BulkJobFindFirstOrThrowArgs>(args?: SelectSubset<T, BulkJobFindFirstOrThrowArgs<ExtArgs>>): Prisma__BulkJobClient<$Result.GetResult<Prisma.$BulkJobPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more BulkJobs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BulkJobFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all BulkJobs
+     * const bulkJobs = await prisma.bulkJob.findMany()
+     * 
+     * // Get first 10 BulkJobs
+     * const bulkJobs = await prisma.bulkJob.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const bulkJobWithIdOnly = await prisma.bulkJob.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends BulkJobFindManyArgs>(args?: SelectSubset<T, BulkJobFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BulkJobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a BulkJob.
+     * @param {BulkJobCreateArgs} args - Arguments to create a BulkJob.
+     * @example
+     * // Create one BulkJob
+     * const BulkJob = await prisma.bulkJob.create({
+     *   data: {
+     *     // ... data to create a BulkJob
+     *   }
+     * })
+     * 
+     */
+    create<T extends BulkJobCreateArgs>(args: SelectSubset<T, BulkJobCreateArgs<ExtArgs>>): Prisma__BulkJobClient<$Result.GetResult<Prisma.$BulkJobPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many BulkJobs.
+     * @param {BulkJobCreateManyArgs} args - Arguments to create many BulkJobs.
+     * @example
+     * // Create many BulkJobs
+     * const bulkJob = await prisma.bulkJob.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends BulkJobCreateManyArgs>(args?: SelectSubset<T, BulkJobCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many BulkJobs and returns the data saved in the database.
+     * @param {BulkJobCreateManyAndReturnArgs} args - Arguments to create many BulkJobs.
+     * @example
+     * // Create many BulkJobs
+     * const bulkJob = await prisma.bulkJob.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many BulkJobs and only return the `id`
+     * const bulkJobWithIdOnly = await prisma.bulkJob.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends BulkJobCreateManyAndReturnArgs>(args?: SelectSubset<T, BulkJobCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BulkJobPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a BulkJob.
+     * @param {BulkJobDeleteArgs} args - Arguments to delete one BulkJob.
+     * @example
+     * // Delete one BulkJob
+     * const BulkJob = await prisma.bulkJob.delete({
+     *   where: {
+     *     // ... filter to delete one BulkJob
+     *   }
+     * })
+     * 
+     */
+    delete<T extends BulkJobDeleteArgs>(args: SelectSubset<T, BulkJobDeleteArgs<ExtArgs>>): Prisma__BulkJobClient<$Result.GetResult<Prisma.$BulkJobPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one BulkJob.
+     * @param {BulkJobUpdateArgs} args - Arguments to update one BulkJob.
+     * @example
+     * // Update one BulkJob
+     * const bulkJob = await prisma.bulkJob.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends BulkJobUpdateArgs>(args: SelectSubset<T, BulkJobUpdateArgs<ExtArgs>>): Prisma__BulkJobClient<$Result.GetResult<Prisma.$BulkJobPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more BulkJobs.
+     * @param {BulkJobDeleteManyArgs} args - Arguments to filter BulkJobs to delete.
+     * @example
+     * // Delete a few BulkJobs
+     * const { count } = await prisma.bulkJob.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends BulkJobDeleteManyArgs>(args?: SelectSubset<T, BulkJobDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more BulkJobs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BulkJobUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many BulkJobs
+     * const bulkJob = await prisma.bulkJob.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends BulkJobUpdateManyArgs>(args: SelectSubset<T, BulkJobUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more BulkJobs and returns the data updated in the database.
+     * @param {BulkJobUpdateManyAndReturnArgs} args - Arguments to update many BulkJobs.
+     * @example
+     * // Update many BulkJobs
+     * const bulkJob = await prisma.bulkJob.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more BulkJobs and only return the `id`
+     * const bulkJobWithIdOnly = await prisma.bulkJob.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends BulkJobUpdateManyAndReturnArgs>(args: SelectSubset<T, BulkJobUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BulkJobPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one BulkJob.
+     * @param {BulkJobUpsertArgs} args - Arguments to update or create a BulkJob.
+     * @example
+     * // Update or create a BulkJob
+     * const bulkJob = await prisma.bulkJob.upsert({
+     *   create: {
+     *     // ... data to create a BulkJob
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the BulkJob we want to update
+     *   }
+     * })
+     */
+    upsert<T extends BulkJobUpsertArgs>(args: SelectSubset<T, BulkJobUpsertArgs<ExtArgs>>): Prisma__BulkJobClient<$Result.GetResult<Prisma.$BulkJobPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of BulkJobs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BulkJobCountArgs} args - Arguments to filter BulkJobs to count.
+     * @example
+     * // Count the number of BulkJobs
+     * const count = await prisma.bulkJob.count({
+     *   where: {
+     *     // ... the filter for the BulkJobs we want to count
+     *   }
+     * })
+    **/
+    count<T extends BulkJobCountArgs>(
+      args?: Subset<T, BulkJobCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], BulkJobCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a BulkJob.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BulkJobAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends BulkJobAggregateArgs>(args: Subset<T, BulkJobAggregateArgs>): Prisma.PrismaPromise<GetBulkJobAggregateType<T>>
+
+    /**
+     * Group by BulkJob.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BulkJobGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends BulkJobGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: BulkJobGroupByArgs['orderBy'] }
+        : { orderBy?: BulkJobGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, BulkJobGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBulkJobGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the BulkJob model
+   */
+  readonly fields: BulkJobFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for BulkJob.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__BulkJobClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    organisation<T extends OrganisationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganisationDefaultArgs<ExtArgs>>): Prisma__OrganisationClient<$Result.GetResult<Prisma.$OrganisationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    created_by<T extends BulkJob$created_byArgs<ExtArgs> = {}>(args?: Subset<T, BulkJob$created_byArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the BulkJob model
+   */
+  interface BulkJobFieldRefs {
+    readonly id: FieldRef<"BulkJob", 'Int'>
+    readonly uuid: FieldRef<"BulkJob", 'String'>
+    readonly organisation_uuid: FieldRef<"BulkJob", 'String'>
+    readonly created_by_user_uuid: FieldRef<"BulkJob", 'String'>
+    readonly title: FieldRef<"BulkJob", 'String'>
+    readonly type: FieldRef<"BulkJob", 'BulkJobType'>
+    readonly status: FieldRef<"BulkJob", 'BulkJobStatus'>
+    readonly error: FieldRef<"BulkJob", 'String'>
+    readonly retries: FieldRef<"BulkJob", 'Int'>
+    readonly max_retries: FieldRef<"BulkJob", 'Int'>
+    readonly progress_current: FieldRef<"BulkJob", 'Int'>
+    readonly progress_total: FieldRef<"BulkJob", 'Int'>
+    readonly queue_name: FieldRef<"BulkJob", 'String'>
+    readonly queue_job_id: FieldRef<"BulkJob", 'String'>
+    readonly reference_type: FieldRef<"BulkJob", 'String'>
+    readonly reference_uuid: FieldRef<"BulkJob", 'String'>
+    readonly metadata: FieldRef<"BulkJob", 'Json'>
+    readonly started_at: FieldRef<"BulkJob", 'DateTime'>
+    readonly completed_at: FieldRef<"BulkJob", 'DateTime'>
+    readonly created_at: FieldRef<"BulkJob", 'DateTime'>
+    readonly updated_at: FieldRef<"BulkJob", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * BulkJob findUnique
+   */
+  export type BulkJobFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BulkJob
+     */
+    select?: BulkJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BulkJob
+     */
+    omit?: BulkJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BulkJobInclude<ExtArgs> | null
+    /**
+     * Filter, which BulkJob to fetch.
+     */
+    where: BulkJobWhereUniqueInput
+  }
+
+  /**
+   * BulkJob findUniqueOrThrow
+   */
+  export type BulkJobFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BulkJob
+     */
+    select?: BulkJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BulkJob
+     */
+    omit?: BulkJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BulkJobInclude<ExtArgs> | null
+    /**
+     * Filter, which BulkJob to fetch.
+     */
+    where: BulkJobWhereUniqueInput
+  }
+
+  /**
+   * BulkJob findFirst
+   */
+  export type BulkJobFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BulkJob
+     */
+    select?: BulkJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BulkJob
+     */
+    omit?: BulkJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BulkJobInclude<ExtArgs> | null
+    /**
+     * Filter, which BulkJob to fetch.
+     */
+    where?: BulkJobWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BulkJobs to fetch.
+     */
+    orderBy?: BulkJobOrderByWithRelationInput | BulkJobOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BulkJobs.
+     */
+    cursor?: BulkJobWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BulkJobs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BulkJobs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BulkJobs.
+     */
+    distinct?: BulkJobScalarFieldEnum | BulkJobScalarFieldEnum[]
+  }
+
+  /**
+   * BulkJob findFirstOrThrow
+   */
+  export type BulkJobFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BulkJob
+     */
+    select?: BulkJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BulkJob
+     */
+    omit?: BulkJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BulkJobInclude<ExtArgs> | null
+    /**
+     * Filter, which BulkJob to fetch.
+     */
+    where?: BulkJobWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BulkJobs to fetch.
+     */
+    orderBy?: BulkJobOrderByWithRelationInput | BulkJobOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BulkJobs.
+     */
+    cursor?: BulkJobWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BulkJobs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BulkJobs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BulkJobs.
+     */
+    distinct?: BulkJobScalarFieldEnum | BulkJobScalarFieldEnum[]
+  }
+
+  /**
+   * BulkJob findMany
+   */
+  export type BulkJobFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BulkJob
+     */
+    select?: BulkJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BulkJob
+     */
+    omit?: BulkJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BulkJobInclude<ExtArgs> | null
+    /**
+     * Filter, which BulkJobs to fetch.
+     */
+    where?: BulkJobWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BulkJobs to fetch.
+     */
+    orderBy?: BulkJobOrderByWithRelationInput | BulkJobOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing BulkJobs.
+     */
+    cursor?: BulkJobWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BulkJobs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BulkJobs.
+     */
+    skip?: number
+    distinct?: BulkJobScalarFieldEnum | BulkJobScalarFieldEnum[]
+  }
+
+  /**
+   * BulkJob create
+   */
+  export type BulkJobCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BulkJob
+     */
+    select?: BulkJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BulkJob
+     */
+    omit?: BulkJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BulkJobInclude<ExtArgs> | null
+    /**
+     * The data needed to create a BulkJob.
+     */
+    data: XOR<BulkJobCreateInput, BulkJobUncheckedCreateInput>
+  }
+
+  /**
+   * BulkJob createMany
+   */
+  export type BulkJobCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many BulkJobs.
+     */
+    data: BulkJobCreateManyInput | BulkJobCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * BulkJob createManyAndReturn
+   */
+  export type BulkJobCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BulkJob
+     */
+    select?: BulkJobSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the BulkJob
+     */
+    omit?: BulkJobOmit<ExtArgs> | null
+    /**
+     * The data used to create many BulkJobs.
+     */
+    data: BulkJobCreateManyInput | BulkJobCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BulkJobIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * BulkJob update
+   */
+  export type BulkJobUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BulkJob
+     */
+    select?: BulkJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BulkJob
+     */
+    omit?: BulkJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BulkJobInclude<ExtArgs> | null
+    /**
+     * The data needed to update a BulkJob.
+     */
+    data: XOR<BulkJobUpdateInput, BulkJobUncheckedUpdateInput>
+    /**
+     * Choose, which BulkJob to update.
+     */
+    where: BulkJobWhereUniqueInput
+  }
+
+  /**
+   * BulkJob updateMany
+   */
+  export type BulkJobUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update BulkJobs.
+     */
+    data: XOR<BulkJobUpdateManyMutationInput, BulkJobUncheckedUpdateManyInput>
+    /**
+     * Filter which BulkJobs to update
+     */
+    where?: BulkJobWhereInput
+    /**
+     * Limit how many BulkJobs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * BulkJob updateManyAndReturn
+   */
+  export type BulkJobUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BulkJob
+     */
+    select?: BulkJobSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the BulkJob
+     */
+    omit?: BulkJobOmit<ExtArgs> | null
+    /**
+     * The data used to update BulkJobs.
+     */
+    data: XOR<BulkJobUpdateManyMutationInput, BulkJobUncheckedUpdateManyInput>
+    /**
+     * Filter which BulkJobs to update
+     */
+    where?: BulkJobWhereInput
+    /**
+     * Limit how many BulkJobs to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BulkJobIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * BulkJob upsert
+   */
+  export type BulkJobUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BulkJob
+     */
+    select?: BulkJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BulkJob
+     */
+    omit?: BulkJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BulkJobInclude<ExtArgs> | null
+    /**
+     * The filter to search for the BulkJob to update in case it exists.
+     */
+    where: BulkJobWhereUniqueInput
+    /**
+     * In case the BulkJob found by the `where` argument doesn't exist, create a new BulkJob with this data.
+     */
+    create: XOR<BulkJobCreateInput, BulkJobUncheckedCreateInput>
+    /**
+     * In case the BulkJob was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<BulkJobUpdateInput, BulkJobUncheckedUpdateInput>
+  }
+
+  /**
+   * BulkJob delete
+   */
+  export type BulkJobDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BulkJob
+     */
+    select?: BulkJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BulkJob
+     */
+    omit?: BulkJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BulkJobInclude<ExtArgs> | null
+    /**
+     * Filter which BulkJob to delete.
+     */
+    where: BulkJobWhereUniqueInput
+  }
+
+  /**
+   * BulkJob deleteMany
+   */
+  export type BulkJobDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BulkJobs to delete
+     */
+    where?: BulkJobWhereInput
+    /**
+     * Limit how many BulkJobs to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * BulkJob.created_by
+   */
+  export type BulkJob$created_byArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * BulkJob without action
+   */
+  export type BulkJobDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BulkJob
+     */
+    select?: BulkJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BulkJob
+     */
+    omit?: BulkJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BulkJobInclude<ExtArgs> | null
   }
 
 
@@ -58153,6 +59693,33 @@ export namespace Prisma {
   export type FilterJobScalarFieldEnum = (typeof FilterJobScalarFieldEnum)[keyof typeof FilterJobScalarFieldEnum]
 
 
+  export const BulkJobScalarFieldEnum: {
+    id: 'id',
+    uuid: 'uuid',
+    organisation_uuid: 'organisation_uuid',
+    created_by_user_uuid: 'created_by_user_uuid',
+    title: 'title',
+    type: 'type',
+    status: 'status',
+    error: 'error',
+    retries: 'retries',
+    max_retries: 'max_retries',
+    progress_current: 'progress_current',
+    progress_total: 'progress_total',
+    queue_name: 'queue_name',
+    queue_job_id: 'queue_job_id',
+    reference_type: 'reference_type',
+    reference_uuid: 'reference_uuid',
+    metadata: 'metadata',
+    started_at: 'started_at',
+    completed_at: 'completed_at',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type BulkJobScalarFieldEnum = (typeof BulkJobScalarFieldEnum)[keyof typeof BulkJobScalarFieldEnum]
+
+
   export const SenderProfileScalarFieldEnum: {
     id: 'id',
     uuid: 'uuid',
@@ -58876,6 +60443,34 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'BulkJobType'
+   */
+  export type EnumBulkJobTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BulkJobType'>
+    
+
+
+  /**
+   * Reference to a field of type 'BulkJobType[]'
+   */
+  export type ListEnumBulkJobTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BulkJobType[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'BulkJobStatus'
+   */
+  export type EnumBulkJobStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BulkJobStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'BulkJobStatus[]'
+   */
+  export type ListEnumBulkJobStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BulkJobStatus[]'>
+    
+
+
+  /**
    * Reference to a field of type 'CampaignStatus'
    */
   export type EnumCampaignStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CampaignStatus'>
@@ -59151,6 +60746,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalListRelationFilter
     goal_achievements?: GoalAchievementListRelationFilter
     goal_personal_bests?: GoalPersonalBestListRelationFilter
+    bulk_jobs_created?: BulkJobListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -59171,6 +60767,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalOrderByRelationAggregateInput
     goal_achievements?: GoalAchievementOrderByRelationAggregateInput
     goal_personal_bests?: GoalPersonalBestOrderByRelationAggregateInput
+    bulk_jobs_created?: BulkJobOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -59194,6 +60791,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalListRelationFilter
     goal_achievements?: GoalAchievementListRelationFilter
     goal_personal_bests?: GoalPersonalBestListRelationFilter
+    bulk_jobs_created?: BulkJobListRelationFilter
   }, "id" | "uuid" | "email" | "phone">
 
   export type UserOrderByWithAggregationInput = {
@@ -59263,6 +60861,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalListRelationFilter
     goal_achievements?: GoalAchievementListRelationFilter
     goal_personal_bests?: GoalPersonalBestListRelationFilter
+    bulk_jobs?: BulkJobListRelationFilter
   }
 
   export type OrganisationOrderByWithRelationInput = {
@@ -59297,6 +60896,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalOrderByRelationAggregateInput
     goal_achievements?: GoalAchievementOrderByRelationAggregateInput
     goal_personal_bests?: GoalPersonalBestOrderByRelationAggregateInput
+    bulk_jobs?: BulkJobOrderByRelationAggregateInput
   }
 
   export type OrganisationWhereUniqueInput = Prisma.AtLeast<{
@@ -59334,6 +60934,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalListRelationFilter
     goal_achievements?: GoalAchievementListRelationFilter
     goal_personal_bests?: GoalPersonalBestListRelationFilter
+    bulk_jobs?: BulkJobListRelationFilter
   }, "id" | "uuid" | "slug">
 
   export type OrganisationOrderByWithAggregationInput = {
@@ -61175,6 +62776,146 @@ export namespace Prisma {
     completed_at?: DateTimeNullableWithAggregatesFilter<"FilterJob"> | Date | string | null
     created_at?: DateTimeWithAggregatesFilter<"FilterJob"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"FilterJob"> | Date | string
+  }
+
+  export type BulkJobWhereInput = {
+    AND?: BulkJobWhereInput | BulkJobWhereInput[]
+    OR?: BulkJobWhereInput[]
+    NOT?: BulkJobWhereInput | BulkJobWhereInput[]
+    id?: IntFilter<"BulkJob"> | number
+    uuid?: StringFilter<"BulkJob"> | string
+    organisation_uuid?: StringFilter<"BulkJob"> | string
+    created_by_user_uuid?: StringNullableFilter<"BulkJob"> | string | null
+    title?: StringFilter<"BulkJob"> | string
+    type?: EnumBulkJobTypeFilter<"BulkJob"> | $Enums.BulkJobType
+    status?: EnumBulkJobStatusFilter<"BulkJob"> | $Enums.BulkJobStatus
+    error?: StringNullableFilter<"BulkJob"> | string | null
+    retries?: IntFilter<"BulkJob"> | number
+    max_retries?: IntFilter<"BulkJob"> | number
+    progress_current?: IntFilter<"BulkJob"> | number
+    progress_total?: IntFilter<"BulkJob"> | number
+    queue_name?: StringNullableFilter<"BulkJob"> | string | null
+    queue_job_id?: StringNullableFilter<"BulkJob"> | string | null
+    reference_type?: StringNullableFilter<"BulkJob"> | string | null
+    reference_uuid?: StringNullableFilter<"BulkJob"> | string | null
+    metadata?: JsonNullableFilter<"BulkJob">
+    started_at?: DateTimeNullableFilter<"BulkJob"> | Date | string | null
+    completed_at?: DateTimeNullableFilter<"BulkJob"> | Date | string | null
+    created_at?: DateTimeFilter<"BulkJob"> | Date | string
+    updated_at?: DateTimeFilter<"BulkJob"> | Date | string
+    organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+    created_by?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }
+
+  export type BulkJobOrderByWithRelationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    created_by_user_uuid?: SortOrderInput | SortOrder
+    title?: SortOrder
+    type?: SortOrder
+    status?: SortOrder
+    error?: SortOrderInput | SortOrder
+    retries?: SortOrder
+    max_retries?: SortOrder
+    progress_current?: SortOrder
+    progress_total?: SortOrder
+    queue_name?: SortOrderInput | SortOrder
+    queue_job_id?: SortOrderInput | SortOrder
+    reference_type?: SortOrderInput | SortOrder
+    reference_uuid?: SortOrderInput | SortOrder
+    metadata?: SortOrderInput | SortOrder
+    started_at?: SortOrderInput | SortOrder
+    completed_at?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    organisation?: OrganisationOrderByWithRelationInput
+    created_by?: UserOrderByWithRelationInput
+  }
+
+  export type BulkJobWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    uuid?: string
+    AND?: BulkJobWhereInput | BulkJobWhereInput[]
+    OR?: BulkJobWhereInput[]
+    NOT?: BulkJobWhereInput | BulkJobWhereInput[]
+    organisation_uuid?: StringFilter<"BulkJob"> | string
+    created_by_user_uuid?: StringNullableFilter<"BulkJob"> | string | null
+    title?: StringFilter<"BulkJob"> | string
+    type?: EnumBulkJobTypeFilter<"BulkJob"> | $Enums.BulkJobType
+    status?: EnumBulkJobStatusFilter<"BulkJob"> | $Enums.BulkJobStatus
+    error?: StringNullableFilter<"BulkJob"> | string | null
+    retries?: IntFilter<"BulkJob"> | number
+    max_retries?: IntFilter<"BulkJob"> | number
+    progress_current?: IntFilter<"BulkJob"> | number
+    progress_total?: IntFilter<"BulkJob"> | number
+    queue_name?: StringNullableFilter<"BulkJob"> | string | null
+    queue_job_id?: StringNullableFilter<"BulkJob"> | string | null
+    reference_type?: StringNullableFilter<"BulkJob"> | string | null
+    reference_uuid?: StringNullableFilter<"BulkJob"> | string | null
+    metadata?: JsonNullableFilter<"BulkJob">
+    started_at?: DateTimeNullableFilter<"BulkJob"> | Date | string | null
+    completed_at?: DateTimeNullableFilter<"BulkJob"> | Date | string | null
+    created_at?: DateTimeFilter<"BulkJob"> | Date | string
+    updated_at?: DateTimeFilter<"BulkJob"> | Date | string
+    organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+    created_by?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }, "id" | "uuid">
+
+  export type BulkJobOrderByWithAggregationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    created_by_user_uuid?: SortOrderInput | SortOrder
+    title?: SortOrder
+    type?: SortOrder
+    status?: SortOrder
+    error?: SortOrderInput | SortOrder
+    retries?: SortOrder
+    max_retries?: SortOrder
+    progress_current?: SortOrder
+    progress_total?: SortOrder
+    queue_name?: SortOrderInput | SortOrder
+    queue_job_id?: SortOrderInput | SortOrder
+    reference_type?: SortOrderInput | SortOrder
+    reference_uuid?: SortOrderInput | SortOrder
+    metadata?: SortOrderInput | SortOrder
+    started_at?: SortOrderInput | SortOrder
+    completed_at?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: BulkJobCountOrderByAggregateInput
+    _avg?: BulkJobAvgOrderByAggregateInput
+    _max?: BulkJobMaxOrderByAggregateInput
+    _min?: BulkJobMinOrderByAggregateInput
+    _sum?: BulkJobSumOrderByAggregateInput
+  }
+
+  export type BulkJobScalarWhereWithAggregatesInput = {
+    AND?: BulkJobScalarWhereWithAggregatesInput | BulkJobScalarWhereWithAggregatesInput[]
+    OR?: BulkJobScalarWhereWithAggregatesInput[]
+    NOT?: BulkJobScalarWhereWithAggregatesInput | BulkJobScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"BulkJob"> | number
+    uuid?: StringWithAggregatesFilter<"BulkJob"> | string
+    organisation_uuid?: StringWithAggregatesFilter<"BulkJob"> | string
+    created_by_user_uuid?: StringNullableWithAggregatesFilter<"BulkJob"> | string | null
+    title?: StringWithAggregatesFilter<"BulkJob"> | string
+    type?: EnumBulkJobTypeWithAggregatesFilter<"BulkJob"> | $Enums.BulkJobType
+    status?: EnumBulkJobStatusWithAggregatesFilter<"BulkJob"> | $Enums.BulkJobStatus
+    error?: StringNullableWithAggregatesFilter<"BulkJob"> | string | null
+    retries?: IntWithAggregatesFilter<"BulkJob"> | number
+    max_retries?: IntWithAggregatesFilter<"BulkJob"> | number
+    progress_current?: IntWithAggregatesFilter<"BulkJob"> | number
+    progress_total?: IntWithAggregatesFilter<"BulkJob"> | number
+    queue_name?: StringNullableWithAggregatesFilter<"BulkJob"> | string | null
+    queue_job_id?: StringNullableWithAggregatesFilter<"BulkJob"> | string | null
+    reference_type?: StringNullableWithAggregatesFilter<"BulkJob"> | string | null
+    reference_uuid?: StringNullableWithAggregatesFilter<"BulkJob"> | string | null
+    metadata?: JsonNullableWithAggregatesFilter<"BulkJob">
+    started_at?: DateTimeNullableWithAggregatesFilter<"BulkJob"> | Date | string | null
+    completed_at?: DateTimeNullableWithAggregatesFilter<"BulkJob"> | Date | string | null
+    created_at?: DateTimeWithAggregatesFilter<"BulkJob"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"BulkJob"> | Date | string
   }
 
   export type SenderProfileWhereInput = {
@@ -63223,6 +64964,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutUserInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutUserInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
+    bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -63243,6 +64985,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutUserInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutUserInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
+    bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserUpdateInput = {
@@ -63262,6 +65005,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutUserNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutUserNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
+    bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -63282,6 +65026,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutUserNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutUserNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
+    bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -63350,6 +65095,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateInput = {
@@ -63384,6 +65130,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUpdateInput = {
@@ -63417,6 +65164,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateInput = {
@@ -63451,6 +65199,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateManyInput = {
@@ -65378,6 +67127,169 @@ export namespace Prisma {
     duration?: IntFieldUpdateOperationsInput | number
     error?: NullableStringFieldUpdateOperationsInput | string | null
     started_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BulkJobCreateInput = {
+    uuid?: string
+    title: string
+    type: $Enums.BulkJobType
+    status?: $Enums.BulkJobStatus
+    error?: string | null
+    retries?: number
+    max_retries?: number
+    progress_current?: number
+    progress_total?: number
+    queue_name?: string | null
+    queue_job_id?: string | null
+    reference_type?: string | null
+    reference_uuid?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    started_at?: Date | string | null
+    completed_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutBulk_jobsInput
+    created_by?: UserCreateNestedOneWithoutBulk_jobs_createdInput
+  }
+
+  export type BulkJobUncheckedCreateInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    created_by_user_uuid?: string | null
+    title: string
+    type: $Enums.BulkJobType
+    status?: $Enums.BulkJobStatus
+    error?: string | null
+    retries?: number
+    max_retries?: number
+    progress_current?: number
+    progress_total?: number
+    queue_name?: string | null
+    queue_job_id?: string | null
+    reference_type?: string | null
+    reference_uuid?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    started_at?: Date | string | null
+    completed_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type BulkJobUpdateInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    type?: EnumBulkJobTypeFieldUpdateOperationsInput | $Enums.BulkJobType
+    status?: EnumBulkJobStatusFieldUpdateOperationsInput | $Enums.BulkJobStatus
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    retries?: IntFieldUpdateOperationsInput | number
+    max_retries?: IntFieldUpdateOperationsInput | number
+    progress_current?: IntFieldUpdateOperationsInput | number
+    progress_total?: IntFieldUpdateOperationsInput | number
+    queue_name?: NullableStringFieldUpdateOperationsInput | string | null
+    queue_job_id?: NullableStringFieldUpdateOperationsInput | string | null
+    reference_type?: NullableStringFieldUpdateOperationsInput | string | null
+    reference_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    started_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutBulk_jobsNestedInput
+    created_by?: UserUpdateOneWithoutBulk_jobs_createdNestedInput
+  }
+
+  export type BulkJobUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    type?: EnumBulkJobTypeFieldUpdateOperationsInput | $Enums.BulkJobType
+    status?: EnumBulkJobStatusFieldUpdateOperationsInput | $Enums.BulkJobStatus
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    retries?: IntFieldUpdateOperationsInput | number
+    max_retries?: IntFieldUpdateOperationsInput | number
+    progress_current?: IntFieldUpdateOperationsInput | number
+    progress_total?: IntFieldUpdateOperationsInput | number
+    queue_name?: NullableStringFieldUpdateOperationsInput | string | null
+    queue_job_id?: NullableStringFieldUpdateOperationsInput | string | null
+    reference_type?: NullableStringFieldUpdateOperationsInput | string | null
+    reference_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    started_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BulkJobCreateManyInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    created_by_user_uuid?: string | null
+    title: string
+    type: $Enums.BulkJobType
+    status?: $Enums.BulkJobStatus
+    error?: string | null
+    retries?: number
+    max_retries?: number
+    progress_current?: number
+    progress_total?: number
+    queue_name?: string | null
+    queue_job_id?: string | null
+    reference_type?: string | null
+    reference_uuid?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    started_at?: Date | string | null
+    completed_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type BulkJobUpdateManyMutationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    type?: EnumBulkJobTypeFieldUpdateOperationsInput | $Enums.BulkJobType
+    status?: EnumBulkJobStatusFieldUpdateOperationsInput | $Enums.BulkJobStatus
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    retries?: IntFieldUpdateOperationsInput | number
+    max_retries?: IntFieldUpdateOperationsInput | number
+    progress_current?: IntFieldUpdateOperationsInput | number
+    progress_total?: IntFieldUpdateOperationsInput | number
+    queue_name?: NullableStringFieldUpdateOperationsInput | string | null
+    queue_job_id?: NullableStringFieldUpdateOperationsInput | string | null
+    reference_type?: NullableStringFieldUpdateOperationsInput | string | null
+    reference_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    started_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BulkJobUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    type?: EnumBulkJobTypeFieldUpdateOperationsInput | $Enums.BulkJobType
+    status?: EnumBulkJobStatusFieldUpdateOperationsInput | $Enums.BulkJobStatus
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    retries?: IntFieldUpdateOperationsInput | number
+    max_retries?: IntFieldUpdateOperationsInput | number
+    progress_current?: IntFieldUpdateOperationsInput | number
+    progress_total?: IntFieldUpdateOperationsInput | number
+    queue_name?: NullableStringFieldUpdateOperationsInput | string | null
+    queue_job_id?: NullableStringFieldUpdateOperationsInput | string | null
+    reference_type?: NullableStringFieldUpdateOperationsInput | string | null
+    reference_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    started_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -67704,6 +69616,12 @@ export namespace Prisma {
     none?: GoalPersonalBestWhereInput
   }
 
+  export type BulkJobListRelationFilter = {
+    every?: BulkJobWhereInput
+    some?: BulkJobWhereInput
+    none?: BulkJobWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -67738,6 +69656,10 @@ export namespace Prisma {
   }
 
   export type GoalPersonalBestOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type BulkJobOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -69665,6 +71587,126 @@ export namespace Prisma {
     _max?: NestedEnumJobTriggerFilter<$PrismaModel>
   }
 
+  export type EnumBulkJobTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.BulkJobType | EnumBulkJobTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.BulkJobType[] | ListEnumBulkJobTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BulkJobType[] | ListEnumBulkJobTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumBulkJobTypeFilter<$PrismaModel> | $Enums.BulkJobType
+  }
+
+  export type EnumBulkJobStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.BulkJobStatus | EnumBulkJobStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.BulkJobStatus[] | ListEnumBulkJobStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BulkJobStatus[] | ListEnumBulkJobStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumBulkJobStatusFilter<$PrismaModel> | $Enums.BulkJobStatus
+  }
+
+  export type BulkJobCountOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    created_by_user_uuid?: SortOrder
+    title?: SortOrder
+    type?: SortOrder
+    status?: SortOrder
+    error?: SortOrder
+    retries?: SortOrder
+    max_retries?: SortOrder
+    progress_current?: SortOrder
+    progress_total?: SortOrder
+    queue_name?: SortOrder
+    queue_job_id?: SortOrder
+    reference_type?: SortOrder
+    reference_uuid?: SortOrder
+    metadata?: SortOrder
+    started_at?: SortOrder
+    completed_at?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type BulkJobAvgOrderByAggregateInput = {
+    id?: SortOrder
+    retries?: SortOrder
+    max_retries?: SortOrder
+    progress_current?: SortOrder
+    progress_total?: SortOrder
+  }
+
+  export type BulkJobMaxOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    created_by_user_uuid?: SortOrder
+    title?: SortOrder
+    type?: SortOrder
+    status?: SortOrder
+    error?: SortOrder
+    retries?: SortOrder
+    max_retries?: SortOrder
+    progress_current?: SortOrder
+    progress_total?: SortOrder
+    queue_name?: SortOrder
+    queue_job_id?: SortOrder
+    reference_type?: SortOrder
+    reference_uuid?: SortOrder
+    started_at?: SortOrder
+    completed_at?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type BulkJobMinOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    created_by_user_uuid?: SortOrder
+    title?: SortOrder
+    type?: SortOrder
+    status?: SortOrder
+    error?: SortOrder
+    retries?: SortOrder
+    max_retries?: SortOrder
+    progress_current?: SortOrder
+    progress_total?: SortOrder
+    queue_name?: SortOrder
+    queue_job_id?: SortOrder
+    reference_type?: SortOrder
+    reference_uuid?: SortOrder
+    started_at?: SortOrder
+    completed_at?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type BulkJobSumOrderByAggregateInput = {
+    id?: SortOrder
+    retries?: SortOrder
+    max_retries?: SortOrder
+    progress_current?: SortOrder
+    progress_total?: SortOrder
+  }
+
+  export type EnumBulkJobTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.BulkJobType | EnumBulkJobTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.BulkJobType[] | ListEnumBulkJobTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BulkJobType[] | ListEnumBulkJobTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumBulkJobTypeWithAggregatesFilter<$PrismaModel> | $Enums.BulkJobType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumBulkJobTypeFilter<$PrismaModel>
+    _max?: NestedEnumBulkJobTypeFilter<$PrismaModel>
+  }
+
+  export type EnumBulkJobStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.BulkJobStatus | EnumBulkJobStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.BulkJobStatus[] | ListEnumBulkJobStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BulkJobStatus[] | ListEnumBulkJobStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumBulkJobStatusWithAggregatesFilter<$PrismaModel> | $Enums.BulkJobStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumBulkJobStatusFilter<$PrismaModel>
+    _max?: NestedEnumBulkJobStatusFilter<$PrismaModel>
+  }
+
   export type SenderProfileCountOrderByAggregateInput = {
     id?: SortOrder
     uuid?: SortOrder
@@ -71330,6 +73372,13 @@ export namespace Prisma {
     connect?: GoalPersonalBestWhereUniqueInput | GoalPersonalBestWhereUniqueInput[]
   }
 
+  export type BulkJobCreateNestedManyWithoutCreated_byInput = {
+    create?: XOR<BulkJobCreateWithoutCreated_byInput, BulkJobUncheckedCreateWithoutCreated_byInput> | BulkJobCreateWithoutCreated_byInput[] | BulkJobUncheckedCreateWithoutCreated_byInput[]
+    connectOrCreate?: BulkJobCreateOrConnectWithoutCreated_byInput | BulkJobCreateOrConnectWithoutCreated_byInput[]
+    createMany?: BulkJobCreateManyCreated_byInputEnvelope
+    connect?: BulkJobWhereUniqueInput | BulkJobWhereUniqueInput[]
+  }
+
   export type OrganisationMemberUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<OrganisationMemberCreateWithoutUserInput, OrganisationMemberUncheckedCreateWithoutUserInput> | OrganisationMemberCreateWithoutUserInput[] | OrganisationMemberUncheckedCreateWithoutUserInput[]
     connectOrCreate?: OrganisationMemberCreateOrConnectWithoutUserInput | OrganisationMemberCreateOrConnectWithoutUserInput[]
@@ -71384,6 +73433,13 @@ export namespace Prisma {
     connectOrCreate?: GoalPersonalBestCreateOrConnectWithoutUserInput | GoalPersonalBestCreateOrConnectWithoutUserInput[]
     createMany?: GoalPersonalBestCreateManyUserInputEnvelope
     connect?: GoalPersonalBestWhereUniqueInput | GoalPersonalBestWhereUniqueInput[]
+  }
+
+  export type BulkJobUncheckedCreateNestedManyWithoutCreated_byInput = {
+    create?: XOR<BulkJobCreateWithoutCreated_byInput, BulkJobUncheckedCreateWithoutCreated_byInput> | BulkJobCreateWithoutCreated_byInput[] | BulkJobUncheckedCreateWithoutCreated_byInput[]
+    connectOrCreate?: BulkJobCreateOrConnectWithoutCreated_byInput | BulkJobCreateOrConnectWithoutCreated_byInput[]
+    createMany?: BulkJobCreateManyCreated_byInputEnvelope
+    connect?: BulkJobWhereUniqueInput | BulkJobWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -71514,6 +73570,20 @@ export namespace Prisma {
     deleteMany?: GoalPersonalBestScalarWhereInput | GoalPersonalBestScalarWhereInput[]
   }
 
+  export type BulkJobUpdateManyWithoutCreated_byNestedInput = {
+    create?: XOR<BulkJobCreateWithoutCreated_byInput, BulkJobUncheckedCreateWithoutCreated_byInput> | BulkJobCreateWithoutCreated_byInput[] | BulkJobUncheckedCreateWithoutCreated_byInput[]
+    connectOrCreate?: BulkJobCreateOrConnectWithoutCreated_byInput | BulkJobCreateOrConnectWithoutCreated_byInput[]
+    upsert?: BulkJobUpsertWithWhereUniqueWithoutCreated_byInput | BulkJobUpsertWithWhereUniqueWithoutCreated_byInput[]
+    createMany?: BulkJobCreateManyCreated_byInputEnvelope
+    set?: BulkJobWhereUniqueInput | BulkJobWhereUniqueInput[]
+    disconnect?: BulkJobWhereUniqueInput | BulkJobWhereUniqueInput[]
+    delete?: BulkJobWhereUniqueInput | BulkJobWhereUniqueInput[]
+    connect?: BulkJobWhereUniqueInput | BulkJobWhereUniqueInput[]
+    update?: BulkJobUpdateWithWhereUniqueWithoutCreated_byInput | BulkJobUpdateWithWhereUniqueWithoutCreated_byInput[]
+    updateMany?: BulkJobUpdateManyWithWhereWithoutCreated_byInput | BulkJobUpdateManyWithWhereWithoutCreated_byInput[]
+    deleteMany?: BulkJobScalarWhereInput | BulkJobScalarWhereInput[]
+  }
+
   export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
@@ -71632,6 +73702,20 @@ export namespace Prisma {
     update?: GoalPersonalBestUpdateWithWhereUniqueWithoutUserInput | GoalPersonalBestUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: GoalPersonalBestUpdateManyWithWhereWithoutUserInput | GoalPersonalBestUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: GoalPersonalBestScalarWhereInput | GoalPersonalBestScalarWhereInput[]
+  }
+
+  export type BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput = {
+    create?: XOR<BulkJobCreateWithoutCreated_byInput, BulkJobUncheckedCreateWithoutCreated_byInput> | BulkJobCreateWithoutCreated_byInput[] | BulkJobUncheckedCreateWithoutCreated_byInput[]
+    connectOrCreate?: BulkJobCreateOrConnectWithoutCreated_byInput | BulkJobCreateOrConnectWithoutCreated_byInput[]
+    upsert?: BulkJobUpsertWithWhereUniqueWithoutCreated_byInput | BulkJobUpsertWithWhereUniqueWithoutCreated_byInput[]
+    createMany?: BulkJobCreateManyCreated_byInputEnvelope
+    set?: BulkJobWhereUniqueInput | BulkJobWhereUniqueInput[]
+    disconnect?: BulkJobWhereUniqueInput | BulkJobWhereUniqueInput[]
+    delete?: BulkJobWhereUniqueInput | BulkJobWhereUniqueInput[]
+    connect?: BulkJobWhereUniqueInput | BulkJobWhereUniqueInput[]
+    update?: BulkJobUpdateWithWhereUniqueWithoutCreated_byInput | BulkJobUpdateWithWhereUniqueWithoutCreated_byInput[]
+    updateMany?: BulkJobUpdateManyWithWhereWithoutCreated_byInput | BulkJobUpdateManyWithWhereWithoutCreated_byInput[]
+    deleteMany?: BulkJobScalarWhereInput | BulkJobScalarWhereInput[]
   }
 
   export type OrganisationMemberCreateNestedManyWithoutOrganisationInput = {
@@ -71795,6 +73879,13 @@ export namespace Prisma {
     connect?: GoalPersonalBestWhereUniqueInput | GoalPersonalBestWhereUniqueInput[]
   }
 
+  export type BulkJobCreateNestedManyWithoutOrganisationInput = {
+    create?: XOR<BulkJobCreateWithoutOrganisationInput, BulkJobUncheckedCreateWithoutOrganisationInput> | BulkJobCreateWithoutOrganisationInput[] | BulkJobUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: BulkJobCreateOrConnectWithoutOrganisationInput | BulkJobCreateOrConnectWithoutOrganisationInput[]
+    createMany?: BulkJobCreateManyOrganisationInputEnvelope
+    connect?: BulkJobWhereUniqueInput | BulkJobWhereUniqueInput[]
+  }
+
   export type OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput = {
     create?: XOR<OrganisationMemberCreateWithoutOrganisationInput, OrganisationMemberUncheckedCreateWithoutOrganisationInput> | OrganisationMemberCreateWithoutOrganisationInput[] | OrganisationMemberUncheckedCreateWithoutOrganisationInput[]
     connectOrCreate?: OrganisationMemberCreateOrConnectWithoutOrganisationInput | OrganisationMemberCreateOrConnectWithoutOrganisationInput[]
@@ -71954,6 +74045,13 @@ export namespace Prisma {
     connectOrCreate?: GoalPersonalBestCreateOrConnectWithoutOrganisationInput | GoalPersonalBestCreateOrConnectWithoutOrganisationInput[]
     createMany?: GoalPersonalBestCreateManyOrganisationInputEnvelope
     connect?: GoalPersonalBestWhereUniqueInput | GoalPersonalBestWhereUniqueInput[]
+  }
+
+  export type BulkJobUncheckedCreateNestedManyWithoutOrganisationInput = {
+    create?: XOR<BulkJobCreateWithoutOrganisationInput, BulkJobUncheckedCreateWithoutOrganisationInput> | BulkJobCreateWithoutOrganisationInput[] | BulkJobUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: BulkJobCreateOrConnectWithoutOrganisationInput | BulkJobCreateOrConnectWithoutOrganisationInput[]
+    createMany?: BulkJobCreateManyOrganisationInputEnvelope
+    connect?: BulkJobWhereUniqueInput | BulkJobWhereUniqueInput[]
   }
 
   export type OrganisationMemberUpdateManyWithoutOrganisationNestedInput = {
@@ -72278,6 +74376,20 @@ export namespace Prisma {
     deleteMany?: GoalPersonalBestScalarWhereInput | GoalPersonalBestScalarWhereInput[]
   }
 
+  export type BulkJobUpdateManyWithoutOrganisationNestedInput = {
+    create?: XOR<BulkJobCreateWithoutOrganisationInput, BulkJobUncheckedCreateWithoutOrganisationInput> | BulkJobCreateWithoutOrganisationInput[] | BulkJobUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: BulkJobCreateOrConnectWithoutOrganisationInput | BulkJobCreateOrConnectWithoutOrganisationInput[]
+    upsert?: BulkJobUpsertWithWhereUniqueWithoutOrganisationInput | BulkJobUpsertWithWhereUniqueWithoutOrganisationInput[]
+    createMany?: BulkJobCreateManyOrganisationInputEnvelope
+    set?: BulkJobWhereUniqueInput | BulkJobWhereUniqueInput[]
+    disconnect?: BulkJobWhereUniqueInput | BulkJobWhereUniqueInput[]
+    delete?: BulkJobWhereUniqueInput | BulkJobWhereUniqueInput[]
+    connect?: BulkJobWhereUniqueInput | BulkJobWhereUniqueInput[]
+    update?: BulkJobUpdateWithWhereUniqueWithoutOrganisationInput | BulkJobUpdateWithWhereUniqueWithoutOrganisationInput[]
+    updateMany?: BulkJobUpdateManyWithWhereWithoutOrganisationInput | BulkJobUpdateManyWithWhereWithoutOrganisationInput[]
+    deleteMany?: BulkJobScalarWhereInput | BulkJobScalarWhereInput[]
+  }
+
   export type OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput = {
     create?: XOR<OrganisationMemberCreateWithoutOrganisationInput, OrganisationMemberUncheckedCreateWithoutOrganisationInput> | OrganisationMemberCreateWithoutOrganisationInput[] | OrganisationMemberUncheckedCreateWithoutOrganisationInput[]
     connectOrCreate?: OrganisationMemberCreateOrConnectWithoutOrganisationInput | OrganisationMemberCreateOrConnectWithoutOrganisationInput[]
@@ -72598,6 +74710,20 @@ export namespace Prisma {
     update?: GoalPersonalBestUpdateWithWhereUniqueWithoutOrganisationInput | GoalPersonalBestUpdateWithWhereUniqueWithoutOrganisationInput[]
     updateMany?: GoalPersonalBestUpdateManyWithWhereWithoutOrganisationInput | GoalPersonalBestUpdateManyWithWhereWithoutOrganisationInput[]
     deleteMany?: GoalPersonalBestScalarWhereInput | GoalPersonalBestScalarWhereInput[]
+  }
+
+  export type BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput = {
+    create?: XOR<BulkJobCreateWithoutOrganisationInput, BulkJobUncheckedCreateWithoutOrganisationInput> | BulkJobCreateWithoutOrganisationInput[] | BulkJobUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: BulkJobCreateOrConnectWithoutOrganisationInput | BulkJobCreateOrConnectWithoutOrganisationInput[]
+    upsert?: BulkJobUpsertWithWhereUniqueWithoutOrganisationInput | BulkJobUpsertWithWhereUniqueWithoutOrganisationInput[]
+    createMany?: BulkJobCreateManyOrganisationInputEnvelope
+    set?: BulkJobWhereUniqueInput | BulkJobWhereUniqueInput[]
+    disconnect?: BulkJobWhereUniqueInput | BulkJobWhereUniqueInput[]
+    delete?: BulkJobWhereUniqueInput | BulkJobWhereUniqueInput[]
+    connect?: BulkJobWhereUniqueInput | BulkJobWhereUniqueInput[]
+    update?: BulkJobUpdateWithWhereUniqueWithoutOrganisationInput | BulkJobUpdateWithWhereUniqueWithoutOrganisationInput[]
+    updateMany?: BulkJobUpdateManyWithWhereWithoutOrganisationInput | BulkJobUpdateManyWithWhereWithoutOrganisationInput[]
+    deleteMany?: BulkJobScalarWhereInput | BulkJobScalarWhereInput[]
   }
 
   export type OrganisationCreateNestedOneWithoutMembersInput = {
@@ -74274,6 +76400,44 @@ export namespace Prisma {
     update?: XOR<XOR<FilterUpdateToOneWithWhereWithoutJobsInput, FilterUpdateWithoutJobsInput>, FilterUncheckedUpdateWithoutJobsInput>
   }
 
+  export type OrganisationCreateNestedOneWithoutBulk_jobsInput = {
+    create?: XOR<OrganisationCreateWithoutBulk_jobsInput, OrganisationUncheckedCreateWithoutBulk_jobsInput>
+    connectOrCreate?: OrganisationCreateOrConnectWithoutBulk_jobsInput
+    connect?: OrganisationWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutBulk_jobs_createdInput = {
+    create?: XOR<UserCreateWithoutBulk_jobs_createdInput, UserUncheckedCreateWithoutBulk_jobs_createdInput>
+    connectOrCreate?: UserCreateOrConnectWithoutBulk_jobs_createdInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type EnumBulkJobTypeFieldUpdateOperationsInput = {
+    set?: $Enums.BulkJobType
+  }
+
+  export type EnumBulkJobStatusFieldUpdateOperationsInput = {
+    set?: $Enums.BulkJobStatus
+  }
+
+  export type OrganisationUpdateOneRequiredWithoutBulk_jobsNestedInput = {
+    create?: XOR<OrganisationCreateWithoutBulk_jobsInput, OrganisationUncheckedCreateWithoutBulk_jobsInput>
+    connectOrCreate?: OrganisationCreateOrConnectWithoutBulk_jobsInput
+    upsert?: OrganisationUpsertWithoutBulk_jobsInput
+    connect?: OrganisationWhereUniqueInput
+    update?: XOR<XOR<OrganisationUpdateToOneWithWhereWithoutBulk_jobsInput, OrganisationUpdateWithoutBulk_jobsInput>, OrganisationUncheckedUpdateWithoutBulk_jobsInput>
+  }
+
+  export type UserUpdateOneWithoutBulk_jobs_createdNestedInput = {
+    create?: XOR<UserCreateWithoutBulk_jobs_createdInput, UserUncheckedCreateWithoutBulk_jobs_createdInput>
+    connectOrCreate?: UserCreateOrConnectWithoutBulk_jobs_createdInput
+    upsert?: UserUpsertWithoutBulk_jobs_createdInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutBulk_jobs_createdInput, UserUpdateWithoutBulk_jobs_createdInput>, UserUncheckedUpdateWithoutBulk_jobs_createdInput>
+  }
+
   export type OrganisationCreateNestedOneWithoutSender_profilesInput = {
     create?: XOR<OrganisationCreateWithoutSender_profilesInput, OrganisationUncheckedCreateWithoutSender_profilesInput>
     connectOrCreate?: OrganisationCreateOrConnectWithoutSender_profilesInput
@@ -75833,6 +77997,40 @@ export namespace Prisma {
     _max?: NestedEnumJobTriggerFilter<$PrismaModel>
   }
 
+  export type NestedEnumBulkJobTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.BulkJobType | EnumBulkJobTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.BulkJobType[] | ListEnumBulkJobTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BulkJobType[] | ListEnumBulkJobTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumBulkJobTypeFilter<$PrismaModel> | $Enums.BulkJobType
+  }
+
+  export type NestedEnumBulkJobStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.BulkJobStatus | EnumBulkJobStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.BulkJobStatus[] | ListEnumBulkJobStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BulkJobStatus[] | ListEnumBulkJobStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumBulkJobStatusFilter<$PrismaModel> | $Enums.BulkJobStatus
+  }
+
+  export type NestedEnumBulkJobTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.BulkJobType | EnumBulkJobTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.BulkJobType[] | ListEnumBulkJobTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BulkJobType[] | ListEnumBulkJobTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumBulkJobTypeWithAggregatesFilter<$PrismaModel> | $Enums.BulkJobType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumBulkJobTypeFilter<$PrismaModel>
+    _max?: NestedEnumBulkJobTypeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumBulkJobStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.BulkJobStatus | EnumBulkJobStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.BulkJobStatus[] | ListEnumBulkJobStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BulkJobStatus[] | ListEnumBulkJobStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumBulkJobStatusWithAggregatesFilter<$PrismaModel> | $Enums.BulkJobStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumBulkJobStatusFilter<$PrismaModel>
+    _max?: NestedEnumBulkJobStatusFilter<$PrismaModel>
+  }
+
   export type NestedEnumCampaignStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.CampaignStatus | EnumCampaignStatusFieldRefInput<$PrismaModel>
     in?: $Enums.CampaignStatus[] | ListEnumCampaignStatusFieldRefInput<$PrismaModel>
@@ -76445,6 +78643,61 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type BulkJobCreateWithoutCreated_byInput = {
+    uuid?: string
+    title: string
+    type: $Enums.BulkJobType
+    status?: $Enums.BulkJobStatus
+    error?: string | null
+    retries?: number
+    max_retries?: number
+    progress_current?: number
+    progress_total?: number
+    queue_name?: string | null
+    queue_job_id?: string | null
+    reference_type?: string | null
+    reference_uuid?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    started_at?: Date | string | null
+    completed_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutBulk_jobsInput
+  }
+
+  export type BulkJobUncheckedCreateWithoutCreated_byInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    title: string
+    type: $Enums.BulkJobType
+    status?: $Enums.BulkJobStatus
+    error?: string | null
+    retries?: number
+    max_retries?: number
+    progress_current?: number
+    progress_total?: number
+    queue_name?: string | null
+    queue_job_id?: string | null
+    reference_type?: string | null
+    reference_uuid?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    started_at?: Date | string | null
+    completed_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type BulkJobCreateOrConnectWithoutCreated_byInput = {
+    where: BulkJobWhereUniqueInput
+    create: XOR<BulkJobCreateWithoutCreated_byInput, BulkJobUncheckedCreateWithoutCreated_byInput>
+  }
+
+  export type BulkJobCreateManyCreated_byInputEnvelope = {
+    data: BulkJobCreateManyCreated_byInput | BulkJobCreateManyCreated_byInput[]
+    skipDuplicates?: boolean
+  }
+
   export type OrganisationMemberUpsertWithWhereUniqueWithoutUserInput = {
     where: OrganisationMemberWhereUniqueInput
     update: XOR<OrganisationMemberUpdateWithoutUserInput, OrganisationMemberUncheckedUpdateWithoutUserInput>
@@ -76709,6 +78962,49 @@ export namespace Prisma {
     best_count?: IntFilter<"GoalPersonalBest"> | number
     achieved_at?: DateTimeFilter<"GoalPersonalBest"> | Date | string
     updated_at?: DateTimeFilter<"GoalPersonalBest"> | Date | string
+  }
+
+  export type BulkJobUpsertWithWhereUniqueWithoutCreated_byInput = {
+    where: BulkJobWhereUniqueInput
+    update: XOR<BulkJobUpdateWithoutCreated_byInput, BulkJobUncheckedUpdateWithoutCreated_byInput>
+    create: XOR<BulkJobCreateWithoutCreated_byInput, BulkJobUncheckedCreateWithoutCreated_byInput>
+  }
+
+  export type BulkJobUpdateWithWhereUniqueWithoutCreated_byInput = {
+    where: BulkJobWhereUniqueInput
+    data: XOR<BulkJobUpdateWithoutCreated_byInput, BulkJobUncheckedUpdateWithoutCreated_byInput>
+  }
+
+  export type BulkJobUpdateManyWithWhereWithoutCreated_byInput = {
+    where: BulkJobScalarWhereInput
+    data: XOR<BulkJobUpdateManyMutationInput, BulkJobUncheckedUpdateManyWithoutCreated_byInput>
+  }
+
+  export type BulkJobScalarWhereInput = {
+    AND?: BulkJobScalarWhereInput | BulkJobScalarWhereInput[]
+    OR?: BulkJobScalarWhereInput[]
+    NOT?: BulkJobScalarWhereInput | BulkJobScalarWhereInput[]
+    id?: IntFilter<"BulkJob"> | number
+    uuid?: StringFilter<"BulkJob"> | string
+    organisation_uuid?: StringFilter<"BulkJob"> | string
+    created_by_user_uuid?: StringNullableFilter<"BulkJob"> | string | null
+    title?: StringFilter<"BulkJob"> | string
+    type?: EnumBulkJobTypeFilter<"BulkJob"> | $Enums.BulkJobType
+    status?: EnumBulkJobStatusFilter<"BulkJob"> | $Enums.BulkJobStatus
+    error?: StringNullableFilter<"BulkJob"> | string | null
+    retries?: IntFilter<"BulkJob"> | number
+    max_retries?: IntFilter<"BulkJob"> | number
+    progress_current?: IntFilter<"BulkJob"> | number
+    progress_total?: IntFilter<"BulkJob"> | number
+    queue_name?: StringNullableFilter<"BulkJob"> | string | null
+    queue_job_id?: StringNullableFilter<"BulkJob"> | string | null
+    reference_type?: StringNullableFilter<"BulkJob"> | string | null
+    reference_uuid?: StringNullableFilter<"BulkJob"> | string | null
+    metadata?: JsonNullableFilter<"BulkJob">
+    started_at?: DateTimeNullableFilter<"BulkJob"> | Date | string | null
+    completed_at?: DateTimeNullableFilter<"BulkJob"> | Date | string | null
+    created_at?: DateTimeFilter<"BulkJob"> | Date | string
+    updated_at?: DateTimeFilter<"BulkJob"> | Date | string
   }
 
   export type OrganisationMemberCreateWithoutOrganisationInput = {
@@ -77727,6 +80023,61 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type BulkJobCreateWithoutOrganisationInput = {
+    uuid?: string
+    title: string
+    type: $Enums.BulkJobType
+    status?: $Enums.BulkJobStatus
+    error?: string | null
+    retries?: number
+    max_retries?: number
+    progress_current?: number
+    progress_total?: number
+    queue_name?: string | null
+    queue_job_id?: string | null
+    reference_type?: string | null
+    reference_uuid?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    started_at?: Date | string | null
+    completed_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    created_by?: UserCreateNestedOneWithoutBulk_jobs_createdInput
+  }
+
+  export type BulkJobUncheckedCreateWithoutOrganisationInput = {
+    id?: number
+    uuid?: string
+    created_by_user_uuid?: string | null
+    title: string
+    type: $Enums.BulkJobType
+    status?: $Enums.BulkJobStatus
+    error?: string | null
+    retries?: number
+    max_retries?: number
+    progress_current?: number
+    progress_total?: number
+    queue_name?: string | null
+    queue_job_id?: string | null
+    reference_type?: string | null
+    reference_uuid?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    started_at?: Date | string | null
+    completed_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type BulkJobCreateOrConnectWithoutOrganisationInput = {
+    where: BulkJobWhereUniqueInput
+    create: XOR<BulkJobCreateWithoutOrganisationInput, BulkJobUncheckedCreateWithoutOrganisationInput>
+  }
+
+  export type BulkJobCreateManyOrganisationInputEnvelope = {
+    data: BulkJobCreateManyOrganisationInput | BulkJobCreateManyOrganisationInput[]
+    skipDuplicates?: boolean
+  }
+
   export type OrganisationMemberUpsertWithWhereUniqueWithoutOrganisationInput = {
     where: OrganisationMemberWhereUniqueInput
     update: XOR<OrganisationMemberUpdateWithoutOrganisationInput, OrganisationMemberUncheckedUpdateWithoutOrganisationInput>
@@ -78433,6 +80784,22 @@ export namespace Prisma {
     data: XOR<GoalPersonalBestUpdateManyMutationInput, GoalPersonalBestUncheckedUpdateManyWithoutOrganisationInput>
   }
 
+  export type BulkJobUpsertWithWhereUniqueWithoutOrganisationInput = {
+    where: BulkJobWhereUniqueInput
+    update: XOR<BulkJobUpdateWithoutOrganisationInput, BulkJobUncheckedUpdateWithoutOrganisationInput>
+    create: XOR<BulkJobCreateWithoutOrganisationInput, BulkJobUncheckedCreateWithoutOrganisationInput>
+  }
+
+  export type BulkJobUpdateWithWhereUniqueWithoutOrganisationInput = {
+    where: BulkJobWhereUniqueInput
+    data: XOR<BulkJobUpdateWithoutOrganisationInput, BulkJobUncheckedUpdateWithoutOrganisationInput>
+  }
+
+  export type BulkJobUpdateManyWithWhereWithoutOrganisationInput = {
+    where: BulkJobScalarWhereInput
+    data: XOR<BulkJobUpdateManyMutationInput, BulkJobUncheckedUpdateManyWithoutOrganisationInput>
+  }
+
   export type OrganisationCreateWithoutMembersInput = {
     uuid?: string
     name: string
@@ -78463,6 +80830,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutMembersInput = {
@@ -78496,6 +80864,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutMembersInput = {
@@ -78519,6 +80888,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutUserInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutUserInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
+    bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserUncheckedCreateWithoutMembershipsInput = {
@@ -78538,6 +80908,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutUserInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutUserInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
+    bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserCreateOrConnectWithoutMembershipsInput = {
@@ -78586,6 +80957,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutMembersInput = {
@@ -78619,6 +80991,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutMembershipsInput = {
@@ -78648,6 +81021,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutUserNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutUserNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
+    bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMembershipsInput = {
@@ -78667,6 +81041,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutUserNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutUserNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
+    bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
   }
 
   export type OrganisationCreateWithoutInvitationsInput = {
@@ -78699,6 +81074,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutInvitationsInput = {
@@ -78732,6 +81108,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutInvitationsInput = {
@@ -78755,6 +81132,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutUserInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutUserInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
+    bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserUncheckedCreateWithoutInvitations_sentInput = {
@@ -78774,6 +81152,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutUserInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutUserInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
+    bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserCreateOrConnectWithoutInvitations_sentInput = {
@@ -78822,6 +81201,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutInvitationsInput = {
@@ -78855,6 +81235,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutInvitations_sentInput = {
@@ -78884,6 +81265,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutUserNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutUserNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
+    bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInvitations_sentInput = {
@@ -78903,6 +81285,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutUserNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutUserNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
+    bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
   }
 
   export type OrganisationCreateWithoutFiltersInput = {
@@ -78935,6 +81318,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutFiltersInput = {
@@ -78968,6 +81352,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutFiltersInput = {
@@ -79258,6 +81643,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutFiltersInput = {
@@ -79291,6 +81677,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type RawLeadUpsertWithWhereUniqueWithoutFilterInput = {
@@ -79469,6 +81856,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutScoring_instructionsInput = {
@@ -79502,6 +81890,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutScoring_instructionsInput = {
@@ -79593,6 +81982,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutScoring_instructionsInput = {
@@ -79626,6 +82016,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type FilterScoringInstructionUpsertWithWhereUniqueWithoutScoring_instructionInput = {
@@ -80405,6 +82796,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutContactsInput = {
@@ -80438,6 +82830,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutContactsInput = {
@@ -80940,6 +83333,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutContactsInput = {
@@ -80973,6 +83367,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type LeadUpsertWithoutContactsInput = {
@@ -82180,6 +84575,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutContact_listsInput = {
@@ -82213,6 +84609,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutContact_listsInput = {
@@ -82398,6 +84795,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutContact_listsInput = {
@@ -82431,6 +84829,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type ContactListUpsertWithoutChildrenInput = {
@@ -83025,6 +85424,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutInteractionsInput = {
@@ -83058,6 +85458,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutInteractionsInput = {
@@ -83346,6 +85747,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutInteractionsInput = {
@@ -83379,6 +85781,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OutreachMessageUpsertWithoutInteractionInput = {
@@ -83577,6 +85980,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutOutreach_messagesInput = {
@@ -83610,6 +86014,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutOutreach_messagesInput = {
@@ -83803,6 +86208,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutUserInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutUserInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
+    bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserUncheckedCreateWithoutOutreach_messages_sentInput = {
@@ -83822,6 +86228,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutUserInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutUserInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
+    bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserCreateOrConnectWithoutOutreach_messages_sentInput = {
@@ -83902,6 +86309,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutOutreach_messagesInput = {
@@ -83935,6 +86343,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type ContactUpsertWithoutOutreach_messagesInput = {
@@ -84146,6 +86555,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutUserNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutUserNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
+    bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOutreach_messages_sentInput = {
@@ -84165,6 +86575,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutUserNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutUserNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
+    bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
   }
 
   export type InteractionUpsertWithoutOutreach_messageInput = {
@@ -84235,6 +86646,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutOutreach_sequencesInput = {
@@ -84268,6 +86680,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutOutreach_sequencesInput = {
@@ -84316,6 +86729,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutOutreach_sequencesInput = {
@@ -84349,6 +86763,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type FilterCreateWithoutJobsInput = {
@@ -84449,6 +86864,250 @@ export namespace Prisma {
     audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutFilterNestedInput
   }
 
+  export type OrganisationCreateWithoutBulk_jobsInput = {
+    uuid?: string
+    name: string
+    slug: string
+    timezone?: string
+    reply_to_email?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
+    invitations?: OrganisationInvitationCreateNestedManyWithoutOrganisationInput
+    filters?: FilterCreateNestedManyWithoutOrganisationInput
+    contacts?: ContactCreateNestedManyWithoutOrganisationInput
+    outreach_messages?: OutreachMessageCreateNestedManyWithoutOrganisationInput
+    outreach_sequences?: OutreachSequenceCreateNestedManyWithoutOrganisationInput
+    interactions?: InteractionCreateNestedManyWithoutOrganisationInput
+    sender_profiles?: SenderProfileCreateNestedManyWithoutOrganisationInput
+    marketing_campaigns?: MarketingCampaignCreateNestedManyWithoutOrganisationInput
+    scoring_instructions?: ScoringInstructionCreateNestedManyWithoutOrganisationInput
+    openai_batch_jobs?: OpenAiBatchJobCreateNestedManyWithoutOrganisationInput
+    integrations?: IntegrationCreateNestedManyWithoutOrganisationInput
+    reminders?: ReminderCreateNestedManyWithoutOrganisationInput
+    forms?: FormCreateNestedManyWithoutOrganisationInput
+    contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
+    ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
+    apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
+    message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+  }
+
+  export type OrganisationUncheckedCreateWithoutBulk_jobsInput = {
+    id?: number
+    uuid?: string
+    name: string
+    slug: string
+    timezone?: string
+    reply_to_email?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
+    invitations?: OrganisationInvitationUncheckedCreateNestedManyWithoutOrganisationInput
+    filters?: FilterUncheckedCreateNestedManyWithoutOrganisationInput
+    contacts?: ContactUncheckedCreateNestedManyWithoutOrganisationInput
+    outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutOrganisationInput
+    outreach_sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutOrganisationInput
+    interactions?: InteractionUncheckedCreateNestedManyWithoutOrganisationInput
+    sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutOrganisationInput
+    marketing_campaigns?: MarketingCampaignUncheckedCreateNestedManyWithoutOrganisationInput
+    scoring_instructions?: ScoringInstructionUncheckedCreateNestedManyWithoutOrganisationInput
+    openai_batch_jobs?: OpenAiBatchJobUncheckedCreateNestedManyWithoutOrganisationInput
+    integrations?: IntegrationUncheckedCreateNestedManyWithoutOrganisationInput
+    reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
+    forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
+    contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
+    ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
+    apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
+    message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+  }
+
+  export type OrganisationCreateOrConnectWithoutBulk_jobsInput = {
+    where: OrganisationWhereUniqueInput
+    create: XOR<OrganisationCreateWithoutBulk_jobsInput, OrganisationUncheckedCreateWithoutBulk_jobsInput>
+  }
+
+  export type UserCreateWithoutBulk_jobs_createdInput = {
+    uuid?: string
+    email: string
+    phone?: string | null
+    full_name?: string | null
+    password: string
+    role?: $Enums.AuthRole
+    created_at?: Date | string
+    updated_at?: Date | string
+    memberships?: OrganisationMemberCreateNestedManyWithoutUserInput
+    invitations_sent?: OrganisationInvitationCreateNestedManyWithoutInvited_byInput
+    form_completions?: FormCompletionCreateNestedManyWithoutCompleted_byInput
+    outreach_messages_sent?: OutreachMessageCreateNestedManyWithoutSent_byInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutActorInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutUserInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutUserInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutBulk_jobs_createdInput = {
+    id?: number
+    uuid?: string
+    email: string
+    phone?: string | null
+    full_name?: string | null
+    password: string
+    role?: $Enums.AuthRole
+    created_at?: Date | string
+    updated_at?: Date | string
+    memberships?: OrganisationMemberUncheckedCreateNestedManyWithoutUserInput
+    invitations_sent?: OrganisationInvitationUncheckedCreateNestedManyWithoutInvited_byInput
+    form_completions?: FormCompletionUncheckedCreateNestedManyWithoutCompleted_byInput
+    outreach_messages_sent?: OutreachMessageUncheckedCreateNestedManyWithoutSent_byInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutActorInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutUserInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutUserInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutBulk_jobs_createdInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutBulk_jobs_createdInput, UserUncheckedCreateWithoutBulk_jobs_createdInput>
+  }
+
+  export type OrganisationUpsertWithoutBulk_jobsInput = {
+    update: XOR<OrganisationUpdateWithoutBulk_jobsInput, OrganisationUncheckedUpdateWithoutBulk_jobsInput>
+    create: XOR<OrganisationCreateWithoutBulk_jobsInput, OrganisationUncheckedCreateWithoutBulk_jobsInput>
+    where?: OrganisationWhereInput
+  }
+
+  export type OrganisationUpdateToOneWithWhereWithoutBulk_jobsInput = {
+    where?: OrganisationWhereInput
+    data: XOR<OrganisationUpdateWithoutBulk_jobsInput, OrganisationUncheckedUpdateWithoutBulk_jobsInput>
+  }
+
+  export type OrganisationUpdateWithoutBulk_jobsInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
+    invitations?: OrganisationInvitationUpdateManyWithoutOrganisationNestedInput
+    filters?: FilterUpdateManyWithoutOrganisationNestedInput
+    contacts?: ContactUpdateManyWithoutOrganisationNestedInput
+    outreach_messages?: OutreachMessageUpdateManyWithoutOrganisationNestedInput
+    outreach_sequences?: OutreachSequenceUpdateManyWithoutOrganisationNestedInput
+    interactions?: InteractionUpdateManyWithoutOrganisationNestedInput
+    sender_profiles?: SenderProfileUpdateManyWithoutOrganisationNestedInput
+    marketing_campaigns?: MarketingCampaignUpdateManyWithoutOrganisationNestedInput
+    scoring_instructions?: ScoringInstructionUpdateManyWithoutOrganisationNestedInput
+    openai_batch_jobs?: OpenAiBatchJobUpdateManyWithoutOrganisationNestedInput
+    integrations?: IntegrationUpdateManyWithoutOrganisationNestedInput
+    reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
+    forms?: FormUpdateManyWithoutOrganisationNestedInput
+    contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
+    ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
+    apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
+    message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+  }
+
+  export type OrganisationUncheckedUpdateWithoutBulk_jobsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
+    invitations?: OrganisationInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
+    filters?: FilterUncheckedUpdateManyWithoutOrganisationNestedInput
+    contacts?: ContactUncheckedUpdateManyWithoutOrganisationNestedInput
+    outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutOrganisationNestedInput
+    outreach_sequences?: OutreachSequenceUncheckedUpdateManyWithoutOrganisationNestedInput
+    interactions?: InteractionUncheckedUpdateManyWithoutOrganisationNestedInput
+    sender_profiles?: SenderProfileUncheckedUpdateManyWithoutOrganisationNestedInput
+    marketing_campaigns?: MarketingCampaignUncheckedUpdateManyWithoutOrganisationNestedInput
+    scoring_instructions?: ScoringInstructionUncheckedUpdateManyWithoutOrganisationNestedInput
+    openai_batch_jobs?: OpenAiBatchJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    integrations?: IntegrationUncheckedUpdateManyWithoutOrganisationNestedInput
+    reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
+    forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
+    contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
+    ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+  }
+
+  export type UserUpsertWithoutBulk_jobs_createdInput = {
+    update: XOR<UserUpdateWithoutBulk_jobs_createdInput, UserUncheckedUpdateWithoutBulk_jobs_createdInput>
+    create: XOR<UserCreateWithoutBulk_jobs_createdInput, UserUncheckedCreateWithoutBulk_jobs_createdInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutBulk_jobs_createdInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutBulk_jobs_createdInput, UserUncheckedUpdateWithoutBulk_jobs_createdInput>
+  }
+
+  export type UserUpdateWithoutBulk_jobs_createdInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    full_name?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumAuthRoleFieldUpdateOperationsInput | $Enums.AuthRole
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: OrganisationMemberUpdateManyWithoutUserNestedInput
+    invitations_sent?: OrganisationInvitationUpdateManyWithoutInvited_byNestedInput
+    form_completions?: FormCompletionUpdateManyWithoutCompleted_byNestedInput
+    outreach_messages_sent?: OutreachMessageUpdateManyWithoutSent_byNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutActorNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutUserNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutUserNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutBulk_jobs_createdInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    full_name?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumAuthRoleFieldUpdateOperationsInput | $Enums.AuthRole
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: OrganisationMemberUncheckedUpdateManyWithoutUserNestedInput
+    invitations_sent?: OrganisationInvitationUncheckedUpdateManyWithoutInvited_byNestedInput
+    form_completions?: FormCompletionUncheckedUpdateManyWithoutCompleted_byNestedInput
+    outreach_messages_sent?: OutreachMessageUncheckedUpdateManyWithoutSent_byNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutActorNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutUserNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutUserNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
+  }
+
   export type OrganisationCreateWithoutSender_profilesInput = {
     uuid?: string
     name: string
@@ -84479,6 +87138,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutSender_profilesInput = {
@@ -84512,6 +87172,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutSender_profilesInput = {
@@ -84655,6 +87316,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutSender_profilesInput = {
@@ -84688,6 +87350,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type MarketingCampaignUpsertWithWhereUniqueWithoutSender_profileInput = {
@@ -84736,6 +87399,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutMessage_templatesInput = {
@@ -84769,6 +87433,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutMessage_templatesInput = {
@@ -84817,6 +87482,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutMessage_templatesInput = {
@@ -84850,6 +87516,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutMarketing_campaignsInput = {
@@ -84882,6 +87549,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutMarketing_campaignsInput = {
@@ -84915,6 +87583,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutMarketing_campaignsInput = {
@@ -85162,6 +87831,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutMarketing_campaignsInput = {
@@ -85195,6 +87865,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type SenderProfileUpsertWithoutMarketing_campaignsInput = {
@@ -85691,6 +88362,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutOpenai_batch_jobsInput = {
@@ -85724,6 +88396,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutOpenai_batch_jobsInput = {
@@ -85772,6 +88445,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutOpenai_batch_jobsInput = {
@@ -85805,6 +88479,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutIntegrationsInput = {
@@ -85837,6 +88512,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutIntegrationsInput = {
@@ -85870,6 +88546,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutIntegrationsInput = {
@@ -85976,6 +88653,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutIntegrationsInput = {
@@ -86009,6 +88687,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type IntegrationKeyUpsertWithWhereUniqueWithoutIntegrationInput = {
@@ -86225,6 +88904,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutRemindersInput = {
@@ -86258,6 +88938,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutRemindersInput = {
@@ -86386,6 +89067,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutRemindersInput = {
@@ -86419,6 +89101,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type ContactUpsertWithoutRemindersInput = {
@@ -86537,6 +89220,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutFormsInput = {
@@ -86570,6 +89254,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutFormsInput = {
@@ -86690,6 +89375,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutFormsInput = {
@@ -86723,6 +89409,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type FormFieldUpsertWithWhereUniqueWithoutFormInput = {
@@ -87013,6 +89700,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutUserInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutUserInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
+    bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserUncheckedCreateWithoutForm_completionsInput = {
@@ -87032,6 +89720,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutUserInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutUserInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
+    bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserCreateOrConnectWithoutForm_completionsInput = {
@@ -87211,6 +89900,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutUserNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutUserNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
+    bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
   }
 
   export type UserUncheckedUpdateWithoutForm_completionsInput = {
@@ -87230,6 +89920,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutUserNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutUserNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
+    bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
   }
 
   export type FormCompletionValueUpsertWithWhereUniqueWithoutCompletionInput = {
@@ -87414,6 +90105,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutContact_audience_analysesInput = {
@@ -87447,6 +90139,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutContact_audience_analysesInput = {
@@ -87571,6 +90264,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutContact_audience_analysesInput = {
@@ -87604,6 +90298,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type FilterUpsertWithoutAudience_analysesInput = {
@@ -87724,6 +90419,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutAi_usage_logsInput = {
@@ -87757,6 +90453,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutAi_usage_logsInput = {
@@ -87805,6 +90502,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutAi_usage_logsInput = {
@@ -87838,6 +90536,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutApify_usage_logsInput = {
@@ -87870,6 +90569,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutApify_usage_logsInput = {
@@ -87903,6 +90603,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutApify_usage_logsInput = {
@@ -87951,6 +90652,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutApify_usage_logsInput = {
@@ -87984,6 +90686,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutMessaging_goalsInput = {
@@ -88016,6 +90719,7 @@ export namespace Prisma {
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutMessaging_goalsInput = {
@@ -88049,6 +90753,7 @@ export namespace Prisma {
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutMessaging_goalsInput = {
@@ -88072,6 +90777,7 @@ export namespace Prisma {
     activity_logs?: ActivityLogCreateNestedManyWithoutActorInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutUserInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
+    bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserUncheckedCreateWithoutMessaging_goalsInput = {
@@ -88091,6 +90797,7 @@ export namespace Prisma {
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutActorInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutUserInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
+    bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserCreateOrConnectWithoutMessaging_goalsInput = {
@@ -88172,6 +90879,7 @@ export namespace Prisma {
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutMessaging_goalsInput = {
@@ -88205,6 +90913,7 @@ export namespace Prisma {
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutMessaging_goalsInput = {
@@ -88234,6 +90943,7 @@ export namespace Prisma {
     activity_logs?: ActivityLogUpdateManyWithoutActorNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutUserNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
+    bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMessaging_goalsInput = {
@@ -88253,6 +90963,7 @@ export namespace Prisma {
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutActorNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutUserNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
+    bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
   }
 
   export type GoalAchievementUpsertWithWhereUniqueWithoutGoalInput = {
@@ -88301,6 +91012,7 @@ export namespace Prisma {
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutGoal_achievementsInput = {
@@ -88334,6 +91046,7 @@ export namespace Prisma {
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutGoal_achievementsInput = {
@@ -88357,6 +91070,7 @@ export namespace Prisma {
     activity_logs?: ActivityLogCreateNestedManyWithoutActorInput
     messaging_goals?: MessagingGoalCreateNestedManyWithoutUserInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
+    bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserUncheckedCreateWithoutGoal_achievementsInput = {
@@ -88376,6 +91090,7 @@ export namespace Prisma {
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutActorInput
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutUserInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
+    bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserCreateOrConnectWithoutGoal_achievementsInput = {
@@ -88452,6 +91167,7 @@ export namespace Prisma {
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutGoal_achievementsInput = {
@@ -88485,6 +91201,7 @@ export namespace Prisma {
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutGoal_achievementsInput = {
@@ -88514,6 +91231,7 @@ export namespace Prisma {
     activity_logs?: ActivityLogUpdateManyWithoutActorNestedInput
     messaging_goals?: MessagingGoalUpdateManyWithoutUserNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
+    bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
   }
 
   export type UserUncheckedUpdateWithoutGoal_achievementsInput = {
@@ -88533,6 +91251,7 @@ export namespace Prisma {
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutActorNestedInput
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutUserNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
+    bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
   }
 
   export type MessagingGoalUpsertWithoutAchievementsInput = {
@@ -88599,6 +91318,7 @@ export namespace Prisma {
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutGoal_personal_bestsInput = {
@@ -88632,6 +91352,7 @@ export namespace Prisma {
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutGoal_personal_bestsInput = {
@@ -88655,6 +91376,7 @@ export namespace Prisma {
     activity_logs?: ActivityLogCreateNestedManyWithoutActorInput
     messaging_goals?: MessagingGoalCreateNestedManyWithoutUserInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutUserInput
+    bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserUncheckedCreateWithoutGoal_personal_bestsInput = {
@@ -88674,6 +91396,7 @@ export namespace Prisma {
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutActorInput
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutUserInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutUserInput
+    bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserCreateOrConnectWithoutGoal_personal_bestsInput = {
@@ -88722,6 +91445,7 @@ export namespace Prisma {
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutGoal_personal_bestsInput = {
@@ -88755,6 +91479,7 @@ export namespace Prisma {
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutGoal_personal_bestsInput = {
@@ -88784,6 +91509,7 @@ export namespace Prisma {
     activity_logs?: ActivityLogUpdateManyWithoutActorNestedInput
     messaging_goals?: MessagingGoalUpdateManyWithoutUserNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutUserNestedInput
+    bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
   }
 
   export type UserUncheckedUpdateWithoutGoal_personal_bestsInput = {
@@ -88803,6 +91529,7 @@ export namespace Prisma {
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutActorNestedInput
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutUserNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutUserNestedInput
+    bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
   }
 
   export type OrganisationCreateWithoutActivity_logsInput = {
@@ -88835,6 +91562,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutActivity_logsInput = {
@@ -88868,6 +91596,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutActivity_logsInput = {
@@ -88891,6 +91620,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutUserInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutUserInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
+    bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserUncheckedCreateWithoutActivity_logsInput = {
@@ -88910,6 +91640,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutUserInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutUserInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
+    bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserCreateOrConnectWithoutActivity_logsInput = {
@@ -88958,6 +91689,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutActivity_logsInput = {
@@ -88991,6 +91723,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutActivity_logsInput = {
@@ -89020,6 +91753,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutUserNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutUserNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
+    bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
   }
 
   export type UserUncheckedUpdateWithoutActivity_logsInput = {
@@ -89039,6 +91773,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutUserNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutUserNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
+    bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
   }
 
   export type OrganisationMemberCreateManyUserInput = {
@@ -89144,6 +91879,29 @@ export namespace Prisma {
     period: $Enums.GoalPeriod
     best_count?: number
     achieved_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type BulkJobCreateManyCreated_byInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    title: string
+    type: $Enums.BulkJobType
+    status?: $Enums.BulkJobStatus
+    error?: string | null
+    retries?: number
+    max_retries?: number
+    progress_current?: number
+    progress_total?: number
+    queue_name?: string | null
+    queue_job_id?: string | null
+    reference_type?: string | null
+    reference_uuid?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    started_at?: Date | string | null
+    completed_at?: Date | string | null
+    created_at?: Date | string
     updated_at?: Date | string
   }
 
@@ -89460,6 +92218,74 @@ export namespace Prisma {
     period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
     best_count?: IntFieldUpdateOperationsInput | number
     achieved_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BulkJobUpdateWithoutCreated_byInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    type?: EnumBulkJobTypeFieldUpdateOperationsInput | $Enums.BulkJobType
+    status?: EnumBulkJobStatusFieldUpdateOperationsInput | $Enums.BulkJobStatus
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    retries?: IntFieldUpdateOperationsInput | number
+    max_retries?: IntFieldUpdateOperationsInput | number
+    progress_current?: IntFieldUpdateOperationsInput | number
+    progress_total?: IntFieldUpdateOperationsInput | number
+    queue_name?: NullableStringFieldUpdateOperationsInput | string | null
+    queue_job_id?: NullableStringFieldUpdateOperationsInput | string | null
+    reference_type?: NullableStringFieldUpdateOperationsInput | string | null
+    reference_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    started_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutBulk_jobsNestedInput
+  }
+
+  export type BulkJobUncheckedUpdateWithoutCreated_byInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    type?: EnumBulkJobTypeFieldUpdateOperationsInput | $Enums.BulkJobType
+    status?: EnumBulkJobStatusFieldUpdateOperationsInput | $Enums.BulkJobStatus
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    retries?: IntFieldUpdateOperationsInput | number
+    max_retries?: IntFieldUpdateOperationsInput | number
+    progress_current?: IntFieldUpdateOperationsInput | number
+    progress_total?: IntFieldUpdateOperationsInput | number
+    queue_name?: NullableStringFieldUpdateOperationsInput | string | null
+    queue_job_id?: NullableStringFieldUpdateOperationsInput | string | null
+    reference_type?: NullableStringFieldUpdateOperationsInput | string | null
+    reference_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    started_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BulkJobUncheckedUpdateManyWithoutCreated_byInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    type?: EnumBulkJobTypeFieldUpdateOperationsInput | $Enums.BulkJobType
+    status?: EnumBulkJobStatusFieldUpdateOperationsInput | $Enums.BulkJobStatus
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    retries?: IntFieldUpdateOperationsInput | number
+    max_retries?: IntFieldUpdateOperationsInput | number
+    progress_current?: IntFieldUpdateOperationsInput | number
+    progress_total?: IntFieldUpdateOperationsInput | number
+    queue_name?: NullableStringFieldUpdateOperationsInput | string | null
+    queue_job_id?: NullableStringFieldUpdateOperationsInput | string | null
+    reference_type?: NullableStringFieldUpdateOperationsInput | string | null
+    reference_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    started_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -89831,6 +92657,29 @@ export namespace Prisma {
     period: $Enums.GoalPeriod
     best_count?: number
     achieved_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type BulkJobCreateManyOrganisationInput = {
+    id?: number
+    uuid?: string
+    created_by_user_uuid?: string | null
+    title: string
+    type: $Enums.BulkJobType
+    status?: $Enums.BulkJobStatus
+    error?: string | null
+    retries?: number
+    max_retries?: number
+    progress_current?: number
+    progress_total?: number
+    queue_name?: string | null
+    queue_job_id?: string | null
+    reference_type?: string | null
+    reference_uuid?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    started_at?: Date | string | null
+    completed_at?: Date | string | null
+    created_at?: Date | string
     updated_at?: Date | string
   }
 
@@ -90988,6 +93837,74 @@ export namespace Prisma {
     period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
     best_count?: IntFieldUpdateOperationsInput | number
     achieved_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BulkJobUpdateWithoutOrganisationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    type?: EnumBulkJobTypeFieldUpdateOperationsInput | $Enums.BulkJobType
+    status?: EnumBulkJobStatusFieldUpdateOperationsInput | $Enums.BulkJobStatus
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    retries?: IntFieldUpdateOperationsInput | number
+    max_retries?: IntFieldUpdateOperationsInput | number
+    progress_current?: IntFieldUpdateOperationsInput | number
+    progress_total?: IntFieldUpdateOperationsInput | number
+    queue_name?: NullableStringFieldUpdateOperationsInput | string | null
+    queue_job_id?: NullableStringFieldUpdateOperationsInput | string | null
+    reference_type?: NullableStringFieldUpdateOperationsInput | string | null
+    reference_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    started_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: UserUpdateOneWithoutBulk_jobs_createdNestedInput
+  }
+
+  export type BulkJobUncheckedUpdateWithoutOrganisationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    type?: EnumBulkJobTypeFieldUpdateOperationsInput | $Enums.BulkJobType
+    status?: EnumBulkJobStatusFieldUpdateOperationsInput | $Enums.BulkJobStatus
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    retries?: IntFieldUpdateOperationsInput | number
+    max_retries?: IntFieldUpdateOperationsInput | number
+    progress_current?: IntFieldUpdateOperationsInput | number
+    progress_total?: IntFieldUpdateOperationsInput | number
+    queue_name?: NullableStringFieldUpdateOperationsInput | string | null
+    queue_job_id?: NullableStringFieldUpdateOperationsInput | string | null
+    reference_type?: NullableStringFieldUpdateOperationsInput | string | null
+    reference_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    started_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BulkJobUncheckedUpdateManyWithoutOrganisationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    type?: EnumBulkJobTypeFieldUpdateOperationsInput | $Enums.BulkJobType
+    status?: EnumBulkJobStatusFieldUpdateOperationsInput | $Enums.BulkJobStatus
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    retries?: IntFieldUpdateOperationsInput | number
+    max_retries?: IntFieldUpdateOperationsInput | number
+    progress_current?: IntFieldUpdateOperationsInput | number
+    progress_total?: IntFieldUpdateOperationsInput | number
+    queue_name?: NullableStringFieldUpdateOperationsInput | string | null
+    queue_job_id?: NullableStringFieldUpdateOperationsInput | string | null
+    reference_type?: NullableStringFieldUpdateOperationsInput | string | null
+    reference_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    started_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 

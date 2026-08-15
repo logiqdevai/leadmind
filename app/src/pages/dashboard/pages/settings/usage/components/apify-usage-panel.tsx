@@ -142,7 +142,7 @@ export function ApifyUsagePanel() {
                 />
             </div>
 
-            <div className="rounded-xl border border-border overflow-hidden">
+            <div className="rounded-xl overflow-hidden">
                 <Table>
                     <Table.ScrollContainer>
                         <Table.Content aria-label="Apify usage logs" className="min-w-[960px]">

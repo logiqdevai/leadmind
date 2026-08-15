@@ -182,7 +182,7 @@ export function CompletionsTable({
     });
 
     return (
-        <div className="bg-surface rounded-xl border border-border overflow-hidden">
+        <div className="bg-surface rounded-xl overflow-hidden">
             <Table>
                 <Table.ScrollContainer>
                     <Table.Content aria-label="Completions" className="min-w-[600px]">

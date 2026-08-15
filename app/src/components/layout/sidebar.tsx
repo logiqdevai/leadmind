@@ -32,12 +32,13 @@ export default function Sidebar() {
       className={cn(
         'hidden lg:flex flex-col shrink-0',
         'my-3 ml-3 rounded-2xl overflow-hidden',
-        'bg-surface border border-border',
+        'bg-surface',
         'transition-all duration-300 ease-in-out',
         collapsed ? 'w-[64px]' : 'w-[220px]',
       )}
       style={{
         boxShadow: `
+          inset 0 0 0 1px color-mix(in oklch, var(--color-border) 100%, transparent),
           0 0 0 1px color-mix(in oklch, var(--accent) 8%, transparent),
           0 20px 40px -12px color-mix(in oklch, black 22%, transparent),
           0 6px 16px -6px color-mix(in oklch, black 12%, transparent)

@@ -57,7 +57,7 @@ const MessageTemplatesPage: FC = () => {
             </div>
 
             {isLoading ? (
-                <div className="h-48 rounded-xl bg-surface-secondary animate-pulse border border-border" />
+                <div className="h-48 rounded-xl bg-surface-secondary animate-pulse" />
             ) : (
                 <MessageTemplatesTable
                     templates={templates}

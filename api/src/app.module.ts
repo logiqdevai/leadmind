@@ -28,6 +28,7 @@ import { WorkersModule } from './workers/workers.module';
 import { AdminModule } from './modules/admin/admin.module';
 import { IntegrationsModule } from './modules/integrations/integrations.module';
 import { RemindersModule } from './modules/reminders/reminders.module';
+import { BulkJobsModule } from './modules/bulk-jobs/bulk-jobs.module';
 import { FormsModule } from './modules/forms/forms.module';
 import { ContactListsModule } from './modules/contact-lists/contact-lists.module';
 import { ContactAudienceStatsModule } from './modules/contact-audience-stats/contact-audience-stats.module';
@@ -74,6 +75,7 @@ import { MessagingGoalsModule } from './modules/messaging-goals/messaging-goals.
     AdminModule,
     IntegrationsModule,
     RemindersModule,
+    BulkJobsModule,
     FormsModule,
     ContactListsModule,
     ContactAudienceStatsModule,

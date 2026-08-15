@@ -121,7 +121,7 @@ export function AiUsagePanel() {
                 />
             </div>
 
-            <div className="rounded-xl border border-border overflow-hidden">
+            <div className="rounded-xl overflow-hidden">
                 <Table>
                     <Table.ScrollContainer>
                         <Table.Content aria-label="AI usage logs" className="min-w-[900px]">

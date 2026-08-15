@@ -139,6 +139,11 @@ export const ApiRoutes = {
         complete: (uuid: string) => `/reminders/${uuid}/complete`,
         remove: (uuid: string) => `/reminders/${uuid}`,
     },
+    bulk_jobs: {
+        prefix: "/bulk-jobs",
+        list: "/bulk-jobs",
+        get: (uuid: string) => `/bulk-jobs/${uuid}`,
+    },
     message_templates: {
         prefix: "/message-templates",
         list: "/message-templates",

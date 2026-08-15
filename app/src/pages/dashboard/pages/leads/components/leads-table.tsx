@@ -182,7 +182,7 @@ export function LeadsTable({ contacts, isLoading, isFetching, page, pageSize, to
   };
 
   return (
-    <div className="bg-surface rounded-xl border border-border overflow-hidden min-w-0 w-full">
+    <div className="bg-surface rounded-xl overflow-hidden min-w-0 w-full">
       <Table>
         <Table.ScrollContainer className="w-full max-w-full overflow-x-hidden">
           <Table.Content
