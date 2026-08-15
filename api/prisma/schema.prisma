@@ -32,6 +32,7 @@ model User {
   messaging_goals          MessagingGoal[]
   goal_achievements        GoalAchievement[]
   goal_personal_bests      GoalPersonalBest[]
+  bulk_jobs_created        BulkJob[]                @relation("BulkJobCreatedBy")
 
   @@index([email])
   @@index([phone])
@@ -72,6 +73,7 @@ model Organisation {
   messaging_goals          MessagingGoal[]
   goal_achievements        GoalAchievement[]
   goal_personal_bests      GoalPersonalBest[]
+  bulk_jobs                BulkJob[]
 
   @@index([uuid])
   @@index([slug])
@@ -519,6 +521,41 @@ model FilterJob {
   @@index([status])
 }
 
+model BulkJob {
+  id                   Int           @id @default(autoincrement())
+  uuid                 String        @unique @default(uuid())
+  organisation_uuid    String
+  created_by_user_uuid String?
+  title                String
+  type                 BulkJobType
+  status               BulkJobStatus @default(PENDING)
+  error                String?       @db.Text
+  retries              Int           @default(0)
+  max_retries          Int           @default(3)
+  progress_current     Int           @default(0)
+  progress_total       Int           @default(0)
+  queue_name           String?
+  queue_job_id         String?
+  reference_type       String?
+  reference_uuid       String?
+  metadata             Json?
+  started_at           DateTime?
+  completed_at         DateTime?
+  created_at           DateTime      @default(now())
+  updated_at           DateTime      @updatedAt
+
+  organisation Organisation @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  created_by   User?        @relation("BulkJobCreatedBy", fields: [created_by_user_uuid], references: [uuid], onDelete: SetNull)
+
+  @@index([organisation_uuid, status])
+  @@index([organisation_uuid, created_at])
+  @@index([organisation_uuid, type])
+  @@index([status, updated_at])
+  @@index([queue_name, queue_job_id])
+  @@index([reference_type, reference_uuid])
+  @@map("bulk_jobs")
+}
+
 model SenderProfile {
   id           Int      @id @default(autoincrement())
   uuid         String   @unique @default(uuid())
@@ -734,6 +771,28 @@ enum JobStatus {
   COMPLETED
   FAILED
   CANCELLED
+}
+
+enum BulkJobStatus {
+  PENDING
+  QUEUED
+  RUNNING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum BulkJobType {
+  CONTACT_EMAIL_SCRAPE
+  FILTER_SCRAPE
+  CONTACT_SCORE
+  CONTACT_ENRICH
+  LEAD_ENRICH
+  AI_DRAFT_MESSAGES
+  CAMPAIGN_DISPATCH
+  CAMPAIGN_MESSAGE_SEND
+  OPENAI_BATCH
+  OTHER
 }
 
 enum JobTrigger {
