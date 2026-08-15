@@ -11,9 +11,7 @@ import {
   useDashboardNavbarSlots,
 } from "@/components/providers/dashboard-navbar-provider";
 import { useReminderNotifications } from "@/features/reminders/hooks/use-reminder-notifications";
-import { useContactEmailScrapeNotifications } from "@/features/contacts/hooks/use-contact-email-scrape-notifications";
 import { GoalCelebrationsHost } from "@/pages/dashboard/components/goal-celebrations-host";
-import { ContactEmailScrapeBanner } from "@/pages/dashboard/components/contact-email-scrape-banner";
 import { environments } from "@/config/environments";
 import { Routes } from "@/routes/routes";
 
@@ -21,7 +19,6 @@ function DashboardShell() {
   const drawerState = useOverlayState();
   const { setSubnavEl } = useDashboardNavbarSlots();
   useReminderNotifications();
-  useContactEmailScrapeNotifications();
 
   return (
     <div className="flex h-full min-h-0 overflow-hidden bg-background">
@@ -36,7 +33,6 @@ function DashboardShell() {
       </div>
 
       <GoalCelebrationsHost />
-      <ContactEmailScrapeBanner />
       <Drawer state={drawerState}>
         <Drawer.Backdrop
           isDismissable

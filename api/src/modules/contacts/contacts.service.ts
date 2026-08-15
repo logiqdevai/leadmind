@@ -1,4 +1,3 @@
-import { randomUUID } from 'crypto';
 import { InjectQueue } from '@nestjs/bullmq';
 import {
     BadRequestException,
@@ -8,7 +7,6 @@ import {
     NotFoundException,
 } from '@nestjs/common';
 import { Queue } from 'bullmq';
-import { NotificationsGateway } from '@/gateways/notifications.gateway';
 import {
     ApifyUsageOperation,
     CampaignContactStatus,
@@ -107,7 +105,6 @@ export class ContactsService {
         private readonly emailCredentialsService: EmailCredentialsService,
         private readonly senderProfilesService: SenderProfilesService,
         private readonly websiteCrawler: WebsiteContentCrawlerAdapter,
-        private readonly notificationsGateway: NotificationsGateway,
         @InjectQueue(AI_PROCESS_QUEUE) private readonly aiProcessQueue: Queue,
     ) { }
 
@@ -1292,8 +1289,7 @@ export class ContactsService {
     async triggerBulkScrapeEmailsFromWebsites(
         organisation_uuid: string,
         dto: BulkScrapeContactEmailsDto,
-        user_uuid: string,
-    ): Promise<{ queued: number; skipped: number; job_id: string | null }> {
+    ): Promise<{ queued: number; skipped: number }> {
         const hasUuids = Boolean(dto.contact_uuids?.length);
         const hasList = Boolean(dto.list_uuid);
         const hasFilters = dto.filters !== undefined && dto.filters !== null;
@@ -1363,7 +1359,7 @@ export class ContactsService {
         }
 
         if (candidateUuids.length === 0) {
-            return { queued: 0, skipped: 0, job_id: null };
+            return { queued: 0, skipped: 0 };
         }
 
         const resolved = await this.prisma.contact.findMany({
@@ -1376,75 +1372,34 @@ export class ContactsService {
                 row.website?.trim() &&
                 (!row.email || row.email.trim() === ''),
         );
-        const skipped = resolved.length - eligible.length;
-        const total = eligible.length;
-
-        if (total === 0) {
-            return { queued: 0, skipped, job_id: null };
-        }
-
-        const job_id = randomUUID();
-        this.notificationsGateway.emitToUser(user_uuid, 'contact.email_scrape.started', {
-            job_id,
-            queued: total,
-            skipped,
-        });
-
-        let completed = 0;
-        let found = 0;
-        let failed = 0;
-
-        const reportProgress = () => {
-            this.notificationsGateway.emitToUser(user_uuid, 'contact.email_scrape.progress', {
-                job_id,
-                completed,
-                total,
-                found,
-                failed,
-                not_found: completed - found - failed,
-            });
-            if (completed >= total) {
-                this.notificationsGateway.emitToUser(user_uuid, 'contact.email_scrape.completed', {
-                    job_id,
-                    queued: total,
-                    found,
-                    failed,
-                    not_found: total - found - failed,
-                });
-            }
-        };
 
         for (const row of eligible) {
-            void this.scrapeAndSaveContactEmail(organisation_uuid, row.uuid, row.website!.trim())
-                .then((didFind) => {
-                    completed += 1;
-                    if (didFind) found += 1;
-                    reportProgress();
-                })
-                .catch((error) => {
-                    completed += 1;
-                    failed += 1;
+            void this.scrapeAndSaveContactEmail(organisation_uuid, row.uuid, row.website!.trim()).catch(
+                (error) => {
                     this.logger.error(
                         `Contact ${row.uuid} website email scrape failed: ${error instanceof Error ? error.message : error}`,
                     );
-                    reportProgress();
-                });
+                },
+            );
         }
 
-        return { queued: total, skipped, job_id };
+        return {
+            queued: eligible.length,
+            skipped: resolved.length - eligible.length,
+        };
     }
 
     private async scrapeAndSaveContactEmail(
         organisation_uuid: string,
         contactUuid: string,
         website: string,
-    ): Promise<boolean> {
+    ): Promise<void> {
         const contact = await this.prisma.contact.findFirst({
             where: { uuid: contactUuid, organisation_uuid },
             select: { uuid: true, lead_uuid: true },
         });
         if (!contact) {
-            return false;
+            return;
         }
 
         const startUrls = buildWebsiteEmailCrawlUrls(website);
@@ -1472,7 +1427,7 @@ export class ContactsService {
             this.logger.debug(
                 `No email found for contact ${contactUuid} across ${pages.length}/${startUrls.length} pages`,
             );
-            return false;
+            return;
         }
 
         const existingByEmail = await findOwnedContactByEmail(this.prisma, organisation_uuid, email);
@@ -1499,7 +1454,7 @@ export class ContactsService {
                 await this.elasticsearchService.indexLead(lead);
             }
             await this.reindexContact(existingByEmail.uuid);
-            return true;
+            return;
         }
 
         await this.prisma.$transaction([
@@ -1518,7 +1473,6 @@ export class ContactsService {
             await this.elasticsearchService.indexLead(lead);
         }
         await this.reindexContact(contactUuid);
-        return true;
     }
 
     async findEnrichmentsForContact(

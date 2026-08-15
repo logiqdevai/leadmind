@@ -410,5 +410,4 @@ export interface BulkScrapeContactEmailsPayload {
 export interface BulkScrapeContactEmailsResult {
     queued: number;
     skipped: number;
-    job_id: string | null;
 }
