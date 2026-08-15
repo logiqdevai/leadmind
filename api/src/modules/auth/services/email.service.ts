@@ -44,7 +44,7 @@ export class EmailAuthService {
 
             const organisation = await this.organisationsService.createForUser(
                 user.uuid,
-                'Default Organisation',
+                'logiqdev',
             );
 
             return this.organisationsService.buildAuthResponse(user.uuid, organisation.uuid);
@@ -76,13 +76,13 @@ export class EmailAuthService {
 
             let membership = await this.prisma.organisationMember.findFirst({
                 where: { user_uuid: user.uuid },
-                orderBy: { created_at: 'asc' },
+                orderBy: { updated_at: 'desc' },
             });
 
             if (!membership) {
                 const organisation = await this.organisationsService.createForUser(
                     user.uuid,
-                    'Default Organisation',
+                    'logiqdev',
                 );
                 membership = await this.prisma.organisationMember.findFirst({
                     where: {

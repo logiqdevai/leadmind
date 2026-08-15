@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto';
 import { InjectQueue } from '@nestjs/bullmq';
 import {
     BadRequestException,
@@ -7,6 +8,7 @@ import {
     NotFoundException,
 } from '@nestjs/common';
 import { Queue } from 'bullmq';
+import { NotificationsGateway } from '@/gateways/notifications.gateway';
 import {
     ApifyUsageOperation,
     CampaignContactStatus,
@@ -76,9 +78,9 @@ import {
     validateEmailProviderAllocations,
 } from '@/modules/outreach/utils/email-provider-allocation.util';
 import { WebsiteContentCrawlerAdapter } from '@/integrations/apify/website-content-crawler/website-content-crawler.adapter';
-import { normalizeWebsiteUrl } from '@/modules/leads/utils/enrichment-data.utils';
 import {
-    extractEmailsFromCrawledPage,
+    buildWebsiteEmailCrawlUrls,
+    extractEmailsFromCrawledPages,
     pickBestContactEmail,
 } from './utils/contact-website-email.utils';
 import {
@@ -105,6 +107,7 @@ export class ContactsService {
         private readonly emailCredentialsService: EmailCredentialsService,
         private readonly senderProfilesService: SenderProfilesService,
         private readonly websiteCrawler: WebsiteContentCrawlerAdapter,
+        private readonly notificationsGateway: NotificationsGateway,
         @InjectQueue(AI_PROCESS_QUEUE) private readonly aiProcessQueue: Queue,
     ) { }
 
@@ -1289,7 +1292,8 @@ export class ContactsService {
     async triggerBulkScrapeEmailsFromWebsites(
         organisation_uuid: string,
         dto: BulkScrapeContactEmailsDto,
-    ): Promise<{ queued: number; skipped: number }> {
+        user_uuid: string,
+    ): Promise<{ queued: number; skipped: number; job_id: string | null }> {
         const hasUuids = Boolean(dto.contact_uuids?.length);
         const hasList = Boolean(dto.list_uuid);
         const hasFilters = dto.filters !== undefined && dto.filters !== null;
@@ -1359,7 +1363,7 @@ export class ContactsService {
         }
 
         if (candidateUuids.length === 0) {
-            return { queued: 0, skipped: 0 };
+            return { queued: 0, skipped: 0, job_id: null };
         }
 
         const resolved = await this.prisma.contact.findMany({
@@ -1372,49 +1376,103 @@ export class ContactsService {
                 row.website?.trim() &&
                 (!row.email || row.email.trim() === ''),
         );
+        const skipped = resolved.length - eligible.length;
+        const total = eligible.length;
 
-        for (const row of eligible) {
-            void this.scrapeAndSaveContactEmail(organisation_uuid, row.uuid, row.website!.trim()).catch((error) => {
-                this.logger.error(
-                    `Contact ${row.uuid} website email scrape failed: ${error instanceof Error ? error.message : error}`,
-                );
-            });
+        if (total === 0) {
+            return { queued: 0, skipped, job_id: null };
         }
 
-        return {
-            queued: eligible.length,
-            skipped: resolved.length - eligible.length,
+        const job_id = randomUUID();
+        this.notificationsGateway.emitToUser(user_uuid, 'contact.email_scrape.started', {
+            job_id,
+            queued: total,
+            skipped,
+        });
+
+        let completed = 0;
+        let found = 0;
+        let failed = 0;
+
+        const reportProgress = () => {
+            this.notificationsGateway.emitToUser(user_uuid, 'contact.email_scrape.progress', {
+                job_id,
+                completed,
+                total,
+                found,
+                failed,
+                not_found: completed - found - failed,
+            });
+            if (completed >= total) {
+                this.notificationsGateway.emitToUser(user_uuid, 'contact.email_scrape.completed', {
+                    job_id,
+                    queued: total,
+                    found,
+                    failed,
+                    not_found: total - found - failed,
+                });
+            }
         };
+
+        for (const row of eligible) {
+            void this.scrapeAndSaveContactEmail(organisation_uuid, row.uuid, row.website!.trim())
+                .then((didFind) => {
+                    completed += 1;
+                    if (didFind) found += 1;
+                    reportProgress();
+                })
+                .catch((error) => {
+                    completed += 1;
+                    failed += 1;
+                    this.logger.error(
+                        `Contact ${row.uuid} website email scrape failed: ${error instanceof Error ? error.message : error}`,
+                    );
+                    reportProgress();
+                });
+        }
+
+        return { queued: total, skipped, job_id };
     }
 
     private async scrapeAndSaveContactEmail(
         organisation_uuid: string,
         contactUuid: string,
         website: string,
-    ): Promise<void> {
+    ): Promise<boolean> {
         const contact = await this.prisma.contact.findFirst({
             where: { uuid: contactUuid, organisation_uuid },
             select: { uuid: true, lead_uuid: true },
         });
         if (!contact) {
-            return;
+            return false;
         }
 
-        const url = normalizeWebsiteUrl(website);
-        const page = await this.websiteCrawler.crawlSinglePage(
+        const startUrls = buildWebsiteEmailCrawlUrls(website);
+        const pages = await this.websiteCrawler.crawlPages(
             organisation_uuid,
-            url,
-            {},
+            {
+                start_urls: startUrls,
+                max_crawl_depth: 0,
+                max_crawl_pages: startUrls.length,
+                max_results: startUrls.length,
+                save_html: true,
+                save_markdown: true,
+                html_transformer: 'none',
+                aggressive_prune: false,
+            },
             {
                 operation: ApifyUsageOperation.CONTACT_EMAIL_SCRAPE,
                 reference_type: 'contact',
                 reference_uuid: contactUuid,
             },
         );
-        const emails = extractEmailsFromCrawledPage(page);
+        const emails = extractEmailsFromCrawledPages(pages);
         const email = pickBestContactEmail(emails);
         if (!email) {
-            return;
+            this.logger.debug(
+                `No email found for contact ${contactUuid} across ${pages.length}/${startUrls.length} pages`,
+            );
+            return false;
         }
 
         const existingByEmail = await findOwnedContactByEmail(this.prisma, organisation_uuid, email);
@@ -1441,7 +1499,7 @@ export class ContactsService {
                 await this.elasticsearchService.indexLead(lead);
             }
             await this.reindexContact(existingByEmail.uuid);
-            return;
+            return true;
         }
 
         await this.prisma.$transaction([
@@ -1460,6 +1518,7 @@ export class ContactsService {
             await this.elasticsearchService.indexLead(lead);
         }
         await this.reindexContact(contactUuid);
+        return true;
     }
 
     async findEnrichmentsForContact(

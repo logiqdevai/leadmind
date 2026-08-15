@@ -52,6 +52,7 @@ import { contactListQueryKeys } from "@/features/contact-lists/hooks/use-contact
 import type { PaginatedListMembers } from "@/features/contact-lists/interfaces/contact-list.interface";
 import type { EnrichmentSource } from "@/features/enrichment/constants/enrichment-sources";
 import { toast } from "@/hooks/use-toast";
+import { useContactEmailScrapeStore } from "@/stores/contact-email-scrape";
 
 export const contactsQueryKeys = {
     all: ["contacts"] as const,
@@ -475,13 +476,33 @@ export function useBulkScrapeContactEmails() {
     return useMutation({
         mutationFn: (payload: BulkScrapeContactEmailsPayload) => bulkScrapeContactEmails(payload),
         onSuccess: (data) => {
+            if (data.job_id && data.queued > 0) {
+                useContactEmailScrapeStore.getState().startJob({
+                    job_id: data.job_id,
+                    queued: data.queued,
+                    skipped: data.skipped,
+                });
+            }
+
+            if (data.queued === 0) {
+                toast({
+                    title: "No contacts to look up",
+                    description:
+                        data.skipped > 0
+                            ? `${data.skipped} skipped — already have an email or no website.`
+                            : "Nothing matched the current selection.",
+                    duration: 4500,
+                });
+                return;
+            }
+
             const skip =
                 data.skipped > 0
                     ? ` (${data.skipped} skipped — already have email or no website)`
                     : "";
             toast({
                 title: "Website email lookup started",
-                description: `${data.queued} contact${data.queued === 1 ? "" : "s"} queued${skip}. Results will appear as crawls finish.`,
+                description: `Checking ${data.queued} contact${data.queued === 1 ? "" : "s"}${skip}. Progress shows in the corner until finished.`,
                 duration: 4500,
             });
             qc.invalidateQueries({ queryKey: contactsQueryKeys.all });

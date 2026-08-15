@@ -39,6 +39,11 @@ export const WEBSOCKET_EVENTS = {
         PROGRESS_UPDATED: 'goal.progress_updated',
         LEADERBOARD_UPDATED: 'goal.leaderboard_updated',
     },
+    CONTACT_EMAIL_SCRAPE: {
+        STARTED: 'contact.email_scrape.started',
+        PROGRESS: 'contact.email_scrape.progress',
+        COMPLETED: 'contact.email_scrape.completed',
+    },
 } as const;
 
 export type WebsocketEventCategory = keyof typeof WEBSOCKET_EVENTS;
