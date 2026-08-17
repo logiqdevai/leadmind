@@ -1,6 +1,7 @@
 import { useState, type ComponentType } from "react";
 import { Button, Chip } from "@heroui/react";
 import {
+    Bot,
     Cloud,
     KeyRound,
     Mail,
@@ -29,6 +30,7 @@ const providerIcons: Record<string, ComponentType<{ className?: string }>> = {
     SMTP: Server,
     TWILIO: MessageSquare,
     APIFY: Cloud,
+    SCRAPIO: Bot,
     HUBSPOT: Plug,
 };
 
@@ -129,6 +131,25 @@ const FALLBACK_PROVIDERS: IntegrationProviderView[] = [
         accounts: [],
         keyTypes: [{ key_type: "API_KEY", label: "API token", placeholder: "apify_api_..." }],
         keys: [],
+    },
+    {
+        provider: "SCRAPIO",
+        uuid: null,
+        label: "Scrapio",
+        description:
+            "AI-built web scrapers for your own sites. Add your Scrapio API key, then paste the webhook URL into your Scrapio account and store the signing secret it gives you.",
+        default_account: null,
+        accounts: [],
+        keyTypes: [
+            { key_type: "API_KEY", label: "API key", placeholder: "spio_..." },
+            {
+                key_type: "WEBHOOK_SECRET",
+                label: "Webhook secret",
+                placeholder: "whsec_...",
+            },
+        ],
+        keys: [],
+        webhook_url: null,
     },
     {
         provider: "HUBSPOT",

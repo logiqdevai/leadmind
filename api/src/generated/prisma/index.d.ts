@@ -500,7 +500,8 @@ export const ExternalIntegrationProvider: {
   SMTP: 'SMTP',
   TWILIO: 'TWILIO',
   APIFY: 'APIFY',
-  HUBSPOT: 'HUBSPOT'
+  HUBSPOT: 'HUBSPOT',
+  SCRAPIO: 'SCRAPIO'
 };
 
 export type ExternalIntegrationProvider = (typeof ExternalIntegrationProvider)[keyof typeof ExternalIntegrationProvider]

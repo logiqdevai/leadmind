@@ -10,6 +10,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { ConfigModule } from './shared/config/env/env.module';
 import { ApifyModule } from './integrations/apify/apify.module';
 import { GemiModule } from './integrations/gemi/gemi.module';
+import { ScrapioModule } from './integrations/scrapio/scrapio.module';
 import { GemiModule as GemiApiModule } from './modules/gemi/gemi.module';
 import { ElasticsearchModule } from './integrations/elasticsearch/elasticsearch.module';
 import { QueuesModule } from './core/queues/queues.module';
@@ -58,6 +59,7 @@ import { MessagingGoalsModule } from './modules/messaging-goals/messaging-goals.
     ApifyModule,
     GemiModule,
     GemiApiModule,
+    ScrapioModule,
     ElasticsearchModule,
     QueuesModule,
     BullBoardModule,

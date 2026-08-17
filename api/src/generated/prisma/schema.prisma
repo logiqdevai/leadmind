@@ -914,6 +914,7 @@ enum ExternalIntegrationProvider {
   TWILIO
   APIFY
   HUBSPOT
+  SCRAPIO
 }
 
 enum IntegrationKeyType {

@@ -913,7 +913,8 @@ exports.ExternalIntegrationProvider = exports.$Enums.ExternalIntegrationProvider
   SMTP: 'SMTP',
   TWILIO: 'TWILIO',
   APIFY: 'APIFY',
-  HUBSPOT: 'HUBSPOT'
+  HUBSPOT: 'HUBSPOT',
+  SCRAPIO: 'SCRAPIO'
 };
 
 exports.JobStatus = exports.$Enums.JobStatus = {

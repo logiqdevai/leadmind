@@ -5,6 +5,7 @@ export const IntegrationProviders = {
     SMTP: "SMTP",
     TWILIO: "TWILIO",
     APIFY: "APIFY",
+    SCRAPIO: "SCRAPIO",
     HUBSPOT: "HUBSPOT",
 } as const;
 
