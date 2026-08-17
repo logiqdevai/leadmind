@@ -304,7 +304,7 @@ export function ReminderFormModal({
                                             </DatePicker.Trigger>
                                         </DateField.Suffix>
                                     </DateField.Group>
-                                    <DatePicker.Popover className="flex flex-col gap-3">
+                                    <DatePicker.Popover className="flex min-w-63 w-auto max-w-none flex-col gap-3">
                                         <Calendar aria-label="Choose date">
                                             <Calendar.Header>
                                                 <Calendar.YearPickerTrigger>

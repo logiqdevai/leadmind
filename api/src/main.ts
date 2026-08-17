@@ -38,7 +38,7 @@ async function bootstrap() {
     bullBoardAdapter.getRouter(),
   );
 
-  const enabledCors = process.env.NODE_ENV !== 'local' ? [process.env.APP_URL, process.env.LANDING_URL] : ['http://localhost:5173', 'http://localhost:3001'];
+  const enabledCors = process.env.NODE_ENV !== 'local' ? [process.env.APP_URL, process.env.LANDING_URL] : ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:3001'];
 
   app.enableCors({
     origin: enabledCors,
