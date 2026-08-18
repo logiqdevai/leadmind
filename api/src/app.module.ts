@@ -42,6 +42,7 @@ import { OrganisationsModule } from './modules/organisations/organisations.modul
 import { UsersModule } from './modules/users/users.module';
 import { ActivityLogsModule } from './modules/activity-logs/activity-logs.module';
 import { MessagingGoalsModule } from './modules/messaging-goals/messaging-goals.module';
+import { EmailSendLimitsModule } from './modules/email-send-limits/email-send-limits.module';
 
 @Module({
   imports: [
@@ -51,6 +52,7 @@ import { MessagingGoalsModule } from './modules/messaging-goals/messaging-goals.
     UsersModule,
     ActivityLogsModule,
     MessagingGoalsModule,
+    EmailSendLimitsModule,
     SmsModule,
     AiModule,
     RedisModule,

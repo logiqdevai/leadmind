@@ -76,6 +76,7 @@ model Organisation {
   goal_personal_bests       GoalPersonalBest[]
   bulk_jobs                 BulkJob[]
   website_scrape_requests   WebsiteScrapeRequest[]
+  email_send_limits         EmailSendLimit[]
 
   @@index([uuid])
   @@index([slug])
@@ -1344,6 +1345,24 @@ model MessagingGoal {
   @@index([organisation_uuid, is_active])
   @@index([user_uuid, is_active])
   @@map("messaging_goals")
+}
+
+model EmailSendLimit {
+  id                Int                         @id @default(autoincrement())
+  uuid              String                      @unique @default(uuid())
+  organisation_uuid String
+  provider          ExternalIntegrationProvider
+  period            GoalPeriod
+  max_count         Int
+  is_active         Boolean                     @default(true)
+  created_at        DateTime                    @default(now())
+  updated_at        DateTime                    @updatedAt
+
+  organisation Organisation @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+
+  @@unique([organisation_uuid, provider, period])
+  @@index([organisation_uuid])
+  @@map("email_send_limits")
 }
 
 model GoalAchievement {

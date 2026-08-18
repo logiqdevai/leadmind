@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Button, Modal } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
-import { Save, Send, ArrowLeft } from "lucide-react";
+import { AlertTriangle, Save, Send, ArrowLeft } from "lucide-react";
+import { useEmailSendLimits } from "@/features/email-send-limits/hooks/use-email-send-limits";
 import { Channel } from "@/features/contacts/interfaces/contact.interface";
 import { contactsQueryKeys, useAiDraftMessage } from "@/features/contacts/hooks/use-contacts";
 import {
@@ -80,11 +81,27 @@ export function ComposeMessageForm({
     const [emailSubjectError, setEmailSubjectError] = useState<string | null>(null);
 
     const aiDraft = useAiDraftMessage();
+    const { data: emailSendLimits = [] } = useEmailSendLimits();
 
     const isBulk = mode === "bulk";
     const bulkCount = contactUuids.length;
     const aiContactUuid = isBulk ? contactUuids[0] : contactUuid;
     const showEmailProviders = activeChannel === Channel.EMAIL;
+
+    const reachedEmailLimits = useMemo(() => {
+        const relevantProviders = new Set<string>(
+            isBulk
+                ? emailAllocations.map((a) => a.provider)
+                : emailProvider
+                  ? [emailProvider.provider]
+                  : [],
+        );
+        return emailSendLimits.filter(
+            (limit) => limit.reached && relevantProviders.has(limit.provider),
+        );
+    }, [emailSendLimits, isBulk, emailAllocations, emailProvider]);
+
+    const emailLimitReached = showEmailProviders && reachedEmailLimits.length > 0;
 
     const isPending = aiDraft.isPending || isBulkSubmitting || isSingleSubmitting;
     const contentEmpty = isComposerContentEmpty(activeChannel, value);
@@ -139,6 +156,7 @@ export function ComposeMessageForm({
             return;
         }
         if (showEmailProviders && !isBulk && !emailProvider) return;
+        if (send && emailLimitReached) return;
 
         setIsBulkSubmitting(true);
         let created = 0;
@@ -239,6 +257,7 @@ export function ComposeMessageForm({
             return;
         }
         if (showEmailProviders && !emailProvider) return;
+        if (emailLimitReached) return;
         if (!senderProfileUuid) return;
         setIsSingleSubmitting(true);
         try {
@@ -290,7 +309,8 @@ export function ComposeMessageForm({
         contentEmpty ||
         isPending ||
         !senderProfileUuid ||
-        emailProviderMissing;
+        emailProviderMissing ||
+        emailLimitReached;
 
     return (
         <>
@@ -343,6 +363,19 @@ export function ComposeMessageForm({
                                 />
                             )
                         ) : null}
+                        {emailLimitReached && (
+                            <div className="flex items-start gap-2 rounded-lg border border-danger/30 bg-danger/10 px-3 py-2 text-xs text-danger">
+                                <AlertTriangle className="size-3.5 mt-0.5 shrink-0" />
+                                <span>
+                                    Sending is paused: the send limit for{" "}
+                                    {reachedEmailLimits
+                                        .map((limit) => limit.provider)
+                                        .filter((provider, i, arr) => arr.indexOf(provider) === i)
+                                        .join(", ")}{" "}
+                                    has been reached for this period.
+                                </span>
+                            </div>
+                        )}
                         <SenderProfileSelect
                             value={senderProfileUuid}
                             onChange={setSenderProfileUuid}

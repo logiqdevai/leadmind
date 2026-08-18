@@ -8,6 +8,9 @@ import { Channel, MsgStatus } from "@/features/contacts/interfaces/contact.inter
 import { SourceBadge } from "@/components/ui/source-badge";
 import { useContact } from "@/features/contacts/hooks/use-contacts";
 import { useSendOutreachMessage } from "@/features/outreach/hooks/use-outreach";
+import { useIntegrations } from "@/features/integrations/hooks/use-integrations";
+import { resolveDefaultEmailTarget } from "@/features/integrations/utils/email-provider-utils";
+import { useEmailProviderSendLimitStatus } from "@/features/email-send-limits/hooks/use-email-provider-send-limit-status";
 import { Routes } from "@/routes/routes";
 import { ContactScoresCompact, StatusChip } from "./badges";
 
@@ -26,6 +29,12 @@ interface LeadDrawerProps {
 export function LeadDrawer({ contactUuid, isOpen, onOpenChange }: LeadDrawerProps) {
   const { data: contact, isLoading } = useContact(contactUuid);
   const sendMessage = useSendOutreachMessage();
+  const { data: integrations = [] } = useIntegrations();
+  const defaultEmailTarget = useMemo(
+    () => resolveDefaultEmailTarget(integrations),
+    [integrations],
+  );
+  const emailLimitStatus = useEmailProviderSendLimitStatus(defaultEmailTarget?.provider ?? null);
 
   const { drafts, sentHistory } = useMemo(() => {
     const messages = contact?.outreach_messages ?? [];
@@ -133,7 +142,10 @@ export function LeadDrawer({ contactUuid, isOpen, onOpenChange }: LeadDrawerProp
                               <ActionButtonWithPending
                                 size="sm"
                                 variant="secondary"
-                                isDisabled={sendMessage.isPending}
+                                isDisabled={
+                                  sendMessage.isPending ||
+                                  (m.channel === Channel.EMAIL && emailLimitStatus.reached)
+                                }
                                 isPending={sendMessage.isPending}
                                 onPress={() =>
                                   sendMessage.mutate({

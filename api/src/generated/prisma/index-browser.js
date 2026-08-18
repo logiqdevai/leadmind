@@ -748,6 +748,18 @@ exports.Prisma.MessagingGoalScalarFieldEnum = {
   updated_at: 'updated_at'
 };
 
+exports.Prisma.EmailSendLimitScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  organisation_uuid: 'organisation_uuid',
+  provider: 'provider',
+  period: 'period',
+  max_count: 'max_count',
+  is_active: 'is_active',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
 exports.Prisma.GoalAchievementScalarFieldEnum = {
   id: 'id',
   uuid: 'uuid',
@@ -1181,6 +1193,7 @@ exports.Prisma.ModelName = {
   AiUsageLog: 'AiUsageLog',
   ApifyUsageLog: 'ApifyUsageLog',
   MessagingGoal: 'MessagingGoal',
+  EmailSendLimit: 'EmailSendLimit',
   GoalAchievement: 'GoalAchievement',
   GoalPersonalBest: 'GoalPersonalBest',
   ActivityLog: 'ActivityLog'

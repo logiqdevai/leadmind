@@ -28,6 +28,12 @@ interface ContactFiltersFormProps {
     showLeadSourceType?: boolean;
     showContactListFilter?: boolean;
     showSavedFilters?: boolean;
+    savedFilterUuid?: string | null;
+    onSavedFilterUuidChange?: (uuid: string | null) => void;
+    onApplySavedFilter?: (
+        patch: Partial<ContactFilters & { contact_list_uuid?: string }>,
+        uuid: string | null,
+    ) => void;
     collapsible?: boolean;
     defaultOpen?: boolean;
     open?: boolean;
@@ -49,6 +55,9 @@ export function ContactFiltersForm({
     showLeadSourceType = false,
     showContactListFilter = false,
     showSavedFilters = false,
+    savedFilterUuid,
+    onSavedFilterUuidChange,
+    onApplySavedFilter,
     collapsible = false,
     defaultOpen = false,
     open: openProp,
@@ -80,6 +89,9 @@ export function ContactFiltersForm({
                     value={value}
                     onChange={onChange}
                     disabled={disabled}
+                    appliedUuid={savedFilterUuid}
+                    onAppliedUuidChange={onSavedFilterUuidChange}
+                    onApply={onApplySavedFilter}
                 />
             ) : null}
 

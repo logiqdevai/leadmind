@@ -22,6 +22,7 @@ import { applySmtpEmailTracking } from '@/shared/utils/email-tracking.util';
 import { EmailCredentialsService } from '@/modules/integrations/services/email-credentials.service';
 import { EmailProviderTarget } from '@/modules/integrations/interfaces/email-credentials.interface';
 import { SenderProfilesService } from '@/modules/sender-profiles/sender-profiles.service';
+import { EmailSendLimitsService } from '@/modules/email-send-limits/email-send-limits.service';
 import {
     buildEmailProviderMetadata,
     parseEmailProviderMetadata,
@@ -48,6 +49,7 @@ export class MessageSendService {
         private readonly callsService: CallsService,
         private readonly outreachRenderService: OutreachRenderService,
         private readonly senderProfilesService: SenderProfilesService,
+        private readonly emailSendLimitsService: EmailSendLimitsService,
     ) { }
 
     async deliverOutreachMessage(
@@ -120,6 +122,13 @@ export class MessageSendService {
                     : await this.emailCredentialsService.resolveDefaultTarget(message.organisation_uuid);
 
             const target = providerOverride ?? metadataProvider ?? defaultTarget;
+
+            if (!message.campaign_uuid && target?.provider) {
+                await this.emailSendLimitsService.assertWithinLimit(
+                    message.organisation_uuid,
+                    target.provider,
+                );
+            }
 
             if (target?.provider === ExternalIntegrationProvider.SMTP) {
                 createEmail.html = this.applySmtpTracking(message.uuid, createEmail.html);

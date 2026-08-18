@@ -51,18 +51,35 @@ interface SavedContactFiltersBarProps {
     value: ContactFilters;
     onChange: (patch: Partial<ContactFilters>) => void;
     disabled?: boolean;
+    appliedUuid?: string | null;
+    onAppliedUuidChange?: (uuid: string | null) => void;
+    /**
+     * Used instead of a separate onChange + onAppliedUuidChange pair when selecting/clearing
+     * a saved filter, so callers that persist both in the same place (e.g. URL search params)
+     * can apply them as a single atomic update instead of two separate state writes.
+     */
+    onApply?: (patch: Partial<ContactFilters>, uuid: string | null) => void;
 }
 
 export function SavedContactFiltersBar({
     value,
     onChange,
     disabled,
+    appliedUuid: appliedUuidProp,
+    onAppliedUuidChange,
+    onApply,
 }: SavedContactFiltersBarProps) {
     const { data: savedFilters, isLoading, isError } = useSavedContactFilters();
     const updateFilter = useUpdateSavedContactFilter();
     const deleteFilter = useDeleteSavedContactFilter();
 
-    const [appliedUuid, setAppliedUuid] = useState<string | null>(null);
+    const [uncontrolledAppliedUuid, setUncontrolledAppliedUuid] = useState<string | null>(null);
+    const isControlled = appliedUuidProp !== undefined;
+    const appliedUuid = isControlled ? appliedUuidProp : uncontrolledAppliedUuid;
+    const setAppliedUuid = (uuid: string | null) => {
+        if (!isControlled) setUncontrolledAppliedUuid(uuid);
+        onAppliedUuidChange?.(uuid);
+    };
     const [modalMode, setModalMode] = useState<SaveContactFilterModalMode | null>(null);
     const [deleteTarget, setDeleteTarget] = useState<SavedContactFilter | null>(null);
 
@@ -74,14 +91,24 @@ export function SavedContactFiltersBar({
 
     const handleSelect = (uuid: string) => {
         if (!uuid) {
-            onChange(toFullPatch({}));
-            setAppliedUuid(null);
+            const patch = toFullPatch({});
+            if (onApply) {
+                onApply(patch, null);
+            } else {
+                onChange(patch);
+                setAppliedUuid(null);
+            }
             return;
         }
         const target = filters.find((f) => f.uuid === uuid);
         if (!target) return;
-        onChange(toFullPatch(target.filters));
-        setAppliedUuid(uuid);
+        const patch = toFullPatch(target.filters);
+        if (onApply) {
+            onApply(patch, uuid);
+        } else {
+            onChange(patch);
+            setAppliedUuid(uuid);
+        }
     };
 
     const handleUpdate = () => {

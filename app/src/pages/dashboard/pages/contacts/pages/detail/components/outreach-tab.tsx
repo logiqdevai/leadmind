@@ -2,13 +2,16 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Button, Chip } from "@heroui/react";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
 import { Pencil, Plus, RefreshCcw, Send, Trash } from "lucide-react";
-import type { Contact } from "@/features/contacts/interfaces/contact.interface";
+import { Channel, type Contact } from "@/features/contacts/interfaces/contact.interface";
 import { MsgStatus, type OutreachMessage } from "@/features/contacts/interfaces/contact.interface";
 import { useDeleteOutreachMessage, useSendOutreachMessage } from "@/features/outreach/hooks/use-outreach";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { EditMessageModal } from "@/pages/dashboard/pages/leads/components/edit-message-modal";
 import { cn } from "@/lib/utils";
 import { ComposeMessageModal } from "@/features/messaging/components/compose-message-modal";
+import { useIntegrations } from "@/features/integrations/hooks/use-integrations";
+import { resolveDefaultEmailTarget } from "@/features/integrations/utils/email-provider-utils";
+import { useEmailProviderSendLimitStatus } from "@/features/email-send-limits/hooks/use-email-provider-send-limit-status";
 import { MessageBodyPreview } from "./message-body-preview";
 import { Section } from "./section";
 import { channelIcon } from "../utils/channel-icon";
@@ -23,6 +26,12 @@ interface OutreachTabProps {
 export function OutreachTab({ contact, highlightUuid, onHighlightConsumed, onNavigationLockChange }: OutreachTabProps) {
   const sendMessage = useSendOutreachMessage();
   const deleteMessage = useDeleteOutreachMessage();
+  const { data: integrations = [] } = useIntegrations();
+  const defaultEmailTarget = useMemo(
+    () => resolveDefaultEmailTarget(integrations),
+    [integrations],
+  );
+  const emailLimitStatus = useEmailProviderSendLimitStatus(defaultEmailTarget?.provider ?? null);
 
   const [editingMessage, setEditingMessage] = useState<OutreachMessage | null>(null);
   const [draftPendingDelete, setDraftPendingDelete] = useState<OutreachMessage | null>(null);
@@ -107,10 +116,17 @@ export function OutreachTab({ contact, highlightUuid, onHighlightConsumed, onNav
                     <ActionButtonWithPending
                       size="sm"
                       variant="tertiary"
-                      isDisabled={sendMessage.isPending}
+                      isDisabled={
+                        sendMessage.isPending ||
+                        (m.channel === Channel.EMAIL && emailLimitStatus.reached)
+                      }
                       isPending={sendMessage.isPending}
                       onPress={() => setDraftPendingSend(m)}
-                      aria-label="Send draft"
+                      aria-label={
+                        m.channel === Channel.EMAIL && emailLimitStatus.reached
+                          ? emailLimitStatus.message ?? "Send limit reached"
+                          : "Send draft"
+                      }
                       idleLeading={<Send className="size-3.5 text-emerald-400" />}
                     >
                       {null}
@@ -159,7 +175,15 @@ export function OutreachTab({ contact, highlightUuid, onHighlightConsumed, onNav
                     <Button
                       size="sm"
                       variant="secondary"
-                      isDisabled={sendMessage.isPending}
+                      isDisabled={
+                        sendMessage.isPending ||
+                        (m.channel === Channel.EMAIL && emailLimitStatus.reached)
+                      }
+                      aria-label={
+                        m.channel === Channel.EMAIL && emailLimitStatus.reached
+                          ? emailLimitStatus.message ?? "Send limit reached"
+                          : "Resend"
+                      }
                       onPress={() =>
                         sendMessage.mutate({
                           uuid: m.uuid,

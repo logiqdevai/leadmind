@@ -224,6 +224,11 @@ export type ApifyUsageLog = $Result.DefaultSelection<Prisma.$ApifyUsageLogPayloa
  */
 export type MessagingGoal = $Result.DefaultSelection<Prisma.$MessagingGoalPayload>
 /**
+ * Model EmailSendLimit
+ * 
+ */
+export type EmailSendLimit = $Result.DefaultSelection<Prisma.$EmailSendLimitPayload>
+/**
  * Model GoalAchievement
  * 
  */
@@ -1365,6 +1370,16 @@ export class PrismaClient<
   get messagingGoal(): Prisma.MessagingGoalDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.emailSendLimit`: Exposes CRUD operations for the **EmailSendLimit** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more EmailSendLimits
+    * const emailSendLimits = await prisma.emailSendLimit.findMany()
+    * ```
+    */
+  get emailSendLimit(): Prisma.EmailSendLimitDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.goalAchievement`: Exposes CRUD operations for the **GoalAchievement** model.
     * Example usage:
     * ```ts
@@ -1869,6 +1884,7 @@ export namespace Prisma {
     AiUsageLog: 'AiUsageLog',
     ApifyUsageLog: 'ApifyUsageLog',
     MessagingGoal: 'MessagingGoal',
+    EmailSendLimit: 'EmailSendLimit',
     GoalAchievement: 'GoalAchievement',
     GoalPersonalBest: 'GoalPersonalBest',
     ActivityLog: 'ActivityLog'
@@ -1887,7 +1903,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "organisation" | "organisationMember" | "organisationInvitation" | "filter" | "savedContactFilter" | "scoringInstruction" | "filterScoringInstruction" | "rawLead" | "lead" | "leadEnrichment" | "contact" | "contactInfo" | "contactFilter" | "contactEnrichment" | "contactScore" | "contactList" | "contactListMember" | "contactTag" | "interaction" | "outreachMessage" | "outreachSequence" | "filterJob" | "bulkJob" | "websiteScrapeRequest" | "senderProfile" | "messageTemplate" | "marketingCampaign" | "marketingCampaignContact" | "openAiBatchJob" | "integration" | "integrationAccount" | "integrationKey" | "reminder" | "form" | "formField" | "formCompletion" | "formCompletionValue" | "contactAudienceAnalysis" | "aiUsageLog" | "apifyUsageLog" | "messagingGoal" | "goalAchievement" | "goalPersonalBest" | "activityLog"
+      modelProps: "user" | "organisation" | "organisationMember" | "organisationInvitation" | "filter" | "savedContactFilter" | "scoringInstruction" | "filterScoringInstruction" | "rawLead" | "lead" | "leadEnrichment" | "contact" | "contactInfo" | "contactFilter" | "contactEnrichment" | "contactScore" | "contactList" | "contactListMember" | "contactTag" | "interaction" | "outreachMessage" | "outreachSequence" | "filterJob" | "bulkJob" | "websiteScrapeRequest" | "senderProfile" | "messageTemplate" | "marketingCampaign" | "marketingCampaignContact" | "openAiBatchJob" | "integration" | "integrationAccount" | "integrationKey" | "reminder" | "form" | "formField" | "formCompletion" | "formCompletionValue" | "contactAudienceAnalysis" | "aiUsageLog" | "apifyUsageLog" | "messagingGoal" | "emailSendLimit" | "goalAchievement" | "goalPersonalBest" | "activityLog"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -4999,6 +5015,80 @@ export namespace Prisma {
           }
         }
       }
+      EmailSendLimit: {
+        payload: Prisma.$EmailSendLimitPayload<ExtArgs>
+        fields: Prisma.EmailSendLimitFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.EmailSendLimitFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailSendLimitPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.EmailSendLimitFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailSendLimitPayload>
+          }
+          findFirst: {
+            args: Prisma.EmailSendLimitFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailSendLimitPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.EmailSendLimitFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailSendLimitPayload>
+          }
+          findMany: {
+            args: Prisma.EmailSendLimitFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailSendLimitPayload>[]
+          }
+          create: {
+            args: Prisma.EmailSendLimitCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailSendLimitPayload>
+          }
+          createMany: {
+            args: Prisma.EmailSendLimitCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.EmailSendLimitCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailSendLimitPayload>[]
+          }
+          delete: {
+            args: Prisma.EmailSendLimitDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailSendLimitPayload>
+          }
+          update: {
+            args: Prisma.EmailSendLimitUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailSendLimitPayload>
+          }
+          deleteMany: {
+            args: Prisma.EmailSendLimitDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.EmailSendLimitUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.EmailSendLimitUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailSendLimitPayload>[]
+          }
+          upsert: {
+            args: Prisma.EmailSendLimitUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailSendLimitPayload>
+          }
+          aggregate: {
+            args: Prisma.EmailSendLimitAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateEmailSendLimit>
+          }
+          groupBy: {
+            args: Prisma.EmailSendLimitGroupByArgs<ExtArgs>
+            result: $Utils.Optional<EmailSendLimitGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.EmailSendLimitCountArgs<ExtArgs>
+            result: $Utils.Optional<EmailSendLimitCountAggregateOutputType> | number
+          }
+        }
+      }
       GoalAchievement: {
         payload: Prisma.$GoalAchievementPayload<ExtArgs>
         fields: Prisma.GoalAchievementFieldRefs
@@ -5371,6 +5461,7 @@ export namespace Prisma {
     aiUsageLog?: AiUsageLogOmit
     apifyUsageLog?: ApifyUsageLogOmit
     messagingGoal?: MessagingGoalOmit
+    emailSendLimit?: EmailSendLimitOmit
     goalAchievement?: GoalAchievementOmit
     goalPersonalBest?: GoalPersonalBestOmit
     activityLog?: ActivityLogOmit
@@ -5583,6 +5674,7 @@ export namespace Prisma {
     goal_personal_bests: number
     bulk_jobs: number
     website_scrape_requests: number
+    email_send_limits: number
   }
 
   export type OrganisationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5612,6 +5704,7 @@ export namespace Prisma {
     goal_personal_bests?: boolean | OrganisationCountOutputTypeCountGoal_personal_bestsArgs
     bulk_jobs?: boolean | OrganisationCountOutputTypeCountBulk_jobsArgs
     website_scrape_requests?: boolean | OrganisationCountOutputTypeCountWebsite_scrape_requestsArgs
+    email_send_limits?: boolean | OrganisationCountOutputTypeCountEmail_send_limitsArgs
   }
 
   // Custom InputTypes
@@ -5805,6 +5898,13 @@ export namespace Prisma {
    */
   export type OrganisationCountOutputTypeCountWebsite_scrape_requestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: WebsiteScrapeRequestWhereInput
+  }
+
+  /**
+   * OrganisationCountOutputType without action
+   */
+  export type OrganisationCountOutputTypeCountEmail_send_limitsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EmailSendLimitWhereInput
   }
 
 
@@ -8019,6 +8119,7 @@ export namespace Prisma {
     goal_personal_bests?: boolean | Organisation$goal_personal_bestsArgs<ExtArgs>
     bulk_jobs?: boolean | Organisation$bulk_jobsArgs<ExtArgs>
     website_scrape_requests?: boolean | Organisation$website_scrape_requestsArgs<ExtArgs>
+    email_send_limits?: boolean | Organisation$email_send_limitsArgs<ExtArgs>
     _count?: boolean | OrganisationCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["organisation"]>
 
@@ -8083,6 +8184,7 @@ export namespace Prisma {
     goal_personal_bests?: boolean | Organisation$goal_personal_bestsArgs<ExtArgs>
     bulk_jobs?: boolean | Organisation$bulk_jobsArgs<ExtArgs>
     website_scrape_requests?: boolean | Organisation$website_scrape_requestsArgs<ExtArgs>
+    email_send_limits?: boolean | Organisation$email_send_limitsArgs<ExtArgs>
     _count?: boolean | OrganisationCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type OrganisationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -8117,6 +8219,7 @@ export namespace Prisma {
       goal_personal_bests: Prisma.$GoalPersonalBestPayload<ExtArgs>[]
       bulk_jobs: Prisma.$BulkJobPayload<ExtArgs>[]
       website_scrape_requests: Prisma.$WebsiteScrapeRequestPayload<ExtArgs>[]
+      email_send_limits: Prisma.$EmailSendLimitPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -8547,6 +8650,7 @@ export namespace Prisma {
     goal_personal_bests<T extends Organisation$goal_personal_bestsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$goal_personal_bestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GoalPersonalBestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     bulk_jobs<T extends Organisation$bulk_jobsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$bulk_jobsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BulkJobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     website_scrape_requests<T extends Organisation$website_scrape_requestsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$website_scrape_requestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WebsiteScrapeRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    email_send_limits<T extends Organisation$email_send_limitsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$email_send_limitsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmailSendLimitPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9593,6 +9697,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: WebsiteScrapeRequestScalarFieldEnum | WebsiteScrapeRequestScalarFieldEnum[]
+  }
+
+  /**
+   * Organisation.email_send_limits
+   */
+  export type Organisation$email_send_limitsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailSendLimit
+     */
+    select?: EmailSendLimitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailSendLimit
+     */
+    omit?: EmailSendLimitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailSendLimitInclude<ExtArgs> | null
+    where?: EmailSendLimitWhereInput
+    orderBy?: EmailSendLimitOrderByWithRelationInput | EmailSendLimitOrderByWithRelationInput[]
+    cursor?: EmailSendLimitWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: EmailSendLimitScalarFieldEnum | EmailSendLimitScalarFieldEnum[]
   }
 
   /**
@@ -58413,6 +58541,1154 @@ export namespace Prisma {
 
 
   /**
+   * Model EmailSendLimit
+   */
+
+  export type AggregateEmailSendLimit = {
+    _count: EmailSendLimitCountAggregateOutputType | null
+    _avg: EmailSendLimitAvgAggregateOutputType | null
+    _sum: EmailSendLimitSumAggregateOutputType | null
+    _min: EmailSendLimitMinAggregateOutputType | null
+    _max: EmailSendLimitMaxAggregateOutputType | null
+  }
+
+  export type EmailSendLimitAvgAggregateOutputType = {
+    id: number | null
+    max_count: number | null
+  }
+
+  export type EmailSendLimitSumAggregateOutputType = {
+    id: number | null
+    max_count: number | null
+  }
+
+  export type EmailSendLimitMinAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    organisation_uuid: string | null
+    provider: $Enums.ExternalIntegrationProvider | null
+    period: $Enums.GoalPeriod | null
+    max_count: number | null
+    is_active: boolean | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type EmailSendLimitMaxAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    organisation_uuid: string | null
+    provider: $Enums.ExternalIntegrationProvider | null
+    period: $Enums.GoalPeriod | null
+    max_count: number | null
+    is_active: boolean | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type EmailSendLimitCountAggregateOutputType = {
+    id: number
+    uuid: number
+    organisation_uuid: number
+    provider: number
+    period: number
+    max_count: number
+    is_active: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type EmailSendLimitAvgAggregateInputType = {
+    id?: true
+    max_count?: true
+  }
+
+  export type EmailSendLimitSumAggregateInputType = {
+    id?: true
+    max_count?: true
+  }
+
+  export type EmailSendLimitMinAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    provider?: true
+    period?: true
+    max_count?: true
+    is_active?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type EmailSendLimitMaxAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    provider?: true
+    period?: true
+    max_count?: true
+    is_active?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type EmailSendLimitCountAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    provider?: true
+    period?: true
+    max_count?: true
+    is_active?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type EmailSendLimitAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which EmailSendLimit to aggregate.
+     */
+    where?: EmailSendLimitWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EmailSendLimits to fetch.
+     */
+    orderBy?: EmailSendLimitOrderByWithRelationInput | EmailSendLimitOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: EmailSendLimitWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EmailSendLimits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EmailSendLimits.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned EmailSendLimits
+    **/
+    _count?: true | EmailSendLimitCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: EmailSendLimitAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: EmailSendLimitSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: EmailSendLimitMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: EmailSendLimitMaxAggregateInputType
+  }
+
+  export type GetEmailSendLimitAggregateType<T extends EmailSendLimitAggregateArgs> = {
+        [P in keyof T & keyof AggregateEmailSendLimit]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateEmailSendLimit[P]>
+      : GetScalarType<T[P], AggregateEmailSendLimit[P]>
+  }
+
+
+
+
+  export type EmailSendLimitGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EmailSendLimitWhereInput
+    orderBy?: EmailSendLimitOrderByWithAggregationInput | EmailSendLimitOrderByWithAggregationInput[]
+    by: EmailSendLimitScalarFieldEnum[] | EmailSendLimitScalarFieldEnum
+    having?: EmailSendLimitScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: EmailSendLimitCountAggregateInputType | true
+    _avg?: EmailSendLimitAvgAggregateInputType
+    _sum?: EmailSendLimitSumAggregateInputType
+    _min?: EmailSendLimitMinAggregateInputType
+    _max?: EmailSendLimitMaxAggregateInputType
+  }
+
+  export type EmailSendLimitGroupByOutputType = {
+    id: number
+    uuid: string
+    organisation_uuid: string
+    provider: $Enums.ExternalIntegrationProvider
+    period: $Enums.GoalPeriod
+    max_count: number
+    is_active: boolean
+    created_at: Date
+    updated_at: Date
+    _count: EmailSendLimitCountAggregateOutputType | null
+    _avg: EmailSendLimitAvgAggregateOutputType | null
+    _sum: EmailSendLimitSumAggregateOutputType | null
+    _min: EmailSendLimitMinAggregateOutputType | null
+    _max: EmailSendLimitMaxAggregateOutputType | null
+  }
+
+  type GetEmailSendLimitGroupByPayload<T extends EmailSendLimitGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<EmailSendLimitGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof EmailSendLimitGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], EmailSendLimitGroupByOutputType[P]>
+            : GetScalarType<T[P], EmailSendLimitGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type EmailSendLimitSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    provider?: boolean
+    period?: boolean
+    max_count?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["emailSendLimit"]>
+
+  export type EmailSendLimitSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    provider?: boolean
+    period?: boolean
+    max_count?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["emailSendLimit"]>
+
+  export type EmailSendLimitSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    provider?: boolean
+    period?: boolean
+    max_count?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["emailSendLimit"]>
+
+  export type EmailSendLimitSelectScalar = {
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    provider?: boolean
+    period?: boolean
+    max_count?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type EmailSendLimitOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "provider" | "period" | "max_count" | "is_active" | "created_at" | "updated_at", ExtArgs["result"]["emailSendLimit"]>
+  export type EmailSendLimitInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }
+  export type EmailSendLimitIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }
+  export type EmailSendLimitIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }
+
+  export type $EmailSendLimitPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "EmailSendLimit"
+    objects: {
+      organisation: Prisma.$OrganisationPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      uuid: string
+      organisation_uuid: string
+      provider: $Enums.ExternalIntegrationProvider
+      period: $Enums.GoalPeriod
+      max_count: number
+      is_active: boolean
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["emailSendLimit"]>
+    composites: {}
+  }
+
+  type EmailSendLimitGetPayload<S extends boolean | null | undefined | EmailSendLimitDefaultArgs> = $Result.GetResult<Prisma.$EmailSendLimitPayload, S>
+
+  type EmailSendLimitCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<EmailSendLimitFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: EmailSendLimitCountAggregateInputType | true
+    }
+
+  export interface EmailSendLimitDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['EmailSendLimit'], meta: { name: 'EmailSendLimit' } }
+    /**
+     * Find zero or one EmailSendLimit that matches the filter.
+     * @param {EmailSendLimitFindUniqueArgs} args - Arguments to find a EmailSendLimit
+     * @example
+     * // Get one EmailSendLimit
+     * const emailSendLimit = await prisma.emailSendLimit.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends EmailSendLimitFindUniqueArgs>(args: SelectSubset<T, EmailSendLimitFindUniqueArgs<ExtArgs>>): Prisma__EmailSendLimitClient<$Result.GetResult<Prisma.$EmailSendLimitPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one EmailSendLimit that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {EmailSendLimitFindUniqueOrThrowArgs} args - Arguments to find a EmailSendLimit
+     * @example
+     * // Get one EmailSendLimit
+     * const emailSendLimit = await prisma.emailSendLimit.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends EmailSendLimitFindUniqueOrThrowArgs>(args: SelectSubset<T, EmailSendLimitFindUniqueOrThrowArgs<ExtArgs>>): Prisma__EmailSendLimitClient<$Result.GetResult<Prisma.$EmailSendLimitPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first EmailSendLimit that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmailSendLimitFindFirstArgs} args - Arguments to find a EmailSendLimit
+     * @example
+     * // Get one EmailSendLimit
+     * const emailSendLimit = await prisma.emailSendLimit.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends EmailSendLimitFindFirstArgs>(args?: SelectSubset<T, EmailSendLimitFindFirstArgs<ExtArgs>>): Prisma__EmailSendLimitClient<$Result.GetResult<Prisma.$EmailSendLimitPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first EmailSendLimit that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmailSendLimitFindFirstOrThrowArgs} args - Arguments to find a EmailSendLimit
+     * @example
+     * // Get one EmailSendLimit
+     * const emailSendLimit = await prisma.emailSendLimit.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends EmailSendLimitFindFirstOrThrowArgs>(args?: SelectSubset<T, EmailSendLimitFindFirstOrThrowArgs<ExtArgs>>): Prisma__EmailSendLimitClient<$Result.GetResult<Prisma.$EmailSendLimitPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more EmailSendLimits that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmailSendLimitFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all EmailSendLimits
+     * const emailSendLimits = await prisma.emailSendLimit.findMany()
+     * 
+     * // Get first 10 EmailSendLimits
+     * const emailSendLimits = await prisma.emailSendLimit.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const emailSendLimitWithIdOnly = await prisma.emailSendLimit.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends EmailSendLimitFindManyArgs>(args?: SelectSubset<T, EmailSendLimitFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmailSendLimitPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a EmailSendLimit.
+     * @param {EmailSendLimitCreateArgs} args - Arguments to create a EmailSendLimit.
+     * @example
+     * // Create one EmailSendLimit
+     * const EmailSendLimit = await prisma.emailSendLimit.create({
+     *   data: {
+     *     // ... data to create a EmailSendLimit
+     *   }
+     * })
+     * 
+     */
+    create<T extends EmailSendLimitCreateArgs>(args: SelectSubset<T, EmailSendLimitCreateArgs<ExtArgs>>): Prisma__EmailSendLimitClient<$Result.GetResult<Prisma.$EmailSendLimitPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many EmailSendLimits.
+     * @param {EmailSendLimitCreateManyArgs} args - Arguments to create many EmailSendLimits.
+     * @example
+     * // Create many EmailSendLimits
+     * const emailSendLimit = await prisma.emailSendLimit.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends EmailSendLimitCreateManyArgs>(args?: SelectSubset<T, EmailSendLimitCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many EmailSendLimits and returns the data saved in the database.
+     * @param {EmailSendLimitCreateManyAndReturnArgs} args - Arguments to create many EmailSendLimits.
+     * @example
+     * // Create many EmailSendLimits
+     * const emailSendLimit = await prisma.emailSendLimit.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many EmailSendLimits and only return the `id`
+     * const emailSendLimitWithIdOnly = await prisma.emailSendLimit.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends EmailSendLimitCreateManyAndReturnArgs>(args?: SelectSubset<T, EmailSendLimitCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmailSendLimitPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a EmailSendLimit.
+     * @param {EmailSendLimitDeleteArgs} args - Arguments to delete one EmailSendLimit.
+     * @example
+     * // Delete one EmailSendLimit
+     * const EmailSendLimit = await prisma.emailSendLimit.delete({
+     *   where: {
+     *     // ... filter to delete one EmailSendLimit
+     *   }
+     * })
+     * 
+     */
+    delete<T extends EmailSendLimitDeleteArgs>(args: SelectSubset<T, EmailSendLimitDeleteArgs<ExtArgs>>): Prisma__EmailSendLimitClient<$Result.GetResult<Prisma.$EmailSendLimitPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one EmailSendLimit.
+     * @param {EmailSendLimitUpdateArgs} args - Arguments to update one EmailSendLimit.
+     * @example
+     * // Update one EmailSendLimit
+     * const emailSendLimit = await prisma.emailSendLimit.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends EmailSendLimitUpdateArgs>(args: SelectSubset<T, EmailSendLimitUpdateArgs<ExtArgs>>): Prisma__EmailSendLimitClient<$Result.GetResult<Prisma.$EmailSendLimitPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more EmailSendLimits.
+     * @param {EmailSendLimitDeleteManyArgs} args - Arguments to filter EmailSendLimits to delete.
+     * @example
+     * // Delete a few EmailSendLimits
+     * const { count } = await prisma.emailSendLimit.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends EmailSendLimitDeleteManyArgs>(args?: SelectSubset<T, EmailSendLimitDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more EmailSendLimits.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmailSendLimitUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many EmailSendLimits
+     * const emailSendLimit = await prisma.emailSendLimit.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends EmailSendLimitUpdateManyArgs>(args: SelectSubset<T, EmailSendLimitUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more EmailSendLimits and returns the data updated in the database.
+     * @param {EmailSendLimitUpdateManyAndReturnArgs} args - Arguments to update many EmailSendLimits.
+     * @example
+     * // Update many EmailSendLimits
+     * const emailSendLimit = await prisma.emailSendLimit.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more EmailSendLimits and only return the `id`
+     * const emailSendLimitWithIdOnly = await prisma.emailSendLimit.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends EmailSendLimitUpdateManyAndReturnArgs>(args: SelectSubset<T, EmailSendLimitUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmailSendLimitPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one EmailSendLimit.
+     * @param {EmailSendLimitUpsertArgs} args - Arguments to update or create a EmailSendLimit.
+     * @example
+     * // Update or create a EmailSendLimit
+     * const emailSendLimit = await prisma.emailSendLimit.upsert({
+     *   create: {
+     *     // ... data to create a EmailSendLimit
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the EmailSendLimit we want to update
+     *   }
+     * })
+     */
+    upsert<T extends EmailSendLimitUpsertArgs>(args: SelectSubset<T, EmailSendLimitUpsertArgs<ExtArgs>>): Prisma__EmailSendLimitClient<$Result.GetResult<Prisma.$EmailSendLimitPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of EmailSendLimits.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmailSendLimitCountArgs} args - Arguments to filter EmailSendLimits to count.
+     * @example
+     * // Count the number of EmailSendLimits
+     * const count = await prisma.emailSendLimit.count({
+     *   where: {
+     *     // ... the filter for the EmailSendLimits we want to count
+     *   }
+     * })
+    **/
+    count<T extends EmailSendLimitCountArgs>(
+      args?: Subset<T, EmailSendLimitCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], EmailSendLimitCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a EmailSendLimit.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmailSendLimitAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends EmailSendLimitAggregateArgs>(args: Subset<T, EmailSendLimitAggregateArgs>): Prisma.PrismaPromise<GetEmailSendLimitAggregateType<T>>
+
+    /**
+     * Group by EmailSendLimit.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmailSendLimitGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends EmailSendLimitGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: EmailSendLimitGroupByArgs['orderBy'] }
+        : { orderBy?: EmailSendLimitGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, EmailSendLimitGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetEmailSendLimitGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the EmailSendLimit model
+   */
+  readonly fields: EmailSendLimitFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for EmailSendLimit.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__EmailSendLimitClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    organisation<T extends OrganisationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganisationDefaultArgs<ExtArgs>>): Prisma__OrganisationClient<$Result.GetResult<Prisma.$OrganisationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the EmailSendLimit model
+   */
+  interface EmailSendLimitFieldRefs {
+    readonly id: FieldRef<"EmailSendLimit", 'Int'>
+    readonly uuid: FieldRef<"EmailSendLimit", 'String'>
+    readonly organisation_uuid: FieldRef<"EmailSendLimit", 'String'>
+    readonly provider: FieldRef<"EmailSendLimit", 'ExternalIntegrationProvider'>
+    readonly period: FieldRef<"EmailSendLimit", 'GoalPeriod'>
+    readonly max_count: FieldRef<"EmailSendLimit", 'Int'>
+    readonly is_active: FieldRef<"EmailSendLimit", 'Boolean'>
+    readonly created_at: FieldRef<"EmailSendLimit", 'DateTime'>
+    readonly updated_at: FieldRef<"EmailSendLimit", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * EmailSendLimit findUnique
+   */
+  export type EmailSendLimitFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailSendLimit
+     */
+    select?: EmailSendLimitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailSendLimit
+     */
+    omit?: EmailSendLimitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailSendLimitInclude<ExtArgs> | null
+    /**
+     * Filter, which EmailSendLimit to fetch.
+     */
+    where: EmailSendLimitWhereUniqueInput
+  }
+
+  /**
+   * EmailSendLimit findUniqueOrThrow
+   */
+  export type EmailSendLimitFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailSendLimit
+     */
+    select?: EmailSendLimitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailSendLimit
+     */
+    omit?: EmailSendLimitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailSendLimitInclude<ExtArgs> | null
+    /**
+     * Filter, which EmailSendLimit to fetch.
+     */
+    where: EmailSendLimitWhereUniqueInput
+  }
+
+  /**
+   * EmailSendLimit findFirst
+   */
+  export type EmailSendLimitFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailSendLimit
+     */
+    select?: EmailSendLimitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailSendLimit
+     */
+    omit?: EmailSendLimitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailSendLimitInclude<ExtArgs> | null
+    /**
+     * Filter, which EmailSendLimit to fetch.
+     */
+    where?: EmailSendLimitWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EmailSendLimits to fetch.
+     */
+    orderBy?: EmailSendLimitOrderByWithRelationInput | EmailSendLimitOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for EmailSendLimits.
+     */
+    cursor?: EmailSendLimitWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EmailSendLimits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EmailSendLimits.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of EmailSendLimits.
+     */
+    distinct?: EmailSendLimitScalarFieldEnum | EmailSendLimitScalarFieldEnum[]
+  }
+
+  /**
+   * EmailSendLimit findFirstOrThrow
+   */
+  export type EmailSendLimitFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailSendLimit
+     */
+    select?: EmailSendLimitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailSendLimit
+     */
+    omit?: EmailSendLimitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailSendLimitInclude<ExtArgs> | null
+    /**
+     * Filter, which EmailSendLimit to fetch.
+     */
+    where?: EmailSendLimitWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EmailSendLimits to fetch.
+     */
+    orderBy?: EmailSendLimitOrderByWithRelationInput | EmailSendLimitOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for EmailSendLimits.
+     */
+    cursor?: EmailSendLimitWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EmailSendLimits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EmailSendLimits.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of EmailSendLimits.
+     */
+    distinct?: EmailSendLimitScalarFieldEnum | EmailSendLimitScalarFieldEnum[]
+  }
+
+  /**
+   * EmailSendLimit findMany
+   */
+  export type EmailSendLimitFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailSendLimit
+     */
+    select?: EmailSendLimitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailSendLimit
+     */
+    omit?: EmailSendLimitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailSendLimitInclude<ExtArgs> | null
+    /**
+     * Filter, which EmailSendLimits to fetch.
+     */
+    where?: EmailSendLimitWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EmailSendLimits to fetch.
+     */
+    orderBy?: EmailSendLimitOrderByWithRelationInput | EmailSendLimitOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing EmailSendLimits.
+     */
+    cursor?: EmailSendLimitWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EmailSendLimits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EmailSendLimits.
+     */
+    skip?: number
+    distinct?: EmailSendLimitScalarFieldEnum | EmailSendLimitScalarFieldEnum[]
+  }
+
+  /**
+   * EmailSendLimit create
+   */
+  export type EmailSendLimitCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailSendLimit
+     */
+    select?: EmailSendLimitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailSendLimit
+     */
+    omit?: EmailSendLimitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailSendLimitInclude<ExtArgs> | null
+    /**
+     * The data needed to create a EmailSendLimit.
+     */
+    data: XOR<EmailSendLimitCreateInput, EmailSendLimitUncheckedCreateInput>
+  }
+
+  /**
+   * EmailSendLimit createMany
+   */
+  export type EmailSendLimitCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many EmailSendLimits.
+     */
+    data: EmailSendLimitCreateManyInput | EmailSendLimitCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * EmailSendLimit createManyAndReturn
+   */
+  export type EmailSendLimitCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailSendLimit
+     */
+    select?: EmailSendLimitSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailSendLimit
+     */
+    omit?: EmailSendLimitOmit<ExtArgs> | null
+    /**
+     * The data used to create many EmailSendLimits.
+     */
+    data: EmailSendLimitCreateManyInput | EmailSendLimitCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailSendLimitIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * EmailSendLimit update
+   */
+  export type EmailSendLimitUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailSendLimit
+     */
+    select?: EmailSendLimitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailSendLimit
+     */
+    omit?: EmailSendLimitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailSendLimitInclude<ExtArgs> | null
+    /**
+     * The data needed to update a EmailSendLimit.
+     */
+    data: XOR<EmailSendLimitUpdateInput, EmailSendLimitUncheckedUpdateInput>
+    /**
+     * Choose, which EmailSendLimit to update.
+     */
+    where: EmailSendLimitWhereUniqueInput
+  }
+
+  /**
+   * EmailSendLimit updateMany
+   */
+  export type EmailSendLimitUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update EmailSendLimits.
+     */
+    data: XOR<EmailSendLimitUpdateManyMutationInput, EmailSendLimitUncheckedUpdateManyInput>
+    /**
+     * Filter which EmailSendLimits to update
+     */
+    where?: EmailSendLimitWhereInput
+    /**
+     * Limit how many EmailSendLimits to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * EmailSendLimit updateManyAndReturn
+   */
+  export type EmailSendLimitUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailSendLimit
+     */
+    select?: EmailSendLimitSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailSendLimit
+     */
+    omit?: EmailSendLimitOmit<ExtArgs> | null
+    /**
+     * The data used to update EmailSendLimits.
+     */
+    data: XOR<EmailSendLimitUpdateManyMutationInput, EmailSendLimitUncheckedUpdateManyInput>
+    /**
+     * Filter which EmailSendLimits to update
+     */
+    where?: EmailSendLimitWhereInput
+    /**
+     * Limit how many EmailSendLimits to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailSendLimitIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * EmailSendLimit upsert
+   */
+  export type EmailSendLimitUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailSendLimit
+     */
+    select?: EmailSendLimitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailSendLimit
+     */
+    omit?: EmailSendLimitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailSendLimitInclude<ExtArgs> | null
+    /**
+     * The filter to search for the EmailSendLimit to update in case it exists.
+     */
+    where: EmailSendLimitWhereUniqueInput
+    /**
+     * In case the EmailSendLimit found by the `where` argument doesn't exist, create a new EmailSendLimit with this data.
+     */
+    create: XOR<EmailSendLimitCreateInput, EmailSendLimitUncheckedCreateInput>
+    /**
+     * In case the EmailSendLimit was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<EmailSendLimitUpdateInput, EmailSendLimitUncheckedUpdateInput>
+  }
+
+  /**
+   * EmailSendLimit delete
+   */
+  export type EmailSendLimitDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailSendLimit
+     */
+    select?: EmailSendLimitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailSendLimit
+     */
+    omit?: EmailSendLimitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailSendLimitInclude<ExtArgs> | null
+    /**
+     * Filter which EmailSendLimit to delete.
+     */
+    where: EmailSendLimitWhereUniqueInput
+  }
+
+  /**
+   * EmailSendLimit deleteMany
+   */
+  export type EmailSendLimitDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which EmailSendLimits to delete
+     */
+    where?: EmailSendLimitWhereInput
+    /**
+     * Limit how many EmailSendLimits to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * EmailSendLimit without action
+   */
+  export type EmailSendLimitDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailSendLimit
+     */
+    select?: EmailSendLimitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailSendLimit
+     */
+    omit?: EmailSendLimitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailSendLimitInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model GoalAchievement
    */
 
@@ -62672,6 +63948,21 @@ export namespace Prisma {
   export type MessagingGoalScalarFieldEnum = (typeof MessagingGoalScalarFieldEnum)[keyof typeof MessagingGoalScalarFieldEnum]
 
 
+  export const EmailSendLimitScalarFieldEnum: {
+    id: 'id',
+    uuid: 'uuid',
+    organisation_uuid: 'organisation_uuid',
+    provider: 'provider',
+    period: 'period',
+    max_count: 'max_count',
+    is_active: 'is_active',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type EmailSendLimitScalarFieldEnum = (typeof EmailSendLimitScalarFieldEnum)[keyof typeof EmailSendLimitScalarFieldEnum]
+
+
   export const GoalAchievementScalarFieldEnum: {
     id: 'id',
     uuid: 'uuid',
@@ -63522,6 +64813,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestListRelationFilter
     bulk_jobs?: BulkJobListRelationFilter
     website_scrape_requests?: WebsiteScrapeRequestListRelationFilter
+    email_send_limits?: EmailSendLimitListRelationFilter
   }
 
   export type OrganisationOrderByWithRelationInput = {
@@ -63559,6 +64851,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestOrderByRelationAggregateInput
     bulk_jobs?: BulkJobOrderByRelationAggregateInput
     website_scrape_requests?: WebsiteScrapeRequestOrderByRelationAggregateInput
+    email_send_limits?: EmailSendLimitOrderByRelationAggregateInput
   }
 
   export type OrganisationWhereUniqueInput = Prisma.AtLeast<{
@@ -63599,6 +64892,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestListRelationFilter
     bulk_jobs?: BulkJobListRelationFilter
     website_scrape_requests?: WebsiteScrapeRequestListRelationFilter
+    email_send_limits?: EmailSendLimitListRelationFilter
   }, "id" | "uuid" | "slug">
 
   export type OrganisationOrderByWithAggregationInput = {
@@ -67528,6 +68822,84 @@ export namespace Prisma {
     updated_at?: DateTimeWithAggregatesFilter<"MessagingGoal"> | Date | string
   }
 
+  export type EmailSendLimitWhereInput = {
+    AND?: EmailSendLimitWhereInput | EmailSendLimitWhereInput[]
+    OR?: EmailSendLimitWhereInput[]
+    NOT?: EmailSendLimitWhereInput | EmailSendLimitWhereInput[]
+    id?: IntFilter<"EmailSendLimit"> | number
+    uuid?: StringFilter<"EmailSendLimit"> | string
+    organisation_uuid?: StringFilter<"EmailSendLimit"> | string
+    provider?: EnumExternalIntegrationProviderFilter<"EmailSendLimit"> | $Enums.ExternalIntegrationProvider
+    period?: EnumGoalPeriodFilter<"EmailSendLimit"> | $Enums.GoalPeriod
+    max_count?: IntFilter<"EmailSendLimit"> | number
+    is_active?: BoolFilter<"EmailSendLimit"> | boolean
+    created_at?: DateTimeFilter<"EmailSendLimit"> | Date | string
+    updated_at?: DateTimeFilter<"EmailSendLimit"> | Date | string
+    organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+  }
+
+  export type EmailSendLimitOrderByWithRelationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    provider?: SortOrder
+    period?: SortOrder
+    max_count?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    organisation?: OrganisationOrderByWithRelationInput
+  }
+
+  export type EmailSendLimitWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    uuid?: string
+    organisation_uuid_provider_period?: EmailSendLimitOrganisation_uuidProviderPeriodCompoundUniqueInput
+    AND?: EmailSendLimitWhereInput | EmailSendLimitWhereInput[]
+    OR?: EmailSendLimitWhereInput[]
+    NOT?: EmailSendLimitWhereInput | EmailSendLimitWhereInput[]
+    organisation_uuid?: StringFilter<"EmailSendLimit"> | string
+    provider?: EnumExternalIntegrationProviderFilter<"EmailSendLimit"> | $Enums.ExternalIntegrationProvider
+    period?: EnumGoalPeriodFilter<"EmailSendLimit"> | $Enums.GoalPeriod
+    max_count?: IntFilter<"EmailSendLimit"> | number
+    is_active?: BoolFilter<"EmailSendLimit"> | boolean
+    created_at?: DateTimeFilter<"EmailSendLimit"> | Date | string
+    updated_at?: DateTimeFilter<"EmailSendLimit"> | Date | string
+    organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+  }, "id" | "uuid" | "organisation_uuid_provider_period">
+
+  export type EmailSendLimitOrderByWithAggregationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    provider?: SortOrder
+    period?: SortOrder
+    max_count?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: EmailSendLimitCountOrderByAggregateInput
+    _avg?: EmailSendLimitAvgOrderByAggregateInput
+    _max?: EmailSendLimitMaxOrderByAggregateInput
+    _min?: EmailSendLimitMinOrderByAggregateInput
+    _sum?: EmailSendLimitSumOrderByAggregateInput
+  }
+
+  export type EmailSendLimitScalarWhereWithAggregatesInput = {
+    AND?: EmailSendLimitScalarWhereWithAggregatesInput | EmailSendLimitScalarWhereWithAggregatesInput[]
+    OR?: EmailSendLimitScalarWhereWithAggregatesInput[]
+    NOT?: EmailSendLimitScalarWhereWithAggregatesInput | EmailSendLimitScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"EmailSendLimit"> | number
+    uuid?: StringWithAggregatesFilter<"EmailSendLimit"> | string
+    organisation_uuid?: StringWithAggregatesFilter<"EmailSendLimit"> | string
+    provider?: EnumExternalIntegrationProviderWithAggregatesFilter<"EmailSendLimit"> | $Enums.ExternalIntegrationProvider
+    period?: EnumGoalPeriodWithAggregatesFilter<"EmailSendLimit"> | $Enums.GoalPeriod
+    max_count?: IntWithAggregatesFilter<"EmailSendLimit"> | number
+    is_active?: BoolWithAggregatesFilter<"EmailSendLimit"> | boolean
+    created_at?: DateTimeWithAggregatesFilter<"EmailSendLimit"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"EmailSendLimit"> | Date | string
+  }
+
   export type GoalAchievementWhereInput = {
     AND?: GoalAchievementWhereInput | GoalAchievementWhereInput[]
     OR?: GoalAchievementWhereInput[]
@@ -67929,6 +69301,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateInput = {
@@ -67966,6 +69339,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUpdateInput = {
@@ -68002,6 +69376,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateInput = {
@@ -68039,6 +69414,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateManyInput = {
@@ -72289,6 +73665,86 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type EmailSendLimitCreateInput = {
+    uuid?: string
+    provider: $Enums.ExternalIntegrationProvider
+    period: $Enums.GoalPeriod
+    max_count: number
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutEmail_send_limitsInput
+  }
+
+  export type EmailSendLimitUncheckedCreateInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    provider: $Enums.ExternalIntegrationProvider
+    period: $Enums.GoalPeriod
+    max_count: number
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type EmailSendLimitUpdateInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    provider?: EnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider
+    period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    max_count?: IntFieldUpdateOperationsInput | number
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutEmail_send_limitsNestedInput
+  }
+
+  export type EmailSendLimitUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    provider?: EnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider
+    period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    max_count?: IntFieldUpdateOperationsInput | number
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EmailSendLimitCreateManyInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    provider: $Enums.ExternalIntegrationProvider
+    period: $Enums.GoalPeriod
+    max_count: number
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type EmailSendLimitUpdateManyMutationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    provider?: EnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider
+    period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    max_count?: IntFieldUpdateOperationsInput | number
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EmailSendLimitUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    provider?: EnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider
+    period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    max_count?: IntFieldUpdateOperationsInput | number
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type GoalAchievementCreateInput = {
     uuid?: string
     type: $Enums.GoalAchievementType
@@ -72914,6 +74370,12 @@ export namespace Prisma {
     none?: WebsiteScrapeRequestWhereInput
   }
 
+  export type EmailSendLimitListRelationFilter = {
+    every?: EmailSendLimitWhereInput
+    some?: EmailSendLimitWhereInput
+    none?: EmailSendLimitWhereInput
+  }
+
   export type FilterOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -72983,6 +74445,10 @@ export namespace Prisma {
   }
 
   export type WebsiteScrapeRequestOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type EmailSendLimitOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -76329,6 +77795,58 @@ export namespace Prisma {
     _max?: NestedEnumGoalPeriodFilter<$PrismaModel>
   }
 
+  export type EmailSendLimitOrganisation_uuidProviderPeriodCompoundUniqueInput = {
+    organisation_uuid: string
+    provider: $Enums.ExternalIntegrationProvider
+    period: $Enums.GoalPeriod
+  }
+
+  export type EmailSendLimitCountOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    provider?: SortOrder
+    period?: SortOrder
+    max_count?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type EmailSendLimitAvgOrderByAggregateInput = {
+    id?: SortOrder
+    max_count?: SortOrder
+  }
+
+  export type EmailSendLimitMaxOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    provider?: SortOrder
+    period?: SortOrder
+    max_count?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type EmailSendLimitMinOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    provider?: SortOrder
+    period?: SortOrder
+    max_count?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type EmailSendLimitSumOrderByAggregateInput = {
+    id?: SortOrder
+    max_count?: SortOrder
+  }
+
   export type EnumGoalAchievementTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.GoalAchievementType | EnumGoalAchievementTypeFieldRefInput<$PrismaModel>
     in?: $Enums.GoalAchievementType[] | ListEnumGoalAchievementTypeFieldRefInput<$PrismaModel>
@@ -77081,6 +78599,13 @@ export namespace Prisma {
     connect?: WebsiteScrapeRequestWhereUniqueInput | WebsiteScrapeRequestWhereUniqueInput[]
   }
 
+  export type EmailSendLimitCreateNestedManyWithoutOrganisationInput = {
+    create?: XOR<EmailSendLimitCreateWithoutOrganisationInput, EmailSendLimitUncheckedCreateWithoutOrganisationInput> | EmailSendLimitCreateWithoutOrganisationInput[] | EmailSendLimitUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: EmailSendLimitCreateOrConnectWithoutOrganisationInput | EmailSendLimitCreateOrConnectWithoutOrganisationInput[]
+    createMany?: EmailSendLimitCreateManyOrganisationInputEnvelope
+    connect?: EmailSendLimitWhereUniqueInput | EmailSendLimitWhereUniqueInput[]
+  }
+
   export type OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput = {
     create?: XOR<OrganisationMemberCreateWithoutOrganisationInput, OrganisationMemberUncheckedCreateWithoutOrganisationInput> | OrganisationMemberCreateWithoutOrganisationInput[] | OrganisationMemberUncheckedCreateWithoutOrganisationInput[]
     connectOrCreate?: OrganisationMemberCreateOrConnectWithoutOrganisationInput | OrganisationMemberCreateOrConnectWithoutOrganisationInput[]
@@ -77261,6 +78786,13 @@ export namespace Prisma {
     connectOrCreate?: WebsiteScrapeRequestCreateOrConnectWithoutOrganisationInput | WebsiteScrapeRequestCreateOrConnectWithoutOrganisationInput[]
     createMany?: WebsiteScrapeRequestCreateManyOrganisationInputEnvelope
     connect?: WebsiteScrapeRequestWhereUniqueInput | WebsiteScrapeRequestWhereUniqueInput[]
+  }
+
+  export type EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput = {
+    create?: XOR<EmailSendLimitCreateWithoutOrganisationInput, EmailSendLimitUncheckedCreateWithoutOrganisationInput> | EmailSendLimitCreateWithoutOrganisationInput[] | EmailSendLimitUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: EmailSendLimitCreateOrConnectWithoutOrganisationInput | EmailSendLimitCreateOrConnectWithoutOrganisationInput[]
+    createMany?: EmailSendLimitCreateManyOrganisationInputEnvelope
+    connect?: EmailSendLimitWhereUniqueInput | EmailSendLimitWhereUniqueInput[]
   }
 
   export type OrganisationMemberUpdateManyWithoutOrganisationNestedInput = {
@@ -77627,6 +79159,20 @@ export namespace Prisma {
     deleteMany?: WebsiteScrapeRequestScalarWhereInput | WebsiteScrapeRequestScalarWhereInput[]
   }
 
+  export type EmailSendLimitUpdateManyWithoutOrganisationNestedInput = {
+    create?: XOR<EmailSendLimitCreateWithoutOrganisationInput, EmailSendLimitUncheckedCreateWithoutOrganisationInput> | EmailSendLimitCreateWithoutOrganisationInput[] | EmailSendLimitUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: EmailSendLimitCreateOrConnectWithoutOrganisationInput | EmailSendLimitCreateOrConnectWithoutOrganisationInput[]
+    upsert?: EmailSendLimitUpsertWithWhereUniqueWithoutOrganisationInput | EmailSendLimitUpsertWithWhereUniqueWithoutOrganisationInput[]
+    createMany?: EmailSendLimitCreateManyOrganisationInputEnvelope
+    set?: EmailSendLimitWhereUniqueInput | EmailSendLimitWhereUniqueInput[]
+    disconnect?: EmailSendLimitWhereUniqueInput | EmailSendLimitWhereUniqueInput[]
+    delete?: EmailSendLimitWhereUniqueInput | EmailSendLimitWhereUniqueInput[]
+    connect?: EmailSendLimitWhereUniqueInput | EmailSendLimitWhereUniqueInput[]
+    update?: EmailSendLimitUpdateWithWhereUniqueWithoutOrganisationInput | EmailSendLimitUpdateWithWhereUniqueWithoutOrganisationInput[]
+    updateMany?: EmailSendLimitUpdateManyWithWhereWithoutOrganisationInput | EmailSendLimitUpdateManyWithWhereWithoutOrganisationInput[]
+    deleteMany?: EmailSendLimitScalarWhereInput | EmailSendLimitScalarWhereInput[]
+  }
+
   export type OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput = {
     create?: XOR<OrganisationMemberCreateWithoutOrganisationInput, OrganisationMemberUncheckedCreateWithoutOrganisationInput> | OrganisationMemberCreateWithoutOrganisationInput[] | OrganisationMemberUncheckedCreateWithoutOrganisationInput[]
     connectOrCreate?: OrganisationMemberCreateOrConnectWithoutOrganisationInput | OrganisationMemberCreateOrConnectWithoutOrganisationInput[]
@@ -77989,6 +79535,20 @@ export namespace Prisma {
     update?: WebsiteScrapeRequestUpdateWithWhereUniqueWithoutOrganisationInput | WebsiteScrapeRequestUpdateWithWhereUniqueWithoutOrganisationInput[]
     updateMany?: WebsiteScrapeRequestUpdateManyWithWhereWithoutOrganisationInput | WebsiteScrapeRequestUpdateManyWithWhereWithoutOrganisationInput[]
     deleteMany?: WebsiteScrapeRequestScalarWhereInput | WebsiteScrapeRequestScalarWhereInput[]
+  }
+
+  export type EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput = {
+    create?: XOR<EmailSendLimitCreateWithoutOrganisationInput, EmailSendLimitUncheckedCreateWithoutOrganisationInput> | EmailSendLimitCreateWithoutOrganisationInput[] | EmailSendLimitUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: EmailSendLimitCreateOrConnectWithoutOrganisationInput | EmailSendLimitCreateOrConnectWithoutOrganisationInput[]
+    upsert?: EmailSendLimitUpsertWithWhereUniqueWithoutOrganisationInput | EmailSendLimitUpsertWithWhereUniqueWithoutOrganisationInput[]
+    createMany?: EmailSendLimitCreateManyOrganisationInputEnvelope
+    set?: EmailSendLimitWhereUniqueInput | EmailSendLimitWhereUniqueInput[]
+    disconnect?: EmailSendLimitWhereUniqueInput | EmailSendLimitWhereUniqueInput[]
+    delete?: EmailSendLimitWhereUniqueInput | EmailSendLimitWhereUniqueInput[]
+    connect?: EmailSendLimitWhereUniqueInput | EmailSendLimitWhereUniqueInput[]
+    update?: EmailSendLimitUpdateWithWhereUniqueWithoutOrganisationInput | EmailSendLimitUpdateWithWhereUniqueWithoutOrganisationInput[]
+    updateMany?: EmailSendLimitUpdateManyWithWhereWithoutOrganisationInput | EmailSendLimitUpdateManyWithWhereWithoutOrganisationInput[]
+    deleteMany?: EmailSendLimitScalarWhereInput | EmailSendLimitScalarWhereInput[]
   }
 
   export type OrganisationCreateNestedOneWithoutMembersInput = {
@@ -80667,6 +82227,20 @@ export namespace Prisma {
     update?: GoalAchievementUpdateWithWhereUniqueWithoutGoalInput | GoalAchievementUpdateWithWhereUniqueWithoutGoalInput[]
     updateMany?: GoalAchievementUpdateManyWithWhereWithoutGoalInput | GoalAchievementUpdateManyWithWhereWithoutGoalInput[]
     deleteMany?: GoalAchievementScalarWhereInput | GoalAchievementScalarWhereInput[]
+  }
+
+  export type OrganisationCreateNestedOneWithoutEmail_send_limitsInput = {
+    create?: XOR<OrganisationCreateWithoutEmail_send_limitsInput, OrganisationUncheckedCreateWithoutEmail_send_limitsInput>
+    connectOrCreate?: OrganisationCreateOrConnectWithoutEmail_send_limitsInput
+    connect?: OrganisationWhereUniqueInput
+  }
+
+  export type OrganisationUpdateOneRequiredWithoutEmail_send_limitsNestedInput = {
+    create?: XOR<OrganisationCreateWithoutEmail_send_limitsInput, OrganisationUncheckedCreateWithoutEmail_send_limitsInput>
+    connectOrCreate?: OrganisationCreateOrConnectWithoutEmail_send_limitsInput
+    upsert?: OrganisationUpsertWithoutEmail_send_limitsInput
+    connect?: OrganisationWhereUniqueInput
+    update?: XOR<XOR<OrganisationUpdateToOneWithWhereWithoutEmail_send_limitsInput, OrganisationUpdateWithoutEmail_send_limitsInput>, OrganisationUncheckedUpdateWithoutEmail_send_limitsInput>
   }
 
   export type OrganisationCreateNestedOneWithoutGoal_achievementsInput = {
@@ -83506,6 +85080,37 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type EmailSendLimitCreateWithoutOrganisationInput = {
+    uuid?: string
+    provider: $Enums.ExternalIntegrationProvider
+    period: $Enums.GoalPeriod
+    max_count: number
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type EmailSendLimitUncheckedCreateWithoutOrganisationInput = {
+    id?: number
+    uuid?: string
+    provider: $Enums.ExternalIntegrationProvider
+    period: $Enums.GoalPeriod
+    max_count: number
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type EmailSendLimitCreateOrConnectWithoutOrganisationInput = {
+    where: EmailSendLimitWhereUniqueInput
+    create: XOR<EmailSendLimitCreateWithoutOrganisationInput, EmailSendLimitUncheckedCreateWithoutOrganisationInput>
+  }
+
+  export type EmailSendLimitCreateManyOrganisationInputEnvelope = {
+    data: EmailSendLimitCreateManyOrganisationInput | EmailSendLimitCreateManyOrganisationInput[]
+    skipDuplicates?: boolean
+  }
+
   export type OrganisationMemberUpsertWithWhereUniqueWithoutOrganisationInput = {
     where: OrganisationMemberWhereUniqueInput
     update: XOR<OrganisationMemberUpdateWithoutOrganisationInput, OrganisationMemberUncheckedUpdateWithoutOrganisationInput>
@@ -84292,6 +85897,37 @@ export namespace Prisma {
     finished_at?: DateTimeNullableFilter<"WebsiteScrapeRequest"> | Date | string | null
   }
 
+  export type EmailSendLimitUpsertWithWhereUniqueWithoutOrganisationInput = {
+    where: EmailSendLimitWhereUniqueInput
+    update: XOR<EmailSendLimitUpdateWithoutOrganisationInput, EmailSendLimitUncheckedUpdateWithoutOrganisationInput>
+    create: XOR<EmailSendLimitCreateWithoutOrganisationInput, EmailSendLimitUncheckedCreateWithoutOrganisationInput>
+  }
+
+  export type EmailSendLimitUpdateWithWhereUniqueWithoutOrganisationInput = {
+    where: EmailSendLimitWhereUniqueInput
+    data: XOR<EmailSendLimitUpdateWithoutOrganisationInput, EmailSendLimitUncheckedUpdateWithoutOrganisationInput>
+  }
+
+  export type EmailSendLimitUpdateManyWithWhereWithoutOrganisationInput = {
+    where: EmailSendLimitScalarWhereInput
+    data: XOR<EmailSendLimitUpdateManyMutationInput, EmailSendLimitUncheckedUpdateManyWithoutOrganisationInput>
+  }
+
+  export type EmailSendLimitScalarWhereInput = {
+    AND?: EmailSendLimitScalarWhereInput | EmailSendLimitScalarWhereInput[]
+    OR?: EmailSendLimitScalarWhereInput[]
+    NOT?: EmailSendLimitScalarWhereInput | EmailSendLimitScalarWhereInput[]
+    id?: IntFilter<"EmailSendLimit"> | number
+    uuid?: StringFilter<"EmailSendLimit"> | string
+    organisation_uuid?: StringFilter<"EmailSendLimit"> | string
+    provider?: EnumExternalIntegrationProviderFilter<"EmailSendLimit"> | $Enums.ExternalIntegrationProvider
+    period?: EnumGoalPeriodFilter<"EmailSendLimit"> | $Enums.GoalPeriod
+    max_count?: IntFilter<"EmailSendLimit"> | number
+    is_active?: BoolFilter<"EmailSendLimit"> | boolean
+    created_at?: DateTimeFilter<"EmailSendLimit"> | Date | string
+    updated_at?: DateTimeFilter<"EmailSendLimit"> | Date | string
+  }
+
   export type OrganisationCreateWithoutMembersInput = {
     uuid?: string
     name: string
@@ -84325,6 +85961,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutMembersInput = {
@@ -84361,6 +85998,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutMembersInput = {
@@ -84456,6 +86094,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutMembersInput = {
@@ -84492,6 +86131,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutMembershipsInput = {
@@ -84577,6 +86217,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutInvitationsInput = {
@@ -84613,6 +86254,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutInvitationsInput = {
@@ -84708,6 +86350,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutInvitationsInput = {
@@ -84744,6 +86387,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutInvitations_sentInput = {
@@ -84829,6 +86473,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutFiltersInput = {
@@ -84865,6 +86510,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutFiltersInput = {
@@ -85158,6 +86804,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutFiltersInput = {
@@ -85194,6 +86841,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type RawLeadUpsertWithWhereUniqueWithoutFilterInput = {
@@ -85375,6 +87023,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutSaved_contact_filtersInput = {
@@ -85411,6 +87060,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutSaved_contact_filtersInput = {
@@ -85462,6 +87112,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutSaved_contact_filtersInput = {
@@ -85498,6 +87149,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutScoring_instructionsInput = {
@@ -85533,6 +87185,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutScoring_instructionsInput = {
@@ -85569,6 +87222,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutScoring_instructionsInput = {
@@ -85663,6 +87317,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutScoring_instructionsInput = {
@@ -85699,6 +87354,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type FilterScoringInstructionUpsertWithWhereUniqueWithoutScoring_instructionInput = {
@@ -86481,6 +88137,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutContactsInput = {
@@ -86517,6 +88174,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutContactsInput = {
@@ -87022,6 +88680,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutContactsInput = {
@@ -87058,6 +88717,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type LeadUpsertWithoutContactsInput = {
@@ -88268,6 +89928,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutContact_listsInput = {
@@ -88304,6 +89965,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutContact_listsInput = {
@@ -88492,6 +90154,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutContact_listsInput = {
@@ -88528,6 +90191,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type ContactListUpsertWithoutChildrenInput = {
@@ -89125,6 +90789,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutInteractionsInput = {
@@ -89161,6 +90826,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutInteractionsInput = {
@@ -89452,6 +91118,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutInteractionsInput = {
@@ -89488,6 +91155,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OutreachMessageUpsertWithoutInteractionInput = {
@@ -89689,6 +91357,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutOutreach_messagesInput = {
@@ -89725,6 +91394,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutOutreach_messagesInput = {
@@ -90022,6 +91692,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutOutreach_messagesInput = {
@@ -90058,6 +91729,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type ContactUpsertWithoutOutreach_messagesInput = {
@@ -90363,6 +92035,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutOutreach_sequencesInput = {
@@ -90399,6 +92072,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutOutreach_sequencesInput = {
@@ -90450,6 +92124,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutOutreach_sequencesInput = {
@@ -90486,6 +92161,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type FilterCreateWithoutJobsInput = {
@@ -90619,6 +92295,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutBulk_jobsInput = {
@@ -90655,6 +92332,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutBulk_jobsInput = {
@@ -90750,6 +92428,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutBulk_jobsInput = {
@@ -90786,6 +92465,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutBulk_jobs_createdInput = {
@@ -90871,6 +92551,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutWebsite_scrape_requestsInput = {
@@ -90907,6 +92588,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutWebsite_scrape_requestsInput = {
@@ -90958,6 +92640,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutWebsite_scrape_requestsInput = {
@@ -90994,6 +92677,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutSender_profilesInput = {
@@ -91029,6 +92713,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutSender_profilesInput = {
@@ -91065,6 +92750,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutSender_profilesInput = {
@@ -91211,6 +92897,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutSender_profilesInput = {
@@ -91247,6 +92934,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type MarketingCampaignUpsertWithWhereUniqueWithoutSender_profileInput = {
@@ -91298,6 +92986,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutMessage_templatesInput = {
@@ -91334,6 +93023,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutMessage_templatesInput = {
@@ -91385,6 +93075,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutMessage_templatesInput = {
@@ -91421,6 +93112,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutMarketing_campaignsInput = {
@@ -91456,6 +93148,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutMarketing_campaignsInput = {
@@ -91492,6 +93185,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutMarketing_campaignsInput = {
@@ -91742,6 +93436,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutMarketing_campaignsInput = {
@@ -91778,6 +93473,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type SenderProfileUpsertWithoutMarketing_campaignsInput = {
@@ -92277,6 +93973,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutOpenai_batch_jobsInput = {
@@ -92313,6 +94010,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutOpenai_batch_jobsInput = {
@@ -92364,6 +94062,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutOpenai_batch_jobsInput = {
@@ -92400,6 +94099,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutIntegrationsInput = {
@@ -92435,6 +94135,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutIntegrationsInput = {
@@ -92471,6 +94172,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutIntegrationsInput = {
@@ -92580,6 +94282,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutIntegrationsInput = {
@@ -92616,6 +94319,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type IntegrationKeyUpsertWithWhereUniqueWithoutIntegrationInput = {
@@ -92835,6 +94539,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutRemindersInput = {
@@ -92871,6 +94576,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutRemindersInput = {
@@ -93002,6 +94708,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutRemindersInput = {
@@ -93038,6 +94745,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type ContactUpsertWithoutRemindersInput = {
@@ -93159,6 +94867,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutFormsInput = {
@@ -93195,6 +94904,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutFormsInput = {
@@ -93318,6 +95028,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutFormsInput = {
@@ -93354,6 +95065,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type FormFieldUpsertWithWhereUniqueWithoutFormInput = {
@@ -94052,6 +95764,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutContact_audience_analysesInput = {
@@ -94088,6 +95801,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutContact_audience_analysesInput = {
@@ -94215,6 +95929,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutContact_audience_analysesInput = {
@@ -94251,6 +95966,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type FilterUpsertWithoutAudience_analysesInput = {
@@ -94374,6 +96090,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutAi_usage_logsInput = {
@@ -94410,6 +96127,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutAi_usage_logsInput = {
@@ -94461,6 +96179,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutAi_usage_logsInput = {
@@ -94497,6 +96216,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutApify_usage_logsInput = {
@@ -94532,6 +96252,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutApify_usage_logsInput = {
@@ -94568,6 +96289,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutApify_usage_logsInput = {
@@ -94619,6 +96341,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutApify_usage_logsInput = {
@@ -94655,6 +96378,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutMessaging_goalsInput = {
@@ -94690,6 +96414,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutMessaging_goalsInput = {
@@ -94726,6 +96451,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutMessaging_goalsInput = {
@@ -94854,6 +96580,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutMessaging_goalsInput = {
@@ -94890,6 +96617,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutMessaging_goalsInput = {
@@ -94958,6 +96686,168 @@ export namespace Prisma {
     data: XOR<GoalAchievementUpdateManyMutationInput, GoalAchievementUncheckedUpdateManyWithoutGoalInput>
   }
 
+  export type OrganisationCreateWithoutEmail_send_limitsInput = {
+    uuid?: string
+    name: string
+    slug: string
+    timezone?: string
+    reply_to_email?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
+    invitations?: OrganisationInvitationCreateNestedManyWithoutOrganisationInput
+    filters?: FilterCreateNestedManyWithoutOrganisationInput
+    contacts?: ContactCreateNestedManyWithoutOrganisationInput
+    outreach_messages?: OutreachMessageCreateNestedManyWithoutOrganisationInput
+    outreach_sequences?: OutreachSequenceCreateNestedManyWithoutOrganisationInput
+    interactions?: InteractionCreateNestedManyWithoutOrganisationInput
+    sender_profiles?: SenderProfileCreateNestedManyWithoutOrganisationInput
+    marketing_campaigns?: MarketingCampaignCreateNestedManyWithoutOrganisationInput
+    scoring_instructions?: ScoringInstructionCreateNestedManyWithoutOrganisationInput
+    openai_batch_jobs?: OpenAiBatchJobCreateNestedManyWithoutOrganisationInput
+    integrations?: IntegrationCreateNestedManyWithoutOrganisationInput
+    reminders?: ReminderCreateNestedManyWithoutOrganisationInput
+    forms?: FormCreateNestedManyWithoutOrganisationInput
+    contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
+    contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
+    ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
+    apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
+    message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+  }
+
+  export type OrganisationUncheckedCreateWithoutEmail_send_limitsInput = {
+    id?: number
+    uuid?: string
+    name: string
+    slug: string
+    timezone?: string
+    reply_to_email?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
+    invitations?: OrganisationInvitationUncheckedCreateNestedManyWithoutOrganisationInput
+    filters?: FilterUncheckedCreateNestedManyWithoutOrganisationInput
+    contacts?: ContactUncheckedCreateNestedManyWithoutOrganisationInput
+    outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutOrganisationInput
+    outreach_sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutOrganisationInput
+    interactions?: InteractionUncheckedCreateNestedManyWithoutOrganisationInput
+    sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutOrganisationInput
+    marketing_campaigns?: MarketingCampaignUncheckedCreateNestedManyWithoutOrganisationInput
+    scoring_instructions?: ScoringInstructionUncheckedCreateNestedManyWithoutOrganisationInput
+    openai_batch_jobs?: OpenAiBatchJobUncheckedCreateNestedManyWithoutOrganisationInput
+    integrations?: IntegrationUncheckedCreateNestedManyWithoutOrganisationInput
+    reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
+    forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
+    contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
+    contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
+    ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
+    apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
+    message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+  }
+
+  export type OrganisationCreateOrConnectWithoutEmail_send_limitsInput = {
+    where: OrganisationWhereUniqueInput
+    create: XOR<OrganisationCreateWithoutEmail_send_limitsInput, OrganisationUncheckedCreateWithoutEmail_send_limitsInput>
+  }
+
+  export type OrganisationUpsertWithoutEmail_send_limitsInput = {
+    update: XOR<OrganisationUpdateWithoutEmail_send_limitsInput, OrganisationUncheckedUpdateWithoutEmail_send_limitsInput>
+    create: XOR<OrganisationCreateWithoutEmail_send_limitsInput, OrganisationUncheckedCreateWithoutEmail_send_limitsInput>
+    where?: OrganisationWhereInput
+  }
+
+  export type OrganisationUpdateToOneWithWhereWithoutEmail_send_limitsInput = {
+    where?: OrganisationWhereInput
+    data: XOR<OrganisationUpdateWithoutEmail_send_limitsInput, OrganisationUncheckedUpdateWithoutEmail_send_limitsInput>
+  }
+
+  export type OrganisationUpdateWithoutEmail_send_limitsInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
+    invitations?: OrganisationInvitationUpdateManyWithoutOrganisationNestedInput
+    filters?: FilterUpdateManyWithoutOrganisationNestedInput
+    contacts?: ContactUpdateManyWithoutOrganisationNestedInput
+    outreach_messages?: OutreachMessageUpdateManyWithoutOrganisationNestedInput
+    outreach_sequences?: OutreachSequenceUpdateManyWithoutOrganisationNestedInput
+    interactions?: InteractionUpdateManyWithoutOrganisationNestedInput
+    sender_profiles?: SenderProfileUpdateManyWithoutOrganisationNestedInput
+    marketing_campaigns?: MarketingCampaignUpdateManyWithoutOrganisationNestedInput
+    scoring_instructions?: ScoringInstructionUpdateManyWithoutOrganisationNestedInput
+    openai_batch_jobs?: OpenAiBatchJobUpdateManyWithoutOrganisationNestedInput
+    integrations?: IntegrationUpdateManyWithoutOrganisationNestedInput
+    reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
+    forms?: FormUpdateManyWithoutOrganisationNestedInput
+    contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
+    contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
+    ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
+    apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
+    message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+  }
+
+  export type OrganisationUncheckedUpdateWithoutEmail_send_limitsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
+    invitations?: OrganisationInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
+    filters?: FilterUncheckedUpdateManyWithoutOrganisationNestedInput
+    contacts?: ContactUncheckedUpdateManyWithoutOrganisationNestedInput
+    outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutOrganisationNestedInput
+    outreach_sequences?: OutreachSequenceUncheckedUpdateManyWithoutOrganisationNestedInput
+    interactions?: InteractionUncheckedUpdateManyWithoutOrganisationNestedInput
+    sender_profiles?: SenderProfileUncheckedUpdateManyWithoutOrganisationNestedInput
+    marketing_campaigns?: MarketingCampaignUncheckedUpdateManyWithoutOrganisationNestedInput
+    scoring_instructions?: ScoringInstructionUncheckedUpdateManyWithoutOrganisationNestedInput
+    openai_batch_jobs?: OpenAiBatchJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    integrations?: IntegrationUncheckedUpdateManyWithoutOrganisationNestedInput
+    reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
+    forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
+    contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
+    contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
+    ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+  }
+
   export type OrganisationCreateWithoutGoal_achievementsInput = {
     uuid?: string
     name: string
@@ -94991,6 +96881,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutGoal_achievementsInput = {
@@ -95027,6 +96918,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutGoal_achievementsInput = {
@@ -95150,6 +97042,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutGoal_achievementsInput = {
@@ -95186,6 +97079,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutGoal_achievementsInput = {
@@ -95305,6 +97199,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutGoal_personal_bestsInput = {
@@ -95341,6 +97236,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutGoal_personal_bestsInput = {
@@ -95436,6 +97332,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutGoal_personal_bestsInput = {
@@ -95472,6 +97369,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutGoal_personal_bestsInput = {
@@ -95557,6 +97455,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutActivity_logsInput = {
@@ -95593,6 +97492,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutActivity_logsInput = {
@@ -95688,6 +97588,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutActivity_logsInput = {
@@ -95724,6 +97625,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutActivity_logsInput = {
@@ -96710,6 +98612,17 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     finished_at?: Date | string | null
+  }
+
+  export type EmailSendLimitCreateManyOrganisationInput = {
+    id?: number
+    uuid?: string
+    provider: $Enums.ExternalIntegrationProvider
+    period: $Enums.GoalPeriod
+    max_count: number
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
   }
 
   export type OrganisationMemberUpdateWithoutOrganisationInput = {
@@ -98009,6 +99922,38 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     finished_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type EmailSendLimitUpdateWithoutOrganisationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    provider?: EnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider
+    period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    max_count?: IntFieldUpdateOperationsInput | number
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EmailSendLimitUncheckedUpdateWithoutOrganisationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    provider?: EnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider
+    period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    max_count?: IntFieldUpdateOperationsInput | number
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EmailSendLimitUncheckedUpdateManyWithoutOrganisationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    provider?: EnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider
+    period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    max_count?: IntFieldUpdateOperationsInput | number
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type RawLeadCreateManyFilterInput = {

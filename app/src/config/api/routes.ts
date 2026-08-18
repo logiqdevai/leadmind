@@ -265,4 +265,9 @@ export const ApiRoutes = {
         update: (uuid: string) => `/messaging-goals/${uuid}`,
         remove: (uuid: string) => `/messaging-goals/${uuid}`,
     },
+    email_send_limits: {
+        list: "/email-send-limits",
+        upsert: "/email-send-limits",
+        remove: (uuid: string) => `/email-send-limits/${uuid}`,
+    },
 }

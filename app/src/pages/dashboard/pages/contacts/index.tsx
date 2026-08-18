@@ -42,6 +42,8 @@ type View = "table" | "pipeline";
 
 const isView = (v: string | null): v is View => v === "table" || v === "pipeline";
 
+const SAVED_FILTER_PARAM = "saved_filter_uuid";
+
 export default function ContactsPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -75,6 +77,8 @@ export default function ContactsPage() {
   const scrapeEmailsBulk = useBulkScrapeContactEmails();
   const deleteContactsBulk = useDeleteContactsBulk();
 
+  const savedFilterUuid = searchParams.get(SAVED_FILTER_PARAM);
+
   const updateFilters = (patch: Partial<ContactFilters>, resetPage = true) => {
     const next = { ...filters, ...patch };
     const serialized = serializeContactFiltersToSearchParams(next);
@@ -82,8 +86,33 @@ export default function ContactsPage() {
     for (const [key, value] of Object.entries(serialized)) {
       if (value != null && value !== "") params.set(key, value);
     }
+    if (savedFilterUuid) params.set(SAVED_FILTER_PARAM, savedFilterUuid);
     if (resetPage) params.set("page", "1");
     else if (page > 1) params.set("page", String(page));
+    startTransition(() => {
+      setSearchParams(params, { replace: true });
+    });
+    setSelectedKeys((prev) => (prev.size === 0 ? prev : new Set()));
+  };
+
+  const updateSavedFilterUuid = (uuid: string | null) => {
+    const params = new URLSearchParams(searchParams);
+    if (uuid) params.set(SAVED_FILTER_PARAM, uuid);
+    else params.delete(SAVED_FILTER_PARAM);
+    startTransition(() => {
+      setSearchParams(params, { replace: true });
+    });
+  };
+
+  const applySavedFilter = (patch: Partial<ContactFilters>, uuid: string | null) => {
+    const next = { ...filters, ...patch };
+    const serialized = serializeContactFiltersToSearchParams(next);
+    const params = new URLSearchParams();
+    for (const [key, value] of Object.entries(serialized)) {
+      if (value != null && value !== "") params.set(key, value);
+    }
+    if (uuid) params.set(SAVED_FILTER_PARAM, uuid);
+    params.set("page", "1");
     startTransition(() => {
       setSearchParams(params, { replace: true });
     });
@@ -226,6 +255,9 @@ export default function ContactsPage() {
             onChange={(patch) => updateFilters(patch)}
             showLeadSourceType
             showSavedFilters
+            savedFilterUuid={savedFilterUuid}
+            onSavedFilterUuidChange={updateSavedFilterUuid}
+            onApplySavedFilter={applySavedFilter}
             collapsible
             defaultOpen={false}
             sections={{ engagement: true, outreach: true }}
