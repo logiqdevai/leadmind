@@ -1,3 +1,5 @@
+import { EmailValidationStatus } from '@/generated/prisma';
+
 const BASIC_EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export function normalizeContactEmail(
@@ -14,4 +16,10 @@ export function hasUsableContactEmail(
     const normalized = normalizeContactEmail(email);
     if (!normalized) return false;
     return BASIC_EMAIL_REGEX.test(normalized);
+}
+
+export function isEmailValidationBlocked(
+    status: EmailValidationStatus | null | undefined,
+): boolean {
+    return status === EmailValidationStatus.INVALID;
 }

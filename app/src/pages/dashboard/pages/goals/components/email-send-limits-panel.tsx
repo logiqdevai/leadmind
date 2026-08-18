@@ -40,7 +40,7 @@ function EmailSendLimitRow({ status }: { status: EmailSendLimitStatus }) {
     };
 
     return (
-        <div className="px-4 py-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between gap-y-2">
+        <div className="px-4 py-3 grid gap-3 sm:grid-cols-[minmax(9rem,1fr)_auto] sm:items-center">
             <div className="min-w-0">
                 <p className="text-sm font-medium text-foreground">
                     {PERIOD_LABELS[status.period]}
@@ -55,7 +55,7 @@ function EmailSendLimitRow({ status }: { status: EmailSendLimitStatus }) {
                     )}
                 </p>
             </div>
-            <div className="flex items-center gap-2 shrink-0">
+            <div className="grid grid-cols-[7rem_auto_auto_2.25rem] items-center gap-3 justify-items-start">
                 <Input
                     aria-label={`${PERIOD_LABELS[status.period]} limit for ${PROVIDER_LABELS[status.provider]}`}
                     type="number"
@@ -63,7 +63,7 @@ function EmailSendLimitRow({ status }: { status: EmailSendLimitStatus }) {
                     value={maxCount}
                     onChange={(e) => setMaxCount(e.target.value)}
                     placeholder="No limit"
-                    className="w-28"
+                    className="w-full"
                 />
                 <Switch
                     isSelected={isActive}
@@ -81,16 +81,18 @@ function EmailSendLimitRow({ status }: { status: EmailSendLimitStatus }) {
                 >
                     Save
                 </Button>
-                {isConfigured && (
+                {isConfigured ? (
                     <Button
                         size="sm"
-                        variant="secondary"
+                        variant="tertiary"
                         aria-label="Remove limit"
                         isDisabled={remove.isPending}
                         onPress={() => status.uuid && remove.mutate(status.uuid)}
                     >
                         <Trash2 className="size-4 text-danger" />
                     </Button>
+                ) : (
+                    <span className="size-9" aria-hidden />
                 )}
             </div>
         </div>

@@ -240,6 +240,9 @@ exports.Prisma.LeadScalarFieldEnum = {
   raw_data: 'raw_data',
   enrichment_summary: 'enrichment_summary',
   enrichment_metadata: 'enrichment_metadata',
+  email_validation_status: 'email_validation_status',
+  email_validation_reason: 'email_validation_reason',
+  email_validated_at: 'email_validated_at',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };
@@ -280,6 +283,9 @@ exports.Prisma.ContactScalarFieldEnum = {
   description: 'description',
   enrichment_summary: 'enrichment_summary',
   enrichment_metadata: 'enrichment_metadata',
+  email_validation_status: 'email_validation_status',
+  email_validation_reason: 'email_validation_reason',
+  email_validated_at: 'email_validated_at',
   unsubscribed_at: 'unsubscribed_at',
   unsubscribe_token: 'unsubscribe_token',
   last_interaction_at: 'last_interaction_at',
@@ -875,6 +881,12 @@ exports.Channel = exports.$Enums.Channel = {
   SMS: 'SMS',
   PHONE_CALL: 'PHONE_CALL',
   LINKEDIN: 'LINKEDIN'
+};
+
+exports.EmailValidationStatus = exports.$Enums.EmailValidationStatus = {
+  UNKNOWN: 'UNKNOWN',
+  VALID: 'VALID',
+  INVALID: 'INVALID'
 };
 
 exports.LeadStatus = exports.$Enums.LeadStatus = {

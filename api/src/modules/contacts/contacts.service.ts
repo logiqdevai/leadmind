@@ -29,6 +29,7 @@ import { SCRAPIO_EMAIL_REGEX_FIELD } from '@/integrations/scrapio/scrapio.consta
 import { AI_PROCESS_QUEUE } from '@/core/queues/queues.constants';
 import { BulkJobsService } from '@/modules/bulk-jobs/bulk-jobs.service';
 import { resolveContactEnrichmentSources } from '@/modules/leads/utils/enrichment-sources.utils';
+import { validateEmailAddress } from '@/shared/utils/email-domain-validation.util';
 import { AddNoteDto } from './dto/add-note.dto';
 import { AiDraftMessageDto } from './dto/ai-draft-message.dto';
 import { BulkTriggerScoreDto } from './dto/bulk-trigger-score.dto';
@@ -1582,6 +1583,13 @@ export class ContactsService {
             return;
         }
 
+        const email_validation = await validateEmailAddress(email);
+        const email_validation_data = {
+            email_validation_status: email_validation.status,
+            email_validation_reason: email_validation.reason,
+            email_validated_at: new Date(),
+        };
+
         const existingByEmail = await findOwnedContactByEmail(this.prisma, organisation_uuid, email);
         if (existingByEmail && existingByEmail.uuid !== contactUuid) {
             await mergeContactsIntoCanonical(
@@ -1593,11 +1601,11 @@ export class ContactsService {
             );
             await this.prisma.lead.update({
                 where: { uuid: existingByEmail.lead_uuid },
-                data: { email },
+                data: { email, ...email_validation_data },
             });
             await this.prisma.contact.update({
                 where: { uuid: existingByEmail.uuid },
-                data: { email },
+                data: { email, ...email_validation_data },
             });
             const lead = await this.prisma.lead.findUnique({
                 where: { uuid: existingByEmail.lead_uuid },
@@ -1612,11 +1620,11 @@ export class ContactsService {
         await this.prisma.$transaction([
             this.prisma.contact.update({
                 where: { uuid: contactUuid },
-                data: { email },
+                data: { email, ...email_validation_data },
             }),
             this.prisma.lead.update({
                 where: { uuid: contact.lead_uuid },
-                data: { email },
+                data: { email, ...email_validation_data },
             }),
         ]);
 

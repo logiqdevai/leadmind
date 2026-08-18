@@ -455,12 +455,15 @@ function FilterSection({ title, description, children }: FilterSectionProps) {
     const [open, setOpen] = useState(false);
 
     return (
-        <section className="rounded-xl border border-border bg-surface overflow-hidden">
+        <section className="rounded-xl border border-border bg-surface">
             <button
                 type="button"
                 onClick={() => setOpen((value) => !value)}
                 aria-expanded={open}
-                className="flex w-full items-center justify-between gap-3 border-b border-border/60 bg-surface-secondary/30 px-4 py-3 text-left outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
+                className={cn(
+                    "flex w-full items-center justify-between gap-3 bg-surface-secondary/30 px-4 py-3 text-left outline-none focus-visible:ring-2 focus-visible:ring-accent/50",
+                    open ? "rounded-t-xl border-b border-border/60" : "rounded-xl",
+                )}
             >
                 <div className="min-w-0">
                     <h3 className="text-sm font-semibold text-foreground">{title}</h3>

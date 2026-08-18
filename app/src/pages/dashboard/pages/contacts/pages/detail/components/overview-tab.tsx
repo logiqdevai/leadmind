@@ -28,7 +28,7 @@ import { EnrichmentSnapshotPanel } from "@/components/ui/enrichment-snapshot-pan
 import { SectionCard, Row, ProfileValue } from "@/components/ui/profile-section";
 import { GemiLeadSourcePanel } from "@/components/ui/gemi-lead-source-panel";
 import { initialsFromName, formatShortDate, normalizeUrl } from "@/lib/profile";
-import { StatusChip } from "@/pages/dashboard/pages/leads/components/badges";
+import { EmailValidationChip, StatusChip } from "@/pages/dashboard/pages/leads/components/badges";
 import { ContactListFormModal } from "@/pages/dashboard/pages/lists/components/contact-list-form-modal";
 import { Routes } from "@/routes/routes";
 import type { ProfileDraft } from "../types";
@@ -212,10 +212,18 @@ function DetailPanel({ contact, onEdit }: { contact: Contact; onEdit: () => void
 
             <SectionCard title="Contact" icon={AtSign}>
                 <Row label="Email">
-                    <ProfileValue
-                        value={contact.email}
-                        href={contact.email?.trim() ? `mailto:${contact.email.trim()}` : undefined}
-                    />
+                    <div className="flex flex-wrap items-center gap-2">
+                        <ProfileValue
+                            value={contact.email}
+                            href={contact.email?.trim() ? `mailto:${contact.email.trim()}` : undefined}
+                        />
+                        {contact.email?.trim() ? (
+                            <EmailValidationChip
+                                status={contact.email_validation_status}
+                                reason={contact.email_validation_reason}
+                            />
+                        ) : null}
+                    </div>
                 </Row>
                 <Row label="Phone">
                     <ProfileValue

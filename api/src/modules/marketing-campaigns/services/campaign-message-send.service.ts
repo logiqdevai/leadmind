@@ -19,7 +19,7 @@ import {
 } from '@/generated/prisma';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { MARKETING_MESSAGE_SEND_QUEUE } from '@/core/queues/queues.constants';
-import { hasUsableContactEmail } from '@/shared/utils/contact-email.util';
+import { hasUsableContactEmail, isEmailValidationBlocked } from '@/shared/utils/contact-email.util';
 import { sanitizeEmailHtml } from '@/shared/utils/sanitize-html.util';
 import { ContactsService } from '@/modules/contacts/contacts.service';
 import { MessageSendService } from '@/modules/outreach/services/message-send.service';
@@ -80,6 +80,13 @@ export class CampaignMessageSendService {
             );
             await this.markSkipped(mcc.uuid, mcc.campaign_uuid, 'no_email');
             return { status: 'skipped', reason: 'no_email' };
+        }
+        if (mcc.channel === Channel.EMAIL && isEmailValidationBlocked(mcc.contact.email_validation_status)) {
+            this.logger.warn(
+                `MCC ${mcc.uuid} skipped: email failed validation (reason=${mcc.contact.email_validation_reason})`,
+            );
+            await this.markSkipped(mcc.uuid, mcc.campaign_uuid, 'email_failed_validation');
+            return { status: 'skipped', reason: 'email_failed_validation' };
         }
         if (mcc.channel === Channel.SMS && !mcc.contact.phone) {
             await this.markSkipped(mcc.uuid, mcc.campaign_uuid, 'no_phone');
@@ -290,7 +297,15 @@ export class CampaignMessageSendService {
         let message = await this.prisma.outreachMessage.findFirst({
             where: { uuid: message_uuid, campaign_uuid, organisation_uuid },
             include: {
-                contact: { select: { email: true, phone: true, unsubscribed_at: true } },
+                contact: {
+                    select: {
+                        email: true,
+                        phone: true,
+                        unsubscribed_at: true,
+                        email_validation_status: true,
+                        email_validation_reason: true,
+                    },
+                },
             },
         });
         if (!message) {
@@ -335,6 +350,9 @@ export class CampaignMessageSendService {
         if (message.channel === Channel.EMAIL && !hasUsableContactEmail(message.contact.email)) {
             throw new BadRequestException('Contact has no email');
         }
+        if (message.channel === Channel.EMAIL && isEmailValidationBlocked(message.contact.email_validation_status)) {
+            throw new BadRequestException('Contact email failed validation');
+        }
         if (message.channel === Channel.SMS && !message.contact.phone) {
             throw new BadRequestException('Contact has no phone');
         }
@@ -354,7 +372,15 @@ export class CampaignMessageSendService {
                     ) as Prisma.InputJsonValue,
                 },
                 include: {
-                    contact: { select: { email: true, phone: true, unsubscribed_at: true } },
+                    contact: {
+                    select: {
+                        email: true,
+                        phone: true,
+                        unsubscribed_at: true,
+                        email_validation_status: true,
+                        email_validation_reason: true,
+                    },
+                },
                 },
             });
         }
@@ -370,7 +396,15 @@ export class CampaignMessageSendService {
                     ) as Prisma.InputJsonValue,
                 },
                 include: {
-                    contact: { select: { email: true, phone: true, unsubscribed_at: true } },
+                    contact: {
+                    select: {
+                        email: true,
+                        phone: true,
+                        unsubscribed_at: true,
+                        email_validation_status: true,
+                        email_validation_reason: true,
+                    },
+                },
                 },
             });
         }

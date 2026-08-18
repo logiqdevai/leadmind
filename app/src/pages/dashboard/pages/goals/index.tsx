@@ -33,7 +33,12 @@ const GoalsPage: FC = () => {
     const tabs = [
         { id: "progress", label: "My Progress" },
         { id: "leaderboard", label: "Leaderboard" },
-        ...(canManage ? [{ id: "manage", label: "Manage" }] : []),
+        ...(canManage
+            ? [
+                  { id: "manage", label: "Manage" },
+                  { id: "email-limits", label: "Email Limits" },
+              ]
+            : []),
     ];
 
     return (
@@ -134,6 +139,11 @@ const GoalsPage: FC = () => {
             {tab === "manage" && canManage && (
                 <div className="flex flex-col gap-6">
                     <GoalsManagePanel />
+                </div>
+            )}
+
+            {tab === "email-limits" && canManage && (
+                <div className="flex flex-col gap-6">
                     <EmailSendLimitsPanel />
                 </div>
             )}

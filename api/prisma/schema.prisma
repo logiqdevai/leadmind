@@ -235,6 +235,9 @@ model Lead {
   raw_data             Json?
   enrichment_summary   String?    @db.Text
   enrichment_metadata  Json?
+  email_validation_status EmailValidationStatus @default(UNKNOWN)
+  email_validation_reason String?
+  email_validated_at      DateTime?
   created_at           DateTime   @default(now())
   updated_at         DateTime   @updatedAt
 
@@ -288,6 +291,9 @@ model Contact {
   description           String?
   enrichment_summary    String?    @db.Text
   enrichment_metadata   Json?
+  email_validation_status EmailValidationStatus @default(UNKNOWN)
+  email_validation_reason String?
+  email_validated_at      DateTime?
   unsubscribed_at       DateTime?
   unsubscribe_token     String?    @unique
   last_interaction_at   DateTime?
@@ -778,6 +784,12 @@ enum SourceType {
   WEBSITE_CRAWLER
   GEMI // greek business directory
   MANUAL
+}
+
+enum EmailValidationStatus {
+  UNKNOWN
+  VALID
+  INVALID
 }
 
 enum EnrichmentSource {

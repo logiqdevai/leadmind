@@ -1,7 +1,8 @@
 import { Processor, WorkerHost, InjectQueue } from '@nestjs/bullmq';
 import { Logger } from '@nestjs/common';
 import { Job, Queue } from 'bullmq';
-import { Filter, JobStatus, JobTrigger, Prisma, SourceType, ApifyUsageOperation, BulkJobStatus, BulkJobType } from '@/generated/prisma';
+import { Filter, JobStatus, JobTrigger, Prisma, SourceType, ApifyUsageOperation, BulkJobStatus, BulkJobType, EmailValidationStatus } from '@/generated/prisma';
+import { validateEmailAddress } from '@/shared/utils/email-domain-validation.util';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { ApifyService } from '@/integrations/apify/apify.service';
 import { GemiService } from '@/integrations/gemi/gemi.service';
@@ -322,7 +323,7 @@ export class FilterScrapeWorker extends WorkerHost {
                     ? { phone: normalized.phone }
                     : { linkedin_url: normalized.linkedin_url };
 
-            const lead_data = this.mapToLead(normalized);
+            const lead_data = await this.mapToLead(normalized);
 
             let lead = await this.prisma.lead.findFirst({ where: dedup_where });
             const is_new_lead = !lead;
@@ -374,6 +375,14 @@ export class FilterScrapeWorker extends WorkerHost {
             if (existing_contact) {
                 await linkContactToFilter(this.prisma, existing_contact, filter.uuid);
                 const profilePatch = fillEmptyContactProfileFromLead(existing_contact, lead);
+                const emailValidationPatch =
+                    profilePatch.email !== undefined
+                        ? {
+                              email_validation_status: lead.email_validation_status,
+                              email_validation_reason: lead.email_validation_reason,
+                              email_validated_at: lead.email_validated_at,
+                          }
+                        : {};
                 if (existing_contact.lead_uuid !== lead.uuid) {
                     const conflict = await this.prisma.contact.findUnique({
                         where: {
@@ -389,18 +398,19 @@ export class FilterScrapeWorker extends WorkerHost {
                             data: {
                                 lead_uuid: lead.uuid,
                                 ...profilePatch,
+                                ...emailValidationPatch,
                             },
                         });
                     } else if (Object.keys(profilePatch).length > 0) {
                         await this.prisma.contact.update({
                             where: { uuid: existing_contact.uuid },
-                            data: profilePatch,
+                            data: { ...profilePatch, ...emailValidationPatch },
                         });
                     }
                 } else if (!is_new_lead && Object.keys(profilePatch).length > 0) {
                     await this.prisma.contact.update({
                         where: { uuid: existing_contact.uuid },
-                        data: profilePatch,
+                        data: { ...profilePatch, ...emailValidationPatch },
                     });
                 }
                 await this.reindexContactsForLead(lead.uuid);
@@ -412,6 +422,9 @@ export class FilterScrapeWorker extends WorkerHost {
                             lead_uuid: lead.uuid,
                             filter_uuid: filter.uuid,
                             ...contactProfileFromLead(lead),
+                            email_validation_status: lead.email_validation_status,
+                            email_validation_reason: lead.email_validation_reason,
+                            email_validated_at: lead.email_validated_at,
                         },
                     });
                     await ensureContactFilterLink(this.prisma, contact.uuid, filter.uuid);
@@ -467,10 +480,15 @@ export class FilterScrapeWorker extends WorkerHost {
         }
     }
 
-    private mapToLead(normalized: NormalizedLead) {
+    private async mapToLead(normalized: NormalizedLead) {
+        const email = normalized.email ?? null;
+        const email_validation = email
+            ? await validateEmailAddress(email)
+            : { status: EmailValidationStatus.UNKNOWN, reason: null };
+
         return {
             name: normalized.name ?? null,
-            email: normalized.email ?? null,
+            email,
             phone: normalized.phone ?? null,
             company: normalized.company ?? null,
             website: resolveLeadWebsite(normalized.website, normalized.email),
@@ -481,6 +499,9 @@ export class FilterScrapeWorker extends WorkerHost {
             industry: normalized.industry ?? null,
             description: normalized.description ?? null,
             raw_data: normalized.raw_data as Prisma.InputJsonValue,
+            email_validation_status: email_validation.status,
+            email_validation_reason: email_validation.reason,
+            email_validated_at: email ? new Date() : null,
         };
     }
 }

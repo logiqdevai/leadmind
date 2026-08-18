@@ -16,7 +16,7 @@ import { SmtpMailService } from '@/integrations/notifications/smtp/services/mail
 import { CallsService } from '@/integrations/notifications/twillio/services/calls.service';
 import { TwillioSmsService } from '@/integrations/notifications/twillio/services/sms.service';
 import { EmailConfig } from '@/shared/config/email';
-import { hasUsableContactEmail, normalizeContactEmail } from '@/shared/utils/contact-email.util';
+import { hasUsableContactEmail, isEmailValidationBlocked, normalizeContactEmail } from '@/shared/utils/contact-email.util';
 import { sanitizeEmailHtml } from '@/shared/utils/sanitize-html.util';
 import { applySmtpEmailTracking } from '@/shared/utils/email-tracking.util';
 import { EmailCredentialsService } from '@/modules/integrations/services/email-credentials.service';
@@ -65,6 +65,16 @@ export class MessageSendService {
                 `Skip email send message=${message.uuid} contact=${message.contact_uuid}: no usable email (raw=${JSON.stringify(message.contact.email)})`,
             );
             throw new Error('Contact has no email');
+        }
+
+        if (
+            message.channel === Channel.EMAIL &&
+            isEmailValidationBlocked(message.contact.email_validation_status)
+        ) {
+            this.logger.warn(
+                `Skip email send message=${message.uuid} contact=${message.contact_uuid}: email failed validation (reason=${message.contact.email_validation_reason})`,
+            );
+            throw new Error('Contact email failed validation');
         }
 
         if (message.channel === Channel.PHONE_CALL) {

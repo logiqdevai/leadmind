@@ -18,6 +18,14 @@ export const LeadStatus = {
 
 export type LeadStatus = (typeof LeadStatus)[keyof typeof LeadStatus];
 
+export const EmailValidationStatus = {
+    UNKNOWN: "UNKNOWN",
+    VALID: "VALID",
+    INVALID: "INVALID",
+} as const;
+
+export type EmailValidationStatus = (typeof EmailValidationStatus)[keyof typeof EmailValidationStatus];
+
 export const Channel = {
     EMAIL: "EMAIL",
     SMS: "SMS",
@@ -216,6 +224,9 @@ export interface Contact {
     notes: string | null;
     name: string | null;
     email: string | null;
+    email_validation_status: EmailValidationStatus;
+    email_validation_reason: string | null;
+    email_validated_at: string | null;
     phone: string | null;
     company: string | null;
     website: string | null;

@@ -2,17 +2,44 @@
 @import "@heroui/styles";
 
 html,
-body {
+body,
+#root {
   height: 100%;
+  overflow-anchor: none;
+}
+
+html {
+  overflow: hidden !important;
+  scrollbar-gutter: auto !important;
 }
 
 body {
   overflow: hidden;
+  position: relative;
 }
 
 #root {
-  height: 100%;
   min-height: 0;
+  overflow: hidden;
+}
+
+main {
+  overflow-anchor: none;
+}
+
+[data-testid="underlay"] {
+  background: transparent !important;
+}
+
+.select__popover,
+.dropdown__popover,
+.popover,
+.combo-box__popover,
+.autocomplete__popover,
+.date-picker__popover,
+.date-range-picker__popover {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
 }
 
 /* ─── Base / legacy custom properties ────────────────────────────────────────
