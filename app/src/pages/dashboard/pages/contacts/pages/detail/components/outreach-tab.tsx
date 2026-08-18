@@ -219,6 +219,9 @@ export function OutreachTab({ contact, highlightUuid, onHighlightConsumed, onNav
         isOpen={composeOpen}
         onOpenChange={setComposeOpen}
         contactUuid={contact.uuid}
+        recipientEmail={contact.email}
+        recipientEmailValidationStatus={contact.email_validation_status}
+        recipientEmailValidationReason={contact.email_validation_reason}
       />
 
       <ConfirmDialog

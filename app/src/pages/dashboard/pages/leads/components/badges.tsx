@@ -24,7 +24,6 @@ export function EmailValidationChip({
   status: EmailValidationStatus;
   reason?: string | null;
 }) {
-  if (status === "UNKNOWN") return null;
   const title = status === "INVALID" ? emailValidationReasonLabel(reason) : undefined;
   return (
     <span title={title}>

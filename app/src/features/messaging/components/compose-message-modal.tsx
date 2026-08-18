@@ -4,6 +4,7 @@ import {
     ComposeMessageForm,
     type ComposeMessageMode,
 } from "@/features/messaging/components/compose-message-form";
+import type { EmailValidationStatus } from "@/features/contacts/interfaces/contact.interface";
 
 export interface ComposeMessageModalProps {
     isOpen: boolean;
@@ -11,6 +12,9 @@ export interface ComposeMessageModalProps {
     mode?: ComposeMessageMode;
     contactUuid?: string;
     contactUuids?: string[];
+    recipientEmail?: string | null;
+    recipientEmailValidationStatus?: EmailValidationStatus;
+    recipientEmailValidationReason?: string | null;
     onBulkComplete?: () => void;
 }
 
@@ -20,6 +24,9 @@ export function ComposeMessageModal({
     mode = "single",
     contactUuid,
     contactUuids,
+    recipientEmail,
+    recipientEmailValidationStatus,
+    recipientEmailValidationReason,
     onBulkComplete,
 }: ComposeMessageModalProps) {
     const [mountKey, setMountKey] = useState(0);
@@ -44,6 +51,9 @@ export function ComposeMessageModal({
                             mode={mode}
                             contactUuid={contactUuid}
                             contactUuids={contactUuids}
+                            recipientEmail={recipientEmail}
+                            recipientEmailValidationStatus={recipientEmailValidationStatus}
+                            recipientEmailValidationReason={recipientEmailValidationReason}
                             onClose={() => onOpenChange(false)}
                             onBulkComplete={onBulkComplete}
                         />

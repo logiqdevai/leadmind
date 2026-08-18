@@ -10,7 +10,7 @@ import { LeadStatus } from "@/features/contacts/interfaces/contact.interface";
 import { useDeleteContact, useUpdateContactStatus } from "@/features/contacts/hooks/use-contacts";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { isTableNavInteractiveCell, renderTableNavCellContent, tableNavInteractiveCellClassName, tableNavRowClassName } from "@/components/ui/table-row-link";
-import { ContactScoresCompact, EmailValidationChip } from "@/pages/dashboard/pages/leads/components/badges";
+import { ContactScoresCompact } from "@/pages/dashboard/pages/leads/components/badges";
 import {
   ContactTableDetailLink,
   ContactTableNameCell,
@@ -88,17 +88,10 @@ export function ContactsTable({ contacts, isLoading, isFetching, page, pageSize,
         cell: (info) => {
           const email = info.getValue();
           if (!email) return "—";
-          const contact = info.row.original;
           return (
-            <div className="flex min-w-0 items-center gap-1.5">
-              <span title={email} className="min-w-0 flex-1 truncate">
-                {email}
-              </span>
-              <EmailValidationChip
-                status={contact.email_validation_status}
-                reason={contact.email_validation_reason}
-              />
-            </div>
+            <span title={email} className="block w-full min-w-0 truncate">
+              {email}
+            </span>
           );
         },
       }),

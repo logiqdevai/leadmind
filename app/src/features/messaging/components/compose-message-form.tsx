@@ -4,7 +4,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
 import { AlertTriangle, Save, Send, ArrowLeft } from "lucide-react";
 import { useEmailSendLimits } from "@/features/email-send-limits/hooks/use-email-send-limits";
-import { Channel } from "@/features/contacts/interfaces/contact.interface";
+import { Channel, type EmailValidationStatus } from "@/features/contacts/interfaces/contact.interface";
+import { EmailValidationChip } from "@/pages/dashboard/pages/leads/components/badges";
 import { contactsQueryKeys, useAiDraftMessage } from "@/features/contacts/hooks/use-contacts";
 import {
     createAndSendMessage,
@@ -49,6 +50,9 @@ export interface ComposeMessageFormProps {
     mode: ComposeMessageMode;
     contactUuid?: string;
     contactUuids?: string[];
+    recipientEmail?: string | null;
+    recipientEmailValidationStatus?: EmailValidationStatus;
+    recipientEmailValidationReason?: string | null;
     onClose: () => void;
     onBulkComplete?: () => void;
     onBack?: () => void;
@@ -65,6 +69,9 @@ export function ComposeMessageForm({
     mode,
     contactUuid,
     contactUuids = [],
+    recipientEmail,
+    recipientEmailValidationStatus,
+    recipientEmailValidationReason,
     onClose,
     onBulkComplete,
     onBack,
@@ -316,6 +323,15 @@ export function ComposeMessageForm({
         <>
             <Modal.Header>
                 <Modal.Heading>{heading}</Modal.Heading>
+                {!isBulk && recipientEmail?.trim() ? (
+                    <div className="flex items-center gap-2 pt-1 text-sm text-muted">
+                        <span className="truncate">{recipientEmail.trim()}</span>
+                        <EmailValidationChip
+                            status={recipientEmailValidationStatus ?? "UNKNOWN"}
+                            reason={recipientEmailValidationReason}
+                        />
+                    </div>
+                ) : null}
             </Modal.Header>
             <div className="flex min-h-0 flex-1 flex-col">
                 <Modal.Body>
