@@ -26,6 +26,7 @@ import {
   History,
   Trophy,
   ListTodo,
+  Wrench,
 } from "lucide-react";
 import { Routes } from "@/routes/routes";
 import { usePermission } from "@/hooks/use-permission";
@@ -89,6 +90,7 @@ const navGroups: NavGroup[] = [
 ];
 
 const adminSubItems: NavItemConfig[] = [
+  { label: "Controls", icon: Wrench, href: Routes.dashboard.admin_controls, end: true },
   { label: "Batch Jobs", icon: Layers, href: Routes.dashboard.admin_batch_jobs, end: false },
   { label: "System Status", icon: Activity, href: Routes.dashboard.admin_system_status, end: false },
 ];

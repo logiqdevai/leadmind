@@ -14,6 +14,7 @@ import {
     CampaignContactStatus,
     Channel,
     Contact,
+    EmailValidationStatus,
     Interaction,
     InteractionType,
     LeadStatus,
@@ -29,7 +30,7 @@ import { SCRAPIO_EMAIL_REGEX_FIELD } from '@/integrations/scrapio/scrapio.consta
 import { AI_PROCESS_QUEUE } from '@/core/queues/queues.constants';
 import { BulkJobsService } from '@/modules/bulk-jobs/bulk-jobs.service';
 import { resolveContactEnrichmentSources } from '@/modules/leads/utils/enrichment-sources.utils';
-import { validateEmailAddress } from '@/shared/utils/email-domain-validation.util';
+import { resolveEmailFieldsForWrite } from '@/shared/utils/email-domain-validation.util';
 import { AddNoteDto } from './dto/add-note.dto';
 import { AiDraftMessageDto } from './dto/ai-draft-message.dto';
 import { BulkTriggerScoreDto } from './dto/bulk-trigger-score.dto';
@@ -126,9 +127,10 @@ export class ContactsService {
             throw new NotFoundException('Filter not found');
         }
 
-        const email = dto.email?.trim() || undefined;
-        if (email) {
-            const existing = await findOwnedContactByEmail(this.prisma, organisation_uuid, email);
+        const emailFields = await resolveEmailFieldsForWrite(dto.email);
+
+        if (emailFields) {
+            const existing = await findOwnedContactByEmail(this.prisma, organisation_uuid, emailFields.email);
             if (existing) {
                 await linkContactToFilter(this.prisma, existing, dto.filter_uuid);
                 await this.applyManualCreateExtras(organisation_uuid, existing.uuid, dto);
@@ -141,7 +143,6 @@ export class ContactsService {
             data: {
                 source_type: SourceType.MANUAL,
                 name: dto.name,
-                email,
                 phone: dto.phone,
                 company: dto.company,
                 website: dto.website,
@@ -151,6 +152,7 @@ export class ContactsService {
                 linkedin_url: dto.linkedin_url,
                 industry: dto.industry,
                 description: dto.description,
+                ...(emailFields ?? {}),
             },
         });
 
@@ -164,6 +166,9 @@ export class ContactsService {
                 status: LeadStatus.NEW,
                 notes: dto.notes,
                 ...profile,
+                email_validation_status: lead.email_validation_status,
+                email_validation_reason: lead.email_validation_reason,
+                email_validated_at: lead.email_validated_at,
                 ...(dto.tags && dto.tags.length > 0
                     ? {
                         tags: {
@@ -503,57 +508,73 @@ export class ContactsService {
     async update(organisation_uuid: string, uuid: string, dto: UpdateContactDto) {
         await this.requireOwnedContact(organisation_uuid, uuid);
 
+        let emailPatch: Prisma.ContactUpdateInput | undefined;
         if (dto.email !== undefined) {
-            const email = dto.email?.trim() || null;
-            if (email) {
-                const existingByEmail = await findOwnedContactByEmail(
-                    this.prisma,
-                    organisation_uuid,
-                    email,
-                );
-                if (existingByEmail && existingByEmail.uuid !== uuid) {
-                    await mergeContactsIntoCanonical(
-                        this.prisma,
-                        this.elasticsearchService,
-                        organisation_uuid,
-                        uuid,
-                        existingByEmail.uuid,
-                    );
-                    const data: Prisma.ContactUpdateInput = { email };
-                    if (dto.notes !== undefined) {
-                        data.notes = dto.notes;
-                    }
-                    await this.prisma.contact.update({
-                        where: { uuid: existingByEmail.uuid },
-                        data,
-                    });
-                    if (dto.list_uuids !== undefined) {
-                        await this.replaceContactListMemberships(
-                            organisation_uuid,
-                            existingByEmail.uuid,
-                            dto.list_uuids,
-                        );
-                    }
-                    await this.reindexContact(existingByEmail.uuid);
-                    return this.findOne(organisation_uuid, existingByEmail.uuid);
+            const trimmed = dto.email?.trim() || null;
+            if (!trimmed) {
+                emailPatch = {
+                    email: null,
+                    email_validation_status: EmailValidationStatus.UNKNOWN,
+                    email_validation_reason: null,
+                    email_validated_at: null,
+                };
+            } else {
+                const fields = await resolveEmailFieldsForWrite(trimmed);
+                if (fields) {
+                    emailPatch = fields;
                 }
             }
         }
 
-        return this.applyUpdateToContact(organisation_uuid, uuid, dto);
+        if (emailPatch?.email) {
+            const existingByEmail = await findOwnedContactByEmail(
+                this.prisma,
+                organisation_uuid,
+                emailPatch.email as string,
+            );
+            if (existingByEmail && existingByEmail.uuid !== uuid) {
+                await mergeContactsIntoCanonical(
+                    this.prisma,
+                    this.elasticsearchService,
+                    organisation_uuid,
+                    uuid,
+                    existingByEmail.uuid,
+                );
+                const data: Prisma.ContactUpdateInput = { ...emailPatch };
+                if (dto.notes !== undefined) {
+                    data.notes = dto.notes;
+                }
+                await this.prisma.contact.update({
+                    where: { uuid: existingByEmail.uuid },
+                    data,
+                });
+                if (dto.list_uuids !== undefined) {
+                    await this.replaceContactListMemberships(
+                        organisation_uuid,
+                        existingByEmail.uuid,
+                        dto.list_uuids,
+                    );
+                }
+                await this.reindexContact(existingByEmail.uuid);
+                return this.findOne(organisation_uuid, existingByEmail.uuid);
+            }
+        }
+
+        return this.applyUpdateToContact(organisation_uuid, uuid, dto, emailPatch);
     }
 
     private async applyUpdateToContact(
         organisation_uuid: string,
         uuid: string,
         dto: UpdateContactDto,
+        emailPatch?: Prisma.ContactUpdateInput,
     ) {
         const data: Prisma.ContactUpdateInput = {};
         if (dto.notes !== undefined) {
             data.notes = dto.notes;
         }
-        if (dto.email !== undefined) {
-            data.email = dto.email?.trim() || null;
+        if (emailPatch) {
+            Object.assign(data, emailPatch);
         }
         for (const key of CONTACT_PROFILE_UPDATE_KEYS) {
             if (key === 'email') continue;
@@ -1583,14 +1604,12 @@ export class ContactsService {
             return;
         }
 
-        const email_validation = await validateEmailAddress(email);
-        const email_validation_data = {
-            email_validation_status: email_validation.status,
-            email_validation_reason: email_validation.reason,
-            email_validated_at: new Date(),
-        };
+        const emailFields = await resolveEmailFieldsForWrite(email);
+        if (!emailFields) {
+            return;
+        }
 
-        const existingByEmail = await findOwnedContactByEmail(this.prisma, organisation_uuid, email);
+        const existingByEmail = await findOwnedContactByEmail(this.prisma, organisation_uuid, emailFields.email);
         if (existingByEmail && existingByEmail.uuid !== contactUuid) {
             await mergeContactsIntoCanonical(
                 this.prisma,
@@ -1601,11 +1620,11 @@ export class ContactsService {
             );
             await this.prisma.lead.update({
                 where: { uuid: existingByEmail.lead_uuid },
-                data: { email, ...email_validation_data },
+                data: emailFields,
             });
             await this.prisma.contact.update({
                 where: { uuid: existingByEmail.uuid },
-                data: { email, ...email_validation_data },
+                data: emailFields,
             });
             const lead = await this.prisma.lead.findUnique({
                 where: { uuid: existingByEmail.lead_uuid },
@@ -1620,11 +1639,11 @@ export class ContactsService {
         await this.prisma.$transaction([
             this.prisma.contact.update({
                 where: { uuid: contactUuid },
-                data: { email, ...email_validation_data },
+                data: emailFields,
             }),
             this.prisma.lead.update({
                 where: { uuid: contact.lead_uuid },
-                data: { email, ...email_validation_data },
+                data: emailFields,
             }),
         ]);
 

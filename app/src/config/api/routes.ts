@@ -136,6 +136,7 @@ export const ApiRoutes = {
         batch_jobs: "/admin/batch-jobs",
         queues: "/admin/queues",
         system_status: "/admin/system-status",
+        email_validation_backfill: "/admin/email-validation-backfill",
     },
     reminders: {
         prefix: "/reminders",

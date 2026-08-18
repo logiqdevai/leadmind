@@ -45,6 +45,7 @@ const NewFilterPage = lazy(() => import("@/pages/dashboard/pages/filters/pages/n
 const FilterDetailPage = lazy(() => import("@/pages/dashboard/pages/filters/pages/detail"));
 const ScoringInstructionsPage = lazy(() => import("@/pages/dashboard/pages/filters/pages/scoring-instructions"));
 
+const AdminControlsPage = lazy(() => import("@/pages/dashboard/pages/admin"));
 const AdminBatchJobsPage = lazy(() => import("@/pages/dashboard/pages/admin/batch-jobs"));
 const AdminSystemStatusPage = lazy(() => import("@/pages/dashboard/pages/admin/system-status"));
 
@@ -387,6 +388,16 @@ export default function AppRoutes() {
             }
           />
         </Route>
+        <Route
+          path="admin"
+          element={
+            <ProtectedRoute requiredRoles={Permissions.admin_batch_jobs}>
+              <Lazy>
+                <AdminControlsPage />
+              </Lazy>
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="admin/batch-jobs"
           element={

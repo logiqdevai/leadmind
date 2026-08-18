@@ -7,14 +7,18 @@ const DISPOSABLE_DOMAINS: string[] = require('disposable-email-domains');
 const DISPOSABLE_DOMAIN_SET = new Set(DISPOSABLE_DOMAINS.map((d) => d.toLowerCase()));
 
 const MX_LOOKUP_TIMEOUT_MS = 5000;
-const CACHE_TTL_MS = 6 * 60 * 60 * 1000;
 
 export interface EmailValidationResult {
     status: EmailValidationStatus;
     reason: string | null;
 }
 
-const domainResultCache = new Map<string, { result: EmailValidationResult; expiresAt: number }>();
+export interface EmailValidationFields {
+    email: string;
+    email_validation_status: EmailValidationStatus;
+    email_validation_reason: string | null;
+    email_validated_at: Date;
+}
 
 function getDomain(email: string): string {
     return email.slice(email.lastIndexOf('@') + 1).toLowerCase();
@@ -35,34 +39,27 @@ async function resolveMxWithTimeout(domain: string) {
 }
 
 async function validateDomain(domain: string): Promise<EmailValidationResult> {
-    const cached = domainResultCache.get(domain);
-    if (cached && cached.expiresAt > Date.now()) {
-        return cached.result;
-    }
-
-    let result: EmailValidationResult;
     if (DISPOSABLE_DOMAIN_SET.has(domain)) {
-        result = { status: EmailValidationStatus.INVALID, reason: 'disposable_domain' };
-    } else {
-        try {
-            const records = await resolveMxWithTimeout(domain);
-            result =
-                records.length > 0
-                    ? { status: EmailValidationStatus.VALID, reason: null }
-                    : { status: EmailValidationStatus.INVALID, reason: 'no_mx_record' };
-        } catch (error) {
-            const code = (error as NodeJS.ErrnoException)?.code;
-            result =
-                code === 'ENOTFOUND' || code === 'ENODATA'
-                    ? { status: EmailValidationStatus.INVALID, reason: 'no_mx_record' }
-                    : { status: EmailValidationStatus.UNKNOWN, reason: 'dns_lookup_failed' };
-        }
+        return { status: EmailValidationStatus.INVALID, reason: 'disposable_domain' };
     }
 
-    domainResultCache.set(domain, { result, expiresAt: Date.now() + CACHE_TTL_MS });
-    return result;
+    try {
+        const records = await resolveMxWithTimeout(domain);
+        return records.length > 0
+            ? { status: EmailValidationStatus.VALID, reason: null }
+            : { status: EmailValidationStatus.INVALID, reason: 'no_mx_record' };
+    } catch (error) {
+        const code = (error as NodeJS.ErrnoException)?.code;
+        return code === 'ENOTFOUND' || code === 'ENODATA'
+            ? { status: EmailValidationStatus.INVALID, reason: 'no_mx_record' }
+            : { status: EmailValidationStatus.UNKNOWN, reason: 'dns_lookup_failed' };
+    }
 }
 
+/**
+ * Runs the email checks (syntax, disposable-domain blocklist, MX record lookup)
+ * against a single address. No caching — every call does a fresh lookup.
+ */
 export async function validateEmailAddress(
     email: string | null | undefined,
 ): Promise<EmailValidationResult> {
@@ -72,4 +69,28 @@ export async function validateEmailAddress(
     }
 
     return validateDomain(getDomain(normalized));
+}
+
+/**
+ * Validates a candidate email and resolves the fields to persist on a Lead/Contact
+ * create or update. Returns null when the address fails validation (or none was
+ * given) — callers should omit these fields from the write entirely in that case,
+ * leaving whatever the record already had untouched rather than storing a
+ * known-bad address.
+ */
+export async function resolveEmailFieldsForWrite(
+    email: string | null | undefined,
+): Promise<EmailValidationFields | null> {
+    const normalized = normalizeContactEmail(email);
+    if (!normalized) return null;
+
+    const result = await validateEmailAddress(normalized);
+    if (result.status === EmailValidationStatus.INVALID) return null;
+
+    return {
+        email: normalized,
+        email_validation_status: result.status,
+        email_validation_reason: result.reason,
+        email_validated_at: new Date(),
+    };
 }

@@ -1,8 +1,8 @@
 import { Processor, WorkerHost, InjectQueue } from '@nestjs/bullmq';
 import { Logger } from '@nestjs/common';
 import { Job, Queue } from 'bullmq';
-import { Filter, JobStatus, JobTrigger, Prisma, SourceType, ApifyUsageOperation, BulkJobStatus, BulkJobType, EmailValidationStatus } from '@/generated/prisma';
-import { validateEmailAddress } from '@/shared/utils/email-domain-validation.util';
+import { Filter, JobStatus, JobTrigger, Prisma, SourceType, ApifyUsageOperation, BulkJobStatus, BulkJobType } from '@/generated/prisma';
+import { resolveEmailFieldsForWrite } from '@/shared/utils/email-domain-validation.util';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { ApifyService } from '@/integrations/apify/apify.service';
 import { GemiService } from '@/integrations/gemi/gemi.service';
@@ -481,14 +481,10 @@ export class FilterScrapeWorker extends WorkerHost {
     }
 
     private async mapToLead(normalized: NormalizedLead) {
-        const email = normalized.email ?? null;
-        const email_validation = email
-            ? await validateEmailAddress(email)
-            : { status: EmailValidationStatus.UNKNOWN, reason: null };
+        const emailFields = await resolveEmailFieldsForWrite(normalized.email);
 
         return {
             name: normalized.name ?? null,
-            email,
             phone: normalized.phone ?? null,
             company: normalized.company ?? null,
             website: resolveLeadWebsite(normalized.website, normalized.email),
@@ -499,9 +495,7 @@ export class FilterScrapeWorker extends WorkerHost {
             industry: normalized.industry ?? null,
             description: normalized.description ?? null,
             raw_data: normalized.raw_data as Prisma.InputJsonValue,
-            email_validation_status: email_validation.status,
-            email_validation_reason: email_validation.reason,
-            email_validated_at: email ? new Date() : null,
+            ...(emailFields ?? {}),
         };
     }
 }
