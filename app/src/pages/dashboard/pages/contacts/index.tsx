@@ -17,7 +17,6 @@ import {
 } from "@/features/enrichment/constants/enrichment-sources";
 import { useEnrichContactsBulk } from "@/features/enrichment/hooks/use-enrichment";
 import { ContactFiltersForm } from "@/pages/dashboard/components/contact-filters-form";
-import { SavedContactFiltersBar } from "@/pages/dashboard/components/saved-contact-filters-bar";
 import { ContactStackViewerScope } from "@/pages/dashboard/components/contact-stack-viewer";
 import {
   useContacts,
@@ -222,15 +221,11 @@ export default function ContactsPage() {
             }
           />
 
-          <SavedContactFiltersBar
-            value={filters}
-            onChange={(patch) => updateFilters(patch)}
-          />
-
           <ContactFiltersForm
             value={filters}
             onChange={(patch) => updateFilters(patch)}
             showLeadSourceType
+            showSavedFilters
             collapsible
             defaultOpen={false}
             sections={{ engagement: true, outreach: true }}

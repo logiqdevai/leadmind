@@ -74,6 +74,7 @@ export function SavedContactFiltersBar({
 
     const handleSelect = (uuid: string) => {
         if (!uuid) {
+            onChange(toFullPatch({}));
             setAppliedUuid(null);
             return;
         }

@@ -6,6 +6,7 @@ import type {
     ContactFiltersFormSections,
 } from "@/interfaces/contact-filters.interface";
 import { ProfileFieldFilter } from "@/pages/dashboard/components/profile-field-filter";
+import { SavedContactFiltersBar } from "@/pages/dashboard/components/saved-contact-filters-bar";
 import type { LeadStatus } from "@/features/contacts/interfaces/contact.interface";
 import { STATUS_OPTIONS } from "@/features/contacts/constants/contacts.constants";
 import { useFilters } from "@/features/filters/hooks/use-filters";
@@ -26,6 +27,7 @@ interface ContactFiltersFormProps {
     showSourceFilter?: boolean;
     showLeadSourceType?: boolean;
     showContactListFilter?: boolean;
+    showSavedFilters?: boolean;
     collapsible?: boolean;
     defaultOpen?: boolean;
     open?: boolean;
@@ -46,6 +48,7 @@ export function ContactFiltersForm({
     showSourceFilter = true,
     showLeadSourceType = false,
     showContactListFilter = false,
+    showSavedFilters = false,
     collapsible = false,
     defaultOpen = false,
     open: openProp,
@@ -72,6 +75,14 @@ export function ContactFiltersForm({
 
     const form = (
         <div className="flex flex-col gap-4">
+            {showSavedFilters ? (
+                <SavedContactFiltersBar
+                    value={value}
+                    onChange={onChange}
+                    disabled={disabled}
+                />
+            ) : null}
+
             <FilterSection
                 title="Find contacts"
                 description="Narrow the audience by keyword or lead source."
