@@ -8,6 +8,16 @@ import { ScrapioCredentialsService } from './scrapio-credentials.service';
 import { ScrapioPlainScrapeConfigsService } from './scrapio-plain-scrape-configs.service';
 import { ScrapioCrawlRunsService } from './scrapio-crawl-runs.service';
 import { SCRAPIO_RUN_WAIT_TIMEOUT_MS } from '../scrapio.constants';
+import type {
+  PlainScrapeExtractionScope,
+  PlainScrapeOutputFormat,
+} from '../interfaces/scrapio-plain-scrape-configs.interface';
+
+export interface InitiateWebsiteScrapeExtraction {
+  extraction_scope: PlainScrapeExtractionScope;
+  output_formats: PlainScrapeOutputFormat[];
+  output_schema: Record<string, unknown>;
+}
 
 export interface InitiateWebsiteScrapeInput {
   organisation_uuid: string;
@@ -15,6 +25,9 @@ export interface InitiateWebsiteScrapeInput {
   reference_uuid: string;
   urls: string[];
   context?: Record<string, unknown>;
+  /** Ask Scrapio to run its own structured extraction (e.g. the built-in email regex preset)
+   *  instead of returning raw HTML/markdown. Omit for raw content (e.g. website enrichment). */
+  extraction?: InitiateWebsiteScrapeExtraction;
 }
 
 export interface InitiateWebsiteScrapeResult {
@@ -65,6 +78,13 @@ export class ScrapioScrapeRequestService {
       name: `leadmind-${input.operation.toLowerCase()}-${Date.now()}`,
       urls: input.urls,
       persist_results: false,
+      ...(input.extraction
+        ? {
+            extraction_scope: input.extraction.extraction_scope,
+            output_formats: input.extraction.output_formats,
+            output_schema: input.extraction.output_schema,
+          }
+        : {}),
     });
 
     await this.plainScrapeConfigs.runNow(input.organisation_uuid, config.id);

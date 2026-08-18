@@ -16,3 +16,13 @@ export const SCRAPIO_TERMINAL_WEBHOOK_EVENTS = [
   'WORKFLOW_RUN_FAILED',
   'WORKFLOW_RUN_CANCELLED',
 ] as const;
+
+/**
+ * Built-in output_schema field descriptor for Scrapio's ready-made email regex extractor
+ * (per Scrapio's OpenAPI spec: `{"type":"regex","pattern":"email"}` — "email"/"phone"/"url" are
+ * built-in preset pattern names, as opposed to a raw regex source string). Confirmed against a
+ * live run: with `extraction_scope: 'COMBINED'`, a field using this descriptor returns an ARRAY
+ * of every matching email found across all scraped pages (e.g. `{ "emails": ["a@x.com", "b@y.com"] }`),
+ * not a single value — the field key holding it should be named accordingly (e.g. `emails`).
+ */
+export const SCRAPIO_EMAIL_REGEX_FIELD = { type: 'regex', pattern: 'email' } as const;

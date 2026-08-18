@@ -5,12 +5,15 @@ import { ScrapioPlainScrapeConfigsService } from '@/integrations/scrapio/service
 import { mapCrawlRunPageToCrawledPage } from '@/integrations/scrapio/utils/scrapio-crawl-page.utils';
 import type { CrawlRunPage, WorkflowRunStatus } from '@/integrations/scrapio/interfaces/scrapio-crawl-runs.interface';
 import { ContactsService } from '@/modules/contacts/contacts.service';
+import { pickBestContactEmail } from '@/modules/contacts/utils/contact-website-email.utils';
 import { EnrichmentOrchestrator } from '@/modules/enrichment/services/enrichment.orchestrator';
 import { EnrichmentTarget } from '@/modules/enrichment/interfaces/enrichment-target.interface';
 
 export interface WebsiteScrapeCompletionResult {
   status: WorkflowRunStatus;
   pages: CrawlRunPage[];
+  /** COMBINED-scope structured extraction result (e.g. Scrapio's regex-extracted `email` field), when requested. */
+  structuredData?: Record<string, unknown> | null;
 }
 
 const SUCCESS_STATUSES: WorkflowRunStatus[] = ['SUCCESS', 'PARTIAL_SUCCESS'];
@@ -59,7 +62,7 @@ export class WebsiteScrapeDispatchService {
     }
 
     try {
-      await this.dispatch(request, succeeded, result.pages);
+      await this.dispatch(request, succeeded, result.pages, result.structuredData ?? null);
     } finally {
       await this.plainScrapeConfigs
         .remove(request.organisation_uuid, request.provider_config_id)
@@ -93,7 +96,7 @@ export class WebsiteScrapeDispatchService {
     }
 
     try {
-      await this.dispatch(request, false, []);
+      await this.dispatch(request, false, [], null);
     } finally {
       await this.plainScrapeConfigs
         .remove(request.organisation_uuid, request.provider_config_id)
@@ -105,6 +108,7 @@ export class WebsiteScrapeDispatchService {
     request: { operation: WebsiteScrapeOperation; organisation_uuid: string; reference_uuid: string; context: unknown; error: string | null },
     succeeded: boolean,
     rawPages: CrawlRunPage[],
+    structuredData: Record<string, unknown> | null,
   ): Promise<void> {
     const context = (request.context as Record<string, unknown> | null) ?? {};
 
@@ -112,10 +116,18 @@ export class WebsiteScrapeDispatchService {
       case WebsiteScrapeOperation.CONTACT_EMAIL_SCRAPE: {
         const bulk_job_uuid = context.bulk_job_uuid as string | undefined;
         if (succeeded) {
-          await this.contactsService.finishContactEmailScrape(
+          // Scrapio's regex-preset field returns EVERY matching email found across the combined
+          // pages (e.g. { emails: ["a@x.com", "b@y.com"] }), not a single value — pick the best
+          // one the same way the Apify path does.
+          const rawEmails = structuredData?.emails;
+          const emails = Array.isArray(rawEmails)
+            ? rawEmails.filter((e): e is string => typeof e === 'string').map((e) => e.trim()).filter(Boolean)
+            : [];
+          const email = pickBestContactEmail(emails);
+          await this.contactsService.finishContactEmailScrapeWithEmail(
             request.organisation_uuid,
             request.reference_uuid,
-            rawPages.map(mapCrawlRunPageToCrawledPage),
+            email,
           );
         }
         if (bulk_job_uuid) {

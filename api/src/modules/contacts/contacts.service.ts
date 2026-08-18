@@ -25,6 +25,7 @@ import {
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { ElasticsearchService } from '@/integrations/elasticsearch/elasticsearch.service';
 import { ScrapioScrapeRequestService } from '@/integrations/scrapio/services/scrapio-scrape-request.service';
+import { SCRAPIO_EMAIL_REGEX_FIELD } from '@/integrations/scrapio/scrapio.constants';
 import { AI_PROCESS_QUEUE } from '@/core/queues/queues.constants';
 import { BulkJobsService } from '@/modules/bulk-jobs/bulk-jobs.service';
 import { resolveContactEnrichmentSources } from '@/modules/leads/utils/enrichment-sources.utils';
@@ -1491,12 +1492,20 @@ export class ContactsService {
         const startUrls = buildWebsiteEmailCrawlUrls(website);
 
         if (this.websiteCrawler.getActiveProvider() === 'scrapio') {
+            // Ask Scrapio to extract the email itself via its built-in regex preset
+            // (combined across all candidate pages) instead of fetching raw content and
+            // running our own regex over it.
             await this.scrapioScrapeRequestService.initiate({
                 organisation_uuid,
                 operation: WebsiteScrapeOperation.CONTACT_EMAIL_SCRAPE,
                 reference_uuid: contactUuid,
                 urls: startUrls,
                 context: { bulk_job_uuid },
+                extraction: {
+                    extraction_scope: 'COMBINED',
+                    output_formats: ['STRUCTURED_JSON'],
+                    output_schema: { emails: SCRAPIO_EMAIL_REGEX_FIELD },
+                },
             });
             return 'deferred';
         }
@@ -1524,28 +1533,52 @@ export class ContactsService {
     }
 
     /**
-     * Post-crawl logic shared by the synchronous Apify path (above) and the async Scrapio
-     * dispatcher (`WebsiteScrapeDispatchService`, modules/webhooks) once its run resolves.
+     * Post-crawl logic for the synchronous Apify path (above): extracts emails from raw crawled
+     * content ourselves, then delegates to `saveFoundContactEmail`.
      */
     async finishContactEmailScrape(
         organisation_uuid: string,
         contactUuid: string,
         pages: CrawledPage[],
     ): Promise<void> {
-        const contact = await this.prisma.contact.findFirst({
-            where: { uuid: contactUuid, organisation_uuid },
-            select: { uuid: true, lead_uuid: true },
-        });
-        if (!contact) {
-            return;
-        }
-
         const emails = extractEmailsFromCrawledPages(pages);
         const email = pickBestContactEmail(emails);
         if (!email) {
             this.logger.debug(
                 `No email found for contact ${contactUuid} across ${pages.length} pages`,
             );
+            return;
+        }
+        await this.saveFoundContactEmail(organisation_uuid, contactUuid, email);
+    }
+
+    /**
+     * Async Scrapio dispatcher (`WebsiteScrapeDispatchService`, modules/webhooks) entry point:
+     * Scrapio already extracted the email itself via its built-in regex preset, so there's no
+     * page content to run our own extraction over — just save whatever it found (if anything).
+     */
+    async finishContactEmailScrapeWithEmail(
+        organisation_uuid: string,
+        contactUuid: string,
+        email: string | null,
+    ): Promise<void> {
+        if (!email) {
+            this.logger.debug(`No email found for contact ${contactUuid}`);
+            return;
+        }
+        await this.saveFoundContactEmail(organisation_uuid, contactUuid, email);
+    }
+
+    private async saveFoundContactEmail(
+        organisation_uuid: string,
+        contactUuid: string,
+        email: string,
+    ): Promise<void> {
+        const contact = await this.prisma.contact.findFirst({
+            where: { uuid: contactUuid, organisation_uuid },
+            select: { uuid: true, lead_uuid: true },
+        });
+        if (!contact) {
             return;
         }
 

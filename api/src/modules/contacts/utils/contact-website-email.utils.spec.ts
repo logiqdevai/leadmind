@@ -17,6 +17,8 @@ describe('buildWebsiteEmailCrawlUrls', () => {
             'https://acme.io/about-us',
             'https://acme.io/impressum',
             'https://acme.io/kontakt',
+            'https://acme.io/terms-of-use',
+            'https://acme.io/privacy-policy',
         ]);
     });
 

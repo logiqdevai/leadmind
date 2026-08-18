@@ -107,6 +107,7 @@ export class ScrapioWebhookController {
         await this.scrapeDispatch.processCompletion(body.workflow_run_id as string, {
           status: run.status,
           pages: run.pages ?? [],
+          structuredData: run.extraction_result?.structured_data ?? null,
         });
       } catch (error) {
         const message = error instanceof Error ? error.message : 'Unknown error';
