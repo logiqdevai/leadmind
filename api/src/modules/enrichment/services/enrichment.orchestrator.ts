@@ -1,10 +1,13 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { EnrichmentSource, Prisma, ApifyUsageOperation } from '@/generated/prisma';
+import { EnrichmentSource, Prisma, ApifyUsageOperation, WebsiteScrapeOperation } from '@/generated/prisma';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { LinkedInCompanyAdapter } from '@/integrations/apify/linkedin-company/linkedin-company.adapter';
 import { LinkedInProfileAdapter } from '@/integrations/apify/linkedin-profile/linkedin-profile.adapter';
-import { WebsiteContentCrawlerAdapter } from '@/integrations/apify/website-content-crawler/website-content-crawler.adapter';
 import { plainTextFromCrawledPage } from '@/integrations/apify/website-content-crawler/crawl-page-text.utils';
+import type { CrawledPage } from '@/integrations/apify/website-content-crawler/website-content-crawler.interfaces';
+import { WebsiteScraperService } from '@/integrations/website-scraper/website-scraper.service';
+import { ScrapioScrapeRequestService } from '@/integrations/scrapio/services/scrapio-scrape-request.service';
+import { DeferredEnrichmentError } from '../utils/deferred-enrichment.error';
 import { GoogleSearchAdapter } from '@/integrations/apify/google-search/google-search.adapter';
 import { GemiService } from '@/integrations/gemi/gemi.service';
 import { GemiCompany } from '@/integrations/gemi/gemi.interfaces';
@@ -50,7 +53,8 @@ export class EnrichmentOrchestrator {
         protected readonly leadAi: LeadAiService,
         protected readonly linkedInCompany: LinkedInCompanyAdapter,
         protected readonly linkedInProfile: LinkedInProfileAdapter,
-        protected readonly websiteCrawler: WebsiteContentCrawlerAdapter,
+        protected readonly websiteCrawler: WebsiteScraperService,
+        protected readonly scrapioScrapeRequestService: ScrapioScrapeRequestService,
         protected readonly googleSearch: GoogleSearchAdapter,
         protected readonly gemiService: GemiService,
         protected readonly summaryService: EnrichmentSummaryService,
@@ -147,6 +151,11 @@ export class EnrichmentOrchestrator {
             const result = await this.executeSource(target, subject, source, force);
             await this.persistAttempt(target, { ...result, status: 'success' });
         } catch (error) {
+            if (error instanceof DeferredEnrichmentError) {
+                // A Scrapio run was kicked off for this source; nothing to persist yet — the
+                // webhook/timeout dispatcher will call finishWebsiteEnrichment() once it resolves.
+                return;
+            }
             this.logger.warn(
                 `${target.kind} ${target.uuid} ${source} enrichment failed: ${error instanceof Error ? error.message : error}`,
             );
@@ -378,6 +387,21 @@ export class EnrichmentOrchestrator {
         if (!organisation_uuid) {
             throw new Error('Entity has no organisation context for Apify');
         }
+
+        if (this.websiteCrawler.getActiveProvider() === 'scrapio') {
+            await this.scrapioScrapeRequestService.initiate({
+                organisation_uuid,
+                operation:
+                    target.kind === 'lead'
+                        ? WebsiteScrapeOperation.LEAD_WEBSITE_ENRICHMENT
+                        : WebsiteScrapeOperation.CONTACT_WEBSITE_ENRICHMENT,
+                reference_uuid: target.uuid,
+                urls: [url],
+                context: { url },
+            });
+            throw new DeferredEnrichmentError();
+        }
+
         const page = await this.websiteCrawler.crawlSinglePage(
             organisation_uuid,
             url,
@@ -388,6 +412,14 @@ export class EnrichmentOrchestrator {
                 reference_uuid: target.uuid,
             },
         );
+        return this.buildWebsiteSourceResult(organisation_uuid, url, page);
+    }
+
+    private async buildWebsiteSourceResult(
+        organisation_uuid: string,
+        url: string,
+        page: CrawledPage | null,
+    ): Promise<EnrichmentSourceResult> {
         const textFull = page ? plainTextFromCrawledPage(page) : null;
         const textSample = textFull?.slice(0, 12000) ?? null;
         const mdSample = page?.markdown?.slice(0, 12000) ?? null;
@@ -412,6 +444,37 @@ export class EnrichmentOrchestrator {
             input_tokens: ws.input_tokens,
             output_tokens: ws.output_tokens,
         };
+    }
+
+    /**
+     * Finishes a deferred WEBSITE source once its Scrapio run resolves — called by
+     * `WebsiteScrapeDispatchService` (modules/webhooks), not from within `runInternal`'s loop.
+     */
+    async finishWebsiteEnrichment(
+        target: EnrichmentTarget,
+        organisation_uuid: string,
+        url: string,
+        outcome: { status: 'success'; page: CrawledPage | null } | { status: 'failed'; error: string },
+    ): Promise<void> {
+        if (outcome.status === 'failed') {
+            await this.persistAttempt(target, {
+                source: EnrichmentSource.WEBSITE,
+                source_url: url,
+                summary: `${EnrichmentSource.WEBSITE} enrichment failed: ${outcome.error}`,
+                payload: {
+                    failed_at: new Date().toISOString(),
+                    error: outcome.error,
+                },
+                metadata: {
+                    error_name: 'ScrapioScrapeFailed',
+                    error_message: outcome.error,
+                },
+                status: 'failed',
+            });
+            return;
+        }
+        const result = await this.buildWebsiteSourceResult(organisation_uuid, url, outcome.page);
+        await this.persistAttempt(target, { ...result, status: 'success' });
     }
 
     private async executeGoogleSearch(

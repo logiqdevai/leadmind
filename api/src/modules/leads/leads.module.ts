@@ -4,6 +4,7 @@ import { PrismaModule } from '@/core/databases/prisma/prisma.module';
 import { AI_PROCESS_QUEUE } from '@/core/queues/queues.constants';
 import { AiIntegrationModule } from '@/integrations/ai/ai.module';
 import { ApifyModule } from '@/integrations/apify/apify.module';
+import { WebsiteScraperModule } from '@/integrations/website-scraper/website-scraper.module';
 import { GemiModule } from '@/integrations/gemi/gemi.module';
 import { EnrichmentModule } from '@/modules/enrichment/enrichment.module';
 import { AiUsageModule } from '@/modules/ai-usage/ai-usage.module';
@@ -19,6 +20,7 @@ import { LeadEnrichmentBatchService } from './services/lead-enrichment-batch.ser
         PrismaModule,
         AiIntegrationModule,
         ApifyModule,
+        WebsiteScraperModule,
         GemiModule,
         forwardRef(() => EnrichmentModule),
         BullModule.registerQueue({ name: AI_PROCESS_QUEUE }),

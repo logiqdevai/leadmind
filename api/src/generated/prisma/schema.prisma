@@ -74,6 +74,7 @@ model Organisation {
   goal_achievements         GoalAchievement[]
   goal_personal_bests       GoalPersonalBest[]
   bulk_jobs                 BulkJob[]
+  website_scrape_requests   WebsiteScrapeRequest[]
 
   @@index([uuid])
   @@index([slug])
@@ -534,6 +535,7 @@ model BulkJob {
   max_retries          Int           @default(3)
   progress_current     Int           @default(0)
   progress_total       Int           @default(0)
+  progress_failed      Int           @default(0)
   queue_name           String?
   queue_job_id         String?
   reference_type       String?
@@ -554,6 +556,47 @@ model BulkJob {
   @@index([queue_name, queue_job_id])
   @@index([reference_type, reference_uuid])
   @@map("bulk_jobs")
+}
+
+enum WebsiteScrapeProvider {
+  SCRAPIO
+}
+
+enum WebsiteScrapeOperation {
+  CONTACT_EMAIL_SCRAPE
+  LEAD_WEBSITE_ENRICHMENT
+  CONTACT_WEBSITE_ENRICHMENT
+}
+
+enum WebsiteScrapeStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+/**
+ * A pending async website-scrape run, tracked until its provider (Scrapio today, others later) resolves it via webhook or timeout.
+ */
+model WebsiteScrapeRequest {
+  id                 String                 @id @default(uuid())
+  provider           WebsiteScrapeProvider  @default(SCRAPIO)
+  provider_run_id    String                 @unique
+  provider_config_id String
+  organisation_uuid  String
+  operation          WebsiteScrapeOperation
+  reference_uuid     String
+  status             WebsiteScrapeStatus    @default(PENDING)
+  context            Json?
+  error              String?                @db.Text
+  created_at         DateTime               @default(now())
+  updated_at         DateTime               @updatedAt
+  finished_at        DateTime?
+
+  organisation Organisation @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+
+  @@index([organisation_uuid, status])
+  @@index([operation, reference_uuid])
+  @@map("website_scrape_requests")
 }
 
 model SenderProfile {

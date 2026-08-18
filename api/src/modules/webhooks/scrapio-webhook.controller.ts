@@ -15,6 +15,10 @@ import { Request } from 'express';
 import { ExternalIntegrationProvider } from '@/generated/prisma';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { ScrapioCredentialsService } from '@/integrations/scrapio/services/scrapio-credentials.service';
+import { ScrapioCrawlRunsService } from '@/integrations/scrapio/services/scrapio-crawl-runs.service';
+import { ScrapioRunWaiterService } from '@/integrations/scrapio/scrapio-run-waiter.service';
+import { SCRAPIO_TERMINAL_WEBHOOK_EVENTS } from '@/integrations/scrapio/scrapio.constants';
+import { WebsiteScrapeDispatchService } from './services/website-scrape-dispatch.service';
 import {
   SCRAPIO_SIGNATURE_HEADER,
   verifyScrapioSignature,
@@ -34,6 +38,9 @@ export class ScrapioWebhookController {
   constructor(
     private readonly prisma: PrismaService,
     private readonly scrapioCredentials: ScrapioCredentialsService,
+    private readonly scrapioCrawlRuns: ScrapioCrawlRunsService,
+    private readonly runWaiter: ScrapioRunWaiterService,
+    private readonly scrapeDispatch: WebsiteScrapeDispatchService,
   ) {}
 
   @Post(':integration_uuid')
@@ -77,8 +84,37 @@ export class ScrapioWebhookController {
       `Scrapio webhook event received org=${integration.organisation_uuid} type=${body.event_type ?? 'unknown'} run=${body.workflow_run_id ?? 'n/a'} test=${Boolean(body.is_test)}`,
     );
 
-    // Event routing (e.g. syncing crawl results back into leads) isn't wired up yet —
-    // this verifies and logs deliveries until that business logic is defined.
+    const isTerminalRunEvent =
+      body.workflow_run_id &&
+      !body.is_test &&
+      (SCRAPIO_TERMINAL_WEBHOOK_EVENTS as readonly string[]).includes(body.event_type ?? '');
+
+    if (isTerminalRunEvent) {
+      // Fetch the run (which includes `pages`) before acking — Scrapio purges the
+      // `persist_results: false` payload once this handler confirms delivery.
+      try {
+        const run = await this.scrapioCrawlRuns.findOne(
+          integration.organisation_uuid,
+          body.workflow_run_id as string,
+        );
+        // Two independent consumers may be waiting on this run: the blocking-wait facade
+        // (prepareWebsiteBatch) via the Redis waiter, or a persisted WebsiteScrapeRequest via
+        // the dispatch service. Both are no-ops if nobody's actually waiting on this run.
+        await this.runWaiter.publishResult(body.workflow_run_id as string, {
+          status: run.status,
+          pages: run.pages ?? [],
+        });
+        await this.scrapeDispatch.processCompletion(body.workflow_run_id as string, {
+          status: run.status,
+          pages: run.pages ?? [],
+        });
+      } catch (error) {
+        const message = error instanceof Error ? error.message : 'Unknown error';
+        this.logger.error(
+          `Failed to fetch/publish Scrapio run ${body.workflow_run_id}: ${message}`,
+        );
+      }
+    }
 
     return { ok: true };
   }

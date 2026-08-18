@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
+import { BullModule } from '@nestjs/bullmq';
 import { PrismaModule } from '@/core/databases/prisma/prisma.module';
 import { IntegrationsModule } from '@/modules/integrations/integrations.module';
+import { WEBSITE_SCRAPE_TIMEOUT_QUEUE } from '@/core/queues/queues.constants';
 import { ScrapioClient } from './scrapio.client';
 import { ScrapioCredentialsService } from './services/scrapio-credentials.service';
 import { ScrapioMetaService } from './services/scrapio-meta.service';
@@ -14,6 +16,9 @@ import { ScrapioBrowserAgentConfigsService } from './services/scrapio-browser-ag
 import { ScrapioJobsService } from './services/scrapio-jobs.service';
 import { ScrapioUserIntegrationsService } from './services/scrapio-user-integrations.service';
 import { ScrapioWebhooksService } from './services/scrapio-webhooks.service';
+import { ScrapioRunWaiterService } from './scrapio-run-waiter.service';
+import { ScrapioWebsiteCrawlerAdapter } from './scrapio-website-crawler.adapter';
+import { ScrapioScrapeRequestService } from './services/scrapio-scrape-request.service';
 
 const SERVICES = [
   ScrapioClient,
@@ -29,10 +34,17 @@ const SERVICES = [
   ScrapioJobsService,
   ScrapioUserIntegrationsService,
   ScrapioWebhooksService,
+  ScrapioRunWaiterService,
+  ScrapioWebsiteCrawlerAdapter,
+  ScrapioScrapeRequestService,
 ];
 
 @Module({
-  imports: [PrismaModule, IntegrationsModule],
+  imports: [
+    PrismaModule,
+    IntegrationsModule,
+    BullModule.registerQueue({ name: WEBSITE_SCRAPE_TIMEOUT_QUEUE }),
+  ],
   providers: SERVICES,
   exports: SERVICES,
 })

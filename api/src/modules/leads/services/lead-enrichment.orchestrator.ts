@@ -3,8 +3,9 @@ import { EnrichmentSource, Lead, ApifyUsageOperation } from '@/generated/prisma'
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { LinkedInCompanyAdapter } from '@/integrations/apify/linkedin-company/linkedin-company.adapter';
 import { LinkedInProfileAdapter } from '@/integrations/apify/linkedin-profile/linkedin-profile.adapter';
-import { WebsiteContentCrawlerAdapter } from '@/integrations/apify/website-content-crawler/website-content-crawler.adapter';
 import { plainTextFromCrawledPage } from '@/integrations/apify/website-content-crawler/crawl-page-text.utils';
+import { WebsiteScraperService } from '@/integrations/website-scraper/website-scraper.service';
+import { ScrapioScrapeRequestService } from '@/integrations/scrapio/services/scrapio-scrape-request.service';
 import { GoogleSearchAdapter } from '@/integrations/apify/google-search/google-search.adapter';
 import { GemiService } from '@/integrations/gemi/gemi.service';
 import { LeadAiService } from '../utils/lead-ai.service';
@@ -45,7 +46,8 @@ export class LeadEnrichmentOrchestrator extends EnrichmentOrchestrator {
         leadAi: LeadAiService,
         linkedInCompany: LinkedInCompanyAdapter,
         linkedInProfile: LinkedInProfileAdapter,
-        websiteCrawler: WebsiteContentCrawlerAdapter,
+        websiteCrawler: WebsiteScraperService,
+        scrapioScrapeRequestService: ScrapioScrapeRequestService,
         googleSearch: GoogleSearchAdapter,
         gemiService: GemiService,
         summaryService: EnrichmentSummaryService,
@@ -56,6 +58,7 @@ export class LeadEnrichmentOrchestrator extends EnrichmentOrchestrator {
             linkedInCompany,
             linkedInProfile,
             websiteCrawler,
+            scrapioScrapeRequestService,
             googleSearch,
             gemiService,
             summaryService,

@@ -3,6 +3,7 @@ import { BullModule } from '@nestjs/bullmq';
 import { PrismaModule } from '@/core/databases/prisma/prisma.module';
 import { AiIntegrationModule } from '@/integrations/ai/ai.module';
 import { ApifyModule } from '@/integrations/apify/apify.module';
+import { WebsiteScraperModule } from '@/integrations/website-scraper/website-scraper.module';
 import { AI_PROCESS_QUEUE } from '@/core/queues/queues.constants';
 import { OutreachModule } from '@/modules/outreach/outreach.module';
 import { IntegrationsModule } from '@/modules/integrations/integrations.module';
@@ -19,6 +20,7 @@ import { ContactAiService } from './services/contact-ai.service';
         PrismaModule,
         AiIntegrationModule,
         ApifyModule,
+        WebsiteScraperModule,
         OutreachModule,
         IntegrationsModule,
         SenderProfilesModule,

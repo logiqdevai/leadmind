@@ -425,6 +425,7 @@ exports.Prisma.BulkJobScalarFieldEnum = {
   max_retries: 'max_retries',
   progress_current: 'progress_current',
   progress_total: 'progress_total',
+  progress_failed: 'progress_failed',
   queue_name: 'queue_name',
   queue_job_id: 'queue_job_id',
   reference_type: 'reference_type',
@@ -434,6 +435,22 @@ exports.Prisma.BulkJobScalarFieldEnum = {
   completed_at: 'completed_at',
   created_at: 'created_at',
   updated_at: 'updated_at'
+};
+
+exports.Prisma.WebsiteScrapeRequestScalarFieldEnum = {
+  id: 'id',
+  provider: 'provider',
+  provider_run_id: 'provider_run_id',
+  provider_config_id: 'provider_config_id',
+  organisation_uuid: 'organisation_uuid',
+  operation: 'operation',
+  reference_uuid: 'reference_uuid',
+  status: 'status',
+  context: 'context',
+  error: 'error',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  finished_at: 'finished_at'
 };
 
 exports.Prisma.SenderProfileScalarFieldEnum = {
@@ -952,6 +969,22 @@ exports.BulkJobStatus = exports.$Enums.BulkJobStatus = {
   CANCELLED: 'CANCELLED'
 };
 
+exports.WebsiteScrapeProvider = exports.$Enums.WebsiteScrapeProvider = {
+  SCRAPIO: 'SCRAPIO'
+};
+
+exports.WebsiteScrapeOperation = exports.$Enums.WebsiteScrapeOperation = {
+  CONTACT_EMAIL_SCRAPE: 'CONTACT_EMAIL_SCRAPE',
+  LEAD_WEBSITE_ENRICHMENT: 'LEAD_WEBSITE_ENRICHMENT',
+  CONTACT_WEBSITE_ENRICHMENT: 'CONTACT_WEBSITE_ENRICHMENT'
+};
+
+exports.WebsiteScrapeStatus = exports.$Enums.WebsiteScrapeStatus = {
+  PENDING: 'PENDING',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED'
+};
+
 exports.CampaignStatus = exports.$Enums.CampaignStatus = {
   DRAFT: 'DRAFT',
   DRAFTS_READY: 'DRAFTS_READY',
@@ -1119,6 +1152,7 @@ exports.Prisma.ModelName = {
   OutreachSequence: 'OutreachSequence',
   FilterJob: 'FilterJob',
   BulkJob: 'BulkJob',
+  WebsiteScrapeRequest: 'WebsiteScrapeRequest',
   SenderProfile: 'SenderProfile',
   MessageTemplate: 'MessageTemplate',
   MarketingCampaign: 'MarketingCampaign',

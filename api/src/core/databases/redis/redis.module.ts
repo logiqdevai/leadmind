@@ -1,6 +1,7 @@
 import { Module, Global, Logger } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { REDIS_OPTIONS } from './redis.constants';
+import Redis from 'ioredis';
+import { REDIS_CLIENT, REDIS_OPTIONS } from './redis.constants';
 import type { RedisOptions } from 'ioredis';
 
 @Global()
@@ -31,7 +32,21 @@ import type { RedisOptions } from 'ioredis';
             },
             inject: [ConfigService],
         },
+        {
+            provide: REDIS_CLIENT,
+            useFactory: (redisOptions: RedisOptions | null): Redis | null => {
+                const logger = new Logger('RedisModule');
+
+                if (!redisOptions) {
+                    logger.warn('REDIS_CLIENT not initialized');
+                    return null;
+                }
+
+                return new Redis(redisOptions);
+            },
+            inject: [REDIS_OPTIONS],
+        },
     ],
-    exports: [REDIS_OPTIONS],
+    exports: [REDIS_OPTIONS, REDIS_CLIENT],
 })
 export class RedisModule { }

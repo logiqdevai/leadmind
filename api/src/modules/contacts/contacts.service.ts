@@ -20,9 +20,11 @@ import {
     OutreachMessage,
     Prisma,
     SourceType,
+    WebsiteScrapeOperation,
 } from '@/generated/prisma';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { ElasticsearchService } from '@/integrations/elasticsearch/elasticsearch.service';
+import { ScrapioScrapeRequestService } from '@/integrations/scrapio/services/scrapio-scrape-request.service';
 import { AI_PROCESS_QUEUE } from '@/core/queues/queues.constants';
 import { BulkJobsService } from '@/modules/bulk-jobs/bulk-jobs.service';
 import { resolveContactEnrichmentSources } from '@/modules/leads/utils/enrichment-sources.utils';
@@ -78,7 +80,8 @@ import {
     buildEqualAllocations,
     validateEmailProviderAllocations,
 } from '@/modules/outreach/utils/email-provider-allocation.util';
-import { WebsiteContentCrawlerAdapter } from '@/integrations/apify/website-content-crawler/website-content-crawler.adapter';
+import { WebsiteScraperService } from '@/integrations/website-scraper/website-scraper.service';
+import type { CrawledPage } from '@/integrations/apify/website-content-crawler/website-content-crawler.interfaces';
 import {
     buildWebsiteEmailCrawlUrls,
     extractEmailsFromCrawledPages,
@@ -107,7 +110,8 @@ export class ContactsService {
         private readonly outreachService: OutreachService,
         private readonly emailCredentialsService: EmailCredentialsService,
         private readonly senderProfilesService: SenderProfilesService,
-        private readonly websiteCrawler: WebsiteContentCrawlerAdapter,
+        private readonly websiteCrawler: WebsiteScraperService,
+        private readonly scrapioScrapeRequestService: ScrapioScrapeRequestService,
         private readonly bulkJobsService: BulkJobsService,
         @InjectQueue(AI_PROCESS_QUEUE) private readonly aiProcessQueue: Queue,
     ) { }
@@ -1422,38 +1426,51 @@ export class ContactsService {
         bulk_job_uuid: string,
         eligible: Array<{ uuid: string; website: string | null }>,
     ): Promise<void> {
-        let failures = 0;
-
         await Promise.all(
             eligible.map(async (row) => {
+                let outcome: 'completed' | 'deferred' = 'completed';
+                let failed = false;
                 try {
-                    await this.scrapeAndSaveContactEmail(
+                    outcome = await this.scrapeAndSaveContactEmail(
                         organisation_uuid,
                         row.uuid,
                         row.website!.trim(),
+                        bulk_job_uuid,
                     );
                 } catch (error) {
-                    failures += 1;
+                    failed = true;
                     this.logger.error(
                         `Contact ${row.uuid} website email scrape failed: ${error instanceof Error ? error.message : error}`,
                     );
-                } finally {
-                    await this.bulkJobsService.incrementProgress(bulk_job_uuid);
+                }
+                // 'deferred' means a Scrapio run was kicked off — the webhook/timeout dispatcher
+                // will call completeBulkEmailScrapeItem itself once that run resolves.
+                if (outcome !== 'deferred') {
+                    await this.completeBulkEmailScrapeItem(bulk_job_uuid, { failed });
                 }
             }),
         );
+    }
 
-        if (failures === eligible.length) {
+    /** Called once per contact, whichever path resolves it (sync Apify, or the async Scrapio dispatcher/timeout). */
+    async completeBulkEmailScrapeItem(bulk_job_uuid: string, opts: { failed: boolean }): Promise<void> {
+        if (opts.failed) {
+            await this.bulkJobsService.incrementFailure(bulk_job_uuid);
+        }
+        const job = await this.bulkJobsService.incrementProgress(bulk_job_uuid);
+        if (job.progress_current < job.progress_total) {
+            return;
+        }
+        if (job.progress_failed >= job.progress_total) {
             await this.bulkJobsService.fail(
                 bulk_job_uuid,
-                `All ${failures} contact email scrapes failed`,
+                `All ${job.progress_total} contact email scrapes failed`,
             );
             return;
         }
-
         await this.bulkJobsService.complete(
             bulk_job_uuid,
-            failures > 0 ? `${failures}/${eligible.length} contacts failed` : null,
+            job.progress_failed > 0 ? `${job.progress_failed}/${job.progress_total} contacts failed` : null,
         );
     }
 
@@ -1461,16 +1478,29 @@ export class ContactsService {
         organisation_uuid: string,
         contactUuid: string,
         website: string,
-    ): Promise<void> {
+        bulk_job_uuid: string,
+    ): Promise<'completed' | 'deferred'> {
         const contact = await this.prisma.contact.findFirst({
             where: { uuid: contactUuid, organisation_uuid },
             select: { uuid: true, lead_uuid: true },
         });
         if (!contact) {
-            return;
+            return 'completed';
         }
 
         const startUrls = buildWebsiteEmailCrawlUrls(website);
+
+        if (this.websiteCrawler.getActiveProvider() === 'scrapio') {
+            await this.scrapioScrapeRequestService.initiate({
+                organisation_uuid,
+                operation: WebsiteScrapeOperation.CONTACT_EMAIL_SCRAPE,
+                reference_uuid: contactUuid,
+                urls: startUrls,
+                context: { bulk_job_uuid },
+            });
+            return 'deferred';
+        }
+
         const pages = await this.websiteCrawler.crawlPages(
             organisation_uuid,
             {
@@ -1489,11 +1519,32 @@ export class ContactsService {
                 reference_uuid: contactUuid,
             },
         );
+        await this.finishContactEmailScrape(organisation_uuid, contactUuid, pages);
+        return 'completed';
+    }
+
+    /**
+     * Post-crawl logic shared by the synchronous Apify path (above) and the async Scrapio
+     * dispatcher (`WebsiteScrapeDispatchService`, modules/webhooks) once its run resolves.
+     */
+    async finishContactEmailScrape(
+        organisation_uuid: string,
+        contactUuid: string,
+        pages: CrawledPage[],
+    ): Promise<void> {
+        const contact = await this.prisma.contact.findFirst({
+            where: { uuid: contactUuid, organisation_uuid },
+            select: { uuid: true, lead_uuid: true },
+        });
+        if (!contact) {
+            return;
+        }
+
         const emails = extractEmailsFromCrawledPages(pages);
         const email = pickBestContactEmail(emails);
         if (!email) {
             this.logger.debug(
-                `No email found for contact ${contactUuid} across ${pages.length}/${startUrls.length} pages`,
+                `No email found for contact ${contactUuid} across ${pages.length} pages`,
             );
             return;
         }

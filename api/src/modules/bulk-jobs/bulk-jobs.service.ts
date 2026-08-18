@@ -122,6 +122,14 @@ export class BulkJobsService {
         return updated;
     }
 
+    async incrementFailure(uuid: string) {
+        const updated = await this.prisma.bulkJob.update({
+            where: { uuid },
+            data: { progress_failed: { increment: 1 } },
+        });
+        return updated;
+    }
+
     async complete(uuid: string, error?: string | null) {
         return this.prisma.bulkJob.update({
             where: { uuid },
