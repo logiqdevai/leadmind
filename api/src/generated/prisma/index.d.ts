@@ -62054,6 +62054,7 @@ export namespace Prisma {
     action: number
     summary: number
     metadata: number
+    changes: number
     created_at: number
     _all: number
   }
@@ -62101,6 +62102,7 @@ export namespace Prisma {
     action?: true
     summary?: true
     metadata?: true
+    changes?: true
     created_at?: true
     _all?: true
   }
@@ -62201,6 +62203,7 @@ export namespace Prisma {
     action: string
     summary: string | null
     metadata: JsonValue | null
+    changes: JsonValue | null
     created_at: Date
     _count: ActivityLogCountAggregateOutputType | null
     _avg: ActivityLogAvgAggregateOutputType | null
@@ -62233,6 +62236,7 @@ export namespace Prisma {
     action?: boolean
     summary?: boolean
     metadata?: boolean
+    changes?: boolean
     created_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     actor?: boolean | ActivityLog$actorArgs<ExtArgs>
@@ -62248,6 +62252,7 @@ export namespace Prisma {
     action?: boolean
     summary?: boolean
     metadata?: boolean
+    changes?: boolean
     created_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     actor?: boolean | ActivityLog$actorArgs<ExtArgs>
@@ -62263,6 +62268,7 @@ export namespace Prisma {
     action?: boolean
     summary?: boolean
     metadata?: boolean
+    changes?: boolean
     created_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     actor?: boolean | ActivityLog$actorArgs<ExtArgs>
@@ -62278,10 +62284,11 @@ export namespace Prisma {
     action?: boolean
     summary?: boolean
     metadata?: boolean
+    changes?: boolean
     created_at?: boolean
   }
 
-  export type ActivityLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "actor_user_uuid" | "entity_type" | "entity_uuid" | "action" | "summary" | "metadata" | "created_at", ExtArgs["result"]["activityLog"]>
+  export type ActivityLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "actor_user_uuid" | "entity_type" | "entity_uuid" | "action" | "summary" | "metadata" | "changes" | "created_at", ExtArgs["result"]["activityLog"]>
   export type ActivityLogInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     actor?: boolean | ActivityLog$actorArgs<ExtArgs>
@@ -62311,6 +62318,7 @@ export namespace Prisma {
       action: string
       summary: string | null
       metadata: Prisma.JsonValue | null
+      changes: Prisma.JsonValue | null
       created_at: Date
     }, ExtArgs["result"]["activityLog"]>
     composites: {}
@@ -62746,6 +62754,7 @@ export namespace Prisma {
     readonly action: FieldRef<"ActivityLog", 'String'>
     readonly summary: FieldRef<"ActivityLog", 'String'>
     readonly metadata: FieldRef<"ActivityLog", 'Json'>
+    readonly changes: FieldRef<"ActivityLog", 'Json'>
     readonly created_at: FieldRef<"ActivityLog", 'DateTime'>
   }
     
@@ -64003,6 +64012,7 @@ export namespace Prisma {
     action: 'action',
     summary: 'summary',
     metadata: 'metadata',
+    changes: 'changes',
     created_at: 'created_at'
   };
 
@@ -69078,6 +69088,7 @@ export namespace Prisma {
     action?: StringFilter<"ActivityLog"> | string
     summary?: StringNullableFilter<"ActivityLog"> | string | null
     metadata?: JsonNullableFilter<"ActivityLog">
+    changes?: JsonNullableFilter<"ActivityLog">
     created_at?: DateTimeFilter<"ActivityLog"> | Date | string
     organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
     actor?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
@@ -69093,6 +69104,7 @@ export namespace Prisma {
     action?: SortOrder
     summary?: SortOrderInput | SortOrder
     metadata?: SortOrderInput | SortOrder
+    changes?: SortOrderInput | SortOrder
     created_at?: SortOrder
     organisation?: OrganisationOrderByWithRelationInput
     actor?: UserOrderByWithRelationInput
@@ -69111,6 +69123,7 @@ export namespace Prisma {
     action?: StringFilter<"ActivityLog"> | string
     summary?: StringNullableFilter<"ActivityLog"> | string | null
     metadata?: JsonNullableFilter<"ActivityLog">
+    changes?: JsonNullableFilter<"ActivityLog">
     created_at?: DateTimeFilter<"ActivityLog"> | Date | string
     organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
     actor?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
@@ -69126,6 +69139,7 @@ export namespace Prisma {
     action?: SortOrder
     summary?: SortOrderInput | SortOrder
     metadata?: SortOrderInput | SortOrder
+    changes?: SortOrderInput | SortOrder
     created_at?: SortOrder
     _count?: ActivityLogCountOrderByAggregateInput
     _avg?: ActivityLogAvgOrderByAggregateInput
@@ -69147,6 +69161,7 @@ export namespace Prisma {
     action?: StringWithAggregatesFilter<"ActivityLog"> | string
     summary?: StringNullableWithAggregatesFilter<"ActivityLog"> | string | null
     metadata?: JsonNullableWithAggregatesFilter<"ActivityLog">
+    changes?: JsonNullableWithAggregatesFilter<"ActivityLog">
     created_at?: DateTimeWithAggregatesFilter<"ActivityLog"> | Date | string
   }
 
@@ -73909,6 +73924,7 @@ export namespace Prisma {
     action: string
     summary?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    changes?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutActivity_logsInput
     actor?: UserCreateNestedOneWithoutActivity_logsInput
@@ -73924,6 +73940,7 @@ export namespace Prisma {
     action: string
     summary?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    changes?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
   }
 
@@ -73934,6 +73951,7 @@ export namespace Prisma {
     action?: StringFieldUpdateOperationsInput | string
     summary?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    changes?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutActivity_logsNestedInput
     actor?: UserUpdateOneWithoutActivity_logsNestedInput
@@ -73949,6 +73967,7 @@ export namespace Prisma {
     action?: StringFieldUpdateOperationsInput | string
     summary?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    changes?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -73962,6 +73981,7 @@ export namespace Prisma {
     action: string
     summary?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    changes?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
   }
 
@@ -73972,6 +73992,7 @@ export namespace Prisma {
     action?: StringFieldUpdateOperationsInput | string
     summary?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    changes?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -73985,6 +74006,7 @@ export namespace Prisma {
     action?: StringFieldUpdateOperationsInput | string
     summary?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    changes?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -77980,6 +78002,7 @@ export namespace Prisma {
     action?: SortOrder
     summary?: SortOrder
     metadata?: SortOrder
+    changes?: SortOrder
     created_at?: SortOrder
   }
 
@@ -83452,6 +83475,7 @@ export namespace Prisma {
     action: string
     summary?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    changes?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutActivity_logsInput
   }
@@ -83465,6 +83489,7 @@ export namespace Prisma {
     action: string
     summary?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    changes?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
   }
 
@@ -83800,6 +83825,7 @@ export namespace Prisma {
     action?: StringFilter<"ActivityLog"> | string
     summary?: StringNullableFilter<"ActivityLog"> | string | null
     metadata?: JsonNullableFilter<"ActivityLog">
+    changes?: JsonNullableFilter<"ActivityLog">
     created_at?: DateTimeFilter<"ActivityLog"> | Date | string
   }
 
@@ -84862,6 +84888,7 @@ export namespace Prisma {
     action: string
     summary?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    changes?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
     actor?: UserCreateNestedOneWithoutActivity_logsInput
   }
@@ -84875,6 +84902,7 @@ export namespace Prisma {
     action: string
     summary?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    changes?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
   }
 
@@ -97748,6 +97776,7 @@ export namespace Prisma {
     action: string
     summary?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    changes?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
   }
 
@@ -97998,6 +98027,7 @@ export namespace Prisma {
     action?: StringFieldUpdateOperationsInput | string
     summary?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    changes?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutActivity_logsNestedInput
   }
@@ -98011,6 +98041,7 @@ export namespace Prisma {
     action?: StringFieldUpdateOperationsInput | string
     summary?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    changes?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -98023,6 +98054,7 @@ export namespace Prisma {
     action?: StringFieldUpdateOperationsInput | string
     summary?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    changes?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -98539,6 +98571,7 @@ export namespace Prisma {
     action: string
     summary?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    changes?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
   }
 
@@ -99682,6 +99715,7 @@ export namespace Prisma {
     action?: StringFieldUpdateOperationsInput | string
     summary?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    changes?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     actor?: UserUpdateOneWithoutActivity_logsNestedInput
   }
@@ -99695,6 +99729,7 @@ export namespace Prisma {
     action?: StringFieldUpdateOperationsInput | string
     summary?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    changes?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -99707,6 +99742,7 @@ export namespace Prisma {
     action?: StringFieldUpdateOperationsInput | string
     summary?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    changes?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 

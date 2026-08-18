@@ -1415,6 +1415,7 @@ model ActivityLog {
   action            String
   summary           String?
   metadata          Json?
+  changes           Json?
   created_at        DateTime @default(now())
 
   organisation Organisation @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)

@@ -794,6 +794,7 @@ exports.Prisma.ActivityLogScalarFieldEnum = {
   action: 'action',
   summary: 'summary',
   metadata: 'metadata',
+  changes: 'changes',
   created_at: 'created_at'
 };
 

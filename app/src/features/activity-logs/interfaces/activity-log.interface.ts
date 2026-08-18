@@ -4,6 +4,11 @@ export interface ActivityLogActor {
     email: string;
 }
 
+export interface ActivityLogFieldChange {
+    from: unknown;
+    to: unknown;
+}
+
 export interface ActivityLog {
     uuid: string;
     organisation_uuid: string;
@@ -13,6 +18,7 @@ export interface ActivityLog {
     action: string;
     summary: string | null;
     metadata: Record<string, unknown> | null;
+    changes: Record<string, ActivityLogFieldChange> | null;
     created_at: string;
     actor: ActivityLogActor | null;
 }
