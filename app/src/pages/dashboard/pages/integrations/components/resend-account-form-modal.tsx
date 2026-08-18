@@ -15,6 +15,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { integrationsQueryKeys } from "@/features/integrations/hooks/use-integrations";
 import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { IntegrationOfficialLink } from "./integration-official-link";
 
 const borderedFieldClass = cn(
     "rounded-md border border-border bg-surface-primary",
@@ -109,7 +110,13 @@ export function ResendAccountFormModal({
                     <Modal.Dialog>
                         <Modal.CloseTrigger />
                         <Modal.Header>
-                            <Modal.Heading>Add Resend account</Modal.Heading>
+                            <Modal.Heading>
+                                Add{" "}
+                                <IntegrationOfficialLink provider="RESEND">
+                                    Resend
+                                </IntegrationOfficialLink>{" "}
+                                account
+                            </Modal.Heading>
                         </Modal.Header>
                         <Modal.Body className="space-y-4">
                             <div className="flex flex-col gap-1.5">

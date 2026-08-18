@@ -21,6 +21,7 @@ import type { IntegrationProviderView } from "@/features/integrations/interfaces
 import { useOrganisationPermission } from "@/hooks/use-organisation-permission";
 import { IntegrationDetailModal } from "./components/integration-detail-modal";
 import { IntegrationKeyFormModal } from "./components/integration-key-form-modal";
+import { IntegrationOfficialLink } from "./components/integration-official-link";
 import { ResendAccountFormModal } from "./components/resend-account-form-modal";
 import { SmtpAccountFormModal } from "./components/smtp-account-form-modal";
 
@@ -352,7 +353,11 @@ function IntegrationCard({
                 <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
                         <h3 className="text-sm font-semibold text-foreground">
-                            {providerView.label}
+                            <IntegrationOfficialLink
+                                provider={providerView.provider}
+                            >
+                                {providerView.label}
+                            </IntegrationOfficialLink>
                         </h3>
                         <Chip
                             size="sm"

@@ -31,6 +31,7 @@ import type {
     IntegrationProviderView,
 } from "@/features/integrations/interfaces/integrations.interface";
 import { cn } from "@/lib/utils";
+import { IntegrationOfficialLink } from "./integration-official-link";
 
 const borderedFieldClass = cn(
     "rounded-md border border-border bg-surface-primary",
@@ -250,9 +251,19 @@ export function IntegrationKeyFormModal({
                         <Modal.CloseTrigger />
                         <Modal.Header>
                             <Modal.Heading>
-                                {isEdit
-                                    ? `Update ${keyItem?.env_name ?? "key"}`
-                                    : `Add ${providerView.label} key`}
+                                {isEdit ? (
+                                    `Update ${keyItem?.env_name ?? "key"}`
+                                ) : (
+                                    <>
+                                        Add{" "}
+                                        <IntegrationOfficialLink
+                                            provider={providerView.provider}
+                                        >
+                                            {providerView.label}
+                                        </IntegrationOfficialLink>{" "}
+                                        key
+                                    </>
+                                )}
                             </Modal.Heading>
                         </Modal.Header>
                         <Modal.Body className="space-y-4">
