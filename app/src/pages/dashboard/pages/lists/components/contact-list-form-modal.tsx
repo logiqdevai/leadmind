@@ -43,24 +43,32 @@ export function ContactListFormModal({
   }, [isOpen, editing]);
 
   const handleConfirm = () => {
-    const payload = {
-      title: title.trim(),
-      description: emptyToNullOnEdit(description, !!editing),
-      ...(parentListUuid && !editing ? { parent_list_uuid: parentListUuid } : {}),
-    };
     if (editing) {
-      updateList.mutate({ uuid: editing.uuid, payload }, { onSuccess: () => onOpenChange(false) });
-    } else {
-      createList.mutate(payload, {
-        onSuccess: (list) => {
-          onOpenChange(false);
-          if (onCreated) {
-            onCreated(list);
-            return;
-          }
-          navigate(Routes.dashboard.lists_detail.replace(":uuid", list.uuid));
+      updateList.mutate(
+        {
+          uuid: editing.uuid,
+          payload: { title: title.trim(), description: emptyToNullOnEdit(description, true) },
         },
-      });
+        { onSuccess: () => onOpenChange(false) },
+      );
+    } else {
+      createList.mutate(
+        {
+          title: title.trim(),
+          description: description.trim() || undefined,
+          ...(parentListUuid ? { parent_list_uuid: parentListUuid } : {}),
+        },
+        {
+          onSuccess: (list) => {
+            onOpenChange(false);
+            if (onCreated) {
+              onCreated(list);
+              return;
+            }
+            navigate(Routes.dashboard.lists_detail.replace(":uuid", list.uuid));
+          },
+        },
+      );
     }
   };
 

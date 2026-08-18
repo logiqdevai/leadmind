@@ -34,19 +34,24 @@ export function FormFormModal({ isOpen, onOpenChange, editing }: FormFormModalPr
     }, [isOpen, editing]);
 
     const handleConfirm = () => {
-        const payload = { name: name.trim(), description: emptyToNullOnEdit(description, !!editing) };
         if (editing) {
             updateForm.mutate(
-                { uuid: editing.uuid, payload },
+                {
+                    uuid: editing.uuid,
+                    payload: { name: name.trim(), description: emptyToNullOnEdit(description, true) },
+                },
                 { onSuccess: () => onOpenChange(false) },
             );
         } else {
-            createForm.mutate(payload, {
-                onSuccess: (form) => {
-                    onOpenChange(false);
-                    navigate(Routes.dashboard.forms_detail.replace(":uuid", form.uuid));
+            createForm.mutate(
+                { name: name.trim(), description: description.trim() || undefined },
+                {
+                    onSuccess: (form) => {
+                        onOpenChange(false);
+                        navigate(Routes.dashboard.forms_detail.replace(":uuid", form.uuid));
+                    },
                 },
-            });
+            );
         }
     };
 
