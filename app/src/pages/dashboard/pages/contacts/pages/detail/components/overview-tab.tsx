@@ -32,7 +32,7 @@ import { StatusChip } from "@/pages/dashboard/pages/leads/components/badges";
 import { ContactListFormModal } from "@/pages/dashboard/pages/lists/components/contact-list-form-modal";
 import { Routes } from "@/routes/routes";
 import type { ProfileDraft } from "../types";
-import { profileDraftFromContact, sameUuidSet } from "../utils/profile-draft";
+import { profileDraftFromContact, profileFieldPatch, sameUuidSet } from "../utils/profile-draft";
 import { ContactInfosSection } from "./contact-infos-section";
 
 interface OverviewTabProps {
@@ -325,26 +325,20 @@ function EditForm({ contact, onDone }: { contact: Contact; onDone: () => void })
         setDraft((p) => ({ ...p, [key]: value }));
 
     const handleSave = () => {
-        const t = (s: string) => s.trim();
-        const payload: UpdateContactPayload = {
-            name: t(draft.name) || undefined,
-            email: t(draft.email) || undefined,
-            phone: t(draft.phone) || undefined,
-            company: t(draft.company) || undefined,
-            website: (() => {
-                const next = t(draft.website);
-                const prev = (contact.website ?? "").trim();
-                if (next === prev) return undefined;
-                return next ? next : null;
-            })(),
-            google_maps_url: t(draft.google_maps_url) || undefined,
-            title: t(draft.title) || undefined,
-            location: t(draft.location) || undefined,
-            linkedin_url: t(draft.linkedin_url) || undefined,
-            industry: t(draft.industry) || undefined,
-            description: t(draft.description) || undefined,
-        };
         const prev = profileDraftFromContact(contact);
+        const payload: UpdateContactPayload = {
+            name: profileFieldPatch(draft.name, prev.name),
+            email: profileFieldPatch(draft.email, prev.email),
+            phone: profileFieldPatch(draft.phone, prev.phone),
+            company: profileFieldPatch(draft.company, prev.company),
+            website: profileFieldPatch(draft.website, prev.website),
+            google_maps_url: profileFieldPatch(draft.google_maps_url, prev.google_maps_url),
+            title: profileFieldPatch(draft.title, prev.title),
+            location: profileFieldPatch(draft.location, prev.location),
+            linkedin_url: profileFieldPatch(draft.linkedin_url, prev.linkedin_url),
+            industry: profileFieldPatch(draft.industry, prev.industry),
+            description: profileFieldPatch(draft.description, prev.description),
+        };
         if (!sameUuidSet(draft.list_uuids, prev.list_uuids)) {
             payload.list_uuids = draft.list_uuids;
         }

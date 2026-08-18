@@ -8,6 +8,7 @@ import {
     FIELD_TYPES_DISPLAY_ONLY,
     FIELD_TYPES_WITH_OPTIONS,
 } from "@/features/forms/interfaces/form.interface";
+import { emptyToNullOnEdit } from "@/lib/profile";
 import type { FieldType, FormField } from "@/features/forms/interfaces/form.interface";
 
 const ALL_FIELD_TYPES = Object.keys(FIELD_TYPE_LABELS) as FieldType[];
@@ -64,10 +65,10 @@ export function FieldFormModal({ formUuid, isOpen, onOpenChange, editing }: Fiel
         const payload = {
             label: label.trim(),
             field_type: fieldType,
-            placeholder: placeholder.trim() || undefined,
-            help_text: helpText.trim() || undefined,
+            placeholder: emptyToNullOnEdit(placeholder, !!editing),
+            help_text: emptyToNullOnEdit(helpText, !!editing),
             required: isDisplayOnly ? false : required,
-            default_value: defaultValue.trim() || undefined,
+            default_value: emptyToNullOnEdit(defaultValue, !!editing),
             enabled,
             options: hasOptions ? cleanedOptions : undefined,
         };

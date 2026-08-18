@@ -503,7 +503,7 @@ export class ContactsService {
         await this.requireOwnedContact(organisation_uuid, uuid);
 
         if (dto.email !== undefined) {
-            const email = dto.email.trim() || null;
+            const email = dto.email?.trim() || null;
             if (email) {
                 const existingByEmail = await findOwnedContactByEmail(
                     this.prisma,
@@ -552,7 +552,7 @@ export class ContactsService {
             data.notes = dto.notes;
         }
         if (dto.email !== undefined) {
-            data.email = dto.email.trim() || null;
+            data.email = dto.email?.trim() || null;
         }
         for (const key of CONTACT_PROFILE_UPDATE_KEYS) {
             if (key === 'email') continue;

@@ -32,17 +32,17 @@ export interface Lead {
 }
 
 export interface UpdateLeadPayload {
-    name?: string;
-    email?: string;
-    phone?: string;
-    company?: string;
-    website?: string;
-    google_maps_url?: string;
-    linkedin_url?: string;
-    title?: string;
-    location?: string;
-    industry?: string;
-    description?: string;
+    name?: string | null;
+    email?: string | null;
+    phone?: string | null;
+    company?: string | null;
+    website?: string | null;
+    google_maps_url?: string | null;
+    linkedin_url?: string | null;
+    title?: string | null;
+    location?: string | null;
+    industry?: string | null;
+    description?: string | null;
 }
 
 export interface ListLeadsQuery {

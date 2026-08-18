@@ -151,13 +151,13 @@ export function CampaignWizard({ campaign }: CampaignWizardProps) {
     const persist = async (extra?: Record<string, unknown>) => {
         const payload: Record<string, unknown> = {
             name: basics.name,
-            description: basics.description || undefined,
+            description: basics.description.trim() || null,
             campaign_type: basics.campaign_type,
             channels: basics.channels,
             filters,
             ...(isPersonalized
                 ? {
-                      ai_prompt: aiPrompt || undefined,
+                      ai_prompt: aiPrompt.trim() || null,
                       use_openai_batch: basics.use_openai_batch,
                       email_subject: null,
                       email_content: null,
@@ -170,16 +170,16 @@ export function CampaignWizard({ campaign }: CampaignWizardProps) {
                           ? new Date(basics.scheduled_at).toISOString()
                           : null,
                       email_subject: basics.channels.includes(Channel.EMAIL)
-                          ? message.emailSubject || undefined
+                          ? message.emailSubject.trim() || null
                           : null,
                       email_content: basics.channels.includes(Channel.EMAIL)
-                          ? (isEmailHtmlEmpty(message.emailContent) ? undefined : message.emailContent)
+                          ? (isEmailHtmlEmpty(message.emailContent) ? null : message.emailContent)
                           : null,
                       sms_content: basics.channels.includes(Channel.SMS)
-                          ? message.smsContent || undefined
+                          ? message.smsContent.trim() || null
                           : null,
                       linkedin_content: basics.channels.includes(Channel.LINKEDIN)
-                          ? message.linkedinContent || undefined
+                          ? message.linkedinContent.trim() || null
                           : null,
                   }),
             ...(showEmailProvider && emailAllocations.length > 0

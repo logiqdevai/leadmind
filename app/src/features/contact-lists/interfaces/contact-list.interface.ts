@@ -38,7 +38,7 @@ export interface CreateContactListPayload {
 
 export interface UpdateContactListPayload {
     title?: string;
-    description?: string;
+    description?: string | null;
     parent_list_uuid?: string | null;
 }
 

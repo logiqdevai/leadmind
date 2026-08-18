@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, type FC, type ReactNode } from "react";
 import { Dropdown, Tabs } from "@heroui/react";
-import { MoreVertical, Sparkles } from "lucide-react";
+import { MoreVertical, Sparkles, Trash2 } from "lucide-react";
 import {
     defaultEnrichmentSourcesForLead,
     enrichmentSourceOptionsForLead,
@@ -77,10 +77,7 @@ export const ContactDetailView: FC<ContactDetailViewProps> = ({
                         isLoading={isLoading}
                         contact={contact}
                         onBack={onBack}
-                        onDeletePress={() => setConfirmDeleteOpen(true)}
-                        deletePending={deleteContact.isPending}
                         showBack={Boolean(onBack)}
-                        showDelete={showDelete}
                     />
                 </div>
                 {headerActions ? <div className="shrink-0 flex items-center gap-1">{headerActions}</div> : null}
@@ -101,6 +98,7 @@ export const ContactDetailView: FC<ContactDetailViewProps> = ({
                                     className="min-w-[11rem] bg-transparent p-0 outline-none backdrop-blur-none [backdrop-filter:none]"
                                     onAction={(key) => {
                                         if (key === "enrich") setEnrichModalOpen(true);
+                                        if (key === "delete") setConfirmDeleteOpen(true);
                                     }}
                                 >
                                     <Dropdown.Item id="enrich" textValue="Run enrichment" isDisabled={enrichContact.isPending}>
@@ -109,6 +107,14 @@ export const ContactDetailView: FC<ContactDetailViewProps> = ({
                                             <span className="font-medium text-violet-400">Run enrichment</span>
                                         </span>
                                     </Dropdown.Item>
+                                    {showDelete ? (
+                                        <Dropdown.Item id="delete" variant="danger" textValue="Delete contact" isDisabled={deleteContact.isPending}>
+                                            <span className="flex items-center gap-2.5 antialiased">
+                                                <Trash2 className="size-4 shrink-0 text-red-500" strokeWidth={2} />
+                                                <span className="font-medium text-red-400">Delete contact</span>
+                                            </span>
+                                        </Dropdown.Item>
+                                    ) : null}
                                 </Dropdown.Menu>
                             </Dropdown.Popover>
                         </Dropdown>

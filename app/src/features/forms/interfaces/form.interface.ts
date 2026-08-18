@@ -86,16 +86,16 @@ export interface CreateFormPayload {
 
 export interface UpdateFormPayload {
     name?: string;
-    description?: string;
+    description?: string | null;
 }
 
 export interface CreateFormFieldPayload {
     label: string;
     field_type: FieldType;
-    placeholder?: string;
-    help_text?: string;
+    placeholder?: string | null;
+    help_text?: string | null;
     required?: boolean;
-    default_value?: string;
+    default_value?: string | null;
     options?: string[];
     order_index?: number;
     enabled?: boolean;

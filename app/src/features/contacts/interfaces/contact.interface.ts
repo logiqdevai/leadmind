@@ -374,17 +374,17 @@ export interface CreateContactPayload {
 
 export interface UpdateContactPayload {
     list_uuids?: string[];
-    name?: string;
-    email?: string;
-    phone?: string;
-    company?: string;
+    name?: string | null;
+    email?: string | null;
+    phone?: string | null;
+    company?: string | null;
     website?: string | null;
-    google_maps_url?: string;
-    title?: string;
-    location?: string;
-    linkedin_url?: string;
-    industry?: string;
-    description?: string;
+    google_maps_url?: string | null;
+    title?: string | null;
+    location?: string | null;
+    linkedin_url?: string | null;
+    industry?: string | null;
+    description?: string | null;
     notes?: string;
 }
 

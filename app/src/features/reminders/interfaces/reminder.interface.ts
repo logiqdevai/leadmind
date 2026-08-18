@@ -37,8 +37,8 @@ export interface CreateReminderPayload {
 }
 
 export interface UpdateReminderPayload {
-    title?: string;
-    notes?: string;
+    title?: string | null;
+    notes?: string | null;
     remind_at?: string;
     status?: ReminderStatus;
 }

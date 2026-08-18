@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Button, Input, Label, ListBox, Select, Switch, TextField } from "@heroui/react";
 import { ChevronDown, Filter } from "lucide-react";
 import type {
@@ -76,17 +76,11 @@ export function ContactFiltersForm({
                 title="Find contacts"
                 description="Narrow the audience by keyword or lead source."
             >
-                <TextField name="search" className="w-full">
-                    <Label>Search</Label>
-                    <Input
-                        placeholder="Name, email, company"
-                        value={value.search ?? ""}
-                        onChange={(e) =>
-                            onChange({ search: e.target.value || undefined })
-                        }
-                        disabled={disabled}
-                    />
-                </TextField>
+                <FilterSearchField
+                    value={value.search ?? ""}
+                    onChange={(search) => onChange({ search })}
+                    disabled={disabled}
+                />
 
                 {showSourceFilter ? (
                 <div>
@@ -371,6 +365,60 @@ export function ContactFiltersForm({
                 <div className="rounded-xl border border-border bg-surface p-4">{form}</div>
             ) : null}
         </div>
+    );
+}
+
+const SEARCH_DEBOUNCE_MS = 300;
+
+interface FilterSearchFieldProps {
+    value: string;
+    onChange: (search: string | undefined) => void;
+    disabled?: boolean;
+}
+
+function FilterSearchField({ value, onChange, disabled }: FilterSearchFieldProps) {
+    const [draft, setDraft] = useState(value);
+    const lastEmittedRef = useRef(value);
+    const onChangeRef = useRef(onChange);
+    const draftRef = useRef(draft);
+    onChangeRef.current = onChange;
+    draftRef.current = draft;
+
+    useEffect(() => {
+        if (value === lastEmittedRef.current) return;
+        lastEmittedRef.current = value;
+        setDraft(value);
+    }, [value]);
+
+    useEffect(() => {
+        const id = window.setTimeout(() => {
+            if (draft === lastEmittedRef.current) return;
+            lastEmittedRef.current = draft;
+            onChangeRef.current(draft || undefined);
+        }, SEARCH_DEBOUNCE_MS);
+        return () => window.clearTimeout(id);
+    }, [draft]);
+
+    useEffect(
+        () => () => {
+            const next = draftRef.current;
+            if (next === lastEmittedRef.current) return;
+            lastEmittedRef.current = next;
+            onChangeRef.current(next || undefined);
+        },
+        [],
+    );
+
+    return (
+        <TextField name="search" className="w-full">
+            <Label>Search</Label>
+            <Input
+                placeholder="Name, email, company"
+                value={draft}
+                onChange={(e) => setDraft(e.target.value)}
+                disabled={disabled}
+            />
+        </TextField>
     );
 }
 

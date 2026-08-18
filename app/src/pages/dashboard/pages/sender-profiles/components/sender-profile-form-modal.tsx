@@ -251,6 +251,8 @@ export function SenderProfileFormModal({
             const v = form[key].trim();
             if (v) {
                 (payload as unknown as Record<string, unknown>)[key] = v;
+            } else if (isEdit) {
+                (payload as unknown as Record<string, unknown>)[key] = null;
             }
         }
 

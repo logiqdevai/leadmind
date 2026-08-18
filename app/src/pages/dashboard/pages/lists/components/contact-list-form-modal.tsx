@@ -4,6 +4,7 @@ import { Button, Input, Label, Modal, TextArea } from "@heroui/react";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
 import { useCreateContactList, useUpdateContactList } from "@/features/contact-lists/hooks/use-contact-lists";
 import type { ContactList } from "@/features/contact-lists/interfaces/contact-list.interface";
+import { emptyToNullOnEdit } from "@/lib/profile";
 import { Routes } from "@/routes/routes";
 
 interface ContactListFormModalProps {
@@ -44,7 +45,7 @@ export function ContactListFormModal({
   const handleConfirm = () => {
     const payload = {
       title: title.trim(),
-      description: description.trim() || undefined,
+      description: emptyToNullOnEdit(description, !!editing),
       ...(parentListUuid && !editing ? { parent_list_uuid: parentListUuid } : {}),
     };
     if (editing) {

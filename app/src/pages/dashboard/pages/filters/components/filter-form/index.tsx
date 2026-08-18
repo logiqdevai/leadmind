@@ -132,7 +132,7 @@ export function FilterForm({
             ...(canEditOutreachInstructions
                 ? {
                       outreach_instructions:
-                          values.outreach_instructions?.trim() || undefined,
+                          values.outreach_instructions?.trim() || null,
                   }
                 : {}),
         };
