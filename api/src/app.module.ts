@@ -32,6 +32,7 @@ import { RemindersModule } from './modules/reminders/reminders.module';
 import { BulkJobsModule } from './modules/bulk-jobs/bulk-jobs.module';
 import { FormsModule } from './modules/forms/forms.module';
 import { ContactListsModule } from './modules/contact-lists/contact-lists.module';
+import { SavedContactFiltersModule } from './modules/saved-contact-filters/saved-contact-filters.module';
 import { ContactAudienceStatsModule } from './modules/contact-audience-stats/contact-audience-stats.module';
 import { GatewaysModule } from './gateways/gateways.module';
 import { AiUsageModule } from './modules/ai-usage/ai-usage.module';
@@ -80,6 +81,7 @@ import { MessagingGoalsModule } from './modules/messaging-goals/messaging-goals.
     BulkJobsModule,
     FormsModule,
     ContactListsModule,
+    SavedContactFiltersModule,
     ContactAudienceStatsModule,
     GatewaysModule,
     AiUsageModule,

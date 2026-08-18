@@ -184,6 +184,16 @@ exports.Prisma.FilterScalarFieldEnum = {
   updated_at: 'updated_at'
 };
 
+exports.Prisma.SavedContactFilterScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  organisation_uuid: 'organisation_uuid',
+  name: 'name',
+  filters: 'filters',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
 exports.Prisma.ScoringInstructionScalarFieldEnum = {
   id: 'id',
   uuid: 'uuid',
@@ -1134,6 +1144,7 @@ exports.Prisma.ModelName = {
   OrganisationMember: 'OrganisationMember',
   OrganisationInvitation: 'OrganisationInvitation',
   Filter: 'Filter',
+  SavedContactFilter: 'SavedContactFilter',
   ScoringInstruction: 'ScoringInstruction',
   FilterScoringInstruction: 'FilterScoringInstruction',
   RawLead: 'RawLead',

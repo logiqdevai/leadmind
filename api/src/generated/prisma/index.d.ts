@@ -39,6 +39,11 @@ export type OrganisationInvitation = $Result.DefaultSelection<Prisma.$Organisati
  */
 export type Filter = $Result.DefaultSelection<Prisma.$FilterPayload>
 /**
+ * Model SavedContactFilter
+ * 
+ */
+export type SavedContactFilter = $Result.DefaultSelection<Prisma.$SavedContactFilterPayload>
+/**
  * Model ScoringInstruction
  * 
  */
@@ -990,6 +995,16 @@ export class PrismaClient<
   get filter(): Prisma.FilterDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.savedContactFilter`: Exposes CRUD operations for the **SavedContactFilter** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SavedContactFilters
+    * const savedContactFilters = await prisma.savedContactFilter.findMany()
+    * ```
+    */
+  get savedContactFilter(): Prisma.SavedContactFilterDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.scoringInstruction`: Exposes CRUD operations for the **ScoringInstruction** model.
     * Example usage:
     * ```ts
@@ -1817,6 +1832,7 @@ export namespace Prisma {
     OrganisationMember: 'OrganisationMember',
     OrganisationInvitation: 'OrganisationInvitation',
     Filter: 'Filter',
+    SavedContactFilter: 'SavedContactFilter',
     ScoringInstruction: 'ScoringInstruction',
     FilterScoringInstruction: 'FilterScoringInstruction',
     RawLead: 'RawLead',
@@ -1871,7 +1887,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "organisation" | "organisationMember" | "organisationInvitation" | "filter" | "scoringInstruction" | "filterScoringInstruction" | "rawLead" | "lead" | "leadEnrichment" | "contact" | "contactInfo" | "contactFilter" | "contactEnrichment" | "contactScore" | "contactList" | "contactListMember" | "contactTag" | "interaction" | "outreachMessage" | "outreachSequence" | "filterJob" | "bulkJob" | "websiteScrapeRequest" | "senderProfile" | "messageTemplate" | "marketingCampaign" | "marketingCampaignContact" | "openAiBatchJob" | "integration" | "integrationAccount" | "integrationKey" | "reminder" | "form" | "formField" | "formCompletion" | "formCompletionValue" | "contactAudienceAnalysis" | "aiUsageLog" | "apifyUsageLog" | "messagingGoal" | "goalAchievement" | "goalPersonalBest" | "activityLog"
+      modelProps: "user" | "organisation" | "organisationMember" | "organisationInvitation" | "filter" | "savedContactFilter" | "scoringInstruction" | "filterScoringInstruction" | "rawLead" | "lead" | "leadEnrichment" | "contact" | "contactInfo" | "contactFilter" | "contactEnrichment" | "contactScore" | "contactList" | "contactListMember" | "contactTag" | "interaction" | "outreachMessage" | "outreachSequence" | "filterJob" | "bulkJob" | "websiteScrapeRequest" | "senderProfile" | "messageTemplate" | "marketingCampaign" | "marketingCampaignContact" | "openAiBatchJob" | "integration" | "integrationAccount" | "integrationKey" | "reminder" | "form" | "formField" | "formCompletion" | "formCompletionValue" | "contactAudienceAnalysis" | "aiUsageLog" | "apifyUsageLog" | "messagingGoal" | "goalAchievement" | "goalPersonalBest" | "activityLog"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2242,6 +2258,80 @@ export namespace Prisma {
           count: {
             args: Prisma.FilterCountArgs<ExtArgs>
             result: $Utils.Optional<FilterCountAggregateOutputType> | number
+          }
+        }
+      }
+      SavedContactFilter: {
+        payload: Prisma.$SavedContactFilterPayload<ExtArgs>
+        fields: Prisma.SavedContactFilterFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SavedContactFilterFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SavedContactFilterPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SavedContactFilterFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SavedContactFilterPayload>
+          }
+          findFirst: {
+            args: Prisma.SavedContactFilterFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SavedContactFilterPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SavedContactFilterFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SavedContactFilterPayload>
+          }
+          findMany: {
+            args: Prisma.SavedContactFilterFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SavedContactFilterPayload>[]
+          }
+          create: {
+            args: Prisma.SavedContactFilterCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SavedContactFilterPayload>
+          }
+          createMany: {
+            args: Prisma.SavedContactFilterCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SavedContactFilterCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SavedContactFilterPayload>[]
+          }
+          delete: {
+            args: Prisma.SavedContactFilterDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SavedContactFilterPayload>
+          }
+          update: {
+            args: Prisma.SavedContactFilterUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SavedContactFilterPayload>
+          }
+          deleteMany: {
+            args: Prisma.SavedContactFilterDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SavedContactFilterUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.SavedContactFilterUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SavedContactFilterPayload>[]
+          }
+          upsert: {
+            args: Prisma.SavedContactFilterUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SavedContactFilterPayload>
+          }
+          aggregate: {
+            args: Prisma.SavedContactFilterAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSavedContactFilter>
+          }
+          groupBy: {
+            args: Prisma.SavedContactFilterGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SavedContactFilterGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SavedContactFilterCountArgs<ExtArgs>
+            result: $Utils.Optional<SavedContactFilterCountAggregateOutputType> | number
           }
         }
       }
@@ -5244,6 +5334,7 @@ export namespace Prisma {
     organisationMember?: OrganisationMemberOmit
     organisationInvitation?: OrganisationInvitationOmit
     filter?: FilterOmit
+    savedContactFilter?: SavedContactFilterOmit
     scoringInstruction?: ScoringInstructionOmit
     filterScoringInstruction?: FilterScoringInstructionOmit
     rawLead?: RawLeadOmit
@@ -5481,6 +5572,7 @@ export namespace Prisma {
     reminders: number
     forms: number
     contact_lists: number
+    saved_contact_filters: number
     contact_audience_analyses: number
     ai_usage_logs: number
     apify_usage_logs: number
@@ -5509,6 +5601,7 @@ export namespace Prisma {
     reminders?: boolean | OrganisationCountOutputTypeCountRemindersArgs
     forms?: boolean | OrganisationCountOutputTypeCountFormsArgs
     contact_lists?: boolean | OrganisationCountOutputTypeCountContact_listsArgs
+    saved_contact_filters?: boolean | OrganisationCountOutputTypeCountSaved_contact_filtersArgs
     contact_audience_analyses?: boolean | OrganisationCountOutputTypeCountContact_audience_analysesArgs
     ai_usage_logs?: boolean | OrganisationCountOutputTypeCountAi_usage_logsArgs
     apify_usage_logs?: boolean | OrganisationCountOutputTypeCountApify_usage_logsArgs
@@ -5635,6 +5728,13 @@ export namespace Prisma {
    */
   export type OrganisationCountOutputTypeCountContact_listsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ContactListWhereInput
+  }
+
+  /**
+   * OrganisationCountOutputType without action
+   */
+  export type OrganisationCountOutputTypeCountSaved_contact_filtersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SavedContactFilterWhereInput
   }
 
   /**
@@ -7908,6 +8008,7 @@ export namespace Prisma {
     reminders?: boolean | Organisation$remindersArgs<ExtArgs>
     forms?: boolean | Organisation$formsArgs<ExtArgs>
     contact_lists?: boolean | Organisation$contact_listsArgs<ExtArgs>
+    saved_contact_filters?: boolean | Organisation$saved_contact_filtersArgs<ExtArgs>
     contact_audience_analyses?: boolean | Organisation$contact_audience_analysesArgs<ExtArgs>
     ai_usage_logs?: boolean | Organisation$ai_usage_logsArgs<ExtArgs>
     apify_usage_logs?: boolean | Organisation$apify_usage_logsArgs<ExtArgs>
@@ -7971,6 +8072,7 @@ export namespace Prisma {
     reminders?: boolean | Organisation$remindersArgs<ExtArgs>
     forms?: boolean | Organisation$formsArgs<ExtArgs>
     contact_lists?: boolean | Organisation$contact_listsArgs<ExtArgs>
+    saved_contact_filters?: boolean | Organisation$saved_contact_filtersArgs<ExtArgs>
     contact_audience_analyses?: boolean | Organisation$contact_audience_analysesArgs<ExtArgs>
     ai_usage_logs?: boolean | Organisation$ai_usage_logsArgs<ExtArgs>
     apify_usage_logs?: boolean | Organisation$apify_usage_logsArgs<ExtArgs>
@@ -8004,6 +8106,7 @@ export namespace Prisma {
       reminders: Prisma.$ReminderPayload<ExtArgs>[]
       forms: Prisma.$FormPayload<ExtArgs>[]
       contact_lists: Prisma.$ContactListPayload<ExtArgs>[]
+      saved_contact_filters: Prisma.$SavedContactFilterPayload<ExtArgs>[]
       contact_audience_analyses: Prisma.$ContactAudienceAnalysisPayload<ExtArgs>[]
       ai_usage_logs: Prisma.$AiUsageLogPayload<ExtArgs>[]
       apify_usage_logs: Prisma.$ApifyUsageLogPayload<ExtArgs>[]
@@ -8433,6 +8536,7 @@ export namespace Prisma {
     reminders<T extends Organisation$remindersArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$remindersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReminderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     forms<T extends Organisation$formsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$formsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FormPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     contact_lists<T extends Organisation$contact_listsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$contact_listsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactListPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    saved_contact_filters<T extends Organisation$saved_contact_filtersArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$saved_contact_filtersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SavedContactFilterPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     contact_audience_analyses<T extends Organisation$contact_audience_analysesArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$contact_audience_analysesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactAudienceAnalysisPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     ai_usage_logs<T extends Organisation$ai_usage_logsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$ai_usage_logsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AiUsageLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     apify_usage_logs<T extends Organisation$apify_usage_logsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$apify_usage_logsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApifyUsageLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -9225,6 +9329,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ContactListScalarFieldEnum | ContactListScalarFieldEnum[]
+  }
+
+  /**
+   * Organisation.saved_contact_filters
+   */
+  export type Organisation$saved_contact_filtersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SavedContactFilter
+     */
+    select?: SavedContactFilterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SavedContactFilter
+     */
+    omit?: SavedContactFilterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SavedContactFilterInclude<ExtArgs> | null
+    where?: SavedContactFilterWhereInput
+    orderBy?: SavedContactFilterOrderByWithRelationInput | SavedContactFilterOrderByWithRelationInput[]
+    cursor?: SavedContactFilterWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SavedContactFilterScalarFieldEnum | SavedContactFilterScalarFieldEnum[]
   }
 
   /**
@@ -13154,6 +13282,1120 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: FilterInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SavedContactFilter
+   */
+
+  export type AggregateSavedContactFilter = {
+    _count: SavedContactFilterCountAggregateOutputType | null
+    _avg: SavedContactFilterAvgAggregateOutputType | null
+    _sum: SavedContactFilterSumAggregateOutputType | null
+    _min: SavedContactFilterMinAggregateOutputType | null
+    _max: SavedContactFilterMaxAggregateOutputType | null
+  }
+
+  export type SavedContactFilterAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type SavedContactFilterSumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type SavedContactFilterMinAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    organisation_uuid: string | null
+    name: string | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type SavedContactFilterMaxAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    organisation_uuid: string | null
+    name: string | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type SavedContactFilterCountAggregateOutputType = {
+    id: number
+    uuid: number
+    organisation_uuid: number
+    name: number
+    filters: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type SavedContactFilterAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type SavedContactFilterSumAggregateInputType = {
+    id?: true
+  }
+
+  export type SavedContactFilterMinAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    name?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type SavedContactFilterMaxAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    name?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type SavedContactFilterCountAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    name?: true
+    filters?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type SavedContactFilterAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SavedContactFilter to aggregate.
+     */
+    where?: SavedContactFilterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SavedContactFilters to fetch.
+     */
+    orderBy?: SavedContactFilterOrderByWithRelationInput | SavedContactFilterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SavedContactFilterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SavedContactFilters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SavedContactFilters.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SavedContactFilters
+    **/
+    _count?: true | SavedContactFilterCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: SavedContactFilterAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: SavedContactFilterSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SavedContactFilterMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SavedContactFilterMaxAggregateInputType
+  }
+
+  export type GetSavedContactFilterAggregateType<T extends SavedContactFilterAggregateArgs> = {
+        [P in keyof T & keyof AggregateSavedContactFilter]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSavedContactFilter[P]>
+      : GetScalarType<T[P], AggregateSavedContactFilter[P]>
+  }
+
+
+
+
+  export type SavedContactFilterGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SavedContactFilterWhereInput
+    orderBy?: SavedContactFilterOrderByWithAggregationInput | SavedContactFilterOrderByWithAggregationInput[]
+    by: SavedContactFilterScalarFieldEnum[] | SavedContactFilterScalarFieldEnum
+    having?: SavedContactFilterScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SavedContactFilterCountAggregateInputType | true
+    _avg?: SavedContactFilterAvgAggregateInputType
+    _sum?: SavedContactFilterSumAggregateInputType
+    _min?: SavedContactFilterMinAggregateInputType
+    _max?: SavedContactFilterMaxAggregateInputType
+  }
+
+  export type SavedContactFilterGroupByOutputType = {
+    id: number
+    uuid: string
+    organisation_uuid: string
+    name: string
+    filters: JsonValue
+    created_at: Date
+    updated_at: Date
+    _count: SavedContactFilterCountAggregateOutputType | null
+    _avg: SavedContactFilterAvgAggregateOutputType | null
+    _sum: SavedContactFilterSumAggregateOutputType | null
+    _min: SavedContactFilterMinAggregateOutputType | null
+    _max: SavedContactFilterMaxAggregateOutputType | null
+  }
+
+  type GetSavedContactFilterGroupByPayload<T extends SavedContactFilterGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SavedContactFilterGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SavedContactFilterGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SavedContactFilterGroupByOutputType[P]>
+            : GetScalarType<T[P], SavedContactFilterGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SavedContactFilterSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    name?: boolean
+    filters?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["savedContactFilter"]>
+
+  export type SavedContactFilterSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    name?: boolean
+    filters?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["savedContactFilter"]>
+
+  export type SavedContactFilterSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    name?: boolean
+    filters?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["savedContactFilter"]>
+
+  export type SavedContactFilterSelectScalar = {
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    name?: boolean
+    filters?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type SavedContactFilterOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "name" | "filters" | "created_at" | "updated_at", ExtArgs["result"]["savedContactFilter"]>
+  export type SavedContactFilterInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }
+  export type SavedContactFilterIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }
+  export type SavedContactFilterIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }
+
+  export type $SavedContactFilterPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SavedContactFilter"
+    objects: {
+      organisation: Prisma.$OrganisationPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      uuid: string
+      organisation_uuid: string
+      name: string
+      filters: Prisma.JsonValue
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["savedContactFilter"]>
+    composites: {}
+  }
+
+  type SavedContactFilterGetPayload<S extends boolean | null | undefined | SavedContactFilterDefaultArgs> = $Result.GetResult<Prisma.$SavedContactFilterPayload, S>
+
+  type SavedContactFilterCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SavedContactFilterFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SavedContactFilterCountAggregateInputType | true
+    }
+
+  export interface SavedContactFilterDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SavedContactFilter'], meta: { name: 'SavedContactFilter' } }
+    /**
+     * Find zero or one SavedContactFilter that matches the filter.
+     * @param {SavedContactFilterFindUniqueArgs} args - Arguments to find a SavedContactFilter
+     * @example
+     * // Get one SavedContactFilter
+     * const savedContactFilter = await prisma.savedContactFilter.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SavedContactFilterFindUniqueArgs>(args: SelectSubset<T, SavedContactFilterFindUniqueArgs<ExtArgs>>): Prisma__SavedContactFilterClient<$Result.GetResult<Prisma.$SavedContactFilterPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one SavedContactFilter that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SavedContactFilterFindUniqueOrThrowArgs} args - Arguments to find a SavedContactFilter
+     * @example
+     * // Get one SavedContactFilter
+     * const savedContactFilter = await prisma.savedContactFilter.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SavedContactFilterFindUniqueOrThrowArgs>(args: SelectSubset<T, SavedContactFilterFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SavedContactFilterClient<$Result.GetResult<Prisma.$SavedContactFilterPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SavedContactFilter that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SavedContactFilterFindFirstArgs} args - Arguments to find a SavedContactFilter
+     * @example
+     * // Get one SavedContactFilter
+     * const savedContactFilter = await prisma.savedContactFilter.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SavedContactFilterFindFirstArgs>(args?: SelectSubset<T, SavedContactFilterFindFirstArgs<ExtArgs>>): Prisma__SavedContactFilterClient<$Result.GetResult<Prisma.$SavedContactFilterPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SavedContactFilter that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SavedContactFilterFindFirstOrThrowArgs} args - Arguments to find a SavedContactFilter
+     * @example
+     * // Get one SavedContactFilter
+     * const savedContactFilter = await prisma.savedContactFilter.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SavedContactFilterFindFirstOrThrowArgs>(args?: SelectSubset<T, SavedContactFilterFindFirstOrThrowArgs<ExtArgs>>): Prisma__SavedContactFilterClient<$Result.GetResult<Prisma.$SavedContactFilterPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more SavedContactFilters that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SavedContactFilterFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SavedContactFilters
+     * const savedContactFilters = await prisma.savedContactFilter.findMany()
+     * 
+     * // Get first 10 SavedContactFilters
+     * const savedContactFilters = await prisma.savedContactFilter.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const savedContactFilterWithIdOnly = await prisma.savedContactFilter.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SavedContactFilterFindManyArgs>(args?: SelectSubset<T, SavedContactFilterFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SavedContactFilterPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a SavedContactFilter.
+     * @param {SavedContactFilterCreateArgs} args - Arguments to create a SavedContactFilter.
+     * @example
+     * // Create one SavedContactFilter
+     * const SavedContactFilter = await prisma.savedContactFilter.create({
+     *   data: {
+     *     // ... data to create a SavedContactFilter
+     *   }
+     * })
+     * 
+     */
+    create<T extends SavedContactFilterCreateArgs>(args: SelectSubset<T, SavedContactFilterCreateArgs<ExtArgs>>): Prisma__SavedContactFilterClient<$Result.GetResult<Prisma.$SavedContactFilterPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many SavedContactFilters.
+     * @param {SavedContactFilterCreateManyArgs} args - Arguments to create many SavedContactFilters.
+     * @example
+     * // Create many SavedContactFilters
+     * const savedContactFilter = await prisma.savedContactFilter.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SavedContactFilterCreateManyArgs>(args?: SelectSubset<T, SavedContactFilterCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SavedContactFilters and returns the data saved in the database.
+     * @param {SavedContactFilterCreateManyAndReturnArgs} args - Arguments to create many SavedContactFilters.
+     * @example
+     * // Create many SavedContactFilters
+     * const savedContactFilter = await prisma.savedContactFilter.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SavedContactFilters and only return the `id`
+     * const savedContactFilterWithIdOnly = await prisma.savedContactFilter.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SavedContactFilterCreateManyAndReturnArgs>(args?: SelectSubset<T, SavedContactFilterCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SavedContactFilterPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a SavedContactFilter.
+     * @param {SavedContactFilterDeleteArgs} args - Arguments to delete one SavedContactFilter.
+     * @example
+     * // Delete one SavedContactFilter
+     * const SavedContactFilter = await prisma.savedContactFilter.delete({
+     *   where: {
+     *     // ... filter to delete one SavedContactFilter
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SavedContactFilterDeleteArgs>(args: SelectSubset<T, SavedContactFilterDeleteArgs<ExtArgs>>): Prisma__SavedContactFilterClient<$Result.GetResult<Prisma.$SavedContactFilterPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one SavedContactFilter.
+     * @param {SavedContactFilterUpdateArgs} args - Arguments to update one SavedContactFilter.
+     * @example
+     * // Update one SavedContactFilter
+     * const savedContactFilter = await prisma.savedContactFilter.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SavedContactFilterUpdateArgs>(args: SelectSubset<T, SavedContactFilterUpdateArgs<ExtArgs>>): Prisma__SavedContactFilterClient<$Result.GetResult<Prisma.$SavedContactFilterPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more SavedContactFilters.
+     * @param {SavedContactFilterDeleteManyArgs} args - Arguments to filter SavedContactFilters to delete.
+     * @example
+     * // Delete a few SavedContactFilters
+     * const { count } = await prisma.savedContactFilter.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SavedContactFilterDeleteManyArgs>(args?: SelectSubset<T, SavedContactFilterDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SavedContactFilters.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SavedContactFilterUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SavedContactFilters
+     * const savedContactFilter = await prisma.savedContactFilter.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SavedContactFilterUpdateManyArgs>(args: SelectSubset<T, SavedContactFilterUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SavedContactFilters and returns the data updated in the database.
+     * @param {SavedContactFilterUpdateManyAndReturnArgs} args - Arguments to update many SavedContactFilters.
+     * @example
+     * // Update many SavedContactFilters
+     * const savedContactFilter = await prisma.savedContactFilter.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more SavedContactFilters and only return the `id`
+     * const savedContactFilterWithIdOnly = await prisma.savedContactFilter.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SavedContactFilterUpdateManyAndReturnArgs>(args: SelectSubset<T, SavedContactFilterUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SavedContactFilterPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one SavedContactFilter.
+     * @param {SavedContactFilterUpsertArgs} args - Arguments to update or create a SavedContactFilter.
+     * @example
+     * // Update or create a SavedContactFilter
+     * const savedContactFilter = await prisma.savedContactFilter.upsert({
+     *   create: {
+     *     // ... data to create a SavedContactFilter
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SavedContactFilter we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SavedContactFilterUpsertArgs>(args: SelectSubset<T, SavedContactFilterUpsertArgs<ExtArgs>>): Prisma__SavedContactFilterClient<$Result.GetResult<Prisma.$SavedContactFilterPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of SavedContactFilters.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SavedContactFilterCountArgs} args - Arguments to filter SavedContactFilters to count.
+     * @example
+     * // Count the number of SavedContactFilters
+     * const count = await prisma.savedContactFilter.count({
+     *   where: {
+     *     // ... the filter for the SavedContactFilters we want to count
+     *   }
+     * })
+    **/
+    count<T extends SavedContactFilterCountArgs>(
+      args?: Subset<T, SavedContactFilterCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SavedContactFilterCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SavedContactFilter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SavedContactFilterAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SavedContactFilterAggregateArgs>(args: Subset<T, SavedContactFilterAggregateArgs>): Prisma.PrismaPromise<GetSavedContactFilterAggregateType<T>>
+
+    /**
+     * Group by SavedContactFilter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SavedContactFilterGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SavedContactFilterGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SavedContactFilterGroupByArgs['orderBy'] }
+        : { orderBy?: SavedContactFilterGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SavedContactFilterGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSavedContactFilterGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SavedContactFilter model
+   */
+  readonly fields: SavedContactFilterFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SavedContactFilter.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SavedContactFilterClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    organisation<T extends OrganisationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganisationDefaultArgs<ExtArgs>>): Prisma__OrganisationClient<$Result.GetResult<Prisma.$OrganisationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SavedContactFilter model
+   */
+  interface SavedContactFilterFieldRefs {
+    readonly id: FieldRef<"SavedContactFilter", 'Int'>
+    readonly uuid: FieldRef<"SavedContactFilter", 'String'>
+    readonly organisation_uuid: FieldRef<"SavedContactFilter", 'String'>
+    readonly name: FieldRef<"SavedContactFilter", 'String'>
+    readonly filters: FieldRef<"SavedContactFilter", 'Json'>
+    readonly created_at: FieldRef<"SavedContactFilter", 'DateTime'>
+    readonly updated_at: FieldRef<"SavedContactFilter", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SavedContactFilter findUnique
+   */
+  export type SavedContactFilterFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SavedContactFilter
+     */
+    select?: SavedContactFilterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SavedContactFilter
+     */
+    omit?: SavedContactFilterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SavedContactFilterInclude<ExtArgs> | null
+    /**
+     * Filter, which SavedContactFilter to fetch.
+     */
+    where: SavedContactFilterWhereUniqueInput
+  }
+
+  /**
+   * SavedContactFilter findUniqueOrThrow
+   */
+  export type SavedContactFilterFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SavedContactFilter
+     */
+    select?: SavedContactFilterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SavedContactFilter
+     */
+    omit?: SavedContactFilterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SavedContactFilterInclude<ExtArgs> | null
+    /**
+     * Filter, which SavedContactFilter to fetch.
+     */
+    where: SavedContactFilterWhereUniqueInput
+  }
+
+  /**
+   * SavedContactFilter findFirst
+   */
+  export type SavedContactFilterFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SavedContactFilter
+     */
+    select?: SavedContactFilterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SavedContactFilter
+     */
+    omit?: SavedContactFilterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SavedContactFilterInclude<ExtArgs> | null
+    /**
+     * Filter, which SavedContactFilter to fetch.
+     */
+    where?: SavedContactFilterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SavedContactFilters to fetch.
+     */
+    orderBy?: SavedContactFilterOrderByWithRelationInput | SavedContactFilterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SavedContactFilters.
+     */
+    cursor?: SavedContactFilterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SavedContactFilters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SavedContactFilters.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SavedContactFilters.
+     */
+    distinct?: SavedContactFilterScalarFieldEnum | SavedContactFilterScalarFieldEnum[]
+  }
+
+  /**
+   * SavedContactFilter findFirstOrThrow
+   */
+  export type SavedContactFilterFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SavedContactFilter
+     */
+    select?: SavedContactFilterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SavedContactFilter
+     */
+    omit?: SavedContactFilterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SavedContactFilterInclude<ExtArgs> | null
+    /**
+     * Filter, which SavedContactFilter to fetch.
+     */
+    where?: SavedContactFilterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SavedContactFilters to fetch.
+     */
+    orderBy?: SavedContactFilterOrderByWithRelationInput | SavedContactFilterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SavedContactFilters.
+     */
+    cursor?: SavedContactFilterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SavedContactFilters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SavedContactFilters.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SavedContactFilters.
+     */
+    distinct?: SavedContactFilterScalarFieldEnum | SavedContactFilterScalarFieldEnum[]
+  }
+
+  /**
+   * SavedContactFilter findMany
+   */
+  export type SavedContactFilterFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SavedContactFilter
+     */
+    select?: SavedContactFilterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SavedContactFilter
+     */
+    omit?: SavedContactFilterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SavedContactFilterInclude<ExtArgs> | null
+    /**
+     * Filter, which SavedContactFilters to fetch.
+     */
+    where?: SavedContactFilterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SavedContactFilters to fetch.
+     */
+    orderBy?: SavedContactFilterOrderByWithRelationInput | SavedContactFilterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SavedContactFilters.
+     */
+    cursor?: SavedContactFilterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SavedContactFilters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SavedContactFilters.
+     */
+    skip?: number
+    distinct?: SavedContactFilterScalarFieldEnum | SavedContactFilterScalarFieldEnum[]
+  }
+
+  /**
+   * SavedContactFilter create
+   */
+  export type SavedContactFilterCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SavedContactFilter
+     */
+    select?: SavedContactFilterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SavedContactFilter
+     */
+    omit?: SavedContactFilterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SavedContactFilterInclude<ExtArgs> | null
+    /**
+     * The data needed to create a SavedContactFilter.
+     */
+    data: XOR<SavedContactFilterCreateInput, SavedContactFilterUncheckedCreateInput>
+  }
+
+  /**
+   * SavedContactFilter createMany
+   */
+  export type SavedContactFilterCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SavedContactFilters.
+     */
+    data: SavedContactFilterCreateManyInput | SavedContactFilterCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SavedContactFilter createManyAndReturn
+   */
+  export type SavedContactFilterCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SavedContactFilter
+     */
+    select?: SavedContactFilterSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SavedContactFilter
+     */
+    omit?: SavedContactFilterOmit<ExtArgs> | null
+    /**
+     * The data used to create many SavedContactFilters.
+     */
+    data: SavedContactFilterCreateManyInput | SavedContactFilterCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SavedContactFilterIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SavedContactFilter update
+   */
+  export type SavedContactFilterUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SavedContactFilter
+     */
+    select?: SavedContactFilterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SavedContactFilter
+     */
+    omit?: SavedContactFilterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SavedContactFilterInclude<ExtArgs> | null
+    /**
+     * The data needed to update a SavedContactFilter.
+     */
+    data: XOR<SavedContactFilterUpdateInput, SavedContactFilterUncheckedUpdateInput>
+    /**
+     * Choose, which SavedContactFilter to update.
+     */
+    where: SavedContactFilterWhereUniqueInput
+  }
+
+  /**
+   * SavedContactFilter updateMany
+   */
+  export type SavedContactFilterUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SavedContactFilters.
+     */
+    data: XOR<SavedContactFilterUpdateManyMutationInput, SavedContactFilterUncheckedUpdateManyInput>
+    /**
+     * Filter which SavedContactFilters to update
+     */
+    where?: SavedContactFilterWhereInput
+    /**
+     * Limit how many SavedContactFilters to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SavedContactFilter updateManyAndReturn
+   */
+  export type SavedContactFilterUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SavedContactFilter
+     */
+    select?: SavedContactFilterSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SavedContactFilter
+     */
+    omit?: SavedContactFilterOmit<ExtArgs> | null
+    /**
+     * The data used to update SavedContactFilters.
+     */
+    data: XOR<SavedContactFilterUpdateManyMutationInput, SavedContactFilterUncheckedUpdateManyInput>
+    /**
+     * Filter which SavedContactFilters to update
+     */
+    where?: SavedContactFilterWhereInput
+    /**
+     * Limit how many SavedContactFilters to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SavedContactFilterIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SavedContactFilter upsert
+   */
+  export type SavedContactFilterUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SavedContactFilter
+     */
+    select?: SavedContactFilterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SavedContactFilter
+     */
+    omit?: SavedContactFilterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SavedContactFilterInclude<ExtArgs> | null
+    /**
+     * The filter to search for the SavedContactFilter to update in case it exists.
+     */
+    where: SavedContactFilterWhereUniqueInput
+    /**
+     * In case the SavedContactFilter found by the `where` argument doesn't exist, create a new SavedContactFilter with this data.
+     */
+    create: XOR<SavedContactFilterCreateInput, SavedContactFilterUncheckedCreateInput>
+    /**
+     * In case the SavedContactFilter was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SavedContactFilterUpdateInput, SavedContactFilterUncheckedUpdateInput>
+  }
+
+  /**
+   * SavedContactFilter delete
+   */
+  export type SavedContactFilterDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SavedContactFilter
+     */
+    select?: SavedContactFilterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SavedContactFilter
+     */
+    omit?: SavedContactFilterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SavedContactFilterInclude<ExtArgs> | null
+    /**
+     * Filter which SavedContactFilter to delete.
+     */
+    where: SavedContactFilterWhereUniqueInput
+  }
+
+  /**
+   * SavedContactFilter deleteMany
+   */
+  export type SavedContactFilterDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SavedContactFilters to delete
+     */
+    where?: SavedContactFilterWhereInput
+    /**
+     * Limit how many SavedContactFilters to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * SavedContactFilter without action
+   */
+  export type SavedContactFilterDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SavedContactFilter
+     */
+    select?: SavedContactFilterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SavedContactFilter
+     */
+    omit?: SavedContactFilterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SavedContactFilterInclude<ExtArgs> | null
   }
 
 
@@ -60755,6 +61997,19 @@ export namespace Prisma {
   export type FilterScalarFieldEnum = (typeof FilterScalarFieldEnum)[keyof typeof FilterScalarFieldEnum]
 
 
+  export const SavedContactFilterScalarFieldEnum: {
+    id: 'id',
+    uuid: 'uuid',
+    organisation_uuid: 'organisation_uuid',
+    name: 'name',
+    filters: 'filters',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type SavedContactFilterScalarFieldEnum = (typeof SavedContactFilterScalarFieldEnum)[keyof typeof SavedContactFilterScalarFieldEnum]
+
+
   export const ScoringInstructionScalarFieldEnum: {
     id: 'id',
     uuid: 'uuid',
@@ -62256,6 +63511,7 @@ export namespace Prisma {
     reminders?: ReminderListRelationFilter
     forms?: FormListRelationFilter
     contact_lists?: ContactListListRelationFilter
+    saved_contact_filters?: SavedContactFilterListRelationFilter
     contact_audience_analyses?: ContactAudienceAnalysisListRelationFilter
     ai_usage_logs?: AiUsageLogListRelationFilter
     apify_usage_logs?: ApifyUsageLogListRelationFilter
@@ -62292,6 +63548,7 @@ export namespace Prisma {
     reminders?: ReminderOrderByRelationAggregateInput
     forms?: FormOrderByRelationAggregateInput
     contact_lists?: ContactListOrderByRelationAggregateInput
+    saved_contact_filters?: SavedContactFilterOrderByRelationAggregateInput
     contact_audience_analyses?: ContactAudienceAnalysisOrderByRelationAggregateInput
     ai_usage_logs?: AiUsageLogOrderByRelationAggregateInput
     apify_usage_logs?: ApifyUsageLogOrderByRelationAggregateInput
@@ -62331,6 +63588,7 @@ export namespace Prisma {
     reminders?: ReminderListRelationFilter
     forms?: FormListRelationFilter
     contact_lists?: ContactListListRelationFilter
+    saved_contact_filters?: SavedContactFilterListRelationFilter
     contact_audience_analyses?: ContactAudienceAnalysisListRelationFilter
     ai_usage_logs?: AiUsageLogListRelationFilter
     apify_usage_logs?: ApifyUsageLogListRelationFilter
@@ -62652,6 +63910,73 @@ export namespace Prisma {
     outreach_instructions?: StringNullableWithAggregatesFilter<"Filter"> | string | null
     created_at?: DateTimeWithAggregatesFilter<"Filter"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"Filter"> | Date | string
+  }
+
+  export type SavedContactFilterWhereInput = {
+    AND?: SavedContactFilterWhereInput | SavedContactFilterWhereInput[]
+    OR?: SavedContactFilterWhereInput[]
+    NOT?: SavedContactFilterWhereInput | SavedContactFilterWhereInput[]
+    id?: IntFilter<"SavedContactFilter"> | number
+    uuid?: StringFilter<"SavedContactFilter"> | string
+    organisation_uuid?: StringFilter<"SavedContactFilter"> | string
+    name?: StringFilter<"SavedContactFilter"> | string
+    filters?: JsonFilter<"SavedContactFilter">
+    created_at?: DateTimeFilter<"SavedContactFilter"> | Date | string
+    updated_at?: DateTimeFilter<"SavedContactFilter"> | Date | string
+    organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+  }
+
+  export type SavedContactFilterOrderByWithRelationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    name?: SortOrder
+    filters?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    organisation?: OrganisationOrderByWithRelationInput
+  }
+
+  export type SavedContactFilterWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    uuid?: string
+    AND?: SavedContactFilterWhereInput | SavedContactFilterWhereInput[]
+    OR?: SavedContactFilterWhereInput[]
+    NOT?: SavedContactFilterWhereInput | SavedContactFilterWhereInput[]
+    organisation_uuid?: StringFilter<"SavedContactFilter"> | string
+    name?: StringFilter<"SavedContactFilter"> | string
+    filters?: JsonFilter<"SavedContactFilter">
+    created_at?: DateTimeFilter<"SavedContactFilter"> | Date | string
+    updated_at?: DateTimeFilter<"SavedContactFilter"> | Date | string
+    organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+  }, "id" | "uuid">
+
+  export type SavedContactFilterOrderByWithAggregationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    name?: SortOrder
+    filters?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: SavedContactFilterCountOrderByAggregateInput
+    _avg?: SavedContactFilterAvgOrderByAggregateInput
+    _max?: SavedContactFilterMaxOrderByAggregateInput
+    _min?: SavedContactFilterMinOrderByAggregateInput
+    _sum?: SavedContactFilterSumOrderByAggregateInput
+  }
+
+  export type SavedContactFilterScalarWhereWithAggregatesInput = {
+    AND?: SavedContactFilterScalarWhereWithAggregatesInput | SavedContactFilterScalarWhereWithAggregatesInput[]
+    OR?: SavedContactFilterScalarWhereWithAggregatesInput[]
+    NOT?: SavedContactFilterScalarWhereWithAggregatesInput | SavedContactFilterScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"SavedContactFilter"> | number
+    uuid?: StringWithAggregatesFilter<"SavedContactFilter"> | string
+    organisation_uuid?: StringWithAggregatesFilter<"SavedContactFilter"> | string
+    name?: StringWithAggregatesFilter<"SavedContactFilter"> | string
+    filters?: JsonWithAggregatesFilter<"SavedContactFilter">
+    created_at?: DateTimeWithAggregatesFilter<"SavedContactFilter"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"SavedContactFilter"> | Date | string
   }
 
   export type ScoringInstructionWhereInput = {
@@ -66593,6 +67918,7 @@ export namespace Prisma {
     reminders?: ReminderCreateNestedManyWithoutOrganisationInput
     forms?: FormCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
@@ -66629,6 +67955,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
     forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -66664,6 +67991,7 @@ export namespace Prisma {
     reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
     forms?: FormUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
@@ -66700,6 +68028,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
     forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -67037,6 +68366,72 @@ export namespace Prisma {
     cron_schedule?: NullableStringFieldUpdateOperationsInput | string | null
     channels?: FilterUpdatechannelsInput | $Enums.Channel[]
     outreach_instructions?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SavedContactFilterCreateInput = {
+    uuid?: string
+    name: string
+    filters: JsonNullValueInput | InputJsonValue
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutSaved_contact_filtersInput
+  }
+
+  export type SavedContactFilterUncheckedCreateInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    name: string
+    filters: JsonNullValueInput | InputJsonValue
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type SavedContactFilterUpdateInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    filters?: JsonNullValueInput | InputJsonValue
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutSaved_contact_filtersNestedInput
+  }
+
+  export type SavedContactFilterUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    filters?: JsonNullValueInput | InputJsonValue
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SavedContactFilterCreateManyInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    name: string
+    filters: JsonNullValueInput | InputJsonValue
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type SavedContactFilterUpdateManyMutationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    filters?: JsonNullValueInput | InputJsonValue
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SavedContactFilterUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    filters?: JsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -71483,6 +72878,12 @@ export namespace Prisma {
     none?: ContactListWhereInput
   }
 
+  export type SavedContactFilterListRelationFilter = {
+    every?: SavedContactFilterWhereInput
+    some?: SavedContactFilterWhereInput
+    none?: SavedContactFilterWhereInput
+  }
+
   export type ContactAudienceAnalysisListRelationFilter = {
     every?: ContactAudienceAnalysisWhereInput
     some?: ContactAudienceAnalysisWhereInput
@@ -71558,6 +72959,10 @@ export namespace Prisma {
   }
 
   export type ContactListOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type SavedContactFilterOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -71987,6 +73392,42 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedBoolFilter<$PrismaModel>
     _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type SavedContactFilterCountOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    name?: SortOrder
+    filters?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type SavedContactFilterAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type SavedContactFilterMaxOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    name?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type SavedContactFilterMinOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    name?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type SavedContactFilterSumOrderByAggregateInput = {
+    id?: SortOrder
   }
 
   export type ContactScoreListRelationFilter = {
@@ -75563,6 +77004,13 @@ export namespace Prisma {
     connect?: ContactListWhereUniqueInput | ContactListWhereUniqueInput[]
   }
 
+  export type SavedContactFilterCreateNestedManyWithoutOrganisationInput = {
+    create?: XOR<SavedContactFilterCreateWithoutOrganisationInput, SavedContactFilterUncheckedCreateWithoutOrganisationInput> | SavedContactFilterCreateWithoutOrganisationInput[] | SavedContactFilterUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: SavedContactFilterCreateOrConnectWithoutOrganisationInput | SavedContactFilterCreateOrConnectWithoutOrganisationInput[]
+    createMany?: SavedContactFilterCreateManyOrganisationInputEnvelope
+    connect?: SavedContactFilterWhereUniqueInput | SavedContactFilterWhereUniqueInput[]
+  }
+
   export type ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput = {
     create?: XOR<ContactAudienceAnalysisCreateWithoutOrganisationInput, ContactAudienceAnalysisUncheckedCreateWithoutOrganisationInput> | ContactAudienceAnalysisCreateWithoutOrganisationInput[] | ContactAudienceAnalysisUncheckedCreateWithoutOrganisationInput[]
     connectOrCreate?: ContactAudienceAnalysisCreateOrConnectWithoutOrganisationInput | ContactAudienceAnalysisCreateOrConnectWithoutOrganisationInput[]
@@ -75736,6 +77184,13 @@ export namespace Prisma {
     connectOrCreate?: ContactListCreateOrConnectWithoutOrganisationInput | ContactListCreateOrConnectWithoutOrganisationInput[]
     createMany?: ContactListCreateManyOrganisationInputEnvelope
     connect?: ContactListWhereUniqueInput | ContactListWhereUniqueInput[]
+  }
+
+  export type SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput = {
+    create?: XOR<SavedContactFilterCreateWithoutOrganisationInput, SavedContactFilterUncheckedCreateWithoutOrganisationInput> | SavedContactFilterCreateWithoutOrganisationInput[] | SavedContactFilterUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: SavedContactFilterCreateOrConnectWithoutOrganisationInput | SavedContactFilterCreateOrConnectWithoutOrganisationInput[]
+    createMany?: SavedContactFilterCreateManyOrganisationInputEnvelope
+    connect?: SavedContactFilterWhereUniqueInput | SavedContactFilterWhereUniqueInput[]
   }
 
   export type ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput = {
@@ -76016,6 +77471,20 @@ export namespace Prisma {
     update?: ContactListUpdateWithWhereUniqueWithoutOrganisationInput | ContactListUpdateWithWhereUniqueWithoutOrganisationInput[]
     updateMany?: ContactListUpdateManyWithWhereWithoutOrganisationInput | ContactListUpdateManyWithWhereWithoutOrganisationInput[]
     deleteMany?: ContactListScalarWhereInput | ContactListScalarWhereInput[]
+  }
+
+  export type SavedContactFilterUpdateManyWithoutOrganisationNestedInput = {
+    create?: XOR<SavedContactFilterCreateWithoutOrganisationInput, SavedContactFilterUncheckedCreateWithoutOrganisationInput> | SavedContactFilterCreateWithoutOrganisationInput[] | SavedContactFilterUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: SavedContactFilterCreateOrConnectWithoutOrganisationInput | SavedContactFilterCreateOrConnectWithoutOrganisationInput[]
+    upsert?: SavedContactFilterUpsertWithWhereUniqueWithoutOrganisationInput | SavedContactFilterUpsertWithWhereUniqueWithoutOrganisationInput[]
+    createMany?: SavedContactFilterCreateManyOrganisationInputEnvelope
+    set?: SavedContactFilterWhereUniqueInput | SavedContactFilterWhereUniqueInput[]
+    disconnect?: SavedContactFilterWhereUniqueInput | SavedContactFilterWhereUniqueInput[]
+    delete?: SavedContactFilterWhereUniqueInput | SavedContactFilterWhereUniqueInput[]
+    connect?: SavedContactFilterWhereUniqueInput | SavedContactFilterWhereUniqueInput[]
+    update?: SavedContactFilterUpdateWithWhereUniqueWithoutOrganisationInput | SavedContactFilterUpdateWithWhereUniqueWithoutOrganisationInput[]
+    updateMany?: SavedContactFilterUpdateManyWithWhereWithoutOrganisationInput | SavedContactFilterUpdateManyWithWhereWithoutOrganisationInput[]
+    deleteMany?: SavedContactFilterScalarWhereInput | SavedContactFilterScalarWhereInput[]
   }
 
   export type ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput = {
@@ -76366,6 +77835,20 @@ export namespace Prisma {
     update?: ContactListUpdateWithWhereUniqueWithoutOrganisationInput | ContactListUpdateWithWhereUniqueWithoutOrganisationInput[]
     updateMany?: ContactListUpdateManyWithWhereWithoutOrganisationInput | ContactListUpdateManyWithWhereWithoutOrganisationInput[]
     deleteMany?: ContactListScalarWhereInput | ContactListScalarWhereInput[]
+  }
+
+  export type SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput = {
+    create?: XOR<SavedContactFilterCreateWithoutOrganisationInput, SavedContactFilterUncheckedCreateWithoutOrganisationInput> | SavedContactFilterCreateWithoutOrganisationInput[] | SavedContactFilterUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: SavedContactFilterCreateOrConnectWithoutOrganisationInput | SavedContactFilterCreateOrConnectWithoutOrganisationInput[]
+    upsert?: SavedContactFilterUpsertWithWhereUniqueWithoutOrganisationInput | SavedContactFilterUpsertWithWhereUniqueWithoutOrganisationInput[]
+    createMany?: SavedContactFilterCreateManyOrganisationInputEnvelope
+    set?: SavedContactFilterWhereUniqueInput | SavedContactFilterWhereUniqueInput[]
+    disconnect?: SavedContactFilterWhereUniqueInput | SavedContactFilterWhereUniqueInput[]
+    delete?: SavedContactFilterWhereUniqueInput | SavedContactFilterWhereUniqueInput[]
+    connect?: SavedContactFilterWhereUniqueInput | SavedContactFilterWhereUniqueInput[]
+    update?: SavedContactFilterUpdateWithWhereUniqueWithoutOrganisationInput | SavedContactFilterUpdateWithWhereUniqueWithoutOrganisationInput[]
+    updateMany?: SavedContactFilterUpdateManyWithWhereWithoutOrganisationInput | SavedContactFilterUpdateManyWithWhereWithoutOrganisationInput[]
+    deleteMany?: SavedContactFilterScalarWhereInput | SavedContactFilterScalarWhereInput[]
   }
 
   export type ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput = {
@@ -76870,6 +78353,20 @@ export namespace Prisma {
     update?: ContactAudienceAnalysisUpdateWithWhereUniqueWithoutFilterInput | ContactAudienceAnalysisUpdateWithWhereUniqueWithoutFilterInput[]
     updateMany?: ContactAudienceAnalysisUpdateManyWithWhereWithoutFilterInput | ContactAudienceAnalysisUpdateManyWithWhereWithoutFilterInput[]
     deleteMany?: ContactAudienceAnalysisScalarWhereInput | ContactAudienceAnalysisScalarWhereInput[]
+  }
+
+  export type OrganisationCreateNestedOneWithoutSaved_contact_filtersInput = {
+    create?: XOR<OrganisationCreateWithoutSaved_contact_filtersInput, OrganisationUncheckedCreateWithoutSaved_contact_filtersInput>
+    connectOrCreate?: OrganisationCreateOrConnectWithoutSaved_contact_filtersInput
+    connect?: OrganisationWhereUniqueInput
+  }
+
+  export type OrganisationUpdateOneRequiredWithoutSaved_contact_filtersNestedInput = {
+    create?: XOR<OrganisationCreateWithoutSaved_contact_filtersInput, OrganisationUncheckedCreateWithoutSaved_contact_filtersInput>
+    connectOrCreate?: OrganisationCreateOrConnectWithoutSaved_contact_filtersInput
+    upsert?: OrganisationUpsertWithoutSaved_contact_filtersInput
+    connect?: OrganisationWhereUniqueInput
+    update?: XOR<XOR<OrganisationUpdateToOneWithWhereWithoutSaved_contact_filtersInput, OrganisationUpdateWithoutSaved_contact_filtersInput>, OrganisationUncheckedUpdateWithoutSaved_contact_filtersInput>
   }
 
   export type OrganisationCreateNestedOneWithoutScoring_instructionsInput = {
@@ -81571,6 +83068,33 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type SavedContactFilterCreateWithoutOrganisationInput = {
+    uuid?: string
+    name: string
+    filters: JsonNullValueInput | InputJsonValue
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type SavedContactFilterUncheckedCreateWithoutOrganisationInput = {
+    id?: number
+    uuid?: string
+    name: string
+    filters: JsonNullValueInput | InputJsonValue
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type SavedContactFilterCreateOrConnectWithoutOrganisationInput = {
+    where: SavedContactFilterWhereUniqueInput
+    create: XOR<SavedContactFilterCreateWithoutOrganisationInput, SavedContactFilterUncheckedCreateWithoutOrganisationInput>
+  }
+
+  export type SavedContactFilterCreateManyOrganisationInputEnvelope = {
+    data: SavedContactFilterCreateManyOrganisationInput | SavedContactFilterCreateManyOrganisationInput[]
+    skipDuplicates?: boolean
+  }
+
   export type ContactAudienceAnalysisCreateWithoutOrganisationInput = {
     uuid?: string
     scope: $Enums.ContactAudienceAnalysisScope
@@ -82470,6 +83994,35 @@ export namespace Prisma {
     updated_at?: DateTimeFilter<"ContactList"> | Date | string
   }
 
+  export type SavedContactFilterUpsertWithWhereUniqueWithoutOrganisationInput = {
+    where: SavedContactFilterWhereUniqueInput
+    update: XOR<SavedContactFilterUpdateWithoutOrganisationInput, SavedContactFilterUncheckedUpdateWithoutOrganisationInput>
+    create: XOR<SavedContactFilterCreateWithoutOrganisationInput, SavedContactFilterUncheckedCreateWithoutOrganisationInput>
+  }
+
+  export type SavedContactFilterUpdateWithWhereUniqueWithoutOrganisationInput = {
+    where: SavedContactFilterWhereUniqueInput
+    data: XOR<SavedContactFilterUpdateWithoutOrganisationInput, SavedContactFilterUncheckedUpdateWithoutOrganisationInput>
+  }
+
+  export type SavedContactFilterUpdateManyWithWhereWithoutOrganisationInput = {
+    where: SavedContactFilterScalarWhereInput
+    data: XOR<SavedContactFilterUpdateManyMutationInput, SavedContactFilterUncheckedUpdateManyWithoutOrganisationInput>
+  }
+
+  export type SavedContactFilterScalarWhereInput = {
+    AND?: SavedContactFilterScalarWhereInput | SavedContactFilterScalarWhereInput[]
+    OR?: SavedContactFilterScalarWhereInput[]
+    NOT?: SavedContactFilterScalarWhereInput | SavedContactFilterScalarWhereInput[]
+    id?: IntFilter<"SavedContactFilter"> | number
+    uuid?: StringFilter<"SavedContactFilter"> | string
+    organisation_uuid?: StringFilter<"SavedContactFilter"> | string
+    name?: StringFilter<"SavedContactFilter"> | string
+    filters?: JsonFilter<"SavedContactFilter">
+    created_at?: DateTimeFilter<"SavedContactFilter"> | Date | string
+    updated_at?: DateTimeFilter<"SavedContactFilter"> | Date | string
+  }
+
   export type ContactAudienceAnalysisUpsertWithWhereUniqueWithoutOrganisationInput = {
     where: ContactAudienceAnalysisWhereUniqueInput
     update: XOR<ContactAudienceAnalysisUpdateWithoutOrganisationInput, ContactAudienceAnalysisUncheckedUpdateWithoutOrganisationInput>
@@ -82761,6 +84314,7 @@ export namespace Prisma {
     reminders?: ReminderCreateNestedManyWithoutOrganisationInput
     forms?: FormCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
@@ -82796,6 +84350,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
     forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -82890,6 +84445,7 @@ export namespace Prisma {
     reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
     forms?: FormUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
@@ -82925,6 +84481,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
     forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -83009,6 +84566,7 @@ export namespace Prisma {
     reminders?: ReminderCreateNestedManyWithoutOrganisationInput
     forms?: FormCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
@@ -83044,6 +84602,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
     forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -83138,6 +84697,7 @@ export namespace Prisma {
     reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
     forms?: FormUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
@@ -83173,6 +84733,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
     forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -83257,6 +84818,7 @@ export namespace Prisma {
     reminders?: ReminderCreateNestedManyWithoutOrganisationInput
     forms?: FormCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
@@ -83292,6 +84854,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
     forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -83584,6 +85147,7 @@ export namespace Prisma {
     reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
     forms?: FormUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
@@ -83619,6 +85183,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
     forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -83777,6 +85342,164 @@ export namespace Prisma {
     data: XOR<ContactAudienceAnalysisUpdateManyMutationInput, ContactAudienceAnalysisUncheckedUpdateManyWithoutFilterInput>
   }
 
+  export type OrganisationCreateWithoutSaved_contact_filtersInput = {
+    uuid?: string
+    name: string
+    slug: string
+    timezone?: string
+    reply_to_email?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
+    invitations?: OrganisationInvitationCreateNestedManyWithoutOrganisationInput
+    filters?: FilterCreateNestedManyWithoutOrganisationInput
+    contacts?: ContactCreateNestedManyWithoutOrganisationInput
+    outreach_messages?: OutreachMessageCreateNestedManyWithoutOrganisationInput
+    outreach_sequences?: OutreachSequenceCreateNestedManyWithoutOrganisationInput
+    interactions?: InteractionCreateNestedManyWithoutOrganisationInput
+    sender_profiles?: SenderProfileCreateNestedManyWithoutOrganisationInput
+    marketing_campaigns?: MarketingCampaignCreateNestedManyWithoutOrganisationInput
+    scoring_instructions?: ScoringInstructionCreateNestedManyWithoutOrganisationInput
+    openai_batch_jobs?: OpenAiBatchJobCreateNestedManyWithoutOrganisationInput
+    integrations?: IntegrationCreateNestedManyWithoutOrganisationInput
+    reminders?: ReminderCreateNestedManyWithoutOrganisationInput
+    forms?: FormCreateNestedManyWithoutOrganisationInput
+    contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
+    ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
+    apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
+    message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+  }
+
+  export type OrganisationUncheckedCreateWithoutSaved_contact_filtersInput = {
+    id?: number
+    uuid?: string
+    name: string
+    slug: string
+    timezone?: string
+    reply_to_email?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
+    invitations?: OrganisationInvitationUncheckedCreateNestedManyWithoutOrganisationInput
+    filters?: FilterUncheckedCreateNestedManyWithoutOrganisationInput
+    contacts?: ContactUncheckedCreateNestedManyWithoutOrganisationInput
+    outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutOrganisationInput
+    outreach_sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutOrganisationInput
+    interactions?: InteractionUncheckedCreateNestedManyWithoutOrganisationInput
+    sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutOrganisationInput
+    marketing_campaigns?: MarketingCampaignUncheckedCreateNestedManyWithoutOrganisationInput
+    scoring_instructions?: ScoringInstructionUncheckedCreateNestedManyWithoutOrganisationInput
+    openai_batch_jobs?: OpenAiBatchJobUncheckedCreateNestedManyWithoutOrganisationInput
+    integrations?: IntegrationUncheckedCreateNestedManyWithoutOrganisationInput
+    reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
+    forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
+    contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
+    ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
+    apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
+    message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+  }
+
+  export type OrganisationCreateOrConnectWithoutSaved_contact_filtersInput = {
+    where: OrganisationWhereUniqueInput
+    create: XOR<OrganisationCreateWithoutSaved_contact_filtersInput, OrganisationUncheckedCreateWithoutSaved_contact_filtersInput>
+  }
+
+  export type OrganisationUpsertWithoutSaved_contact_filtersInput = {
+    update: XOR<OrganisationUpdateWithoutSaved_contact_filtersInput, OrganisationUncheckedUpdateWithoutSaved_contact_filtersInput>
+    create: XOR<OrganisationCreateWithoutSaved_contact_filtersInput, OrganisationUncheckedCreateWithoutSaved_contact_filtersInput>
+    where?: OrganisationWhereInput
+  }
+
+  export type OrganisationUpdateToOneWithWhereWithoutSaved_contact_filtersInput = {
+    where?: OrganisationWhereInput
+    data: XOR<OrganisationUpdateWithoutSaved_contact_filtersInput, OrganisationUncheckedUpdateWithoutSaved_contact_filtersInput>
+  }
+
+  export type OrganisationUpdateWithoutSaved_contact_filtersInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
+    invitations?: OrganisationInvitationUpdateManyWithoutOrganisationNestedInput
+    filters?: FilterUpdateManyWithoutOrganisationNestedInput
+    contacts?: ContactUpdateManyWithoutOrganisationNestedInput
+    outreach_messages?: OutreachMessageUpdateManyWithoutOrganisationNestedInput
+    outreach_sequences?: OutreachSequenceUpdateManyWithoutOrganisationNestedInput
+    interactions?: InteractionUpdateManyWithoutOrganisationNestedInput
+    sender_profiles?: SenderProfileUpdateManyWithoutOrganisationNestedInput
+    marketing_campaigns?: MarketingCampaignUpdateManyWithoutOrganisationNestedInput
+    scoring_instructions?: ScoringInstructionUpdateManyWithoutOrganisationNestedInput
+    openai_batch_jobs?: OpenAiBatchJobUpdateManyWithoutOrganisationNestedInput
+    integrations?: IntegrationUpdateManyWithoutOrganisationNestedInput
+    reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
+    forms?: FormUpdateManyWithoutOrganisationNestedInput
+    contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
+    ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
+    apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
+    message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+  }
+
+  export type OrganisationUncheckedUpdateWithoutSaved_contact_filtersInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
+    invitations?: OrganisationInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
+    filters?: FilterUncheckedUpdateManyWithoutOrganisationNestedInput
+    contacts?: ContactUncheckedUpdateManyWithoutOrganisationNestedInput
+    outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutOrganisationNestedInput
+    outreach_sequences?: OutreachSequenceUncheckedUpdateManyWithoutOrganisationNestedInput
+    interactions?: InteractionUncheckedUpdateManyWithoutOrganisationNestedInput
+    sender_profiles?: SenderProfileUncheckedUpdateManyWithoutOrganisationNestedInput
+    marketing_campaigns?: MarketingCampaignUncheckedUpdateManyWithoutOrganisationNestedInput
+    scoring_instructions?: ScoringInstructionUncheckedUpdateManyWithoutOrganisationNestedInput
+    openai_batch_jobs?: OpenAiBatchJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    integrations?: IntegrationUncheckedUpdateManyWithoutOrganisationNestedInput
+    reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
+    forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
+    contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
+    ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+  }
+
   export type OrganisationCreateWithoutScoring_instructionsInput = {
     uuid?: string
     name: string
@@ -83799,6 +85522,7 @@ export namespace Prisma {
     reminders?: ReminderCreateNestedManyWithoutOrganisationInput
     forms?: FormCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
@@ -83834,6 +85558,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
     forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -83927,6 +85652,7 @@ export namespace Prisma {
     reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
     forms?: FormUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
@@ -83962,6 +85688,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
     forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -84743,6 +86470,7 @@ export namespace Prisma {
     reminders?: ReminderCreateNestedManyWithoutOrganisationInput
     forms?: FormCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
@@ -84778,6 +86506,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
     forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -85282,6 +87011,7 @@ export namespace Prisma {
     reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
     forms?: FormUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
@@ -85317,6 +87047,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
     forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -86526,6 +88257,7 @@ export namespace Prisma {
     integrations?: IntegrationCreateNestedManyWithoutOrganisationInput
     reminders?: ReminderCreateNestedManyWithoutOrganisationInput
     forms?: FormCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
@@ -86561,6 +88293,7 @@ export namespace Prisma {
     integrations?: IntegrationUncheckedCreateNestedManyWithoutOrganisationInput
     reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
     forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -86748,6 +88481,7 @@ export namespace Prisma {
     integrations?: IntegrationUpdateManyWithoutOrganisationNestedInput
     reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
     forms?: FormUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
@@ -86783,6 +88517,7 @@ export namespace Prisma {
     integrations?: IntegrationUncheckedUpdateManyWithoutOrganisationNestedInput
     reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
     forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -87379,6 +89114,7 @@ export namespace Prisma {
     reminders?: ReminderCreateNestedManyWithoutOrganisationInput
     forms?: FormCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
@@ -87414,6 +89150,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
     forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -87704,6 +89441,7 @@ export namespace Prisma {
     reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
     forms?: FormUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
@@ -87739,6 +89477,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
     forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -87939,6 +89678,7 @@ export namespace Prisma {
     reminders?: ReminderCreateNestedManyWithoutOrganisationInput
     forms?: FormCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
@@ -87974,6 +89714,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
     forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -88270,6 +90011,7 @@ export namespace Prisma {
     reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
     forms?: FormUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
@@ -88305,6 +90047,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
     forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -88609,6 +90352,7 @@ export namespace Prisma {
     reminders?: ReminderCreateNestedManyWithoutOrganisationInput
     forms?: FormCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
@@ -88644,6 +90388,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
     forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -88694,6 +90439,7 @@ export namespace Prisma {
     reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
     forms?: FormUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
@@ -88729,6 +90475,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
     forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -88862,6 +90609,7 @@ export namespace Prisma {
     reminders?: ReminderCreateNestedManyWithoutOrganisationInput
     forms?: FormCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
@@ -88897,6 +90645,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
     forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -88991,6 +90740,7 @@ export namespace Prisma {
     reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
     forms?: FormUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
@@ -89026,6 +90776,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
     forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -89110,6 +90861,7 @@ export namespace Prisma {
     reminders?: ReminderCreateNestedManyWithoutOrganisationInput
     forms?: FormCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
@@ -89145,6 +90897,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
     forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -89195,6 +90948,7 @@ export namespace Prisma {
     reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
     forms?: FormUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
@@ -89230,6 +90984,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
     forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -89263,6 +91018,7 @@ export namespace Prisma {
     reminders?: ReminderCreateNestedManyWithoutOrganisationInput
     forms?: FormCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
@@ -89298,6 +91054,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
     forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -89443,6 +91200,7 @@ export namespace Prisma {
     reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
     forms?: FormUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
@@ -89478,6 +91236,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
     forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -89529,6 +91288,7 @@ export namespace Prisma {
     reminders?: ReminderCreateNestedManyWithoutOrganisationInput
     forms?: FormCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
@@ -89564,6 +91324,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
     forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -89614,6 +91375,7 @@ export namespace Prisma {
     reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
     forms?: FormUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
@@ -89649,6 +91411,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
     forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -89682,6 +91445,7 @@ export namespace Prisma {
     reminders?: ReminderCreateNestedManyWithoutOrganisationInput
     forms?: FormCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
@@ -89717,6 +91481,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
     forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -89966,6 +91731,7 @@ export namespace Prisma {
     reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
     forms?: FormUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
@@ -90001,6 +91767,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
     forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -90499,6 +92266,7 @@ export namespace Prisma {
     reminders?: ReminderCreateNestedManyWithoutOrganisationInput
     forms?: FormCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
@@ -90534,6 +92302,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
     forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -90584,6 +92353,7 @@ export namespace Prisma {
     reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
     forms?: FormUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
@@ -90619,6 +92389,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
     forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -90653,6 +92424,7 @@ export namespace Prisma {
     reminders?: ReminderCreateNestedManyWithoutOrganisationInput
     forms?: FormCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
@@ -90688,6 +92460,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
     forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -90796,6 +92569,7 @@ export namespace Prisma {
     reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
     forms?: FormUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
@@ -90831,6 +92605,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
     forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -91049,6 +92824,7 @@ export namespace Prisma {
     integrations?: IntegrationCreateNestedManyWithoutOrganisationInput
     forms?: FormCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
@@ -91084,6 +92860,7 @@ export namespace Prisma {
     integrations?: IntegrationUncheckedCreateNestedManyWithoutOrganisationInput
     forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -91214,6 +92991,7 @@ export namespace Prisma {
     integrations?: IntegrationUpdateManyWithoutOrganisationNestedInput
     forms?: FormUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
@@ -91249,6 +93027,7 @@ export namespace Prisma {
     integrations?: IntegrationUncheckedUpdateManyWithoutOrganisationNestedInput
     forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -91369,6 +93148,7 @@ export namespace Prisma {
     integrations?: IntegrationCreateNestedManyWithoutOrganisationInput
     reminders?: ReminderCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
@@ -91404,6 +93184,7 @@ export namespace Prisma {
     integrations?: IntegrationUncheckedCreateNestedManyWithoutOrganisationInput
     reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -91526,6 +93307,7 @@ export namespace Prisma {
     integrations?: IntegrationUpdateManyWithoutOrganisationNestedInput
     reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
@@ -91561,6 +93343,7 @@ export namespace Prisma {
     integrations?: IntegrationUncheckedUpdateManyWithoutOrganisationNestedInput
     reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -92259,6 +94042,7 @@ export namespace Prisma {
     reminders?: ReminderCreateNestedManyWithoutOrganisationInput
     forms?: FormCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
@@ -92294,6 +94078,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
     forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
@@ -92420,6 +94205,7 @@ export namespace Prisma {
     reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
     forms?: FormUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
@@ -92455,6 +94241,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
     forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -92577,6 +94364,7 @@ export namespace Prisma {
     reminders?: ReminderCreateNestedManyWithoutOrganisationInput
     forms?: FormCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
@@ -92612,6 +94400,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
     forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
@@ -92662,6 +94451,7 @@ export namespace Prisma {
     reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
     forms?: FormUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
@@ -92697,6 +94487,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
     forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -92731,6 +94522,7 @@ export namespace Prisma {
     reminders?: ReminderCreateNestedManyWithoutOrganisationInput
     forms?: FormCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
@@ -92766,6 +94558,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
     forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
@@ -92816,6 +94609,7 @@ export namespace Prisma {
     reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
     forms?: FormUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
@@ -92851,6 +94645,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
     forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -92885,6 +94680,7 @@ export namespace Prisma {
     reminders?: ReminderCreateNestedManyWithoutOrganisationInput
     forms?: FormCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
@@ -92920,6 +94716,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
     forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -93047,6 +94844,7 @@ export namespace Prisma {
     reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
     forms?: FormUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
@@ -93082,6 +94880,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
     forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -93182,6 +94981,7 @@ export namespace Prisma {
     reminders?: ReminderCreateNestedManyWithoutOrganisationInput
     forms?: FormCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
@@ -93217,6 +95017,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
     forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -93339,6 +95140,7 @@ export namespace Prisma {
     reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
     forms?: FormUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
@@ -93374,6 +95176,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
     forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -93492,6 +95295,7 @@ export namespace Prisma {
     reminders?: ReminderCreateNestedManyWithoutOrganisationInput
     forms?: FormCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
@@ -93527,6 +95331,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
     forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -93621,6 +95426,7 @@ export namespace Prisma {
     reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
     forms?: FormUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
@@ -93656,6 +95462,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
     forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -93740,6 +95547,7 @@ export namespace Prisma {
     reminders?: ReminderCreateNestedManyWithoutOrganisationInput
     forms?: FormCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
@@ -93775,6 +95583,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
     forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -93869,6 +95678,7 @@ export namespace Prisma {
     reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
     forms?: FormUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
@@ -93904,6 +95714,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
     forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -94730,6 +96541,15 @@ export namespace Prisma {
     parent_list_uuid?: string | null
     title: string
     description?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type SavedContactFilterCreateManyOrganisationInput = {
+    id?: number
+    uuid?: string
+    name: string
+    filters: JsonNullValueInput | InputJsonValue
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -95692,6 +97512,32 @@ export namespace Prisma {
     parent_list_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SavedContactFilterUpdateWithoutOrganisationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    filters?: JsonNullValueInput | InputJsonValue
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SavedContactFilterUncheckedUpdateWithoutOrganisationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    filters?: JsonNullValueInput | InputJsonValue
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SavedContactFilterUncheckedUpdateManyWithoutOrganisationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    filters?: JsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }

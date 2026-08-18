@@ -112,6 +112,14 @@ export const ApiRoutes = {
         update: (uuid: string) => `/sender-profiles/${uuid}`,
         remove: (uuid: string) => `/sender-profiles/${uuid}`,
     },
+    saved_contact_filters: {
+        prefix: "/saved-contact-filters",
+        list: "/saved-contact-filters",
+        create: "/saved-contact-filters",
+        get: (uuid: string) => `/saved-contact-filters/${uuid}`,
+        update: (uuid: string) => `/saved-contact-filters/${uuid}`,
+        remove: (uuid: string) => `/saved-contact-filters/${uuid}`,
+    },
     integrations: {
         prefix: "/integrations",
         list: "/integrations",

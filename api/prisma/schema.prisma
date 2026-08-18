@@ -65,6 +65,7 @@ model Organisation {
   reminders                Reminder[]
   forms                    Form[]
   contact_lists            ContactList[]
+  saved_contact_filters    SavedContactFilter[]
   contact_audience_analyses ContactAudienceAnalysis[]
   ai_usage_logs            AiUsageLog[]
   apify_usage_logs         ApifyUsageLog[]
@@ -147,6 +148,21 @@ model Filter {
   audience_analyses            ContactAudienceAnalysis[]
 
   @@index([organisation_uuid])
+}
+
+model SavedContactFilter {
+  id                Int      @id @default(autoincrement())
+  uuid              String   @unique @default(uuid())
+  organisation_uuid String
+  name              String
+  filters           Json
+  created_at        DateTime @default(now())
+  updated_at        DateTime @updatedAt
+
+  organisation Organisation @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+
+  @@index([organisation_uuid])
+  @@map("saved_contact_filters")
 }
 
 model ScoringInstruction {
