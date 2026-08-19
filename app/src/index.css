@@ -11,11 +11,13 @@ body,
 html {
   overflow: hidden !important;
   scrollbar-gutter: auto !important;
+  pointer-events: auto !important;
 }
 
 body {
   overflow: hidden;
   position: relative;
+  pointer-events: auto !important;
 }
 
 #root {
@@ -33,6 +35,11 @@ main {
   backdrop-filter: none !important;
 }
 
+[data-testid="underlay"]:not([data-open]),
+[data-testid="underlay"][data-exiting] {
+  pointer-events: none !important;
+}
+
 .select__popover,
 .dropdown__popover,
 .popover,
@@ -42,6 +49,13 @@ main {
 .date-range-picker__popover {
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
+}
+
+.drawer:not([data-open]),
+.drawer[data-exiting],
+.modal:not([data-open]),
+.modal[data-exiting] {
+  pointer-events: none !important;
 }
 
 /* ─── Base / legacy custom properties ────────────────────────────────────────

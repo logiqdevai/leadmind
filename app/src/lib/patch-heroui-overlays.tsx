@@ -112,5 +112,46 @@ function lockDocumentScroll() {
     };
 }
 
+const OPEN_BLOCKING_OVERLAY_SELECTOR = [
+    ".drawer[data-open]:not([data-exiting])",
+    ".modal[data-open]:not([data-exiting])",
+    ".alert-dialog[data-open]:not([data-exiting])",
+].join(",");
+
+function restorePageInteractivity(): void {
+    const root = document.getElementById("root");
+    const hasBlockingOverlay = Boolean(document.querySelector(OPEN_BLOCKING_OVERLAY_SELECTOR));
+
+    document.body.style.removeProperty("pointer-events");
+    document.documentElement.style.removeProperty("pointer-events");
+
+    if (hasBlockingOverlay) return;
+
+    document.body.removeAttribute("inert");
+    document.documentElement.removeAttribute("inert");
+    if (root) {
+        root.removeAttribute("inert");
+        if (root.getAttribute("aria-hidden") === "true") {
+            root.removeAttribute("aria-hidden");
+        }
+    }
+}
+
+function restoreInteractivityAfterOverlayClose(): void {
+    if (typeof window === "undefined") return;
+
+    const scheduleRestore = () => {
+        requestAnimationFrame(restorePageInteractivity);
+        window.setTimeout(restorePageInteractivity, 0);
+        window.setTimeout(restorePageInteractivity, 350);
+    };
+
+    document.addEventListener("pointerup", scheduleRestore, true);
+    document.addEventListener("keyup", (event) => {
+        if (event.key === "Escape") scheduleRestore();
+    }, true);
+}
+
 lockDocumentScroll();
 dismissOverlaysOnOutsidePointer();
+restoreInteractivityAfterOverlayClose();
