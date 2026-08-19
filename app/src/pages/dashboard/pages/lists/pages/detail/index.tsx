@@ -15,6 +15,7 @@ import {
 } from "@/features/contacts/hooks/use-contacts";
 import { useDashboardNavbarTitle } from "@/components/providers/dashboard-navbar-provider";
 import { ContactListFormModal } from "../../components/contact-list-form-modal";
+import { MoveContactListModal } from "../../components/move-contact-list-modal";
 import { ContactListsTable } from "../../components/contact-lists-table";
 import { ListMembersTable } from "./components/list-members-table";
 import { AddContactsModal } from "./components/add-contacts-modal";
@@ -44,6 +45,7 @@ export default function ListDetailPage() {
     const { uuid = "" } = useParams<{ uuid: string }>();
     const [searchParams, setSearchParams] = useSearchParams();
     const [editOpen, setEditOpen] = useState(false);
+    const [moveOpen, setMoveOpen] = useState(false);
     const [createSublistOpen, setCreateSublistOpen] = useState(false);
     const [addContactsOpen, setAddContactsOpen] = useState(false);
     const [selectedKeys, setSelectedKeys] = useState<Set<string>>(new Set());
@@ -232,6 +234,7 @@ export default function ListDetailPage() {
                                         : undefined
                                 }
                                 onEditList={() => setEditOpen(true)}
+                                onMoveList={() => setMoveOpen(true)}
                                 onScrapeEmails={
                                     currentTab === ListDetailTabIds.CONTACTS
                                         ? () => setScrapeConfirmOpen(true)
@@ -333,6 +336,7 @@ export default function ListDetailPage() {
                     )}
 
                     <ContactListFormModal isOpen={editOpen} onOpenChange={setEditOpen} editing={list} />
+                    <MoveContactListModal isOpen={moveOpen} onOpenChange={setMoveOpen} list={list} />
                     <ContactListFormModal
                         isOpen={createSublistOpen}
                         onOpenChange={setCreateSublistOpen}

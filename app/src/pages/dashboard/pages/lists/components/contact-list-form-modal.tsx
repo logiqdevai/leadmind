@@ -5,6 +5,7 @@ import { ActionButtonWithPending } from "@/components/ui/action-button-with-pend
 import { useCreateContactList, useUpdateContactList } from "@/features/contact-lists/hooks/use-contact-lists";
 import type { ContactList } from "@/features/contact-lists/interfaces/contact-list.interface";
 import { Routes } from "@/routes/routes";
+import { ParentListSelect } from "./parent-list-select";
 
 interface ContactListFormModalProps {
   isOpen: boolean;
@@ -25,32 +26,41 @@ export function ContactListFormModal({
   const createList = useCreateContactList();
   const updateList = useUpdateContactList();
   const isPending = createList.isPending || updateList.isPending;
-  const isSublist = !editing && !!parentListUuid;
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [selectedParentUuid, setSelectedParentUuid] = useState<string | null>(parentListUuid ?? null);
+  const isSublist = !editing && !!selectedParentUuid;
 
   useEffect(() => {
     if (!isOpen) return;
     if (editing) {
       setTitle(editing.title);
       setDescription(editing.description ?? "");
+      setSelectedParentUuid(editing.parent_list_uuid);
     } else {
       setTitle("");
       setDescription("");
+      setSelectedParentUuid(parentListUuid ?? null);
     }
-  }, [isOpen, editing]);
+  }, [isOpen, editing, parentListUuid]);
 
   const handleConfirm = () => {
-    const payload = {
-      title: title.trim(),
-      description: description.trim() || undefined,
-      ...(parentListUuid && !editing ? { parent_list_uuid: parentListUuid } : {}),
-    };
     if (editing) {
-      updateList.mutate({ uuid: editing.uuid, payload }, { onSuccess: () => onOpenChange(false) });
-    } else {
-      createList.mutate(payload, {
+      updateList.mutate(
+        { uuid: editing.uuid, payload: { title: title.trim(), description: description.trim() || undefined } },
+        { onSuccess: () => onOpenChange(false) },
+      );
+      return;
+    }
+
+    createList.mutate(
+      {
+        title: title.trim(),
+        description: description.trim() || undefined,
+        ...(selectedParentUuid ? { parent_list_uuid: selectedParentUuid } : {}),
+      },
+      {
         onSuccess: (list) => {
           onOpenChange(false);
           if (onCreated) {
@@ -59,8 +69,8 @@ export function ContactListFormModal({
           }
           navigate(Routes.dashboard.lists_detail.replace(":uuid", list.uuid));
         },
-      });
-    }
+      },
+    );
   };
 
   return (
@@ -95,6 +105,13 @@ export function ContactListFormModal({
                 rows={3}
               />
             </div>
+            {editing ? null : (
+              <ParentListSelect
+                value={selectedParentUuid}
+                onChange={setSelectedParentUuid}
+                enabled={isOpen}
+              />
+            )}
           </Modal.Body>
           <Modal.Footer className="gap-2 justify-end">
             <Button variant="tertiary" onPress={() => onOpenChange(false)}>

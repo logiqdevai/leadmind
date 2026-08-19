@@ -83,7 +83,10 @@ export function useUpdateContactList() {
         onSuccess: (_, vars) => {
             qc.invalidateQueries({ queryKey: contactListQueryKeys.all });
             qc.invalidateQueries({ queryKey: contactListQueryKeys.detail(vars.uuid) });
-            toast({ title: "List updated", duration: 1500 });
+            toast({
+                title: vars.payload.parent_list_uuid !== undefined ? "List moved" : "List updated",
+                duration: 1500,
+            });
         },
         onError: (error: Error) => {
             toast({

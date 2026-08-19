@@ -1,6 +1,6 @@
 import type { FC } from "react";
 import { Button, Dropdown } from "@heroui/react";
-import { ChevronDown, ChevronsUpDown, Globe, Mail, Pencil, Trash2, UserPlus } from "lucide-react";
+import { ChevronDown, ChevronsUpDown, FolderInput, Globe, Mail, Pencil, Trash2, UserPlus } from "lucide-react";
 
 interface ListActionsDropdownProps {
     showContactsActions?: boolean;
@@ -8,6 +8,7 @@ interface ListActionsDropdownProps {
     quickBrowseDisabled?: boolean;
     onAddContacts?: () => void;
     onEditList: () => void;
+    onMoveList?: () => void;
     onScrapeEmails?: () => void;
     scrapeEmailsDisabled?: boolean;
     scrapeEmailsPending?: boolean;
@@ -24,6 +25,7 @@ export const ListActionsDropdown: FC<ListActionsDropdownProps> = ({
     quickBrowseDisabled = false,
     onAddContacts,
     onEditList,
+    onMoveList,
     onScrapeEmails,
     scrapeEmailsDisabled = false,
     scrapeEmailsPending = false,
@@ -50,6 +52,7 @@ export const ListActionsDropdown: FC<ListActionsDropdownProps> = ({
                     if (key === "quick-browse") onQuickBrowse?.();
                     if (key === "add-contacts") onAddContacts?.();
                     if (key === "edit-list") onEditList();
+                    if (key === "move-list") onMoveList?.();
                     if (key === "scrape-emails") onScrapeEmails?.();
                     if (key === "send-messages-selected") onSendMessagesSelected?.();
                     if (key === "delete-selected") onDeleteSelected?.();
@@ -117,6 +120,14 @@ export const ListActionsDropdown: FC<ListActionsDropdownProps> = ({
                         <span className="font-medium text-foreground">Edit list</span>
                     </span>
                 </Dropdown.Item>
+                {onMoveList ? (
+                    <Dropdown.Item id="move-list" textValue="Move to list">
+                        <span className="flex items-center gap-2.5 antialiased">
+                            <FolderInput className="size-4 shrink-0 text-muted" strokeWidth={2} />
+                            <span className="font-medium text-foreground">Move to list</span>
+                        </span>
+                    </Dropdown.Item>
+                ) : null}
             </Dropdown.Menu>
         </Dropdown.Popover>
     </Dropdown>

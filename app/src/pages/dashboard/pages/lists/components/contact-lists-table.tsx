@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Button, Table } from "@heroui/react";
-import { Pencil, Trash2 } from "lucide-react";
+import { FolderInput, Pencil, Trash2 } from "lucide-react";
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { Routes } from "@/routes/routes";
 import { TablePagination } from "@/components/ui/table-pagination";
@@ -9,6 +9,7 @@ import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { useDeleteContactList } from "@/features/contact-lists/hooks/use-contact-lists";
 import type { ContactList } from "@/features/contact-lists/interfaces/contact-list.interface";
 import { ContactListFormModal } from "./contact-list-form-modal";
+import { MoveContactListModal } from "./move-contact-list-modal";
 
 function formatDate(dateStr: string): string {
     return new Date(dateStr).toLocaleDateString(undefined, {
@@ -20,6 +21,7 @@ function formatDate(dateStr: string): string {
 
 function RowActions({ list }: { list: ContactList }) {
     const [editOpen, setEditOpen] = useState(false);
+    const [moveOpen, setMoveOpen] = useState(false);
     const [deleteOpen, setDeleteOpen] = useState(false);
     const del = useDeleteContactList();
 
@@ -36,6 +38,14 @@ function RowActions({ list }: { list: ContactList }) {
             <Button
                 size="sm"
                 variant="tertiary"
+                onPress={() => setMoveOpen(true)}
+                aria-label="Move list"
+            >
+                <FolderInput className="size-3.5" />
+            </Button>
+            <Button
+                size="sm"
+                variant="tertiary"
                 onPress={() => setDeleteOpen(true)}
                 className="text-danger"
                 aria-label="Delete list"
@@ -44,6 +54,7 @@ function RowActions({ list }: { list: ContactList }) {
             </Button>
 
             <ContactListFormModal isOpen={editOpen} onOpenChange={setEditOpen} editing={list} />
+            <MoveContactListModal isOpen={moveOpen} onOpenChange={setMoveOpen} list={list} />
             <ConfirmDialog
                 isOpen={deleteOpen}
                 onOpenChange={setDeleteOpen}
@@ -182,7 +193,7 @@ export function ContactListsTable({
                                             : header.id === "sublists" || header.id === "updated_at"
                                               ? "hidden md:table-cell"
                                               : header.id === "actions"
-                                                ? "w-24"
+                                                ? "w-32"
                                                 : "min-w-0"
                                     }
                                 >
@@ -229,7 +240,7 @@ export function ContactListsTable({
                                                           cell.column.id === "updated_at"
                                                         ? "hidden md:table-cell"
                                                         : cell.column.id === "actions"
-                                                          ? "w-24"
+                                                          ? "w-32"
                                                           : "min-w-0";
 
                                               return (
