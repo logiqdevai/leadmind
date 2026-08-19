@@ -14,6 +14,7 @@ import { useAuthStore } from "@/stores/auth";
 import { GoalProgressCard } from "./components/goal-progress-card";
 import { GoalsLeaderboard } from "./components/goals-leaderboard";
 import { GoalsManagePanel } from "./components/goals-manage-panel";
+import { EmailSendLimitsPanel } from "./components/email-send-limits-panel";
 import { PERIOD_LABELS } from "./utils/goals-copy";
 
 const TAB_CLASS =
@@ -32,7 +33,12 @@ const GoalsPage: FC = () => {
     const tabs = [
         { id: "progress", label: "My Progress" },
         { id: "leaderboard", label: "Leaderboard" },
-        ...(canManage ? [{ id: "manage", label: "Manage" }] : []),
+        ...(canManage
+            ? [
+                  { id: "manage", label: "Manage" },
+                  { id: "email-limits", label: "Email Limits" },
+              ]
+            : []),
     ];
 
     return (
@@ -130,7 +136,17 @@ const GoalsPage: FC = () => {
                 </div>
             )}
 
-            {tab === "manage" && canManage && <GoalsManagePanel />}
+            {tab === "manage" && canManage && (
+                <div className="flex flex-col gap-6">
+                    <GoalsManagePanel />
+                </div>
+            )}
+
+            {tab === "email-limits" && canManage && (
+                <div className="flex flex-col gap-6">
+                    <EmailSendLimitsPanel />
+                </div>
+            )}
         </div>
     );
 };

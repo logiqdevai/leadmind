@@ -25,6 +25,8 @@ import {
   User,
   History,
   Trophy,
+  ListTodo,
+  Wrench,
 } from "lucide-react";
 import { Routes } from "@/routes/routes";
 import { usePermission } from "@/hooks/use-permission";
@@ -58,6 +60,7 @@ const navGroups: NavGroup[] = [
       { label: "Contacts", icon: Users, href: Routes.dashboard.contacts, end: false },
       { label: "Lists", icon: List, href: Routes.dashboard.lists, end: false },
       { label: "Reminders", icon: Bell, href: Routes.dashboard.reminders, end: false },
+      { label: "Jobs", icon: ListTodo, href: Routes.dashboard.jobs, end: false },
       { label: "Goals", icon: Trophy, href: Routes.dashboard.goals, end: false },
       { label: "Forms", icon: ClipboardList, href: Routes.dashboard.forms, end: false },
     ],
@@ -87,6 +90,7 @@ const navGroups: NavGroup[] = [
 ];
 
 const adminSubItems: NavItemConfig[] = [
+  { label: "Controls", icon: Wrench, href: Routes.dashboard.admin_controls, end: true },
   { label: "Batch Jobs", icon: Layers, href: Routes.dashboard.admin_batch_jobs, end: false },
   { label: "System Status", icon: Activity, href: Routes.dashboard.admin_system_status, end: false },
 ];

@@ -9,7 +9,7 @@ export function SendHistoryTableSkeleton() {
                     <div className="h-7 w-16 rounded-lg bg-surface-secondary" />
                 </div>
             </div>
-            <div className="overflow-hidden rounded-xl border border-border">
+            <div className="overflow-hidden rounded-xl">
                 <div className="bg-surface-secondary/40 px-3 py-2 flex gap-4">
                     {[72, 56, 72, 56, 120, 64, 48].map((w, i) => (
                         <div

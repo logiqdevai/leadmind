@@ -112,6 +112,14 @@ export const ApiRoutes = {
         update: (uuid: string) => `/sender-profiles/${uuid}`,
         remove: (uuid: string) => `/sender-profiles/${uuid}`,
     },
+    saved_contact_filters: {
+        prefix: "/saved-contact-filters",
+        list: "/saved-contact-filters",
+        create: "/saved-contact-filters",
+        get: (uuid: string) => `/saved-contact-filters/${uuid}`,
+        update: (uuid: string) => `/saved-contact-filters/${uuid}`,
+        remove: (uuid: string) => `/saved-contact-filters/${uuid}`,
+    },
     integrations: {
         prefix: "/integrations",
         list: "/integrations",
@@ -128,6 +136,7 @@ export const ApiRoutes = {
         batch_jobs: "/admin/batch-jobs",
         queues: "/admin/queues",
         system_status: "/admin/system-status",
+        email_validation_backfill: "/admin/email-validation-backfill",
     },
     reminders: {
         prefix: "/reminders",
@@ -138,6 +147,11 @@ export const ApiRoutes = {
         update: (uuid: string) => `/reminders/${uuid}`,
         complete: (uuid: string) => `/reminders/${uuid}/complete`,
         remove: (uuid: string) => `/reminders/${uuid}`,
+    },
+    bulk_jobs: {
+        prefix: "/bulk-jobs",
+        list: "/bulk-jobs",
+        get: (uuid: string) => `/bulk-jobs/${uuid}`,
     },
     message_templates: {
         prefix: "/message-templates",
@@ -251,5 +265,10 @@ export const ApiRoutes = {
         achievementSeen: (uuid: string) => `/messaging-goals/achievements/${uuid}/seen`,
         update: (uuid: string) => `/messaging-goals/${uuid}`,
         remove: (uuid: string) => `/messaging-goals/${uuid}`,
+    },
+    email_send_limits: {
+        list: "/email-send-limits",
+        upsert: "/email-send-limits",
+        remove: (uuid: string) => `/email-send-limits/${uuid}`,
     },
 }

@@ -23,3 +23,5 @@ export function sameUuidSet(a: string[], b: string[]): boolean {
   const set = new Set(a);
   return b.every((id) => set.has(id));
 }
+
+export { profileFieldPatch } from "@/lib/profile";

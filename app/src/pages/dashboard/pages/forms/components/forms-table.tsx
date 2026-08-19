@@ -164,7 +164,7 @@ export function FormsTable({
     });
 
     return (
-        <div className="bg-surface rounded-xl border border-border overflow-hidden">
+        <div className="bg-surface rounded-xl overflow-hidden">
             <Table>
                 <Table.ScrollContainer>
                     <Table.Content

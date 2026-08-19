@@ -10,7 +10,7 @@ export function RouteFallbackSkeleton() {
                 <div className="h-9 w-24 rounded-lg bg-surface-secondary" />
                 <div className="h-9 w-32 rounded-lg bg-surface-secondary" />
             </div>
-            <div className="overflow-hidden rounded-xl border border-border flex-1 min-h-[12rem]">
+            <div className="overflow-hidden rounded-xl flex-1 min-h-[12rem]">
                 <div className="bg-surface-secondary/40 px-3 py-2 flex gap-4">
                     {[80, 64, 96, 56, 72].map((w, i) => (
                         <div

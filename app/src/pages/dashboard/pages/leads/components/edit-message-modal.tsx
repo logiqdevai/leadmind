@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button, Input, Label, Modal, TextArea, TextField } from "@heroui/react";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
-import { Send, Save } from "lucide-react";
+import { AlertTriangle, Send, Save } from "lucide-react";
 import {
     Channel,
     type OutreachMessage,
@@ -14,6 +14,7 @@ import {
 import { EmailProviderSelect } from "@/features/messaging/components/email-provider-select";
 import { SenderProfileSelect } from "@/features/messaging/components/sender-profile-select";
 import { RichTextEditor } from "@/components/ui/rich-text-editor";
+import { useEmailProviderSendLimitStatus } from "@/features/email-send-limits/hooks/use-email-provider-send-limit-status";
 
 interface EditMessageModalProps {
     message: OutreachMessage | null;
@@ -63,6 +64,9 @@ function MessageForm({ message, contact_uuid, onClose }: MessageFormProps) {
     const send = useSendOutreachMessage();
 
     const isEmail = message.channel === Channel.EMAIL;
+    const limitStatus = useEmailProviderSendLimitStatus(
+        isEmail ? emailProvider?.provider : null,
+    );
     const dirty =
         (isEmail && subject !== (message.subject ?? "")) ||
         content !== (message.content ?? "");
@@ -81,6 +85,7 @@ function MessageForm({ message, contact_uuid, onClose }: MessageFormProps) {
     const handleSend = async () => {
         if (!senderProfileUuid) return;
         if (isEmail && !emailProvider) return;
+        if (limitStatus.reached) return;
         if (dirty) {
             await update.mutateAsync({
                 uuid: message.uuid,
@@ -149,6 +154,12 @@ function MessageForm({ message, contact_uuid, onClose }: MessageFormProps) {
                             disabled={send.isPending || update.isPending}
                         />
                     ) : null}
+                    {limitStatus.reached && (
+                        <div className="flex items-start gap-2 rounded-lg border border-danger/30 bg-danger/10 px-3 py-2 text-xs text-danger">
+                            <AlertTriangle className="size-3.5 mt-0.5 shrink-0" />
+                            <span>{limitStatus.message}</span>
+                        </div>
+                    )}
                     <SenderProfileSelect
                         value={senderProfileUuid}
                         onChange={setSenderProfileUuid}
@@ -174,7 +185,8 @@ function MessageForm({ message, contact_uuid, onClose }: MessageFormProps) {
                         send.isPending ||
                         update.isPending ||
                         !senderProfileUuid ||
-                        (isEmail && !emailProvider)
+                        (isEmail && !emailProvider) ||
+                        limitStatus.reached
                     }
                     isPending={send.isPending}
                     onPress={handleSend}

@@ -4,6 +4,7 @@ import { Button, Input, Label, Modal, TextArea } from "@heroui/react";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
 import { useCreateContactList, useUpdateContactList } from "@/features/contact-lists/hooks/use-contact-lists";
 import type { ContactList } from "@/features/contact-lists/interfaces/contact-list.interface";
+import { emptyToNullOnEdit } from "@/lib/profile";
 import { Routes } from "@/routes/routes";
 import { ParentListSelect } from "./parent-list-select";
 
@@ -48,29 +49,31 @@ export function ContactListFormModal({
   const handleConfirm = () => {
     if (editing) {
       updateList.mutate(
-        { uuid: editing.uuid, payload: { title: title.trim(), description: description.trim() || undefined } },
+        {
+          uuid: editing.uuid,
+          payload: { title: title.trim(), description: emptyToNullOnEdit(description, true) },
+        },
         { onSuccess: () => onOpenChange(false) },
       );
-      return;
-    }
-
-    createList.mutate(
-      {
-        title: title.trim(),
-        description: description.trim() || undefined,
-        ...(selectedParentUuid ? { parent_list_uuid: selectedParentUuid } : {}),
-      },
-      {
-        onSuccess: (list) => {
-          onOpenChange(false);
-          if (onCreated) {
-            onCreated(list);
-            return;
-          }
-          navigate(Routes.dashboard.lists_detail.replace(":uuid", list.uuid));
+    } else {
+      createList.mutate(
+        {
+          title: title.trim(),
+          description: description.trim() || undefined,
+          ...(parentListUuid ? { parent_list_uuid: parentListUuid } : {}),
         },
-      },
-    );
+        {
+          onSuccess: (list) => {
+            onOpenChange(false);
+            if (onCreated) {
+              onCreated(list);
+              return;
+            }
+            navigate(Routes.dashboard.lists_detail.replace(":uuid", list.uuid));
+          },
+        },
+      );
+    }
   };
 
   return (

@@ -29,6 +29,7 @@ import { listContacts } from "@/features/contacts/services/contacts.service";
 import { contactsQueryKeys } from "@/features/contacts/hooks/use-contacts";
 import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import type { Reminder, ReminderContact } from "@/features/reminders/interfaces/reminder.interface";
+import { emptyToNullOnEdit } from "@/lib/profile";
 
 interface ReminderFormModalProps {
     contactUuid?: string;
@@ -118,8 +119,8 @@ export function ReminderFormModal({
                 {
                     uuid: editing.uuid,
                     payload: {
-                        title: title.trim() || undefined,
-                        notes: notes.trim() || undefined,
+                        title: emptyToNullOnEdit(title, true),
+                        notes: emptyToNullOnEdit(notes, true),
                         remind_at: dt.toISOString(),
                     },
                 },
@@ -304,7 +305,7 @@ export function ReminderFormModal({
                                             </DatePicker.Trigger>
                                         </DateField.Suffix>
                                     </DateField.Group>
-                                    <DatePicker.Popover className="flex flex-col gap-3">
+                                    <DatePicker.Popover className="flex min-w-63 w-auto max-w-none flex-col gap-3">
                                         <Calendar aria-label="Choose date">
                                             <Calendar.Header>
                                                 <Calendar.YearPickerTrigger>

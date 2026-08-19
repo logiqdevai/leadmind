@@ -120,6 +120,17 @@ export function formatActivityDescription(log: {
     return `${formatActivityAction(log.action)} · ${formatActivityEntityType(log.entity_type)}`;
 }
 
+export function formatFieldName(field: string): string {
+    return field.replaceAll("_", " ").replace(/\b\w/g, (char) => char.toUpperCase());
+}
+
+export function formatChangeValue(value: unknown): string {
+    if (value === null || value === undefined) return "—";
+    if (typeof value === "boolean") return value ? "Yes" : "No";
+    if (typeof value === "object") return JSON.stringify(value, null, 2);
+    return String(value);
+}
+
 export const ACTIVITY_ENTITY_FILTER_OPTIONS = [
     { id: "", label: "All entities" },
     ...Object.entries(ENTITY_LABELS).map(([id, label]) => ({ id, label })),

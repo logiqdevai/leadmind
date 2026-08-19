@@ -44,7 +44,7 @@ export class EmailAuthService {
 
             const organisation = await this.organisationsService.createForUser(
                 user.uuid,
-                'Default Organisation',
+                'logiqdev',
             );
 
             return this.organisationsService.buildAuthResponse(user.uuid, organisation.uuid);
@@ -52,7 +52,8 @@ export class EmailAuthService {
             if (error instanceof ConflictException) {
                 throw error;
             }
-            throw new BadRequestException(error.message);
+            const message = error instanceof Error ? error.message : 'Registration failed';
+            throw new BadRequestException(message);
         }
     }
 
@@ -76,13 +77,13 @@ export class EmailAuthService {
 
             let membership = await this.prisma.organisationMember.findFirst({
                 where: { user_uuid: user.uuid },
-                orderBy: { created_at: 'asc' },
+                orderBy: { updated_at: 'desc' },
             });
 
             if (!membership) {
                 const organisation = await this.organisationsService.createForUser(
                     user.uuid,
-                    'Default Organisation',
+                    'logiqdev',
                 );
                 membership = await this.prisma.organisationMember.findFirst({
                     where: {
@@ -100,7 +101,8 @@ export class EmailAuthService {
             if (error instanceof UnauthorizedException) {
                 throw error;
             }
-            throw new BadRequestException(error.message);
+            const message = error instanceof Error ? error.message : 'Login failed';
+            throw new BadRequestException(message);
         }
     }
 
@@ -133,7 +135,8 @@ export class EmailAuthService {
 
             return { message: 'You have been successfully added to the waitlist', code: 'WAITLIST_SUCCESS' };
         } catch (error) {
-            throw new BadRequestException('Failed to waitlist user', error.message);
+            const detail = error instanceof Error ? error.message : String(error);
+            throw new BadRequestException('Failed to waitlist user', detail);
         }
     }
 }

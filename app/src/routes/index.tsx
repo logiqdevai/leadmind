@@ -21,6 +21,7 @@ const ContactDetailPage = lazy(() => import("@/pages/dashboard/pages/contacts/pa
 const ListsPage = lazy(() => import("@/pages/dashboard/pages/lists"));
 const ListDetailPage = lazy(() => import("@/pages/dashboard/pages/lists/pages/detail"));
 const RemindersPage = lazy(() => import("@/pages/dashboard/pages/reminders"));
+const JobsPage = lazy(() => import("@/pages/dashboard/pages/jobs"));
 const GoalsPage = lazy(() => import("@/pages/dashboard/pages/goals"));
 const FormsPage = lazy(() => import("@/pages/dashboard/pages/forms"));
 const FormDetailPage = lazy(() => import("@/pages/dashboard/pages/forms/pages/detail"));
@@ -44,6 +45,7 @@ const NewFilterPage = lazy(() => import("@/pages/dashboard/pages/filters/pages/n
 const FilterDetailPage = lazy(() => import("@/pages/dashboard/pages/filters/pages/detail"));
 const ScoringInstructionsPage = lazy(() => import("@/pages/dashboard/pages/filters/pages/scoring-instructions"));
 
+const AdminControlsPage = lazy(() => import("@/pages/dashboard/pages/admin"));
 const AdminBatchJobsPage = lazy(() => import("@/pages/dashboard/pages/admin/batch-jobs"));
 const AdminSystemStatusPage = lazy(() => import("@/pages/dashboard/pages/admin/system-status"));
 
@@ -205,6 +207,14 @@ export default function AppRoutes() {
           element={
             <Lazy>
               <RemindersPage />
+            </Lazy>
+          }
+        />
+        <Route
+          path="jobs"
+          element={
+            <Lazy>
+              <JobsPage />
             </Lazy>
           }
         />
@@ -378,6 +388,16 @@ export default function AppRoutes() {
             }
           />
         </Route>
+        <Route
+          path="admin"
+          element={
+            <ProtectedRoute requiredRoles={Permissions.admin_batch_jobs}>
+              <Lazy>
+                <AdminControlsPage />
+              </Lazy>
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="admin/batch-jobs"
           element={

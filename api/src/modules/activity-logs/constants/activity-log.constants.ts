@@ -21,6 +21,7 @@ export const ActivityEntityType = {
     CONTACT_LIST: 'contact_list',
     SCORING_INSTRUCTION: 'scoring_instruction',
     AUDIENCE_ANALYSIS: 'audience_analysis',
+    EMAIL_SEND_LIMIT: 'email_send_limit',
 } as const;
 
 export type ActivityEntityType =

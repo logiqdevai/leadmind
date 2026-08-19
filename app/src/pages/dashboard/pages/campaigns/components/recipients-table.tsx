@@ -21,7 +21,7 @@ export function RecipientsTable({ rows }: { rows: MarketingCampaignContact[] }) 
     return <div className="rounded-xl border border-dashed border-border bg-surface-secondary/30 p-8 text-center text-sm text-muted">No recipients yet.</div>;
   }
   return (
-    <div className="overflow-x-auto rounded-xl border border-border">
+    <div className="overflow-x-auto rounded-xl">
       <table className="w-full text-sm">
         <thead className="bg-surface-secondary/40 text-muted">
           <tr>

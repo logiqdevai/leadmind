@@ -153,7 +153,11 @@ export class OrganisationsService {
     }
 
     async switchOrganisation(organisationUuid: string, userUuid: string) {
-        await this.requireMembership(organisationUuid, userUuid);
+        const membership = await this.requireMembership(organisationUuid, userUuid);
+        await this.prisma.organisationMember.update({
+            where: { uuid: membership.uuid },
+            data: { updated_at: new Date() },
+        });
         return this.buildAuthResponse(userUuid, organisationUuid);
     }
 

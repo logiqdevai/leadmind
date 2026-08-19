@@ -27,7 +27,7 @@ export function ContactSelectionTable({
     const someSelected = rows.some((r) => selected.has(r.uuid));
 
     return (
-        <div className="overflow-x-auto rounded-xl border border-border">
+        <div className="overflow-x-auto rounded-xl">
             <table className="w-full text-sm">
                 <thead className="bg-surface-secondary/40 text-muted">
                     <tr>

@@ -4,9 +4,8 @@ import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { AiService } from '@/integrations/ai/services/ai.service';
 import { AiConfig } from '@/integrations/ai/utils/ai.config';
 import { AiProviders } from '@/integrations/ai/interfaces/ai.interface';
-import { WebsiteContentCrawlerAdapter } from '@/integrations/apify/website-content-crawler/website-content-crawler.adapter';
-import { ApifyCredentialsService } from '@/integrations/apify/services/apify-credentials.service';
 import { plainTextFromCrawledPage } from '@/integrations/apify/website-content-crawler/crawl-page-text.utils';
+import { WebsiteScraperService } from '@/integrations/website-scraper/website-scraper.service';
 import {
     LEAD_ENRICHMENT_SUMMARY_MODEL,
     leadEnrichmentModelForProvider,
@@ -45,8 +44,7 @@ export class LeadAiService {
         private readonly prisma: PrismaService,
         private readonly aiService: AiService,
         private readonly aiConfig: AiConfig,
-        private readonly websiteCrawler: WebsiteContentCrawlerAdapter,
-        private readonly apifyCredentials: ApifyCredentialsService,
+        private readonly websiteCrawler: WebsiteScraperService,
         private readonly summaryService: LeadEnrichmentSummaryService,
     ) {}
 
@@ -460,8 +458,8 @@ export class LeadAiService {
         url: string,
     ): Promise<string | null> {
         try {
-            if (!(await this.apifyCredentials.hasApifyApiKey(organisation_uuid))) {
-                this.logger.warn(`Apify not configured for organisation ${organisation_uuid}, skipping crawl for ${url}`);
+            if (!(await this.websiteCrawler.isConfigured(organisation_uuid))) {
+                this.logger.warn(`Website scraping provider not configured for organisation ${organisation_uuid}, skipping crawl for ${url}`);
                 return null;
             }
             const page = await this.websiteCrawler.crawlSinglePage(

@@ -37,7 +37,7 @@ export function AppDatePicker({
     return (
         <DatePicker
             name={name}
-            className={cn("w-full", className)}
+            className={cn("w-52", className)}
             value={toDateValue(value)}
             minValue={toDateValue(minValue) ?? undefined}
             maxValue={toDateValue(maxValue) ?? undefined}
@@ -54,7 +54,7 @@ export function AppDatePicker({
                     </DatePicker.Trigger>
                 </DateField.Suffix>
             </DateField.Group>
-            <DatePicker.Popover>
+            <DatePicker.Popover className="min-w-63 w-auto max-w-none">
                 <Calendar aria-label={ariaLabel ?? label ?? "Choose date"}>
                     <Calendar.Header>
                         <Calendar.YearPickerTrigger>

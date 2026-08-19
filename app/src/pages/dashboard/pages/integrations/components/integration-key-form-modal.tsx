@@ -8,8 +8,9 @@ import {
     Modal,
     Select,
 } from "@heroui/react";
-import { Save } from "lucide-react";
+import { Check, Copy, RefreshCw, Save } from "lucide-react";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
+import { toast } from "@/hooks/use-toast";
 import {
     useCreateIntegrationKey,
     useUpdateIntegrationKey,
@@ -30,11 +31,17 @@ import type {
     IntegrationProviderView,
 } from "@/features/integrations/interfaces/integrations.interface";
 import { cn } from "@/lib/utils";
+import { IntegrationOfficialLink } from "./integration-official-link";
 
 const borderedFieldClass = cn(
     "rounded-md border border-border bg-surface-primary",
     "focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/40",
 );
+
+const generateUuid = () =>
+    typeof crypto !== "undefined" && "randomUUID" in crypto
+        ? crypto.randomUUID()
+        : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
 
 interface IntegrationKeyFormModalProps {
     isOpen: boolean;
@@ -109,6 +116,7 @@ export function IntegrationKeyFormModal({
     const [accountError, setAccountError] = useState<string | null>(null);
     const [titleError, setTitleError] = useState<string | null>(null);
     const [secretError, setSecretError] = useState<string | null>(null);
+    const [secretCopied, setSecretCopied] = useState(false);
 
     const keyTypeMeta = useMemo(
         () => providerView.keyTypes.find((row) => row.key_type === keyType),
@@ -137,6 +145,7 @@ export function IntegrationKeyFormModal({
         setAccountError(null);
         setTitleError(null);
         setSecretError(null);
+        setSecretCopied(false);
     }, [isOpen, initialAccount, keyItem, initialKeyType, defaultKeyType, suggestedAccount, providerView.provider]);
 
     useEffect(() => {
@@ -158,6 +167,22 @@ export function IntegrationKeyFormModal({
         allowsMultipleAccounts &&
         !isEdit &&
         !providerView.keys.some((key) => key.account === account.trim());
+
+    const handleCopySecret = async () => {
+        if (!secret) return;
+        try {
+            await navigator.clipboard.writeText(secret);
+            setSecretCopied(true);
+            toast({ title: "Copied to clipboard", duration: 1500 });
+            window.setTimeout(() => setSecretCopied(false), 2000);
+        } catch {
+            toast({
+                title: "Could not copy to clipboard",
+                variant: "error",
+                duration: 2000,
+            });
+        }
+    };
 
     const handleSubmit = async () => {
         const trimmedAccount = allowsMultipleAccounts ? account.trim() : "1";
@@ -226,9 +251,19 @@ export function IntegrationKeyFormModal({
                         <Modal.CloseTrigger />
                         <Modal.Header>
                             <Modal.Heading>
-                                {isEdit
-                                    ? `Update ${keyItem?.env_name ?? "key"}`
-                                    : `Add ${providerView.label} key`}
+                                {isEdit ? (
+                                    `Update ${keyItem?.env_name ?? "key"}`
+                                ) : (
+                                    <>
+                                        Add{" "}
+                                        <IntegrationOfficialLink
+                                            provider={providerView.provider}
+                                        >
+                                            {providerView.label}
+                                        </IntegrationOfficialLink>{" "}
+                                        key
+                                    </>
+                                )}
                             </Modal.Heading>
                         </Modal.Header>
                         <Modal.Body className="space-y-4">
@@ -333,9 +368,41 @@ export function IntegrationKeyFormModal({
                             </div>
 
                             <div className="flex flex-col gap-1.5">
-                                <Label htmlFor="integration-key-secret">
-                                    {keyTypeMeta?.label ?? "Secret"}
-                                </Label>
+                                <div className="flex items-center justify-between gap-2">
+                                    <Label htmlFor="integration-key-secret">
+                                        {keyTypeMeta?.label ?? "Secret"}
+                                    </Label>
+                                    <div className="flex items-center gap-1.5">
+                                        {keyType === "WEBHOOK_SECRET" && (
+                                            <Button
+                                                size="sm"
+                                                variant="ghost"
+                                                onPress={() => {
+                                                    setSecret(generateUuid());
+                                                    setSecretError(null);
+                                                    setSecretCopied(false);
+                                                }}
+                                            >
+                                                <RefreshCw className="size-3.5" />
+                                                Generate
+                                            </Button>
+                                        )}
+                                        <Button
+                                            size="sm"
+                                            variant="ghost"
+                                            isDisabled={!secret}
+                                            onPress={handleCopySecret}
+                                            aria-label="Copy secret"
+                                        >
+                                            {secretCopied ? (
+                                                <Check className="size-3.5" />
+                                            ) : (
+                                                <Copy className="size-3.5" />
+                                            )}
+                                            Copy
+                                        </Button>
+                                    </div>
+                                </div>
                                 <Input
                                     id="integration-key-secret"
                                     className={borderedFieldClass}
@@ -350,7 +417,10 @@ export function IntegrationKeyFormModal({
                                         KEY_TYPE_PLACEHOLDERS[keyType]
                                     }
                                     value={secret}
-                                    onChange={(e) => setSecret(e.target.value)}
+                                    onChange={(e) => {
+                                        setSecret(e.target.value);
+                                        setSecretCopied(false);
+                                    }}
                                 />
                                 {secretError && (
                                     <FieldError>{secretError}</FieldError>

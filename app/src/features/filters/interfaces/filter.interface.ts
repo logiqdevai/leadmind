@@ -101,7 +101,7 @@ export interface CreateFilterPayload {
     cron_schedule?: string | null;
     channels: Channel[];
     scoring_instruction_uuids?: string[];
-    outreach_instructions?: string;
+    outreach_instructions?: string | null;
 }
 
 export type UpdateFilterPayload = Partial<CreateFilterPayload>;

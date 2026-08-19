@@ -32,4 +32,12 @@ export class AdminController {
     syncBatchJob(@Param('batchId') batchId: string) {
         return this.adminService.syncBatchJob(batchId);
     }
+
+    @Post('email-validation-backfill')
+    @ApiOperation({
+        summary: 'Validate every Lead/Contact email and clear invalid ones (admin only)',
+    })
+    runEmailValidationBackfill() {
+        return this.adminService.runEmailValidationBackfill();
+    }
 }

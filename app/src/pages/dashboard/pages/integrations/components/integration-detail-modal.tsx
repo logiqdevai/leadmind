@@ -35,6 +35,7 @@ import type {
 } from "@/features/integrations/interfaces/integrations.interface";
 import { toast } from "@/hooks/use-toast";
 import { IntegrationKeyFormModal } from "./integration-key-form-modal";
+import { IntegrationOfficialLink } from "./integration-official-link";
 import { ResendAccountFormModal } from "./resend-account-form-modal";
 import { SmtpAccountFormModal } from "./smtp-account-form-modal";
 import { cn } from "@/lib/utils";
@@ -218,7 +219,13 @@ export function IntegrationDetailModal({
                         <Modal.Dialog>
                             <Modal.CloseTrigger />
                             <Modal.Header>
-                                <Modal.Heading>{providerView.label}</Modal.Heading>
+                                <Modal.Heading>
+                                    <IntegrationOfficialLink
+                                        provider={providerView.provider}
+                                    >
+                                        {providerView.label}
+                                    </IntegrationOfficialLink>
+                                </Modal.Heading>
                                 <p className="text-sm text-muted font-normal">
                                     {providerView.description}
                                 </p>

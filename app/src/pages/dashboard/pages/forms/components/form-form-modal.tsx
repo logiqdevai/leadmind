@@ -4,6 +4,7 @@ import { Button, Input, Label, Modal, TextArea } from "@heroui/react";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
 import { useCreateForm, useUpdateForm } from "@/features/forms/hooks/use-forms";
 import type { Form } from "@/features/forms/interfaces/form.interface";
+import { emptyToNullOnEdit } from "@/lib/profile";
 import { Routes } from "@/routes/routes";
 
 interface FormFormModalProps {
@@ -33,19 +34,24 @@ export function FormFormModal({ isOpen, onOpenChange, editing }: FormFormModalPr
     }, [isOpen, editing]);
 
     const handleConfirm = () => {
-        const payload = { name: name.trim(), description: description.trim() || undefined };
         if (editing) {
             updateForm.mutate(
-                { uuid: editing.uuid, payload },
+                {
+                    uuid: editing.uuid,
+                    payload: { name: name.trim(), description: emptyToNullOnEdit(description, true) },
+                },
                 { onSuccess: () => onOpenChange(false) },
             );
         } else {
-            createForm.mutate(payload, {
-                onSuccess: (form) => {
-                    onOpenChange(false);
-                    navigate(Routes.dashboard.forms_detail.replace(":uuid", form.uuid));
+            createForm.mutate(
+                { name: name.trim(), description: description.trim() || undefined },
+                {
+                    onSuccess: (form) => {
+                        onOpenChange(false);
+                        navigate(Routes.dashboard.forms_detail.replace(":uuid", form.uuid));
+                    },
                 },
-            });
+            );
         }
     };
 

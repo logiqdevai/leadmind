@@ -1,6 +1,7 @@
 import { useState, type ComponentType } from "react";
 import { Button, Chip } from "@heroui/react";
 import {
+    Bot,
     Cloud,
     KeyRound,
     Mail,
@@ -20,6 +21,7 @@ import type { IntegrationProviderView } from "@/features/integrations/interfaces
 import { useOrganisationPermission } from "@/hooks/use-organisation-permission";
 import { IntegrationDetailModal } from "./components/integration-detail-modal";
 import { IntegrationKeyFormModal } from "./components/integration-key-form-modal";
+import { IntegrationOfficialLink } from "./components/integration-official-link";
 import { ResendAccountFormModal } from "./components/resend-account-form-modal";
 import { SmtpAccountFormModal } from "./components/smtp-account-form-modal";
 
@@ -29,6 +31,7 @@ const providerIcons: Record<string, ComponentType<{ className?: string }>> = {
     SMTP: Server,
     TWILIO: MessageSquare,
     APIFY: Cloud,
+    SCRAPIO: Bot,
     HUBSPOT: Plug,
 };
 
@@ -129,6 +132,25 @@ const FALLBACK_PROVIDERS: IntegrationProviderView[] = [
         accounts: [],
         keyTypes: [{ key_type: "API_KEY", label: "API token", placeholder: "apify_api_..." }],
         keys: [],
+    },
+    {
+        provider: "SCRAPIO",
+        uuid: null,
+        label: "Scrapio",
+        description:
+            "AI-built web scrapers for your own sites. Add your Scrapio API key, then paste the webhook URL into your Scrapio account and store the signing secret it gives you.",
+        default_account: null,
+        accounts: [],
+        keyTypes: [
+            { key_type: "API_KEY", label: "API key", placeholder: "spio_..." },
+            {
+                key_type: "WEBHOOK_SECRET",
+                label: "Webhook secret",
+                placeholder: "whsec_...",
+            },
+        ],
+        keys: [],
+        webhook_url: null,
     },
     {
         provider: "HUBSPOT",
@@ -331,7 +353,11 @@ function IntegrationCard({
                 <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
                         <h3 className="text-sm font-semibold text-foreground">
-                            {providerView.label}
+                            <IntegrationOfficialLink
+                                provider={providerView.provider}
+                            >
+                                {providerView.label}
+                            </IntegrationOfficialLink>
                         </h3>
                         <Chip
                             size="sm"

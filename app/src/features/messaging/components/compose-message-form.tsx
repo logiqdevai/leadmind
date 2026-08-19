@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Button, Modal } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
-import { Save, Send, ArrowLeft } from "lucide-react";
-import { Channel } from "@/features/contacts/interfaces/contact.interface";
+import { AlertTriangle, Save, Send, ArrowLeft } from "lucide-react";
+import { useEmailSendLimits } from "@/features/email-send-limits/hooks/use-email-send-limits";
+import { Channel, type EmailValidationStatus } from "@/features/contacts/interfaces/contact.interface";
+import { EmailValidationChip } from "@/pages/dashboard/pages/leads/components/badges";
 import { contactsQueryKeys, useAiDraftMessage } from "@/features/contacts/hooks/use-contacts";
 import {
     createAndSendMessage,
@@ -48,6 +50,9 @@ export interface ComposeMessageFormProps {
     mode: ComposeMessageMode;
     contactUuid?: string;
     contactUuids?: string[];
+    recipientEmail?: string | null;
+    recipientEmailValidationStatus?: EmailValidationStatus;
+    recipientEmailValidationReason?: string | null;
     onClose: () => void;
     onBulkComplete?: () => void;
     onBack?: () => void;
@@ -64,6 +69,9 @@ export function ComposeMessageForm({
     mode,
     contactUuid,
     contactUuids = [],
+    recipientEmail,
+    recipientEmailValidationStatus,
+    recipientEmailValidationReason,
     onClose,
     onBulkComplete,
     onBack,
@@ -80,11 +88,27 @@ export function ComposeMessageForm({
     const [emailSubjectError, setEmailSubjectError] = useState<string | null>(null);
 
     const aiDraft = useAiDraftMessage();
+    const { data: emailSendLimits = [] } = useEmailSendLimits();
 
     const isBulk = mode === "bulk";
     const bulkCount = contactUuids.length;
     const aiContactUuid = isBulk ? contactUuids[0] : contactUuid;
     const showEmailProviders = activeChannel === Channel.EMAIL;
+
+    const reachedEmailLimits = useMemo(() => {
+        const relevantProviders = new Set<string>(
+            isBulk
+                ? emailAllocations.map((a) => a.provider)
+                : emailProvider
+                  ? [emailProvider.provider]
+                  : [],
+        );
+        return emailSendLimits.filter(
+            (limit) => limit.reached && relevantProviders.has(limit.provider),
+        );
+    }, [emailSendLimits, isBulk, emailAllocations, emailProvider]);
+
+    const emailLimitReached = showEmailProviders && reachedEmailLimits.length > 0;
 
     const isPending = aiDraft.isPending || isBulkSubmitting || isSingleSubmitting;
     const contentEmpty = isComposerContentEmpty(activeChannel, value);
@@ -139,6 +163,7 @@ export function ComposeMessageForm({
             return;
         }
         if (showEmailProviders && !isBulk && !emailProvider) return;
+        if (send && emailLimitReached) return;
 
         setIsBulkSubmitting(true);
         let created = 0;
@@ -239,6 +264,7 @@ export function ComposeMessageForm({
             return;
         }
         if (showEmailProviders && !emailProvider) return;
+        if (emailLimitReached) return;
         if (!senderProfileUuid) return;
         setIsSingleSubmitting(true);
         try {
@@ -290,12 +316,22 @@ export function ComposeMessageForm({
         contentEmpty ||
         isPending ||
         !senderProfileUuid ||
-        emailProviderMissing;
+        emailProviderMissing ||
+        emailLimitReached;
 
     return (
         <>
             <Modal.Header>
                 <Modal.Heading>{heading}</Modal.Heading>
+                {!isBulk && recipientEmail?.trim() ? (
+                    <div className="flex items-center gap-2 pt-1 text-sm text-muted">
+                        <span className="truncate">{recipientEmail.trim()}</span>
+                        <EmailValidationChip
+                            status={recipientEmailValidationStatus ?? "UNKNOWN"}
+                            reason={recipientEmailValidationReason}
+                        />
+                    </div>
+                ) : null}
             </Modal.Header>
             <div className="flex min-h-0 flex-1 flex-col">
                 <Modal.Body>
@@ -343,6 +379,19 @@ export function ComposeMessageForm({
                                 />
                             )
                         ) : null}
+                        {emailLimitReached && (
+                            <div className="flex items-start gap-2 rounded-lg border border-danger/30 bg-danger/10 px-3 py-2 text-xs text-danger">
+                                <AlertTriangle className="size-3.5 mt-0.5 shrink-0" />
+                                <span>
+                                    Sending is paused: the send limit for{" "}
+                                    {reachedEmailLimits
+                                        .map((limit) => limit.provider)
+                                        .filter((provider, i, arr) => arr.indexOf(provider) === i)
+                                        .join(", ")}{" "}
+                                    has been reached for this period.
+                                </span>
+                            </div>
+                        )}
                         <SenderProfileSelect
                             value={senderProfileUuid}
                             onChange={setSenderProfileUuid}

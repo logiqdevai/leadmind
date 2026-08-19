@@ -4,6 +4,10 @@ import type { RedisOptions } from 'ioredis';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { REDIS_OPTIONS } from '@/core/databases/redis/redis.constants';
 import { OpenAiBatchDispatchService } from '@/modules/webhooks/services/openai-batch-dispatch.service';
+import {
+    runEmailValidationBackfill,
+    type EmailValidationBackfillResult,
+} from '@/shared/utils/email-validation-backfill.util';
 import { ListBatchJobsDto } from './dto/list-batch-jobs.dto';
 import {
     SystemServiceStatuses,
@@ -120,5 +124,9 @@ export class AdminService {
             where: { batch_id: batchId },
             include: { organisation: { select: { uuid: true, name: true } } },
         });
+    }
+
+    runEmailValidationBackfill(): Promise<EmailValidationBackfillResult> {
+        return runEmailValidationBackfill(this.prisma, { dryRun: false });
     }
 }

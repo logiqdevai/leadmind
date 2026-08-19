@@ -11,7 +11,7 @@ import { SourceBadge } from "@/components/ui/source-badge";
 import { OverviewUrlField } from "@/components/ui/overview-url-field";
 import { SectionCard, Row, ProfileValue } from "@/components/ui/profile-section";
 import { GemiLeadSourcePanel } from "@/components/ui/gemi-lead-source-panel";
-import { initialsFromName, formatShortDate, normalizeUrl } from "@/lib/profile";
+import { initialsFromName, formatShortDate, normalizeUrl, profileFieldPatch } from "@/lib/profile";
 
 interface LeadDirectoryProfileTabProps {
     lead: Lead;
@@ -253,19 +253,19 @@ function EditForm({ lead, onDone }: { lead: Lead; onDone: () => void }) {
         setDraft((p) => ({ ...p, [key]: value }));
 
     const handleSave = () => {
-        const t = (s: string) => s.trim();
+        const prev = draftFromLead(lead);
         const payload: UpdateLeadPayload = {
-            name: t(draft.name) || undefined,
-            email: t(draft.email) || undefined,
-            phone: t(draft.phone) || undefined,
-            company: t(draft.company) || undefined,
-            website: t(draft.website) || undefined,
-            google_maps_url: t(draft.google_maps_url) || undefined,
-            title: t(draft.title) || undefined,
-            location: t(draft.location) || undefined,
-            linkedin_url: t(draft.linkedin_url) || undefined,
-            industry: t(draft.industry) || undefined,
-            description: t(draft.description) || undefined,
+            name: profileFieldPatch(draft.name, prev.name),
+            email: profileFieldPatch(draft.email, prev.email),
+            phone: profileFieldPatch(draft.phone, prev.phone),
+            company: profileFieldPatch(draft.company, prev.company),
+            website: profileFieldPatch(draft.website, prev.website),
+            google_maps_url: profileFieldPatch(draft.google_maps_url, prev.google_maps_url),
+            title: profileFieldPatch(draft.title, prev.title),
+            location: profileFieldPatch(draft.location, prev.location),
+            linkedin_url: profileFieldPatch(draft.linkedin_url, prev.linkedin_url),
+            industry: profileFieldPatch(draft.industry, prev.industry),
+            description: profileFieldPatch(draft.description, prev.description),
         };
         updateLead.mutate({ uuid: lead.uuid, payload }, { onSuccess: onDone });
     };

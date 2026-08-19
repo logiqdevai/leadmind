@@ -9,20 +9,28 @@ import {
 import { Queue } from 'bullmq';
 import {
     ApifyUsageOperation,
+    BulkJobStatus,
+    BulkJobType,
     CampaignContactStatus,
     Channel,
     Contact,
+    EmailValidationStatus,
     Interaction,
     InteractionType,
     LeadStatus,
     OutreachMessage,
     Prisma,
     SourceType,
+    WebsiteScrapeOperation,
 } from '@/generated/prisma';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { ElasticsearchService } from '@/integrations/elasticsearch/elasticsearch.service';
+import { ScrapioScrapeRequestService } from '@/integrations/scrapio/services/scrapio-scrape-request.service';
+import { SCRAPIO_EMAIL_REGEX_FIELD } from '@/integrations/scrapio/scrapio.constants';
 import { AI_PROCESS_QUEUE } from '@/core/queues/queues.constants';
+import { BulkJobsService } from '@/modules/bulk-jobs/bulk-jobs.service';
 import { resolveContactEnrichmentSources } from '@/modules/leads/utils/enrichment-sources.utils';
+import { resolveEmailFieldsForWrite } from '@/shared/utils/email-domain-validation.util';
 import { AddNoteDto } from './dto/add-note.dto';
 import { AiDraftMessageDto } from './dto/ai-draft-message.dto';
 import { BulkTriggerScoreDto } from './dto/bulk-trigger-score.dto';
@@ -75,10 +83,11 @@ import {
     buildEqualAllocations,
     validateEmailProviderAllocations,
 } from '@/modules/outreach/utils/email-provider-allocation.util';
-import { WebsiteContentCrawlerAdapter } from '@/integrations/apify/website-content-crawler/website-content-crawler.adapter';
-import { normalizeWebsiteUrl } from '@/modules/leads/utils/enrichment-data.utils';
+import { WebsiteScraperService } from '@/integrations/website-scraper/website-scraper.service';
+import type { CrawledPage } from '@/integrations/apify/website-content-crawler/website-content-crawler.interfaces';
 import {
-    extractEmailsFromCrawledPage,
+    buildWebsiteEmailCrawlUrls,
+    extractEmailsFromCrawledPages,
     pickBestContactEmail,
 } from './utils/contact-website-email.utils';
 import {
@@ -104,7 +113,9 @@ export class ContactsService {
         private readonly outreachService: OutreachService,
         private readonly emailCredentialsService: EmailCredentialsService,
         private readonly senderProfilesService: SenderProfilesService,
-        private readonly websiteCrawler: WebsiteContentCrawlerAdapter,
+        private readonly websiteCrawler: WebsiteScraperService,
+        private readonly scrapioScrapeRequestService: ScrapioScrapeRequestService,
+        private readonly bulkJobsService: BulkJobsService,
         @InjectQueue(AI_PROCESS_QUEUE) private readonly aiProcessQueue: Queue,
     ) { }
 
@@ -116,9 +127,10 @@ export class ContactsService {
             throw new NotFoundException('Filter not found');
         }
 
-        const email = dto.email?.trim() || undefined;
-        if (email) {
-            const existing = await findOwnedContactByEmail(this.prisma, organisation_uuid, email);
+        const emailFields = await resolveEmailFieldsForWrite(dto.email);
+
+        if (emailFields) {
+            const existing = await findOwnedContactByEmail(this.prisma, organisation_uuid, emailFields.email);
             if (existing) {
                 await linkContactToFilter(this.prisma, existing, dto.filter_uuid);
                 await this.applyManualCreateExtras(organisation_uuid, existing.uuid, dto);
@@ -131,7 +143,6 @@ export class ContactsService {
             data: {
                 source_type: SourceType.MANUAL,
                 name: dto.name,
-                email,
                 phone: dto.phone,
                 company: dto.company,
                 website: dto.website,
@@ -141,6 +152,7 @@ export class ContactsService {
                 linkedin_url: dto.linkedin_url,
                 industry: dto.industry,
                 description: dto.description,
+                ...(emailFields ?? {}),
             },
         });
 
@@ -154,6 +166,9 @@ export class ContactsService {
                 status: LeadStatus.NEW,
                 notes: dto.notes,
                 ...profile,
+                email_validation_status: lead.email_validation_status,
+                email_validation_reason: lead.email_validation_reason,
+                email_validated_at: lead.email_validated_at,
                 ...(dto.tags && dto.tags.length > 0
                     ? {
                         tags: {
@@ -493,57 +508,73 @@ export class ContactsService {
     async update(organisation_uuid: string, uuid: string, dto: UpdateContactDto) {
         await this.requireOwnedContact(organisation_uuid, uuid);
 
+        let emailPatch: Prisma.ContactUpdateInput | undefined;
         if (dto.email !== undefined) {
-            const email = dto.email.trim() || null;
-            if (email) {
-                const existingByEmail = await findOwnedContactByEmail(
-                    this.prisma,
-                    organisation_uuid,
-                    email,
-                );
-                if (existingByEmail && existingByEmail.uuid !== uuid) {
-                    await mergeContactsIntoCanonical(
-                        this.prisma,
-                        this.elasticsearchService,
-                        organisation_uuid,
-                        uuid,
-                        existingByEmail.uuid,
-                    );
-                    const data: Prisma.ContactUpdateInput = { email };
-                    if (dto.notes !== undefined) {
-                        data.notes = dto.notes;
-                    }
-                    await this.prisma.contact.update({
-                        where: { uuid: existingByEmail.uuid },
-                        data,
-                    });
-                    if (dto.list_uuids !== undefined) {
-                        await this.replaceContactListMemberships(
-                            organisation_uuid,
-                            existingByEmail.uuid,
-                            dto.list_uuids,
-                        );
-                    }
-                    await this.reindexContact(existingByEmail.uuid);
-                    return this.findOne(organisation_uuid, existingByEmail.uuid);
+            const trimmed = dto.email?.trim() || null;
+            if (!trimmed) {
+                emailPatch = {
+                    email: null,
+                    email_validation_status: EmailValidationStatus.UNKNOWN,
+                    email_validation_reason: null,
+                    email_validated_at: null,
+                };
+            } else {
+                const fields = await resolveEmailFieldsForWrite(trimmed);
+                if (fields) {
+                    emailPatch = fields;
                 }
             }
         }
 
-        return this.applyUpdateToContact(organisation_uuid, uuid, dto);
+        if (emailPatch?.email) {
+            const existingByEmail = await findOwnedContactByEmail(
+                this.prisma,
+                organisation_uuid,
+                emailPatch.email as string,
+            );
+            if (existingByEmail && existingByEmail.uuid !== uuid) {
+                await mergeContactsIntoCanonical(
+                    this.prisma,
+                    this.elasticsearchService,
+                    organisation_uuid,
+                    uuid,
+                    existingByEmail.uuid,
+                );
+                const data: Prisma.ContactUpdateInput = { ...emailPatch };
+                if (dto.notes !== undefined) {
+                    data.notes = dto.notes;
+                }
+                await this.prisma.contact.update({
+                    where: { uuid: existingByEmail.uuid },
+                    data,
+                });
+                if (dto.list_uuids !== undefined) {
+                    await this.replaceContactListMemberships(
+                        organisation_uuid,
+                        existingByEmail.uuid,
+                        dto.list_uuids,
+                    );
+                }
+                await this.reindexContact(existingByEmail.uuid);
+                return this.findOne(organisation_uuid, existingByEmail.uuid);
+            }
+        }
+
+        return this.applyUpdateToContact(organisation_uuid, uuid, dto, emailPatch);
     }
 
     private async applyUpdateToContact(
         organisation_uuid: string,
         uuid: string,
         dto: UpdateContactDto,
+        emailPatch?: Prisma.ContactUpdateInput,
     ) {
         const data: Prisma.ContactUpdateInput = {};
         if (dto.notes !== undefined) {
             data.notes = dto.notes;
         }
-        if (dto.email !== undefined) {
-            data.email = dto.email.trim() || null;
+        if (emailPatch) {
+            Object.assign(data, emailPatch);
         }
         for (const key of CONTACT_PROFILE_UPDATE_KEYS) {
             if (key === 'email') continue;
@@ -1289,7 +1320,8 @@ export class ContactsService {
     async triggerBulkScrapeEmailsFromWebsites(
         organisation_uuid: string,
         dto: BulkScrapeContactEmailsDto,
-    ): Promise<{ queued: number; skipped: number }> {
+        created_by_user_uuid?: string,
+    ): Promise<{ queued: number; skipped: number; bulk_job_uuid: string | null }> {
         const hasUuids = Boolean(dto.contact_uuids?.length);
         const hasList = Boolean(dto.list_uuid);
         const hasFilters = dto.filters !== undefined && dto.filters !== null;
@@ -1359,7 +1391,7 @@ export class ContactsService {
         }
 
         if (candidateUuids.length === 0) {
-            return { queued: 0, skipped: 0 };
+            return { queued: 0, skipped: 0, bulk_job_uuid: null };
         }
 
         const resolved = await this.prisma.contact.findMany({
@@ -1373,24 +1405,196 @@ export class ContactsService {
                 (!row.email || row.email.trim() === ''),
         );
 
-        for (const row of eligible) {
-            void this.scrapeAndSaveContactEmail(organisation_uuid, row.uuid, row.website!.trim()).catch((error) => {
-                this.logger.error(
-                    `Contact ${row.uuid} website email scrape failed: ${error instanceof Error ? error.message : error}`,
-                );
-            });
+        const skipped = resolved.length - eligible.length;
+        if (eligible.length === 0) {
+            return { queued: 0, skipped, bulk_job_uuid: null };
         }
+
+        const title = `Find emails from websites (${eligible.length})`;
+
+        const bulkJob = await this.bulkJobsService.create({
+            organisation_uuid,
+            created_by_user_uuid,
+            title,
+            type: BulkJobType.CONTACT_EMAIL_SCRAPE,
+            status: BulkJobStatus.RUNNING,
+            progress_total: eligible.length,
+            progress_current: 0,
+            reference_type: hasList ? 'contact_list' : 'contacts',
+            reference_uuid: hasList ? dto.list_uuid! : undefined,
+            metadata: {
+                contact_count: eligible.length,
+                skipped,
+            },
+            started_at: new Date(),
+        });
+
+        void this.runBulkWebsiteEmailScrape(organisation_uuid, bulkJob.uuid, eligible).catch(
+            (error) => {
+                this.logger.error(
+                    `Bulk email scrape job ${bulkJob.uuid} failed: ${error instanceof Error ? error.message : error}`,
+                );
+            },
+        );
 
         return {
             queued: eligible.length,
-            skipped: resolved.length - eligible.length,
+            skipped,
+            bulk_job_uuid: bulkJob.uuid,
         };
+    }
+
+    private async runBulkWebsiteEmailScrape(
+        organisation_uuid: string,
+        bulk_job_uuid: string,
+        eligible: Array<{ uuid: string; website: string | null }>,
+    ): Promise<void> {
+        await Promise.all(
+            eligible.map(async (row) => {
+                let outcome: 'completed' | 'deferred' = 'completed';
+                let failed = false;
+                try {
+                    outcome = await this.scrapeAndSaveContactEmail(
+                        organisation_uuid,
+                        row.uuid,
+                        row.website!.trim(),
+                        bulk_job_uuid,
+                    );
+                } catch (error) {
+                    failed = true;
+                    this.logger.error(
+                        `Contact ${row.uuid} website email scrape failed: ${error instanceof Error ? error.message : error}`,
+                    );
+                }
+                // 'deferred' means a Scrapio run was kicked off — the webhook/timeout dispatcher
+                // will call completeBulkEmailScrapeItem itself once that run resolves.
+                if (outcome !== 'deferred') {
+                    await this.completeBulkEmailScrapeItem(bulk_job_uuid, { failed });
+                }
+            }),
+        );
+    }
+
+    /** Called once per contact, whichever path resolves it (sync Apify, or the async Scrapio dispatcher/timeout). */
+    async completeBulkEmailScrapeItem(bulk_job_uuid: string, opts: { failed: boolean }): Promise<void> {
+        if (opts.failed) {
+            await this.bulkJobsService.incrementFailure(bulk_job_uuid);
+        }
+        const job = await this.bulkJobsService.incrementProgress(bulk_job_uuid);
+        if (job.progress_current < job.progress_total) {
+            return;
+        }
+        if (job.progress_failed >= job.progress_total) {
+            await this.bulkJobsService.fail(
+                bulk_job_uuid,
+                `All ${job.progress_total} contact email scrapes failed`,
+            );
+            return;
+        }
+        await this.bulkJobsService.complete(
+            bulk_job_uuid,
+            job.progress_failed > 0 ? `${job.progress_failed}/${job.progress_total} contacts failed` : null,
+        );
     }
 
     private async scrapeAndSaveContactEmail(
         organisation_uuid: string,
         contactUuid: string,
         website: string,
+        bulk_job_uuid: string,
+    ): Promise<'completed' | 'deferred'> {
+        const contact = await this.prisma.contact.findFirst({
+            where: { uuid: contactUuid, organisation_uuid },
+            select: { uuid: true, lead_uuid: true },
+        });
+        if (!contact) {
+            return 'completed';
+        }
+
+        const startUrls = buildWebsiteEmailCrawlUrls(website);
+
+        if (this.websiteCrawler.getActiveProvider() === 'scrapio') {
+            // Ask Scrapio to extract the email itself via its built-in regex preset
+            // (combined across all candidate pages) instead of fetching raw content and
+            // running our own regex over it.
+            await this.scrapioScrapeRequestService.initiate({
+                organisation_uuid,
+                operation: WebsiteScrapeOperation.CONTACT_EMAIL_SCRAPE,
+                reference_uuid: contactUuid,
+                urls: startUrls,
+                context: { bulk_job_uuid },
+                extraction: {
+                    extraction_scope: 'COMBINED',
+                    output_formats: ['STRUCTURED_JSON'],
+                    output_schema: { emails: SCRAPIO_EMAIL_REGEX_FIELD },
+                },
+            });
+            return 'deferred';
+        }
+
+        const pages = await this.websiteCrawler.crawlPages(
+            organisation_uuid,
+            {
+                start_urls: startUrls,
+                max_crawl_depth: 0,
+                max_crawl_pages: startUrls.length,
+                max_results: startUrls.length,
+                save_html: true,
+                save_markdown: true,
+                html_transformer: 'none',
+                aggressive_prune: false,
+            },
+            {
+                operation: ApifyUsageOperation.CONTACT_EMAIL_SCRAPE,
+                reference_type: 'contact',
+                reference_uuid: contactUuid,
+            },
+        );
+        await this.finishContactEmailScrape(organisation_uuid, contactUuid, pages);
+        return 'completed';
+    }
+
+    /**
+     * Post-crawl logic for the synchronous Apify path (above): extracts emails from raw crawled
+     * content ourselves, then delegates to `saveFoundContactEmail`.
+     */
+    async finishContactEmailScrape(
+        organisation_uuid: string,
+        contactUuid: string,
+        pages: CrawledPage[],
+    ): Promise<void> {
+        const emails = extractEmailsFromCrawledPages(pages);
+        const email = pickBestContactEmail(emails);
+        if (!email) {
+            this.logger.debug(
+                `No email found for contact ${contactUuid} across ${pages.length} pages`,
+            );
+            return;
+        }
+        await this.saveFoundContactEmail(organisation_uuid, contactUuid, email);
+    }
+
+    /**
+     * Async Scrapio dispatcher (`WebsiteScrapeDispatchService`, modules/webhooks) entry point:
+     * Scrapio already extracted the email itself via its built-in regex preset, so there's no
+     * page content to run our own extraction over — just save whatever it found (if anything).
+     */
+    async finishContactEmailScrapeWithEmail(
+        organisation_uuid: string,
+        contactUuid: string,
+        email: string | null,
+    ): Promise<void> {
+        if (!email) {
+            this.logger.debug(`No email found for contact ${contactUuid}`);
+            return;
+        }
+        await this.saveFoundContactEmail(organisation_uuid, contactUuid, email);
+    }
+
+    private async saveFoundContactEmail(
+        organisation_uuid: string,
+        contactUuid: string,
+        email: string,
     ): Promise<void> {
         const contact = await this.prisma.contact.findFirst({
             where: { uuid: contactUuid, organisation_uuid },
@@ -1400,24 +1604,12 @@ export class ContactsService {
             return;
         }
 
-        const url = normalizeWebsiteUrl(website);
-        const page = await this.websiteCrawler.crawlSinglePage(
-            organisation_uuid,
-            url,
-            {},
-            {
-                operation: ApifyUsageOperation.CONTACT_EMAIL_SCRAPE,
-                reference_type: 'contact',
-                reference_uuid: contactUuid,
-            },
-        );
-        const emails = extractEmailsFromCrawledPage(page);
-        const email = pickBestContactEmail(emails);
-        if (!email) {
+        const emailFields = await resolveEmailFieldsForWrite(email);
+        if (!emailFields) {
             return;
         }
 
-        const existingByEmail = await findOwnedContactByEmail(this.prisma, organisation_uuid, email);
+        const existingByEmail = await findOwnedContactByEmail(this.prisma, organisation_uuid, emailFields.email);
         if (existingByEmail && existingByEmail.uuid !== contactUuid) {
             await mergeContactsIntoCanonical(
                 this.prisma,
@@ -1428,11 +1620,11 @@ export class ContactsService {
             );
             await this.prisma.lead.update({
                 where: { uuid: existingByEmail.lead_uuid },
-                data: { email },
+                data: emailFields,
             });
             await this.prisma.contact.update({
                 where: { uuid: existingByEmail.uuid },
-                data: { email },
+                data: emailFields,
             });
             const lead = await this.prisma.lead.findUnique({
                 where: { uuid: existingByEmail.lead_uuid },
@@ -1447,11 +1639,11 @@ export class ContactsService {
         await this.prisma.$transaction([
             this.prisma.contact.update({
                 where: { uuid: contactUuid },
-                data: { email },
+                data: emailFields,
             }),
             this.prisma.lead.update({
                 where: { uuid: contact.lead_uuid },
-                data: { email },
+                data: emailFields,
             }),
         ]);
 

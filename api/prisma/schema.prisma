@@ -32,6 +32,7 @@ model User {
   messaging_goals          MessagingGoal[]
   goal_achievements        GoalAchievement[]
   goal_personal_bests      GoalPersonalBest[]
+  bulk_jobs_created        BulkJob[]                @relation("BulkJobCreatedBy")
 
   @@index([email])
   @@index([phone])
@@ -64,6 +65,7 @@ model Organisation {
   reminders                Reminder[]
   forms                    Form[]
   contact_lists            ContactList[]
+  saved_contact_filters    SavedContactFilter[]
   contact_audience_analyses ContactAudienceAnalysis[]
   ai_usage_logs            AiUsageLog[]
   apify_usage_logs         ApifyUsageLog[]
@@ -72,6 +74,9 @@ model Organisation {
   messaging_goals          MessagingGoal[]
   goal_achievements        GoalAchievement[]
   goal_personal_bests      GoalPersonalBest[]
+  bulk_jobs                BulkJob[]
+  website_scrape_requests  WebsiteScrapeRequest[]
+  email_send_limits        EmailSendLimit[]
 
   @@index([uuid])
   @@index([slug])
@@ -146,6 +151,21 @@ model Filter {
   @@index([organisation_uuid])
 }
 
+model SavedContactFilter {
+  id                Int      @id @default(autoincrement())
+  uuid              String   @unique @default(uuid())
+  organisation_uuid String
+  name              String
+  filters           Json
+  created_at        DateTime @default(now())
+  updated_at        DateTime @updatedAt
+
+  organisation Organisation @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+
+  @@index([organisation_uuid])
+  @@map("saved_contact_filters")
+}
+
 model ScoringInstruction {
   id                Int      @id @default(autoincrement())
   uuid              String   @unique @default(uuid())
@@ -215,6 +235,9 @@ model Lead {
   raw_data             Json?
   enrichment_summary   String?    @db.Text
   enrichment_metadata  Json?
+  email_validation_status EmailValidationStatus @default(UNKNOWN)
+  email_validation_reason String?
+  email_validated_at      DateTime?
   created_at           DateTime   @default(now())
   updated_at         DateTime   @updatedAt
 
@@ -268,6 +291,9 @@ model Contact {
   description           String?
   enrichment_summary    String?    @db.Text
   enrichment_metadata   Json?
+  email_validation_status EmailValidationStatus @default(UNKNOWN)
+  email_validation_reason String?
+  email_validated_at      DateTime?
   unsubscribed_at       DateTime?
   unsubscribe_token     String?    @unique
   last_interaction_at   DateTime?
@@ -519,6 +545,81 @@ model FilterJob {
   @@index([status])
 }
 
+model BulkJob {
+  id                   Int           @id @default(autoincrement())
+  uuid                 String        @unique @default(uuid())
+  organisation_uuid    String
+  created_by_user_uuid String?
+  title                String
+  type                 BulkJobType
+  status               BulkJobStatus @default(PENDING)
+  error                String?       @db.Text
+  retries              Int           @default(0)
+  max_retries          Int           @default(3)
+  progress_current     Int           @default(0)
+  progress_total       Int           @default(0)
+  progress_failed      Int           @default(0)
+  queue_name           String?
+  queue_job_id         String?
+  reference_type       String?
+  reference_uuid       String?
+  metadata             Json?
+  started_at           DateTime?
+  completed_at         DateTime?
+  created_at           DateTime      @default(now())
+  updated_at           DateTime      @updatedAt
+
+  organisation Organisation @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  created_by   User?        @relation("BulkJobCreatedBy", fields: [created_by_user_uuid], references: [uuid], onDelete: SetNull)
+
+  @@index([organisation_uuid, status])
+  @@index([organisation_uuid, created_at])
+  @@index([organisation_uuid, type])
+  @@index([status, updated_at])
+  @@index([queue_name, queue_job_id])
+  @@index([reference_type, reference_uuid])
+  @@map("bulk_jobs")
+}
+
+enum WebsiteScrapeProvider {
+  SCRAPIO
+}
+
+enum WebsiteScrapeOperation {
+  CONTACT_EMAIL_SCRAPE
+  LEAD_WEBSITE_ENRICHMENT
+  CONTACT_WEBSITE_ENRICHMENT
+}
+
+enum WebsiteScrapeStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+/** A pending async website-scrape run, tracked until its provider (Scrapio today, others later) resolves it via webhook or timeout. */
+model WebsiteScrapeRequest {
+  id                 String                 @id @default(uuid())
+  provider           WebsiteScrapeProvider  @default(SCRAPIO)
+  provider_run_id    String                 @unique
+  provider_config_id String
+  organisation_uuid  String
+  operation          WebsiteScrapeOperation
+  reference_uuid     String
+  status             WebsiteScrapeStatus    @default(PENDING)
+  context            Json?
+  error              String?                @db.Text
+  created_at         DateTime               @default(now())
+  updated_at         DateTime               @updatedAt
+  finished_at        DateTime?
+
+  organisation Organisation @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+
+  @@index([organisation_uuid, status])
+  @@index([operation, reference_uuid])
+  @@map("website_scrape_requests")
+}
+
 model SenderProfile {
   id           Int      @id @default(autoincrement())
   uuid         String   @unique @default(uuid())
@@ -685,6 +786,12 @@ enum SourceType {
   MANUAL
 }
 
+enum EmailValidationStatus {
+  UNKNOWN
+  VALID
+  INVALID
+}
+
 enum EnrichmentSource {
   LINKEDIN
   WEBSITE
@@ -734,6 +841,28 @@ enum JobStatus {
   COMPLETED
   FAILED
   CANCELLED
+}
+
+enum BulkJobStatus {
+  PENDING
+  QUEUED
+  RUNNING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum BulkJobType {
+  CONTACT_EMAIL_SCRAPE
+  FILTER_SCRAPE
+  CONTACT_SCORE
+  CONTACT_ENRICH
+  LEAD_ENRICH
+  AI_DRAFT_MESSAGES
+  CAMPAIGN_DISPATCH
+  CAMPAIGN_MESSAGE_SEND
+  OPENAI_BATCH
+  OTHER
 }
 
 enum JobTrigger {
@@ -855,6 +984,7 @@ enum ExternalIntegrationProvider {
   TWILIO
   APIFY
   HUBSPOT
+  SCRAPIO
 }
 
 enum IntegrationKeyType {
@@ -1227,6 +1357,24 @@ model MessagingGoal {
   @@map("messaging_goals")
 }
 
+model EmailSendLimit {
+  id                Int                         @id @default(autoincrement())
+  uuid              String                      @unique @default(uuid())
+  organisation_uuid String
+  provider          ExternalIntegrationProvider
+  period            GoalPeriod
+  max_count         Int
+  is_active         Boolean                     @default(true)
+  created_at        DateTime                    @default(now())
+  updated_at        DateTime                    @updatedAt
+
+  organisation Organisation @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+
+  @@unique([organisation_uuid, provider, period])
+  @@index([organisation_uuid])
+  @@map("email_send_limits")
+}
+
 model GoalAchievement {
   id                Int                 @id @default(autoincrement())
   uuid              String              @unique @default(uuid())
@@ -1277,6 +1425,7 @@ model ActivityLog {
   action            String
   summary           String?
   metadata          Json?
+  changes           Json?
   created_at        DateTime @default(now())
 
   organisation Organisation @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)

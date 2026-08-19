@@ -1,4 +1,4 @@
-import { LeadStatus } from "../interfaces/contact.interface";
+import { EmailValidationStatus, LeadStatus } from "../interfaces/contact.interface";
 
 export type ContactStatusChipColor = "default" | "success" | "warning" | "danger";
 
@@ -101,6 +101,30 @@ export const STATUS_CHIP_COLOR = Object.fromEntries(
 export const STATUS_BAR_COLOR = Object.fromEntries(
     CONTACT_STATUS_OPTIONS.map((o) => [o.id, o.barColor]),
 ) as Record<LeadStatus, string>;
+
+export const EMAIL_VALIDATION_STATUS_LABEL: Record<EmailValidationStatus, string> = {
+    UNKNOWN: "Unchecked",
+    VALID: "Valid",
+    INVALID: "Invalid",
+};
+
+export const EMAIL_VALIDATION_STATUS_CHIP_COLOR: Record<EmailValidationStatus, ContactStatusChipColor> = {
+    UNKNOWN: "default",
+    VALID: "success",
+    INVALID: "danger",
+};
+
+const EMAIL_VALIDATION_REASON_LABEL: Record<string, string> = {
+    invalid_syntax: "Badly formatted address",
+    disposable_domain: "Disposable email domain",
+    no_mx_record: "Domain can't receive mail",
+    dns_lookup_failed: "Couldn't verify domain (temporary)",
+};
+
+export function emailValidationReasonLabel(reason: string | null | undefined): string | undefined {
+    if (!reason) return undefined;
+    return EMAIL_VALIDATION_REASON_LABEL[reason] ?? reason;
+}
 
 export function isLeadStatus(value: string | null | undefined): value is LeadStatus {
     return !!value && LEAD_STATUS_VALUES.includes(value as LeadStatus);

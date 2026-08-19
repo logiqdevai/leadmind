@@ -146,7 +146,7 @@ export default function AdminBatchJobsPage() {
                 </div>
             </div>
 
-            <div className="rounded-xl border border-border overflow-hidden">
+            <div className="rounded-xl overflow-hidden">
                 <Table>
                     <Table.ScrollContainer>
                         <Table.Content aria-label="OpenAI Batch Jobs" className="min-w-[960px]">

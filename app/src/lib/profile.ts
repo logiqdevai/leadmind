@@ -23,3 +23,16 @@ export function normalizeUrl(raw: string): string {
     if (!t) return t;
     return /^https?:\/\//i.test(t) ? t : `https://${t}`;
 }
+
+export function profileFieldPatch(next: string, prev: string): string | null | undefined {
+    const trimmedNext = next.trim();
+    const trimmedPrev = prev.trim();
+    if (trimmedNext === trimmedPrev) return undefined;
+    return trimmedNext || null;
+}
+
+export function emptyToNullOnEdit(value: string, isEdit: boolean): string | null | undefined {
+    const trimmed = value.trim();
+    if (trimmed) return trimmed;
+    return isEdit ? null : undefined;
+}

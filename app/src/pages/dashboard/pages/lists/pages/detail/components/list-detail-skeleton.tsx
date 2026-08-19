@@ -23,7 +23,7 @@ export function ListDetailSkeleton() {
                     <div className="h-8 w-20 rounded-md bg-surface-secondary" />
                 </div>
 
-                <div className="overflow-hidden rounded-xl border border-border">
+                <div className="overflow-hidden rounded-xl">
                     <div className="bg-surface-secondary/40 px-3 py-2 flex gap-4">
                         {[80, 72, 96, 56, 32].map((w, i) => (
                             <div

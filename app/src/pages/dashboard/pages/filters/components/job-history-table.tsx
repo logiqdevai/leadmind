@@ -62,7 +62,7 @@ export function JobHistoryTable({
 
     return (
         <>
-        <div className="bg-surface rounded-xl border border-border overflow-hidden">
+        <div className="bg-surface rounded-xl overflow-hidden">
             <Table>
                 <Table.ScrollContainer>
                     <Table.Content aria-label="Filter job history" className="min-w-[920px]">

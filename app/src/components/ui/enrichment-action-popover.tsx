@@ -118,7 +118,7 @@ function EnrichmentRunPanel({
 
     return (
         <>
-            <div className="relative px-3 pt-3 pb-2 border-b border-border/60 overflow-hidden">
+            <div className="relative px-3 pt-3 pb-2 pr-10 border-b border-border/60 overflow-hidden">
                 <div
                     className="pointer-events-none absolute -right-6 -top-8 size-24 rounded-full bg-accent/20 blur-2xl"
                     aria-hidden
@@ -275,7 +275,7 @@ export function EnrichmentRunModal({
                         "shadow-[0_24px_48px_-12px_oklch(0_0_0/0.45),0_0_0_1px_oklch(1_0_0/0.04)_inset]",
                     )}
                 >
-                    <Modal.CloseTrigger className="top-2 end-2" />
+                    <Modal.CloseTrigger className="top-2 end-2 z-20" />
                     <EnrichmentRunPanel
                         isActive={isOpen}
                         mode={mode}

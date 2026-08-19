@@ -33,11 +33,7 @@ export function useSignin() {
                 ? getPreferredOrganisationUuid(data.user_uuid)
                 : null;
 
-            login({
-                ...data,
-                isLoggedIn: true,
-            });
-
+            let authUser = data;
             if (
                 preferredOrganisationUuid &&
                 preferredOrganisationUuid !== data.organisation_uuid
@@ -46,9 +42,14 @@ export function useSignin() {
                     const switched = await switchOrganisation(
                         preferredOrganisationUuid,
                     );
-                    login({ ...formatAuthUser(switched), isLoggedIn: true });
+                    authUser = formatAuthUser(switched);
                 } catch {}
             }
+
+            login({
+                ...authUser,
+                isLoggedIn: true,
+            });
 
             toast({
                 title: "Login successful",

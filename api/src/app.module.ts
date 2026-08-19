@@ -10,6 +10,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { ConfigModule } from './shared/config/env/env.module';
 import { ApifyModule } from './integrations/apify/apify.module';
 import { GemiModule } from './integrations/gemi/gemi.module';
+import { ScrapioModule } from './integrations/scrapio/scrapio.module';
 import { GemiModule as GemiApiModule } from './modules/gemi/gemi.module';
 import { ElasticsearchModule } from './integrations/elasticsearch/elasticsearch.module';
 import { QueuesModule } from './core/queues/queues.module';
@@ -28,8 +29,10 @@ import { WorkersModule } from './workers/workers.module';
 import { AdminModule } from './modules/admin/admin.module';
 import { IntegrationsModule } from './modules/integrations/integrations.module';
 import { RemindersModule } from './modules/reminders/reminders.module';
+import { BulkJobsModule } from './modules/bulk-jobs/bulk-jobs.module';
 import { FormsModule } from './modules/forms/forms.module';
 import { ContactListsModule } from './modules/contact-lists/contact-lists.module';
+import { SavedContactFiltersModule } from './modules/saved-contact-filters/saved-contact-filters.module';
 import { ContactAudienceStatsModule } from './modules/contact-audience-stats/contact-audience-stats.module';
 import { GatewaysModule } from './gateways/gateways.module';
 import { AiUsageModule } from './modules/ai-usage/ai-usage.module';
@@ -39,6 +42,7 @@ import { OrganisationsModule } from './modules/organisations/organisations.modul
 import { UsersModule } from './modules/users/users.module';
 import { ActivityLogsModule } from './modules/activity-logs/activity-logs.module';
 import { MessagingGoalsModule } from './modules/messaging-goals/messaging-goals.module';
+import { EmailSendLimitsModule } from './modules/email-send-limits/email-send-limits.module';
 
 @Module({
   imports: [
@@ -48,6 +52,7 @@ import { MessagingGoalsModule } from './modules/messaging-goals/messaging-goals.
     UsersModule,
     ActivityLogsModule,
     MessagingGoalsModule,
+    EmailSendLimitsModule,
     SmsModule,
     AiModule,
     RedisModule,
@@ -57,6 +62,7 @@ import { MessagingGoalsModule } from './modules/messaging-goals/messaging-goals.
     ApifyModule,
     GemiModule,
     GemiApiModule,
+    ScrapioModule,
     ElasticsearchModule,
     QueuesModule,
     BullBoardModule,
@@ -74,8 +80,10 @@ import { MessagingGoalsModule } from './modules/messaging-goals/messaging-goals.
     AdminModule,
     IntegrationsModule,
     RemindersModule,
+    BulkJobsModule,
     FormsModule,
     ContactListsModule,
+    SavedContactFiltersModule,
     ContactAudienceStatsModule,
     GatewaysModule,
     AiUsageModule,

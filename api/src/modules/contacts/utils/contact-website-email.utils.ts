@@ -1,17 +1,38 @@
 import type { CrawledPage } from '@/integrations/apify/website-content-crawler/website-content-crawler.interfaces';
 import { plainTextFromCrawledPage } from '@/integrations/apify/website-content-crawler/crawl-page-text.utils';
+import { normalizeWebsiteUrl } from '@/modules/leads/utils/enrichment-data.utils';
 
 const EMAIL_REGEX = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
+const MAILTO_REGEX = /mailto:([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/gi;
+const OBFUSCATED_EMAIL_REGEX =
+    /\b([a-zA-Z0-9._%+-]+)\s*(?:\[\s*at\s*\]|\(\s*at\s*\)|\s+at\s+|&#64;|@)\s*([a-zA-Z0-9.-]+)\s*(?:\[\s*dot\s*\]|\(\s*dot\s*\)|\s+dot\s+|\.)\s*([a-zA-Z]{2,})\b/gi;
 
-const JUNK_EMAIL_DOMAIN_FRAGMENTS = [
+const EMAIL_PAGE_PATHS = [
+    '/',
+    '/contact',
+    '/contact-us',
+    '/contactus',
+    '/get-in-touch',
+    '/about',
+    '/about-us',
+    '/impressum',
+    '/kontakt',
+    '/terms-of-use',
+    '/privacy-policy',
+] as const;
+
+const JUNK_EMAIL_DOMAINS = new Set([
     'example.com',
+    'example.org',
+    'example.net',
     'sentry.io',
     'wixpress.com',
     'users.noreply.github.com',
     'email.com',
     'domain.com',
     'yourdomain.com',
-];
+    'test.com',
+]);
 
 const GENERIC_LOCAL_PARTS = new Set([
     'info',
@@ -28,29 +49,77 @@ const GENERIC_LOCAL_PARTS = new Set([
 
 function isJunkEmail(email: string): boolean {
     const lower = email.toLowerCase();
-    if (lower.includes('.png') || lower.includes('.jpg') || lower.includes('.jpeg') || lower.includes('.gif')) {
+    if (/\.(png|jpe?g|gif|webp|svg)(\?|$)/i.test(lower)) {
         return true;
     }
-    return JUNK_EMAIL_DOMAIN_FRAGMENTS.some((fragment) => lower.endsWith(`@${fragment}`) || lower.includes(`@${fragment}`));
+    const domain = lower.split('@')[1] ?? '';
+    if (!domain) return true;
+    if (JUNK_EMAIL_DOMAINS.has(domain)) return true;
+    for (const junk of JUNK_EMAIL_DOMAINS) {
+        if (domain.endsWith(`.${junk}`)) return true;
+    }
+    return false;
+}
+
+function collectEmailsFromText(text: string, into: Set<string>): void {
+    for (const match of text.matchAll(MAILTO_REGEX)) {
+        const email = match[1]?.toLowerCase();
+        if (email && !isJunkEmail(email)) into.add(email);
+    }
+
+    OBFUSCATED_EMAIL_REGEX.lastIndex = 0;
+    for (const match of text.matchAll(OBFUSCATED_EMAIL_REGEX)) {
+        const email = `${match[1]}@${match[2]}.${match[3]}`.toLowerCase();
+        if (!isJunkEmail(email)) into.add(email);
+    }
+
+    const matches = text.match(EMAIL_REGEX) ?? [];
+    for (const match of matches) {
+        const normalized = match.toLowerCase();
+        if (!isJunkEmail(normalized)) into.add(normalized);
+    }
 }
 
 function extractEmailsFromHaystack(haystack: string): string[] {
-    const matches = haystack.match(EMAIL_REGEX) ?? [];
     const unique = new Set<string>();
-    for (const match of matches) {
-        const normalized = match.toLowerCase();
-        if (!isJunkEmail(normalized)) {
-            unique.add(normalized);
-        }
-    }
+    collectEmailsFromText(haystack, unique);
     return [...unique];
+}
+
+export function buildWebsiteEmailCrawlUrls(website: string): string[] {
+    const normalized = normalizeWebsiteUrl(website.trim());
+    let origin: string;
+    try {
+        const parsed = new URL(normalized);
+        origin = `${parsed.protocol}//${parsed.host}`;
+    } catch {
+        return [normalized];
+    }
+
+    const urls = EMAIL_PAGE_PATHS.map((path) => `${origin}${path === '/' ? '/' : path}`);
+    const withoutTrailingSlash = normalized.replace(/\/$/, '');
+    if (withoutTrailingSlash !== origin && !urls.includes(normalized) && !urls.includes(withoutTrailingSlash)) {
+        urls.unshift(normalized);
+    }
+    return [...new Set(urls)];
 }
 
 export function extractEmailsFromCrawledPage(page: CrawledPage | null): string[] {
     if (!page) return [];
-    const parts = [page.title, page.markdown, page.text, plainTextFromCrawledPage(page)].filter(Boolean);
-    const haystack = parts.join('\n');
-    return extractEmailsFromHaystack(haystack);
+    const parts = [page.title, page.markdown, page.text, page.html, plainTextFromCrawledPage(page)].filter(
+        Boolean,
+    );
+    return extractEmailsFromHaystack(parts.join('\n'));
+}
+
+export function extractEmailsFromCrawledPages(pages: CrawledPage[]): string[] {
+    const unique = new Set<string>();
+    for (const page of pages) {
+        for (const email of extractEmailsFromCrawledPage(page)) {
+            unique.add(email);
+        }
+    }
+    return [...unique];
 }
 
 export function pickBestContactEmail(emails: string[]): string | null {

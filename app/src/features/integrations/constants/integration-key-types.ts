@@ -13,6 +13,7 @@ export const PROVIDER_KEY_TYPES: Record<IntegrationProvider, IntegrationKeyType[
         SMTP: ["HOST", "PORT", "USERNAME", "PASSWORD", "FROM_EMAIL", "FROM_NAME"],
         TWILIO: ["ACCOUNT_SID", "AUTH_TOKEN"],
         APIFY: ["API_KEY"],
+        SCRAPIO: ["API_KEY", "WEBHOOK_SECRET"],
         HUBSPOT: ["ACCESS_TOKEN"],
     };
 
@@ -54,6 +55,7 @@ export const OPTIONAL_PROVIDER_KEY_TYPES: Partial<
 > = {
     RESEND: ["WEBHOOK_SECRET"],
     SMTP: ["FROM_NAME"],
+    SCRAPIO: ["WEBHOOK_SECRET"],
 };
 
 export function requiredKeyTypesForProvider(

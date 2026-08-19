@@ -39,6 +39,11 @@ export type OrganisationInvitation = $Result.DefaultSelection<Prisma.$Organisati
  */
 export type Filter = $Result.DefaultSelection<Prisma.$FilterPayload>
 /**
+ * Model SavedContactFilter
+ * 
+ */
+export type SavedContactFilter = $Result.DefaultSelection<Prisma.$SavedContactFilterPayload>
+/**
  * Model ScoringInstruction
  * 
  */
@@ -123,6 +128,16 @@ export type OutreachSequence = $Result.DefaultSelection<Prisma.$OutreachSequence
  * 
  */
 export type FilterJob = $Result.DefaultSelection<Prisma.$FilterJobPayload>
+/**
+ * Model BulkJob
+ * 
+ */
+export type BulkJob = $Result.DefaultSelection<Prisma.$BulkJobPayload>
+/**
+ * Model WebsiteScrapeRequest
+ * * A pending async website-scrape run, tracked until its provider (Scrapio today, others later) resolves it via webhook or timeout.
+ */
+export type WebsiteScrapeRequest = $Result.DefaultSelection<Prisma.$WebsiteScrapeRequestPayload>
 /**
  * Model SenderProfile
  * 
@@ -209,6 +224,11 @@ export type ApifyUsageLog = $Result.DefaultSelection<Prisma.$ApifyUsageLogPayloa
  */
 export type MessagingGoal = $Result.DefaultSelection<Prisma.$MessagingGoalPayload>
 /**
+ * Model EmailSendLimit
+ * 
+ */
+export type EmailSendLimit = $Result.DefaultSelection<Prisma.$EmailSendLimitPayload>
+/**
  * Model GoalAchievement
  * 
  */
@@ -228,7 +248,32 @@ export type ActivityLog = $Result.DefaultSelection<Prisma.$ActivityLogPayload>
  * Enums
  */
 export namespace $Enums {
-  export const AuthRole: {
+  export const WebsiteScrapeProvider: {
+  SCRAPIO: 'SCRAPIO'
+};
+
+export type WebsiteScrapeProvider = (typeof WebsiteScrapeProvider)[keyof typeof WebsiteScrapeProvider]
+
+
+export const WebsiteScrapeOperation: {
+  CONTACT_EMAIL_SCRAPE: 'CONTACT_EMAIL_SCRAPE',
+  LEAD_WEBSITE_ENRICHMENT: 'LEAD_WEBSITE_ENRICHMENT',
+  CONTACT_WEBSITE_ENRICHMENT: 'CONTACT_WEBSITE_ENRICHMENT'
+};
+
+export type WebsiteScrapeOperation = (typeof WebsiteScrapeOperation)[keyof typeof WebsiteScrapeOperation]
+
+
+export const WebsiteScrapeStatus: {
+  PENDING: 'PENDING',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED'
+};
+
+export type WebsiteScrapeStatus = (typeof WebsiteScrapeStatus)[keyof typeof WebsiteScrapeStatus]
+
+
+export const AuthRole: {
   USER: 'USER',
   ADMIN: 'ADMIN',
   SUPER_ADMIN: 'SUPER_ADMIN',
@@ -276,6 +321,15 @@ export const SourceType: {
 };
 
 export type SourceType = (typeof SourceType)[keyof typeof SourceType]
+
+
+export const EmailValidationStatus: {
+  UNKNOWN: 'UNKNOWN',
+  VALID: 'VALID',
+  INVALID: 'INVALID'
+};
+
+export type EmailValidationStatus = (typeof EmailValidationStatus)[keyof typeof EmailValidationStatus]
 
 
 export const EnrichmentSource: {
@@ -342,6 +396,34 @@ export const JobStatus: {
 };
 
 export type JobStatus = (typeof JobStatus)[keyof typeof JobStatus]
+
+
+export const BulkJobStatus: {
+  PENDING: 'PENDING',
+  QUEUED: 'QUEUED',
+  RUNNING: 'RUNNING',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED',
+  CANCELLED: 'CANCELLED'
+};
+
+export type BulkJobStatus = (typeof BulkJobStatus)[keyof typeof BulkJobStatus]
+
+
+export const BulkJobType: {
+  CONTACT_EMAIL_SCRAPE: 'CONTACT_EMAIL_SCRAPE',
+  FILTER_SCRAPE: 'FILTER_SCRAPE',
+  CONTACT_SCORE: 'CONTACT_SCORE',
+  CONTACT_ENRICH: 'CONTACT_ENRICH',
+  LEAD_ENRICH: 'LEAD_ENRICH',
+  AI_DRAFT_MESSAGES: 'AI_DRAFT_MESSAGES',
+  CAMPAIGN_DISPATCH: 'CAMPAIGN_DISPATCH',
+  CAMPAIGN_MESSAGE_SEND: 'CAMPAIGN_MESSAGE_SEND',
+  OPENAI_BATCH: 'OPENAI_BATCH',
+  OTHER: 'OTHER'
+};
+
+export type BulkJobType = (typeof BulkJobType)[keyof typeof BulkJobType]
 
 
 export const JobTrigger: {
@@ -467,7 +549,8 @@ export const ExternalIntegrationProvider: {
   SMTP: 'SMTP',
   TWILIO: 'TWILIO',
   APIFY: 'APIFY',
-  HUBSPOT: 'HUBSPOT'
+  HUBSPOT: 'HUBSPOT',
+  SCRAPIO: 'SCRAPIO'
 };
 
 export type ExternalIntegrationProvider = (typeof ExternalIntegrationProvider)[keyof typeof ExternalIntegrationProvider]
@@ -610,6 +693,18 @@ export type GoalAchievementType = (typeof GoalAchievementType)[keyof typeof Goal
 
 }
 
+export type WebsiteScrapeProvider = $Enums.WebsiteScrapeProvider
+
+export const WebsiteScrapeProvider: typeof $Enums.WebsiteScrapeProvider
+
+export type WebsiteScrapeOperation = $Enums.WebsiteScrapeOperation
+
+export const WebsiteScrapeOperation: typeof $Enums.WebsiteScrapeOperation
+
+export type WebsiteScrapeStatus = $Enums.WebsiteScrapeStatus
+
+export const WebsiteScrapeStatus: typeof $Enums.WebsiteScrapeStatus
+
 export type AuthRole = $Enums.AuthRole
 
 export const AuthRole: typeof $Enums.AuthRole
@@ -630,6 +725,10 @@ export type SourceType = $Enums.SourceType
 
 export const SourceType: typeof $Enums.SourceType
 
+export type EmailValidationStatus = $Enums.EmailValidationStatus
+
+export const EmailValidationStatus: typeof $Enums.EmailValidationStatus
+
 export type EnrichmentSource = $Enums.EnrichmentSource
 
 export const EnrichmentSource: typeof $Enums.EnrichmentSource
@@ -649,6 +748,14 @@ export const LeadStatus: typeof $Enums.LeadStatus
 export type JobStatus = $Enums.JobStatus
 
 export const JobStatus: typeof $Enums.JobStatus
+
+export type BulkJobStatus = $Enums.BulkJobStatus
+
+export const BulkJobStatus: typeof $Enums.BulkJobStatus
+
+export type BulkJobType = $Enums.BulkJobType
+
+export const BulkJobType: typeof $Enums.BulkJobType
 
 export type JobTrigger = $Enums.JobTrigger
 
@@ -906,6 +1013,16 @@ export class PrismaClient<
   get filter(): Prisma.FilterDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.savedContactFilter`: Exposes CRUD operations for the **SavedContactFilter** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SavedContactFilters
+    * const savedContactFilters = await prisma.savedContactFilter.findMany()
+    * ```
+    */
+  get savedContactFilter(): Prisma.SavedContactFilterDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.scoringInstruction`: Exposes CRUD operations for the **ScoringInstruction** model.
     * Example usage:
     * ```ts
@@ -1076,6 +1193,26 @@ export class PrismaClient<
   get filterJob(): Prisma.FilterJobDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.bulkJob`: Exposes CRUD operations for the **BulkJob** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more BulkJobs
+    * const bulkJobs = await prisma.bulkJob.findMany()
+    * ```
+    */
+  get bulkJob(): Prisma.BulkJobDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.websiteScrapeRequest`: Exposes CRUD operations for the **WebsiteScrapeRequest** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more WebsiteScrapeRequests
+    * const websiteScrapeRequests = await prisma.websiteScrapeRequest.findMany()
+    * ```
+    */
+  get websiteScrapeRequest(): Prisma.WebsiteScrapeRequestDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.senderProfile`: Exposes CRUD operations for the **SenderProfile** model.
     * Example usage:
     * ```ts
@@ -1244,6 +1381,16 @@ export class PrismaClient<
     * ```
     */
   get messagingGoal(): Prisma.MessagingGoalDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.emailSendLimit`: Exposes CRUD operations for the **EmailSendLimit** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more EmailSendLimits
+    * const emailSendLimits = await prisma.emailSendLimit.findMany()
+    * ```
+    */
+  get emailSendLimit(): Prisma.EmailSendLimitDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.goalAchievement`: Exposes CRUD operations for the **GoalAchievement** model.
@@ -1713,6 +1860,7 @@ export namespace Prisma {
     OrganisationMember: 'OrganisationMember',
     OrganisationInvitation: 'OrganisationInvitation',
     Filter: 'Filter',
+    SavedContactFilter: 'SavedContactFilter',
     ScoringInstruction: 'ScoringInstruction',
     FilterScoringInstruction: 'FilterScoringInstruction',
     RawLead: 'RawLead',
@@ -1730,6 +1878,8 @@ export namespace Prisma {
     OutreachMessage: 'OutreachMessage',
     OutreachSequence: 'OutreachSequence',
     FilterJob: 'FilterJob',
+    BulkJob: 'BulkJob',
+    WebsiteScrapeRequest: 'WebsiteScrapeRequest',
     SenderProfile: 'SenderProfile',
     MessageTemplate: 'MessageTemplate',
     MarketingCampaign: 'MarketingCampaign',
@@ -1747,6 +1897,7 @@ export namespace Prisma {
     AiUsageLog: 'AiUsageLog',
     ApifyUsageLog: 'ApifyUsageLog',
     MessagingGoal: 'MessagingGoal',
+    EmailSendLimit: 'EmailSendLimit',
     GoalAchievement: 'GoalAchievement',
     GoalPersonalBest: 'GoalPersonalBest',
     ActivityLog: 'ActivityLog'
@@ -1765,7 +1916,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "organisation" | "organisationMember" | "organisationInvitation" | "filter" | "scoringInstruction" | "filterScoringInstruction" | "rawLead" | "lead" | "leadEnrichment" | "contact" | "contactInfo" | "contactFilter" | "contactEnrichment" | "contactScore" | "contactList" | "contactListMember" | "contactTag" | "interaction" | "outreachMessage" | "outreachSequence" | "filterJob" | "senderProfile" | "messageTemplate" | "marketingCampaign" | "marketingCampaignContact" | "openAiBatchJob" | "integration" | "integrationAccount" | "integrationKey" | "reminder" | "form" | "formField" | "formCompletion" | "formCompletionValue" | "contactAudienceAnalysis" | "aiUsageLog" | "apifyUsageLog" | "messagingGoal" | "goalAchievement" | "goalPersonalBest" | "activityLog"
+      modelProps: "user" | "organisation" | "organisationMember" | "organisationInvitation" | "filter" | "savedContactFilter" | "scoringInstruction" | "filterScoringInstruction" | "rawLead" | "lead" | "leadEnrichment" | "contact" | "contactInfo" | "contactFilter" | "contactEnrichment" | "contactScore" | "contactList" | "contactListMember" | "contactTag" | "interaction" | "outreachMessage" | "outreachSequence" | "filterJob" | "bulkJob" | "websiteScrapeRequest" | "senderProfile" | "messageTemplate" | "marketingCampaign" | "marketingCampaignContact" | "openAiBatchJob" | "integration" | "integrationAccount" | "integrationKey" | "reminder" | "form" | "formField" | "formCompletion" | "formCompletionValue" | "contactAudienceAnalysis" | "aiUsageLog" | "apifyUsageLog" | "messagingGoal" | "emailSendLimit" | "goalAchievement" | "goalPersonalBest" | "activityLog"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2136,6 +2287,80 @@ export namespace Prisma {
           count: {
             args: Prisma.FilterCountArgs<ExtArgs>
             result: $Utils.Optional<FilterCountAggregateOutputType> | number
+          }
+        }
+      }
+      SavedContactFilter: {
+        payload: Prisma.$SavedContactFilterPayload<ExtArgs>
+        fields: Prisma.SavedContactFilterFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SavedContactFilterFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SavedContactFilterPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SavedContactFilterFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SavedContactFilterPayload>
+          }
+          findFirst: {
+            args: Prisma.SavedContactFilterFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SavedContactFilterPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SavedContactFilterFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SavedContactFilterPayload>
+          }
+          findMany: {
+            args: Prisma.SavedContactFilterFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SavedContactFilterPayload>[]
+          }
+          create: {
+            args: Prisma.SavedContactFilterCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SavedContactFilterPayload>
+          }
+          createMany: {
+            args: Prisma.SavedContactFilterCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SavedContactFilterCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SavedContactFilterPayload>[]
+          }
+          delete: {
+            args: Prisma.SavedContactFilterDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SavedContactFilterPayload>
+          }
+          update: {
+            args: Prisma.SavedContactFilterUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SavedContactFilterPayload>
+          }
+          deleteMany: {
+            args: Prisma.SavedContactFilterDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SavedContactFilterUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.SavedContactFilterUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SavedContactFilterPayload>[]
+          }
+          upsert: {
+            args: Prisma.SavedContactFilterUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SavedContactFilterPayload>
+          }
+          aggregate: {
+            args: Prisma.SavedContactFilterAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSavedContactFilter>
+          }
+          groupBy: {
+            args: Prisma.SavedContactFilterGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SavedContactFilterGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SavedContactFilterCountArgs<ExtArgs>
+            result: $Utils.Optional<SavedContactFilterCountAggregateOutputType> | number
           }
         }
       }
@@ -3397,6 +3622,154 @@ export namespace Prisma {
           }
         }
       }
+      BulkJob: {
+        payload: Prisma.$BulkJobPayload<ExtArgs>
+        fields: Prisma.BulkJobFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.BulkJobFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BulkJobPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.BulkJobFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BulkJobPayload>
+          }
+          findFirst: {
+            args: Prisma.BulkJobFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BulkJobPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.BulkJobFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BulkJobPayload>
+          }
+          findMany: {
+            args: Prisma.BulkJobFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BulkJobPayload>[]
+          }
+          create: {
+            args: Prisma.BulkJobCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BulkJobPayload>
+          }
+          createMany: {
+            args: Prisma.BulkJobCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.BulkJobCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BulkJobPayload>[]
+          }
+          delete: {
+            args: Prisma.BulkJobDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BulkJobPayload>
+          }
+          update: {
+            args: Prisma.BulkJobUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BulkJobPayload>
+          }
+          deleteMany: {
+            args: Prisma.BulkJobDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.BulkJobUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.BulkJobUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BulkJobPayload>[]
+          }
+          upsert: {
+            args: Prisma.BulkJobUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BulkJobPayload>
+          }
+          aggregate: {
+            args: Prisma.BulkJobAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateBulkJob>
+          }
+          groupBy: {
+            args: Prisma.BulkJobGroupByArgs<ExtArgs>
+            result: $Utils.Optional<BulkJobGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.BulkJobCountArgs<ExtArgs>
+            result: $Utils.Optional<BulkJobCountAggregateOutputType> | number
+          }
+        }
+      }
+      WebsiteScrapeRequest: {
+        payload: Prisma.$WebsiteScrapeRequestPayload<ExtArgs>
+        fields: Prisma.WebsiteScrapeRequestFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.WebsiteScrapeRequestFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WebsiteScrapeRequestPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.WebsiteScrapeRequestFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WebsiteScrapeRequestPayload>
+          }
+          findFirst: {
+            args: Prisma.WebsiteScrapeRequestFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WebsiteScrapeRequestPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.WebsiteScrapeRequestFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WebsiteScrapeRequestPayload>
+          }
+          findMany: {
+            args: Prisma.WebsiteScrapeRequestFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WebsiteScrapeRequestPayload>[]
+          }
+          create: {
+            args: Prisma.WebsiteScrapeRequestCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WebsiteScrapeRequestPayload>
+          }
+          createMany: {
+            args: Prisma.WebsiteScrapeRequestCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.WebsiteScrapeRequestCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WebsiteScrapeRequestPayload>[]
+          }
+          delete: {
+            args: Prisma.WebsiteScrapeRequestDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WebsiteScrapeRequestPayload>
+          }
+          update: {
+            args: Prisma.WebsiteScrapeRequestUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WebsiteScrapeRequestPayload>
+          }
+          deleteMany: {
+            args: Prisma.WebsiteScrapeRequestDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.WebsiteScrapeRequestUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.WebsiteScrapeRequestUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WebsiteScrapeRequestPayload>[]
+          }
+          upsert: {
+            args: Prisma.WebsiteScrapeRequestUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WebsiteScrapeRequestPayload>
+          }
+          aggregate: {
+            args: Prisma.WebsiteScrapeRequestAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateWebsiteScrapeRequest>
+          }
+          groupBy: {
+            args: Prisma.WebsiteScrapeRequestGroupByArgs<ExtArgs>
+            result: $Utils.Optional<WebsiteScrapeRequestGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.WebsiteScrapeRequestCountArgs<ExtArgs>
+            result: $Utils.Optional<WebsiteScrapeRequestCountAggregateOutputType> | number
+          }
+        }
+      }
       SenderProfile: {
         payload: Prisma.$SenderProfilePayload<ExtArgs>
         fields: Prisma.SenderProfileFieldRefs
@@ -4655,6 +5028,80 @@ export namespace Prisma {
           }
         }
       }
+      EmailSendLimit: {
+        payload: Prisma.$EmailSendLimitPayload<ExtArgs>
+        fields: Prisma.EmailSendLimitFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.EmailSendLimitFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailSendLimitPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.EmailSendLimitFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailSendLimitPayload>
+          }
+          findFirst: {
+            args: Prisma.EmailSendLimitFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailSendLimitPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.EmailSendLimitFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailSendLimitPayload>
+          }
+          findMany: {
+            args: Prisma.EmailSendLimitFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailSendLimitPayload>[]
+          }
+          create: {
+            args: Prisma.EmailSendLimitCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailSendLimitPayload>
+          }
+          createMany: {
+            args: Prisma.EmailSendLimitCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.EmailSendLimitCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailSendLimitPayload>[]
+          }
+          delete: {
+            args: Prisma.EmailSendLimitDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailSendLimitPayload>
+          }
+          update: {
+            args: Prisma.EmailSendLimitUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailSendLimitPayload>
+          }
+          deleteMany: {
+            args: Prisma.EmailSendLimitDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.EmailSendLimitUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.EmailSendLimitUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailSendLimitPayload>[]
+          }
+          upsert: {
+            args: Prisma.EmailSendLimitUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailSendLimitPayload>
+          }
+          aggregate: {
+            args: Prisma.EmailSendLimitAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateEmailSendLimit>
+          }
+          groupBy: {
+            args: Prisma.EmailSendLimitGroupByArgs<ExtArgs>
+            result: $Utils.Optional<EmailSendLimitGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.EmailSendLimitCountArgs<ExtArgs>
+            result: $Utils.Optional<EmailSendLimitCountAggregateOutputType> | number
+          }
+        }
+      }
       GoalAchievement: {
         payload: Prisma.$GoalAchievementPayload<ExtArgs>
         fields: Prisma.GoalAchievementFieldRefs
@@ -4990,6 +5437,7 @@ export namespace Prisma {
     organisationMember?: OrganisationMemberOmit
     organisationInvitation?: OrganisationInvitationOmit
     filter?: FilterOmit
+    savedContactFilter?: SavedContactFilterOmit
     scoringInstruction?: ScoringInstructionOmit
     filterScoringInstruction?: FilterScoringInstructionOmit
     rawLead?: RawLeadOmit
@@ -5007,6 +5455,8 @@ export namespace Prisma {
     outreachMessage?: OutreachMessageOmit
     outreachSequence?: OutreachSequenceOmit
     filterJob?: FilterJobOmit
+    bulkJob?: BulkJobOmit
+    websiteScrapeRequest?: WebsiteScrapeRequestOmit
     senderProfile?: SenderProfileOmit
     messageTemplate?: MessageTemplateOmit
     marketingCampaign?: MarketingCampaignOmit
@@ -5024,6 +5474,7 @@ export namespace Prisma {
     aiUsageLog?: AiUsageLogOmit
     apifyUsageLog?: ApifyUsageLogOmit
     messagingGoal?: MessagingGoalOmit
+    emailSendLimit?: EmailSendLimitOmit
     goalAchievement?: GoalAchievementOmit
     goalPersonalBest?: GoalPersonalBestOmit
     activityLog?: ActivityLogOmit
@@ -5115,6 +5566,7 @@ export namespace Prisma {
     messaging_goals: number
     goal_achievements: number
     goal_personal_bests: number
+    bulk_jobs_created: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5126,6 +5578,7 @@ export namespace Prisma {
     messaging_goals?: boolean | UserCountOutputTypeCountMessaging_goalsArgs
     goal_achievements?: boolean | UserCountOutputTypeCountGoal_achievementsArgs
     goal_personal_bests?: boolean | UserCountOutputTypeCountGoal_personal_bestsArgs
+    bulk_jobs_created?: boolean | UserCountOutputTypeCountBulk_jobs_createdArgs
   }
 
   // Custom InputTypes
@@ -5195,6 +5648,13 @@ export namespace Prisma {
     where?: GoalPersonalBestWhereInput
   }
 
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountBulk_jobs_createdArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BulkJobWhereInput
+  }
+
 
   /**
    * Count Type OrganisationCountOutputType
@@ -5216,6 +5676,7 @@ export namespace Prisma {
     reminders: number
     forms: number
     contact_lists: number
+    saved_contact_filters: number
     contact_audience_analyses: number
     ai_usage_logs: number
     apify_usage_logs: number
@@ -5224,6 +5685,9 @@ export namespace Prisma {
     messaging_goals: number
     goal_achievements: number
     goal_personal_bests: number
+    bulk_jobs: number
+    website_scrape_requests: number
+    email_send_limits: number
   }
 
   export type OrganisationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5242,6 +5706,7 @@ export namespace Prisma {
     reminders?: boolean | OrganisationCountOutputTypeCountRemindersArgs
     forms?: boolean | OrganisationCountOutputTypeCountFormsArgs
     contact_lists?: boolean | OrganisationCountOutputTypeCountContact_listsArgs
+    saved_contact_filters?: boolean | OrganisationCountOutputTypeCountSaved_contact_filtersArgs
     contact_audience_analyses?: boolean | OrganisationCountOutputTypeCountContact_audience_analysesArgs
     ai_usage_logs?: boolean | OrganisationCountOutputTypeCountAi_usage_logsArgs
     apify_usage_logs?: boolean | OrganisationCountOutputTypeCountApify_usage_logsArgs
@@ -5250,6 +5715,9 @@ export namespace Prisma {
     messaging_goals?: boolean | OrganisationCountOutputTypeCountMessaging_goalsArgs
     goal_achievements?: boolean | OrganisationCountOutputTypeCountGoal_achievementsArgs
     goal_personal_bests?: boolean | OrganisationCountOutputTypeCountGoal_personal_bestsArgs
+    bulk_jobs?: boolean | OrganisationCountOutputTypeCountBulk_jobsArgs
+    website_scrape_requests?: boolean | OrganisationCountOutputTypeCountWebsite_scrape_requestsArgs
+    email_send_limits?: boolean | OrganisationCountOutputTypeCountEmail_send_limitsArgs
   }
 
   // Custom InputTypes
@@ -5371,6 +5839,13 @@ export namespace Prisma {
   /**
    * OrganisationCountOutputType without action
    */
+  export type OrganisationCountOutputTypeCountSaved_contact_filtersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SavedContactFilterWhereInput
+  }
+
+  /**
+   * OrganisationCountOutputType without action
+   */
   export type OrganisationCountOutputTypeCountContact_audience_analysesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ContactAudienceAnalysisWhereInput
   }
@@ -5422,6 +5897,27 @@ export namespace Prisma {
    */
   export type OrganisationCountOutputTypeCountGoal_personal_bestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: GoalPersonalBestWhereInput
+  }
+
+  /**
+   * OrganisationCountOutputType without action
+   */
+  export type OrganisationCountOutputTypeCountBulk_jobsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BulkJobWhereInput
+  }
+
+  /**
+   * OrganisationCountOutputType without action
+   */
+  export type OrganisationCountOutputTypeCountWebsite_scrape_requestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WebsiteScrapeRequestWhereInput
+  }
+
+  /**
+   * OrganisationCountOutputType without action
+   */
+  export type OrganisationCountOutputTypeCountEmail_send_limitsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EmailSendLimitWhereInput
   }
 
 
@@ -6246,6 +6742,7 @@ export namespace Prisma {
     messaging_goals?: boolean | User$messaging_goalsArgs<ExtArgs>
     goal_achievements?: boolean | User$goal_achievementsArgs<ExtArgs>
     goal_personal_bests?: boolean | User$goal_personal_bestsArgs<ExtArgs>
+    bulk_jobs_created?: boolean | User$bulk_jobs_createdArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -6295,6 +6792,7 @@ export namespace Prisma {
     messaging_goals?: boolean | User$messaging_goalsArgs<ExtArgs>
     goal_achievements?: boolean | User$goal_achievementsArgs<ExtArgs>
     goal_personal_bests?: boolean | User$goal_personal_bestsArgs<ExtArgs>
+    bulk_jobs_created?: boolean | User$bulk_jobs_createdArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -6311,6 +6809,7 @@ export namespace Prisma {
       messaging_goals: Prisma.$MessagingGoalPayload<ExtArgs>[]
       goal_achievements: Prisma.$GoalAchievementPayload<ExtArgs>[]
       goal_personal_bests: Prisma.$GoalPersonalBestPayload<ExtArgs>[]
+      bulk_jobs_created: Prisma.$BulkJobPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -6724,6 +7223,7 @@ export namespace Prisma {
     messaging_goals<T extends User$messaging_goalsArgs<ExtArgs> = {}>(args?: Subset<T, User$messaging_goalsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessagingGoalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     goal_achievements<T extends User$goal_achievementsArgs<ExtArgs> = {}>(args?: Subset<T, User$goal_achievementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GoalAchievementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     goal_personal_bests<T extends User$goal_personal_bestsArgs<ExtArgs> = {}>(args?: Subset<T, User$goal_personal_bestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GoalPersonalBestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    bulk_jobs_created<T extends User$bulk_jobs_createdArgs<ExtArgs> = {}>(args?: Subset<T, User$bulk_jobs_createdArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BulkJobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7342,6 +7842,30 @@ export namespace Prisma {
   }
 
   /**
+   * User.bulk_jobs_created
+   */
+  export type User$bulk_jobs_createdArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BulkJob
+     */
+    select?: BulkJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BulkJob
+     */
+    omit?: BulkJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BulkJobInclude<ExtArgs> | null
+    where?: BulkJobWhereInput
+    orderBy?: BulkJobOrderByWithRelationInput | BulkJobOrderByWithRelationInput[]
+    cursor?: BulkJobWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BulkJobScalarFieldEnum | BulkJobScalarFieldEnum[]
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7597,6 +8121,7 @@ export namespace Prisma {
     reminders?: boolean | Organisation$remindersArgs<ExtArgs>
     forms?: boolean | Organisation$formsArgs<ExtArgs>
     contact_lists?: boolean | Organisation$contact_listsArgs<ExtArgs>
+    saved_contact_filters?: boolean | Organisation$saved_contact_filtersArgs<ExtArgs>
     contact_audience_analyses?: boolean | Organisation$contact_audience_analysesArgs<ExtArgs>
     ai_usage_logs?: boolean | Organisation$ai_usage_logsArgs<ExtArgs>
     apify_usage_logs?: boolean | Organisation$apify_usage_logsArgs<ExtArgs>
@@ -7605,6 +8130,9 @@ export namespace Prisma {
     messaging_goals?: boolean | Organisation$messaging_goalsArgs<ExtArgs>
     goal_achievements?: boolean | Organisation$goal_achievementsArgs<ExtArgs>
     goal_personal_bests?: boolean | Organisation$goal_personal_bestsArgs<ExtArgs>
+    bulk_jobs?: boolean | Organisation$bulk_jobsArgs<ExtArgs>
+    website_scrape_requests?: boolean | Organisation$website_scrape_requestsArgs<ExtArgs>
+    email_send_limits?: boolean | Organisation$email_send_limitsArgs<ExtArgs>
     _count?: boolean | OrganisationCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["organisation"]>
 
@@ -7658,6 +8186,7 @@ export namespace Prisma {
     reminders?: boolean | Organisation$remindersArgs<ExtArgs>
     forms?: boolean | Organisation$formsArgs<ExtArgs>
     contact_lists?: boolean | Organisation$contact_listsArgs<ExtArgs>
+    saved_contact_filters?: boolean | Organisation$saved_contact_filtersArgs<ExtArgs>
     contact_audience_analyses?: boolean | Organisation$contact_audience_analysesArgs<ExtArgs>
     ai_usage_logs?: boolean | Organisation$ai_usage_logsArgs<ExtArgs>
     apify_usage_logs?: boolean | Organisation$apify_usage_logsArgs<ExtArgs>
@@ -7666,6 +8195,9 @@ export namespace Prisma {
     messaging_goals?: boolean | Organisation$messaging_goalsArgs<ExtArgs>
     goal_achievements?: boolean | Organisation$goal_achievementsArgs<ExtArgs>
     goal_personal_bests?: boolean | Organisation$goal_personal_bestsArgs<ExtArgs>
+    bulk_jobs?: boolean | Organisation$bulk_jobsArgs<ExtArgs>
+    website_scrape_requests?: boolean | Organisation$website_scrape_requestsArgs<ExtArgs>
+    email_send_limits?: boolean | Organisation$email_send_limitsArgs<ExtArgs>
     _count?: boolean | OrganisationCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type OrganisationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -7689,6 +8221,7 @@ export namespace Prisma {
       reminders: Prisma.$ReminderPayload<ExtArgs>[]
       forms: Prisma.$FormPayload<ExtArgs>[]
       contact_lists: Prisma.$ContactListPayload<ExtArgs>[]
+      saved_contact_filters: Prisma.$SavedContactFilterPayload<ExtArgs>[]
       contact_audience_analyses: Prisma.$ContactAudienceAnalysisPayload<ExtArgs>[]
       ai_usage_logs: Prisma.$AiUsageLogPayload<ExtArgs>[]
       apify_usage_logs: Prisma.$ApifyUsageLogPayload<ExtArgs>[]
@@ -7697,6 +8230,9 @@ export namespace Prisma {
       messaging_goals: Prisma.$MessagingGoalPayload<ExtArgs>[]
       goal_achievements: Prisma.$GoalAchievementPayload<ExtArgs>[]
       goal_personal_bests: Prisma.$GoalPersonalBestPayload<ExtArgs>[]
+      bulk_jobs: Prisma.$BulkJobPayload<ExtArgs>[]
+      website_scrape_requests: Prisma.$WebsiteScrapeRequestPayload<ExtArgs>[]
+      email_send_limits: Prisma.$EmailSendLimitPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -8116,6 +8652,7 @@ export namespace Prisma {
     reminders<T extends Organisation$remindersArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$remindersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReminderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     forms<T extends Organisation$formsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$formsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FormPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     contact_lists<T extends Organisation$contact_listsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$contact_listsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactListPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    saved_contact_filters<T extends Organisation$saved_contact_filtersArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$saved_contact_filtersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SavedContactFilterPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     contact_audience_analyses<T extends Organisation$contact_audience_analysesArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$contact_audience_analysesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactAudienceAnalysisPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     ai_usage_logs<T extends Organisation$ai_usage_logsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$ai_usage_logsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AiUsageLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     apify_usage_logs<T extends Organisation$apify_usage_logsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$apify_usage_logsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApifyUsageLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -8124,6 +8661,9 @@ export namespace Prisma {
     messaging_goals<T extends Organisation$messaging_goalsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$messaging_goalsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessagingGoalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     goal_achievements<T extends Organisation$goal_achievementsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$goal_achievementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GoalAchievementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     goal_personal_bests<T extends Organisation$goal_personal_bestsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$goal_personal_bestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GoalPersonalBestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    bulk_jobs<T extends Organisation$bulk_jobsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$bulk_jobsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BulkJobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    website_scrape_requests<T extends Organisation$website_scrape_requestsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$website_scrape_requestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WebsiteScrapeRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    email_send_limits<T extends Organisation$email_send_limitsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$email_send_limitsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmailSendLimitPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -8909,6 +9449,30 @@ export namespace Prisma {
   }
 
   /**
+   * Organisation.saved_contact_filters
+   */
+  export type Organisation$saved_contact_filtersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SavedContactFilter
+     */
+    select?: SavedContactFilterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SavedContactFilter
+     */
+    omit?: SavedContactFilterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SavedContactFilterInclude<ExtArgs> | null
+    where?: SavedContactFilterWhereInput
+    orderBy?: SavedContactFilterOrderByWithRelationInput | SavedContactFilterOrderByWithRelationInput[]
+    cursor?: SavedContactFilterWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SavedContactFilterScalarFieldEnum | SavedContactFilterScalarFieldEnum[]
+  }
+
+  /**
    * Organisation.contact_audience_analyses
    */
   export type Organisation$contact_audience_analysesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -9098,6 +9662,78 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: GoalPersonalBestScalarFieldEnum | GoalPersonalBestScalarFieldEnum[]
+  }
+
+  /**
+   * Organisation.bulk_jobs
+   */
+  export type Organisation$bulk_jobsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BulkJob
+     */
+    select?: BulkJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BulkJob
+     */
+    omit?: BulkJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BulkJobInclude<ExtArgs> | null
+    where?: BulkJobWhereInput
+    orderBy?: BulkJobOrderByWithRelationInput | BulkJobOrderByWithRelationInput[]
+    cursor?: BulkJobWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BulkJobScalarFieldEnum | BulkJobScalarFieldEnum[]
+  }
+
+  /**
+   * Organisation.website_scrape_requests
+   */
+  export type Organisation$website_scrape_requestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WebsiteScrapeRequest
+     */
+    select?: WebsiteScrapeRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WebsiteScrapeRequest
+     */
+    omit?: WebsiteScrapeRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WebsiteScrapeRequestInclude<ExtArgs> | null
+    where?: WebsiteScrapeRequestWhereInput
+    orderBy?: WebsiteScrapeRequestOrderByWithRelationInput | WebsiteScrapeRequestOrderByWithRelationInput[]
+    cursor?: WebsiteScrapeRequestWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: WebsiteScrapeRequestScalarFieldEnum | WebsiteScrapeRequestScalarFieldEnum[]
+  }
+
+  /**
+   * Organisation.email_send_limits
+   */
+  export type Organisation$email_send_limitsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailSendLimit
+     */
+    select?: EmailSendLimitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailSendLimit
+     */
+    omit?: EmailSendLimitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailSendLimitInclude<ExtArgs> | null
+    where?: EmailSendLimitWhereInput
+    orderBy?: EmailSendLimitOrderByWithRelationInput | EmailSendLimitOrderByWithRelationInput[]
+    cursor?: EmailSendLimitWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: EmailSendLimitScalarFieldEnum | EmailSendLimitScalarFieldEnum[]
   }
 
   /**
@@ -12791,6 +13427,1120 @@ export namespace Prisma {
 
 
   /**
+   * Model SavedContactFilter
+   */
+
+  export type AggregateSavedContactFilter = {
+    _count: SavedContactFilterCountAggregateOutputType | null
+    _avg: SavedContactFilterAvgAggregateOutputType | null
+    _sum: SavedContactFilterSumAggregateOutputType | null
+    _min: SavedContactFilterMinAggregateOutputType | null
+    _max: SavedContactFilterMaxAggregateOutputType | null
+  }
+
+  export type SavedContactFilterAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type SavedContactFilterSumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type SavedContactFilterMinAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    organisation_uuid: string | null
+    name: string | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type SavedContactFilterMaxAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    organisation_uuid: string | null
+    name: string | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type SavedContactFilterCountAggregateOutputType = {
+    id: number
+    uuid: number
+    organisation_uuid: number
+    name: number
+    filters: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type SavedContactFilterAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type SavedContactFilterSumAggregateInputType = {
+    id?: true
+  }
+
+  export type SavedContactFilterMinAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    name?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type SavedContactFilterMaxAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    name?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type SavedContactFilterCountAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    name?: true
+    filters?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type SavedContactFilterAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SavedContactFilter to aggregate.
+     */
+    where?: SavedContactFilterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SavedContactFilters to fetch.
+     */
+    orderBy?: SavedContactFilterOrderByWithRelationInput | SavedContactFilterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SavedContactFilterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SavedContactFilters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SavedContactFilters.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SavedContactFilters
+    **/
+    _count?: true | SavedContactFilterCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: SavedContactFilterAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: SavedContactFilterSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SavedContactFilterMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SavedContactFilterMaxAggregateInputType
+  }
+
+  export type GetSavedContactFilterAggregateType<T extends SavedContactFilterAggregateArgs> = {
+        [P in keyof T & keyof AggregateSavedContactFilter]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSavedContactFilter[P]>
+      : GetScalarType<T[P], AggregateSavedContactFilter[P]>
+  }
+
+
+
+
+  export type SavedContactFilterGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SavedContactFilterWhereInput
+    orderBy?: SavedContactFilterOrderByWithAggregationInput | SavedContactFilterOrderByWithAggregationInput[]
+    by: SavedContactFilterScalarFieldEnum[] | SavedContactFilterScalarFieldEnum
+    having?: SavedContactFilterScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SavedContactFilterCountAggregateInputType | true
+    _avg?: SavedContactFilterAvgAggregateInputType
+    _sum?: SavedContactFilterSumAggregateInputType
+    _min?: SavedContactFilterMinAggregateInputType
+    _max?: SavedContactFilterMaxAggregateInputType
+  }
+
+  export type SavedContactFilterGroupByOutputType = {
+    id: number
+    uuid: string
+    organisation_uuid: string
+    name: string
+    filters: JsonValue
+    created_at: Date
+    updated_at: Date
+    _count: SavedContactFilterCountAggregateOutputType | null
+    _avg: SavedContactFilterAvgAggregateOutputType | null
+    _sum: SavedContactFilterSumAggregateOutputType | null
+    _min: SavedContactFilterMinAggregateOutputType | null
+    _max: SavedContactFilterMaxAggregateOutputType | null
+  }
+
+  type GetSavedContactFilterGroupByPayload<T extends SavedContactFilterGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SavedContactFilterGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SavedContactFilterGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SavedContactFilterGroupByOutputType[P]>
+            : GetScalarType<T[P], SavedContactFilterGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SavedContactFilterSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    name?: boolean
+    filters?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["savedContactFilter"]>
+
+  export type SavedContactFilterSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    name?: boolean
+    filters?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["savedContactFilter"]>
+
+  export type SavedContactFilterSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    name?: boolean
+    filters?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["savedContactFilter"]>
+
+  export type SavedContactFilterSelectScalar = {
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    name?: boolean
+    filters?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type SavedContactFilterOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "name" | "filters" | "created_at" | "updated_at", ExtArgs["result"]["savedContactFilter"]>
+  export type SavedContactFilterInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }
+  export type SavedContactFilterIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }
+  export type SavedContactFilterIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }
+
+  export type $SavedContactFilterPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SavedContactFilter"
+    objects: {
+      organisation: Prisma.$OrganisationPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      uuid: string
+      organisation_uuid: string
+      name: string
+      filters: Prisma.JsonValue
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["savedContactFilter"]>
+    composites: {}
+  }
+
+  type SavedContactFilterGetPayload<S extends boolean | null | undefined | SavedContactFilterDefaultArgs> = $Result.GetResult<Prisma.$SavedContactFilterPayload, S>
+
+  type SavedContactFilterCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SavedContactFilterFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SavedContactFilterCountAggregateInputType | true
+    }
+
+  export interface SavedContactFilterDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SavedContactFilter'], meta: { name: 'SavedContactFilter' } }
+    /**
+     * Find zero or one SavedContactFilter that matches the filter.
+     * @param {SavedContactFilterFindUniqueArgs} args - Arguments to find a SavedContactFilter
+     * @example
+     * // Get one SavedContactFilter
+     * const savedContactFilter = await prisma.savedContactFilter.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SavedContactFilterFindUniqueArgs>(args: SelectSubset<T, SavedContactFilterFindUniqueArgs<ExtArgs>>): Prisma__SavedContactFilterClient<$Result.GetResult<Prisma.$SavedContactFilterPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one SavedContactFilter that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SavedContactFilterFindUniqueOrThrowArgs} args - Arguments to find a SavedContactFilter
+     * @example
+     * // Get one SavedContactFilter
+     * const savedContactFilter = await prisma.savedContactFilter.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SavedContactFilterFindUniqueOrThrowArgs>(args: SelectSubset<T, SavedContactFilterFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SavedContactFilterClient<$Result.GetResult<Prisma.$SavedContactFilterPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SavedContactFilter that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SavedContactFilterFindFirstArgs} args - Arguments to find a SavedContactFilter
+     * @example
+     * // Get one SavedContactFilter
+     * const savedContactFilter = await prisma.savedContactFilter.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SavedContactFilterFindFirstArgs>(args?: SelectSubset<T, SavedContactFilterFindFirstArgs<ExtArgs>>): Prisma__SavedContactFilterClient<$Result.GetResult<Prisma.$SavedContactFilterPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SavedContactFilter that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SavedContactFilterFindFirstOrThrowArgs} args - Arguments to find a SavedContactFilter
+     * @example
+     * // Get one SavedContactFilter
+     * const savedContactFilter = await prisma.savedContactFilter.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SavedContactFilterFindFirstOrThrowArgs>(args?: SelectSubset<T, SavedContactFilterFindFirstOrThrowArgs<ExtArgs>>): Prisma__SavedContactFilterClient<$Result.GetResult<Prisma.$SavedContactFilterPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more SavedContactFilters that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SavedContactFilterFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SavedContactFilters
+     * const savedContactFilters = await prisma.savedContactFilter.findMany()
+     * 
+     * // Get first 10 SavedContactFilters
+     * const savedContactFilters = await prisma.savedContactFilter.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const savedContactFilterWithIdOnly = await prisma.savedContactFilter.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SavedContactFilterFindManyArgs>(args?: SelectSubset<T, SavedContactFilterFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SavedContactFilterPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a SavedContactFilter.
+     * @param {SavedContactFilterCreateArgs} args - Arguments to create a SavedContactFilter.
+     * @example
+     * // Create one SavedContactFilter
+     * const SavedContactFilter = await prisma.savedContactFilter.create({
+     *   data: {
+     *     // ... data to create a SavedContactFilter
+     *   }
+     * })
+     * 
+     */
+    create<T extends SavedContactFilterCreateArgs>(args: SelectSubset<T, SavedContactFilterCreateArgs<ExtArgs>>): Prisma__SavedContactFilterClient<$Result.GetResult<Prisma.$SavedContactFilterPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many SavedContactFilters.
+     * @param {SavedContactFilterCreateManyArgs} args - Arguments to create many SavedContactFilters.
+     * @example
+     * // Create many SavedContactFilters
+     * const savedContactFilter = await prisma.savedContactFilter.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SavedContactFilterCreateManyArgs>(args?: SelectSubset<T, SavedContactFilterCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SavedContactFilters and returns the data saved in the database.
+     * @param {SavedContactFilterCreateManyAndReturnArgs} args - Arguments to create many SavedContactFilters.
+     * @example
+     * // Create many SavedContactFilters
+     * const savedContactFilter = await prisma.savedContactFilter.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SavedContactFilters and only return the `id`
+     * const savedContactFilterWithIdOnly = await prisma.savedContactFilter.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SavedContactFilterCreateManyAndReturnArgs>(args?: SelectSubset<T, SavedContactFilterCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SavedContactFilterPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a SavedContactFilter.
+     * @param {SavedContactFilterDeleteArgs} args - Arguments to delete one SavedContactFilter.
+     * @example
+     * // Delete one SavedContactFilter
+     * const SavedContactFilter = await prisma.savedContactFilter.delete({
+     *   where: {
+     *     // ... filter to delete one SavedContactFilter
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SavedContactFilterDeleteArgs>(args: SelectSubset<T, SavedContactFilterDeleteArgs<ExtArgs>>): Prisma__SavedContactFilterClient<$Result.GetResult<Prisma.$SavedContactFilterPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one SavedContactFilter.
+     * @param {SavedContactFilterUpdateArgs} args - Arguments to update one SavedContactFilter.
+     * @example
+     * // Update one SavedContactFilter
+     * const savedContactFilter = await prisma.savedContactFilter.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SavedContactFilterUpdateArgs>(args: SelectSubset<T, SavedContactFilterUpdateArgs<ExtArgs>>): Prisma__SavedContactFilterClient<$Result.GetResult<Prisma.$SavedContactFilterPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more SavedContactFilters.
+     * @param {SavedContactFilterDeleteManyArgs} args - Arguments to filter SavedContactFilters to delete.
+     * @example
+     * // Delete a few SavedContactFilters
+     * const { count } = await prisma.savedContactFilter.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SavedContactFilterDeleteManyArgs>(args?: SelectSubset<T, SavedContactFilterDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SavedContactFilters.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SavedContactFilterUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SavedContactFilters
+     * const savedContactFilter = await prisma.savedContactFilter.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SavedContactFilterUpdateManyArgs>(args: SelectSubset<T, SavedContactFilterUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SavedContactFilters and returns the data updated in the database.
+     * @param {SavedContactFilterUpdateManyAndReturnArgs} args - Arguments to update many SavedContactFilters.
+     * @example
+     * // Update many SavedContactFilters
+     * const savedContactFilter = await prisma.savedContactFilter.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more SavedContactFilters and only return the `id`
+     * const savedContactFilterWithIdOnly = await prisma.savedContactFilter.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SavedContactFilterUpdateManyAndReturnArgs>(args: SelectSubset<T, SavedContactFilterUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SavedContactFilterPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one SavedContactFilter.
+     * @param {SavedContactFilterUpsertArgs} args - Arguments to update or create a SavedContactFilter.
+     * @example
+     * // Update or create a SavedContactFilter
+     * const savedContactFilter = await prisma.savedContactFilter.upsert({
+     *   create: {
+     *     // ... data to create a SavedContactFilter
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SavedContactFilter we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SavedContactFilterUpsertArgs>(args: SelectSubset<T, SavedContactFilterUpsertArgs<ExtArgs>>): Prisma__SavedContactFilterClient<$Result.GetResult<Prisma.$SavedContactFilterPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of SavedContactFilters.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SavedContactFilterCountArgs} args - Arguments to filter SavedContactFilters to count.
+     * @example
+     * // Count the number of SavedContactFilters
+     * const count = await prisma.savedContactFilter.count({
+     *   where: {
+     *     // ... the filter for the SavedContactFilters we want to count
+     *   }
+     * })
+    **/
+    count<T extends SavedContactFilterCountArgs>(
+      args?: Subset<T, SavedContactFilterCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SavedContactFilterCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SavedContactFilter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SavedContactFilterAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SavedContactFilterAggregateArgs>(args: Subset<T, SavedContactFilterAggregateArgs>): Prisma.PrismaPromise<GetSavedContactFilterAggregateType<T>>
+
+    /**
+     * Group by SavedContactFilter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SavedContactFilterGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SavedContactFilterGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SavedContactFilterGroupByArgs['orderBy'] }
+        : { orderBy?: SavedContactFilterGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SavedContactFilterGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSavedContactFilterGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SavedContactFilter model
+   */
+  readonly fields: SavedContactFilterFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SavedContactFilter.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SavedContactFilterClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    organisation<T extends OrganisationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganisationDefaultArgs<ExtArgs>>): Prisma__OrganisationClient<$Result.GetResult<Prisma.$OrganisationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SavedContactFilter model
+   */
+  interface SavedContactFilterFieldRefs {
+    readonly id: FieldRef<"SavedContactFilter", 'Int'>
+    readonly uuid: FieldRef<"SavedContactFilter", 'String'>
+    readonly organisation_uuid: FieldRef<"SavedContactFilter", 'String'>
+    readonly name: FieldRef<"SavedContactFilter", 'String'>
+    readonly filters: FieldRef<"SavedContactFilter", 'Json'>
+    readonly created_at: FieldRef<"SavedContactFilter", 'DateTime'>
+    readonly updated_at: FieldRef<"SavedContactFilter", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SavedContactFilter findUnique
+   */
+  export type SavedContactFilterFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SavedContactFilter
+     */
+    select?: SavedContactFilterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SavedContactFilter
+     */
+    omit?: SavedContactFilterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SavedContactFilterInclude<ExtArgs> | null
+    /**
+     * Filter, which SavedContactFilter to fetch.
+     */
+    where: SavedContactFilterWhereUniqueInput
+  }
+
+  /**
+   * SavedContactFilter findUniqueOrThrow
+   */
+  export type SavedContactFilterFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SavedContactFilter
+     */
+    select?: SavedContactFilterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SavedContactFilter
+     */
+    omit?: SavedContactFilterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SavedContactFilterInclude<ExtArgs> | null
+    /**
+     * Filter, which SavedContactFilter to fetch.
+     */
+    where: SavedContactFilterWhereUniqueInput
+  }
+
+  /**
+   * SavedContactFilter findFirst
+   */
+  export type SavedContactFilterFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SavedContactFilter
+     */
+    select?: SavedContactFilterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SavedContactFilter
+     */
+    omit?: SavedContactFilterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SavedContactFilterInclude<ExtArgs> | null
+    /**
+     * Filter, which SavedContactFilter to fetch.
+     */
+    where?: SavedContactFilterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SavedContactFilters to fetch.
+     */
+    orderBy?: SavedContactFilterOrderByWithRelationInput | SavedContactFilterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SavedContactFilters.
+     */
+    cursor?: SavedContactFilterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SavedContactFilters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SavedContactFilters.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SavedContactFilters.
+     */
+    distinct?: SavedContactFilterScalarFieldEnum | SavedContactFilterScalarFieldEnum[]
+  }
+
+  /**
+   * SavedContactFilter findFirstOrThrow
+   */
+  export type SavedContactFilterFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SavedContactFilter
+     */
+    select?: SavedContactFilterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SavedContactFilter
+     */
+    omit?: SavedContactFilterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SavedContactFilterInclude<ExtArgs> | null
+    /**
+     * Filter, which SavedContactFilter to fetch.
+     */
+    where?: SavedContactFilterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SavedContactFilters to fetch.
+     */
+    orderBy?: SavedContactFilterOrderByWithRelationInput | SavedContactFilterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SavedContactFilters.
+     */
+    cursor?: SavedContactFilterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SavedContactFilters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SavedContactFilters.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SavedContactFilters.
+     */
+    distinct?: SavedContactFilterScalarFieldEnum | SavedContactFilterScalarFieldEnum[]
+  }
+
+  /**
+   * SavedContactFilter findMany
+   */
+  export type SavedContactFilterFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SavedContactFilter
+     */
+    select?: SavedContactFilterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SavedContactFilter
+     */
+    omit?: SavedContactFilterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SavedContactFilterInclude<ExtArgs> | null
+    /**
+     * Filter, which SavedContactFilters to fetch.
+     */
+    where?: SavedContactFilterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SavedContactFilters to fetch.
+     */
+    orderBy?: SavedContactFilterOrderByWithRelationInput | SavedContactFilterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SavedContactFilters.
+     */
+    cursor?: SavedContactFilterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SavedContactFilters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SavedContactFilters.
+     */
+    skip?: number
+    distinct?: SavedContactFilterScalarFieldEnum | SavedContactFilterScalarFieldEnum[]
+  }
+
+  /**
+   * SavedContactFilter create
+   */
+  export type SavedContactFilterCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SavedContactFilter
+     */
+    select?: SavedContactFilterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SavedContactFilter
+     */
+    omit?: SavedContactFilterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SavedContactFilterInclude<ExtArgs> | null
+    /**
+     * The data needed to create a SavedContactFilter.
+     */
+    data: XOR<SavedContactFilterCreateInput, SavedContactFilterUncheckedCreateInput>
+  }
+
+  /**
+   * SavedContactFilter createMany
+   */
+  export type SavedContactFilterCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SavedContactFilters.
+     */
+    data: SavedContactFilterCreateManyInput | SavedContactFilterCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SavedContactFilter createManyAndReturn
+   */
+  export type SavedContactFilterCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SavedContactFilter
+     */
+    select?: SavedContactFilterSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SavedContactFilter
+     */
+    omit?: SavedContactFilterOmit<ExtArgs> | null
+    /**
+     * The data used to create many SavedContactFilters.
+     */
+    data: SavedContactFilterCreateManyInput | SavedContactFilterCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SavedContactFilterIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SavedContactFilter update
+   */
+  export type SavedContactFilterUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SavedContactFilter
+     */
+    select?: SavedContactFilterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SavedContactFilter
+     */
+    omit?: SavedContactFilterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SavedContactFilterInclude<ExtArgs> | null
+    /**
+     * The data needed to update a SavedContactFilter.
+     */
+    data: XOR<SavedContactFilterUpdateInput, SavedContactFilterUncheckedUpdateInput>
+    /**
+     * Choose, which SavedContactFilter to update.
+     */
+    where: SavedContactFilterWhereUniqueInput
+  }
+
+  /**
+   * SavedContactFilter updateMany
+   */
+  export type SavedContactFilterUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SavedContactFilters.
+     */
+    data: XOR<SavedContactFilterUpdateManyMutationInput, SavedContactFilterUncheckedUpdateManyInput>
+    /**
+     * Filter which SavedContactFilters to update
+     */
+    where?: SavedContactFilterWhereInput
+    /**
+     * Limit how many SavedContactFilters to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SavedContactFilter updateManyAndReturn
+   */
+  export type SavedContactFilterUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SavedContactFilter
+     */
+    select?: SavedContactFilterSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SavedContactFilter
+     */
+    omit?: SavedContactFilterOmit<ExtArgs> | null
+    /**
+     * The data used to update SavedContactFilters.
+     */
+    data: XOR<SavedContactFilterUpdateManyMutationInput, SavedContactFilterUncheckedUpdateManyInput>
+    /**
+     * Filter which SavedContactFilters to update
+     */
+    where?: SavedContactFilterWhereInput
+    /**
+     * Limit how many SavedContactFilters to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SavedContactFilterIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SavedContactFilter upsert
+   */
+  export type SavedContactFilterUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SavedContactFilter
+     */
+    select?: SavedContactFilterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SavedContactFilter
+     */
+    omit?: SavedContactFilterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SavedContactFilterInclude<ExtArgs> | null
+    /**
+     * The filter to search for the SavedContactFilter to update in case it exists.
+     */
+    where: SavedContactFilterWhereUniqueInput
+    /**
+     * In case the SavedContactFilter found by the `where` argument doesn't exist, create a new SavedContactFilter with this data.
+     */
+    create: XOR<SavedContactFilterCreateInput, SavedContactFilterUncheckedCreateInput>
+    /**
+     * In case the SavedContactFilter was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SavedContactFilterUpdateInput, SavedContactFilterUncheckedUpdateInput>
+  }
+
+  /**
+   * SavedContactFilter delete
+   */
+  export type SavedContactFilterDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SavedContactFilter
+     */
+    select?: SavedContactFilterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SavedContactFilter
+     */
+    omit?: SavedContactFilterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SavedContactFilterInclude<ExtArgs> | null
+    /**
+     * Filter which SavedContactFilter to delete.
+     */
+    where: SavedContactFilterWhereUniqueInput
+  }
+
+  /**
+   * SavedContactFilter deleteMany
+   */
+  export type SavedContactFilterDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SavedContactFilters to delete
+     */
+    where?: SavedContactFilterWhereInput
+    /**
+     * Limit how many SavedContactFilters to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * SavedContactFilter without action
+   */
+  export type SavedContactFilterDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SavedContactFilter
+     */
+    select?: SavedContactFilterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SavedContactFilter
+     */
+    omit?: SavedContactFilterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SavedContactFilterInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model ScoringInstruction
    */
 
@@ -16193,6 +17943,9 @@ export namespace Prisma {
     description: string | null
     source_type: $Enums.SourceType | null
     enrichment_summary: string | null
+    email_validation_status: $Enums.EmailValidationStatus | null
+    email_validation_reason: string | null
+    email_validated_at: Date | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -16214,6 +17967,9 @@ export namespace Prisma {
     description: string | null
     source_type: $Enums.SourceType | null
     enrichment_summary: string | null
+    email_validation_status: $Enums.EmailValidationStatus | null
+    email_validation_reason: string | null
+    email_validated_at: Date | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -16237,6 +17993,9 @@ export namespace Prisma {
     raw_data: number
     enrichment_summary: number
     enrichment_metadata: number
+    email_validation_status: number
+    email_validation_reason: number
+    email_validated_at: number
     created_at: number
     updated_at: number
     _all: number
@@ -16268,6 +18027,9 @@ export namespace Prisma {
     description?: true
     source_type?: true
     enrichment_summary?: true
+    email_validation_status?: true
+    email_validation_reason?: true
+    email_validated_at?: true
     created_at?: true
     updated_at?: true
   }
@@ -16289,6 +18051,9 @@ export namespace Prisma {
     description?: true
     source_type?: true
     enrichment_summary?: true
+    email_validation_status?: true
+    email_validation_reason?: true
+    email_validated_at?: true
     created_at?: true
     updated_at?: true
   }
@@ -16312,6 +18077,9 @@ export namespace Prisma {
     raw_data?: true
     enrichment_summary?: true
     enrichment_metadata?: true
+    email_validation_status?: true
+    email_validation_reason?: true
+    email_validated_at?: true
     created_at?: true
     updated_at?: true
     _all?: true
@@ -16422,6 +18190,9 @@ export namespace Prisma {
     raw_data: JsonValue | null
     enrichment_summary: string | null
     enrichment_metadata: JsonValue | null
+    email_validation_status: $Enums.EmailValidationStatus
+    email_validation_reason: string | null
+    email_validated_at: Date | null
     created_at: Date
     updated_at: Date
     _count: LeadCountAggregateOutputType | null
@@ -16464,6 +18235,9 @@ export namespace Prisma {
     raw_data?: boolean
     enrichment_summary?: boolean
     enrichment_metadata?: boolean
+    email_validation_status?: boolean
+    email_validation_reason?: boolean
+    email_validated_at?: boolean
     created_at?: boolean
     updated_at?: boolean
     raw_lead?: boolean | Lead$raw_leadArgs<ExtArgs>
@@ -16491,6 +18265,9 @@ export namespace Prisma {
     raw_data?: boolean
     enrichment_summary?: boolean
     enrichment_metadata?: boolean
+    email_validation_status?: boolean
+    email_validation_reason?: boolean
+    email_validated_at?: boolean
     created_at?: boolean
     updated_at?: boolean
     raw_lead?: boolean | Lead$raw_leadArgs<ExtArgs>
@@ -16515,6 +18292,9 @@ export namespace Prisma {
     raw_data?: boolean
     enrichment_summary?: boolean
     enrichment_metadata?: boolean
+    email_validation_status?: boolean
+    email_validation_reason?: boolean
+    email_validated_at?: boolean
     created_at?: boolean
     updated_at?: boolean
     raw_lead?: boolean | Lead$raw_leadArgs<ExtArgs>
@@ -16539,11 +18319,14 @@ export namespace Prisma {
     raw_data?: boolean
     enrichment_summary?: boolean
     enrichment_metadata?: boolean
+    email_validation_status?: boolean
+    email_validation_reason?: boolean
+    email_validated_at?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
-  export type LeadOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "raw_lead_uuid" | "name" | "email" | "phone" | "company" | "website" | "google_maps_url" | "linkedin_url" | "title" | "location" | "industry" | "description" | "source_type" | "raw_data" | "enrichment_summary" | "enrichment_metadata" | "created_at" | "updated_at", ExtArgs["result"]["lead"]>
+  export type LeadOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "raw_lead_uuid" | "name" | "email" | "phone" | "company" | "website" | "google_maps_url" | "linkedin_url" | "title" | "location" | "industry" | "description" | "source_type" | "raw_data" | "enrichment_summary" | "enrichment_metadata" | "email_validation_status" | "email_validation_reason" | "email_validated_at" | "created_at" | "updated_at", ExtArgs["result"]["lead"]>
   export type LeadInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     raw_lead?: boolean | Lead$raw_leadArgs<ExtArgs>
     contacts?: boolean | Lead$contactsArgs<ExtArgs>
@@ -16583,6 +18366,9 @@ export namespace Prisma {
       raw_data: Prisma.JsonValue | null
       enrichment_summary: string | null
       enrichment_metadata: Prisma.JsonValue | null
+      email_validation_status: $Enums.EmailValidationStatus
+      email_validation_reason: string | null
+      email_validated_at: Date | null
       created_at: Date
       updated_at: Date
     }, ExtArgs["result"]["lead"]>
@@ -17029,6 +18815,9 @@ export namespace Prisma {
     readonly raw_data: FieldRef<"Lead", 'Json'>
     readonly enrichment_summary: FieldRef<"Lead", 'String'>
     readonly enrichment_metadata: FieldRef<"Lead", 'Json'>
+    readonly email_validation_status: FieldRef<"Lead", 'EmailValidationStatus'>
+    readonly email_validation_reason: FieldRef<"Lead", 'String'>
+    readonly email_validated_at: FieldRef<"Lead", 'DateTime'>
     readonly created_at: FieldRef<"Lead", 'DateTime'>
     readonly updated_at: FieldRef<"Lead", 'DateTime'>
   }
@@ -18739,6 +20528,9 @@ export namespace Prisma {
     industry: string | null
     description: string | null
     enrichment_summary: string | null
+    email_validation_status: $Enums.EmailValidationStatus | null
+    email_validation_reason: string | null
+    email_validated_at: Date | null
     unsubscribed_at: Date | null
     unsubscribe_token: string | null
     last_interaction_at: Date | null
@@ -18766,6 +20558,9 @@ export namespace Prisma {
     industry: string | null
     description: string | null
     enrichment_summary: string | null
+    email_validation_status: $Enums.EmailValidationStatus | null
+    email_validation_reason: string | null
+    email_validated_at: Date | null
     unsubscribed_at: Date | null
     unsubscribe_token: string | null
     last_interaction_at: Date | null
@@ -18794,6 +20589,9 @@ export namespace Prisma {
     description: number
     enrichment_summary: number
     enrichment_metadata: number
+    email_validation_status: number
+    email_validation_reason: number
+    email_validated_at: number
     unsubscribed_at: number
     unsubscribe_token: number
     last_interaction_at: number
@@ -18831,6 +20629,9 @@ export namespace Prisma {
     industry?: true
     description?: true
     enrichment_summary?: true
+    email_validation_status?: true
+    email_validation_reason?: true
+    email_validated_at?: true
     unsubscribed_at?: true
     unsubscribe_token?: true
     last_interaction_at?: true
@@ -18858,6 +20659,9 @@ export namespace Prisma {
     industry?: true
     description?: true
     enrichment_summary?: true
+    email_validation_status?: true
+    email_validation_reason?: true
+    email_validated_at?: true
     unsubscribed_at?: true
     unsubscribe_token?: true
     last_interaction_at?: true
@@ -18886,6 +20690,9 @@ export namespace Prisma {
     description?: true
     enrichment_summary?: true
     enrichment_metadata?: true
+    email_validation_status?: true
+    email_validation_reason?: true
+    email_validated_at?: true
     unsubscribed_at?: true
     unsubscribe_token?: true
     last_interaction_at?: true
@@ -19001,6 +20808,9 @@ export namespace Prisma {
     description: string | null
     enrichment_summary: string | null
     enrichment_metadata: JsonValue | null
+    email_validation_status: $Enums.EmailValidationStatus
+    email_validation_reason: string | null
+    email_validated_at: Date | null
     unsubscribed_at: Date | null
     unsubscribe_token: string | null
     last_interaction_at: Date | null
@@ -19048,6 +20858,9 @@ export namespace Prisma {
     description?: boolean
     enrichment_summary?: boolean
     enrichment_metadata?: boolean
+    email_validation_status?: boolean
+    email_validation_reason?: boolean
+    email_validated_at?: boolean
     unsubscribed_at?: boolean
     unsubscribe_token?: boolean
     last_interaction_at?: boolean
@@ -19091,6 +20904,9 @@ export namespace Prisma {
     description?: boolean
     enrichment_summary?: boolean
     enrichment_metadata?: boolean
+    email_validation_status?: boolean
+    email_validation_reason?: boolean
+    email_validated_at?: boolean
     unsubscribed_at?: boolean
     unsubscribe_token?: boolean
     last_interaction_at?: boolean
@@ -19122,6 +20938,9 @@ export namespace Prisma {
     description?: boolean
     enrichment_summary?: boolean
     enrichment_metadata?: boolean
+    email_validation_status?: boolean
+    email_validation_reason?: boolean
+    email_validated_at?: boolean
     unsubscribed_at?: boolean
     unsubscribe_token?: boolean
     last_interaction_at?: boolean
@@ -19153,6 +20972,9 @@ export namespace Prisma {
     description?: boolean
     enrichment_summary?: boolean
     enrichment_metadata?: boolean
+    email_validation_status?: boolean
+    email_validation_reason?: boolean
+    email_validated_at?: boolean
     unsubscribed_at?: boolean
     unsubscribe_token?: boolean
     last_interaction_at?: boolean
@@ -19160,7 +20982,7 @@ export namespace Prisma {
     updated_at?: boolean
   }
 
-  export type ContactOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "lead_uuid" | "filter_uuid" | "status" | "notes" | "name" | "email" | "phone" | "company" | "website" | "google_maps_url" | "linkedin_url" | "title" | "location" | "industry" | "description" | "enrichment_summary" | "enrichment_metadata" | "unsubscribed_at" | "unsubscribe_token" | "last_interaction_at" | "created_at" | "updated_at", ExtArgs["result"]["contact"]>
+  export type ContactOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "lead_uuid" | "filter_uuid" | "status" | "notes" | "name" | "email" | "phone" | "company" | "website" | "google_maps_url" | "linkedin_url" | "title" | "location" | "industry" | "description" | "enrichment_summary" | "enrichment_metadata" | "email_validation_status" | "email_validation_reason" | "email_validated_at" | "unsubscribed_at" | "unsubscribe_token" | "last_interaction_at" | "created_at" | "updated_at", ExtArgs["result"]["contact"]>
   export type ContactInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     lead?: boolean | LeadDefaultArgs<ExtArgs>
@@ -19228,6 +21050,9 @@ export namespace Prisma {
       description: string | null
       enrichment_summary: string | null
       enrichment_metadata: Prisma.JsonValue | null
+      email_validation_status: $Enums.EmailValidationStatus
+      email_validation_reason: string | null
+      email_validated_at: Date | null
       unsubscribed_at: Date | null
       unsubscribe_token: string | null
       last_interaction_at: Date | null
@@ -19690,6 +21515,9 @@ export namespace Prisma {
     readonly description: FieldRef<"Contact", 'String'>
     readonly enrichment_summary: FieldRef<"Contact", 'String'>
     readonly enrichment_metadata: FieldRef<"Contact", 'Json'>
+    readonly email_validation_status: FieldRef<"Contact", 'EmailValidationStatus'>
+    readonly email_validation_reason: FieldRef<"Contact", 'String'>
+    readonly email_validated_at: FieldRef<"Contact", 'DateTime'>
     readonly unsubscribed_at: FieldRef<"Contact", 'DateTime'>
     readonly unsubscribe_token: FieldRef<"Contact", 'String'>
     readonly last_interaction_at: FieldRef<"Contact", 'DateTime'>
@@ -33262,6 +35090,2520 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: FilterJobInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model BulkJob
+   */
+
+  export type AggregateBulkJob = {
+    _count: BulkJobCountAggregateOutputType | null
+    _avg: BulkJobAvgAggregateOutputType | null
+    _sum: BulkJobSumAggregateOutputType | null
+    _min: BulkJobMinAggregateOutputType | null
+    _max: BulkJobMaxAggregateOutputType | null
+  }
+
+  export type BulkJobAvgAggregateOutputType = {
+    id: number | null
+    retries: number | null
+    max_retries: number | null
+    progress_current: number | null
+    progress_total: number | null
+    progress_failed: number | null
+  }
+
+  export type BulkJobSumAggregateOutputType = {
+    id: number | null
+    retries: number | null
+    max_retries: number | null
+    progress_current: number | null
+    progress_total: number | null
+    progress_failed: number | null
+  }
+
+  export type BulkJobMinAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    organisation_uuid: string | null
+    created_by_user_uuid: string | null
+    title: string | null
+    type: $Enums.BulkJobType | null
+    status: $Enums.BulkJobStatus | null
+    error: string | null
+    retries: number | null
+    max_retries: number | null
+    progress_current: number | null
+    progress_total: number | null
+    progress_failed: number | null
+    queue_name: string | null
+    queue_job_id: string | null
+    reference_type: string | null
+    reference_uuid: string | null
+    started_at: Date | null
+    completed_at: Date | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type BulkJobMaxAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    organisation_uuid: string | null
+    created_by_user_uuid: string | null
+    title: string | null
+    type: $Enums.BulkJobType | null
+    status: $Enums.BulkJobStatus | null
+    error: string | null
+    retries: number | null
+    max_retries: number | null
+    progress_current: number | null
+    progress_total: number | null
+    progress_failed: number | null
+    queue_name: string | null
+    queue_job_id: string | null
+    reference_type: string | null
+    reference_uuid: string | null
+    started_at: Date | null
+    completed_at: Date | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type BulkJobCountAggregateOutputType = {
+    id: number
+    uuid: number
+    organisation_uuid: number
+    created_by_user_uuid: number
+    title: number
+    type: number
+    status: number
+    error: number
+    retries: number
+    max_retries: number
+    progress_current: number
+    progress_total: number
+    progress_failed: number
+    queue_name: number
+    queue_job_id: number
+    reference_type: number
+    reference_uuid: number
+    metadata: number
+    started_at: number
+    completed_at: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type BulkJobAvgAggregateInputType = {
+    id?: true
+    retries?: true
+    max_retries?: true
+    progress_current?: true
+    progress_total?: true
+    progress_failed?: true
+  }
+
+  export type BulkJobSumAggregateInputType = {
+    id?: true
+    retries?: true
+    max_retries?: true
+    progress_current?: true
+    progress_total?: true
+    progress_failed?: true
+  }
+
+  export type BulkJobMinAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    created_by_user_uuid?: true
+    title?: true
+    type?: true
+    status?: true
+    error?: true
+    retries?: true
+    max_retries?: true
+    progress_current?: true
+    progress_total?: true
+    progress_failed?: true
+    queue_name?: true
+    queue_job_id?: true
+    reference_type?: true
+    reference_uuid?: true
+    started_at?: true
+    completed_at?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type BulkJobMaxAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    created_by_user_uuid?: true
+    title?: true
+    type?: true
+    status?: true
+    error?: true
+    retries?: true
+    max_retries?: true
+    progress_current?: true
+    progress_total?: true
+    progress_failed?: true
+    queue_name?: true
+    queue_job_id?: true
+    reference_type?: true
+    reference_uuid?: true
+    started_at?: true
+    completed_at?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type BulkJobCountAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    created_by_user_uuid?: true
+    title?: true
+    type?: true
+    status?: true
+    error?: true
+    retries?: true
+    max_retries?: true
+    progress_current?: true
+    progress_total?: true
+    progress_failed?: true
+    queue_name?: true
+    queue_job_id?: true
+    reference_type?: true
+    reference_uuid?: true
+    metadata?: true
+    started_at?: true
+    completed_at?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type BulkJobAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BulkJob to aggregate.
+     */
+    where?: BulkJobWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BulkJobs to fetch.
+     */
+    orderBy?: BulkJobOrderByWithRelationInput | BulkJobOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: BulkJobWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BulkJobs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BulkJobs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned BulkJobs
+    **/
+    _count?: true | BulkJobCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: BulkJobAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: BulkJobSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: BulkJobMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: BulkJobMaxAggregateInputType
+  }
+
+  export type GetBulkJobAggregateType<T extends BulkJobAggregateArgs> = {
+        [P in keyof T & keyof AggregateBulkJob]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateBulkJob[P]>
+      : GetScalarType<T[P], AggregateBulkJob[P]>
+  }
+
+
+
+
+  export type BulkJobGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BulkJobWhereInput
+    orderBy?: BulkJobOrderByWithAggregationInput | BulkJobOrderByWithAggregationInput[]
+    by: BulkJobScalarFieldEnum[] | BulkJobScalarFieldEnum
+    having?: BulkJobScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: BulkJobCountAggregateInputType | true
+    _avg?: BulkJobAvgAggregateInputType
+    _sum?: BulkJobSumAggregateInputType
+    _min?: BulkJobMinAggregateInputType
+    _max?: BulkJobMaxAggregateInputType
+  }
+
+  export type BulkJobGroupByOutputType = {
+    id: number
+    uuid: string
+    organisation_uuid: string
+    created_by_user_uuid: string | null
+    title: string
+    type: $Enums.BulkJobType
+    status: $Enums.BulkJobStatus
+    error: string | null
+    retries: number
+    max_retries: number
+    progress_current: number
+    progress_total: number
+    progress_failed: number
+    queue_name: string | null
+    queue_job_id: string | null
+    reference_type: string | null
+    reference_uuid: string | null
+    metadata: JsonValue | null
+    started_at: Date | null
+    completed_at: Date | null
+    created_at: Date
+    updated_at: Date
+    _count: BulkJobCountAggregateOutputType | null
+    _avg: BulkJobAvgAggregateOutputType | null
+    _sum: BulkJobSumAggregateOutputType | null
+    _min: BulkJobMinAggregateOutputType | null
+    _max: BulkJobMaxAggregateOutputType | null
+  }
+
+  type GetBulkJobGroupByPayload<T extends BulkJobGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<BulkJobGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof BulkJobGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], BulkJobGroupByOutputType[P]>
+            : GetScalarType<T[P], BulkJobGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type BulkJobSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    created_by_user_uuid?: boolean
+    title?: boolean
+    type?: boolean
+    status?: boolean
+    error?: boolean
+    retries?: boolean
+    max_retries?: boolean
+    progress_current?: boolean
+    progress_total?: boolean
+    progress_failed?: boolean
+    queue_name?: boolean
+    queue_job_id?: boolean
+    reference_type?: boolean
+    reference_uuid?: boolean
+    metadata?: boolean
+    started_at?: boolean
+    completed_at?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    created_by?: boolean | BulkJob$created_byArgs<ExtArgs>
+  }, ExtArgs["result"]["bulkJob"]>
+
+  export type BulkJobSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    created_by_user_uuid?: boolean
+    title?: boolean
+    type?: boolean
+    status?: boolean
+    error?: boolean
+    retries?: boolean
+    max_retries?: boolean
+    progress_current?: boolean
+    progress_total?: boolean
+    progress_failed?: boolean
+    queue_name?: boolean
+    queue_job_id?: boolean
+    reference_type?: boolean
+    reference_uuid?: boolean
+    metadata?: boolean
+    started_at?: boolean
+    completed_at?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    created_by?: boolean | BulkJob$created_byArgs<ExtArgs>
+  }, ExtArgs["result"]["bulkJob"]>
+
+  export type BulkJobSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    created_by_user_uuid?: boolean
+    title?: boolean
+    type?: boolean
+    status?: boolean
+    error?: boolean
+    retries?: boolean
+    max_retries?: boolean
+    progress_current?: boolean
+    progress_total?: boolean
+    progress_failed?: boolean
+    queue_name?: boolean
+    queue_job_id?: boolean
+    reference_type?: boolean
+    reference_uuid?: boolean
+    metadata?: boolean
+    started_at?: boolean
+    completed_at?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    created_by?: boolean | BulkJob$created_byArgs<ExtArgs>
+  }, ExtArgs["result"]["bulkJob"]>
+
+  export type BulkJobSelectScalar = {
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    created_by_user_uuid?: boolean
+    title?: boolean
+    type?: boolean
+    status?: boolean
+    error?: boolean
+    retries?: boolean
+    max_retries?: boolean
+    progress_current?: boolean
+    progress_total?: boolean
+    progress_failed?: boolean
+    queue_name?: boolean
+    queue_job_id?: boolean
+    reference_type?: boolean
+    reference_uuid?: boolean
+    metadata?: boolean
+    started_at?: boolean
+    completed_at?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type BulkJobOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "created_by_user_uuid" | "title" | "type" | "status" | "error" | "retries" | "max_retries" | "progress_current" | "progress_total" | "progress_failed" | "queue_name" | "queue_job_id" | "reference_type" | "reference_uuid" | "metadata" | "started_at" | "completed_at" | "created_at" | "updated_at", ExtArgs["result"]["bulkJob"]>
+  export type BulkJobInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    created_by?: boolean | BulkJob$created_byArgs<ExtArgs>
+  }
+  export type BulkJobIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    created_by?: boolean | BulkJob$created_byArgs<ExtArgs>
+  }
+  export type BulkJobIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    created_by?: boolean | BulkJob$created_byArgs<ExtArgs>
+  }
+
+  export type $BulkJobPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "BulkJob"
+    objects: {
+      organisation: Prisma.$OrganisationPayload<ExtArgs>
+      created_by: Prisma.$UserPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      uuid: string
+      organisation_uuid: string
+      created_by_user_uuid: string | null
+      title: string
+      type: $Enums.BulkJobType
+      status: $Enums.BulkJobStatus
+      error: string | null
+      retries: number
+      max_retries: number
+      progress_current: number
+      progress_total: number
+      progress_failed: number
+      queue_name: string | null
+      queue_job_id: string | null
+      reference_type: string | null
+      reference_uuid: string | null
+      metadata: Prisma.JsonValue | null
+      started_at: Date | null
+      completed_at: Date | null
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["bulkJob"]>
+    composites: {}
+  }
+
+  type BulkJobGetPayload<S extends boolean | null | undefined | BulkJobDefaultArgs> = $Result.GetResult<Prisma.$BulkJobPayload, S>
+
+  type BulkJobCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<BulkJobFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: BulkJobCountAggregateInputType | true
+    }
+
+  export interface BulkJobDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['BulkJob'], meta: { name: 'BulkJob' } }
+    /**
+     * Find zero or one BulkJob that matches the filter.
+     * @param {BulkJobFindUniqueArgs} args - Arguments to find a BulkJob
+     * @example
+     * // Get one BulkJob
+     * const bulkJob = await prisma.bulkJob.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends BulkJobFindUniqueArgs>(args: SelectSubset<T, BulkJobFindUniqueArgs<ExtArgs>>): Prisma__BulkJobClient<$Result.GetResult<Prisma.$BulkJobPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one BulkJob that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {BulkJobFindUniqueOrThrowArgs} args - Arguments to find a BulkJob
+     * @example
+     * // Get one BulkJob
+     * const bulkJob = await prisma.bulkJob.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends BulkJobFindUniqueOrThrowArgs>(args: SelectSubset<T, BulkJobFindUniqueOrThrowArgs<ExtArgs>>): Prisma__BulkJobClient<$Result.GetResult<Prisma.$BulkJobPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first BulkJob that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BulkJobFindFirstArgs} args - Arguments to find a BulkJob
+     * @example
+     * // Get one BulkJob
+     * const bulkJob = await prisma.bulkJob.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends BulkJobFindFirstArgs>(args?: SelectSubset<T, BulkJobFindFirstArgs<ExtArgs>>): Prisma__BulkJobClient<$Result.GetResult<Prisma.$BulkJobPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first BulkJob that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BulkJobFindFirstOrThrowArgs} args - Arguments to find a BulkJob
+     * @example
+     * // Get one BulkJob
+     * const bulkJob = await prisma.bulkJob.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends BulkJobFindFirstOrThrowArgs>(args?: SelectSubset<T, BulkJobFindFirstOrThrowArgs<ExtArgs>>): Prisma__BulkJobClient<$Result.GetResult<Prisma.$BulkJobPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more BulkJobs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BulkJobFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all BulkJobs
+     * const bulkJobs = await prisma.bulkJob.findMany()
+     * 
+     * // Get first 10 BulkJobs
+     * const bulkJobs = await prisma.bulkJob.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const bulkJobWithIdOnly = await prisma.bulkJob.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends BulkJobFindManyArgs>(args?: SelectSubset<T, BulkJobFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BulkJobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a BulkJob.
+     * @param {BulkJobCreateArgs} args - Arguments to create a BulkJob.
+     * @example
+     * // Create one BulkJob
+     * const BulkJob = await prisma.bulkJob.create({
+     *   data: {
+     *     // ... data to create a BulkJob
+     *   }
+     * })
+     * 
+     */
+    create<T extends BulkJobCreateArgs>(args: SelectSubset<T, BulkJobCreateArgs<ExtArgs>>): Prisma__BulkJobClient<$Result.GetResult<Prisma.$BulkJobPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many BulkJobs.
+     * @param {BulkJobCreateManyArgs} args - Arguments to create many BulkJobs.
+     * @example
+     * // Create many BulkJobs
+     * const bulkJob = await prisma.bulkJob.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends BulkJobCreateManyArgs>(args?: SelectSubset<T, BulkJobCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many BulkJobs and returns the data saved in the database.
+     * @param {BulkJobCreateManyAndReturnArgs} args - Arguments to create many BulkJobs.
+     * @example
+     * // Create many BulkJobs
+     * const bulkJob = await prisma.bulkJob.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many BulkJobs and only return the `id`
+     * const bulkJobWithIdOnly = await prisma.bulkJob.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends BulkJobCreateManyAndReturnArgs>(args?: SelectSubset<T, BulkJobCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BulkJobPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a BulkJob.
+     * @param {BulkJobDeleteArgs} args - Arguments to delete one BulkJob.
+     * @example
+     * // Delete one BulkJob
+     * const BulkJob = await prisma.bulkJob.delete({
+     *   where: {
+     *     // ... filter to delete one BulkJob
+     *   }
+     * })
+     * 
+     */
+    delete<T extends BulkJobDeleteArgs>(args: SelectSubset<T, BulkJobDeleteArgs<ExtArgs>>): Prisma__BulkJobClient<$Result.GetResult<Prisma.$BulkJobPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one BulkJob.
+     * @param {BulkJobUpdateArgs} args - Arguments to update one BulkJob.
+     * @example
+     * // Update one BulkJob
+     * const bulkJob = await prisma.bulkJob.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends BulkJobUpdateArgs>(args: SelectSubset<T, BulkJobUpdateArgs<ExtArgs>>): Prisma__BulkJobClient<$Result.GetResult<Prisma.$BulkJobPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more BulkJobs.
+     * @param {BulkJobDeleteManyArgs} args - Arguments to filter BulkJobs to delete.
+     * @example
+     * // Delete a few BulkJobs
+     * const { count } = await prisma.bulkJob.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends BulkJobDeleteManyArgs>(args?: SelectSubset<T, BulkJobDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more BulkJobs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BulkJobUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many BulkJobs
+     * const bulkJob = await prisma.bulkJob.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends BulkJobUpdateManyArgs>(args: SelectSubset<T, BulkJobUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more BulkJobs and returns the data updated in the database.
+     * @param {BulkJobUpdateManyAndReturnArgs} args - Arguments to update many BulkJobs.
+     * @example
+     * // Update many BulkJobs
+     * const bulkJob = await prisma.bulkJob.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more BulkJobs and only return the `id`
+     * const bulkJobWithIdOnly = await prisma.bulkJob.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends BulkJobUpdateManyAndReturnArgs>(args: SelectSubset<T, BulkJobUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BulkJobPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one BulkJob.
+     * @param {BulkJobUpsertArgs} args - Arguments to update or create a BulkJob.
+     * @example
+     * // Update or create a BulkJob
+     * const bulkJob = await prisma.bulkJob.upsert({
+     *   create: {
+     *     // ... data to create a BulkJob
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the BulkJob we want to update
+     *   }
+     * })
+     */
+    upsert<T extends BulkJobUpsertArgs>(args: SelectSubset<T, BulkJobUpsertArgs<ExtArgs>>): Prisma__BulkJobClient<$Result.GetResult<Prisma.$BulkJobPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of BulkJobs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BulkJobCountArgs} args - Arguments to filter BulkJobs to count.
+     * @example
+     * // Count the number of BulkJobs
+     * const count = await prisma.bulkJob.count({
+     *   where: {
+     *     // ... the filter for the BulkJobs we want to count
+     *   }
+     * })
+    **/
+    count<T extends BulkJobCountArgs>(
+      args?: Subset<T, BulkJobCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], BulkJobCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a BulkJob.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BulkJobAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends BulkJobAggregateArgs>(args: Subset<T, BulkJobAggregateArgs>): Prisma.PrismaPromise<GetBulkJobAggregateType<T>>
+
+    /**
+     * Group by BulkJob.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BulkJobGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends BulkJobGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: BulkJobGroupByArgs['orderBy'] }
+        : { orderBy?: BulkJobGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, BulkJobGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBulkJobGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the BulkJob model
+   */
+  readonly fields: BulkJobFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for BulkJob.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__BulkJobClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    organisation<T extends OrganisationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganisationDefaultArgs<ExtArgs>>): Prisma__OrganisationClient<$Result.GetResult<Prisma.$OrganisationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    created_by<T extends BulkJob$created_byArgs<ExtArgs> = {}>(args?: Subset<T, BulkJob$created_byArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the BulkJob model
+   */
+  interface BulkJobFieldRefs {
+    readonly id: FieldRef<"BulkJob", 'Int'>
+    readonly uuid: FieldRef<"BulkJob", 'String'>
+    readonly organisation_uuid: FieldRef<"BulkJob", 'String'>
+    readonly created_by_user_uuid: FieldRef<"BulkJob", 'String'>
+    readonly title: FieldRef<"BulkJob", 'String'>
+    readonly type: FieldRef<"BulkJob", 'BulkJobType'>
+    readonly status: FieldRef<"BulkJob", 'BulkJobStatus'>
+    readonly error: FieldRef<"BulkJob", 'String'>
+    readonly retries: FieldRef<"BulkJob", 'Int'>
+    readonly max_retries: FieldRef<"BulkJob", 'Int'>
+    readonly progress_current: FieldRef<"BulkJob", 'Int'>
+    readonly progress_total: FieldRef<"BulkJob", 'Int'>
+    readonly progress_failed: FieldRef<"BulkJob", 'Int'>
+    readonly queue_name: FieldRef<"BulkJob", 'String'>
+    readonly queue_job_id: FieldRef<"BulkJob", 'String'>
+    readonly reference_type: FieldRef<"BulkJob", 'String'>
+    readonly reference_uuid: FieldRef<"BulkJob", 'String'>
+    readonly metadata: FieldRef<"BulkJob", 'Json'>
+    readonly started_at: FieldRef<"BulkJob", 'DateTime'>
+    readonly completed_at: FieldRef<"BulkJob", 'DateTime'>
+    readonly created_at: FieldRef<"BulkJob", 'DateTime'>
+    readonly updated_at: FieldRef<"BulkJob", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * BulkJob findUnique
+   */
+  export type BulkJobFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BulkJob
+     */
+    select?: BulkJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BulkJob
+     */
+    omit?: BulkJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BulkJobInclude<ExtArgs> | null
+    /**
+     * Filter, which BulkJob to fetch.
+     */
+    where: BulkJobWhereUniqueInput
+  }
+
+  /**
+   * BulkJob findUniqueOrThrow
+   */
+  export type BulkJobFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BulkJob
+     */
+    select?: BulkJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BulkJob
+     */
+    omit?: BulkJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BulkJobInclude<ExtArgs> | null
+    /**
+     * Filter, which BulkJob to fetch.
+     */
+    where: BulkJobWhereUniqueInput
+  }
+
+  /**
+   * BulkJob findFirst
+   */
+  export type BulkJobFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BulkJob
+     */
+    select?: BulkJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BulkJob
+     */
+    omit?: BulkJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BulkJobInclude<ExtArgs> | null
+    /**
+     * Filter, which BulkJob to fetch.
+     */
+    where?: BulkJobWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BulkJobs to fetch.
+     */
+    orderBy?: BulkJobOrderByWithRelationInput | BulkJobOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BulkJobs.
+     */
+    cursor?: BulkJobWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BulkJobs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BulkJobs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BulkJobs.
+     */
+    distinct?: BulkJobScalarFieldEnum | BulkJobScalarFieldEnum[]
+  }
+
+  /**
+   * BulkJob findFirstOrThrow
+   */
+  export type BulkJobFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BulkJob
+     */
+    select?: BulkJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BulkJob
+     */
+    omit?: BulkJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BulkJobInclude<ExtArgs> | null
+    /**
+     * Filter, which BulkJob to fetch.
+     */
+    where?: BulkJobWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BulkJobs to fetch.
+     */
+    orderBy?: BulkJobOrderByWithRelationInput | BulkJobOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BulkJobs.
+     */
+    cursor?: BulkJobWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BulkJobs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BulkJobs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BulkJobs.
+     */
+    distinct?: BulkJobScalarFieldEnum | BulkJobScalarFieldEnum[]
+  }
+
+  /**
+   * BulkJob findMany
+   */
+  export type BulkJobFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BulkJob
+     */
+    select?: BulkJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BulkJob
+     */
+    omit?: BulkJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BulkJobInclude<ExtArgs> | null
+    /**
+     * Filter, which BulkJobs to fetch.
+     */
+    where?: BulkJobWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BulkJobs to fetch.
+     */
+    orderBy?: BulkJobOrderByWithRelationInput | BulkJobOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing BulkJobs.
+     */
+    cursor?: BulkJobWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BulkJobs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BulkJobs.
+     */
+    skip?: number
+    distinct?: BulkJobScalarFieldEnum | BulkJobScalarFieldEnum[]
+  }
+
+  /**
+   * BulkJob create
+   */
+  export type BulkJobCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BulkJob
+     */
+    select?: BulkJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BulkJob
+     */
+    omit?: BulkJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BulkJobInclude<ExtArgs> | null
+    /**
+     * The data needed to create a BulkJob.
+     */
+    data: XOR<BulkJobCreateInput, BulkJobUncheckedCreateInput>
+  }
+
+  /**
+   * BulkJob createMany
+   */
+  export type BulkJobCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many BulkJobs.
+     */
+    data: BulkJobCreateManyInput | BulkJobCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * BulkJob createManyAndReturn
+   */
+  export type BulkJobCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BulkJob
+     */
+    select?: BulkJobSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the BulkJob
+     */
+    omit?: BulkJobOmit<ExtArgs> | null
+    /**
+     * The data used to create many BulkJobs.
+     */
+    data: BulkJobCreateManyInput | BulkJobCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BulkJobIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * BulkJob update
+   */
+  export type BulkJobUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BulkJob
+     */
+    select?: BulkJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BulkJob
+     */
+    omit?: BulkJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BulkJobInclude<ExtArgs> | null
+    /**
+     * The data needed to update a BulkJob.
+     */
+    data: XOR<BulkJobUpdateInput, BulkJobUncheckedUpdateInput>
+    /**
+     * Choose, which BulkJob to update.
+     */
+    where: BulkJobWhereUniqueInput
+  }
+
+  /**
+   * BulkJob updateMany
+   */
+  export type BulkJobUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update BulkJobs.
+     */
+    data: XOR<BulkJobUpdateManyMutationInput, BulkJobUncheckedUpdateManyInput>
+    /**
+     * Filter which BulkJobs to update
+     */
+    where?: BulkJobWhereInput
+    /**
+     * Limit how many BulkJobs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * BulkJob updateManyAndReturn
+   */
+  export type BulkJobUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BulkJob
+     */
+    select?: BulkJobSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the BulkJob
+     */
+    omit?: BulkJobOmit<ExtArgs> | null
+    /**
+     * The data used to update BulkJobs.
+     */
+    data: XOR<BulkJobUpdateManyMutationInput, BulkJobUncheckedUpdateManyInput>
+    /**
+     * Filter which BulkJobs to update
+     */
+    where?: BulkJobWhereInput
+    /**
+     * Limit how many BulkJobs to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BulkJobIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * BulkJob upsert
+   */
+  export type BulkJobUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BulkJob
+     */
+    select?: BulkJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BulkJob
+     */
+    omit?: BulkJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BulkJobInclude<ExtArgs> | null
+    /**
+     * The filter to search for the BulkJob to update in case it exists.
+     */
+    where: BulkJobWhereUniqueInput
+    /**
+     * In case the BulkJob found by the `where` argument doesn't exist, create a new BulkJob with this data.
+     */
+    create: XOR<BulkJobCreateInput, BulkJobUncheckedCreateInput>
+    /**
+     * In case the BulkJob was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<BulkJobUpdateInput, BulkJobUncheckedUpdateInput>
+  }
+
+  /**
+   * BulkJob delete
+   */
+  export type BulkJobDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BulkJob
+     */
+    select?: BulkJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BulkJob
+     */
+    omit?: BulkJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BulkJobInclude<ExtArgs> | null
+    /**
+     * Filter which BulkJob to delete.
+     */
+    where: BulkJobWhereUniqueInput
+  }
+
+  /**
+   * BulkJob deleteMany
+   */
+  export type BulkJobDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BulkJobs to delete
+     */
+    where?: BulkJobWhereInput
+    /**
+     * Limit how many BulkJobs to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * BulkJob.created_by
+   */
+  export type BulkJob$created_byArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * BulkJob without action
+   */
+  export type BulkJobDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BulkJob
+     */
+    select?: BulkJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BulkJob
+     */
+    omit?: BulkJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BulkJobInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model WebsiteScrapeRequest
+   */
+
+  export type AggregateWebsiteScrapeRequest = {
+    _count: WebsiteScrapeRequestCountAggregateOutputType | null
+    _min: WebsiteScrapeRequestMinAggregateOutputType | null
+    _max: WebsiteScrapeRequestMaxAggregateOutputType | null
+  }
+
+  export type WebsiteScrapeRequestMinAggregateOutputType = {
+    id: string | null
+    provider: $Enums.WebsiteScrapeProvider | null
+    provider_run_id: string | null
+    provider_config_id: string | null
+    organisation_uuid: string | null
+    operation: $Enums.WebsiteScrapeOperation | null
+    reference_uuid: string | null
+    status: $Enums.WebsiteScrapeStatus | null
+    error: string | null
+    created_at: Date | null
+    updated_at: Date | null
+    finished_at: Date | null
+  }
+
+  export type WebsiteScrapeRequestMaxAggregateOutputType = {
+    id: string | null
+    provider: $Enums.WebsiteScrapeProvider | null
+    provider_run_id: string | null
+    provider_config_id: string | null
+    organisation_uuid: string | null
+    operation: $Enums.WebsiteScrapeOperation | null
+    reference_uuid: string | null
+    status: $Enums.WebsiteScrapeStatus | null
+    error: string | null
+    created_at: Date | null
+    updated_at: Date | null
+    finished_at: Date | null
+  }
+
+  export type WebsiteScrapeRequestCountAggregateOutputType = {
+    id: number
+    provider: number
+    provider_run_id: number
+    provider_config_id: number
+    organisation_uuid: number
+    operation: number
+    reference_uuid: number
+    status: number
+    context: number
+    error: number
+    created_at: number
+    updated_at: number
+    finished_at: number
+    _all: number
+  }
+
+
+  export type WebsiteScrapeRequestMinAggregateInputType = {
+    id?: true
+    provider?: true
+    provider_run_id?: true
+    provider_config_id?: true
+    organisation_uuid?: true
+    operation?: true
+    reference_uuid?: true
+    status?: true
+    error?: true
+    created_at?: true
+    updated_at?: true
+    finished_at?: true
+  }
+
+  export type WebsiteScrapeRequestMaxAggregateInputType = {
+    id?: true
+    provider?: true
+    provider_run_id?: true
+    provider_config_id?: true
+    organisation_uuid?: true
+    operation?: true
+    reference_uuid?: true
+    status?: true
+    error?: true
+    created_at?: true
+    updated_at?: true
+    finished_at?: true
+  }
+
+  export type WebsiteScrapeRequestCountAggregateInputType = {
+    id?: true
+    provider?: true
+    provider_run_id?: true
+    provider_config_id?: true
+    organisation_uuid?: true
+    operation?: true
+    reference_uuid?: true
+    status?: true
+    context?: true
+    error?: true
+    created_at?: true
+    updated_at?: true
+    finished_at?: true
+    _all?: true
+  }
+
+  export type WebsiteScrapeRequestAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WebsiteScrapeRequest to aggregate.
+     */
+    where?: WebsiteScrapeRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WebsiteScrapeRequests to fetch.
+     */
+    orderBy?: WebsiteScrapeRequestOrderByWithRelationInput | WebsiteScrapeRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: WebsiteScrapeRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WebsiteScrapeRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WebsiteScrapeRequests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned WebsiteScrapeRequests
+    **/
+    _count?: true | WebsiteScrapeRequestCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: WebsiteScrapeRequestMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: WebsiteScrapeRequestMaxAggregateInputType
+  }
+
+  export type GetWebsiteScrapeRequestAggregateType<T extends WebsiteScrapeRequestAggregateArgs> = {
+        [P in keyof T & keyof AggregateWebsiteScrapeRequest]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateWebsiteScrapeRequest[P]>
+      : GetScalarType<T[P], AggregateWebsiteScrapeRequest[P]>
+  }
+
+
+
+
+  export type WebsiteScrapeRequestGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WebsiteScrapeRequestWhereInput
+    orderBy?: WebsiteScrapeRequestOrderByWithAggregationInput | WebsiteScrapeRequestOrderByWithAggregationInput[]
+    by: WebsiteScrapeRequestScalarFieldEnum[] | WebsiteScrapeRequestScalarFieldEnum
+    having?: WebsiteScrapeRequestScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: WebsiteScrapeRequestCountAggregateInputType | true
+    _min?: WebsiteScrapeRequestMinAggregateInputType
+    _max?: WebsiteScrapeRequestMaxAggregateInputType
+  }
+
+  export type WebsiteScrapeRequestGroupByOutputType = {
+    id: string
+    provider: $Enums.WebsiteScrapeProvider
+    provider_run_id: string
+    provider_config_id: string
+    organisation_uuid: string
+    operation: $Enums.WebsiteScrapeOperation
+    reference_uuid: string
+    status: $Enums.WebsiteScrapeStatus
+    context: JsonValue | null
+    error: string | null
+    created_at: Date
+    updated_at: Date
+    finished_at: Date | null
+    _count: WebsiteScrapeRequestCountAggregateOutputType | null
+    _min: WebsiteScrapeRequestMinAggregateOutputType | null
+    _max: WebsiteScrapeRequestMaxAggregateOutputType | null
+  }
+
+  type GetWebsiteScrapeRequestGroupByPayload<T extends WebsiteScrapeRequestGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<WebsiteScrapeRequestGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof WebsiteScrapeRequestGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], WebsiteScrapeRequestGroupByOutputType[P]>
+            : GetScalarType<T[P], WebsiteScrapeRequestGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type WebsiteScrapeRequestSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    provider?: boolean
+    provider_run_id?: boolean
+    provider_config_id?: boolean
+    organisation_uuid?: boolean
+    operation?: boolean
+    reference_uuid?: boolean
+    status?: boolean
+    context?: boolean
+    error?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    finished_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["websiteScrapeRequest"]>
+
+  export type WebsiteScrapeRequestSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    provider?: boolean
+    provider_run_id?: boolean
+    provider_config_id?: boolean
+    organisation_uuid?: boolean
+    operation?: boolean
+    reference_uuid?: boolean
+    status?: boolean
+    context?: boolean
+    error?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    finished_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["websiteScrapeRequest"]>
+
+  export type WebsiteScrapeRequestSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    provider?: boolean
+    provider_run_id?: boolean
+    provider_config_id?: boolean
+    organisation_uuid?: boolean
+    operation?: boolean
+    reference_uuid?: boolean
+    status?: boolean
+    context?: boolean
+    error?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    finished_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["websiteScrapeRequest"]>
+
+  export type WebsiteScrapeRequestSelectScalar = {
+    id?: boolean
+    provider?: boolean
+    provider_run_id?: boolean
+    provider_config_id?: boolean
+    organisation_uuid?: boolean
+    operation?: boolean
+    reference_uuid?: boolean
+    status?: boolean
+    context?: boolean
+    error?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    finished_at?: boolean
+  }
+
+  export type WebsiteScrapeRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "provider" | "provider_run_id" | "provider_config_id" | "organisation_uuid" | "operation" | "reference_uuid" | "status" | "context" | "error" | "created_at" | "updated_at" | "finished_at", ExtArgs["result"]["websiteScrapeRequest"]>
+  export type WebsiteScrapeRequestInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }
+  export type WebsiteScrapeRequestIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }
+  export type WebsiteScrapeRequestIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }
+
+  export type $WebsiteScrapeRequestPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "WebsiteScrapeRequest"
+    objects: {
+      organisation: Prisma.$OrganisationPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      provider: $Enums.WebsiteScrapeProvider
+      provider_run_id: string
+      provider_config_id: string
+      organisation_uuid: string
+      operation: $Enums.WebsiteScrapeOperation
+      reference_uuid: string
+      status: $Enums.WebsiteScrapeStatus
+      context: Prisma.JsonValue | null
+      error: string | null
+      created_at: Date
+      updated_at: Date
+      finished_at: Date | null
+    }, ExtArgs["result"]["websiteScrapeRequest"]>
+    composites: {}
+  }
+
+  type WebsiteScrapeRequestGetPayload<S extends boolean | null | undefined | WebsiteScrapeRequestDefaultArgs> = $Result.GetResult<Prisma.$WebsiteScrapeRequestPayload, S>
+
+  type WebsiteScrapeRequestCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<WebsiteScrapeRequestFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: WebsiteScrapeRequestCountAggregateInputType | true
+    }
+
+  export interface WebsiteScrapeRequestDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['WebsiteScrapeRequest'], meta: { name: 'WebsiteScrapeRequest' } }
+    /**
+     * Find zero or one WebsiteScrapeRequest that matches the filter.
+     * @param {WebsiteScrapeRequestFindUniqueArgs} args - Arguments to find a WebsiteScrapeRequest
+     * @example
+     * // Get one WebsiteScrapeRequest
+     * const websiteScrapeRequest = await prisma.websiteScrapeRequest.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends WebsiteScrapeRequestFindUniqueArgs>(args: SelectSubset<T, WebsiteScrapeRequestFindUniqueArgs<ExtArgs>>): Prisma__WebsiteScrapeRequestClient<$Result.GetResult<Prisma.$WebsiteScrapeRequestPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one WebsiteScrapeRequest that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {WebsiteScrapeRequestFindUniqueOrThrowArgs} args - Arguments to find a WebsiteScrapeRequest
+     * @example
+     * // Get one WebsiteScrapeRequest
+     * const websiteScrapeRequest = await prisma.websiteScrapeRequest.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends WebsiteScrapeRequestFindUniqueOrThrowArgs>(args: SelectSubset<T, WebsiteScrapeRequestFindUniqueOrThrowArgs<ExtArgs>>): Prisma__WebsiteScrapeRequestClient<$Result.GetResult<Prisma.$WebsiteScrapeRequestPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first WebsiteScrapeRequest that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WebsiteScrapeRequestFindFirstArgs} args - Arguments to find a WebsiteScrapeRequest
+     * @example
+     * // Get one WebsiteScrapeRequest
+     * const websiteScrapeRequest = await prisma.websiteScrapeRequest.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends WebsiteScrapeRequestFindFirstArgs>(args?: SelectSubset<T, WebsiteScrapeRequestFindFirstArgs<ExtArgs>>): Prisma__WebsiteScrapeRequestClient<$Result.GetResult<Prisma.$WebsiteScrapeRequestPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first WebsiteScrapeRequest that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WebsiteScrapeRequestFindFirstOrThrowArgs} args - Arguments to find a WebsiteScrapeRequest
+     * @example
+     * // Get one WebsiteScrapeRequest
+     * const websiteScrapeRequest = await prisma.websiteScrapeRequest.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends WebsiteScrapeRequestFindFirstOrThrowArgs>(args?: SelectSubset<T, WebsiteScrapeRequestFindFirstOrThrowArgs<ExtArgs>>): Prisma__WebsiteScrapeRequestClient<$Result.GetResult<Prisma.$WebsiteScrapeRequestPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more WebsiteScrapeRequests that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WebsiteScrapeRequestFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all WebsiteScrapeRequests
+     * const websiteScrapeRequests = await prisma.websiteScrapeRequest.findMany()
+     * 
+     * // Get first 10 WebsiteScrapeRequests
+     * const websiteScrapeRequests = await prisma.websiteScrapeRequest.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const websiteScrapeRequestWithIdOnly = await prisma.websiteScrapeRequest.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends WebsiteScrapeRequestFindManyArgs>(args?: SelectSubset<T, WebsiteScrapeRequestFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WebsiteScrapeRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a WebsiteScrapeRequest.
+     * @param {WebsiteScrapeRequestCreateArgs} args - Arguments to create a WebsiteScrapeRequest.
+     * @example
+     * // Create one WebsiteScrapeRequest
+     * const WebsiteScrapeRequest = await prisma.websiteScrapeRequest.create({
+     *   data: {
+     *     // ... data to create a WebsiteScrapeRequest
+     *   }
+     * })
+     * 
+     */
+    create<T extends WebsiteScrapeRequestCreateArgs>(args: SelectSubset<T, WebsiteScrapeRequestCreateArgs<ExtArgs>>): Prisma__WebsiteScrapeRequestClient<$Result.GetResult<Prisma.$WebsiteScrapeRequestPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many WebsiteScrapeRequests.
+     * @param {WebsiteScrapeRequestCreateManyArgs} args - Arguments to create many WebsiteScrapeRequests.
+     * @example
+     * // Create many WebsiteScrapeRequests
+     * const websiteScrapeRequest = await prisma.websiteScrapeRequest.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends WebsiteScrapeRequestCreateManyArgs>(args?: SelectSubset<T, WebsiteScrapeRequestCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many WebsiteScrapeRequests and returns the data saved in the database.
+     * @param {WebsiteScrapeRequestCreateManyAndReturnArgs} args - Arguments to create many WebsiteScrapeRequests.
+     * @example
+     * // Create many WebsiteScrapeRequests
+     * const websiteScrapeRequest = await prisma.websiteScrapeRequest.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many WebsiteScrapeRequests and only return the `id`
+     * const websiteScrapeRequestWithIdOnly = await prisma.websiteScrapeRequest.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends WebsiteScrapeRequestCreateManyAndReturnArgs>(args?: SelectSubset<T, WebsiteScrapeRequestCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WebsiteScrapeRequestPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a WebsiteScrapeRequest.
+     * @param {WebsiteScrapeRequestDeleteArgs} args - Arguments to delete one WebsiteScrapeRequest.
+     * @example
+     * // Delete one WebsiteScrapeRequest
+     * const WebsiteScrapeRequest = await prisma.websiteScrapeRequest.delete({
+     *   where: {
+     *     // ... filter to delete one WebsiteScrapeRequest
+     *   }
+     * })
+     * 
+     */
+    delete<T extends WebsiteScrapeRequestDeleteArgs>(args: SelectSubset<T, WebsiteScrapeRequestDeleteArgs<ExtArgs>>): Prisma__WebsiteScrapeRequestClient<$Result.GetResult<Prisma.$WebsiteScrapeRequestPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one WebsiteScrapeRequest.
+     * @param {WebsiteScrapeRequestUpdateArgs} args - Arguments to update one WebsiteScrapeRequest.
+     * @example
+     * // Update one WebsiteScrapeRequest
+     * const websiteScrapeRequest = await prisma.websiteScrapeRequest.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends WebsiteScrapeRequestUpdateArgs>(args: SelectSubset<T, WebsiteScrapeRequestUpdateArgs<ExtArgs>>): Prisma__WebsiteScrapeRequestClient<$Result.GetResult<Prisma.$WebsiteScrapeRequestPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more WebsiteScrapeRequests.
+     * @param {WebsiteScrapeRequestDeleteManyArgs} args - Arguments to filter WebsiteScrapeRequests to delete.
+     * @example
+     * // Delete a few WebsiteScrapeRequests
+     * const { count } = await prisma.websiteScrapeRequest.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends WebsiteScrapeRequestDeleteManyArgs>(args?: SelectSubset<T, WebsiteScrapeRequestDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more WebsiteScrapeRequests.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WebsiteScrapeRequestUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many WebsiteScrapeRequests
+     * const websiteScrapeRequest = await prisma.websiteScrapeRequest.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends WebsiteScrapeRequestUpdateManyArgs>(args: SelectSubset<T, WebsiteScrapeRequestUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more WebsiteScrapeRequests and returns the data updated in the database.
+     * @param {WebsiteScrapeRequestUpdateManyAndReturnArgs} args - Arguments to update many WebsiteScrapeRequests.
+     * @example
+     * // Update many WebsiteScrapeRequests
+     * const websiteScrapeRequest = await prisma.websiteScrapeRequest.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more WebsiteScrapeRequests and only return the `id`
+     * const websiteScrapeRequestWithIdOnly = await prisma.websiteScrapeRequest.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends WebsiteScrapeRequestUpdateManyAndReturnArgs>(args: SelectSubset<T, WebsiteScrapeRequestUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WebsiteScrapeRequestPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one WebsiteScrapeRequest.
+     * @param {WebsiteScrapeRequestUpsertArgs} args - Arguments to update or create a WebsiteScrapeRequest.
+     * @example
+     * // Update or create a WebsiteScrapeRequest
+     * const websiteScrapeRequest = await prisma.websiteScrapeRequest.upsert({
+     *   create: {
+     *     // ... data to create a WebsiteScrapeRequest
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the WebsiteScrapeRequest we want to update
+     *   }
+     * })
+     */
+    upsert<T extends WebsiteScrapeRequestUpsertArgs>(args: SelectSubset<T, WebsiteScrapeRequestUpsertArgs<ExtArgs>>): Prisma__WebsiteScrapeRequestClient<$Result.GetResult<Prisma.$WebsiteScrapeRequestPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of WebsiteScrapeRequests.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WebsiteScrapeRequestCountArgs} args - Arguments to filter WebsiteScrapeRequests to count.
+     * @example
+     * // Count the number of WebsiteScrapeRequests
+     * const count = await prisma.websiteScrapeRequest.count({
+     *   where: {
+     *     // ... the filter for the WebsiteScrapeRequests we want to count
+     *   }
+     * })
+    **/
+    count<T extends WebsiteScrapeRequestCountArgs>(
+      args?: Subset<T, WebsiteScrapeRequestCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], WebsiteScrapeRequestCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a WebsiteScrapeRequest.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WebsiteScrapeRequestAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends WebsiteScrapeRequestAggregateArgs>(args: Subset<T, WebsiteScrapeRequestAggregateArgs>): Prisma.PrismaPromise<GetWebsiteScrapeRequestAggregateType<T>>
+
+    /**
+     * Group by WebsiteScrapeRequest.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WebsiteScrapeRequestGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends WebsiteScrapeRequestGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: WebsiteScrapeRequestGroupByArgs['orderBy'] }
+        : { orderBy?: WebsiteScrapeRequestGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, WebsiteScrapeRequestGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetWebsiteScrapeRequestGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the WebsiteScrapeRequest model
+   */
+  readonly fields: WebsiteScrapeRequestFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for WebsiteScrapeRequest.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__WebsiteScrapeRequestClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    organisation<T extends OrganisationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganisationDefaultArgs<ExtArgs>>): Prisma__OrganisationClient<$Result.GetResult<Prisma.$OrganisationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the WebsiteScrapeRequest model
+   */
+  interface WebsiteScrapeRequestFieldRefs {
+    readonly id: FieldRef<"WebsiteScrapeRequest", 'String'>
+    readonly provider: FieldRef<"WebsiteScrapeRequest", 'WebsiteScrapeProvider'>
+    readonly provider_run_id: FieldRef<"WebsiteScrapeRequest", 'String'>
+    readonly provider_config_id: FieldRef<"WebsiteScrapeRequest", 'String'>
+    readonly organisation_uuid: FieldRef<"WebsiteScrapeRequest", 'String'>
+    readonly operation: FieldRef<"WebsiteScrapeRequest", 'WebsiteScrapeOperation'>
+    readonly reference_uuid: FieldRef<"WebsiteScrapeRequest", 'String'>
+    readonly status: FieldRef<"WebsiteScrapeRequest", 'WebsiteScrapeStatus'>
+    readonly context: FieldRef<"WebsiteScrapeRequest", 'Json'>
+    readonly error: FieldRef<"WebsiteScrapeRequest", 'String'>
+    readonly created_at: FieldRef<"WebsiteScrapeRequest", 'DateTime'>
+    readonly updated_at: FieldRef<"WebsiteScrapeRequest", 'DateTime'>
+    readonly finished_at: FieldRef<"WebsiteScrapeRequest", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * WebsiteScrapeRequest findUnique
+   */
+  export type WebsiteScrapeRequestFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WebsiteScrapeRequest
+     */
+    select?: WebsiteScrapeRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WebsiteScrapeRequest
+     */
+    omit?: WebsiteScrapeRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WebsiteScrapeRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which WebsiteScrapeRequest to fetch.
+     */
+    where: WebsiteScrapeRequestWhereUniqueInput
+  }
+
+  /**
+   * WebsiteScrapeRequest findUniqueOrThrow
+   */
+  export type WebsiteScrapeRequestFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WebsiteScrapeRequest
+     */
+    select?: WebsiteScrapeRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WebsiteScrapeRequest
+     */
+    omit?: WebsiteScrapeRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WebsiteScrapeRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which WebsiteScrapeRequest to fetch.
+     */
+    where: WebsiteScrapeRequestWhereUniqueInput
+  }
+
+  /**
+   * WebsiteScrapeRequest findFirst
+   */
+  export type WebsiteScrapeRequestFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WebsiteScrapeRequest
+     */
+    select?: WebsiteScrapeRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WebsiteScrapeRequest
+     */
+    omit?: WebsiteScrapeRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WebsiteScrapeRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which WebsiteScrapeRequest to fetch.
+     */
+    where?: WebsiteScrapeRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WebsiteScrapeRequests to fetch.
+     */
+    orderBy?: WebsiteScrapeRequestOrderByWithRelationInput | WebsiteScrapeRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WebsiteScrapeRequests.
+     */
+    cursor?: WebsiteScrapeRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WebsiteScrapeRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WebsiteScrapeRequests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WebsiteScrapeRequests.
+     */
+    distinct?: WebsiteScrapeRequestScalarFieldEnum | WebsiteScrapeRequestScalarFieldEnum[]
+  }
+
+  /**
+   * WebsiteScrapeRequest findFirstOrThrow
+   */
+  export type WebsiteScrapeRequestFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WebsiteScrapeRequest
+     */
+    select?: WebsiteScrapeRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WebsiteScrapeRequest
+     */
+    omit?: WebsiteScrapeRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WebsiteScrapeRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which WebsiteScrapeRequest to fetch.
+     */
+    where?: WebsiteScrapeRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WebsiteScrapeRequests to fetch.
+     */
+    orderBy?: WebsiteScrapeRequestOrderByWithRelationInput | WebsiteScrapeRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WebsiteScrapeRequests.
+     */
+    cursor?: WebsiteScrapeRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WebsiteScrapeRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WebsiteScrapeRequests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WebsiteScrapeRequests.
+     */
+    distinct?: WebsiteScrapeRequestScalarFieldEnum | WebsiteScrapeRequestScalarFieldEnum[]
+  }
+
+  /**
+   * WebsiteScrapeRequest findMany
+   */
+  export type WebsiteScrapeRequestFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WebsiteScrapeRequest
+     */
+    select?: WebsiteScrapeRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WebsiteScrapeRequest
+     */
+    omit?: WebsiteScrapeRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WebsiteScrapeRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which WebsiteScrapeRequests to fetch.
+     */
+    where?: WebsiteScrapeRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WebsiteScrapeRequests to fetch.
+     */
+    orderBy?: WebsiteScrapeRequestOrderByWithRelationInput | WebsiteScrapeRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing WebsiteScrapeRequests.
+     */
+    cursor?: WebsiteScrapeRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WebsiteScrapeRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WebsiteScrapeRequests.
+     */
+    skip?: number
+    distinct?: WebsiteScrapeRequestScalarFieldEnum | WebsiteScrapeRequestScalarFieldEnum[]
+  }
+
+  /**
+   * WebsiteScrapeRequest create
+   */
+  export type WebsiteScrapeRequestCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WebsiteScrapeRequest
+     */
+    select?: WebsiteScrapeRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WebsiteScrapeRequest
+     */
+    omit?: WebsiteScrapeRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WebsiteScrapeRequestInclude<ExtArgs> | null
+    /**
+     * The data needed to create a WebsiteScrapeRequest.
+     */
+    data: XOR<WebsiteScrapeRequestCreateInput, WebsiteScrapeRequestUncheckedCreateInput>
+  }
+
+  /**
+   * WebsiteScrapeRequest createMany
+   */
+  export type WebsiteScrapeRequestCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many WebsiteScrapeRequests.
+     */
+    data: WebsiteScrapeRequestCreateManyInput | WebsiteScrapeRequestCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * WebsiteScrapeRequest createManyAndReturn
+   */
+  export type WebsiteScrapeRequestCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WebsiteScrapeRequest
+     */
+    select?: WebsiteScrapeRequestSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the WebsiteScrapeRequest
+     */
+    omit?: WebsiteScrapeRequestOmit<ExtArgs> | null
+    /**
+     * The data used to create many WebsiteScrapeRequests.
+     */
+    data: WebsiteScrapeRequestCreateManyInput | WebsiteScrapeRequestCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WebsiteScrapeRequestIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * WebsiteScrapeRequest update
+   */
+  export type WebsiteScrapeRequestUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WebsiteScrapeRequest
+     */
+    select?: WebsiteScrapeRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WebsiteScrapeRequest
+     */
+    omit?: WebsiteScrapeRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WebsiteScrapeRequestInclude<ExtArgs> | null
+    /**
+     * The data needed to update a WebsiteScrapeRequest.
+     */
+    data: XOR<WebsiteScrapeRequestUpdateInput, WebsiteScrapeRequestUncheckedUpdateInput>
+    /**
+     * Choose, which WebsiteScrapeRequest to update.
+     */
+    where: WebsiteScrapeRequestWhereUniqueInput
+  }
+
+  /**
+   * WebsiteScrapeRequest updateMany
+   */
+  export type WebsiteScrapeRequestUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update WebsiteScrapeRequests.
+     */
+    data: XOR<WebsiteScrapeRequestUpdateManyMutationInput, WebsiteScrapeRequestUncheckedUpdateManyInput>
+    /**
+     * Filter which WebsiteScrapeRequests to update
+     */
+    where?: WebsiteScrapeRequestWhereInput
+    /**
+     * Limit how many WebsiteScrapeRequests to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * WebsiteScrapeRequest updateManyAndReturn
+   */
+  export type WebsiteScrapeRequestUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WebsiteScrapeRequest
+     */
+    select?: WebsiteScrapeRequestSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the WebsiteScrapeRequest
+     */
+    omit?: WebsiteScrapeRequestOmit<ExtArgs> | null
+    /**
+     * The data used to update WebsiteScrapeRequests.
+     */
+    data: XOR<WebsiteScrapeRequestUpdateManyMutationInput, WebsiteScrapeRequestUncheckedUpdateManyInput>
+    /**
+     * Filter which WebsiteScrapeRequests to update
+     */
+    where?: WebsiteScrapeRequestWhereInput
+    /**
+     * Limit how many WebsiteScrapeRequests to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WebsiteScrapeRequestIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * WebsiteScrapeRequest upsert
+   */
+  export type WebsiteScrapeRequestUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WebsiteScrapeRequest
+     */
+    select?: WebsiteScrapeRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WebsiteScrapeRequest
+     */
+    omit?: WebsiteScrapeRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WebsiteScrapeRequestInclude<ExtArgs> | null
+    /**
+     * The filter to search for the WebsiteScrapeRequest to update in case it exists.
+     */
+    where: WebsiteScrapeRequestWhereUniqueInput
+    /**
+     * In case the WebsiteScrapeRequest found by the `where` argument doesn't exist, create a new WebsiteScrapeRequest with this data.
+     */
+    create: XOR<WebsiteScrapeRequestCreateInput, WebsiteScrapeRequestUncheckedCreateInput>
+    /**
+     * In case the WebsiteScrapeRequest was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<WebsiteScrapeRequestUpdateInput, WebsiteScrapeRequestUncheckedUpdateInput>
+  }
+
+  /**
+   * WebsiteScrapeRequest delete
+   */
+  export type WebsiteScrapeRequestDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WebsiteScrapeRequest
+     */
+    select?: WebsiteScrapeRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WebsiteScrapeRequest
+     */
+    omit?: WebsiteScrapeRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WebsiteScrapeRequestInclude<ExtArgs> | null
+    /**
+     * Filter which WebsiteScrapeRequest to delete.
+     */
+    where: WebsiteScrapeRequestWhereUniqueInput
+  }
+
+  /**
+   * WebsiteScrapeRequest deleteMany
+   */
+  export type WebsiteScrapeRequestDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WebsiteScrapeRequests to delete
+     */
+    where?: WebsiteScrapeRequestWhereInput
+    /**
+     * Limit how many WebsiteScrapeRequests to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * WebsiteScrapeRequest without action
+   */
+  export type WebsiteScrapeRequestDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WebsiteScrapeRequest
+     */
+    select?: WebsiteScrapeRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WebsiteScrapeRequest
+     */
+    omit?: WebsiteScrapeRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WebsiteScrapeRequestInclude<ExtArgs> | null
   }
 
 
@@ -54290,6 +58632,1154 @@ export namespace Prisma {
 
 
   /**
+   * Model EmailSendLimit
+   */
+
+  export type AggregateEmailSendLimit = {
+    _count: EmailSendLimitCountAggregateOutputType | null
+    _avg: EmailSendLimitAvgAggregateOutputType | null
+    _sum: EmailSendLimitSumAggregateOutputType | null
+    _min: EmailSendLimitMinAggregateOutputType | null
+    _max: EmailSendLimitMaxAggregateOutputType | null
+  }
+
+  export type EmailSendLimitAvgAggregateOutputType = {
+    id: number | null
+    max_count: number | null
+  }
+
+  export type EmailSendLimitSumAggregateOutputType = {
+    id: number | null
+    max_count: number | null
+  }
+
+  export type EmailSendLimitMinAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    organisation_uuid: string | null
+    provider: $Enums.ExternalIntegrationProvider | null
+    period: $Enums.GoalPeriod | null
+    max_count: number | null
+    is_active: boolean | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type EmailSendLimitMaxAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    organisation_uuid: string | null
+    provider: $Enums.ExternalIntegrationProvider | null
+    period: $Enums.GoalPeriod | null
+    max_count: number | null
+    is_active: boolean | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type EmailSendLimitCountAggregateOutputType = {
+    id: number
+    uuid: number
+    organisation_uuid: number
+    provider: number
+    period: number
+    max_count: number
+    is_active: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type EmailSendLimitAvgAggregateInputType = {
+    id?: true
+    max_count?: true
+  }
+
+  export type EmailSendLimitSumAggregateInputType = {
+    id?: true
+    max_count?: true
+  }
+
+  export type EmailSendLimitMinAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    provider?: true
+    period?: true
+    max_count?: true
+    is_active?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type EmailSendLimitMaxAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    provider?: true
+    period?: true
+    max_count?: true
+    is_active?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type EmailSendLimitCountAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    provider?: true
+    period?: true
+    max_count?: true
+    is_active?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type EmailSendLimitAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which EmailSendLimit to aggregate.
+     */
+    where?: EmailSendLimitWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EmailSendLimits to fetch.
+     */
+    orderBy?: EmailSendLimitOrderByWithRelationInput | EmailSendLimitOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: EmailSendLimitWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EmailSendLimits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EmailSendLimits.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned EmailSendLimits
+    **/
+    _count?: true | EmailSendLimitCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: EmailSendLimitAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: EmailSendLimitSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: EmailSendLimitMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: EmailSendLimitMaxAggregateInputType
+  }
+
+  export type GetEmailSendLimitAggregateType<T extends EmailSendLimitAggregateArgs> = {
+        [P in keyof T & keyof AggregateEmailSendLimit]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateEmailSendLimit[P]>
+      : GetScalarType<T[P], AggregateEmailSendLimit[P]>
+  }
+
+
+
+
+  export type EmailSendLimitGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EmailSendLimitWhereInput
+    orderBy?: EmailSendLimitOrderByWithAggregationInput | EmailSendLimitOrderByWithAggregationInput[]
+    by: EmailSendLimitScalarFieldEnum[] | EmailSendLimitScalarFieldEnum
+    having?: EmailSendLimitScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: EmailSendLimitCountAggregateInputType | true
+    _avg?: EmailSendLimitAvgAggregateInputType
+    _sum?: EmailSendLimitSumAggregateInputType
+    _min?: EmailSendLimitMinAggregateInputType
+    _max?: EmailSendLimitMaxAggregateInputType
+  }
+
+  export type EmailSendLimitGroupByOutputType = {
+    id: number
+    uuid: string
+    organisation_uuid: string
+    provider: $Enums.ExternalIntegrationProvider
+    period: $Enums.GoalPeriod
+    max_count: number
+    is_active: boolean
+    created_at: Date
+    updated_at: Date
+    _count: EmailSendLimitCountAggregateOutputType | null
+    _avg: EmailSendLimitAvgAggregateOutputType | null
+    _sum: EmailSendLimitSumAggregateOutputType | null
+    _min: EmailSendLimitMinAggregateOutputType | null
+    _max: EmailSendLimitMaxAggregateOutputType | null
+  }
+
+  type GetEmailSendLimitGroupByPayload<T extends EmailSendLimitGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<EmailSendLimitGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof EmailSendLimitGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], EmailSendLimitGroupByOutputType[P]>
+            : GetScalarType<T[P], EmailSendLimitGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type EmailSendLimitSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    provider?: boolean
+    period?: boolean
+    max_count?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["emailSendLimit"]>
+
+  export type EmailSendLimitSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    provider?: boolean
+    period?: boolean
+    max_count?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["emailSendLimit"]>
+
+  export type EmailSendLimitSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    provider?: boolean
+    period?: boolean
+    max_count?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["emailSendLimit"]>
+
+  export type EmailSendLimitSelectScalar = {
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    provider?: boolean
+    period?: boolean
+    max_count?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type EmailSendLimitOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "provider" | "period" | "max_count" | "is_active" | "created_at" | "updated_at", ExtArgs["result"]["emailSendLimit"]>
+  export type EmailSendLimitInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }
+  export type EmailSendLimitIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }
+  export type EmailSendLimitIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }
+
+  export type $EmailSendLimitPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "EmailSendLimit"
+    objects: {
+      organisation: Prisma.$OrganisationPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      uuid: string
+      organisation_uuid: string
+      provider: $Enums.ExternalIntegrationProvider
+      period: $Enums.GoalPeriod
+      max_count: number
+      is_active: boolean
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["emailSendLimit"]>
+    composites: {}
+  }
+
+  type EmailSendLimitGetPayload<S extends boolean | null | undefined | EmailSendLimitDefaultArgs> = $Result.GetResult<Prisma.$EmailSendLimitPayload, S>
+
+  type EmailSendLimitCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<EmailSendLimitFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: EmailSendLimitCountAggregateInputType | true
+    }
+
+  export interface EmailSendLimitDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['EmailSendLimit'], meta: { name: 'EmailSendLimit' } }
+    /**
+     * Find zero or one EmailSendLimit that matches the filter.
+     * @param {EmailSendLimitFindUniqueArgs} args - Arguments to find a EmailSendLimit
+     * @example
+     * // Get one EmailSendLimit
+     * const emailSendLimit = await prisma.emailSendLimit.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends EmailSendLimitFindUniqueArgs>(args: SelectSubset<T, EmailSendLimitFindUniqueArgs<ExtArgs>>): Prisma__EmailSendLimitClient<$Result.GetResult<Prisma.$EmailSendLimitPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one EmailSendLimit that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {EmailSendLimitFindUniqueOrThrowArgs} args - Arguments to find a EmailSendLimit
+     * @example
+     * // Get one EmailSendLimit
+     * const emailSendLimit = await prisma.emailSendLimit.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends EmailSendLimitFindUniqueOrThrowArgs>(args: SelectSubset<T, EmailSendLimitFindUniqueOrThrowArgs<ExtArgs>>): Prisma__EmailSendLimitClient<$Result.GetResult<Prisma.$EmailSendLimitPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first EmailSendLimit that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmailSendLimitFindFirstArgs} args - Arguments to find a EmailSendLimit
+     * @example
+     * // Get one EmailSendLimit
+     * const emailSendLimit = await prisma.emailSendLimit.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends EmailSendLimitFindFirstArgs>(args?: SelectSubset<T, EmailSendLimitFindFirstArgs<ExtArgs>>): Prisma__EmailSendLimitClient<$Result.GetResult<Prisma.$EmailSendLimitPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first EmailSendLimit that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmailSendLimitFindFirstOrThrowArgs} args - Arguments to find a EmailSendLimit
+     * @example
+     * // Get one EmailSendLimit
+     * const emailSendLimit = await prisma.emailSendLimit.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends EmailSendLimitFindFirstOrThrowArgs>(args?: SelectSubset<T, EmailSendLimitFindFirstOrThrowArgs<ExtArgs>>): Prisma__EmailSendLimitClient<$Result.GetResult<Prisma.$EmailSendLimitPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more EmailSendLimits that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmailSendLimitFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all EmailSendLimits
+     * const emailSendLimits = await prisma.emailSendLimit.findMany()
+     * 
+     * // Get first 10 EmailSendLimits
+     * const emailSendLimits = await prisma.emailSendLimit.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const emailSendLimitWithIdOnly = await prisma.emailSendLimit.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends EmailSendLimitFindManyArgs>(args?: SelectSubset<T, EmailSendLimitFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmailSendLimitPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a EmailSendLimit.
+     * @param {EmailSendLimitCreateArgs} args - Arguments to create a EmailSendLimit.
+     * @example
+     * // Create one EmailSendLimit
+     * const EmailSendLimit = await prisma.emailSendLimit.create({
+     *   data: {
+     *     // ... data to create a EmailSendLimit
+     *   }
+     * })
+     * 
+     */
+    create<T extends EmailSendLimitCreateArgs>(args: SelectSubset<T, EmailSendLimitCreateArgs<ExtArgs>>): Prisma__EmailSendLimitClient<$Result.GetResult<Prisma.$EmailSendLimitPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many EmailSendLimits.
+     * @param {EmailSendLimitCreateManyArgs} args - Arguments to create many EmailSendLimits.
+     * @example
+     * // Create many EmailSendLimits
+     * const emailSendLimit = await prisma.emailSendLimit.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends EmailSendLimitCreateManyArgs>(args?: SelectSubset<T, EmailSendLimitCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many EmailSendLimits and returns the data saved in the database.
+     * @param {EmailSendLimitCreateManyAndReturnArgs} args - Arguments to create many EmailSendLimits.
+     * @example
+     * // Create many EmailSendLimits
+     * const emailSendLimit = await prisma.emailSendLimit.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many EmailSendLimits and only return the `id`
+     * const emailSendLimitWithIdOnly = await prisma.emailSendLimit.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends EmailSendLimitCreateManyAndReturnArgs>(args?: SelectSubset<T, EmailSendLimitCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmailSendLimitPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a EmailSendLimit.
+     * @param {EmailSendLimitDeleteArgs} args - Arguments to delete one EmailSendLimit.
+     * @example
+     * // Delete one EmailSendLimit
+     * const EmailSendLimit = await prisma.emailSendLimit.delete({
+     *   where: {
+     *     // ... filter to delete one EmailSendLimit
+     *   }
+     * })
+     * 
+     */
+    delete<T extends EmailSendLimitDeleteArgs>(args: SelectSubset<T, EmailSendLimitDeleteArgs<ExtArgs>>): Prisma__EmailSendLimitClient<$Result.GetResult<Prisma.$EmailSendLimitPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one EmailSendLimit.
+     * @param {EmailSendLimitUpdateArgs} args - Arguments to update one EmailSendLimit.
+     * @example
+     * // Update one EmailSendLimit
+     * const emailSendLimit = await prisma.emailSendLimit.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends EmailSendLimitUpdateArgs>(args: SelectSubset<T, EmailSendLimitUpdateArgs<ExtArgs>>): Prisma__EmailSendLimitClient<$Result.GetResult<Prisma.$EmailSendLimitPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more EmailSendLimits.
+     * @param {EmailSendLimitDeleteManyArgs} args - Arguments to filter EmailSendLimits to delete.
+     * @example
+     * // Delete a few EmailSendLimits
+     * const { count } = await prisma.emailSendLimit.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends EmailSendLimitDeleteManyArgs>(args?: SelectSubset<T, EmailSendLimitDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more EmailSendLimits.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmailSendLimitUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many EmailSendLimits
+     * const emailSendLimit = await prisma.emailSendLimit.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends EmailSendLimitUpdateManyArgs>(args: SelectSubset<T, EmailSendLimitUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more EmailSendLimits and returns the data updated in the database.
+     * @param {EmailSendLimitUpdateManyAndReturnArgs} args - Arguments to update many EmailSendLimits.
+     * @example
+     * // Update many EmailSendLimits
+     * const emailSendLimit = await prisma.emailSendLimit.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more EmailSendLimits and only return the `id`
+     * const emailSendLimitWithIdOnly = await prisma.emailSendLimit.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends EmailSendLimitUpdateManyAndReturnArgs>(args: SelectSubset<T, EmailSendLimitUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmailSendLimitPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one EmailSendLimit.
+     * @param {EmailSendLimitUpsertArgs} args - Arguments to update or create a EmailSendLimit.
+     * @example
+     * // Update or create a EmailSendLimit
+     * const emailSendLimit = await prisma.emailSendLimit.upsert({
+     *   create: {
+     *     // ... data to create a EmailSendLimit
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the EmailSendLimit we want to update
+     *   }
+     * })
+     */
+    upsert<T extends EmailSendLimitUpsertArgs>(args: SelectSubset<T, EmailSendLimitUpsertArgs<ExtArgs>>): Prisma__EmailSendLimitClient<$Result.GetResult<Prisma.$EmailSendLimitPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of EmailSendLimits.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmailSendLimitCountArgs} args - Arguments to filter EmailSendLimits to count.
+     * @example
+     * // Count the number of EmailSendLimits
+     * const count = await prisma.emailSendLimit.count({
+     *   where: {
+     *     // ... the filter for the EmailSendLimits we want to count
+     *   }
+     * })
+    **/
+    count<T extends EmailSendLimitCountArgs>(
+      args?: Subset<T, EmailSendLimitCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], EmailSendLimitCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a EmailSendLimit.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmailSendLimitAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends EmailSendLimitAggregateArgs>(args: Subset<T, EmailSendLimitAggregateArgs>): Prisma.PrismaPromise<GetEmailSendLimitAggregateType<T>>
+
+    /**
+     * Group by EmailSendLimit.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmailSendLimitGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends EmailSendLimitGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: EmailSendLimitGroupByArgs['orderBy'] }
+        : { orderBy?: EmailSendLimitGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, EmailSendLimitGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetEmailSendLimitGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the EmailSendLimit model
+   */
+  readonly fields: EmailSendLimitFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for EmailSendLimit.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__EmailSendLimitClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    organisation<T extends OrganisationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganisationDefaultArgs<ExtArgs>>): Prisma__OrganisationClient<$Result.GetResult<Prisma.$OrganisationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the EmailSendLimit model
+   */
+  interface EmailSendLimitFieldRefs {
+    readonly id: FieldRef<"EmailSendLimit", 'Int'>
+    readonly uuid: FieldRef<"EmailSendLimit", 'String'>
+    readonly organisation_uuid: FieldRef<"EmailSendLimit", 'String'>
+    readonly provider: FieldRef<"EmailSendLimit", 'ExternalIntegrationProvider'>
+    readonly period: FieldRef<"EmailSendLimit", 'GoalPeriod'>
+    readonly max_count: FieldRef<"EmailSendLimit", 'Int'>
+    readonly is_active: FieldRef<"EmailSendLimit", 'Boolean'>
+    readonly created_at: FieldRef<"EmailSendLimit", 'DateTime'>
+    readonly updated_at: FieldRef<"EmailSendLimit", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * EmailSendLimit findUnique
+   */
+  export type EmailSendLimitFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailSendLimit
+     */
+    select?: EmailSendLimitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailSendLimit
+     */
+    omit?: EmailSendLimitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailSendLimitInclude<ExtArgs> | null
+    /**
+     * Filter, which EmailSendLimit to fetch.
+     */
+    where: EmailSendLimitWhereUniqueInput
+  }
+
+  /**
+   * EmailSendLimit findUniqueOrThrow
+   */
+  export type EmailSendLimitFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailSendLimit
+     */
+    select?: EmailSendLimitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailSendLimit
+     */
+    omit?: EmailSendLimitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailSendLimitInclude<ExtArgs> | null
+    /**
+     * Filter, which EmailSendLimit to fetch.
+     */
+    where: EmailSendLimitWhereUniqueInput
+  }
+
+  /**
+   * EmailSendLimit findFirst
+   */
+  export type EmailSendLimitFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailSendLimit
+     */
+    select?: EmailSendLimitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailSendLimit
+     */
+    omit?: EmailSendLimitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailSendLimitInclude<ExtArgs> | null
+    /**
+     * Filter, which EmailSendLimit to fetch.
+     */
+    where?: EmailSendLimitWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EmailSendLimits to fetch.
+     */
+    orderBy?: EmailSendLimitOrderByWithRelationInput | EmailSendLimitOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for EmailSendLimits.
+     */
+    cursor?: EmailSendLimitWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EmailSendLimits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EmailSendLimits.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of EmailSendLimits.
+     */
+    distinct?: EmailSendLimitScalarFieldEnum | EmailSendLimitScalarFieldEnum[]
+  }
+
+  /**
+   * EmailSendLimit findFirstOrThrow
+   */
+  export type EmailSendLimitFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailSendLimit
+     */
+    select?: EmailSendLimitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailSendLimit
+     */
+    omit?: EmailSendLimitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailSendLimitInclude<ExtArgs> | null
+    /**
+     * Filter, which EmailSendLimit to fetch.
+     */
+    where?: EmailSendLimitWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EmailSendLimits to fetch.
+     */
+    orderBy?: EmailSendLimitOrderByWithRelationInput | EmailSendLimitOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for EmailSendLimits.
+     */
+    cursor?: EmailSendLimitWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EmailSendLimits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EmailSendLimits.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of EmailSendLimits.
+     */
+    distinct?: EmailSendLimitScalarFieldEnum | EmailSendLimitScalarFieldEnum[]
+  }
+
+  /**
+   * EmailSendLimit findMany
+   */
+  export type EmailSendLimitFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailSendLimit
+     */
+    select?: EmailSendLimitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailSendLimit
+     */
+    omit?: EmailSendLimitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailSendLimitInclude<ExtArgs> | null
+    /**
+     * Filter, which EmailSendLimits to fetch.
+     */
+    where?: EmailSendLimitWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EmailSendLimits to fetch.
+     */
+    orderBy?: EmailSendLimitOrderByWithRelationInput | EmailSendLimitOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing EmailSendLimits.
+     */
+    cursor?: EmailSendLimitWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EmailSendLimits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EmailSendLimits.
+     */
+    skip?: number
+    distinct?: EmailSendLimitScalarFieldEnum | EmailSendLimitScalarFieldEnum[]
+  }
+
+  /**
+   * EmailSendLimit create
+   */
+  export type EmailSendLimitCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailSendLimit
+     */
+    select?: EmailSendLimitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailSendLimit
+     */
+    omit?: EmailSendLimitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailSendLimitInclude<ExtArgs> | null
+    /**
+     * The data needed to create a EmailSendLimit.
+     */
+    data: XOR<EmailSendLimitCreateInput, EmailSendLimitUncheckedCreateInput>
+  }
+
+  /**
+   * EmailSendLimit createMany
+   */
+  export type EmailSendLimitCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many EmailSendLimits.
+     */
+    data: EmailSendLimitCreateManyInput | EmailSendLimitCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * EmailSendLimit createManyAndReturn
+   */
+  export type EmailSendLimitCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailSendLimit
+     */
+    select?: EmailSendLimitSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailSendLimit
+     */
+    omit?: EmailSendLimitOmit<ExtArgs> | null
+    /**
+     * The data used to create many EmailSendLimits.
+     */
+    data: EmailSendLimitCreateManyInput | EmailSendLimitCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailSendLimitIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * EmailSendLimit update
+   */
+  export type EmailSendLimitUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailSendLimit
+     */
+    select?: EmailSendLimitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailSendLimit
+     */
+    omit?: EmailSendLimitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailSendLimitInclude<ExtArgs> | null
+    /**
+     * The data needed to update a EmailSendLimit.
+     */
+    data: XOR<EmailSendLimitUpdateInput, EmailSendLimitUncheckedUpdateInput>
+    /**
+     * Choose, which EmailSendLimit to update.
+     */
+    where: EmailSendLimitWhereUniqueInput
+  }
+
+  /**
+   * EmailSendLimit updateMany
+   */
+  export type EmailSendLimitUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update EmailSendLimits.
+     */
+    data: XOR<EmailSendLimitUpdateManyMutationInput, EmailSendLimitUncheckedUpdateManyInput>
+    /**
+     * Filter which EmailSendLimits to update
+     */
+    where?: EmailSendLimitWhereInput
+    /**
+     * Limit how many EmailSendLimits to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * EmailSendLimit updateManyAndReturn
+   */
+  export type EmailSendLimitUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailSendLimit
+     */
+    select?: EmailSendLimitSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailSendLimit
+     */
+    omit?: EmailSendLimitOmit<ExtArgs> | null
+    /**
+     * The data used to update EmailSendLimits.
+     */
+    data: XOR<EmailSendLimitUpdateManyMutationInput, EmailSendLimitUncheckedUpdateManyInput>
+    /**
+     * Filter which EmailSendLimits to update
+     */
+    where?: EmailSendLimitWhereInput
+    /**
+     * Limit how many EmailSendLimits to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailSendLimitIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * EmailSendLimit upsert
+   */
+  export type EmailSendLimitUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailSendLimit
+     */
+    select?: EmailSendLimitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailSendLimit
+     */
+    omit?: EmailSendLimitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailSendLimitInclude<ExtArgs> | null
+    /**
+     * The filter to search for the EmailSendLimit to update in case it exists.
+     */
+    where: EmailSendLimitWhereUniqueInput
+    /**
+     * In case the EmailSendLimit found by the `where` argument doesn't exist, create a new EmailSendLimit with this data.
+     */
+    create: XOR<EmailSendLimitCreateInput, EmailSendLimitUncheckedCreateInput>
+    /**
+     * In case the EmailSendLimit was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<EmailSendLimitUpdateInput, EmailSendLimitUncheckedUpdateInput>
+  }
+
+  /**
+   * EmailSendLimit delete
+   */
+  export type EmailSendLimitDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailSendLimit
+     */
+    select?: EmailSendLimitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailSendLimit
+     */
+    omit?: EmailSendLimitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailSendLimitInclude<ExtArgs> | null
+    /**
+     * Filter which EmailSendLimit to delete.
+     */
+    where: EmailSendLimitWhereUniqueInput
+  }
+
+  /**
+   * EmailSendLimit deleteMany
+   */
+  export type EmailSendLimitDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which EmailSendLimits to delete
+     */
+    where?: EmailSendLimitWhereInput
+    /**
+     * Limit how many EmailSendLimits to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * EmailSendLimit without action
+   */
+  export type EmailSendLimitDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailSendLimit
+     */
+    select?: EmailSendLimitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailSendLimit
+     */
+    omit?: EmailSendLimitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailSendLimitInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model GoalAchievement
    */
 
@@ -56655,6 +62145,7 @@ export namespace Prisma {
     action: number
     summary: number
     metadata: number
+    changes: number
     created_at: number
     _all: number
   }
@@ -56702,6 +62193,7 @@ export namespace Prisma {
     action?: true
     summary?: true
     metadata?: true
+    changes?: true
     created_at?: true
     _all?: true
   }
@@ -56802,6 +62294,7 @@ export namespace Prisma {
     action: string
     summary: string | null
     metadata: JsonValue | null
+    changes: JsonValue | null
     created_at: Date
     _count: ActivityLogCountAggregateOutputType | null
     _avg: ActivityLogAvgAggregateOutputType | null
@@ -56834,6 +62327,7 @@ export namespace Prisma {
     action?: boolean
     summary?: boolean
     metadata?: boolean
+    changes?: boolean
     created_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     actor?: boolean | ActivityLog$actorArgs<ExtArgs>
@@ -56849,6 +62343,7 @@ export namespace Prisma {
     action?: boolean
     summary?: boolean
     metadata?: boolean
+    changes?: boolean
     created_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     actor?: boolean | ActivityLog$actorArgs<ExtArgs>
@@ -56864,6 +62359,7 @@ export namespace Prisma {
     action?: boolean
     summary?: boolean
     metadata?: boolean
+    changes?: boolean
     created_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     actor?: boolean | ActivityLog$actorArgs<ExtArgs>
@@ -56879,10 +62375,11 @@ export namespace Prisma {
     action?: boolean
     summary?: boolean
     metadata?: boolean
+    changes?: boolean
     created_at?: boolean
   }
 
-  export type ActivityLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "actor_user_uuid" | "entity_type" | "entity_uuid" | "action" | "summary" | "metadata" | "created_at", ExtArgs["result"]["activityLog"]>
+  export type ActivityLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "actor_user_uuid" | "entity_type" | "entity_uuid" | "action" | "summary" | "metadata" | "changes" | "created_at", ExtArgs["result"]["activityLog"]>
   export type ActivityLogInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     actor?: boolean | ActivityLog$actorArgs<ExtArgs>
@@ -56912,6 +62409,7 @@ export namespace Prisma {
       action: string
       summary: string | null
       metadata: Prisma.JsonValue | null
+      changes: Prisma.JsonValue | null
       created_at: Date
     }, ExtArgs["result"]["activityLog"]>
     composites: {}
@@ -57347,6 +62845,7 @@ export namespace Prisma {
     readonly action: FieldRef<"ActivityLog", 'String'>
     readonly summary: FieldRef<"ActivityLog", 'String'>
     readonly metadata: FieldRef<"ActivityLog", 'Json'>
+    readonly changes: FieldRef<"ActivityLog", 'Json'>
     readonly created_at: FieldRef<"ActivityLog", 'DateTime'>
   }
     
@@ -57874,6 +63373,19 @@ export namespace Prisma {
   export type FilterScalarFieldEnum = (typeof FilterScalarFieldEnum)[keyof typeof FilterScalarFieldEnum]
 
 
+  export const SavedContactFilterScalarFieldEnum: {
+    id: 'id',
+    uuid: 'uuid',
+    organisation_uuid: 'organisation_uuid',
+    name: 'name',
+    filters: 'filters',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type SavedContactFilterScalarFieldEnum = (typeof SavedContactFilterScalarFieldEnum)[keyof typeof SavedContactFilterScalarFieldEnum]
+
+
   export const ScoringInstructionScalarFieldEnum: {
     id: 'id',
     uuid: 'uuid',
@@ -57929,6 +63441,9 @@ export namespace Prisma {
     raw_data: 'raw_data',
     enrichment_summary: 'enrichment_summary',
     enrichment_metadata: 'enrichment_metadata',
+    email_validation_status: 'email_validation_status',
+    email_validation_reason: 'email_validation_reason',
+    email_validated_at: 'email_validated_at',
     created_at: 'created_at',
     updated_at: 'updated_at'
   };
@@ -57975,6 +63490,9 @@ export namespace Prisma {
     description: 'description',
     enrichment_summary: 'enrichment_summary',
     enrichment_metadata: 'enrichment_metadata',
+    email_validation_status: 'email_validation_status',
+    email_validation_reason: 'email_validation_reason',
+    email_validated_at: 'email_validated_at',
     unsubscribed_at: 'unsubscribed_at',
     unsubscribe_token: 'unsubscribe_token',
     last_interaction_at: 'last_interaction_at',
@@ -58151,6 +63669,53 @@ export namespace Prisma {
   };
 
   export type FilterJobScalarFieldEnum = (typeof FilterJobScalarFieldEnum)[keyof typeof FilterJobScalarFieldEnum]
+
+
+  export const BulkJobScalarFieldEnum: {
+    id: 'id',
+    uuid: 'uuid',
+    organisation_uuid: 'organisation_uuid',
+    created_by_user_uuid: 'created_by_user_uuid',
+    title: 'title',
+    type: 'type',
+    status: 'status',
+    error: 'error',
+    retries: 'retries',
+    max_retries: 'max_retries',
+    progress_current: 'progress_current',
+    progress_total: 'progress_total',
+    progress_failed: 'progress_failed',
+    queue_name: 'queue_name',
+    queue_job_id: 'queue_job_id',
+    reference_type: 'reference_type',
+    reference_uuid: 'reference_uuid',
+    metadata: 'metadata',
+    started_at: 'started_at',
+    completed_at: 'completed_at',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type BulkJobScalarFieldEnum = (typeof BulkJobScalarFieldEnum)[keyof typeof BulkJobScalarFieldEnum]
+
+
+  export const WebsiteScrapeRequestScalarFieldEnum: {
+    id: 'id',
+    provider: 'provider',
+    provider_run_id: 'provider_run_id',
+    provider_config_id: 'provider_config_id',
+    organisation_uuid: 'organisation_uuid',
+    operation: 'operation',
+    reference_uuid: 'reference_uuid',
+    status: 'status',
+    context: 'context',
+    error: 'error',
+    created_at: 'created_at',
+    updated_at: 'updated_at',
+    finished_at: 'finished_at'
+  };
+
+  export type WebsiteScrapeRequestScalarFieldEnum = (typeof WebsiteScrapeRequestScalarFieldEnum)[keyof typeof WebsiteScrapeRequestScalarFieldEnum]
 
 
   export const SenderProfileScalarFieldEnum: {
@@ -58489,6 +64054,21 @@ export namespace Prisma {
   export type MessagingGoalScalarFieldEnum = (typeof MessagingGoalScalarFieldEnum)[keyof typeof MessagingGoalScalarFieldEnum]
 
 
+  export const EmailSendLimitScalarFieldEnum: {
+    id: 'id',
+    uuid: 'uuid',
+    organisation_uuid: 'organisation_uuid',
+    provider: 'provider',
+    period: 'period',
+    max_count: 'max_count',
+    is_active: 'is_active',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type EmailSendLimitScalarFieldEnum = (typeof EmailSendLimitScalarFieldEnum)[keyof typeof EmailSendLimitScalarFieldEnum]
+
+
   export const GoalAchievementScalarFieldEnum: {
     id: 'id',
     uuid: 'uuid',
@@ -58529,6 +64109,7 @@ export namespace Prisma {
     action: 'action',
     summary: 'summary',
     metadata: 'metadata',
+    changes: 'changes',
     created_at: 'created_at'
   };
 
@@ -58750,6 +64331,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'EmailValidationStatus'
+   */
+  export type EnumEmailValidationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EmailValidationStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'EmailValidationStatus[]'
+   */
+  export type ListEnumEmailValidationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EmailValidationStatus[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Decimal'
    */
   export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
@@ -58872,6 +64467,76 @@ export namespace Prisma {
    * Reference to a field of type 'JobTrigger[]'
    */
   export type ListEnumJobTriggerFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'JobTrigger[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'BulkJobType'
+   */
+  export type EnumBulkJobTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BulkJobType'>
+    
+
+
+  /**
+   * Reference to a field of type 'BulkJobType[]'
+   */
+  export type ListEnumBulkJobTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BulkJobType[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'BulkJobStatus'
+   */
+  export type EnumBulkJobStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BulkJobStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'BulkJobStatus[]'
+   */
+  export type ListEnumBulkJobStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BulkJobStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'WebsiteScrapeProvider'
+   */
+  export type EnumWebsiteScrapeProviderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WebsiteScrapeProvider'>
+    
+
+
+  /**
+   * Reference to a field of type 'WebsiteScrapeProvider[]'
+   */
+  export type ListEnumWebsiteScrapeProviderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WebsiteScrapeProvider[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'WebsiteScrapeOperation'
+   */
+  export type EnumWebsiteScrapeOperationFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WebsiteScrapeOperation'>
+    
+
+
+  /**
+   * Reference to a field of type 'WebsiteScrapeOperation[]'
+   */
+  export type ListEnumWebsiteScrapeOperationFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WebsiteScrapeOperation[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'WebsiteScrapeStatus'
+   */
+  export type EnumWebsiteScrapeStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WebsiteScrapeStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'WebsiteScrapeStatus[]'
+   */
+  export type ListEnumWebsiteScrapeStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WebsiteScrapeStatus[]'>
     
 
 
@@ -59151,6 +64816,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalListRelationFilter
     goal_achievements?: GoalAchievementListRelationFilter
     goal_personal_bests?: GoalPersonalBestListRelationFilter
+    bulk_jobs_created?: BulkJobListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -59171,6 +64837,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalOrderByRelationAggregateInput
     goal_achievements?: GoalAchievementOrderByRelationAggregateInput
     goal_personal_bests?: GoalPersonalBestOrderByRelationAggregateInput
+    bulk_jobs_created?: BulkJobOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -59194,6 +64861,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalListRelationFilter
     goal_achievements?: GoalAchievementListRelationFilter
     goal_personal_bests?: GoalPersonalBestListRelationFilter
+    bulk_jobs_created?: BulkJobListRelationFilter
   }, "id" | "uuid" | "email" | "phone">
 
   export type UserOrderByWithAggregationInput = {
@@ -59255,6 +64923,7 @@ export namespace Prisma {
     reminders?: ReminderListRelationFilter
     forms?: FormListRelationFilter
     contact_lists?: ContactListListRelationFilter
+    saved_contact_filters?: SavedContactFilterListRelationFilter
     contact_audience_analyses?: ContactAudienceAnalysisListRelationFilter
     ai_usage_logs?: AiUsageLogListRelationFilter
     apify_usage_logs?: ApifyUsageLogListRelationFilter
@@ -59263,6 +64932,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalListRelationFilter
     goal_achievements?: GoalAchievementListRelationFilter
     goal_personal_bests?: GoalPersonalBestListRelationFilter
+    bulk_jobs?: BulkJobListRelationFilter
+    website_scrape_requests?: WebsiteScrapeRequestListRelationFilter
+    email_send_limits?: EmailSendLimitListRelationFilter
   }
 
   export type OrganisationOrderByWithRelationInput = {
@@ -59289,6 +64961,7 @@ export namespace Prisma {
     reminders?: ReminderOrderByRelationAggregateInput
     forms?: FormOrderByRelationAggregateInput
     contact_lists?: ContactListOrderByRelationAggregateInput
+    saved_contact_filters?: SavedContactFilterOrderByRelationAggregateInput
     contact_audience_analyses?: ContactAudienceAnalysisOrderByRelationAggregateInput
     ai_usage_logs?: AiUsageLogOrderByRelationAggregateInput
     apify_usage_logs?: ApifyUsageLogOrderByRelationAggregateInput
@@ -59297,6 +64970,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalOrderByRelationAggregateInput
     goal_achievements?: GoalAchievementOrderByRelationAggregateInput
     goal_personal_bests?: GoalPersonalBestOrderByRelationAggregateInput
+    bulk_jobs?: BulkJobOrderByRelationAggregateInput
+    website_scrape_requests?: WebsiteScrapeRequestOrderByRelationAggregateInput
+    email_send_limits?: EmailSendLimitOrderByRelationAggregateInput
   }
 
   export type OrganisationWhereUniqueInput = Prisma.AtLeast<{
@@ -59326,6 +65002,7 @@ export namespace Prisma {
     reminders?: ReminderListRelationFilter
     forms?: FormListRelationFilter
     contact_lists?: ContactListListRelationFilter
+    saved_contact_filters?: SavedContactFilterListRelationFilter
     contact_audience_analyses?: ContactAudienceAnalysisListRelationFilter
     ai_usage_logs?: AiUsageLogListRelationFilter
     apify_usage_logs?: ApifyUsageLogListRelationFilter
@@ -59334,6 +65011,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalListRelationFilter
     goal_achievements?: GoalAchievementListRelationFilter
     goal_personal_bests?: GoalPersonalBestListRelationFilter
+    bulk_jobs?: BulkJobListRelationFilter
+    website_scrape_requests?: WebsiteScrapeRequestListRelationFilter
+    email_send_limits?: EmailSendLimitListRelationFilter
   }, "id" | "uuid" | "slug">
 
   export type OrganisationOrderByWithAggregationInput = {
@@ -59647,6 +65327,73 @@ export namespace Prisma {
     updated_at?: DateTimeWithAggregatesFilter<"Filter"> | Date | string
   }
 
+  export type SavedContactFilterWhereInput = {
+    AND?: SavedContactFilterWhereInput | SavedContactFilterWhereInput[]
+    OR?: SavedContactFilterWhereInput[]
+    NOT?: SavedContactFilterWhereInput | SavedContactFilterWhereInput[]
+    id?: IntFilter<"SavedContactFilter"> | number
+    uuid?: StringFilter<"SavedContactFilter"> | string
+    organisation_uuid?: StringFilter<"SavedContactFilter"> | string
+    name?: StringFilter<"SavedContactFilter"> | string
+    filters?: JsonFilter<"SavedContactFilter">
+    created_at?: DateTimeFilter<"SavedContactFilter"> | Date | string
+    updated_at?: DateTimeFilter<"SavedContactFilter"> | Date | string
+    organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+  }
+
+  export type SavedContactFilterOrderByWithRelationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    name?: SortOrder
+    filters?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    organisation?: OrganisationOrderByWithRelationInput
+  }
+
+  export type SavedContactFilterWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    uuid?: string
+    AND?: SavedContactFilterWhereInput | SavedContactFilterWhereInput[]
+    OR?: SavedContactFilterWhereInput[]
+    NOT?: SavedContactFilterWhereInput | SavedContactFilterWhereInput[]
+    organisation_uuid?: StringFilter<"SavedContactFilter"> | string
+    name?: StringFilter<"SavedContactFilter"> | string
+    filters?: JsonFilter<"SavedContactFilter">
+    created_at?: DateTimeFilter<"SavedContactFilter"> | Date | string
+    updated_at?: DateTimeFilter<"SavedContactFilter"> | Date | string
+    organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+  }, "id" | "uuid">
+
+  export type SavedContactFilterOrderByWithAggregationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    name?: SortOrder
+    filters?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: SavedContactFilterCountOrderByAggregateInput
+    _avg?: SavedContactFilterAvgOrderByAggregateInput
+    _max?: SavedContactFilterMaxOrderByAggregateInput
+    _min?: SavedContactFilterMinOrderByAggregateInput
+    _sum?: SavedContactFilterSumOrderByAggregateInput
+  }
+
+  export type SavedContactFilterScalarWhereWithAggregatesInput = {
+    AND?: SavedContactFilterScalarWhereWithAggregatesInput | SavedContactFilterScalarWhereWithAggregatesInput[]
+    OR?: SavedContactFilterScalarWhereWithAggregatesInput[]
+    NOT?: SavedContactFilterScalarWhereWithAggregatesInput | SavedContactFilterScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"SavedContactFilter"> | number
+    uuid?: StringWithAggregatesFilter<"SavedContactFilter"> | string
+    organisation_uuid?: StringWithAggregatesFilter<"SavedContactFilter"> | string
+    name?: StringWithAggregatesFilter<"SavedContactFilter"> | string
+    filters?: JsonWithAggregatesFilter<"SavedContactFilter">
+    created_at?: DateTimeWithAggregatesFilter<"SavedContactFilter"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"SavedContactFilter"> | Date | string
+  }
+
   export type ScoringInstructionWhereInput = {
     AND?: ScoringInstructionWhereInput | ScoringInstructionWhereInput[]
     OR?: ScoringInstructionWhereInput[]
@@ -59866,6 +65613,9 @@ export namespace Prisma {
     raw_data?: JsonNullableFilter<"Lead">
     enrichment_summary?: StringNullableFilter<"Lead"> | string | null
     enrichment_metadata?: JsonNullableFilter<"Lead">
+    email_validation_status?: EnumEmailValidationStatusFilter<"Lead"> | $Enums.EmailValidationStatus
+    email_validation_reason?: StringNullableFilter<"Lead"> | string | null
+    email_validated_at?: DateTimeNullableFilter<"Lead"> | Date | string | null
     created_at?: DateTimeFilter<"Lead"> | Date | string
     updated_at?: DateTimeFilter<"Lead"> | Date | string
     raw_lead?: XOR<RawLeadNullableScalarRelationFilter, RawLeadWhereInput> | null
@@ -59892,6 +65642,9 @@ export namespace Prisma {
     raw_data?: SortOrderInput | SortOrder
     enrichment_summary?: SortOrderInput | SortOrder
     enrichment_metadata?: SortOrderInput | SortOrder
+    email_validation_status?: SortOrder
+    email_validation_reason?: SortOrderInput | SortOrder
+    email_validated_at?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     raw_lead?: RawLeadOrderByWithRelationInput
@@ -59921,6 +65674,9 @@ export namespace Prisma {
     raw_data?: JsonNullableFilter<"Lead">
     enrichment_summary?: StringNullableFilter<"Lead"> | string | null
     enrichment_metadata?: JsonNullableFilter<"Lead">
+    email_validation_status?: EnumEmailValidationStatusFilter<"Lead"> | $Enums.EmailValidationStatus
+    email_validation_reason?: StringNullableFilter<"Lead"> | string | null
+    email_validated_at?: DateTimeNullableFilter<"Lead"> | Date | string | null
     created_at?: DateTimeFilter<"Lead"> | Date | string
     updated_at?: DateTimeFilter<"Lead"> | Date | string
     raw_lead?: XOR<RawLeadNullableScalarRelationFilter, RawLeadWhereInput> | null
@@ -59947,6 +65703,9 @@ export namespace Prisma {
     raw_data?: SortOrderInput | SortOrder
     enrichment_summary?: SortOrderInput | SortOrder
     enrichment_metadata?: SortOrderInput | SortOrder
+    email_validation_status?: SortOrder
+    email_validation_reason?: SortOrderInput | SortOrder
+    email_validated_at?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     _count?: LeadCountOrderByAggregateInput
@@ -59978,6 +65737,9 @@ export namespace Prisma {
     raw_data?: JsonNullableWithAggregatesFilter<"Lead">
     enrichment_summary?: StringNullableWithAggregatesFilter<"Lead"> | string | null
     enrichment_metadata?: JsonNullableWithAggregatesFilter<"Lead">
+    email_validation_status?: EnumEmailValidationStatusWithAggregatesFilter<"Lead"> | $Enums.EmailValidationStatus
+    email_validation_reason?: StringNullableWithAggregatesFilter<"Lead"> | string | null
+    email_validated_at?: DateTimeNullableWithAggregatesFilter<"Lead"> | Date | string | null
     created_at?: DateTimeWithAggregatesFilter<"Lead"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"Lead"> | Date | string
   }
@@ -60098,6 +65860,9 @@ export namespace Prisma {
     description?: StringNullableFilter<"Contact"> | string | null
     enrichment_summary?: StringNullableFilter<"Contact"> | string | null
     enrichment_metadata?: JsonNullableFilter<"Contact">
+    email_validation_status?: EnumEmailValidationStatusFilter<"Contact"> | $Enums.EmailValidationStatus
+    email_validation_reason?: StringNullableFilter<"Contact"> | string | null
+    email_validated_at?: DateTimeNullableFilter<"Contact"> | Date | string | null
     unsubscribed_at?: DateTimeNullableFilter<"Contact"> | Date | string | null
     unsubscribe_token?: StringNullableFilter<"Contact"> | string | null
     last_interaction_at?: DateTimeNullableFilter<"Contact"> | Date | string | null
@@ -60140,6 +65905,9 @@ export namespace Prisma {
     description?: SortOrderInput | SortOrder
     enrichment_summary?: SortOrderInput | SortOrder
     enrichment_metadata?: SortOrderInput | SortOrder
+    email_validation_status?: SortOrder
+    email_validation_reason?: SortOrderInput | SortOrder
+    email_validated_at?: SortOrderInput | SortOrder
     unsubscribed_at?: SortOrderInput | SortOrder
     unsubscribe_token?: SortOrderInput | SortOrder
     last_interaction_at?: SortOrderInput | SortOrder
@@ -60187,6 +65955,9 @@ export namespace Prisma {
     description?: StringNullableFilter<"Contact"> | string | null
     enrichment_summary?: StringNullableFilter<"Contact"> | string | null
     enrichment_metadata?: JsonNullableFilter<"Contact">
+    email_validation_status?: EnumEmailValidationStatusFilter<"Contact"> | $Enums.EmailValidationStatus
+    email_validation_reason?: StringNullableFilter<"Contact"> | string | null
+    email_validated_at?: DateTimeNullableFilter<"Contact"> | Date | string | null
     unsubscribed_at?: DateTimeNullableFilter<"Contact"> | Date | string | null
     last_interaction_at?: DateTimeNullableFilter<"Contact"> | Date | string | null
     created_at?: DateTimeFilter<"Contact"> | Date | string
@@ -60228,6 +65999,9 @@ export namespace Prisma {
     description?: SortOrderInput | SortOrder
     enrichment_summary?: SortOrderInput | SortOrder
     enrichment_metadata?: SortOrderInput | SortOrder
+    email_validation_status?: SortOrder
+    email_validation_reason?: SortOrderInput | SortOrder
+    email_validated_at?: SortOrderInput | SortOrder
     unsubscribed_at?: SortOrderInput | SortOrder
     unsubscribe_token?: SortOrderInput | SortOrder
     last_interaction_at?: SortOrderInput | SortOrder
@@ -60264,6 +66038,9 @@ export namespace Prisma {
     description?: StringNullableWithAggregatesFilter<"Contact"> | string | null
     enrichment_summary?: StringNullableWithAggregatesFilter<"Contact"> | string | null
     enrichment_metadata?: JsonNullableWithAggregatesFilter<"Contact">
+    email_validation_status?: EnumEmailValidationStatusWithAggregatesFilter<"Contact"> | $Enums.EmailValidationStatus
+    email_validation_reason?: StringNullableWithAggregatesFilter<"Contact"> | string | null
+    email_validated_at?: DateTimeNullableWithAggregatesFilter<"Contact"> | Date | string | null
     unsubscribed_at?: DateTimeNullableWithAggregatesFilter<"Contact"> | Date | string | null
     unsubscribe_token?: StringNullableWithAggregatesFilter<"Contact"> | string | null
     last_interaction_at?: DateTimeNullableWithAggregatesFilter<"Contact"> | Date | string | null
@@ -61175,6 +66952,246 @@ export namespace Prisma {
     completed_at?: DateTimeNullableWithAggregatesFilter<"FilterJob"> | Date | string | null
     created_at?: DateTimeWithAggregatesFilter<"FilterJob"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"FilterJob"> | Date | string
+  }
+
+  export type BulkJobWhereInput = {
+    AND?: BulkJobWhereInput | BulkJobWhereInput[]
+    OR?: BulkJobWhereInput[]
+    NOT?: BulkJobWhereInput | BulkJobWhereInput[]
+    id?: IntFilter<"BulkJob"> | number
+    uuid?: StringFilter<"BulkJob"> | string
+    organisation_uuid?: StringFilter<"BulkJob"> | string
+    created_by_user_uuid?: StringNullableFilter<"BulkJob"> | string | null
+    title?: StringFilter<"BulkJob"> | string
+    type?: EnumBulkJobTypeFilter<"BulkJob"> | $Enums.BulkJobType
+    status?: EnumBulkJobStatusFilter<"BulkJob"> | $Enums.BulkJobStatus
+    error?: StringNullableFilter<"BulkJob"> | string | null
+    retries?: IntFilter<"BulkJob"> | number
+    max_retries?: IntFilter<"BulkJob"> | number
+    progress_current?: IntFilter<"BulkJob"> | number
+    progress_total?: IntFilter<"BulkJob"> | number
+    progress_failed?: IntFilter<"BulkJob"> | number
+    queue_name?: StringNullableFilter<"BulkJob"> | string | null
+    queue_job_id?: StringNullableFilter<"BulkJob"> | string | null
+    reference_type?: StringNullableFilter<"BulkJob"> | string | null
+    reference_uuid?: StringNullableFilter<"BulkJob"> | string | null
+    metadata?: JsonNullableFilter<"BulkJob">
+    started_at?: DateTimeNullableFilter<"BulkJob"> | Date | string | null
+    completed_at?: DateTimeNullableFilter<"BulkJob"> | Date | string | null
+    created_at?: DateTimeFilter<"BulkJob"> | Date | string
+    updated_at?: DateTimeFilter<"BulkJob"> | Date | string
+    organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+    created_by?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }
+
+  export type BulkJobOrderByWithRelationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    created_by_user_uuid?: SortOrderInput | SortOrder
+    title?: SortOrder
+    type?: SortOrder
+    status?: SortOrder
+    error?: SortOrderInput | SortOrder
+    retries?: SortOrder
+    max_retries?: SortOrder
+    progress_current?: SortOrder
+    progress_total?: SortOrder
+    progress_failed?: SortOrder
+    queue_name?: SortOrderInput | SortOrder
+    queue_job_id?: SortOrderInput | SortOrder
+    reference_type?: SortOrderInput | SortOrder
+    reference_uuid?: SortOrderInput | SortOrder
+    metadata?: SortOrderInput | SortOrder
+    started_at?: SortOrderInput | SortOrder
+    completed_at?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    organisation?: OrganisationOrderByWithRelationInput
+    created_by?: UserOrderByWithRelationInput
+  }
+
+  export type BulkJobWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    uuid?: string
+    AND?: BulkJobWhereInput | BulkJobWhereInput[]
+    OR?: BulkJobWhereInput[]
+    NOT?: BulkJobWhereInput | BulkJobWhereInput[]
+    organisation_uuid?: StringFilter<"BulkJob"> | string
+    created_by_user_uuid?: StringNullableFilter<"BulkJob"> | string | null
+    title?: StringFilter<"BulkJob"> | string
+    type?: EnumBulkJobTypeFilter<"BulkJob"> | $Enums.BulkJobType
+    status?: EnumBulkJobStatusFilter<"BulkJob"> | $Enums.BulkJobStatus
+    error?: StringNullableFilter<"BulkJob"> | string | null
+    retries?: IntFilter<"BulkJob"> | number
+    max_retries?: IntFilter<"BulkJob"> | number
+    progress_current?: IntFilter<"BulkJob"> | number
+    progress_total?: IntFilter<"BulkJob"> | number
+    progress_failed?: IntFilter<"BulkJob"> | number
+    queue_name?: StringNullableFilter<"BulkJob"> | string | null
+    queue_job_id?: StringNullableFilter<"BulkJob"> | string | null
+    reference_type?: StringNullableFilter<"BulkJob"> | string | null
+    reference_uuid?: StringNullableFilter<"BulkJob"> | string | null
+    metadata?: JsonNullableFilter<"BulkJob">
+    started_at?: DateTimeNullableFilter<"BulkJob"> | Date | string | null
+    completed_at?: DateTimeNullableFilter<"BulkJob"> | Date | string | null
+    created_at?: DateTimeFilter<"BulkJob"> | Date | string
+    updated_at?: DateTimeFilter<"BulkJob"> | Date | string
+    organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+    created_by?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }, "id" | "uuid">
+
+  export type BulkJobOrderByWithAggregationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    created_by_user_uuid?: SortOrderInput | SortOrder
+    title?: SortOrder
+    type?: SortOrder
+    status?: SortOrder
+    error?: SortOrderInput | SortOrder
+    retries?: SortOrder
+    max_retries?: SortOrder
+    progress_current?: SortOrder
+    progress_total?: SortOrder
+    progress_failed?: SortOrder
+    queue_name?: SortOrderInput | SortOrder
+    queue_job_id?: SortOrderInput | SortOrder
+    reference_type?: SortOrderInput | SortOrder
+    reference_uuid?: SortOrderInput | SortOrder
+    metadata?: SortOrderInput | SortOrder
+    started_at?: SortOrderInput | SortOrder
+    completed_at?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: BulkJobCountOrderByAggregateInput
+    _avg?: BulkJobAvgOrderByAggregateInput
+    _max?: BulkJobMaxOrderByAggregateInput
+    _min?: BulkJobMinOrderByAggregateInput
+    _sum?: BulkJobSumOrderByAggregateInput
+  }
+
+  export type BulkJobScalarWhereWithAggregatesInput = {
+    AND?: BulkJobScalarWhereWithAggregatesInput | BulkJobScalarWhereWithAggregatesInput[]
+    OR?: BulkJobScalarWhereWithAggregatesInput[]
+    NOT?: BulkJobScalarWhereWithAggregatesInput | BulkJobScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"BulkJob"> | number
+    uuid?: StringWithAggregatesFilter<"BulkJob"> | string
+    organisation_uuid?: StringWithAggregatesFilter<"BulkJob"> | string
+    created_by_user_uuid?: StringNullableWithAggregatesFilter<"BulkJob"> | string | null
+    title?: StringWithAggregatesFilter<"BulkJob"> | string
+    type?: EnumBulkJobTypeWithAggregatesFilter<"BulkJob"> | $Enums.BulkJobType
+    status?: EnumBulkJobStatusWithAggregatesFilter<"BulkJob"> | $Enums.BulkJobStatus
+    error?: StringNullableWithAggregatesFilter<"BulkJob"> | string | null
+    retries?: IntWithAggregatesFilter<"BulkJob"> | number
+    max_retries?: IntWithAggregatesFilter<"BulkJob"> | number
+    progress_current?: IntWithAggregatesFilter<"BulkJob"> | number
+    progress_total?: IntWithAggregatesFilter<"BulkJob"> | number
+    progress_failed?: IntWithAggregatesFilter<"BulkJob"> | number
+    queue_name?: StringNullableWithAggregatesFilter<"BulkJob"> | string | null
+    queue_job_id?: StringNullableWithAggregatesFilter<"BulkJob"> | string | null
+    reference_type?: StringNullableWithAggregatesFilter<"BulkJob"> | string | null
+    reference_uuid?: StringNullableWithAggregatesFilter<"BulkJob"> | string | null
+    metadata?: JsonNullableWithAggregatesFilter<"BulkJob">
+    started_at?: DateTimeNullableWithAggregatesFilter<"BulkJob"> | Date | string | null
+    completed_at?: DateTimeNullableWithAggregatesFilter<"BulkJob"> | Date | string | null
+    created_at?: DateTimeWithAggregatesFilter<"BulkJob"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"BulkJob"> | Date | string
+  }
+
+  export type WebsiteScrapeRequestWhereInput = {
+    AND?: WebsiteScrapeRequestWhereInput | WebsiteScrapeRequestWhereInput[]
+    OR?: WebsiteScrapeRequestWhereInput[]
+    NOT?: WebsiteScrapeRequestWhereInput | WebsiteScrapeRequestWhereInput[]
+    id?: StringFilter<"WebsiteScrapeRequest"> | string
+    provider?: EnumWebsiteScrapeProviderFilter<"WebsiteScrapeRequest"> | $Enums.WebsiteScrapeProvider
+    provider_run_id?: StringFilter<"WebsiteScrapeRequest"> | string
+    provider_config_id?: StringFilter<"WebsiteScrapeRequest"> | string
+    organisation_uuid?: StringFilter<"WebsiteScrapeRequest"> | string
+    operation?: EnumWebsiteScrapeOperationFilter<"WebsiteScrapeRequest"> | $Enums.WebsiteScrapeOperation
+    reference_uuid?: StringFilter<"WebsiteScrapeRequest"> | string
+    status?: EnumWebsiteScrapeStatusFilter<"WebsiteScrapeRequest"> | $Enums.WebsiteScrapeStatus
+    context?: JsonNullableFilter<"WebsiteScrapeRequest">
+    error?: StringNullableFilter<"WebsiteScrapeRequest"> | string | null
+    created_at?: DateTimeFilter<"WebsiteScrapeRequest"> | Date | string
+    updated_at?: DateTimeFilter<"WebsiteScrapeRequest"> | Date | string
+    finished_at?: DateTimeNullableFilter<"WebsiteScrapeRequest"> | Date | string | null
+    organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+  }
+
+  export type WebsiteScrapeRequestOrderByWithRelationInput = {
+    id?: SortOrder
+    provider?: SortOrder
+    provider_run_id?: SortOrder
+    provider_config_id?: SortOrder
+    organisation_uuid?: SortOrder
+    operation?: SortOrder
+    reference_uuid?: SortOrder
+    status?: SortOrder
+    context?: SortOrderInput | SortOrder
+    error?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    finished_at?: SortOrderInput | SortOrder
+    organisation?: OrganisationOrderByWithRelationInput
+  }
+
+  export type WebsiteScrapeRequestWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    provider_run_id?: string
+    AND?: WebsiteScrapeRequestWhereInput | WebsiteScrapeRequestWhereInput[]
+    OR?: WebsiteScrapeRequestWhereInput[]
+    NOT?: WebsiteScrapeRequestWhereInput | WebsiteScrapeRequestWhereInput[]
+    provider?: EnumWebsiteScrapeProviderFilter<"WebsiteScrapeRequest"> | $Enums.WebsiteScrapeProvider
+    provider_config_id?: StringFilter<"WebsiteScrapeRequest"> | string
+    organisation_uuid?: StringFilter<"WebsiteScrapeRequest"> | string
+    operation?: EnumWebsiteScrapeOperationFilter<"WebsiteScrapeRequest"> | $Enums.WebsiteScrapeOperation
+    reference_uuid?: StringFilter<"WebsiteScrapeRequest"> | string
+    status?: EnumWebsiteScrapeStatusFilter<"WebsiteScrapeRequest"> | $Enums.WebsiteScrapeStatus
+    context?: JsonNullableFilter<"WebsiteScrapeRequest">
+    error?: StringNullableFilter<"WebsiteScrapeRequest"> | string | null
+    created_at?: DateTimeFilter<"WebsiteScrapeRequest"> | Date | string
+    updated_at?: DateTimeFilter<"WebsiteScrapeRequest"> | Date | string
+    finished_at?: DateTimeNullableFilter<"WebsiteScrapeRequest"> | Date | string | null
+    organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+  }, "id" | "provider_run_id">
+
+  export type WebsiteScrapeRequestOrderByWithAggregationInput = {
+    id?: SortOrder
+    provider?: SortOrder
+    provider_run_id?: SortOrder
+    provider_config_id?: SortOrder
+    organisation_uuid?: SortOrder
+    operation?: SortOrder
+    reference_uuid?: SortOrder
+    status?: SortOrder
+    context?: SortOrderInput | SortOrder
+    error?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    finished_at?: SortOrderInput | SortOrder
+    _count?: WebsiteScrapeRequestCountOrderByAggregateInput
+    _max?: WebsiteScrapeRequestMaxOrderByAggregateInput
+    _min?: WebsiteScrapeRequestMinOrderByAggregateInput
+  }
+
+  export type WebsiteScrapeRequestScalarWhereWithAggregatesInput = {
+    AND?: WebsiteScrapeRequestScalarWhereWithAggregatesInput | WebsiteScrapeRequestScalarWhereWithAggregatesInput[]
+    OR?: WebsiteScrapeRequestScalarWhereWithAggregatesInput[]
+    NOT?: WebsiteScrapeRequestScalarWhereWithAggregatesInput | WebsiteScrapeRequestScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"WebsiteScrapeRequest"> | string
+    provider?: EnumWebsiteScrapeProviderWithAggregatesFilter<"WebsiteScrapeRequest"> | $Enums.WebsiteScrapeProvider
+    provider_run_id?: StringWithAggregatesFilter<"WebsiteScrapeRequest"> | string
+    provider_config_id?: StringWithAggregatesFilter<"WebsiteScrapeRequest"> | string
+    organisation_uuid?: StringWithAggregatesFilter<"WebsiteScrapeRequest"> | string
+    operation?: EnumWebsiteScrapeOperationWithAggregatesFilter<"WebsiteScrapeRequest"> | $Enums.WebsiteScrapeOperation
+    reference_uuid?: StringWithAggregatesFilter<"WebsiteScrapeRequest"> | string
+    status?: EnumWebsiteScrapeStatusWithAggregatesFilter<"WebsiteScrapeRequest"> | $Enums.WebsiteScrapeStatus
+    context?: JsonNullableWithAggregatesFilter<"WebsiteScrapeRequest">
+    error?: StringNullableWithAggregatesFilter<"WebsiteScrapeRequest"> | string | null
+    created_at?: DateTimeWithAggregatesFilter<"WebsiteScrapeRequest"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"WebsiteScrapeRequest"> | Date | string
+    finished_at?: DateTimeNullableWithAggregatesFilter<"WebsiteScrapeRequest"> | Date | string | null
   }
 
   export type SenderProfileWhereInput = {
@@ -62956,6 +68973,84 @@ export namespace Prisma {
     updated_at?: DateTimeWithAggregatesFilter<"MessagingGoal"> | Date | string
   }
 
+  export type EmailSendLimitWhereInput = {
+    AND?: EmailSendLimitWhereInput | EmailSendLimitWhereInput[]
+    OR?: EmailSendLimitWhereInput[]
+    NOT?: EmailSendLimitWhereInput | EmailSendLimitWhereInput[]
+    id?: IntFilter<"EmailSendLimit"> | number
+    uuid?: StringFilter<"EmailSendLimit"> | string
+    organisation_uuid?: StringFilter<"EmailSendLimit"> | string
+    provider?: EnumExternalIntegrationProviderFilter<"EmailSendLimit"> | $Enums.ExternalIntegrationProvider
+    period?: EnumGoalPeriodFilter<"EmailSendLimit"> | $Enums.GoalPeriod
+    max_count?: IntFilter<"EmailSendLimit"> | number
+    is_active?: BoolFilter<"EmailSendLimit"> | boolean
+    created_at?: DateTimeFilter<"EmailSendLimit"> | Date | string
+    updated_at?: DateTimeFilter<"EmailSendLimit"> | Date | string
+    organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+  }
+
+  export type EmailSendLimitOrderByWithRelationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    provider?: SortOrder
+    period?: SortOrder
+    max_count?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    organisation?: OrganisationOrderByWithRelationInput
+  }
+
+  export type EmailSendLimitWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    uuid?: string
+    organisation_uuid_provider_period?: EmailSendLimitOrganisation_uuidProviderPeriodCompoundUniqueInput
+    AND?: EmailSendLimitWhereInput | EmailSendLimitWhereInput[]
+    OR?: EmailSendLimitWhereInput[]
+    NOT?: EmailSendLimitWhereInput | EmailSendLimitWhereInput[]
+    organisation_uuid?: StringFilter<"EmailSendLimit"> | string
+    provider?: EnumExternalIntegrationProviderFilter<"EmailSendLimit"> | $Enums.ExternalIntegrationProvider
+    period?: EnumGoalPeriodFilter<"EmailSendLimit"> | $Enums.GoalPeriod
+    max_count?: IntFilter<"EmailSendLimit"> | number
+    is_active?: BoolFilter<"EmailSendLimit"> | boolean
+    created_at?: DateTimeFilter<"EmailSendLimit"> | Date | string
+    updated_at?: DateTimeFilter<"EmailSendLimit"> | Date | string
+    organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+  }, "id" | "uuid" | "organisation_uuid_provider_period">
+
+  export type EmailSendLimitOrderByWithAggregationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    provider?: SortOrder
+    period?: SortOrder
+    max_count?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: EmailSendLimitCountOrderByAggregateInput
+    _avg?: EmailSendLimitAvgOrderByAggregateInput
+    _max?: EmailSendLimitMaxOrderByAggregateInput
+    _min?: EmailSendLimitMinOrderByAggregateInput
+    _sum?: EmailSendLimitSumOrderByAggregateInput
+  }
+
+  export type EmailSendLimitScalarWhereWithAggregatesInput = {
+    AND?: EmailSendLimitScalarWhereWithAggregatesInput | EmailSendLimitScalarWhereWithAggregatesInput[]
+    OR?: EmailSendLimitScalarWhereWithAggregatesInput[]
+    NOT?: EmailSendLimitScalarWhereWithAggregatesInput | EmailSendLimitScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"EmailSendLimit"> | number
+    uuid?: StringWithAggregatesFilter<"EmailSendLimit"> | string
+    organisation_uuid?: StringWithAggregatesFilter<"EmailSendLimit"> | string
+    provider?: EnumExternalIntegrationProviderWithAggregatesFilter<"EmailSendLimit"> | $Enums.ExternalIntegrationProvider
+    period?: EnumGoalPeriodWithAggregatesFilter<"EmailSendLimit"> | $Enums.GoalPeriod
+    max_count?: IntWithAggregatesFilter<"EmailSendLimit"> | number
+    is_active?: BoolWithAggregatesFilter<"EmailSendLimit"> | boolean
+    created_at?: DateTimeWithAggregatesFilter<"EmailSendLimit"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"EmailSendLimit"> | Date | string
+  }
+
   export type GoalAchievementWhereInput = {
     AND?: GoalAchievementWhereInput | GoalAchievementWhereInput[]
     OR?: GoalAchievementWhereInput[]
@@ -63134,6 +69229,7 @@ export namespace Prisma {
     action?: StringFilter<"ActivityLog"> | string
     summary?: StringNullableFilter<"ActivityLog"> | string | null
     metadata?: JsonNullableFilter<"ActivityLog">
+    changes?: JsonNullableFilter<"ActivityLog">
     created_at?: DateTimeFilter<"ActivityLog"> | Date | string
     organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
     actor?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
@@ -63149,6 +69245,7 @@ export namespace Prisma {
     action?: SortOrder
     summary?: SortOrderInput | SortOrder
     metadata?: SortOrderInput | SortOrder
+    changes?: SortOrderInput | SortOrder
     created_at?: SortOrder
     organisation?: OrganisationOrderByWithRelationInput
     actor?: UserOrderByWithRelationInput
@@ -63167,6 +69264,7 @@ export namespace Prisma {
     action?: StringFilter<"ActivityLog"> | string
     summary?: StringNullableFilter<"ActivityLog"> | string | null
     metadata?: JsonNullableFilter<"ActivityLog">
+    changes?: JsonNullableFilter<"ActivityLog">
     created_at?: DateTimeFilter<"ActivityLog"> | Date | string
     organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
     actor?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
@@ -63182,6 +69280,7 @@ export namespace Prisma {
     action?: SortOrder
     summary?: SortOrderInput | SortOrder
     metadata?: SortOrderInput | SortOrder
+    changes?: SortOrderInput | SortOrder
     created_at?: SortOrder
     _count?: ActivityLogCountOrderByAggregateInput
     _avg?: ActivityLogAvgOrderByAggregateInput
@@ -63203,6 +69302,7 @@ export namespace Prisma {
     action?: StringWithAggregatesFilter<"ActivityLog"> | string
     summary?: StringNullableWithAggregatesFilter<"ActivityLog"> | string | null
     metadata?: JsonNullableWithAggregatesFilter<"ActivityLog">
+    changes?: JsonNullableWithAggregatesFilter<"ActivityLog">
     created_at?: DateTimeWithAggregatesFilter<"ActivityLog"> | Date | string
   }
 
@@ -63223,6 +69323,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutUserInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutUserInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
+    bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -63243,6 +69344,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutUserInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutUserInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
+    bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserUpdateInput = {
@@ -63262,6 +69364,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutUserNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutUserNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
+    bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -63282,6 +69385,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutUserNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutUserNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
+    bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -63342,6 +69446,7 @@ export namespace Prisma {
     reminders?: ReminderCreateNestedManyWithoutOrganisationInput
     forms?: FormCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
@@ -63350,6 +69455,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateInput = {
@@ -63376,6 +69484,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
     forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -63384,6 +69493,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUpdateInput = {
@@ -63409,6 +69521,7 @@ export namespace Prisma {
     reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
     forms?: FormUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
@@ -63417,6 +69530,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateInput = {
@@ -63443,6 +69559,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
     forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -63451,6 +69568,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateManyInput = {
@@ -63782,6 +69902,72 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type SavedContactFilterCreateInput = {
+    uuid?: string
+    name: string
+    filters: JsonNullValueInput | InputJsonValue
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutSaved_contact_filtersInput
+  }
+
+  export type SavedContactFilterUncheckedCreateInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    name: string
+    filters: JsonNullValueInput | InputJsonValue
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type SavedContactFilterUpdateInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    filters?: JsonNullValueInput | InputJsonValue
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutSaved_contact_filtersNestedInput
+  }
+
+  export type SavedContactFilterUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    filters?: JsonNullValueInput | InputJsonValue
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SavedContactFilterCreateManyInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    name: string
+    filters: JsonNullValueInput | InputJsonValue
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type SavedContactFilterUpdateManyMutationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    filters?: JsonNullValueInput | InputJsonValue
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SavedContactFilterUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    filters?: JsonNullValueInput | InputJsonValue
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type ScoringInstructionCreateInput = {
     uuid?: string
     name: string
@@ -63990,6 +70176,9 @@ export namespace Prisma {
     raw_data?: NullableJsonNullValueInput | InputJsonValue
     enrichment_summary?: string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: $Enums.EmailValidationStatus
+    email_validation_reason?: string | null
+    email_validated_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     raw_lead?: RawLeadCreateNestedOneWithoutLeadInput
@@ -64016,6 +70205,9 @@ export namespace Prisma {
     raw_data?: NullableJsonNullValueInput | InputJsonValue
     enrichment_summary?: string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: $Enums.EmailValidationStatus
+    email_validation_reason?: string | null
+    email_validated_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     contacts?: ContactUncheckedCreateNestedManyWithoutLeadInput
@@ -64039,6 +70231,9 @@ export namespace Prisma {
     raw_data?: NullableJsonNullValueInput | InputJsonValue
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
+    email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     raw_lead?: RawLeadUpdateOneWithoutLeadNestedInput
@@ -64065,6 +70260,9 @@ export namespace Prisma {
     raw_data?: NullableJsonNullValueInput | InputJsonValue
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
+    email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     contacts?: ContactUncheckedUpdateManyWithoutLeadNestedInput
@@ -64090,6 +70288,9 @@ export namespace Prisma {
     raw_data?: NullableJsonNullValueInput | InputJsonValue
     enrichment_summary?: string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: $Enums.EmailValidationStatus
+    email_validation_reason?: string | null
+    email_validated_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -64111,6 +70312,9 @@ export namespace Prisma {
     raw_data?: NullableJsonNullValueInput | InputJsonValue
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
+    email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -64134,6 +70338,9 @@ export namespace Prisma {
     raw_data?: NullableJsonNullValueInput | InputJsonValue
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
+    email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -64256,6 +70463,9 @@ export namespace Prisma {
     description?: string | null
     enrichment_summary?: string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: $Enums.EmailValidationStatus
+    email_validation_reason?: string | null
+    email_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -64298,6 +70508,9 @@ export namespace Prisma {
     description?: string | null
     enrichment_summary?: string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: $Enums.EmailValidationStatus
+    email_validation_reason?: string | null
+    email_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -64333,6 +70546,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
+    email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -64375,6 +70591,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
+    email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -64414,6 +70633,9 @@ export namespace Prisma {
     description?: string | null
     enrichment_summary?: string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: $Enums.EmailValidationStatus
+    email_validation_reason?: string | null
+    email_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -64438,6 +70660,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
+    email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -64466,6 +70691,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
+    email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -65381,6 +71609,287 @@ export namespace Prisma {
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BulkJobCreateInput = {
+    uuid?: string
+    title: string
+    type: $Enums.BulkJobType
+    status?: $Enums.BulkJobStatus
+    error?: string | null
+    retries?: number
+    max_retries?: number
+    progress_current?: number
+    progress_total?: number
+    progress_failed?: number
+    queue_name?: string | null
+    queue_job_id?: string | null
+    reference_type?: string | null
+    reference_uuid?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    started_at?: Date | string | null
+    completed_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutBulk_jobsInput
+    created_by?: UserCreateNestedOneWithoutBulk_jobs_createdInput
+  }
+
+  export type BulkJobUncheckedCreateInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    created_by_user_uuid?: string | null
+    title: string
+    type: $Enums.BulkJobType
+    status?: $Enums.BulkJobStatus
+    error?: string | null
+    retries?: number
+    max_retries?: number
+    progress_current?: number
+    progress_total?: number
+    progress_failed?: number
+    queue_name?: string | null
+    queue_job_id?: string | null
+    reference_type?: string | null
+    reference_uuid?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    started_at?: Date | string | null
+    completed_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type BulkJobUpdateInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    type?: EnumBulkJobTypeFieldUpdateOperationsInput | $Enums.BulkJobType
+    status?: EnumBulkJobStatusFieldUpdateOperationsInput | $Enums.BulkJobStatus
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    retries?: IntFieldUpdateOperationsInput | number
+    max_retries?: IntFieldUpdateOperationsInput | number
+    progress_current?: IntFieldUpdateOperationsInput | number
+    progress_total?: IntFieldUpdateOperationsInput | number
+    progress_failed?: IntFieldUpdateOperationsInput | number
+    queue_name?: NullableStringFieldUpdateOperationsInput | string | null
+    queue_job_id?: NullableStringFieldUpdateOperationsInput | string | null
+    reference_type?: NullableStringFieldUpdateOperationsInput | string | null
+    reference_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    started_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutBulk_jobsNestedInput
+    created_by?: UserUpdateOneWithoutBulk_jobs_createdNestedInput
+  }
+
+  export type BulkJobUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    type?: EnumBulkJobTypeFieldUpdateOperationsInput | $Enums.BulkJobType
+    status?: EnumBulkJobStatusFieldUpdateOperationsInput | $Enums.BulkJobStatus
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    retries?: IntFieldUpdateOperationsInput | number
+    max_retries?: IntFieldUpdateOperationsInput | number
+    progress_current?: IntFieldUpdateOperationsInput | number
+    progress_total?: IntFieldUpdateOperationsInput | number
+    progress_failed?: IntFieldUpdateOperationsInput | number
+    queue_name?: NullableStringFieldUpdateOperationsInput | string | null
+    queue_job_id?: NullableStringFieldUpdateOperationsInput | string | null
+    reference_type?: NullableStringFieldUpdateOperationsInput | string | null
+    reference_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    started_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BulkJobCreateManyInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    created_by_user_uuid?: string | null
+    title: string
+    type: $Enums.BulkJobType
+    status?: $Enums.BulkJobStatus
+    error?: string | null
+    retries?: number
+    max_retries?: number
+    progress_current?: number
+    progress_total?: number
+    progress_failed?: number
+    queue_name?: string | null
+    queue_job_id?: string | null
+    reference_type?: string | null
+    reference_uuid?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    started_at?: Date | string | null
+    completed_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type BulkJobUpdateManyMutationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    type?: EnumBulkJobTypeFieldUpdateOperationsInput | $Enums.BulkJobType
+    status?: EnumBulkJobStatusFieldUpdateOperationsInput | $Enums.BulkJobStatus
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    retries?: IntFieldUpdateOperationsInput | number
+    max_retries?: IntFieldUpdateOperationsInput | number
+    progress_current?: IntFieldUpdateOperationsInput | number
+    progress_total?: IntFieldUpdateOperationsInput | number
+    progress_failed?: IntFieldUpdateOperationsInput | number
+    queue_name?: NullableStringFieldUpdateOperationsInput | string | null
+    queue_job_id?: NullableStringFieldUpdateOperationsInput | string | null
+    reference_type?: NullableStringFieldUpdateOperationsInput | string | null
+    reference_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    started_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BulkJobUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    type?: EnumBulkJobTypeFieldUpdateOperationsInput | $Enums.BulkJobType
+    status?: EnumBulkJobStatusFieldUpdateOperationsInput | $Enums.BulkJobStatus
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    retries?: IntFieldUpdateOperationsInput | number
+    max_retries?: IntFieldUpdateOperationsInput | number
+    progress_current?: IntFieldUpdateOperationsInput | number
+    progress_total?: IntFieldUpdateOperationsInput | number
+    progress_failed?: IntFieldUpdateOperationsInput | number
+    queue_name?: NullableStringFieldUpdateOperationsInput | string | null
+    queue_job_id?: NullableStringFieldUpdateOperationsInput | string | null
+    reference_type?: NullableStringFieldUpdateOperationsInput | string | null
+    reference_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    started_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WebsiteScrapeRequestCreateInput = {
+    id?: string
+    provider?: $Enums.WebsiteScrapeProvider
+    provider_run_id: string
+    provider_config_id: string
+    operation: $Enums.WebsiteScrapeOperation
+    reference_uuid: string
+    status?: $Enums.WebsiteScrapeStatus
+    context?: NullableJsonNullValueInput | InputJsonValue
+    error?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    finished_at?: Date | string | null
+    organisation: OrganisationCreateNestedOneWithoutWebsite_scrape_requestsInput
+  }
+
+  export type WebsiteScrapeRequestUncheckedCreateInput = {
+    id?: string
+    provider?: $Enums.WebsiteScrapeProvider
+    provider_run_id: string
+    provider_config_id: string
+    organisation_uuid: string
+    operation: $Enums.WebsiteScrapeOperation
+    reference_uuid: string
+    status?: $Enums.WebsiteScrapeStatus
+    context?: NullableJsonNullValueInput | InputJsonValue
+    error?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    finished_at?: Date | string | null
+  }
+
+  export type WebsiteScrapeRequestUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    provider?: EnumWebsiteScrapeProviderFieldUpdateOperationsInput | $Enums.WebsiteScrapeProvider
+    provider_run_id?: StringFieldUpdateOperationsInput | string
+    provider_config_id?: StringFieldUpdateOperationsInput | string
+    operation?: EnumWebsiteScrapeOperationFieldUpdateOperationsInput | $Enums.WebsiteScrapeOperation
+    reference_uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumWebsiteScrapeStatusFieldUpdateOperationsInput | $Enums.WebsiteScrapeStatus
+    context?: NullableJsonNullValueInput | InputJsonValue
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    finished_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    organisation?: OrganisationUpdateOneRequiredWithoutWebsite_scrape_requestsNestedInput
+  }
+
+  export type WebsiteScrapeRequestUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    provider?: EnumWebsiteScrapeProviderFieldUpdateOperationsInput | $Enums.WebsiteScrapeProvider
+    provider_run_id?: StringFieldUpdateOperationsInput | string
+    provider_config_id?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    operation?: EnumWebsiteScrapeOperationFieldUpdateOperationsInput | $Enums.WebsiteScrapeOperation
+    reference_uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumWebsiteScrapeStatusFieldUpdateOperationsInput | $Enums.WebsiteScrapeStatus
+    context?: NullableJsonNullValueInput | InputJsonValue
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    finished_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type WebsiteScrapeRequestCreateManyInput = {
+    id?: string
+    provider?: $Enums.WebsiteScrapeProvider
+    provider_run_id: string
+    provider_config_id: string
+    organisation_uuid: string
+    operation: $Enums.WebsiteScrapeOperation
+    reference_uuid: string
+    status?: $Enums.WebsiteScrapeStatus
+    context?: NullableJsonNullValueInput | InputJsonValue
+    error?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    finished_at?: Date | string | null
+  }
+
+  export type WebsiteScrapeRequestUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    provider?: EnumWebsiteScrapeProviderFieldUpdateOperationsInput | $Enums.WebsiteScrapeProvider
+    provider_run_id?: StringFieldUpdateOperationsInput | string
+    provider_config_id?: StringFieldUpdateOperationsInput | string
+    operation?: EnumWebsiteScrapeOperationFieldUpdateOperationsInput | $Enums.WebsiteScrapeOperation
+    reference_uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumWebsiteScrapeStatusFieldUpdateOperationsInput | $Enums.WebsiteScrapeStatus
+    context?: NullableJsonNullValueInput | InputJsonValue
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    finished_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type WebsiteScrapeRequestUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    provider?: EnumWebsiteScrapeProviderFieldUpdateOperationsInput | $Enums.WebsiteScrapeProvider
+    provider_run_id?: StringFieldUpdateOperationsInput | string
+    provider_config_id?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    operation?: EnumWebsiteScrapeOperationFieldUpdateOperationsInput | $Enums.WebsiteScrapeOperation
+    reference_uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumWebsiteScrapeStatusFieldUpdateOperationsInput | $Enums.WebsiteScrapeStatus
+    context?: NullableJsonNullValueInput | InputJsonValue
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    finished_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type SenderProfileCreateInput = {
@@ -67354,6 +73863,86 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type EmailSendLimitCreateInput = {
+    uuid?: string
+    provider: $Enums.ExternalIntegrationProvider
+    period: $Enums.GoalPeriod
+    max_count: number
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutEmail_send_limitsInput
+  }
+
+  export type EmailSendLimitUncheckedCreateInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    provider: $Enums.ExternalIntegrationProvider
+    period: $Enums.GoalPeriod
+    max_count: number
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type EmailSendLimitUpdateInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    provider?: EnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider
+    period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    max_count?: IntFieldUpdateOperationsInput | number
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutEmail_send_limitsNestedInput
+  }
+
+  export type EmailSendLimitUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    provider?: EnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider
+    period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    max_count?: IntFieldUpdateOperationsInput | number
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EmailSendLimitCreateManyInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    provider: $Enums.ExternalIntegrationProvider
+    period: $Enums.GoalPeriod
+    max_count: number
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type EmailSendLimitUpdateManyMutationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    provider?: EnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider
+    period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    max_count?: IntFieldUpdateOperationsInput | number
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EmailSendLimitUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    provider?: EnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider
+    period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    max_count?: IntFieldUpdateOperationsInput | number
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type GoalAchievementCreateInput = {
     uuid?: string
     type: $Enums.GoalAchievementType
@@ -67518,6 +74107,7 @@ export namespace Prisma {
     action: string
     summary?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    changes?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutActivity_logsInput
     actor?: UserCreateNestedOneWithoutActivity_logsInput
@@ -67533,6 +74123,7 @@ export namespace Prisma {
     action: string
     summary?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    changes?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
   }
 
@@ -67543,6 +74134,7 @@ export namespace Prisma {
     action?: StringFieldUpdateOperationsInput | string
     summary?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    changes?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutActivity_logsNestedInput
     actor?: UserUpdateOneWithoutActivity_logsNestedInput
@@ -67558,6 +74150,7 @@ export namespace Prisma {
     action?: StringFieldUpdateOperationsInput | string
     summary?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    changes?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -67571,6 +74164,7 @@ export namespace Prisma {
     action: string
     summary?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    changes?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
   }
 
@@ -67581,6 +74175,7 @@ export namespace Prisma {
     action?: StringFieldUpdateOperationsInput | string
     summary?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    changes?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -67594,6 +74189,7 @@ export namespace Prisma {
     action?: StringFieldUpdateOperationsInput | string
     summary?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    changes?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -67704,6 +74300,12 @@ export namespace Prisma {
     none?: GoalPersonalBestWhereInput
   }
 
+  export type BulkJobListRelationFilter = {
+    every?: BulkJobWhereInput
+    some?: BulkJobWhereInput
+    none?: BulkJobWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -67738,6 +74340,10 @@ export namespace Prisma {
   }
 
   export type GoalPersonalBestOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type BulkJobOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -67933,6 +74539,12 @@ export namespace Prisma {
     none?: ContactListWhereInput
   }
 
+  export type SavedContactFilterListRelationFilter = {
+    every?: SavedContactFilterWhereInput
+    some?: SavedContactFilterWhereInput
+    none?: SavedContactFilterWhereInput
+  }
+
   export type ContactAudienceAnalysisListRelationFilter = {
     every?: ContactAudienceAnalysisWhereInput
     some?: ContactAudienceAnalysisWhereInput
@@ -67955,6 +74567,18 @@ export namespace Prisma {
     every?: MessageTemplateWhereInput
     some?: MessageTemplateWhereInput
     none?: MessageTemplateWhereInput
+  }
+
+  export type WebsiteScrapeRequestListRelationFilter = {
+    every?: WebsiteScrapeRequestWhereInput
+    some?: WebsiteScrapeRequestWhereInput
+    none?: WebsiteScrapeRequestWhereInput
+  }
+
+  export type EmailSendLimitListRelationFilter = {
+    every?: EmailSendLimitWhereInput
+    some?: EmailSendLimitWhereInput
+    none?: EmailSendLimitWhereInput
   }
 
   export type FilterOrderByRelationAggregateInput = {
@@ -68005,6 +74629,10 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type SavedContactFilterOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type ContactAudienceAnalysisOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -68018,6 +74646,14 @@ export namespace Prisma {
   }
 
   export type MessageTemplateOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type WebsiteScrapeRequestOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type EmailSendLimitOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -68429,6 +75065,42 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
+  export type SavedContactFilterCountOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    name?: SortOrder
+    filters?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type SavedContactFilterAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type SavedContactFilterMaxOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    name?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type SavedContactFilterMinOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    name?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type SavedContactFilterSumOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
   export type ContactScoreListRelationFilter = {
     every?: ContactScoreWhereInput
     some?: ContactScoreWhereInput
@@ -68577,6 +75249,13 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
+  export type EnumEmailValidationStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.EmailValidationStatus | EnumEmailValidationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.EmailValidationStatus[] | ListEnumEmailValidationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EmailValidationStatus[] | ListEnumEmailValidationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumEmailValidationStatusFilter<$PrismaModel> | $Enums.EmailValidationStatus
+  }
+
   export type RawLeadNullableScalarRelationFilter = {
     is?: RawLeadWhereInput | null
     isNot?: RawLeadWhereInput | null
@@ -68611,6 +75290,9 @@ export namespace Prisma {
     raw_data?: SortOrder
     enrichment_summary?: SortOrder
     enrichment_metadata?: SortOrder
+    email_validation_status?: SortOrder
+    email_validation_reason?: SortOrder
+    email_validated_at?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -68636,6 +75318,9 @@ export namespace Prisma {
     description?: SortOrder
     source_type?: SortOrder
     enrichment_summary?: SortOrder
+    email_validation_status?: SortOrder
+    email_validation_reason?: SortOrder
+    email_validated_at?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -68657,6 +75342,9 @@ export namespace Prisma {
     description?: SortOrder
     source_type?: SortOrder
     enrichment_summary?: SortOrder
+    email_validation_status?: SortOrder
+    email_validation_reason?: SortOrder
+    email_validated_at?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -68689,6 +75377,16 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedJsonNullableFilter<$PrismaModel>
     _max?: NestedJsonNullableFilter<$PrismaModel>
+  }
+
+  export type EnumEmailValidationStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.EmailValidationStatus | EnumEmailValidationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.EmailValidationStatus[] | ListEnumEmailValidationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EmailValidationStatus[] | ListEnumEmailValidationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumEmailValidationStatusWithAggregatesFilter<$PrismaModel> | $Enums.EmailValidationStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumEmailValidationStatusFilter<$PrismaModel>
+    _max?: NestedEnumEmailValidationStatusFilter<$PrismaModel>
   }
 
   export type EnumEnrichmentSourceFilter<$PrismaModel = never> = {
@@ -68910,6 +75608,9 @@ export namespace Prisma {
     description?: SortOrder
     enrichment_summary?: SortOrder
     enrichment_metadata?: SortOrder
+    email_validation_status?: SortOrder
+    email_validation_reason?: SortOrder
+    email_validated_at?: SortOrder
     unsubscribed_at?: SortOrder
     unsubscribe_token?: SortOrder
     last_interaction_at?: SortOrder
@@ -68941,6 +75642,9 @@ export namespace Prisma {
     industry?: SortOrder
     description?: SortOrder
     enrichment_summary?: SortOrder
+    email_validation_status?: SortOrder
+    email_validation_reason?: SortOrder
+    email_validated_at?: SortOrder
     unsubscribed_at?: SortOrder
     unsubscribe_token?: SortOrder
     last_interaction_at?: SortOrder
@@ -68968,6 +75672,9 @@ export namespace Prisma {
     industry?: SortOrder
     description?: SortOrder
     enrichment_summary?: SortOrder
+    email_validation_status?: SortOrder
+    email_validation_reason?: SortOrder
+    email_validated_at?: SortOrder
     unsubscribed_at?: SortOrder
     unsubscribe_token?: SortOrder
     last_interaction_at?: SortOrder
@@ -69663,6 +76370,228 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumJobTriggerFilter<$PrismaModel>
     _max?: NestedEnumJobTriggerFilter<$PrismaModel>
+  }
+
+  export type EnumBulkJobTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.BulkJobType | EnumBulkJobTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.BulkJobType[] | ListEnumBulkJobTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BulkJobType[] | ListEnumBulkJobTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumBulkJobTypeFilter<$PrismaModel> | $Enums.BulkJobType
+  }
+
+  export type EnumBulkJobStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.BulkJobStatus | EnumBulkJobStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.BulkJobStatus[] | ListEnumBulkJobStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BulkJobStatus[] | ListEnumBulkJobStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumBulkJobStatusFilter<$PrismaModel> | $Enums.BulkJobStatus
+  }
+
+  export type BulkJobCountOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    created_by_user_uuid?: SortOrder
+    title?: SortOrder
+    type?: SortOrder
+    status?: SortOrder
+    error?: SortOrder
+    retries?: SortOrder
+    max_retries?: SortOrder
+    progress_current?: SortOrder
+    progress_total?: SortOrder
+    progress_failed?: SortOrder
+    queue_name?: SortOrder
+    queue_job_id?: SortOrder
+    reference_type?: SortOrder
+    reference_uuid?: SortOrder
+    metadata?: SortOrder
+    started_at?: SortOrder
+    completed_at?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type BulkJobAvgOrderByAggregateInput = {
+    id?: SortOrder
+    retries?: SortOrder
+    max_retries?: SortOrder
+    progress_current?: SortOrder
+    progress_total?: SortOrder
+    progress_failed?: SortOrder
+  }
+
+  export type BulkJobMaxOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    created_by_user_uuid?: SortOrder
+    title?: SortOrder
+    type?: SortOrder
+    status?: SortOrder
+    error?: SortOrder
+    retries?: SortOrder
+    max_retries?: SortOrder
+    progress_current?: SortOrder
+    progress_total?: SortOrder
+    progress_failed?: SortOrder
+    queue_name?: SortOrder
+    queue_job_id?: SortOrder
+    reference_type?: SortOrder
+    reference_uuid?: SortOrder
+    started_at?: SortOrder
+    completed_at?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type BulkJobMinOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    created_by_user_uuid?: SortOrder
+    title?: SortOrder
+    type?: SortOrder
+    status?: SortOrder
+    error?: SortOrder
+    retries?: SortOrder
+    max_retries?: SortOrder
+    progress_current?: SortOrder
+    progress_total?: SortOrder
+    progress_failed?: SortOrder
+    queue_name?: SortOrder
+    queue_job_id?: SortOrder
+    reference_type?: SortOrder
+    reference_uuid?: SortOrder
+    started_at?: SortOrder
+    completed_at?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type BulkJobSumOrderByAggregateInput = {
+    id?: SortOrder
+    retries?: SortOrder
+    max_retries?: SortOrder
+    progress_current?: SortOrder
+    progress_total?: SortOrder
+    progress_failed?: SortOrder
+  }
+
+  export type EnumBulkJobTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.BulkJobType | EnumBulkJobTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.BulkJobType[] | ListEnumBulkJobTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BulkJobType[] | ListEnumBulkJobTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumBulkJobTypeWithAggregatesFilter<$PrismaModel> | $Enums.BulkJobType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumBulkJobTypeFilter<$PrismaModel>
+    _max?: NestedEnumBulkJobTypeFilter<$PrismaModel>
+  }
+
+  export type EnumBulkJobStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.BulkJobStatus | EnumBulkJobStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.BulkJobStatus[] | ListEnumBulkJobStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BulkJobStatus[] | ListEnumBulkJobStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumBulkJobStatusWithAggregatesFilter<$PrismaModel> | $Enums.BulkJobStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumBulkJobStatusFilter<$PrismaModel>
+    _max?: NestedEnumBulkJobStatusFilter<$PrismaModel>
+  }
+
+  export type EnumWebsiteScrapeProviderFilter<$PrismaModel = never> = {
+    equals?: $Enums.WebsiteScrapeProvider | EnumWebsiteScrapeProviderFieldRefInput<$PrismaModel>
+    in?: $Enums.WebsiteScrapeProvider[] | ListEnumWebsiteScrapeProviderFieldRefInput<$PrismaModel>
+    notIn?: $Enums.WebsiteScrapeProvider[] | ListEnumWebsiteScrapeProviderFieldRefInput<$PrismaModel>
+    not?: NestedEnumWebsiteScrapeProviderFilter<$PrismaModel> | $Enums.WebsiteScrapeProvider
+  }
+
+  export type EnumWebsiteScrapeOperationFilter<$PrismaModel = never> = {
+    equals?: $Enums.WebsiteScrapeOperation | EnumWebsiteScrapeOperationFieldRefInput<$PrismaModel>
+    in?: $Enums.WebsiteScrapeOperation[] | ListEnumWebsiteScrapeOperationFieldRefInput<$PrismaModel>
+    notIn?: $Enums.WebsiteScrapeOperation[] | ListEnumWebsiteScrapeOperationFieldRefInput<$PrismaModel>
+    not?: NestedEnumWebsiteScrapeOperationFilter<$PrismaModel> | $Enums.WebsiteScrapeOperation
+  }
+
+  export type EnumWebsiteScrapeStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.WebsiteScrapeStatus | EnumWebsiteScrapeStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.WebsiteScrapeStatus[] | ListEnumWebsiteScrapeStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.WebsiteScrapeStatus[] | ListEnumWebsiteScrapeStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumWebsiteScrapeStatusFilter<$PrismaModel> | $Enums.WebsiteScrapeStatus
+  }
+
+  export type WebsiteScrapeRequestCountOrderByAggregateInput = {
+    id?: SortOrder
+    provider?: SortOrder
+    provider_run_id?: SortOrder
+    provider_config_id?: SortOrder
+    organisation_uuid?: SortOrder
+    operation?: SortOrder
+    reference_uuid?: SortOrder
+    status?: SortOrder
+    context?: SortOrder
+    error?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    finished_at?: SortOrder
+  }
+
+  export type WebsiteScrapeRequestMaxOrderByAggregateInput = {
+    id?: SortOrder
+    provider?: SortOrder
+    provider_run_id?: SortOrder
+    provider_config_id?: SortOrder
+    organisation_uuid?: SortOrder
+    operation?: SortOrder
+    reference_uuid?: SortOrder
+    status?: SortOrder
+    error?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    finished_at?: SortOrder
+  }
+
+  export type WebsiteScrapeRequestMinOrderByAggregateInput = {
+    id?: SortOrder
+    provider?: SortOrder
+    provider_run_id?: SortOrder
+    provider_config_id?: SortOrder
+    organisation_uuid?: SortOrder
+    operation?: SortOrder
+    reference_uuid?: SortOrder
+    status?: SortOrder
+    error?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    finished_at?: SortOrder
+  }
+
+  export type EnumWebsiteScrapeProviderWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.WebsiteScrapeProvider | EnumWebsiteScrapeProviderFieldRefInput<$PrismaModel>
+    in?: $Enums.WebsiteScrapeProvider[] | ListEnumWebsiteScrapeProviderFieldRefInput<$PrismaModel>
+    notIn?: $Enums.WebsiteScrapeProvider[] | ListEnumWebsiteScrapeProviderFieldRefInput<$PrismaModel>
+    not?: NestedEnumWebsiteScrapeProviderWithAggregatesFilter<$PrismaModel> | $Enums.WebsiteScrapeProvider
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumWebsiteScrapeProviderFilter<$PrismaModel>
+    _max?: NestedEnumWebsiteScrapeProviderFilter<$PrismaModel>
+  }
+
+  export type EnumWebsiteScrapeOperationWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.WebsiteScrapeOperation | EnumWebsiteScrapeOperationFieldRefInput<$PrismaModel>
+    in?: $Enums.WebsiteScrapeOperation[] | ListEnumWebsiteScrapeOperationFieldRefInput<$PrismaModel>
+    notIn?: $Enums.WebsiteScrapeOperation[] | ListEnumWebsiteScrapeOperationFieldRefInput<$PrismaModel>
+    not?: NestedEnumWebsiteScrapeOperationWithAggregatesFilter<$PrismaModel> | $Enums.WebsiteScrapeOperation
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumWebsiteScrapeOperationFilter<$PrismaModel>
+    _max?: NestedEnumWebsiteScrapeOperationFilter<$PrismaModel>
+  }
+
+  export type EnumWebsiteScrapeStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.WebsiteScrapeStatus | EnumWebsiteScrapeStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.WebsiteScrapeStatus[] | ListEnumWebsiteScrapeStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.WebsiteScrapeStatus[] | ListEnumWebsiteScrapeStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumWebsiteScrapeStatusWithAggregatesFilter<$PrismaModel> | $Enums.WebsiteScrapeStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumWebsiteScrapeStatusFilter<$PrismaModel>
+    _max?: NestedEnumWebsiteScrapeStatusFilter<$PrismaModel>
   }
 
   export type SenderProfileCountOrderByAggregateInput = {
@@ -71106,6 +78035,58 @@ export namespace Prisma {
     _max?: NestedEnumGoalPeriodFilter<$PrismaModel>
   }
 
+  export type EmailSendLimitOrganisation_uuidProviderPeriodCompoundUniqueInput = {
+    organisation_uuid: string
+    provider: $Enums.ExternalIntegrationProvider
+    period: $Enums.GoalPeriod
+  }
+
+  export type EmailSendLimitCountOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    provider?: SortOrder
+    period?: SortOrder
+    max_count?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type EmailSendLimitAvgOrderByAggregateInput = {
+    id?: SortOrder
+    max_count?: SortOrder
+  }
+
+  export type EmailSendLimitMaxOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    provider?: SortOrder
+    period?: SortOrder
+    max_count?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type EmailSendLimitMinOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    provider?: SortOrder
+    period?: SortOrder
+    max_count?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type EmailSendLimitSumOrderByAggregateInput = {
+    id?: SortOrder
+    max_count?: SortOrder
+  }
+
   export type EnumGoalAchievementTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.GoalAchievementType | EnumGoalAchievementTypeFieldRefInput<$PrismaModel>
     in?: $Enums.GoalAchievementType[] | ListEnumGoalAchievementTypeFieldRefInput<$PrismaModel>
@@ -71239,6 +78220,7 @@ export namespace Prisma {
     action?: SortOrder
     summary?: SortOrder
     metadata?: SortOrder
+    changes?: SortOrder
     created_at?: SortOrder
   }
 
@@ -71330,6 +78312,13 @@ export namespace Prisma {
     connect?: GoalPersonalBestWhereUniqueInput | GoalPersonalBestWhereUniqueInput[]
   }
 
+  export type BulkJobCreateNestedManyWithoutCreated_byInput = {
+    create?: XOR<BulkJobCreateWithoutCreated_byInput, BulkJobUncheckedCreateWithoutCreated_byInput> | BulkJobCreateWithoutCreated_byInput[] | BulkJobUncheckedCreateWithoutCreated_byInput[]
+    connectOrCreate?: BulkJobCreateOrConnectWithoutCreated_byInput | BulkJobCreateOrConnectWithoutCreated_byInput[]
+    createMany?: BulkJobCreateManyCreated_byInputEnvelope
+    connect?: BulkJobWhereUniqueInput | BulkJobWhereUniqueInput[]
+  }
+
   export type OrganisationMemberUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<OrganisationMemberCreateWithoutUserInput, OrganisationMemberUncheckedCreateWithoutUserInput> | OrganisationMemberCreateWithoutUserInput[] | OrganisationMemberUncheckedCreateWithoutUserInput[]
     connectOrCreate?: OrganisationMemberCreateOrConnectWithoutUserInput | OrganisationMemberCreateOrConnectWithoutUserInput[]
@@ -71384,6 +78373,13 @@ export namespace Prisma {
     connectOrCreate?: GoalPersonalBestCreateOrConnectWithoutUserInput | GoalPersonalBestCreateOrConnectWithoutUserInput[]
     createMany?: GoalPersonalBestCreateManyUserInputEnvelope
     connect?: GoalPersonalBestWhereUniqueInput | GoalPersonalBestWhereUniqueInput[]
+  }
+
+  export type BulkJobUncheckedCreateNestedManyWithoutCreated_byInput = {
+    create?: XOR<BulkJobCreateWithoutCreated_byInput, BulkJobUncheckedCreateWithoutCreated_byInput> | BulkJobCreateWithoutCreated_byInput[] | BulkJobUncheckedCreateWithoutCreated_byInput[]
+    connectOrCreate?: BulkJobCreateOrConnectWithoutCreated_byInput | BulkJobCreateOrConnectWithoutCreated_byInput[]
+    createMany?: BulkJobCreateManyCreated_byInputEnvelope
+    connect?: BulkJobWhereUniqueInput | BulkJobWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -71514,6 +78510,20 @@ export namespace Prisma {
     deleteMany?: GoalPersonalBestScalarWhereInput | GoalPersonalBestScalarWhereInput[]
   }
 
+  export type BulkJobUpdateManyWithoutCreated_byNestedInput = {
+    create?: XOR<BulkJobCreateWithoutCreated_byInput, BulkJobUncheckedCreateWithoutCreated_byInput> | BulkJobCreateWithoutCreated_byInput[] | BulkJobUncheckedCreateWithoutCreated_byInput[]
+    connectOrCreate?: BulkJobCreateOrConnectWithoutCreated_byInput | BulkJobCreateOrConnectWithoutCreated_byInput[]
+    upsert?: BulkJobUpsertWithWhereUniqueWithoutCreated_byInput | BulkJobUpsertWithWhereUniqueWithoutCreated_byInput[]
+    createMany?: BulkJobCreateManyCreated_byInputEnvelope
+    set?: BulkJobWhereUniqueInput | BulkJobWhereUniqueInput[]
+    disconnect?: BulkJobWhereUniqueInput | BulkJobWhereUniqueInput[]
+    delete?: BulkJobWhereUniqueInput | BulkJobWhereUniqueInput[]
+    connect?: BulkJobWhereUniqueInput | BulkJobWhereUniqueInput[]
+    update?: BulkJobUpdateWithWhereUniqueWithoutCreated_byInput | BulkJobUpdateWithWhereUniqueWithoutCreated_byInput[]
+    updateMany?: BulkJobUpdateManyWithWhereWithoutCreated_byInput | BulkJobUpdateManyWithWhereWithoutCreated_byInput[]
+    deleteMany?: BulkJobScalarWhereInput | BulkJobScalarWhereInput[]
+  }
+
   export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
@@ -71634,6 +78644,20 @@ export namespace Prisma {
     deleteMany?: GoalPersonalBestScalarWhereInput | GoalPersonalBestScalarWhereInput[]
   }
 
+  export type BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput = {
+    create?: XOR<BulkJobCreateWithoutCreated_byInput, BulkJobUncheckedCreateWithoutCreated_byInput> | BulkJobCreateWithoutCreated_byInput[] | BulkJobUncheckedCreateWithoutCreated_byInput[]
+    connectOrCreate?: BulkJobCreateOrConnectWithoutCreated_byInput | BulkJobCreateOrConnectWithoutCreated_byInput[]
+    upsert?: BulkJobUpsertWithWhereUniqueWithoutCreated_byInput | BulkJobUpsertWithWhereUniqueWithoutCreated_byInput[]
+    createMany?: BulkJobCreateManyCreated_byInputEnvelope
+    set?: BulkJobWhereUniqueInput | BulkJobWhereUniqueInput[]
+    disconnect?: BulkJobWhereUniqueInput | BulkJobWhereUniqueInput[]
+    delete?: BulkJobWhereUniqueInput | BulkJobWhereUniqueInput[]
+    connect?: BulkJobWhereUniqueInput | BulkJobWhereUniqueInput[]
+    update?: BulkJobUpdateWithWhereUniqueWithoutCreated_byInput | BulkJobUpdateWithWhereUniqueWithoutCreated_byInput[]
+    updateMany?: BulkJobUpdateManyWithWhereWithoutCreated_byInput | BulkJobUpdateManyWithWhereWithoutCreated_byInput[]
+    deleteMany?: BulkJobScalarWhereInput | BulkJobScalarWhereInput[]
+  }
+
   export type OrganisationMemberCreateNestedManyWithoutOrganisationInput = {
     create?: XOR<OrganisationMemberCreateWithoutOrganisationInput, OrganisationMemberUncheckedCreateWithoutOrganisationInput> | OrganisationMemberCreateWithoutOrganisationInput[] | OrganisationMemberUncheckedCreateWithoutOrganisationInput[]
     connectOrCreate?: OrganisationMemberCreateOrConnectWithoutOrganisationInput | OrganisationMemberCreateOrConnectWithoutOrganisationInput[]
@@ -71739,6 +78763,13 @@ export namespace Prisma {
     connect?: ContactListWhereUniqueInput | ContactListWhereUniqueInput[]
   }
 
+  export type SavedContactFilterCreateNestedManyWithoutOrganisationInput = {
+    create?: XOR<SavedContactFilterCreateWithoutOrganisationInput, SavedContactFilterUncheckedCreateWithoutOrganisationInput> | SavedContactFilterCreateWithoutOrganisationInput[] | SavedContactFilterUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: SavedContactFilterCreateOrConnectWithoutOrganisationInput | SavedContactFilterCreateOrConnectWithoutOrganisationInput[]
+    createMany?: SavedContactFilterCreateManyOrganisationInputEnvelope
+    connect?: SavedContactFilterWhereUniqueInput | SavedContactFilterWhereUniqueInput[]
+  }
+
   export type ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput = {
     create?: XOR<ContactAudienceAnalysisCreateWithoutOrganisationInput, ContactAudienceAnalysisUncheckedCreateWithoutOrganisationInput> | ContactAudienceAnalysisCreateWithoutOrganisationInput[] | ContactAudienceAnalysisUncheckedCreateWithoutOrganisationInput[]
     connectOrCreate?: ContactAudienceAnalysisCreateOrConnectWithoutOrganisationInput | ContactAudienceAnalysisCreateOrConnectWithoutOrganisationInput[]
@@ -71793,6 +78824,27 @@ export namespace Prisma {
     connectOrCreate?: GoalPersonalBestCreateOrConnectWithoutOrganisationInput | GoalPersonalBestCreateOrConnectWithoutOrganisationInput[]
     createMany?: GoalPersonalBestCreateManyOrganisationInputEnvelope
     connect?: GoalPersonalBestWhereUniqueInput | GoalPersonalBestWhereUniqueInput[]
+  }
+
+  export type BulkJobCreateNestedManyWithoutOrganisationInput = {
+    create?: XOR<BulkJobCreateWithoutOrganisationInput, BulkJobUncheckedCreateWithoutOrganisationInput> | BulkJobCreateWithoutOrganisationInput[] | BulkJobUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: BulkJobCreateOrConnectWithoutOrganisationInput | BulkJobCreateOrConnectWithoutOrganisationInput[]
+    createMany?: BulkJobCreateManyOrganisationInputEnvelope
+    connect?: BulkJobWhereUniqueInput | BulkJobWhereUniqueInput[]
+  }
+
+  export type WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput = {
+    create?: XOR<WebsiteScrapeRequestCreateWithoutOrganisationInput, WebsiteScrapeRequestUncheckedCreateWithoutOrganisationInput> | WebsiteScrapeRequestCreateWithoutOrganisationInput[] | WebsiteScrapeRequestUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: WebsiteScrapeRequestCreateOrConnectWithoutOrganisationInput | WebsiteScrapeRequestCreateOrConnectWithoutOrganisationInput[]
+    createMany?: WebsiteScrapeRequestCreateManyOrganisationInputEnvelope
+    connect?: WebsiteScrapeRequestWhereUniqueInput | WebsiteScrapeRequestWhereUniqueInput[]
+  }
+
+  export type EmailSendLimitCreateNestedManyWithoutOrganisationInput = {
+    create?: XOR<EmailSendLimitCreateWithoutOrganisationInput, EmailSendLimitUncheckedCreateWithoutOrganisationInput> | EmailSendLimitCreateWithoutOrganisationInput[] | EmailSendLimitUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: EmailSendLimitCreateOrConnectWithoutOrganisationInput | EmailSendLimitCreateOrConnectWithoutOrganisationInput[]
+    createMany?: EmailSendLimitCreateManyOrganisationInputEnvelope
+    connect?: EmailSendLimitWhereUniqueInput | EmailSendLimitWhereUniqueInput[]
   }
 
   export type OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput = {
@@ -71900,6 +78952,13 @@ export namespace Prisma {
     connect?: ContactListWhereUniqueInput | ContactListWhereUniqueInput[]
   }
 
+  export type SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput = {
+    create?: XOR<SavedContactFilterCreateWithoutOrganisationInput, SavedContactFilterUncheckedCreateWithoutOrganisationInput> | SavedContactFilterCreateWithoutOrganisationInput[] | SavedContactFilterUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: SavedContactFilterCreateOrConnectWithoutOrganisationInput | SavedContactFilterCreateOrConnectWithoutOrganisationInput[]
+    createMany?: SavedContactFilterCreateManyOrganisationInputEnvelope
+    connect?: SavedContactFilterWhereUniqueInput | SavedContactFilterWhereUniqueInput[]
+  }
+
   export type ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput = {
     create?: XOR<ContactAudienceAnalysisCreateWithoutOrganisationInput, ContactAudienceAnalysisUncheckedCreateWithoutOrganisationInput> | ContactAudienceAnalysisCreateWithoutOrganisationInput[] | ContactAudienceAnalysisUncheckedCreateWithoutOrganisationInput[]
     connectOrCreate?: ContactAudienceAnalysisCreateOrConnectWithoutOrganisationInput | ContactAudienceAnalysisCreateOrConnectWithoutOrganisationInput[]
@@ -71954,6 +79013,27 @@ export namespace Prisma {
     connectOrCreate?: GoalPersonalBestCreateOrConnectWithoutOrganisationInput | GoalPersonalBestCreateOrConnectWithoutOrganisationInput[]
     createMany?: GoalPersonalBestCreateManyOrganisationInputEnvelope
     connect?: GoalPersonalBestWhereUniqueInput | GoalPersonalBestWhereUniqueInput[]
+  }
+
+  export type BulkJobUncheckedCreateNestedManyWithoutOrganisationInput = {
+    create?: XOR<BulkJobCreateWithoutOrganisationInput, BulkJobUncheckedCreateWithoutOrganisationInput> | BulkJobCreateWithoutOrganisationInput[] | BulkJobUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: BulkJobCreateOrConnectWithoutOrganisationInput | BulkJobCreateOrConnectWithoutOrganisationInput[]
+    createMany?: BulkJobCreateManyOrganisationInputEnvelope
+    connect?: BulkJobWhereUniqueInput | BulkJobWhereUniqueInput[]
+  }
+
+  export type WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput = {
+    create?: XOR<WebsiteScrapeRequestCreateWithoutOrganisationInput, WebsiteScrapeRequestUncheckedCreateWithoutOrganisationInput> | WebsiteScrapeRequestCreateWithoutOrganisationInput[] | WebsiteScrapeRequestUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: WebsiteScrapeRequestCreateOrConnectWithoutOrganisationInput | WebsiteScrapeRequestCreateOrConnectWithoutOrganisationInput[]
+    createMany?: WebsiteScrapeRequestCreateManyOrganisationInputEnvelope
+    connect?: WebsiteScrapeRequestWhereUniqueInput | WebsiteScrapeRequestWhereUniqueInput[]
+  }
+
+  export type EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput = {
+    create?: XOR<EmailSendLimitCreateWithoutOrganisationInput, EmailSendLimitUncheckedCreateWithoutOrganisationInput> | EmailSendLimitCreateWithoutOrganisationInput[] | EmailSendLimitUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: EmailSendLimitCreateOrConnectWithoutOrganisationInput | EmailSendLimitCreateOrConnectWithoutOrganisationInput[]
+    createMany?: EmailSendLimitCreateManyOrganisationInputEnvelope
+    connect?: EmailSendLimitWhereUniqueInput | EmailSendLimitWhereUniqueInput[]
   }
 
   export type OrganisationMemberUpdateManyWithoutOrganisationNestedInput = {
@@ -72166,6 +79246,20 @@ export namespace Prisma {
     deleteMany?: ContactListScalarWhereInput | ContactListScalarWhereInput[]
   }
 
+  export type SavedContactFilterUpdateManyWithoutOrganisationNestedInput = {
+    create?: XOR<SavedContactFilterCreateWithoutOrganisationInput, SavedContactFilterUncheckedCreateWithoutOrganisationInput> | SavedContactFilterCreateWithoutOrganisationInput[] | SavedContactFilterUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: SavedContactFilterCreateOrConnectWithoutOrganisationInput | SavedContactFilterCreateOrConnectWithoutOrganisationInput[]
+    upsert?: SavedContactFilterUpsertWithWhereUniqueWithoutOrganisationInput | SavedContactFilterUpsertWithWhereUniqueWithoutOrganisationInput[]
+    createMany?: SavedContactFilterCreateManyOrganisationInputEnvelope
+    set?: SavedContactFilterWhereUniqueInput | SavedContactFilterWhereUniqueInput[]
+    disconnect?: SavedContactFilterWhereUniqueInput | SavedContactFilterWhereUniqueInput[]
+    delete?: SavedContactFilterWhereUniqueInput | SavedContactFilterWhereUniqueInput[]
+    connect?: SavedContactFilterWhereUniqueInput | SavedContactFilterWhereUniqueInput[]
+    update?: SavedContactFilterUpdateWithWhereUniqueWithoutOrganisationInput | SavedContactFilterUpdateWithWhereUniqueWithoutOrganisationInput[]
+    updateMany?: SavedContactFilterUpdateManyWithWhereWithoutOrganisationInput | SavedContactFilterUpdateManyWithWhereWithoutOrganisationInput[]
+    deleteMany?: SavedContactFilterScalarWhereInput | SavedContactFilterScalarWhereInput[]
+  }
+
   export type ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput = {
     create?: XOR<ContactAudienceAnalysisCreateWithoutOrganisationInput, ContactAudienceAnalysisUncheckedCreateWithoutOrganisationInput> | ContactAudienceAnalysisCreateWithoutOrganisationInput[] | ContactAudienceAnalysisUncheckedCreateWithoutOrganisationInput[]
     connectOrCreate?: ContactAudienceAnalysisCreateOrConnectWithoutOrganisationInput | ContactAudienceAnalysisCreateOrConnectWithoutOrganisationInput[]
@@ -72276,6 +79370,48 @@ export namespace Prisma {
     update?: GoalPersonalBestUpdateWithWhereUniqueWithoutOrganisationInput | GoalPersonalBestUpdateWithWhereUniqueWithoutOrganisationInput[]
     updateMany?: GoalPersonalBestUpdateManyWithWhereWithoutOrganisationInput | GoalPersonalBestUpdateManyWithWhereWithoutOrganisationInput[]
     deleteMany?: GoalPersonalBestScalarWhereInput | GoalPersonalBestScalarWhereInput[]
+  }
+
+  export type BulkJobUpdateManyWithoutOrganisationNestedInput = {
+    create?: XOR<BulkJobCreateWithoutOrganisationInput, BulkJobUncheckedCreateWithoutOrganisationInput> | BulkJobCreateWithoutOrganisationInput[] | BulkJobUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: BulkJobCreateOrConnectWithoutOrganisationInput | BulkJobCreateOrConnectWithoutOrganisationInput[]
+    upsert?: BulkJobUpsertWithWhereUniqueWithoutOrganisationInput | BulkJobUpsertWithWhereUniqueWithoutOrganisationInput[]
+    createMany?: BulkJobCreateManyOrganisationInputEnvelope
+    set?: BulkJobWhereUniqueInput | BulkJobWhereUniqueInput[]
+    disconnect?: BulkJobWhereUniqueInput | BulkJobWhereUniqueInput[]
+    delete?: BulkJobWhereUniqueInput | BulkJobWhereUniqueInput[]
+    connect?: BulkJobWhereUniqueInput | BulkJobWhereUniqueInput[]
+    update?: BulkJobUpdateWithWhereUniqueWithoutOrganisationInput | BulkJobUpdateWithWhereUniqueWithoutOrganisationInput[]
+    updateMany?: BulkJobUpdateManyWithWhereWithoutOrganisationInput | BulkJobUpdateManyWithWhereWithoutOrganisationInput[]
+    deleteMany?: BulkJobScalarWhereInput | BulkJobScalarWhereInput[]
+  }
+
+  export type WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput = {
+    create?: XOR<WebsiteScrapeRequestCreateWithoutOrganisationInput, WebsiteScrapeRequestUncheckedCreateWithoutOrganisationInput> | WebsiteScrapeRequestCreateWithoutOrganisationInput[] | WebsiteScrapeRequestUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: WebsiteScrapeRequestCreateOrConnectWithoutOrganisationInput | WebsiteScrapeRequestCreateOrConnectWithoutOrganisationInput[]
+    upsert?: WebsiteScrapeRequestUpsertWithWhereUniqueWithoutOrganisationInput | WebsiteScrapeRequestUpsertWithWhereUniqueWithoutOrganisationInput[]
+    createMany?: WebsiteScrapeRequestCreateManyOrganisationInputEnvelope
+    set?: WebsiteScrapeRequestWhereUniqueInput | WebsiteScrapeRequestWhereUniqueInput[]
+    disconnect?: WebsiteScrapeRequestWhereUniqueInput | WebsiteScrapeRequestWhereUniqueInput[]
+    delete?: WebsiteScrapeRequestWhereUniqueInput | WebsiteScrapeRequestWhereUniqueInput[]
+    connect?: WebsiteScrapeRequestWhereUniqueInput | WebsiteScrapeRequestWhereUniqueInput[]
+    update?: WebsiteScrapeRequestUpdateWithWhereUniqueWithoutOrganisationInput | WebsiteScrapeRequestUpdateWithWhereUniqueWithoutOrganisationInput[]
+    updateMany?: WebsiteScrapeRequestUpdateManyWithWhereWithoutOrganisationInput | WebsiteScrapeRequestUpdateManyWithWhereWithoutOrganisationInput[]
+    deleteMany?: WebsiteScrapeRequestScalarWhereInput | WebsiteScrapeRequestScalarWhereInput[]
+  }
+
+  export type EmailSendLimitUpdateManyWithoutOrganisationNestedInput = {
+    create?: XOR<EmailSendLimitCreateWithoutOrganisationInput, EmailSendLimitUncheckedCreateWithoutOrganisationInput> | EmailSendLimitCreateWithoutOrganisationInput[] | EmailSendLimitUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: EmailSendLimitCreateOrConnectWithoutOrganisationInput | EmailSendLimitCreateOrConnectWithoutOrganisationInput[]
+    upsert?: EmailSendLimitUpsertWithWhereUniqueWithoutOrganisationInput | EmailSendLimitUpsertWithWhereUniqueWithoutOrganisationInput[]
+    createMany?: EmailSendLimitCreateManyOrganisationInputEnvelope
+    set?: EmailSendLimitWhereUniqueInput | EmailSendLimitWhereUniqueInput[]
+    disconnect?: EmailSendLimitWhereUniqueInput | EmailSendLimitWhereUniqueInput[]
+    delete?: EmailSendLimitWhereUniqueInput | EmailSendLimitWhereUniqueInput[]
+    connect?: EmailSendLimitWhereUniqueInput | EmailSendLimitWhereUniqueInput[]
+    update?: EmailSendLimitUpdateWithWhereUniqueWithoutOrganisationInput | EmailSendLimitUpdateWithWhereUniqueWithoutOrganisationInput[]
+    updateMany?: EmailSendLimitUpdateManyWithWhereWithoutOrganisationInput | EmailSendLimitUpdateManyWithWhereWithoutOrganisationInput[]
+    deleteMany?: EmailSendLimitScalarWhereInput | EmailSendLimitScalarWhereInput[]
   }
 
   export type OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput = {
@@ -72488,6 +79624,20 @@ export namespace Prisma {
     deleteMany?: ContactListScalarWhereInput | ContactListScalarWhereInput[]
   }
 
+  export type SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput = {
+    create?: XOR<SavedContactFilterCreateWithoutOrganisationInput, SavedContactFilterUncheckedCreateWithoutOrganisationInput> | SavedContactFilterCreateWithoutOrganisationInput[] | SavedContactFilterUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: SavedContactFilterCreateOrConnectWithoutOrganisationInput | SavedContactFilterCreateOrConnectWithoutOrganisationInput[]
+    upsert?: SavedContactFilterUpsertWithWhereUniqueWithoutOrganisationInput | SavedContactFilterUpsertWithWhereUniqueWithoutOrganisationInput[]
+    createMany?: SavedContactFilterCreateManyOrganisationInputEnvelope
+    set?: SavedContactFilterWhereUniqueInput | SavedContactFilterWhereUniqueInput[]
+    disconnect?: SavedContactFilterWhereUniqueInput | SavedContactFilterWhereUniqueInput[]
+    delete?: SavedContactFilterWhereUniqueInput | SavedContactFilterWhereUniqueInput[]
+    connect?: SavedContactFilterWhereUniqueInput | SavedContactFilterWhereUniqueInput[]
+    update?: SavedContactFilterUpdateWithWhereUniqueWithoutOrganisationInput | SavedContactFilterUpdateWithWhereUniqueWithoutOrganisationInput[]
+    updateMany?: SavedContactFilterUpdateManyWithWhereWithoutOrganisationInput | SavedContactFilterUpdateManyWithWhereWithoutOrganisationInput[]
+    deleteMany?: SavedContactFilterScalarWhereInput | SavedContactFilterScalarWhereInput[]
+  }
+
   export type ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput = {
     create?: XOR<ContactAudienceAnalysisCreateWithoutOrganisationInput, ContactAudienceAnalysisUncheckedCreateWithoutOrganisationInput> | ContactAudienceAnalysisCreateWithoutOrganisationInput[] | ContactAudienceAnalysisUncheckedCreateWithoutOrganisationInput[]
     connectOrCreate?: ContactAudienceAnalysisCreateOrConnectWithoutOrganisationInput | ContactAudienceAnalysisCreateOrConnectWithoutOrganisationInput[]
@@ -72598,6 +79748,48 @@ export namespace Prisma {
     update?: GoalPersonalBestUpdateWithWhereUniqueWithoutOrganisationInput | GoalPersonalBestUpdateWithWhereUniqueWithoutOrganisationInput[]
     updateMany?: GoalPersonalBestUpdateManyWithWhereWithoutOrganisationInput | GoalPersonalBestUpdateManyWithWhereWithoutOrganisationInput[]
     deleteMany?: GoalPersonalBestScalarWhereInput | GoalPersonalBestScalarWhereInput[]
+  }
+
+  export type BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput = {
+    create?: XOR<BulkJobCreateWithoutOrganisationInput, BulkJobUncheckedCreateWithoutOrganisationInput> | BulkJobCreateWithoutOrganisationInput[] | BulkJobUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: BulkJobCreateOrConnectWithoutOrganisationInput | BulkJobCreateOrConnectWithoutOrganisationInput[]
+    upsert?: BulkJobUpsertWithWhereUniqueWithoutOrganisationInput | BulkJobUpsertWithWhereUniqueWithoutOrganisationInput[]
+    createMany?: BulkJobCreateManyOrganisationInputEnvelope
+    set?: BulkJobWhereUniqueInput | BulkJobWhereUniqueInput[]
+    disconnect?: BulkJobWhereUniqueInput | BulkJobWhereUniqueInput[]
+    delete?: BulkJobWhereUniqueInput | BulkJobWhereUniqueInput[]
+    connect?: BulkJobWhereUniqueInput | BulkJobWhereUniqueInput[]
+    update?: BulkJobUpdateWithWhereUniqueWithoutOrganisationInput | BulkJobUpdateWithWhereUniqueWithoutOrganisationInput[]
+    updateMany?: BulkJobUpdateManyWithWhereWithoutOrganisationInput | BulkJobUpdateManyWithWhereWithoutOrganisationInput[]
+    deleteMany?: BulkJobScalarWhereInput | BulkJobScalarWhereInput[]
+  }
+
+  export type WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput = {
+    create?: XOR<WebsiteScrapeRequestCreateWithoutOrganisationInput, WebsiteScrapeRequestUncheckedCreateWithoutOrganisationInput> | WebsiteScrapeRequestCreateWithoutOrganisationInput[] | WebsiteScrapeRequestUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: WebsiteScrapeRequestCreateOrConnectWithoutOrganisationInput | WebsiteScrapeRequestCreateOrConnectWithoutOrganisationInput[]
+    upsert?: WebsiteScrapeRequestUpsertWithWhereUniqueWithoutOrganisationInput | WebsiteScrapeRequestUpsertWithWhereUniqueWithoutOrganisationInput[]
+    createMany?: WebsiteScrapeRequestCreateManyOrganisationInputEnvelope
+    set?: WebsiteScrapeRequestWhereUniqueInput | WebsiteScrapeRequestWhereUniqueInput[]
+    disconnect?: WebsiteScrapeRequestWhereUniqueInput | WebsiteScrapeRequestWhereUniqueInput[]
+    delete?: WebsiteScrapeRequestWhereUniqueInput | WebsiteScrapeRequestWhereUniqueInput[]
+    connect?: WebsiteScrapeRequestWhereUniqueInput | WebsiteScrapeRequestWhereUniqueInput[]
+    update?: WebsiteScrapeRequestUpdateWithWhereUniqueWithoutOrganisationInput | WebsiteScrapeRequestUpdateWithWhereUniqueWithoutOrganisationInput[]
+    updateMany?: WebsiteScrapeRequestUpdateManyWithWhereWithoutOrganisationInput | WebsiteScrapeRequestUpdateManyWithWhereWithoutOrganisationInput[]
+    deleteMany?: WebsiteScrapeRequestScalarWhereInput | WebsiteScrapeRequestScalarWhereInput[]
+  }
+
+  export type EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput = {
+    create?: XOR<EmailSendLimitCreateWithoutOrganisationInput, EmailSendLimitUncheckedCreateWithoutOrganisationInput> | EmailSendLimitCreateWithoutOrganisationInput[] | EmailSendLimitUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: EmailSendLimitCreateOrConnectWithoutOrganisationInput | EmailSendLimitCreateOrConnectWithoutOrganisationInput[]
+    upsert?: EmailSendLimitUpsertWithWhereUniqueWithoutOrganisationInput | EmailSendLimitUpsertWithWhereUniqueWithoutOrganisationInput[]
+    createMany?: EmailSendLimitCreateManyOrganisationInputEnvelope
+    set?: EmailSendLimitWhereUniqueInput | EmailSendLimitWhereUniqueInput[]
+    disconnect?: EmailSendLimitWhereUniqueInput | EmailSendLimitWhereUniqueInput[]
+    delete?: EmailSendLimitWhereUniqueInput | EmailSendLimitWhereUniqueInput[]
+    connect?: EmailSendLimitWhereUniqueInput | EmailSendLimitWhereUniqueInput[]
+    update?: EmailSendLimitUpdateWithWhereUniqueWithoutOrganisationInput | EmailSendLimitUpdateWithWhereUniqueWithoutOrganisationInput[]
+    updateMany?: EmailSendLimitUpdateManyWithWhereWithoutOrganisationInput | EmailSendLimitUpdateManyWithWhereWithoutOrganisationInput[]
+    deleteMany?: EmailSendLimitScalarWhereInput | EmailSendLimitScalarWhereInput[]
   }
 
   export type OrganisationCreateNestedOneWithoutMembersInput = {
@@ -72964,6 +80156,20 @@ export namespace Prisma {
     deleteMany?: ContactAudienceAnalysisScalarWhereInput | ContactAudienceAnalysisScalarWhereInput[]
   }
 
+  export type OrganisationCreateNestedOneWithoutSaved_contact_filtersInput = {
+    create?: XOR<OrganisationCreateWithoutSaved_contact_filtersInput, OrganisationUncheckedCreateWithoutSaved_contact_filtersInput>
+    connectOrCreate?: OrganisationCreateOrConnectWithoutSaved_contact_filtersInput
+    connect?: OrganisationWhereUniqueInput
+  }
+
+  export type OrganisationUpdateOneRequiredWithoutSaved_contact_filtersNestedInput = {
+    create?: XOR<OrganisationCreateWithoutSaved_contact_filtersInput, OrganisationUncheckedCreateWithoutSaved_contact_filtersInput>
+    connectOrCreate?: OrganisationCreateOrConnectWithoutSaved_contact_filtersInput
+    upsert?: OrganisationUpsertWithoutSaved_contact_filtersInput
+    connect?: OrganisationWhereUniqueInput
+    update?: XOR<XOR<OrganisationUpdateToOneWithWhereWithoutSaved_contact_filtersInput, OrganisationUpdateWithoutSaved_contact_filtersInput>, OrganisationUncheckedUpdateWithoutSaved_contact_filtersInput>
+  }
+
   export type OrganisationCreateNestedOneWithoutScoring_instructionsInput = {
     create?: XOR<OrganisationCreateWithoutScoring_instructionsInput, OrganisationUncheckedCreateWithoutScoring_instructionsInput>
     connectOrCreate?: OrganisationCreateOrConnectWithoutScoring_instructionsInput
@@ -73168,6 +80374,10 @@ export namespace Prisma {
     connectOrCreate?: LeadEnrichmentCreateOrConnectWithoutLeadInput | LeadEnrichmentCreateOrConnectWithoutLeadInput[]
     createMany?: LeadEnrichmentCreateManyLeadInputEnvelope
     connect?: LeadEnrichmentWhereUniqueInput | LeadEnrichmentWhereUniqueInput[]
+  }
+
+  export type EnumEmailValidationStatusFieldUpdateOperationsInput = {
+    set?: $Enums.EmailValidationStatus
   }
 
   export type RawLeadUpdateOneWithoutLeadNestedInput = {
@@ -74274,6 +81484,70 @@ export namespace Prisma {
     update?: XOR<XOR<FilterUpdateToOneWithWhereWithoutJobsInput, FilterUpdateWithoutJobsInput>, FilterUncheckedUpdateWithoutJobsInput>
   }
 
+  export type OrganisationCreateNestedOneWithoutBulk_jobsInput = {
+    create?: XOR<OrganisationCreateWithoutBulk_jobsInput, OrganisationUncheckedCreateWithoutBulk_jobsInput>
+    connectOrCreate?: OrganisationCreateOrConnectWithoutBulk_jobsInput
+    connect?: OrganisationWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutBulk_jobs_createdInput = {
+    create?: XOR<UserCreateWithoutBulk_jobs_createdInput, UserUncheckedCreateWithoutBulk_jobs_createdInput>
+    connectOrCreate?: UserCreateOrConnectWithoutBulk_jobs_createdInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type EnumBulkJobTypeFieldUpdateOperationsInput = {
+    set?: $Enums.BulkJobType
+  }
+
+  export type EnumBulkJobStatusFieldUpdateOperationsInput = {
+    set?: $Enums.BulkJobStatus
+  }
+
+  export type OrganisationUpdateOneRequiredWithoutBulk_jobsNestedInput = {
+    create?: XOR<OrganisationCreateWithoutBulk_jobsInput, OrganisationUncheckedCreateWithoutBulk_jobsInput>
+    connectOrCreate?: OrganisationCreateOrConnectWithoutBulk_jobsInput
+    upsert?: OrganisationUpsertWithoutBulk_jobsInput
+    connect?: OrganisationWhereUniqueInput
+    update?: XOR<XOR<OrganisationUpdateToOneWithWhereWithoutBulk_jobsInput, OrganisationUpdateWithoutBulk_jobsInput>, OrganisationUncheckedUpdateWithoutBulk_jobsInput>
+  }
+
+  export type UserUpdateOneWithoutBulk_jobs_createdNestedInput = {
+    create?: XOR<UserCreateWithoutBulk_jobs_createdInput, UserUncheckedCreateWithoutBulk_jobs_createdInput>
+    connectOrCreate?: UserCreateOrConnectWithoutBulk_jobs_createdInput
+    upsert?: UserUpsertWithoutBulk_jobs_createdInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutBulk_jobs_createdInput, UserUpdateWithoutBulk_jobs_createdInput>, UserUncheckedUpdateWithoutBulk_jobs_createdInput>
+  }
+
+  export type OrganisationCreateNestedOneWithoutWebsite_scrape_requestsInput = {
+    create?: XOR<OrganisationCreateWithoutWebsite_scrape_requestsInput, OrganisationUncheckedCreateWithoutWebsite_scrape_requestsInput>
+    connectOrCreate?: OrganisationCreateOrConnectWithoutWebsite_scrape_requestsInput
+    connect?: OrganisationWhereUniqueInput
+  }
+
+  export type EnumWebsiteScrapeProviderFieldUpdateOperationsInput = {
+    set?: $Enums.WebsiteScrapeProvider
+  }
+
+  export type EnumWebsiteScrapeOperationFieldUpdateOperationsInput = {
+    set?: $Enums.WebsiteScrapeOperation
+  }
+
+  export type EnumWebsiteScrapeStatusFieldUpdateOperationsInput = {
+    set?: $Enums.WebsiteScrapeStatus
+  }
+
+  export type OrganisationUpdateOneRequiredWithoutWebsite_scrape_requestsNestedInput = {
+    create?: XOR<OrganisationCreateWithoutWebsite_scrape_requestsInput, OrganisationUncheckedCreateWithoutWebsite_scrape_requestsInput>
+    connectOrCreate?: OrganisationCreateOrConnectWithoutWebsite_scrape_requestsInput
+    upsert?: OrganisationUpsertWithoutWebsite_scrape_requestsInput
+    connect?: OrganisationWhereUniqueInput
+    update?: XOR<XOR<OrganisationUpdateToOneWithWhereWithoutWebsite_scrape_requestsInput, OrganisationUpdateWithoutWebsite_scrape_requestsInput>, OrganisationUncheckedUpdateWithoutWebsite_scrape_requestsInput>
+  }
+
   export type OrganisationCreateNestedOneWithoutSender_profilesInput = {
     create?: XOR<OrganisationCreateWithoutSender_profilesInput, OrganisationUncheckedCreateWithoutSender_profilesInput>
     connectOrCreate?: OrganisationCreateOrConnectWithoutSender_profilesInput
@@ -75200,6 +82474,20 @@ export namespace Prisma {
     deleteMany?: GoalAchievementScalarWhereInput | GoalAchievementScalarWhereInput[]
   }
 
+  export type OrganisationCreateNestedOneWithoutEmail_send_limitsInput = {
+    create?: XOR<OrganisationCreateWithoutEmail_send_limitsInput, OrganisationUncheckedCreateWithoutEmail_send_limitsInput>
+    connectOrCreate?: OrganisationCreateOrConnectWithoutEmail_send_limitsInput
+    connect?: OrganisationWhereUniqueInput
+  }
+
+  export type OrganisationUpdateOneRequiredWithoutEmail_send_limitsNestedInput = {
+    create?: XOR<OrganisationCreateWithoutEmail_send_limitsInput, OrganisationUncheckedCreateWithoutEmail_send_limitsInput>
+    connectOrCreate?: OrganisationCreateOrConnectWithoutEmail_send_limitsInput
+    upsert?: OrganisationUpsertWithoutEmail_send_limitsInput
+    connect?: OrganisationWhereUniqueInput
+    update?: XOR<XOR<OrganisationUpdateToOneWithWhereWithoutEmail_send_limitsInput, OrganisationUpdateWithoutEmail_send_limitsInput>, OrganisationUncheckedUpdateWithoutEmail_send_limitsInput>
+  }
+
   export type OrganisationCreateNestedOneWithoutGoal_achievementsInput = {
     create?: XOR<OrganisationCreateWithoutGoal_achievementsInput, OrganisationUncheckedCreateWithoutGoal_achievementsInput>
     connectOrCreate?: OrganisationCreateOrConnectWithoutGoal_achievementsInput
@@ -75585,6 +82873,13 @@ export namespace Prisma {
     _min?: NestedBoolFilter<$PrismaModel>
     _max?: NestedBoolFilter<$PrismaModel>
   }
+
+  export type NestedEnumEmailValidationStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.EmailValidationStatus | EnumEmailValidationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.EmailValidationStatus[] | ListEnumEmailValidationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EmailValidationStatus[] | ListEnumEmailValidationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumEmailValidationStatusFilter<$PrismaModel> | $Enums.EmailValidationStatus
+  }
   export type NestedJsonNullableFilter<$PrismaModel = never> =
     | PatchUndefined<
         Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
@@ -75607,6 +82902,16 @@ export namespace Prisma {
     gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type NestedEnumEmailValidationStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.EmailValidationStatus | EnumEmailValidationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.EmailValidationStatus[] | ListEnumEmailValidationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EmailValidationStatus[] | ListEnumEmailValidationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumEmailValidationStatusWithAggregatesFilter<$PrismaModel> | $Enums.EmailValidationStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumEmailValidationStatusFilter<$PrismaModel>
+    _max?: NestedEnumEmailValidationStatusFilter<$PrismaModel>
   }
 
   export type NestedEnumEnrichmentSourceFilter<$PrismaModel = never> = {
@@ -75831,6 +83136,91 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumJobTriggerFilter<$PrismaModel>
     _max?: NestedEnumJobTriggerFilter<$PrismaModel>
+  }
+
+  export type NestedEnumBulkJobTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.BulkJobType | EnumBulkJobTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.BulkJobType[] | ListEnumBulkJobTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BulkJobType[] | ListEnumBulkJobTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumBulkJobTypeFilter<$PrismaModel> | $Enums.BulkJobType
+  }
+
+  export type NestedEnumBulkJobStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.BulkJobStatus | EnumBulkJobStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.BulkJobStatus[] | ListEnumBulkJobStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BulkJobStatus[] | ListEnumBulkJobStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumBulkJobStatusFilter<$PrismaModel> | $Enums.BulkJobStatus
+  }
+
+  export type NestedEnumBulkJobTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.BulkJobType | EnumBulkJobTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.BulkJobType[] | ListEnumBulkJobTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BulkJobType[] | ListEnumBulkJobTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumBulkJobTypeWithAggregatesFilter<$PrismaModel> | $Enums.BulkJobType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumBulkJobTypeFilter<$PrismaModel>
+    _max?: NestedEnumBulkJobTypeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumBulkJobStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.BulkJobStatus | EnumBulkJobStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.BulkJobStatus[] | ListEnumBulkJobStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BulkJobStatus[] | ListEnumBulkJobStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumBulkJobStatusWithAggregatesFilter<$PrismaModel> | $Enums.BulkJobStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumBulkJobStatusFilter<$PrismaModel>
+    _max?: NestedEnumBulkJobStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumWebsiteScrapeProviderFilter<$PrismaModel = never> = {
+    equals?: $Enums.WebsiteScrapeProvider | EnumWebsiteScrapeProviderFieldRefInput<$PrismaModel>
+    in?: $Enums.WebsiteScrapeProvider[] | ListEnumWebsiteScrapeProviderFieldRefInput<$PrismaModel>
+    notIn?: $Enums.WebsiteScrapeProvider[] | ListEnumWebsiteScrapeProviderFieldRefInput<$PrismaModel>
+    not?: NestedEnumWebsiteScrapeProviderFilter<$PrismaModel> | $Enums.WebsiteScrapeProvider
+  }
+
+  export type NestedEnumWebsiteScrapeOperationFilter<$PrismaModel = never> = {
+    equals?: $Enums.WebsiteScrapeOperation | EnumWebsiteScrapeOperationFieldRefInput<$PrismaModel>
+    in?: $Enums.WebsiteScrapeOperation[] | ListEnumWebsiteScrapeOperationFieldRefInput<$PrismaModel>
+    notIn?: $Enums.WebsiteScrapeOperation[] | ListEnumWebsiteScrapeOperationFieldRefInput<$PrismaModel>
+    not?: NestedEnumWebsiteScrapeOperationFilter<$PrismaModel> | $Enums.WebsiteScrapeOperation
+  }
+
+  export type NestedEnumWebsiteScrapeStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.WebsiteScrapeStatus | EnumWebsiteScrapeStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.WebsiteScrapeStatus[] | ListEnumWebsiteScrapeStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.WebsiteScrapeStatus[] | ListEnumWebsiteScrapeStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumWebsiteScrapeStatusFilter<$PrismaModel> | $Enums.WebsiteScrapeStatus
+  }
+
+  export type NestedEnumWebsiteScrapeProviderWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.WebsiteScrapeProvider | EnumWebsiteScrapeProviderFieldRefInput<$PrismaModel>
+    in?: $Enums.WebsiteScrapeProvider[] | ListEnumWebsiteScrapeProviderFieldRefInput<$PrismaModel>
+    notIn?: $Enums.WebsiteScrapeProvider[] | ListEnumWebsiteScrapeProviderFieldRefInput<$PrismaModel>
+    not?: NestedEnumWebsiteScrapeProviderWithAggregatesFilter<$PrismaModel> | $Enums.WebsiteScrapeProvider
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumWebsiteScrapeProviderFilter<$PrismaModel>
+    _max?: NestedEnumWebsiteScrapeProviderFilter<$PrismaModel>
+  }
+
+  export type NestedEnumWebsiteScrapeOperationWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.WebsiteScrapeOperation | EnumWebsiteScrapeOperationFieldRefInput<$PrismaModel>
+    in?: $Enums.WebsiteScrapeOperation[] | ListEnumWebsiteScrapeOperationFieldRefInput<$PrismaModel>
+    notIn?: $Enums.WebsiteScrapeOperation[] | ListEnumWebsiteScrapeOperationFieldRefInput<$PrismaModel>
+    not?: NestedEnumWebsiteScrapeOperationWithAggregatesFilter<$PrismaModel> | $Enums.WebsiteScrapeOperation
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumWebsiteScrapeOperationFilter<$PrismaModel>
+    _max?: NestedEnumWebsiteScrapeOperationFilter<$PrismaModel>
+  }
+
+  export type NestedEnumWebsiteScrapeStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.WebsiteScrapeStatus | EnumWebsiteScrapeStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.WebsiteScrapeStatus[] | ListEnumWebsiteScrapeStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.WebsiteScrapeStatus[] | ListEnumWebsiteScrapeStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumWebsiteScrapeStatusWithAggregatesFilter<$PrismaModel> | $Enums.WebsiteScrapeStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumWebsiteScrapeStatusFilter<$PrismaModel>
+    _max?: NestedEnumWebsiteScrapeStatusFilter<$PrismaModel>
   }
 
   export type NestedEnumCampaignStatusFilter<$PrismaModel = never> = {
@@ -76324,6 +83714,7 @@ export namespace Prisma {
     action: string
     summary?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    changes?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutActivity_logsInput
   }
@@ -76337,6 +83728,7 @@ export namespace Prisma {
     action: string
     summary?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    changes?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
   }
 
@@ -76442,6 +83834,63 @@ export namespace Prisma {
 
   export type GoalPersonalBestCreateManyUserInputEnvelope = {
     data: GoalPersonalBestCreateManyUserInput | GoalPersonalBestCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type BulkJobCreateWithoutCreated_byInput = {
+    uuid?: string
+    title: string
+    type: $Enums.BulkJobType
+    status?: $Enums.BulkJobStatus
+    error?: string | null
+    retries?: number
+    max_retries?: number
+    progress_current?: number
+    progress_total?: number
+    progress_failed?: number
+    queue_name?: string | null
+    queue_job_id?: string | null
+    reference_type?: string | null
+    reference_uuid?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    started_at?: Date | string | null
+    completed_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutBulk_jobsInput
+  }
+
+  export type BulkJobUncheckedCreateWithoutCreated_byInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    title: string
+    type: $Enums.BulkJobType
+    status?: $Enums.BulkJobStatus
+    error?: string | null
+    retries?: number
+    max_retries?: number
+    progress_current?: number
+    progress_total?: number
+    progress_failed?: number
+    queue_name?: string | null
+    queue_job_id?: string | null
+    reference_type?: string | null
+    reference_uuid?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    started_at?: Date | string | null
+    completed_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type BulkJobCreateOrConnectWithoutCreated_byInput = {
+    where: BulkJobWhereUniqueInput
+    create: XOR<BulkJobCreateWithoutCreated_byInput, BulkJobUncheckedCreateWithoutCreated_byInput>
+  }
+
+  export type BulkJobCreateManyCreated_byInputEnvelope = {
+    data: BulkJobCreateManyCreated_byInput | BulkJobCreateManyCreated_byInput[]
     skipDuplicates?: boolean
   }
 
@@ -76615,6 +84064,7 @@ export namespace Prisma {
     action?: StringFilter<"ActivityLog"> | string
     summary?: StringNullableFilter<"ActivityLog"> | string | null
     metadata?: JsonNullableFilter<"ActivityLog">
+    changes?: JsonNullableFilter<"ActivityLog">
     created_at?: DateTimeFilter<"ActivityLog"> | Date | string
   }
 
@@ -76709,6 +84159,50 @@ export namespace Prisma {
     best_count?: IntFilter<"GoalPersonalBest"> | number
     achieved_at?: DateTimeFilter<"GoalPersonalBest"> | Date | string
     updated_at?: DateTimeFilter<"GoalPersonalBest"> | Date | string
+  }
+
+  export type BulkJobUpsertWithWhereUniqueWithoutCreated_byInput = {
+    where: BulkJobWhereUniqueInput
+    update: XOR<BulkJobUpdateWithoutCreated_byInput, BulkJobUncheckedUpdateWithoutCreated_byInput>
+    create: XOR<BulkJobCreateWithoutCreated_byInput, BulkJobUncheckedCreateWithoutCreated_byInput>
+  }
+
+  export type BulkJobUpdateWithWhereUniqueWithoutCreated_byInput = {
+    where: BulkJobWhereUniqueInput
+    data: XOR<BulkJobUpdateWithoutCreated_byInput, BulkJobUncheckedUpdateWithoutCreated_byInput>
+  }
+
+  export type BulkJobUpdateManyWithWhereWithoutCreated_byInput = {
+    where: BulkJobScalarWhereInput
+    data: XOR<BulkJobUpdateManyMutationInput, BulkJobUncheckedUpdateManyWithoutCreated_byInput>
+  }
+
+  export type BulkJobScalarWhereInput = {
+    AND?: BulkJobScalarWhereInput | BulkJobScalarWhereInput[]
+    OR?: BulkJobScalarWhereInput[]
+    NOT?: BulkJobScalarWhereInput | BulkJobScalarWhereInput[]
+    id?: IntFilter<"BulkJob"> | number
+    uuid?: StringFilter<"BulkJob"> | string
+    organisation_uuid?: StringFilter<"BulkJob"> | string
+    created_by_user_uuid?: StringNullableFilter<"BulkJob"> | string | null
+    title?: StringFilter<"BulkJob"> | string
+    type?: EnumBulkJobTypeFilter<"BulkJob"> | $Enums.BulkJobType
+    status?: EnumBulkJobStatusFilter<"BulkJob"> | $Enums.BulkJobStatus
+    error?: StringNullableFilter<"BulkJob"> | string | null
+    retries?: IntFilter<"BulkJob"> | number
+    max_retries?: IntFilter<"BulkJob"> | number
+    progress_current?: IntFilter<"BulkJob"> | number
+    progress_total?: IntFilter<"BulkJob"> | number
+    progress_failed?: IntFilter<"BulkJob"> | number
+    queue_name?: StringNullableFilter<"BulkJob"> | string | null
+    queue_job_id?: StringNullableFilter<"BulkJob"> | string | null
+    reference_type?: StringNullableFilter<"BulkJob"> | string | null
+    reference_uuid?: StringNullableFilter<"BulkJob"> | string | null
+    metadata?: JsonNullableFilter<"BulkJob">
+    started_at?: DateTimeNullableFilter<"BulkJob"> | Date | string | null
+    completed_at?: DateTimeNullableFilter<"BulkJob"> | Date | string | null
+    created_at?: DateTimeFilter<"BulkJob"> | Date | string
+    updated_at?: DateTimeFilter<"BulkJob"> | Date | string
   }
 
   export type OrganisationMemberCreateWithoutOrganisationInput = {
@@ -76843,6 +84337,9 @@ export namespace Prisma {
     description?: string | null
     enrichment_summary?: string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: $Enums.EmailValidationStatus
+    email_validation_reason?: string | null
+    email_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -76883,6 +84380,9 @@ export namespace Prisma {
     description?: string | null
     enrichment_summary?: string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: $Enums.EmailValidationStatus
+    email_validation_reason?: string | null
+    email_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -77413,6 +84913,33 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type SavedContactFilterCreateWithoutOrganisationInput = {
+    uuid?: string
+    name: string
+    filters: JsonNullValueInput | InputJsonValue
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type SavedContactFilterUncheckedCreateWithoutOrganisationInput = {
+    id?: number
+    uuid?: string
+    name: string
+    filters: JsonNullValueInput | InputJsonValue
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type SavedContactFilterCreateOrConnectWithoutOrganisationInput = {
+    where: SavedContactFilterWhereUniqueInput
+    create: XOR<SavedContactFilterCreateWithoutOrganisationInput, SavedContactFilterUncheckedCreateWithoutOrganisationInput>
+  }
+
+  export type SavedContactFilterCreateManyOrganisationInputEnvelope = {
+    data: SavedContactFilterCreateManyOrganisationInput | SavedContactFilterCreateManyOrganisationInput[]
+    skipDuplicates?: boolean
+  }
+
   export type ContactAudienceAnalysisCreateWithoutOrganisationInput = {
     uuid?: string
     scope: $Enums.ContactAudienceAnalysisScope
@@ -77606,6 +85133,7 @@ export namespace Prisma {
     action: string
     summary?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    changes?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
     actor?: UserCreateNestedOneWithoutActivity_logsInput
   }
@@ -77619,6 +85147,7 @@ export namespace Prisma {
     action: string
     summary?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    changes?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
   }
 
@@ -77724,6 +85253,134 @@ export namespace Prisma {
 
   export type GoalPersonalBestCreateManyOrganisationInputEnvelope = {
     data: GoalPersonalBestCreateManyOrganisationInput | GoalPersonalBestCreateManyOrganisationInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type BulkJobCreateWithoutOrganisationInput = {
+    uuid?: string
+    title: string
+    type: $Enums.BulkJobType
+    status?: $Enums.BulkJobStatus
+    error?: string | null
+    retries?: number
+    max_retries?: number
+    progress_current?: number
+    progress_total?: number
+    progress_failed?: number
+    queue_name?: string | null
+    queue_job_id?: string | null
+    reference_type?: string | null
+    reference_uuid?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    started_at?: Date | string | null
+    completed_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    created_by?: UserCreateNestedOneWithoutBulk_jobs_createdInput
+  }
+
+  export type BulkJobUncheckedCreateWithoutOrganisationInput = {
+    id?: number
+    uuid?: string
+    created_by_user_uuid?: string | null
+    title: string
+    type: $Enums.BulkJobType
+    status?: $Enums.BulkJobStatus
+    error?: string | null
+    retries?: number
+    max_retries?: number
+    progress_current?: number
+    progress_total?: number
+    progress_failed?: number
+    queue_name?: string | null
+    queue_job_id?: string | null
+    reference_type?: string | null
+    reference_uuid?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    started_at?: Date | string | null
+    completed_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type BulkJobCreateOrConnectWithoutOrganisationInput = {
+    where: BulkJobWhereUniqueInput
+    create: XOR<BulkJobCreateWithoutOrganisationInput, BulkJobUncheckedCreateWithoutOrganisationInput>
+  }
+
+  export type BulkJobCreateManyOrganisationInputEnvelope = {
+    data: BulkJobCreateManyOrganisationInput | BulkJobCreateManyOrganisationInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type WebsiteScrapeRequestCreateWithoutOrganisationInput = {
+    id?: string
+    provider?: $Enums.WebsiteScrapeProvider
+    provider_run_id: string
+    provider_config_id: string
+    operation: $Enums.WebsiteScrapeOperation
+    reference_uuid: string
+    status?: $Enums.WebsiteScrapeStatus
+    context?: NullableJsonNullValueInput | InputJsonValue
+    error?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    finished_at?: Date | string | null
+  }
+
+  export type WebsiteScrapeRequestUncheckedCreateWithoutOrganisationInput = {
+    id?: string
+    provider?: $Enums.WebsiteScrapeProvider
+    provider_run_id: string
+    provider_config_id: string
+    operation: $Enums.WebsiteScrapeOperation
+    reference_uuid: string
+    status?: $Enums.WebsiteScrapeStatus
+    context?: NullableJsonNullValueInput | InputJsonValue
+    error?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    finished_at?: Date | string | null
+  }
+
+  export type WebsiteScrapeRequestCreateOrConnectWithoutOrganisationInput = {
+    where: WebsiteScrapeRequestWhereUniqueInput
+    create: XOR<WebsiteScrapeRequestCreateWithoutOrganisationInput, WebsiteScrapeRequestUncheckedCreateWithoutOrganisationInput>
+  }
+
+  export type WebsiteScrapeRequestCreateManyOrganisationInputEnvelope = {
+    data: WebsiteScrapeRequestCreateManyOrganisationInput | WebsiteScrapeRequestCreateManyOrganisationInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type EmailSendLimitCreateWithoutOrganisationInput = {
+    uuid?: string
+    provider: $Enums.ExternalIntegrationProvider
+    period: $Enums.GoalPeriod
+    max_count: number
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type EmailSendLimitUncheckedCreateWithoutOrganisationInput = {
+    id?: number
+    uuid?: string
+    provider: $Enums.ExternalIntegrationProvider
+    period: $Enums.GoalPeriod
+    max_count: number
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type EmailSendLimitCreateOrConnectWithoutOrganisationInput = {
+    where: EmailSendLimitWhereUniqueInput
+    create: XOR<EmailSendLimitCreateWithoutOrganisationInput, EmailSendLimitUncheckedCreateWithoutOrganisationInput>
+  }
+
+  export type EmailSendLimitCreateManyOrganisationInputEnvelope = {
+    data: EmailSendLimitCreateManyOrganisationInput | EmailSendLimitCreateManyOrganisationInput[]
     skipDuplicates?: boolean
   }
 
@@ -77834,6 +85491,9 @@ export namespace Prisma {
     description?: StringNullableFilter<"Contact"> | string | null
     enrichment_summary?: StringNullableFilter<"Contact"> | string | null
     enrichment_metadata?: JsonNullableFilter<"Contact">
+    email_validation_status?: EnumEmailValidationStatusFilter<"Contact"> | $Enums.EmailValidationStatus
+    email_validation_reason?: StringNullableFilter<"Contact"> | string | null
+    email_validated_at?: DateTimeNullableFilter<"Contact"> | Date | string | null
     unsubscribed_at?: DateTimeNullableFilter<"Contact"> | Date | string | null
     unsubscribe_token?: StringNullableFilter<"Contact"> | string | null
     last_interaction_at?: DateTimeNullableFilter<"Contact"> | Date | string | null
@@ -78215,6 +85875,35 @@ export namespace Prisma {
     updated_at?: DateTimeFilter<"ContactList"> | Date | string
   }
 
+  export type SavedContactFilterUpsertWithWhereUniqueWithoutOrganisationInput = {
+    where: SavedContactFilterWhereUniqueInput
+    update: XOR<SavedContactFilterUpdateWithoutOrganisationInput, SavedContactFilterUncheckedUpdateWithoutOrganisationInput>
+    create: XOR<SavedContactFilterCreateWithoutOrganisationInput, SavedContactFilterUncheckedCreateWithoutOrganisationInput>
+  }
+
+  export type SavedContactFilterUpdateWithWhereUniqueWithoutOrganisationInput = {
+    where: SavedContactFilterWhereUniqueInput
+    data: XOR<SavedContactFilterUpdateWithoutOrganisationInput, SavedContactFilterUncheckedUpdateWithoutOrganisationInput>
+  }
+
+  export type SavedContactFilterUpdateManyWithWhereWithoutOrganisationInput = {
+    where: SavedContactFilterScalarWhereInput
+    data: XOR<SavedContactFilterUpdateManyMutationInput, SavedContactFilterUncheckedUpdateManyWithoutOrganisationInput>
+  }
+
+  export type SavedContactFilterScalarWhereInput = {
+    AND?: SavedContactFilterScalarWhereInput | SavedContactFilterScalarWhereInput[]
+    OR?: SavedContactFilterScalarWhereInput[]
+    NOT?: SavedContactFilterScalarWhereInput | SavedContactFilterScalarWhereInput[]
+    id?: IntFilter<"SavedContactFilter"> | number
+    uuid?: StringFilter<"SavedContactFilter"> | string
+    organisation_uuid?: StringFilter<"SavedContactFilter"> | string
+    name?: StringFilter<"SavedContactFilter"> | string
+    filters?: JsonFilter<"SavedContactFilter">
+    created_at?: DateTimeFilter<"SavedContactFilter"> | Date | string
+    updated_at?: DateTimeFilter<"SavedContactFilter"> | Date | string
+  }
+
   export type ContactAudienceAnalysisUpsertWithWhereUniqueWithoutOrganisationInput = {
     where: ContactAudienceAnalysisWhereUniqueInput
     update: XOR<ContactAudienceAnalysisUpdateWithoutOrganisationInput, ContactAudienceAnalysisUncheckedUpdateWithoutOrganisationInput>
@@ -78433,6 +86122,88 @@ export namespace Prisma {
     data: XOR<GoalPersonalBestUpdateManyMutationInput, GoalPersonalBestUncheckedUpdateManyWithoutOrganisationInput>
   }
 
+  export type BulkJobUpsertWithWhereUniqueWithoutOrganisationInput = {
+    where: BulkJobWhereUniqueInput
+    update: XOR<BulkJobUpdateWithoutOrganisationInput, BulkJobUncheckedUpdateWithoutOrganisationInput>
+    create: XOR<BulkJobCreateWithoutOrganisationInput, BulkJobUncheckedCreateWithoutOrganisationInput>
+  }
+
+  export type BulkJobUpdateWithWhereUniqueWithoutOrganisationInput = {
+    where: BulkJobWhereUniqueInput
+    data: XOR<BulkJobUpdateWithoutOrganisationInput, BulkJobUncheckedUpdateWithoutOrganisationInput>
+  }
+
+  export type BulkJobUpdateManyWithWhereWithoutOrganisationInput = {
+    where: BulkJobScalarWhereInput
+    data: XOR<BulkJobUpdateManyMutationInput, BulkJobUncheckedUpdateManyWithoutOrganisationInput>
+  }
+
+  export type WebsiteScrapeRequestUpsertWithWhereUniqueWithoutOrganisationInput = {
+    where: WebsiteScrapeRequestWhereUniqueInput
+    update: XOR<WebsiteScrapeRequestUpdateWithoutOrganisationInput, WebsiteScrapeRequestUncheckedUpdateWithoutOrganisationInput>
+    create: XOR<WebsiteScrapeRequestCreateWithoutOrganisationInput, WebsiteScrapeRequestUncheckedCreateWithoutOrganisationInput>
+  }
+
+  export type WebsiteScrapeRequestUpdateWithWhereUniqueWithoutOrganisationInput = {
+    where: WebsiteScrapeRequestWhereUniqueInput
+    data: XOR<WebsiteScrapeRequestUpdateWithoutOrganisationInput, WebsiteScrapeRequestUncheckedUpdateWithoutOrganisationInput>
+  }
+
+  export type WebsiteScrapeRequestUpdateManyWithWhereWithoutOrganisationInput = {
+    where: WebsiteScrapeRequestScalarWhereInput
+    data: XOR<WebsiteScrapeRequestUpdateManyMutationInput, WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationInput>
+  }
+
+  export type WebsiteScrapeRequestScalarWhereInput = {
+    AND?: WebsiteScrapeRequestScalarWhereInput | WebsiteScrapeRequestScalarWhereInput[]
+    OR?: WebsiteScrapeRequestScalarWhereInput[]
+    NOT?: WebsiteScrapeRequestScalarWhereInput | WebsiteScrapeRequestScalarWhereInput[]
+    id?: StringFilter<"WebsiteScrapeRequest"> | string
+    provider?: EnumWebsiteScrapeProviderFilter<"WebsiteScrapeRequest"> | $Enums.WebsiteScrapeProvider
+    provider_run_id?: StringFilter<"WebsiteScrapeRequest"> | string
+    provider_config_id?: StringFilter<"WebsiteScrapeRequest"> | string
+    organisation_uuid?: StringFilter<"WebsiteScrapeRequest"> | string
+    operation?: EnumWebsiteScrapeOperationFilter<"WebsiteScrapeRequest"> | $Enums.WebsiteScrapeOperation
+    reference_uuid?: StringFilter<"WebsiteScrapeRequest"> | string
+    status?: EnumWebsiteScrapeStatusFilter<"WebsiteScrapeRequest"> | $Enums.WebsiteScrapeStatus
+    context?: JsonNullableFilter<"WebsiteScrapeRequest">
+    error?: StringNullableFilter<"WebsiteScrapeRequest"> | string | null
+    created_at?: DateTimeFilter<"WebsiteScrapeRequest"> | Date | string
+    updated_at?: DateTimeFilter<"WebsiteScrapeRequest"> | Date | string
+    finished_at?: DateTimeNullableFilter<"WebsiteScrapeRequest"> | Date | string | null
+  }
+
+  export type EmailSendLimitUpsertWithWhereUniqueWithoutOrganisationInput = {
+    where: EmailSendLimitWhereUniqueInput
+    update: XOR<EmailSendLimitUpdateWithoutOrganisationInput, EmailSendLimitUncheckedUpdateWithoutOrganisationInput>
+    create: XOR<EmailSendLimitCreateWithoutOrganisationInput, EmailSendLimitUncheckedCreateWithoutOrganisationInput>
+  }
+
+  export type EmailSendLimitUpdateWithWhereUniqueWithoutOrganisationInput = {
+    where: EmailSendLimitWhereUniqueInput
+    data: XOR<EmailSendLimitUpdateWithoutOrganisationInput, EmailSendLimitUncheckedUpdateWithoutOrganisationInput>
+  }
+
+  export type EmailSendLimitUpdateManyWithWhereWithoutOrganisationInput = {
+    where: EmailSendLimitScalarWhereInput
+    data: XOR<EmailSendLimitUpdateManyMutationInput, EmailSendLimitUncheckedUpdateManyWithoutOrganisationInput>
+  }
+
+  export type EmailSendLimitScalarWhereInput = {
+    AND?: EmailSendLimitScalarWhereInput | EmailSendLimitScalarWhereInput[]
+    OR?: EmailSendLimitScalarWhereInput[]
+    NOT?: EmailSendLimitScalarWhereInput | EmailSendLimitScalarWhereInput[]
+    id?: IntFilter<"EmailSendLimit"> | number
+    uuid?: StringFilter<"EmailSendLimit"> | string
+    organisation_uuid?: StringFilter<"EmailSendLimit"> | string
+    provider?: EnumExternalIntegrationProviderFilter<"EmailSendLimit"> | $Enums.ExternalIntegrationProvider
+    period?: EnumGoalPeriodFilter<"EmailSendLimit"> | $Enums.GoalPeriod
+    max_count?: IntFilter<"EmailSendLimit"> | number
+    is_active?: BoolFilter<"EmailSendLimit"> | boolean
+    created_at?: DateTimeFilter<"EmailSendLimit"> | Date | string
+    updated_at?: DateTimeFilter<"EmailSendLimit"> | Date | string
+  }
+
   export type OrganisationCreateWithoutMembersInput = {
     uuid?: string
     name: string
@@ -78455,6 +86226,7 @@ export namespace Prisma {
     reminders?: ReminderCreateNestedManyWithoutOrganisationInput
     forms?: FormCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
@@ -78463,6 +86235,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutMembersInput = {
@@ -78488,6 +86263,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
     forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -78496,6 +86272,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutMembersInput = {
@@ -78519,6 +86298,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutUserInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutUserInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
+    bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserUncheckedCreateWithoutMembershipsInput = {
@@ -78538,6 +86318,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutUserInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutUserInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
+    bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserCreateOrConnectWithoutMembershipsInput = {
@@ -78578,6 +86359,7 @@ export namespace Prisma {
     reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
     forms?: FormUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
@@ -78586,6 +86368,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutMembersInput = {
@@ -78611,6 +86396,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
     forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -78619,6 +86405,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutMembershipsInput = {
@@ -78648,6 +86437,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutUserNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutUserNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
+    bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMembershipsInput = {
@@ -78667,6 +86457,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutUserNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutUserNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
+    bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
   }
 
   export type OrganisationCreateWithoutInvitationsInput = {
@@ -78691,6 +86482,7 @@ export namespace Prisma {
     reminders?: ReminderCreateNestedManyWithoutOrganisationInput
     forms?: FormCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
@@ -78699,6 +86491,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutInvitationsInput = {
@@ -78724,6 +86519,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
     forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -78732,6 +86528,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutInvitationsInput = {
@@ -78755,6 +86554,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutUserInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutUserInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
+    bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserUncheckedCreateWithoutInvitations_sentInput = {
@@ -78774,6 +86574,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutUserInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutUserInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
+    bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserCreateOrConnectWithoutInvitations_sentInput = {
@@ -78814,6 +86615,7 @@ export namespace Prisma {
     reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
     forms?: FormUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
@@ -78822,6 +86624,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutInvitationsInput = {
@@ -78847,6 +86652,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
     forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -78855,6 +86661,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutInvitations_sentInput = {
@@ -78884,6 +86693,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutUserNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutUserNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
+    bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInvitations_sentInput = {
@@ -78903,6 +86713,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutUserNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutUserNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
+    bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
   }
 
   export type OrganisationCreateWithoutFiltersInput = {
@@ -78927,6 +86738,7 @@ export namespace Prisma {
     reminders?: ReminderCreateNestedManyWithoutOrganisationInput
     forms?: FormCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
@@ -78935,6 +86747,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutFiltersInput = {
@@ -78960,6 +86775,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
     forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -78968,6 +86784,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutFiltersInput = {
@@ -79023,6 +86842,9 @@ export namespace Prisma {
     description?: string | null
     enrichment_summary?: string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: $Enums.EmailValidationStatus
+    email_validation_reason?: string | null
+    email_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -79063,6 +86885,9 @@ export namespace Prisma {
     description?: string | null
     enrichment_summary?: string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: $Enums.EmailValidationStatus
+    email_validation_reason?: string | null
+    email_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -79250,6 +87075,7 @@ export namespace Prisma {
     reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
     forms?: FormUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
@@ -79258,6 +87084,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutFiltersInput = {
@@ -79283,6 +87112,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
     forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -79291,6 +87121,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type RawLeadUpsertWithWhereUniqueWithoutFilterInput = {
@@ -79439,6 +87272,168 @@ export namespace Prisma {
     data: XOR<ContactAudienceAnalysisUpdateManyMutationInput, ContactAudienceAnalysisUncheckedUpdateManyWithoutFilterInput>
   }
 
+  export type OrganisationCreateWithoutSaved_contact_filtersInput = {
+    uuid?: string
+    name: string
+    slug: string
+    timezone?: string
+    reply_to_email?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
+    invitations?: OrganisationInvitationCreateNestedManyWithoutOrganisationInput
+    filters?: FilterCreateNestedManyWithoutOrganisationInput
+    contacts?: ContactCreateNestedManyWithoutOrganisationInput
+    outreach_messages?: OutreachMessageCreateNestedManyWithoutOrganisationInput
+    outreach_sequences?: OutreachSequenceCreateNestedManyWithoutOrganisationInput
+    interactions?: InteractionCreateNestedManyWithoutOrganisationInput
+    sender_profiles?: SenderProfileCreateNestedManyWithoutOrganisationInput
+    marketing_campaigns?: MarketingCampaignCreateNestedManyWithoutOrganisationInput
+    scoring_instructions?: ScoringInstructionCreateNestedManyWithoutOrganisationInput
+    openai_batch_jobs?: OpenAiBatchJobCreateNestedManyWithoutOrganisationInput
+    integrations?: IntegrationCreateNestedManyWithoutOrganisationInput
+    reminders?: ReminderCreateNestedManyWithoutOrganisationInput
+    forms?: FormCreateNestedManyWithoutOrganisationInput
+    contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
+    ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
+    apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
+    message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
+  }
+
+  export type OrganisationUncheckedCreateWithoutSaved_contact_filtersInput = {
+    id?: number
+    uuid?: string
+    name: string
+    slug: string
+    timezone?: string
+    reply_to_email?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
+    invitations?: OrganisationInvitationUncheckedCreateNestedManyWithoutOrganisationInput
+    filters?: FilterUncheckedCreateNestedManyWithoutOrganisationInput
+    contacts?: ContactUncheckedCreateNestedManyWithoutOrganisationInput
+    outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutOrganisationInput
+    outreach_sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutOrganisationInput
+    interactions?: InteractionUncheckedCreateNestedManyWithoutOrganisationInput
+    sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutOrganisationInput
+    marketing_campaigns?: MarketingCampaignUncheckedCreateNestedManyWithoutOrganisationInput
+    scoring_instructions?: ScoringInstructionUncheckedCreateNestedManyWithoutOrganisationInput
+    openai_batch_jobs?: OpenAiBatchJobUncheckedCreateNestedManyWithoutOrganisationInput
+    integrations?: IntegrationUncheckedCreateNestedManyWithoutOrganisationInput
+    reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
+    forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
+    contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
+    ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
+    apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
+    message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
+  }
+
+  export type OrganisationCreateOrConnectWithoutSaved_contact_filtersInput = {
+    where: OrganisationWhereUniqueInput
+    create: XOR<OrganisationCreateWithoutSaved_contact_filtersInput, OrganisationUncheckedCreateWithoutSaved_contact_filtersInput>
+  }
+
+  export type OrganisationUpsertWithoutSaved_contact_filtersInput = {
+    update: XOR<OrganisationUpdateWithoutSaved_contact_filtersInput, OrganisationUncheckedUpdateWithoutSaved_contact_filtersInput>
+    create: XOR<OrganisationCreateWithoutSaved_contact_filtersInput, OrganisationUncheckedCreateWithoutSaved_contact_filtersInput>
+    where?: OrganisationWhereInput
+  }
+
+  export type OrganisationUpdateToOneWithWhereWithoutSaved_contact_filtersInput = {
+    where?: OrganisationWhereInput
+    data: XOR<OrganisationUpdateWithoutSaved_contact_filtersInput, OrganisationUncheckedUpdateWithoutSaved_contact_filtersInput>
+  }
+
+  export type OrganisationUpdateWithoutSaved_contact_filtersInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
+    invitations?: OrganisationInvitationUpdateManyWithoutOrganisationNestedInput
+    filters?: FilterUpdateManyWithoutOrganisationNestedInput
+    contacts?: ContactUpdateManyWithoutOrganisationNestedInput
+    outreach_messages?: OutreachMessageUpdateManyWithoutOrganisationNestedInput
+    outreach_sequences?: OutreachSequenceUpdateManyWithoutOrganisationNestedInput
+    interactions?: InteractionUpdateManyWithoutOrganisationNestedInput
+    sender_profiles?: SenderProfileUpdateManyWithoutOrganisationNestedInput
+    marketing_campaigns?: MarketingCampaignUpdateManyWithoutOrganisationNestedInput
+    scoring_instructions?: ScoringInstructionUpdateManyWithoutOrganisationNestedInput
+    openai_batch_jobs?: OpenAiBatchJobUpdateManyWithoutOrganisationNestedInput
+    integrations?: IntegrationUpdateManyWithoutOrganisationNestedInput
+    reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
+    forms?: FormUpdateManyWithoutOrganisationNestedInput
+    contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
+    ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
+    apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
+    message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
+  }
+
+  export type OrganisationUncheckedUpdateWithoutSaved_contact_filtersInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
+    invitations?: OrganisationInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
+    filters?: FilterUncheckedUpdateManyWithoutOrganisationNestedInput
+    contacts?: ContactUncheckedUpdateManyWithoutOrganisationNestedInput
+    outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutOrganisationNestedInput
+    outreach_sequences?: OutreachSequenceUncheckedUpdateManyWithoutOrganisationNestedInput
+    interactions?: InteractionUncheckedUpdateManyWithoutOrganisationNestedInput
+    sender_profiles?: SenderProfileUncheckedUpdateManyWithoutOrganisationNestedInput
+    marketing_campaigns?: MarketingCampaignUncheckedUpdateManyWithoutOrganisationNestedInput
+    scoring_instructions?: ScoringInstructionUncheckedUpdateManyWithoutOrganisationNestedInput
+    openai_batch_jobs?: OpenAiBatchJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    integrations?: IntegrationUncheckedUpdateManyWithoutOrganisationNestedInput
+    reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
+    forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
+    contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
+    ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
+  }
+
   export type OrganisationCreateWithoutScoring_instructionsInput = {
     uuid?: string
     name: string
@@ -79461,6 +87456,7 @@ export namespace Prisma {
     reminders?: ReminderCreateNestedManyWithoutOrganisationInput
     forms?: FormCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
@@ -79469,6 +87465,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutScoring_instructionsInput = {
@@ -79494,6 +87493,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
     forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -79502,6 +87502,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutScoring_instructionsInput = {
@@ -79585,6 +87588,7 @@ export namespace Prisma {
     reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
     forms?: FormUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
@@ -79593,6 +87597,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutScoring_instructionsInput = {
@@ -79618,6 +87625,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
     forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -79626,6 +87634,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type FilterScoringInstructionUpsertWithWhereUniqueWithoutScoring_instructionInput = {
@@ -79890,6 +87901,9 @@ export namespace Prisma {
     raw_data?: NullableJsonNullValueInput | InputJsonValue
     enrichment_summary?: string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: $Enums.EmailValidationStatus
+    email_validation_reason?: string | null
+    email_validated_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     contacts?: ContactCreateNestedManyWithoutLeadInput
@@ -79914,6 +87928,9 @@ export namespace Prisma {
     raw_data?: NullableJsonNullValueInput | InputJsonValue
     enrichment_summary?: string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: $Enums.EmailValidationStatus
+    email_validation_reason?: string | null
+    email_validated_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     contacts?: ContactUncheckedCreateNestedManyWithoutLeadInput
@@ -80005,6 +88022,9 @@ export namespace Prisma {
     raw_data?: NullableJsonNullValueInput | InputJsonValue
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
+    email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     contacts?: ContactUpdateManyWithoutLeadNestedInput
@@ -80029,6 +88049,9 @@ export namespace Prisma {
     raw_data?: NullableJsonNullValueInput | InputJsonValue
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
+    email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     contacts?: ContactUncheckedUpdateManyWithoutLeadNestedInput
@@ -80078,6 +88101,9 @@ export namespace Prisma {
     description?: string | null
     enrichment_summary?: string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: $Enums.EmailValidationStatus
+    email_validation_reason?: string | null
+    email_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -80118,6 +88144,9 @@ export namespace Prisma {
     description?: string | null
     enrichment_summary?: string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: $Enums.EmailValidationStatus
+    email_validation_reason?: string | null
+    email_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -80282,6 +88311,9 @@ export namespace Prisma {
     raw_data?: NullableJsonNullValueInput | InputJsonValue
     enrichment_summary?: string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: $Enums.EmailValidationStatus
+    email_validation_reason?: string | null
+    email_validated_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     raw_lead?: RawLeadCreateNestedOneWithoutLeadInput
@@ -80307,6 +88339,9 @@ export namespace Prisma {
     raw_data?: NullableJsonNullValueInput | InputJsonValue
     enrichment_summary?: string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: $Enums.EmailValidationStatus
+    email_validation_reason?: string | null
+    email_validated_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     contacts?: ContactUncheckedCreateNestedManyWithoutLeadInput
@@ -80345,6 +88380,9 @@ export namespace Prisma {
     raw_data?: NullableJsonNullValueInput | InputJsonValue
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
+    email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     raw_lead?: RawLeadUpdateOneWithoutLeadNestedInput
@@ -80370,6 +88408,9 @@ export namespace Prisma {
     raw_data?: NullableJsonNullValueInput | InputJsonValue
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
+    email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     contacts?: ContactUncheckedUpdateManyWithoutLeadNestedInput
@@ -80397,6 +88438,7 @@ export namespace Prisma {
     reminders?: ReminderCreateNestedManyWithoutOrganisationInput
     forms?: FormCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
@@ -80405,6 +88447,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutContactsInput = {
@@ -80430,6 +88475,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
     forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -80438,6 +88484,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutContactsInput = {
@@ -80462,6 +88511,9 @@ export namespace Prisma {
     raw_data?: NullableJsonNullValueInput | InputJsonValue
     enrichment_summary?: string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: $Enums.EmailValidationStatus
+    email_validation_reason?: string | null
+    email_validated_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     raw_lead?: RawLeadCreateNestedOneWithoutLeadInput
@@ -80487,6 +88539,9 @@ export namespace Prisma {
     raw_data?: NullableJsonNullValueInput | InputJsonValue
     enrichment_summary?: string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: $Enums.EmailValidationStatus
+    email_validation_reason?: string | null
+    email_validated_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     enrichments?: LeadEnrichmentUncheckedCreateNestedManyWithoutLeadInput
@@ -80932,6 +88987,7 @@ export namespace Prisma {
     reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
     forms?: FormUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
@@ -80940,6 +88996,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutContactsInput = {
@@ -80965,6 +89024,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
     forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -80973,6 +89033,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type LeadUpsertWithoutContactsInput = {
@@ -81003,6 +89066,9 @@ export namespace Prisma {
     raw_data?: NullableJsonNullValueInput | InputJsonValue
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
+    email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     raw_lead?: RawLeadUpdateOneWithoutLeadNestedInput
@@ -81028,6 +89094,9 @@ export namespace Prisma {
     raw_data?: NullableJsonNullValueInput | InputJsonValue
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
+    email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     enrichments?: LeadEnrichmentUncheckedUpdateManyWithoutLeadNestedInput
@@ -81347,6 +89416,9 @@ export namespace Prisma {
     description?: string | null
     enrichment_summary?: string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: $Enums.EmailValidationStatus
+    email_validation_reason?: string | null
+    email_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -81388,6 +89460,9 @@ export namespace Prisma {
     description?: string | null
     enrichment_summary?: string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: $Enums.EmailValidationStatus
+    email_validation_reason?: string | null
+    email_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -81438,6 +89513,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
+    email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -81479,6 +89557,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
+    email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -81513,6 +89594,9 @@ export namespace Prisma {
     description?: string | null
     enrichment_summary?: string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: $Enums.EmailValidationStatus
+    email_validation_reason?: string | null
+    email_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -81554,6 +89638,9 @@ export namespace Prisma {
     description?: string | null
     enrichment_summary?: string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: $Enums.EmailValidationStatus
+    email_validation_reason?: string | null
+    email_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -81650,6 +89737,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
+    email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -81691,6 +89781,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
+    email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -81777,6 +89870,9 @@ export namespace Prisma {
     description?: string | null
     enrichment_summary?: string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: $Enums.EmailValidationStatus
+    email_validation_reason?: string | null
+    email_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -81818,6 +89914,9 @@ export namespace Prisma {
     description?: string | null
     enrichment_summary?: string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: $Enums.EmailValidationStatus
+    email_validation_reason?: string | null
+    email_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -81868,6 +89967,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
+    email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -81909,6 +90011,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
+    email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -81943,6 +90048,9 @@ export namespace Prisma {
     description?: string | null
     enrichment_summary?: string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: $Enums.EmailValidationStatus
+    email_validation_reason?: string | null
+    email_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -81984,6 +90092,9 @@ export namespace Prisma {
     description?: string | null
     enrichment_summary?: string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: $Enums.EmailValidationStatus
+    email_validation_reason?: string | null
+    email_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -82060,6 +90171,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
+    email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -82101,6 +90215,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
+    email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -82172,6 +90289,7 @@ export namespace Prisma {
     integrations?: IntegrationCreateNestedManyWithoutOrganisationInput
     reminders?: ReminderCreateNestedManyWithoutOrganisationInput
     forms?: FormCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
@@ -82180,6 +90298,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutContact_listsInput = {
@@ -82205,6 +90326,7 @@ export namespace Prisma {
     integrations?: IntegrationUncheckedCreateNestedManyWithoutOrganisationInput
     reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
     forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -82213,6 +90335,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutContact_listsInput = {
@@ -82390,6 +90515,7 @@ export namespace Prisma {
     integrations?: IntegrationUpdateManyWithoutOrganisationNestedInput
     reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
     forms?: FormUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
@@ -82398,6 +90524,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutContact_listsInput = {
@@ -82423,6 +90552,7 @@ export namespace Prisma {
     integrations?: IntegrationUncheckedUpdateManyWithoutOrganisationNestedInput
     reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
     forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -82431,6 +90561,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type ContactListUpsertWithoutChildrenInput = {
@@ -82564,6 +90697,9 @@ export namespace Prisma {
     description?: string | null
     enrichment_summary?: string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: $Enums.EmailValidationStatus
+    email_validation_reason?: string | null
+    email_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -82605,6 +90741,9 @@ export namespace Prisma {
     description?: string | null
     enrichment_summary?: string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: $Enums.EmailValidationStatus
+    email_validation_reason?: string | null
+    email_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -82691,6 +90830,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
+    email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -82732,6 +90874,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
+    email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -82766,6 +90911,9 @@ export namespace Prisma {
     description?: string | null
     enrichment_summary?: string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: $Enums.EmailValidationStatus
+    email_validation_reason?: string | null
+    email_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -82807,6 +90955,9 @@ export namespace Prisma {
     description?: string | null
     enrichment_summary?: string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: $Enums.EmailValidationStatus
+    email_validation_reason?: string | null
+    email_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -82857,6 +91008,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
+    email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -82898,6 +91052,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
+    email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -82932,6 +91089,9 @@ export namespace Prisma {
     description?: string | null
     enrichment_summary?: string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: $Enums.EmailValidationStatus
+    email_validation_reason?: string | null
+    email_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -82973,6 +91133,9 @@ export namespace Prisma {
     description?: string | null
     enrichment_summary?: string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: $Enums.EmailValidationStatus
+    email_validation_reason?: string | null
+    email_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -83017,6 +91180,7 @@ export namespace Prisma {
     reminders?: ReminderCreateNestedManyWithoutOrganisationInput
     forms?: FormCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
@@ -83025,6 +91189,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutInteractionsInput = {
@@ -83050,6 +91217,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
     forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -83058,6 +91226,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutInteractionsInput = {
@@ -83247,6 +91418,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
+    email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -83288,6 +91462,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
+    email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -83338,6 +91515,7 @@ export namespace Prisma {
     reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
     forms?: FormUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
@@ -83346,6 +91524,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutInteractionsInput = {
@@ -83371,6 +91552,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
     forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -83379,6 +91561,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OutreachMessageUpsertWithoutInteractionInput = {
@@ -83569,6 +91754,7 @@ export namespace Prisma {
     reminders?: ReminderCreateNestedManyWithoutOrganisationInput
     forms?: FormCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
@@ -83577,6 +91763,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutOutreach_messagesInput = {
@@ -83602,6 +91791,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
     forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -83610,6 +91800,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutOutreach_messagesInput = {
@@ -83634,6 +91827,9 @@ export namespace Prisma {
     description?: string | null
     enrichment_summary?: string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: $Enums.EmailValidationStatus
+    email_validation_reason?: string | null
+    email_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -83675,6 +91871,9 @@ export namespace Prisma {
     description?: string | null
     enrichment_summary?: string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: $Enums.EmailValidationStatus
+    email_validation_reason?: string | null
+    email_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -83803,6 +92002,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutUserInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutUserInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
+    bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserUncheckedCreateWithoutOutreach_messages_sentInput = {
@@ -83822,6 +92022,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutUserInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutUserInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
+    bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserCreateOrConnectWithoutOutreach_messages_sentInput = {
@@ -83894,6 +92095,7 @@ export namespace Prisma {
     reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
     forms?: FormUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
@@ -83902,6 +92104,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutOutreach_messagesInput = {
@@ -83927,6 +92132,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
     forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -83935,6 +92141,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type ContactUpsertWithoutOutreach_messagesInput = {
@@ -83965,6 +92174,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
+    email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -84006,6 +92218,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
+    email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -84146,6 +92361,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutUserNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutUserNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
+    bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOutreach_messages_sentInput = {
@@ -84165,6 +92381,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutUserNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutUserNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
+    bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
   }
 
   export type InteractionUpsertWithoutOutreach_messageInput = {
@@ -84227,6 +92444,7 @@ export namespace Prisma {
     reminders?: ReminderCreateNestedManyWithoutOrganisationInput
     forms?: FormCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
@@ -84235,6 +92453,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutOutreach_sequencesInput = {
@@ -84260,6 +92481,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
     forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -84268,6 +92490,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutOutreach_sequencesInput = {
@@ -84308,6 +92533,7 @@ export namespace Prisma {
     reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
     forms?: FormUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
@@ -84316,6 +92542,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutOutreach_sequencesInput = {
@@ -84341,6 +92570,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
     forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -84349,6 +92579,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type FilterCreateWithoutJobsInput = {
@@ -84449,6 +92682,424 @@ export namespace Prisma {
     audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutFilterNestedInput
   }
 
+  export type OrganisationCreateWithoutBulk_jobsInput = {
+    uuid?: string
+    name: string
+    slug: string
+    timezone?: string
+    reply_to_email?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
+    invitations?: OrganisationInvitationCreateNestedManyWithoutOrganisationInput
+    filters?: FilterCreateNestedManyWithoutOrganisationInput
+    contacts?: ContactCreateNestedManyWithoutOrganisationInput
+    outreach_messages?: OutreachMessageCreateNestedManyWithoutOrganisationInput
+    outreach_sequences?: OutreachSequenceCreateNestedManyWithoutOrganisationInput
+    interactions?: InteractionCreateNestedManyWithoutOrganisationInput
+    sender_profiles?: SenderProfileCreateNestedManyWithoutOrganisationInput
+    marketing_campaigns?: MarketingCampaignCreateNestedManyWithoutOrganisationInput
+    scoring_instructions?: ScoringInstructionCreateNestedManyWithoutOrganisationInput
+    openai_batch_jobs?: OpenAiBatchJobCreateNestedManyWithoutOrganisationInput
+    integrations?: IntegrationCreateNestedManyWithoutOrganisationInput
+    reminders?: ReminderCreateNestedManyWithoutOrganisationInput
+    forms?: FormCreateNestedManyWithoutOrganisationInput
+    contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
+    contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
+    ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
+    apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
+    message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
+  }
+
+  export type OrganisationUncheckedCreateWithoutBulk_jobsInput = {
+    id?: number
+    uuid?: string
+    name: string
+    slug: string
+    timezone?: string
+    reply_to_email?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
+    invitations?: OrganisationInvitationUncheckedCreateNestedManyWithoutOrganisationInput
+    filters?: FilterUncheckedCreateNestedManyWithoutOrganisationInput
+    contacts?: ContactUncheckedCreateNestedManyWithoutOrganisationInput
+    outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutOrganisationInput
+    outreach_sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutOrganisationInput
+    interactions?: InteractionUncheckedCreateNestedManyWithoutOrganisationInput
+    sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutOrganisationInput
+    marketing_campaigns?: MarketingCampaignUncheckedCreateNestedManyWithoutOrganisationInput
+    scoring_instructions?: ScoringInstructionUncheckedCreateNestedManyWithoutOrganisationInput
+    openai_batch_jobs?: OpenAiBatchJobUncheckedCreateNestedManyWithoutOrganisationInput
+    integrations?: IntegrationUncheckedCreateNestedManyWithoutOrganisationInput
+    reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
+    forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
+    contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
+    contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
+    ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
+    apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
+    message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
+  }
+
+  export type OrganisationCreateOrConnectWithoutBulk_jobsInput = {
+    where: OrganisationWhereUniqueInput
+    create: XOR<OrganisationCreateWithoutBulk_jobsInput, OrganisationUncheckedCreateWithoutBulk_jobsInput>
+  }
+
+  export type UserCreateWithoutBulk_jobs_createdInput = {
+    uuid?: string
+    email: string
+    phone?: string | null
+    full_name?: string | null
+    password: string
+    role?: $Enums.AuthRole
+    created_at?: Date | string
+    updated_at?: Date | string
+    memberships?: OrganisationMemberCreateNestedManyWithoutUserInput
+    invitations_sent?: OrganisationInvitationCreateNestedManyWithoutInvited_byInput
+    form_completions?: FormCompletionCreateNestedManyWithoutCompleted_byInput
+    outreach_messages_sent?: OutreachMessageCreateNestedManyWithoutSent_byInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutActorInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutUserInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutUserInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutBulk_jobs_createdInput = {
+    id?: number
+    uuid?: string
+    email: string
+    phone?: string | null
+    full_name?: string | null
+    password: string
+    role?: $Enums.AuthRole
+    created_at?: Date | string
+    updated_at?: Date | string
+    memberships?: OrganisationMemberUncheckedCreateNestedManyWithoutUserInput
+    invitations_sent?: OrganisationInvitationUncheckedCreateNestedManyWithoutInvited_byInput
+    form_completions?: FormCompletionUncheckedCreateNestedManyWithoutCompleted_byInput
+    outreach_messages_sent?: OutreachMessageUncheckedCreateNestedManyWithoutSent_byInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutActorInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutUserInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutUserInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutBulk_jobs_createdInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutBulk_jobs_createdInput, UserUncheckedCreateWithoutBulk_jobs_createdInput>
+  }
+
+  export type OrganisationUpsertWithoutBulk_jobsInput = {
+    update: XOR<OrganisationUpdateWithoutBulk_jobsInput, OrganisationUncheckedUpdateWithoutBulk_jobsInput>
+    create: XOR<OrganisationCreateWithoutBulk_jobsInput, OrganisationUncheckedCreateWithoutBulk_jobsInput>
+    where?: OrganisationWhereInput
+  }
+
+  export type OrganisationUpdateToOneWithWhereWithoutBulk_jobsInput = {
+    where?: OrganisationWhereInput
+    data: XOR<OrganisationUpdateWithoutBulk_jobsInput, OrganisationUncheckedUpdateWithoutBulk_jobsInput>
+  }
+
+  export type OrganisationUpdateWithoutBulk_jobsInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
+    invitations?: OrganisationInvitationUpdateManyWithoutOrganisationNestedInput
+    filters?: FilterUpdateManyWithoutOrganisationNestedInput
+    contacts?: ContactUpdateManyWithoutOrganisationNestedInput
+    outreach_messages?: OutreachMessageUpdateManyWithoutOrganisationNestedInput
+    outreach_sequences?: OutreachSequenceUpdateManyWithoutOrganisationNestedInput
+    interactions?: InteractionUpdateManyWithoutOrganisationNestedInput
+    sender_profiles?: SenderProfileUpdateManyWithoutOrganisationNestedInput
+    marketing_campaigns?: MarketingCampaignUpdateManyWithoutOrganisationNestedInput
+    scoring_instructions?: ScoringInstructionUpdateManyWithoutOrganisationNestedInput
+    openai_batch_jobs?: OpenAiBatchJobUpdateManyWithoutOrganisationNestedInput
+    integrations?: IntegrationUpdateManyWithoutOrganisationNestedInput
+    reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
+    forms?: FormUpdateManyWithoutOrganisationNestedInput
+    contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
+    contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
+    ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
+    apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
+    message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
+  }
+
+  export type OrganisationUncheckedUpdateWithoutBulk_jobsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
+    invitations?: OrganisationInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
+    filters?: FilterUncheckedUpdateManyWithoutOrganisationNestedInput
+    contacts?: ContactUncheckedUpdateManyWithoutOrganisationNestedInput
+    outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutOrganisationNestedInput
+    outreach_sequences?: OutreachSequenceUncheckedUpdateManyWithoutOrganisationNestedInput
+    interactions?: InteractionUncheckedUpdateManyWithoutOrganisationNestedInput
+    sender_profiles?: SenderProfileUncheckedUpdateManyWithoutOrganisationNestedInput
+    marketing_campaigns?: MarketingCampaignUncheckedUpdateManyWithoutOrganisationNestedInput
+    scoring_instructions?: ScoringInstructionUncheckedUpdateManyWithoutOrganisationNestedInput
+    openai_batch_jobs?: OpenAiBatchJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    integrations?: IntegrationUncheckedUpdateManyWithoutOrganisationNestedInput
+    reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
+    forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
+    contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
+    contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
+    ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
+  }
+
+  export type UserUpsertWithoutBulk_jobs_createdInput = {
+    update: XOR<UserUpdateWithoutBulk_jobs_createdInput, UserUncheckedUpdateWithoutBulk_jobs_createdInput>
+    create: XOR<UserCreateWithoutBulk_jobs_createdInput, UserUncheckedCreateWithoutBulk_jobs_createdInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutBulk_jobs_createdInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutBulk_jobs_createdInput, UserUncheckedUpdateWithoutBulk_jobs_createdInput>
+  }
+
+  export type UserUpdateWithoutBulk_jobs_createdInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    full_name?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumAuthRoleFieldUpdateOperationsInput | $Enums.AuthRole
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: OrganisationMemberUpdateManyWithoutUserNestedInput
+    invitations_sent?: OrganisationInvitationUpdateManyWithoutInvited_byNestedInput
+    form_completions?: FormCompletionUpdateManyWithoutCompleted_byNestedInput
+    outreach_messages_sent?: OutreachMessageUpdateManyWithoutSent_byNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutActorNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutUserNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutUserNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutBulk_jobs_createdInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    full_name?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumAuthRoleFieldUpdateOperationsInput | $Enums.AuthRole
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: OrganisationMemberUncheckedUpdateManyWithoutUserNestedInput
+    invitations_sent?: OrganisationInvitationUncheckedUpdateManyWithoutInvited_byNestedInput
+    form_completions?: FormCompletionUncheckedUpdateManyWithoutCompleted_byNestedInput
+    outreach_messages_sent?: OutreachMessageUncheckedUpdateManyWithoutSent_byNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutActorNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutUserNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutUserNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type OrganisationCreateWithoutWebsite_scrape_requestsInput = {
+    uuid?: string
+    name: string
+    slug: string
+    timezone?: string
+    reply_to_email?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
+    invitations?: OrganisationInvitationCreateNestedManyWithoutOrganisationInput
+    filters?: FilterCreateNestedManyWithoutOrganisationInput
+    contacts?: ContactCreateNestedManyWithoutOrganisationInput
+    outreach_messages?: OutreachMessageCreateNestedManyWithoutOrganisationInput
+    outreach_sequences?: OutreachSequenceCreateNestedManyWithoutOrganisationInput
+    interactions?: InteractionCreateNestedManyWithoutOrganisationInput
+    sender_profiles?: SenderProfileCreateNestedManyWithoutOrganisationInput
+    marketing_campaigns?: MarketingCampaignCreateNestedManyWithoutOrganisationInput
+    scoring_instructions?: ScoringInstructionCreateNestedManyWithoutOrganisationInput
+    openai_batch_jobs?: OpenAiBatchJobCreateNestedManyWithoutOrganisationInput
+    integrations?: IntegrationCreateNestedManyWithoutOrganisationInput
+    reminders?: ReminderCreateNestedManyWithoutOrganisationInput
+    forms?: FormCreateNestedManyWithoutOrganisationInput
+    contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
+    contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
+    ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
+    apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
+    message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
+  }
+
+  export type OrganisationUncheckedCreateWithoutWebsite_scrape_requestsInput = {
+    id?: number
+    uuid?: string
+    name: string
+    slug: string
+    timezone?: string
+    reply_to_email?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
+    invitations?: OrganisationInvitationUncheckedCreateNestedManyWithoutOrganisationInput
+    filters?: FilterUncheckedCreateNestedManyWithoutOrganisationInput
+    contacts?: ContactUncheckedCreateNestedManyWithoutOrganisationInput
+    outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutOrganisationInput
+    outreach_sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutOrganisationInput
+    interactions?: InteractionUncheckedCreateNestedManyWithoutOrganisationInput
+    sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutOrganisationInput
+    marketing_campaigns?: MarketingCampaignUncheckedCreateNestedManyWithoutOrganisationInput
+    scoring_instructions?: ScoringInstructionUncheckedCreateNestedManyWithoutOrganisationInput
+    openai_batch_jobs?: OpenAiBatchJobUncheckedCreateNestedManyWithoutOrganisationInput
+    integrations?: IntegrationUncheckedCreateNestedManyWithoutOrganisationInput
+    reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
+    forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
+    contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
+    contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
+    ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
+    apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
+    message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
+  }
+
+  export type OrganisationCreateOrConnectWithoutWebsite_scrape_requestsInput = {
+    where: OrganisationWhereUniqueInput
+    create: XOR<OrganisationCreateWithoutWebsite_scrape_requestsInput, OrganisationUncheckedCreateWithoutWebsite_scrape_requestsInput>
+  }
+
+  export type OrganisationUpsertWithoutWebsite_scrape_requestsInput = {
+    update: XOR<OrganisationUpdateWithoutWebsite_scrape_requestsInput, OrganisationUncheckedUpdateWithoutWebsite_scrape_requestsInput>
+    create: XOR<OrganisationCreateWithoutWebsite_scrape_requestsInput, OrganisationUncheckedCreateWithoutWebsite_scrape_requestsInput>
+    where?: OrganisationWhereInput
+  }
+
+  export type OrganisationUpdateToOneWithWhereWithoutWebsite_scrape_requestsInput = {
+    where?: OrganisationWhereInput
+    data: XOR<OrganisationUpdateWithoutWebsite_scrape_requestsInput, OrganisationUncheckedUpdateWithoutWebsite_scrape_requestsInput>
+  }
+
+  export type OrganisationUpdateWithoutWebsite_scrape_requestsInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
+    invitations?: OrganisationInvitationUpdateManyWithoutOrganisationNestedInput
+    filters?: FilterUpdateManyWithoutOrganisationNestedInput
+    contacts?: ContactUpdateManyWithoutOrganisationNestedInput
+    outreach_messages?: OutreachMessageUpdateManyWithoutOrganisationNestedInput
+    outreach_sequences?: OutreachSequenceUpdateManyWithoutOrganisationNestedInput
+    interactions?: InteractionUpdateManyWithoutOrganisationNestedInput
+    sender_profiles?: SenderProfileUpdateManyWithoutOrganisationNestedInput
+    marketing_campaigns?: MarketingCampaignUpdateManyWithoutOrganisationNestedInput
+    scoring_instructions?: ScoringInstructionUpdateManyWithoutOrganisationNestedInput
+    openai_batch_jobs?: OpenAiBatchJobUpdateManyWithoutOrganisationNestedInput
+    integrations?: IntegrationUpdateManyWithoutOrganisationNestedInput
+    reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
+    forms?: FormUpdateManyWithoutOrganisationNestedInput
+    contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
+    contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
+    ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
+    apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
+    message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
+  }
+
+  export type OrganisationUncheckedUpdateWithoutWebsite_scrape_requestsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
+    invitations?: OrganisationInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
+    filters?: FilterUncheckedUpdateManyWithoutOrganisationNestedInput
+    contacts?: ContactUncheckedUpdateManyWithoutOrganisationNestedInput
+    outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutOrganisationNestedInput
+    outreach_sequences?: OutreachSequenceUncheckedUpdateManyWithoutOrganisationNestedInput
+    interactions?: InteractionUncheckedUpdateManyWithoutOrganisationNestedInput
+    sender_profiles?: SenderProfileUncheckedUpdateManyWithoutOrganisationNestedInput
+    marketing_campaigns?: MarketingCampaignUncheckedUpdateManyWithoutOrganisationNestedInput
+    scoring_instructions?: ScoringInstructionUncheckedUpdateManyWithoutOrganisationNestedInput
+    openai_batch_jobs?: OpenAiBatchJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    integrations?: IntegrationUncheckedUpdateManyWithoutOrganisationNestedInput
+    reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
+    forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
+    contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
+    contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
+    ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
+  }
+
   export type OrganisationCreateWithoutSender_profilesInput = {
     uuid?: string
     name: string
@@ -84471,6 +93122,7 @@ export namespace Prisma {
     reminders?: ReminderCreateNestedManyWithoutOrganisationInput
     forms?: FormCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
@@ -84479,6 +93131,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutSender_profilesInput = {
@@ -84504,6 +93159,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
     forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -84512,6 +93168,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutSender_profilesInput = {
@@ -84647,6 +93306,7 @@ export namespace Prisma {
     reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
     forms?: FormUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
@@ -84655,6 +93315,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutSender_profilesInput = {
@@ -84680,6 +93343,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
     forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -84688,6 +93352,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type MarketingCampaignUpsertWithWhereUniqueWithoutSender_profileInput = {
@@ -84729,6 +93396,7 @@ export namespace Prisma {
     reminders?: ReminderCreateNestedManyWithoutOrganisationInput
     forms?: FormCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
@@ -84736,6 +93404,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutMessage_templatesInput = {
@@ -84762,6 +93433,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
     forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -84769,6 +93441,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutMessage_templatesInput = {
@@ -84810,6 +93485,7 @@ export namespace Prisma {
     reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
     forms?: FormUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
@@ -84817,6 +93493,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutMessage_templatesInput = {
@@ -84843,6 +93522,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
     forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -84850,6 +93530,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutMarketing_campaignsInput = {
@@ -84874,6 +93557,7 @@ export namespace Prisma {
     reminders?: ReminderCreateNestedManyWithoutOrganisationInput
     forms?: FormCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
@@ -84882,6 +93566,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutMarketing_campaignsInput = {
@@ -84907,6 +93594,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
     forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -84915,6 +93603,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutMarketing_campaignsInput = {
@@ -85154,6 +93845,7 @@ export namespace Prisma {
     reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
     forms?: FormUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
@@ -85162,6 +93854,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutMarketing_campaignsInput = {
@@ -85187,6 +93882,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
     forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -85195,6 +93891,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type SenderProfileUpsertWithoutMarketing_campaignsInput = {
@@ -85416,6 +94115,9 @@ export namespace Prisma {
     description?: string | null
     enrichment_summary?: string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: $Enums.EmailValidationStatus
+    email_validation_reason?: string | null
+    email_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -85457,6 +94159,9 @@ export namespace Prisma {
     description?: string | null
     enrichment_summary?: string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: $Enums.EmailValidationStatus
+    email_validation_reason?: string | null
+    email_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -85603,6 +94308,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
+    email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -85644,6 +94352,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
+    email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -85683,6 +94394,7 @@ export namespace Prisma {
     reminders?: ReminderCreateNestedManyWithoutOrganisationInput
     forms?: FormCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
@@ -85691,6 +94403,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutOpenai_batch_jobsInput = {
@@ -85716,6 +94431,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
     forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -85724,6 +94440,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutOpenai_batch_jobsInput = {
@@ -85764,6 +94483,7 @@ export namespace Prisma {
     reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
     forms?: FormUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
@@ -85772,6 +94492,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutOpenai_batch_jobsInput = {
@@ -85797,6 +94520,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
     forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -85805,6 +94529,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutIntegrationsInput = {
@@ -85829,6 +94556,7 @@ export namespace Prisma {
     reminders?: ReminderCreateNestedManyWithoutOrganisationInput
     forms?: FormCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
@@ -85837,6 +94565,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutIntegrationsInput = {
@@ -85862,6 +94593,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
     forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -85870,6 +94602,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutIntegrationsInput = {
@@ -85968,6 +94703,7 @@ export namespace Prisma {
     reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
     forms?: FormUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
@@ -85976,6 +94712,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutIntegrationsInput = {
@@ -86001,6 +94740,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
     forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -86009,6 +94749,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type IntegrationKeyUpsertWithWhereUniqueWithoutIntegrationInput = {
@@ -86217,6 +94960,7 @@ export namespace Prisma {
     integrations?: IntegrationCreateNestedManyWithoutOrganisationInput
     forms?: FormCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
@@ -86225,6 +94969,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutRemindersInput = {
@@ -86250,6 +94997,7 @@ export namespace Prisma {
     integrations?: IntegrationUncheckedCreateNestedManyWithoutOrganisationInput
     forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -86258,6 +95006,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutRemindersInput = {
@@ -86282,6 +95033,9 @@ export namespace Prisma {
     description?: string | null
     enrichment_summary?: string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: $Enums.EmailValidationStatus
+    email_validation_reason?: string | null
+    email_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -86323,6 +95077,9 @@ export namespace Prisma {
     description?: string | null
     enrichment_summary?: string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: $Enums.EmailValidationStatus
+    email_validation_reason?: string | null
+    email_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -86378,6 +95135,7 @@ export namespace Prisma {
     integrations?: IntegrationUpdateManyWithoutOrganisationNestedInput
     forms?: FormUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
@@ -86386,6 +95144,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutRemindersInput = {
@@ -86411,6 +95172,7 @@ export namespace Prisma {
     integrations?: IntegrationUncheckedUpdateManyWithoutOrganisationNestedInput
     forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -86419,6 +95181,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type ContactUpsertWithoutRemindersInput = {
@@ -86449,6 +95214,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
+    email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -86490,6 +95258,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
+    email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -86529,6 +95300,7 @@ export namespace Prisma {
     integrations?: IntegrationCreateNestedManyWithoutOrganisationInput
     reminders?: ReminderCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
@@ -86537,6 +95309,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutFormsInput = {
@@ -86562,6 +95337,7 @@ export namespace Prisma {
     integrations?: IntegrationUncheckedCreateNestedManyWithoutOrganisationInput
     reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -86570,6 +95346,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutFormsInput = {
@@ -86682,6 +95461,7 @@ export namespace Prisma {
     integrations?: IntegrationUpdateManyWithoutOrganisationNestedInput
     reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
@@ -86690,6 +95470,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutFormsInput = {
@@ -86715,6 +95498,7 @@ export namespace Prisma {
     integrations?: IntegrationUncheckedUpdateManyWithoutOrganisationNestedInput
     reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -86723,6 +95507,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type FormFieldUpsertWithWhereUniqueWithoutFormInput = {
@@ -86934,6 +95721,9 @@ export namespace Prisma {
     description?: string | null
     enrichment_summary?: string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: $Enums.EmailValidationStatus
+    email_validation_reason?: string | null
+    email_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -86975,6 +95765,9 @@ export namespace Prisma {
     description?: string | null
     enrichment_summary?: string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: $Enums.EmailValidationStatus
+    email_validation_reason?: string | null
+    email_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -87013,6 +95806,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutUserInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutUserInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
+    bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserUncheckedCreateWithoutForm_completionsInput = {
@@ -87032,6 +95826,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutUserInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutUserInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
+    bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserCreateOrConnectWithoutForm_completionsInput = {
@@ -87126,6 +95921,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
+    email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -87167,6 +95965,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
+    email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -87211,6 +96012,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutUserNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutUserNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
+    bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
   }
 
   export type UserUncheckedUpdateWithoutForm_completionsInput = {
@@ -87230,6 +96032,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutUserNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutUserNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
+    bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
   }
 
   export type FormCompletionValueUpsertWithWhereUniqueWithoutCompletionInput = {
@@ -87407,6 +96210,7 @@ export namespace Prisma {
     reminders?: ReminderCreateNestedManyWithoutOrganisationInput
     forms?: FormCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
@@ -87414,6 +96218,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutContact_audience_analysesInput = {
@@ -87440,6 +96247,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
     forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
@@ -87447,6 +96255,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutContact_audience_analysesInput = {
@@ -87564,6 +96375,7 @@ export namespace Prisma {
     reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
     forms?: FormUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
@@ -87571,6 +96383,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutContact_audience_analysesInput = {
@@ -87597,6 +96412,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
     forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -87604,6 +96420,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type FilterUpsertWithoutAudience_analysesInput = {
@@ -87717,6 +96536,7 @@ export namespace Prisma {
     reminders?: ReminderCreateNestedManyWithoutOrganisationInput
     forms?: FormCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
@@ -87724,6 +96544,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutAi_usage_logsInput = {
@@ -87750,6 +96573,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
     forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
@@ -87757,6 +96581,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutAi_usage_logsInput = {
@@ -87798,6 +96625,7 @@ export namespace Prisma {
     reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
     forms?: FormUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
@@ -87805,6 +96633,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutAi_usage_logsInput = {
@@ -87831,6 +96662,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
     forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -87838,6 +96670,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutApify_usage_logsInput = {
@@ -87863,6 +96698,7 @@ export namespace Prisma {
     reminders?: ReminderCreateNestedManyWithoutOrganisationInput
     forms?: FormCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
@@ -87870,6 +96706,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutApify_usage_logsInput = {
@@ -87896,6 +96735,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
     forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
@@ -87903,6 +96743,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutApify_usage_logsInput = {
@@ -87944,6 +96787,7 @@ export namespace Prisma {
     reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
     forms?: FormUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
@@ -87951,6 +96795,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutApify_usage_logsInput = {
@@ -87977,6 +96824,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
     forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -87984,6 +96832,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutMessaging_goalsInput = {
@@ -88009,6 +96860,7 @@ export namespace Prisma {
     reminders?: ReminderCreateNestedManyWithoutOrganisationInput
     forms?: FormCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
@@ -88016,6 +96868,9 @@ export namespace Prisma {
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutMessaging_goalsInput = {
@@ -88042,6 +96897,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
     forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -88049,6 +96905,9 @@ export namespace Prisma {
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutMessaging_goalsInput = {
@@ -88072,6 +96931,7 @@ export namespace Prisma {
     activity_logs?: ActivityLogCreateNestedManyWithoutActorInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutUserInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
+    bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserUncheckedCreateWithoutMessaging_goalsInput = {
@@ -88091,6 +96951,7 @@ export namespace Prisma {
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutActorInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutUserInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
+    bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserCreateOrConnectWithoutMessaging_goalsInput = {
@@ -88165,6 +97026,7 @@ export namespace Prisma {
     reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
     forms?: FormUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
@@ -88172,6 +97034,9 @@ export namespace Prisma {
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutMessaging_goalsInput = {
@@ -88198,6 +97063,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
     forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -88205,6 +97071,9 @@ export namespace Prisma {
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutMessaging_goalsInput = {
@@ -88234,6 +97103,7 @@ export namespace Prisma {
     activity_logs?: ActivityLogUpdateManyWithoutActorNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutUserNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
+    bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMessaging_goalsInput = {
@@ -88253,6 +97123,7 @@ export namespace Prisma {
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutActorNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutUserNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
+    bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
   }
 
   export type GoalAchievementUpsertWithWhereUniqueWithoutGoalInput = {
@@ -88269,6 +97140,168 @@ export namespace Prisma {
   export type GoalAchievementUpdateManyWithWhereWithoutGoalInput = {
     where: GoalAchievementScalarWhereInput
     data: XOR<GoalAchievementUpdateManyMutationInput, GoalAchievementUncheckedUpdateManyWithoutGoalInput>
+  }
+
+  export type OrganisationCreateWithoutEmail_send_limitsInput = {
+    uuid?: string
+    name: string
+    slug: string
+    timezone?: string
+    reply_to_email?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
+    invitations?: OrganisationInvitationCreateNestedManyWithoutOrganisationInput
+    filters?: FilterCreateNestedManyWithoutOrganisationInput
+    contacts?: ContactCreateNestedManyWithoutOrganisationInput
+    outreach_messages?: OutreachMessageCreateNestedManyWithoutOrganisationInput
+    outreach_sequences?: OutreachSequenceCreateNestedManyWithoutOrganisationInput
+    interactions?: InteractionCreateNestedManyWithoutOrganisationInput
+    sender_profiles?: SenderProfileCreateNestedManyWithoutOrganisationInput
+    marketing_campaigns?: MarketingCampaignCreateNestedManyWithoutOrganisationInput
+    scoring_instructions?: ScoringInstructionCreateNestedManyWithoutOrganisationInput
+    openai_batch_jobs?: OpenAiBatchJobCreateNestedManyWithoutOrganisationInput
+    integrations?: IntegrationCreateNestedManyWithoutOrganisationInput
+    reminders?: ReminderCreateNestedManyWithoutOrganisationInput
+    forms?: FormCreateNestedManyWithoutOrganisationInput
+    contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
+    contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
+    ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
+    apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
+    message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+  }
+
+  export type OrganisationUncheckedCreateWithoutEmail_send_limitsInput = {
+    id?: number
+    uuid?: string
+    name: string
+    slug: string
+    timezone?: string
+    reply_to_email?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
+    invitations?: OrganisationInvitationUncheckedCreateNestedManyWithoutOrganisationInput
+    filters?: FilterUncheckedCreateNestedManyWithoutOrganisationInput
+    contacts?: ContactUncheckedCreateNestedManyWithoutOrganisationInput
+    outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutOrganisationInput
+    outreach_sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutOrganisationInput
+    interactions?: InteractionUncheckedCreateNestedManyWithoutOrganisationInput
+    sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutOrganisationInput
+    marketing_campaigns?: MarketingCampaignUncheckedCreateNestedManyWithoutOrganisationInput
+    scoring_instructions?: ScoringInstructionUncheckedCreateNestedManyWithoutOrganisationInput
+    openai_batch_jobs?: OpenAiBatchJobUncheckedCreateNestedManyWithoutOrganisationInput
+    integrations?: IntegrationUncheckedCreateNestedManyWithoutOrganisationInput
+    reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
+    forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
+    contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
+    contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
+    ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
+    apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
+    message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+  }
+
+  export type OrganisationCreateOrConnectWithoutEmail_send_limitsInput = {
+    where: OrganisationWhereUniqueInput
+    create: XOR<OrganisationCreateWithoutEmail_send_limitsInput, OrganisationUncheckedCreateWithoutEmail_send_limitsInput>
+  }
+
+  export type OrganisationUpsertWithoutEmail_send_limitsInput = {
+    update: XOR<OrganisationUpdateWithoutEmail_send_limitsInput, OrganisationUncheckedUpdateWithoutEmail_send_limitsInput>
+    create: XOR<OrganisationCreateWithoutEmail_send_limitsInput, OrganisationUncheckedCreateWithoutEmail_send_limitsInput>
+    where?: OrganisationWhereInput
+  }
+
+  export type OrganisationUpdateToOneWithWhereWithoutEmail_send_limitsInput = {
+    where?: OrganisationWhereInput
+    data: XOR<OrganisationUpdateWithoutEmail_send_limitsInput, OrganisationUncheckedUpdateWithoutEmail_send_limitsInput>
+  }
+
+  export type OrganisationUpdateWithoutEmail_send_limitsInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
+    invitations?: OrganisationInvitationUpdateManyWithoutOrganisationNestedInput
+    filters?: FilterUpdateManyWithoutOrganisationNestedInput
+    contacts?: ContactUpdateManyWithoutOrganisationNestedInput
+    outreach_messages?: OutreachMessageUpdateManyWithoutOrganisationNestedInput
+    outreach_sequences?: OutreachSequenceUpdateManyWithoutOrganisationNestedInput
+    interactions?: InteractionUpdateManyWithoutOrganisationNestedInput
+    sender_profiles?: SenderProfileUpdateManyWithoutOrganisationNestedInput
+    marketing_campaigns?: MarketingCampaignUpdateManyWithoutOrganisationNestedInput
+    scoring_instructions?: ScoringInstructionUpdateManyWithoutOrganisationNestedInput
+    openai_batch_jobs?: OpenAiBatchJobUpdateManyWithoutOrganisationNestedInput
+    integrations?: IntegrationUpdateManyWithoutOrganisationNestedInput
+    reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
+    forms?: FormUpdateManyWithoutOrganisationNestedInput
+    contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
+    contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
+    ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
+    apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
+    message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+  }
+
+  export type OrganisationUncheckedUpdateWithoutEmail_send_limitsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
+    invitations?: OrganisationInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
+    filters?: FilterUncheckedUpdateManyWithoutOrganisationNestedInput
+    contacts?: ContactUncheckedUpdateManyWithoutOrganisationNestedInput
+    outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutOrganisationNestedInput
+    outreach_sequences?: OutreachSequenceUncheckedUpdateManyWithoutOrganisationNestedInput
+    interactions?: InteractionUncheckedUpdateManyWithoutOrganisationNestedInput
+    sender_profiles?: SenderProfileUncheckedUpdateManyWithoutOrganisationNestedInput
+    marketing_campaigns?: MarketingCampaignUncheckedUpdateManyWithoutOrganisationNestedInput
+    scoring_instructions?: ScoringInstructionUncheckedUpdateManyWithoutOrganisationNestedInput
+    openai_batch_jobs?: OpenAiBatchJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    integrations?: IntegrationUncheckedUpdateManyWithoutOrganisationNestedInput
+    reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
+    forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
+    contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
+    contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
+    ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutGoal_achievementsInput = {
@@ -88294,6 +97327,7 @@ export namespace Prisma {
     reminders?: ReminderCreateNestedManyWithoutOrganisationInput
     forms?: FormCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
@@ -88301,6 +97335,9 @@ export namespace Prisma {
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutGoal_achievementsInput = {
@@ -88327,6 +97364,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
     forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -88334,6 +97372,9 @@ export namespace Prisma {
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutGoal_achievementsInput = {
@@ -88357,6 +97398,7 @@ export namespace Prisma {
     activity_logs?: ActivityLogCreateNestedManyWithoutActorInput
     messaging_goals?: MessagingGoalCreateNestedManyWithoutUserInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
+    bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserUncheckedCreateWithoutGoal_achievementsInput = {
@@ -88376,6 +97418,7 @@ export namespace Prisma {
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutActorInput
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutUserInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
+    bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserCreateOrConnectWithoutGoal_achievementsInput = {
@@ -88445,6 +97488,7 @@ export namespace Prisma {
     reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
     forms?: FormUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
@@ -88452,6 +97496,9 @@ export namespace Prisma {
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutGoal_achievementsInput = {
@@ -88478,6 +97525,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
     forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -88485,6 +97533,9 @@ export namespace Prisma {
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutGoal_achievementsInput = {
@@ -88514,6 +97565,7 @@ export namespace Prisma {
     activity_logs?: ActivityLogUpdateManyWithoutActorNestedInput
     messaging_goals?: MessagingGoalUpdateManyWithoutUserNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
+    bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
   }
 
   export type UserUncheckedUpdateWithoutGoal_achievementsInput = {
@@ -88533,6 +97585,7 @@ export namespace Prisma {
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutActorNestedInput
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutUserNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
+    bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
   }
 
   export type MessagingGoalUpsertWithoutAchievementsInput = {
@@ -88592,6 +97645,7 @@ export namespace Prisma {
     reminders?: ReminderCreateNestedManyWithoutOrganisationInput
     forms?: FormCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
@@ -88599,6 +97653,9 @@ export namespace Prisma {
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutGoal_personal_bestsInput = {
@@ -88625,6 +97682,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
     forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -88632,6 +97690,9 @@ export namespace Prisma {
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutGoal_personal_bestsInput = {
@@ -88655,6 +97716,7 @@ export namespace Prisma {
     activity_logs?: ActivityLogCreateNestedManyWithoutActorInput
     messaging_goals?: MessagingGoalCreateNestedManyWithoutUserInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutUserInput
+    bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserUncheckedCreateWithoutGoal_personal_bestsInput = {
@@ -88674,6 +97736,7 @@ export namespace Prisma {
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutActorInput
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutUserInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutUserInput
+    bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserCreateOrConnectWithoutGoal_personal_bestsInput = {
@@ -88715,6 +97778,7 @@ export namespace Prisma {
     reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
     forms?: FormUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
@@ -88722,6 +97786,9 @@ export namespace Prisma {
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutGoal_personal_bestsInput = {
@@ -88748,6 +97815,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
     forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -88755,6 +97823,9 @@ export namespace Prisma {
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutGoal_personal_bestsInput = {
@@ -88784,6 +97855,7 @@ export namespace Prisma {
     activity_logs?: ActivityLogUpdateManyWithoutActorNestedInput
     messaging_goals?: MessagingGoalUpdateManyWithoutUserNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutUserNestedInput
+    bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
   }
 
   export type UserUncheckedUpdateWithoutGoal_personal_bestsInput = {
@@ -88803,6 +97875,7 @@ export namespace Prisma {
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutActorNestedInput
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutUserNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutUserNestedInput
+    bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
   }
 
   export type OrganisationCreateWithoutActivity_logsInput = {
@@ -88828,6 +97901,7 @@ export namespace Prisma {
     reminders?: ReminderCreateNestedManyWithoutOrganisationInput
     forms?: FormCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
@@ -88835,6 +97909,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutActivity_logsInput = {
@@ -88861,6 +97938,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
     forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
     contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
     ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -88868,6 +97946,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutActivity_logsInput = {
@@ -88891,6 +97972,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutUserInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutUserInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
+    bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserUncheckedCreateWithoutActivity_logsInput = {
@@ -88910,6 +97992,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutUserInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutUserInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
+    bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserCreateOrConnectWithoutActivity_logsInput = {
@@ -88951,6 +98034,7 @@ export namespace Prisma {
     reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
     forms?: FormUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
@@ -88958,6 +98042,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutActivity_logsInput = {
@@ -88984,6 +98071,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
     forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
     ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -88991,6 +98079,9 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutActivity_logsInput = {
@@ -89020,6 +98111,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutUserNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutUserNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
+    bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
   }
 
   export type UserUncheckedUpdateWithoutActivity_logsInput = {
@@ -89039,6 +98131,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutUserNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutUserNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
+    bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
   }
 
   export type OrganisationMemberCreateManyUserInput = {
@@ -89111,6 +98204,7 @@ export namespace Prisma {
     action: string
     summary?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    changes?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
   }
 
@@ -89144,6 +98238,30 @@ export namespace Prisma {
     period: $Enums.GoalPeriod
     best_count?: number
     achieved_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type BulkJobCreateManyCreated_byInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    title: string
+    type: $Enums.BulkJobType
+    status?: $Enums.BulkJobStatus
+    error?: string | null
+    retries?: number
+    max_retries?: number
+    progress_current?: number
+    progress_total?: number
+    progress_failed?: number
+    queue_name?: string | null
+    queue_job_id?: string | null
+    reference_type?: string | null
+    reference_uuid?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    started_at?: Date | string | null
+    completed_at?: Date | string | null
+    created_at?: Date | string
     updated_at?: Date | string
   }
 
@@ -89337,6 +98455,7 @@ export namespace Prisma {
     action?: StringFieldUpdateOperationsInput | string
     summary?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    changes?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutActivity_logsNestedInput
   }
@@ -89350,6 +98469,7 @@ export namespace Prisma {
     action?: StringFieldUpdateOperationsInput | string
     summary?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    changes?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -89362,6 +98482,7 @@ export namespace Prisma {
     action?: StringFieldUpdateOperationsInput | string
     summary?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    changes?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -89463,6 +98584,77 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type BulkJobUpdateWithoutCreated_byInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    type?: EnumBulkJobTypeFieldUpdateOperationsInput | $Enums.BulkJobType
+    status?: EnumBulkJobStatusFieldUpdateOperationsInput | $Enums.BulkJobStatus
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    retries?: IntFieldUpdateOperationsInput | number
+    max_retries?: IntFieldUpdateOperationsInput | number
+    progress_current?: IntFieldUpdateOperationsInput | number
+    progress_total?: IntFieldUpdateOperationsInput | number
+    progress_failed?: IntFieldUpdateOperationsInput | number
+    queue_name?: NullableStringFieldUpdateOperationsInput | string | null
+    queue_job_id?: NullableStringFieldUpdateOperationsInput | string | null
+    reference_type?: NullableStringFieldUpdateOperationsInput | string | null
+    reference_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    started_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutBulk_jobsNestedInput
+  }
+
+  export type BulkJobUncheckedUpdateWithoutCreated_byInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    type?: EnumBulkJobTypeFieldUpdateOperationsInput | $Enums.BulkJobType
+    status?: EnumBulkJobStatusFieldUpdateOperationsInput | $Enums.BulkJobStatus
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    retries?: IntFieldUpdateOperationsInput | number
+    max_retries?: IntFieldUpdateOperationsInput | number
+    progress_current?: IntFieldUpdateOperationsInput | number
+    progress_total?: IntFieldUpdateOperationsInput | number
+    progress_failed?: IntFieldUpdateOperationsInput | number
+    queue_name?: NullableStringFieldUpdateOperationsInput | string | null
+    queue_job_id?: NullableStringFieldUpdateOperationsInput | string | null
+    reference_type?: NullableStringFieldUpdateOperationsInput | string | null
+    reference_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    started_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BulkJobUncheckedUpdateManyWithoutCreated_byInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    type?: EnumBulkJobTypeFieldUpdateOperationsInput | $Enums.BulkJobType
+    status?: EnumBulkJobStatusFieldUpdateOperationsInput | $Enums.BulkJobStatus
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    retries?: IntFieldUpdateOperationsInput | number
+    max_retries?: IntFieldUpdateOperationsInput | number
+    progress_current?: IntFieldUpdateOperationsInput | number
+    progress_total?: IntFieldUpdateOperationsInput | number
+    progress_failed?: IntFieldUpdateOperationsInput | number
+    queue_name?: NullableStringFieldUpdateOperationsInput | string | null
+    queue_job_id?: NullableStringFieldUpdateOperationsInput | string | null
+    reference_type?: NullableStringFieldUpdateOperationsInput | string | null
+    reference_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    started_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type OrganisationMemberCreateManyOrganisationInput = {
     id?: number
     uuid?: string
@@ -89521,6 +98713,9 @@ export namespace Prisma {
     description?: string | null
     enrichment_summary?: string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: $Enums.EmailValidationStatus
+    email_validation_reason?: string | null
+    email_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -89715,6 +98910,15 @@ export namespace Prisma {
     updated_at?: Date | string
   }
 
+  export type SavedContactFilterCreateManyOrganisationInput = {
+    id?: number
+    uuid?: string
+    name: string
+    filters: JsonNullValueInput | InputJsonValue
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
   export type ContactAudienceAnalysisCreateManyOrganisationInput = {
     id?: number
     uuid?: string
@@ -89798,6 +99002,7 @@ export namespace Prisma {
     action: string
     summary?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    changes?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
   }
 
@@ -89831,6 +99036,56 @@ export namespace Prisma {
     period: $Enums.GoalPeriod
     best_count?: number
     achieved_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type BulkJobCreateManyOrganisationInput = {
+    id?: number
+    uuid?: string
+    created_by_user_uuid?: string | null
+    title: string
+    type: $Enums.BulkJobType
+    status?: $Enums.BulkJobStatus
+    error?: string | null
+    retries?: number
+    max_retries?: number
+    progress_current?: number
+    progress_total?: number
+    progress_failed?: number
+    queue_name?: string | null
+    queue_job_id?: string | null
+    reference_type?: string | null
+    reference_uuid?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    started_at?: Date | string | null
+    completed_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type WebsiteScrapeRequestCreateManyOrganisationInput = {
+    id?: string
+    provider?: $Enums.WebsiteScrapeProvider
+    provider_run_id: string
+    provider_config_id: string
+    operation: $Enums.WebsiteScrapeOperation
+    reference_uuid: string
+    status?: $Enums.WebsiteScrapeStatus
+    context?: NullableJsonNullValueInput | InputJsonValue
+    error?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    finished_at?: Date | string | null
+  }
+
+  export type EmailSendLimitCreateManyOrganisationInput = {
+    id?: number
+    uuid?: string
+    provider: $Enums.ExternalIntegrationProvider
+    period: $Enums.GoalPeriod
+    max_count: number
+    is_active?: boolean
+    created_at?: Date | string
     updated_at?: Date | string
   }
 
@@ -89974,6 +99229,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
+    email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -90014,6 +99272,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
+    email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -90052,6 +99313,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
+    email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -90638,6 +99902,32 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type SavedContactFilterUpdateWithoutOrganisationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    filters?: JsonNullValueInput | InputJsonValue
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SavedContactFilterUncheckedUpdateWithoutOrganisationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    filters?: JsonNullValueInput | InputJsonValue
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SavedContactFilterUncheckedUpdateManyWithoutOrganisationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    filters?: JsonNullValueInput | InputJsonValue
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type ContactAudienceAnalysisUpdateWithoutOrganisationInput = {
     uuid?: StringFieldUpdateOperationsInput | string
     scope?: EnumContactAudienceAnalysisScopeFieldUpdateOperationsInput | $Enums.ContactAudienceAnalysisScope
@@ -90865,6 +100155,7 @@ export namespace Prisma {
     action?: StringFieldUpdateOperationsInput | string
     summary?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    changes?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     actor?: UserUpdateOneWithoutActivity_logsNestedInput
   }
@@ -90878,6 +100169,7 @@ export namespace Prisma {
     action?: StringFieldUpdateOperationsInput | string
     summary?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    changes?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -90890,6 +100182,7 @@ export namespace Prisma {
     action?: StringFieldUpdateOperationsInput | string
     summary?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    changes?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -90991,6 +100284,154 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type BulkJobUpdateWithoutOrganisationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    type?: EnumBulkJobTypeFieldUpdateOperationsInput | $Enums.BulkJobType
+    status?: EnumBulkJobStatusFieldUpdateOperationsInput | $Enums.BulkJobStatus
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    retries?: IntFieldUpdateOperationsInput | number
+    max_retries?: IntFieldUpdateOperationsInput | number
+    progress_current?: IntFieldUpdateOperationsInput | number
+    progress_total?: IntFieldUpdateOperationsInput | number
+    progress_failed?: IntFieldUpdateOperationsInput | number
+    queue_name?: NullableStringFieldUpdateOperationsInput | string | null
+    queue_job_id?: NullableStringFieldUpdateOperationsInput | string | null
+    reference_type?: NullableStringFieldUpdateOperationsInput | string | null
+    reference_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    started_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: UserUpdateOneWithoutBulk_jobs_createdNestedInput
+  }
+
+  export type BulkJobUncheckedUpdateWithoutOrganisationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    type?: EnumBulkJobTypeFieldUpdateOperationsInput | $Enums.BulkJobType
+    status?: EnumBulkJobStatusFieldUpdateOperationsInput | $Enums.BulkJobStatus
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    retries?: IntFieldUpdateOperationsInput | number
+    max_retries?: IntFieldUpdateOperationsInput | number
+    progress_current?: IntFieldUpdateOperationsInput | number
+    progress_total?: IntFieldUpdateOperationsInput | number
+    progress_failed?: IntFieldUpdateOperationsInput | number
+    queue_name?: NullableStringFieldUpdateOperationsInput | string | null
+    queue_job_id?: NullableStringFieldUpdateOperationsInput | string | null
+    reference_type?: NullableStringFieldUpdateOperationsInput | string | null
+    reference_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    started_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BulkJobUncheckedUpdateManyWithoutOrganisationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    type?: EnumBulkJobTypeFieldUpdateOperationsInput | $Enums.BulkJobType
+    status?: EnumBulkJobStatusFieldUpdateOperationsInput | $Enums.BulkJobStatus
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    retries?: IntFieldUpdateOperationsInput | number
+    max_retries?: IntFieldUpdateOperationsInput | number
+    progress_current?: IntFieldUpdateOperationsInput | number
+    progress_total?: IntFieldUpdateOperationsInput | number
+    progress_failed?: IntFieldUpdateOperationsInput | number
+    queue_name?: NullableStringFieldUpdateOperationsInput | string | null
+    queue_job_id?: NullableStringFieldUpdateOperationsInput | string | null
+    reference_type?: NullableStringFieldUpdateOperationsInput | string | null
+    reference_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    started_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WebsiteScrapeRequestUpdateWithoutOrganisationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    provider?: EnumWebsiteScrapeProviderFieldUpdateOperationsInput | $Enums.WebsiteScrapeProvider
+    provider_run_id?: StringFieldUpdateOperationsInput | string
+    provider_config_id?: StringFieldUpdateOperationsInput | string
+    operation?: EnumWebsiteScrapeOperationFieldUpdateOperationsInput | $Enums.WebsiteScrapeOperation
+    reference_uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumWebsiteScrapeStatusFieldUpdateOperationsInput | $Enums.WebsiteScrapeStatus
+    context?: NullableJsonNullValueInput | InputJsonValue
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    finished_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type WebsiteScrapeRequestUncheckedUpdateWithoutOrganisationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    provider?: EnumWebsiteScrapeProviderFieldUpdateOperationsInput | $Enums.WebsiteScrapeProvider
+    provider_run_id?: StringFieldUpdateOperationsInput | string
+    provider_config_id?: StringFieldUpdateOperationsInput | string
+    operation?: EnumWebsiteScrapeOperationFieldUpdateOperationsInput | $Enums.WebsiteScrapeOperation
+    reference_uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumWebsiteScrapeStatusFieldUpdateOperationsInput | $Enums.WebsiteScrapeStatus
+    context?: NullableJsonNullValueInput | InputJsonValue
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    finished_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    provider?: EnumWebsiteScrapeProviderFieldUpdateOperationsInput | $Enums.WebsiteScrapeProvider
+    provider_run_id?: StringFieldUpdateOperationsInput | string
+    provider_config_id?: StringFieldUpdateOperationsInput | string
+    operation?: EnumWebsiteScrapeOperationFieldUpdateOperationsInput | $Enums.WebsiteScrapeOperation
+    reference_uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumWebsiteScrapeStatusFieldUpdateOperationsInput | $Enums.WebsiteScrapeStatus
+    context?: NullableJsonNullValueInput | InputJsonValue
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    finished_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type EmailSendLimitUpdateWithoutOrganisationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    provider?: EnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider
+    period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    max_count?: IntFieldUpdateOperationsInput | number
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EmailSendLimitUncheckedUpdateWithoutOrganisationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    provider?: EnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider
+    period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    max_count?: IntFieldUpdateOperationsInput | number
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EmailSendLimitUncheckedUpdateManyWithoutOrganisationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    provider?: EnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider
+    period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    max_count?: IntFieldUpdateOperationsInput | number
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type RawLeadCreateManyFilterInput = {
     id?: number
     uuid?: string
@@ -91021,6 +100462,9 @@ export namespace Prisma {
     description?: string | null
     enrichment_summary?: string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: $Enums.EmailValidationStatus
+    email_validation_reason?: string | null
+    email_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -91120,6 +100564,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
+    email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -91160,6 +100607,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
+    email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -91198,6 +100648,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
+    email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -91402,6 +100855,9 @@ export namespace Prisma {
     description?: string | null
     enrichment_summary?: string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: $Enums.EmailValidationStatus
+    email_validation_reason?: string | null
+    email_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -91440,6 +100896,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
+    email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -91480,6 +100939,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
+    email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -91518,6 +100980,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
+    email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null

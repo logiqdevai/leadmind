@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Button, Input, Label, ListBox, Select, Switch, TextField } from "@heroui/react";
 import { ChevronDown, Filter } from "lucide-react";
 import type {
@@ -6,6 +6,7 @@ import type {
     ContactFiltersFormSections,
 } from "@/interfaces/contact-filters.interface";
 import { ProfileFieldFilter } from "@/pages/dashboard/components/profile-field-filter";
+import { SavedContactFiltersBar } from "@/pages/dashboard/components/saved-contact-filters-bar";
 import type { LeadStatus } from "@/features/contacts/interfaces/contact.interface";
 import { STATUS_OPTIONS } from "@/features/contacts/constants/contacts.constants";
 import { useFilters } from "@/features/filters/hooks/use-filters";
@@ -26,6 +27,13 @@ interface ContactFiltersFormProps {
     showSourceFilter?: boolean;
     showLeadSourceType?: boolean;
     showContactListFilter?: boolean;
+    showSavedFilters?: boolean;
+    savedFilterUuid?: string | null;
+    onSavedFilterUuidChange?: (uuid: string | null) => void;
+    onApplySavedFilter?: (
+        patch: Partial<ContactFilters & { contact_list_uuid?: string }>,
+        uuid: string | null,
+    ) => void;
     collapsible?: boolean;
     defaultOpen?: boolean;
     open?: boolean;
@@ -46,6 +54,10 @@ export function ContactFiltersForm({
     showSourceFilter = true,
     showLeadSourceType = false,
     showContactListFilter = false,
+    showSavedFilters = false,
+    savedFilterUuid,
+    onSavedFilterUuidChange,
+    onApplySavedFilter,
     collapsible = false,
     defaultOpen = false,
     open: openProp,
@@ -72,21 +84,26 @@ export function ContactFiltersForm({
 
     const form = (
         <div className="flex flex-col gap-4">
+            {showSavedFilters ? (
+                <SavedContactFiltersBar
+                    value={value}
+                    onChange={onChange}
+                    disabled={disabled}
+                    appliedUuid={savedFilterUuid}
+                    onAppliedUuidChange={onSavedFilterUuidChange}
+                    onApply={onApplySavedFilter}
+                />
+            ) : null}
+
             <FilterSection
                 title="Find contacts"
                 description="Narrow the audience by keyword or lead source."
             >
-                <TextField name="search" className="w-full">
-                    <Label>Search</Label>
-                    <Input
-                        placeholder="Name, email, company"
-                        value={value.search ?? ""}
-                        onChange={(e) =>
-                            onChange({ search: e.target.value || undefined })
-                        }
-                        disabled={disabled}
-                    />
-                </TextField>
+                <FilterSearchField
+                    value={value.search ?? ""}
+                    onChange={(search) => onChange({ search })}
+                    disabled={disabled}
+                />
 
                 {showSourceFilter ? (
                 <div>
@@ -374,6 +391,60 @@ export function ContactFiltersForm({
     );
 }
 
+const SEARCH_DEBOUNCE_MS = 300;
+
+interface FilterSearchFieldProps {
+    value: string;
+    onChange: (search: string | undefined) => void;
+    disabled?: boolean;
+}
+
+function FilterSearchField({ value, onChange, disabled }: FilterSearchFieldProps) {
+    const [draft, setDraft] = useState(value);
+    const lastEmittedRef = useRef(value);
+    const onChangeRef = useRef(onChange);
+    const draftRef = useRef(draft);
+    onChangeRef.current = onChange;
+    draftRef.current = draft;
+
+    useEffect(() => {
+        if (value === lastEmittedRef.current) return;
+        lastEmittedRef.current = value;
+        setDraft(value);
+    }, [value]);
+
+    useEffect(() => {
+        const id = window.setTimeout(() => {
+            if (draft === lastEmittedRef.current) return;
+            lastEmittedRef.current = draft;
+            onChangeRef.current(draft || undefined);
+        }, SEARCH_DEBOUNCE_MS);
+        return () => window.clearTimeout(id);
+    }, [draft]);
+
+    useEffect(
+        () => () => {
+            const next = draftRef.current;
+            if (next === lastEmittedRef.current) return;
+            lastEmittedRef.current = next;
+            onChangeRef.current(next || undefined);
+        },
+        [],
+    );
+
+    return (
+        <TextField name="search" className="w-full">
+            <Label>Search</Label>
+            <Input
+                placeholder="Name, email, company"
+                value={draft}
+                onChange={(e) => setDraft(e.target.value)}
+                disabled={disabled}
+            />
+        </TextField>
+    );
+}
+
 interface FilterSectionProps {
     title: string;
     description?: string;
@@ -384,12 +455,15 @@ function FilterSection({ title, description, children }: FilterSectionProps) {
     const [open, setOpen] = useState(false);
 
     return (
-        <section className="rounded-xl border border-border bg-surface overflow-hidden">
+        <section className="rounded-xl border border-border bg-surface">
             <button
                 type="button"
                 onClick={() => setOpen((value) => !value)}
                 aria-expanded={open}
-                className="flex w-full items-center justify-between gap-3 border-b border-border/60 bg-surface-secondary/30 px-4 py-3 text-left outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
+                className={cn(
+                    "flex w-full items-center justify-between gap-3 bg-surface-secondary/30 px-4 py-3 text-left outline-none focus-visible:ring-2 focus-visible:ring-accent/50",
+                    open ? "rounded-t-xl border-b border-border/60" : "rounded-xl",
+                )}
             >
                 <div className="min-w-0">
                     <h3 className="text-sm font-semibold text-foreground">{title}</h3>

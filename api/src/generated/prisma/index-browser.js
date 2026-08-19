@@ -184,6 +184,16 @@ exports.Prisma.FilterScalarFieldEnum = {
   updated_at: 'updated_at'
 };
 
+exports.Prisma.SavedContactFilterScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  organisation_uuid: 'organisation_uuid',
+  name: 'name',
+  filters: 'filters',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
 exports.Prisma.ScoringInstructionScalarFieldEnum = {
   id: 'id',
   uuid: 'uuid',
@@ -230,6 +240,9 @@ exports.Prisma.LeadScalarFieldEnum = {
   raw_data: 'raw_data',
   enrichment_summary: 'enrichment_summary',
   enrichment_metadata: 'enrichment_metadata',
+  email_validation_status: 'email_validation_status',
+  email_validation_reason: 'email_validation_reason',
+  email_validated_at: 'email_validated_at',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };
@@ -270,6 +283,9 @@ exports.Prisma.ContactScalarFieldEnum = {
   description: 'description',
   enrichment_summary: 'enrichment_summary',
   enrichment_metadata: 'enrichment_metadata',
+  email_validation_status: 'email_validation_status',
+  email_validation_reason: 'email_validation_reason',
+  email_validated_at: 'email_validated_at',
   unsubscribed_at: 'unsubscribed_at',
   unsubscribe_token: 'unsubscribe_token',
   last_interaction_at: 'last_interaction_at',
@@ -410,6 +426,47 @@ exports.Prisma.FilterJobScalarFieldEnum = {
   completed_at: 'completed_at',
   created_at: 'created_at',
   updated_at: 'updated_at'
+};
+
+exports.Prisma.BulkJobScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  organisation_uuid: 'organisation_uuid',
+  created_by_user_uuid: 'created_by_user_uuid',
+  title: 'title',
+  type: 'type',
+  status: 'status',
+  error: 'error',
+  retries: 'retries',
+  max_retries: 'max_retries',
+  progress_current: 'progress_current',
+  progress_total: 'progress_total',
+  progress_failed: 'progress_failed',
+  queue_name: 'queue_name',
+  queue_job_id: 'queue_job_id',
+  reference_type: 'reference_type',
+  reference_uuid: 'reference_uuid',
+  metadata: 'metadata',
+  started_at: 'started_at',
+  completed_at: 'completed_at',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.WebsiteScrapeRequestScalarFieldEnum = {
+  id: 'id',
+  provider: 'provider',
+  provider_run_id: 'provider_run_id',
+  provider_config_id: 'provider_config_id',
+  organisation_uuid: 'organisation_uuid',
+  operation: 'operation',
+  reference_uuid: 'reference_uuid',
+  status: 'status',
+  context: 'context',
+  error: 'error',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  finished_at: 'finished_at'
 };
 
 exports.Prisma.SenderProfileScalarFieldEnum = {
@@ -697,6 +754,18 @@ exports.Prisma.MessagingGoalScalarFieldEnum = {
   updated_at: 'updated_at'
 };
 
+exports.Prisma.EmailSendLimitScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  organisation_uuid: 'organisation_uuid',
+  provider: 'provider',
+  period: 'period',
+  max_count: 'max_count',
+  is_active: 'is_active',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
 exports.Prisma.GoalAchievementScalarFieldEnum = {
   id: 'id',
   uuid: 'uuid',
@@ -731,6 +800,7 @@ exports.Prisma.ActivityLogScalarFieldEnum = {
   action: 'action',
   summary: 'summary',
   metadata: 'metadata',
+  changes: 'changes',
   created_at: 'created_at'
 };
 
@@ -813,6 +883,12 @@ exports.Channel = exports.$Enums.Channel = {
   LINKEDIN: 'LINKEDIN'
 };
 
+exports.EmailValidationStatus = exports.$Enums.EmailValidationStatus = {
+  UNKNOWN: 'UNKNOWN',
+  VALID: 'VALID',
+  INVALID: 'INVALID'
+};
+
 exports.LeadStatus = exports.$Enums.LeadStatus = {
   NEW: 'NEW',
   CONTACTED: 'CONTACTED',
@@ -889,7 +965,8 @@ exports.ExternalIntegrationProvider = exports.$Enums.ExternalIntegrationProvider
   SMTP: 'SMTP',
   TWILIO: 'TWILIO',
   APIFY: 'APIFY',
-  HUBSPOT: 'HUBSPOT'
+  HUBSPOT: 'HUBSPOT',
+  SCRAPIO: 'SCRAPIO'
 };
 
 exports.JobStatus = exports.$Enums.JobStatus = {
@@ -903,6 +980,44 @@ exports.JobStatus = exports.$Enums.JobStatus = {
 exports.JobTrigger = exports.$Enums.JobTrigger = {
   MANUAL: 'MANUAL',
   SCHEDULED: 'SCHEDULED'
+};
+
+exports.BulkJobType = exports.$Enums.BulkJobType = {
+  CONTACT_EMAIL_SCRAPE: 'CONTACT_EMAIL_SCRAPE',
+  FILTER_SCRAPE: 'FILTER_SCRAPE',
+  CONTACT_SCORE: 'CONTACT_SCORE',
+  CONTACT_ENRICH: 'CONTACT_ENRICH',
+  LEAD_ENRICH: 'LEAD_ENRICH',
+  AI_DRAFT_MESSAGES: 'AI_DRAFT_MESSAGES',
+  CAMPAIGN_DISPATCH: 'CAMPAIGN_DISPATCH',
+  CAMPAIGN_MESSAGE_SEND: 'CAMPAIGN_MESSAGE_SEND',
+  OPENAI_BATCH: 'OPENAI_BATCH',
+  OTHER: 'OTHER'
+};
+
+exports.BulkJobStatus = exports.$Enums.BulkJobStatus = {
+  PENDING: 'PENDING',
+  QUEUED: 'QUEUED',
+  RUNNING: 'RUNNING',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED',
+  CANCELLED: 'CANCELLED'
+};
+
+exports.WebsiteScrapeProvider = exports.$Enums.WebsiteScrapeProvider = {
+  SCRAPIO: 'SCRAPIO'
+};
+
+exports.WebsiteScrapeOperation = exports.$Enums.WebsiteScrapeOperation = {
+  CONTACT_EMAIL_SCRAPE: 'CONTACT_EMAIL_SCRAPE',
+  LEAD_WEBSITE_ENRICHMENT: 'LEAD_WEBSITE_ENRICHMENT',
+  CONTACT_WEBSITE_ENRICHMENT: 'CONTACT_WEBSITE_ENRICHMENT'
+};
+
+exports.WebsiteScrapeStatus = exports.$Enums.WebsiteScrapeStatus = {
+  PENDING: 'PENDING',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED'
 };
 
 exports.CampaignStatus = exports.$Enums.CampaignStatus = {
@@ -1054,6 +1169,7 @@ exports.Prisma.ModelName = {
   OrganisationMember: 'OrganisationMember',
   OrganisationInvitation: 'OrganisationInvitation',
   Filter: 'Filter',
+  SavedContactFilter: 'SavedContactFilter',
   ScoringInstruction: 'ScoringInstruction',
   FilterScoringInstruction: 'FilterScoringInstruction',
   RawLead: 'RawLead',
@@ -1071,6 +1187,8 @@ exports.Prisma.ModelName = {
   OutreachMessage: 'OutreachMessage',
   OutreachSequence: 'OutreachSequence',
   FilterJob: 'FilterJob',
+  BulkJob: 'BulkJob',
+  WebsiteScrapeRequest: 'WebsiteScrapeRequest',
   SenderProfile: 'SenderProfile',
   MessageTemplate: 'MessageTemplate',
   MarketingCampaign: 'MarketingCampaign',
@@ -1088,6 +1206,7 @@ exports.Prisma.ModelName = {
   AiUsageLog: 'AiUsageLog',
   ApifyUsageLog: 'ApifyUsageLog',
   MessagingGoal: 'MessagingGoal',
+  EmailSendLimit: 'EmailSendLimit',
   GoalAchievement: 'GoalAchievement',
   GoalPersonalBest: 'GoalPersonalBest',
   ActivityLog: 'ActivityLog'

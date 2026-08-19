@@ -1,13 +1,36 @@
 import { Chip } from "@heroui/react";
 import type { Contact, ContactScoreRow } from "@/features/contacts/interfaces/contact.interface";
-import type { LeadStatus } from "@/features/contacts/interfaces/contact.interface";
-import { STATUS_CHIP_COLOR, STATUS_LABEL } from "@/features/contacts/constants/contacts.constants";
+import type { EmailValidationStatus, LeadStatus } from "@/features/contacts/interfaces/contact.interface";
+import {
+  EMAIL_VALIDATION_STATUS_CHIP_COLOR,
+  EMAIL_VALIDATION_STATUS_LABEL,
+  STATUS_CHIP_COLOR,
+  STATUS_LABEL,
+  emailValidationReasonLabel,
+} from "@/features/contacts/constants/contacts.constants";
 
 export function StatusChip({ status }: { status: LeadStatus }) {
   return (
     <Chip size="sm" variant="soft" color={STATUS_CHIP_COLOR[status]}>
       <Chip.Label>{STATUS_LABEL[status]}</Chip.Label>
     </Chip>
+  );
+}
+
+export function EmailValidationChip({
+  status,
+  reason,
+}: {
+  status: EmailValidationStatus;
+  reason?: string | null;
+}) {
+  const title = status === "INVALID" ? emailValidationReasonLabel(reason) : undefined;
+  return (
+    <span title={title}>
+      <Chip size="sm" variant="soft" color={EMAIL_VALIDATION_STATUS_CHIP_COLOR[status]}>
+        <Chip.Label>{EMAIL_VALIDATION_STATUS_LABEL[status]}</Chip.Label>
+      </Chip>
+    </span>
   );
 }
 

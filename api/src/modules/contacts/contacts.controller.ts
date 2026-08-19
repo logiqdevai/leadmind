@@ -140,9 +140,14 @@ export class ContactsController {
     @ApiResponse({ status: 404 })
     triggerBulkScrapeEmails(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
+        @CurrentUser('uuid') user_uuid: string,
         @Body() dto: BulkScrapeContactEmailsDto,
     ) {
-        return this.contactsService.triggerBulkScrapeEmailsFromWebsites(organisation_uuid, dto);
+        return this.contactsService.triggerBulkScrapeEmailsFromWebsites(
+            organisation_uuid,
+            dto,
+            user_uuid,
+        );
     }
 
     @ActivityLog({ entityType: ActivityEntityType.CONTACT, action: ActivityAction.BULK_DELETED, entityUuidFrom: 'none' })

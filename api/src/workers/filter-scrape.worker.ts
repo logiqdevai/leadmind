@@ -1,12 +1,14 @@
 import { Processor, WorkerHost, InjectQueue } from '@nestjs/bullmq';
 import { Logger } from '@nestjs/common';
 import { Job, Queue } from 'bullmq';
-import { Filter, JobStatus, JobTrigger, Prisma, SourceType, ApifyUsageOperation } from '@/generated/prisma';
+import { Filter, JobStatus, JobTrigger, Prisma, SourceType, ApifyUsageOperation, BulkJobStatus, BulkJobType } from '@/generated/prisma';
+import { resolveEmailFieldsForWrite } from '@/shared/utils/email-domain-validation.util';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { ApifyService } from '@/integrations/apify/apify.service';
 import { GemiService } from '@/integrations/gemi/gemi.service';
 import { ElasticsearchService } from '@/integrations/elasticsearch/elasticsearch.service';
 import { NormalizedLead } from '@/integrations/apify/interfaces/apify.interfaces';
+import { BulkJobsService } from '@/modules/bulk-jobs/bulk-jobs.service';
 import { contactProfileFromLead, fillEmptyContactProfileFromLead } from '@/modules/contacts/utils/contact-profile.utils';
 import {
     findOwnedContactByEmail,
@@ -48,6 +50,7 @@ export class FilterScrapeWorker extends WorkerHost {
         private readonly apifyService: ApifyService,
         private readonly gemiService: GemiService,
         private readonly elasticsearchService: ElasticsearchService,
+        private readonly bulkJobsService: BulkJobsService,
         @InjectQueue(AI_PROCESS_QUEUE) private readonly aiProcessQueue: Queue,
     ) {
         super();
@@ -77,6 +80,22 @@ export class FilterScrapeWorker extends WorkerHost {
                 completed_at: new Date(),
             },
         });
+        await this.prisma.bulkJob.updateMany({
+            where: {
+                organisation_uuid: filter.organisation_uuid,
+                type: BulkJobType.FILTER_SCRAPE,
+                status: { in: [BulkJobStatus.PENDING, BulkJobStatus.QUEUED, BulkJobStatus.RUNNING] },
+                metadata: {
+                    path: ['filter_uuid'],
+                    equals: filter.uuid,
+                },
+            },
+            data: {
+                status: BulkJobStatus.FAILED,
+                error: 'Superseded by a newer run',
+                completed_at: new Date(),
+            },
+        });
 
         const filter_job = await this.prisma.filterJob.create({
             data: {
@@ -87,8 +106,25 @@ export class FilterScrapeWorker extends WorkerHost {
             },
         });
 
+        const bulkJob = await this.bulkJobsService.create({
+            organisation_uuid: filter.organisation_uuid,
+            title: `Filter scrape: ${filter.name}`,
+            type: BulkJobType.FILTER_SCRAPE,
+            status: BulkJobStatus.RUNNING,
+            queue_name: FILTER_SCRAPE_QUEUE,
+            queue_job_id: String(job.id),
+            reference_type: 'filter_job',
+            reference_uuid: filter_job.uuid,
+            metadata: {
+                filter_uuid: filter.uuid,
+                filter_name: filter.name,
+                trigger: manual ? 'MANUAL' : 'SCHEDULED',
+            },
+            started_at: new Date(),
+        });
+
         if (cancelSignal.aborted || (await this.isCancelled(filter_job.uuid))) {
-            await this.markCancelled(filter_job.uuid);
+            await this.markCancelled(filter_job.uuid, bulkJob.uuid);
             endFilterScrapeCancel(filter.uuid, cancelSignal);
             this.logger.warn(`Filter ${filter.uuid} cancelled before scrape start`);
             return null;
@@ -109,7 +145,7 @@ export class FilterScrapeWorker extends WorkerHost {
         try {
             if (cancelSignal.aborted || (await this.isCancelled(filter_job.uuid))) {
                 abortFilterScrape(filter.uuid);
-                await this.markCancelled(filter_job.uuid);
+                await this.markCancelled(filter_job.uuid, bulkJob.uuid);
                 return null;
             }
 
@@ -135,7 +171,7 @@ export class FilterScrapeWorker extends WorkerHost {
                 this.logger.warn(
                     `Filter ${filter.uuid} cancelled after scrape — skipping persist`,
                 );
-                await this.markCancelled(filter_job.uuid);
+                await this.markCancelled(filter_job.uuid, bulkJob.uuid);
                 return null;
             }
 
@@ -164,7 +200,7 @@ export class FilterScrapeWorker extends WorkerHost {
             return { filter_job_uuid: filter_job.uuid, new_contacts };
         } catch (error) {
             if (this.isAbortError(error) || cancelSignal.aborted) {
-                await this.markCancelled(filter_job.uuid);
+                await this.markCancelled(filter_job.uuid, bulkJob.uuid);
                 this.logger.warn(`Filter ${filter.uuid} scrape aborted by user`);
                 return null;
             }
@@ -201,7 +237,29 @@ export class FilterScrapeWorker extends WorkerHost {
                         duration,
                     },
                 });
+                if (status === JobStatus.FAILED) {
+                    await this.bulkJobsService.fail(
+                        bulkJob.uuid,
+                        error_message ?? 'Filter scrape failed',
+                    );
+                } else if (status === JobStatus.COMPLETED) {
+                    await this.bulkJobsService.complete(bulkJob.uuid);
+                    await this.prisma.bulkJob.update({
+                        where: { uuid: bulkJob.uuid },
+                        data: {
+                            progress_current: leads_found,
+                            progress_total: leads_found,
+                            metadata: {
+                                filter_uuid: filter.uuid,
+                                filter_name: filter.name,
+                                leads_found,
+                                new_contacts,
+                            },
+                        },
+                    });
+                }
             } else {
+                await this.bulkJobsService.cancel(bulkJob.uuid, 'Stopped by user');
                 this.logger.warn(
                     `Filter ${filter.uuid} scrape finished after cancel — keeping CANCELLED status`,
                 );
@@ -217,7 +275,7 @@ export class FilterScrapeWorker extends WorkerHost {
         return current?.status === JobStatus.CANCELLED;
     }
 
-    private async markCancelled(filter_job_uuid: string): Promise<void> {
+    private async markCancelled(filter_job_uuid: string, bulk_job_uuid?: string): Promise<void> {
         await this.prisma.filterJob.updateMany({
             where: {
                 uuid: filter_job_uuid,
@@ -229,6 +287,9 @@ export class FilterScrapeWorker extends WorkerHost {
                 completed_at: new Date(),
             },
         });
+        if (bulk_job_uuid) {
+            await this.bulkJobsService.cancel(bulk_job_uuid, 'Stopped by user');
+        }
     }
 
     private isAbortError(error: unknown): boolean {
@@ -262,7 +323,7 @@ export class FilterScrapeWorker extends WorkerHost {
                     ? { phone: normalized.phone }
                     : { linkedin_url: normalized.linkedin_url };
 
-            const lead_data = this.mapToLead(normalized);
+            const lead_data = await this.mapToLead(normalized);
 
             let lead = await this.prisma.lead.findFirst({ where: dedup_where });
             const is_new_lead = !lead;
@@ -314,6 +375,14 @@ export class FilterScrapeWorker extends WorkerHost {
             if (existing_contact) {
                 await linkContactToFilter(this.prisma, existing_contact, filter.uuid);
                 const profilePatch = fillEmptyContactProfileFromLead(existing_contact, lead);
+                const emailValidationPatch =
+                    profilePatch.email !== undefined
+                        ? {
+                              email_validation_status: lead.email_validation_status,
+                              email_validation_reason: lead.email_validation_reason,
+                              email_validated_at: lead.email_validated_at,
+                          }
+                        : {};
                 if (existing_contact.lead_uuid !== lead.uuid) {
                     const conflict = await this.prisma.contact.findUnique({
                         where: {
@@ -329,18 +398,19 @@ export class FilterScrapeWorker extends WorkerHost {
                             data: {
                                 lead_uuid: lead.uuid,
                                 ...profilePatch,
+                                ...emailValidationPatch,
                             },
                         });
                     } else if (Object.keys(profilePatch).length > 0) {
                         await this.prisma.contact.update({
                             where: { uuid: existing_contact.uuid },
-                            data: profilePatch,
+                            data: { ...profilePatch, ...emailValidationPatch },
                         });
                     }
                 } else if (!is_new_lead && Object.keys(profilePatch).length > 0) {
                     await this.prisma.contact.update({
                         where: { uuid: existing_contact.uuid },
-                        data: profilePatch,
+                        data: { ...profilePatch, ...emailValidationPatch },
                     });
                 }
                 await this.reindexContactsForLead(lead.uuid);
@@ -352,6 +422,9 @@ export class FilterScrapeWorker extends WorkerHost {
                             lead_uuid: lead.uuid,
                             filter_uuid: filter.uuid,
                             ...contactProfileFromLead(lead),
+                            email_validation_status: lead.email_validation_status,
+                            email_validation_reason: lead.email_validation_reason,
+                            email_validated_at: lead.email_validated_at,
                         },
                     });
                     await ensureContactFilterLink(this.prisma, contact.uuid, filter.uuid);
@@ -407,10 +480,11 @@ export class FilterScrapeWorker extends WorkerHost {
         }
     }
 
-    private mapToLead(normalized: NormalizedLead) {
+    private async mapToLead(normalized: NormalizedLead) {
+        const emailFields = await resolveEmailFieldsForWrite(normalized.email);
+
         return {
             name: normalized.name ?? null,
-            email: normalized.email ?? null,
             phone: normalized.phone ?? null,
             company: normalized.company ?? null,
             website: resolveLeadWebsite(normalized.website, normalized.email),
@@ -421,6 +495,7 @@ export class FilterScrapeWorker extends WorkerHost {
             industry: normalized.industry ?? null,
             description: normalized.description ?? null,
             raw_data: normalized.raw_data as Prisma.InputJsonValue,
+            ...(emailFields ?? {}),
         };
     }
 }

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { startTransition, useEffect, useMemo, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { Tabs } from "@heroui/react";
 import { Columns3, LayoutList } from "lucide-react";
@@ -23,7 +23,6 @@ import {
   useBulkScrapeContactEmails,
   useDeleteContactsBulk,
 } from "@/features/contacts/hooks/use-contacts";
-import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import {
   contactFiltersToListQuery,
   contactFiltersToBulkScrapePayload,
@@ -42,6 +41,8 @@ const VIEW_STORAGE_KEY = "contacts.view";
 type View = "table" | "pipeline";
 
 const isView = (v: string | null): v is View => v === "table" || v === "pipeline";
+
+const SAVED_FILTER_PARAM = "saved_filter_uuid";
 
 export default function ContactsPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -76,6 +77,8 @@ export default function ContactsPage() {
   const scrapeEmailsBulk = useBulkScrapeContactEmails();
   const deleteContactsBulk = useDeleteContactsBulk();
 
+  const savedFilterUuid = searchParams.get(SAVED_FILTER_PARAM);
+
   const updateFilters = (patch: Partial<ContactFilters>, resetPage = true) => {
     const next = { ...filters, ...patch };
     const serialized = serializeContactFiltersToSearchParams(next);
@@ -83,16 +86,42 @@ export default function ContactsPage() {
     for (const [key, value] of Object.entries(serialized)) {
       if (value != null && value !== "") params.set(key, value);
     }
+    if (savedFilterUuid) params.set(SAVED_FILTER_PARAM, savedFilterUuid);
     if (resetPage) params.set("page", "1");
     else if (page > 1) params.set("page", String(page));
-    setSearchParams(params, { replace: true });
-    setSelectedKeys(new Set());
+    startTransition(() => {
+      setSearchParams(params, { replace: true });
+    });
+    setSelectedKeys((prev) => (prev.size === 0 ? prev : new Set()));
   };
 
-  const debouncedFilters = useDebouncedValue(filters, 300);
+  const updateSavedFilterUuid = (uuid: string | null) => {
+    const params = new URLSearchParams(searchParams);
+    if (uuid) params.set(SAVED_FILTER_PARAM, uuid);
+    else params.delete(SAVED_FILTER_PARAM);
+    startTransition(() => {
+      setSearchParams(params, { replace: true });
+    });
+  };
+
+  const applySavedFilter = (patch: Partial<ContactFilters>, uuid: string | null) => {
+    const next = { ...filters, ...patch };
+    const serialized = serializeContactFiltersToSearchParams(next);
+    const params = new URLSearchParams();
+    for (const [key, value] of Object.entries(serialized)) {
+      if (value != null && value !== "") params.set(key, value);
+    }
+    if (uuid) params.set(SAVED_FILTER_PARAM, uuid);
+    params.set("page", "1");
+    startTransition(() => {
+      setSearchParams(params, { replace: true });
+    });
+    setSelectedKeys((prev) => (prev.size === 0 ? prev : new Set()));
+  };
+
   const pageSize = view === "pipeline" ? PIPELINE_PAGE_SIZE : TABLE_PAGE_SIZE;
 
-  const hasFilterScope = hasActiveContactFilters(debouncedFilters);
+  const hasFilterScope = hasActiveContactFilters(filters);
   const canScrapeEmails = view === "table" && (selectedKeys.size > 0 || hasFilterScope);
 
   const handleScrapeEmails = async () => {
@@ -104,7 +133,7 @@ export default function ContactsPage() {
     }
     if (hasFilterScope) {
       await scrapeEmailsBulk.mutateAsync({
-        filters: contactFiltersToBulkScrapePayload(debouncedFilters),
+        filters: contactFiltersToBulkScrapePayload(filters),
       });
       setScrapeConfirmOpen(false);
     }
@@ -129,17 +158,20 @@ export default function ContactsPage() {
 
   const query = useMemo(
     () =>
-      contactFiltersToListQuery(debouncedFilters, {
+      contactFiltersToListQuery(filters, {
         page: view === "pipeline" ? 1 : page,
         limit: pageSize,
       }),
-    [debouncedFilters, view, page, pageSize],
+    [filters, view, page, pageSize],
   );
 
   const { data, isLoading, isFetching } = useContacts(query);
 
   const contacts = data?.data ?? [];
-  const contactUuids = contacts.map((contact) => contact.uuid);
+  const contactUuids = useMemo(
+    () => contacts.map((contact) => contact.uuid),
+    [contacts],
+  );
   const selectedContacts = useMemo(
     () => contacts.filter((c) => selectedKeys.has(c.uuid)),
     [contacts, selectedKeys],
@@ -222,6 +254,10 @@ export default function ContactsPage() {
             value={filters}
             onChange={(patch) => updateFilters(patch)}
             showLeadSourceType
+            showSavedFilters
+            savedFilterUuid={savedFilterUuid}
+            onSavedFilterUuidChange={updateSavedFilterUuid}
+            onApplySavedFilter={applySavedFilter}
             collapsible
             defaultOpen={false}
             sections={{ engagement: true, outreach: true }}

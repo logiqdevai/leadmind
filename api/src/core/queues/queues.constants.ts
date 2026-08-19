@@ -13,3 +13,5 @@ export const MARKETING_CAMPAIGN_DISPATCH_QUEUE = 'marketing-campaign-dispatch';
 export const MARKETING_MESSAGE_SEND_QUEUE = 'marketing-message-send';
 
 export const REMINDER_TRIGGER_QUEUE = 'reminder-trigger';
+
+export const WEBSITE_SCRAPE_TIMEOUT_QUEUE = 'website-scrape-timeout';
