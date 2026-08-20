@@ -43,6 +43,51 @@ export function isEmailProviderAllocationValid(
     return validateAllocations(allocations, totalCount) === null;
 }
 
+function EmailProviderSingleSelectSkeleton() {
+    return (
+        <div className="space-y-1.5 animate-pulse" aria-hidden>
+            <div className="h-4 w-20 rounded bg-surface-secondary" />
+            <div className="h-10 w-full rounded-md border border-border bg-surface-secondary" />
+            <div className="h-3 w-64 max-w-full rounded bg-surface-secondary" />
+        </div>
+    );
+}
+
+function EmailProviderAllocationSelectSkeleton() {
+    return (
+        <div className="space-y-4 animate-pulse" aria-hidden>
+            <div className="space-y-1">
+                <div className="h-4 w-28 rounded bg-surface-secondary" />
+                <div className="h-3 w-full max-w-md rounded bg-surface-secondary" />
+                <div className="h-3 w-3/4 max-w-sm rounded bg-surface-secondary" />
+            </div>
+            <div className="space-y-2">
+                <div className="h-3 w-14 rounded bg-surface-secondary" />
+                <div className="space-y-2">
+                    {Array.from({ length: 2 }).map((_, i) => (
+                        <div
+                            key={i}
+                            className="flex flex-wrap items-center gap-3 rounded-lg border border-border px-3 py-2"
+                        >
+                            <div className="size-4 rounded bg-surface-secondary" />
+                            <div className="h-4 w-40 max-w-[60%] rounded bg-surface-secondary" />
+                            <div className="ml-auto h-9 w-24 rounded-md bg-surface-secondary" />
+                        </div>
+                    ))}
+                </div>
+            </div>
+            <div className="space-y-2">
+                <div className="h-3 w-12 rounded bg-surface-secondary" />
+                <div className="flex flex-wrap items-center gap-3 rounded-lg border border-border px-3 py-2">
+                    <div className="size-4 rounded bg-surface-secondary" />
+                    <div className="h-4 w-36 max-w-[60%] rounded bg-surface-secondary" />
+                </div>
+            </div>
+            <div className="h-3 w-40 rounded bg-surface-secondary" />
+        </div>
+    );
+}
+
 function EmailProviderSingleSelect({
     value,
     onChange,
@@ -301,7 +346,11 @@ export function EmailProviderSelect(props: EmailProviderSelectProps) {
     );
 
     if (isLoading) {
-        return <p className="text-sm text-muted">Loading email providers…</p>;
+        return props.totalCount !== undefined ? (
+            <EmailProviderAllocationSelectSkeleton />
+        ) : (
+            <EmailProviderSingleSelectSkeleton />
+        );
     }
 
     if (visibleAccounts.length === 0) {
