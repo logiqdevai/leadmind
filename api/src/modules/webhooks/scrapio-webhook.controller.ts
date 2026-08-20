@@ -77,6 +77,11 @@ export class ScrapioWebhookController {
       ? req.rawBody.toString('utf8')
       : JSON.stringify(body);
     if (!verifyScrapioSignature(raw, signature, secret)) {
+      this.logger.warn(
+        `Scrapio webhook signature mismatch org=${integration.organisation_uuid} ` +
+          `hasRawBody=${Boolean(req.rawBody)} signaturePresent=${Boolean(signature)} ` +
+          `signatureLength=${signature?.length ?? 0} rawBodyLength=${raw.length}`,
+      );
       throw new UnauthorizedException('Invalid Scrapio webhook signature');
     }
 

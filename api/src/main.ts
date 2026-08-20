@@ -3,13 +3,18 @@ import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ExpressAdapter } from '@bull-board/express';
 import { IoAdapter } from '@nestjs/platform-socket.io';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { BULL_BOARD_ADAPTER } from './core/queues/queues.constants';
 import { bullBoardAuthMiddleware } from './core/queues/bull-board.middleware';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { rawBody: true });
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, { rawBody: true });
+  // Default body-parser limit (100kb) is too small for provider webhook payloads that embed
+  // full page content (e.g. Scrapio's PLAIN_SCRAPE result includes raw_html for every crawled page).
+  app.useBodyParser('json', { limit: '20mb' });
+  app.useBodyParser('urlencoded', { extended: true, limit: '20mb' });
   app.useWebSocketAdapter(new IoAdapter(app));
 
   app.useGlobalPipes(
