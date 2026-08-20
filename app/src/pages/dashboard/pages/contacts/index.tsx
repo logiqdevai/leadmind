@@ -1,6 +1,7 @@
 import { startTransition, useEffect, useMemo, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { Tabs } from "@heroui/react";
+import { ScrollableTabs, ScrollableTabsList, tabTriggerClassName } from "@/components/ui/scrollable-tabs";
 import { Columns3, LayoutList } from "lucide-react";
 import { ContactsTable } from "./components/contacts-table";
 import { PipelineView } from "./components/pipeline-view";
@@ -236,24 +237,24 @@ export default function ContactsPage() {
                   deleteDisabled={selectedKeys.size === 0}
                   deletePending={deleteContactsBulk.isPending}
                 />
-                <Tabs selectedKey={view} onSelectionChange={(key) => setView(String(key) as View)}>
-                  <Tabs.List className="inline-flex gap-1 rounded-lg bg-surface-secondary p-1 border border-border">
+                <ScrollableTabs selectedKey={view} onSelectionChange={(key) => setView(String(key) as View)}>
+                  <ScrollableTabsList>
                     <Tabs.Tab
                       id="table"
-                      className="px-3 py-1.5 text-sm font-medium rounded-md cursor-pointer transition-colors text-muted hover:text-foreground data-[selected]:bg-accent data-[selected]:text-accent-foreground data-[selected]:shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-accent inline-flex items-center gap-1.5"
+                      className={`${tabTriggerClassName} inline-flex items-center gap-1.5`}
                     >
                       <LayoutList className="size-3.5" />
                       <span className="hidden sm:inline">Table</span>
                     </Tabs.Tab>
                     <Tabs.Tab
                       id="pipeline"
-                      className="px-3 py-1.5 text-sm font-medium rounded-md cursor-pointer transition-colors text-muted hover:text-foreground data-[selected]:bg-accent data-[selected]:text-accent-foreground data-[selected]:shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-accent inline-flex items-center gap-1.5"
+                      className={`${tabTriggerClassName} inline-flex items-center gap-1.5`}
                     >
                       <Columns3 className="size-3.5" />
                       <span className="hidden sm:inline">Pipeline</span>
                     </Tabs.Tab>
-                  </Tabs.List>
-                </Tabs>
+                  </ScrollableTabsList>
+                </ScrollableTabs>
               </>
             }
           />

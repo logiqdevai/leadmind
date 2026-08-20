@@ -14,7 +14,7 @@ export function TableCellLink({ to, children, className, ariaLabel }: TableCellL
         <Link
             to={to}
             aria-label={ariaLabel}
-            className={cn("block text-inherit hover:text-accent transition-colors", className)}
+            className={cn("block min-w-0 overflow-hidden text-inherit hover:text-accent transition-colors", className)}
         >
             {children}
         </Link>

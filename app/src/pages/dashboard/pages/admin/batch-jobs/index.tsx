@@ -44,7 +44,7 @@ function StatusChip({ status }: { status: OpenAiBatchStatus }) {
     return (
         <Chip size="sm" variant="soft" color={color}>
             <Icon className="size-3" />
-            <Chip.Label>{label}</Chip.Label>
+            <Chip.Label className="!text-[13px]">{label}</Chip.Label>
         </Chip>
     );
 }
@@ -148,7 +148,7 @@ export default function AdminBatchJobsPage() {
 
             <div className="rounded-xl overflow-hidden">
                 <Table>
-                    <Table.ScrollContainer>
+                    <Table.ScrollContainer className="w-full max-w-full overflow-x-auto">
                         <Table.Content aria-label="OpenAI Batch Jobs" className="min-w-[960px]">
                             <Table.Header>
                                 <Table.Column id="batch_id" isRowHeader>

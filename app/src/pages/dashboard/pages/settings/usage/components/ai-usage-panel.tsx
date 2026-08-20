@@ -123,7 +123,7 @@ export function AiUsagePanel() {
 
             <div className="rounded-xl overflow-hidden">
                 <Table>
-                    <Table.ScrollContainer>
+                    <Table.ScrollContainer className="w-full max-w-full overflow-x-auto">
                         <Table.Content aria-label="AI usage logs" className="min-w-[900px]">
                             <Table.Header>
                                 <Table.Column id="date" isRowHeader>

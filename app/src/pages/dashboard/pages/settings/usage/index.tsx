@@ -1,5 +1,6 @@
 import { useSearchParams } from "react-router-dom";
 import { Tabs } from "@heroui/react";
+import { ScrollableTabs, ScrollableTabsList } from "@/components/ui/scrollable-tabs";
 import { BarChart2, Bot, Globe } from "lucide-react";
 import { AiUsagePanel } from "./components/ai-usage-panel";
 import { ApifyUsagePanel } from "./components/apify-usage-panel";
@@ -43,8 +44,8 @@ export default function SettingsUsagePage() {
                     </div>
                 </div>
 
-                <Tabs selectedKey={activeTab} onSelectionChange={(key) => setTab(String(key) as UsageTabId)}>
-                    <Tabs.List className="inline-flex gap-1 rounded-lg bg-surface-secondary p-1 border border-border">
+                <ScrollableTabs selectedKey={activeTab} onSelectionChange={(key) => setTab(String(key) as UsageTabId)}>
+                    <ScrollableTabsList>
                         {USAGE_TABS.map((tab) => (
                             <Tabs.Tab key={tab.id} id={tab.id} className={USAGE_TAB_CLASS}>
                                 {tab.id === "ai" ? (
@@ -55,8 +56,8 @@ export default function SettingsUsagePage() {
                                 {tab.label}
                             </Tabs.Tab>
                         ))}
-                    </Tabs.List>
-                </Tabs>
+                    </ScrollableTabsList>
+                </ScrollableTabs>
             </div>
 
             {activeTab === "ai" ? <AiUsagePanel /> : <ApifyUsagePanel />}

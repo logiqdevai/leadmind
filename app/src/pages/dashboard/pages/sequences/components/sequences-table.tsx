@@ -34,11 +34,11 @@ export function SequencesTable({ sequences, onDelete }: SequencesTableProps) {
             <table className="w-full table-fixed text-sm">
                 <thead className="bg-surface-secondary/40 text-muted">
                     <tr>
-                        <th className="px-4 py-3 text-left font-medium">Name</th>
+                        <th className="min-w-0 max-w-0 overflow-hidden px-4 py-3 text-left font-medium">Name</th>
                         <th className="px-4 py-3 text-left font-medium w-28">Status</th>
                         <th className="hidden lg:table-cell px-4 py-3 text-left font-medium w-24">Steps</th>
                         <th className="hidden lg:table-cell px-4 py-3 text-left font-medium">Updated</th>
-                        <th className="px-4 py-3 text-right font-medium w-20 lg:w-28">Actions</th>
+                        <th className="px-4 py-3 text-right font-medium w-20 lg:w-28 whitespace-nowrap">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -48,10 +48,10 @@ export function SequencesTable({ sequences, onDelete }: SequencesTableProps) {
                             className="border-t border-border hover:bg-surface-secondary/30 cursor-pointer"
                             onClick={() => navigate(Routes.dashboard.sequences_edit.replace(":uuid", sequence.uuid))}
                         >
-                            <td className="px-4 py-3 align-top">
-                                <div className="font-medium text-foreground">{sequence.name}</div>
+                            <td className="min-w-0 max-w-0 overflow-hidden px-4 py-3 align-top">
+                                <div className="truncate font-medium text-foreground">{sequence.name}</div>
                                 {sequence.description ? (
-                                    <div className="text-xs text-muted line-clamp-1">{sequence.description}</div>
+                                    <div className="text-xs text-muted truncate">{sequence.description}</div>
                                 ) : null}
                             </td>
                             <td className="px-4 py-3 align-top">

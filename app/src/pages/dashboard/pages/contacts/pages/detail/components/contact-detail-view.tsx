@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState, type FC, type ReactNode } from "react";
 import { Dropdown, Tabs } from "@heroui/react";
+import { ScrollableTabs, ScrollableTabsList, tabTriggerClassName } from "@/components/ui/scrollable-tabs";
 import { MoreVertical, Sparkles, Trash2 } from "lucide-react";
 import {
     defaultEnrichmentSourcesForLead,
@@ -70,7 +71,7 @@ export const ContactDetailView: FC<ContactDetailViewProps> = ({
     }, [navigationLocked, onNavigationLockChange]);
 
     return (
-        <div className="space-y-4">
+        <div className="space-y-4 min-w-0">
             <div className="flex items-start gap-2 min-w-0">
                 <div className="min-w-0 flex-1">
                     <ContactDetailHeader
@@ -136,19 +137,19 @@ export const ContactDetailView: FC<ContactDetailViewProps> = ({
                 ) : null}
             </div>
 
-            <Tabs selectedKey={activeTab} onSelectionChange={(key) => setActiveTab(String(key))}>
-                <Tabs.List className="inline-flex gap-1 rounded-lg bg-surface-secondary p-1 border border-border overflow-x-auto max-w-full">
+            <ScrollableTabs selectedKey={activeTab} onSelectionChange={(key) => setActiveTab(String(key))}>
+                <ScrollableTabsList>
                     {CONTACT_DETAIL_TABS.map((t) => (
                         <Tabs.Tab
                             key={t.id}
                             id={t.id}
-                            className="px-3 py-1.5 text-sm font-medium rounded-md cursor-pointer transition-colors text-muted hover:text-foreground data-[selected]:bg-accent data-[selected]:text-accent-foreground data-[selected]:shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-accent whitespace-nowrap"
+                            className={tabTriggerClassName}
                         >
                             {t.label}
                         </Tabs.Tab>
                     ))}
-                </Tabs.List>
-            </Tabs>
+                </ScrollableTabsList>
+            </ScrollableTabs>
 
             <div className="pt-2">
                 {!contact ? (

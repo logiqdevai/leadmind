@@ -275,7 +275,7 @@ export default function LeadsDirectoryPage() {
 
       <div className="bg-surface rounded-xl overflow-hidden">
         <Table>
-          <Table.ScrollContainer className="w-full max-w-full">
+          <Table.ScrollContainer className="w-full max-w-full overflow-x-hidden">
             <Table.Content
               aria-label="Public leads directory"
               className="w-full table-fixed"

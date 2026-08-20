@@ -43,29 +43,29 @@ export function SendHistoryTable({ rows }: { rows: SendHistoryMessage[] }) {
             <table className="w-full table-fixed text-sm">
                 <thead className="bg-surface-secondary/40 text-muted">
                     <tr>
-                        <th className="px-3 py-2 text-left font-medium">Contact</th>
+                        <th className="min-w-0 max-w-0 overflow-hidden px-3 py-2 text-left font-medium">Contact</th>
                         <th className="hidden lg:table-cell px-3 py-2 text-left font-medium">Channel</th>
                         <th className="hidden lg:table-cell px-3 py-2 text-left font-medium">Integration</th>
-                        <th className="px-3 py-2 text-left font-medium">Status</th>
+                        <th className="px-3 py-2 text-left font-medium w-28">Status</th>
                         <th className="hidden lg:table-cell px-3 py-2 text-left font-medium">Subject / preview</th>
                         <th className="hidden lg:table-cell px-3 py-2 text-left font-medium">Sent by</th>
-                        <th className="px-3 py-2 text-left font-medium">Sent</th>
+                        <th className="hidden lg:table-cell px-3 py-2 text-left font-medium">Sent</th>
                     </tr>
                 </thead>
                 <tbody>
                     {rows.map((row) => (
                         <tr key={row.uuid} className="border-t border-border">
-                            <td className="px-3 py-2 align-top">
+                            <td className="min-w-0 max-w-0 overflow-hidden px-3 py-2 align-top">
                                 <Link
                                     to={Routes.dashboard.contacts_detail.replace(
                                         ":uuid",
                                         row.contact.uuid,
                                     )}
-                                    className="font-medium text-foreground hover:text-accent"
+                                    className="block truncate font-medium text-foreground hover:text-accent"
                                 >
                                     {row.contact.name ?? "Unnamed contact"}
                                 </Link>
-                                <div className="text-xs text-muted">{getContactDestination(row)}</div>
+                                <div className="text-xs text-muted truncate">{getContactDestination(row)}</div>
                             </td>
                             <td className="hidden lg:table-cell px-3 py-2 align-top text-foreground/90">{row.channel}</td>
                             <td className="hidden lg:table-cell px-3 py-2 align-top text-foreground/90">
@@ -91,7 +91,7 @@ export function SendHistoryTable({ rows }: { rows: SendHistoryMessage[] }) {
                                     row.sent_by?.email ||
                                     (row.campaign_uuid ? "Campaign" : "—")}
                             </td>
-                            <td className="px-3 py-2 align-top text-xs text-muted whitespace-nowrap">
+                            <td className="hidden lg:table-cell px-3 py-2 align-top text-xs text-muted whitespace-nowrap">
                                 {formatSendHistoryDate(row.sent_at)}
                             </td>
                         </tr>

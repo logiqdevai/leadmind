@@ -202,7 +202,7 @@ export function CreateContactModal({ isOpen, onOpenChange }: CreateContactModalP
                         }
                       }}
                       placeholder={(form.tags ?? []).length === 0 ? "Type a tag and press Enter" : ""}
-                      className="flex-1 min-w-32 h-7 px-1 text-sm bg-transparent border-0 shadow-none focus-visible:ring-0"
+                      className="flex-1 min-w-32 h-6 px-1 text-xs bg-transparent border-0 shadow-none focus-visible:ring-0"
                       aria-label="New tag"
                     />
                   </div>

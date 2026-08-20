@@ -52,6 +52,6 @@ export const MobileListFilters: FC<MobileListFiltersProps> = ({
 
 export function extraListColumnClass(columnId: string, extraIds: readonly string[]): string {
   if (extraIds.includes(columnId)) return "hidden lg:table-cell min-w-0";
-  if (columnId === "actions") return "w-[1%] whitespace-nowrap pl-2 pr-3 lg:pr-4";
-  return "min-w-0";
+  if (columnId === "actions") return "w-36 whitespace-nowrap pl-2 pr-3 lg:pr-4";
+  return "min-w-0 overflow-hidden";
 }

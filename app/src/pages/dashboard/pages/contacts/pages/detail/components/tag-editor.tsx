@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
-import { Button, Chip, Input } from "@heroui/react";
+import { Chip, Input } from "@heroui/react";
 import { Check, Plus, X } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface TagEditorProps {
   tags: string[];
@@ -101,7 +102,7 @@ export function TagEditor({ tags, onChange, disabled, availableTags = [] }: TagE
             </button>
           </span>
         ) : (
-          <Chip key={tag} size="sm" variant="soft">
+          <Chip key={tag} size="sm" variant="soft" className="px-2.5 py-1">
             <button type="button" disabled={disabled} onClick={() => beginEdit(idx, tag)} className="cursor-text disabled:cursor-not-allowed" aria-label={`Edit tag ${tag}`}>
               <Chip.Label>{tag}</Chip.Label>
             </button>
@@ -155,19 +156,28 @@ export function TagEditor({ tags, onChange, disabled, availableTags = [] }: TagE
           )}
         </span>
       ) : (
-        <Button
+        <Chip
           size="sm"
-          variant="tertiary"
-          isDisabled={disabled}
-          onPress={() => {
-            setAdding(true);
-            setDraft("");
-          }}
-          aria-label="Add tag"
+          variant="soft"
+          className={cn(
+            "cursor-pointer border border-dashed border-border/80 bg-transparent hover:bg-surface-secondary/80 px-2.5 py-1",
+            disabled && "pointer-events-none opacity-50",
+          )}
         >
-          <Plus className="size-3.5" />
-          Add tag
-        </Button>
+          <button
+            type="button"
+            disabled={disabled}
+            onClick={() => {
+              setAdding(true);
+              setDraft("");
+            }}
+            aria-label="Add tag"
+            className="inline-flex items-center gap-0.5"
+          >
+            <Plus className="size-3" />
+            <Chip.Label>Add tag</Chip.Label>
+          </button>
+        </Chip>
       )}
 
       {tags.length === 0 && !adding && <span className="text-xs text-muted italic">Click on a tag to edit, X to remove.</span>}

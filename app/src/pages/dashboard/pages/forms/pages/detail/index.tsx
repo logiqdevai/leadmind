@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button, Tabs } from "@heroui/react";
+import { ScrollableTabs, ScrollableTabsList, tabTriggerClassName } from "@/components/ui/scrollable-tabs";
 import { ArrowLeft, ClipboardList, Copy, Pencil, Trash2 } from "lucide-react";
 import { useDeleteForm, useDuplicateForm, useForm } from "@/features/forms/hooks/use-forms";
 import { useFormWebSocket } from "@/features/forms/hooks/use-form-websocket";
@@ -101,19 +102,19 @@ export default function FormDetailPage() {
             </div>
 
             {/* Tabs */}
-            <Tabs selectedKey={activeTab} onSelectionChange={(key) => setActiveTab(String(key))}>
-                <Tabs.List className="inline-flex gap-1 rounded-lg bg-surface-secondary p-1 border border-border overflow-x-auto max-w-full">
+            <ScrollableTabs selectedKey={activeTab} onSelectionChange={(key) => setActiveTab(String(key))}>
+                <ScrollableTabsList>
                     {FORM_DETAIL_TABS.map((t) => (
                         <Tabs.Tab
                             key={t.id}
                             id={t.id}
-                            className="px-3 py-1.5 text-sm font-medium rounded-md cursor-pointer transition-colors text-muted hover:text-foreground data-[selected]:bg-accent data-[selected]:text-accent-foreground data-[selected]:shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-accent whitespace-nowrap"
+                            className={tabTriggerClassName}
                         >
                             {t.label}
                         </Tabs.Tab>
                     ))}
-                </Tabs.List>
-            </Tabs>
+                </ScrollableTabsList>
+            </ScrollableTabs>
 
             {/* Tab content */}
             <div>

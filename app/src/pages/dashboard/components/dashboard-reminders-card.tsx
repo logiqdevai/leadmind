@@ -68,7 +68,7 @@ export function DashboardRemindersCard({ isLoading }: DashboardRemindersCardProp
 
     return (
         <div className="rounded-2xl border border-border/80 bg-surface/80 flex flex-col">
-            <div className="flex items-center justify-between gap-2 border-b border-border/60 px-5 py-3.5">
+            <div className="flex items-center justify-between gap-2 border-b border-border/60 px-4 sm:px-5 py-3.5">
                 <div className="flex items-center gap-2">
                     <Bell className="size-4 text-muted" />
                     <h3 className="text-sm font-semibold text-foreground">Upcoming Reminders</h3>
@@ -76,7 +76,7 @@ export function DashboardRemindersCard({ isLoading }: DashboardRemindersCardProp
             </div>
 
             {stats && (
-                <div className="flex flex-wrap gap-2 px-5 pt-3.5 pb-1">
+                <div className="flex flex-wrap gap-2 px-4 sm:px-5 pt-3.5 pb-1">
                     <StatPill label="Pending" value={stats.pending} tone="blue" icon={Clock} />
                     <StatPill label="Today" value={stats.due_today} tone="orange" icon={Bell} />
                     <StatPill label="Overdue" value={stats.overdue} tone="red" icon={TriangleAlert} />
@@ -89,7 +89,7 @@ export function DashboardRemindersCard({ isLoading }: DashboardRemindersCardProp
                 </div>
             )}
 
-            <div className="px-5 py-3 flex-1">
+            <div className="px-4 sm:px-5 py-3 flex-1">
                 {isLoading ? (
                     <div className="space-y-2">
                         {Array.from({ length: 3 }).map((_, i) => (
@@ -130,7 +130,7 @@ export function DashboardRemindersCard({ isLoading }: DashboardRemindersCardProp
             </div>
 
             {upcoming.length > 5 && (
-                <div className="border-t border-border/60 px-5 py-2.5">
+                <div className="border-t border-border/60 px-4 sm:px-5 py-2.5">
                     <Button
                         size="sm"
                         variant="tertiary"

@@ -18,12 +18,12 @@ export function AudiencePipelineDistribution({
 
     return (
         <section className="overflow-hidden rounded-xl border border-border/60 bg-surface">
-            <div className="px-5 py-4 border-b border-border/50">
+            <div className="px-4 sm:px-5 py-4 border-b border-border/50">
                 <p className="text-sm font-semibold text-foreground">Pipeline distribution</p>
             </div>
 
             {isLoading ? (
-                <div className="px-5 py-5 space-y-4">
+                <div className="px-4 sm:px-5 py-5 space-y-4">
                     {Array.from({ length: 4 }).map((_, i) => (
                         <div
                             key={i}
@@ -37,11 +37,11 @@ export function AudiencePipelineDistribution({
                     ))}
                 </div>
             ) : total === 0 ? (
-                <div className="flex items-center justify-center min-h-[120px] px-5">
+                <div className="flex items-center justify-center min-h-[120px] px-4 sm:px-5">
                     <p className="text-sm text-muted text-center">No contacts match the current filters.</p>
                 </div>
             ) : (
-                <div className="px-5 py-5 space-y-4">
+                <div className="px-4 sm:px-5 py-5 space-y-4">
                     {LEAD_STATUS_VALUES.map((s) => {
                         const count = statusCounts[s] ?? 0;
                         const pct = total > 0 ? (count / total) * 100 : 0;
