@@ -235,14 +235,14 @@ export default function ContactsPage() {
                       className="px-3 py-1.5 text-sm font-medium rounded-md cursor-pointer transition-colors text-muted hover:text-foreground data-[selected]:bg-accent data-[selected]:text-accent-foreground data-[selected]:shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-accent inline-flex items-center gap-1.5"
                     >
                       <LayoutList className="size-3.5" />
-                      Table
+                      <span className="hidden sm:inline">Table</span>
                     </Tabs.Tab>
                     <Tabs.Tab
                       id="pipeline"
                       className="px-3 py-1.5 text-sm font-medium rounded-md cursor-pointer transition-colors text-muted hover:text-foreground data-[selected]:bg-accent data-[selected]:text-accent-foreground data-[selected]:shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-accent inline-flex items-center gap-1.5"
                     >
                       <Columns3 className="size-3.5" />
-                      Pipeline
+                      <span className="hidden sm:inline">Pipeline</span>
                     </Tabs.Tab>
                   </Tabs.List>
                 </Tabs>

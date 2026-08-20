@@ -40,22 +40,22 @@ export function MessageTemplatesTable({ templates, onEdit, onDelete }: MessageTe
     }
 
     return (
-        <div className="overflow-x-auto rounded-xl">
-            <table className="w-full text-sm">
+        <div className="overflow-x-hidden rounded-xl">
+            <table className="w-full table-fixed text-sm">
                 <thead className="bg-surface-secondary/40 text-muted">
                     <tr>
                         <th className="px-4 py-3 text-left font-medium">Name</th>
-                        <th className="px-4 py-3 text-left font-medium">Channels</th>
-                        <th className="px-4 py-3 text-left font-medium">Preview</th>
-                        <th className="px-4 py-3 text-left font-medium">Updated</th>
-                        <th className="px-4 py-3 text-right font-medium w-28">Actions</th>
+                        <th className="hidden lg:table-cell px-4 py-3 text-left font-medium">Channels</th>
+                        <th className="hidden lg:table-cell px-4 py-3 text-left font-medium">Preview</th>
+                        <th className="hidden lg:table-cell px-4 py-3 text-left font-medium">Updated</th>
+                        <th className="px-4 py-3 text-right font-medium w-20 lg:w-28">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {templates.map((template) => (
                         <tr key={template.uuid} className="border-t border-border hover:bg-surface-secondary/30">
                             <td className="px-4 py-3 align-top font-medium text-foreground">{template.name}</td>
-                            <td className="px-4 py-3 align-top">
+                            <td className="hidden lg:table-cell px-4 py-3 align-top">
                                 <div className="flex flex-wrap gap-1">
                                     {template.channels.includes(Channel.EMAIL) ? (
                                         <Chip size="sm" variant="soft">
@@ -71,10 +71,10 @@ export function MessageTemplatesTable({ templates, onEdit, onDelete }: MessageTe
                                     ) : null}
                                 </div>
                             </td>
-                            <td className="px-4 py-3 align-top max-w-md text-muted line-clamp-2">
+                            <td className="hidden lg:table-cell px-4 py-3 align-top max-w-md text-muted line-clamp-2">
                                 {previewText(template)}
                             </td>
-                            <td className="px-4 py-3 align-top text-muted whitespace-nowrap">
+                            <td className="hidden lg:table-cell px-4 py-3 align-top text-muted whitespace-nowrap">
                                 {formatTemplateDate(template.updated_at)}
                             </td>
                             <td className="px-4 py-3 align-top">

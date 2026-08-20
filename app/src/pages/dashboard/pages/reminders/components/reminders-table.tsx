@@ -4,7 +4,7 @@ import { Button, Table } from "@heroui/react";
 import { CheckCircle2, Pencil, Trash2 } from "lucide-react";
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { Routes } from "@/routes/routes";
-import { TablePagination } from "@/components/ui/table-pagination";
+import { extraListColumnClass } from "@/components/ui/mobile-list-filters";
 import { isTableNavInteractiveCell, renderTableNavCellContent, tableNavInteractiveCellClassName, tableNavRowClassName } from "@/components/ui/table-row-link";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { ReminderStatusBadge, ReminderFormModal } from "@/components/reminders";
@@ -174,14 +174,15 @@ export function RemindersTable({
     return (
         <div className="bg-surface rounded-xl overflow-hidden">
             <Table>
-                <Table.ScrollContainer>
-                    <Table.Content aria-label="Reminders" className="min-w-[700px]">
+                <Table.ScrollContainer className="w-full max-w-full overflow-x-hidden">
+                    <Table.Content aria-label="Reminders" className="w-full table-fixed">
                         <Table.Header>
                             {table.getHeaderGroups()[0]!.headers.map((header) => (
                                 <Table.Column
                                     key={header.id}
                                     id={header.id}
                                     isRowHeader={header.id === "title"}
+                                    className={extraListColumnClass(header.id, ["contact", "remind_at"])}
                                 >
                                     {flexRender(header.column.columnDef.header, header.getContext())}
                                 </Table.Column>
@@ -222,7 +223,11 @@ export function RemindersTable({
                                               return (
                                               <Table.Cell
                                                   key={cell.id}
-                                                  className={isInteractive ? tableNavInteractiveCellClassName : undefined}
+                                                  className={
+                                                      isInteractive
+                                                          ? `${extraListColumnClass(cell.column.id, ["contact", "remind_at"])} ${tableNavInteractiveCellClassName}`
+                                                          : extraListColumnClass(cell.column.id, ["contact", "remind_at"])
+                                                  }
                                               >
                                                   {renderTableNavCellContent(cell.column.id, rowHref, content, {
                                                       interactiveColumnIds: ["contact", "actions"],

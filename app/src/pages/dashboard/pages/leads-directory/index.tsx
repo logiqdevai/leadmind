@@ -15,6 +15,21 @@ import { Routes } from "@/routes/routes";
 import { usePermission } from "@/hooks/use-permission";
 import { BulkEnrichmentRunModal } from "@/components/ui/bulk-enrichment-run-modal";
 import { useEnrichLeadsBulk } from "@/features/lead-enrichment/hooks/use-lead-enrichment";
+import { MobileListFilters } from "@/components/ui/mobile-list-filters";
+
+const LEAD_DIR_COL: Record<string, string> = {
+  name: "min-w-0 overflow-hidden",
+  company: "min-w-0 hidden xl:table-cell overflow-hidden",
+  email: "min-w-0 hidden 2xl:table-cell overflow-hidden",
+  title: "min-w-0 hidden 2xl:table-cell overflow-hidden",
+  source_type: "hidden xl:table-cell w-40 overflow-hidden",
+  location: "min-w-0 hidden xl:table-cell overflow-hidden",
+  actions: "w-[9.75rem] whitespace-nowrap pl-2 pr-3",
+};
+
+function leadDirColumnClass(columnId: string): string {
+  return LEAD_DIR_COL[columnId] ?? "min-w-0";
+}
 
 const PAGE_SIZE = 20;
 
@@ -54,19 +69,35 @@ export default function LeadsDirectoryPage() {
     () => [
       columnHelper.accessor("name", {
         header: "Name",
-        cell: (info) => <span className="font-medium text-foreground">{info.getValue() ?? "—"}</span>,
+        cell: (info) => {
+          const lead = info.row.original;
+          return (
+            <div className="min-w-0">
+              <span className="block font-medium text-foreground truncate">{info.getValue() ?? "—"}</span>
+              <div className="mt-1 xl:hidden">
+                <SourceBadge source={lead.source_type} />
+              </div>
+            </div>
+          );
+        },
       }),
       columnHelper.accessor("company", {
         header: "Company",
-        cell: (info) => info.getValue() ?? "—",
+        cell: (info) => (
+          <span className="block min-w-0 truncate">{info.getValue() ?? "—"}</span>
+        ),
       }),
       columnHelper.accessor("email", {
         header: "Email",
-        cell: (info) => info.getValue() ?? "—",
+        cell: (info) => (
+          <span className="block min-w-0 truncate">{info.getValue() ?? "—"}</span>
+        ),
       }),
       columnHelper.accessor("title", {
         header: "Title",
-        cell: (info) => info.getValue() ?? "—",
+        cell: (info) => (
+          <span className="block min-w-0 truncate">{info.getValue() ?? "—"}</span>
+        ),
       }),
       columnHelper.accessor("source_type", {
         header: "Source",
@@ -74,7 +105,9 @@ export default function LeadsDirectoryPage() {
       }),
       columnHelper.accessor("location", {
         header: "Location",
-        cell: (info) => info.getValue() ?? "—",
+        cell: (info) => (
+          <span className="block min-w-0 truncate">{info.getValue() ?? "—"}</span>
+        ),
       }),
       columnHelper.display({
         id: "actions",
@@ -83,7 +116,7 @@ export default function LeadsDirectoryPage() {
           const lead = info.row.original;
           const adopted = adoptedUuids.has(lead.uuid);
           return (
-            <div className="flex justify-end" onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()} role="presentation">
+            <div className="flex justify-end pr-1" onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()} role="presentation">
               <Button
                 size="sm"
                 variant={adopted ? "tertiary" : "secondary"}
@@ -147,8 +180,9 @@ export default function LeadsDirectoryPage() {
 
   return (
     <div className="space-y-4">
-      <div className="bg-surface rounded-xl border border-border p-4 flex flex-col gap-3 sm:flex-row sm:items-end">
-        <div className="flex-1 min-w-0">
+      <MobileListFilters
+        search={
+        <div className="min-w-0">
           <Label htmlFor="leads-search" className="mb-1 block">
             Search
           </Label>
@@ -167,6 +201,9 @@ export default function LeadsDirectoryPage() {
             />
           </div>
         </div>
+        }
+        extras={
+          <>
         <div className="w-full sm:w-56">
           <Select
             className="w-full"
@@ -199,10 +236,7 @@ export default function LeadsDirectoryPage() {
           </Select>
         </div>
         {canBulkEnrich ? (
-          <div className="w-full sm:w-auto sm:ms-auto shrink-0">
-            <Label className="mb-1 block opacity-0 pointer-events-none select-none" aria-hidden>
-              Enrich
-            </Label>
+          <div className="w-full sm:w-auto shrink-0">
             <Button
               size="md"
               variant="secondary"
@@ -214,7 +248,9 @@ export default function LeadsDirectoryPage() {
             </Button>
           </div>
         ) : null}
-      </div>
+          </>
+        }
+      />
 
                 {canBulkEnrich ? (
         <BulkEnrichmentRunModal
@@ -239,10 +275,10 @@ export default function LeadsDirectoryPage() {
 
       <div className="bg-surface rounded-xl overflow-hidden">
         <Table>
-          <Table.ScrollContainer>
+          <Table.ScrollContainer className="w-full max-w-full">
             <Table.Content
               aria-label="Public leads directory"
-              className={canBulkEnrich ? "min-w-[960px]" : "min-w-[900px]"}
+              className="w-full table-fixed"
               {...(canBulkEnrich
                 ? {
                     selectionMode: "multiple" as const,
@@ -263,7 +299,12 @@ export default function LeadsDirectoryPage() {
                   </Table.Column>
                 ) : null}
                 {table.getHeaderGroups()[0]!.headers.map((header) => (
-                  <Table.Column key={header.id} id={header.id} isRowHeader={header.id === "name"}>
+                  <Table.Column
+                    key={header.id}
+                    id={header.id}
+                    isRowHeader={header.id === "name"}
+                    className={leadDirColumnClass(header.id)}
+                  >
                     {flexRender(header.column.columnDef.header, header.getContext())}
                   </Table.Column>
                 ))}
@@ -278,7 +319,7 @@ export default function LeadsDirectoryPage() {
                           </Table.Cell>
                         ) : null}
                         {columns.map((c) => (
-                          <Table.Cell key={c.id}>
+                          <Table.Cell key={c.id} className={leadDirColumnClass(c.id ?? "")}>
                             <div className="h-4 w-3/4 rounded bg-surface-secondary animate-pulse" />
                           </Table.Cell>
                         ))}
@@ -306,7 +347,11 @@ export default function LeadsDirectoryPage() {
                           return (
                           <Table.Cell
                             key={cell.id}
-                            className={isInteractive ? tableNavInteractiveCellClassName : undefined}
+                            className={
+                              isInteractive
+                                ? `${leadDirColumnClass(cell.column.id)} ${tableNavInteractiveCellClassName}`
+                                : leadDirColumnClass(cell.column.id)
+                            }
                           >
                             {renderTableNavCellContent(cell.column.id, rowHref, content, {
                               interactiveColumnIds: ["actions"],

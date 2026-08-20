@@ -18,6 +18,7 @@ import { MultiSelect } from "@/components/ui/multi-select";
 import { Routes } from "@/routes/routes";
 import { CampaignStatusBadge } from "./components/campaign-status-badge";
 import { CampaignActionsDropdown } from "./components/campaign-actions-dropdown";
+import { MobileListFilters } from "@/components/ui/mobile-list-filters";
 
 export default function CampaignsPage() {
     const navigate = useNavigate();
@@ -63,8 +64,9 @@ export default function CampaignsPage() {
                 </Button>
             </header>
 
-            <div className="flex flex-wrap gap-3 items-end">
-                <div className="w-72 relative">
+            <MobileListFilters
+                search={
+                <div className="w-full relative">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted pointer-events-none" />
                     <TextField name="search" className="w-full">
                         <Input
@@ -75,8 +77,10 @@ export default function CampaignsPage() {
                         />
                     </TextField>
                 </div>
-                {availableTags.length > 0 && (
-                    <div className="w-60">
+                }
+                extras={
+                    availableTags.length > 0 ? (
+                    <div className="w-full sm:w-60">
                         <MultiSelect
                             options={availableTags}
                             value={tags}
@@ -87,8 +91,9 @@ export default function CampaignsPage() {
                             aria-label="Filter campaigns by tags"
                         />
                     </div>
-                )}
-            </div>
+                    ) : null
+                }
+            />
 
             {isLoading ? (
                 <SkeletonRows />

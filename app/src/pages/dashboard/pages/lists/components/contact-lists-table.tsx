@@ -176,7 +176,7 @@ export function ContactListsTable({
     return (
         <div className="bg-surface rounded-xl overflow-hidden min-w-0 w-full">
             <Table>
-                <Table.ScrollContainer className="w-full max-w-full">
+                <Table.ScrollContainer className="w-full max-w-full overflow-x-hidden">
                     <Table.Content
                         aria-label="Contact lists"
                         className="w-full table-fixed"

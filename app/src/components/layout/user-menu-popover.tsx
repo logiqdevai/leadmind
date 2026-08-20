@@ -73,7 +73,7 @@ export default function UserMenuPopover({ collapsed = false, placement = "top" }
             <Avatar />
             <div className="flex-1 min-w-0 text-left">
               <p className="text-xs font-semibold text-foreground truncate leading-snug">{displayName}</p>
-              <p className="text-xs text-muted truncate leading-snug">
+              <p className="!text-[13px] text-muted truncate leading-snug">
                 {organisation_name || email || ""}
               </p>
             </div>

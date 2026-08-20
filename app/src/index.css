@@ -10,7 +10,7 @@ body,
 
 html {
   overflow: hidden !important;
-  scrollbar-gutter: auto !important;
+  scrollbar-gutter: unset;
   pointer-events: auto !important;
 }
 
@@ -27,6 +27,7 @@ body {
 
 main {
   overflow-anchor: none;
+  scrollbar-gutter: auto;
 }
 
 [data-testid="underlay"] {
@@ -79,7 +80,7 @@ main {
   --heading: "DM Sans", system-ui, "Segoe UI", sans-serif;
   --mono:    ui-monospace, Consolas, monospace;
 
-  font: 18px/145% var(--sans);
+  font: 16px/145% var(--sans);
   letter-spacing: 0.18px;
   color-scheme: dark;
   color: var(--text);
@@ -88,10 +89,6 @@ main {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
 }
 
 /* ─── Theme overrides ─────────────────────────────────────────────────────────
@@ -356,4 +353,22 @@ main {
   .rounded-field
 ):where(.border):where(.border-danger\/30) {
   outline-color: color-mix(in oklab, var(--color-danger) 30%, transparent);
+}
+
+html,
+body,
+#root {
+  font-size: 16px !important;
+}
+
+#root *:not(svg):not(svg *) {
+  font-size: 16px !important;
+}
+
+#root .chip,
+#root .chip *:not(svg):not(svg *),
+#root .chip__label,
+#root [data-slot="chip"],
+#root [data-slot="chip"] *:not(svg):not(svg *) {
+  font-size: 13px !important;
 }

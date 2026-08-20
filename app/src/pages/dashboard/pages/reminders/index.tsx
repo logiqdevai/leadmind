@@ -10,6 +10,7 @@ import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import type { ReminderStatus } from "@/features/reminders/interfaces/reminder.interface";
 import { ReminderStatsCards } from "./components/reminder-stats-cards";
 import { RemindersTable } from "./components/reminders-table";
+import { MobileListFilters } from "@/components/ui/mobile-list-filters";
 
 const PAGE_SIZE = 20;
 
@@ -88,19 +89,22 @@ export default function RemindersPage() {
 
             <ReminderStatsCards stats={stats} isLoading={statsLoading} />
 
-            <div className="flex flex-wrap items-center gap-3">
-                <div className="relative max-w-xs">
-                    <Search className="size-3.5 text-muted absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-                    <Input
-                        className="pl-9"
-                        placeholder="Search reminders…"
-                        value={search}
-                        onChange={(e) =>
-                            updateParams({ search: e.target.value || null, page: "1" })
-                        }
-                    />
-                </div>
-
+            <MobileListFilters
+                search={
+                    <div className="relative">
+                        <Search className="size-3.5 text-muted absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                        <Input
+                            className="pl-9"
+                            placeholder="Search reminders…"
+                            value={search}
+                            onChange={(e) =>
+                                updateParams({ search: e.target.value || null, page: "1" })
+                            }
+                        />
+                    </div>
+                }
+                extras={
+                    <>
                 <Select
                     aria-label="Filter by status"
                     placeholder="All statuses"
@@ -146,7 +150,9 @@ export default function RemindersPage() {
                         </ListBox>
                     </Select.Popover>
                 </Select>
-            </div>
+                    </>
+                }
+            />
 
             <RemindersTable
                 reminders={reminders}

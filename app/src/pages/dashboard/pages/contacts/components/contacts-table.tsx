@@ -238,7 +238,7 @@ export function ContactsTable({ contacts, isLoading, isFetching, page, pageSize,
   return (
     <div className="bg-surface rounded-xl overflow-hidden min-w-0 w-full">
       <Table>
-        <Table.ScrollContainer className="w-full max-w-full">
+        <Table.ScrollContainer className="w-full max-w-full overflow-x-hidden">
           <Table.Content
             aria-label="Contacts"
             className="w-full table-fixed"

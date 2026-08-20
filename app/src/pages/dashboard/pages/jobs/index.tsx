@@ -15,6 +15,7 @@ import {
     type BulkJob,
 } from "@/features/bulk-jobs/interfaces/bulk-job.interface";
 import { TablePagination } from "@/components/ui/table-pagination";
+import { MobileListFilters } from "@/components/ui/mobile-list-filters";
 
 const PAGE_LIMIT = 20;
 
@@ -181,7 +182,8 @@ export default function JobsPage() {
                     </div>
                 </div>
 
-                <div className="flex items-center gap-2 flex-wrap">
+                <MobileListFilters
+                    search={
                     <FilterSelect
                         label="Active only"
                         value={statusFilter ? "" : scope === "all" ? "all" : "active"}
@@ -191,6 +193,9 @@ export default function JobsPage() {
                         ]}
                         onChange={(v) => setScope(v === "all" ? "all" : "active")}
                     />
+                    }
+                    extras={
+                        <>
                     <FilterSelect
                         label="All types"
                         value={typeFilter ?? ""}
@@ -221,25 +226,27 @@ export default function JobsPage() {
                             );
                         }}
                     />
-                </div>
+                        </>
+                    }
+                />
             </div>
 
             <div className="rounded-xl overflow-hidden">
                 <Table>
-                    <Table.ScrollContainer>
-                        <Table.Content aria-label="Jobs" className="min-w-[1100px]">
+                    <Table.ScrollContainer className="w-full max-w-full overflow-x-hidden">
+                        <Table.Content aria-label="Jobs" className="w-full table-fixed">
                             <Table.Header>
                                 <Table.Column id="title" isRowHeader>
                                     Title
                                 </Table.Column>
                                 <Table.Column id="type">Type</Table.Column>
                                 <Table.Column id="status">Status</Table.Column>
-                                <Table.Column id="progress">Progress</Table.Column>
-                                <Table.Column id="retries">Retries</Table.Column>
-                                <Table.Column id="error">Error</Table.Column>
-                                <Table.Column id="started">Started</Table.Column>
-                                <Table.Column id="completed">Completed</Table.Column>
-                                <Table.Column id="created">Created</Table.Column>
+                                <Table.Column id="progress" className="hidden lg:table-cell">Progress</Table.Column>
+                                <Table.Column id="retries" className="hidden lg:table-cell">Retries</Table.Column>
+                                <Table.Column id="error" className="hidden lg:table-cell">Error</Table.Column>
+                                <Table.Column id="started" className="hidden lg:table-cell">Started</Table.Column>
+                                <Table.Column id="completed" className="hidden lg:table-cell">Completed</Table.Column>
+                                <Table.Column id="created" className="hidden lg:table-cell">Created</Table.Column>
                             </Table.Header>
                             <Table.Body
                                 renderEmptyState={() =>
@@ -254,7 +261,7 @@ export default function JobsPage() {
                                     ? Array.from({ length: 5 }).map((_, i) => (
                                           <Table.Row key={`sk-${i}`} id={`sk-${i}`}>
                                               {Array.from({ length: 9 }).map((__, j) => (
-                                                  <Table.Cell key={j}>
+                                                  <Table.Cell key={j} className={j >= 3 ? "hidden lg:table-cell" : undefined}>
                                                       <div className="h-4 w-3/4 rounded bg-surface-secondary animate-pulse" />
                                                   </Table.Cell>
                                               ))}
@@ -275,17 +282,17 @@ export default function JobsPage() {
                                               <Table.Cell>
                                                   <StatusChip status={job.status} />
                                               </Table.Cell>
-                                              <Table.Cell>
+                                              <Table.Cell className="hidden lg:table-cell">
                                                   <span className="text-xs text-foreground tabular-nums">
                                                       {formatProgress(job)}
                                                   </span>
                                               </Table.Cell>
-                                              <Table.Cell>
+                                              <Table.Cell className="hidden lg:table-cell">
                                                   <span className="text-xs text-muted tabular-nums">
                                                       {job.retries}/{job.max_retries}
                                                   </span>
                                               </Table.Cell>
-                                              <Table.Cell>
+                                              <Table.Cell className="hidden lg:table-cell">
                                                   {job.error ? (
                                                       <span
                                                           className="text-xs text-danger line-clamp-2 max-w-[200px]"
@@ -297,17 +304,17 @@ export default function JobsPage() {
                                                       <span className="text-xs text-muted">—</span>
                                                   )}
                                               </Table.Cell>
-                                              <Table.Cell>
+                                              <Table.Cell className="hidden lg:table-cell">
                                                   <span className="text-xs text-muted tabular-nums">
                                                       {formatDate(job.started_at)}
                                                   </span>
                                               </Table.Cell>
-                                              <Table.Cell>
+                                              <Table.Cell className="hidden lg:table-cell">
                                                   <span className="text-xs text-muted tabular-nums">
                                                       {formatDate(job.completed_at)}
                                                   </span>
                                               </Table.Cell>
-                                              <Table.Cell>
+                                              <Table.Cell className="hidden lg:table-cell">
                                                   <span className="text-xs text-muted tabular-nums">
                                                       {formatDate(job.created_at)}
                                                   </span>

@@ -23,10 +23,10 @@ function DashboardShell() {
     <div className="flex h-full min-h-0 overflow-hidden bg-background">
       <Sidebar />
 
-      <div className="flex min-h-0 flex-1 flex-col overflow-hidden mr-3">
+      <div className="flex min-h-0 flex-1 flex-col overflow-hidden lg:mr-3">
         <DashboardNavbar onMenuClick={() => setIsMobileNavOpen(true)} />
-        <div ref={setSubnavEl} className="mx-3 mt-2 shrink-0 empty:hidden" />
-        <main className="min-h-0 flex-1 overflow-y-auto p-6">
+        <div ref={setSubnavEl} className="mx-4 mt-2 shrink-0 empty:hidden lg:mx-3" />
+        <main className="min-h-0 flex-1 overflow-y-auto px-4 py-4 lg:p-6">
           <Outlet />
         </main>
       </div>

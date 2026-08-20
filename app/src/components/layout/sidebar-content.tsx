@@ -165,7 +165,7 @@ function NavItem({
             />
             {!collapsed && (
               <span
-                className="text-[13px] font-medium truncate leading-none"
+                className="!text-[14px] font-medium truncate leading-none"
                 style={{ letterSpacing: "-0.005em" }}
               >
                 {label}
@@ -194,7 +194,7 @@ function NavGroupSection({
   return (
     <li className={cn(showDivider && "pt-2.5 mt-2.5 border-t border-border")}>
       {label && !collapsed && (
-        <p className="px-2.5 pb-1.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-muted">
+        <p className="px-2.5 pb-1.5 !text-[12px] font-semibold uppercase tracking-[0.12em] text-muted">
           {label}
         </p>
       )}

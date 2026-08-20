@@ -1,6 +1,7 @@
 import { Button, Input, ListBox, Select, TextField } from "@heroui/react";
 import { Search, X } from "lucide-react";
 import { AppDatePicker } from "@/components/ui/date-picker";
+import { MobileListFilters } from "@/components/ui/mobile-list-filters";
 
 
 export interface SendHistoryFilterOption {
@@ -72,22 +73,23 @@ export function SendHistoryFiltersBar({
     onClear,
 }: SendHistoryFiltersBarProps) {
     return (
-        <div className="flex flex-wrap items-center gap-2">
-            <div className="relative w-full min-w-[220px] max-w-sm grow sm:grow-0 sm:w-72">
-                <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 size-3.5 text-muted pointer-events-none" />
-                <TextField name="search" className="w-full">
-                    <Input
-                        className="h-8 pl-8 text-[13px]"
-                        placeholder="Search contacts…"
-                        value={search}
-                        onChange={(e) => onSearchChange(e.target.value)}
-                        aria-label="Search contacts"
-                    />
-                </TextField>
-            </div>
-
-            <div className="hidden h-4 w-px bg-border sm:block" aria-hidden />
-
+        <MobileListFilters
+            search={
+                <div className="relative w-full">
+                    <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 size-3.5 text-muted pointer-events-none" />
+                    <TextField name="search" className="w-full">
+                        <Input
+                            className="h-8 pl-8 text-[13px]"
+                            placeholder="Search contacts…"
+                            value={search}
+                            onChange={(e) => onSearchChange(e.target.value)}
+                            aria-label="Search contacts"
+                        />
+                    </TextField>
+                </div>
+            }
+            extras={
+                <>
             <FilterSelect
                 label="Channel"
                 value={channel}
@@ -166,7 +168,9 @@ export function SendHistoryFiltersBar({
                     Reset
                 </Button>
             ) : null}
-        </div>
+                </>
+            }
+        />
     );
 }
 

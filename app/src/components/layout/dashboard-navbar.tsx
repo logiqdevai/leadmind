@@ -54,7 +54,7 @@ export default function DashboardNavbar({ onMenuClick }: DashboardNavbarProps) {
   return (
     <header
       className={cn(
-        "mx-3 mt-3 rounded-xl shrink-0",
+        "mx-4 mt-3 rounded-xl shrink-0 lg:mx-3",
         "h-12 flex items-center justify-between gap-2 px-3",
         "bg-surface border border-border",
       )}

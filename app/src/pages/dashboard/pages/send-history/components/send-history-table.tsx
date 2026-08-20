@@ -39,16 +39,16 @@ export function SendHistoryTable({ rows }: { rows: SendHistoryMessage[] }) {
     }
 
     return (
-        <div className="overflow-x-auto rounded-xl">
-            <table className="w-full text-sm">
+        <div className="overflow-x-hidden rounded-xl">
+            <table className="w-full table-fixed text-sm">
                 <thead className="bg-surface-secondary/40 text-muted">
                     <tr>
                         <th className="px-3 py-2 text-left font-medium">Contact</th>
-                        <th className="px-3 py-2 text-left font-medium">Channel</th>
-                        <th className="px-3 py-2 text-left font-medium">Integration</th>
+                        <th className="hidden lg:table-cell px-3 py-2 text-left font-medium">Channel</th>
+                        <th className="hidden lg:table-cell px-3 py-2 text-left font-medium">Integration</th>
                         <th className="px-3 py-2 text-left font-medium">Status</th>
-                        <th className="px-3 py-2 text-left font-medium">Subject / preview</th>
-                        <th className="px-3 py-2 text-left font-medium">Sent by</th>
+                        <th className="hidden lg:table-cell px-3 py-2 text-left font-medium">Subject / preview</th>
+                        <th className="hidden lg:table-cell px-3 py-2 text-left font-medium">Sent by</th>
                         <th className="px-3 py-2 text-left font-medium">Sent</th>
                     </tr>
                 </thead>
@@ -67,8 +67,8 @@ export function SendHistoryTable({ rows }: { rows: SendHistoryMessage[] }) {
                                 </Link>
                                 <div className="text-xs text-muted">{getContactDestination(row)}</div>
                             </td>
-                            <td className="px-3 py-2 align-top text-foreground/90">{row.channel}</td>
-                            <td className="px-3 py-2 align-top text-foreground/90">
+                            <td className="hidden lg:table-cell px-3 py-2 align-top text-foreground/90">{row.channel}</td>
+                            <td className="hidden lg:table-cell px-3 py-2 align-top text-foreground/90">
                                 {getSendIntegrationLabel(row, integrations)}
                             </td>
                             <td className="px-3 py-2 align-top">
@@ -76,7 +76,7 @@ export function SendHistoryTable({ rows }: { rows: SendHistoryMessage[] }) {
                                     <Chip.Label>{row.status}</Chip.Label>
                                 </Chip>
                             </td>
-                            <td className="px-3 py-2 align-top max-w-xs">
+                            <td className="hidden lg:table-cell px-3 py-2 align-top max-w-xs">
                                 {row.channel === "EMAIL" && row.subject ? (
                                     <div className="font-medium text-foreground truncate">
                                         {row.subject}
@@ -86,7 +86,7 @@ export function SendHistoryTable({ rows }: { rows: SendHistoryMessage[] }) {
                                     {stripHtml(row.content)}
                                 </div>
                             </td>
-                            <td className="px-3 py-2 align-top text-xs text-muted">
+                            <td className="hidden lg:table-cell px-3 py-2 align-top text-xs text-muted">
                                 {row.sent_by?.full_name?.trim() ||
                                     row.sent_by?.email ||
                                     (row.campaign_uuid ? "Campaign" : "—")}

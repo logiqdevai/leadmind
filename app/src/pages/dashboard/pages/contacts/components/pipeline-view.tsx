@@ -22,7 +22,18 @@ interface PipelineViewProps {
     onCardClick: (contact: Contact) => void;
 }
 
-const PIPELINE_GRID_CLASS = "grid gap-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5";
+const PIPELINE_BOARD_CLASS =
+    "flex w-full gap-3 overflow-x-auto snap-x snap-mandatory pb-1 md:grid md:overflow-x-visible md:snap-none md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5";
+
+const PIPELINE_COLUMN_CLASS =
+    "flex min-h-72 w-full min-w-full snap-start flex-col rounded-xl border border-border bg-surface md:min-w-0";
+
+function cardCompanyLine(name: string, company: string | null | undefined): string | null {
+    const trimmed = company?.trim();
+    if (!trimmed) return null;
+    if (trimmed.toLowerCase() === name.trim().toLowerCase()) return null;
+    return trimmed;
+}
 
 export function PipelineView({ contacts, isLoading, onCardClick }: PipelineViewProps) {
     const updateStatus = useUpdateContactStatus();
@@ -46,11 +57,11 @@ export function PipelineView({ contacts, isLoading, onCardClick }: PipelineViewP
 
     if (isLoading) {
         return (
-            <div className={PIPELINE_GRID_CLASS}>
+            <div className={PIPELINE_BOARD_CLASS}>
                 {PIPELINE_STATUS_OPTIONS.map((col) => (
                     <div
                         key={col.id}
-                        className="rounded-xl border border-border bg-surface p-3 min-h-72"
+                        className={`${PIPELINE_COLUMN_CLASS} p-3`}
                     >
                         <div className="h-4 w-24 rounded bg-surface-secondary animate-pulse mb-3" />
                         <div className="space-y-2">
@@ -69,14 +80,11 @@ export function PipelineView({ contacts, isLoading, onCardClick }: PipelineViewP
 
     return (
         <DragDropContext onDragEnd={handleDragEnd}>
-            <div className={PIPELINE_GRID_CLASS}>
+            <div className={PIPELINE_BOARD_CLASS}>
                 {PIPELINE_STATUS_OPTIONS.map((col) => {
                     const items = grouped[col.id] ?? [];
                     return (
-                        <div
-                            key={col.id}
-                            className="rounded-xl border border-border bg-surface flex flex-col min-h-72"
-                        >
+                        <div key={col.id} className={PIPELINE_COLUMN_CLASS}>
                             <div className="flex items-center justify-between px-3 py-2 border-b border-border">
                                 <div className="flex items-center gap-2">
                                     <span className="text-sm font-semibold text-foreground">
@@ -103,7 +111,11 @@ export function PipelineView({ contacts, isLoading, onCardClick }: PipelineViewP
                                                 Drop contacts here
                                             </p>
                                         )}
-                                        {items.map((contact, idx) => (
+                                        {items.map((contact, idx) => {
+                                            const name = contact.name?.trim() || "Unnamed";
+                                            const companyLine = cardCompanyLine(name, contact.company);
+
+                                            return (
                                             <Draggable
                                                 key={contact.uuid}
                                                 draggableId={contact.uuid}
@@ -120,23 +132,25 @@ export function PipelineView({ contacts, isLoading, onCardClick }: PipelineViewP
                                                             onCardClick(contact);
                                                         }}
                                                         className={cn(
-                                                            "rounded-lg border border-border bg-background p-3 cursor-pointer hover:border-accent/50 transition-colors",
+                                                            "min-w-0 overflow-hidden rounded-lg border border-border bg-background p-3 cursor-pointer hover:border-accent/50 transition-colors",
                                                             dragSnapshot.isDragging &&
                                                                 "shadow-lg ring-2 ring-accent",
                                                         )}
                                                     >
-                                                        <div className="flex items-start justify-between gap-2">
+                                                        <div className="flex min-w-0 items-start justify-between gap-2">
                                                             <div className="min-w-0 flex-1">
-                                                                <p className="text-sm font-medium text-foreground truncate">
-                                                                    {contact.name ?? "Unnamed"}
+                                                                <p className="truncate font-medium text-foreground">
+                                                                    {name}
                                                                 </p>
-                                                                {contact.company && (
-                                                                    <p className="text-xs text-muted truncate">
-                                                                        {contact.company}
+                                                                {companyLine ? (
+                                                                    <p className="truncate text-muted">
+                                                                        {companyLine}
                                                                     </p>
-                                                                )}
+                                                                ) : null}
                                                             </div>
-                                                            <ContactScoresCompact contact={contact} />
+                                                            <div className="shrink-0">
+                                                                <ContactScoresCompact contact={contact} />
+                                                            </div>
                                                         </div>
                                                         {contact.tags.length > 0 && (
                                                             <div className="flex flex-wrap gap-1 mt-2">
@@ -159,7 +173,8 @@ export function PipelineView({ contacts, isLoading, onCardClick }: PipelineViewP
                                                     </div>
                                                 )}
                                             </Draggable>
-                                        ))}
+                                            );
+                                        })}
                                         {provided.placeholder}
                                     </div>
                                 )}

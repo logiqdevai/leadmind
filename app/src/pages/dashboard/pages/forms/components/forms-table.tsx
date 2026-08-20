@@ -4,7 +4,7 @@ import { Button, Table } from "@heroui/react";
 import { Copy, ExternalLink, Pencil, Trash2 } from "lucide-react";
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { Routes } from "@/routes/routes";
-import { TablePagination } from "@/components/ui/table-pagination";
+import { extraListColumnClass } from "@/components/ui/mobile-list-filters";
 import { isTableNavInteractiveCell, renderTableNavCellContent, tableNavInteractiveCellClassName, tableNavRowClassName } from "@/components/ui/table-row-link";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { useDeleteForm, useDuplicateForm } from "@/features/forms/hooks/use-forms";
@@ -166,10 +166,10 @@ export function FormsTable({
     return (
         <div className="bg-surface rounded-xl overflow-hidden">
             <Table>
-                <Table.ScrollContainer>
+                <Table.ScrollContainer className="w-full max-w-full overflow-x-hidden">
                     <Table.Content
                         aria-label="Forms"
-                        className="min-w-[700px]"
+                        className="w-full table-fixed"
                     >
                         <Table.Header>
                             {table.getHeaderGroups()[0]!.headers.map((header) => (
@@ -177,6 +177,7 @@ export function FormsTable({
                                     key={header.id}
                                     id={header.id}
                                     isRowHeader={header.id === "name"}
+                                    className={extraListColumnClass(header.id, ["description", "fields", "completions", "created_at"])}
                                 >
                                     {flexRender(header.column.columnDef.header, header.getContext())}
                                 </Table.Column>
@@ -217,7 +218,11 @@ export function FormsTable({
                                               return (
                                               <Table.Cell
                                                   key={cell.id}
-                                                  className={isInteractive ? tableNavInteractiveCellClassName : undefined}
+                                                  className={
+                                                      isInteractive
+                                                          ? `${extraListColumnClass(cell.column.id, ["description", "fields", "completions", "created_at"])} ${tableNavInteractiveCellClassName}`
+                                                          : extraListColumnClass(cell.column.id, ["description", "fields", "completions", "created_at"])
+                                                  }
                                               >
                                                   {renderTableNavCellContent(cell.column.id, rowHref, content, {
                                                       primaryColumnId: "name",
