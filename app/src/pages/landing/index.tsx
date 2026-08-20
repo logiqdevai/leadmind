@@ -5,6 +5,7 @@ import { useAuthStore } from "@/stores/auth";
 import { Routes } from "@/routes/routes";
 import "./landing.css";
 import { environments } from "@/config/environments";
+import { AppLogo } from "@/components/layout/app-logo";
 
 /* ─── Theme hook ──────────────────────────────────────────────────────────── */
 
@@ -152,7 +153,7 @@ function LandingNav({ isLoggedIn, isDark, toggle }: { isLoggedIn: boolean; isDar
     >
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between gap-6">
         <Link to="/" className="flex items-center gap-2.5 shrink-0" style={{ textDecoration: "none" }}>
-          <img src="/leadfinder-logo.png" alt="" className="h-7 w-7 object-contain" />
+          <AppLogo className="h-7 w-7" style={{ color: "var(--lf-acc)" }} />
           <span style={{ fontFamily: "'Syne', system-ui, sans-serif", fontWeight: 700, fontSize: "17px", color: "var(--lf-tx)", letterSpacing: "-0.01em" }}>{environments.APP_NAME}</span>
         </Link>
 
@@ -552,7 +553,7 @@ function LandingFooter() {
         <div className="flex flex-col md:flex-row items-start justify-between gap-10">
           <div className="space-y-4 max-w-xs">
             <Link to="/" className="flex items-center gap-2.5" style={{ textDecoration: "none" }}>
-              <img src="/leadfinder-logo.png" alt="" className="h-7 w-7 object-contain" />
+              <AppLogo className="h-7 w-7" style={{ color: "var(--lf-acc)" }} />
               <span style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: "17px", color: "var(--lf-tx)" }}>{environments.APP_NAME}</span>
             </Link>
             <p className="text-sm leading-relaxed" style={{ color: "var(--lf-mu)" }}>
