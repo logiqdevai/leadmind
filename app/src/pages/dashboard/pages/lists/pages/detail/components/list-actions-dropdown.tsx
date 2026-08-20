@@ -1,6 +1,6 @@
 import type { FC } from "react";
 import { Button, Dropdown } from "@heroui/react";
-import { ChevronDown, ChevronsUpDown, FolderInput, Globe, Mail, Pencil, Trash2, UserPlus } from "lucide-react";
+import { ChevronDown, ChevronsUpDown, FolderInput, Globe, Mail, Pencil, Trash2, UserPlus, Workflow } from "lucide-react";
 
 interface ListActionsDropdownProps {
     showContactsActions?: boolean;
@@ -14,6 +14,8 @@ interface ListActionsDropdownProps {
     scrapeEmailsPending?: boolean;
     onSendMessagesSelected?: () => void;
     sendMessagesDisabled?: boolean;
+    onEnrollSelected?: () => void;
+    enrollDisabled?: boolean;
     onDeleteSelected?: () => void;
     deleteDisabled?: boolean;
     deletePending?: boolean;
@@ -31,6 +33,8 @@ export const ListActionsDropdown: FC<ListActionsDropdownProps> = ({
     scrapeEmailsPending = false,
     onSendMessagesSelected,
     sendMessagesDisabled = false,
+    onEnrollSelected,
+    enrollDisabled = false,
     onDeleteSelected,
     deleteDisabled = false,
     deletePending = false,
@@ -55,6 +59,7 @@ export const ListActionsDropdown: FC<ListActionsDropdownProps> = ({
                     if (key === "move-list") onMoveList?.();
                     if (key === "scrape-emails") onScrapeEmails?.();
                     if (key === "send-messages-selected") onSendMessagesSelected?.();
+                    if (key === "enroll-selected") onEnrollSelected?.();
                     if (key === "delete-selected") onDeleteSelected?.();
                 }}
             >
@@ -99,6 +104,18 @@ export const ListActionsDropdown: FC<ListActionsDropdownProps> = ({
                         <span className="flex items-center gap-2.5 antialiased">
                             <Globe className="size-4 shrink-0 text-muted" strokeWidth={2} />
                             <span className="font-medium text-foreground">Find emails from websites</span>
+                        </span>
+                    </Dropdown.Item>
+                ) : null}
+                {showContactsActions && onEnrollSelected ? (
+                    <Dropdown.Item
+                        id="enroll-selected"
+                        textValue="Enroll in sequence"
+                        isDisabled={enrollDisabled}
+                    >
+                        <span className="flex items-center gap-2.5 antialiased">
+                            <Workflow className="size-4 shrink-0 text-muted" strokeWidth={2} />
+                            <span className="font-medium text-foreground">Enroll in sequence</span>
                         </span>
                     </Dropdown.Item>
                 ) : null}

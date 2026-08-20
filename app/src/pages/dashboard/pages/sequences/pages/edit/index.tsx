@@ -1,11 +1,9 @@
 import { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Button, Input, Label, TextArea, TextField } from "@heroui/react";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
 import { ChevronLeft, Plus } from "lucide-react";
 import {
-    useActivateSequence,
-    useArchiveSequence,
     useAddSequenceStep,
     useDeleteSequenceStep,
     useReorderSequenceSteps,
@@ -17,15 +15,15 @@ import { SequenceStatus, type SequenceStep } from "@/features/sequences/interfac
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { Routes } from "@/routes/routes";
 import { SequenceStatusBadge } from "../../components/sequence-status-badge";
+import { SequenceActionsDropdown } from "../../components/sequence-actions-dropdown";
 import { StepList } from "../../components/step-list";
 import { StepEditorModal } from "../../components/step-editor-modal";
 
 export default function EditSequencePage() {
     const { uuid } = useParams<{ uuid: string }>();
+    const navigate = useNavigate();
     const { data: sequence, isLoading, isError, error } = useSequence(uuid);
     const updateSequenceMut = useUpdateSequence();
-    const activateMut = useActivateSequence();
-    const archiveMut = useArchiveSequence();
     const addStepMut = useAddSequenceStep();
     const updateStepMut = useUpdateSequenceStep();
     const deleteStepMut = useDeleteSequenceStep();
@@ -58,7 +56,12 @@ export default function EditSequencePage() {
     const nameDirty = name !== null && name !== sequence.name;
     const descriptionDirty = description !== null && description !== (sequence.description ?? "");
     const isDraft = sequence.status === SequenceStatus.DRAFT;
-    const enabledStepCount = sequence.steps.filter((s) => s.enabled).length;
+    const firstEnabledStepUuid = [...sequence.steps]
+        .filter((s) => s.enabled)
+        .sort((a, b) => a.order_index - b.order_index)[0]?.uuid;
+    const isEditingFirstStep = editingStep
+        ? editingStep.uuid === firstEnabledStepUuid
+        : sequence.steps.filter((s) => s.enabled).length === 0;
 
     const saveBasics = async () => {
         if (!nameDirty && !descriptionDirty) return;
@@ -84,32 +87,10 @@ export default function EditSequencePage() {
                     <h1 className="text-xl font-semibold text-foreground">{sequence.name || "Untitled sequence"}</h1>
                     <SequenceStatusBadge status={sequence.status} />
                 </div>
-                <div className="flex items-center gap-2">
-                    {sequence.status === SequenceStatus.DRAFT && (
-                        <span
-                            title={enabledStepCount === 0 ? "Add at least one enabled step first" : undefined}
-                        >
-                            <ActionButtonWithPending
-                                size="sm"
-                                isPending={activateMut.isPending}
-                                isDisabled={enabledStepCount === 0}
-                                onPress={() => activateMut.mutate(sequence.uuid)}
-                            >
-                                Activate
-                            </ActionButtonWithPending>
-                        </span>
-                    )}
-                    {sequence.status !== SequenceStatus.ARCHIVED && (
-                        <ActionButtonWithPending
-                            size="sm"
-                            variant="secondary"
-                            isPending={archiveMut.isPending}
-                            onPress={() => archiveMut.mutate(sequence.uuid)}
-                        >
-                            Archive
-                        </ActionButtonWithPending>
-                    )}
-                </div>
+                <SequenceActionsDropdown
+                    sequence={sequence}
+                    onDeleted={() => navigate(Routes.dashboard.sequences)}
+                />
             </div>
 
             <div className="flex flex-col gap-4 max-w-2xl">
@@ -175,6 +156,7 @@ export default function EditSequencePage() {
                     if (!open) setEditingStep(null);
                 }}
                 initial={editingStep}
+                isFirstStep={isEditingFirstStep}
                 isSaving={addStepMut.isPending || updateStepMut.isPending}
                 onSave={async (payload) => {
                     if (editingStep) {

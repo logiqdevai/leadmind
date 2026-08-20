@@ -178,6 +178,7 @@ export const ApiRoutes = {
         remove_step: (uuid: string, stepUuid: string) => `/sequences/${uuid}/steps/${stepUuid}`,
         reorder_steps: (uuid: string) => `/sequences/${uuid}/steps/reorder`,
         enroll: (uuid: string) => `/sequences/${uuid}/enroll`,
+        enroll_bulk: (uuid: string) => `/sequences/${uuid}/enroll-bulk`,
         enrollments: (uuid: string) => `/sequences/${uuid}/enrollments`,
         cancel_enrollment: (uuid: string, enrollmentUuid: string) =>
             `/sequences/${uuid}/enrollments/${enrollmentUuid}/cancel`,

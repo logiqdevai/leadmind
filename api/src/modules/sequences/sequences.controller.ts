@@ -31,6 +31,7 @@ import { CreateSequenceStepDto } from './dto/create-sequence-step.dto';
 import { UpdateSequenceStepDto } from './dto/update-sequence-step.dto';
 import { ReorderSequenceStepsDto } from './dto/reorder-sequence-steps.dto';
 import { EnrollContactDto } from './dto/enroll-contact.dto';
+import { BulkEnrollContactsDto } from './dto/bulk-enroll-contacts.dto';
 import { ListSequencesDto } from './dto/list-sequences.dto';
 
 @ApiTags('sequences')
@@ -231,6 +232,32 @@ export class SequencesController {
             organisation_uuid,
             uuid,
             dto.contact_uuid,
+            user_uuid,
+        );
+    }
+
+    @ActivityLog({
+        entityType: ActivityEntityType.OUTREACH_SEQUENCE,
+        action: ActivityAction.SEQUENCE_ASSIGNED,
+        entityUuidFrom: 'params.uuid',
+    })
+    @Post(':uuid/enroll-bulk')
+    @ApiOperation({
+        summary:
+            'Enroll multiple contacts in a sequence and schedule their step messages',
+    })
+    @ApiResponse({ status: 201 })
+    enrollBulk(
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
+        @CurrentUser('uuid') user_uuid: string,
+        @Param('uuid', ParseUUIDPipe) uuid: string,
+        @Body() dto: BulkEnrollContactsDto,
+    ) {
+        return this.enrollmentService.bulkEnroll(
+            organisation_uuid,
+            uuid,
+            dto.contact_uuids,
+            undefined,
             user_uuid,
         );
     }

@@ -7,6 +7,7 @@ import { PipelineView } from "./components/pipeline-view";
 import { NewContactModal } from "./components/new-contact-modal";
 import { BulkScoreContactsPopover } from "./components/bulk-score-contacts-popover";
 import { BulkSendMessageModal } from "@/pages/dashboard/components/bulk-send-message-modal";
+import { BulkEnrollInSequenceModal } from "@/features/sequences/components/bulk-enroll-in-sequence-modal";
 import { BulkEnrichmentRunModal } from "@/components/ui/bulk-enrichment-run-modal";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { ContactsActionsDropdown } from "./components/contacts-actions-dropdown";
@@ -69,6 +70,7 @@ export default function ContactsPage() {
   const [createOpen, setCreateOpen] = useState(false);
   const [scoreOpen, setScoreOpen] = useState(false);
   const [composeOpen, setComposeOpen] = useState(false);
+  const [enrollOpen, setEnrollOpen] = useState(false);
   const [enrichOpen, setEnrichOpen] = useState(false);
   const [scrapeConfirmOpen, setScrapeConfirmOpen] = useState(false);
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
@@ -219,6 +221,8 @@ export default function ContactsPage() {
                     view === "table" ? () => setComposeOpen(true) : undefined
                   }
                   sendMessagesDisabled={selectedKeys.size === 0}
+                  onEnrollSelected={view === "table" ? () => setEnrollOpen(true) : undefined}
+                  enrollDisabled={selectedKeys.size === 0}
                   onEnrichSelected={view === "table" ? () => setEnrichOpen(true) : undefined}
                   enrichDisabled={selectedKeys.size === 0 || enrichBulk.isPending}
                   onScrapeEmailsSelected={view === "table" ? () => setScrapeConfirmOpen(true) : undefined}
@@ -295,6 +299,14 @@ export default function ContactsPage() {
               isOpen={composeOpen}
               onOpenChange={setComposeOpen}
               contacts={selectedContacts}
+              onComplete={() => setSelectedKeys(new Set())}
+            />
+          ) : null}
+          {view === "table" ? (
+            <BulkEnrollInSequenceModal
+              isOpen={enrollOpen}
+              onOpenChange={setEnrollOpen}
+              contactUuids={[...selectedKeys]}
               onComplete={() => setSelectedKeys(new Set())}
             />
           ) : null}

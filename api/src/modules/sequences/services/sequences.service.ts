@@ -120,11 +120,6 @@ export class SequencesService {
         uuid: string,
     ): Promise<OutreachSequence> {
         const sequence = await this.findOne(organisation_uuid, uuid);
-        if (sequence.status === SequenceStatus.ARCHIVED) {
-            throw new ConflictException(
-                'Archived sequences cannot be activated; create a new one instead',
-            );
-        }
         const enabledSteps = sequence.steps.filter((step) => step.enabled);
         if (enabledSteps.length === 0) {
             throw new BadRequestException(

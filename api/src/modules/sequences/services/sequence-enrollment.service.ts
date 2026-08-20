@@ -143,7 +143,8 @@ export class SequenceEnrollmentService {
         organisation_uuid: string,
         sequence_uuid: string,
         contact_uuids: string[],
-        campaign_uuid: string,
+        campaign_uuid?: string,
+        sent_by_user_uuid?: string,
     ): Promise<{ enrolled: number; skipped: number; totalMessages: number }> {
         let enrolled = 0;
         let skipped = 0;
@@ -157,8 +158,8 @@ export class SequenceEnrollmentService {
                         organisation_uuid,
                         sequence_uuid,
                         contact_uuid,
-                        // Campaign-driven enrollments have no acting user; messages are unattributed.
-                        undefined,
+                        // Campaign-driven bulk enrollments have no acting user; direct bulk enrolls attribute to the caller.
+                        sent_by_user_uuid,
                         campaign_uuid,
                     );
                     enrolled += 1;

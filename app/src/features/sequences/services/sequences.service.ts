@@ -144,6 +144,21 @@ export const enrollContactInSequence = async (
     }
 };
 
+export const bulkEnrollContactsInSequence = async (
+    uuid: string,
+    contact_uuids: string[],
+): Promise<{ enrolled: number; skipped: number; totalMessages: number }> => {
+    try {
+        const response = await axiosInstance.post<{ enrolled: number; skipped: number; totalMessages: number }>(
+            ApiRoutes.sequences.enroll_bulk(uuid),
+            { contact_uuids },
+        );
+        return response.data;
+    } catch (error: any) {
+        throw new Error(error?.response?.data?.message || "Failed to enroll contacts. Please try again.");
+    }
+};
+
 export const listSequenceEnrollments = async (
     uuid: string,
     query: { page?: number; limit?: number } = {},

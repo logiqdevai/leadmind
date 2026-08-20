@@ -50,6 +50,8 @@ interface StepEditorModalProps {
     isOpen: boolean;
     onOpenChange: (open: boolean) => void;
     initial?: SequenceStep | null;
+    /** True when this step, once added, will be the sequence's first enabled step. */
+    isFirstStep?: boolean;
     isSaving: boolean;
     onSave: (payload: CreateSequenceStepPayload) => Promise<void>;
 }
@@ -58,6 +60,7 @@ export const StepEditorModal: FC<StepEditorModalProps> = ({
     isOpen,
     onOpenChange,
     initial = null,
+    isFirstStep = false,
     isSaving,
     onSave,
 }) => {
@@ -92,7 +95,7 @@ export const StepEditorModal: FC<StepEditorModalProps> = ({
                 setChannel(Channel.EMAIL);
                 setComposerValue(EMPTY_MESSAGE_COMPOSER_VALUE);
                 setMessageTemplateUuid(null);
-                setDelayValue("1");
+                setDelayValue(isFirstStep ? "0" : "1");
                 setDelayUnit(SequenceDelayUnit.DAYS);
                 setDelayReference(SequenceDelayReference.PREVIOUS_STEP);
             }
@@ -101,7 +104,7 @@ export const StepEditorModal: FC<StepEditorModalProps> = ({
             setComposerReady(true);
         }
         wasOpenRef.current = isOpen;
-    }, [isOpen, initial]);
+    }, [isOpen, initial, isFirstStep]);
 
     const handleTemplateSelect = (template: MessageTemplate) => {
         setComposerValue((prev) => mergeTemplateIntoComposer(prev, template));
@@ -138,7 +141,7 @@ export const StepEditorModal: FC<StepEditorModalProps> = ({
                     <Modal.Header>
                         <Modal.Heading>{initial ? "Edit step" : "Add step"}</Modal.Heading>
                     </Modal.Header>
-                    <Modal.Body className="space-y-5 overflow-y-auto flex-1">
+                    <Modal.Body className="space-y-5 overflow-y-auto flex-1 pb-4">
                         {composerReady ? (
                             <>
                                 <MessageTemplateSelect
@@ -226,8 +229,9 @@ export const StepEditorModal: FC<StepEditorModalProps> = ({
                                         </div>
                                     </div>
                                     <p className="text-xs text-muted">
-                                        Ignored for the first enabled step in the sequence, which always sends
-                                        this long after a contact is enrolled.
+                                        {isFirstStep
+                                            ? "This is the first step — its delay counts from enrollment. Leave it at 0 to send this immediately when a contact enrolls."
+                                            : "The \"After\" choice above is ignored for the sequence's first enabled step, which always counts its delay from enrollment."}
                                     </p>
                                 </div>
                             </>

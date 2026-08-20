@@ -3,6 +3,7 @@ import {
     activateSequence,
     addSequenceStep,
     archiveSequence,
+    bulkEnrollContactsInSequence,
     cancelSequenceEnrollment,
     createSequence,
     deleteSequence,
@@ -250,6 +251,34 @@ export function useEnrollContact() {
         onError: (error: Error) => {
             toast({
                 title: "Could not enroll contact",
+                description: error.message,
+                variant: "error",
+                duration: 3000,
+            });
+        },
+    });
+}
+
+export function useBulkEnrollContacts() {
+    const qc = useQueryClient();
+    return useMutation({
+        mutationFn: (vars: { uuid: string; contact_uuids: string[] }) =>
+            bulkEnrollContactsInSequence(vars.uuid, vars.contact_uuids),
+        onSuccess: (data, vars) => {
+            qc.invalidateQueries({ queryKey: sequencesQueryKeys.enrollments(vars.uuid) });
+            qc.invalidateQueries({ queryKey: contactsQueryKeys.all });
+            toast({
+                title: "Contacts enrolled",
+                description:
+                    data.skipped > 0
+                        ? `${data.enrolled} enrolled, ${data.skipped} skipped (already enrolled or unreachable).`
+                        : `${data.enrolled} contact${data.enrolled === 1 ? "" : "s"} enrolled.`,
+                duration: 3000,
+            });
+        },
+        onError: (error: Error) => {
+            toast({
+                title: "Could not enroll contacts",
                 description: error.message,
                 variant: "error",
                 duration: 3000,

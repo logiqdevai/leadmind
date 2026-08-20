@@ -28,6 +28,7 @@ import {
 } from "./components/list-members-delete-dialog";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { BulkSendMessageModal } from "@/pages/dashboard/components/bulk-send-message-modal";
+import { BulkEnrollInSequenceModal } from "@/features/sequences/components/bulk-enroll-in-sequence-modal";
 import { ContactAudienceAnalyticsPanel } from "@/pages/dashboard/components/audience-analytics/contact-audience-analytics-panel";
 import { ContactStackViewerScope } from "@/pages/dashboard/components/contact-stack-viewer";
 import { ListDetailSkeleton } from "./components/list-detail-skeleton";
@@ -51,6 +52,7 @@ export default function ListDetailPage() {
     const [selectedKeys, setSelectedKeys] = useState<Set<string>>(new Set());
     const [scrapeConfirmOpen, setScrapeConfirmOpen] = useState(false);
     const [composeOpen, setComposeOpen] = useState(false);
+    const [enrollOpen, setEnrollOpen] = useState(false);
     const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
     const [pendingDeleteUuids, setPendingDeleteUuids] = useState<string[]>([]);
 
@@ -248,6 +250,12 @@ export default function ListDetailPage() {
                                         : undefined
                                 }
                                 sendMessagesDisabled={selectedKeys.size === 0}
+                                onEnrollSelected={
+                                    currentTab === ListDetailTabIds.CONTACTS
+                                        ? () => setEnrollOpen(true)
+                                        : undefined
+                                }
+                                enrollDisabled={selectedKeys.size === 0}
                                 onDeleteSelected={
                                     currentTab === ListDetailTabIds.CONTACTS
                                         ? () => openDeleteDialog([...selectedKeys])
@@ -370,6 +378,12 @@ export default function ListDetailPage() {
                         isOpen={composeOpen}
                         onOpenChange={setComposeOpen}
                         contacts={selectedMembers}
+                        onComplete={() => setSelectedKeys(new Set())}
+                    />
+                    <BulkEnrollInSequenceModal
+                        isOpen={enrollOpen}
+                        onOpenChange={setEnrollOpen}
+                        contactUuids={[...selectedKeys]}
                         onComplete={() => setSelectedKeys(new Set())}
                     />
                 </div>
