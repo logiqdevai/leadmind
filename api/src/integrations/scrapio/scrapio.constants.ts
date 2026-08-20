@@ -9,14 +9,6 @@ export const SCRAPIO_RETRY_DELAY_MS = 2_000;
 /** How long to wait for a Scrapio plain-scrape run to finish via its webhook before giving up. */
 export const SCRAPIO_RUN_WAIT_TIMEOUT_MS = 120_000;
 
-/** Terminal workflow-run events that carry a finished (or failed) plain-scrape result. */
-export const SCRAPIO_TERMINAL_WEBHOOK_EVENTS = [
-  'WORKFLOW_RUN_SUCCEEDED',
-  'WORKFLOW_RUN_PARTIAL_SUCCESS',
-  'WORKFLOW_RUN_FAILED',
-  'WORKFLOW_RUN_CANCELLED',
-] as const;
-
 /**
  * Built-in output_schema field descriptor for Scrapio's ready-made email regex extractor
  * (per Scrapio's OpenAPI spec: `{"type":"regex","pattern":"email"}` — "email"/"phone"/"url" are

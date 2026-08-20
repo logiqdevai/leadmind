@@ -15,20 +15,44 @@ import { Request } from 'express';
 import { ExternalIntegrationProvider } from '@/generated/prisma';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { ScrapioCredentialsService } from '@/integrations/scrapio/services/scrapio-credentials.service';
-import { ScrapioCrawlRunsService } from '@/integrations/scrapio/services/scrapio-crawl-runs.service';
 import { ScrapioRunWaiterService } from '@/integrations/scrapio/scrapio-run-waiter.service';
-import { SCRAPIO_TERMINAL_WEBHOOK_EVENTS } from '@/integrations/scrapio/scrapio.constants';
+import type {
+  CrawlRunPage,
+  ExtractionResultEntity,
+  WorkflowRunStatus,
+} from '@/integrations/scrapio/interfaces/scrapio-crawl-runs.interface';
 import { WebsiteScrapeDispatchService } from './services/website-scrape-dispatch.service';
 import {
   SCRAPIO_SIGNATURE_HEADER,
   verifyScrapioSignature,
 } from './utils/verify-scrapio-signature.util';
 
+/**
+ * Shape of the JSON body Scrapio actually POSTs to the webhook URL — confirmed against live
+ * deliveries. It is NOT the same shape as the delivery-log entries their dashboard/API show
+ * (those wrap this object under a `payload` key alongside dashboard-only bookkeeping fields
+ * like `event_type`/`is_test`, which are never sent to the webhook endpoint itself).
+ */
 interface ScrapioWebhookBody {
-  event_type?: string;
-  workflow_run_id?: string | null;
-  is_test?: boolean;
+  event?: string;
+  created_at?: string;
+  data?: {
+    workflow_run_id?: string | null;
+    status?: WorkflowRunStatus;
+    error_message?: string | null;
+    /** Present once a PLAIN_SCRAPE run finishes. */
+    result?: { pages?: CrawlRunPage[] };
+    /** Present once a run with STRUCTURED_JSON/MARKDOWN output finishes. */
+    extraction_result?: ExtractionResultEntity | null;
+  };
 }
+
+const TERMINAL_RUN_STATUSES: readonly WorkflowRunStatus[] = [
+  'SUCCESS',
+  'PARTIAL_SUCCESS',
+  'FAILED',
+  'CANCELLED',
+];
 
 @ApiTags('webhooks')
 @Controller('webhooks/scrapio')
@@ -38,7 +62,6 @@ export class ScrapioWebhookController {
   constructor(
     private readonly prisma: PrismaService,
     private readonly scrapioCredentials: ScrapioCredentialsService,
-    private readonly scrapioCrawlRuns: ScrapioCrawlRunsService,
     private readonly runWaiter: ScrapioRunWaiterService,
     private readonly scrapeDispatch: WebsiteScrapeDispatchService,
   ) {}
@@ -85,40 +108,36 @@ export class ScrapioWebhookController {
       throw new UnauthorizedException('Invalid Scrapio webhook signature');
     }
 
+    const data = body.data;
     this.logger.log(
-      `Scrapio webhook event received org=${integration.organisation_uuid} type=${body.event_type ?? 'unknown'} run=${body.workflow_run_id ?? 'n/a'} test=${Boolean(body.is_test)}`,
+      `Scrapio webhook event received org=${integration.organisation_uuid} event=${body.event ?? 'unknown'} run=${data?.workflow_run_id ?? 'n/a'} status=${data?.status ?? 'n/a'}`,
     );
 
-    const isTerminalRunEvent =
-      body.workflow_run_id &&
-      !body.is_test &&
-      (SCRAPIO_TERMINAL_WEBHOOK_EVENTS as readonly string[]).includes(body.event_type ?? '');
+    const isTerminalRunEvent = Boolean(
+      data?.workflow_run_id && data.status && TERMINAL_RUN_STATUSES.includes(data.status),
+    );
 
     if (isTerminalRunEvent) {
-      // Fetch the run (which includes `pages`) before acking — Scrapio purges the
-      // `persist_results: false` payload once this handler confirms delivery.
+      // Use the run data embedded in this delivery directly — don't re-fetch via the API.
+      // Scrapio purges a `persist_results: false` run's structured_data/pages almost
+      // immediately after it finishes, so a separate GET here can lose that race and come
+      // back empty even though the webhook body itself still has everything.
+      const workflow_run_id = data!.workflow_run_id as string;
+      const status = data!.status as WorkflowRunStatus;
+      const pages = data!.result?.pages ?? [];
       try {
-        const run = await this.scrapioCrawlRuns.findOne(
-          integration.organisation_uuid,
-          body.workflow_run_id as string,
-        );
         // Two independent consumers may be waiting on this run: the blocking-wait facade
         // (prepareWebsiteBatch) via the Redis waiter, or a persisted WebsiteScrapeRequest via
         // the dispatch service. Both are no-ops if nobody's actually waiting on this run.
-        await this.runWaiter.publishResult(body.workflow_run_id as string, {
-          status: run.status,
-          pages: run.pages ?? [],
-        });
-        await this.scrapeDispatch.processCompletion(body.workflow_run_id as string, {
-          status: run.status,
-          pages: run.pages ?? [],
-          structuredData: run.extraction_result?.structured_data ?? null,
+        await this.runWaiter.publishResult(workflow_run_id, { status, pages });
+        await this.scrapeDispatch.processCompletion(workflow_run_id, {
+          status,
+          pages,
+          structuredData: data!.extraction_result?.structured_data ?? null,
         });
       } catch (error) {
         const message = error instanceof Error ? error.message : 'Unknown error';
-        this.logger.error(
-          `Failed to fetch/publish Scrapio run ${body.workflow_run_id}: ${message}`,
-        );
+        this.logger.error(`Failed to process Scrapio run ${workflow_run_id}: ${message}`);
       }
     }
 
