@@ -8,6 +8,7 @@ import {
   PlainScrapeConfigsListQuery,
   UpdatePlainScrapeConfigDto,
 } from '../interfaces/scrapio-plain-scrape-configs.interface';
+import { WorkflowRun } from '../interfaces/scrapio-crawl-runs.interface';
 
 @Injectable()
 export class ScrapioPlainScrapeConfigsService {
@@ -71,9 +72,9 @@ export class ScrapioPlainScrapeConfigsService {
     });
   }
 
-  /** Manually trigger a plain scrape run. */
-  async runNow(organisation_uuid: string, id: string): Promise<void> {
-    return this.client.post<void>(
+  /** Manually trigger a plain scrape run. Returns the created run (including its id). */
+  async runNow(organisation_uuid: string, id: string): Promise<WorkflowRun> {
+    return this.client.post<WorkflowRun>(
       `/plain-scrape-configs/${id}/run-now`,
       undefined,
       { organisation_uuid },

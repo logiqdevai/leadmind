@@ -6,7 +6,6 @@ import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { WEBSITE_SCRAPE_TIMEOUT_QUEUE } from '@/core/queues/queues.constants';
 import { ScrapioCredentialsService } from './scrapio-credentials.service';
 import { ScrapioPlainScrapeConfigsService } from './scrapio-plain-scrape-configs.service';
-import { ScrapioCrawlRunsService } from './scrapio-crawl-runs.service';
 import { SCRAPIO_RUN_WAIT_TIMEOUT_MS } from '../scrapio.constants';
 import type {
   PlainScrapeExtractionScope,
@@ -55,7 +54,6 @@ export class ScrapioScrapeRequestService {
     private readonly prisma: PrismaService,
     private readonly credentials: ScrapioCredentialsService,
     private readonly plainScrapeConfigs: ScrapioPlainScrapeConfigsService,
-    private readonly crawlRuns: ScrapioCrawlRunsService,
     @InjectQueue(WEBSITE_SCRAPE_TIMEOUT_QUEUE)
     private readonly timeoutQueue: Queue<WebsiteScrapeTimeoutJobData>,
   ) {}
@@ -87,8 +85,13 @@ export class ScrapioScrapeRequestService {
         : {}),
     });
 
-    await this.plainScrapeConfigs.runNow(input.organisation_uuid, config.id);
-    const provider_run_id = await this.resolveRunId(input.organisation_uuid, config.id);
+    // Use the run id from runNow's own response instead of a separate list lookup afterward —
+    // Scrapio dispatches the webhook as soon as the run finishes, independent of what we're
+    // doing here, and these plain-scrape runs can complete in ~1-2s. Every extra round trip
+    // before the WebsiteScrapeRequest row exists is a window where a fast-finishing run's
+    // webhook arrives, finds no matching PENDING row, and is silently dropped.
+    const run = await this.plainScrapeConfigs.runNow(input.organisation_uuid, config.id);
+    const provider_run_id = run.id;
 
     const request = await this.prisma.websiteScrapeRequest.create({
       data: {
@@ -109,24 +112,5 @@ export class ScrapioScrapeRequestService {
     );
 
     return { id: request.id, provider_run_id };
-  }
-
-  private async resolveRunId(
-    organisation_uuid: string,
-    workflow_config_id: string,
-  ): Promise<string> {
-    // Assumes the list endpoint returns runs newest-first (verify against the live API);
-    // safe regardless since this config is ephemeral/single-use for this one call.
-    const runs = await this.crawlRuns.findAll(organisation_uuid, {
-      workflow_config_id,
-      limit: 1,
-    });
-    const run = runs.data[0];
-    if (!run) {
-      throw new Error(
-        `No crawl run found for Scrapio plain-scrape config ${workflow_config_id}`,
-      );
-    }
-    return run.id;
   }
 }
