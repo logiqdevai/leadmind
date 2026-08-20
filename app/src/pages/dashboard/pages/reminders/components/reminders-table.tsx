@@ -7,6 +7,7 @@ import { Routes } from "@/routes/routes";
 import { extraListColumnClass } from "@/components/ui/mobile-list-filters";
 import { isTableNavInteractiveCell, renderTableNavCellContent, tableNavInteractiveCellClassName, tableNavRowClassName } from "@/components/ui/table-row-link";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
+import { TablePagination } from "@/components/ui/table-pagination";
 import { ReminderStatusBadge, ReminderFormModal } from "@/components/reminders";
 import { useCompleteReminder, useDeleteReminder } from "@/features/reminders/hooks/use-reminders";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";

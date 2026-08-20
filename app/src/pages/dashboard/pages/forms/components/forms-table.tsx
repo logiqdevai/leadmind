@@ -7,6 +7,7 @@ import { Routes } from "@/routes/routes";
 import { extraListColumnClass } from "@/components/ui/mobile-list-filters";
 import { isTableNavInteractiveCell, renderTableNavCellContent, tableNavInteractiveCellClassName, tableNavRowClassName } from "@/components/ui/table-row-link";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
+import { TablePagination } from "@/components/ui/table-pagination";
 import { useDeleteForm, useDuplicateForm } from "@/features/forms/hooks/use-forms";
 import type { Form } from "@/features/forms/interfaces/form.interface";
 import { FormFormModal } from "./form-form-modal";
