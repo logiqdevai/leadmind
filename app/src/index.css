@@ -372,3 +372,39 @@ body,
 #root [data-slot="chip"] *:not(svg):not(svg *) {
   font-size: 13px !important;
 }
+
+@keyframes celebration-bubble-fall {
+  0% {
+    top: -12%;
+    transform: translate3d(0, 0, 0) scale(0.55);
+    opacity: 0;
+  }
+  12% {
+    opacity: var(--bubble-opacity, 0.45);
+  }
+  25% {
+    top: 22%;
+    transform: translate3d(var(--bubble-sway, 10px), 0, 0) scale(0.85);
+  }
+  50% {
+    top: 50%;
+    transform: translate3d(calc(var(--bubble-sway, 10px) * -1), 0, 0) scale(1);
+  }
+  75% {
+    top: 78%;
+    transform: translate3d(var(--bubble-sway, 10px), 0, 0) scale(0.95);
+    opacity: var(--bubble-opacity, 0.45);
+  }
+  100% {
+    top: 112%;
+    transform: translate3d(0, 0, 0) scale(0.7);
+    opacity: 0;
+  }
+}
+
+.celebration-bubble {
+  animation-name: celebration-bubble-fall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: top, transform, opacity;
+}

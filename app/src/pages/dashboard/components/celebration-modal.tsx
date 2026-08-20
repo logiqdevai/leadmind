@@ -9,6 +9,22 @@ interface CelebrationModalProps {
     onClose: () => void;
 }
 
+const BUBBLE_COLORS = [
+    "var(--accent)",
+    "oklch(0.75 0.15 85)",
+    "oklch(0.7 0.14 145)",
+] as const;
+
+const BUBBLES = Array.from({ length: 22 }, (_, i) => ({
+    left: `${4 + ((i * 19) % 92)}%`,
+    size: 6 + (i % 5) * 2,
+    duration: `${3.4 + (i % 6) * 0.55}s`,
+    delay: `${-((i * 0.37) % 4.8)}s`,
+    opacity: 0.28 + (i % 5) * 0.08,
+    sway: `${(i % 2 === 0 ? 1 : -1) * (8 + (i % 4) * 4)}px`,
+    color: BUBBLE_COLORS[i % BUBBLE_COLORS.length],
+}));
+
 export function CelebrationModal({ isOpen, type, onClose }: CelebrationModalProps) {
     const copy = type ? ACHIEVEMENT_COPY[type] : null;
 
@@ -16,22 +32,20 @@ export function CelebrationModal({ isOpen, type, onClose }: CelebrationModalProp
         <Modal.Backdrop isOpen={isOpen} onOpenChange={(open) => !open && onClose()}>
             <Modal.Container>
                 <Modal.Dialog className="relative overflow-hidden max-w-md">
-                    <div className="pointer-events-none absolute inset-0 overflow-hidden">
-                        {Array.from({ length: 18 }).map((_, i) => (
+                    <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
+                        {BUBBLES.map((bubble, i) => (
                             <span
                                 key={i}
-                                className="absolute size-2 rounded-full animate-pulse"
+                                className="celebration-bubble absolute rounded-full"
                                 style={{
-                                    left: `${8 + ((i * 17) % 84)}%`,
-                                    top: `${10 + ((i * 29) % 70)}%`,
-                                    background:
-                                        i % 3 === 0
-                                            ? "var(--accent)"
-                                            : i % 3 === 1
-                                              ? "oklch(0.75 0.15 85)"
-                                              : "oklch(0.7 0.14 145)",
-                                    opacity: 0.35 + (i % 4) * 0.1,
-                                    animationDelay: `${i * 40}ms`,
+                                    left: bubble.left,
+                                    width: bubble.size,
+                                    height: bubble.size,
+                                    background: bubble.color,
+                                    animationDuration: bubble.duration,
+                                    animationDelay: bubble.delay,
+                                    ["--bubble-opacity" as string]: bubble.opacity,
+                                    ["--bubble-sway" as string]: bubble.sway,
                                 }}
                             />
                         ))}
