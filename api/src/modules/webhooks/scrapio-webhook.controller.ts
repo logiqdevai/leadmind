@@ -40,10 +40,13 @@ interface ScrapioWebhookBody {
     workflow_run_id?: string | null;
     status?: WorkflowRunStatus;
     error_message?: string | null;
-    /** Present once a PLAIN_SCRAPE run finishes. */
-    result?: { pages?: CrawlRunPage[] };
-    /** Present once a run with STRUCTURED_JSON/MARKDOWN output finishes. */
-    extraction_result?: ExtractionResultEntity | null;
+    /** Present once a PLAIN_SCRAPE run finishes. `extraction_result` is nested here (a sibling
+     *  of `pages`), not alongside `result` at the top level of `data` — confirmed against a
+     *  live delivery. */
+    result?: {
+      pages?: CrawlRunPage[];
+      extraction_result?: ExtractionResultEntity | null;
+    };
   };
 }
 
@@ -133,7 +136,7 @@ export class ScrapioWebhookController {
         await this.scrapeDispatch.processCompletion(workflow_run_id, {
           status,
           pages,
-          structuredData: data!.extraction_result?.structured_data ?? null,
+          structuredData: data!.result?.extraction_result?.structured_data ?? null,
         });
       } catch (error) {
         const message = error instanceof Error ? error.message : 'Unknown error';
