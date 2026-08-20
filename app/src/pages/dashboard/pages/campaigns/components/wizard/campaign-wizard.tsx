@@ -28,6 +28,7 @@ import { WizardShell, type WizardStepKey, WIZARD_STEPS } from "./wizard-shell";
 import { StepBasics, type BasicsValues } from "./step-basics";
 import { StepAudience } from "./step-audience";
 import { StepMessage } from "./step-message";
+import { StepSequence } from "./step-sequence";
 import { StepReview } from "./step-review";
 
 interface CampaignWizardProps {
@@ -94,14 +95,16 @@ export function CampaignWizard({ campaign }: CampaignWizardProps) {
     const [senderProfileUuid, setSenderProfileUuid] = useState<string | null>(
         campaign.sender_profile_uuid,
     );
+    const [sequenceUuid, setSequenceUuid] = useState<string | null>(campaign.sequence_uuid);
     const [confirmStart, setConfirmStart] = useState(false);
 
     const serializedFilters = useMemo(() => JSON.stringify(filters), [filters]);
 
     const isDraft = campaign.status === CampaignStatuses.DRAFT;
     const isPersonalized = basics.campaign_type === CampaignType.PERSONALIZED;
+    const isSequence = basics.campaign_type === CampaignType.SEQUENCE;
     const includesEmail = basics.channels.includes(Channel.EMAIL);
-    const showEmailProvider = includesEmail && !isPersonalized;
+    const showEmailProvider = includesEmail && !isPersonalized && !isSequence;
     const emailProviderMissing =
         showEmailProvider &&
         emailAudienceCount > 0 &&
@@ -165,7 +168,18 @@ export function CampaignWizard({ campaign }: CampaignWizardProps) {
                       linkedin_content: null,
                       scheduled_at: null,
                   }
-                : {
+                : isSequence
+                  ? {
+                        sequence_uuid: sequenceUuid,
+                        email_subject: null,
+                        email_content: null,
+                        sms_content: null,
+                        linkedin_content: null,
+                        scheduled_at: basics.scheduled_at
+                            ? new Date(basics.scheduled_at).toISOString()
+                            : null,
+                    }
+                  : {
                       scheduled_at: basics.scheduled_at
                           ? new Date(basics.scheduled_at).toISOString()
                           : null,
@@ -266,15 +280,19 @@ export function CampaignWizard({ campaign }: CampaignWizardProps) {
                     />
                 )}
                 {activeStep === "message" && (
-                    <StepMessage
-                        campaignUuid={campaign.uuid}
-                        campaignType={basics.campaign_type}
-                        channels={basics.channels}
-                        value={message}
-                        onChange={setMessage}
-                        aiPrompt={aiPrompt}
-                        onAiPromptChange={setAiPrompt}
-                    />
+                    isSequence ? (
+                        <StepSequence value={sequenceUuid} onChange={setSequenceUuid} />
+                    ) : (
+                        <StepMessage
+                            campaignUuid={campaign.uuid}
+                            campaignType={basics.campaign_type}
+                            channels={basics.channels}
+                            value={message}
+                            onChange={setMessage}
+                            aiPrompt={aiPrompt}
+                            onAiPromptChange={setAiPrompt}
+                        />
+                    )
                 )}
                 {activeStep === "review" && (
                     <StepReview
@@ -282,6 +300,7 @@ export function CampaignWizard({ campaign }: CampaignWizardProps) {
                         audienceCount={audienceCount}
                         message={message}
                         aiPrompt={aiPrompt}
+                        sequenceUuid={sequenceUuid}
                         onBasicsChange={(patch) => setBasics((v) => ({ ...v, ...patch }))}
                     />
                 )}

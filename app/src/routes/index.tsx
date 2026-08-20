@@ -33,6 +33,9 @@ const EditCampaignPage = lazy(() => import("@/pages/dashboard/pages/campaigns/pa
 const CampaignDetailPage = lazy(() => import("@/pages/dashboard/pages/campaigns/pages/detail"));
 const SendHistoryPage = lazy(() => import("@/pages/dashboard/pages/send-history"));
 const MessageTemplatesPage = lazy(() => import("@/pages/dashboard/pages/message-templates"));
+const SequencesPage = lazy(() => import("@/pages/dashboard/pages/sequences"));
+const NewSequencePage = lazy(() => import("@/pages/dashboard/pages/sequences/pages/new"));
+const EditSequencePage = lazy(() => import("@/pages/dashboard/pages/sequences/pages/edit"));
 const SettingsUsagePage = lazy(() => import("@/pages/dashboard/pages/settings/usage"));
 const SettingsOrganisationPage = lazy(() => import("@/pages/dashboard/pages/settings/organisation"));
 const SettingsActivityPage = lazy(() => import("@/pages/dashboard/pages/settings/activity"));
@@ -340,6 +343,30 @@ export default function AppRoutes() {
           element={
             <Lazy>
               <MessageTemplatesPage />
+            </Lazy>
+          }
+        />
+        <Route
+          path="sequences"
+          element={
+            <Lazy>
+              <SequencesPage />
+            </Lazy>
+          }
+        />
+        <Route
+          path="sequences/new"
+          element={
+            <Lazy>
+              <NewSequencePage />
+            </Lazy>
+          }
+        />
+        <Route
+          path="sequences/:uuid/edit"
+          element={
+            <Lazy>
+              <EditSequencePage />
             </Lazy>
           }
         />

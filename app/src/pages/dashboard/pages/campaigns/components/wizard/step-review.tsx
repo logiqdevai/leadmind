@@ -1,8 +1,9 @@
 import { Checkbox, Chip } from "@heroui/react";
-import { Calendar, Link2, Mail, MessageSquare, Sparkles, Users } from "lucide-react";
+import { Calendar, Link2, Mail, MessageSquare, Sparkles, Users, Workflow } from "lucide-react";
 import { Channel } from "@/features/contacts/interfaces/contact.interface";
 import { CampaignType } from "@/features/marketing-campaigns/interfaces/campaign.interface";
 import type { MessageComposerValue } from "@/features/messaging/components/message-composer";
+import { useSequence } from "@/features/sequences/hooks/use-sequences";
 import type { BasicsValues } from "./step-basics";
 
 interface StepReviewProps {
@@ -10,11 +11,21 @@ interface StepReviewProps {
     audienceCount: number | null;
     message: MessageComposerValue;
     aiPrompt: string;
+    sequenceUuid?: string | null;
     onBasicsChange: (patch: Partial<BasicsValues>) => void;
 }
 
-export function StepReview({ basics, audienceCount, message, aiPrompt, onBasicsChange }: StepReviewProps) {
+export function StepReview({
+    basics,
+    audienceCount,
+    message,
+    aiPrompt,
+    sequenceUuid = null,
+    onBasicsChange,
+}: StepReviewProps) {
     const isPersonalized = basics.campaign_type === CampaignType.PERSONALIZED;
+    const isSequence = basics.campaign_type === CampaignType.SEQUENCE;
+    const { data: sequence } = useSequence(isSequence ? sequenceUuid : null);
 
     return (
         <div className="flex flex-col gap-5 max-w-3xl">
@@ -85,7 +96,24 @@ export function StepReview({ basics, audienceCount, message, aiPrompt, onBasicsC
                 </section>
             )}
 
-            {!isPersonalized && basics.channels.includes(Channel.EMAIL) && (
+            {isSequence && (
+                <section className="rounded-xl border border-border bg-surface p-4 space-y-2">
+                    <h3 className="text-xs uppercase tracking-wide text-muted flex items-center gap-1.5">
+                        <Workflow className="size-3.5" />
+                        Sequence
+                    </h3>
+                    {sequence ? (
+                        <p className="text-sm text-foreground">
+                            {sequence.name} · {sequence.steps.filter((s) => s.enabled).length} enabled step
+                            {sequence.steps.filter((s) => s.enabled).length === 1 ? "" : "s"}
+                        </p>
+                    ) : (
+                        <p className="text-sm text-muted italic">— no sequence selected —</p>
+                    )}
+                </section>
+            )}
+
+            {!isPersonalized && !isSequence && basics.channels.includes(Channel.EMAIL) && (
                 <section className="rounded-xl border border-border bg-surface p-4 space-y-3">
                     <h3 className="text-xs uppercase tracking-wide text-muted">Email</h3>
                     <div>
@@ -107,7 +135,7 @@ export function StepReview({ basics, audienceCount, message, aiPrompt, onBasicsC
                 </section>
             )}
 
-            {!isPersonalized && basics.channels.includes(Channel.SMS) && (
+            {!isPersonalized && !isSequence && basics.channels.includes(Channel.SMS) && (
                 <section className="rounded-xl border border-border bg-surface p-4 space-y-2">
                     <h3 className="text-xs uppercase tracking-wide text-muted">SMS</h3>
                     <div className="rounded-lg border border-border bg-surface-secondary/30 p-3 text-sm whitespace-pre-wrap">
@@ -128,7 +156,7 @@ export function StepReview({ basics, audienceCount, message, aiPrompt, onBasicsC
                 </section>
             )}
 
-            {!isPersonalized && basics.channels.includes(Channel.LINKEDIN) && (
+            {!isPersonalized && !isSequence && basics.channels.includes(Channel.LINKEDIN) && (
                 <section className="rounded-xl border border-border bg-surface p-4 space-y-2">
                     <h3 className="text-xs uppercase tracking-wide text-muted">LinkedIn</h3>
                     <div className="rounded-lg border border-border bg-surface-secondary/30 p-3 text-sm whitespace-pre-wrap">

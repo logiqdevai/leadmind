@@ -50,6 +50,9 @@ import {
 } from '@/modules/outreach/utils/email-provider-allocation.util';
 import { SendExistingMessageDto } from '@/modules/outreach/dto/email-provider.dto';
 import { MessageSendJobData } from '@/workers/marketing-message-send.worker';
+import { SequencesService } from '@/modules/sequences/services/sequences.service';
+import { SequenceEnrollmentService } from '@/modules/sequences/services/sequence-enrollment.service';
+import { SequenceStatus } from '@/generated/prisma';
 
 @Injectable()
 export class MarketingCampaignsService {
@@ -62,6 +65,8 @@ export class MarketingCampaignsService {
         private readonly campaignMessageSend: CampaignMessageSendService,
         private readonly contactAiService: ContactAiService,
         private readonly emailCredentialsService: EmailCredentialsService,
+        private readonly sequencesService: SequencesService,
+        private readonly sequenceEnrollmentService: SequenceEnrollmentService,
         @InjectQueue(MARKETING_CAMPAIGN_DISPATCH_QUEUE)
         private readonly dispatchQueue: Queue,
         @InjectQueue(MARKETING_MESSAGE_SEND_QUEUE)
@@ -74,6 +79,9 @@ export class MarketingCampaignsService {
         this.validateContentLoose(dto.channels, dto.email_subject, dto.email_content, dto.sms_content, dto.linkedin_content, type);
         if (dto.sender_profile_uuid) {
             await this.assertOwnedSenderProfile(organisation_uuid, dto.sender_profile_uuid);
+        }
+        if (dto.sequence_uuid) {
+            await this.assertOwnedSequence(organisation_uuid, dto.sequence_uuid);
         }
 
         return this.prisma.marketingCampaign.create({
@@ -93,6 +101,7 @@ export class MarketingCampaignsService {
                 use_openai_batch:
                     type === CampaignType.PERSONALIZED ? (dto.use_openai_batch ?? true) : false,
                 sender_profile_uuid: dto.sender_profile_uuid ?? null,
+                sequence_uuid: dto.sequence_uuid ?? null,
                 scheduled_at: dto.scheduled_at ? new Date(dto.scheduled_at) : null,
                 filters_snapshot: (dto.filters ?? {}) as unknown as Prisma.InputJsonValue,
                 email_provider_allocations: dto.email_provider_allocations
@@ -139,6 +148,9 @@ export class MarketingCampaignsService {
         if (dto.sender_profile_uuid) {
             await this.assertOwnedSenderProfile(organisation_uuid, dto.sender_profile_uuid);
         }
+        if (dto.sequence_uuid) {
+            await this.assertOwnedSequence(organisation_uuid, dto.sequence_uuid);
+        }
 
         return this.prisma.marketingCampaign.update({
             where: { uuid },
@@ -160,6 +172,7 @@ export class MarketingCampaignsService {
                 ...(dto.sender_profile_uuid !== undefined && {
                     sender_profile_uuid: dto.sender_profile_uuid,
                 }),
+                ...(dto.sequence_uuid !== undefined && { sequence_uuid: dto.sequence_uuid }),
                 ...(dto.scheduled_at !== undefined && {
                     scheduled_at: dto.scheduled_at ? new Date(dto.scheduled_at) : null,
                 }),
@@ -311,6 +324,10 @@ export class MarketingCampaignsService {
             return this.startPersonalized(organisation_uuid, campaign);
         }
 
+        if (campaign.campaign_type === CampaignType.SEQUENCE) {
+            return this.startSequenceCampaign(organisation_uuid, campaign);
+        }
+
         this.validateContent(
             campaign.channels,
             campaign.email_subject,
@@ -337,6 +354,32 @@ export class MarketingCampaignsService {
             await this.assertOwnedSenderProfile(organisation_uuid, dto.sender_profile_uuid);
         }
 
+        return this.queueDispatch(campaign, {
+            ...(allocations
+                ? { email_provider_allocations: allocations as unknown as Prisma.InputJsonValue }
+                : {}),
+            ...(dto?.sender_profile_uuid ? { sender_profile_uuid: dto.sender_profile_uuid } : {}),
+        });
+    }
+
+    private async startSequenceCampaign(
+        organisation_uuid: string,
+        campaign: MarketingCampaign,
+    ): Promise<MarketingCampaign> {
+        if (!campaign.sequence_uuid) {
+            throw new BadRequestException('A sequence must be selected for SEQUENCE campaigns');
+        }
+        const sequence = await this.sequencesService.findOne(organisation_uuid, campaign.sequence_uuid);
+        if (sequence.status !== SequenceStatus.ACTIVE) {
+            throw new BadRequestException('Selected sequence must be ACTIVE to start this campaign');
+        }
+        return this.queueDispatch(campaign);
+    }
+
+    private async queueDispatch(
+        campaign: MarketingCampaign,
+        extraUpdateData: Prisma.MarketingCampaignUpdateInput = {},
+    ): Promise<MarketingCampaign> {
         const now = new Date();
         const scheduled =
             campaign.scheduled_at && campaign.scheduled_at.getTime() > now.getTime()
@@ -344,28 +387,20 @@ export class MarketingCampaignsService {
                 : null;
 
         const updated = await this.prisma.marketingCampaign.update({
-            where: { uuid },
+            where: { uuid: campaign.uuid },
             data: {
                 status: scheduled ? CampaignStatus.SCHEDULED : CampaignStatus.SENDING,
                 ...(scheduled ? {} : { started_at: now }),
-                ...(allocations
-                    ? {
-                          email_provider_allocations:
-                              allocations as unknown as Prisma.InputJsonValue,
-                      }
-                    : {}),
-                ...(dto?.sender_profile_uuid
-                    ? { sender_profile_uuid: dto.sender_profile_uuid }
-                    : {}),
+                ...extraUpdateData,
             },
         });
 
         const delay = scheduled ? Math.max(0, scheduled.getTime() - now.getTime()) : 0;
         await this.dispatchQueue.add(
-            `dispatch-${uuid}`,
-            { campaign_uuid: uuid },
+            `dispatch-${campaign.uuid}`,
+            { campaign_uuid: campaign.uuid },
             {
-                jobId: `dispatch-${uuid}`,
+                jobId: `dispatch-${campaign.uuid}`,
                 delay,
                 attempts: 3,
                 backoff: { type: 'exponential', delay: 30_000 },
@@ -374,7 +409,7 @@ export class MarketingCampaignsService {
             },
         );
         this.logger.log(
-            `Campaign ${uuid} queued for dispatch (status=${updated.status}, delay=${delay}ms)`,
+            `Campaign ${campaign.uuid} queued for dispatch (status=${updated.status}, delay=${delay}ms)`,
         );
         return updated;
     }
@@ -660,6 +695,7 @@ export class MarketingCampaignsService {
                 ai_prompt: campaign.ai_prompt,
                 use_openai_batch: campaign.use_openai_batch,
                 sender_profile_uuid: campaign.sender_profile_uuid,
+                sequence_uuid: campaign.sequence_uuid,
                 filters_snapshot: campaign.filters_snapshot ?? Prisma.JsonNull,
             },
         });
@@ -733,6 +769,10 @@ export class MarketingCampaignsService {
         });
 
         await this.removePendingJobsForCampaign(uuid);
+
+        if (campaign.campaign_type === CampaignType.SEQUENCE) {
+            await this.sequenceEnrollmentService.cancelAllForCampaign(organisation_uuid, uuid);
+        }
 
         if (pendingBatchId) {
             await this.prisma.openAiBatchJob.updateMany({
@@ -832,6 +872,10 @@ export class MarketingCampaignsService {
         }
     }
 
+    private async assertOwnedSequence(organisation_uuid: string, uuid: string): Promise<void> {
+        await this.sequencesService.findOne(organisation_uuid, uuid);
+    }
+
     private async resolveCampaignEmailAllocations(
         organisation_uuid: string,
         channels: Channel[],
@@ -870,7 +914,7 @@ export class MarketingCampaignsService {
         linkedin_content: string | null | undefined,
         campaign_type: CampaignType = CampaignType.STANDARD,
     ): void {
-        if (campaign_type === CampaignType.PERSONALIZED) return;
+        if (campaign_type === CampaignType.PERSONALIZED || campaign_type === CampaignType.SEQUENCE) return;
         if (channels.includes(Channel.EMAIL)) {
             if (!email_subject || email_subject.trim().length === 0) {
                 throw new BadRequestException('Email subject is required when EMAIL is selected');
@@ -905,7 +949,7 @@ export class MarketingCampaignsService {
         linkedin_content: string | null | undefined,
         campaign_type: CampaignType = CampaignType.STANDARD,
     ): void {
-        if (campaign_type === CampaignType.PERSONALIZED) return;
+        if (campaign_type === CampaignType.PERSONALIZED || campaign_type === CampaignType.SEQUENCE) return;
         // For partial saves on drafts: only check max lengths / format, not required-ness.
         if (channels.includes(Channel.EMAIL) && email_content && isEmailHtmlEmpty(email_content)) {
             throw new BadRequestException('Email body cannot be empty HTML');

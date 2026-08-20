@@ -19,8 +19,6 @@ import {
 import { MsgStatus } from '@/generated/prisma';
 import { CurrentUser } from '@/shared/decorators/current-user.decorator';
 import { JwtGuard } from '@/shared/guards/jwt.guard';
-import { AssignSequenceDto } from './dto/assign-sequence.dto';
-import { CreateSequenceDto } from './dto/create-sequence.dto';
 import { ListMessagesDto } from './dto/list-messages.dto';
 import { SendOutreachDto } from './dto/send-outreach.dto';
 import { SendExistingMessageDto } from './dto/email-provider.dto';
@@ -107,33 +105,5 @@ export class OutreachController {
         @Body() dto: SendOutreachDto,
     ) {
         return this.outreachService.createDraft(organisation_uuid, dto, user_uuid);
-    }
-
-    @ActivityLog({ entityType: ActivityEntityType.OUTREACH_SEQUENCE, action: ActivityAction.SEQUENCE_CREATED })
-    @Post('sequences')
-    @ApiOperation({ summary: 'Create outreach sequence' })
-    @ApiResponse({ status: 201 })
-    createSequence(@CurrentUser('organisation_uuid') organisation_uuid: string, @Body() dto: CreateSequenceDto) {
-        return this.outreachService.createSequence(organisation_uuid, dto);
-    }
-
-    @Get('sequences')
-    @ApiOperation({ summary: 'List outreach sequences for current user' })
-    @ApiResponse({ status: 200 })
-    listSequences(@CurrentUser('organisation_uuid') organisation_uuid: string) {
-        return this.outreachService.listSequences(organisation_uuid);
-    }
-
-    @ActivityLog({ entityType: ActivityEntityType.OUTREACH_SEQUENCE, action: ActivityAction.SEQUENCE_ASSIGNED, entityUuidFrom: 'params.uuid' })
-    @Post('sequences/:uuid/assign')
-    @ApiOperation({ summary: 'Assign sequence to contact and enqueue messages' })
-    @ApiResponse({ status: 201 })
-    assignSequence(
-        @CurrentUser('organisation_uuid') organisation_uuid: string,
-        @CurrentUser('uuid') user_uuid: string,
-        @Param('uuid') sequence_uuid: string,
-        @Body() dto: AssignSequenceDto,
-    ) {
-        return this.outreachService.assignSequence(organisation_uuid, sequence_uuid, dto, user_uuid);
     }
 }

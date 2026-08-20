@@ -38,6 +38,7 @@ import { GatewaysModule } from './gateways/gateways.module';
 import { AiUsageModule } from './modules/ai-usage/ai-usage.module';
 import { ApifyUsageModule } from './modules/apify-usage/apify-usage.module';
 import { MessageTemplatesModule } from './modules/message-templates/message-templates.module';
+import { SequencesModule } from './modules/sequences/sequences.module';
 import { OrganisationsModule } from './modules/organisations/organisations.module';
 import { UsersModule } from './modules/users/users.module';
 import { ActivityLogsModule } from './modules/activity-logs/activity-logs.module';
@@ -89,8 +90,9 @@ import { EmailSendLimitsModule } from './modules/email-send-limits/email-send-li
     AiUsageModule,
     ApifyUsageModule,
     MessageTemplatesModule,
+    SequencesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {}

@@ -124,6 +124,16 @@ export type OutreachMessage = $Result.DefaultSelection<Prisma.$OutreachMessagePa
  */
 export type OutreachSequence = $Result.DefaultSelection<Prisma.$OutreachSequencePayload>
 /**
+ * Model OutreachSequenceStep
+ * 
+ */
+export type OutreachSequenceStep = $Result.DefaultSelection<Prisma.$OutreachSequenceStepPayload>
+/**
+ * Model SequenceEnrollment
+ * 
+ */
+export type SequenceEnrollment = $Result.DefaultSelection<Prisma.$SequenceEnrollmentPayload>
+/**
  * Model FilterJob
  * 
  */
@@ -135,7 +145,8 @@ export type FilterJob = $Result.DefaultSelection<Prisma.$FilterJobPayload>
 export type BulkJob = $Result.DefaultSelection<Prisma.$BulkJobPayload>
 /**
  * Model WebsiteScrapeRequest
- * * A pending async website-scrape run, tracked until its provider (Scrapio today, others later) resolves it via webhook or timeout.
+ * *
+ *  * A pending async website-scrape run, tracked until its provider (Scrapio today, others later) resolves it via webhook or timeout.
  */
 export type WebsiteScrapeRequest = $Result.DefaultSelection<Prisma.$WebsiteScrapeRequestPayload>
 /**
@@ -486,10 +497,47 @@ export type InteractionType = (typeof InteractionType)[keyof typeof InteractionT
 
 export const CampaignType: {
   STANDARD: 'STANDARD',
-  PERSONALIZED: 'PERSONALIZED'
+  PERSONALIZED: 'PERSONALIZED',
+  SEQUENCE: 'SEQUENCE'
 };
 
 export type CampaignType = (typeof CampaignType)[keyof typeof CampaignType]
+
+
+export const SequenceStatus: {
+  DRAFT: 'DRAFT',
+  ACTIVE: 'ACTIVE',
+  ARCHIVED: 'ARCHIVED'
+};
+
+export type SequenceStatus = (typeof SequenceStatus)[keyof typeof SequenceStatus]
+
+
+export const SequenceDelayUnit: {
+  HOURS: 'HOURS',
+  DAYS: 'DAYS',
+  WEEKS: 'WEEKS',
+  MONTHS: 'MONTHS'
+};
+
+export type SequenceDelayUnit = (typeof SequenceDelayUnit)[keyof typeof SequenceDelayUnit]
+
+
+export const SequenceDelayReference: {
+  FIRST_STEP: 'FIRST_STEP',
+  PREVIOUS_STEP: 'PREVIOUS_STEP'
+};
+
+export type SequenceDelayReference = (typeof SequenceDelayReference)[keyof typeof SequenceDelayReference]
+
+
+export const SequenceEnrollmentStatus: {
+  ACTIVE: 'ACTIVE',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED'
+};
+
+export type SequenceEnrollmentStatus = (typeof SequenceEnrollmentStatus)[keyof typeof SequenceEnrollmentStatus]
 
 
 export const CampaignStatus: {
@@ -776,6 +824,22 @@ export const InteractionType: typeof $Enums.InteractionType
 export type CampaignType = $Enums.CampaignType
 
 export const CampaignType: typeof $Enums.CampaignType
+
+export type SequenceStatus = $Enums.SequenceStatus
+
+export const SequenceStatus: typeof $Enums.SequenceStatus
+
+export type SequenceDelayUnit = $Enums.SequenceDelayUnit
+
+export const SequenceDelayUnit: typeof $Enums.SequenceDelayUnit
+
+export type SequenceDelayReference = $Enums.SequenceDelayReference
+
+export const SequenceDelayReference: typeof $Enums.SequenceDelayReference
+
+export type SequenceEnrollmentStatus = $Enums.SequenceEnrollmentStatus
+
+export const SequenceEnrollmentStatus: typeof $Enums.SequenceEnrollmentStatus
 
 export type CampaignStatus = $Enums.CampaignStatus
 
@@ -1181,6 +1245,26 @@ export class PrismaClient<
     * ```
     */
   get outreachSequence(): Prisma.OutreachSequenceDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.outreachSequenceStep`: Exposes CRUD operations for the **OutreachSequenceStep** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more OutreachSequenceSteps
+    * const outreachSequenceSteps = await prisma.outreachSequenceStep.findMany()
+    * ```
+    */
+  get outreachSequenceStep(): Prisma.OutreachSequenceStepDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.sequenceEnrollment`: Exposes CRUD operations for the **SequenceEnrollment** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SequenceEnrollments
+    * const sequenceEnrollments = await prisma.sequenceEnrollment.findMany()
+    * ```
+    */
+  get sequenceEnrollment(): Prisma.SequenceEnrollmentDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.filterJob`: Exposes CRUD operations for the **FilterJob** model.
@@ -1877,6 +1961,8 @@ export namespace Prisma {
     Interaction: 'Interaction',
     OutreachMessage: 'OutreachMessage',
     OutreachSequence: 'OutreachSequence',
+    OutreachSequenceStep: 'OutreachSequenceStep',
+    SequenceEnrollment: 'SequenceEnrollment',
     FilterJob: 'FilterJob',
     BulkJob: 'BulkJob',
     WebsiteScrapeRequest: 'WebsiteScrapeRequest',
@@ -1916,7 +2002,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "organisation" | "organisationMember" | "organisationInvitation" | "filter" | "savedContactFilter" | "scoringInstruction" | "filterScoringInstruction" | "rawLead" | "lead" | "leadEnrichment" | "contact" | "contactInfo" | "contactFilter" | "contactEnrichment" | "contactScore" | "contactList" | "contactListMember" | "contactTag" | "interaction" | "outreachMessage" | "outreachSequence" | "filterJob" | "bulkJob" | "websiteScrapeRequest" | "senderProfile" | "messageTemplate" | "marketingCampaign" | "marketingCampaignContact" | "openAiBatchJob" | "integration" | "integrationAccount" | "integrationKey" | "reminder" | "form" | "formField" | "formCompletion" | "formCompletionValue" | "contactAudienceAnalysis" | "aiUsageLog" | "apifyUsageLog" | "messagingGoal" | "emailSendLimit" | "goalAchievement" | "goalPersonalBest" | "activityLog"
+      modelProps: "user" | "organisation" | "organisationMember" | "organisationInvitation" | "filter" | "savedContactFilter" | "scoringInstruction" | "filterScoringInstruction" | "rawLead" | "lead" | "leadEnrichment" | "contact" | "contactInfo" | "contactFilter" | "contactEnrichment" | "contactScore" | "contactList" | "contactListMember" | "contactTag" | "interaction" | "outreachMessage" | "outreachSequence" | "outreachSequenceStep" | "sequenceEnrollment" | "filterJob" | "bulkJob" | "websiteScrapeRequest" | "senderProfile" | "messageTemplate" | "marketingCampaign" | "marketingCampaignContact" | "openAiBatchJob" | "integration" | "integrationAccount" | "integrationKey" | "reminder" | "form" | "formField" | "formCompletion" | "formCompletionValue" | "contactAudienceAnalysis" | "aiUsageLog" | "apifyUsageLog" | "messagingGoal" | "emailSendLimit" | "goalAchievement" | "goalPersonalBest" | "activityLog"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -3545,6 +3631,154 @@ export namespace Prisma {
           count: {
             args: Prisma.OutreachSequenceCountArgs<ExtArgs>
             result: $Utils.Optional<OutreachSequenceCountAggregateOutputType> | number
+          }
+        }
+      }
+      OutreachSequenceStep: {
+        payload: Prisma.$OutreachSequenceStepPayload<ExtArgs>
+        fields: Prisma.OutreachSequenceStepFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.OutreachSequenceStepFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OutreachSequenceStepPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.OutreachSequenceStepFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OutreachSequenceStepPayload>
+          }
+          findFirst: {
+            args: Prisma.OutreachSequenceStepFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OutreachSequenceStepPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.OutreachSequenceStepFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OutreachSequenceStepPayload>
+          }
+          findMany: {
+            args: Prisma.OutreachSequenceStepFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OutreachSequenceStepPayload>[]
+          }
+          create: {
+            args: Prisma.OutreachSequenceStepCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OutreachSequenceStepPayload>
+          }
+          createMany: {
+            args: Prisma.OutreachSequenceStepCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.OutreachSequenceStepCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OutreachSequenceStepPayload>[]
+          }
+          delete: {
+            args: Prisma.OutreachSequenceStepDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OutreachSequenceStepPayload>
+          }
+          update: {
+            args: Prisma.OutreachSequenceStepUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OutreachSequenceStepPayload>
+          }
+          deleteMany: {
+            args: Prisma.OutreachSequenceStepDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.OutreachSequenceStepUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.OutreachSequenceStepUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OutreachSequenceStepPayload>[]
+          }
+          upsert: {
+            args: Prisma.OutreachSequenceStepUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OutreachSequenceStepPayload>
+          }
+          aggregate: {
+            args: Prisma.OutreachSequenceStepAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateOutreachSequenceStep>
+          }
+          groupBy: {
+            args: Prisma.OutreachSequenceStepGroupByArgs<ExtArgs>
+            result: $Utils.Optional<OutreachSequenceStepGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.OutreachSequenceStepCountArgs<ExtArgs>
+            result: $Utils.Optional<OutreachSequenceStepCountAggregateOutputType> | number
+          }
+        }
+      }
+      SequenceEnrollment: {
+        payload: Prisma.$SequenceEnrollmentPayload<ExtArgs>
+        fields: Prisma.SequenceEnrollmentFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SequenceEnrollmentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SequenceEnrollmentPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SequenceEnrollmentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SequenceEnrollmentPayload>
+          }
+          findFirst: {
+            args: Prisma.SequenceEnrollmentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SequenceEnrollmentPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SequenceEnrollmentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SequenceEnrollmentPayload>
+          }
+          findMany: {
+            args: Prisma.SequenceEnrollmentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SequenceEnrollmentPayload>[]
+          }
+          create: {
+            args: Prisma.SequenceEnrollmentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SequenceEnrollmentPayload>
+          }
+          createMany: {
+            args: Prisma.SequenceEnrollmentCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SequenceEnrollmentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SequenceEnrollmentPayload>[]
+          }
+          delete: {
+            args: Prisma.SequenceEnrollmentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SequenceEnrollmentPayload>
+          }
+          update: {
+            args: Prisma.SequenceEnrollmentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SequenceEnrollmentPayload>
+          }
+          deleteMany: {
+            args: Prisma.SequenceEnrollmentDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SequenceEnrollmentUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.SequenceEnrollmentUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SequenceEnrollmentPayload>[]
+          }
+          upsert: {
+            args: Prisma.SequenceEnrollmentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SequenceEnrollmentPayload>
+          }
+          aggregate: {
+            args: Prisma.SequenceEnrollmentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSequenceEnrollment>
+          }
+          groupBy: {
+            args: Prisma.SequenceEnrollmentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SequenceEnrollmentGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SequenceEnrollmentCountArgs<ExtArgs>
+            result: $Utils.Optional<SequenceEnrollmentCountAggregateOutputType> | number
           }
         }
       }
@@ -5454,6 +5688,8 @@ export namespace Prisma {
     interaction?: InteractionOmit
     outreachMessage?: OutreachMessageOmit
     outreachSequence?: OutreachSequenceOmit
+    outreachSequenceStep?: OutreachSequenceStepOmit
+    sequenceEnrollment?: SequenceEnrollmentOmit
     filterJob?: FilterJobOmit
     bulkJob?: BulkJobOmit
     websiteScrapeRequest?: WebsiteScrapeRequestOmit
@@ -6093,6 +6329,7 @@ export namespace Prisma {
     form_completions: number
     list_memberships: number
     enrichments: number
+    sequence_enrollments: number
   }
 
   export type ContactCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6107,6 +6344,7 @@ export namespace Prisma {
     form_completions?: boolean | ContactCountOutputTypeCountForm_completionsArgs
     list_memberships?: boolean | ContactCountOutputTypeCountList_membershipsArgs
     enrichments?: boolean | ContactCountOutputTypeCountEnrichmentsArgs
+    sequence_enrollments?: boolean | ContactCountOutputTypeCountSequence_enrollmentsArgs
   }
 
   // Custom InputTypes
@@ -6197,6 +6435,13 @@ export namespace Prisma {
     where?: ContactEnrichmentWhereInput
   }
 
+  /**
+   * ContactCountOutputType without action
+   */
+  export type ContactCountOutputTypeCountSequence_enrollmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SequenceEnrollmentWhereInput
+  }
+
 
   /**
    * Count Type ContactListCountOutputType
@@ -6248,6 +6493,117 @@ export namespace Prisma {
 
 
   /**
+   * Count Type OutreachSequenceCountOutputType
+   */
+
+  export type OutreachSequenceCountOutputType = {
+    steps: number
+    enrollments: number
+    campaigns: number
+  }
+
+  export type OutreachSequenceCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    steps?: boolean | OutreachSequenceCountOutputTypeCountStepsArgs
+    enrollments?: boolean | OutreachSequenceCountOutputTypeCountEnrollmentsArgs
+    campaigns?: boolean | OutreachSequenceCountOutputTypeCountCampaignsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * OutreachSequenceCountOutputType without action
+   */
+  export type OutreachSequenceCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OutreachSequenceCountOutputType
+     */
+    select?: OutreachSequenceCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * OutreachSequenceCountOutputType without action
+   */
+  export type OutreachSequenceCountOutputTypeCountStepsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OutreachSequenceStepWhereInput
+  }
+
+  /**
+   * OutreachSequenceCountOutputType without action
+   */
+  export type OutreachSequenceCountOutputTypeCountEnrollmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SequenceEnrollmentWhereInput
+  }
+
+  /**
+   * OutreachSequenceCountOutputType without action
+   */
+  export type OutreachSequenceCountOutputTypeCountCampaignsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MarketingCampaignWhereInput
+  }
+
+
+  /**
+   * Count Type OutreachSequenceStepCountOutputType
+   */
+
+  export type OutreachSequenceStepCountOutputType = {
+    outreach_messages: number
+  }
+
+  export type OutreachSequenceStepCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    outreach_messages?: boolean | OutreachSequenceStepCountOutputTypeCountOutreach_messagesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * OutreachSequenceStepCountOutputType without action
+   */
+  export type OutreachSequenceStepCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OutreachSequenceStepCountOutputType
+     */
+    select?: OutreachSequenceStepCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * OutreachSequenceStepCountOutputType without action
+   */
+  export type OutreachSequenceStepCountOutputTypeCountOutreach_messagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OutreachMessageWhereInput
+  }
+
+
+  /**
+   * Count Type SequenceEnrollmentCountOutputType
+   */
+
+  export type SequenceEnrollmentCountOutputType = {
+    outreach_messages: number
+  }
+
+  export type SequenceEnrollmentCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    outreach_messages?: boolean | SequenceEnrollmentCountOutputTypeCountOutreach_messagesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * SequenceEnrollmentCountOutputType without action
+   */
+  export type SequenceEnrollmentCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SequenceEnrollmentCountOutputType
+     */
+    select?: SequenceEnrollmentCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * SequenceEnrollmentCountOutputType without action
+   */
+  export type SequenceEnrollmentCountOutputTypeCountOutreach_messagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OutreachMessageWhereInput
+  }
+
+
+  /**
    * Count Type SenderProfileCountOutputType
    */
 
@@ -6279,6 +6635,37 @@ export namespace Prisma {
 
 
   /**
+   * Count Type MessageTemplateCountOutputType
+   */
+
+  export type MessageTemplateCountOutputType = {
+    sequence_steps: number
+  }
+
+  export type MessageTemplateCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sequence_steps?: boolean | MessageTemplateCountOutputTypeCountSequence_stepsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * MessageTemplateCountOutputType without action
+   */
+  export type MessageTemplateCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessageTemplateCountOutputType
+     */
+    select?: MessageTemplateCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * MessageTemplateCountOutputType without action
+   */
+  export type MessageTemplateCountOutputTypeCountSequence_stepsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OutreachSequenceStepWhereInput
+  }
+
+
+  /**
    * Count Type MarketingCampaignCountOutputType
    */
 
@@ -6286,12 +6673,14 @@ export namespace Prisma {
     campaign_contacts: number
     outreach_messages: number
     interactions: number
+    sequence_enrollments: number
   }
 
   export type MarketingCampaignCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     campaign_contacts?: boolean | MarketingCampaignCountOutputTypeCountCampaign_contactsArgs
     outreach_messages?: boolean | MarketingCampaignCountOutputTypeCountOutreach_messagesArgs
     interactions?: boolean | MarketingCampaignCountOutputTypeCountInteractionsArgs
+    sequence_enrollments?: boolean | MarketingCampaignCountOutputTypeCountSequence_enrollmentsArgs
   }
 
   // Custom InputTypes
@@ -6324,6 +6713,13 @@ export namespace Prisma {
    */
   export type MarketingCampaignCountOutputTypeCountInteractionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: InteractionWhereInput
+  }
+
+  /**
+   * MarketingCampaignCountOutputType without action
+   */
+  export type MarketingCampaignCountOutputTypeCountSequence_enrollmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SequenceEnrollmentWhereInput
   }
 
 
@@ -20880,6 +21276,7 @@ export namespace Prisma {
     form_completions?: boolean | Contact$form_completionsArgs<ExtArgs>
     list_memberships?: boolean | Contact$list_membershipsArgs<ExtArgs>
     enrichments?: boolean | Contact$enrichmentsArgs<ExtArgs>
+    sequence_enrollments?: boolean | Contact$sequence_enrollmentsArgs<ExtArgs>
     _count?: boolean | ContactCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["contact"]>
 
@@ -20998,6 +21395,7 @@ export namespace Prisma {
     form_completions?: boolean | Contact$form_completionsArgs<ExtArgs>
     list_memberships?: boolean | Contact$list_membershipsArgs<ExtArgs>
     enrichments?: boolean | Contact$enrichmentsArgs<ExtArgs>
+    sequence_enrollments?: boolean | Contact$sequence_enrollmentsArgs<ExtArgs>
     _count?: boolean | ContactCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ContactIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -21028,6 +21426,7 @@ export namespace Prisma {
       form_completions: Prisma.$FormCompletionPayload<ExtArgs>[]
       list_memberships: Prisma.$ContactListMemberPayload<ExtArgs>[]
       enrichments: Prisma.$ContactEnrichmentPayload<ExtArgs>[]
+      sequence_enrollments: Prisma.$SequenceEnrollmentPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -21466,6 +21865,7 @@ export namespace Prisma {
     form_completions<T extends Contact$form_completionsArgs<ExtArgs> = {}>(args?: Subset<T, Contact$form_completionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FormCompletionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     list_memberships<T extends Contact$list_membershipsArgs<ExtArgs> = {}>(args?: Subset<T, Contact$list_membershipsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactListMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     enrichments<T extends Contact$enrichmentsArgs<ExtArgs> = {}>(args?: Subset<T, Contact$enrichmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactEnrichmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    sequence_enrollments<T extends Contact$sequence_enrollmentsArgs<ExtArgs> = {}>(args?: Subset<T, Contact$sequence_enrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SequenceEnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -22199,6 +22599,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ContactEnrichmentScalarFieldEnum | ContactEnrichmentScalarFieldEnum[]
+  }
+
+  /**
+   * Contact.sequence_enrollments
+   */
+  export type Contact$sequence_enrollmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SequenceEnrollment
+     */
+    select?: SequenceEnrollmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SequenceEnrollment
+     */
+    omit?: SequenceEnrollmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SequenceEnrollmentInclude<ExtArgs> | null
+    where?: SequenceEnrollmentWhereInput
+    orderBy?: SequenceEnrollmentOrderByWithRelationInput | SequenceEnrollmentOrderByWithRelationInput[]
+    cursor?: SequenceEnrollmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SequenceEnrollmentScalarFieldEnum | SequenceEnrollmentScalarFieldEnum[]
   }
 
   /**
@@ -31374,6 +31798,8 @@ export namespace Prisma {
     email_provider: $Enums.ExternalIntegrationProvider | null
     email_account: string | null
     sms_provider: string | null
+    sequence_enrollment_uuid: string | null
+    sequence_step_uuid: string | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -31403,6 +31829,8 @@ export namespace Prisma {
     email_provider: $Enums.ExternalIntegrationProvider | null
     email_account: string | null
     sms_provider: string | null
+    sequence_enrollment_uuid: string | null
+    sequence_step_uuid: string | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -31433,6 +31861,8 @@ export namespace Prisma {
     email_account: number
     sms_provider: number
     metadata: number
+    sequence_enrollment_uuid: number
+    sequence_step_uuid: number
     created_at: number
     updated_at: number
     _all: number
@@ -31472,6 +31902,8 @@ export namespace Prisma {
     email_provider?: true
     email_account?: true
     sms_provider?: true
+    sequence_enrollment_uuid?: true
+    sequence_step_uuid?: true
     created_at?: true
     updated_at?: true
   }
@@ -31501,6 +31933,8 @@ export namespace Prisma {
     email_provider?: true
     email_account?: true
     sms_provider?: true
+    sequence_enrollment_uuid?: true
+    sequence_step_uuid?: true
     created_at?: true
     updated_at?: true
   }
@@ -31531,6 +31965,8 @@ export namespace Prisma {
     email_account?: true
     sms_provider?: true
     metadata?: true
+    sequence_enrollment_uuid?: true
+    sequence_step_uuid?: true
     created_at?: true
     updated_at?: true
     _all?: true
@@ -31648,6 +32084,8 @@ export namespace Prisma {
     email_account: string | null
     sms_provider: string | null
     metadata: JsonValue | null
+    sequence_enrollment_uuid: string | null
+    sequence_step_uuid: string | null
     created_at: Date
     updated_at: Date
     _count: OutreachMessageCountAggregateOutputType | null
@@ -31697,6 +32135,8 @@ export namespace Prisma {
     email_account?: boolean
     sms_provider?: boolean
     metadata?: boolean
+    sequence_enrollment_uuid?: boolean
+    sequence_step_uuid?: boolean
     created_at?: boolean
     updated_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
@@ -31704,6 +32144,8 @@ export namespace Prisma {
     campaign?: boolean | OutreachMessage$campaignArgs<ExtArgs>
     sent_by?: boolean | OutreachMessage$sent_byArgs<ExtArgs>
     interaction?: boolean | OutreachMessage$interactionArgs<ExtArgs>
+    sequence_enrollment?: boolean | OutreachMessage$sequence_enrollmentArgs<ExtArgs>
+    sequence_step?: boolean | OutreachMessage$sequence_stepArgs<ExtArgs>
   }, ExtArgs["result"]["outreachMessage"]>
 
   export type OutreachMessageSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -31732,12 +32174,16 @@ export namespace Prisma {
     email_account?: boolean
     sms_provider?: boolean
     metadata?: boolean
+    sequence_enrollment_uuid?: boolean
+    sequence_step_uuid?: boolean
     created_at?: boolean
     updated_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     contact?: boolean | ContactDefaultArgs<ExtArgs>
     campaign?: boolean | OutreachMessage$campaignArgs<ExtArgs>
     sent_by?: boolean | OutreachMessage$sent_byArgs<ExtArgs>
+    sequence_enrollment?: boolean | OutreachMessage$sequence_enrollmentArgs<ExtArgs>
+    sequence_step?: boolean | OutreachMessage$sequence_stepArgs<ExtArgs>
   }, ExtArgs["result"]["outreachMessage"]>
 
   export type OutreachMessageSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -31766,12 +32212,16 @@ export namespace Prisma {
     email_account?: boolean
     sms_provider?: boolean
     metadata?: boolean
+    sequence_enrollment_uuid?: boolean
+    sequence_step_uuid?: boolean
     created_at?: boolean
     updated_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     contact?: boolean | ContactDefaultArgs<ExtArgs>
     campaign?: boolean | OutreachMessage$campaignArgs<ExtArgs>
     sent_by?: boolean | OutreachMessage$sent_byArgs<ExtArgs>
+    sequence_enrollment?: boolean | OutreachMessage$sequence_enrollmentArgs<ExtArgs>
+    sequence_step?: boolean | OutreachMessage$sequence_stepArgs<ExtArgs>
   }, ExtArgs["result"]["outreachMessage"]>
 
   export type OutreachMessageSelectScalar = {
@@ -31800,29 +32250,37 @@ export namespace Prisma {
     email_account?: boolean
     sms_provider?: boolean
     metadata?: boolean
+    sequence_enrollment_uuid?: boolean
+    sequence_step_uuid?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
-  export type OutreachMessageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "contact_uuid" | "campaign_uuid" | "sent_by_user_uuid" | "channel" | "direction" | "subject" | "content" | "status" | "provider_message_id" | "idempotency_key" | "scheduled_at" | "sent_at" | "delivered_at" | "opened_at" | "clicked_at" | "replied_at" | "bounced_at" | "failed_at" | "email_provider" | "email_account" | "sms_provider" | "metadata" | "created_at" | "updated_at", ExtArgs["result"]["outreachMessage"]>
+  export type OutreachMessageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "contact_uuid" | "campaign_uuid" | "sent_by_user_uuid" | "channel" | "direction" | "subject" | "content" | "status" | "provider_message_id" | "idempotency_key" | "scheduled_at" | "sent_at" | "delivered_at" | "opened_at" | "clicked_at" | "replied_at" | "bounced_at" | "failed_at" | "email_provider" | "email_account" | "sms_provider" | "metadata" | "sequence_enrollment_uuid" | "sequence_step_uuid" | "created_at" | "updated_at", ExtArgs["result"]["outreachMessage"]>
   export type OutreachMessageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     contact?: boolean | ContactDefaultArgs<ExtArgs>
     campaign?: boolean | OutreachMessage$campaignArgs<ExtArgs>
     sent_by?: boolean | OutreachMessage$sent_byArgs<ExtArgs>
     interaction?: boolean | OutreachMessage$interactionArgs<ExtArgs>
+    sequence_enrollment?: boolean | OutreachMessage$sequence_enrollmentArgs<ExtArgs>
+    sequence_step?: boolean | OutreachMessage$sequence_stepArgs<ExtArgs>
   }
   export type OutreachMessageIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     contact?: boolean | ContactDefaultArgs<ExtArgs>
     campaign?: boolean | OutreachMessage$campaignArgs<ExtArgs>
     sent_by?: boolean | OutreachMessage$sent_byArgs<ExtArgs>
+    sequence_enrollment?: boolean | OutreachMessage$sequence_enrollmentArgs<ExtArgs>
+    sequence_step?: boolean | OutreachMessage$sequence_stepArgs<ExtArgs>
   }
   export type OutreachMessageIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     contact?: boolean | ContactDefaultArgs<ExtArgs>
     campaign?: boolean | OutreachMessage$campaignArgs<ExtArgs>
     sent_by?: boolean | OutreachMessage$sent_byArgs<ExtArgs>
+    sequence_enrollment?: boolean | OutreachMessage$sequence_enrollmentArgs<ExtArgs>
+    sequence_step?: boolean | OutreachMessage$sequence_stepArgs<ExtArgs>
   }
 
   export type $OutreachMessagePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -31833,6 +32291,8 @@ export namespace Prisma {
       campaign: Prisma.$MarketingCampaignPayload<ExtArgs> | null
       sent_by: Prisma.$UserPayload<ExtArgs> | null
       interaction: Prisma.$InteractionPayload<ExtArgs> | null
+      sequence_enrollment: Prisma.$SequenceEnrollmentPayload<ExtArgs> | null
+      sequence_step: Prisma.$OutreachSequenceStepPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -31860,6 +32320,8 @@ export namespace Prisma {
       email_account: string | null
       sms_provider: string | null
       metadata: Prisma.JsonValue | null
+      sequence_enrollment_uuid: string | null
+      sequence_step_uuid: string | null
       created_at: Date
       updated_at: Date
     }, ExtArgs["result"]["outreachMessage"]>
@@ -32261,6 +32723,8 @@ export namespace Prisma {
     campaign<T extends OutreachMessage$campaignArgs<ExtArgs> = {}>(args?: Subset<T, OutreachMessage$campaignArgs<ExtArgs>>): Prisma__MarketingCampaignClient<$Result.GetResult<Prisma.$MarketingCampaignPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     sent_by<T extends OutreachMessage$sent_byArgs<ExtArgs> = {}>(args?: Subset<T, OutreachMessage$sent_byArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     interaction<T extends OutreachMessage$interactionArgs<ExtArgs> = {}>(args?: Subset<T, OutreachMessage$interactionArgs<ExtArgs>>): Prisma__InteractionClient<$Result.GetResult<Prisma.$InteractionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    sequence_enrollment<T extends OutreachMessage$sequence_enrollmentArgs<ExtArgs> = {}>(args?: Subset<T, OutreachMessage$sequence_enrollmentArgs<ExtArgs>>): Prisma__SequenceEnrollmentClient<$Result.GetResult<Prisma.$SequenceEnrollmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    sequence_step<T extends OutreachMessage$sequence_stepArgs<ExtArgs> = {}>(args?: Subset<T, OutreachMessage$sequence_stepArgs<ExtArgs>>): Prisma__OutreachSequenceStepClient<$Result.GetResult<Prisma.$OutreachSequenceStepPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -32315,6 +32779,8 @@ export namespace Prisma {
     readonly email_account: FieldRef<"OutreachMessage", 'String'>
     readonly sms_provider: FieldRef<"OutreachMessage", 'String'>
     readonly metadata: FieldRef<"OutreachMessage", 'Json'>
+    readonly sequence_enrollment_uuid: FieldRef<"OutreachMessage", 'String'>
+    readonly sequence_step_uuid: FieldRef<"OutreachMessage", 'String'>
     readonly created_at: FieldRef<"OutreachMessage", 'DateTime'>
     readonly updated_at: FieldRef<"OutreachMessage", 'DateTime'>
   }
@@ -32770,6 +33236,44 @@ export namespace Prisma {
   }
 
   /**
+   * OutreachMessage.sequence_enrollment
+   */
+  export type OutreachMessage$sequence_enrollmentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SequenceEnrollment
+     */
+    select?: SequenceEnrollmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SequenceEnrollment
+     */
+    omit?: SequenceEnrollmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SequenceEnrollmentInclude<ExtArgs> | null
+    where?: SequenceEnrollmentWhereInput
+  }
+
+  /**
+   * OutreachMessage.sequence_step
+   */
+  export type OutreachMessage$sequence_stepArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OutreachSequenceStep
+     */
+    select?: OutreachSequenceStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OutreachSequenceStep
+     */
+    omit?: OutreachSequenceStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OutreachSequenceStepInclude<ExtArgs> | null
+    where?: OutreachSequenceStepWhereInput
+  }
+
+  /**
    * OutreachMessage without action
    */
   export type OutreachMessageDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -32813,6 +33317,8 @@ export namespace Prisma {
     uuid: string | null
     organisation_uuid: string | null
     name: string | null
+    description: string | null
+    status: $Enums.SequenceStatus | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -32822,6 +33328,8 @@ export namespace Prisma {
     uuid: string | null
     organisation_uuid: string | null
     name: string | null
+    description: string | null
+    status: $Enums.SequenceStatus | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -32831,7 +33339,8 @@ export namespace Prisma {
     uuid: number
     organisation_uuid: number
     name: number
-    steps: number
+    description: number
+    status: number
     created_at: number
     updated_at: number
     _all: number
@@ -32851,6 +33360,8 @@ export namespace Prisma {
     uuid?: true
     organisation_uuid?: true
     name?: true
+    description?: true
+    status?: true
     created_at?: true
     updated_at?: true
   }
@@ -32860,6 +33371,8 @@ export namespace Prisma {
     uuid?: true
     organisation_uuid?: true
     name?: true
+    description?: true
+    status?: true
     created_at?: true
     updated_at?: true
   }
@@ -32869,7 +33382,8 @@ export namespace Prisma {
     uuid?: true
     organisation_uuid?: true
     name?: true
-    steps?: true
+    description?: true
+    status?: true
     created_at?: true
     updated_at?: true
     _all?: true
@@ -32966,7 +33480,8 @@ export namespace Prisma {
     uuid: string
     organisation_uuid: string
     name: string
-    steps: JsonValue
+    description: string | null
+    status: $Enums.SequenceStatus
     created_at: Date
     updated_at: Date
     _count: OutreachSequenceCountAggregateOutputType | null
@@ -32995,10 +33510,15 @@ export namespace Prisma {
     uuid?: boolean
     organisation_uuid?: boolean
     name?: boolean
-    steps?: boolean
+    description?: boolean
+    status?: boolean
     created_at?: boolean
     updated_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    steps?: boolean | OutreachSequence$stepsArgs<ExtArgs>
+    enrollments?: boolean | OutreachSequence$enrollmentsArgs<ExtArgs>
+    campaigns?: boolean | OutreachSequence$campaignsArgs<ExtArgs>
+    _count?: boolean | OutreachSequenceCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["outreachSequence"]>
 
   export type OutreachSequenceSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -33006,7 +33526,8 @@ export namespace Prisma {
     uuid?: boolean
     organisation_uuid?: boolean
     name?: boolean
-    steps?: boolean
+    description?: boolean
+    status?: boolean
     created_at?: boolean
     updated_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
@@ -33017,7 +33538,8 @@ export namespace Prisma {
     uuid?: boolean
     organisation_uuid?: boolean
     name?: boolean
-    steps?: boolean
+    description?: boolean
+    status?: boolean
     created_at?: boolean
     updated_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
@@ -33028,14 +33550,19 @@ export namespace Prisma {
     uuid?: boolean
     organisation_uuid?: boolean
     name?: boolean
-    steps?: boolean
+    description?: boolean
+    status?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
-  export type OutreachSequenceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "name" | "steps" | "created_at" | "updated_at", ExtArgs["result"]["outreachSequence"]>
+  export type OutreachSequenceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "name" | "description" | "status" | "created_at" | "updated_at", ExtArgs["result"]["outreachSequence"]>
   export type OutreachSequenceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    steps?: boolean | OutreachSequence$stepsArgs<ExtArgs>
+    enrollments?: boolean | OutreachSequence$enrollmentsArgs<ExtArgs>
+    campaigns?: boolean | OutreachSequence$campaignsArgs<ExtArgs>
+    _count?: boolean | OutreachSequenceCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type OutreachSequenceIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
@@ -33048,13 +33575,17 @@ export namespace Prisma {
     name: "OutreachSequence"
     objects: {
       organisation: Prisma.$OrganisationPayload<ExtArgs>
+      steps: Prisma.$OutreachSequenceStepPayload<ExtArgs>[]
+      enrollments: Prisma.$SequenceEnrollmentPayload<ExtArgs>[]
+      campaigns: Prisma.$MarketingCampaignPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
       uuid: string
       organisation_uuid: string
       name: string
-      steps: Prisma.JsonValue
+      description: string | null
+      status: $Enums.SequenceStatus
       created_at: Date
       updated_at: Date
     }, ExtArgs["result"]["outreachSequence"]>
@@ -33452,6 +33983,9 @@ export namespace Prisma {
   export interface Prisma__OutreachSequenceClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     organisation<T extends OrganisationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganisationDefaultArgs<ExtArgs>>): Prisma__OrganisationClient<$Result.GetResult<Prisma.$OrganisationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    steps<T extends OutreachSequence$stepsArgs<ExtArgs> = {}>(args?: Subset<T, OutreachSequence$stepsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OutreachSequenceStepPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    enrollments<T extends OutreachSequence$enrollmentsArgs<ExtArgs> = {}>(args?: Subset<T, OutreachSequence$enrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SequenceEnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    campaigns<T extends OutreachSequence$campaignsArgs<ExtArgs> = {}>(args?: Subset<T, OutreachSequence$campaignsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MarketingCampaignPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -33485,7 +34019,8 @@ export namespace Prisma {
     readonly uuid: FieldRef<"OutreachSequence", 'String'>
     readonly organisation_uuid: FieldRef<"OutreachSequence", 'String'>
     readonly name: FieldRef<"OutreachSequence", 'String'>
-    readonly steps: FieldRef<"OutreachSequence", 'Json'>
+    readonly description: FieldRef<"OutreachSequence", 'String'>
+    readonly status: FieldRef<"OutreachSequence", 'SequenceStatus'>
     readonly created_at: FieldRef<"OutreachSequence", 'DateTime'>
     readonly updated_at: FieldRef<"OutreachSequence", 'DateTime'>
   }
@@ -33884,6 +34419,78 @@ export namespace Prisma {
   }
 
   /**
+   * OutreachSequence.steps
+   */
+  export type OutreachSequence$stepsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OutreachSequenceStep
+     */
+    select?: OutreachSequenceStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OutreachSequenceStep
+     */
+    omit?: OutreachSequenceStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OutreachSequenceStepInclude<ExtArgs> | null
+    where?: OutreachSequenceStepWhereInput
+    orderBy?: OutreachSequenceStepOrderByWithRelationInput | OutreachSequenceStepOrderByWithRelationInput[]
+    cursor?: OutreachSequenceStepWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: OutreachSequenceStepScalarFieldEnum | OutreachSequenceStepScalarFieldEnum[]
+  }
+
+  /**
+   * OutreachSequence.enrollments
+   */
+  export type OutreachSequence$enrollmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SequenceEnrollment
+     */
+    select?: SequenceEnrollmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SequenceEnrollment
+     */
+    omit?: SequenceEnrollmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SequenceEnrollmentInclude<ExtArgs> | null
+    where?: SequenceEnrollmentWhereInput
+    orderBy?: SequenceEnrollmentOrderByWithRelationInput | SequenceEnrollmentOrderByWithRelationInput[]
+    cursor?: SequenceEnrollmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SequenceEnrollmentScalarFieldEnum | SequenceEnrollmentScalarFieldEnum[]
+  }
+
+  /**
+   * OutreachSequence.campaigns
+   */
+  export type OutreachSequence$campaignsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MarketingCampaign
+     */
+    select?: MarketingCampaignSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MarketingCampaign
+     */
+    omit?: MarketingCampaignOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MarketingCampaignInclude<ExtArgs> | null
+    where?: MarketingCampaignWhereInput
+    orderBy?: MarketingCampaignOrderByWithRelationInput | MarketingCampaignOrderByWithRelationInput[]
+    cursor?: MarketingCampaignWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MarketingCampaignScalarFieldEnum | MarketingCampaignScalarFieldEnum[]
+  }
+
+  /**
    * OutreachSequence without action
    */
   export type OutreachSequenceDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -33899,6 +34506,2528 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: OutreachSequenceInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model OutreachSequenceStep
+   */
+
+  export type AggregateOutreachSequenceStep = {
+    _count: OutreachSequenceStepCountAggregateOutputType | null
+    _avg: OutreachSequenceStepAvgAggregateOutputType | null
+    _sum: OutreachSequenceStepSumAggregateOutputType | null
+    _min: OutreachSequenceStepMinAggregateOutputType | null
+    _max: OutreachSequenceStepMaxAggregateOutputType | null
+  }
+
+  export type OutreachSequenceStepAvgAggregateOutputType = {
+    id: number | null
+    order_index: number | null
+    delay_value: number | null
+  }
+
+  export type OutreachSequenceStepSumAggregateOutputType = {
+    id: number | null
+    order_index: number | null
+    delay_value: number | null
+  }
+
+  export type OutreachSequenceStepMinAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    sequence_uuid: string | null
+    order_index: number | null
+    enabled: boolean | null
+    channel: $Enums.Channel | null
+    email_subject: string | null
+    email_content: string | null
+    sms_content: string | null
+    message_template_uuid: string | null
+    delay_value: number | null
+    delay_unit: $Enums.SequenceDelayUnit | null
+    delay_reference: $Enums.SequenceDelayReference | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type OutreachSequenceStepMaxAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    sequence_uuid: string | null
+    order_index: number | null
+    enabled: boolean | null
+    channel: $Enums.Channel | null
+    email_subject: string | null
+    email_content: string | null
+    sms_content: string | null
+    message_template_uuid: string | null
+    delay_value: number | null
+    delay_unit: $Enums.SequenceDelayUnit | null
+    delay_reference: $Enums.SequenceDelayReference | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type OutreachSequenceStepCountAggregateOutputType = {
+    id: number
+    uuid: number
+    sequence_uuid: number
+    order_index: number
+    enabled: number
+    channel: number
+    email_subject: number
+    email_content: number
+    sms_content: number
+    message_template_uuid: number
+    delay_value: number
+    delay_unit: number
+    delay_reference: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type OutreachSequenceStepAvgAggregateInputType = {
+    id?: true
+    order_index?: true
+    delay_value?: true
+  }
+
+  export type OutreachSequenceStepSumAggregateInputType = {
+    id?: true
+    order_index?: true
+    delay_value?: true
+  }
+
+  export type OutreachSequenceStepMinAggregateInputType = {
+    id?: true
+    uuid?: true
+    sequence_uuid?: true
+    order_index?: true
+    enabled?: true
+    channel?: true
+    email_subject?: true
+    email_content?: true
+    sms_content?: true
+    message_template_uuid?: true
+    delay_value?: true
+    delay_unit?: true
+    delay_reference?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type OutreachSequenceStepMaxAggregateInputType = {
+    id?: true
+    uuid?: true
+    sequence_uuid?: true
+    order_index?: true
+    enabled?: true
+    channel?: true
+    email_subject?: true
+    email_content?: true
+    sms_content?: true
+    message_template_uuid?: true
+    delay_value?: true
+    delay_unit?: true
+    delay_reference?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type OutreachSequenceStepCountAggregateInputType = {
+    id?: true
+    uuid?: true
+    sequence_uuid?: true
+    order_index?: true
+    enabled?: true
+    channel?: true
+    email_subject?: true
+    email_content?: true
+    sms_content?: true
+    message_template_uuid?: true
+    delay_value?: true
+    delay_unit?: true
+    delay_reference?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type OutreachSequenceStepAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which OutreachSequenceStep to aggregate.
+     */
+    where?: OutreachSequenceStepWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OutreachSequenceSteps to fetch.
+     */
+    orderBy?: OutreachSequenceStepOrderByWithRelationInput | OutreachSequenceStepOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: OutreachSequenceStepWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OutreachSequenceSteps from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OutreachSequenceSteps.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned OutreachSequenceSteps
+    **/
+    _count?: true | OutreachSequenceStepCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: OutreachSequenceStepAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: OutreachSequenceStepSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: OutreachSequenceStepMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: OutreachSequenceStepMaxAggregateInputType
+  }
+
+  export type GetOutreachSequenceStepAggregateType<T extends OutreachSequenceStepAggregateArgs> = {
+        [P in keyof T & keyof AggregateOutreachSequenceStep]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateOutreachSequenceStep[P]>
+      : GetScalarType<T[P], AggregateOutreachSequenceStep[P]>
+  }
+
+
+
+
+  export type OutreachSequenceStepGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OutreachSequenceStepWhereInput
+    orderBy?: OutreachSequenceStepOrderByWithAggregationInput | OutreachSequenceStepOrderByWithAggregationInput[]
+    by: OutreachSequenceStepScalarFieldEnum[] | OutreachSequenceStepScalarFieldEnum
+    having?: OutreachSequenceStepScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: OutreachSequenceStepCountAggregateInputType | true
+    _avg?: OutreachSequenceStepAvgAggregateInputType
+    _sum?: OutreachSequenceStepSumAggregateInputType
+    _min?: OutreachSequenceStepMinAggregateInputType
+    _max?: OutreachSequenceStepMaxAggregateInputType
+  }
+
+  export type OutreachSequenceStepGroupByOutputType = {
+    id: number
+    uuid: string
+    sequence_uuid: string
+    order_index: number
+    enabled: boolean
+    channel: $Enums.Channel
+    email_subject: string | null
+    email_content: string | null
+    sms_content: string | null
+    message_template_uuid: string | null
+    delay_value: number
+    delay_unit: $Enums.SequenceDelayUnit
+    delay_reference: $Enums.SequenceDelayReference
+    created_at: Date
+    updated_at: Date
+    _count: OutreachSequenceStepCountAggregateOutputType | null
+    _avg: OutreachSequenceStepAvgAggregateOutputType | null
+    _sum: OutreachSequenceStepSumAggregateOutputType | null
+    _min: OutreachSequenceStepMinAggregateOutputType | null
+    _max: OutreachSequenceStepMaxAggregateOutputType | null
+  }
+
+  type GetOutreachSequenceStepGroupByPayload<T extends OutreachSequenceStepGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<OutreachSequenceStepGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof OutreachSequenceStepGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], OutreachSequenceStepGroupByOutputType[P]>
+            : GetScalarType<T[P], OutreachSequenceStepGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type OutreachSequenceStepSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    sequence_uuid?: boolean
+    order_index?: boolean
+    enabled?: boolean
+    channel?: boolean
+    email_subject?: boolean
+    email_content?: boolean
+    sms_content?: boolean
+    message_template_uuid?: boolean
+    delay_value?: boolean
+    delay_unit?: boolean
+    delay_reference?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    sequence?: boolean | OutreachSequenceDefaultArgs<ExtArgs>
+    message_template?: boolean | OutreachSequenceStep$message_templateArgs<ExtArgs>
+    outreach_messages?: boolean | OutreachSequenceStep$outreach_messagesArgs<ExtArgs>
+    _count?: boolean | OutreachSequenceStepCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["outreachSequenceStep"]>
+
+  export type OutreachSequenceStepSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    sequence_uuid?: boolean
+    order_index?: boolean
+    enabled?: boolean
+    channel?: boolean
+    email_subject?: boolean
+    email_content?: boolean
+    sms_content?: boolean
+    message_template_uuid?: boolean
+    delay_value?: boolean
+    delay_unit?: boolean
+    delay_reference?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    sequence?: boolean | OutreachSequenceDefaultArgs<ExtArgs>
+    message_template?: boolean | OutreachSequenceStep$message_templateArgs<ExtArgs>
+  }, ExtArgs["result"]["outreachSequenceStep"]>
+
+  export type OutreachSequenceStepSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    sequence_uuid?: boolean
+    order_index?: boolean
+    enabled?: boolean
+    channel?: boolean
+    email_subject?: boolean
+    email_content?: boolean
+    sms_content?: boolean
+    message_template_uuid?: boolean
+    delay_value?: boolean
+    delay_unit?: boolean
+    delay_reference?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    sequence?: boolean | OutreachSequenceDefaultArgs<ExtArgs>
+    message_template?: boolean | OutreachSequenceStep$message_templateArgs<ExtArgs>
+  }, ExtArgs["result"]["outreachSequenceStep"]>
+
+  export type OutreachSequenceStepSelectScalar = {
+    id?: boolean
+    uuid?: boolean
+    sequence_uuid?: boolean
+    order_index?: boolean
+    enabled?: boolean
+    channel?: boolean
+    email_subject?: boolean
+    email_content?: boolean
+    sms_content?: boolean
+    message_template_uuid?: boolean
+    delay_value?: boolean
+    delay_unit?: boolean
+    delay_reference?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type OutreachSequenceStepOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "sequence_uuid" | "order_index" | "enabled" | "channel" | "email_subject" | "email_content" | "sms_content" | "message_template_uuid" | "delay_value" | "delay_unit" | "delay_reference" | "created_at" | "updated_at", ExtArgs["result"]["outreachSequenceStep"]>
+  export type OutreachSequenceStepInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sequence?: boolean | OutreachSequenceDefaultArgs<ExtArgs>
+    message_template?: boolean | OutreachSequenceStep$message_templateArgs<ExtArgs>
+    outreach_messages?: boolean | OutreachSequenceStep$outreach_messagesArgs<ExtArgs>
+    _count?: boolean | OutreachSequenceStepCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type OutreachSequenceStepIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sequence?: boolean | OutreachSequenceDefaultArgs<ExtArgs>
+    message_template?: boolean | OutreachSequenceStep$message_templateArgs<ExtArgs>
+  }
+  export type OutreachSequenceStepIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sequence?: boolean | OutreachSequenceDefaultArgs<ExtArgs>
+    message_template?: boolean | OutreachSequenceStep$message_templateArgs<ExtArgs>
+  }
+
+  export type $OutreachSequenceStepPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "OutreachSequenceStep"
+    objects: {
+      sequence: Prisma.$OutreachSequencePayload<ExtArgs>
+      message_template: Prisma.$MessageTemplatePayload<ExtArgs> | null
+      outreach_messages: Prisma.$OutreachMessagePayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      uuid: string
+      sequence_uuid: string
+      order_index: number
+      enabled: boolean
+      channel: $Enums.Channel
+      email_subject: string | null
+      email_content: string | null
+      sms_content: string | null
+      message_template_uuid: string | null
+      delay_value: number
+      delay_unit: $Enums.SequenceDelayUnit
+      delay_reference: $Enums.SequenceDelayReference
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["outreachSequenceStep"]>
+    composites: {}
+  }
+
+  type OutreachSequenceStepGetPayload<S extends boolean | null | undefined | OutreachSequenceStepDefaultArgs> = $Result.GetResult<Prisma.$OutreachSequenceStepPayload, S>
+
+  type OutreachSequenceStepCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<OutreachSequenceStepFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: OutreachSequenceStepCountAggregateInputType | true
+    }
+
+  export interface OutreachSequenceStepDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['OutreachSequenceStep'], meta: { name: 'OutreachSequenceStep' } }
+    /**
+     * Find zero or one OutreachSequenceStep that matches the filter.
+     * @param {OutreachSequenceStepFindUniqueArgs} args - Arguments to find a OutreachSequenceStep
+     * @example
+     * // Get one OutreachSequenceStep
+     * const outreachSequenceStep = await prisma.outreachSequenceStep.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends OutreachSequenceStepFindUniqueArgs>(args: SelectSubset<T, OutreachSequenceStepFindUniqueArgs<ExtArgs>>): Prisma__OutreachSequenceStepClient<$Result.GetResult<Prisma.$OutreachSequenceStepPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one OutreachSequenceStep that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {OutreachSequenceStepFindUniqueOrThrowArgs} args - Arguments to find a OutreachSequenceStep
+     * @example
+     * // Get one OutreachSequenceStep
+     * const outreachSequenceStep = await prisma.outreachSequenceStep.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends OutreachSequenceStepFindUniqueOrThrowArgs>(args: SelectSubset<T, OutreachSequenceStepFindUniqueOrThrowArgs<ExtArgs>>): Prisma__OutreachSequenceStepClient<$Result.GetResult<Prisma.$OutreachSequenceStepPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first OutreachSequenceStep that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OutreachSequenceStepFindFirstArgs} args - Arguments to find a OutreachSequenceStep
+     * @example
+     * // Get one OutreachSequenceStep
+     * const outreachSequenceStep = await prisma.outreachSequenceStep.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends OutreachSequenceStepFindFirstArgs>(args?: SelectSubset<T, OutreachSequenceStepFindFirstArgs<ExtArgs>>): Prisma__OutreachSequenceStepClient<$Result.GetResult<Prisma.$OutreachSequenceStepPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first OutreachSequenceStep that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OutreachSequenceStepFindFirstOrThrowArgs} args - Arguments to find a OutreachSequenceStep
+     * @example
+     * // Get one OutreachSequenceStep
+     * const outreachSequenceStep = await prisma.outreachSequenceStep.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends OutreachSequenceStepFindFirstOrThrowArgs>(args?: SelectSubset<T, OutreachSequenceStepFindFirstOrThrowArgs<ExtArgs>>): Prisma__OutreachSequenceStepClient<$Result.GetResult<Prisma.$OutreachSequenceStepPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more OutreachSequenceSteps that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OutreachSequenceStepFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all OutreachSequenceSteps
+     * const outreachSequenceSteps = await prisma.outreachSequenceStep.findMany()
+     * 
+     * // Get first 10 OutreachSequenceSteps
+     * const outreachSequenceSteps = await prisma.outreachSequenceStep.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const outreachSequenceStepWithIdOnly = await prisma.outreachSequenceStep.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends OutreachSequenceStepFindManyArgs>(args?: SelectSubset<T, OutreachSequenceStepFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OutreachSequenceStepPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a OutreachSequenceStep.
+     * @param {OutreachSequenceStepCreateArgs} args - Arguments to create a OutreachSequenceStep.
+     * @example
+     * // Create one OutreachSequenceStep
+     * const OutreachSequenceStep = await prisma.outreachSequenceStep.create({
+     *   data: {
+     *     // ... data to create a OutreachSequenceStep
+     *   }
+     * })
+     * 
+     */
+    create<T extends OutreachSequenceStepCreateArgs>(args: SelectSubset<T, OutreachSequenceStepCreateArgs<ExtArgs>>): Prisma__OutreachSequenceStepClient<$Result.GetResult<Prisma.$OutreachSequenceStepPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many OutreachSequenceSteps.
+     * @param {OutreachSequenceStepCreateManyArgs} args - Arguments to create many OutreachSequenceSteps.
+     * @example
+     * // Create many OutreachSequenceSteps
+     * const outreachSequenceStep = await prisma.outreachSequenceStep.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends OutreachSequenceStepCreateManyArgs>(args?: SelectSubset<T, OutreachSequenceStepCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many OutreachSequenceSteps and returns the data saved in the database.
+     * @param {OutreachSequenceStepCreateManyAndReturnArgs} args - Arguments to create many OutreachSequenceSteps.
+     * @example
+     * // Create many OutreachSequenceSteps
+     * const outreachSequenceStep = await prisma.outreachSequenceStep.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many OutreachSequenceSteps and only return the `id`
+     * const outreachSequenceStepWithIdOnly = await prisma.outreachSequenceStep.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends OutreachSequenceStepCreateManyAndReturnArgs>(args?: SelectSubset<T, OutreachSequenceStepCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OutreachSequenceStepPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a OutreachSequenceStep.
+     * @param {OutreachSequenceStepDeleteArgs} args - Arguments to delete one OutreachSequenceStep.
+     * @example
+     * // Delete one OutreachSequenceStep
+     * const OutreachSequenceStep = await prisma.outreachSequenceStep.delete({
+     *   where: {
+     *     // ... filter to delete one OutreachSequenceStep
+     *   }
+     * })
+     * 
+     */
+    delete<T extends OutreachSequenceStepDeleteArgs>(args: SelectSubset<T, OutreachSequenceStepDeleteArgs<ExtArgs>>): Prisma__OutreachSequenceStepClient<$Result.GetResult<Prisma.$OutreachSequenceStepPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one OutreachSequenceStep.
+     * @param {OutreachSequenceStepUpdateArgs} args - Arguments to update one OutreachSequenceStep.
+     * @example
+     * // Update one OutreachSequenceStep
+     * const outreachSequenceStep = await prisma.outreachSequenceStep.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends OutreachSequenceStepUpdateArgs>(args: SelectSubset<T, OutreachSequenceStepUpdateArgs<ExtArgs>>): Prisma__OutreachSequenceStepClient<$Result.GetResult<Prisma.$OutreachSequenceStepPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more OutreachSequenceSteps.
+     * @param {OutreachSequenceStepDeleteManyArgs} args - Arguments to filter OutreachSequenceSteps to delete.
+     * @example
+     * // Delete a few OutreachSequenceSteps
+     * const { count } = await prisma.outreachSequenceStep.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends OutreachSequenceStepDeleteManyArgs>(args?: SelectSubset<T, OutreachSequenceStepDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more OutreachSequenceSteps.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OutreachSequenceStepUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many OutreachSequenceSteps
+     * const outreachSequenceStep = await prisma.outreachSequenceStep.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends OutreachSequenceStepUpdateManyArgs>(args: SelectSubset<T, OutreachSequenceStepUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more OutreachSequenceSteps and returns the data updated in the database.
+     * @param {OutreachSequenceStepUpdateManyAndReturnArgs} args - Arguments to update many OutreachSequenceSteps.
+     * @example
+     * // Update many OutreachSequenceSteps
+     * const outreachSequenceStep = await prisma.outreachSequenceStep.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more OutreachSequenceSteps and only return the `id`
+     * const outreachSequenceStepWithIdOnly = await prisma.outreachSequenceStep.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends OutreachSequenceStepUpdateManyAndReturnArgs>(args: SelectSubset<T, OutreachSequenceStepUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OutreachSequenceStepPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one OutreachSequenceStep.
+     * @param {OutreachSequenceStepUpsertArgs} args - Arguments to update or create a OutreachSequenceStep.
+     * @example
+     * // Update or create a OutreachSequenceStep
+     * const outreachSequenceStep = await prisma.outreachSequenceStep.upsert({
+     *   create: {
+     *     // ... data to create a OutreachSequenceStep
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the OutreachSequenceStep we want to update
+     *   }
+     * })
+     */
+    upsert<T extends OutreachSequenceStepUpsertArgs>(args: SelectSubset<T, OutreachSequenceStepUpsertArgs<ExtArgs>>): Prisma__OutreachSequenceStepClient<$Result.GetResult<Prisma.$OutreachSequenceStepPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of OutreachSequenceSteps.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OutreachSequenceStepCountArgs} args - Arguments to filter OutreachSequenceSteps to count.
+     * @example
+     * // Count the number of OutreachSequenceSteps
+     * const count = await prisma.outreachSequenceStep.count({
+     *   where: {
+     *     // ... the filter for the OutreachSequenceSteps we want to count
+     *   }
+     * })
+    **/
+    count<T extends OutreachSequenceStepCountArgs>(
+      args?: Subset<T, OutreachSequenceStepCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], OutreachSequenceStepCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a OutreachSequenceStep.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OutreachSequenceStepAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends OutreachSequenceStepAggregateArgs>(args: Subset<T, OutreachSequenceStepAggregateArgs>): Prisma.PrismaPromise<GetOutreachSequenceStepAggregateType<T>>
+
+    /**
+     * Group by OutreachSequenceStep.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OutreachSequenceStepGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends OutreachSequenceStepGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: OutreachSequenceStepGroupByArgs['orderBy'] }
+        : { orderBy?: OutreachSequenceStepGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, OutreachSequenceStepGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetOutreachSequenceStepGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the OutreachSequenceStep model
+   */
+  readonly fields: OutreachSequenceStepFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for OutreachSequenceStep.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__OutreachSequenceStepClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    sequence<T extends OutreachSequenceDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OutreachSequenceDefaultArgs<ExtArgs>>): Prisma__OutreachSequenceClient<$Result.GetResult<Prisma.$OutreachSequencePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    message_template<T extends OutreachSequenceStep$message_templateArgs<ExtArgs> = {}>(args?: Subset<T, OutreachSequenceStep$message_templateArgs<ExtArgs>>): Prisma__MessageTemplateClient<$Result.GetResult<Prisma.$MessageTemplatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    outreach_messages<T extends OutreachSequenceStep$outreach_messagesArgs<ExtArgs> = {}>(args?: Subset<T, OutreachSequenceStep$outreach_messagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OutreachMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the OutreachSequenceStep model
+   */
+  interface OutreachSequenceStepFieldRefs {
+    readonly id: FieldRef<"OutreachSequenceStep", 'Int'>
+    readonly uuid: FieldRef<"OutreachSequenceStep", 'String'>
+    readonly sequence_uuid: FieldRef<"OutreachSequenceStep", 'String'>
+    readonly order_index: FieldRef<"OutreachSequenceStep", 'Int'>
+    readonly enabled: FieldRef<"OutreachSequenceStep", 'Boolean'>
+    readonly channel: FieldRef<"OutreachSequenceStep", 'Channel'>
+    readonly email_subject: FieldRef<"OutreachSequenceStep", 'String'>
+    readonly email_content: FieldRef<"OutreachSequenceStep", 'String'>
+    readonly sms_content: FieldRef<"OutreachSequenceStep", 'String'>
+    readonly message_template_uuid: FieldRef<"OutreachSequenceStep", 'String'>
+    readonly delay_value: FieldRef<"OutreachSequenceStep", 'Int'>
+    readonly delay_unit: FieldRef<"OutreachSequenceStep", 'SequenceDelayUnit'>
+    readonly delay_reference: FieldRef<"OutreachSequenceStep", 'SequenceDelayReference'>
+    readonly created_at: FieldRef<"OutreachSequenceStep", 'DateTime'>
+    readonly updated_at: FieldRef<"OutreachSequenceStep", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * OutreachSequenceStep findUnique
+   */
+  export type OutreachSequenceStepFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OutreachSequenceStep
+     */
+    select?: OutreachSequenceStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OutreachSequenceStep
+     */
+    omit?: OutreachSequenceStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OutreachSequenceStepInclude<ExtArgs> | null
+    /**
+     * Filter, which OutreachSequenceStep to fetch.
+     */
+    where: OutreachSequenceStepWhereUniqueInput
+  }
+
+  /**
+   * OutreachSequenceStep findUniqueOrThrow
+   */
+  export type OutreachSequenceStepFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OutreachSequenceStep
+     */
+    select?: OutreachSequenceStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OutreachSequenceStep
+     */
+    omit?: OutreachSequenceStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OutreachSequenceStepInclude<ExtArgs> | null
+    /**
+     * Filter, which OutreachSequenceStep to fetch.
+     */
+    where: OutreachSequenceStepWhereUniqueInput
+  }
+
+  /**
+   * OutreachSequenceStep findFirst
+   */
+  export type OutreachSequenceStepFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OutreachSequenceStep
+     */
+    select?: OutreachSequenceStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OutreachSequenceStep
+     */
+    omit?: OutreachSequenceStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OutreachSequenceStepInclude<ExtArgs> | null
+    /**
+     * Filter, which OutreachSequenceStep to fetch.
+     */
+    where?: OutreachSequenceStepWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OutreachSequenceSteps to fetch.
+     */
+    orderBy?: OutreachSequenceStepOrderByWithRelationInput | OutreachSequenceStepOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for OutreachSequenceSteps.
+     */
+    cursor?: OutreachSequenceStepWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OutreachSequenceSteps from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OutreachSequenceSteps.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of OutreachSequenceSteps.
+     */
+    distinct?: OutreachSequenceStepScalarFieldEnum | OutreachSequenceStepScalarFieldEnum[]
+  }
+
+  /**
+   * OutreachSequenceStep findFirstOrThrow
+   */
+  export type OutreachSequenceStepFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OutreachSequenceStep
+     */
+    select?: OutreachSequenceStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OutreachSequenceStep
+     */
+    omit?: OutreachSequenceStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OutreachSequenceStepInclude<ExtArgs> | null
+    /**
+     * Filter, which OutreachSequenceStep to fetch.
+     */
+    where?: OutreachSequenceStepWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OutreachSequenceSteps to fetch.
+     */
+    orderBy?: OutreachSequenceStepOrderByWithRelationInput | OutreachSequenceStepOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for OutreachSequenceSteps.
+     */
+    cursor?: OutreachSequenceStepWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OutreachSequenceSteps from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OutreachSequenceSteps.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of OutreachSequenceSteps.
+     */
+    distinct?: OutreachSequenceStepScalarFieldEnum | OutreachSequenceStepScalarFieldEnum[]
+  }
+
+  /**
+   * OutreachSequenceStep findMany
+   */
+  export type OutreachSequenceStepFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OutreachSequenceStep
+     */
+    select?: OutreachSequenceStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OutreachSequenceStep
+     */
+    omit?: OutreachSequenceStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OutreachSequenceStepInclude<ExtArgs> | null
+    /**
+     * Filter, which OutreachSequenceSteps to fetch.
+     */
+    where?: OutreachSequenceStepWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OutreachSequenceSteps to fetch.
+     */
+    orderBy?: OutreachSequenceStepOrderByWithRelationInput | OutreachSequenceStepOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing OutreachSequenceSteps.
+     */
+    cursor?: OutreachSequenceStepWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OutreachSequenceSteps from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OutreachSequenceSteps.
+     */
+    skip?: number
+    distinct?: OutreachSequenceStepScalarFieldEnum | OutreachSequenceStepScalarFieldEnum[]
+  }
+
+  /**
+   * OutreachSequenceStep create
+   */
+  export type OutreachSequenceStepCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OutreachSequenceStep
+     */
+    select?: OutreachSequenceStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OutreachSequenceStep
+     */
+    omit?: OutreachSequenceStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OutreachSequenceStepInclude<ExtArgs> | null
+    /**
+     * The data needed to create a OutreachSequenceStep.
+     */
+    data: XOR<OutreachSequenceStepCreateInput, OutreachSequenceStepUncheckedCreateInput>
+  }
+
+  /**
+   * OutreachSequenceStep createMany
+   */
+  export type OutreachSequenceStepCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many OutreachSequenceSteps.
+     */
+    data: OutreachSequenceStepCreateManyInput | OutreachSequenceStepCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * OutreachSequenceStep createManyAndReturn
+   */
+  export type OutreachSequenceStepCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OutreachSequenceStep
+     */
+    select?: OutreachSequenceStepSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the OutreachSequenceStep
+     */
+    omit?: OutreachSequenceStepOmit<ExtArgs> | null
+    /**
+     * The data used to create many OutreachSequenceSteps.
+     */
+    data: OutreachSequenceStepCreateManyInput | OutreachSequenceStepCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OutreachSequenceStepIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * OutreachSequenceStep update
+   */
+  export type OutreachSequenceStepUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OutreachSequenceStep
+     */
+    select?: OutreachSequenceStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OutreachSequenceStep
+     */
+    omit?: OutreachSequenceStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OutreachSequenceStepInclude<ExtArgs> | null
+    /**
+     * The data needed to update a OutreachSequenceStep.
+     */
+    data: XOR<OutreachSequenceStepUpdateInput, OutreachSequenceStepUncheckedUpdateInput>
+    /**
+     * Choose, which OutreachSequenceStep to update.
+     */
+    where: OutreachSequenceStepWhereUniqueInput
+  }
+
+  /**
+   * OutreachSequenceStep updateMany
+   */
+  export type OutreachSequenceStepUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update OutreachSequenceSteps.
+     */
+    data: XOR<OutreachSequenceStepUpdateManyMutationInput, OutreachSequenceStepUncheckedUpdateManyInput>
+    /**
+     * Filter which OutreachSequenceSteps to update
+     */
+    where?: OutreachSequenceStepWhereInput
+    /**
+     * Limit how many OutreachSequenceSteps to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * OutreachSequenceStep updateManyAndReturn
+   */
+  export type OutreachSequenceStepUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OutreachSequenceStep
+     */
+    select?: OutreachSequenceStepSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the OutreachSequenceStep
+     */
+    omit?: OutreachSequenceStepOmit<ExtArgs> | null
+    /**
+     * The data used to update OutreachSequenceSteps.
+     */
+    data: XOR<OutreachSequenceStepUpdateManyMutationInput, OutreachSequenceStepUncheckedUpdateManyInput>
+    /**
+     * Filter which OutreachSequenceSteps to update
+     */
+    where?: OutreachSequenceStepWhereInput
+    /**
+     * Limit how many OutreachSequenceSteps to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OutreachSequenceStepIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * OutreachSequenceStep upsert
+   */
+  export type OutreachSequenceStepUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OutreachSequenceStep
+     */
+    select?: OutreachSequenceStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OutreachSequenceStep
+     */
+    omit?: OutreachSequenceStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OutreachSequenceStepInclude<ExtArgs> | null
+    /**
+     * The filter to search for the OutreachSequenceStep to update in case it exists.
+     */
+    where: OutreachSequenceStepWhereUniqueInput
+    /**
+     * In case the OutreachSequenceStep found by the `where` argument doesn't exist, create a new OutreachSequenceStep with this data.
+     */
+    create: XOR<OutreachSequenceStepCreateInput, OutreachSequenceStepUncheckedCreateInput>
+    /**
+     * In case the OutreachSequenceStep was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<OutreachSequenceStepUpdateInput, OutreachSequenceStepUncheckedUpdateInput>
+  }
+
+  /**
+   * OutreachSequenceStep delete
+   */
+  export type OutreachSequenceStepDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OutreachSequenceStep
+     */
+    select?: OutreachSequenceStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OutreachSequenceStep
+     */
+    omit?: OutreachSequenceStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OutreachSequenceStepInclude<ExtArgs> | null
+    /**
+     * Filter which OutreachSequenceStep to delete.
+     */
+    where: OutreachSequenceStepWhereUniqueInput
+  }
+
+  /**
+   * OutreachSequenceStep deleteMany
+   */
+  export type OutreachSequenceStepDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which OutreachSequenceSteps to delete
+     */
+    where?: OutreachSequenceStepWhereInput
+    /**
+     * Limit how many OutreachSequenceSteps to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * OutreachSequenceStep.message_template
+   */
+  export type OutreachSequenceStep$message_templateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessageTemplate
+     */
+    select?: MessageTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MessageTemplate
+     */
+    omit?: MessageTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessageTemplateInclude<ExtArgs> | null
+    where?: MessageTemplateWhereInput
+  }
+
+  /**
+   * OutreachSequenceStep.outreach_messages
+   */
+  export type OutreachSequenceStep$outreach_messagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OutreachMessage
+     */
+    select?: OutreachMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OutreachMessage
+     */
+    omit?: OutreachMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OutreachMessageInclude<ExtArgs> | null
+    where?: OutreachMessageWhereInput
+    orderBy?: OutreachMessageOrderByWithRelationInput | OutreachMessageOrderByWithRelationInput[]
+    cursor?: OutreachMessageWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: OutreachMessageScalarFieldEnum | OutreachMessageScalarFieldEnum[]
+  }
+
+  /**
+   * OutreachSequenceStep without action
+   */
+  export type OutreachSequenceStepDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OutreachSequenceStep
+     */
+    select?: OutreachSequenceStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OutreachSequenceStep
+     */
+    omit?: OutreachSequenceStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OutreachSequenceStepInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SequenceEnrollment
+   */
+
+  export type AggregateSequenceEnrollment = {
+    _count: SequenceEnrollmentCountAggregateOutputType | null
+    _avg: SequenceEnrollmentAvgAggregateOutputType | null
+    _sum: SequenceEnrollmentSumAggregateOutputType | null
+    _min: SequenceEnrollmentMinAggregateOutputType | null
+    _max: SequenceEnrollmentMaxAggregateOutputType | null
+  }
+
+  export type SequenceEnrollmentAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type SequenceEnrollmentSumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type SequenceEnrollmentMinAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    sequence_uuid: string | null
+    contact_uuid: string | null
+    campaign_uuid: string | null
+    status: $Enums.SequenceEnrollmentStatus | null
+    enrolled_at: Date | null
+    cancelled_at: Date | null
+    completed_at: Date | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type SequenceEnrollmentMaxAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    sequence_uuid: string | null
+    contact_uuid: string | null
+    campaign_uuid: string | null
+    status: $Enums.SequenceEnrollmentStatus | null
+    enrolled_at: Date | null
+    cancelled_at: Date | null
+    completed_at: Date | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type SequenceEnrollmentCountAggregateOutputType = {
+    id: number
+    uuid: number
+    sequence_uuid: number
+    contact_uuid: number
+    campaign_uuid: number
+    status: number
+    enrolled_at: number
+    cancelled_at: number
+    completed_at: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type SequenceEnrollmentAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type SequenceEnrollmentSumAggregateInputType = {
+    id?: true
+  }
+
+  export type SequenceEnrollmentMinAggregateInputType = {
+    id?: true
+    uuid?: true
+    sequence_uuid?: true
+    contact_uuid?: true
+    campaign_uuid?: true
+    status?: true
+    enrolled_at?: true
+    cancelled_at?: true
+    completed_at?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type SequenceEnrollmentMaxAggregateInputType = {
+    id?: true
+    uuid?: true
+    sequence_uuid?: true
+    contact_uuid?: true
+    campaign_uuid?: true
+    status?: true
+    enrolled_at?: true
+    cancelled_at?: true
+    completed_at?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type SequenceEnrollmentCountAggregateInputType = {
+    id?: true
+    uuid?: true
+    sequence_uuid?: true
+    contact_uuid?: true
+    campaign_uuid?: true
+    status?: true
+    enrolled_at?: true
+    cancelled_at?: true
+    completed_at?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type SequenceEnrollmentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SequenceEnrollment to aggregate.
+     */
+    where?: SequenceEnrollmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SequenceEnrollments to fetch.
+     */
+    orderBy?: SequenceEnrollmentOrderByWithRelationInput | SequenceEnrollmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SequenceEnrollmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SequenceEnrollments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SequenceEnrollments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SequenceEnrollments
+    **/
+    _count?: true | SequenceEnrollmentCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: SequenceEnrollmentAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: SequenceEnrollmentSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SequenceEnrollmentMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SequenceEnrollmentMaxAggregateInputType
+  }
+
+  export type GetSequenceEnrollmentAggregateType<T extends SequenceEnrollmentAggregateArgs> = {
+        [P in keyof T & keyof AggregateSequenceEnrollment]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSequenceEnrollment[P]>
+      : GetScalarType<T[P], AggregateSequenceEnrollment[P]>
+  }
+
+
+
+
+  export type SequenceEnrollmentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SequenceEnrollmentWhereInput
+    orderBy?: SequenceEnrollmentOrderByWithAggregationInput | SequenceEnrollmentOrderByWithAggregationInput[]
+    by: SequenceEnrollmentScalarFieldEnum[] | SequenceEnrollmentScalarFieldEnum
+    having?: SequenceEnrollmentScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SequenceEnrollmentCountAggregateInputType | true
+    _avg?: SequenceEnrollmentAvgAggregateInputType
+    _sum?: SequenceEnrollmentSumAggregateInputType
+    _min?: SequenceEnrollmentMinAggregateInputType
+    _max?: SequenceEnrollmentMaxAggregateInputType
+  }
+
+  export type SequenceEnrollmentGroupByOutputType = {
+    id: number
+    uuid: string
+    sequence_uuid: string
+    contact_uuid: string
+    campaign_uuid: string | null
+    status: $Enums.SequenceEnrollmentStatus
+    enrolled_at: Date
+    cancelled_at: Date | null
+    completed_at: Date | null
+    created_at: Date
+    updated_at: Date
+    _count: SequenceEnrollmentCountAggregateOutputType | null
+    _avg: SequenceEnrollmentAvgAggregateOutputType | null
+    _sum: SequenceEnrollmentSumAggregateOutputType | null
+    _min: SequenceEnrollmentMinAggregateOutputType | null
+    _max: SequenceEnrollmentMaxAggregateOutputType | null
+  }
+
+  type GetSequenceEnrollmentGroupByPayload<T extends SequenceEnrollmentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SequenceEnrollmentGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SequenceEnrollmentGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SequenceEnrollmentGroupByOutputType[P]>
+            : GetScalarType<T[P], SequenceEnrollmentGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SequenceEnrollmentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    sequence_uuid?: boolean
+    contact_uuid?: boolean
+    campaign_uuid?: boolean
+    status?: boolean
+    enrolled_at?: boolean
+    cancelled_at?: boolean
+    completed_at?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    sequence?: boolean | OutreachSequenceDefaultArgs<ExtArgs>
+    contact?: boolean | ContactDefaultArgs<ExtArgs>
+    campaign?: boolean | SequenceEnrollment$campaignArgs<ExtArgs>
+    outreach_messages?: boolean | SequenceEnrollment$outreach_messagesArgs<ExtArgs>
+    _count?: boolean | SequenceEnrollmentCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["sequenceEnrollment"]>
+
+  export type SequenceEnrollmentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    sequence_uuid?: boolean
+    contact_uuid?: boolean
+    campaign_uuid?: boolean
+    status?: boolean
+    enrolled_at?: boolean
+    cancelled_at?: boolean
+    completed_at?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    sequence?: boolean | OutreachSequenceDefaultArgs<ExtArgs>
+    contact?: boolean | ContactDefaultArgs<ExtArgs>
+    campaign?: boolean | SequenceEnrollment$campaignArgs<ExtArgs>
+  }, ExtArgs["result"]["sequenceEnrollment"]>
+
+  export type SequenceEnrollmentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    sequence_uuid?: boolean
+    contact_uuid?: boolean
+    campaign_uuid?: boolean
+    status?: boolean
+    enrolled_at?: boolean
+    cancelled_at?: boolean
+    completed_at?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    sequence?: boolean | OutreachSequenceDefaultArgs<ExtArgs>
+    contact?: boolean | ContactDefaultArgs<ExtArgs>
+    campaign?: boolean | SequenceEnrollment$campaignArgs<ExtArgs>
+  }, ExtArgs["result"]["sequenceEnrollment"]>
+
+  export type SequenceEnrollmentSelectScalar = {
+    id?: boolean
+    uuid?: boolean
+    sequence_uuid?: boolean
+    contact_uuid?: boolean
+    campaign_uuid?: boolean
+    status?: boolean
+    enrolled_at?: boolean
+    cancelled_at?: boolean
+    completed_at?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type SequenceEnrollmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "sequence_uuid" | "contact_uuid" | "campaign_uuid" | "status" | "enrolled_at" | "cancelled_at" | "completed_at" | "created_at" | "updated_at", ExtArgs["result"]["sequenceEnrollment"]>
+  export type SequenceEnrollmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sequence?: boolean | OutreachSequenceDefaultArgs<ExtArgs>
+    contact?: boolean | ContactDefaultArgs<ExtArgs>
+    campaign?: boolean | SequenceEnrollment$campaignArgs<ExtArgs>
+    outreach_messages?: boolean | SequenceEnrollment$outreach_messagesArgs<ExtArgs>
+    _count?: boolean | SequenceEnrollmentCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type SequenceEnrollmentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sequence?: boolean | OutreachSequenceDefaultArgs<ExtArgs>
+    contact?: boolean | ContactDefaultArgs<ExtArgs>
+    campaign?: boolean | SequenceEnrollment$campaignArgs<ExtArgs>
+  }
+  export type SequenceEnrollmentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sequence?: boolean | OutreachSequenceDefaultArgs<ExtArgs>
+    contact?: boolean | ContactDefaultArgs<ExtArgs>
+    campaign?: boolean | SequenceEnrollment$campaignArgs<ExtArgs>
+  }
+
+  export type $SequenceEnrollmentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SequenceEnrollment"
+    objects: {
+      sequence: Prisma.$OutreachSequencePayload<ExtArgs>
+      contact: Prisma.$ContactPayload<ExtArgs>
+      campaign: Prisma.$MarketingCampaignPayload<ExtArgs> | null
+      outreach_messages: Prisma.$OutreachMessagePayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      uuid: string
+      sequence_uuid: string
+      contact_uuid: string
+      campaign_uuid: string | null
+      status: $Enums.SequenceEnrollmentStatus
+      enrolled_at: Date
+      cancelled_at: Date | null
+      completed_at: Date | null
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["sequenceEnrollment"]>
+    composites: {}
+  }
+
+  type SequenceEnrollmentGetPayload<S extends boolean | null | undefined | SequenceEnrollmentDefaultArgs> = $Result.GetResult<Prisma.$SequenceEnrollmentPayload, S>
+
+  type SequenceEnrollmentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SequenceEnrollmentFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SequenceEnrollmentCountAggregateInputType | true
+    }
+
+  export interface SequenceEnrollmentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SequenceEnrollment'], meta: { name: 'SequenceEnrollment' } }
+    /**
+     * Find zero or one SequenceEnrollment that matches the filter.
+     * @param {SequenceEnrollmentFindUniqueArgs} args - Arguments to find a SequenceEnrollment
+     * @example
+     * // Get one SequenceEnrollment
+     * const sequenceEnrollment = await prisma.sequenceEnrollment.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SequenceEnrollmentFindUniqueArgs>(args: SelectSubset<T, SequenceEnrollmentFindUniqueArgs<ExtArgs>>): Prisma__SequenceEnrollmentClient<$Result.GetResult<Prisma.$SequenceEnrollmentPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one SequenceEnrollment that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SequenceEnrollmentFindUniqueOrThrowArgs} args - Arguments to find a SequenceEnrollment
+     * @example
+     * // Get one SequenceEnrollment
+     * const sequenceEnrollment = await prisma.sequenceEnrollment.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SequenceEnrollmentFindUniqueOrThrowArgs>(args: SelectSubset<T, SequenceEnrollmentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SequenceEnrollmentClient<$Result.GetResult<Prisma.$SequenceEnrollmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SequenceEnrollment that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SequenceEnrollmentFindFirstArgs} args - Arguments to find a SequenceEnrollment
+     * @example
+     * // Get one SequenceEnrollment
+     * const sequenceEnrollment = await prisma.sequenceEnrollment.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SequenceEnrollmentFindFirstArgs>(args?: SelectSubset<T, SequenceEnrollmentFindFirstArgs<ExtArgs>>): Prisma__SequenceEnrollmentClient<$Result.GetResult<Prisma.$SequenceEnrollmentPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SequenceEnrollment that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SequenceEnrollmentFindFirstOrThrowArgs} args - Arguments to find a SequenceEnrollment
+     * @example
+     * // Get one SequenceEnrollment
+     * const sequenceEnrollment = await prisma.sequenceEnrollment.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SequenceEnrollmentFindFirstOrThrowArgs>(args?: SelectSubset<T, SequenceEnrollmentFindFirstOrThrowArgs<ExtArgs>>): Prisma__SequenceEnrollmentClient<$Result.GetResult<Prisma.$SequenceEnrollmentPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more SequenceEnrollments that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SequenceEnrollmentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SequenceEnrollments
+     * const sequenceEnrollments = await prisma.sequenceEnrollment.findMany()
+     * 
+     * // Get first 10 SequenceEnrollments
+     * const sequenceEnrollments = await prisma.sequenceEnrollment.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const sequenceEnrollmentWithIdOnly = await prisma.sequenceEnrollment.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SequenceEnrollmentFindManyArgs>(args?: SelectSubset<T, SequenceEnrollmentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SequenceEnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a SequenceEnrollment.
+     * @param {SequenceEnrollmentCreateArgs} args - Arguments to create a SequenceEnrollment.
+     * @example
+     * // Create one SequenceEnrollment
+     * const SequenceEnrollment = await prisma.sequenceEnrollment.create({
+     *   data: {
+     *     // ... data to create a SequenceEnrollment
+     *   }
+     * })
+     * 
+     */
+    create<T extends SequenceEnrollmentCreateArgs>(args: SelectSubset<T, SequenceEnrollmentCreateArgs<ExtArgs>>): Prisma__SequenceEnrollmentClient<$Result.GetResult<Prisma.$SequenceEnrollmentPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many SequenceEnrollments.
+     * @param {SequenceEnrollmentCreateManyArgs} args - Arguments to create many SequenceEnrollments.
+     * @example
+     * // Create many SequenceEnrollments
+     * const sequenceEnrollment = await prisma.sequenceEnrollment.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SequenceEnrollmentCreateManyArgs>(args?: SelectSubset<T, SequenceEnrollmentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SequenceEnrollments and returns the data saved in the database.
+     * @param {SequenceEnrollmentCreateManyAndReturnArgs} args - Arguments to create many SequenceEnrollments.
+     * @example
+     * // Create many SequenceEnrollments
+     * const sequenceEnrollment = await prisma.sequenceEnrollment.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SequenceEnrollments and only return the `id`
+     * const sequenceEnrollmentWithIdOnly = await prisma.sequenceEnrollment.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SequenceEnrollmentCreateManyAndReturnArgs>(args?: SelectSubset<T, SequenceEnrollmentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SequenceEnrollmentPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a SequenceEnrollment.
+     * @param {SequenceEnrollmentDeleteArgs} args - Arguments to delete one SequenceEnrollment.
+     * @example
+     * // Delete one SequenceEnrollment
+     * const SequenceEnrollment = await prisma.sequenceEnrollment.delete({
+     *   where: {
+     *     // ... filter to delete one SequenceEnrollment
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SequenceEnrollmentDeleteArgs>(args: SelectSubset<T, SequenceEnrollmentDeleteArgs<ExtArgs>>): Prisma__SequenceEnrollmentClient<$Result.GetResult<Prisma.$SequenceEnrollmentPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one SequenceEnrollment.
+     * @param {SequenceEnrollmentUpdateArgs} args - Arguments to update one SequenceEnrollment.
+     * @example
+     * // Update one SequenceEnrollment
+     * const sequenceEnrollment = await prisma.sequenceEnrollment.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SequenceEnrollmentUpdateArgs>(args: SelectSubset<T, SequenceEnrollmentUpdateArgs<ExtArgs>>): Prisma__SequenceEnrollmentClient<$Result.GetResult<Prisma.$SequenceEnrollmentPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more SequenceEnrollments.
+     * @param {SequenceEnrollmentDeleteManyArgs} args - Arguments to filter SequenceEnrollments to delete.
+     * @example
+     * // Delete a few SequenceEnrollments
+     * const { count } = await prisma.sequenceEnrollment.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SequenceEnrollmentDeleteManyArgs>(args?: SelectSubset<T, SequenceEnrollmentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SequenceEnrollments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SequenceEnrollmentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SequenceEnrollments
+     * const sequenceEnrollment = await prisma.sequenceEnrollment.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SequenceEnrollmentUpdateManyArgs>(args: SelectSubset<T, SequenceEnrollmentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SequenceEnrollments and returns the data updated in the database.
+     * @param {SequenceEnrollmentUpdateManyAndReturnArgs} args - Arguments to update many SequenceEnrollments.
+     * @example
+     * // Update many SequenceEnrollments
+     * const sequenceEnrollment = await prisma.sequenceEnrollment.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more SequenceEnrollments and only return the `id`
+     * const sequenceEnrollmentWithIdOnly = await prisma.sequenceEnrollment.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SequenceEnrollmentUpdateManyAndReturnArgs>(args: SelectSubset<T, SequenceEnrollmentUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SequenceEnrollmentPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one SequenceEnrollment.
+     * @param {SequenceEnrollmentUpsertArgs} args - Arguments to update or create a SequenceEnrollment.
+     * @example
+     * // Update or create a SequenceEnrollment
+     * const sequenceEnrollment = await prisma.sequenceEnrollment.upsert({
+     *   create: {
+     *     // ... data to create a SequenceEnrollment
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SequenceEnrollment we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SequenceEnrollmentUpsertArgs>(args: SelectSubset<T, SequenceEnrollmentUpsertArgs<ExtArgs>>): Prisma__SequenceEnrollmentClient<$Result.GetResult<Prisma.$SequenceEnrollmentPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of SequenceEnrollments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SequenceEnrollmentCountArgs} args - Arguments to filter SequenceEnrollments to count.
+     * @example
+     * // Count the number of SequenceEnrollments
+     * const count = await prisma.sequenceEnrollment.count({
+     *   where: {
+     *     // ... the filter for the SequenceEnrollments we want to count
+     *   }
+     * })
+    **/
+    count<T extends SequenceEnrollmentCountArgs>(
+      args?: Subset<T, SequenceEnrollmentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SequenceEnrollmentCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SequenceEnrollment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SequenceEnrollmentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SequenceEnrollmentAggregateArgs>(args: Subset<T, SequenceEnrollmentAggregateArgs>): Prisma.PrismaPromise<GetSequenceEnrollmentAggregateType<T>>
+
+    /**
+     * Group by SequenceEnrollment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SequenceEnrollmentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SequenceEnrollmentGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SequenceEnrollmentGroupByArgs['orderBy'] }
+        : { orderBy?: SequenceEnrollmentGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SequenceEnrollmentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSequenceEnrollmentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SequenceEnrollment model
+   */
+  readonly fields: SequenceEnrollmentFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SequenceEnrollment.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SequenceEnrollmentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    sequence<T extends OutreachSequenceDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OutreachSequenceDefaultArgs<ExtArgs>>): Prisma__OutreachSequenceClient<$Result.GetResult<Prisma.$OutreachSequencePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    contact<T extends ContactDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ContactDefaultArgs<ExtArgs>>): Prisma__ContactClient<$Result.GetResult<Prisma.$ContactPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    campaign<T extends SequenceEnrollment$campaignArgs<ExtArgs> = {}>(args?: Subset<T, SequenceEnrollment$campaignArgs<ExtArgs>>): Prisma__MarketingCampaignClient<$Result.GetResult<Prisma.$MarketingCampaignPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    outreach_messages<T extends SequenceEnrollment$outreach_messagesArgs<ExtArgs> = {}>(args?: Subset<T, SequenceEnrollment$outreach_messagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OutreachMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SequenceEnrollment model
+   */
+  interface SequenceEnrollmentFieldRefs {
+    readonly id: FieldRef<"SequenceEnrollment", 'Int'>
+    readonly uuid: FieldRef<"SequenceEnrollment", 'String'>
+    readonly sequence_uuid: FieldRef<"SequenceEnrollment", 'String'>
+    readonly contact_uuid: FieldRef<"SequenceEnrollment", 'String'>
+    readonly campaign_uuid: FieldRef<"SequenceEnrollment", 'String'>
+    readonly status: FieldRef<"SequenceEnrollment", 'SequenceEnrollmentStatus'>
+    readonly enrolled_at: FieldRef<"SequenceEnrollment", 'DateTime'>
+    readonly cancelled_at: FieldRef<"SequenceEnrollment", 'DateTime'>
+    readonly completed_at: FieldRef<"SequenceEnrollment", 'DateTime'>
+    readonly created_at: FieldRef<"SequenceEnrollment", 'DateTime'>
+    readonly updated_at: FieldRef<"SequenceEnrollment", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SequenceEnrollment findUnique
+   */
+  export type SequenceEnrollmentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SequenceEnrollment
+     */
+    select?: SequenceEnrollmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SequenceEnrollment
+     */
+    omit?: SequenceEnrollmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SequenceEnrollmentInclude<ExtArgs> | null
+    /**
+     * Filter, which SequenceEnrollment to fetch.
+     */
+    where: SequenceEnrollmentWhereUniqueInput
+  }
+
+  /**
+   * SequenceEnrollment findUniqueOrThrow
+   */
+  export type SequenceEnrollmentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SequenceEnrollment
+     */
+    select?: SequenceEnrollmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SequenceEnrollment
+     */
+    omit?: SequenceEnrollmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SequenceEnrollmentInclude<ExtArgs> | null
+    /**
+     * Filter, which SequenceEnrollment to fetch.
+     */
+    where: SequenceEnrollmentWhereUniqueInput
+  }
+
+  /**
+   * SequenceEnrollment findFirst
+   */
+  export type SequenceEnrollmentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SequenceEnrollment
+     */
+    select?: SequenceEnrollmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SequenceEnrollment
+     */
+    omit?: SequenceEnrollmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SequenceEnrollmentInclude<ExtArgs> | null
+    /**
+     * Filter, which SequenceEnrollment to fetch.
+     */
+    where?: SequenceEnrollmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SequenceEnrollments to fetch.
+     */
+    orderBy?: SequenceEnrollmentOrderByWithRelationInput | SequenceEnrollmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SequenceEnrollments.
+     */
+    cursor?: SequenceEnrollmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SequenceEnrollments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SequenceEnrollments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SequenceEnrollments.
+     */
+    distinct?: SequenceEnrollmentScalarFieldEnum | SequenceEnrollmentScalarFieldEnum[]
+  }
+
+  /**
+   * SequenceEnrollment findFirstOrThrow
+   */
+  export type SequenceEnrollmentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SequenceEnrollment
+     */
+    select?: SequenceEnrollmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SequenceEnrollment
+     */
+    omit?: SequenceEnrollmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SequenceEnrollmentInclude<ExtArgs> | null
+    /**
+     * Filter, which SequenceEnrollment to fetch.
+     */
+    where?: SequenceEnrollmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SequenceEnrollments to fetch.
+     */
+    orderBy?: SequenceEnrollmentOrderByWithRelationInput | SequenceEnrollmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SequenceEnrollments.
+     */
+    cursor?: SequenceEnrollmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SequenceEnrollments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SequenceEnrollments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SequenceEnrollments.
+     */
+    distinct?: SequenceEnrollmentScalarFieldEnum | SequenceEnrollmentScalarFieldEnum[]
+  }
+
+  /**
+   * SequenceEnrollment findMany
+   */
+  export type SequenceEnrollmentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SequenceEnrollment
+     */
+    select?: SequenceEnrollmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SequenceEnrollment
+     */
+    omit?: SequenceEnrollmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SequenceEnrollmentInclude<ExtArgs> | null
+    /**
+     * Filter, which SequenceEnrollments to fetch.
+     */
+    where?: SequenceEnrollmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SequenceEnrollments to fetch.
+     */
+    orderBy?: SequenceEnrollmentOrderByWithRelationInput | SequenceEnrollmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SequenceEnrollments.
+     */
+    cursor?: SequenceEnrollmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SequenceEnrollments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SequenceEnrollments.
+     */
+    skip?: number
+    distinct?: SequenceEnrollmentScalarFieldEnum | SequenceEnrollmentScalarFieldEnum[]
+  }
+
+  /**
+   * SequenceEnrollment create
+   */
+  export type SequenceEnrollmentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SequenceEnrollment
+     */
+    select?: SequenceEnrollmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SequenceEnrollment
+     */
+    omit?: SequenceEnrollmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SequenceEnrollmentInclude<ExtArgs> | null
+    /**
+     * The data needed to create a SequenceEnrollment.
+     */
+    data: XOR<SequenceEnrollmentCreateInput, SequenceEnrollmentUncheckedCreateInput>
+  }
+
+  /**
+   * SequenceEnrollment createMany
+   */
+  export type SequenceEnrollmentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SequenceEnrollments.
+     */
+    data: SequenceEnrollmentCreateManyInput | SequenceEnrollmentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SequenceEnrollment createManyAndReturn
+   */
+  export type SequenceEnrollmentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SequenceEnrollment
+     */
+    select?: SequenceEnrollmentSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SequenceEnrollment
+     */
+    omit?: SequenceEnrollmentOmit<ExtArgs> | null
+    /**
+     * The data used to create many SequenceEnrollments.
+     */
+    data: SequenceEnrollmentCreateManyInput | SequenceEnrollmentCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SequenceEnrollmentIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SequenceEnrollment update
+   */
+  export type SequenceEnrollmentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SequenceEnrollment
+     */
+    select?: SequenceEnrollmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SequenceEnrollment
+     */
+    omit?: SequenceEnrollmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SequenceEnrollmentInclude<ExtArgs> | null
+    /**
+     * The data needed to update a SequenceEnrollment.
+     */
+    data: XOR<SequenceEnrollmentUpdateInput, SequenceEnrollmentUncheckedUpdateInput>
+    /**
+     * Choose, which SequenceEnrollment to update.
+     */
+    where: SequenceEnrollmentWhereUniqueInput
+  }
+
+  /**
+   * SequenceEnrollment updateMany
+   */
+  export type SequenceEnrollmentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SequenceEnrollments.
+     */
+    data: XOR<SequenceEnrollmentUpdateManyMutationInput, SequenceEnrollmentUncheckedUpdateManyInput>
+    /**
+     * Filter which SequenceEnrollments to update
+     */
+    where?: SequenceEnrollmentWhereInput
+    /**
+     * Limit how many SequenceEnrollments to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SequenceEnrollment updateManyAndReturn
+   */
+  export type SequenceEnrollmentUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SequenceEnrollment
+     */
+    select?: SequenceEnrollmentSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SequenceEnrollment
+     */
+    omit?: SequenceEnrollmentOmit<ExtArgs> | null
+    /**
+     * The data used to update SequenceEnrollments.
+     */
+    data: XOR<SequenceEnrollmentUpdateManyMutationInput, SequenceEnrollmentUncheckedUpdateManyInput>
+    /**
+     * Filter which SequenceEnrollments to update
+     */
+    where?: SequenceEnrollmentWhereInput
+    /**
+     * Limit how many SequenceEnrollments to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SequenceEnrollmentIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SequenceEnrollment upsert
+   */
+  export type SequenceEnrollmentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SequenceEnrollment
+     */
+    select?: SequenceEnrollmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SequenceEnrollment
+     */
+    omit?: SequenceEnrollmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SequenceEnrollmentInclude<ExtArgs> | null
+    /**
+     * The filter to search for the SequenceEnrollment to update in case it exists.
+     */
+    where: SequenceEnrollmentWhereUniqueInput
+    /**
+     * In case the SequenceEnrollment found by the `where` argument doesn't exist, create a new SequenceEnrollment with this data.
+     */
+    create: XOR<SequenceEnrollmentCreateInput, SequenceEnrollmentUncheckedCreateInput>
+    /**
+     * In case the SequenceEnrollment was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SequenceEnrollmentUpdateInput, SequenceEnrollmentUncheckedUpdateInput>
+  }
+
+  /**
+   * SequenceEnrollment delete
+   */
+  export type SequenceEnrollmentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SequenceEnrollment
+     */
+    select?: SequenceEnrollmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SequenceEnrollment
+     */
+    omit?: SequenceEnrollmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SequenceEnrollmentInclude<ExtArgs> | null
+    /**
+     * Filter which SequenceEnrollment to delete.
+     */
+    where: SequenceEnrollmentWhereUniqueInput
+  }
+
+  /**
+   * SequenceEnrollment deleteMany
+   */
+  export type SequenceEnrollmentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SequenceEnrollments to delete
+     */
+    where?: SequenceEnrollmentWhereInput
+    /**
+     * Limit how many SequenceEnrollments to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * SequenceEnrollment.campaign
+   */
+  export type SequenceEnrollment$campaignArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MarketingCampaign
+     */
+    select?: MarketingCampaignSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MarketingCampaign
+     */
+    omit?: MarketingCampaignOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MarketingCampaignInclude<ExtArgs> | null
+    where?: MarketingCampaignWhereInput
+  }
+
+  /**
+   * SequenceEnrollment.outreach_messages
+   */
+  export type SequenceEnrollment$outreach_messagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OutreachMessage
+     */
+    select?: OutreachMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OutreachMessage
+     */
+    omit?: OutreachMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OutreachMessageInclude<ExtArgs> | null
+    where?: OutreachMessageWhereInput
+    orderBy?: OutreachMessageOrderByWithRelationInput | OutreachMessageOrderByWithRelationInput[]
+    cursor?: OutreachMessageWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: OutreachMessageScalarFieldEnum | OutreachMessageScalarFieldEnum[]
+  }
+
+  /**
+   * SequenceEnrollment without action
+   */
+  export type SequenceEnrollmentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SequenceEnrollment
+     */
+    select?: SequenceEnrollmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SequenceEnrollment
+     */
+    omit?: SequenceEnrollmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SequenceEnrollmentInclude<ExtArgs> | null
   }
 
 
@@ -39219,6 +42348,8 @@ export namespace Prisma {
     created_at?: boolean
     updated_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    sequence_steps?: boolean | MessageTemplate$sequence_stepsArgs<ExtArgs>
+    _count?: boolean | MessageTemplateCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["messageTemplate"]>
 
   export type MessageTemplateSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -39271,6 +42402,8 @@ export namespace Prisma {
   export type MessageTemplateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "name" | "channels" | "email_subject" | "email_content" | "sms_content" | "source_campaign_uuid" | "source_message_uuid" | "created_at" | "updated_at", ExtArgs["result"]["messageTemplate"]>
   export type MessageTemplateInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    sequence_steps?: boolean | MessageTemplate$sequence_stepsArgs<ExtArgs>
+    _count?: boolean | MessageTemplateCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type MessageTemplateIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
@@ -39283,6 +42416,7 @@ export namespace Prisma {
     name: "MessageTemplate"
     objects: {
       organisation: Prisma.$OrganisationPayload<ExtArgs>
+      sequence_steps: Prisma.$OutreachSequenceStepPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -39692,6 +42826,7 @@ export namespace Prisma {
   export interface Prisma__MessageTemplateClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     organisation<T extends OrganisationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganisationDefaultArgs<ExtArgs>>): Prisma__OrganisationClient<$Result.GetResult<Prisma.$OrganisationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    sequence_steps<T extends MessageTemplate$sequence_stepsArgs<ExtArgs> = {}>(args?: Subset<T, MessageTemplate$sequence_stepsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OutreachSequenceStepPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -40129,6 +43264,30 @@ export namespace Prisma {
   }
 
   /**
+   * MessageTemplate.sequence_steps
+   */
+  export type MessageTemplate$sequence_stepsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OutreachSequenceStep
+     */
+    select?: OutreachSequenceStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OutreachSequenceStep
+     */
+    omit?: OutreachSequenceStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OutreachSequenceStepInclude<ExtArgs> | null
+    where?: OutreachSequenceStepWhereInput
+    orderBy?: OutreachSequenceStepOrderByWithRelationInput | OutreachSequenceStepOrderByWithRelationInput[]
+    cursor?: OutreachSequenceStepWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: OutreachSequenceStepScalarFieldEnum | OutreachSequenceStepScalarFieldEnum[]
+  }
+
+  /**
    * MessageTemplate without action
    */
   export type MessageTemplateDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -40211,6 +43370,7 @@ export namespace Prisma {
     use_openai_batch: boolean | null
     draft_batch_id: string | null
     sender_profile_uuid: string | null
+    sequence_uuid: string | null
     scheduled_at: Date | null
     started_at: Date | null
     completed_at: Date | null
@@ -40249,6 +43409,7 @@ export namespace Prisma {
     use_openai_batch: boolean | null
     draft_batch_id: string | null
     sender_profile_uuid: string | null
+    sequence_uuid: string | null
     scheduled_at: Date | null
     started_at: Date | null
     completed_at: Date | null
@@ -40290,6 +43451,7 @@ export namespace Prisma {
     draft_batch_id: number
     sender_profile_uuid: number
     email_provider_allocations: number
+    sequence_uuid: number
     scheduled_at: number
     started_at: number
     completed_at: number
@@ -40366,6 +43528,7 @@ export namespace Prisma {
     use_openai_batch?: true
     draft_batch_id?: true
     sender_profile_uuid?: true
+    sequence_uuid?: true
     scheduled_at?: true
     started_at?: true
     completed_at?: true
@@ -40404,6 +43567,7 @@ export namespace Prisma {
     use_openai_batch?: true
     draft_batch_id?: true
     sender_profile_uuid?: true
+    sequence_uuid?: true
     scheduled_at?: true
     started_at?: true
     completed_at?: true
@@ -40445,6 +43609,7 @@ export namespace Prisma {
     draft_batch_id?: true
     sender_profile_uuid?: true
     email_provider_allocations?: true
+    sequence_uuid?: true
     scheduled_at?: true
     started_at?: true
     completed_at?: true
@@ -40573,6 +43738,7 @@ export namespace Prisma {
     draft_batch_id: string | null
     sender_profile_uuid: string | null
     email_provider_allocations: JsonValue | null
+    sequence_uuid: string | null
     scheduled_at: Date | null
     started_at: Date | null
     completed_at: Date | null
@@ -40633,6 +43799,7 @@ export namespace Prisma {
     draft_batch_id?: boolean
     sender_profile_uuid?: boolean
     email_provider_allocations?: boolean
+    sequence_uuid?: boolean
     scheduled_at?: boolean
     started_at?: boolean
     completed_at?: boolean
@@ -40655,9 +43822,11 @@ export namespace Prisma {
     updated_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     sender_profile?: boolean | MarketingCampaign$sender_profileArgs<ExtArgs>
+    sequence?: boolean | MarketingCampaign$sequenceArgs<ExtArgs>
     campaign_contacts?: boolean | MarketingCampaign$campaign_contactsArgs<ExtArgs>
     outreach_messages?: boolean | MarketingCampaign$outreach_messagesArgs<ExtArgs>
     interactions?: boolean | MarketingCampaign$interactionsArgs<ExtArgs>
+    sequence_enrollments?: boolean | MarketingCampaign$sequence_enrollmentsArgs<ExtArgs>
     _count?: boolean | MarketingCampaignCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["marketingCampaign"]>
 
@@ -40680,6 +43849,7 @@ export namespace Prisma {
     draft_batch_id?: boolean
     sender_profile_uuid?: boolean
     email_provider_allocations?: boolean
+    sequence_uuid?: boolean
     scheduled_at?: boolean
     started_at?: boolean
     completed_at?: boolean
@@ -40702,6 +43872,7 @@ export namespace Prisma {
     updated_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     sender_profile?: boolean | MarketingCampaign$sender_profileArgs<ExtArgs>
+    sequence?: boolean | MarketingCampaign$sequenceArgs<ExtArgs>
   }, ExtArgs["result"]["marketingCampaign"]>
 
   export type MarketingCampaignSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -40723,6 +43894,7 @@ export namespace Prisma {
     draft_batch_id?: boolean
     sender_profile_uuid?: boolean
     email_provider_allocations?: boolean
+    sequence_uuid?: boolean
     scheduled_at?: boolean
     started_at?: boolean
     completed_at?: boolean
@@ -40745,6 +43917,7 @@ export namespace Prisma {
     updated_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     sender_profile?: boolean | MarketingCampaign$sender_profileArgs<ExtArgs>
+    sequence?: boolean | MarketingCampaign$sequenceArgs<ExtArgs>
   }, ExtArgs["result"]["marketingCampaign"]>
 
   export type MarketingCampaignSelectScalar = {
@@ -40766,6 +43939,7 @@ export namespace Prisma {
     draft_batch_id?: boolean
     sender_profile_uuid?: boolean
     email_provider_allocations?: boolean
+    sequence_uuid?: boolean
     scheduled_at?: boolean
     started_at?: boolean
     completed_at?: boolean
@@ -40788,22 +43962,26 @@ export namespace Prisma {
     updated_at?: boolean
   }
 
-  export type MarketingCampaignOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "name" | "description" | "status" | "campaign_type" | "channels" | "filters_snapshot" | "email_subject" | "email_content" | "sms_content" | "linkedin_content" | "ai_prompt" | "use_openai_batch" | "draft_batch_id" | "sender_profile_uuid" | "email_provider_allocations" | "scheduled_at" | "started_at" | "completed_at" | "cancelled_at" | "selected_contact_count" | "total_messages" | "queued_count" | "sent_count" | "failed_count" | "skipped_count" | "delivered_count" | "opened_count" | "clicked_count" | "replied_count" | "website_visit_count" | "booking_visit_count" | "bounced_count" | "unsubscribed_count" | "created_at" | "updated_at", ExtArgs["result"]["marketingCampaign"]>
+  export type MarketingCampaignOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "name" | "description" | "status" | "campaign_type" | "channels" | "filters_snapshot" | "email_subject" | "email_content" | "sms_content" | "linkedin_content" | "ai_prompt" | "use_openai_batch" | "draft_batch_id" | "sender_profile_uuid" | "email_provider_allocations" | "sequence_uuid" | "scheduled_at" | "started_at" | "completed_at" | "cancelled_at" | "selected_contact_count" | "total_messages" | "queued_count" | "sent_count" | "failed_count" | "skipped_count" | "delivered_count" | "opened_count" | "clicked_count" | "replied_count" | "website_visit_count" | "booking_visit_count" | "bounced_count" | "unsubscribed_count" | "created_at" | "updated_at", ExtArgs["result"]["marketingCampaign"]>
   export type MarketingCampaignInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     sender_profile?: boolean | MarketingCampaign$sender_profileArgs<ExtArgs>
+    sequence?: boolean | MarketingCampaign$sequenceArgs<ExtArgs>
     campaign_contacts?: boolean | MarketingCampaign$campaign_contactsArgs<ExtArgs>
     outreach_messages?: boolean | MarketingCampaign$outreach_messagesArgs<ExtArgs>
     interactions?: boolean | MarketingCampaign$interactionsArgs<ExtArgs>
+    sequence_enrollments?: boolean | MarketingCampaign$sequence_enrollmentsArgs<ExtArgs>
     _count?: boolean | MarketingCampaignCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type MarketingCampaignIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     sender_profile?: boolean | MarketingCampaign$sender_profileArgs<ExtArgs>
+    sequence?: boolean | MarketingCampaign$sequenceArgs<ExtArgs>
   }
   export type MarketingCampaignIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     sender_profile?: boolean | MarketingCampaign$sender_profileArgs<ExtArgs>
+    sequence?: boolean | MarketingCampaign$sequenceArgs<ExtArgs>
   }
 
   export type $MarketingCampaignPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -40811,9 +43989,11 @@ export namespace Prisma {
     objects: {
       organisation: Prisma.$OrganisationPayload<ExtArgs>
       sender_profile: Prisma.$SenderProfilePayload<ExtArgs> | null
+      sequence: Prisma.$OutreachSequencePayload<ExtArgs> | null
       campaign_contacts: Prisma.$MarketingCampaignContactPayload<ExtArgs>[]
       outreach_messages: Prisma.$OutreachMessagePayload<ExtArgs>[]
       interactions: Prisma.$InteractionPayload<ExtArgs>[]
+      sequence_enrollments: Prisma.$SequenceEnrollmentPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -40834,6 +44014,7 @@ export namespace Prisma {
       draft_batch_id: string | null
       sender_profile_uuid: string | null
       email_provider_allocations: Prisma.JsonValue | null
+      sequence_uuid: string | null
       scheduled_at: Date | null
       started_at: Date | null
       completed_at: Date | null
@@ -41250,9 +44431,11 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     organisation<T extends OrganisationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganisationDefaultArgs<ExtArgs>>): Prisma__OrganisationClient<$Result.GetResult<Prisma.$OrganisationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     sender_profile<T extends MarketingCampaign$sender_profileArgs<ExtArgs> = {}>(args?: Subset<T, MarketingCampaign$sender_profileArgs<ExtArgs>>): Prisma__SenderProfileClient<$Result.GetResult<Prisma.$SenderProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    sequence<T extends MarketingCampaign$sequenceArgs<ExtArgs> = {}>(args?: Subset<T, MarketingCampaign$sequenceArgs<ExtArgs>>): Prisma__OutreachSequenceClient<$Result.GetResult<Prisma.$OutreachSequencePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     campaign_contacts<T extends MarketingCampaign$campaign_contactsArgs<ExtArgs> = {}>(args?: Subset<T, MarketingCampaign$campaign_contactsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MarketingCampaignContactPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     outreach_messages<T extends MarketingCampaign$outreach_messagesArgs<ExtArgs> = {}>(args?: Subset<T, MarketingCampaign$outreach_messagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OutreachMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     interactions<T extends MarketingCampaign$interactionsArgs<ExtArgs> = {}>(args?: Subset<T, MarketingCampaign$interactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InteractionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    sequence_enrollments<T extends MarketingCampaign$sequence_enrollmentsArgs<ExtArgs> = {}>(args?: Subset<T, MarketingCampaign$sequence_enrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SequenceEnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -41300,6 +44483,7 @@ export namespace Prisma {
     readonly draft_batch_id: FieldRef<"MarketingCampaign", 'String'>
     readonly sender_profile_uuid: FieldRef<"MarketingCampaign", 'String'>
     readonly email_provider_allocations: FieldRef<"MarketingCampaign", 'Json'>
+    readonly sequence_uuid: FieldRef<"MarketingCampaign", 'String'>
     readonly scheduled_at: FieldRef<"MarketingCampaign", 'DateTime'>
     readonly started_at: FieldRef<"MarketingCampaign", 'DateTime'>
     readonly completed_at: FieldRef<"MarketingCampaign", 'DateTime'>
@@ -41735,6 +44919,25 @@ export namespace Prisma {
   }
 
   /**
+   * MarketingCampaign.sequence
+   */
+  export type MarketingCampaign$sequenceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OutreachSequence
+     */
+    select?: OutreachSequenceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OutreachSequence
+     */
+    omit?: OutreachSequenceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OutreachSequenceInclude<ExtArgs> | null
+    where?: OutreachSequenceWhereInput
+  }
+
+  /**
    * MarketingCampaign.campaign_contacts
    */
   export type MarketingCampaign$campaign_contactsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -41804,6 +45007,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: InteractionScalarFieldEnum | InteractionScalarFieldEnum[]
+  }
+
+  /**
+   * MarketingCampaign.sequence_enrollments
+   */
+  export type MarketingCampaign$sequence_enrollmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SequenceEnrollment
+     */
+    select?: SequenceEnrollmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SequenceEnrollment
+     */
+    omit?: SequenceEnrollmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SequenceEnrollmentInclude<ExtArgs> | null
+    where?: SequenceEnrollmentWhereInput
+    orderBy?: SequenceEnrollmentOrderByWithRelationInput | SequenceEnrollmentOrderByWithRelationInput[]
+    cursor?: SequenceEnrollmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SequenceEnrollmentScalarFieldEnum | SequenceEnrollmentScalarFieldEnum[]
   }
 
   /**
@@ -63633,6 +66860,8 @@ export namespace Prisma {
     email_account: 'email_account',
     sms_provider: 'sms_provider',
     metadata: 'metadata',
+    sequence_enrollment_uuid: 'sequence_enrollment_uuid',
+    sequence_step_uuid: 'sequence_step_uuid',
     created_at: 'created_at',
     updated_at: 'updated_at'
   };
@@ -63645,12 +66874,51 @@ export namespace Prisma {
     uuid: 'uuid',
     organisation_uuid: 'organisation_uuid',
     name: 'name',
-    steps: 'steps',
+    description: 'description',
+    status: 'status',
     created_at: 'created_at',
     updated_at: 'updated_at'
   };
 
   export type OutreachSequenceScalarFieldEnum = (typeof OutreachSequenceScalarFieldEnum)[keyof typeof OutreachSequenceScalarFieldEnum]
+
+
+  export const OutreachSequenceStepScalarFieldEnum: {
+    id: 'id',
+    uuid: 'uuid',
+    sequence_uuid: 'sequence_uuid',
+    order_index: 'order_index',
+    enabled: 'enabled',
+    channel: 'channel',
+    email_subject: 'email_subject',
+    email_content: 'email_content',
+    sms_content: 'sms_content',
+    message_template_uuid: 'message_template_uuid',
+    delay_value: 'delay_value',
+    delay_unit: 'delay_unit',
+    delay_reference: 'delay_reference',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type OutreachSequenceStepScalarFieldEnum = (typeof OutreachSequenceStepScalarFieldEnum)[keyof typeof OutreachSequenceStepScalarFieldEnum]
+
+
+  export const SequenceEnrollmentScalarFieldEnum: {
+    id: 'id',
+    uuid: 'uuid',
+    sequence_uuid: 'sequence_uuid',
+    contact_uuid: 'contact_uuid',
+    campaign_uuid: 'campaign_uuid',
+    status: 'status',
+    enrolled_at: 'enrolled_at',
+    cancelled_at: 'cancelled_at',
+    completed_at: 'completed_at',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type SequenceEnrollmentScalarFieldEnum = (typeof SequenceEnrollmentScalarFieldEnum)[keyof typeof SequenceEnrollmentScalarFieldEnum]
 
 
   export const FilterJobScalarFieldEnum: {
@@ -63785,6 +67053,7 @@ export namespace Prisma {
     draft_batch_id: 'draft_batch_id',
     sender_profile_uuid: 'sender_profile_uuid',
     email_provider_allocations: 'email_provider_allocations',
+    sequence_uuid: 'sequence_uuid',
     scheduled_at: 'scheduled_at',
     started_at: 'started_at',
     completed_at: 'completed_at',
@@ -64439,6 +67708,62 @@ export namespace Prisma {
    * Reference to a field of type 'ExternalIntegrationProvider[]'
    */
   export type ListEnumExternalIntegrationProviderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ExternalIntegrationProvider[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'SequenceStatus'
+   */
+  export type EnumSequenceStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SequenceStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'SequenceStatus[]'
+   */
+  export type ListEnumSequenceStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SequenceStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'SequenceDelayUnit'
+   */
+  export type EnumSequenceDelayUnitFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SequenceDelayUnit'>
+    
+
+
+  /**
+   * Reference to a field of type 'SequenceDelayUnit[]'
+   */
+  export type ListEnumSequenceDelayUnitFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SequenceDelayUnit[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'SequenceDelayReference'
+   */
+  export type EnumSequenceDelayReferenceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SequenceDelayReference'>
+    
+
+
+  /**
+   * Reference to a field of type 'SequenceDelayReference[]'
+   */
+  export type ListEnumSequenceDelayReferenceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SequenceDelayReference[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'SequenceEnrollmentStatus'
+   */
+  export type EnumSequenceEnrollmentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SequenceEnrollmentStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'SequenceEnrollmentStatus[]'
+   */
+  export type ListEnumSequenceEnrollmentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SequenceEnrollmentStatus[]'>
     
 
 
@@ -65882,6 +69207,7 @@ export namespace Prisma {
     form_completions?: FormCompletionListRelationFilter
     list_memberships?: ContactListMemberListRelationFilter
     enrichments?: ContactEnrichmentListRelationFilter
+    sequence_enrollments?: SequenceEnrollmentListRelationFilter
   }
 
   export type ContactOrderByWithRelationInput = {
@@ -65927,6 +69253,7 @@ export namespace Prisma {
     form_completions?: FormCompletionOrderByRelationAggregateInput
     list_memberships?: ContactListMemberOrderByRelationAggregateInput
     enrichments?: ContactEnrichmentOrderByRelationAggregateInput
+    sequence_enrollments?: SequenceEnrollmentOrderByRelationAggregateInput
   }
 
   export type ContactWhereUniqueInput = Prisma.AtLeast<{
@@ -65976,6 +69303,7 @@ export namespace Prisma {
     form_completions?: FormCompletionListRelationFilter
     list_memberships?: ContactListMemberListRelationFilter
     enrichments?: ContactEnrichmentListRelationFilter
+    sequence_enrollments?: SequenceEnrollmentListRelationFilter
   }, "id" | "uuid" | "unsubscribe_token" | "organisation_uuid_lead_uuid">
 
   export type ContactOrderByWithAggregationInput = {
@@ -66645,6 +69973,8 @@ export namespace Prisma {
     email_account?: StringNullableFilter<"OutreachMessage"> | string | null
     sms_provider?: StringNullableFilter<"OutreachMessage"> | string | null
     metadata?: JsonNullableFilter<"OutreachMessage">
+    sequence_enrollment_uuid?: StringNullableFilter<"OutreachMessage"> | string | null
+    sequence_step_uuid?: StringNullableFilter<"OutreachMessage"> | string | null
     created_at?: DateTimeFilter<"OutreachMessage"> | Date | string
     updated_at?: DateTimeFilter<"OutreachMessage"> | Date | string
     organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
@@ -66652,6 +69982,8 @@ export namespace Prisma {
     campaign?: XOR<MarketingCampaignNullableScalarRelationFilter, MarketingCampaignWhereInput> | null
     sent_by?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     interaction?: XOR<InteractionNullableScalarRelationFilter, InteractionWhereInput> | null
+    sequence_enrollment?: XOR<SequenceEnrollmentNullableScalarRelationFilter, SequenceEnrollmentWhereInput> | null
+    sequence_step?: XOR<OutreachSequenceStepNullableScalarRelationFilter, OutreachSequenceStepWhereInput> | null
   }
 
   export type OutreachMessageOrderByWithRelationInput = {
@@ -66680,6 +70012,8 @@ export namespace Prisma {
     email_account?: SortOrderInput | SortOrder
     sms_provider?: SortOrderInput | SortOrder
     metadata?: SortOrderInput | SortOrder
+    sequence_enrollment_uuid?: SortOrderInput | SortOrder
+    sequence_step_uuid?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     organisation?: OrganisationOrderByWithRelationInput
@@ -66687,6 +70021,8 @@ export namespace Prisma {
     campaign?: MarketingCampaignOrderByWithRelationInput
     sent_by?: UserOrderByWithRelationInput
     interaction?: InteractionOrderByWithRelationInput
+    sequence_enrollment?: SequenceEnrollmentOrderByWithRelationInput
+    sequence_step?: OutreachSequenceStepOrderByWithRelationInput
   }
 
   export type OutreachMessageWhereUniqueInput = Prisma.AtLeast<{
@@ -66718,6 +70054,8 @@ export namespace Prisma {
     email_account?: StringNullableFilter<"OutreachMessage"> | string | null
     sms_provider?: StringNullableFilter<"OutreachMessage"> | string | null
     metadata?: JsonNullableFilter<"OutreachMessage">
+    sequence_enrollment_uuid?: StringNullableFilter<"OutreachMessage"> | string | null
+    sequence_step_uuid?: StringNullableFilter<"OutreachMessage"> | string | null
     created_at?: DateTimeFilter<"OutreachMessage"> | Date | string
     updated_at?: DateTimeFilter<"OutreachMessage"> | Date | string
     organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
@@ -66725,6 +70063,8 @@ export namespace Prisma {
     campaign?: XOR<MarketingCampaignNullableScalarRelationFilter, MarketingCampaignWhereInput> | null
     sent_by?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     interaction?: XOR<InteractionNullableScalarRelationFilter, InteractionWhereInput> | null
+    sequence_enrollment?: XOR<SequenceEnrollmentNullableScalarRelationFilter, SequenceEnrollmentWhereInput> | null
+    sequence_step?: XOR<OutreachSequenceStepNullableScalarRelationFilter, OutreachSequenceStepWhereInput> | null
   }, "id" | "uuid" | "idempotency_key">
 
   export type OutreachMessageOrderByWithAggregationInput = {
@@ -66753,6 +70093,8 @@ export namespace Prisma {
     email_account?: SortOrderInput | SortOrder
     sms_provider?: SortOrderInput | SortOrder
     metadata?: SortOrderInput | SortOrder
+    sequence_enrollment_uuid?: SortOrderInput | SortOrder
+    sequence_step_uuid?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     _count?: OutreachMessageCountOrderByAggregateInput
@@ -66791,6 +70133,8 @@ export namespace Prisma {
     email_account?: StringNullableWithAggregatesFilter<"OutreachMessage"> | string | null
     sms_provider?: StringNullableWithAggregatesFilter<"OutreachMessage"> | string | null
     metadata?: JsonNullableWithAggregatesFilter<"OutreachMessage">
+    sequence_enrollment_uuid?: StringNullableWithAggregatesFilter<"OutreachMessage"> | string | null
+    sequence_step_uuid?: StringNullableWithAggregatesFilter<"OutreachMessage"> | string | null
     created_at?: DateTimeWithAggregatesFilter<"OutreachMessage"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"OutreachMessage"> | Date | string
   }
@@ -66803,10 +70147,14 @@ export namespace Prisma {
     uuid?: StringFilter<"OutreachSequence"> | string
     organisation_uuid?: StringFilter<"OutreachSequence"> | string
     name?: StringFilter<"OutreachSequence"> | string
-    steps?: JsonFilter<"OutreachSequence">
+    description?: StringNullableFilter<"OutreachSequence"> | string | null
+    status?: EnumSequenceStatusFilter<"OutreachSequence"> | $Enums.SequenceStatus
     created_at?: DateTimeFilter<"OutreachSequence"> | Date | string
     updated_at?: DateTimeFilter<"OutreachSequence"> | Date | string
     organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+    steps?: OutreachSequenceStepListRelationFilter
+    enrollments?: SequenceEnrollmentListRelationFilter
+    campaigns?: MarketingCampaignListRelationFilter
   }
 
   export type OutreachSequenceOrderByWithRelationInput = {
@@ -66814,10 +70162,14 @@ export namespace Prisma {
     uuid?: SortOrder
     organisation_uuid?: SortOrder
     name?: SortOrder
-    steps?: SortOrder
+    description?: SortOrderInput | SortOrder
+    status?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     organisation?: OrganisationOrderByWithRelationInput
+    steps?: OutreachSequenceStepOrderByRelationAggregateInput
+    enrollments?: SequenceEnrollmentOrderByRelationAggregateInput
+    campaigns?: MarketingCampaignOrderByRelationAggregateInput
   }
 
   export type OutreachSequenceWhereUniqueInput = Prisma.AtLeast<{
@@ -66828,10 +70180,14 @@ export namespace Prisma {
     NOT?: OutreachSequenceWhereInput | OutreachSequenceWhereInput[]
     organisation_uuid?: StringFilter<"OutreachSequence"> | string
     name?: StringFilter<"OutreachSequence"> | string
-    steps?: JsonFilter<"OutreachSequence">
+    description?: StringNullableFilter<"OutreachSequence"> | string | null
+    status?: EnumSequenceStatusFilter<"OutreachSequence"> | $Enums.SequenceStatus
     created_at?: DateTimeFilter<"OutreachSequence"> | Date | string
     updated_at?: DateTimeFilter<"OutreachSequence"> | Date | string
     organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+    steps?: OutreachSequenceStepListRelationFilter
+    enrollments?: SequenceEnrollmentListRelationFilter
+    campaigns?: MarketingCampaignListRelationFilter
   }, "id" | "uuid">
 
   export type OutreachSequenceOrderByWithAggregationInput = {
@@ -66839,7 +70195,8 @@ export namespace Prisma {
     uuid?: SortOrder
     organisation_uuid?: SortOrder
     name?: SortOrder
-    steps?: SortOrder
+    description?: SortOrderInput | SortOrder
+    status?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     _count?: OutreachSequenceCountOrderByAggregateInput
@@ -66857,9 +70214,220 @@ export namespace Prisma {
     uuid?: StringWithAggregatesFilter<"OutreachSequence"> | string
     organisation_uuid?: StringWithAggregatesFilter<"OutreachSequence"> | string
     name?: StringWithAggregatesFilter<"OutreachSequence"> | string
-    steps?: JsonWithAggregatesFilter<"OutreachSequence">
+    description?: StringNullableWithAggregatesFilter<"OutreachSequence"> | string | null
+    status?: EnumSequenceStatusWithAggregatesFilter<"OutreachSequence"> | $Enums.SequenceStatus
     created_at?: DateTimeWithAggregatesFilter<"OutreachSequence"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"OutreachSequence"> | Date | string
+  }
+
+  export type OutreachSequenceStepWhereInput = {
+    AND?: OutreachSequenceStepWhereInput | OutreachSequenceStepWhereInput[]
+    OR?: OutreachSequenceStepWhereInput[]
+    NOT?: OutreachSequenceStepWhereInput | OutreachSequenceStepWhereInput[]
+    id?: IntFilter<"OutreachSequenceStep"> | number
+    uuid?: StringFilter<"OutreachSequenceStep"> | string
+    sequence_uuid?: StringFilter<"OutreachSequenceStep"> | string
+    order_index?: IntFilter<"OutreachSequenceStep"> | number
+    enabled?: BoolFilter<"OutreachSequenceStep"> | boolean
+    channel?: EnumChannelFilter<"OutreachSequenceStep"> | $Enums.Channel
+    email_subject?: StringNullableFilter<"OutreachSequenceStep"> | string | null
+    email_content?: StringNullableFilter<"OutreachSequenceStep"> | string | null
+    sms_content?: StringNullableFilter<"OutreachSequenceStep"> | string | null
+    message_template_uuid?: StringNullableFilter<"OutreachSequenceStep"> | string | null
+    delay_value?: IntFilter<"OutreachSequenceStep"> | number
+    delay_unit?: EnumSequenceDelayUnitFilter<"OutreachSequenceStep"> | $Enums.SequenceDelayUnit
+    delay_reference?: EnumSequenceDelayReferenceFilter<"OutreachSequenceStep"> | $Enums.SequenceDelayReference
+    created_at?: DateTimeFilter<"OutreachSequenceStep"> | Date | string
+    updated_at?: DateTimeFilter<"OutreachSequenceStep"> | Date | string
+    sequence?: XOR<OutreachSequenceScalarRelationFilter, OutreachSequenceWhereInput>
+    message_template?: XOR<MessageTemplateNullableScalarRelationFilter, MessageTemplateWhereInput> | null
+    outreach_messages?: OutreachMessageListRelationFilter
+  }
+
+  export type OutreachSequenceStepOrderByWithRelationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    sequence_uuid?: SortOrder
+    order_index?: SortOrder
+    enabled?: SortOrder
+    channel?: SortOrder
+    email_subject?: SortOrderInput | SortOrder
+    email_content?: SortOrderInput | SortOrder
+    sms_content?: SortOrderInput | SortOrder
+    message_template_uuid?: SortOrderInput | SortOrder
+    delay_value?: SortOrder
+    delay_unit?: SortOrder
+    delay_reference?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    sequence?: OutreachSequenceOrderByWithRelationInput
+    message_template?: MessageTemplateOrderByWithRelationInput
+    outreach_messages?: OutreachMessageOrderByRelationAggregateInput
+  }
+
+  export type OutreachSequenceStepWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    uuid?: string
+    AND?: OutreachSequenceStepWhereInput | OutreachSequenceStepWhereInput[]
+    OR?: OutreachSequenceStepWhereInput[]
+    NOT?: OutreachSequenceStepWhereInput | OutreachSequenceStepWhereInput[]
+    sequence_uuid?: StringFilter<"OutreachSequenceStep"> | string
+    order_index?: IntFilter<"OutreachSequenceStep"> | number
+    enabled?: BoolFilter<"OutreachSequenceStep"> | boolean
+    channel?: EnumChannelFilter<"OutreachSequenceStep"> | $Enums.Channel
+    email_subject?: StringNullableFilter<"OutreachSequenceStep"> | string | null
+    email_content?: StringNullableFilter<"OutreachSequenceStep"> | string | null
+    sms_content?: StringNullableFilter<"OutreachSequenceStep"> | string | null
+    message_template_uuid?: StringNullableFilter<"OutreachSequenceStep"> | string | null
+    delay_value?: IntFilter<"OutreachSequenceStep"> | number
+    delay_unit?: EnumSequenceDelayUnitFilter<"OutreachSequenceStep"> | $Enums.SequenceDelayUnit
+    delay_reference?: EnumSequenceDelayReferenceFilter<"OutreachSequenceStep"> | $Enums.SequenceDelayReference
+    created_at?: DateTimeFilter<"OutreachSequenceStep"> | Date | string
+    updated_at?: DateTimeFilter<"OutreachSequenceStep"> | Date | string
+    sequence?: XOR<OutreachSequenceScalarRelationFilter, OutreachSequenceWhereInput>
+    message_template?: XOR<MessageTemplateNullableScalarRelationFilter, MessageTemplateWhereInput> | null
+    outreach_messages?: OutreachMessageListRelationFilter
+  }, "id" | "uuid">
+
+  export type OutreachSequenceStepOrderByWithAggregationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    sequence_uuid?: SortOrder
+    order_index?: SortOrder
+    enabled?: SortOrder
+    channel?: SortOrder
+    email_subject?: SortOrderInput | SortOrder
+    email_content?: SortOrderInput | SortOrder
+    sms_content?: SortOrderInput | SortOrder
+    message_template_uuid?: SortOrderInput | SortOrder
+    delay_value?: SortOrder
+    delay_unit?: SortOrder
+    delay_reference?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: OutreachSequenceStepCountOrderByAggregateInput
+    _avg?: OutreachSequenceStepAvgOrderByAggregateInput
+    _max?: OutreachSequenceStepMaxOrderByAggregateInput
+    _min?: OutreachSequenceStepMinOrderByAggregateInput
+    _sum?: OutreachSequenceStepSumOrderByAggregateInput
+  }
+
+  export type OutreachSequenceStepScalarWhereWithAggregatesInput = {
+    AND?: OutreachSequenceStepScalarWhereWithAggregatesInput | OutreachSequenceStepScalarWhereWithAggregatesInput[]
+    OR?: OutreachSequenceStepScalarWhereWithAggregatesInput[]
+    NOT?: OutreachSequenceStepScalarWhereWithAggregatesInput | OutreachSequenceStepScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"OutreachSequenceStep"> | number
+    uuid?: StringWithAggregatesFilter<"OutreachSequenceStep"> | string
+    sequence_uuid?: StringWithAggregatesFilter<"OutreachSequenceStep"> | string
+    order_index?: IntWithAggregatesFilter<"OutreachSequenceStep"> | number
+    enabled?: BoolWithAggregatesFilter<"OutreachSequenceStep"> | boolean
+    channel?: EnumChannelWithAggregatesFilter<"OutreachSequenceStep"> | $Enums.Channel
+    email_subject?: StringNullableWithAggregatesFilter<"OutreachSequenceStep"> | string | null
+    email_content?: StringNullableWithAggregatesFilter<"OutreachSequenceStep"> | string | null
+    sms_content?: StringNullableWithAggregatesFilter<"OutreachSequenceStep"> | string | null
+    message_template_uuid?: StringNullableWithAggregatesFilter<"OutreachSequenceStep"> | string | null
+    delay_value?: IntWithAggregatesFilter<"OutreachSequenceStep"> | number
+    delay_unit?: EnumSequenceDelayUnitWithAggregatesFilter<"OutreachSequenceStep"> | $Enums.SequenceDelayUnit
+    delay_reference?: EnumSequenceDelayReferenceWithAggregatesFilter<"OutreachSequenceStep"> | $Enums.SequenceDelayReference
+    created_at?: DateTimeWithAggregatesFilter<"OutreachSequenceStep"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"OutreachSequenceStep"> | Date | string
+  }
+
+  export type SequenceEnrollmentWhereInput = {
+    AND?: SequenceEnrollmentWhereInput | SequenceEnrollmentWhereInput[]
+    OR?: SequenceEnrollmentWhereInput[]
+    NOT?: SequenceEnrollmentWhereInput | SequenceEnrollmentWhereInput[]
+    id?: IntFilter<"SequenceEnrollment"> | number
+    uuid?: StringFilter<"SequenceEnrollment"> | string
+    sequence_uuid?: StringFilter<"SequenceEnrollment"> | string
+    contact_uuid?: StringFilter<"SequenceEnrollment"> | string
+    campaign_uuid?: StringNullableFilter<"SequenceEnrollment"> | string | null
+    status?: EnumSequenceEnrollmentStatusFilter<"SequenceEnrollment"> | $Enums.SequenceEnrollmentStatus
+    enrolled_at?: DateTimeFilter<"SequenceEnrollment"> | Date | string
+    cancelled_at?: DateTimeNullableFilter<"SequenceEnrollment"> | Date | string | null
+    completed_at?: DateTimeNullableFilter<"SequenceEnrollment"> | Date | string | null
+    created_at?: DateTimeFilter<"SequenceEnrollment"> | Date | string
+    updated_at?: DateTimeFilter<"SequenceEnrollment"> | Date | string
+    sequence?: XOR<OutreachSequenceScalarRelationFilter, OutreachSequenceWhereInput>
+    contact?: XOR<ContactScalarRelationFilter, ContactWhereInput>
+    campaign?: XOR<MarketingCampaignNullableScalarRelationFilter, MarketingCampaignWhereInput> | null
+    outreach_messages?: OutreachMessageListRelationFilter
+  }
+
+  export type SequenceEnrollmentOrderByWithRelationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    sequence_uuid?: SortOrder
+    contact_uuid?: SortOrder
+    campaign_uuid?: SortOrderInput | SortOrder
+    status?: SortOrder
+    enrolled_at?: SortOrder
+    cancelled_at?: SortOrderInput | SortOrder
+    completed_at?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    sequence?: OutreachSequenceOrderByWithRelationInput
+    contact?: ContactOrderByWithRelationInput
+    campaign?: MarketingCampaignOrderByWithRelationInput
+    outreach_messages?: OutreachMessageOrderByRelationAggregateInput
+  }
+
+  export type SequenceEnrollmentWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    uuid?: string
+    sequence_uuid_contact_uuid_campaign_uuid?: SequenceEnrollmentSequence_uuidContact_uuidCampaign_uuidCompoundUniqueInput
+    AND?: SequenceEnrollmentWhereInput | SequenceEnrollmentWhereInput[]
+    OR?: SequenceEnrollmentWhereInput[]
+    NOT?: SequenceEnrollmentWhereInput | SequenceEnrollmentWhereInput[]
+    sequence_uuid?: StringFilter<"SequenceEnrollment"> | string
+    contact_uuid?: StringFilter<"SequenceEnrollment"> | string
+    campaign_uuid?: StringNullableFilter<"SequenceEnrollment"> | string | null
+    status?: EnumSequenceEnrollmentStatusFilter<"SequenceEnrollment"> | $Enums.SequenceEnrollmentStatus
+    enrolled_at?: DateTimeFilter<"SequenceEnrollment"> | Date | string
+    cancelled_at?: DateTimeNullableFilter<"SequenceEnrollment"> | Date | string | null
+    completed_at?: DateTimeNullableFilter<"SequenceEnrollment"> | Date | string | null
+    created_at?: DateTimeFilter<"SequenceEnrollment"> | Date | string
+    updated_at?: DateTimeFilter<"SequenceEnrollment"> | Date | string
+    sequence?: XOR<OutreachSequenceScalarRelationFilter, OutreachSequenceWhereInput>
+    contact?: XOR<ContactScalarRelationFilter, ContactWhereInput>
+    campaign?: XOR<MarketingCampaignNullableScalarRelationFilter, MarketingCampaignWhereInput> | null
+    outreach_messages?: OutreachMessageListRelationFilter
+  }, "id" | "uuid" | "sequence_uuid_contact_uuid_campaign_uuid">
+
+  export type SequenceEnrollmentOrderByWithAggregationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    sequence_uuid?: SortOrder
+    contact_uuid?: SortOrder
+    campaign_uuid?: SortOrderInput | SortOrder
+    status?: SortOrder
+    enrolled_at?: SortOrder
+    cancelled_at?: SortOrderInput | SortOrder
+    completed_at?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: SequenceEnrollmentCountOrderByAggregateInput
+    _avg?: SequenceEnrollmentAvgOrderByAggregateInput
+    _max?: SequenceEnrollmentMaxOrderByAggregateInput
+    _min?: SequenceEnrollmentMinOrderByAggregateInput
+    _sum?: SequenceEnrollmentSumOrderByAggregateInput
+  }
+
+  export type SequenceEnrollmentScalarWhereWithAggregatesInput = {
+    AND?: SequenceEnrollmentScalarWhereWithAggregatesInput | SequenceEnrollmentScalarWhereWithAggregatesInput[]
+    OR?: SequenceEnrollmentScalarWhereWithAggregatesInput[]
+    NOT?: SequenceEnrollmentScalarWhereWithAggregatesInput | SequenceEnrollmentScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"SequenceEnrollment"> | number
+    uuid?: StringWithAggregatesFilter<"SequenceEnrollment"> | string
+    sequence_uuid?: StringWithAggregatesFilter<"SequenceEnrollment"> | string
+    contact_uuid?: StringWithAggregatesFilter<"SequenceEnrollment"> | string
+    campaign_uuid?: StringNullableWithAggregatesFilter<"SequenceEnrollment"> | string | null
+    status?: EnumSequenceEnrollmentStatusWithAggregatesFilter<"SequenceEnrollment"> | $Enums.SequenceEnrollmentStatus
+    enrolled_at?: DateTimeWithAggregatesFilter<"SequenceEnrollment"> | Date | string
+    cancelled_at?: DateTimeNullableWithAggregatesFilter<"SequenceEnrollment"> | Date | string | null
+    completed_at?: DateTimeNullableWithAggregatesFilter<"SequenceEnrollment"> | Date | string | null
+    created_at?: DateTimeWithAggregatesFilter<"SequenceEnrollment"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"SequenceEnrollment"> | Date | string
   }
 
   export type FilterJobWhereInput = {
@@ -67366,6 +70934,7 @@ export namespace Prisma {
     created_at?: DateTimeFilter<"MessageTemplate"> | Date | string
     updated_at?: DateTimeFilter<"MessageTemplate"> | Date | string
     organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+    sequence_steps?: OutreachSequenceStepListRelationFilter
   }
 
   export type MessageTemplateOrderByWithRelationInput = {
@@ -67382,6 +70951,7 @@ export namespace Prisma {
     created_at?: SortOrder
     updated_at?: SortOrder
     organisation?: OrganisationOrderByWithRelationInput
+    sequence_steps?: OutreachSequenceStepOrderByRelationAggregateInput
   }
 
   export type MessageTemplateWhereUniqueInput = Prisma.AtLeast<{
@@ -67401,6 +70971,7 @@ export namespace Prisma {
     created_at?: DateTimeFilter<"MessageTemplate"> | Date | string
     updated_at?: DateTimeFilter<"MessageTemplate"> | Date | string
     organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+    sequence_steps?: OutreachSequenceStepListRelationFilter
   }, "id" | "uuid">
 
   export type MessageTemplateOrderByWithAggregationInput = {
@@ -67463,6 +71034,7 @@ export namespace Prisma {
     draft_batch_id?: StringNullableFilter<"MarketingCampaign"> | string | null
     sender_profile_uuid?: StringNullableFilter<"MarketingCampaign"> | string | null
     email_provider_allocations?: JsonNullableFilter<"MarketingCampaign">
+    sequence_uuid?: StringNullableFilter<"MarketingCampaign"> | string | null
     scheduled_at?: DateTimeNullableFilter<"MarketingCampaign"> | Date | string | null
     started_at?: DateTimeNullableFilter<"MarketingCampaign"> | Date | string | null
     completed_at?: DateTimeNullableFilter<"MarketingCampaign"> | Date | string | null
@@ -67485,9 +71057,11 @@ export namespace Prisma {
     updated_at?: DateTimeFilter<"MarketingCampaign"> | Date | string
     organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
     sender_profile?: XOR<SenderProfileNullableScalarRelationFilter, SenderProfileWhereInput> | null
+    sequence?: XOR<OutreachSequenceNullableScalarRelationFilter, OutreachSequenceWhereInput> | null
     campaign_contacts?: MarketingCampaignContactListRelationFilter
     outreach_messages?: OutreachMessageListRelationFilter
     interactions?: InteractionListRelationFilter
+    sequence_enrollments?: SequenceEnrollmentListRelationFilter
   }
 
   export type MarketingCampaignOrderByWithRelationInput = {
@@ -67509,6 +71083,7 @@ export namespace Prisma {
     draft_batch_id?: SortOrderInput | SortOrder
     sender_profile_uuid?: SortOrderInput | SortOrder
     email_provider_allocations?: SortOrderInput | SortOrder
+    sequence_uuid?: SortOrderInput | SortOrder
     scheduled_at?: SortOrderInput | SortOrder
     started_at?: SortOrderInput | SortOrder
     completed_at?: SortOrderInput | SortOrder
@@ -67531,9 +71106,11 @@ export namespace Prisma {
     updated_at?: SortOrder
     organisation?: OrganisationOrderByWithRelationInput
     sender_profile?: SenderProfileOrderByWithRelationInput
+    sequence?: OutreachSequenceOrderByWithRelationInput
     campaign_contacts?: MarketingCampaignContactOrderByRelationAggregateInput
     outreach_messages?: OutreachMessageOrderByRelationAggregateInput
     interactions?: InteractionOrderByRelationAggregateInput
+    sequence_enrollments?: SequenceEnrollmentOrderByRelationAggregateInput
   }
 
   export type MarketingCampaignWhereUniqueInput = Prisma.AtLeast<{
@@ -67558,6 +71135,7 @@ export namespace Prisma {
     draft_batch_id?: StringNullableFilter<"MarketingCampaign"> | string | null
     sender_profile_uuid?: StringNullableFilter<"MarketingCampaign"> | string | null
     email_provider_allocations?: JsonNullableFilter<"MarketingCampaign">
+    sequence_uuid?: StringNullableFilter<"MarketingCampaign"> | string | null
     scheduled_at?: DateTimeNullableFilter<"MarketingCampaign"> | Date | string | null
     started_at?: DateTimeNullableFilter<"MarketingCampaign"> | Date | string | null
     completed_at?: DateTimeNullableFilter<"MarketingCampaign"> | Date | string | null
@@ -67580,9 +71158,11 @@ export namespace Prisma {
     updated_at?: DateTimeFilter<"MarketingCampaign"> | Date | string
     organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
     sender_profile?: XOR<SenderProfileNullableScalarRelationFilter, SenderProfileWhereInput> | null
+    sequence?: XOR<OutreachSequenceNullableScalarRelationFilter, OutreachSequenceWhereInput> | null
     campaign_contacts?: MarketingCampaignContactListRelationFilter
     outreach_messages?: OutreachMessageListRelationFilter
     interactions?: InteractionListRelationFilter
+    sequence_enrollments?: SequenceEnrollmentListRelationFilter
   }, "id" | "uuid">
 
   export type MarketingCampaignOrderByWithAggregationInput = {
@@ -67604,6 +71184,7 @@ export namespace Prisma {
     draft_batch_id?: SortOrderInput | SortOrder
     sender_profile_uuid?: SortOrderInput | SortOrder
     email_provider_allocations?: SortOrderInput | SortOrder
+    sequence_uuid?: SortOrderInput | SortOrder
     scheduled_at?: SortOrderInput | SortOrder
     started_at?: SortOrderInput | SortOrder
     completed_at?: SortOrderInput | SortOrder
@@ -67653,6 +71234,7 @@ export namespace Prisma {
     draft_batch_id?: StringNullableWithAggregatesFilter<"MarketingCampaign"> | string | null
     sender_profile_uuid?: StringNullableWithAggregatesFilter<"MarketingCampaign"> | string | null
     email_provider_allocations?: JsonNullableWithAggregatesFilter<"MarketingCampaign">
+    sequence_uuid?: StringNullableWithAggregatesFilter<"MarketingCampaign"> | string | null
     scheduled_at?: DateTimeNullableWithAggregatesFilter<"MarketingCampaign"> | Date | string | null
     started_at?: DateTimeNullableWithAggregatesFilter<"MarketingCampaign"> | Date | string | null
     completed_at?: DateTimeNullableWithAggregatesFilter<"MarketingCampaign"> | Date | string | null
@@ -70485,6 +74067,7 @@ export namespace Prisma {
     form_completions?: FormCompletionCreateNestedManyWithoutContactInput
     list_memberships?: ContactListMemberCreateNestedManyWithoutContactInput
     enrichments?: ContactEnrichmentCreateNestedManyWithoutContactInput
+    sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutContactInput
   }
 
   export type ContactUncheckedCreateInput = {
@@ -70527,6 +74110,7 @@ export namespace Prisma {
     form_completions?: FormCompletionUncheckedCreateNestedManyWithoutContactInput
     list_memberships?: ContactListMemberUncheckedCreateNestedManyWithoutContactInput
     enrichments?: ContactEnrichmentUncheckedCreateNestedManyWithoutContactInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutContactInput
   }
 
   export type ContactUpdateInput = {
@@ -70568,6 +74152,7 @@ export namespace Prisma {
     form_completions?: FormCompletionUpdateManyWithoutContactNestedInput
     list_memberships?: ContactListMemberUpdateManyWithoutContactNestedInput
     enrichments?: ContactEnrichmentUpdateManyWithoutContactNestedInput
+    sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutContactNestedInput
   }
 
   export type ContactUncheckedUpdateInput = {
@@ -70610,6 +74195,7 @@ export namespace Prisma {
     form_completions?: FormCompletionUncheckedUpdateManyWithoutContactNestedInput
     list_memberships?: ContactListMemberUncheckedUpdateManyWithoutContactNestedInput
     enrichments?: ContactEnrichmentUncheckedUpdateManyWithoutContactNestedInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutContactNestedInput
   }
 
   export type ContactCreateManyInput = {
@@ -71265,6 +74851,8 @@ export namespace Prisma {
     campaign?: MarketingCampaignCreateNestedOneWithoutOutreach_messagesInput
     sent_by?: UserCreateNestedOneWithoutOutreach_messages_sentInput
     interaction?: InteractionCreateNestedOneWithoutOutreach_messageInput
+    sequence_enrollment?: SequenceEnrollmentCreateNestedOneWithoutOutreach_messagesInput
+    sequence_step?: OutreachSequenceStepCreateNestedOneWithoutOutreach_messagesInput
   }
 
   export type OutreachMessageUncheckedCreateInput = {
@@ -71293,6 +74881,8 @@ export namespace Prisma {
     email_account?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    sequence_enrollment_uuid?: string | null
+    sequence_step_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     interaction?: InteractionUncheckedCreateNestedOneWithoutOutreach_messageInput
@@ -71326,6 +74916,8 @@ export namespace Prisma {
     campaign?: MarketingCampaignUpdateOneWithoutOutreach_messagesNestedInput
     sent_by?: UserUpdateOneWithoutOutreach_messages_sentNestedInput
     interaction?: InteractionUpdateOneWithoutOutreach_messageNestedInput
+    sequence_enrollment?: SequenceEnrollmentUpdateOneWithoutOutreach_messagesNestedInput
+    sequence_step?: OutreachSequenceStepUpdateOneWithoutOutreach_messagesNestedInput
   }
 
   export type OutreachMessageUncheckedUpdateInput = {
@@ -71354,6 +74946,8 @@ export namespace Prisma {
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    sequence_step_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     interaction?: InteractionUncheckedUpdateOneWithoutOutreach_messageNestedInput
@@ -71385,6 +74979,8 @@ export namespace Prisma {
     email_account?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    sequence_enrollment_uuid?: string | null
+    sequence_step_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -71440,6 +75036,8 @@ export namespace Prisma {
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    sequence_step_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -71447,10 +75045,14 @@ export namespace Prisma {
   export type OutreachSequenceCreateInput = {
     uuid?: string
     name: string
-    steps: JsonNullValueInput | InputJsonValue
+    description?: string | null
+    status?: $Enums.SequenceStatus
     created_at?: Date | string
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutOutreach_sequencesInput
+    steps?: OutreachSequenceStepCreateNestedManyWithoutSequenceInput
+    enrollments?: SequenceEnrollmentCreateNestedManyWithoutSequenceInput
+    campaigns?: MarketingCampaignCreateNestedManyWithoutSequenceInput
   }
 
   export type OutreachSequenceUncheckedCreateInput = {
@@ -71458,18 +75060,26 @@ export namespace Prisma {
     uuid?: string
     organisation_uuid: string
     name: string
-    steps: JsonNullValueInput | InputJsonValue
+    description?: string | null
+    status?: $Enums.SequenceStatus
     created_at?: Date | string
     updated_at?: Date | string
+    steps?: OutreachSequenceStepUncheckedCreateNestedManyWithoutSequenceInput
+    enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutSequenceInput
+    campaigns?: MarketingCampaignUncheckedCreateNestedManyWithoutSequenceInput
   }
 
   export type OutreachSequenceUpdateInput = {
     uuid?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    steps?: JsonNullValueInput | InputJsonValue
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSequenceStatusFieldUpdateOperationsInput | $Enums.SequenceStatus
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutOutreach_sequencesNestedInput
+    steps?: OutreachSequenceStepUpdateManyWithoutSequenceNestedInput
+    enrollments?: SequenceEnrollmentUpdateManyWithoutSequenceNestedInput
+    campaigns?: MarketingCampaignUpdateManyWithoutSequenceNestedInput
   }
 
   export type OutreachSequenceUncheckedUpdateInput = {
@@ -71477,9 +75087,13 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     organisation_uuid?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    steps?: JsonNullValueInput | InputJsonValue
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSequenceStatusFieldUpdateOperationsInput | $Enums.SequenceStatus
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    steps?: OutreachSequenceStepUncheckedUpdateManyWithoutSequenceNestedInput
+    enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutSequenceNestedInput
+    campaigns?: MarketingCampaignUncheckedUpdateManyWithoutSequenceNestedInput
   }
 
   export type OutreachSequenceCreateManyInput = {
@@ -71487,7 +75101,8 @@ export namespace Prisma {
     uuid?: string
     organisation_uuid: string
     name: string
-    steps: JsonNullValueInput | InputJsonValue
+    description?: string | null
+    status?: $Enums.SequenceStatus
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -71495,7 +75110,8 @@ export namespace Prisma {
   export type OutreachSequenceUpdateManyMutationInput = {
     uuid?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    steps?: JsonNullValueInput | InputJsonValue
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSequenceStatusFieldUpdateOperationsInput | $Enums.SequenceStatus
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -71505,7 +75121,229 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     organisation_uuid?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    steps?: JsonNullValueInput | InputJsonValue
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSequenceStatusFieldUpdateOperationsInput | $Enums.SequenceStatus
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OutreachSequenceStepCreateInput = {
+    uuid?: string
+    order_index: number
+    enabled?: boolean
+    channel: $Enums.Channel
+    email_subject?: string | null
+    email_content?: string | null
+    sms_content?: string | null
+    delay_value: number
+    delay_unit?: $Enums.SequenceDelayUnit
+    delay_reference?: $Enums.SequenceDelayReference
+    created_at?: Date | string
+    updated_at?: Date | string
+    sequence: OutreachSequenceCreateNestedOneWithoutStepsInput
+    message_template?: MessageTemplateCreateNestedOneWithoutSequence_stepsInput
+    outreach_messages?: OutreachMessageCreateNestedManyWithoutSequence_stepInput
+  }
+
+  export type OutreachSequenceStepUncheckedCreateInput = {
+    id?: number
+    uuid?: string
+    sequence_uuid: string
+    order_index: number
+    enabled?: boolean
+    channel: $Enums.Channel
+    email_subject?: string | null
+    email_content?: string | null
+    sms_content?: string | null
+    message_template_uuid?: string | null
+    delay_value: number
+    delay_unit?: $Enums.SequenceDelayUnit
+    delay_reference?: $Enums.SequenceDelayReference
+    created_at?: Date | string
+    updated_at?: Date | string
+    outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutSequence_stepInput
+  }
+
+  export type OutreachSequenceStepUpdateInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    order_index?: IntFieldUpdateOperationsInput | number
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    channel?: EnumChannelFieldUpdateOperationsInput | $Enums.Channel
+    email_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    email_content?: NullableStringFieldUpdateOperationsInput | string | null
+    sms_content?: NullableStringFieldUpdateOperationsInput | string | null
+    delay_value?: IntFieldUpdateOperationsInput | number
+    delay_unit?: EnumSequenceDelayUnitFieldUpdateOperationsInput | $Enums.SequenceDelayUnit
+    delay_reference?: EnumSequenceDelayReferenceFieldUpdateOperationsInput | $Enums.SequenceDelayReference
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    sequence?: OutreachSequenceUpdateOneRequiredWithoutStepsNestedInput
+    message_template?: MessageTemplateUpdateOneWithoutSequence_stepsNestedInput
+    outreach_messages?: OutreachMessageUpdateManyWithoutSequence_stepNestedInput
+  }
+
+  export type OutreachSequenceStepUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    sequence_uuid?: StringFieldUpdateOperationsInput | string
+    order_index?: IntFieldUpdateOperationsInput | number
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    channel?: EnumChannelFieldUpdateOperationsInput | $Enums.Channel
+    email_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    email_content?: NullableStringFieldUpdateOperationsInput | string | null
+    sms_content?: NullableStringFieldUpdateOperationsInput | string | null
+    message_template_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    delay_value?: IntFieldUpdateOperationsInput | number
+    delay_unit?: EnumSequenceDelayUnitFieldUpdateOperationsInput | $Enums.SequenceDelayUnit
+    delay_reference?: EnumSequenceDelayReferenceFieldUpdateOperationsInput | $Enums.SequenceDelayReference
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutSequence_stepNestedInput
+  }
+
+  export type OutreachSequenceStepCreateManyInput = {
+    id?: number
+    uuid?: string
+    sequence_uuid: string
+    order_index: number
+    enabled?: boolean
+    channel: $Enums.Channel
+    email_subject?: string | null
+    email_content?: string | null
+    sms_content?: string | null
+    message_template_uuid?: string | null
+    delay_value: number
+    delay_unit?: $Enums.SequenceDelayUnit
+    delay_reference?: $Enums.SequenceDelayReference
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type OutreachSequenceStepUpdateManyMutationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    order_index?: IntFieldUpdateOperationsInput | number
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    channel?: EnumChannelFieldUpdateOperationsInput | $Enums.Channel
+    email_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    email_content?: NullableStringFieldUpdateOperationsInput | string | null
+    sms_content?: NullableStringFieldUpdateOperationsInput | string | null
+    delay_value?: IntFieldUpdateOperationsInput | number
+    delay_unit?: EnumSequenceDelayUnitFieldUpdateOperationsInput | $Enums.SequenceDelayUnit
+    delay_reference?: EnumSequenceDelayReferenceFieldUpdateOperationsInput | $Enums.SequenceDelayReference
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OutreachSequenceStepUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    sequence_uuid?: StringFieldUpdateOperationsInput | string
+    order_index?: IntFieldUpdateOperationsInput | number
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    channel?: EnumChannelFieldUpdateOperationsInput | $Enums.Channel
+    email_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    email_content?: NullableStringFieldUpdateOperationsInput | string | null
+    sms_content?: NullableStringFieldUpdateOperationsInput | string | null
+    message_template_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    delay_value?: IntFieldUpdateOperationsInput | number
+    delay_unit?: EnumSequenceDelayUnitFieldUpdateOperationsInput | $Enums.SequenceDelayUnit
+    delay_reference?: EnumSequenceDelayReferenceFieldUpdateOperationsInput | $Enums.SequenceDelayReference
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SequenceEnrollmentCreateInput = {
+    uuid?: string
+    status?: $Enums.SequenceEnrollmentStatus
+    enrolled_at?: Date | string
+    cancelled_at?: Date | string | null
+    completed_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    sequence: OutreachSequenceCreateNestedOneWithoutEnrollmentsInput
+    contact: ContactCreateNestedOneWithoutSequence_enrollmentsInput
+    campaign?: MarketingCampaignCreateNestedOneWithoutSequence_enrollmentsInput
+    outreach_messages?: OutreachMessageCreateNestedManyWithoutSequence_enrollmentInput
+  }
+
+  export type SequenceEnrollmentUncheckedCreateInput = {
+    id?: number
+    uuid?: string
+    sequence_uuid: string
+    contact_uuid: string
+    campaign_uuid?: string | null
+    status?: $Enums.SequenceEnrollmentStatus
+    enrolled_at?: Date | string
+    cancelled_at?: Date | string | null
+    completed_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutSequence_enrollmentInput
+  }
+
+  export type SequenceEnrollmentUpdateInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumSequenceEnrollmentStatusFieldUpdateOperationsInput | $Enums.SequenceEnrollmentStatus
+    enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    sequence?: OutreachSequenceUpdateOneRequiredWithoutEnrollmentsNestedInput
+    contact?: ContactUpdateOneRequiredWithoutSequence_enrollmentsNestedInput
+    campaign?: MarketingCampaignUpdateOneWithoutSequence_enrollmentsNestedInput
+    outreach_messages?: OutreachMessageUpdateManyWithoutSequence_enrollmentNestedInput
+  }
+
+  export type SequenceEnrollmentUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    sequence_uuid?: StringFieldUpdateOperationsInput | string
+    contact_uuid?: StringFieldUpdateOperationsInput | string
+    campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSequenceEnrollmentStatusFieldUpdateOperationsInput | $Enums.SequenceEnrollmentStatus
+    enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutSequence_enrollmentNestedInput
+  }
+
+  export type SequenceEnrollmentCreateManyInput = {
+    id?: number
+    uuid?: string
+    sequence_uuid: string
+    contact_uuid: string
+    campaign_uuid?: string | null
+    status?: $Enums.SequenceEnrollmentStatus
+    enrolled_at?: Date | string
+    cancelled_at?: Date | string | null
+    completed_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type SequenceEnrollmentUpdateManyMutationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumSequenceEnrollmentStatusFieldUpdateOperationsInput | $Enums.SequenceEnrollmentStatus
+    enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SequenceEnrollmentUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    sequence_uuid?: StringFieldUpdateOperationsInput | string
+    contact_uuid?: StringFieldUpdateOperationsInput | string
+    campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSequenceEnrollmentStatusFieldUpdateOperationsInput | $Enums.SequenceEnrollmentStatus
+    enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -72093,6 +75931,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutMessage_templatesInput
+    sequence_steps?: OutreachSequenceStepCreateNestedManyWithoutMessage_templateInput
   }
 
   export type MessageTemplateUncheckedCreateInput = {
@@ -72108,6 +75947,7 @@ export namespace Prisma {
     source_message_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
+    sequence_steps?: OutreachSequenceStepUncheckedCreateNestedManyWithoutMessage_templateInput
   }
 
   export type MessageTemplateUpdateInput = {
@@ -72122,6 +75962,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutMessage_templatesNestedInput
+    sequence_steps?: OutreachSequenceStepUpdateManyWithoutMessage_templateNestedInput
   }
 
   export type MessageTemplateUncheckedUpdateInput = {
@@ -72137,6 +75978,7 @@ export namespace Prisma {
     source_message_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    sequence_steps?: OutreachSequenceStepUncheckedUpdateManyWithoutMessage_templateNestedInput
   }
 
   export type MessageTemplateCreateManyInput = {
@@ -72220,9 +76062,11 @@ export namespace Prisma {
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutMarketing_campaignsInput
     sender_profile?: SenderProfileCreateNestedOneWithoutMarketing_campaignsInput
+    sequence?: OutreachSequenceCreateNestedOneWithoutCampaignsInput
     campaign_contacts?: MarketingCampaignContactCreateNestedManyWithoutCampaignInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutCampaignInput
     interactions?: InteractionCreateNestedManyWithoutCampaignInput
+    sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutCampaignInput
   }
 
   export type MarketingCampaignUncheckedCreateInput = {
@@ -72244,6 +76088,7 @@ export namespace Prisma {
     draft_batch_id?: string | null
     sender_profile_uuid?: string | null
     email_provider_allocations?: NullableJsonNullValueInput | InputJsonValue
+    sequence_uuid?: string | null
     scheduled_at?: Date | string | null
     started_at?: Date | string | null
     completed_at?: Date | string | null
@@ -72267,6 +76112,7 @@ export namespace Prisma {
     campaign_contacts?: MarketingCampaignContactUncheckedCreateNestedManyWithoutCampaignInput
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutCampaignInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutCampaignInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutCampaignInput
   }
 
   export type MarketingCampaignUpdateInput = {
@@ -72307,9 +76153,11 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutMarketing_campaignsNestedInput
     sender_profile?: SenderProfileUpdateOneWithoutMarketing_campaignsNestedInput
+    sequence?: OutreachSequenceUpdateOneWithoutCampaignsNestedInput
     campaign_contacts?: MarketingCampaignContactUpdateManyWithoutCampaignNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutCampaignNestedInput
     interactions?: InteractionUpdateManyWithoutCampaignNestedInput
+    sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutCampaignNestedInput
   }
 
   export type MarketingCampaignUncheckedUpdateInput = {
@@ -72331,6 +76179,7 @@ export namespace Prisma {
     draft_batch_id?: NullableStringFieldUpdateOperationsInput | string | null
     sender_profile_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     email_provider_allocations?: NullableJsonNullValueInput | InputJsonValue
+    sequence_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     scheduled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     started_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -72354,6 +76203,7 @@ export namespace Prisma {
     campaign_contacts?: MarketingCampaignContactUncheckedUpdateManyWithoutCampaignNestedInput
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutCampaignNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutCampaignNestedInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutCampaignNestedInput
   }
 
   export type MarketingCampaignCreateManyInput = {
@@ -72375,6 +76225,7 @@ export namespace Prisma {
     draft_batch_id?: string | null
     sender_profile_uuid?: string | null
     email_provider_allocations?: NullableJsonNullValueInput | InputJsonValue
+    sequence_uuid?: string | null
     scheduled_at?: Date | string | null
     started_at?: Date | string | null
     completed_at?: Date | string | null
@@ -72454,6 +76305,7 @@ export namespace Prisma {
     draft_batch_id?: NullableStringFieldUpdateOperationsInput | string | null
     sender_profile_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     email_provider_allocations?: NullableJsonNullValueInput | InputJsonValue
+    sequence_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     scheduled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     started_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -75562,6 +79414,12 @@ export namespace Prisma {
     none?: ContactEnrichmentWhereInput
   }
 
+  export type SequenceEnrollmentListRelationFilter = {
+    every?: SequenceEnrollmentWhereInput
+    some?: SequenceEnrollmentWhereInput
+    none?: SequenceEnrollmentWhereInput
+  }
+
   export type ContactTagOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -75579,6 +79437,10 @@ export namespace Prisma {
   }
 
   export type ContactEnrichmentOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type SequenceEnrollmentOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -76109,6 +79971,16 @@ export namespace Prisma {
     isNot?: InteractionWhereInput | null
   }
 
+  export type SequenceEnrollmentNullableScalarRelationFilter = {
+    is?: SequenceEnrollmentWhereInput | null
+    isNot?: SequenceEnrollmentWhereInput | null
+  }
+
+  export type OutreachSequenceStepNullableScalarRelationFilter = {
+    is?: OutreachSequenceStepWhereInput | null
+    isNot?: OutreachSequenceStepWhereInput | null
+  }
+
   export type OutreachMessageCountOrderByAggregateInput = {
     id?: SortOrder
     uuid?: SortOrder
@@ -76135,6 +80007,8 @@ export namespace Prisma {
     email_account?: SortOrder
     sms_provider?: SortOrder
     metadata?: SortOrder
+    sequence_enrollment_uuid?: SortOrder
+    sequence_step_uuid?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -76168,6 +80042,8 @@ export namespace Prisma {
     email_provider?: SortOrder
     email_account?: SortOrder
     sms_provider?: SortOrder
+    sequence_enrollment_uuid?: SortOrder
+    sequence_step_uuid?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -76197,6 +80073,8 @@ export namespace Prisma {
     email_provider?: SortOrder
     email_account?: SortOrder
     sms_provider?: SortOrder
+    sequence_enrollment_uuid?: SortOrder
+    sequence_step_uuid?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -76245,12 +80123,30 @@ export namespace Prisma {
     _max?: NestedEnumExternalIntegrationProviderNullableFilter<$PrismaModel>
   }
 
+  export type EnumSequenceStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.SequenceStatus | EnumSequenceStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SequenceStatus[] | ListEnumSequenceStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SequenceStatus[] | ListEnumSequenceStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSequenceStatusFilter<$PrismaModel> | $Enums.SequenceStatus
+  }
+
+  export type OutreachSequenceStepListRelationFilter = {
+    every?: OutreachSequenceStepWhereInput
+    some?: OutreachSequenceStepWhereInput
+    none?: OutreachSequenceStepWhereInput
+  }
+
+  export type OutreachSequenceStepOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type OutreachSequenceCountOrderByAggregateInput = {
     id?: SortOrder
     uuid?: SortOrder
     organisation_uuid?: SortOrder
     name?: SortOrder
-    steps?: SortOrder
+    description?: SortOrder
+    status?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -76264,6 +80160,8 @@ export namespace Prisma {
     uuid?: SortOrder
     organisation_uuid?: SortOrder
     name?: SortOrder
+    description?: SortOrder
+    status?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -76273,12 +80171,207 @@ export namespace Prisma {
     uuid?: SortOrder
     organisation_uuid?: SortOrder
     name?: SortOrder
+    description?: SortOrder
+    status?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
 
   export type OutreachSequenceSumOrderByAggregateInput = {
     id?: SortOrder
+  }
+
+  export type EnumSequenceStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SequenceStatus | EnumSequenceStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SequenceStatus[] | ListEnumSequenceStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SequenceStatus[] | ListEnumSequenceStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSequenceStatusWithAggregatesFilter<$PrismaModel> | $Enums.SequenceStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSequenceStatusFilter<$PrismaModel>
+    _max?: NestedEnumSequenceStatusFilter<$PrismaModel>
+  }
+
+  export type EnumSequenceDelayUnitFilter<$PrismaModel = never> = {
+    equals?: $Enums.SequenceDelayUnit | EnumSequenceDelayUnitFieldRefInput<$PrismaModel>
+    in?: $Enums.SequenceDelayUnit[] | ListEnumSequenceDelayUnitFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SequenceDelayUnit[] | ListEnumSequenceDelayUnitFieldRefInput<$PrismaModel>
+    not?: NestedEnumSequenceDelayUnitFilter<$PrismaModel> | $Enums.SequenceDelayUnit
+  }
+
+  export type EnumSequenceDelayReferenceFilter<$PrismaModel = never> = {
+    equals?: $Enums.SequenceDelayReference | EnumSequenceDelayReferenceFieldRefInput<$PrismaModel>
+    in?: $Enums.SequenceDelayReference[] | ListEnumSequenceDelayReferenceFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SequenceDelayReference[] | ListEnumSequenceDelayReferenceFieldRefInput<$PrismaModel>
+    not?: NestedEnumSequenceDelayReferenceFilter<$PrismaModel> | $Enums.SequenceDelayReference
+  }
+
+  export type OutreachSequenceScalarRelationFilter = {
+    is?: OutreachSequenceWhereInput
+    isNot?: OutreachSequenceWhereInput
+  }
+
+  export type MessageTemplateNullableScalarRelationFilter = {
+    is?: MessageTemplateWhereInput | null
+    isNot?: MessageTemplateWhereInput | null
+  }
+
+  export type OutreachSequenceStepCountOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    sequence_uuid?: SortOrder
+    order_index?: SortOrder
+    enabled?: SortOrder
+    channel?: SortOrder
+    email_subject?: SortOrder
+    email_content?: SortOrder
+    sms_content?: SortOrder
+    message_template_uuid?: SortOrder
+    delay_value?: SortOrder
+    delay_unit?: SortOrder
+    delay_reference?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type OutreachSequenceStepAvgOrderByAggregateInput = {
+    id?: SortOrder
+    order_index?: SortOrder
+    delay_value?: SortOrder
+  }
+
+  export type OutreachSequenceStepMaxOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    sequence_uuid?: SortOrder
+    order_index?: SortOrder
+    enabled?: SortOrder
+    channel?: SortOrder
+    email_subject?: SortOrder
+    email_content?: SortOrder
+    sms_content?: SortOrder
+    message_template_uuid?: SortOrder
+    delay_value?: SortOrder
+    delay_unit?: SortOrder
+    delay_reference?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type OutreachSequenceStepMinOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    sequence_uuid?: SortOrder
+    order_index?: SortOrder
+    enabled?: SortOrder
+    channel?: SortOrder
+    email_subject?: SortOrder
+    email_content?: SortOrder
+    sms_content?: SortOrder
+    message_template_uuid?: SortOrder
+    delay_value?: SortOrder
+    delay_unit?: SortOrder
+    delay_reference?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type OutreachSequenceStepSumOrderByAggregateInput = {
+    id?: SortOrder
+    order_index?: SortOrder
+    delay_value?: SortOrder
+  }
+
+  export type EnumSequenceDelayUnitWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SequenceDelayUnit | EnumSequenceDelayUnitFieldRefInput<$PrismaModel>
+    in?: $Enums.SequenceDelayUnit[] | ListEnumSequenceDelayUnitFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SequenceDelayUnit[] | ListEnumSequenceDelayUnitFieldRefInput<$PrismaModel>
+    not?: NestedEnumSequenceDelayUnitWithAggregatesFilter<$PrismaModel> | $Enums.SequenceDelayUnit
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSequenceDelayUnitFilter<$PrismaModel>
+    _max?: NestedEnumSequenceDelayUnitFilter<$PrismaModel>
+  }
+
+  export type EnumSequenceDelayReferenceWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SequenceDelayReference | EnumSequenceDelayReferenceFieldRefInput<$PrismaModel>
+    in?: $Enums.SequenceDelayReference[] | ListEnumSequenceDelayReferenceFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SequenceDelayReference[] | ListEnumSequenceDelayReferenceFieldRefInput<$PrismaModel>
+    not?: NestedEnumSequenceDelayReferenceWithAggregatesFilter<$PrismaModel> | $Enums.SequenceDelayReference
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSequenceDelayReferenceFilter<$PrismaModel>
+    _max?: NestedEnumSequenceDelayReferenceFilter<$PrismaModel>
+  }
+
+  export type EnumSequenceEnrollmentStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.SequenceEnrollmentStatus | EnumSequenceEnrollmentStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SequenceEnrollmentStatus[] | ListEnumSequenceEnrollmentStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SequenceEnrollmentStatus[] | ListEnumSequenceEnrollmentStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSequenceEnrollmentStatusFilter<$PrismaModel> | $Enums.SequenceEnrollmentStatus
+  }
+
+  export type SequenceEnrollmentSequence_uuidContact_uuidCampaign_uuidCompoundUniqueInput = {
+    sequence_uuid: string
+    contact_uuid: string
+    campaign_uuid: string
+  }
+
+  export type SequenceEnrollmentCountOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    sequence_uuid?: SortOrder
+    contact_uuid?: SortOrder
+    campaign_uuid?: SortOrder
+    status?: SortOrder
+    enrolled_at?: SortOrder
+    cancelled_at?: SortOrder
+    completed_at?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type SequenceEnrollmentAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type SequenceEnrollmentMaxOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    sequence_uuid?: SortOrder
+    contact_uuid?: SortOrder
+    campaign_uuid?: SortOrder
+    status?: SortOrder
+    enrolled_at?: SortOrder
+    cancelled_at?: SortOrder
+    completed_at?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type SequenceEnrollmentMinOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    sequence_uuid?: SortOrder
+    contact_uuid?: SortOrder
+    campaign_uuid?: SortOrder
+    status?: SortOrder
+    enrolled_at?: SortOrder
+    cancelled_at?: SortOrder
+    completed_at?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type SequenceEnrollmentSumOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type EnumSequenceEnrollmentStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SequenceEnrollmentStatus | EnumSequenceEnrollmentStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SequenceEnrollmentStatus[] | ListEnumSequenceEnrollmentStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SequenceEnrollmentStatus[] | ListEnumSequenceEnrollmentStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSequenceEnrollmentStatusWithAggregatesFilter<$PrismaModel> | $Enums.SequenceEnrollmentStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSequenceEnrollmentStatusFilter<$PrismaModel>
+    _max?: NestedEnumSequenceEnrollmentStatusFilter<$PrismaModel>
   }
 
   export type EnumJobStatusFilter<$PrismaModel = never> = {
@@ -76749,6 +80842,11 @@ export namespace Prisma {
     isNot?: SenderProfileWhereInput | null
   }
 
+  export type OutreachSequenceNullableScalarRelationFilter = {
+    is?: OutreachSequenceWhereInput | null
+    isNot?: OutreachSequenceWhereInput | null
+  }
+
   export type MarketingCampaignCountOrderByAggregateInput = {
     id?: SortOrder
     uuid?: SortOrder
@@ -76768,6 +80866,7 @@ export namespace Prisma {
     draft_batch_id?: SortOrder
     sender_profile_uuid?: SortOrder
     email_provider_allocations?: SortOrder
+    sequence_uuid?: SortOrder
     scheduled_at?: SortOrder
     started_at?: SortOrder
     completed_at?: SortOrder
@@ -76824,6 +80923,7 @@ export namespace Prisma {
     use_openai_batch?: SortOrder
     draft_batch_id?: SortOrder
     sender_profile_uuid?: SortOrder
+    sequence_uuid?: SortOrder
     scheduled_at?: SortOrder
     started_at?: SortOrder
     completed_at?: SortOrder
@@ -76862,6 +80962,7 @@ export namespace Prisma {
     use_openai_batch?: SortOrder
     draft_batch_id?: SortOrder
     sender_profile_uuid?: SortOrder
+    sequence_uuid?: SortOrder
     scheduled_at?: SortOrder
     started_at?: SortOrder
     completed_at?: SortOrder
@@ -80575,6 +84676,13 @@ export namespace Prisma {
     connect?: ContactEnrichmentWhereUniqueInput | ContactEnrichmentWhereUniqueInput[]
   }
 
+  export type SequenceEnrollmentCreateNestedManyWithoutContactInput = {
+    create?: XOR<SequenceEnrollmentCreateWithoutContactInput, SequenceEnrollmentUncheckedCreateWithoutContactInput> | SequenceEnrollmentCreateWithoutContactInput[] | SequenceEnrollmentUncheckedCreateWithoutContactInput[]
+    connectOrCreate?: SequenceEnrollmentCreateOrConnectWithoutContactInput | SequenceEnrollmentCreateOrConnectWithoutContactInput[]
+    createMany?: SequenceEnrollmentCreateManyContactInputEnvelope
+    connect?: SequenceEnrollmentWhereUniqueInput | SequenceEnrollmentWhereUniqueInput[]
+  }
+
   export type ContactFilterUncheckedCreateNestedManyWithoutContactInput = {
     create?: XOR<ContactFilterCreateWithoutContactInput, ContactFilterUncheckedCreateWithoutContactInput> | ContactFilterCreateWithoutContactInput[] | ContactFilterUncheckedCreateWithoutContactInput[]
     connectOrCreate?: ContactFilterCreateOrConnectWithoutContactInput | ContactFilterCreateOrConnectWithoutContactInput[]
@@ -80650,6 +84758,13 @@ export namespace Prisma {
     connectOrCreate?: ContactEnrichmentCreateOrConnectWithoutContactInput | ContactEnrichmentCreateOrConnectWithoutContactInput[]
     createMany?: ContactEnrichmentCreateManyContactInputEnvelope
     connect?: ContactEnrichmentWhereUniqueInput | ContactEnrichmentWhereUniqueInput[]
+  }
+
+  export type SequenceEnrollmentUncheckedCreateNestedManyWithoutContactInput = {
+    create?: XOR<SequenceEnrollmentCreateWithoutContactInput, SequenceEnrollmentUncheckedCreateWithoutContactInput> | SequenceEnrollmentCreateWithoutContactInput[] | SequenceEnrollmentUncheckedCreateWithoutContactInput[]
+    connectOrCreate?: SequenceEnrollmentCreateOrConnectWithoutContactInput | SequenceEnrollmentCreateOrConnectWithoutContactInput[]
+    createMany?: SequenceEnrollmentCreateManyContactInputEnvelope
+    connect?: SequenceEnrollmentWhereUniqueInput | SequenceEnrollmentWhereUniqueInput[]
   }
 
   export type EnumLeadStatusFieldUpdateOperationsInput = {
@@ -80836,6 +84951,20 @@ export namespace Prisma {
     deleteMany?: ContactEnrichmentScalarWhereInput | ContactEnrichmentScalarWhereInput[]
   }
 
+  export type SequenceEnrollmentUpdateManyWithoutContactNestedInput = {
+    create?: XOR<SequenceEnrollmentCreateWithoutContactInput, SequenceEnrollmentUncheckedCreateWithoutContactInput> | SequenceEnrollmentCreateWithoutContactInput[] | SequenceEnrollmentUncheckedCreateWithoutContactInput[]
+    connectOrCreate?: SequenceEnrollmentCreateOrConnectWithoutContactInput | SequenceEnrollmentCreateOrConnectWithoutContactInput[]
+    upsert?: SequenceEnrollmentUpsertWithWhereUniqueWithoutContactInput | SequenceEnrollmentUpsertWithWhereUniqueWithoutContactInput[]
+    createMany?: SequenceEnrollmentCreateManyContactInputEnvelope
+    set?: SequenceEnrollmentWhereUniqueInput | SequenceEnrollmentWhereUniqueInput[]
+    disconnect?: SequenceEnrollmentWhereUniqueInput | SequenceEnrollmentWhereUniqueInput[]
+    delete?: SequenceEnrollmentWhereUniqueInput | SequenceEnrollmentWhereUniqueInput[]
+    connect?: SequenceEnrollmentWhereUniqueInput | SequenceEnrollmentWhereUniqueInput[]
+    update?: SequenceEnrollmentUpdateWithWhereUniqueWithoutContactInput | SequenceEnrollmentUpdateWithWhereUniqueWithoutContactInput[]
+    updateMany?: SequenceEnrollmentUpdateManyWithWhereWithoutContactInput | SequenceEnrollmentUpdateManyWithWhereWithoutContactInput[]
+    deleteMany?: SequenceEnrollmentScalarWhereInput | SequenceEnrollmentScalarWhereInput[]
+  }
+
   export type ContactFilterUncheckedUpdateManyWithoutContactNestedInput = {
     create?: XOR<ContactFilterCreateWithoutContactInput, ContactFilterUncheckedCreateWithoutContactInput> | ContactFilterCreateWithoutContactInput[] | ContactFilterUncheckedCreateWithoutContactInput[]
     connectOrCreate?: ContactFilterCreateOrConnectWithoutContactInput | ContactFilterCreateOrConnectWithoutContactInput[]
@@ -80988,6 +85117,20 @@ export namespace Prisma {
     update?: ContactEnrichmentUpdateWithWhereUniqueWithoutContactInput | ContactEnrichmentUpdateWithWhereUniqueWithoutContactInput[]
     updateMany?: ContactEnrichmentUpdateManyWithWhereWithoutContactInput | ContactEnrichmentUpdateManyWithWhereWithoutContactInput[]
     deleteMany?: ContactEnrichmentScalarWhereInput | ContactEnrichmentScalarWhereInput[]
+  }
+
+  export type SequenceEnrollmentUncheckedUpdateManyWithoutContactNestedInput = {
+    create?: XOR<SequenceEnrollmentCreateWithoutContactInput, SequenceEnrollmentUncheckedCreateWithoutContactInput> | SequenceEnrollmentCreateWithoutContactInput[] | SequenceEnrollmentUncheckedCreateWithoutContactInput[]
+    connectOrCreate?: SequenceEnrollmentCreateOrConnectWithoutContactInput | SequenceEnrollmentCreateOrConnectWithoutContactInput[]
+    upsert?: SequenceEnrollmentUpsertWithWhereUniqueWithoutContactInput | SequenceEnrollmentUpsertWithWhereUniqueWithoutContactInput[]
+    createMany?: SequenceEnrollmentCreateManyContactInputEnvelope
+    set?: SequenceEnrollmentWhereUniqueInput | SequenceEnrollmentWhereUniqueInput[]
+    disconnect?: SequenceEnrollmentWhereUniqueInput | SequenceEnrollmentWhereUniqueInput[]
+    delete?: SequenceEnrollmentWhereUniqueInput | SequenceEnrollmentWhereUniqueInput[]
+    connect?: SequenceEnrollmentWhereUniqueInput | SequenceEnrollmentWhereUniqueInput[]
+    update?: SequenceEnrollmentUpdateWithWhereUniqueWithoutContactInput | SequenceEnrollmentUpdateWithWhereUniqueWithoutContactInput[]
+    updateMany?: SequenceEnrollmentUpdateManyWithWhereWithoutContactInput | SequenceEnrollmentUpdateManyWithWhereWithoutContactInput[]
+    deleteMany?: SequenceEnrollmentScalarWhereInput | SequenceEnrollmentScalarWhereInput[]
   }
 
   export type ContactCreateNestedOneWithoutContact_infosInput = {
@@ -81370,6 +85513,18 @@ export namespace Prisma {
     connect?: InteractionWhereUniqueInput
   }
 
+  export type SequenceEnrollmentCreateNestedOneWithoutOutreach_messagesInput = {
+    create?: XOR<SequenceEnrollmentCreateWithoutOutreach_messagesInput, SequenceEnrollmentUncheckedCreateWithoutOutreach_messagesInput>
+    connectOrCreate?: SequenceEnrollmentCreateOrConnectWithoutOutreach_messagesInput
+    connect?: SequenceEnrollmentWhereUniqueInput
+  }
+
+  export type OutreachSequenceStepCreateNestedOneWithoutOutreach_messagesInput = {
+    create?: XOR<OutreachSequenceStepCreateWithoutOutreach_messagesInput, OutreachSequenceStepUncheckedCreateWithoutOutreach_messagesInput>
+    connectOrCreate?: OutreachSequenceStepCreateOrConnectWithoutOutreach_messagesInput
+    connect?: OutreachSequenceStepWhereUniqueInput
+  }
+
   export type InteractionUncheckedCreateNestedOneWithoutOutreach_messageInput = {
     create?: XOR<InteractionCreateWithoutOutreach_messageInput, InteractionUncheckedCreateWithoutOutreach_messageInput>
     connectOrCreate?: InteractionCreateOrConnectWithoutOutreach_messageInput
@@ -81438,6 +85593,26 @@ export namespace Prisma {
     update?: XOR<XOR<InteractionUpdateToOneWithWhereWithoutOutreach_messageInput, InteractionUpdateWithoutOutreach_messageInput>, InteractionUncheckedUpdateWithoutOutreach_messageInput>
   }
 
+  export type SequenceEnrollmentUpdateOneWithoutOutreach_messagesNestedInput = {
+    create?: XOR<SequenceEnrollmentCreateWithoutOutreach_messagesInput, SequenceEnrollmentUncheckedCreateWithoutOutreach_messagesInput>
+    connectOrCreate?: SequenceEnrollmentCreateOrConnectWithoutOutreach_messagesInput
+    upsert?: SequenceEnrollmentUpsertWithoutOutreach_messagesInput
+    disconnect?: SequenceEnrollmentWhereInput | boolean
+    delete?: SequenceEnrollmentWhereInput | boolean
+    connect?: SequenceEnrollmentWhereUniqueInput
+    update?: XOR<XOR<SequenceEnrollmentUpdateToOneWithWhereWithoutOutreach_messagesInput, SequenceEnrollmentUpdateWithoutOutreach_messagesInput>, SequenceEnrollmentUncheckedUpdateWithoutOutreach_messagesInput>
+  }
+
+  export type OutreachSequenceStepUpdateOneWithoutOutreach_messagesNestedInput = {
+    create?: XOR<OutreachSequenceStepCreateWithoutOutreach_messagesInput, OutreachSequenceStepUncheckedCreateWithoutOutreach_messagesInput>
+    connectOrCreate?: OutreachSequenceStepCreateOrConnectWithoutOutreach_messagesInput
+    upsert?: OutreachSequenceStepUpsertWithoutOutreach_messagesInput
+    disconnect?: OutreachSequenceStepWhereInput | boolean
+    delete?: OutreachSequenceStepWhereInput | boolean
+    connect?: OutreachSequenceStepWhereUniqueInput
+    update?: XOR<XOR<OutreachSequenceStepUpdateToOneWithWhereWithoutOutreach_messagesInput, OutreachSequenceStepUpdateWithoutOutreach_messagesInput>, OutreachSequenceStepUncheckedUpdateWithoutOutreach_messagesInput>
+  }
+
   export type InteractionUncheckedUpdateOneWithoutOutreach_messageNestedInput = {
     create?: XOR<InteractionCreateWithoutOutreach_messageInput, InteractionUncheckedCreateWithoutOutreach_messageInput>
     connectOrCreate?: InteractionCreateOrConnectWithoutOutreach_messageInput
@@ -81454,12 +85629,312 @@ export namespace Prisma {
     connect?: OrganisationWhereUniqueInput
   }
 
+  export type OutreachSequenceStepCreateNestedManyWithoutSequenceInput = {
+    create?: XOR<OutreachSequenceStepCreateWithoutSequenceInput, OutreachSequenceStepUncheckedCreateWithoutSequenceInput> | OutreachSequenceStepCreateWithoutSequenceInput[] | OutreachSequenceStepUncheckedCreateWithoutSequenceInput[]
+    connectOrCreate?: OutreachSequenceStepCreateOrConnectWithoutSequenceInput | OutreachSequenceStepCreateOrConnectWithoutSequenceInput[]
+    createMany?: OutreachSequenceStepCreateManySequenceInputEnvelope
+    connect?: OutreachSequenceStepWhereUniqueInput | OutreachSequenceStepWhereUniqueInput[]
+  }
+
+  export type SequenceEnrollmentCreateNestedManyWithoutSequenceInput = {
+    create?: XOR<SequenceEnrollmentCreateWithoutSequenceInput, SequenceEnrollmentUncheckedCreateWithoutSequenceInput> | SequenceEnrollmentCreateWithoutSequenceInput[] | SequenceEnrollmentUncheckedCreateWithoutSequenceInput[]
+    connectOrCreate?: SequenceEnrollmentCreateOrConnectWithoutSequenceInput | SequenceEnrollmentCreateOrConnectWithoutSequenceInput[]
+    createMany?: SequenceEnrollmentCreateManySequenceInputEnvelope
+    connect?: SequenceEnrollmentWhereUniqueInput | SequenceEnrollmentWhereUniqueInput[]
+  }
+
+  export type MarketingCampaignCreateNestedManyWithoutSequenceInput = {
+    create?: XOR<MarketingCampaignCreateWithoutSequenceInput, MarketingCampaignUncheckedCreateWithoutSequenceInput> | MarketingCampaignCreateWithoutSequenceInput[] | MarketingCampaignUncheckedCreateWithoutSequenceInput[]
+    connectOrCreate?: MarketingCampaignCreateOrConnectWithoutSequenceInput | MarketingCampaignCreateOrConnectWithoutSequenceInput[]
+    createMany?: MarketingCampaignCreateManySequenceInputEnvelope
+    connect?: MarketingCampaignWhereUniqueInput | MarketingCampaignWhereUniqueInput[]
+  }
+
+  export type OutreachSequenceStepUncheckedCreateNestedManyWithoutSequenceInput = {
+    create?: XOR<OutreachSequenceStepCreateWithoutSequenceInput, OutreachSequenceStepUncheckedCreateWithoutSequenceInput> | OutreachSequenceStepCreateWithoutSequenceInput[] | OutreachSequenceStepUncheckedCreateWithoutSequenceInput[]
+    connectOrCreate?: OutreachSequenceStepCreateOrConnectWithoutSequenceInput | OutreachSequenceStepCreateOrConnectWithoutSequenceInput[]
+    createMany?: OutreachSequenceStepCreateManySequenceInputEnvelope
+    connect?: OutreachSequenceStepWhereUniqueInput | OutreachSequenceStepWhereUniqueInput[]
+  }
+
+  export type SequenceEnrollmentUncheckedCreateNestedManyWithoutSequenceInput = {
+    create?: XOR<SequenceEnrollmentCreateWithoutSequenceInput, SequenceEnrollmentUncheckedCreateWithoutSequenceInput> | SequenceEnrollmentCreateWithoutSequenceInput[] | SequenceEnrollmentUncheckedCreateWithoutSequenceInput[]
+    connectOrCreate?: SequenceEnrollmentCreateOrConnectWithoutSequenceInput | SequenceEnrollmentCreateOrConnectWithoutSequenceInput[]
+    createMany?: SequenceEnrollmentCreateManySequenceInputEnvelope
+    connect?: SequenceEnrollmentWhereUniqueInput | SequenceEnrollmentWhereUniqueInput[]
+  }
+
+  export type MarketingCampaignUncheckedCreateNestedManyWithoutSequenceInput = {
+    create?: XOR<MarketingCampaignCreateWithoutSequenceInput, MarketingCampaignUncheckedCreateWithoutSequenceInput> | MarketingCampaignCreateWithoutSequenceInput[] | MarketingCampaignUncheckedCreateWithoutSequenceInput[]
+    connectOrCreate?: MarketingCampaignCreateOrConnectWithoutSequenceInput | MarketingCampaignCreateOrConnectWithoutSequenceInput[]
+    createMany?: MarketingCampaignCreateManySequenceInputEnvelope
+    connect?: MarketingCampaignWhereUniqueInput | MarketingCampaignWhereUniqueInput[]
+  }
+
+  export type EnumSequenceStatusFieldUpdateOperationsInput = {
+    set?: $Enums.SequenceStatus
+  }
+
   export type OrganisationUpdateOneRequiredWithoutOutreach_sequencesNestedInput = {
     create?: XOR<OrganisationCreateWithoutOutreach_sequencesInput, OrganisationUncheckedCreateWithoutOutreach_sequencesInput>
     connectOrCreate?: OrganisationCreateOrConnectWithoutOutreach_sequencesInput
     upsert?: OrganisationUpsertWithoutOutreach_sequencesInput
     connect?: OrganisationWhereUniqueInput
     update?: XOR<XOR<OrganisationUpdateToOneWithWhereWithoutOutreach_sequencesInput, OrganisationUpdateWithoutOutreach_sequencesInput>, OrganisationUncheckedUpdateWithoutOutreach_sequencesInput>
+  }
+
+  export type OutreachSequenceStepUpdateManyWithoutSequenceNestedInput = {
+    create?: XOR<OutreachSequenceStepCreateWithoutSequenceInput, OutreachSequenceStepUncheckedCreateWithoutSequenceInput> | OutreachSequenceStepCreateWithoutSequenceInput[] | OutreachSequenceStepUncheckedCreateWithoutSequenceInput[]
+    connectOrCreate?: OutreachSequenceStepCreateOrConnectWithoutSequenceInput | OutreachSequenceStepCreateOrConnectWithoutSequenceInput[]
+    upsert?: OutreachSequenceStepUpsertWithWhereUniqueWithoutSequenceInput | OutreachSequenceStepUpsertWithWhereUniqueWithoutSequenceInput[]
+    createMany?: OutreachSequenceStepCreateManySequenceInputEnvelope
+    set?: OutreachSequenceStepWhereUniqueInput | OutreachSequenceStepWhereUniqueInput[]
+    disconnect?: OutreachSequenceStepWhereUniqueInput | OutreachSequenceStepWhereUniqueInput[]
+    delete?: OutreachSequenceStepWhereUniqueInput | OutreachSequenceStepWhereUniqueInput[]
+    connect?: OutreachSequenceStepWhereUniqueInput | OutreachSequenceStepWhereUniqueInput[]
+    update?: OutreachSequenceStepUpdateWithWhereUniqueWithoutSequenceInput | OutreachSequenceStepUpdateWithWhereUniqueWithoutSequenceInput[]
+    updateMany?: OutreachSequenceStepUpdateManyWithWhereWithoutSequenceInput | OutreachSequenceStepUpdateManyWithWhereWithoutSequenceInput[]
+    deleteMany?: OutreachSequenceStepScalarWhereInput | OutreachSequenceStepScalarWhereInput[]
+  }
+
+  export type SequenceEnrollmentUpdateManyWithoutSequenceNestedInput = {
+    create?: XOR<SequenceEnrollmentCreateWithoutSequenceInput, SequenceEnrollmentUncheckedCreateWithoutSequenceInput> | SequenceEnrollmentCreateWithoutSequenceInput[] | SequenceEnrollmentUncheckedCreateWithoutSequenceInput[]
+    connectOrCreate?: SequenceEnrollmentCreateOrConnectWithoutSequenceInput | SequenceEnrollmentCreateOrConnectWithoutSequenceInput[]
+    upsert?: SequenceEnrollmentUpsertWithWhereUniqueWithoutSequenceInput | SequenceEnrollmentUpsertWithWhereUniqueWithoutSequenceInput[]
+    createMany?: SequenceEnrollmentCreateManySequenceInputEnvelope
+    set?: SequenceEnrollmentWhereUniqueInput | SequenceEnrollmentWhereUniqueInput[]
+    disconnect?: SequenceEnrollmentWhereUniqueInput | SequenceEnrollmentWhereUniqueInput[]
+    delete?: SequenceEnrollmentWhereUniqueInput | SequenceEnrollmentWhereUniqueInput[]
+    connect?: SequenceEnrollmentWhereUniqueInput | SequenceEnrollmentWhereUniqueInput[]
+    update?: SequenceEnrollmentUpdateWithWhereUniqueWithoutSequenceInput | SequenceEnrollmentUpdateWithWhereUniqueWithoutSequenceInput[]
+    updateMany?: SequenceEnrollmentUpdateManyWithWhereWithoutSequenceInput | SequenceEnrollmentUpdateManyWithWhereWithoutSequenceInput[]
+    deleteMany?: SequenceEnrollmentScalarWhereInput | SequenceEnrollmentScalarWhereInput[]
+  }
+
+  export type MarketingCampaignUpdateManyWithoutSequenceNestedInput = {
+    create?: XOR<MarketingCampaignCreateWithoutSequenceInput, MarketingCampaignUncheckedCreateWithoutSequenceInput> | MarketingCampaignCreateWithoutSequenceInput[] | MarketingCampaignUncheckedCreateWithoutSequenceInput[]
+    connectOrCreate?: MarketingCampaignCreateOrConnectWithoutSequenceInput | MarketingCampaignCreateOrConnectWithoutSequenceInput[]
+    upsert?: MarketingCampaignUpsertWithWhereUniqueWithoutSequenceInput | MarketingCampaignUpsertWithWhereUniqueWithoutSequenceInput[]
+    createMany?: MarketingCampaignCreateManySequenceInputEnvelope
+    set?: MarketingCampaignWhereUniqueInput | MarketingCampaignWhereUniqueInput[]
+    disconnect?: MarketingCampaignWhereUniqueInput | MarketingCampaignWhereUniqueInput[]
+    delete?: MarketingCampaignWhereUniqueInput | MarketingCampaignWhereUniqueInput[]
+    connect?: MarketingCampaignWhereUniqueInput | MarketingCampaignWhereUniqueInput[]
+    update?: MarketingCampaignUpdateWithWhereUniqueWithoutSequenceInput | MarketingCampaignUpdateWithWhereUniqueWithoutSequenceInput[]
+    updateMany?: MarketingCampaignUpdateManyWithWhereWithoutSequenceInput | MarketingCampaignUpdateManyWithWhereWithoutSequenceInput[]
+    deleteMany?: MarketingCampaignScalarWhereInput | MarketingCampaignScalarWhereInput[]
+  }
+
+  export type OutreachSequenceStepUncheckedUpdateManyWithoutSequenceNestedInput = {
+    create?: XOR<OutreachSequenceStepCreateWithoutSequenceInput, OutreachSequenceStepUncheckedCreateWithoutSequenceInput> | OutreachSequenceStepCreateWithoutSequenceInput[] | OutreachSequenceStepUncheckedCreateWithoutSequenceInput[]
+    connectOrCreate?: OutreachSequenceStepCreateOrConnectWithoutSequenceInput | OutreachSequenceStepCreateOrConnectWithoutSequenceInput[]
+    upsert?: OutreachSequenceStepUpsertWithWhereUniqueWithoutSequenceInput | OutreachSequenceStepUpsertWithWhereUniqueWithoutSequenceInput[]
+    createMany?: OutreachSequenceStepCreateManySequenceInputEnvelope
+    set?: OutreachSequenceStepWhereUniqueInput | OutreachSequenceStepWhereUniqueInput[]
+    disconnect?: OutreachSequenceStepWhereUniqueInput | OutreachSequenceStepWhereUniqueInput[]
+    delete?: OutreachSequenceStepWhereUniqueInput | OutreachSequenceStepWhereUniqueInput[]
+    connect?: OutreachSequenceStepWhereUniqueInput | OutreachSequenceStepWhereUniqueInput[]
+    update?: OutreachSequenceStepUpdateWithWhereUniqueWithoutSequenceInput | OutreachSequenceStepUpdateWithWhereUniqueWithoutSequenceInput[]
+    updateMany?: OutreachSequenceStepUpdateManyWithWhereWithoutSequenceInput | OutreachSequenceStepUpdateManyWithWhereWithoutSequenceInput[]
+    deleteMany?: OutreachSequenceStepScalarWhereInput | OutreachSequenceStepScalarWhereInput[]
+  }
+
+  export type SequenceEnrollmentUncheckedUpdateManyWithoutSequenceNestedInput = {
+    create?: XOR<SequenceEnrollmentCreateWithoutSequenceInput, SequenceEnrollmentUncheckedCreateWithoutSequenceInput> | SequenceEnrollmentCreateWithoutSequenceInput[] | SequenceEnrollmentUncheckedCreateWithoutSequenceInput[]
+    connectOrCreate?: SequenceEnrollmentCreateOrConnectWithoutSequenceInput | SequenceEnrollmentCreateOrConnectWithoutSequenceInput[]
+    upsert?: SequenceEnrollmentUpsertWithWhereUniqueWithoutSequenceInput | SequenceEnrollmentUpsertWithWhereUniqueWithoutSequenceInput[]
+    createMany?: SequenceEnrollmentCreateManySequenceInputEnvelope
+    set?: SequenceEnrollmentWhereUniqueInput | SequenceEnrollmentWhereUniqueInput[]
+    disconnect?: SequenceEnrollmentWhereUniqueInput | SequenceEnrollmentWhereUniqueInput[]
+    delete?: SequenceEnrollmentWhereUniqueInput | SequenceEnrollmentWhereUniqueInput[]
+    connect?: SequenceEnrollmentWhereUniqueInput | SequenceEnrollmentWhereUniqueInput[]
+    update?: SequenceEnrollmentUpdateWithWhereUniqueWithoutSequenceInput | SequenceEnrollmentUpdateWithWhereUniqueWithoutSequenceInput[]
+    updateMany?: SequenceEnrollmentUpdateManyWithWhereWithoutSequenceInput | SequenceEnrollmentUpdateManyWithWhereWithoutSequenceInput[]
+    deleteMany?: SequenceEnrollmentScalarWhereInput | SequenceEnrollmentScalarWhereInput[]
+  }
+
+  export type MarketingCampaignUncheckedUpdateManyWithoutSequenceNestedInput = {
+    create?: XOR<MarketingCampaignCreateWithoutSequenceInput, MarketingCampaignUncheckedCreateWithoutSequenceInput> | MarketingCampaignCreateWithoutSequenceInput[] | MarketingCampaignUncheckedCreateWithoutSequenceInput[]
+    connectOrCreate?: MarketingCampaignCreateOrConnectWithoutSequenceInput | MarketingCampaignCreateOrConnectWithoutSequenceInput[]
+    upsert?: MarketingCampaignUpsertWithWhereUniqueWithoutSequenceInput | MarketingCampaignUpsertWithWhereUniqueWithoutSequenceInput[]
+    createMany?: MarketingCampaignCreateManySequenceInputEnvelope
+    set?: MarketingCampaignWhereUniqueInput | MarketingCampaignWhereUniqueInput[]
+    disconnect?: MarketingCampaignWhereUniqueInput | MarketingCampaignWhereUniqueInput[]
+    delete?: MarketingCampaignWhereUniqueInput | MarketingCampaignWhereUniqueInput[]
+    connect?: MarketingCampaignWhereUniqueInput | MarketingCampaignWhereUniqueInput[]
+    update?: MarketingCampaignUpdateWithWhereUniqueWithoutSequenceInput | MarketingCampaignUpdateWithWhereUniqueWithoutSequenceInput[]
+    updateMany?: MarketingCampaignUpdateManyWithWhereWithoutSequenceInput | MarketingCampaignUpdateManyWithWhereWithoutSequenceInput[]
+    deleteMany?: MarketingCampaignScalarWhereInput | MarketingCampaignScalarWhereInput[]
+  }
+
+  export type OutreachSequenceCreateNestedOneWithoutStepsInput = {
+    create?: XOR<OutreachSequenceCreateWithoutStepsInput, OutreachSequenceUncheckedCreateWithoutStepsInput>
+    connectOrCreate?: OutreachSequenceCreateOrConnectWithoutStepsInput
+    connect?: OutreachSequenceWhereUniqueInput
+  }
+
+  export type MessageTemplateCreateNestedOneWithoutSequence_stepsInput = {
+    create?: XOR<MessageTemplateCreateWithoutSequence_stepsInput, MessageTemplateUncheckedCreateWithoutSequence_stepsInput>
+    connectOrCreate?: MessageTemplateCreateOrConnectWithoutSequence_stepsInput
+    connect?: MessageTemplateWhereUniqueInput
+  }
+
+  export type OutreachMessageCreateNestedManyWithoutSequence_stepInput = {
+    create?: XOR<OutreachMessageCreateWithoutSequence_stepInput, OutreachMessageUncheckedCreateWithoutSequence_stepInput> | OutreachMessageCreateWithoutSequence_stepInput[] | OutreachMessageUncheckedCreateWithoutSequence_stepInput[]
+    connectOrCreate?: OutreachMessageCreateOrConnectWithoutSequence_stepInput | OutreachMessageCreateOrConnectWithoutSequence_stepInput[]
+    createMany?: OutreachMessageCreateManySequence_stepInputEnvelope
+    connect?: OutreachMessageWhereUniqueInput | OutreachMessageWhereUniqueInput[]
+  }
+
+  export type OutreachMessageUncheckedCreateNestedManyWithoutSequence_stepInput = {
+    create?: XOR<OutreachMessageCreateWithoutSequence_stepInput, OutreachMessageUncheckedCreateWithoutSequence_stepInput> | OutreachMessageCreateWithoutSequence_stepInput[] | OutreachMessageUncheckedCreateWithoutSequence_stepInput[]
+    connectOrCreate?: OutreachMessageCreateOrConnectWithoutSequence_stepInput | OutreachMessageCreateOrConnectWithoutSequence_stepInput[]
+    createMany?: OutreachMessageCreateManySequence_stepInputEnvelope
+    connect?: OutreachMessageWhereUniqueInput | OutreachMessageWhereUniqueInput[]
+  }
+
+  export type EnumSequenceDelayUnitFieldUpdateOperationsInput = {
+    set?: $Enums.SequenceDelayUnit
+  }
+
+  export type EnumSequenceDelayReferenceFieldUpdateOperationsInput = {
+    set?: $Enums.SequenceDelayReference
+  }
+
+  export type OutreachSequenceUpdateOneRequiredWithoutStepsNestedInput = {
+    create?: XOR<OutreachSequenceCreateWithoutStepsInput, OutreachSequenceUncheckedCreateWithoutStepsInput>
+    connectOrCreate?: OutreachSequenceCreateOrConnectWithoutStepsInput
+    upsert?: OutreachSequenceUpsertWithoutStepsInput
+    connect?: OutreachSequenceWhereUniqueInput
+    update?: XOR<XOR<OutreachSequenceUpdateToOneWithWhereWithoutStepsInput, OutreachSequenceUpdateWithoutStepsInput>, OutreachSequenceUncheckedUpdateWithoutStepsInput>
+  }
+
+  export type MessageTemplateUpdateOneWithoutSequence_stepsNestedInput = {
+    create?: XOR<MessageTemplateCreateWithoutSequence_stepsInput, MessageTemplateUncheckedCreateWithoutSequence_stepsInput>
+    connectOrCreate?: MessageTemplateCreateOrConnectWithoutSequence_stepsInput
+    upsert?: MessageTemplateUpsertWithoutSequence_stepsInput
+    disconnect?: MessageTemplateWhereInput | boolean
+    delete?: MessageTemplateWhereInput | boolean
+    connect?: MessageTemplateWhereUniqueInput
+    update?: XOR<XOR<MessageTemplateUpdateToOneWithWhereWithoutSequence_stepsInput, MessageTemplateUpdateWithoutSequence_stepsInput>, MessageTemplateUncheckedUpdateWithoutSequence_stepsInput>
+  }
+
+  export type OutreachMessageUpdateManyWithoutSequence_stepNestedInput = {
+    create?: XOR<OutreachMessageCreateWithoutSequence_stepInput, OutreachMessageUncheckedCreateWithoutSequence_stepInput> | OutreachMessageCreateWithoutSequence_stepInput[] | OutreachMessageUncheckedCreateWithoutSequence_stepInput[]
+    connectOrCreate?: OutreachMessageCreateOrConnectWithoutSequence_stepInput | OutreachMessageCreateOrConnectWithoutSequence_stepInput[]
+    upsert?: OutreachMessageUpsertWithWhereUniqueWithoutSequence_stepInput | OutreachMessageUpsertWithWhereUniqueWithoutSequence_stepInput[]
+    createMany?: OutreachMessageCreateManySequence_stepInputEnvelope
+    set?: OutreachMessageWhereUniqueInput | OutreachMessageWhereUniqueInput[]
+    disconnect?: OutreachMessageWhereUniqueInput | OutreachMessageWhereUniqueInput[]
+    delete?: OutreachMessageWhereUniqueInput | OutreachMessageWhereUniqueInput[]
+    connect?: OutreachMessageWhereUniqueInput | OutreachMessageWhereUniqueInput[]
+    update?: OutreachMessageUpdateWithWhereUniqueWithoutSequence_stepInput | OutreachMessageUpdateWithWhereUniqueWithoutSequence_stepInput[]
+    updateMany?: OutreachMessageUpdateManyWithWhereWithoutSequence_stepInput | OutreachMessageUpdateManyWithWhereWithoutSequence_stepInput[]
+    deleteMany?: OutreachMessageScalarWhereInput | OutreachMessageScalarWhereInput[]
+  }
+
+  export type OutreachMessageUncheckedUpdateManyWithoutSequence_stepNestedInput = {
+    create?: XOR<OutreachMessageCreateWithoutSequence_stepInput, OutreachMessageUncheckedCreateWithoutSequence_stepInput> | OutreachMessageCreateWithoutSequence_stepInput[] | OutreachMessageUncheckedCreateWithoutSequence_stepInput[]
+    connectOrCreate?: OutreachMessageCreateOrConnectWithoutSequence_stepInput | OutreachMessageCreateOrConnectWithoutSequence_stepInput[]
+    upsert?: OutreachMessageUpsertWithWhereUniqueWithoutSequence_stepInput | OutreachMessageUpsertWithWhereUniqueWithoutSequence_stepInput[]
+    createMany?: OutreachMessageCreateManySequence_stepInputEnvelope
+    set?: OutreachMessageWhereUniqueInput | OutreachMessageWhereUniqueInput[]
+    disconnect?: OutreachMessageWhereUniqueInput | OutreachMessageWhereUniqueInput[]
+    delete?: OutreachMessageWhereUniqueInput | OutreachMessageWhereUniqueInput[]
+    connect?: OutreachMessageWhereUniqueInput | OutreachMessageWhereUniqueInput[]
+    update?: OutreachMessageUpdateWithWhereUniqueWithoutSequence_stepInput | OutreachMessageUpdateWithWhereUniqueWithoutSequence_stepInput[]
+    updateMany?: OutreachMessageUpdateManyWithWhereWithoutSequence_stepInput | OutreachMessageUpdateManyWithWhereWithoutSequence_stepInput[]
+    deleteMany?: OutreachMessageScalarWhereInput | OutreachMessageScalarWhereInput[]
+  }
+
+  export type OutreachSequenceCreateNestedOneWithoutEnrollmentsInput = {
+    create?: XOR<OutreachSequenceCreateWithoutEnrollmentsInput, OutreachSequenceUncheckedCreateWithoutEnrollmentsInput>
+    connectOrCreate?: OutreachSequenceCreateOrConnectWithoutEnrollmentsInput
+    connect?: OutreachSequenceWhereUniqueInput
+  }
+
+  export type ContactCreateNestedOneWithoutSequence_enrollmentsInput = {
+    create?: XOR<ContactCreateWithoutSequence_enrollmentsInput, ContactUncheckedCreateWithoutSequence_enrollmentsInput>
+    connectOrCreate?: ContactCreateOrConnectWithoutSequence_enrollmentsInput
+    connect?: ContactWhereUniqueInput
+  }
+
+  export type MarketingCampaignCreateNestedOneWithoutSequence_enrollmentsInput = {
+    create?: XOR<MarketingCampaignCreateWithoutSequence_enrollmentsInput, MarketingCampaignUncheckedCreateWithoutSequence_enrollmentsInput>
+    connectOrCreate?: MarketingCampaignCreateOrConnectWithoutSequence_enrollmentsInput
+    connect?: MarketingCampaignWhereUniqueInput
+  }
+
+  export type OutreachMessageCreateNestedManyWithoutSequence_enrollmentInput = {
+    create?: XOR<OutreachMessageCreateWithoutSequence_enrollmentInput, OutreachMessageUncheckedCreateWithoutSequence_enrollmentInput> | OutreachMessageCreateWithoutSequence_enrollmentInput[] | OutreachMessageUncheckedCreateWithoutSequence_enrollmentInput[]
+    connectOrCreate?: OutreachMessageCreateOrConnectWithoutSequence_enrollmentInput | OutreachMessageCreateOrConnectWithoutSequence_enrollmentInput[]
+    createMany?: OutreachMessageCreateManySequence_enrollmentInputEnvelope
+    connect?: OutreachMessageWhereUniqueInput | OutreachMessageWhereUniqueInput[]
+  }
+
+  export type OutreachMessageUncheckedCreateNestedManyWithoutSequence_enrollmentInput = {
+    create?: XOR<OutreachMessageCreateWithoutSequence_enrollmentInput, OutreachMessageUncheckedCreateWithoutSequence_enrollmentInput> | OutreachMessageCreateWithoutSequence_enrollmentInput[] | OutreachMessageUncheckedCreateWithoutSequence_enrollmentInput[]
+    connectOrCreate?: OutreachMessageCreateOrConnectWithoutSequence_enrollmentInput | OutreachMessageCreateOrConnectWithoutSequence_enrollmentInput[]
+    createMany?: OutreachMessageCreateManySequence_enrollmentInputEnvelope
+    connect?: OutreachMessageWhereUniqueInput | OutreachMessageWhereUniqueInput[]
+  }
+
+  export type EnumSequenceEnrollmentStatusFieldUpdateOperationsInput = {
+    set?: $Enums.SequenceEnrollmentStatus
+  }
+
+  export type OutreachSequenceUpdateOneRequiredWithoutEnrollmentsNestedInput = {
+    create?: XOR<OutreachSequenceCreateWithoutEnrollmentsInput, OutreachSequenceUncheckedCreateWithoutEnrollmentsInput>
+    connectOrCreate?: OutreachSequenceCreateOrConnectWithoutEnrollmentsInput
+    upsert?: OutreachSequenceUpsertWithoutEnrollmentsInput
+    connect?: OutreachSequenceWhereUniqueInput
+    update?: XOR<XOR<OutreachSequenceUpdateToOneWithWhereWithoutEnrollmentsInput, OutreachSequenceUpdateWithoutEnrollmentsInput>, OutreachSequenceUncheckedUpdateWithoutEnrollmentsInput>
+  }
+
+  export type ContactUpdateOneRequiredWithoutSequence_enrollmentsNestedInput = {
+    create?: XOR<ContactCreateWithoutSequence_enrollmentsInput, ContactUncheckedCreateWithoutSequence_enrollmentsInput>
+    connectOrCreate?: ContactCreateOrConnectWithoutSequence_enrollmentsInput
+    upsert?: ContactUpsertWithoutSequence_enrollmentsInput
+    connect?: ContactWhereUniqueInput
+    update?: XOR<XOR<ContactUpdateToOneWithWhereWithoutSequence_enrollmentsInput, ContactUpdateWithoutSequence_enrollmentsInput>, ContactUncheckedUpdateWithoutSequence_enrollmentsInput>
+  }
+
+  export type MarketingCampaignUpdateOneWithoutSequence_enrollmentsNestedInput = {
+    create?: XOR<MarketingCampaignCreateWithoutSequence_enrollmentsInput, MarketingCampaignUncheckedCreateWithoutSequence_enrollmentsInput>
+    connectOrCreate?: MarketingCampaignCreateOrConnectWithoutSequence_enrollmentsInput
+    upsert?: MarketingCampaignUpsertWithoutSequence_enrollmentsInput
+    disconnect?: MarketingCampaignWhereInput | boolean
+    delete?: MarketingCampaignWhereInput | boolean
+    connect?: MarketingCampaignWhereUniqueInput
+    update?: XOR<XOR<MarketingCampaignUpdateToOneWithWhereWithoutSequence_enrollmentsInput, MarketingCampaignUpdateWithoutSequence_enrollmentsInput>, MarketingCampaignUncheckedUpdateWithoutSequence_enrollmentsInput>
+  }
+
+  export type OutreachMessageUpdateManyWithoutSequence_enrollmentNestedInput = {
+    create?: XOR<OutreachMessageCreateWithoutSequence_enrollmentInput, OutreachMessageUncheckedCreateWithoutSequence_enrollmentInput> | OutreachMessageCreateWithoutSequence_enrollmentInput[] | OutreachMessageUncheckedCreateWithoutSequence_enrollmentInput[]
+    connectOrCreate?: OutreachMessageCreateOrConnectWithoutSequence_enrollmentInput | OutreachMessageCreateOrConnectWithoutSequence_enrollmentInput[]
+    upsert?: OutreachMessageUpsertWithWhereUniqueWithoutSequence_enrollmentInput | OutreachMessageUpsertWithWhereUniqueWithoutSequence_enrollmentInput[]
+    createMany?: OutreachMessageCreateManySequence_enrollmentInputEnvelope
+    set?: OutreachMessageWhereUniqueInput | OutreachMessageWhereUniqueInput[]
+    disconnect?: OutreachMessageWhereUniqueInput | OutreachMessageWhereUniqueInput[]
+    delete?: OutreachMessageWhereUniqueInput | OutreachMessageWhereUniqueInput[]
+    connect?: OutreachMessageWhereUniqueInput | OutreachMessageWhereUniqueInput[]
+    update?: OutreachMessageUpdateWithWhereUniqueWithoutSequence_enrollmentInput | OutreachMessageUpdateWithWhereUniqueWithoutSequence_enrollmentInput[]
+    updateMany?: OutreachMessageUpdateManyWithWhereWithoutSequence_enrollmentInput | OutreachMessageUpdateManyWithWhereWithoutSequence_enrollmentInput[]
+    deleteMany?: OutreachMessageScalarWhereInput | OutreachMessageScalarWhereInput[]
+  }
+
+  export type OutreachMessageUncheckedUpdateManyWithoutSequence_enrollmentNestedInput = {
+    create?: XOR<OutreachMessageCreateWithoutSequence_enrollmentInput, OutreachMessageUncheckedCreateWithoutSequence_enrollmentInput> | OutreachMessageCreateWithoutSequence_enrollmentInput[] | OutreachMessageUncheckedCreateWithoutSequence_enrollmentInput[]
+    connectOrCreate?: OutreachMessageCreateOrConnectWithoutSequence_enrollmentInput | OutreachMessageCreateOrConnectWithoutSequence_enrollmentInput[]
+    upsert?: OutreachMessageUpsertWithWhereUniqueWithoutSequence_enrollmentInput | OutreachMessageUpsertWithWhereUniqueWithoutSequence_enrollmentInput[]
+    createMany?: OutreachMessageCreateManySequence_enrollmentInputEnvelope
+    set?: OutreachMessageWhereUniqueInput | OutreachMessageWhereUniqueInput[]
+    disconnect?: OutreachMessageWhereUniqueInput | OutreachMessageWhereUniqueInput[]
+    delete?: OutreachMessageWhereUniqueInput | OutreachMessageWhereUniqueInput[]
+    connect?: OutreachMessageWhereUniqueInput | OutreachMessageWhereUniqueInput[]
+    update?: OutreachMessageUpdateWithWhereUniqueWithoutSequence_enrollmentInput | OutreachMessageUpdateWithWhereUniqueWithoutSequence_enrollmentInput[]
+    updateMany?: OutreachMessageUpdateManyWithWhereWithoutSequence_enrollmentInput | OutreachMessageUpdateManyWithWhereWithoutSequence_enrollmentInput[]
+    deleteMany?: OutreachMessageScalarWhereInput | OutreachMessageScalarWhereInput[]
   }
 
   export type FilterCreateNestedOneWithoutJobsInput = {
@@ -81614,6 +86089,20 @@ export namespace Prisma {
     connect?: OrganisationWhereUniqueInput
   }
 
+  export type OutreachSequenceStepCreateNestedManyWithoutMessage_templateInput = {
+    create?: XOR<OutreachSequenceStepCreateWithoutMessage_templateInput, OutreachSequenceStepUncheckedCreateWithoutMessage_templateInput> | OutreachSequenceStepCreateWithoutMessage_templateInput[] | OutreachSequenceStepUncheckedCreateWithoutMessage_templateInput[]
+    connectOrCreate?: OutreachSequenceStepCreateOrConnectWithoutMessage_templateInput | OutreachSequenceStepCreateOrConnectWithoutMessage_templateInput[]
+    createMany?: OutreachSequenceStepCreateManyMessage_templateInputEnvelope
+    connect?: OutreachSequenceStepWhereUniqueInput | OutreachSequenceStepWhereUniqueInput[]
+  }
+
+  export type OutreachSequenceStepUncheckedCreateNestedManyWithoutMessage_templateInput = {
+    create?: XOR<OutreachSequenceStepCreateWithoutMessage_templateInput, OutreachSequenceStepUncheckedCreateWithoutMessage_templateInput> | OutreachSequenceStepCreateWithoutMessage_templateInput[] | OutreachSequenceStepUncheckedCreateWithoutMessage_templateInput[]
+    connectOrCreate?: OutreachSequenceStepCreateOrConnectWithoutMessage_templateInput | OutreachSequenceStepCreateOrConnectWithoutMessage_templateInput[]
+    createMany?: OutreachSequenceStepCreateManyMessage_templateInputEnvelope
+    connect?: OutreachSequenceStepWhereUniqueInput | OutreachSequenceStepWhereUniqueInput[]
+  }
+
   export type MessageTemplateUpdatechannelsInput = {
     set?: $Enums.Channel[]
     push?: $Enums.Channel | $Enums.Channel[]
@@ -81625,6 +86114,34 @@ export namespace Prisma {
     upsert?: OrganisationUpsertWithoutMessage_templatesInput
     connect?: OrganisationWhereUniqueInput
     update?: XOR<XOR<OrganisationUpdateToOneWithWhereWithoutMessage_templatesInput, OrganisationUpdateWithoutMessage_templatesInput>, OrganisationUncheckedUpdateWithoutMessage_templatesInput>
+  }
+
+  export type OutreachSequenceStepUpdateManyWithoutMessage_templateNestedInput = {
+    create?: XOR<OutreachSequenceStepCreateWithoutMessage_templateInput, OutreachSequenceStepUncheckedCreateWithoutMessage_templateInput> | OutreachSequenceStepCreateWithoutMessage_templateInput[] | OutreachSequenceStepUncheckedCreateWithoutMessage_templateInput[]
+    connectOrCreate?: OutreachSequenceStepCreateOrConnectWithoutMessage_templateInput | OutreachSequenceStepCreateOrConnectWithoutMessage_templateInput[]
+    upsert?: OutreachSequenceStepUpsertWithWhereUniqueWithoutMessage_templateInput | OutreachSequenceStepUpsertWithWhereUniqueWithoutMessage_templateInput[]
+    createMany?: OutreachSequenceStepCreateManyMessage_templateInputEnvelope
+    set?: OutreachSequenceStepWhereUniqueInput | OutreachSequenceStepWhereUniqueInput[]
+    disconnect?: OutreachSequenceStepWhereUniqueInput | OutreachSequenceStepWhereUniqueInput[]
+    delete?: OutreachSequenceStepWhereUniqueInput | OutreachSequenceStepWhereUniqueInput[]
+    connect?: OutreachSequenceStepWhereUniqueInput | OutreachSequenceStepWhereUniqueInput[]
+    update?: OutreachSequenceStepUpdateWithWhereUniqueWithoutMessage_templateInput | OutreachSequenceStepUpdateWithWhereUniqueWithoutMessage_templateInput[]
+    updateMany?: OutreachSequenceStepUpdateManyWithWhereWithoutMessage_templateInput | OutreachSequenceStepUpdateManyWithWhereWithoutMessage_templateInput[]
+    deleteMany?: OutreachSequenceStepScalarWhereInput | OutreachSequenceStepScalarWhereInput[]
+  }
+
+  export type OutreachSequenceStepUncheckedUpdateManyWithoutMessage_templateNestedInput = {
+    create?: XOR<OutreachSequenceStepCreateWithoutMessage_templateInput, OutreachSequenceStepUncheckedCreateWithoutMessage_templateInput> | OutreachSequenceStepCreateWithoutMessage_templateInput[] | OutreachSequenceStepUncheckedCreateWithoutMessage_templateInput[]
+    connectOrCreate?: OutreachSequenceStepCreateOrConnectWithoutMessage_templateInput | OutreachSequenceStepCreateOrConnectWithoutMessage_templateInput[]
+    upsert?: OutreachSequenceStepUpsertWithWhereUniqueWithoutMessage_templateInput | OutreachSequenceStepUpsertWithWhereUniqueWithoutMessage_templateInput[]
+    createMany?: OutreachSequenceStepCreateManyMessage_templateInputEnvelope
+    set?: OutreachSequenceStepWhereUniqueInput | OutreachSequenceStepWhereUniqueInput[]
+    disconnect?: OutreachSequenceStepWhereUniqueInput | OutreachSequenceStepWhereUniqueInput[]
+    delete?: OutreachSequenceStepWhereUniqueInput | OutreachSequenceStepWhereUniqueInput[]
+    connect?: OutreachSequenceStepWhereUniqueInput | OutreachSequenceStepWhereUniqueInput[]
+    update?: OutreachSequenceStepUpdateWithWhereUniqueWithoutMessage_templateInput | OutreachSequenceStepUpdateWithWhereUniqueWithoutMessage_templateInput[]
+    updateMany?: OutreachSequenceStepUpdateManyWithWhereWithoutMessage_templateInput | OutreachSequenceStepUpdateManyWithWhereWithoutMessage_templateInput[]
+    deleteMany?: OutreachSequenceStepScalarWhereInput | OutreachSequenceStepScalarWhereInput[]
   }
 
   export type MarketingCampaignCreatechannelsInput = {
@@ -81641,6 +86158,12 @@ export namespace Prisma {
     create?: XOR<SenderProfileCreateWithoutMarketing_campaignsInput, SenderProfileUncheckedCreateWithoutMarketing_campaignsInput>
     connectOrCreate?: SenderProfileCreateOrConnectWithoutMarketing_campaignsInput
     connect?: SenderProfileWhereUniqueInput
+  }
+
+  export type OutreachSequenceCreateNestedOneWithoutCampaignsInput = {
+    create?: XOR<OutreachSequenceCreateWithoutCampaignsInput, OutreachSequenceUncheckedCreateWithoutCampaignsInput>
+    connectOrCreate?: OutreachSequenceCreateOrConnectWithoutCampaignsInput
+    connect?: OutreachSequenceWhereUniqueInput
   }
 
   export type MarketingCampaignContactCreateNestedManyWithoutCampaignInput = {
@@ -81664,6 +86187,13 @@ export namespace Prisma {
     connect?: InteractionWhereUniqueInput | InteractionWhereUniqueInput[]
   }
 
+  export type SequenceEnrollmentCreateNestedManyWithoutCampaignInput = {
+    create?: XOR<SequenceEnrollmentCreateWithoutCampaignInput, SequenceEnrollmentUncheckedCreateWithoutCampaignInput> | SequenceEnrollmentCreateWithoutCampaignInput[] | SequenceEnrollmentUncheckedCreateWithoutCampaignInput[]
+    connectOrCreate?: SequenceEnrollmentCreateOrConnectWithoutCampaignInput | SequenceEnrollmentCreateOrConnectWithoutCampaignInput[]
+    createMany?: SequenceEnrollmentCreateManyCampaignInputEnvelope
+    connect?: SequenceEnrollmentWhereUniqueInput | SequenceEnrollmentWhereUniqueInput[]
+  }
+
   export type MarketingCampaignContactUncheckedCreateNestedManyWithoutCampaignInput = {
     create?: XOR<MarketingCampaignContactCreateWithoutCampaignInput, MarketingCampaignContactUncheckedCreateWithoutCampaignInput> | MarketingCampaignContactCreateWithoutCampaignInput[] | MarketingCampaignContactUncheckedCreateWithoutCampaignInput[]
     connectOrCreate?: MarketingCampaignContactCreateOrConnectWithoutCampaignInput | MarketingCampaignContactCreateOrConnectWithoutCampaignInput[]
@@ -81683,6 +86213,13 @@ export namespace Prisma {
     connectOrCreate?: InteractionCreateOrConnectWithoutCampaignInput | InteractionCreateOrConnectWithoutCampaignInput[]
     createMany?: InteractionCreateManyCampaignInputEnvelope
     connect?: InteractionWhereUniqueInput | InteractionWhereUniqueInput[]
+  }
+
+  export type SequenceEnrollmentUncheckedCreateNestedManyWithoutCampaignInput = {
+    create?: XOR<SequenceEnrollmentCreateWithoutCampaignInput, SequenceEnrollmentUncheckedCreateWithoutCampaignInput> | SequenceEnrollmentCreateWithoutCampaignInput[] | SequenceEnrollmentUncheckedCreateWithoutCampaignInput[]
+    connectOrCreate?: SequenceEnrollmentCreateOrConnectWithoutCampaignInput | SequenceEnrollmentCreateOrConnectWithoutCampaignInput[]
+    createMany?: SequenceEnrollmentCreateManyCampaignInputEnvelope
+    connect?: SequenceEnrollmentWhereUniqueInput | SequenceEnrollmentWhereUniqueInput[]
   }
 
   export type EnumCampaignStatusFieldUpdateOperationsInput = {
@@ -81714,6 +86251,16 @@ export namespace Prisma {
     delete?: SenderProfileWhereInput | boolean
     connect?: SenderProfileWhereUniqueInput
     update?: XOR<XOR<SenderProfileUpdateToOneWithWhereWithoutMarketing_campaignsInput, SenderProfileUpdateWithoutMarketing_campaignsInput>, SenderProfileUncheckedUpdateWithoutMarketing_campaignsInput>
+  }
+
+  export type OutreachSequenceUpdateOneWithoutCampaignsNestedInput = {
+    create?: XOR<OutreachSequenceCreateWithoutCampaignsInput, OutreachSequenceUncheckedCreateWithoutCampaignsInput>
+    connectOrCreate?: OutreachSequenceCreateOrConnectWithoutCampaignsInput
+    upsert?: OutreachSequenceUpsertWithoutCampaignsInput
+    disconnect?: OutreachSequenceWhereInput | boolean
+    delete?: OutreachSequenceWhereInput | boolean
+    connect?: OutreachSequenceWhereUniqueInput
+    update?: XOR<XOR<OutreachSequenceUpdateToOneWithWhereWithoutCampaignsInput, OutreachSequenceUpdateWithoutCampaignsInput>, OutreachSequenceUncheckedUpdateWithoutCampaignsInput>
   }
 
   export type MarketingCampaignContactUpdateManyWithoutCampaignNestedInput = {
@@ -81758,6 +86305,20 @@ export namespace Prisma {
     deleteMany?: InteractionScalarWhereInput | InteractionScalarWhereInput[]
   }
 
+  export type SequenceEnrollmentUpdateManyWithoutCampaignNestedInput = {
+    create?: XOR<SequenceEnrollmentCreateWithoutCampaignInput, SequenceEnrollmentUncheckedCreateWithoutCampaignInput> | SequenceEnrollmentCreateWithoutCampaignInput[] | SequenceEnrollmentUncheckedCreateWithoutCampaignInput[]
+    connectOrCreate?: SequenceEnrollmentCreateOrConnectWithoutCampaignInput | SequenceEnrollmentCreateOrConnectWithoutCampaignInput[]
+    upsert?: SequenceEnrollmentUpsertWithWhereUniqueWithoutCampaignInput | SequenceEnrollmentUpsertWithWhereUniqueWithoutCampaignInput[]
+    createMany?: SequenceEnrollmentCreateManyCampaignInputEnvelope
+    set?: SequenceEnrollmentWhereUniqueInput | SequenceEnrollmentWhereUniqueInput[]
+    disconnect?: SequenceEnrollmentWhereUniqueInput | SequenceEnrollmentWhereUniqueInput[]
+    delete?: SequenceEnrollmentWhereUniqueInput | SequenceEnrollmentWhereUniqueInput[]
+    connect?: SequenceEnrollmentWhereUniqueInput | SequenceEnrollmentWhereUniqueInput[]
+    update?: SequenceEnrollmentUpdateWithWhereUniqueWithoutCampaignInput | SequenceEnrollmentUpdateWithWhereUniqueWithoutCampaignInput[]
+    updateMany?: SequenceEnrollmentUpdateManyWithWhereWithoutCampaignInput | SequenceEnrollmentUpdateManyWithWhereWithoutCampaignInput[]
+    deleteMany?: SequenceEnrollmentScalarWhereInput | SequenceEnrollmentScalarWhereInput[]
+  }
+
   export type MarketingCampaignContactUncheckedUpdateManyWithoutCampaignNestedInput = {
     create?: XOR<MarketingCampaignContactCreateWithoutCampaignInput, MarketingCampaignContactUncheckedCreateWithoutCampaignInput> | MarketingCampaignContactCreateWithoutCampaignInput[] | MarketingCampaignContactUncheckedCreateWithoutCampaignInput[]
     connectOrCreate?: MarketingCampaignContactCreateOrConnectWithoutCampaignInput | MarketingCampaignContactCreateOrConnectWithoutCampaignInput[]
@@ -81798,6 +86359,20 @@ export namespace Prisma {
     update?: InteractionUpdateWithWhereUniqueWithoutCampaignInput | InteractionUpdateWithWhereUniqueWithoutCampaignInput[]
     updateMany?: InteractionUpdateManyWithWhereWithoutCampaignInput | InteractionUpdateManyWithWhereWithoutCampaignInput[]
     deleteMany?: InteractionScalarWhereInput | InteractionScalarWhereInput[]
+  }
+
+  export type SequenceEnrollmentUncheckedUpdateManyWithoutCampaignNestedInput = {
+    create?: XOR<SequenceEnrollmentCreateWithoutCampaignInput, SequenceEnrollmentUncheckedCreateWithoutCampaignInput> | SequenceEnrollmentCreateWithoutCampaignInput[] | SequenceEnrollmentUncheckedCreateWithoutCampaignInput[]
+    connectOrCreate?: SequenceEnrollmentCreateOrConnectWithoutCampaignInput | SequenceEnrollmentCreateOrConnectWithoutCampaignInput[]
+    upsert?: SequenceEnrollmentUpsertWithWhereUniqueWithoutCampaignInput | SequenceEnrollmentUpsertWithWhereUniqueWithoutCampaignInput[]
+    createMany?: SequenceEnrollmentCreateManyCampaignInputEnvelope
+    set?: SequenceEnrollmentWhereUniqueInput | SequenceEnrollmentWhereUniqueInput[]
+    disconnect?: SequenceEnrollmentWhereUniqueInput | SequenceEnrollmentWhereUniqueInput[]
+    delete?: SequenceEnrollmentWhereUniqueInput | SequenceEnrollmentWhereUniqueInput[]
+    connect?: SequenceEnrollmentWhereUniqueInput | SequenceEnrollmentWhereUniqueInput[]
+    update?: SequenceEnrollmentUpdateWithWhereUniqueWithoutCampaignInput | SequenceEnrollmentUpdateWithWhereUniqueWithoutCampaignInput[]
+    updateMany?: SequenceEnrollmentUpdateManyWithWhereWithoutCampaignInput | SequenceEnrollmentUpdateManyWithWhereWithoutCampaignInput[]
+    deleteMany?: SequenceEnrollmentScalarWhereInput | SequenceEnrollmentScalarWhereInput[]
   }
 
   export type MarketingCampaignCreateNestedOneWithoutCampaign_contactsInput = {
@@ -83104,6 +87679,74 @@ export namespace Prisma {
     _max?: NestedEnumExternalIntegrationProviderNullableFilter<$PrismaModel>
   }
 
+  export type NestedEnumSequenceStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.SequenceStatus | EnumSequenceStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SequenceStatus[] | ListEnumSequenceStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SequenceStatus[] | ListEnumSequenceStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSequenceStatusFilter<$PrismaModel> | $Enums.SequenceStatus
+  }
+
+  export type NestedEnumSequenceStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SequenceStatus | EnumSequenceStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SequenceStatus[] | ListEnumSequenceStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SequenceStatus[] | ListEnumSequenceStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSequenceStatusWithAggregatesFilter<$PrismaModel> | $Enums.SequenceStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSequenceStatusFilter<$PrismaModel>
+    _max?: NestedEnumSequenceStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumSequenceDelayUnitFilter<$PrismaModel = never> = {
+    equals?: $Enums.SequenceDelayUnit | EnumSequenceDelayUnitFieldRefInput<$PrismaModel>
+    in?: $Enums.SequenceDelayUnit[] | ListEnumSequenceDelayUnitFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SequenceDelayUnit[] | ListEnumSequenceDelayUnitFieldRefInput<$PrismaModel>
+    not?: NestedEnumSequenceDelayUnitFilter<$PrismaModel> | $Enums.SequenceDelayUnit
+  }
+
+  export type NestedEnumSequenceDelayReferenceFilter<$PrismaModel = never> = {
+    equals?: $Enums.SequenceDelayReference | EnumSequenceDelayReferenceFieldRefInput<$PrismaModel>
+    in?: $Enums.SequenceDelayReference[] | ListEnumSequenceDelayReferenceFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SequenceDelayReference[] | ListEnumSequenceDelayReferenceFieldRefInput<$PrismaModel>
+    not?: NestedEnumSequenceDelayReferenceFilter<$PrismaModel> | $Enums.SequenceDelayReference
+  }
+
+  export type NestedEnumSequenceDelayUnitWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SequenceDelayUnit | EnumSequenceDelayUnitFieldRefInput<$PrismaModel>
+    in?: $Enums.SequenceDelayUnit[] | ListEnumSequenceDelayUnitFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SequenceDelayUnit[] | ListEnumSequenceDelayUnitFieldRefInput<$PrismaModel>
+    not?: NestedEnumSequenceDelayUnitWithAggregatesFilter<$PrismaModel> | $Enums.SequenceDelayUnit
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSequenceDelayUnitFilter<$PrismaModel>
+    _max?: NestedEnumSequenceDelayUnitFilter<$PrismaModel>
+  }
+
+  export type NestedEnumSequenceDelayReferenceWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SequenceDelayReference | EnumSequenceDelayReferenceFieldRefInput<$PrismaModel>
+    in?: $Enums.SequenceDelayReference[] | ListEnumSequenceDelayReferenceFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SequenceDelayReference[] | ListEnumSequenceDelayReferenceFieldRefInput<$PrismaModel>
+    not?: NestedEnumSequenceDelayReferenceWithAggregatesFilter<$PrismaModel> | $Enums.SequenceDelayReference
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSequenceDelayReferenceFilter<$PrismaModel>
+    _max?: NestedEnumSequenceDelayReferenceFilter<$PrismaModel>
+  }
+
+  export type NestedEnumSequenceEnrollmentStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.SequenceEnrollmentStatus | EnumSequenceEnrollmentStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SequenceEnrollmentStatus[] | ListEnumSequenceEnrollmentStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SequenceEnrollmentStatus[] | ListEnumSequenceEnrollmentStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSequenceEnrollmentStatusFilter<$PrismaModel> | $Enums.SequenceEnrollmentStatus
+  }
+
+  export type NestedEnumSequenceEnrollmentStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SequenceEnrollmentStatus | EnumSequenceEnrollmentStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SequenceEnrollmentStatus[] | ListEnumSequenceEnrollmentStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SequenceEnrollmentStatus[] | ListEnumSequenceEnrollmentStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSequenceEnrollmentStatusWithAggregatesFilter<$PrismaModel> | $Enums.SequenceEnrollmentStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSequenceEnrollmentStatusFilter<$PrismaModel>
+    _max?: NestedEnumSequenceEnrollmentStatusFilter<$PrismaModel>
+  }
+
   export type NestedEnumJobStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.JobStatus | EnumJobStatusFieldRefInput<$PrismaModel>
     in?: $Enums.JobStatus[] | ListEnumJobStatusFieldRefInput<$PrismaModel>
@@ -83665,6 +88308,8 @@ export namespace Prisma {
     contact: ContactCreateNestedOneWithoutOutreach_messagesInput
     campaign?: MarketingCampaignCreateNestedOneWithoutOutreach_messagesInput
     interaction?: InteractionCreateNestedOneWithoutOutreach_messageInput
+    sequence_enrollment?: SequenceEnrollmentCreateNestedOneWithoutOutreach_messagesInput
+    sequence_step?: OutreachSequenceStepCreateNestedOneWithoutOutreach_messagesInput
   }
 
   export type OutreachMessageUncheckedCreateWithoutSent_byInput = {
@@ -83692,6 +88337,8 @@ export namespace Prisma {
     email_account?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    sequence_enrollment_uuid?: string | null
+    sequence_step_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     interaction?: InteractionUncheckedCreateNestedOneWithoutOutreach_messageInput
@@ -84031,6 +88678,8 @@ export namespace Prisma {
     email_account?: StringNullableFilter<"OutreachMessage"> | string | null
     sms_provider?: StringNullableFilter<"OutreachMessage"> | string | null
     metadata?: JsonNullableFilter<"OutreachMessage">
+    sequence_enrollment_uuid?: StringNullableFilter<"OutreachMessage"> | string | null
+    sequence_step_uuid?: StringNullableFilter<"OutreachMessage"> | string | null
     created_at?: DateTimeFilter<"OutreachMessage"> | Date | string
     updated_at?: DateTimeFilter<"OutreachMessage"> | Date | string
   }
@@ -84358,6 +89007,7 @@ export namespace Prisma {
     form_completions?: FormCompletionCreateNestedManyWithoutContactInput
     list_memberships?: ContactListMemberCreateNestedManyWithoutContactInput
     enrichments?: ContactEnrichmentCreateNestedManyWithoutContactInput
+    sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutContactInput
   }
 
   export type ContactUncheckedCreateWithoutOrganisationInput = {
@@ -84399,6 +89049,7 @@ export namespace Prisma {
     form_completions?: FormCompletionUncheckedCreateNestedManyWithoutContactInput
     list_memberships?: ContactListMemberUncheckedCreateNestedManyWithoutContactInput
     enrichments?: ContactEnrichmentUncheckedCreateNestedManyWithoutContactInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutContactInput
   }
 
   export type ContactCreateOrConnectWithoutOrganisationInput = {
@@ -84438,6 +89089,8 @@ export namespace Prisma {
     campaign?: MarketingCampaignCreateNestedOneWithoutOutreach_messagesInput
     sent_by?: UserCreateNestedOneWithoutOutreach_messages_sentInput
     interaction?: InteractionCreateNestedOneWithoutOutreach_messageInput
+    sequence_enrollment?: SequenceEnrollmentCreateNestedOneWithoutOutreach_messagesInput
+    sequence_step?: OutreachSequenceStepCreateNestedOneWithoutOutreach_messagesInput
   }
 
   export type OutreachMessageUncheckedCreateWithoutOrganisationInput = {
@@ -84465,6 +89118,8 @@ export namespace Prisma {
     email_account?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    sequence_enrollment_uuid?: string | null
+    sequence_step_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     interaction?: InteractionUncheckedCreateNestedOneWithoutOutreach_messageInput
@@ -84483,18 +89138,26 @@ export namespace Prisma {
   export type OutreachSequenceCreateWithoutOrganisationInput = {
     uuid?: string
     name: string
-    steps: JsonNullValueInput | InputJsonValue
+    description?: string | null
+    status?: $Enums.SequenceStatus
     created_at?: Date | string
     updated_at?: Date | string
+    steps?: OutreachSequenceStepCreateNestedManyWithoutSequenceInput
+    enrollments?: SequenceEnrollmentCreateNestedManyWithoutSequenceInput
+    campaigns?: MarketingCampaignCreateNestedManyWithoutSequenceInput
   }
 
   export type OutreachSequenceUncheckedCreateWithoutOrganisationInput = {
     id?: number
     uuid?: string
     name: string
-    steps: JsonNullValueInput | InputJsonValue
+    description?: string | null
+    status?: $Enums.SequenceStatus
     created_at?: Date | string
     updated_at?: Date | string
+    steps?: OutreachSequenceStepUncheckedCreateNestedManyWithoutSequenceInput
+    enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutSequenceInput
+    campaigns?: MarketingCampaignUncheckedCreateNestedManyWithoutSequenceInput
   }
 
   export type OutreachSequenceCreateOrConnectWithoutOrganisationInput = {
@@ -84644,9 +89307,11 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     sender_profile?: SenderProfileCreateNestedOneWithoutMarketing_campaignsInput
+    sequence?: OutreachSequenceCreateNestedOneWithoutCampaignsInput
     campaign_contacts?: MarketingCampaignContactCreateNestedManyWithoutCampaignInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutCampaignInput
     interactions?: InteractionCreateNestedManyWithoutCampaignInput
+    sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutCampaignInput
   }
 
   export type MarketingCampaignUncheckedCreateWithoutOrganisationInput = {
@@ -84667,6 +89332,7 @@ export namespace Prisma {
     draft_batch_id?: string | null
     sender_profile_uuid?: string | null
     email_provider_allocations?: NullableJsonNullValueInput | InputJsonValue
+    sequence_uuid?: string | null
     scheduled_at?: Date | string | null
     started_at?: Date | string | null
     completed_at?: Date | string | null
@@ -84690,6 +89356,7 @@ export namespace Prisma {
     campaign_contacts?: MarketingCampaignContactUncheckedCreateNestedManyWithoutCampaignInput
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutCampaignInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutCampaignInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutCampaignInput
   }
 
   export type MarketingCampaignCreateOrConnectWithoutOrganisationInput = {
@@ -85100,6 +89767,7 @@ export namespace Prisma {
     source_message_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
+    sequence_steps?: OutreachSequenceStepCreateNestedManyWithoutMessage_templateInput
   }
 
   export type MessageTemplateUncheckedCreateWithoutOrganisationInput = {
@@ -85114,6 +89782,7 @@ export namespace Prisma {
     source_message_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
+    sequence_steps?: OutreachSequenceStepUncheckedCreateNestedManyWithoutMessage_templateInput
   }
 
   export type MessageTemplateCreateOrConnectWithoutOrganisationInput = {
@@ -85541,7 +90210,8 @@ export namespace Prisma {
     uuid?: StringFilter<"OutreachSequence"> | string
     organisation_uuid?: StringFilter<"OutreachSequence"> | string
     name?: StringFilter<"OutreachSequence"> | string
-    steps?: JsonFilter<"OutreachSequence">
+    description?: StringNullableFilter<"OutreachSequence"> | string | null
+    status?: EnumSequenceStatusFilter<"OutreachSequence"> | $Enums.SequenceStatus
     created_at?: DateTimeFilter<"OutreachSequence"> | Date | string
     updated_at?: DateTimeFilter<"OutreachSequence"> | Date | string
   }
@@ -85664,6 +90334,7 @@ export namespace Prisma {
     draft_batch_id?: StringNullableFilter<"MarketingCampaign"> | string | null
     sender_profile_uuid?: StringNullableFilter<"MarketingCampaign"> | string | null
     email_provider_allocations?: JsonNullableFilter<"MarketingCampaign">
+    sequence_uuid?: StringNullableFilter<"MarketingCampaign"> | string | null
     scheduled_at?: DateTimeNullableFilter<"MarketingCampaign"> | Date | string | null
     started_at?: DateTimeNullableFilter<"MarketingCampaign"> | Date | string | null
     completed_at?: DateTimeNullableFilter<"MarketingCampaign"> | Date | string | null
@@ -86863,6 +91534,7 @@ export namespace Prisma {
     form_completions?: FormCompletionCreateNestedManyWithoutContactInput
     list_memberships?: ContactListMemberCreateNestedManyWithoutContactInput
     enrichments?: ContactEnrichmentCreateNestedManyWithoutContactInput
+    sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutContactInput
   }
 
   export type ContactUncheckedCreateWithoutFilterInput = {
@@ -86904,6 +91576,7 @@ export namespace Prisma {
     form_completions?: FormCompletionUncheckedCreateNestedManyWithoutContactInput
     list_memberships?: ContactListMemberUncheckedCreateNestedManyWithoutContactInput
     enrichments?: ContactEnrichmentUncheckedCreateNestedManyWithoutContactInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutContactInput
   }
 
   export type ContactCreateOrConnectWithoutFilterInput = {
@@ -88122,6 +92795,7 @@ export namespace Prisma {
     form_completions?: FormCompletionCreateNestedManyWithoutContactInput
     list_memberships?: ContactListMemberCreateNestedManyWithoutContactInput
     enrichments?: ContactEnrichmentCreateNestedManyWithoutContactInput
+    sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutContactInput
   }
 
   export type ContactUncheckedCreateWithoutLeadInput = {
@@ -88163,6 +92837,7 @@ export namespace Prisma {
     form_completions?: FormCompletionUncheckedCreateNestedManyWithoutContactInput
     list_memberships?: ContactListMemberUncheckedCreateNestedManyWithoutContactInput
     enrichments?: ContactEnrichmentUncheckedCreateNestedManyWithoutContactInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutContactInput
   }
 
   export type ContactCreateOrConnectWithoutLeadInput = {
@@ -88730,6 +93405,8 @@ export namespace Prisma {
     campaign?: MarketingCampaignCreateNestedOneWithoutOutreach_messagesInput
     sent_by?: UserCreateNestedOneWithoutOutreach_messages_sentInput
     interaction?: InteractionCreateNestedOneWithoutOutreach_messageInput
+    sequence_enrollment?: SequenceEnrollmentCreateNestedOneWithoutOutreach_messagesInput
+    sequence_step?: OutreachSequenceStepCreateNestedOneWithoutOutreach_messagesInput
   }
 
   export type OutreachMessageUncheckedCreateWithoutContactInput = {
@@ -88757,6 +93434,8 @@ export namespace Prisma {
     email_account?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    sequence_enrollment_uuid?: string | null
+    sequence_step_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     interaction?: InteractionUncheckedCreateNestedOneWithoutOutreach_messageInput
@@ -88951,6 +93630,43 @@ export namespace Prisma {
 
   export type ContactEnrichmentCreateManyContactInputEnvelope = {
     data: ContactEnrichmentCreateManyContactInput | ContactEnrichmentCreateManyContactInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SequenceEnrollmentCreateWithoutContactInput = {
+    uuid?: string
+    status?: $Enums.SequenceEnrollmentStatus
+    enrolled_at?: Date | string
+    cancelled_at?: Date | string | null
+    completed_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    sequence: OutreachSequenceCreateNestedOneWithoutEnrollmentsInput
+    campaign?: MarketingCampaignCreateNestedOneWithoutSequence_enrollmentsInput
+    outreach_messages?: OutreachMessageCreateNestedManyWithoutSequence_enrollmentInput
+  }
+
+  export type SequenceEnrollmentUncheckedCreateWithoutContactInput = {
+    id?: number
+    uuid?: string
+    sequence_uuid: string
+    campaign_uuid?: string | null
+    status?: $Enums.SequenceEnrollmentStatus
+    enrolled_at?: Date | string
+    cancelled_at?: Date | string | null
+    completed_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutSequence_enrollmentInput
+  }
+
+  export type SequenceEnrollmentCreateOrConnectWithoutContactInput = {
+    where: SequenceEnrollmentWhereUniqueInput
+    create: XOR<SequenceEnrollmentCreateWithoutContactInput, SequenceEnrollmentUncheckedCreateWithoutContactInput>
+  }
+
+  export type SequenceEnrollmentCreateManyContactInputEnvelope = {
+    data: SequenceEnrollmentCreateManyContactInput | SequenceEnrollmentCreateManyContactInput[]
     skipDuplicates?: boolean
   }
 
@@ -89399,6 +94115,39 @@ export namespace Prisma {
     created_at?: DateTimeFilter<"ContactEnrichment"> | Date | string
   }
 
+  export type SequenceEnrollmentUpsertWithWhereUniqueWithoutContactInput = {
+    where: SequenceEnrollmentWhereUniqueInput
+    update: XOR<SequenceEnrollmentUpdateWithoutContactInput, SequenceEnrollmentUncheckedUpdateWithoutContactInput>
+    create: XOR<SequenceEnrollmentCreateWithoutContactInput, SequenceEnrollmentUncheckedCreateWithoutContactInput>
+  }
+
+  export type SequenceEnrollmentUpdateWithWhereUniqueWithoutContactInput = {
+    where: SequenceEnrollmentWhereUniqueInput
+    data: XOR<SequenceEnrollmentUpdateWithoutContactInput, SequenceEnrollmentUncheckedUpdateWithoutContactInput>
+  }
+
+  export type SequenceEnrollmentUpdateManyWithWhereWithoutContactInput = {
+    where: SequenceEnrollmentScalarWhereInput
+    data: XOR<SequenceEnrollmentUpdateManyMutationInput, SequenceEnrollmentUncheckedUpdateManyWithoutContactInput>
+  }
+
+  export type SequenceEnrollmentScalarWhereInput = {
+    AND?: SequenceEnrollmentScalarWhereInput | SequenceEnrollmentScalarWhereInput[]
+    OR?: SequenceEnrollmentScalarWhereInput[]
+    NOT?: SequenceEnrollmentScalarWhereInput | SequenceEnrollmentScalarWhereInput[]
+    id?: IntFilter<"SequenceEnrollment"> | number
+    uuid?: StringFilter<"SequenceEnrollment"> | string
+    sequence_uuid?: StringFilter<"SequenceEnrollment"> | string
+    contact_uuid?: StringFilter<"SequenceEnrollment"> | string
+    campaign_uuid?: StringNullableFilter<"SequenceEnrollment"> | string | null
+    status?: EnumSequenceEnrollmentStatusFilter<"SequenceEnrollment"> | $Enums.SequenceEnrollmentStatus
+    enrolled_at?: DateTimeFilter<"SequenceEnrollment"> | Date | string
+    cancelled_at?: DateTimeNullableFilter<"SequenceEnrollment"> | Date | string | null
+    completed_at?: DateTimeNullableFilter<"SequenceEnrollment"> | Date | string | null
+    created_at?: DateTimeFilter<"SequenceEnrollment"> | Date | string
+    updated_at?: DateTimeFilter<"SequenceEnrollment"> | Date | string
+  }
+
   export type ContactCreateWithoutContact_infosInput = {
     uuid?: string
     status?: $Enums.LeadStatus
@@ -89437,6 +94186,7 @@ export namespace Prisma {
     form_completions?: FormCompletionCreateNestedManyWithoutContactInput
     list_memberships?: ContactListMemberCreateNestedManyWithoutContactInput
     enrichments?: ContactEnrichmentCreateNestedManyWithoutContactInput
+    sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutContactInput
   }
 
   export type ContactUncheckedCreateWithoutContact_infosInput = {
@@ -89478,6 +94228,7 @@ export namespace Prisma {
     form_completions?: FormCompletionUncheckedCreateNestedManyWithoutContactInput
     list_memberships?: ContactListMemberUncheckedCreateNestedManyWithoutContactInput
     enrichments?: ContactEnrichmentUncheckedCreateNestedManyWithoutContactInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutContactInput
   }
 
   export type ContactCreateOrConnectWithoutContact_infosInput = {
@@ -89534,6 +94285,7 @@ export namespace Prisma {
     form_completions?: FormCompletionUpdateManyWithoutContactNestedInput
     list_memberships?: ContactListMemberUpdateManyWithoutContactNestedInput
     enrichments?: ContactEnrichmentUpdateManyWithoutContactNestedInput
+    sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutContactNestedInput
   }
 
   export type ContactUncheckedUpdateWithoutContact_infosInput = {
@@ -89575,6 +94327,7 @@ export namespace Prisma {
     form_completions?: FormCompletionUncheckedUpdateManyWithoutContactNestedInput
     list_memberships?: ContactListMemberUncheckedUpdateManyWithoutContactNestedInput
     enrichments?: ContactEnrichmentUncheckedUpdateManyWithoutContactNestedInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutContactNestedInput
   }
 
   export type ContactCreateWithoutContact_filtersInput = {
@@ -89615,6 +94368,7 @@ export namespace Prisma {
     form_completions?: FormCompletionCreateNestedManyWithoutContactInput
     list_memberships?: ContactListMemberCreateNestedManyWithoutContactInput
     enrichments?: ContactEnrichmentCreateNestedManyWithoutContactInput
+    sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutContactInput
   }
 
   export type ContactUncheckedCreateWithoutContact_filtersInput = {
@@ -89656,6 +94410,7 @@ export namespace Prisma {
     form_completions?: FormCompletionUncheckedCreateNestedManyWithoutContactInput
     list_memberships?: ContactListMemberUncheckedCreateNestedManyWithoutContactInput
     enrichments?: ContactEnrichmentUncheckedCreateNestedManyWithoutContactInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutContactInput
   }
 
   export type ContactCreateOrConnectWithoutContact_filtersInput = {
@@ -89758,6 +94513,7 @@ export namespace Prisma {
     form_completions?: FormCompletionUpdateManyWithoutContactNestedInput
     list_memberships?: ContactListMemberUpdateManyWithoutContactNestedInput
     enrichments?: ContactEnrichmentUpdateManyWithoutContactNestedInput
+    sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutContactNestedInput
   }
 
   export type ContactUncheckedUpdateWithoutContact_filtersInput = {
@@ -89799,6 +94555,7 @@ export namespace Prisma {
     form_completions?: FormCompletionUncheckedUpdateManyWithoutContactNestedInput
     list_memberships?: ContactListMemberUncheckedUpdateManyWithoutContactNestedInput
     enrichments?: ContactEnrichmentUncheckedUpdateManyWithoutContactNestedInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutContactNestedInput
   }
 
   export type FilterUpsertWithoutContact_filtersInput = {
@@ -89891,6 +94648,7 @@ export namespace Prisma {
     reminders?: ReminderCreateNestedManyWithoutContactInput
     form_completions?: FormCompletionCreateNestedManyWithoutContactInput
     list_memberships?: ContactListMemberCreateNestedManyWithoutContactInput
+    sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutContactInput
   }
 
   export type ContactUncheckedCreateWithoutEnrichmentsInput = {
@@ -89932,6 +94690,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedCreateNestedManyWithoutContactInput
     form_completions?: FormCompletionUncheckedCreateNestedManyWithoutContactInput
     list_memberships?: ContactListMemberUncheckedCreateNestedManyWithoutContactInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutContactInput
   }
 
   export type ContactCreateOrConnectWithoutEnrichmentsInput = {
@@ -89988,6 +94747,7 @@ export namespace Prisma {
     reminders?: ReminderUpdateManyWithoutContactNestedInput
     form_completions?: FormCompletionUpdateManyWithoutContactNestedInput
     list_memberships?: ContactListMemberUpdateManyWithoutContactNestedInput
+    sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutContactNestedInput
   }
 
   export type ContactUncheckedUpdateWithoutEnrichmentsInput = {
@@ -90029,6 +94789,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedUpdateManyWithoutContactNestedInput
     form_completions?: FormCompletionUncheckedUpdateManyWithoutContactNestedInput
     list_memberships?: ContactListMemberUncheckedUpdateManyWithoutContactNestedInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutContactNestedInput
   }
 
   export type ContactCreateWithoutContact_scoresInput = {
@@ -90069,6 +94830,7 @@ export namespace Prisma {
     form_completions?: FormCompletionCreateNestedManyWithoutContactInput
     list_memberships?: ContactListMemberCreateNestedManyWithoutContactInput
     enrichments?: ContactEnrichmentCreateNestedManyWithoutContactInput
+    sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutContactInput
   }
 
   export type ContactUncheckedCreateWithoutContact_scoresInput = {
@@ -90110,6 +94872,7 @@ export namespace Prisma {
     form_completions?: FormCompletionUncheckedCreateNestedManyWithoutContactInput
     list_memberships?: ContactListMemberUncheckedCreateNestedManyWithoutContactInput
     enrichments?: ContactEnrichmentUncheckedCreateNestedManyWithoutContactInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutContactInput
   }
 
   export type ContactCreateOrConnectWithoutContact_scoresInput = {
@@ -90192,6 +94955,7 @@ export namespace Prisma {
     form_completions?: FormCompletionUpdateManyWithoutContactNestedInput
     list_memberships?: ContactListMemberUpdateManyWithoutContactNestedInput
     enrichments?: ContactEnrichmentUpdateManyWithoutContactNestedInput
+    sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutContactNestedInput
   }
 
   export type ContactUncheckedUpdateWithoutContact_scoresInput = {
@@ -90233,6 +94997,7 @@ export namespace Prisma {
     form_completions?: FormCompletionUncheckedUpdateManyWithoutContactNestedInput
     list_memberships?: ContactListMemberUncheckedUpdateManyWithoutContactNestedInput
     enrichments?: ContactEnrichmentUncheckedUpdateManyWithoutContactNestedInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutContactNestedInput
   }
 
   export type ScoringInstructionUpsertWithoutContact_scoresInput = {
@@ -90718,6 +95483,7 @@ export namespace Prisma {
     reminders?: ReminderCreateNestedManyWithoutContactInput
     form_completions?: FormCompletionCreateNestedManyWithoutContactInput
     enrichments?: ContactEnrichmentCreateNestedManyWithoutContactInput
+    sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutContactInput
   }
 
   export type ContactUncheckedCreateWithoutList_membershipsInput = {
@@ -90759,6 +95525,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedCreateNestedManyWithoutContactInput
     form_completions?: FormCompletionUncheckedCreateNestedManyWithoutContactInput
     enrichments?: ContactEnrichmentUncheckedCreateNestedManyWithoutContactInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutContactInput
   }
 
   export type ContactCreateOrConnectWithoutList_membershipsInput = {
@@ -90851,6 +95618,7 @@ export namespace Prisma {
     reminders?: ReminderUpdateManyWithoutContactNestedInput
     form_completions?: FormCompletionUpdateManyWithoutContactNestedInput
     enrichments?: ContactEnrichmentUpdateManyWithoutContactNestedInput
+    sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutContactNestedInput
   }
 
   export type ContactUncheckedUpdateWithoutList_membershipsInput = {
@@ -90892,6 +95660,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedUpdateManyWithoutContactNestedInput
     form_completions?: FormCompletionUncheckedUpdateManyWithoutContactNestedInput
     enrichments?: ContactEnrichmentUncheckedUpdateManyWithoutContactNestedInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutContactNestedInput
   }
 
   export type ContactCreateWithoutTagsInput = {
@@ -90932,6 +95701,7 @@ export namespace Prisma {
     form_completions?: FormCompletionCreateNestedManyWithoutContactInput
     list_memberships?: ContactListMemberCreateNestedManyWithoutContactInput
     enrichments?: ContactEnrichmentCreateNestedManyWithoutContactInput
+    sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutContactInput
   }
 
   export type ContactUncheckedCreateWithoutTagsInput = {
@@ -90973,6 +95743,7 @@ export namespace Prisma {
     form_completions?: FormCompletionUncheckedCreateNestedManyWithoutContactInput
     list_memberships?: ContactListMemberUncheckedCreateNestedManyWithoutContactInput
     enrichments?: ContactEnrichmentUncheckedCreateNestedManyWithoutContactInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutContactInput
   }
 
   export type ContactCreateOrConnectWithoutTagsInput = {
@@ -91029,6 +95800,7 @@ export namespace Prisma {
     form_completions?: FormCompletionUpdateManyWithoutContactNestedInput
     list_memberships?: ContactListMemberUpdateManyWithoutContactNestedInput
     enrichments?: ContactEnrichmentUpdateManyWithoutContactNestedInput
+    sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutContactNestedInput
   }
 
   export type ContactUncheckedUpdateWithoutTagsInput = {
@@ -91070,6 +95842,7 @@ export namespace Prisma {
     form_completions?: FormCompletionUncheckedUpdateManyWithoutContactNestedInput
     list_memberships?: ContactListMemberUncheckedUpdateManyWithoutContactNestedInput
     enrichments?: ContactEnrichmentUncheckedUpdateManyWithoutContactNestedInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutContactNestedInput
   }
 
   export type ContactCreateWithoutInteractionsInput = {
@@ -91110,6 +95883,7 @@ export namespace Prisma {
     form_completions?: FormCompletionCreateNestedManyWithoutContactInput
     list_memberships?: ContactListMemberCreateNestedManyWithoutContactInput
     enrichments?: ContactEnrichmentCreateNestedManyWithoutContactInput
+    sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutContactInput
   }
 
   export type ContactUncheckedCreateWithoutInteractionsInput = {
@@ -91151,6 +95925,7 @@ export namespace Prisma {
     form_completions?: FormCompletionUncheckedCreateNestedManyWithoutContactInput
     list_memberships?: ContactListMemberUncheckedCreateNestedManyWithoutContactInput
     enrichments?: ContactEnrichmentUncheckedCreateNestedManyWithoutContactInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutContactInput
   }
 
   export type ContactCreateOrConnectWithoutInteractionsInput = {
@@ -91263,6 +96038,8 @@ export namespace Prisma {
     contact: ContactCreateNestedOneWithoutOutreach_messagesInput
     campaign?: MarketingCampaignCreateNestedOneWithoutOutreach_messagesInput
     sent_by?: UserCreateNestedOneWithoutOutreach_messages_sentInput
+    sequence_enrollment?: SequenceEnrollmentCreateNestedOneWithoutOutreach_messagesInput
+    sequence_step?: OutreachSequenceStepCreateNestedOneWithoutOutreach_messagesInput
   }
 
   export type OutreachMessageUncheckedCreateWithoutInteractionInput = {
@@ -91291,6 +96068,8 @@ export namespace Prisma {
     email_account?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    sequence_enrollment_uuid?: string | null
+    sequence_step_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -91338,8 +96117,10 @@ export namespace Prisma {
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutMarketing_campaignsInput
     sender_profile?: SenderProfileCreateNestedOneWithoutMarketing_campaignsInput
+    sequence?: OutreachSequenceCreateNestedOneWithoutCampaignsInput
     campaign_contacts?: MarketingCampaignContactCreateNestedManyWithoutCampaignInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutCampaignInput
+    sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutCampaignInput
   }
 
   export type MarketingCampaignUncheckedCreateWithoutInteractionsInput = {
@@ -91361,6 +96142,7 @@ export namespace Prisma {
     draft_batch_id?: string | null
     sender_profile_uuid?: string | null
     email_provider_allocations?: NullableJsonNullValueInput | InputJsonValue
+    sequence_uuid?: string | null
     scheduled_at?: Date | string | null
     started_at?: Date | string | null
     completed_at?: Date | string | null
@@ -91383,6 +96165,7 @@ export namespace Prisma {
     updated_at?: Date | string
     campaign_contacts?: MarketingCampaignContactUncheckedCreateNestedManyWithoutCampaignInput
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutCampaignInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutCampaignInput
   }
 
   export type MarketingCampaignCreateOrConnectWithoutInteractionsInput = {
@@ -91439,6 +96222,7 @@ export namespace Prisma {
     form_completions?: FormCompletionUpdateManyWithoutContactNestedInput
     list_memberships?: ContactListMemberUpdateManyWithoutContactNestedInput
     enrichments?: ContactEnrichmentUpdateManyWithoutContactNestedInput
+    sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutContactNestedInput
   }
 
   export type ContactUncheckedUpdateWithoutInteractionsInput = {
@@ -91480,6 +96264,7 @@ export namespace Prisma {
     form_completions?: FormCompletionUncheckedUpdateManyWithoutContactNestedInput
     list_memberships?: ContactListMemberUncheckedUpdateManyWithoutContactNestedInput
     enrichments?: ContactEnrichmentUncheckedUpdateManyWithoutContactNestedInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutContactNestedInput
   }
 
   export type OrganisationUpsertWithoutInteractionsInput = {
@@ -91604,6 +96389,8 @@ export namespace Prisma {
     contact?: ContactUpdateOneRequiredWithoutOutreach_messagesNestedInput
     campaign?: MarketingCampaignUpdateOneWithoutOutreach_messagesNestedInput
     sent_by?: UserUpdateOneWithoutOutreach_messages_sentNestedInput
+    sequence_enrollment?: SequenceEnrollmentUpdateOneWithoutOutreach_messagesNestedInput
+    sequence_step?: OutreachSequenceStepUpdateOneWithoutOutreach_messagesNestedInput
   }
 
   export type OutreachMessageUncheckedUpdateWithoutInteractionInput = {
@@ -91632,6 +96419,8 @@ export namespace Prisma {
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    sequence_step_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -91685,8 +96474,10 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutMarketing_campaignsNestedInput
     sender_profile?: SenderProfileUpdateOneWithoutMarketing_campaignsNestedInput
+    sequence?: OutreachSequenceUpdateOneWithoutCampaignsNestedInput
     campaign_contacts?: MarketingCampaignContactUpdateManyWithoutCampaignNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutCampaignNestedInput
+    sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutCampaignNestedInput
   }
 
   export type MarketingCampaignUncheckedUpdateWithoutInteractionsInput = {
@@ -91708,6 +96499,7 @@ export namespace Prisma {
     draft_batch_id?: NullableStringFieldUpdateOperationsInput | string | null
     sender_profile_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     email_provider_allocations?: NullableJsonNullValueInput | InputJsonValue
+    sequence_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     scheduled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     started_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -91730,6 +96522,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     campaign_contacts?: MarketingCampaignContactUncheckedUpdateManyWithoutCampaignNestedInput
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutCampaignNestedInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutCampaignNestedInput
   }
 
   export type OrganisationCreateWithoutOutreach_messagesInput = {
@@ -91848,6 +96641,7 @@ export namespace Prisma {
     form_completions?: FormCompletionCreateNestedManyWithoutContactInput
     list_memberships?: ContactListMemberCreateNestedManyWithoutContactInput
     enrichments?: ContactEnrichmentCreateNestedManyWithoutContactInput
+    sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutContactInput
   }
 
   export type ContactUncheckedCreateWithoutOutreach_messagesInput = {
@@ -91889,6 +96683,7 @@ export namespace Prisma {
     form_completions?: FormCompletionUncheckedCreateNestedManyWithoutContactInput
     list_memberships?: ContactListMemberUncheckedCreateNestedManyWithoutContactInput
     enrichments?: ContactEnrichmentUncheckedCreateNestedManyWithoutContactInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutContactInput
   }
 
   export type ContactCreateOrConnectWithoutOutreach_messagesInput = {
@@ -91934,8 +96729,10 @@ export namespace Prisma {
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutMarketing_campaignsInput
     sender_profile?: SenderProfileCreateNestedOneWithoutMarketing_campaignsInput
+    sequence?: OutreachSequenceCreateNestedOneWithoutCampaignsInput
     campaign_contacts?: MarketingCampaignContactCreateNestedManyWithoutCampaignInput
     interactions?: InteractionCreateNestedManyWithoutCampaignInput
+    sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutCampaignInput
   }
 
   export type MarketingCampaignUncheckedCreateWithoutOutreach_messagesInput = {
@@ -91957,6 +96754,7 @@ export namespace Prisma {
     draft_batch_id?: string | null
     sender_profile_uuid?: string | null
     email_provider_allocations?: NullableJsonNullValueInput | InputJsonValue
+    sequence_uuid?: string | null
     scheduled_at?: Date | string | null
     started_at?: Date | string | null
     completed_at?: Date | string | null
@@ -91979,6 +96777,7 @@ export namespace Prisma {
     updated_at?: Date | string
     campaign_contacts?: MarketingCampaignContactUncheckedCreateNestedManyWithoutCampaignInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutCampaignInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutCampaignInput
   }
 
   export type MarketingCampaignCreateOrConnectWithoutOutreach_messagesInput = {
@@ -92060,6 +96859,78 @@ export namespace Prisma {
   export type InteractionCreateOrConnectWithoutOutreach_messageInput = {
     where: InteractionWhereUniqueInput
     create: XOR<InteractionCreateWithoutOutreach_messageInput, InteractionUncheckedCreateWithoutOutreach_messageInput>
+  }
+
+  export type SequenceEnrollmentCreateWithoutOutreach_messagesInput = {
+    uuid?: string
+    status?: $Enums.SequenceEnrollmentStatus
+    enrolled_at?: Date | string
+    cancelled_at?: Date | string | null
+    completed_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    sequence: OutreachSequenceCreateNestedOneWithoutEnrollmentsInput
+    contact: ContactCreateNestedOneWithoutSequence_enrollmentsInput
+    campaign?: MarketingCampaignCreateNestedOneWithoutSequence_enrollmentsInput
+  }
+
+  export type SequenceEnrollmentUncheckedCreateWithoutOutreach_messagesInput = {
+    id?: number
+    uuid?: string
+    sequence_uuid: string
+    contact_uuid: string
+    campaign_uuid?: string | null
+    status?: $Enums.SequenceEnrollmentStatus
+    enrolled_at?: Date | string
+    cancelled_at?: Date | string | null
+    completed_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type SequenceEnrollmentCreateOrConnectWithoutOutreach_messagesInput = {
+    where: SequenceEnrollmentWhereUniqueInput
+    create: XOR<SequenceEnrollmentCreateWithoutOutreach_messagesInput, SequenceEnrollmentUncheckedCreateWithoutOutreach_messagesInput>
+  }
+
+  export type OutreachSequenceStepCreateWithoutOutreach_messagesInput = {
+    uuid?: string
+    order_index: number
+    enabled?: boolean
+    channel: $Enums.Channel
+    email_subject?: string | null
+    email_content?: string | null
+    sms_content?: string | null
+    delay_value: number
+    delay_unit?: $Enums.SequenceDelayUnit
+    delay_reference?: $Enums.SequenceDelayReference
+    created_at?: Date | string
+    updated_at?: Date | string
+    sequence: OutreachSequenceCreateNestedOneWithoutStepsInput
+    message_template?: MessageTemplateCreateNestedOneWithoutSequence_stepsInput
+  }
+
+  export type OutreachSequenceStepUncheckedCreateWithoutOutreach_messagesInput = {
+    id?: number
+    uuid?: string
+    sequence_uuid: string
+    order_index: number
+    enabled?: boolean
+    channel: $Enums.Channel
+    email_subject?: string | null
+    email_content?: string | null
+    sms_content?: string | null
+    message_template_uuid?: string | null
+    delay_value: number
+    delay_unit?: $Enums.SequenceDelayUnit
+    delay_reference?: $Enums.SequenceDelayReference
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type OutreachSequenceStepCreateOrConnectWithoutOutreach_messagesInput = {
+    where: OutreachSequenceStepWhereUniqueInput
+    create: XOR<OutreachSequenceStepCreateWithoutOutreach_messagesInput, OutreachSequenceStepUncheckedCreateWithoutOutreach_messagesInput>
   }
 
   export type OrganisationUpsertWithoutOutreach_messagesInput = {
@@ -92195,6 +97066,7 @@ export namespace Prisma {
     form_completions?: FormCompletionUpdateManyWithoutContactNestedInput
     list_memberships?: ContactListMemberUpdateManyWithoutContactNestedInput
     enrichments?: ContactEnrichmentUpdateManyWithoutContactNestedInput
+    sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutContactNestedInput
   }
 
   export type ContactUncheckedUpdateWithoutOutreach_messagesInput = {
@@ -92236,6 +97108,7 @@ export namespace Prisma {
     form_completions?: FormCompletionUncheckedUpdateManyWithoutContactNestedInput
     list_memberships?: ContactListMemberUncheckedUpdateManyWithoutContactNestedInput
     enrichments?: ContactEnrichmentUncheckedUpdateManyWithoutContactNestedInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutContactNestedInput
   }
 
   export type MarketingCampaignUpsertWithoutOutreach_messagesInput = {
@@ -92287,8 +97160,10 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutMarketing_campaignsNestedInput
     sender_profile?: SenderProfileUpdateOneWithoutMarketing_campaignsNestedInput
+    sequence?: OutreachSequenceUpdateOneWithoutCampaignsNestedInput
     campaign_contacts?: MarketingCampaignContactUpdateManyWithoutCampaignNestedInput
     interactions?: InteractionUpdateManyWithoutCampaignNestedInput
+    sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutCampaignNestedInput
   }
 
   export type MarketingCampaignUncheckedUpdateWithoutOutreach_messagesInput = {
@@ -92310,6 +97185,7 @@ export namespace Prisma {
     draft_batch_id?: NullableStringFieldUpdateOperationsInput | string | null
     sender_profile_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     email_provider_allocations?: NullableJsonNullValueInput | InputJsonValue
+    sequence_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     scheduled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     started_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -92332,6 +97208,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     campaign_contacts?: MarketingCampaignContactUncheckedUpdateManyWithoutCampaignNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutCampaignNestedInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutCampaignNestedInput
   }
 
   export type UserUpsertWithoutOutreach_messages_sentInput = {
@@ -92422,6 +97299,90 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type SequenceEnrollmentUpsertWithoutOutreach_messagesInput = {
+    update: XOR<SequenceEnrollmentUpdateWithoutOutreach_messagesInput, SequenceEnrollmentUncheckedUpdateWithoutOutreach_messagesInput>
+    create: XOR<SequenceEnrollmentCreateWithoutOutreach_messagesInput, SequenceEnrollmentUncheckedCreateWithoutOutreach_messagesInput>
+    where?: SequenceEnrollmentWhereInput
+  }
+
+  export type SequenceEnrollmentUpdateToOneWithWhereWithoutOutreach_messagesInput = {
+    where?: SequenceEnrollmentWhereInput
+    data: XOR<SequenceEnrollmentUpdateWithoutOutreach_messagesInput, SequenceEnrollmentUncheckedUpdateWithoutOutreach_messagesInput>
+  }
+
+  export type SequenceEnrollmentUpdateWithoutOutreach_messagesInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumSequenceEnrollmentStatusFieldUpdateOperationsInput | $Enums.SequenceEnrollmentStatus
+    enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    sequence?: OutreachSequenceUpdateOneRequiredWithoutEnrollmentsNestedInput
+    contact?: ContactUpdateOneRequiredWithoutSequence_enrollmentsNestedInput
+    campaign?: MarketingCampaignUpdateOneWithoutSequence_enrollmentsNestedInput
+  }
+
+  export type SequenceEnrollmentUncheckedUpdateWithoutOutreach_messagesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    sequence_uuid?: StringFieldUpdateOperationsInput | string
+    contact_uuid?: StringFieldUpdateOperationsInput | string
+    campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSequenceEnrollmentStatusFieldUpdateOperationsInput | $Enums.SequenceEnrollmentStatus
+    enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OutreachSequenceStepUpsertWithoutOutreach_messagesInput = {
+    update: XOR<OutreachSequenceStepUpdateWithoutOutreach_messagesInput, OutreachSequenceStepUncheckedUpdateWithoutOutreach_messagesInput>
+    create: XOR<OutreachSequenceStepCreateWithoutOutreach_messagesInput, OutreachSequenceStepUncheckedCreateWithoutOutreach_messagesInput>
+    where?: OutreachSequenceStepWhereInput
+  }
+
+  export type OutreachSequenceStepUpdateToOneWithWhereWithoutOutreach_messagesInput = {
+    where?: OutreachSequenceStepWhereInput
+    data: XOR<OutreachSequenceStepUpdateWithoutOutreach_messagesInput, OutreachSequenceStepUncheckedUpdateWithoutOutreach_messagesInput>
+  }
+
+  export type OutreachSequenceStepUpdateWithoutOutreach_messagesInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    order_index?: IntFieldUpdateOperationsInput | number
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    channel?: EnumChannelFieldUpdateOperationsInput | $Enums.Channel
+    email_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    email_content?: NullableStringFieldUpdateOperationsInput | string | null
+    sms_content?: NullableStringFieldUpdateOperationsInput | string | null
+    delay_value?: IntFieldUpdateOperationsInput | number
+    delay_unit?: EnumSequenceDelayUnitFieldUpdateOperationsInput | $Enums.SequenceDelayUnit
+    delay_reference?: EnumSequenceDelayReferenceFieldUpdateOperationsInput | $Enums.SequenceDelayReference
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    sequence?: OutreachSequenceUpdateOneRequiredWithoutStepsNestedInput
+    message_template?: MessageTemplateUpdateOneWithoutSequence_stepsNestedInput
+  }
+
+  export type OutreachSequenceStepUncheckedUpdateWithoutOutreach_messagesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    sequence_uuid?: StringFieldUpdateOperationsInput | string
+    order_index?: IntFieldUpdateOperationsInput | number
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    channel?: EnumChannelFieldUpdateOperationsInput | $Enums.Channel
+    email_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    email_content?: NullableStringFieldUpdateOperationsInput | string | null
+    sms_content?: NullableStringFieldUpdateOperationsInput | string | null
+    message_template_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    delay_value?: IntFieldUpdateOperationsInput | number
+    delay_unit?: EnumSequenceDelayUnitFieldUpdateOperationsInput | $Enums.SequenceDelayUnit
+    delay_reference?: EnumSequenceDelayReferenceFieldUpdateOperationsInput | $Enums.SequenceDelayReference
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type OrganisationCreateWithoutOutreach_sequencesInput = {
     uuid?: string
     name: string
@@ -92498,6 +97459,187 @@ export namespace Prisma {
   export type OrganisationCreateOrConnectWithoutOutreach_sequencesInput = {
     where: OrganisationWhereUniqueInput
     create: XOR<OrganisationCreateWithoutOutreach_sequencesInput, OrganisationUncheckedCreateWithoutOutreach_sequencesInput>
+  }
+
+  export type OutreachSequenceStepCreateWithoutSequenceInput = {
+    uuid?: string
+    order_index: number
+    enabled?: boolean
+    channel: $Enums.Channel
+    email_subject?: string | null
+    email_content?: string | null
+    sms_content?: string | null
+    delay_value: number
+    delay_unit?: $Enums.SequenceDelayUnit
+    delay_reference?: $Enums.SequenceDelayReference
+    created_at?: Date | string
+    updated_at?: Date | string
+    message_template?: MessageTemplateCreateNestedOneWithoutSequence_stepsInput
+    outreach_messages?: OutreachMessageCreateNestedManyWithoutSequence_stepInput
+  }
+
+  export type OutreachSequenceStepUncheckedCreateWithoutSequenceInput = {
+    id?: number
+    uuid?: string
+    order_index: number
+    enabled?: boolean
+    channel: $Enums.Channel
+    email_subject?: string | null
+    email_content?: string | null
+    sms_content?: string | null
+    message_template_uuid?: string | null
+    delay_value: number
+    delay_unit?: $Enums.SequenceDelayUnit
+    delay_reference?: $Enums.SequenceDelayReference
+    created_at?: Date | string
+    updated_at?: Date | string
+    outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutSequence_stepInput
+  }
+
+  export type OutreachSequenceStepCreateOrConnectWithoutSequenceInput = {
+    where: OutreachSequenceStepWhereUniqueInput
+    create: XOR<OutreachSequenceStepCreateWithoutSequenceInput, OutreachSequenceStepUncheckedCreateWithoutSequenceInput>
+  }
+
+  export type OutreachSequenceStepCreateManySequenceInputEnvelope = {
+    data: OutreachSequenceStepCreateManySequenceInput | OutreachSequenceStepCreateManySequenceInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SequenceEnrollmentCreateWithoutSequenceInput = {
+    uuid?: string
+    status?: $Enums.SequenceEnrollmentStatus
+    enrolled_at?: Date | string
+    cancelled_at?: Date | string | null
+    completed_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    contact: ContactCreateNestedOneWithoutSequence_enrollmentsInput
+    campaign?: MarketingCampaignCreateNestedOneWithoutSequence_enrollmentsInput
+    outreach_messages?: OutreachMessageCreateNestedManyWithoutSequence_enrollmentInput
+  }
+
+  export type SequenceEnrollmentUncheckedCreateWithoutSequenceInput = {
+    id?: number
+    uuid?: string
+    contact_uuid: string
+    campaign_uuid?: string | null
+    status?: $Enums.SequenceEnrollmentStatus
+    enrolled_at?: Date | string
+    cancelled_at?: Date | string | null
+    completed_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutSequence_enrollmentInput
+  }
+
+  export type SequenceEnrollmentCreateOrConnectWithoutSequenceInput = {
+    where: SequenceEnrollmentWhereUniqueInput
+    create: XOR<SequenceEnrollmentCreateWithoutSequenceInput, SequenceEnrollmentUncheckedCreateWithoutSequenceInput>
+  }
+
+  export type SequenceEnrollmentCreateManySequenceInputEnvelope = {
+    data: SequenceEnrollmentCreateManySequenceInput | SequenceEnrollmentCreateManySequenceInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type MarketingCampaignCreateWithoutSequenceInput = {
+    uuid?: string
+    name: string
+    description?: string | null
+    status?: $Enums.CampaignStatus
+    campaign_type?: $Enums.CampaignType
+    channels?: MarketingCampaignCreatechannelsInput | $Enums.Channel[]
+    filters_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    email_subject?: string | null
+    email_content?: string | null
+    sms_content?: string | null
+    linkedin_content?: string | null
+    ai_prompt?: string | null
+    use_openai_batch?: boolean
+    draft_batch_id?: string | null
+    email_provider_allocations?: NullableJsonNullValueInput | InputJsonValue
+    scheduled_at?: Date | string | null
+    started_at?: Date | string | null
+    completed_at?: Date | string | null
+    cancelled_at?: Date | string | null
+    selected_contact_count?: number
+    total_messages?: number
+    queued_count?: number
+    sent_count?: number
+    failed_count?: number
+    skipped_count?: number
+    delivered_count?: number
+    opened_count?: number
+    clicked_count?: number
+    replied_count?: number
+    website_visit_count?: number
+    booking_visit_count?: number
+    bounced_count?: number
+    unsubscribed_count?: number
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutMarketing_campaignsInput
+    sender_profile?: SenderProfileCreateNestedOneWithoutMarketing_campaignsInput
+    campaign_contacts?: MarketingCampaignContactCreateNestedManyWithoutCampaignInput
+    outreach_messages?: OutreachMessageCreateNestedManyWithoutCampaignInput
+    interactions?: InteractionCreateNestedManyWithoutCampaignInput
+    sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutCampaignInput
+  }
+
+  export type MarketingCampaignUncheckedCreateWithoutSequenceInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    name: string
+    description?: string | null
+    status?: $Enums.CampaignStatus
+    campaign_type?: $Enums.CampaignType
+    channels?: MarketingCampaignCreatechannelsInput | $Enums.Channel[]
+    filters_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    email_subject?: string | null
+    email_content?: string | null
+    sms_content?: string | null
+    linkedin_content?: string | null
+    ai_prompt?: string | null
+    use_openai_batch?: boolean
+    draft_batch_id?: string | null
+    sender_profile_uuid?: string | null
+    email_provider_allocations?: NullableJsonNullValueInput | InputJsonValue
+    scheduled_at?: Date | string | null
+    started_at?: Date | string | null
+    completed_at?: Date | string | null
+    cancelled_at?: Date | string | null
+    selected_contact_count?: number
+    total_messages?: number
+    queued_count?: number
+    sent_count?: number
+    failed_count?: number
+    skipped_count?: number
+    delivered_count?: number
+    opened_count?: number
+    clicked_count?: number
+    replied_count?: number
+    website_visit_count?: number
+    booking_visit_count?: number
+    bounced_count?: number
+    unsubscribed_count?: number
+    created_at?: Date | string
+    updated_at?: Date | string
+    campaign_contacts?: MarketingCampaignContactUncheckedCreateNestedManyWithoutCampaignInput
+    outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutCampaignInput
+    interactions?: InteractionUncheckedCreateNestedManyWithoutCampaignInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutCampaignInput
+  }
+
+  export type MarketingCampaignCreateOrConnectWithoutSequenceInput = {
+    where: MarketingCampaignWhereUniqueInput
+    create: XOR<MarketingCampaignCreateWithoutSequenceInput, MarketingCampaignUncheckedCreateWithoutSequenceInput>
+  }
+
+  export type MarketingCampaignCreateManySequenceInputEnvelope = {
+    data: MarketingCampaignCreateManySequenceInput | MarketingCampaignCreateManySequenceInput[]
+    skipDuplicates?: boolean
   }
 
   export type OrganisationUpsertWithoutOutreach_sequencesInput = {
@@ -92582,6 +97724,835 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
+  }
+
+  export type OutreachSequenceStepUpsertWithWhereUniqueWithoutSequenceInput = {
+    where: OutreachSequenceStepWhereUniqueInput
+    update: XOR<OutreachSequenceStepUpdateWithoutSequenceInput, OutreachSequenceStepUncheckedUpdateWithoutSequenceInput>
+    create: XOR<OutreachSequenceStepCreateWithoutSequenceInput, OutreachSequenceStepUncheckedCreateWithoutSequenceInput>
+  }
+
+  export type OutreachSequenceStepUpdateWithWhereUniqueWithoutSequenceInput = {
+    where: OutreachSequenceStepWhereUniqueInput
+    data: XOR<OutreachSequenceStepUpdateWithoutSequenceInput, OutreachSequenceStepUncheckedUpdateWithoutSequenceInput>
+  }
+
+  export type OutreachSequenceStepUpdateManyWithWhereWithoutSequenceInput = {
+    where: OutreachSequenceStepScalarWhereInput
+    data: XOR<OutreachSequenceStepUpdateManyMutationInput, OutreachSequenceStepUncheckedUpdateManyWithoutSequenceInput>
+  }
+
+  export type OutreachSequenceStepScalarWhereInput = {
+    AND?: OutreachSequenceStepScalarWhereInput | OutreachSequenceStepScalarWhereInput[]
+    OR?: OutreachSequenceStepScalarWhereInput[]
+    NOT?: OutreachSequenceStepScalarWhereInput | OutreachSequenceStepScalarWhereInput[]
+    id?: IntFilter<"OutreachSequenceStep"> | number
+    uuid?: StringFilter<"OutreachSequenceStep"> | string
+    sequence_uuid?: StringFilter<"OutreachSequenceStep"> | string
+    order_index?: IntFilter<"OutreachSequenceStep"> | number
+    enabled?: BoolFilter<"OutreachSequenceStep"> | boolean
+    channel?: EnumChannelFilter<"OutreachSequenceStep"> | $Enums.Channel
+    email_subject?: StringNullableFilter<"OutreachSequenceStep"> | string | null
+    email_content?: StringNullableFilter<"OutreachSequenceStep"> | string | null
+    sms_content?: StringNullableFilter<"OutreachSequenceStep"> | string | null
+    message_template_uuid?: StringNullableFilter<"OutreachSequenceStep"> | string | null
+    delay_value?: IntFilter<"OutreachSequenceStep"> | number
+    delay_unit?: EnumSequenceDelayUnitFilter<"OutreachSequenceStep"> | $Enums.SequenceDelayUnit
+    delay_reference?: EnumSequenceDelayReferenceFilter<"OutreachSequenceStep"> | $Enums.SequenceDelayReference
+    created_at?: DateTimeFilter<"OutreachSequenceStep"> | Date | string
+    updated_at?: DateTimeFilter<"OutreachSequenceStep"> | Date | string
+  }
+
+  export type SequenceEnrollmentUpsertWithWhereUniqueWithoutSequenceInput = {
+    where: SequenceEnrollmentWhereUniqueInput
+    update: XOR<SequenceEnrollmentUpdateWithoutSequenceInput, SequenceEnrollmentUncheckedUpdateWithoutSequenceInput>
+    create: XOR<SequenceEnrollmentCreateWithoutSequenceInput, SequenceEnrollmentUncheckedCreateWithoutSequenceInput>
+  }
+
+  export type SequenceEnrollmentUpdateWithWhereUniqueWithoutSequenceInput = {
+    where: SequenceEnrollmentWhereUniqueInput
+    data: XOR<SequenceEnrollmentUpdateWithoutSequenceInput, SequenceEnrollmentUncheckedUpdateWithoutSequenceInput>
+  }
+
+  export type SequenceEnrollmentUpdateManyWithWhereWithoutSequenceInput = {
+    where: SequenceEnrollmentScalarWhereInput
+    data: XOR<SequenceEnrollmentUpdateManyMutationInput, SequenceEnrollmentUncheckedUpdateManyWithoutSequenceInput>
+  }
+
+  export type MarketingCampaignUpsertWithWhereUniqueWithoutSequenceInput = {
+    where: MarketingCampaignWhereUniqueInput
+    update: XOR<MarketingCampaignUpdateWithoutSequenceInput, MarketingCampaignUncheckedUpdateWithoutSequenceInput>
+    create: XOR<MarketingCampaignCreateWithoutSequenceInput, MarketingCampaignUncheckedCreateWithoutSequenceInput>
+  }
+
+  export type MarketingCampaignUpdateWithWhereUniqueWithoutSequenceInput = {
+    where: MarketingCampaignWhereUniqueInput
+    data: XOR<MarketingCampaignUpdateWithoutSequenceInput, MarketingCampaignUncheckedUpdateWithoutSequenceInput>
+  }
+
+  export type MarketingCampaignUpdateManyWithWhereWithoutSequenceInput = {
+    where: MarketingCampaignScalarWhereInput
+    data: XOR<MarketingCampaignUpdateManyMutationInput, MarketingCampaignUncheckedUpdateManyWithoutSequenceInput>
+  }
+
+  export type OutreachSequenceCreateWithoutStepsInput = {
+    uuid?: string
+    name: string
+    description?: string | null
+    status?: $Enums.SequenceStatus
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutOutreach_sequencesInput
+    enrollments?: SequenceEnrollmentCreateNestedManyWithoutSequenceInput
+    campaigns?: MarketingCampaignCreateNestedManyWithoutSequenceInput
+  }
+
+  export type OutreachSequenceUncheckedCreateWithoutStepsInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    name: string
+    description?: string | null
+    status?: $Enums.SequenceStatus
+    created_at?: Date | string
+    updated_at?: Date | string
+    enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutSequenceInput
+    campaigns?: MarketingCampaignUncheckedCreateNestedManyWithoutSequenceInput
+  }
+
+  export type OutreachSequenceCreateOrConnectWithoutStepsInput = {
+    where: OutreachSequenceWhereUniqueInput
+    create: XOR<OutreachSequenceCreateWithoutStepsInput, OutreachSequenceUncheckedCreateWithoutStepsInput>
+  }
+
+  export type MessageTemplateCreateWithoutSequence_stepsInput = {
+    uuid?: string
+    name: string
+    channels?: MessageTemplateCreatechannelsInput | $Enums.Channel[]
+    email_subject?: string | null
+    email_content?: string | null
+    sms_content?: string | null
+    source_campaign_uuid?: string | null
+    source_message_uuid?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutMessage_templatesInput
+  }
+
+  export type MessageTemplateUncheckedCreateWithoutSequence_stepsInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    name: string
+    channels?: MessageTemplateCreatechannelsInput | $Enums.Channel[]
+    email_subject?: string | null
+    email_content?: string | null
+    sms_content?: string | null
+    source_campaign_uuid?: string | null
+    source_message_uuid?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type MessageTemplateCreateOrConnectWithoutSequence_stepsInput = {
+    where: MessageTemplateWhereUniqueInput
+    create: XOR<MessageTemplateCreateWithoutSequence_stepsInput, MessageTemplateUncheckedCreateWithoutSequence_stepsInput>
+  }
+
+  export type OutreachMessageCreateWithoutSequence_stepInput = {
+    uuid?: string
+    channel: $Enums.Channel
+    direction?: $Enums.MsgDirection
+    subject?: string | null
+    content: string
+    status?: $Enums.MsgStatus
+    provider_message_id?: string | null
+    idempotency_key?: string | null
+    scheduled_at?: Date | string | null
+    sent_at?: Date | string | null
+    delivered_at?: Date | string | null
+    opened_at?: Date | string | null
+    clicked_at?: Date | string | null
+    replied_at?: Date | string | null
+    bounced_at?: Date | string | null
+    failed_at?: Date | string | null
+    email_provider?: $Enums.ExternalIntegrationProvider | null
+    email_account?: string | null
+    sms_provider?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutOutreach_messagesInput
+    contact: ContactCreateNestedOneWithoutOutreach_messagesInput
+    campaign?: MarketingCampaignCreateNestedOneWithoutOutreach_messagesInput
+    sent_by?: UserCreateNestedOneWithoutOutreach_messages_sentInput
+    interaction?: InteractionCreateNestedOneWithoutOutreach_messageInput
+    sequence_enrollment?: SequenceEnrollmentCreateNestedOneWithoutOutreach_messagesInput
+  }
+
+  export type OutreachMessageUncheckedCreateWithoutSequence_stepInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    contact_uuid: string
+    campaign_uuid?: string | null
+    sent_by_user_uuid?: string | null
+    channel: $Enums.Channel
+    direction?: $Enums.MsgDirection
+    subject?: string | null
+    content: string
+    status?: $Enums.MsgStatus
+    provider_message_id?: string | null
+    idempotency_key?: string | null
+    scheduled_at?: Date | string | null
+    sent_at?: Date | string | null
+    delivered_at?: Date | string | null
+    opened_at?: Date | string | null
+    clicked_at?: Date | string | null
+    replied_at?: Date | string | null
+    bounced_at?: Date | string | null
+    failed_at?: Date | string | null
+    email_provider?: $Enums.ExternalIntegrationProvider | null
+    email_account?: string | null
+    sms_provider?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    sequence_enrollment_uuid?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    interaction?: InteractionUncheckedCreateNestedOneWithoutOutreach_messageInput
+  }
+
+  export type OutreachMessageCreateOrConnectWithoutSequence_stepInput = {
+    where: OutreachMessageWhereUniqueInput
+    create: XOR<OutreachMessageCreateWithoutSequence_stepInput, OutreachMessageUncheckedCreateWithoutSequence_stepInput>
+  }
+
+  export type OutreachMessageCreateManySequence_stepInputEnvelope = {
+    data: OutreachMessageCreateManySequence_stepInput | OutreachMessageCreateManySequence_stepInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type OutreachSequenceUpsertWithoutStepsInput = {
+    update: XOR<OutreachSequenceUpdateWithoutStepsInput, OutreachSequenceUncheckedUpdateWithoutStepsInput>
+    create: XOR<OutreachSequenceCreateWithoutStepsInput, OutreachSequenceUncheckedCreateWithoutStepsInput>
+    where?: OutreachSequenceWhereInput
+  }
+
+  export type OutreachSequenceUpdateToOneWithWhereWithoutStepsInput = {
+    where?: OutreachSequenceWhereInput
+    data: XOR<OutreachSequenceUpdateWithoutStepsInput, OutreachSequenceUncheckedUpdateWithoutStepsInput>
+  }
+
+  export type OutreachSequenceUpdateWithoutStepsInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSequenceStatusFieldUpdateOperationsInput | $Enums.SequenceStatus
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutOutreach_sequencesNestedInput
+    enrollments?: SequenceEnrollmentUpdateManyWithoutSequenceNestedInput
+    campaigns?: MarketingCampaignUpdateManyWithoutSequenceNestedInput
+  }
+
+  export type OutreachSequenceUncheckedUpdateWithoutStepsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSequenceStatusFieldUpdateOperationsInput | $Enums.SequenceStatus
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutSequenceNestedInput
+    campaigns?: MarketingCampaignUncheckedUpdateManyWithoutSequenceNestedInput
+  }
+
+  export type MessageTemplateUpsertWithoutSequence_stepsInput = {
+    update: XOR<MessageTemplateUpdateWithoutSequence_stepsInput, MessageTemplateUncheckedUpdateWithoutSequence_stepsInput>
+    create: XOR<MessageTemplateCreateWithoutSequence_stepsInput, MessageTemplateUncheckedCreateWithoutSequence_stepsInput>
+    where?: MessageTemplateWhereInput
+  }
+
+  export type MessageTemplateUpdateToOneWithWhereWithoutSequence_stepsInput = {
+    where?: MessageTemplateWhereInput
+    data: XOR<MessageTemplateUpdateWithoutSequence_stepsInput, MessageTemplateUncheckedUpdateWithoutSequence_stepsInput>
+  }
+
+  export type MessageTemplateUpdateWithoutSequence_stepsInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    channels?: MessageTemplateUpdatechannelsInput | $Enums.Channel[]
+    email_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    email_content?: NullableStringFieldUpdateOperationsInput | string | null
+    sms_content?: NullableStringFieldUpdateOperationsInput | string | null
+    source_campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    source_message_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutMessage_templatesNestedInput
+  }
+
+  export type MessageTemplateUncheckedUpdateWithoutSequence_stepsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    channels?: MessageTemplateUpdatechannelsInput | $Enums.Channel[]
+    email_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    email_content?: NullableStringFieldUpdateOperationsInput | string | null
+    sms_content?: NullableStringFieldUpdateOperationsInput | string | null
+    source_campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    source_message_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OutreachMessageUpsertWithWhereUniqueWithoutSequence_stepInput = {
+    where: OutreachMessageWhereUniqueInput
+    update: XOR<OutreachMessageUpdateWithoutSequence_stepInput, OutreachMessageUncheckedUpdateWithoutSequence_stepInput>
+    create: XOR<OutreachMessageCreateWithoutSequence_stepInput, OutreachMessageUncheckedCreateWithoutSequence_stepInput>
+  }
+
+  export type OutreachMessageUpdateWithWhereUniqueWithoutSequence_stepInput = {
+    where: OutreachMessageWhereUniqueInput
+    data: XOR<OutreachMessageUpdateWithoutSequence_stepInput, OutreachMessageUncheckedUpdateWithoutSequence_stepInput>
+  }
+
+  export type OutreachMessageUpdateManyWithWhereWithoutSequence_stepInput = {
+    where: OutreachMessageScalarWhereInput
+    data: XOR<OutreachMessageUpdateManyMutationInput, OutreachMessageUncheckedUpdateManyWithoutSequence_stepInput>
+  }
+
+  export type OutreachSequenceCreateWithoutEnrollmentsInput = {
+    uuid?: string
+    name: string
+    description?: string | null
+    status?: $Enums.SequenceStatus
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutOutreach_sequencesInput
+    steps?: OutreachSequenceStepCreateNestedManyWithoutSequenceInput
+    campaigns?: MarketingCampaignCreateNestedManyWithoutSequenceInput
+  }
+
+  export type OutreachSequenceUncheckedCreateWithoutEnrollmentsInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    name: string
+    description?: string | null
+    status?: $Enums.SequenceStatus
+    created_at?: Date | string
+    updated_at?: Date | string
+    steps?: OutreachSequenceStepUncheckedCreateNestedManyWithoutSequenceInput
+    campaigns?: MarketingCampaignUncheckedCreateNestedManyWithoutSequenceInput
+  }
+
+  export type OutreachSequenceCreateOrConnectWithoutEnrollmentsInput = {
+    where: OutreachSequenceWhereUniqueInput
+    create: XOR<OutreachSequenceCreateWithoutEnrollmentsInput, OutreachSequenceUncheckedCreateWithoutEnrollmentsInput>
+  }
+
+  export type ContactCreateWithoutSequence_enrollmentsInput = {
+    uuid?: string
+    status?: $Enums.LeadStatus
+    notes?: string | null
+    name?: string | null
+    email?: string | null
+    phone?: string | null
+    company?: string | null
+    website?: string | null
+    google_maps_url?: string | null
+    linkedin_url?: string | null
+    title?: string | null
+    location?: string | null
+    industry?: string | null
+    description?: string | null
+    enrichment_summary?: string | null
+    enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: $Enums.EmailValidationStatus
+    email_validation_reason?: string | null
+    email_validated_at?: Date | string | null
+    unsubscribed_at?: Date | string | null
+    unsubscribe_token?: string | null
+    last_interaction_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutContactsInput
+    lead: LeadCreateNestedOneWithoutContactsInput
+    filter?: FilterCreateNestedOneWithoutContactsInput
+    contact_filters?: ContactFilterCreateNestedManyWithoutContactInput
+    tags?: ContactTagCreateNestedManyWithoutContactInput
+    contact_infos?: ContactInfoCreateNestedManyWithoutContactInput
+    interactions?: InteractionCreateNestedManyWithoutContactInput
+    outreach_messages?: OutreachMessageCreateNestedManyWithoutContactInput
+    campaign_contacts?: MarketingCampaignContactCreateNestedManyWithoutContactInput
+    contact_scores?: ContactScoreCreateNestedManyWithoutContactInput
+    reminders?: ReminderCreateNestedManyWithoutContactInput
+    form_completions?: FormCompletionCreateNestedManyWithoutContactInput
+    list_memberships?: ContactListMemberCreateNestedManyWithoutContactInput
+    enrichments?: ContactEnrichmentCreateNestedManyWithoutContactInput
+  }
+
+  export type ContactUncheckedCreateWithoutSequence_enrollmentsInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    lead_uuid: string
+    filter_uuid?: string | null
+    status?: $Enums.LeadStatus
+    notes?: string | null
+    name?: string | null
+    email?: string | null
+    phone?: string | null
+    company?: string | null
+    website?: string | null
+    google_maps_url?: string | null
+    linkedin_url?: string | null
+    title?: string | null
+    location?: string | null
+    industry?: string | null
+    description?: string | null
+    enrichment_summary?: string | null
+    enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: $Enums.EmailValidationStatus
+    email_validation_reason?: string | null
+    email_validated_at?: Date | string | null
+    unsubscribed_at?: Date | string | null
+    unsubscribe_token?: string | null
+    last_interaction_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    contact_filters?: ContactFilterUncheckedCreateNestedManyWithoutContactInput
+    tags?: ContactTagUncheckedCreateNestedManyWithoutContactInput
+    contact_infos?: ContactInfoUncheckedCreateNestedManyWithoutContactInput
+    interactions?: InteractionUncheckedCreateNestedManyWithoutContactInput
+    outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutContactInput
+    campaign_contacts?: MarketingCampaignContactUncheckedCreateNestedManyWithoutContactInput
+    contact_scores?: ContactScoreUncheckedCreateNestedManyWithoutContactInput
+    reminders?: ReminderUncheckedCreateNestedManyWithoutContactInput
+    form_completions?: FormCompletionUncheckedCreateNestedManyWithoutContactInput
+    list_memberships?: ContactListMemberUncheckedCreateNestedManyWithoutContactInput
+    enrichments?: ContactEnrichmentUncheckedCreateNestedManyWithoutContactInput
+  }
+
+  export type ContactCreateOrConnectWithoutSequence_enrollmentsInput = {
+    where: ContactWhereUniqueInput
+    create: XOR<ContactCreateWithoutSequence_enrollmentsInput, ContactUncheckedCreateWithoutSequence_enrollmentsInput>
+  }
+
+  export type MarketingCampaignCreateWithoutSequence_enrollmentsInput = {
+    uuid?: string
+    name: string
+    description?: string | null
+    status?: $Enums.CampaignStatus
+    campaign_type?: $Enums.CampaignType
+    channels?: MarketingCampaignCreatechannelsInput | $Enums.Channel[]
+    filters_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    email_subject?: string | null
+    email_content?: string | null
+    sms_content?: string | null
+    linkedin_content?: string | null
+    ai_prompt?: string | null
+    use_openai_batch?: boolean
+    draft_batch_id?: string | null
+    email_provider_allocations?: NullableJsonNullValueInput | InputJsonValue
+    scheduled_at?: Date | string | null
+    started_at?: Date | string | null
+    completed_at?: Date | string | null
+    cancelled_at?: Date | string | null
+    selected_contact_count?: number
+    total_messages?: number
+    queued_count?: number
+    sent_count?: number
+    failed_count?: number
+    skipped_count?: number
+    delivered_count?: number
+    opened_count?: number
+    clicked_count?: number
+    replied_count?: number
+    website_visit_count?: number
+    booking_visit_count?: number
+    bounced_count?: number
+    unsubscribed_count?: number
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutMarketing_campaignsInput
+    sender_profile?: SenderProfileCreateNestedOneWithoutMarketing_campaignsInput
+    sequence?: OutreachSequenceCreateNestedOneWithoutCampaignsInput
+    campaign_contacts?: MarketingCampaignContactCreateNestedManyWithoutCampaignInput
+    outreach_messages?: OutreachMessageCreateNestedManyWithoutCampaignInput
+    interactions?: InteractionCreateNestedManyWithoutCampaignInput
+  }
+
+  export type MarketingCampaignUncheckedCreateWithoutSequence_enrollmentsInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    name: string
+    description?: string | null
+    status?: $Enums.CampaignStatus
+    campaign_type?: $Enums.CampaignType
+    channels?: MarketingCampaignCreatechannelsInput | $Enums.Channel[]
+    filters_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    email_subject?: string | null
+    email_content?: string | null
+    sms_content?: string | null
+    linkedin_content?: string | null
+    ai_prompt?: string | null
+    use_openai_batch?: boolean
+    draft_batch_id?: string | null
+    sender_profile_uuid?: string | null
+    email_provider_allocations?: NullableJsonNullValueInput | InputJsonValue
+    sequence_uuid?: string | null
+    scheduled_at?: Date | string | null
+    started_at?: Date | string | null
+    completed_at?: Date | string | null
+    cancelled_at?: Date | string | null
+    selected_contact_count?: number
+    total_messages?: number
+    queued_count?: number
+    sent_count?: number
+    failed_count?: number
+    skipped_count?: number
+    delivered_count?: number
+    opened_count?: number
+    clicked_count?: number
+    replied_count?: number
+    website_visit_count?: number
+    booking_visit_count?: number
+    bounced_count?: number
+    unsubscribed_count?: number
+    created_at?: Date | string
+    updated_at?: Date | string
+    campaign_contacts?: MarketingCampaignContactUncheckedCreateNestedManyWithoutCampaignInput
+    outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutCampaignInput
+    interactions?: InteractionUncheckedCreateNestedManyWithoutCampaignInput
+  }
+
+  export type MarketingCampaignCreateOrConnectWithoutSequence_enrollmentsInput = {
+    where: MarketingCampaignWhereUniqueInput
+    create: XOR<MarketingCampaignCreateWithoutSequence_enrollmentsInput, MarketingCampaignUncheckedCreateWithoutSequence_enrollmentsInput>
+  }
+
+  export type OutreachMessageCreateWithoutSequence_enrollmentInput = {
+    uuid?: string
+    channel: $Enums.Channel
+    direction?: $Enums.MsgDirection
+    subject?: string | null
+    content: string
+    status?: $Enums.MsgStatus
+    provider_message_id?: string | null
+    idempotency_key?: string | null
+    scheduled_at?: Date | string | null
+    sent_at?: Date | string | null
+    delivered_at?: Date | string | null
+    opened_at?: Date | string | null
+    clicked_at?: Date | string | null
+    replied_at?: Date | string | null
+    bounced_at?: Date | string | null
+    failed_at?: Date | string | null
+    email_provider?: $Enums.ExternalIntegrationProvider | null
+    email_account?: string | null
+    sms_provider?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutOutreach_messagesInput
+    contact: ContactCreateNestedOneWithoutOutreach_messagesInput
+    campaign?: MarketingCampaignCreateNestedOneWithoutOutreach_messagesInput
+    sent_by?: UserCreateNestedOneWithoutOutreach_messages_sentInput
+    interaction?: InteractionCreateNestedOneWithoutOutreach_messageInput
+    sequence_step?: OutreachSequenceStepCreateNestedOneWithoutOutreach_messagesInput
+  }
+
+  export type OutreachMessageUncheckedCreateWithoutSequence_enrollmentInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    contact_uuid: string
+    campaign_uuid?: string | null
+    sent_by_user_uuid?: string | null
+    channel: $Enums.Channel
+    direction?: $Enums.MsgDirection
+    subject?: string | null
+    content: string
+    status?: $Enums.MsgStatus
+    provider_message_id?: string | null
+    idempotency_key?: string | null
+    scheduled_at?: Date | string | null
+    sent_at?: Date | string | null
+    delivered_at?: Date | string | null
+    opened_at?: Date | string | null
+    clicked_at?: Date | string | null
+    replied_at?: Date | string | null
+    bounced_at?: Date | string | null
+    failed_at?: Date | string | null
+    email_provider?: $Enums.ExternalIntegrationProvider | null
+    email_account?: string | null
+    sms_provider?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    sequence_step_uuid?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    interaction?: InteractionUncheckedCreateNestedOneWithoutOutreach_messageInput
+  }
+
+  export type OutreachMessageCreateOrConnectWithoutSequence_enrollmentInput = {
+    where: OutreachMessageWhereUniqueInput
+    create: XOR<OutreachMessageCreateWithoutSequence_enrollmentInput, OutreachMessageUncheckedCreateWithoutSequence_enrollmentInput>
+  }
+
+  export type OutreachMessageCreateManySequence_enrollmentInputEnvelope = {
+    data: OutreachMessageCreateManySequence_enrollmentInput | OutreachMessageCreateManySequence_enrollmentInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type OutreachSequenceUpsertWithoutEnrollmentsInput = {
+    update: XOR<OutreachSequenceUpdateWithoutEnrollmentsInput, OutreachSequenceUncheckedUpdateWithoutEnrollmentsInput>
+    create: XOR<OutreachSequenceCreateWithoutEnrollmentsInput, OutreachSequenceUncheckedCreateWithoutEnrollmentsInput>
+    where?: OutreachSequenceWhereInput
+  }
+
+  export type OutreachSequenceUpdateToOneWithWhereWithoutEnrollmentsInput = {
+    where?: OutreachSequenceWhereInput
+    data: XOR<OutreachSequenceUpdateWithoutEnrollmentsInput, OutreachSequenceUncheckedUpdateWithoutEnrollmentsInput>
+  }
+
+  export type OutreachSequenceUpdateWithoutEnrollmentsInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSequenceStatusFieldUpdateOperationsInput | $Enums.SequenceStatus
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutOutreach_sequencesNestedInput
+    steps?: OutreachSequenceStepUpdateManyWithoutSequenceNestedInput
+    campaigns?: MarketingCampaignUpdateManyWithoutSequenceNestedInput
+  }
+
+  export type OutreachSequenceUncheckedUpdateWithoutEnrollmentsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSequenceStatusFieldUpdateOperationsInput | $Enums.SequenceStatus
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    steps?: OutreachSequenceStepUncheckedUpdateManyWithoutSequenceNestedInput
+    campaigns?: MarketingCampaignUncheckedUpdateManyWithoutSequenceNestedInput
+  }
+
+  export type ContactUpsertWithoutSequence_enrollmentsInput = {
+    update: XOR<ContactUpdateWithoutSequence_enrollmentsInput, ContactUncheckedUpdateWithoutSequence_enrollmentsInput>
+    create: XOR<ContactCreateWithoutSequence_enrollmentsInput, ContactUncheckedCreateWithoutSequence_enrollmentsInput>
+    where?: ContactWhereInput
+  }
+
+  export type ContactUpdateToOneWithWhereWithoutSequence_enrollmentsInput = {
+    where?: ContactWhereInput
+    data: XOR<ContactUpdateWithoutSequence_enrollmentsInput, ContactUncheckedUpdateWithoutSequence_enrollmentsInput>
+  }
+
+  export type ContactUpdateWithoutSequence_enrollmentsInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    company?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    google_maps_url?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedin_url?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    industry?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
+    enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
+    email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
+    last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutContactsNestedInput
+    lead?: LeadUpdateOneRequiredWithoutContactsNestedInput
+    filter?: FilterUpdateOneWithoutContactsNestedInput
+    contact_filters?: ContactFilterUpdateManyWithoutContactNestedInput
+    tags?: ContactTagUpdateManyWithoutContactNestedInput
+    contact_infos?: ContactInfoUpdateManyWithoutContactNestedInput
+    interactions?: InteractionUpdateManyWithoutContactNestedInput
+    outreach_messages?: OutreachMessageUpdateManyWithoutContactNestedInput
+    campaign_contacts?: MarketingCampaignContactUpdateManyWithoutContactNestedInput
+    contact_scores?: ContactScoreUpdateManyWithoutContactNestedInput
+    reminders?: ReminderUpdateManyWithoutContactNestedInput
+    form_completions?: FormCompletionUpdateManyWithoutContactNestedInput
+    list_memberships?: ContactListMemberUpdateManyWithoutContactNestedInput
+    enrichments?: ContactEnrichmentUpdateManyWithoutContactNestedInput
+  }
+
+  export type ContactUncheckedUpdateWithoutSequence_enrollmentsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    lead_uuid?: StringFieldUpdateOperationsInput | string
+    filter_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    company?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    google_maps_url?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedin_url?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    industry?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
+    enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
+    email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
+    last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    contact_filters?: ContactFilterUncheckedUpdateManyWithoutContactNestedInput
+    tags?: ContactTagUncheckedUpdateManyWithoutContactNestedInput
+    contact_infos?: ContactInfoUncheckedUpdateManyWithoutContactNestedInput
+    interactions?: InteractionUncheckedUpdateManyWithoutContactNestedInput
+    outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutContactNestedInput
+    campaign_contacts?: MarketingCampaignContactUncheckedUpdateManyWithoutContactNestedInput
+    contact_scores?: ContactScoreUncheckedUpdateManyWithoutContactNestedInput
+    reminders?: ReminderUncheckedUpdateManyWithoutContactNestedInput
+    form_completions?: FormCompletionUncheckedUpdateManyWithoutContactNestedInput
+    list_memberships?: ContactListMemberUncheckedUpdateManyWithoutContactNestedInput
+    enrichments?: ContactEnrichmentUncheckedUpdateManyWithoutContactNestedInput
+  }
+
+  export type MarketingCampaignUpsertWithoutSequence_enrollmentsInput = {
+    update: XOR<MarketingCampaignUpdateWithoutSequence_enrollmentsInput, MarketingCampaignUncheckedUpdateWithoutSequence_enrollmentsInput>
+    create: XOR<MarketingCampaignCreateWithoutSequence_enrollmentsInput, MarketingCampaignUncheckedCreateWithoutSequence_enrollmentsInput>
+    where?: MarketingCampaignWhereInput
+  }
+
+  export type MarketingCampaignUpdateToOneWithWhereWithoutSequence_enrollmentsInput = {
+    where?: MarketingCampaignWhereInput
+    data: XOR<MarketingCampaignUpdateWithoutSequence_enrollmentsInput, MarketingCampaignUncheckedUpdateWithoutSequence_enrollmentsInput>
+  }
+
+  export type MarketingCampaignUpdateWithoutSequence_enrollmentsInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
+    campaign_type?: EnumCampaignTypeFieldUpdateOperationsInput | $Enums.CampaignType
+    channels?: MarketingCampaignUpdatechannelsInput | $Enums.Channel[]
+    filters_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    email_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    email_content?: NullableStringFieldUpdateOperationsInput | string | null
+    sms_content?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedin_content?: NullableStringFieldUpdateOperationsInput | string | null
+    ai_prompt?: NullableStringFieldUpdateOperationsInput | string | null
+    use_openai_batch?: BoolFieldUpdateOperationsInput | boolean
+    draft_batch_id?: NullableStringFieldUpdateOperationsInput | string | null
+    email_provider_allocations?: NullableJsonNullValueInput | InputJsonValue
+    scheduled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    started_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    selected_contact_count?: IntFieldUpdateOperationsInput | number
+    total_messages?: IntFieldUpdateOperationsInput | number
+    queued_count?: IntFieldUpdateOperationsInput | number
+    sent_count?: IntFieldUpdateOperationsInput | number
+    failed_count?: IntFieldUpdateOperationsInput | number
+    skipped_count?: IntFieldUpdateOperationsInput | number
+    delivered_count?: IntFieldUpdateOperationsInput | number
+    opened_count?: IntFieldUpdateOperationsInput | number
+    clicked_count?: IntFieldUpdateOperationsInput | number
+    replied_count?: IntFieldUpdateOperationsInput | number
+    website_visit_count?: IntFieldUpdateOperationsInput | number
+    booking_visit_count?: IntFieldUpdateOperationsInput | number
+    bounced_count?: IntFieldUpdateOperationsInput | number
+    unsubscribed_count?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutMarketing_campaignsNestedInput
+    sender_profile?: SenderProfileUpdateOneWithoutMarketing_campaignsNestedInput
+    sequence?: OutreachSequenceUpdateOneWithoutCampaignsNestedInput
+    campaign_contacts?: MarketingCampaignContactUpdateManyWithoutCampaignNestedInput
+    outreach_messages?: OutreachMessageUpdateManyWithoutCampaignNestedInput
+    interactions?: InteractionUpdateManyWithoutCampaignNestedInput
+  }
+
+  export type MarketingCampaignUncheckedUpdateWithoutSequence_enrollmentsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
+    campaign_type?: EnumCampaignTypeFieldUpdateOperationsInput | $Enums.CampaignType
+    channels?: MarketingCampaignUpdatechannelsInput | $Enums.Channel[]
+    filters_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    email_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    email_content?: NullableStringFieldUpdateOperationsInput | string | null
+    sms_content?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedin_content?: NullableStringFieldUpdateOperationsInput | string | null
+    ai_prompt?: NullableStringFieldUpdateOperationsInput | string | null
+    use_openai_batch?: BoolFieldUpdateOperationsInput | boolean
+    draft_batch_id?: NullableStringFieldUpdateOperationsInput | string | null
+    sender_profile_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    email_provider_allocations?: NullableJsonNullValueInput | InputJsonValue
+    sequence_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    started_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    selected_contact_count?: IntFieldUpdateOperationsInput | number
+    total_messages?: IntFieldUpdateOperationsInput | number
+    queued_count?: IntFieldUpdateOperationsInput | number
+    sent_count?: IntFieldUpdateOperationsInput | number
+    failed_count?: IntFieldUpdateOperationsInput | number
+    skipped_count?: IntFieldUpdateOperationsInput | number
+    delivered_count?: IntFieldUpdateOperationsInput | number
+    opened_count?: IntFieldUpdateOperationsInput | number
+    clicked_count?: IntFieldUpdateOperationsInput | number
+    replied_count?: IntFieldUpdateOperationsInput | number
+    website_visit_count?: IntFieldUpdateOperationsInput | number
+    booking_visit_count?: IntFieldUpdateOperationsInput | number
+    bounced_count?: IntFieldUpdateOperationsInput | number
+    unsubscribed_count?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    campaign_contacts?: MarketingCampaignContactUncheckedUpdateManyWithoutCampaignNestedInput
+    outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutCampaignNestedInput
+    interactions?: InteractionUncheckedUpdateManyWithoutCampaignNestedInput
+  }
+
+  export type OutreachMessageUpsertWithWhereUniqueWithoutSequence_enrollmentInput = {
+    where: OutreachMessageWhereUniqueInput
+    update: XOR<OutreachMessageUpdateWithoutSequence_enrollmentInput, OutreachMessageUncheckedUpdateWithoutSequence_enrollmentInput>
+    create: XOR<OutreachMessageCreateWithoutSequence_enrollmentInput, OutreachMessageUncheckedCreateWithoutSequence_enrollmentInput>
+  }
+
+  export type OutreachMessageUpdateWithWhereUniqueWithoutSequence_enrollmentInput = {
+    where: OutreachMessageWhereUniqueInput
+    data: XOR<OutreachMessageUpdateWithoutSequence_enrollmentInput, OutreachMessageUncheckedUpdateWithoutSequence_enrollmentInput>
+  }
+
+  export type OutreachMessageUpdateManyWithWhereWithoutSequence_enrollmentInput = {
+    where: OutreachMessageScalarWhereInput
+    data: XOR<OutreachMessageUpdateManyMutationInput, OutreachMessageUncheckedUpdateManyWithoutSequence_enrollmentInput>
   }
 
   export type FilterCreateWithoutJobsInput = {
@@ -93215,9 +99186,11 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutMarketing_campaignsInput
+    sequence?: OutreachSequenceCreateNestedOneWithoutCampaignsInput
     campaign_contacts?: MarketingCampaignContactCreateNestedManyWithoutCampaignInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutCampaignInput
     interactions?: InteractionCreateNestedManyWithoutCampaignInput
+    sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutCampaignInput
   }
 
   export type MarketingCampaignUncheckedCreateWithoutSender_profileInput = {
@@ -93238,6 +99211,7 @@ export namespace Prisma {
     use_openai_batch?: boolean
     draft_batch_id?: string | null
     email_provider_allocations?: NullableJsonNullValueInput | InputJsonValue
+    sequence_uuid?: string | null
     scheduled_at?: Date | string | null
     started_at?: Date | string | null
     completed_at?: Date | string | null
@@ -93261,6 +99235,7 @@ export namespace Prisma {
     campaign_contacts?: MarketingCampaignContactUncheckedCreateNestedManyWithoutCampaignInput
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutCampaignInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutCampaignInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutCampaignInput
   }
 
   export type MarketingCampaignCreateOrConnectWithoutSender_profileInput = {
@@ -93451,6 +99426,51 @@ export namespace Prisma {
     create: XOR<OrganisationCreateWithoutMessage_templatesInput, OrganisationUncheckedCreateWithoutMessage_templatesInput>
   }
 
+  export type OutreachSequenceStepCreateWithoutMessage_templateInput = {
+    uuid?: string
+    order_index: number
+    enabled?: boolean
+    channel: $Enums.Channel
+    email_subject?: string | null
+    email_content?: string | null
+    sms_content?: string | null
+    delay_value: number
+    delay_unit?: $Enums.SequenceDelayUnit
+    delay_reference?: $Enums.SequenceDelayReference
+    created_at?: Date | string
+    updated_at?: Date | string
+    sequence: OutreachSequenceCreateNestedOneWithoutStepsInput
+    outreach_messages?: OutreachMessageCreateNestedManyWithoutSequence_stepInput
+  }
+
+  export type OutreachSequenceStepUncheckedCreateWithoutMessage_templateInput = {
+    id?: number
+    uuid?: string
+    sequence_uuid: string
+    order_index: number
+    enabled?: boolean
+    channel: $Enums.Channel
+    email_subject?: string | null
+    email_content?: string | null
+    sms_content?: string | null
+    delay_value: number
+    delay_unit?: $Enums.SequenceDelayUnit
+    delay_reference?: $Enums.SequenceDelayReference
+    created_at?: Date | string
+    updated_at?: Date | string
+    outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutSequence_stepInput
+  }
+
+  export type OutreachSequenceStepCreateOrConnectWithoutMessage_templateInput = {
+    where: OutreachSequenceStepWhereUniqueInput
+    create: XOR<OutreachSequenceStepCreateWithoutMessage_templateInput, OutreachSequenceStepUncheckedCreateWithoutMessage_templateInput>
+  }
+
+  export type OutreachSequenceStepCreateManyMessage_templateInputEnvelope = {
+    data: OutreachSequenceStepCreateManyMessage_templateInput | OutreachSequenceStepCreateManyMessage_templateInput[]
+    skipDuplicates?: boolean
+  }
+
   export type OrganisationUpsertWithoutMessage_templatesInput = {
     update: XOR<OrganisationUpdateWithoutMessage_templatesInput, OrganisationUncheckedUpdateWithoutMessage_templatesInput>
     create: XOR<OrganisationCreateWithoutMessage_templatesInput, OrganisationUncheckedCreateWithoutMessage_templatesInput>
@@ -93533,6 +99553,22 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
+  }
+
+  export type OutreachSequenceStepUpsertWithWhereUniqueWithoutMessage_templateInput = {
+    where: OutreachSequenceStepWhereUniqueInput
+    update: XOR<OutreachSequenceStepUpdateWithoutMessage_templateInput, OutreachSequenceStepUncheckedUpdateWithoutMessage_templateInput>
+    create: XOR<OutreachSequenceStepCreateWithoutMessage_templateInput, OutreachSequenceStepUncheckedCreateWithoutMessage_templateInput>
+  }
+
+  export type OutreachSequenceStepUpdateWithWhereUniqueWithoutMessage_templateInput = {
+    where: OutreachSequenceStepWhereUniqueInput
+    data: XOR<OutreachSequenceStepUpdateWithoutMessage_templateInput, OutreachSequenceStepUncheckedUpdateWithoutMessage_templateInput>
+  }
+
+  export type OutreachSequenceStepUpdateManyWithWhereWithoutMessage_templateInput = {
+    where: OutreachSequenceStepScalarWhereInput
+    data: XOR<OutreachSequenceStepUpdateManyMutationInput, OutreachSequenceStepUncheckedUpdateManyWithoutMessage_templateInput>
   }
 
   export type OrganisationCreateWithoutMarketing_campaignsInput = {
@@ -93671,6 +99707,36 @@ export namespace Prisma {
     create: XOR<SenderProfileCreateWithoutMarketing_campaignsInput, SenderProfileUncheckedCreateWithoutMarketing_campaignsInput>
   }
 
+  export type OutreachSequenceCreateWithoutCampaignsInput = {
+    uuid?: string
+    name: string
+    description?: string | null
+    status?: $Enums.SequenceStatus
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutOutreach_sequencesInput
+    steps?: OutreachSequenceStepCreateNestedManyWithoutSequenceInput
+    enrollments?: SequenceEnrollmentCreateNestedManyWithoutSequenceInput
+  }
+
+  export type OutreachSequenceUncheckedCreateWithoutCampaignsInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    name: string
+    description?: string | null
+    status?: $Enums.SequenceStatus
+    created_at?: Date | string
+    updated_at?: Date | string
+    steps?: OutreachSequenceStepUncheckedCreateNestedManyWithoutSequenceInput
+    enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutSequenceInput
+  }
+
+  export type OutreachSequenceCreateOrConnectWithoutCampaignsInput = {
+    where: OutreachSequenceWhereUniqueInput
+    create: XOR<OutreachSequenceCreateWithoutCampaignsInput, OutreachSequenceUncheckedCreateWithoutCampaignsInput>
+  }
+
   export type MarketingCampaignContactCreateWithoutCampaignInput = {
     uuid?: string
     channel: $Enums.Channel
@@ -93733,6 +99799,8 @@ export namespace Prisma {
     contact: ContactCreateNestedOneWithoutOutreach_messagesInput
     sent_by?: UserCreateNestedOneWithoutOutreach_messages_sentInput
     interaction?: InteractionCreateNestedOneWithoutOutreach_messageInput
+    sequence_enrollment?: SequenceEnrollmentCreateNestedOneWithoutOutreach_messagesInput
+    sequence_step?: OutreachSequenceStepCreateNestedOneWithoutOutreach_messagesInput
   }
 
   export type OutreachMessageUncheckedCreateWithoutCampaignInput = {
@@ -93760,6 +99828,8 @@ export namespace Prisma {
     email_account?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    sequence_enrollment_uuid?: string | null
+    sequence_step_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     interaction?: InteractionUncheckedCreateNestedOneWithoutOutreach_messageInput
@@ -93809,6 +99879,43 @@ export namespace Prisma {
 
   export type InteractionCreateManyCampaignInputEnvelope = {
     data: InteractionCreateManyCampaignInput | InteractionCreateManyCampaignInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SequenceEnrollmentCreateWithoutCampaignInput = {
+    uuid?: string
+    status?: $Enums.SequenceEnrollmentStatus
+    enrolled_at?: Date | string
+    cancelled_at?: Date | string | null
+    completed_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    sequence: OutreachSequenceCreateNestedOneWithoutEnrollmentsInput
+    contact: ContactCreateNestedOneWithoutSequence_enrollmentsInput
+    outreach_messages?: OutreachMessageCreateNestedManyWithoutSequence_enrollmentInput
+  }
+
+  export type SequenceEnrollmentUncheckedCreateWithoutCampaignInput = {
+    id?: number
+    uuid?: string
+    sequence_uuid: string
+    contact_uuid: string
+    status?: $Enums.SequenceEnrollmentStatus
+    enrolled_at?: Date | string
+    cancelled_at?: Date | string | null
+    completed_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutSequence_enrollmentInput
+  }
+
+  export type SequenceEnrollmentCreateOrConnectWithoutCampaignInput = {
+    where: SequenceEnrollmentWhereUniqueInput
+    create: XOR<SequenceEnrollmentCreateWithoutCampaignInput, SequenceEnrollmentUncheckedCreateWithoutCampaignInput>
+  }
+
+  export type SequenceEnrollmentCreateManyCampaignInputEnvelope = {
+    data: SequenceEnrollmentCreateManyCampaignInput | SequenceEnrollmentCreateManyCampaignInput[]
     skipDuplicates?: boolean
   }
 
@@ -93960,6 +100067,42 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type OutreachSequenceUpsertWithoutCampaignsInput = {
+    update: XOR<OutreachSequenceUpdateWithoutCampaignsInput, OutreachSequenceUncheckedUpdateWithoutCampaignsInput>
+    create: XOR<OutreachSequenceCreateWithoutCampaignsInput, OutreachSequenceUncheckedCreateWithoutCampaignsInput>
+    where?: OutreachSequenceWhereInput
+  }
+
+  export type OutreachSequenceUpdateToOneWithWhereWithoutCampaignsInput = {
+    where?: OutreachSequenceWhereInput
+    data: XOR<OutreachSequenceUpdateWithoutCampaignsInput, OutreachSequenceUncheckedUpdateWithoutCampaignsInput>
+  }
+
+  export type OutreachSequenceUpdateWithoutCampaignsInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSequenceStatusFieldUpdateOperationsInput | $Enums.SequenceStatus
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutOutreach_sequencesNestedInput
+    steps?: OutreachSequenceStepUpdateManyWithoutSequenceNestedInput
+    enrollments?: SequenceEnrollmentUpdateManyWithoutSequenceNestedInput
+  }
+
+  export type OutreachSequenceUncheckedUpdateWithoutCampaignsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSequenceStatusFieldUpdateOperationsInput | $Enums.SequenceStatus
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    steps?: OutreachSequenceStepUncheckedUpdateManyWithoutSequenceNestedInput
+    enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutSequenceNestedInput
+  }
+
   export type MarketingCampaignContactUpsertWithWhereUniqueWithoutCampaignInput = {
     where: MarketingCampaignContactWhereUniqueInput
     update: XOR<MarketingCampaignContactUpdateWithoutCampaignInput, MarketingCampaignContactUncheckedUpdateWithoutCampaignInput>
@@ -94008,6 +100151,22 @@ export namespace Prisma {
     data: XOR<InteractionUpdateManyMutationInput, InteractionUncheckedUpdateManyWithoutCampaignInput>
   }
 
+  export type SequenceEnrollmentUpsertWithWhereUniqueWithoutCampaignInput = {
+    where: SequenceEnrollmentWhereUniqueInput
+    update: XOR<SequenceEnrollmentUpdateWithoutCampaignInput, SequenceEnrollmentUncheckedUpdateWithoutCampaignInput>
+    create: XOR<SequenceEnrollmentCreateWithoutCampaignInput, SequenceEnrollmentUncheckedCreateWithoutCampaignInput>
+  }
+
+  export type SequenceEnrollmentUpdateWithWhereUniqueWithoutCampaignInput = {
+    where: SequenceEnrollmentWhereUniqueInput
+    data: XOR<SequenceEnrollmentUpdateWithoutCampaignInput, SequenceEnrollmentUncheckedUpdateWithoutCampaignInput>
+  }
+
+  export type SequenceEnrollmentUpdateManyWithWhereWithoutCampaignInput = {
+    where: SequenceEnrollmentScalarWhereInput
+    data: XOR<SequenceEnrollmentUpdateManyMutationInput, SequenceEnrollmentUncheckedUpdateManyWithoutCampaignInput>
+  }
+
   export type MarketingCampaignCreateWithoutCampaign_contactsInput = {
     uuid?: string
     name: string
@@ -94046,8 +100205,10 @@ export namespace Prisma {
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutMarketing_campaignsInput
     sender_profile?: SenderProfileCreateNestedOneWithoutMarketing_campaignsInput
+    sequence?: OutreachSequenceCreateNestedOneWithoutCampaignsInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutCampaignInput
     interactions?: InteractionCreateNestedManyWithoutCampaignInput
+    sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutCampaignInput
   }
 
   export type MarketingCampaignUncheckedCreateWithoutCampaign_contactsInput = {
@@ -94069,6 +100230,7 @@ export namespace Prisma {
     draft_batch_id?: string | null
     sender_profile_uuid?: string | null
     email_provider_allocations?: NullableJsonNullValueInput | InputJsonValue
+    sequence_uuid?: string | null
     scheduled_at?: Date | string | null
     started_at?: Date | string | null
     completed_at?: Date | string | null
@@ -94091,6 +100253,7 @@ export namespace Prisma {
     updated_at?: Date | string
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutCampaignInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutCampaignInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutCampaignInput
   }
 
   export type MarketingCampaignCreateOrConnectWithoutCampaign_contactsInput = {
@@ -94136,6 +100299,7 @@ export namespace Prisma {
     form_completions?: FormCompletionCreateNestedManyWithoutContactInput
     list_memberships?: ContactListMemberCreateNestedManyWithoutContactInput
     enrichments?: ContactEnrichmentCreateNestedManyWithoutContactInput
+    sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutContactInput
   }
 
   export type ContactUncheckedCreateWithoutCampaign_contactsInput = {
@@ -94177,6 +100341,7 @@ export namespace Prisma {
     form_completions?: FormCompletionUncheckedCreateNestedManyWithoutContactInput
     list_memberships?: ContactListMemberUncheckedCreateNestedManyWithoutContactInput
     enrichments?: ContactEnrichmentUncheckedCreateNestedManyWithoutContactInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutContactInput
   }
 
   export type ContactCreateOrConnectWithoutCampaign_contactsInput = {
@@ -94233,8 +100398,10 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutMarketing_campaignsNestedInput
     sender_profile?: SenderProfileUpdateOneWithoutMarketing_campaignsNestedInput
+    sequence?: OutreachSequenceUpdateOneWithoutCampaignsNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutCampaignNestedInput
     interactions?: InteractionUpdateManyWithoutCampaignNestedInput
+    sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutCampaignNestedInput
   }
 
   export type MarketingCampaignUncheckedUpdateWithoutCampaign_contactsInput = {
@@ -94256,6 +100423,7 @@ export namespace Prisma {
     draft_batch_id?: NullableStringFieldUpdateOperationsInput | string | null
     sender_profile_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     email_provider_allocations?: NullableJsonNullValueInput | InputJsonValue
+    sequence_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     scheduled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     started_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -94278,6 +100446,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutCampaignNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutCampaignNestedInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutCampaignNestedInput
   }
 
   export type ContactUpsertWithoutCampaign_contactsInput = {
@@ -94329,6 +100498,7 @@ export namespace Prisma {
     form_completions?: FormCompletionUpdateManyWithoutContactNestedInput
     list_memberships?: ContactListMemberUpdateManyWithoutContactNestedInput
     enrichments?: ContactEnrichmentUpdateManyWithoutContactNestedInput
+    sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutContactNestedInput
   }
 
   export type ContactUncheckedUpdateWithoutCampaign_contactsInput = {
@@ -94370,6 +100540,7 @@ export namespace Prisma {
     form_completions?: FormCompletionUncheckedUpdateManyWithoutContactNestedInput
     list_memberships?: ContactListMemberUncheckedUpdateManyWithoutContactNestedInput
     enrichments?: ContactEnrichmentUncheckedUpdateManyWithoutContactNestedInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutContactNestedInput
   }
 
   export type OrganisationCreateWithoutOpenai_batch_jobsInput = {
@@ -95054,6 +101225,7 @@ export namespace Prisma {
     form_completions?: FormCompletionCreateNestedManyWithoutContactInput
     list_memberships?: ContactListMemberCreateNestedManyWithoutContactInput
     enrichments?: ContactEnrichmentCreateNestedManyWithoutContactInput
+    sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutContactInput
   }
 
   export type ContactUncheckedCreateWithoutRemindersInput = {
@@ -95095,6 +101267,7 @@ export namespace Prisma {
     form_completions?: FormCompletionUncheckedCreateNestedManyWithoutContactInput
     list_memberships?: ContactListMemberUncheckedCreateNestedManyWithoutContactInput
     enrichments?: ContactEnrichmentUncheckedCreateNestedManyWithoutContactInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutContactInput
   }
 
   export type ContactCreateOrConnectWithoutRemindersInput = {
@@ -95235,6 +101408,7 @@ export namespace Prisma {
     form_completions?: FormCompletionUpdateManyWithoutContactNestedInput
     list_memberships?: ContactListMemberUpdateManyWithoutContactNestedInput
     enrichments?: ContactEnrichmentUpdateManyWithoutContactNestedInput
+    sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutContactNestedInput
   }
 
   export type ContactUncheckedUpdateWithoutRemindersInput = {
@@ -95276,6 +101450,7 @@ export namespace Prisma {
     form_completions?: FormCompletionUncheckedUpdateManyWithoutContactNestedInput
     list_memberships?: ContactListMemberUncheckedUpdateManyWithoutContactNestedInput
     enrichments?: ContactEnrichmentUncheckedUpdateManyWithoutContactNestedInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutContactNestedInput
   }
 
   export type OrganisationCreateWithoutFormsInput = {
@@ -95742,6 +101917,7 @@ export namespace Prisma {
     reminders?: ReminderCreateNestedManyWithoutContactInput
     list_memberships?: ContactListMemberCreateNestedManyWithoutContactInput
     enrichments?: ContactEnrichmentCreateNestedManyWithoutContactInput
+    sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutContactInput
   }
 
   export type ContactUncheckedCreateWithoutForm_completionsInput = {
@@ -95783,6 +101959,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedCreateNestedManyWithoutContactInput
     list_memberships?: ContactListMemberUncheckedCreateNestedManyWithoutContactInput
     enrichments?: ContactEnrichmentUncheckedCreateNestedManyWithoutContactInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutContactInput
   }
 
   export type ContactCreateOrConnectWithoutForm_completionsInput = {
@@ -95942,6 +102119,7 @@ export namespace Prisma {
     reminders?: ReminderUpdateManyWithoutContactNestedInput
     list_memberships?: ContactListMemberUpdateManyWithoutContactNestedInput
     enrichments?: ContactEnrichmentUpdateManyWithoutContactNestedInput
+    sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutContactNestedInput
   }
 
   export type ContactUncheckedUpdateWithoutForm_completionsInput = {
@@ -95983,6 +102161,7 @@ export namespace Prisma {
     reminders?: ReminderUncheckedUpdateManyWithoutContactNestedInput
     list_memberships?: ContactListMemberUncheckedUpdateManyWithoutContactNestedInput
     enrichments?: ContactEnrichmentUncheckedUpdateManyWithoutContactNestedInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutContactNestedInput
   }
 
   export type UserUpsertWithoutForm_completionsInput = {
@@ -98191,6 +104370,8 @@ export namespace Prisma {
     email_account?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    sequence_enrollment_uuid?: string | null
+    sequence_step_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -98387,6 +104568,8 @@ export namespace Prisma {
     contact?: ContactUpdateOneRequiredWithoutOutreach_messagesNestedInput
     campaign?: MarketingCampaignUpdateOneWithoutOutreach_messagesNestedInput
     interaction?: InteractionUpdateOneWithoutOutreach_messageNestedInput
+    sequence_enrollment?: SequenceEnrollmentUpdateOneWithoutOutreach_messagesNestedInput
+    sequence_step?: OutreachSequenceStepUpdateOneWithoutOutreach_messagesNestedInput
   }
 
   export type OutreachMessageUncheckedUpdateWithoutSent_byInput = {
@@ -98414,6 +104597,8 @@ export namespace Prisma {
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    sequence_step_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     interaction?: InteractionUncheckedUpdateOneWithoutOutreach_messageNestedInput
@@ -98444,6 +104629,8 @@ export namespace Prisma {
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    sequence_step_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -98748,6 +104935,8 @@ export namespace Prisma {
     email_account?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    sequence_enrollment_uuid?: string | null
+    sequence_step_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -98756,7 +104945,8 @@ export namespace Prisma {
     id?: number
     uuid?: string
     name: string
-    steps: JsonNullValueInput | InputJsonValue
+    description?: string | null
+    status?: $Enums.SequenceStatus
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -98819,6 +105009,7 @@ export namespace Prisma {
     draft_batch_id?: string | null
     sender_profile_uuid?: string | null
     email_provider_allocations?: NullableJsonNullValueInput | InputJsonValue
+    sequence_uuid?: string | null
     scheduled_at?: Date | string | null
     started_at?: Date | string | null
     completed_at?: Date | string | null
@@ -99250,6 +105441,7 @@ export namespace Prisma {
     form_completions?: FormCompletionUpdateManyWithoutContactNestedInput
     list_memberships?: ContactListMemberUpdateManyWithoutContactNestedInput
     enrichments?: ContactEnrichmentUpdateManyWithoutContactNestedInput
+    sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutContactNestedInput
   }
 
   export type ContactUncheckedUpdateWithoutOrganisationInput = {
@@ -99291,6 +105483,7 @@ export namespace Prisma {
     form_completions?: FormCompletionUncheckedUpdateManyWithoutContactNestedInput
     list_memberships?: ContactListMemberUncheckedUpdateManyWithoutContactNestedInput
     enrichments?: ContactEnrichmentUncheckedUpdateManyWithoutContactNestedInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutContactNestedInput
   }
 
   export type ContactUncheckedUpdateManyWithoutOrganisationInput = {
@@ -99350,6 +105543,8 @@ export namespace Prisma {
     campaign?: MarketingCampaignUpdateOneWithoutOutreach_messagesNestedInput
     sent_by?: UserUpdateOneWithoutOutreach_messages_sentNestedInput
     interaction?: InteractionUpdateOneWithoutOutreach_messageNestedInput
+    sequence_enrollment?: SequenceEnrollmentUpdateOneWithoutOutreach_messagesNestedInput
+    sequence_step?: OutreachSequenceStepUpdateOneWithoutOutreach_messagesNestedInput
   }
 
   export type OutreachMessageUncheckedUpdateWithoutOrganisationInput = {
@@ -99377,6 +105572,8 @@ export namespace Prisma {
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    sequence_step_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     interaction?: InteractionUncheckedUpdateOneWithoutOutreach_messageNestedInput
@@ -99407,6 +105604,8 @@ export namespace Prisma {
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    sequence_step_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -99414,25 +105613,34 @@ export namespace Prisma {
   export type OutreachSequenceUpdateWithoutOrganisationInput = {
     uuid?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    steps?: JsonNullValueInput | InputJsonValue
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSequenceStatusFieldUpdateOperationsInput | $Enums.SequenceStatus
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    steps?: OutreachSequenceStepUpdateManyWithoutSequenceNestedInput
+    enrollments?: SequenceEnrollmentUpdateManyWithoutSequenceNestedInput
+    campaigns?: MarketingCampaignUpdateManyWithoutSequenceNestedInput
   }
 
   export type OutreachSequenceUncheckedUpdateWithoutOrganisationInput = {
     id?: IntFieldUpdateOperationsInput | number
     uuid?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    steps?: JsonNullValueInput | InputJsonValue
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSequenceStatusFieldUpdateOperationsInput | $Enums.SequenceStatus
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    steps?: OutreachSequenceStepUncheckedUpdateManyWithoutSequenceNestedInput
+    enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutSequenceNestedInput
+    campaigns?: MarketingCampaignUncheckedUpdateManyWithoutSequenceNestedInput
   }
 
   export type OutreachSequenceUncheckedUpdateManyWithoutOrganisationInput = {
     id?: IntFieldUpdateOperationsInput | number
     uuid?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    steps?: JsonNullValueInput | InputJsonValue
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSequenceStatusFieldUpdateOperationsInput | $Enums.SequenceStatus
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -99594,9 +105802,11 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     sender_profile?: SenderProfileUpdateOneWithoutMarketing_campaignsNestedInput
+    sequence?: OutreachSequenceUpdateOneWithoutCampaignsNestedInput
     campaign_contacts?: MarketingCampaignContactUpdateManyWithoutCampaignNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutCampaignNestedInput
     interactions?: InteractionUpdateManyWithoutCampaignNestedInput
+    sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutCampaignNestedInput
   }
 
   export type MarketingCampaignUncheckedUpdateWithoutOrganisationInput = {
@@ -99617,6 +105827,7 @@ export namespace Prisma {
     draft_batch_id?: NullableStringFieldUpdateOperationsInput | string | null
     sender_profile_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     email_provider_allocations?: NullableJsonNullValueInput | InputJsonValue
+    sequence_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     scheduled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     started_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -99640,6 +105851,7 @@ export namespace Prisma {
     campaign_contacts?: MarketingCampaignContactUncheckedUpdateManyWithoutCampaignNestedInput
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutCampaignNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutCampaignNestedInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutCampaignNestedInput
   }
 
   export type MarketingCampaignUncheckedUpdateManyWithoutOrganisationInput = {
@@ -99660,6 +105872,7 @@ export namespace Prisma {
     draft_batch_id?: NullableStringFieldUpdateOperationsInput | string | null
     sender_profile_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     email_provider_allocations?: NullableJsonNullValueInput | InputJsonValue
+    sequence_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     scheduled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     started_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -100118,6 +106331,7 @@ export namespace Prisma {
     source_message_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    sequence_steps?: OutreachSequenceStepUpdateManyWithoutMessage_templateNestedInput
   }
 
   export type MessageTemplateUncheckedUpdateWithoutOrganisationInput = {
@@ -100132,6 +106346,7 @@ export namespace Prisma {
     source_message_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    sequence_steps?: OutreachSequenceStepUncheckedUpdateManyWithoutMessage_templateNestedInput
   }
 
   export type MessageTemplateUncheckedUpdateManyWithoutOrganisationInput = {
@@ -100585,6 +106800,7 @@ export namespace Prisma {
     form_completions?: FormCompletionUpdateManyWithoutContactNestedInput
     list_memberships?: ContactListMemberUpdateManyWithoutContactNestedInput
     enrichments?: ContactEnrichmentUpdateManyWithoutContactNestedInput
+    sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutContactNestedInput
   }
 
   export type ContactUncheckedUpdateWithoutFilterInput = {
@@ -100626,6 +106842,7 @@ export namespace Prisma {
     form_completions?: FormCompletionUncheckedUpdateManyWithoutContactNestedInput
     list_memberships?: ContactListMemberUncheckedUpdateManyWithoutContactNestedInput
     enrichments?: ContactEnrichmentUncheckedUpdateManyWithoutContactNestedInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutContactNestedInput
   }
 
   export type ContactUncheckedUpdateManyWithoutFilterInput = {
@@ -100917,6 +107134,7 @@ export namespace Prisma {
     form_completions?: FormCompletionUpdateManyWithoutContactNestedInput
     list_memberships?: ContactListMemberUpdateManyWithoutContactNestedInput
     enrichments?: ContactEnrichmentUpdateManyWithoutContactNestedInput
+    sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutContactNestedInput
   }
 
   export type ContactUncheckedUpdateWithoutLeadInput = {
@@ -100958,6 +107176,7 @@ export namespace Prisma {
     form_completions?: FormCompletionUncheckedUpdateManyWithoutContactNestedInput
     list_memberships?: ContactListMemberUncheckedUpdateManyWithoutContactNestedInput
     enrichments?: ContactEnrichmentUncheckedUpdateManyWithoutContactNestedInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutContactNestedInput
   }
 
   export type ContactUncheckedUpdateManyWithoutLeadInput = {
@@ -101090,6 +107309,8 @@ export namespace Prisma {
     email_account?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    sequence_enrollment_uuid?: string | null
+    sequence_step_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -101155,6 +107376,19 @@ export namespace Prisma {
     output_tokens?: number | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
+  }
+
+  export type SequenceEnrollmentCreateManyContactInput = {
+    id?: number
+    uuid?: string
+    sequence_uuid: string
+    campaign_uuid?: string | null
+    status?: $Enums.SequenceEnrollmentStatus
+    enrolled_at?: Date | string
+    cancelled_at?: Date | string | null
+    completed_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
   }
 
   export type ContactFilterUpdateWithoutContactInput = {
@@ -101283,6 +107517,8 @@ export namespace Prisma {
     campaign?: MarketingCampaignUpdateOneWithoutOutreach_messagesNestedInput
     sent_by?: UserUpdateOneWithoutOutreach_messages_sentNestedInput
     interaction?: InteractionUpdateOneWithoutOutreach_messageNestedInput
+    sequence_enrollment?: SequenceEnrollmentUpdateOneWithoutOutreach_messagesNestedInput
+    sequence_step?: OutreachSequenceStepUpdateOneWithoutOutreach_messagesNestedInput
   }
 
   export type OutreachMessageUncheckedUpdateWithoutContactInput = {
@@ -101310,6 +107546,8 @@ export namespace Prisma {
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    sequence_step_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     interaction?: InteractionUncheckedUpdateOneWithoutOutreach_messageNestedInput
@@ -101340,6 +107578,8 @@ export namespace Prisma {
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    sequence_step_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -101529,6 +107769,46 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type SequenceEnrollmentUpdateWithoutContactInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumSequenceEnrollmentStatusFieldUpdateOperationsInput | $Enums.SequenceEnrollmentStatus
+    enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    sequence?: OutreachSequenceUpdateOneRequiredWithoutEnrollmentsNestedInput
+    campaign?: MarketingCampaignUpdateOneWithoutSequence_enrollmentsNestedInput
+    outreach_messages?: OutreachMessageUpdateManyWithoutSequence_enrollmentNestedInput
+  }
+
+  export type SequenceEnrollmentUncheckedUpdateWithoutContactInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    sequence_uuid?: StringFieldUpdateOperationsInput | string
+    campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSequenceEnrollmentStatusFieldUpdateOperationsInput | $Enums.SequenceEnrollmentStatus
+    enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutSequence_enrollmentNestedInput
+  }
+
+  export type SequenceEnrollmentUncheckedUpdateManyWithoutContactInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    sequence_uuid?: StringFieldUpdateOperationsInput | string
+    campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSequenceEnrollmentStatusFieldUpdateOperationsInput | $Enums.SequenceEnrollmentStatus
+    enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type ContactListCreateManyParentInput = {
     id?: number
     uuid?: string
@@ -101680,6 +107960,549 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type OutreachSequenceStepCreateManySequenceInput = {
+    id?: number
+    uuid?: string
+    order_index: number
+    enabled?: boolean
+    channel: $Enums.Channel
+    email_subject?: string | null
+    email_content?: string | null
+    sms_content?: string | null
+    message_template_uuid?: string | null
+    delay_value: number
+    delay_unit?: $Enums.SequenceDelayUnit
+    delay_reference?: $Enums.SequenceDelayReference
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type SequenceEnrollmentCreateManySequenceInput = {
+    id?: number
+    uuid?: string
+    contact_uuid: string
+    campaign_uuid?: string | null
+    status?: $Enums.SequenceEnrollmentStatus
+    enrolled_at?: Date | string
+    cancelled_at?: Date | string | null
+    completed_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type MarketingCampaignCreateManySequenceInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    name: string
+    description?: string | null
+    status?: $Enums.CampaignStatus
+    campaign_type?: $Enums.CampaignType
+    channels?: MarketingCampaignCreatechannelsInput | $Enums.Channel[]
+    filters_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    email_subject?: string | null
+    email_content?: string | null
+    sms_content?: string | null
+    linkedin_content?: string | null
+    ai_prompt?: string | null
+    use_openai_batch?: boolean
+    draft_batch_id?: string | null
+    sender_profile_uuid?: string | null
+    email_provider_allocations?: NullableJsonNullValueInput | InputJsonValue
+    scheduled_at?: Date | string | null
+    started_at?: Date | string | null
+    completed_at?: Date | string | null
+    cancelled_at?: Date | string | null
+    selected_contact_count?: number
+    total_messages?: number
+    queued_count?: number
+    sent_count?: number
+    failed_count?: number
+    skipped_count?: number
+    delivered_count?: number
+    opened_count?: number
+    clicked_count?: number
+    replied_count?: number
+    website_visit_count?: number
+    booking_visit_count?: number
+    bounced_count?: number
+    unsubscribed_count?: number
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type OutreachSequenceStepUpdateWithoutSequenceInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    order_index?: IntFieldUpdateOperationsInput | number
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    channel?: EnumChannelFieldUpdateOperationsInput | $Enums.Channel
+    email_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    email_content?: NullableStringFieldUpdateOperationsInput | string | null
+    sms_content?: NullableStringFieldUpdateOperationsInput | string | null
+    delay_value?: IntFieldUpdateOperationsInput | number
+    delay_unit?: EnumSequenceDelayUnitFieldUpdateOperationsInput | $Enums.SequenceDelayUnit
+    delay_reference?: EnumSequenceDelayReferenceFieldUpdateOperationsInput | $Enums.SequenceDelayReference
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    message_template?: MessageTemplateUpdateOneWithoutSequence_stepsNestedInput
+    outreach_messages?: OutreachMessageUpdateManyWithoutSequence_stepNestedInput
+  }
+
+  export type OutreachSequenceStepUncheckedUpdateWithoutSequenceInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    order_index?: IntFieldUpdateOperationsInput | number
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    channel?: EnumChannelFieldUpdateOperationsInput | $Enums.Channel
+    email_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    email_content?: NullableStringFieldUpdateOperationsInput | string | null
+    sms_content?: NullableStringFieldUpdateOperationsInput | string | null
+    message_template_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    delay_value?: IntFieldUpdateOperationsInput | number
+    delay_unit?: EnumSequenceDelayUnitFieldUpdateOperationsInput | $Enums.SequenceDelayUnit
+    delay_reference?: EnumSequenceDelayReferenceFieldUpdateOperationsInput | $Enums.SequenceDelayReference
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutSequence_stepNestedInput
+  }
+
+  export type OutreachSequenceStepUncheckedUpdateManyWithoutSequenceInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    order_index?: IntFieldUpdateOperationsInput | number
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    channel?: EnumChannelFieldUpdateOperationsInput | $Enums.Channel
+    email_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    email_content?: NullableStringFieldUpdateOperationsInput | string | null
+    sms_content?: NullableStringFieldUpdateOperationsInput | string | null
+    message_template_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    delay_value?: IntFieldUpdateOperationsInput | number
+    delay_unit?: EnumSequenceDelayUnitFieldUpdateOperationsInput | $Enums.SequenceDelayUnit
+    delay_reference?: EnumSequenceDelayReferenceFieldUpdateOperationsInput | $Enums.SequenceDelayReference
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SequenceEnrollmentUpdateWithoutSequenceInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumSequenceEnrollmentStatusFieldUpdateOperationsInput | $Enums.SequenceEnrollmentStatus
+    enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    contact?: ContactUpdateOneRequiredWithoutSequence_enrollmentsNestedInput
+    campaign?: MarketingCampaignUpdateOneWithoutSequence_enrollmentsNestedInput
+    outreach_messages?: OutreachMessageUpdateManyWithoutSequence_enrollmentNestedInput
+  }
+
+  export type SequenceEnrollmentUncheckedUpdateWithoutSequenceInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    contact_uuid?: StringFieldUpdateOperationsInput | string
+    campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSequenceEnrollmentStatusFieldUpdateOperationsInput | $Enums.SequenceEnrollmentStatus
+    enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutSequence_enrollmentNestedInput
+  }
+
+  export type SequenceEnrollmentUncheckedUpdateManyWithoutSequenceInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    contact_uuid?: StringFieldUpdateOperationsInput | string
+    campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSequenceEnrollmentStatusFieldUpdateOperationsInput | $Enums.SequenceEnrollmentStatus
+    enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MarketingCampaignUpdateWithoutSequenceInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
+    campaign_type?: EnumCampaignTypeFieldUpdateOperationsInput | $Enums.CampaignType
+    channels?: MarketingCampaignUpdatechannelsInput | $Enums.Channel[]
+    filters_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    email_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    email_content?: NullableStringFieldUpdateOperationsInput | string | null
+    sms_content?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedin_content?: NullableStringFieldUpdateOperationsInput | string | null
+    ai_prompt?: NullableStringFieldUpdateOperationsInput | string | null
+    use_openai_batch?: BoolFieldUpdateOperationsInput | boolean
+    draft_batch_id?: NullableStringFieldUpdateOperationsInput | string | null
+    email_provider_allocations?: NullableJsonNullValueInput | InputJsonValue
+    scheduled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    started_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    selected_contact_count?: IntFieldUpdateOperationsInput | number
+    total_messages?: IntFieldUpdateOperationsInput | number
+    queued_count?: IntFieldUpdateOperationsInput | number
+    sent_count?: IntFieldUpdateOperationsInput | number
+    failed_count?: IntFieldUpdateOperationsInput | number
+    skipped_count?: IntFieldUpdateOperationsInput | number
+    delivered_count?: IntFieldUpdateOperationsInput | number
+    opened_count?: IntFieldUpdateOperationsInput | number
+    clicked_count?: IntFieldUpdateOperationsInput | number
+    replied_count?: IntFieldUpdateOperationsInput | number
+    website_visit_count?: IntFieldUpdateOperationsInput | number
+    booking_visit_count?: IntFieldUpdateOperationsInput | number
+    bounced_count?: IntFieldUpdateOperationsInput | number
+    unsubscribed_count?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutMarketing_campaignsNestedInput
+    sender_profile?: SenderProfileUpdateOneWithoutMarketing_campaignsNestedInput
+    campaign_contacts?: MarketingCampaignContactUpdateManyWithoutCampaignNestedInput
+    outreach_messages?: OutreachMessageUpdateManyWithoutCampaignNestedInput
+    interactions?: InteractionUpdateManyWithoutCampaignNestedInput
+    sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutCampaignNestedInput
+  }
+
+  export type MarketingCampaignUncheckedUpdateWithoutSequenceInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
+    campaign_type?: EnumCampaignTypeFieldUpdateOperationsInput | $Enums.CampaignType
+    channels?: MarketingCampaignUpdatechannelsInput | $Enums.Channel[]
+    filters_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    email_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    email_content?: NullableStringFieldUpdateOperationsInput | string | null
+    sms_content?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedin_content?: NullableStringFieldUpdateOperationsInput | string | null
+    ai_prompt?: NullableStringFieldUpdateOperationsInput | string | null
+    use_openai_batch?: BoolFieldUpdateOperationsInput | boolean
+    draft_batch_id?: NullableStringFieldUpdateOperationsInput | string | null
+    sender_profile_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    email_provider_allocations?: NullableJsonNullValueInput | InputJsonValue
+    scheduled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    started_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    selected_contact_count?: IntFieldUpdateOperationsInput | number
+    total_messages?: IntFieldUpdateOperationsInput | number
+    queued_count?: IntFieldUpdateOperationsInput | number
+    sent_count?: IntFieldUpdateOperationsInput | number
+    failed_count?: IntFieldUpdateOperationsInput | number
+    skipped_count?: IntFieldUpdateOperationsInput | number
+    delivered_count?: IntFieldUpdateOperationsInput | number
+    opened_count?: IntFieldUpdateOperationsInput | number
+    clicked_count?: IntFieldUpdateOperationsInput | number
+    replied_count?: IntFieldUpdateOperationsInput | number
+    website_visit_count?: IntFieldUpdateOperationsInput | number
+    booking_visit_count?: IntFieldUpdateOperationsInput | number
+    bounced_count?: IntFieldUpdateOperationsInput | number
+    unsubscribed_count?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    campaign_contacts?: MarketingCampaignContactUncheckedUpdateManyWithoutCampaignNestedInput
+    outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutCampaignNestedInput
+    interactions?: InteractionUncheckedUpdateManyWithoutCampaignNestedInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutCampaignNestedInput
+  }
+
+  export type MarketingCampaignUncheckedUpdateManyWithoutSequenceInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
+    campaign_type?: EnumCampaignTypeFieldUpdateOperationsInput | $Enums.CampaignType
+    channels?: MarketingCampaignUpdatechannelsInput | $Enums.Channel[]
+    filters_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    email_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    email_content?: NullableStringFieldUpdateOperationsInput | string | null
+    sms_content?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedin_content?: NullableStringFieldUpdateOperationsInput | string | null
+    ai_prompt?: NullableStringFieldUpdateOperationsInput | string | null
+    use_openai_batch?: BoolFieldUpdateOperationsInput | boolean
+    draft_batch_id?: NullableStringFieldUpdateOperationsInput | string | null
+    sender_profile_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    email_provider_allocations?: NullableJsonNullValueInput | InputJsonValue
+    scheduled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    started_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    selected_contact_count?: IntFieldUpdateOperationsInput | number
+    total_messages?: IntFieldUpdateOperationsInput | number
+    queued_count?: IntFieldUpdateOperationsInput | number
+    sent_count?: IntFieldUpdateOperationsInput | number
+    failed_count?: IntFieldUpdateOperationsInput | number
+    skipped_count?: IntFieldUpdateOperationsInput | number
+    delivered_count?: IntFieldUpdateOperationsInput | number
+    opened_count?: IntFieldUpdateOperationsInput | number
+    clicked_count?: IntFieldUpdateOperationsInput | number
+    replied_count?: IntFieldUpdateOperationsInput | number
+    website_visit_count?: IntFieldUpdateOperationsInput | number
+    booking_visit_count?: IntFieldUpdateOperationsInput | number
+    bounced_count?: IntFieldUpdateOperationsInput | number
+    unsubscribed_count?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OutreachMessageCreateManySequence_stepInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    contact_uuid: string
+    campaign_uuid?: string | null
+    sent_by_user_uuid?: string | null
+    channel: $Enums.Channel
+    direction?: $Enums.MsgDirection
+    subject?: string | null
+    content: string
+    status?: $Enums.MsgStatus
+    provider_message_id?: string | null
+    idempotency_key?: string | null
+    scheduled_at?: Date | string | null
+    sent_at?: Date | string | null
+    delivered_at?: Date | string | null
+    opened_at?: Date | string | null
+    clicked_at?: Date | string | null
+    replied_at?: Date | string | null
+    bounced_at?: Date | string | null
+    failed_at?: Date | string | null
+    email_provider?: $Enums.ExternalIntegrationProvider | null
+    email_account?: string | null
+    sms_provider?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    sequence_enrollment_uuid?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type OutreachMessageUpdateWithoutSequence_stepInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    channel?: EnumChannelFieldUpdateOperationsInput | $Enums.Channel
+    direction?: EnumMsgDirectionFieldUpdateOperationsInput | $Enums.MsgDirection
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    content?: StringFieldUpdateOperationsInput | string
+    status?: EnumMsgStatusFieldUpdateOperationsInput | $Enums.MsgStatus
+    provider_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    idempotency_key?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    delivered_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    opened_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    clicked_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    replied_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
+    email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutOutreach_messagesNestedInput
+    contact?: ContactUpdateOneRequiredWithoutOutreach_messagesNestedInput
+    campaign?: MarketingCampaignUpdateOneWithoutOutreach_messagesNestedInput
+    sent_by?: UserUpdateOneWithoutOutreach_messages_sentNestedInput
+    interaction?: InteractionUpdateOneWithoutOutreach_messageNestedInput
+    sequence_enrollment?: SequenceEnrollmentUpdateOneWithoutOutreach_messagesNestedInput
+  }
+
+  export type OutreachMessageUncheckedUpdateWithoutSequence_stepInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    contact_uuid?: StringFieldUpdateOperationsInput | string
+    campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    sent_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    channel?: EnumChannelFieldUpdateOperationsInput | $Enums.Channel
+    direction?: EnumMsgDirectionFieldUpdateOperationsInput | $Enums.MsgDirection
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    content?: StringFieldUpdateOperationsInput | string
+    status?: EnumMsgStatusFieldUpdateOperationsInput | $Enums.MsgStatus
+    provider_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    idempotency_key?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    delivered_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    opened_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    clicked_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    replied_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
+    email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    interaction?: InteractionUncheckedUpdateOneWithoutOutreach_messageNestedInput
+  }
+
+  export type OutreachMessageUncheckedUpdateManyWithoutSequence_stepInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    contact_uuid?: StringFieldUpdateOperationsInput | string
+    campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    sent_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    channel?: EnumChannelFieldUpdateOperationsInput | $Enums.Channel
+    direction?: EnumMsgDirectionFieldUpdateOperationsInput | $Enums.MsgDirection
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    content?: StringFieldUpdateOperationsInput | string
+    status?: EnumMsgStatusFieldUpdateOperationsInput | $Enums.MsgStatus
+    provider_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    idempotency_key?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    delivered_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    opened_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    clicked_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    replied_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
+    email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OutreachMessageCreateManySequence_enrollmentInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    contact_uuid: string
+    campaign_uuid?: string | null
+    sent_by_user_uuid?: string | null
+    channel: $Enums.Channel
+    direction?: $Enums.MsgDirection
+    subject?: string | null
+    content: string
+    status?: $Enums.MsgStatus
+    provider_message_id?: string | null
+    idempotency_key?: string | null
+    scheduled_at?: Date | string | null
+    sent_at?: Date | string | null
+    delivered_at?: Date | string | null
+    opened_at?: Date | string | null
+    clicked_at?: Date | string | null
+    replied_at?: Date | string | null
+    bounced_at?: Date | string | null
+    failed_at?: Date | string | null
+    email_provider?: $Enums.ExternalIntegrationProvider | null
+    email_account?: string | null
+    sms_provider?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    sequence_step_uuid?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type OutreachMessageUpdateWithoutSequence_enrollmentInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    channel?: EnumChannelFieldUpdateOperationsInput | $Enums.Channel
+    direction?: EnumMsgDirectionFieldUpdateOperationsInput | $Enums.MsgDirection
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    content?: StringFieldUpdateOperationsInput | string
+    status?: EnumMsgStatusFieldUpdateOperationsInput | $Enums.MsgStatus
+    provider_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    idempotency_key?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    delivered_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    opened_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    clicked_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    replied_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
+    email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutOutreach_messagesNestedInput
+    contact?: ContactUpdateOneRequiredWithoutOutreach_messagesNestedInput
+    campaign?: MarketingCampaignUpdateOneWithoutOutreach_messagesNestedInput
+    sent_by?: UserUpdateOneWithoutOutreach_messages_sentNestedInput
+    interaction?: InteractionUpdateOneWithoutOutreach_messageNestedInput
+    sequence_step?: OutreachSequenceStepUpdateOneWithoutOutreach_messagesNestedInput
+  }
+
+  export type OutreachMessageUncheckedUpdateWithoutSequence_enrollmentInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    contact_uuid?: StringFieldUpdateOperationsInput | string
+    campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    sent_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    channel?: EnumChannelFieldUpdateOperationsInput | $Enums.Channel
+    direction?: EnumMsgDirectionFieldUpdateOperationsInput | $Enums.MsgDirection
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    content?: StringFieldUpdateOperationsInput | string
+    status?: EnumMsgStatusFieldUpdateOperationsInput | $Enums.MsgStatus
+    provider_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    idempotency_key?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    delivered_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    opened_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    clicked_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    replied_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
+    email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    sequence_step_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    interaction?: InteractionUncheckedUpdateOneWithoutOutreach_messageNestedInput
+  }
+
+  export type OutreachMessageUncheckedUpdateManyWithoutSequence_enrollmentInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    contact_uuid?: StringFieldUpdateOperationsInput | string
+    campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    sent_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    channel?: EnumChannelFieldUpdateOperationsInput | $Enums.Channel
+    direction?: EnumMsgDirectionFieldUpdateOperationsInput | $Enums.MsgDirection
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    content?: StringFieldUpdateOperationsInput | string
+    status?: EnumMsgStatusFieldUpdateOperationsInput | $Enums.MsgStatus
+    provider_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    idempotency_key?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    delivered_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    opened_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    clicked_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    replied_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
+    email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    sequence_step_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type MarketingCampaignCreateManySender_profileInput = {
     id?: number
     uuid?: string
@@ -101698,6 +108521,7 @@ export namespace Prisma {
     use_openai_batch?: boolean
     draft_batch_id?: string | null
     email_provider_allocations?: NullableJsonNullValueInput | InputJsonValue
+    sequence_uuid?: string | null
     scheduled_at?: Date | string | null
     started_at?: Date | string | null
     completed_at?: Date | string | null
@@ -101757,9 +108581,11 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutMarketing_campaignsNestedInput
+    sequence?: OutreachSequenceUpdateOneWithoutCampaignsNestedInput
     campaign_contacts?: MarketingCampaignContactUpdateManyWithoutCampaignNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutCampaignNestedInput
     interactions?: InteractionUpdateManyWithoutCampaignNestedInput
+    sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutCampaignNestedInput
   }
 
   export type MarketingCampaignUncheckedUpdateWithoutSender_profileInput = {
@@ -101780,6 +108606,7 @@ export namespace Prisma {
     use_openai_batch?: BoolFieldUpdateOperationsInput | boolean
     draft_batch_id?: NullableStringFieldUpdateOperationsInput | string | null
     email_provider_allocations?: NullableJsonNullValueInput | InputJsonValue
+    sequence_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     scheduled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     started_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -101803,6 +108630,7 @@ export namespace Prisma {
     campaign_contacts?: MarketingCampaignContactUncheckedUpdateManyWithoutCampaignNestedInput
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutCampaignNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutCampaignNestedInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutCampaignNestedInput
   }
 
   export type MarketingCampaignUncheckedUpdateManyWithoutSender_profileInput = {
@@ -101823,6 +108651,7 @@ export namespace Prisma {
     use_openai_batch?: BoolFieldUpdateOperationsInput | boolean
     draft_batch_id?: NullableStringFieldUpdateOperationsInput | string | null
     email_provider_allocations?: NullableJsonNullValueInput | InputJsonValue
+    sequence_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     scheduled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     started_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -101841,6 +108670,75 @@ export namespace Prisma {
     booking_visit_count?: IntFieldUpdateOperationsInput | number
     bounced_count?: IntFieldUpdateOperationsInput | number
     unsubscribed_count?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OutreachSequenceStepCreateManyMessage_templateInput = {
+    id?: number
+    uuid?: string
+    sequence_uuid: string
+    order_index: number
+    enabled?: boolean
+    channel: $Enums.Channel
+    email_subject?: string | null
+    email_content?: string | null
+    sms_content?: string | null
+    delay_value: number
+    delay_unit?: $Enums.SequenceDelayUnit
+    delay_reference?: $Enums.SequenceDelayReference
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type OutreachSequenceStepUpdateWithoutMessage_templateInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    order_index?: IntFieldUpdateOperationsInput | number
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    channel?: EnumChannelFieldUpdateOperationsInput | $Enums.Channel
+    email_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    email_content?: NullableStringFieldUpdateOperationsInput | string | null
+    sms_content?: NullableStringFieldUpdateOperationsInput | string | null
+    delay_value?: IntFieldUpdateOperationsInput | number
+    delay_unit?: EnumSequenceDelayUnitFieldUpdateOperationsInput | $Enums.SequenceDelayUnit
+    delay_reference?: EnumSequenceDelayReferenceFieldUpdateOperationsInput | $Enums.SequenceDelayReference
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    sequence?: OutreachSequenceUpdateOneRequiredWithoutStepsNestedInput
+    outreach_messages?: OutreachMessageUpdateManyWithoutSequence_stepNestedInput
+  }
+
+  export type OutreachSequenceStepUncheckedUpdateWithoutMessage_templateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    sequence_uuid?: StringFieldUpdateOperationsInput | string
+    order_index?: IntFieldUpdateOperationsInput | number
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    channel?: EnumChannelFieldUpdateOperationsInput | $Enums.Channel
+    email_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    email_content?: NullableStringFieldUpdateOperationsInput | string | null
+    sms_content?: NullableStringFieldUpdateOperationsInput | string | null
+    delay_value?: IntFieldUpdateOperationsInput | number
+    delay_unit?: EnumSequenceDelayUnitFieldUpdateOperationsInput | $Enums.SequenceDelayUnit
+    delay_reference?: EnumSequenceDelayReferenceFieldUpdateOperationsInput | $Enums.SequenceDelayReference
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutSequence_stepNestedInput
+  }
+
+  export type OutreachSequenceStepUncheckedUpdateManyWithoutMessage_templateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    sequence_uuid?: StringFieldUpdateOperationsInput | string
+    order_index?: IntFieldUpdateOperationsInput | number
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    channel?: EnumChannelFieldUpdateOperationsInput | $Enums.Channel
+    email_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    email_content?: NullableStringFieldUpdateOperationsInput | string | null
+    sms_content?: NullableStringFieldUpdateOperationsInput | string | null
+    delay_value?: IntFieldUpdateOperationsInput | number
+    delay_unit?: EnumSequenceDelayUnitFieldUpdateOperationsInput | $Enums.SequenceDelayUnit
+    delay_reference?: EnumSequenceDelayReferenceFieldUpdateOperationsInput | $Enums.SequenceDelayReference
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -101883,6 +108781,8 @@ export namespace Prisma {
     email_account?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    sequence_enrollment_uuid?: string | null
+    sequence_step_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -101897,6 +108797,19 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status_change?: NullableJsonNullValueInput | InputJsonValue
     outreach_message_uuid?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type SequenceEnrollmentCreateManyCampaignInput = {
+    id?: number
+    uuid?: string
+    sequence_uuid: string
+    contact_uuid: string
+    status?: $Enums.SequenceEnrollmentStatus
+    enrolled_at?: Date | string
+    cancelled_at?: Date | string | null
+    completed_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -101966,6 +108879,8 @@ export namespace Prisma {
     contact?: ContactUpdateOneRequiredWithoutOutreach_messagesNestedInput
     sent_by?: UserUpdateOneWithoutOutreach_messages_sentNestedInput
     interaction?: InteractionUpdateOneWithoutOutreach_messageNestedInput
+    sequence_enrollment?: SequenceEnrollmentUpdateOneWithoutOutreach_messagesNestedInput
+    sequence_step?: OutreachSequenceStepUpdateOneWithoutOutreach_messagesNestedInput
   }
 
   export type OutreachMessageUncheckedUpdateWithoutCampaignInput = {
@@ -101993,6 +108908,8 @@ export namespace Prisma {
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    sequence_step_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     interaction?: InteractionUncheckedUpdateOneWithoutOutreach_messageNestedInput
@@ -102023,6 +108940,8 @@ export namespace Prisma {
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    sequence_step_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -102064,6 +108983,46 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status_change?: NullableJsonNullValueInput | InputJsonValue
     outreach_message_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SequenceEnrollmentUpdateWithoutCampaignInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumSequenceEnrollmentStatusFieldUpdateOperationsInput | $Enums.SequenceEnrollmentStatus
+    enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    sequence?: OutreachSequenceUpdateOneRequiredWithoutEnrollmentsNestedInput
+    contact?: ContactUpdateOneRequiredWithoutSequence_enrollmentsNestedInput
+    outreach_messages?: OutreachMessageUpdateManyWithoutSequence_enrollmentNestedInput
+  }
+
+  export type SequenceEnrollmentUncheckedUpdateWithoutCampaignInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    sequence_uuid?: StringFieldUpdateOperationsInput | string
+    contact_uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumSequenceEnrollmentStatusFieldUpdateOperationsInput | $Enums.SequenceEnrollmentStatus
+    enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutSequence_enrollmentNestedInput
+  }
+
+  export type SequenceEnrollmentUncheckedUpdateManyWithoutCampaignInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    sequence_uuid?: StringFieldUpdateOperationsInput | string
+    contact_uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumSequenceEnrollmentStatusFieldUpdateOperationsInput | $Enums.SequenceEnrollmentStatus
+    enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }

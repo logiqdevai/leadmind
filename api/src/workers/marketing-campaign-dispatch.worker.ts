@@ -4,6 +4,7 @@ import { Job, Queue } from 'bullmq';
 import {
     CampaignContactStatus,
     CampaignStatus,
+    CampaignType,
     Channel,
 } from '@/generated/prisma';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
@@ -14,6 +15,7 @@ import {
 import { CampaignContactResolverService } from '@/modules/marketing-campaigns/services/campaign-contact-resolver.service';
 import { CampaignFiltersDto } from '@/modules/marketing-campaigns/dto/campaign-filters.dto';
 import { CampaignMessageSendService } from '@/modules/marketing-campaigns/services/campaign-message-send.service';
+import { SequenceEnrollmentService } from '@/modules/sequences/services/sequence-enrollment.service';
 import {
     assignEmailProviders,
     parseStoredEmailProviderAllocations,
@@ -35,6 +37,7 @@ export class MarketingCampaignDispatchWorker extends WorkerHost {
         private readonly prisma: PrismaService,
         private readonly resolver: CampaignContactResolverService,
         private readonly sendService: CampaignMessageSendService,
+        private readonly sequenceEnrollmentService: SequenceEnrollmentService,
         @InjectQueue(MARKETING_MESSAGE_SEND_QUEUE)
         private readonly messageSendQueue: Queue,
     ) {
@@ -84,6 +87,15 @@ export class MarketingCampaignDispatchWorker extends WorkerHost {
                 },
             });
             this.logger.log(`Campaign ${campaign_uuid} dispatched zero contacts; marked COMPLETED`);
+            return;
+        }
+
+        if (campaign.campaign_type === CampaignType.SEQUENCE) {
+            if (!campaign.sequence_uuid) {
+                this.logger.error(`Campaign ${campaign_uuid} is SEQUENCE type but has no sequence_uuid`);
+                return;
+            }
+            await this.dispatchSequenceCampaign(campaign.organisation_uuid, campaign_uuid, campaign.sequence_uuid, contact_uuids);
             return;
         }
 
@@ -166,5 +178,32 @@ export class MarketingCampaignDispatchWorker extends WorkerHost {
         this.logger.log(`Campaign ${campaign_uuid}: enqueued ${mccs.length} send jobs`);
 
         await this.sendService.checkCompletion(campaign_uuid);
+    }
+
+    private async dispatchSequenceCampaign(
+        organisation_uuid: string,
+        campaign_uuid: string,
+        sequence_uuid: string,
+        contact_uuids: string[],
+    ): Promise<void> {
+        const { enrolled, skipped, totalMessages } = await this.sequenceEnrollmentService.bulkEnroll(
+            organisation_uuid,
+            sequence_uuid,
+            contact_uuids,
+            campaign_uuid,
+        );
+
+        await this.prisma.marketingCampaign.update({
+            where: { uuid: campaign_uuid },
+            data: {
+                selected_contact_count: enrolled,
+                total_messages: totalMessages,
+                queued_count: totalMessages,
+            },
+        });
+
+        this.logger.log(
+            `Campaign ${campaign_uuid}: enrolled ${enrolled} contacts into sequence ${sequence_uuid} (${skipped} skipped, ${totalMessages} messages scheduled)`,
+        );
     }
 }

@@ -17,6 +17,8 @@ export type ActivityUuidSource =
     | 'params.userUuid'
     | 'params.invitationUuid'
     | 'params.token'
+    | 'params.step_uuid'
+    | 'params.enrollment_uuid'
     | 'body.uuid'
     | 'result.uuid'
     | 'result.jobId'

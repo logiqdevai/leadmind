@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsUUID } from 'class-validator';
 
-export class AssignSequenceDto {
+export class EnrollContactDto {
     @ApiProperty()
     @IsUUID()
-    contact_uuid: string;
+    contact_uuid!: string;
 }

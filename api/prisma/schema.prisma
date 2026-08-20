@@ -24,15 +24,15 @@ model User {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  memberships              OrganisationMember[]
-  invitations_sent         OrganisationInvitation[] @relation("InvitationInvitedBy")
-  form_completions         FormCompletion[]         @relation("CompletedByUser")
-  outreach_messages_sent   OutreachMessage[]        @relation("OutreachMessageSentBy")
-  activity_logs            ActivityLog[]            @relation("ActivityLogActor")
-  messaging_goals          MessagingGoal[]
-  goal_achievements        GoalAchievement[]
-  goal_personal_bests      GoalPersonalBest[]
-  bulk_jobs_created        BulkJob[]                @relation("BulkJobCreatedBy")
+  memberships            OrganisationMember[]
+  invitations_sent       OrganisationInvitation[] @relation("InvitationInvitedBy")
+  form_completions       FormCompletion[]         @relation("CompletedByUser")
+  outreach_messages_sent OutreachMessage[]        @relation("OutreachMessageSentBy")
+  activity_logs          ActivityLog[]            @relation("ActivityLogActor")
+  messaging_goals        MessagingGoal[]
+  goal_achievements      GoalAchievement[]
+  goal_personal_bests    GoalPersonalBest[]
+  bulk_jobs_created      BulkJob[]                @relation("BulkJobCreatedBy")
 
   @@index([email])
   @@index([phone])
@@ -50,33 +50,33 @@ model Organisation {
   created_at     DateTime @default(now())
   updated_at     DateTime @updatedAt
 
-  members                  OrganisationMember[]
-  invitations              OrganisationInvitation[]
-  filters                  Filter[]
-  contacts                 Contact[]
-  outreach_messages        OutreachMessage[]
-  outreach_sequences       OutreachSequence[]
-  interactions             Interaction[]
-  sender_profiles          SenderProfile[]
-  marketing_campaigns      MarketingCampaign[]
-  scoring_instructions     ScoringInstruction[]
-  openai_batch_jobs        OpenAiBatchJob[]
-  integrations             Integration[]
-  reminders                Reminder[]
-  forms                    Form[]
-  contact_lists            ContactList[]
-  saved_contact_filters    SavedContactFilter[]
+  members                   OrganisationMember[]
+  invitations               OrganisationInvitation[]
+  filters                   Filter[]
+  contacts                  Contact[]
+  outreach_messages         OutreachMessage[]
+  outreach_sequences        OutreachSequence[]
+  interactions              Interaction[]
+  sender_profiles           SenderProfile[]
+  marketing_campaigns       MarketingCampaign[]
+  scoring_instructions      ScoringInstruction[]
+  openai_batch_jobs         OpenAiBatchJob[]
+  integrations              Integration[]
+  reminders                 Reminder[]
+  forms                     Form[]
+  contact_lists             ContactList[]
+  saved_contact_filters     SavedContactFilter[]
   contact_audience_analyses ContactAudienceAnalysis[]
-  ai_usage_logs            AiUsageLog[]
-  apify_usage_logs         ApifyUsageLog[]
-  message_templates        MessageTemplate[]
-  activity_logs            ActivityLog[]
-  messaging_goals          MessagingGoal[]
-  goal_achievements        GoalAchievement[]
-  goal_personal_bests      GoalPersonalBest[]
-  bulk_jobs                BulkJob[]
-  website_scrape_requests  WebsiteScrapeRequest[]
-  email_send_limits        EmailSendLimit[]
+  ai_usage_logs             AiUsageLog[]
+  apify_usage_logs          ApifyUsageLog[]
+  message_templates         MessageTemplate[]
+  activity_logs             ActivityLog[]
+  messaging_goals           MessagingGoal[]
+  goal_achievements         GoalAchievement[]
+  goal_personal_bests       GoalPersonalBest[]
+  bulk_jobs                 BulkJob[]
+  website_scrape_requests   WebsiteScrapeRequest[]
+  email_send_limits         EmailSendLimit[]
 
   @@index([uuid])
   @@index([slug])
@@ -84,13 +84,13 @@ model Organisation {
 }
 
 model OrganisationMember {
-  id                 Int              @id @default(autoincrement())
-  uuid               String           @unique @default(uuid())
-  organisation_uuid  String
-  user_uuid          String
-  role               OrganisationRole @default(MEMBER)
-  created_at         DateTime         @default(now())
-  updated_at         DateTime         @updatedAt
+  id                Int              @id @default(autoincrement())
+  uuid              String           @unique @default(uuid())
+  organisation_uuid String
+  user_uuid         String
+  role              OrganisationRole @default(MEMBER)
+  created_at        DateTime         @default(now())
+  updated_at        DateTime         @updatedAt
 
   organisation Organisation @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
   user         User         @relation(fields: [user_uuid], references: [uuid], onDelete: Cascade)
@@ -102,18 +102,18 @@ model OrganisationMember {
 }
 
 model OrganisationInvitation {
-  id                    Int                        @id @default(autoincrement())
-  uuid                  String                     @unique @default(uuid())
-  organisation_uuid     String
-  email                 String
-  role                  OrganisationInviteRole     @default(MEMBER)
-  token                 String                     @unique @default(uuid())
-  status                OrganisationInviteStatus   @default(PENDING)
-  invited_by_user_uuid  String
-  expires_at            DateTime
-  accepted_at           DateTime?
-  created_at            DateTime                   @default(now())
-  updated_at            DateTime                   @updatedAt
+  id                   Int                      @id @default(autoincrement())
+  uuid                 String                   @unique @default(uuid())
+  organisation_uuid    String
+  email                String
+  role                 OrganisationInviteRole   @default(MEMBER)
+  token                String                   @unique @default(uuid())
+  status               OrganisationInviteStatus @default(PENDING)
+  invited_by_user_uuid String
+  expires_at           DateTime
+  accepted_at          DateTime?
+  created_at           DateTime                 @default(now())
+  updated_at           DateTime                 @updatedAt
 
   organisation Organisation @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
   invited_by   User         @relation("InvitationInvitedBy", fields: [invited_by_user_uuid], references: [uuid], onDelete: Cascade)
@@ -140,13 +140,13 @@ model Filter {
   created_at            DateTime           @default(now())
   updated_at            DateTime           @updatedAt
 
-  organisation                 Organisation                 @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
-  raw_leads                    RawLead[]
-  contacts                     Contact[]
-  contact_filters              ContactFilter[]
-  jobs                         FilterJob[]
-  filter_scoring_instructions  FilterScoringInstruction[]
-  audience_analyses            ContactAudienceAnalysis[]
+  organisation                Organisation               @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  raw_leads                   RawLead[]
+  contacts                    Contact[]
+  contact_filters             ContactFilter[]
+  jobs                        FilterJob[]
+  filter_scoring_instructions FilterScoringInstruction[]
+  audience_analyses           ContactAudienceAnalysis[]
 
   @@index([organisation_uuid])
 }
@@ -175,8 +175,8 @@ model ScoringInstruction {
   created_at        DateTime @default(now())
   updated_at        DateTime @updatedAt
 
-  organisation Organisation              @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
-  filter_links FilterScoringInstruction[]
+  organisation   Organisation               @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  filter_links   FilterScoringInstruction[]
   contact_scores ContactScore[]
 
   @@index([organisation_uuid])
@@ -184,12 +184,12 @@ model ScoringInstruction {
 }
 
 model FilterScoringInstruction {
-  filter_uuid                String
-  scoring_instruction_uuid   String
-  created_at                   DateTime @default(now())
+  filter_uuid              String
+  scoring_instruction_uuid String
+  created_at               DateTime @default(now())
 
-  filter               Filter               @relation(fields: [filter_uuid], references: [uuid], onDelete: Cascade)
-  scoring_instruction  ScoringInstruction   @relation(fields: [scoring_instruction_uuid], references: [uuid], onDelete: Cascade)
+  filter              Filter             @relation(fields: [filter_uuid], references: [uuid], onDelete: Cascade)
+  scoring_instruction ScoringInstruction @relation(fields: [scoring_instruction_uuid], references: [uuid], onDelete: Cascade)
 
   @@id([filter_uuid, scoring_instruction_uuid])
   @@map("filter_scoring_instructions")
@@ -217,29 +217,29 @@ model RawLead {
 // Each Lead is created from a RawLead (`raw_lead_uuid`), which is the audit
 // record of what the scraper returned.
 model Lead {
-  id                 Int        @id @default(autoincrement())
-  uuid               String     @unique @default(uuid())
-  raw_lead_uuid      String?    @unique
-  name               String?
-  email              String?
-  phone              String?
-  company            String?
-  website            String?
-  google_maps_url    String?
-  linkedin_url       String?
-  title              String?
-  location           String?
-  industry           String?
-  description        String?
-  source_type        SourceType
-  raw_data             Json?
-  enrichment_summary   String?    @db.Text
-  enrichment_metadata  Json?
+  id                      Int                   @id @default(autoincrement())
+  uuid                    String                @unique @default(uuid())
+  raw_lead_uuid           String?               @unique
+  name                    String?
+  email                   String?
+  phone                   String?
+  company                 String?
+  website                 String?
+  google_maps_url         String?
+  linkedin_url            String?
+  title                   String?
+  location                String?
+  industry                String?
+  description             String?
+  source_type             SourceType
+  raw_data                Json?
+  enrichment_summary      String?               @db.Text
+  enrichment_metadata     Json?
   email_validation_status EmailValidationStatus @default(UNKNOWN)
   email_validation_reason String?
   email_validated_at      DateTime?
-  created_at           DateTime   @default(now())
-  updated_at         DateTime   @updatedAt
+  created_at              DateTime              @default(now())
+  updated_at              DateTime              @updatedAt
 
   raw_lead    RawLead?         @relation(fields: [raw_lead_uuid], references: [uuid], onDelete: SetNull)
   contacts    Contact[]
@@ -271,49 +271,50 @@ model LeadEnrichment {
 }
 
 model Contact {
-  id                  Int        @id @default(autoincrement())
-  uuid                String     @unique @default(uuid())
-  organisation_uuid   String
-  lead_uuid           String
-  filter_uuid         String?
-  status              LeadStatus @default(NEW)
-  notes               String?
-  name                String?
-  email               String?
-  phone               String?
-  company             String?
-  website             String?
-  google_maps_url     String?
-  linkedin_url        String?
-  title               String?
-  location            String?
-  industry            String?
-  description           String?
-  enrichment_summary    String?    @db.Text
-  enrichment_metadata   Json?
+  id                      Int                   @id @default(autoincrement())
+  uuid                    String                @unique @default(uuid())
+  organisation_uuid       String
+  lead_uuid               String
+  filter_uuid             String?
+  status                  LeadStatus            @default(NEW)
+  notes                   String?
+  name                    String?
+  email                   String?
+  phone                   String?
+  company                 String?
+  website                 String?
+  google_maps_url         String?
+  linkedin_url            String?
+  title                   String?
+  location                String?
+  industry                String?
+  description             String?
+  enrichment_summary      String?               @db.Text
+  enrichment_metadata     Json?
   email_validation_status EmailValidationStatus @default(UNKNOWN)
   email_validation_reason String?
   email_validated_at      DateTime?
-  unsubscribed_at       DateTime?
-  unsubscribe_token     String?    @unique
-  last_interaction_at   DateTime?
-  created_at            DateTime   @default(now())
-  updated_at            DateTime   @updatedAt
+  unsubscribed_at         DateTime?
+  unsubscribe_token       String?               @unique
+  last_interaction_at     DateTime?
+  created_at              DateTime              @default(now())
+  updated_at              DateTime              @updatedAt
 
-  organisation      Organisation               @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
-  lead              Lead                       @relation(fields: [lead_uuid], references: [uuid], onDelete: Cascade)
-  filter            Filter?                    @relation(fields: [filter_uuid], references: [uuid], onDelete: SetNull)
-  contact_filters   ContactFilter[]
-  tags              ContactTag[]
-  contact_infos     ContactInfo[]
-  interactions      Interaction[]
-  outreach_messages OutreachMessage[]
-  campaign_contacts MarketingCampaignContact[]
-  contact_scores    ContactScore[]
-  reminders         Reminder[]
-  form_completions  FormCompletion[]
-  list_memberships  ContactListMember[]
-  enrichments       ContactEnrichment[]
+  organisation         Organisation               @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  lead                 Lead                       @relation(fields: [lead_uuid], references: [uuid], onDelete: Cascade)
+  filter               Filter?                    @relation(fields: [filter_uuid], references: [uuid], onDelete: SetNull)
+  contact_filters      ContactFilter[]
+  tags                 ContactTag[]
+  contact_infos        ContactInfo[]
+  interactions         Interaction[]
+  outreach_messages    OutreachMessage[]
+  campaign_contacts    MarketingCampaignContact[]
+  contact_scores       ContactScore[]
+  reminders            Reminder[]
+  form_completions     FormCompletion[]
+  list_memberships     ContactListMember[]
+  enrichments          ContactEnrichment[]
+  sequence_enrollments SequenceEnrollment[]
 
   @@unique([organisation_uuid, lead_uuid])
   @@index([organisation_uuid])
@@ -381,8 +382,8 @@ model ContactScore {
   score                    Int
   updated_at               DateTime @updatedAt
 
-  contact              Contact            @relation(fields: [contact_uuid], references: [uuid], onDelete: Cascade)
-  scoring_instruction  ScoringInstruction @relation(fields: [scoring_instruction_uuid], references: [uuid], onDelete: Cascade)
+  contact             Contact            @relation(fields: [contact_uuid], references: [uuid], onDelete: Cascade)
+  scoring_instruction ScoringInstruction @relation(fields: [scoring_instruction_uuid], references: [uuid], onDelete: Cascade)
 
   @@unique([contact_uuid, scoring_instruction_uuid])
   @@index([contact_uuid])
@@ -400,9 +401,9 @@ model ContactList {
   created_at        DateTime @default(now())
   updated_at        DateTime @updatedAt
 
-  organisation      Organisation        @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
-  parent            ContactList?        @relation("ContactListHierarchy", fields: [parent_list_uuid], references: [uuid], onDelete: Cascade)
-  children          ContactList[]       @relation("ContactListHierarchy")
+  organisation      Organisation              @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  parent            ContactList?              @relation("ContactListHierarchy", fields: [parent_list_uuid], references: [uuid], onDelete: Cascade)
+  children          ContactList[]             @relation("ContactListHierarchy")
   members           ContactListMember[]
   audience_analyses ContactAudienceAnalysis[]
 
@@ -466,39 +467,43 @@ model Interaction {
 }
 
 model OutreachMessage {
-  id                  Int          @id @default(autoincrement())
-  uuid                String       @unique @default(uuid())
-  organisation_uuid   String
-  contact_uuid        String
-  campaign_uuid       String?
-  sent_by_user_uuid   String?
-  channel             Channel
-  direction           MsgDirection @default(OUTBOUND)
-  subject             String?
-  content             String
-  status              MsgStatus    @default(PENDING)
-  provider_message_id String?
-  idempotency_key     String?      @unique
-  scheduled_at        DateTime?
-  sent_at             DateTime?
-  delivered_at        DateTime?
-  opened_at           DateTime?
-  clicked_at          DateTime?
-  replied_at          DateTime?
-  bounced_at          DateTime?
-  failed_at           DateTime?
-  email_provider      ExternalIntegrationProvider?
-  email_account       String?
-  sms_provider        String?
-  metadata            Json?
-  created_at          DateTime     @default(now())
-  updated_at          DateTime     @updatedAt
+  id                       Int                          @id @default(autoincrement())
+  uuid                     String                       @unique @default(uuid())
+  organisation_uuid        String
+  contact_uuid             String
+  campaign_uuid            String?
+  sent_by_user_uuid        String?
+  channel                  Channel
+  direction                MsgDirection                 @default(OUTBOUND)
+  subject                  String?
+  content                  String
+  status                   MsgStatus                    @default(PENDING)
+  provider_message_id      String?
+  idempotency_key          String?                      @unique
+  scheduled_at             DateTime?
+  sent_at                  DateTime?
+  delivered_at             DateTime?
+  opened_at                DateTime?
+  clicked_at               DateTime?
+  replied_at               DateTime?
+  bounced_at               DateTime?
+  failed_at                DateTime?
+  email_provider           ExternalIntegrationProvider?
+  email_account            String?
+  sms_provider             String?
+  metadata                 Json?
+  sequence_enrollment_uuid String?
+  sequence_step_uuid       String?
+  created_at               DateTime                     @default(now())
+  updated_at               DateTime                     @updatedAt
 
-  organisation Organisation       @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
-  contact      Contact            @relation(fields: [contact_uuid], references: [uuid], onDelete: Cascade)
-  campaign     MarketingCampaign? @relation(fields: [campaign_uuid], references: [uuid], onDelete: SetNull)
-  sent_by      User?              @relation("OutreachMessageSentBy", fields: [sent_by_user_uuid], references: [uuid], onDelete: SetNull)
-  interaction  Interaction?
+  organisation        Organisation          @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  contact             Contact               @relation(fields: [contact_uuid], references: [uuid], onDelete: Cascade)
+  campaign            MarketingCampaign?    @relation(fields: [campaign_uuid], references: [uuid], onDelete: SetNull)
+  sent_by             User?                 @relation("OutreachMessageSentBy", fields: [sent_by_user_uuid], references: [uuid], onDelete: SetNull)
+  interaction         Interaction?
+  sequence_enrollment SequenceEnrollment?   @relation(fields: [sequence_enrollment_uuid], references: [uuid], onDelete: SetNull)
+  sequence_step       OutreachSequenceStep? @relation(fields: [sequence_step_uuid], references: [uuid], onDelete: SetNull)
 
   @@index([organisation_uuid])
   @@index([contact_uuid])
@@ -509,20 +514,81 @@ model OutreachMessage {
   @@index([sent_by_user_uuid])
   @@index([campaign_uuid, contact_uuid, channel])
   @@index([organisation_uuid, sent_by_user_uuid, sent_at])
+  @@index([sequence_enrollment_uuid])
+  @@index([sequence_step_uuid])
 }
 
 model OutreachSequence {
-  id                Int      @id @default(autoincrement())
-  uuid              String   @unique @default(uuid())
+  id                Int            @id @default(autoincrement())
+  uuid              String         @unique @default(uuid())
   organisation_uuid String
   name              String
-  steps             Json
-  created_at        DateTime @default(now())
-  updated_at        DateTime @updatedAt
+  description       String?
+  status            SequenceStatus @default(DRAFT)
+  created_at        DateTime       @default(now())
+  updated_at        DateTime       @updatedAt
 
-  organisation Organisation @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  organisation Organisation           @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  steps        OutreachSequenceStep[]
+  enrollments  SequenceEnrollment[]
+  campaigns    MarketingCampaign[]
 
   @@index([organisation_uuid])
+  @@index([organisation_uuid, status])
+}
+
+model OutreachSequenceStep {
+  id                    Int                    @id @default(autoincrement())
+  uuid                  String                 @unique @default(uuid())
+  sequence_uuid         String
+  order_index           Int
+  enabled               Boolean                @default(true)
+  channel               Channel
+  email_subject         String?
+  email_content         String?                @db.Text
+  sms_content           String?                @db.Text
+  message_template_uuid String?
+  delay_value           Int
+  delay_unit            SequenceDelayUnit      @default(HOURS)
+  delay_reference       SequenceDelayReference @default(PREVIOUS_STEP)
+  created_at            DateTime               @default(now())
+  updated_at            DateTime               @updatedAt
+
+  sequence          OutreachSequence  @relation(fields: [sequence_uuid], references: [uuid], onDelete: Cascade)
+  message_template  MessageTemplate?  @relation(fields: [message_template_uuid], references: [uuid], onDelete: SetNull)
+  outreach_messages OutreachMessage[]
+
+  @@index([sequence_uuid])
+  @@index([sequence_uuid, order_index])
+  @@index([message_template_uuid])
+  @@map("outreach_sequence_steps")
+}
+
+model SequenceEnrollment {
+  id            Int                      @id @default(autoincrement())
+  uuid          String                   @unique @default(uuid())
+  sequence_uuid String
+  contact_uuid  String
+  campaign_uuid String?
+  status        SequenceEnrollmentStatus @default(ACTIVE)
+  enrolled_at   DateTime                 @default(now())
+  cancelled_at  DateTime?
+  completed_at  DateTime?
+  created_at    DateTime                 @default(now())
+  updated_at    DateTime                 @updatedAt
+
+  sequence          OutreachSequence   @relation(fields: [sequence_uuid], references: [uuid], onDelete: Cascade)
+  contact           Contact            @relation(fields: [contact_uuid], references: [uuid], onDelete: Cascade)
+  campaign          MarketingCampaign? @relation(fields: [campaign_uuid], references: [uuid], onDelete: SetNull)
+  outreach_messages OutreachMessage[]
+
+  @@unique([sequence_uuid, contact_uuid, campaign_uuid], map: "sequence_enrollments_target_key")
+  @@index([sequence_uuid])
+  @@index([contact_uuid])
+  @@index([campaign_uuid])
+  @@index([sequence_uuid, contact_uuid, status])
+  @@index([status])
+  @@map("sequence_enrollments")
 }
 
 model FilterJob {
@@ -597,7 +663,9 @@ enum WebsiteScrapeStatus {
   FAILED
 }
 
-/** A pending async website-scrape run, tracked until its provider (Scrapio today, others later) resolves it via webhook or timeout. */
+/**
+ * A pending async website-scrape run, tracked until its provider (Scrapio today, others later) resolves it via webhook or timeout.
+ */
 model WebsiteScrapeRequest {
   id                 String                 @id @default(uuid())
   provider           WebsiteScrapeProvider  @default(SCRAPIO)
@@ -621,30 +689,30 @@ model WebsiteScrapeRequest {
 }
 
 model SenderProfile {
-  id           Int      @id @default(autoincrement())
-  uuid         String   @unique @default(uuid())
-  organisation_uuid String
-  name         String
-  company_name String?
-  title        String?
-  first_name   String?
-  last_name    String?
-  email        String?
-  phone        String?
-  website      String?
-  website_utm  Json?
-  address      String?
-  city         String?
-  country      String?
-  logo_url     String?
-  booking_url  String?
-  booking_utm  Json?
-  sender_id    String?
-  signature    String?  @db.Text
-  business_description String? @db.Text
-  is_default   Boolean  @default(false)
-  created_at   DateTime @default(now())
-  updated_at   DateTime @updatedAt
+  id                   Int      @id @default(autoincrement())
+  uuid                 String   @unique @default(uuid())
+  organisation_uuid    String
+  name                 String
+  company_name         String?
+  title                String?
+  first_name           String?
+  last_name            String?
+  email                String?
+  phone                String?
+  website              String?
+  website_utm          Json?
+  address              String?
+  city                 String?
+  country              String?
+  logo_url             String?
+  booking_url          String?
+  booking_utm          Json?
+  sender_id            String?
+  signature            String?  @db.Text
+  business_description String?  @db.Text
+  is_default           Boolean  @default(false)
+  created_at           DateTime @default(now())
+  updated_at           DateTime @updatedAt
 
   organisation        Organisation        @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
   marketing_campaigns MarketingCampaign[]
@@ -667,35 +735,37 @@ model MessageTemplate {
   created_at           DateTime  @default(now())
   updated_at           DateTime  @updatedAt
 
-  organisation Organisation @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  organisation   Organisation           @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  sequence_steps OutreachSequenceStep[]
 
   @@index([organisation_uuid])
   @@map("message_templates")
 }
 
 model MarketingCampaign {
-  id                  Int            @id @default(autoincrement())
-  uuid                String         @unique @default(uuid())
-  organisation_uuid   String
-  name                String
-  description         String?
-  status              CampaignStatus @default(DRAFT)
-  campaign_type       CampaignType   @default(STANDARD)
-  channels            Channel[]      @default([EMAIL])
-  filters_snapshot    Json?
-  email_subject       String?
-  email_content       String?        @db.Text
-  sms_content         String?        @db.Text
-  linkedin_content    String?        @db.Text
-  ai_prompt           String?        @db.Text
-  use_openai_batch    Boolean        @default(false)
-  draft_batch_id      String?
-  sender_profile_uuid String?
+  id                         Int            @id @default(autoincrement())
+  uuid                       String         @unique @default(uuid())
+  organisation_uuid          String
+  name                       String
+  description                String?
+  status                     CampaignStatus @default(DRAFT)
+  campaign_type              CampaignType   @default(STANDARD)
+  channels                   Channel[]      @default([EMAIL])
+  filters_snapshot           Json?
+  email_subject              String?
+  email_content              String?        @db.Text
+  sms_content                String?        @db.Text
+  linkedin_content           String?        @db.Text
+  ai_prompt                  String?        @db.Text
+  use_openai_batch           Boolean        @default(false)
+  draft_batch_id             String?
+  sender_profile_uuid        String?
   email_provider_allocations Json?
-  scheduled_at        DateTime?
-  started_at          DateTime?
-  completed_at        DateTime?
-  cancelled_at        DateTime?
+  sequence_uuid              String?
+  scheduled_at               DateTime?
+  started_at                 DateTime?
+  completed_at               DateTime?
+  cancelled_at               DateTime?
 
   selected_contact_count Int @default(0)
   total_messages         Int @default(0)
@@ -715,15 +785,18 @@ model MarketingCampaign {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  organisation      Organisation               @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
-  sender_profile    SenderProfile?             @relation(fields: [sender_profile_uuid], references: [uuid], onDelete: SetNull)
-  campaign_contacts MarketingCampaignContact[]
-  outreach_messages OutreachMessage[]
-  interactions      Interaction[]
+  organisation         Organisation               @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  sender_profile       SenderProfile?             @relation(fields: [sender_profile_uuid], references: [uuid], onDelete: SetNull)
+  sequence             OutreachSequence?          @relation(fields: [sequence_uuid], references: [uuid], onDelete: SetNull)
+  campaign_contacts    MarketingCampaignContact[]
+  outreach_messages    OutreachMessage[]
+  interactions         Interaction[]
+  sequence_enrollments SequenceEnrollment[]
 
   @@index([organisation_uuid])
   @@index([status])
   @@index([scheduled_at])
+  @@index([sequence_uuid])
   @@map("marketing_campaigns")
 }
 
@@ -914,6 +987,31 @@ enum InteractionType {
 enum CampaignType {
   STANDARD
   PERSONALIZED
+  SEQUENCE
+}
+
+enum SequenceStatus {
+  DRAFT
+  ACTIVE
+  ARCHIVED
+}
+
+enum SequenceDelayUnit {
+  HOURS
+  DAYS
+  WEEKS
+  MONTHS
+}
+
+enum SequenceDelayReference {
+  FIRST_STEP
+  PREVIOUS_STEP
+}
+
+enum SequenceEnrollmentStatus {
+  ACTIVE
+  COMPLETED
+  CANCELLED
 }
 
 enum CampaignStatus {
@@ -941,23 +1039,23 @@ enum CampaignContactStatus {
 }
 
 model OpenAiBatchJob {
-  id                  String             @id @default(uuid())
-  batch_id            String             @unique
-  organisation_uuid   String
-  type                OpenAiBatchJobType
-  status              OpenAiBatchStatus  @default(IN_PROGRESS)
-  total_requests      Int                @default(0)
-  completed_requests  Int                @default(0)
-  failed_requests     Int                @default(0)
-  input_file_id       String?
-  output_file_id      String?
-  error_file_id       String?
-  expires_at          DateTime?
-  finished_at         DateTime?
-  context             Json?
-  created_at          DateTime           @default(now())
-  updated_at          DateTime           @updatedAt
-  organisation        Organisation       @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  id                 String             @id @default(uuid())
+  batch_id           String             @unique
+  organisation_uuid  String
+  type               OpenAiBatchJobType
+  status             OpenAiBatchStatus  @default(IN_PROGRESS)
+  total_requests     Int                @default(0)
+  completed_requests Int                @default(0)
+  failed_requests    Int                @default(0)
+  input_file_id      String?
+  output_file_id     String?
+  error_file_id      String?
+  expires_at         DateTime?
+  finished_at        DateTime?
+  context            Json?
+  created_at         DateTime           @default(now())
+  updated_at         DateTime           @updatedAt
+  organisation       Organisation       @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
 
   @@map("openai_batch_jobs")
 }
@@ -1002,14 +1100,14 @@ enum IntegrationKeyType {
 }
 
 model Integration {
-  id               Int                         @id @default(autoincrement())
-  uuid             String                      @unique @default(uuid())
+  id                Int                         @id @default(autoincrement())
+  uuid              String                      @unique @default(uuid())
   organisation_uuid String
-  provider         ExternalIntegrationProvider
-  title            String
-  default_account  String?
-  created_at       DateTime                    @default(now())
-  updated_at       DateTime                    @updatedAt
+  provider          ExternalIntegrationProvider
+  title             String
+  default_account   String?
+  created_at        DateTime                    @default(now())
+  updated_at        DateTime                    @updatedAt
 
   organisation Organisation         @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
   keys         IntegrationKey[]
@@ -1038,15 +1136,15 @@ model IntegrationAccount {
 }
 
 model IntegrationKey {
-  id               Int                 @id @default(autoincrement())
-  uuid             String              @unique @default(uuid())
+  id               Int                @id @default(autoincrement())
+  uuid             String             @unique @default(uuid())
   integration_uuid String
   key_type         IntegrationKeyType
-  account          String              @default("1")
-  secret           String              @db.Text
+  account          String             @default("1")
+  secret           String             @db.Text
   last4            String?
-  created_at       DateTime            @default(now())
-  updated_at       DateTime            @updatedAt
+  created_at       DateTime           @default(now())
+  updated_at       DateTime           @updatedAt
 
   integration Integration @relation(fields: [integration_uuid], references: [uuid], onDelete: Cascade)
 
@@ -1137,7 +1235,7 @@ model FormField {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  form              Form                 @relation(fields: [form_uuid], references: [uuid], onDelete: Cascade)
+  form              Form                  @relation(fields: [form_uuid], references: [uuid], onDelete: Cascade)
   completion_values FormCompletionValue[]
 
   @@index([form_uuid])
@@ -1155,9 +1253,9 @@ model FormCompletion {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  form         Form                 @relation(fields: [form_uuid], references: [uuid], onDelete: Cascade)
-  contact      Contact              @relation(fields: [contact_uuid], references: [uuid], onDelete: Cascade)
-  completed_by User                 @relation("CompletedByUser", fields: [completed_by_uuid], references: [uuid], onDelete: Cascade)
+  form         Form                  @relation(fields: [form_uuid], references: [uuid], onDelete: Cascade)
+  contact      Contact               @relation(fields: [contact_uuid], references: [uuid], onDelete: Cascade)
+  completed_by User                  @relation("CompletedByUser", fields: [completed_by_uuid], references: [uuid], onDelete: Cascade)
   values       FormCompletionValue[]
 
   @@index([form_uuid])
@@ -1387,8 +1485,8 @@ model GoalAchievement {
   seen_at           DateTime?
   created_at        DateTime            @default(now())
 
-  organisation Organisation @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
-  user         User         @relation(fields: [user_uuid], references: [uuid], onDelete: Cascade)
+  organisation Organisation  @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  user         User          @relation(fields: [user_uuid], references: [uuid], onDelete: Cascade)
   goal         MessagingGoal @relation(fields: [goal_uuid], references: [uuid], onDelete: Cascade)
 
   @@unique([user_uuid, goal_uuid, type, period_key])

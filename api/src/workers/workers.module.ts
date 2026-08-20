@@ -13,6 +13,7 @@ import { TwillioModule } from '@/integrations/notifications/twillio/twillio.modu
 import { GatewaysModule } from '@/gateways/gateways.module';
 import { MessagingGoalsModule } from '@/modules/messaging-goals/messaging-goals.module';
 import { BulkJobsModule } from '@/modules/bulk-jobs/bulk-jobs.module';
+import { SequencesModule } from '@/modules/sequences/sequences.module';
 import {
     AI_PROCESS_QUEUE,
     FILTER_SCRAPE_QUEUE,
@@ -43,6 +44,7 @@ import { ReminderTriggerWorker } from './reminder-trigger.worker';
         GatewaysModule,
         MessagingGoalsModule,
         BulkJobsModule,
+        SequencesModule,
         BullModule.registerQueue(
             { name: FILTER_SCRAPE_QUEUE },
             { name: AI_PROCESS_QUEUE },
@@ -69,4 +71,4 @@ import { ReminderTriggerWorker } from './reminder-trigger.worker';
         ReminderTriggerWorker,
     ],
 })
-export class WorkersModule { }
+export class WorkersModule {}

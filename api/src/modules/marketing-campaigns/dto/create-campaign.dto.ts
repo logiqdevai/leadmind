@@ -71,6 +71,11 @@ export class CreateCampaignDto {
     @IsUUID()
     sender_profile_uuid?: string;
 
+    @ApiPropertyOptional({ description: 'ACTIVE OutreachSequence to enroll the resolved audience into (SEQUENCE campaigns only)' })
+    @IsOptional()
+    @IsUUID()
+    sequence_uuid?: string;
+
     @ApiPropertyOptional({ description: 'ISO datetime; if in future, campaign is queued for that time' })
     @IsOptional()
     @IsDateString()

@@ -399,6 +399,8 @@ exports.Prisma.OutreachMessageScalarFieldEnum = {
   email_account: 'email_account',
   sms_provider: 'sms_provider',
   metadata: 'metadata',
+  sequence_enrollment_uuid: 'sequence_enrollment_uuid',
+  sequence_step_uuid: 'sequence_step_uuid',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };
@@ -408,7 +410,40 @@ exports.Prisma.OutreachSequenceScalarFieldEnum = {
   uuid: 'uuid',
   organisation_uuid: 'organisation_uuid',
   name: 'name',
-  steps: 'steps',
+  description: 'description',
+  status: 'status',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.OutreachSequenceStepScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  sequence_uuid: 'sequence_uuid',
+  order_index: 'order_index',
+  enabled: 'enabled',
+  channel: 'channel',
+  email_subject: 'email_subject',
+  email_content: 'email_content',
+  sms_content: 'sms_content',
+  message_template_uuid: 'message_template_uuid',
+  delay_value: 'delay_value',
+  delay_unit: 'delay_unit',
+  delay_reference: 'delay_reference',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.SequenceEnrollmentScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  sequence_uuid: 'sequence_uuid',
+  contact_uuid: 'contact_uuid',
+  campaign_uuid: 'campaign_uuid',
+  status: 'status',
+  enrolled_at: 'enrolled_at',
+  cancelled_at: 'cancelled_at',
+  completed_at: 'completed_at',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };
@@ -530,6 +565,7 @@ exports.Prisma.MarketingCampaignScalarFieldEnum = {
   draft_batch_id: 'draft_batch_id',
   sender_profile_uuid: 'sender_profile_uuid',
   email_provider_allocations: 'email_provider_allocations',
+  sequence_uuid: 'sequence_uuid',
   scheduled_at: 'scheduled_at',
   started_at: 'started_at',
   completed_at: 'completed_at',
@@ -969,6 +1005,30 @@ exports.ExternalIntegrationProvider = exports.$Enums.ExternalIntegrationProvider
   SCRAPIO: 'SCRAPIO'
 };
 
+exports.SequenceStatus = exports.$Enums.SequenceStatus = {
+  DRAFT: 'DRAFT',
+  ACTIVE: 'ACTIVE',
+  ARCHIVED: 'ARCHIVED'
+};
+
+exports.SequenceDelayUnit = exports.$Enums.SequenceDelayUnit = {
+  HOURS: 'HOURS',
+  DAYS: 'DAYS',
+  WEEKS: 'WEEKS',
+  MONTHS: 'MONTHS'
+};
+
+exports.SequenceDelayReference = exports.$Enums.SequenceDelayReference = {
+  FIRST_STEP: 'FIRST_STEP',
+  PREVIOUS_STEP: 'PREVIOUS_STEP'
+};
+
+exports.SequenceEnrollmentStatus = exports.$Enums.SequenceEnrollmentStatus = {
+  ACTIVE: 'ACTIVE',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED'
+};
+
 exports.JobStatus = exports.$Enums.JobStatus = {
   PENDING: 'PENDING',
   RUNNING: 'RUNNING',
@@ -1032,7 +1092,8 @@ exports.CampaignStatus = exports.$Enums.CampaignStatus = {
 
 exports.CampaignType = exports.$Enums.CampaignType = {
   STANDARD: 'STANDARD',
-  PERSONALIZED: 'PERSONALIZED'
+  PERSONALIZED: 'PERSONALIZED',
+  SEQUENCE: 'SEQUENCE'
 };
 
 exports.CampaignContactStatus = exports.$Enums.CampaignContactStatus = {
@@ -1186,6 +1247,8 @@ exports.Prisma.ModelName = {
   Interaction: 'Interaction',
   OutreachMessage: 'OutreachMessage',
   OutreachSequence: 'OutreachSequence',
+  OutreachSequenceStep: 'OutreachSequenceStep',
+  SequenceEnrollment: 'SequenceEnrollment',
   FilterJob: 'FilterJob',
   BulkJob: 'BulkJob',
   WebsiteScrapeRequest: 'WebsiteScrapeRequest',

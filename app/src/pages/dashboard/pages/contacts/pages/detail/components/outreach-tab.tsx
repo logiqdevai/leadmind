@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Button, Chip } from "@heroui/react";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
-import { Pencil, Plus, RefreshCcw, Send, Trash } from "lucide-react";
+import { Pencil, Plus, RefreshCcw, Send, Trash, Workflow } from "lucide-react";
 import { Channel, type Contact } from "@/features/contacts/interfaces/contact.interface";
 import { MsgStatus, type OutreachMessage } from "@/features/contacts/interfaces/contact.interface";
 import { useDeleteOutreachMessage, useSendOutreachMessage } from "@/features/outreach/hooks/use-outreach";
@@ -9,6 +9,7 @@ import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { EditMessageModal } from "@/pages/dashboard/pages/leads/components/edit-message-modal";
 import { cn } from "@/lib/utils";
 import { ComposeMessageModal } from "@/features/messaging/components/compose-message-modal";
+import { EnrollInSequenceModal } from "@/features/sequences/components/enroll-in-sequence-modal";
 import { useIntegrations } from "@/features/integrations/hooks/use-integrations";
 import { resolveDefaultEmailTarget } from "@/features/integrations/utils/email-provider-utils";
 import { useEmailProviderSendLimitStatus } from "@/features/email-send-limits/hooks/use-email-provider-send-limit-status";
@@ -37,6 +38,7 @@ export function OutreachTab({ contact, highlightUuid, onHighlightConsumed, onNav
   const [draftPendingDelete, setDraftPendingDelete] = useState<OutreachMessage | null>(null);
   const [draftPendingSend, setDraftPendingSend] = useState<OutreachMessage | null>(null);
   const [composeOpen, setComposeOpen] = useState(false);
+  const [enrollOpen, setEnrollOpen] = useState(false);
   const [ringedUuid, setRingedUuid] = useState<string | null>(null);
   const cardRefs = useRef(new Map<string, HTMLDivElement>());
 
@@ -55,9 +57,14 @@ export function OutreachTab({ contact, highlightUuid, onHighlightConsumed, onNav
   }, [highlightUuid, onHighlightConsumed]);
 
   useEffect(() => {
-    const locked = composeOpen || editingMessage !== null || draftPendingDelete !== null || draftPendingSend !== null;
+    const locked =
+      composeOpen ||
+      enrollOpen ||
+      editingMessage !== null ||
+      draftPendingDelete !== null ||
+      draftPendingSend !== null;
     onNavigationLockChange?.(locked);
-  }, [composeOpen, draftPendingDelete, draftPendingSend, editingMessage, onNavigationLockChange]);
+  }, [composeOpen, enrollOpen, draftPendingDelete, draftPendingSend, editingMessage, onNavigationLockChange]);
 
   const setCardRef = (uuid: string) => (el: HTMLDivElement | null) => {
     if (el) cardRefs.current.set(uuid, el);
@@ -82,10 +89,16 @@ export function OutreachTab({ contact, highlightUuid, onHighlightConsumed, onNav
       <Section
         title={`Drafted outreach (${drafts.length})`}
         action={
-          <Button size="sm" variant="tertiary" onPress={() => setComposeOpen(true)}>
-            <Plus className="size-3.5" />
-            New message
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button size="sm" variant="tertiary" onPress={() => setEnrollOpen(true)}>
+              <Workflow className="size-3.5" />
+              Enroll in sequence
+            </Button>
+            <Button size="sm" variant="tertiary" onPress={() => setComposeOpen(true)}>
+              <Plus className="size-3.5" />
+              New message
+            </Button>
+          </div>
         }
         emptyText="No pending drafts. Click New message to compose one."
       >
@@ -223,6 +236,8 @@ export function OutreachTab({ contact, highlightUuid, onHighlightConsumed, onNav
         recipientEmailValidationStatus={contact.email_validation_status}
         recipientEmailValidationReason={contact.email_validation_reason}
       />
+
+      <EnrollInSequenceModal isOpen={enrollOpen} onOpenChange={setEnrollOpen} contactUuid={contact.uuid} />
 
       <ConfirmDialog
         isOpen={draftPendingSend !== null}

@@ -13,15 +13,12 @@ import {
     Contact,
     MsgStatus,
     OutreachMessage,
-    OutreachSequence,
     Prisma,
 } from '@/generated/prisma';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { OUTREACH_SEND_QUEUE } from '@/core/queues/queues.constants';
 import { hasUsableContactEmail } from '@/shared/utils/contact-email.util';
 import { isEmailHtmlEmpty, sanitizeEmailHtml } from '@/shared/utils/sanitize-html.util';
-import { AssignSequenceDto } from './dto/assign-sequence.dto';
-import { CreateSequenceDto } from './dto/create-sequence.dto';
 import { ListMessagesDto, SendSource } from './dto/list-messages.dto';
 import { SendOutreachDto } from './dto/send-outreach.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
@@ -355,58 +352,6 @@ export class OutreachService {
         };
     }
 
-    async createSequence(organisation_uuid: string, dto: CreateSequenceDto): Promise<OutreachSequence> {
-        return this.prisma.outreachSequence.create({
-            data: {
-                organisation_uuid,
-                name: dto.name,
-                steps: dto.steps as unknown as Prisma.InputJsonValue,
-            },
-        });
-    }
-
-    async assignSequence(
-        organisation_uuid: string,
-        sequence_uuid: string,
-        dto: AssignSequenceDto,
-        sent_by_user_uuid: string,
-    ): Promise<{ created: number }> {
-        const [sequence, contact] = await Promise.all([
-            this.requireOwnedSequence(organisation_uuid, sequence_uuid),
-            this.requireOwnedContact(organisation_uuid, dto.contact_uuid),
-        ]);
-
-        const steps = this.parseSequenceSteps(sequence.steps);
-        const created = await Promise.all(
-            steps.map(async (step) => {
-                const scheduled_at = new Date(Date.now() + step.delayHours * 60 * 60 * 1000);
-                const content = this.renderTemplate(step.template, contact);
-                const message = await this.prisma.outreachMessage.create({
-                    data: {
-                        organisation_uuid,
-                        contact_uuid: contact.uuid,
-                        sent_by_user_uuid,
-                        channel: step.channel,
-                        content,
-                        status: MsgStatus.PENDING,
-                        scheduled_at,
-                    },
-                });
-                await this.enqueueMessage(message.uuid, scheduled_at);
-                return message;
-            }),
-        );
-
-        return { created: created.length };
-    }
-
-    async listSequences(organisation_uuid: string): Promise<OutreachSequence[]> {
-        return this.prisma.outreachSequence.findMany({
-            where: { organisation_uuid },
-            orderBy: { created_at: 'desc' },
-        });
-    }
-
     private async removeStaleOutreachSendJob(message_uuid: string): Promise<void> {
         const existing = await this.outreachSendQueue.getJob(message_uuid);
         if (!existing) {
@@ -464,16 +409,6 @@ export class OutreachService {
         return message;
     }
 
-    private async requireOwnedSequence(organisation_uuid: string, sequence_uuid: string) {
-        const sequence = await this.prisma.outreachSequence.findFirst({
-            where: { uuid: sequence_uuid, organisation_uuid },
-        });
-        if (!sequence) {
-            throw new NotFoundException(`Outreach sequence ${sequence_uuid} not found`);
-        }
-        return sequence;
-    }
-
     private ensurePending(message: OutreachMessage): void {
         if (message.status !== MsgStatus.PENDING) {
             throw new ConflictException('Only PENDING messages can be modified');
@@ -500,26 +435,5 @@ export class OutreachService {
             return;
         }
         this.ensurePending(message);
-    }
-
-    private parseSequenceSteps(steps: Prisma.JsonValue): Array<{
-        delayHours: number;
-        channel: Channel;
-        template: string;
-    }> {
-        if (!Array.isArray(steps)) {
-            throw new ConflictException('Sequence steps are invalid');
-        }
-        return steps as Array<{
-            delayHours: number;
-            channel: Channel;
-            template: string;
-        }>;
-    }
-
-    private renderTemplate(template: string, contact: Contact) {
-        return template
-            .replaceAll('{{name}}', contact.name ?? '')
-            .replaceAll('{{company}}', contact.company ?? '');
     }
 }

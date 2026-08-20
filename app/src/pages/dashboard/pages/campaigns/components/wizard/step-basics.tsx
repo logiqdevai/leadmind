@@ -2,7 +2,7 @@ import { Checkbox, Input, Label, TextArea, TextField } from "@heroui/react";
 import { Channel } from "@/features/contacts/interfaces/contact.interface";
 import { CampaignType } from "@/features/marketing-campaigns/interfaces/campaign.interface";
 import { cn } from "@/lib/utils";
-import { Mail, MessageSquare, Sparkles, LayoutTemplate, Link2 } from "lucide-react";
+import { Mail, MessageSquare, Sparkles, LayoutTemplate, Link2, Workflow } from "lucide-react";
 
 export interface BasicsValues {
     name: string;
@@ -76,6 +76,13 @@ export function StepBasics({ value, onChange }: StepBasicsProps) {
                         label="Personalized"
                         description="Unique AI draft per contact"
                     />
+                    <TypeChip
+                        active={value.campaign_type === CampaignType.SEQUENCE}
+                        onClick={() => selectType(CampaignType.SEQUENCE)}
+                        icon={Workflow}
+                        label="Sequence"
+                        description="Multi-step drip via an existing sequence"
+                    />
                 </div>
                 {value.campaign_type === CampaignType.PERSONALIZED && (
                     <div className="mt-3">
@@ -122,7 +129,7 @@ export function StepBasics({ value, onChange }: StepBasicsProps) {
                 </p>
             </div>
 
-            {value.campaign_type === CampaignType.STANDARD && (
+            {value.campaign_type !== CampaignType.PERSONALIZED && (
                 <TextField name="scheduled_at">
                     <Label>Schedule (optional)</Label>
                     <Input

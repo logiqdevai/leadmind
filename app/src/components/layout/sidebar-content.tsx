@@ -27,6 +27,7 @@ import {
   Trophy,
   ListTodo,
   Wrench,
+  Workflow,
 } from "lucide-react";
 import { Routes } from "@/routes/routes";
 import { usePermission } from "@/hooks/use-permission";
@@ -76,6 +77,7 @@ const navGroups: NavGroup[] = [
     label: "Outreach",
     items: [
       { label: "Campaigns", icon: Megaphone, href: Routes.dashboard.campaigns, end: false },
+      { label: "Sequences", icon: Workflow, href: Routes.dashboard.sequences, end: false },
       { label: "Templates", icon: FileText, href: Routes.dashboard.message_templates, end: false },
       { label: "Send history", icon: Mail, href: Routes.dashboard.send_history, end: false },
       { label: "Sender Profiles", icon: IdCard, href: Routes.dashboard.sender_profiles, end: false },

@@ -40,7 +40,7 @@ export default function NewCampaignPage() {
                         ? basics.use_openai_batch
                         : undefined,
                 scheduled_at:
-                    basics.campaign_type === CampaignType.STANDARD && basics.scheduled_at
+                    basics.campaign_type !== CampaignType.PERSONALIZED && basics.scheduled_at
                         ? new Date(basics.scheduled_at).toISOString()
                         : undefined,
             });

@@ -7,6 +7,7 @@ import { OUTREACH_SEND_QUEUE } from '@/core/queues/queues.constants';
 import { ContactsService } from '@/modules/contacts/contacts.service';
 import { MessageSendService } from '@/modules/outreach/services/message-send.service';
 import { MessagingGoalsService } from '@/modules/messaging-goals/messaging-goals.service';
+import { CampaignMessageSendService } from '@/modules/marketing-campaigns/services/campaign-message-send.service';
 import { hasUsableContactEmail } from '@/shared/utils/contact-email.util';
 
 interface OutreachSendJobData {
@@ -22,6 +23,7 @@ export class OutreachSendWorker extends WorkerHost implements OnModuleInit {
         private readonly messageSendService: MessageSendService,
         private readonly contactsService: ContactsService,
         private readonly messagingGoalsService: MessagingGoalsService,
+        private readonly campaignMessageSendService: CampaignMessageSendService,
     ) {
         super();
     }
@@ -50,7 +52,7 @@ export class OutreachSendWorker extends WorkerHost implements OnModuleInit {
             this.logger.warn(`Outreach message ${job.data.message_uuid} not found`);
             return;
         }
-        if (message.campaign_uuid) {
+        if (message.campaign_uuid && !message.sequence_step_uuid) {
             await this.failSkippedMessage(
                 message.uuid,
                 `Campaign message must be sent via the campaign worker (campaign ${message.campaign_uuid})`,
@@ -63,6 +65,8 @@ export class OutreachSendWorker extends WorkerHost implements OnModuleInit {
                 message.uuid,
                 `Message is ${message.status} and cannot be sent`,
                 message.metadata,
+                message.campaign_uuid,
+                message.sequence_step_uuid,
             );
             return;
         }
@@ -72,6 +76,8 @@ export class OutreachSendWorker extends WorkerHost implements OnModuleInit {
                 message.uuid,
                 'Contact has no email',
                 message.metadata,
+                message.campaign_uuid,
+                message.sequence_step_uuid,
             );
             return;
         }
@@ -80,6 +86,8 @@ export class OutreachSendWorker extends WorkerHost implements OnModuleInit {
                 message.uuid,
                 'Contact has no phone',
                 message.metadata,
+                message.campaign_uuid,
+                message.sequence_step_uuid,
             );
             return;
         }
@@ -127,6 +135,14 @@ export class OutreachSendWorker extends WorkerHost implements OnModuleInit {
                 await this.contactsService.syncContactSearchIndex(message.contact_uuid);
             }
 
+            if (message.campaign_uuid && message.sequence_step_uuid) {
+                await this.prisma.marketingCampaign.update({
+                    where: { uuid: message.campaign_uuid },
+                    data: { sent_count: { increment: 1 } },
+                });
+                await this.campaignMessageSendService.checkCompletion(message.campaign_uuid);
+            }
+
             if (message.sent_by_user_uuid) {
                 setImmediate(() => {
                     void this.messagingGoalsService.onMessageSent({
@@ -147,6 +163,13 @@ export class OutreachSendWorker extends WorkerHost implements OnModuleInit {
                 error_message,
                 message.metadata,
             );
+            if (message.campaign_uuid && message.sequence_step_uuid) {
+                await this.prisma.marketingCampaign.update({
+                    where: { uuid: message.campaign_uuid },
+                    data: { failed_count: { increment: 1 } },
+                });
+                await this.campaignMessageSendService.checkCompletion(message.campaign_uuid);
+            }
             this.logger.error(
                 `Failed sending outreach message ${message.uuid}: ${error_message} (status set to FAILED)`,
                 error instanceof Error ? error.stack : undefined,
@@ -158,12 +181,21 @@ export class OutreachSendWorker extends WorkerHost implements OnModuleInit {
         message_uuid: string,
         error_message: string,
         metadata: unknown,
+        campaign_uuid?: string | null,
+        sequence_step_uuid?: string | null,
     ): Promise<void> {
         await this.messageSendService.messageFailedOperationPreservingProvider(
             message_uuid,
             error_message,
             metadata,
         );
+        if (campaign_uuid && sequence_step_uuid) {
+            await this.prisma.marketingCampaign.update({
+                where: { uuid: campaign_uuid },
+                data: { failed_count: { increment: 1 } },
+            });
+            await this.campaignMessageSendService.checkCompletion(campaign_uuid);
+        }
         this.logger.warn(`Outreach send skipped message=${message_uuid}: ${error_message}`);
     }
 

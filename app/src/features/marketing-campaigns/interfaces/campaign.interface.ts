@@ -5,6 +5,7 @@ import type { EmailProviderAllocation } from "@/features/integrations/interfaces
 export const CampaignType = {
     STANDARD: "STANDARD",
     PERSONALIZED: "PERSONALIZED",
+    SEQUENCE: "SEQUENCE",
 } as const;
 
 export type CampaignType = (typeof CampaignType)[keyof typeof CampaignType];
@@ -61,6 +62,7 @@ export interface MarketingCampaign {
     use_openai_batch: boolean;
     draft_batch_id: string | null;
     sender_profile_uuid: string | null;
+    sequence_uuid: string | null;
     scheduled_at: string | null;
     started_at: string | null;
     completed_at: string | null;
@@ -142,6 +144,7 @@ export interface CreateCampaignPayload {
     ai_prompt?: string;
     use_openai_batch?: boolean;
     sender_profile_uuid?: string;
+    sequence_uuid?: string;
     scheduled_at?: string;
     filters?: CampaignFilters;
     email_provider_allocations?: EmailProviderAllocation[];

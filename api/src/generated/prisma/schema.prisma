@@ -300,20 +300,21 @@ model Contact {
   created_at              DateTime              @default(now())
   updated_at              DateTime              @updatedAt
 
-  organisation      Organisation               @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
-  lead              Lead                       @relation(fields: [lead_uuid], references: [uuid], onDelete: Cascade)
-  filter            Filter?                    @relation(fields: [filter_uuid], references: [uuid], onDelete: SetNull)
-  contact_filters   ContactFilter[]
-  tags              ContactTag[]
-  contact_infos     ContactInfo[]
-  interactions      Interaction[]
-  outreach_messages OutreachMessage[]
-  campaign_contacts MarketingCampaignContact[]
-  contact_scores    ContactScore[]
-  reminders         Reminder[]
-  form_completions  FormCompletion[]
-  list_memberships  ContactListMember[]
-  enrichments       ContactEnrichment[]
+  organisation         Organisation               @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  lead                 Lead                       @relation(fields: [lead_uuid], references: [uuid], onDelete: Cascade)
+  filter               Filter?                    @relation(fields: [filter_uuid], references: [uuid], onDelete: SetNull)
+  contact_filters      ContactFilter[]
+  tags                 ContactTag[]
+  contact_infos        ContactInfo[]
+  interactions         Interaction[]
+  outreach_messages    OutreachMessage[]
+  campaign_contacts    MarketingCampaignContact[]
+  contact_scores       ContactScore[]
+  reminders            Reminder[]
+  form_completions     FormCompletion[]
+  list_memberships     ContactListMember[]
+  enrichments          ContactEnrichment[]
+  sequence_enrollments SequenceEnrollment[]
 
   @@unique([organisation_uuid, lead_uuid])
   @@index([organisation_uuid])
@@ -466,39 +467,43 @@ model Interaction {
 }
 
 model OutreachMessage {
-  id                  Int                          @id @default(autoincrement())
-  uuid                String                       @unique @default(uuid())
-  organisation_uuid   String
-  contact_uuid        String
-  campaign_uuid       String?
-  sent_by_user_uuid   String?
-  channel             Channel
-  direction           MsgDirection                 @default(OUTBOUND)
-  subject             String?
-  content             String
-  status              MsgStatus                    @default(PENDING)
-  provider_message_id String?
-  idempotency_key     String?                      @unique
-  scheduled_at        DateTime?
-  sent_at             DateTime?
-  delivered_at        DateTime?
-  opened_at           DateTime?
-  clicked_at          DateTime?
-  replied_at          DateTime?
-  bounced_at          DateTime?
-  failed_at           DateTime?
-  email_provider      ExternalIntegrationProvider?
-  email_account       String?
-  sms_provider        String?
-  metadata            Json?
-  created_at          DateTime                     @default(now())
-  updated_at          DateTime                     @updatedAt
+  id                       Int                          @id @default(autoincrement())
+  uuid                     String                       @unique @default(uuid())
+  organisation_uuid        String
+  contact_uuid             String
+  campaign_uuid            String?
+  sent_by_user_uuid        String?
+  channel                  Channel
+  direction                MsgDirection                 @default(OUTBOUND)
+  subject                  String?
+  content                  String
+  status                   MsgStatus                    @default(PENDING)
+  provider_message_id      String?
+  idempotency_key          String?                      @unique
+  scheduled_at             DateTime?
+  sent_at                  DateTime?
+  delivered_at             DateTime?
+  opened_at                DateTime?
+  clicked_at               DateTime?
+  replied_at               DateTime?
+  bounced_at               DateTime?
+  failed_at                DateTime?
+  email_provider           ExternalIntegrationProvider?
+  email_account            String?
+  sms_provider             String?
+  metadata                 Json?
+  sequence_enrollment_uuid String?
+  sequence_step_uuid       String?
+  created_at               DateTime                     @default(now())
+  updated_at               DateTime                     @updatedAt
 
-  organisation Organisation       @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
-  contact      Contact            @relation(fields: [contact_uuid], references: [uuid], onDelete: Cascade)
-  campaign     MarketingCampaign? @relation(fields: [campaign_uuid], references: [uuid], onDelete: SetNull)
-  sent_by      User?              @relation("OutreachMessageSentBy", fields: [sent_by_user_uuid], references: [uuid], onDelete: SetNull)
-  interaction  Interaction?
+  organisation        Organisation          @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  contact             Contact               @relation(fields: [contact_uuid], references: [uuid], onDelete: Cascade)
+  campaign            MarketingCampaign?    @relation(fields: [campaign_uuid], references: [uuid], onDelete: SetNull)
+  sent_by             User?                 @relation("OutreachMessageSentBy", fields: [sent_by_user_uuid], references: [uuid], onDelete: SetNull)
+  interaction         Interaction?
+  sequence_enrollment SequenceEnrollment?   @relation(fields: [sequence_enrollment_uuid], references: [uuid], onDelete: SetNull)
+  sequence_step       OutreachSequenceStep? @relation(fields: [sequence_step_uuid], references: [uuid], onDelete: SetNull)
 
   @@index([organisation_uuid])
   @@index([contact_uuid])
@@ -509,20 +514,81 @@ model OutreachMessage {
   @@index([sent_by_user_uuid])
   @@index([campaign_uuid, contact_uuid, channel])
   @@index([organisation_uuid, sent_by_user_uuid, sent_at])
+  @@index([sequence_enrollment_uuid])
+  @@index([sequence_step_uuid])
 }
 
 model OutreachSequence {
-  id                Int      @id @default(autoincrement())
-  uuid              String   @unique @default(uuid())
+  id                Int            @id @default(autoincrement())
+  uuid              String         @unique @default(uuid())
   organisation_uuid String
   name              String
-  steps             Json
-  created_at        DateTime @default(now())
-  updated_at        DateTime @updatedAt
+  description       String?
+  status            SequenceStatus @default(DRAFT)
+  created_at        DateTime       @default(now())
+  updated_at        DateTime       @updatedAt
 
-  organisation Organisation @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  organisation Organisation           @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  steps        OutreachSequenceStep[]
+  enrollments  SequenceEnrollment[]
+  campaigns    MarketingCampaign[]
 
   @@index([organisation_uuid])
+  @@index([organisation_uuid, status])
+}
+
+model OutreachSequenceStep {
+  id                    Int                    @id @default(autoincrement())
+  uuid                  String                 @unique @default(uuid())
+  sequence_uuid         String
+  order_index           Int
+  enabled               Boolean                @default(true)
+  channel               Channel
+  email_subject         String?
+  email_content         String?                @db.Text
+  sms_content           String?                @db.Text
+  message_template_uuid String?
+  delay_value           Int
+  delay_unit            SequenceDelayUnit      @default(HOURS)
+  delay_reference       SequenceDelayReference @default(PREVIOUS_STEP)
+  created_at            DateTime               @default(now())
+  updated_at            DateTime               @updatedAt
+
+  sequence          OutreachSequence  @relation(fields: [sequence_uuid], references: [uuid], onDelete: Cascade)
+  message_template  MessageTemplate?  @relation(fields: [message_template_uuid], references: [uuid], onDelete: SetNull)
+  outreach_messages OutreachMessage[]
+
+  @@index([sequence_uuid])
+  @@index([sequence_uuid, order_index])
+  @@index([message_template_uuid])
+  @@map("outreach_sequence_steps")
+}
+
+model SequenceEnrollment {
+  id            Int                      @id @default(autoincrement())
+  uuid          String                   @unique @default(uuid())
+  sequence_uuid String
+  contact_uuid  String
+  campaign_uuid String?
+  status        SequenceEnrollmentStatus @default(ACTIVE)
+  enrolled_at   DateTime                 @default(now())
+  cancelled_at  DateTime?
+  completed_at  DateTime?
+  created_at    DateTime                 @default(now())
+  updated_at    DateTime                 @updatedAt
+
+  sequence          OutreachSequence   @relation(fields: [sequence_uuid], references: [uuid], onDelete: Cascade)
+  contact           Contact            @relation(fields: [contact_uuid], references: [uuid], onDelete: Cascade)
+  campaign          MarketingCampaign? @relation(fields: [campaign_uuid], references: [uuid], onDelete: SetNull)
+  outreach_messages OutreachMessage[]
+
+  @@unique([sequence_uuid, contact_uuid, campaign_uuid], map: "sequence_enrollments_target_key")
+  @@index([sequence_uuid])
+  @@index([contact_uuid])
+  @@index([campaign_uuid])
+  @@index([sequence_uuid, contact_uuid, status])
+  @@index([status])
+  @@map("sequence_enrollments")
 }
 
 model FilterJob {
@@ -669,7 +735,8 @@ model MessageTemplate {
   created_at           DateTime  @default(now())
   updated_at           DateTime  @updatedAt
 
-  organisation Organisation @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  organisation   Organisation           @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  sequence_steps OutreachSequenceStep[]
 
   @@index([organisation_uuid])
   @@map("message_templates")
@@ -694,6 +761,7 @@ model MarketingCampaign {
   draft_batch_id             String?
   sender_profile_uuid        String?
   email_provider_allocations Json?
+  sequence_uuid              String?
   scheduled_at               DateTime?
   started_at                 DateTime?
   completed_at               DateTime?
@@ -717,15 +785,18 @@ model MarketingCampaign {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  organisation      Organisation               @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
-  sender_profile    SenderProfile?             @relation(fields: [sender_profile_uuid], references: [uuid], onDelete: SetNull)
-  campaign_contacts MarketingCampaignContact[]
-  outreach_messages OutreachMessage[]
-  interactions      Interaction[]
+  organisation         Organisation               @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  sender_profile       SenderProfile?             @relation(fields: [sender_profile_uuid], references: [uuid], onDelete: SetNull)
+  sequence             OutreachSequence?          @relation(fields: [sequence_uuid], references: [uuid], onDelete: SetNull)
+  campaign_contacts    MarketingCampaignContact[]
+  outreach_messages    OutreachMessage[]
+  interactions         Interaction[]
+  sequence_enrollments SequenceEnrollment[]
 
   @@index([organisation_uuid])
   @@index([status])
   @@index([scheduled_at])
+  @@index([sequence_uuid])
   @@map("marketing_campaigns")
 }
 
@@ -916,6 +987,31 @@ enum InteractionType {
 enum CampaignType {
   STANDARD
   PERSONALIZED
+  SEQUENCE
+}
+
+enum SequenceStatus {
+  DRAFT
+  ACTIVE
+  ARCHIVED
+}
+
+enum SequenceDelayUnit {
+  HOURS
+  DAYS
+  WEEKS
+  MONTHS
+}
+
+enum SequenceDelayReference {
+  FIRST_STEP
+  PREVIOUS_STEP
+}
+
+enum SequenceEnrollmentStatus {
+  ACTIVE
+  COMPLETED
+  CANCELLED
 }
 
 enum CampaignStatus {
