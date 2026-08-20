@@ -25,8 +25,7 @@ export const ListDetailToolbar: FC<ListDetailToolbarProps> = ({
     <DashboardSubnav>
         <div
             className={cn(
-                "flex items-center gap-3 rounded-xl border border-border bg-surface px-3 py-2.5",
-                "shadow-[0_1px_0_0_color-mix(in_oklch,var(--accent)_8%,transparent),0_8px_24px_-12px_color-mix(in_oklch,black_18%,transparent)]",
+                "flex items-center gap-3 px-0.5 py-1.5",
                 className,
             )}
         >
@@ -43,14 +42,12 @@ export const ListDetailToolbar: FC<ListDetailToolbarProps> = ({
                 <ArrowLeft className="size-4" strokeWidth={2} />
             </Link>
 
-            <div className="hidden sm:block h-6 w-px shrink-0 bg-border" aria-hidden />
-
             <div className="min-w-0 flex-1">
-                <h1 className="text-[15px] font-semibold tracking-tight text-foreground truncate leading-snug">
+                <h1 className="text-lg font-semibold tracking-tight text-foreground truncate leading-snug">
                     {title}
                 </h1>
                 {meta ? (
-                    <p className="text-[11px] text-muted truncate mt-0.5 leading-none">{meta}</p>
+                    <p className="text-sm text-muted truncate mt-0.5 leading-none">{meta}</p>
                 ) : null}
             </div>
 

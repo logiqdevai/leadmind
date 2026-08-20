@@ -4,12 +4,11 @@ export function ListDetailSkeleton() {
     return (
         <>
             <DashboardSubnav>
-                <div className="flex items-center gap-3 rounded-xl border border-border bg-surface px-3 py-2.5 animate-pulse">
+                <div className="flex items-center gap-3 px-0.5 py-1.5 animate-pulse">
                     <div className="size-9 rounded-lg bg-surface-secondary shrink-0" />
-                    <div className="hidden sm:block h-6 w-px bg-border shrink-0" />
                     <div className="min-w-0 flex-1 space-y-1.5">
-                        <div className="h-4 w-56 max-w-full rounded bg-surface-secondary" />
-                        <div className="h-3 w-20 rounded bg-surface-secondary" />
+                        <div className="h-5 w-56 max-w-full rounded bg-surface-secondary" />
+                        <div className="h-3.5 w-28 rounded bg-surface-secondary" />
                     </div>
                     <div className="h-8 w-24 rounded-lg bg-surface-secondary shrink-0" />
                 </div>
