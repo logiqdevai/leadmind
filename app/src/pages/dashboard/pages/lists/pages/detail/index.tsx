@@ -28,7 +28,12 @@ import {
 } from "./components/list-members-delete-dialog";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { BulkSendMessageModal } from "@/pages/dashboard/components/bulk-send-message-modal";
-import { BulkEnrollInSequenceModal } from "@/features/sequences/components/bulk-enroll-in-sequence-modal";
+import { BulkEnrollInSequenceModal } from "@/pages/dashboard/components/bulk-enroll-in-sequence-modal";
+import {
+    BulkOutreachChooserModal,
+    OutreachActionTypes,
+    type OutreachActionType,
+} from "@/pages/dashboard/components/bulk-outreach-chooser-modal";
 import { ContactAudienceAnalyticsPanel } from "@/pages/dashboard/components/audience-analytics/contact-audience-analytics-panel";
 import { ContactStackViewerScope } from "@/pages/dashboard/components/contact-stack-viewer";
 import { ListDetailSkeleton } from "./components/list-detail-skeleton";
@@ -51,6 +56,7 @@ export default function ListDetailPage() {
     const [addContactsOpen, setAddContactsOpen] = useState(false);
     const [selectedKeys, setSelectedKeys] = useState<Set<string>>(new Set());
     const [scrapeConfirmOpen, setScrapeConfirmOpen] = useState(false);
+    const [outreachChooserOpen, setOutreachChooserOpen] = useState(false);
     const [composeOpen, setComposeOpen] = useState(false);
     const [enrollOpen, setEnrollOpen] = useState(false);
     const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
@@ -244,18 +250,12 @@ export default function ListDetailPage() {
                                 }
                                 scrapeEmailsDisabled={!canScrapeEmails}
                                 scrapeEmailsPending={scrapeEmailsBulk.isPending}
-                                onSendMessagesSelected={
+                                onSendToSelected={
                                     currentTab === ListDetailTabIds.CONTACTS
-                                        ? () => setComposeOpen(true)
+                                        ? () => setOutreachChooserOpen(true)
                                         : undefined
                                 }
-                                sendMessagesDisabled={selectedKeys.size === 0}
-                                onEnrollSelected={
-                                    currentTab === ListDetailTabIds.CONTACTS
-                                        ? () => setEnrollOpen(true)
-                                        : undefined
-                                }
-                                enrollDisabled={selectedKeys.size === 0}
+                                sendToSelectedDisabled={selectedKeys.size === 0}
                                 onDeleteSelected={
                                     currentTab === ListDetailTabIds.CONTACTS
                                         ? () => openDeleteDialog([...selectedKeys])
@@ -374,6 +374,15 @@ export default function ListDetailPage() {
                         isPending={deletePending}
                         onConfirm={handleDeleteConfirm}
                     />
+                    <BulkOutreachChooserModal
+                        isOpen={outreachChooserOpen}
+                        onOpenChange={setOutreachChooserOpen}
+                        contactCount={selectedKeys.size}
+                        onSelect={(action: OutreachActionType) => {
+                            if (action === OutreachActionTypes.MESSAGE) setComposeOpen(true);
+                            if (action === OutreachActionTypes.SEQUENCE) setEnrollOpen(true);
+                        }}
+                    />
                     <BulkSendMessageModal
                         isOpen={composeOpen}
                         onOpenChange={setComposeOpen}
@@ -383,7 +392,7 @@ export default function ListDetailPage() {
                     <BulkEnrollInSequenceModal
                         isOpen={enrollOpen}
                         onOpenChange={setEnrollOpen}
-                        contactUuids={[...selectedKeys]}
+                        contacts={selectedMembers}
                         onComplete={() => setSelectedKeys(new Set())}
                     />
                 </div>

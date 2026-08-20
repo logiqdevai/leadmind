@@ -7,7 +7,12 @@ import { PipelineView } from "./components/pipeline-view";
 import { NewContactModal } from "./components/new-contact-modal";
 import { BulkScoreContactsPopover } from "./components/bulk-score-contacts-popover";
 import { BulkSendMessageModal } from "@/pages/dashboard/components/bulk-send-message-modal";
-import { BulkEnrollInSequenceModal } from "@/features/sequences/components/bulk-enroll-in-sequence-modal";
+import { BulkEnrollInSequenceModal } from "@/pages/dashboard/components/bulk-enroll-in-sequence-modal";
+import {
+  BulkOutreachChooserModal,
+  OutreachActionTypes,
+  type OutreachActionType,
+} from "@/pages/dashboard/components/bulk-outreach-chooser-modal";
 import { BulkEnrichmentRunModal } from "@/components/ui/bulk-enrichment-run-modal";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { ContactsActionsDropdown } from "./components/contacts-actions-dropdown";
@@ -69,6 +74,7 @@ export default function ContactsPage() {
   const [selectedKeys, setSelectedKeys] = useState<Set<string>>(new Set());
   const [createOpen, setCreateOpen] = useState(false);
   const [scoreOpen, setScoreOpen] = useState(false);
+  const [outreachChooserOpen, setOutreachChooserOpen] = useState(false);
   const [composeOpen, setComposeOpen] = useState(false);
   const [enrollOpen, setEnrollOpen] = useState(false);
   const [enrichOpen, setEnrichOpen] = useState(false);
@@ -217,12 +223,10 @@ export default function ContactsPage() {
                   quickBrowseDisabled={!quickBrowse.hasContacts}
                   onScoreSelected={view === "table" ? () => setScoreOpen(true) : undefined}
                   scoreDisabled={selectedKeys.size === 0}
-                  onSendMessagesSelected={
-                    view === "table" ? () => setComposeOpen(true) : undefined
+                  onSendToSelected={
+                    view === "table" ? () => setOutreachChooserOpen(true) : undefined
                   }
-                  sendMessagesDisabled={selectedKeys.size === 0}
-                  onEnrollSelected={view === "table" ? () => setEnrollOpen(true) : undefined}
-                  enrollDisabled={selectedKeys.size === 0}
+                  sendToSelectedDisabled={selectedKeys.size === 0}
                   onEnrichSelected={view === "table" ? () => setEnrichOpen(true) : undefined}
                   enrichDisabled={selectedKeys.size === 0 || enrichBulk.isPending}
                   onScrapeEmailsSelected={view === "table" ? () => setScrapeConfirmOpen(true) : undefined}
@@ -295,6 +299,17 @@ export default function ContactsPage() {
             />
           ) : null}
           {view === "table" ? (
+            <BulkOutreachChooserModal
+              isOpen={outreachChooserOpen}
+              onOpenChange={setOutreachChooserOpen}
+              contactCount={selectedKeys.size}
+              onSelect={(action: OutreachActionType) => {
+                if (action === OutreachActionTypes.MESSAGE) setComposeOpen(true);
+                if (action === OutreachActionTypes.SEQUENCE) setEnrollOpen(true);
+              }}
+            />
+          ) : null}
+          {view === "table" ? (
             <BulkSendMessageModal
               isOpen={composeOpen}
               onOpenChange={setComposeOpen}
@@ -306,7 +321,7 @@ export default function ContactsPage() {
             <BulkEnrollInSequenceModal
               isOpen={enrollOpen}
               onOpenChange={setEnrollOpen}
-              contactUuids={[...selectedKeys]}
+              contacts={selectedContacts}
               onComplete={() => setSelectedKeys(new Set())}
             />
           ) : null}

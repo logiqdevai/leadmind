@@ -1,6 +1,6 @@
 import type { FC } from "react";
 import { Button, Dropdown } from "@heroui/react";
-import { ChevronDown, ChevronsUpDown, FolderInput, Globe, Mail, Pencil, Trash2, UserPlus, Workflow } from "lucide-react";
+import { ChevronDown, ChevronsUpDown, FolderInput, Globe, Pencil, Send, Trash2, UserPlus } from "lucide-react";
 
 interface ListActionsDropdownProps {
     showContactsActions?: boolean;
@@ -12,10 +12,8 @@ interface ListActionsDropdownProps {
     onScrapeEmails?: () => void;
     scrapeEmailsDisabled?: boolean;
     scrapeEmailsPending?: boolean;
-    onSendMessagesSelected?: () => void;
-    sendMessagesDisabled?: boolean;
-    onEnrollSelected?: () => void;
-    enrollDisabled?: boolean;
+    onSendToSelected?: () => void;
+    sendToSelectedDisabled?: boolean;
     onDeleteSelected?: () => void;
     deleteDisabled?: boolean;
     deletePending?: boolean;
@@ -31,10 +29,8 @@ export const ListActionsDropdown: FC<ListActionsDropdownProps> = ({
     onScrapeEmails,
     scrapeEmailsDisabled = false,
     scrapeEmailsPending = false,
-    onSendMessagesSelected,
-    sendMessagesDisabled = false,
-    onEnrollSelected,
-    enrollDisabled = false,
+    onSendToSelected,
+    sendToSelectedDisabled = false,
     onDeleteSelected,
     deleteDisabled = false,
     deletePending = false,
@@ -58,8 +54,7 @@ export const ListActionsDropdown: FC<ListActionsDropdownProps> = ({
                     if (key === "edit-list") onEditList();
                     if (key === "move-list") onMoveList?.();
                     if (key === "scrape-emails") onScrapeEmails?.();
-                    if (key === "send-messages-selected") onSendMessagesSelected?.();
-                    if (key === "enroll-selected") onEnrollSelected?.();
+                    if (key === "send-to-selected") onSendToSelected?.();
                     if (key === "delete-selected") onDeleteSelected?.();
                 }}
             >
@@ -83,15 +78,15 @@ export const ListActionsDropdown: FC<ListActionsDropdownProps> = ({
                         </span>
                     </Dropdown.Item>
                 ) : null}
-                {showContactsActions && onSendMessagesSelected ? (
+                {showContactsActions && onSendToSelected ? (
                     <Dropdown.Item
-                        id="send-messages-selected"
-                        textValue="Send messages to selected"
-                        isDisabled={sendMessagesDisabled}
+                        id="send-to-selected"
+                        textValue="Send to selected"
+                        isDisabled={sendToSelectedDisabled}
                     >
                         <span className="flex items-center gap-2.5 antialiased">
-                            <Mail className="size-4 shrink-0 text-muted" strokeWidth={2} />
-                            <span className="font-medium text-foreground">Send messages to selected</span>
+                            <Send className="size-4 shrink-0 text-muted" strokeWidth={2} />
+                            <span className="font-medium text-foreground">Send to selected</span>
                         </span>
                     </Dropdown.Item>
                 ) : null}
@@ -104,18 +99,6 @@ export const ListActionsDropdown: FC<ListActionsDropdownProps> = ({
                         <span className="flex items-center gap-2.5 antialiased">
                             <Globe className="size-4 shrink-0 text-muted" strokeWidth={2} />
                             <span className="font-medium text-foreground">Find emails from websites</span>
-                        </span>
-                    </Dropdown.Item>
-                ) : null}
-                {showContactsActions && onEnrollSelected ? (
-                    <Dropdown.Item
-                        id="enroll-selected"
-                        textValue="Enroll in sequence"
-                        isDisabled={enrollDisabled}
-                    >
-                        <span className="flex items-center gap-2.5 antialiased">
-                            <Workflow className="size-4 shrink-0 text-muted" strokeWidth={2} />
-                            <span className="font-medium text-foreground">Enroll in sequence</span>
                         </span>
                     </Dropdown.Item>
                 ) : null}

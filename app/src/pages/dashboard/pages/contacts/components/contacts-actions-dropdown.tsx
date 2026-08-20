@@ -1,6 +1,6 @@
 import type { FC } from "react";
 import { Button, Dropdown } from "@heroui/react";
-import { ChevronDown, ChevronsUpDown, Gauge, Globe, Mail, Plus, Sparkles, Trash2, Workflow } from "lucide-react";
+import { ChevronDown, ChevronsUpDown, Gauge, Globe, Plus, Send, Sparkles, Trash2 } from "lucide-react";
 
 interface ContactsActionsDropdownProps {
     onAddContact: () => void;
@@ -8,10 +8,8 @@ interface ContactsActionsDropdownProps {
     quickBrowseDisabled?: boolean;
     onScoreSelected?: () => void;
     scoreDisabled?: boolean;
-    onSendMessagesSelected?: () => void;
-    sendMessagesDisabled?: boolean;
-    onEnrollSelected?: () => void;
-    enrollDisabled?: boolean;
+    onSendToSelected?: () => void;
+    sendToSelectedDisabled?: boolean;
     onEnrichSelected?: () => void;
     enrichDisabled?: boolean;
     onScrapeEmailsSelected?: () => void;
@@ -28,10 +26,8 @@ export const ContactsActionsDropdown: FC<ContactsActionsDropdownProps> = ({
     quickBrowseDisabled = false,
     onScoreSelected,
     scoreDisabled = false,
-    onSendMessagesSelected,
-    sendMessagesDisabled = false,
-    onEnrollSelected,
-    enrollDisabled = false,
+    onSendToSelected,
+    sendToSelectedDisabled = false,
     onEnrichSelected,
     enrichDisabled = false,
     onScrapeEmailsSelected,
@@ -57,8 +53,7 @@ export const ContactsActionsDropdown: FC<ContactsActionsDropdownProps> = ({
                 onAction={(key) => {
                     if (key === "quick-browse") onQuickBrowse?.();
                     if (key === "score-selected") onScoreSelected?.();
-                    if (key === "send-messages-selected") onSendMessagesSelected?.();
-                    if (key === "enroll-selected") onEnrollSelected?.();
+                    if (key === "send-to-selected") onSendToSelected?.();
                     if (key === "enrich-selected") onEnrichSelected?.();
                     if (key === "scrape-emails-selected") onScrapeEmailsSelected?.();
                     if (key === "delete-selected") onDeleteSelected?.();
@@ -113,27 +108,15 @@ export const ContactsActionsDropdown: FC<ContactsActionsDropdownProps> = ({
                         </span>
                     </Dropdown.Item>
                 ) : null}
-                {onSendMessagesSelected ? (
+                {onSendToSelected ? (
                     <Dropdown.Item
-                        id="send-messages-selected"
-                        textValue="Send messages to selected"
-                        isDisabled={sendMessagesDisabled}
+                        id="send-to-selected"
+                        textValue="Send to selected"
+                        isDisabled={sendToSelectedDisabled}
                     >
                         <span className="flex items-center gap-2.5 antialiased">
-                            <Mail className="size-4 shrink-0 text-muted" strokeWidth={2} />
-                            <span className="font-medium text-foreground">Send messages to selected</span>
-                        </span>
-                    </Dropdown.Item>
-                ) : null}
-                {onEnrollSelected ? (
-                    <Dropdown.Item
-                        id="enroll-selected"
-                        textValue="Enroll in sequence"
-                        isDisabled={enrollDisabled}
-                    >
-                        <span className="flex items-center gap-2.5 antialiased">
-                            <Workflow className="size-4 shrink-0 text-muted" strokeWidth={2} />
-                            <span className="font-medium text-foreground">Enroll in sequence</span>
+                            <Send className="size-4 shrink-0 text-muted" strokeWidth={2} />
+                            <span className="font-medium text-foreground">Send to selected</span>
                         </span>
                     </Dropdown.Item>
                 ) : null}
