@@ -262,7 +262,6 @@ export default function ContactsPage() {
             value={filters}
             onChange={(patch) => updateFilters(patch)}
             showLeadSourceType
-            showSavedFilters
             savedFilterUuid={savedFilterUuid}
             onSavedFilterUuidChange={updateSavedFilterUuid}
             onApplySavedFilter={applySavedFilter}
