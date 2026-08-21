@@ -68,7 +68,7 @@ export function EnrichmentTabContent({
                 <p className="text-sm font-medium text-foreground mb-3">History</p>
 
                 <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end mb-4">
-                    <div className="flex-1 min-w-[200px]">
+                    <div className="min-w-0 w-full flex-1">
                         <Label htmlFor="enrichment-search" className="mb-1 block text-xs text-muted">
                             Search
                         </Label>

@@ -108,7 +108,7 @@ export function FormsTable({
                 id: "name",
                 header: "Name",
                 cell: (info) => (
-                    <span className="font-medium text-foreground">{info.getValue()}</span>
+                    <span className="block min-w-0 truncate font-medium text-foreground">{info.getValue()}</span>
                 ),
             }),
             columnHelper.accessor("description", {

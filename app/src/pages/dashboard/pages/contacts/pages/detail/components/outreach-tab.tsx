@@ -115,12 +115,12 @@ export function OutreachTab({ contact, highlightUuid, onHighlightConsumed, onNav
                 )}
               >
                 <div className="flex items-center justify-between gap-2 flex-wrap">
-                  <div className="flex items-center gap-2 min-w-0">
+                  <div className="flex items-center gap-2 min-w-0 flex-1">
                     <Icon className="size-4 text-muted shrink-0" />
                     <Chip size="sm" variant="soft">
                       <Chip.Label>{m.channel}</Chip.Label>
                     </Chip>
-                    {m.subject && <span className="text-sm font-medium text-foreground truncate">{m.subject}</span>}
+                    {m.subject && <span className="min-w-0 truncate text-sm font-medium text-foreground">{m.subject}</span>}
                   </div>
                   <div className="flex items-center gap-1 shrink-0 ml-auto">
                     <Button size="sm" variant="tertiary" onPress={() => setEditingMessage(m)} aria-label="Edit draft">
@@ -175,14 +175,18 @@ export function OutreachTab({ contact, highlightUuid, onHighlightConsumed, onNav
                 ringedUuid === m.uuid && "ring-2 ring-accent ring-offset-1 ring-offset-background",
               )}
             >
-              <div className="flex items-center gap-2 flex-wrap">
+              <div className="flex items-center gap-2 flex-wrap min-w-0">
                 <Chip size="sm" color={m.status === MsgStatus.SENT ? "success" : "danger"} variant="soft">
                   <Chip.Label>{m.status}</Chip.Label>
                 </Chip>
                 <Chip size="sm" variant="soft">
                   <Chip.Label>{m.channel}</Chip.Label>
                 </Chip>
-                {m.subject && <span className="text-sm font-medium text-foreground truncate">{m.subject}</span>}
+                {m.subject && (
+                  <span className="min-w-0 flex-1 basis-40 truncate text-sm font-medium text-foreground">
+                    {m.subject}
+                  </span>
+                )}
                 <div className="ml-auto flex items-center gap-2 shrink-0">
                   {m.status === MsgStatus.FAILED ? (
                     <Button

@@ -7,6 +7,7 @@ import {
     getCoreRowModel,
     useReactTable,
 } from "@tanstack/react-table";
+import { extraListColumnClass } from "@/components/ui/mobile-list-filters";
 import { TablePagination } from "@/components/ui/table-pagination";
 import { isTableNavInteractiveCell, renderTableNavCellContent, tableNavInteractiveCellClassName, tableNavRowClassName } from "@/components/ui/table-row-link";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
@@ -122,11 +123,11 @@ export function CompletionsTable({
                     const c = info.getValue();
                     return (
                         <div className="flex flex-col">
-                            <span className="text-sm font-medium text-foreground">
+                            <span className="block min-w-0 truncate text-sm font-medium text-foreground">
                                 {c.name ?? c.email ?? "—"}
                             </span>
                             {c.company && (
-                                <span className="text-xs text-muted">{c.company}</span>
+                                <span className="block min-w-0 truncate text-xs text-muted">{c.company}</span>
                             )}
                         </div>
                     );
@@ -184,14 +185,15 @@ export function CompletionsTable({
     return (
         <div className="bg-surface rounded-xl overflow-hidden">
             <Table>
-                <Table.ScrollContainer>
-                    <Table.Content aria-label="Completions" className="min-w-[600px]">
+                <Table.ScrollContainer className="w-full max-w-full overflow-x-hidden">
+                    <Table.Content aria-label="Completions" className="w-full table-fixed">
                         <Table.Header>
                             {table.getHeaderGroups()[0]!.headers.map((header) => (
                                 <Table.Column
                                     key={header.id}
                                     id={header.id}
                                     isRowHeader={header.id === "contact"}
+                                    className={extraListColumnClass(header.id, ["fields_filled", "completed_at", "updated_at"])}
                                 >
                                     {flexRender(
                                         header.column.columnDef.header,
@@ -235,10 +237,20 @@ export function CompletionsTable({
                                               );
                                               const isInteractive = isTableNavInteractiveCell(cell.column.id);
 
+                                              const columnClass = extraListColumnClass(cell.column.id, [
+                                                  "fields_filled",
+                                                  "completed_at",
+                                                  "updated_at",
+                                              ]);
+
                                               return (
                                               <Table.Cell
                                                   key={cell.id}
-                                                  className={isInteractive ? tableNavInteractiveCellClassName : undefined}
+                                                  className={
+                                                      isInteractive
+                                                          ? `${columnClass} ${tableNavInteractiveCellClassName}`
+                                                          : columnClass
+                                                  }
                                               >
                                                   {renderTableNavCellContent(cell.column.id, rowHref, content, {
                                                       primaryColumnId: "contact",

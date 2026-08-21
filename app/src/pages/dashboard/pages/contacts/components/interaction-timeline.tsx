@@ -244,7 +244,7 @@ export function InteractionTimeline({ contactUuid, onNavigateToOutreach }: Inter
                 {Array.from({ length: 4 }).map((_, i) => (
                     <div key={i} className="flex gap-3">
                         <div className="size-8 rounded-full bg-surface-secondary animate-pulse shrink-0" />
-                        <div className="flex-1 space-y-2 pt-1">
+                        <div className="min-w-0 flex-1 space-y-2 pt-1">
                             <div className="h-3 w-24 rounded bg-surface-secondary animate-pulse" />
                             <div className="h-4 w-2/3 rounded bg-surface-secondary animate-pulse" />
                         </div>
@@ -288,7 +288,7 @@ export function InteractionTimeline({ contactUuid, onNavigateToOutreach }: Inter
                         : null;
 
                 return (
-                    <li key={interaction.uuid} className="flex gap-3">
+                    <li key={interaction.uuid} className="flex gap-3 min-w-0">
                         <div className="relative flex flex-col items-center shrink-0 w-8">
                             <span
                                 className={cn(
@@ -306,7 +306,7 @@ export function InteractionTimeline({ contactUuid, onNavigateToOutreach }: Inter
                                 !isLast && "pb-4",
                             )}
                         >
-                            <div className="flex items-center gap-2 flex-wrap">
+                            <div className="flex items-center gap-2 flex-wrap min-w-0">
                                 <Chip
                                     size="sm"
                                     variant="soft"
@@ -328,12 +328,11 @@ export function InteractionTimeline({ contactUuid, onNavigateToOutreach }: Inter
                             {interaction.type === InteractionType.STATUS_CHANGE ? (
                                 <>
                                     {pair ? (
-                                        <div className="flex flex-wrap items-center gap-2 mt-2">
+                                        <div className="flex flex-wrap items-center gap-1.5 mt-2">
                                             <StatusChip status={pair.from} />
-                                            <ArrowRight
-                                                className="size-4 text-muted shrink-0"
-                                                aria-hidden
-                                            />
+                                            <span className="inline-flex size-6 shrink-0 items-center justify-center text-muted" aria-hidden>
+                                                <ArrowRight className="size-3.5" />
+                                            </span>
                                             <StatusChip status={pair.to} />
                                         </div>
                                     ) : null}
@@ -413,13 +412,13 @@ export function InteractionTimeline({ contactUuid, onNavigateToOutreach }: Inter
                                 <button
                                     type="button"
                                     onClick={() => onNavigateToOutreach?.(interaction.outreach_message!.uuid)}
-                                    className="group mt-1 inline-flex items-center gap-1.5 text-left text-sm font-medium text-foreground hover:text-accent transition-colors"
+                                    className="group mt-2 flex w-full min-w-0 max-w-full items-center gap-1.5 text-left text-sm font-medium text-foreground hover:text-accent transition-colors"
                                     title="Open in Outreach tab"
                                 >
-                                    <span className="truncate">
+                                    <span className="min-w-0 break-words">
                                         {interaction.outreach_message.subject?.trim() || "(no subject)"}
                                     </span>
-                                    <ExternalLink className="size-3.5 text-muted group-hover:text-accent shrink-0" />
+                                    <ExternalLink className="size-3.5 shrink-0 self-center text-muted group-hover:text-accent" />
                                 </button>
                             ) : interaction.content?.trim() ? (
                                 <p className="text-sm text-foreground whitespace-pre-line break-words mt-1">

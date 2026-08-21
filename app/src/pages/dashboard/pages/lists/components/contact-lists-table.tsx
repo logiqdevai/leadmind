@@ -3,6 +3,7 @@ import { Button, Table } from "@heroui/react";
 import { FolderInput, Pencil, Trash2 } from "lucide-react";
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { Routes } from "@/routes/routes";
+import { extraListColumnClass } from "@/components/ui/mobile-list-filters";
 import { TablePagination } from "@/components/ui/table-pagination";
 import { isTableNavInteractiveCell, renderTableNavCellContent, tableNavInteractiveCellClassName, tableNavRowClassName } from "@/components/ui/table-row-link";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
@@ -187,15 +188,7 @@ export function ContactListsTable({
                                     key={header.id}
                                     id={header.id}
                                     isRowHeader={header.id === "title"}
-                                    className={
-                                        header.id === "description"
-                                            ? "min-w-0 hidden sm:table-cell"
-                                            : header.id === "sublists" || header.id === "updated_at"
-                                              ? "hidden md:table-cell"
-                                              : header.id === "actions"
-                                                ? "w-32"
-                                                : "min-w-0"
-                                    }
+                                    className={extraListColumnClass(header.id, ["description", "sublists", "contacts", "updated_at"])}
                                 >
                                     {flexRender(header.column.columnDef.header, header.getContext())}
                                 </Table.Column>
@@ -233,15 +226,12 @@ export function ContactListsTable({
                                                   cell.getContext(),
                                               );
                                               const isInteractive = isTableNavInteractiveCell(cell.column.id);
-                                              const columnClass =
-                                                  cell.column.id === "description"
-                                                      ? "min-w-0 hidden sm:table-cell"
-                                                      : cell.column.id === "sublists" ||
-                                                          cell.column.id === "updated_at"
-                                                        ? "hidden md:table-cell"
-                                                        : cell.column.id === "actions"
-                                                          ? "w-32"
-                                                          : "min-w-0";
+                                              const columnClass = extraListColumnClass(cell.column.id, [
+                                                  "description",
+                                                  "sublists",
+                                                  "contacts",
+                                                  "updated_at",
+                                              ]);
 
                                               return (
                                               <Table.Cell

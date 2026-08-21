@@ -119,14 +119,14 @@ export function FormsTab({ contactUuid, contactName }: FormsTabProps) {
     return (
         <div className="flex flex-col gap-4 max-w-3xl">
             <div className="rounded-2xl border border-border/80 bg-surface/80">
-                <div className="flex items-center justify-between gap-2 border-b border-border/60 px-5 py-3.5">
+                <div className="flex items-center justify-between gap-2 border-b border-border/60 px-4 sm:px-5 py-3.5">
                     <div className="flex items-center gap-2">
                         <ClipboardList className="size-4 text-muted" />
                         <h3 className="text-sm font-semibold text-foreground">Forms</h3>
                     </div>
                 </div>
 
-                <div className="p-5 space-y-2">
+                <div className="p-4 sm:p-5 space-y-2">
                     {completionsLoading || formsLoading ? (
                         Array.from({ length: 2 }).map((_, i) => (
                             <div

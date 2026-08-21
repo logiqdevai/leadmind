@@ -99,7 +99,7 @@ export function ContactInfosSection({ contactUuid, infos }: ContactInfosSectionP
                             return (
                                 <li
                                     key={info.uuid}
-                                    className="grid grid-cols-[6.5rem_minmax(0,1fr)_auto] items-center gap-3 rounded-lg px-2 py-2 transition-colors hover:bg-surface-secondary/60"
+                                    className="grid grid-cols-1 gap-1 rounded-lg px-2 py-2 transition-colors hover:bg-surface-secondary/60 sm:grid-cols-[6.5rem_minmax(0,1fr)_auto] sm:items-center sm:gap-3"
                                 >
                                     <p className="truncate text-xs font-medium text-muted">
                                         {CONTACT_INFO_TYPE_LABELS[info.type]}
@@ -122,7 +122,7 @@ export function ContactInfosSection({ contactUuid, infos }: ContactInfosSectionP
                                             {info.value}
                                         </p>
                                     )}
-                                    <div className="flex shrink-0 items-center gap-0.5">
+                                    <div className="flex shrink-0 items-center gap-0.5 justify-end sm:justify-start">
                                         <Button
                                             size="sm"
                                             variant="tertiary"

@@ -31,15 +31,15 @@ export function ActivityLogTable({ rows }: { rows: ActivityLog[] }) {
     };
 
     return (
-        <div className="overflow-x-auto rounded-xl">
-            <table className="w-full text-sm">
+        <div className="overflow-x-hidden rounded-xl">
+            <table className="w-full table-fixed text-sm">
                 <thead className="bg-surface-secondary/40 text-muted">
                     <tr>
-                        <th className="px-3 py-2 text-left font-medium">When</th>
-                        <th className="px-3 py-2 text-left font-medium">User</th>
-                        <th className="px-3 py-2 text-left font-medium">Action</th>
-                        <th className="px-3 py-2 text-left font-medium">Entity</th>
-                        <th className="px-3 py-2 text-left font-medium">Details</th>
+                        <th className="w-28 px-3 py-2 text-left font-medium">When</th>
+                        <th className="min-w-0 max-w-0 overflow-hidden px-3 py-2 text-left font-medium">User</th>
+                        <th className="hidden lg:table-cell px-3 py-2 text-left font-medium">Action</th>
+                        <th className="hidden lg:table-cell px-3 py-2 text-left font-medium">Entity</th>
+                        <th className="px-3 py-2 text-left font-medium w-24">Details</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -53,20 +53,20 @@ export function ActivityLogTable({ rows }: { rows: ActivityLog[] }) {
                                     <td className="px-3 py-2 align-top text-xs text-muted whitespace-nowrap">
                                         {formatActivityDate(row.created_at)}
                                     </td>
-                                    <td className="px-3 py-2 align-top">
-                                        <div className="font-medium text-foreground">
+                                    <td className="min-w-0 max-w-0 overflow-hidden px-3 py-2 align-top">
+                                        <div className="truncate font-medium text-foreground">
                                             {formatActivityActor(row.actor)}
                                         </div>
                                         {row.actor?.email ? (
-                                            <div className="text-xs text-muted">
+                                            <div className="truncate text-xs text-muted">
                                                 {row.actor.email}
                                             </div>
                                         ) : null}
                                     </td>
-                                    <td className="px-3 py-2 align-top text-foreground/90">
+                                    <td className="hidden lg:table-cell px-3 py-2 align-top text-foreground/90">
                                         {formatActivityDescription(row)}
                                     </td>
-                                    <td className="px-3 py-2 align-top text-foreground/90">
+                                    <td className="hidden lg:table-cell px-3 py-2 align-top text-foreground/90">
                                         <div>{formatActivityEntityType(row.entity_type)}</div>
                                         {row.entity_uuid ? (
                                             <div className="text-xs text-muted font-mono truncate max-w-[10rem]">

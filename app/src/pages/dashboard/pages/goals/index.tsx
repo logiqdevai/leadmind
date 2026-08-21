@@ -1,5 +1,6 @@
 import { useState, type FC } from "react";
 import { ListBox, Select, Tabs } from "@heroui/react";
+import { ScrollableTabs, ScrollableTabsList, tabTriggerClassName } from "@/components/ui/scrollable-tabs";
 import { Trophy } from "lucide-react";
 import {
     useMessagingGoalsLeaderboard,
@@ -16,9 +17,6 @@ import { GoalsLeaderboard } from "./components/goals-leaderboard";
 import { GoalsManagePanel } from "./components/goals-manage-panel";
 import { EmailSendLimitsPanel } from "./components/email-send-limits-panel";
 import { PERIOD_LABELS } from "./utils/goals-copy";
-
-const TAB_CLASS =
-    "px-3 py-1.5 text-sm font-medium rounded-md cursor-pointer transition-colors text-muted hover:text-foreground data-[selected]:bg-accent data-[selected]:text-accent-foreground data-[selected]:shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-accent whitespace-nowrap";
 
 const GoalsPage: FC = () => {
     const canManage = useOrganisationPermission("org_manage_goals");
@@ -48,15 +46,15 @@ const GoalsPage: FC = () => {
                 <h1 className="text-xl font-semibold text-foreground">Goals</h1>
             </div>
 
-            <Tabs selectedKey={tab} onSelectionChange={(key) => setTab(String(key))}>
-                <Tabs.List className="inline-flex gap-1 rounded-lg bg-surface-secondary p-1 border border-border overflow-x-auto max-w-full">
+            <ScrollableTabs selectedKey={tab} onSelectionChange={(key) => setTab(String(key))}>
+                <ScrollableTabsList>
                     {tabs.map((t) => (
-                        <Tabs.Tab key={t.id} id={t.id} className={TAB_CLASS}>
+                        <Tabs.Tab key={t.id} id={t.id} className={tabTriggerClassName}>
                             {t.label}
                         </Tabs.Tab>
                     ))}
-                </Tabs.List>
-            </Tabs>
+                </ScrollableTabsList>
+            </ScrollableTabs>
 
             {tab === "progress" && (
                 <div className="flex flex-col gap-4">

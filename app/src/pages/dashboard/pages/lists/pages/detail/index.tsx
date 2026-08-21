@@ -1,6 +1,7 @@
 import { useMemo, useState, type Key } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import { Button, Tabs } from "@heroui/react";
+import { ScrollableTabs, ScrollableTabsList, tabTriggerClassName } from "@/components/ui/scrollable-tabs";
 import { Plus } from "lucide-react";
 import { Routes, ListDetailTabIds } from "@/routes/routes";
 import {
@@ -273,19 +274,19 @@ export default function ListDetailPage() {
                         </p>
                     ) : null}
 
-                    <Tabs selectedKey={currentTab} onSelectionChange={handleTabChange}>
-                        <Tabs.List className="inline-flex gap-1 rounded-lg bg-surface-secondary p-1 border border-border">
+                    <ScrollableTabs selectedKey={currentTab} onSelectionChange={handleTabChange}>
+                        <ScrollableTabsList>
                             {TABS.map((t) => (
                                 <Tabs.Tab
                                     key={t.id}
                                     id={t.id}
-                                    className="px-3 py-1.5 text-sm font-medium rounded-md cursor-pointer transition-colors text-muted hover:text-foreground data-[selected]:bg-accent data-[selected]:text-accent-foreground data-[selected]:shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                                    className={tabTriggerClassName}
                                 >
                                     {t.label}
                                 </Tabs.Tab>
                             ))}
-                        </Tabs.List>
-                    </Tabs>
+                        </ScrollableTabsList>
+                    </ScrollableTabs>
 
                     {currentTab === ListDetailTabIds.SUBLISTS && (
                         <section className="flex flex-col gap-4">

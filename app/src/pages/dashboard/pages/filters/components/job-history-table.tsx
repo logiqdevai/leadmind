@@ -64,7 +64,7 @@ export function JobHistoryTable({
         <>
         <div className="bg-surface rounded-xl overflow-hidden">
             <Table>
-                <Table.ScrollContainer>
+                <Table.ScrollContainer className="w-full max-w-full overflow-x-auto">
                     <Table.Content aria-label="Filter job history" className="min-w-[920px]">
                         <Table.Header>
                             <Table.Column id="started_at" isRowHeader>

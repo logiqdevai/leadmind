@@ -181,13 +181,13 @@ export function DraftedMessagesTable({ campaignUuid }: DraftedMessagesTableProps
             />
 
             <div className="rounded-xl overflow-hidden">
-                <table className="w-full text-sm">
+                <table className="w-full table-fixed text-sm">
                     <thead>
                         <tr className="border-b border-border bg-surface-secondary/50">
-                            <th className="px-4 py-3 text-left text-xs font-medium text-muted uppercase tracking-wide">Contact</th>
-                            <th className="px-4 py-3 text-left text-xs font-medium text-muted uppercase tracking-wide">Subject / Preview</th>
-                            <th className="px-4 py-3 text-left text-xs font-medium text-muted uppercase tracking-wide">Status</th>
-                            <th className="px-4 py-3 text-right text-xs font-medium text-muted uppercase tracking-wide w-36">Actions</th>
+                            <th className="min-w-0 max-w-0 overflow-hidden px-4 py-3 text-left text-xs font-medium text-muted uppercase tracking-wide">Contact</th>
+                            <th className="hidden lg:table-cell px-4 py-3 text-left text-xs font-medium text-muted uppercase tracking-wide">Subject / Preview</th>
+                            <th className="px-4 py-3 text-left text-xs font-medium text-muted uppercase tracking-wide w-28">Status</th>
+                            <th className="px-4 py-3 text-right text-xs font-medium text-muted uppercase tracking-wide w-36 whitespace-nowrap">Actions</th>
                             <th className="px-4 py-3 w-10" />
                         </tr>
                     </thead>
@@ -266,8 +266,8 @@ function DraftRow({
                 className="border-b border-border last:border-0 hover:bg-surface-secondary/30 cursor-pointer"
                 onClick={() => setExpanded((v) => !v)}
             >
-                <td className="px-4 py-3">
-                    <div className="font-medium text-foreground">{contactName}</div>
+                <td className="min-w-0 max-w-0 overflow-hidden px-4 py-3">
+                    <div className="truncate font-medium text-foreground">{contactName}</div>
                     {msg.contact.email ? (
                         <div className="mt-1 flex items-center gap-1 min-w-0">
                             <span className="text-xs text-muted truncate">{msg.contact.email}</span>
@@ -280,7 +280,7 @@ function DraftRow({
                         <div className="text-xs text-muted">{msg.contact.company}</div>
                     )}
                 </td>
-                <td className="px-4 py-3 max-w-xs">
+                <td className="hidden lg:table-cell px-4 py-3 max-w-xs overflow-hidden">
                     {msg.subject && (
                         <div className="flex items-center gap-1 min-w-0">
                             <span className="font-medium text-foreground truncate">{msg.subject}</span>

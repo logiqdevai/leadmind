@@ -169,7 +169,7 @@ export function RemindersTab({ contactUuid }: RemindersTabProps) {
         <div className="flex flex-col gap-4 max-w-3xl">
             <NotificationPermissionBanner />
             <div className="rounded-2xl border border-border/80 bg-surface/80">
-                <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border/60 px-5 py-3.5">
+                <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border/60 px-4 sm:px-5 py-3.5">
                     <div className="flex items-center gap-2">
                         <Bell className="size-4 text-muted" />
                         <h3 className="text-sm font-semibold text-foreground">Reminders</h3>
@@ -182,7 +182,7 @@ export function RemindersTab({ contactUuid }: RemindersTabProps) {
                                     type="button"
                                     onClick={() => setFilter(opt.id)}
                                     className={cn(
-                                        "px-3 py-1 text-xs font-medium transition-colors",
+                                        "h-6 px-2.5 text-[13px] font-medium transition-colors",
                                         filter === opt.id
                                             ? "bg-accent text-accent-foreground"
                                             : "bg-surface text-muted hover:bg-surface-secondary",
@@ -196,6 +196,7 @@ export function RemindersTab({ contactUuid }: RemindersTabProps) {
                             size="sm"
                             variant="secondary"
                             onPress={() => setCreateOpen(true)}
+                            className="h-6 min-h-6 px-2.5 text-[13px]"
                         >
                             <Plus className="size-3.5" />
                             Add reminder
@@ -203,7 +204,7 @@ export function RemindersTab({ contactUuid }: RemindersTabProps) {
                     </div>
                 </div>
 
-                <div className="p-5 space-y-2">
+                <div className="p-4 sm:p-5 space-y-2">
                     {isLoading ? (
                         Array.from({ length: 3 }).map((_, i) => (
                             <div

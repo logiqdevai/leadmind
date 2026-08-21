@@ -13,7 +13,7 @@ interface DashboardPanelHeaderProps {
 
 export function DashboardPanelHeader({ title, subtitle, actionLabel, onAction, children }: DashboardPanelHeaderProps) {
   return (
-    <div className="flex items-center justify-between gap-4 px-5 py-4 border-b border-border/50">
+    <div className="flex items-center justify-between gap-4 px-4 sm:px-5 py-4 border-b border-border/50">
       <div className="min-w-0">
         <p className="text-sm font-semibold text-foreground">{title}</p>
         {subtitle && <p className="text-xs text-muted mt-0.5">{subtitle}</p>}

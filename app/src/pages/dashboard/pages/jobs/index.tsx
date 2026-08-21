@@ -236,11 +236,11 @@ export default function JobsPage() {
                     <Table.ScrollContainer className="w-full max-w-full overflow-x-hidden">
                         <Table.Content aria-label="Jobs" className="w-full table-fixed">
                             <Table.Header>
-                                <Table.Column id="title" isRowHeader>
+                                <Table.Column id="title" isRowHeader className="min-w-0 overflow-hidden">
                                     Title
                                 </Table.Column>
-                                <Table.Column id="type">Type</Table.Column>
-                                <Table.Column id="status">Status</Table.Column>
+                                <Table.Column id="type" className="w-28">Type</Table.Column>
+                                <Table.Column id="status" className="w-36">Status</Table.Column>
                                 <Table.Column id="progress" className="hidden lg:table-cell">Progress</Table.Column>
                                 <Table.Column id="retries" className="hidden lg:table-cell">Retries</Table.Column>
                                 <Table.Column id="error" className="hidden lg:table-cell">Error</Table.Column>
@@ -269,8 +269,8 @@ export default function JobsPage() {
                                       ))
                                     : (data?.data ?? []).map((job) => (
                                           <Table.Row key={job.uuid} id={job.uuid}>
-                                              <Table.Cell>
-                                                  <span className="text-sm text-foreground font-medium line-clamp-2 max-w-[220px]">
+                                              <Table.Cell className="min-w-0 overflow-hidden">
+                                                  <span className="text-sm text-foreground font-medium truncate block">
                                                       {job.title}
                                                   </span>
                                               </Table.Cell>

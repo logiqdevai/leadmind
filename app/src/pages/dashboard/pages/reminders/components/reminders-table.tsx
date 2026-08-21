@@ -112,7 +112,7 @@ export function RemindersTable({
                 id: "title",
                 header: "Title",
                 cell: (info) => (
-                    <span className="font-medium text-foreground">
+                    <span className="block min-w-0 truncate font-medium text-foreground">
                         {info.getValue() ?? "Reminder"}
                     </span>
                 ),

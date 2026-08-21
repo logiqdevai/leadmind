@@ -44,17 +44,17 @@ export function MessageTemplatesTable({ templates, onEdit, onDelete }: MessageTe
             <table className="w-full table-fixed text-sm">
                 <thead className="bg-surface-secondary/40 text-muted">
                     <tr>
-                        <th className="px-4 py-3 text-left font-medium">Name</th>
+                        <th className="min-w-0 max-w-0 overflow-hidden px-4 py-3 text-left font-medium">Name</th>
                         <th className="hidden lg:table-cell px-4 py-3 text-left font-medium">Channels</th>
                         <th className="hidden lg:table-cell px-4 py-3 text-left font-medium">Preview</th>
                         <th className="hidden lg:table-cell px-4 py-3 text-left font-medium">Updated</th>
-                        <th className="px-4 py-3 text-right font-medium w-20 lg:w-28">Actions</th>
+                        <th className="px-4 py-3 text-right font-medium w-20 lg:w-28 whitespace-nowrap">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {templates.map((template) => (
                         <tr key={template.uuid} className="border-t border-border hover:bg-surface-secondary/30">
-                            <td className="px-4 py-3 align-top font-medium text-foreground">{template.name}</td>
+                            <td className="min-w-0 max-w-0 overflow-hidden px-4 py-3 align-top font-medium text-foreground truncate">{template.name}</td>
                             <td className="hidden lg:table-cell px-4 py-3 align-top">
                                 <div className="flex flex-wrap gap-1">
                                     {template.channels.includes(Channel.EMAIL) ? (

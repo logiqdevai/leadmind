@@ -1,6 +1,7 @@
 import { useState, type Key } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { Button, Chip, Dropdown, Tabs } from "@heroui/react";
+import { ScrollableTabs, ScrollableTabsList, tabTriggerClassName } from "@/components/ui/scrollable-tabs";
 import { ArrowLeft, MoreVertical, Pause, Play, Square, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Channel } from "@/features/contacts/interfaces/contact.interface";
@@ -223,15 +224,15 @@ export default function FilterDetailPage() {
         )}
       </div>
 
-      <Tabs selectedKey={currentTab} onSelectionChange={handleTabChange}>
-        <Tabs.List className="inline-flex gap-1 rounded-lg bg-surface-secondary p-1 border border-border">
+      <ScrollableTabs selectedKey={currentTab} onSelectionChange={handleTabChange}>
+        <ScrollableTabsList>
           {TABS.map((t) => (
-            <Tabs.Tab key={t.id} id={t.id} className="px-3 py-1.5 text-sm font-medium rounded-md cursor-pointer transition-colors text-muted hover:text-foreground data-[selected]:bg-accent data-[selected]:text-accent-foreground data-[selected]:shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-accent">
+            <Tabs.Tab key={t.id} id={t.id} className={tabTriggerClassName}>
               {t.label}
             </Tabs.Tab>
           ))}
-        </Tabs.List>
-      </Tabs>
+        </ScrollableTabsList>
+      </ScrollableTabs>
 
       <div className="pt-2">
         {currentTab === FilterDetailTabIds.FILTER && uuid && (

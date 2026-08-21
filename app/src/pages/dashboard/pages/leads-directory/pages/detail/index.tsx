@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button, Dropdown, Tabs } from "@heroui/react";
+import { ScrollableTabs, ScrollableTabsList, tabTriggerClassName } from "@/components/ui/scrollable-tabs";
 import { ArrowLeft, Check, MoreVertical, Plus, Sparkles, Trash2 } from "lucide-react";
 import { SourceType } from "@/features/leads/interfaces/lead.interface";
 import { SourceBadge } from "@/components/ui/source-badge";
@@ -183,15 +184,15 @@ export default function LeadDirectoryDetailPage() {
         />
       ) : null}
 
-      <Tabs selectedKey={activeTab} onSelectionChange={(key) => setActiveTab(String(key))}>
-        <Tabs.List className="inline-flex gap-1 rounded-lg bg-surface-secondary p-1 border border-border overflow-x-auto max-w-full">
+      <ScrollableTabs selectedKey={activeTab} onSelectionChange={(key) => setActiveTab(String(key))}>
+        <ScrollableTabsList>
           {TABS.map((t) => (
-            <Tabs.Tab key={t.id} id={t.id} className="px-3 py-1.5 text-sm font-medium rounded-md cursor-pointer transition-colors text-muted hover:text-foreground data-[selected]:bg-accent data-[selected]:text-accent-foreground data-[selected]:shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-accent whitespace-nowrap">
+            <Tabs.Tab key={t.id} id={t.id} className={tabTriggerClassName}>
               {t.label}
             </Tabs.Tab>
           ))}
-        </Tabs.List>
-      </Tabs>
+        </ScrollableTabsList>
+      </ScrollableTabs>
 
       <div className="pt-2">
         {isLoading || !lead ? (

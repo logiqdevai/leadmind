@@ -27,8 +27,8 @@ export function ContactSelectionTable({
     const someSelected = rows.some((r) => selected.has(r.uuid));
 
     return (
-        <div className="overflow-x-auto rounded-xl">
-            <table className="w-full text-sm">
+        <div className="overflow-x-hidden rounded-xl">
+            <table className="w-full table-fixed text-sm">
                 <thead className="bg-surface-secondary/40 text-muted">
                     <tr>
                         <th className="w-8 px-3 py-2">
@@ -49,10 +49,10 @@ export function ContactSelectionTable({
                                 />
                             ) : null}
                         </th>
-                        <th className="px-3 py-2 text-left font-medium">Name</th>
-                        <th className="px-3 py-2 text-left font-medium">Company</th>
-                        <th className="px-3 py-2 text-left font-medium">Score</th>
-                        <th className="px-3 py-2 text-left font-medium">Tags</th>
+                        <th className="min-w-0 max-w-0 overflow-hidden px-3 py-2 text-left font-medium">Name</th>
+                        <th className="hidden lg:table-cell px-3 py-2 text-left font-medium">Company</th>
+                        <th className="px-3 py-2 text-left font-medium w-24">Score</th>
+                        <th className="hidden lg:table-cell px-3 py-2 text-left font-medium">Tags</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -71,21 +71,21 @@ export function ContactSelectionTable({
                                         aria-label={`Select ${c.name ?? "contact"}`}
                                     />
                                 </td>
-                                <td className="px-3 py-2 align-top">
-                                    <div className="font-medium text-foreground">
+                                <td className="min-w-0 max-w-0 overflow-hidden px-3 py-2 align-top">
+                                    <div className="truncate font-medium text-foreground">
                                         {c.name ?? "—"}
                                     </div>
-                                    <div className="text-xs text-muted">
+                                    <div className="truncate text-xs text-muted">
                                         {c.email ?? c.phone ?? "—"}
                                     </div>
                                 </td>
-                                <td className="px-3 py-2 align-top text-foreground/90">
+                                <td className="hidden lg:table-cell px-3 py-2 align-top text-foreground/90 truncate">
                                     {c.company ?? "—"}
                                 </td>
                                 <td className="px-3 py-2 align-top">
                                     <ContactScoresCompact contact={c} />
                                 </td>
-                                <td className="px-3 py-2 align-top">
+                                <td className="hidden lg:table-cell px-3 py-2 align-top">
                                     <div className="flex flex-wrap gap-1">
                                         {(c.tags ?? []).slice(0, 3).map((t) => (
                                             <Chip key={t} size="sm" variant="soft" color="default">

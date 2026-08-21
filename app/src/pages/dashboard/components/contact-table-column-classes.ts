@@ -13,7 +13,7 @@ export const CONTACT_TABLE_COLUMN_CLASS: Record<string, string> = {
     last_interaction: `hidden ${WIDE} whitespace-nowrap overflow-hidden`,
     source: `hidden ${WIDE} min-w-0 overflow-hidden`,
     drafts: "hidden xl:table-cell w-16 overflow-hidden",
-    actions: "w-32 overflow-hidden",
+    actions: "w-32",
 };
 
 export function contactTableColumnClass(columnId: string): string | undefined {

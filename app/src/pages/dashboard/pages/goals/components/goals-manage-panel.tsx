@@ -1,5 +1,6 @@
 import { useMemo, useState, type Key } from "react";
 import { Button, Dropdown, Input, ListBox, Select, Tabs } from "@heroui/react";
+import { ScrollableTabs, ScrollableTabsList, tabTriggerClassName } from "@/components/ui/scrollable-tabs";
 import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import {
     useBulkUpsertMessagingGoals,
@@ -24,9 +25,6 @@ const PERIOD_OPTIONS = [
     { id: GoalPeriods.WEEK, label: PERIOD_LABELS.WEEK },
     { id: GoalPeriods.MONTH, label: PERIOD_LABELS.MONTH },
 ];
-
-const TAB_CLASS =
-    "px-3 py-1.5 text-sm font-medium rounded-md cursor-pointer transition-colors text-muted hover:text-foreground data-[selected]:bg-accent data-[selected]:text-accent-foreground data-[selected]:shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-accent whitespace-nowrap";
 
 function memberLabel(member: {
     full_name: string | null;
@@ -166,19 +164,19 @@ export function GoalsManagePanel() {
                                   : "Assign a daily, weekly, or monthly message target to one teammate."}
                         </p>
                     </div>
-                    <Tabs
+                    <ScrollableTabs
                         selectedKey={assignTab}
                         onSelectionChange={(key) => setAssignTab(String(key))}
                     >
-                        <Tabs.List className="inline-flex gap-1 rounded-lg bg-surface-secondary p-1 border border-border shrink-0">
-                            <Tabs.Tab id="individual" className={TAB_CLASS}>
+                        <ScrollableTabsList>
+                            <Tabs.Tab id="individual" className={tabTriggerClassName}>
                                 Individual
                             </Tabs.Tab>
-                            <Tabs.Tab id="bulk" className={TAB_CLASS}>
+                            <Tabs.Tab id="bulk" className={tabTriggerClassName}>
                                 Bulk
                             </Tabs.Tab>
-                        </Tabs.List>
-                    </Tabs>
+                        </ScrollableTabsList>
+                    </ScrollableTabs>
                 </div>
 
                 {assignTab === "individual" ? (

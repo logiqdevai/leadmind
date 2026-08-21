@@ -122,7 +122,7 @@ export function CrmTab({ contact, onNavigateToOutreach }: CrmTabProps) {
 
       {/* CRM State */}
       <div className="rounded-2xl border border-border/80 bg-surface/80">
-        <div className="flex items-center justify-between gap-2 border-b border-border/60 px-5 py-3.5">
+        <div className="flex items-center justify-between gap-2 border-b border-border/60 px-4 sm:px-5 py-3.5">
           <h3 className="text-sm font-semibold text-foreground">CRM State</h3>
           <Popover isOpen={rescoreOpen} onOpenChange={handleRescoreOpenChange}>
             <Popover.Trigger>
@@ -213,9 +213,9 @@ export function CrmTab({ contact, onNavigateToOutreach }: CrmTabProps) {
           </Popover>
         </div>
 
-        <div className="px-5 py-4 space-y-5">
+        <div className="px-4 sm:px-5 py-4 space-y-5">
           <div className="flex flex-wrap gap-5">
-            <div className="flex-1 min-w-[180px] flex flex-col gap-2">
+            <div className="flex min-w-0 w-full flex-1 flex-col gap-2 sm:min-w-0">
               <p className={LABEL_CLASS}>Status</p>
               <Select
                 className="w-full"
@@ -245,7 +245,7 @@ export function CrmTab({ contact, onNavigateToOutreach }: CrmTabProps) {
               </Select>
             </div>
 
-            <div className="flex flex-col gap-2 flex-1 min-w-[200px]">
+            <div className="flex min-w-0 w-full flex-1 flex-col gap-2">
               <p className={LABEL_CLASS}>AI scores</p>
               <div className="flex flex-col gap-2 pt-0.5">
                 {(contact.filter?.scoring_instructions ?? []).length === 0 ? (
@@ -286,10 +286,10 @@ export function CrmTab({ contact, onNavigateToOutreach }: CrmTabProps) {
 
       {/* Notes */}
       <div className="rounded-2xl border border-border/80 bg-surface/80">
-        <div className="border-b border-border/60 px-5 py-3.5">
+        <div className="border-b border-border/60 px-4 sm:px-5 py-3.5">
           <h3 className="text-sm font-semibold text-foreground">Notes</h3>
         </div>
-        <div className="px-5 py-4 flex flex-col gap-3">
+        <div className="px-4 sm:px-5 py-4 flex flex-col gap-3">
           <TextArea
             id="contact-notes"
             aria-label="CRM notes"
@@ -318,7 +318,7 @@ export function CrmTab({ contact, onNavigateToOutreach }: CrmTabProps) {
 
       {/* Activity */}
       <div className="rounded-2xl border border-border/80 bg-surface/80">
-        <div className="flex items-center justify-between gap-2 border-b border-border/60 px-5 py-3.5">
+        <div className="flex items-center justify-between gap-2 border-b border-border/60 px-4 sm:px-5 py-3.5">
           <h3 className="text-sm font-semibold text-foreground">Activity</h3>
           <Dropdown>
             <Dropdown.Trigger>
@@ -356,7 +356,7 @@ export function CrmTab({ contact, onNavigateToOutreach }: CrmTabProps) {
             </Dropdown.Popover>
           </Dropdown>
         </div>
-        <div className="px-5 py-4">
+        <div className="px-4 sm:px-5 py-4">
           <InteractionTimeline contactUuid={contact.uuid} onNavigateToOutreach={onNavigateToOutreach} />
         </div>
       </div>

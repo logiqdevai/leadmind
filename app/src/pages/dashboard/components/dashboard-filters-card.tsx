@@ -38,7 +38,7 @@ export function DashboardFiltersCard({ filters, isLoading }: DashboardFiltersCar
       {isLoading ? (
         <ul className="divide-y divide-border/40" aria-busy>
           {Array.from({ length: 3 }).map((_, i) => (
-            <li key={i} className="flex items-center gap-3 px-5 py-3.5">
+            <li key={i} className="flex items-center gap-3 px-4 sm:px-5 py-3.5">
               <div className="size-2 rounded-full bg-surface-secondary animate-pulse shrink-0" />
               <div className="flex-1 space-y-1.5">
                 <div className="h-3.5 w-32 rounded bg-surface-secondary animate-pulse" />
@@ -88,7 +88,7 @@ function DashboardFilterRow({ filter }: { filter: Filter }) {
     <li>
       <Link
         to={Routes.dashboard.filters_detail.replace(":uuid", filter.uuid)}
-        className="flex items-center gap-3 px-5 py-3.5 hover:bg-surface-secondary/40 transition-colors"
+        className="flex items-center gap-3 px-4 sm:px-5 py-3.5 hover:bg-surface-secondary/40 transition-colors"
       >
         <span className={cn("size-2 rounded-full shrink-0", dotColor, isRunning && "animate-pulse")} />
         <div className="min-w-0 flex-1">

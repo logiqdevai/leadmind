@@ -38,7 +38,7 @@ export function DashboardTopContactsCard({ contacts, isLoading }: DashboardTopCo
             <li key={c.uuid}>
               <Link
                 to={Routes.dashboard.contacts_detail.replace(":uuid", c.uuid)}
-                className="flex items-center gap-3 px-5 py-3.5 hover:bg-surface-secondary/40 transition-colors"
+                className="flex items-center gap-3 px-4 sm:px-5 py-3.5 hover:bg-surface-secondary/40 transition-colors"
               >
                 <DashboardAvatar name={c.name} />
                 <div className="min-w-0 flex-1">
