@@ -12,13 +12,13 @@ import { Tabs } from "@heroui/react";
 import { cn } from "@/lib/utils";
 
 export const tabListClassName =
-    "hidden lg:inline-flex gap-1 rounded-lg bg-surface-secondary p-1 border border-border";
+    "inline-flex w-fit max-w-full min-w-0 gap-1 rounded-lg bg-surface-secondary p-1 border border-border *:w-fit";
 
 export const tabTriggerClassName =
-    "shrink-0 whitespace-nowrap px-3 py-1.5 text-sm font-medium rounded-md cursor-pointer transition-colors text-muted hover:text-foreground data-[selected]:bg-accent data-[selected]:text-accent-foreground data-[selected]:shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-accent";
+    "shrink-0 w-fit whitespace-nowrap px-3 py-1.5 text-sm font-medium rounded-md cursor-pointer transition-colors text-muted hover:text-foreground data-[selected]:bg-accent data-[selected]:text-accent-foreground data-[selected]:shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-accent";
 
 const mobileTabClassName =
-    "flex min-h-11 items-center justify-center gap-1.5 rounded-lg px-2 text-[13px] font-medium leading-none tracking-[-0.01em] transition-colors";
+    "flex min-h-11 w-full items-center justify-center gap-1.5 rounded-lg px-2 text-[13px] font-medium leading-none tracking-[-0.01em] transition-colors";
 
 interface TabNavContextValue {
     selectedKey: string;
@@ -47,7 +47,7 @@ export const ScrollableTabsList: FC<ScrollableTabsListProps> = ({ children, clas
     return (
         <>
             <div
-                className="grid grid-cols-2 gap-1.5 lg:hidden"
+                className="grid w-full max-w-full grid-cols-2 gap-1.5 lg:hidden"
                 role="tablist"
                 aria-orientation="vertical"
             >
@@ -72,7 +72,9 @@ export const ScrollableTabsList: FC<ScrollableTabsListProps> = ({ children, clas
                     );
                 })}
             </div>
-            <Tabs.List className={cn(tabListClassName, className)}>{children}</Tabs.List>
+            <Tabs.ListContainer className="hidden w-fit max-w-full min-w-0 overflow-x-auto lg:block">
+                <Tabs.List className={cn(tabListClassName, className)}>{children}</Tabs.List>
+            </Tabs.ListContainer>
         </>
     );
 };
@@ -87,7 +89,7 @@ export const ScrollableTabs: FC<TabsRootProps> = ({ className, children, ...prop
 
     return (
         <TabNavContext.Provider value={{ selectedKey, onSelect }}>
-            <Tabs {...props} className={cn("block w-full min-w-0", className)}>
+            <Tabs {...props} className={cn("flex w-fit max-w-full min-w-0 flex-col", className)}>
                 {children}
             </Tabs>
         </TabNavContext.Provider>
