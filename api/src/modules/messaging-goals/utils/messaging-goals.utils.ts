@@ -61,6 +61,32 @@ export function getPeriodWindow(
   };
 }
 
+/**
+ * Reverses getPeriodWindow's period_key encoding back into a calendar date
+ * (yyyy-MM-dd), so per-day usage can be read out of SendingUsageCounter rows
+ * regardless of which period unit was active when they were written. HOUR keys
+ * collapse (and sum) onto their calendar day; WEEK keys attribute the whole
+ * week's count to that ISO week's Monday. Returns null for an unrecognized key.
+ */
+export function periodKeyToDate(period_key: string): string | null {
+  if (/^\d{4}-\d{2}-\d{2}$/.test(period_key)) return period_key;
+
+  const hourMatch = /^(\d{4}-\d{2}-\d{2})T\d{2}$/.exec(period_key);
+  if (hourMatch) return hourMatch[1];
+
+  const weekMatch = /^(\d{4})-W(\d{2})$/.exec(period_key);
+  if (weekMatch) {
+    const weekStart = DateTime.fromObject({
+      weekYear: Number(weekMatch[1]),
+      weekNumber: Number(weekMatch[2]),
+      weekday: 1,
+    });
+    return weekStart.isValid ? weekStart.toFormat('yyyy-MM-dd') : null;
+  }
+
+  return null;
+}
+
 export const SENT_MESSAGE_STATUSES = [
   'SENT',
   'DELIVERED',

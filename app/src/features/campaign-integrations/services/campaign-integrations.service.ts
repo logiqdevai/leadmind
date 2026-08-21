@@ -4,6 +4,7 @@ import type {
     AssignCampaignIntegrationPayload,
     CampaignIntegration,
     CampaignIntegrationCapacity,
+    SendingActivitySeries,
     UpdateCampaignIntegrationStatusPayload,
 } from "../interfaces/campaign-integration.interface";
 
@@ -75,6 +76,17 @@ export const removeCampaignIntegration = async (
         return response.data;
     } catch {
         throw new Error("Failed to remove integration. Please try again.");
+    }
+};
+
+export const getCampaignIntegrationsActivity = async (
+    campaignUuid: string,
+): Promise<SendingActivitySeries[]> => {
+    try {
+        const response = await axiosInstance.get(ApiRoutes.campaign_integrations.activity(campaignUuid));
+        return response.data;
+    } catch {
+        throw new Error("Failed to load sending activity. Please try again.");
     }
 };
 

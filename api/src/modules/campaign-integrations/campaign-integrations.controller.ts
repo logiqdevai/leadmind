@@ -113,6 +113,21 @@ export class CampaignIntegrationsController {
     );
   }
 
+  @Get('activity')
+  @ApiOperation({
+    summary:
+      'Real per-day send counts per campaign integration, for the sending-schedule calendar view',
+  })
+  getSendingActivity(
+    @CurrentUser('organisation_uuid') organisation_uuid: string,
+    @Param('campaign_uuid') campaign_uuid: string,
+  ) {
+    return this.campaignIntegrationsService.getSendingActivity(
+      organisation_uuid,
+      campaign_uuid,
+    );
+  }
+
   @Get(':ci_uuid/capacity')
   @ApiOperation({
     summary:

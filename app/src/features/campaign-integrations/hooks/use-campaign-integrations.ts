@@ -7,6 +7,7 @@ import type {
 import {
     assignCampaignIntegration,
     getCampaignIntegrationCapacity,
+    getCampaignIntegrationsActivity,
     listCampaignIntegrations,
     listCampaignIntegrationsForOrganisation,
     removeCampaignIntegration,
@@ -18,6 +19,7 @@ export const campaignIntegrationsQueryKeys = {
     list: (campaignUuid: string) => ["campaign-integrations", campaignUuid, "list"] as const,
     capacity: (campaignUuid: string, ciUuid: string) =>
         ["campaign-integrations", campaignUuid, "capacity", ciUuid] as const,
+    activity: (campaignUuid: string) => ["campaign-integrations", campaignUuid, "activity"] as const,
     forOrganisation: (excludeCampaignUuid?: string) =>
         ["campaign-integrations", "org", excludeCampaignUuid ?? "all"] as const,
 };
@@ -44,6 +46,15 @@ export function useCampaignIntegrationCapacity(campaignUuid: string, ciUuid: str
         queryFn: () => getCampaignIntegrationCapacity(campaignUuid, ciUuid as string),
         enabled: Boolean(campaignUuid) && Boolean(ciUuid),
         refetchInterval: 30_000,
+    });
+}
+
+export function useCampaignIntegrationsActivity(campaignUuid: string) {
+    return useQuery({
+        queryKey: campaignIntegrationsQueryKeys.activity(campaignUuid),
+        queryFn: () => getCampaignIntegrationsActivity(campaignUuid),
+        enabled: Boolean(campaignUuid),
+        refetchInterval: 60_000,
     });
 }
 

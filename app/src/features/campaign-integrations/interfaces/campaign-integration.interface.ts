@@ -42,6 +42,20 @@ export interface UpdateCampaignIntegrationStatusPayload {
     status: "ACTIVE" | "PAUSED";
 }
 
+export interface SendingActivityDay {
+    /** yyyy-MM-dd, in the sending policy's own timezone bucketing. */
+    date: string;
+    count: number;
+}
+
+export interface SendingActivitySeries {
+    campaign_integration_uuid: string;
+    status: CampaignIntegrationStatus;
+    integration_account: { title: string; provider: string };
+    /** Only days with at least one real send - sparse, sorted ascending by date. */
+    days: SendingActivityDay[];
+}
+
 export interface CampaignIntegrationCapacity {
     campaign_integration_uuid: string;
     current_stage: {

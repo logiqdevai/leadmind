@@ -10,6 +10,7 @@ import { CampaignIntegrationStatus } from "@/features/campaign-integrations/inte
 import { firstStageDailyCapacity } from "@/features/sending-policy/utils/sending-policy-validation";
 import { CampaignIntegrationCard } from "./campaign-integration-card";
 import { AssignIntegrationModal } from "./assign-integration-modal";
+import { SendingActivityHeatmap } from "./sending-activity-heatmap";
 
 /** Estimated days-to-complete above this is called out as a warning, not just an estimate. */
 const SLOW_PACE_DAY_THRESHOLD = 60;
@@ -123,6 +124,12 @@ export function CampaignIntegrationPicker({
                     ))}
                 </div>
             )}
+
+            {campaignIntegrations?.length ? (
+                <div className="border-t border-border pt-3">
+                    <SendingActivityHeatmap campaignUuid={campaignUuid} />
+                </div>
+            ) : null}
 
             <AssignIntegrationModal
                 isOpen={showAssignModal}

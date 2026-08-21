@@ -313,6 +313,7 @@ export const ApiRoutes = {
             `/marketing-campaigns/${campaignUuid}/integrations/${ciUuid}`,
         capacity: (campaignUuid: string, ciUuid: string) =>
             `/marketing-campaigns/${campaignUuid}/integrations/${ciUuid}/capacity`,
+        activity: (campaignUuid: string) => `/marketing-campaigns/${campaignUuid}/integrations/activity`,
         list_for_organisation: "/campaign-integrations",
     },
 }
