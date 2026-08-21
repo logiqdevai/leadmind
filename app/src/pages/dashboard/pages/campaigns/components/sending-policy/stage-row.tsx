@@ -1,5 +1,5 @@
 import { Button, Checkbox, Input, Label, ListBox, Select, TextField } from "@heroui/react";
-import { ChevronDown, ChevronUp, Trash2 } from "lucide-react";
+import { AlertTriangle, ChevronDown, ChevronUp, Trash2 } from "lucide-react";
 import {
     SendingPeriodUnit,
     type UpsertSendingPolicyStagePayload,
@@ -20,6 +20,8 @@ interface StageRowProps {
     onMoveUp: () => void;
     onMoveDown: () => void;
     disabled?: boolean;
+    /** Advisory feasibility warning for this stage (e.g. limit doesn't fit the window/interval). */
+    warning?: string | null;
 }
 
 export function StageRow({
@@ -31,6 +33,7 @@ export function StageRow({
     onMoveUp,
     onMoveDown,
     disabled = false,
+    warning = null,
 }: StageRowProps) {
     const isFinal = value.duration_value === undefined;
 
@@ -84,6 +87,7 @@ export function StageRow({
                     <Input
                         type="number"
                         min={1}
+                        placeholder="e.g. 30"
                         value={String(value.limit)}
                         onChange={(e) =>
                             onChange({ ...value, limit: Math.max(1, Number.parseInt(e.target.value, 10) || 1) })
@@ -147,6 +151,7 @@ export function StageRow({
                             <Input
                                 type="number"
                                 min={1}
+                                placeholder="e.g. 3"
                                 value={String(value.duration_value ?? 1)}
                                 onChange={(e) =>
                                     onChange({
@@ -187,6 +192,13 @@ export function StageRow({
                     </>
                 ) : null}
             </div>
+
+            {warning ? (
+                <p className="flex items-start gap-1.5 text-xs text-warning">
+                    <AlertTriangle className="size-3.5 shrink-0 mt-0.5" />
+                    <span>{warning}</span>
+                </p>
+            ) : null}
         </div>
     );
 }

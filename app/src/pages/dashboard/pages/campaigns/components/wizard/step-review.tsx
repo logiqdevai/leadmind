@@ -79,14 +79,8 @@ export function StepReview({
             </section>
 
             {showIntegrationPicker && (
-                <section className="rounded-xl border border-border bg-surface p-4 space-y-3">
-                    <div>
-                        <h3 className="text-xs uppercase tracking-wide text-muted">Sending schedule</h3>
-                        <p className="mt-1 text-xs text-muted">
-                            {emailAudienceCount} email recipient{emailAudienceCount === 1 ? "" : "s"} matched.
-                        </p>
-                    </div>
-                    <CampaignIntegrationPicker campaignUuid={campaignUuid} />
+                <section className="rounded-xl border border-border bg-surface p-4">
+                    <CampaignIntegrationPicker campaignUuid={campaignUuid} totalContacts={emailAudienceCount} />
                 </section>
             )}
 

@@ -184,12 +184,8 @@ export default function CampaignDetailPage() {
             <CampaignStatsSection campaign={campaign} />
 
             {showIntegrationPicker ? (
-                <section className="space-y-3">
-                    <h2 className="text-sm font-semibold text-foreground">Sending schedule</h2>
-                    <p className="text-xs text-muted">
-                        {pendingEmailCount} pending email{pendingEmailCount === 1 ? "" : "s"} to send.
-                    </p>
-                    <CampaignIntegrationPicker campaignUuid={campaign.uuid} />
+                <section className="rounded-xl border border-border bg-surface p-4">
+                    <CampaignIntegrationPicker campaignUuid={campaign.uuid} totalContacts={pendingEmailCount} />
                 </section>
             ) : null}
 
