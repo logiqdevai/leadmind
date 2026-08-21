@@ -116,8 +116,9 @@ export function EmailSendLimitsPanel() {
                     Email sending limits
                 </h2>
                 <p className="text-xs text-muted mt-0.5">
-                    Cap how many emails your team can send manually per day, week, or month for
-                    each connected email integration. Campaign sends are not affected.
+                    Cap how many emails can go out per day, week, or month for each connected
+                    email integration — this is the provider-wide ceiling underneath every
+                    campaign's own sending schedule, configured per campaign integration.
                 </p>
             </div>
             {isLoading ? (

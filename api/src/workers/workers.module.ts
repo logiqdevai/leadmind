@@ -14,13 +14,16 @@ import { GatewaysModule } from '@/gateways/gateways.module';
 import { MessagingGoalsModule } from '@/modules/messaging-goals/messaging-goals.module';
 import { BulkJobsModule } from '@/modules/bulk-jobs/bulk-jobs.module';
 import { SequencesModule } from '@/modules/sequences/sequences.module';
+import { SendingEngineModule } from '@/modules/sending-engine/sending-engine.module';
+import { SendingCapacityModule } from '@/modules/sending-capacity/sending-capacity.module';
 import {
-    AI_PROCESS_QUEUE,
-    FILTER_SCRAPE_QUEUE,
-    MARKETING_CAMPAIGN_DISPATCH_QUEUE,
-    MARKETING_MESSAGE_SEND_QUEUE,
-    OUTREACH_SEND_QUEUE,
-    REMINDER_TRIGGER_QUEUE,
+  AI_PROCESS_QUEUE,
+  FILTER_SCRAPE_QUEUE,
+  MARKETING_CAMPAIGN_DISPATCH_QUEUE,
+  MARKETING_MESSAGE_SEND_QUEUE,
+  OUTREACH_SEND_QUEUE,
+  REMINDER_TRIGGER_QUEUE,
+  SENDING_ENGINE_TICK_QUEUE,
 } from '@/core/queues/queues.constants';
 import { FilterScrapeWorker } from './filter-scrape.worker';
 import { AiProcessWorker } from './ai-process.worker';
@@ -28,47 +31,53 @@ import { OutreachSendWorker } from './outreach-send.worker';
 import { MarketingCampaignDispatchWorker } from './marketing-campaign-dispatch.worker';
 import { MarketingMessageSendWorker } from './marketing-message-send.worker';
 import { ReminderTriggerWorker } from './reminder-trigger.worker';
+import { SendingEngineTickWorker } from './sending-engine-tick.worker';
 
 @Module({
-    imports: [
-        PrismaModule,
-        ApifyModule,
-        GemiModule,
-        LeadsModule,
-        ContactsModule,
-        OutreachModule,
-        MarketingCampaignsModule,
-        ResendModule,
-        SmtpModule,
-        TwillioModule,
-        GatewaysModule,
-        MessagingGoalsModule,
-        BulkJobsModule,
-        SequencesModule,
-        BullModule.registerQueue(
-            { name: FILTER_SCRAPE_QUEUE },
-            { name: AI_PROCESS_QUEUE },
-            { name: OUTREACH_SEND_QUEUE },
-            { name: MARKETING_CAMPAIGN_DISPATCH_QUEUE },
-            { name: MARKETING_MESSAGE_SEND_QUEUE },
-            { name: REMINDER_TRIGGER_QUEUE },
-        ),
-    ],
-    providers: [
-        FilterScrapeWorker,
-        AiProcessWorker,
-        OutreachSendWorker,
-        MarketingCampaignDispatchWorker,
-        MarketingMessageSendWorker,
-        ReminderTriggerWorker,
-    ],
-    exports: [
-        FilterScrapeWorker,
-        AiProcessWorker,
-        OutreachSendWorker,
-        MarketingCampaignDispatchWorker,
-        MarketingMessageSendWorker,
-        ReminderTriggerWorker,
-    ],
+  imports: [
+    PrismaModule,
+    ApifyModule,
+    GemiModule,
+    LeadsModule,
+    ContactsModule,
+    OutreachModule,
+    MarketingCampaignsModule,
+    ResendModule,
+    SmtpModule,
+    TwillioModule,
+    GatewaysModule,
+    MessagingGoalsModule,
+    BulkJobsModule,
+    SequencesModule,
+    SendingEngineModule,
+    SendingCapacityModule,
+    BullModule.registerQueue(
+      { name: FILTER_SCRAPE_QUEUE },
+      { name: AI_PROCESS_QUEUE },
+      { name: OUTREACH_SEND_QUEUE },
+      { name: MARKETING_CAMPAIGN_DISPATCH_QUEUE },
+      { name: MARKETING_MESSAGE_SEND_QUEUE },
+      { name: REMINDER_TRIGGER_QUEUE },
+      { name: SENDING_ENGINE_TICK_QUEUE },
+    ),
+  ],
+  providers: [
+    FilterScrapeWorker,
+    AiProcessWorker,
+    OutreachSendWorker,
+    MarketingCampaignDispatchWorker,
+    MarketingMessageSendWorker,
+    ReminderTriggerWorker,
+    SendingEngineTickWorker,
+  ],
+  exports: [
+    FilterScrapeWorker,
+    AiProcessWorker,
+    OutreachSendWorker,
+    MarketingCampaignDispatchWorker,
+    MarketingMessageSendWorker,
+    ReminderTriggerWorker,
+    SendingEngineTickWorker,
+  ],
 })
 export class WorkersModule {}

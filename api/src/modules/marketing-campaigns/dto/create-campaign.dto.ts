@@ -1,110 +1,127 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
-    ArrayMaxSize,
-    ArrayMinSize,
-    ArrayUnique,
-    IsArray,
-    IsBoolean,
-    IsDateString,
-    IsEnum,
-    IsOptional,
-    IsString,
-    IsUUID,
-    MaxLength,
-    ValidateNested,
+  ArrayMaxSize,
+  ArrayMinSize,
+  ArrayUnique,
+  IsArray,
+  IsBoolean,
+  IsDateString,
+  IsEnum,
+  IsOptional,
+  IsString,
+  IsUUID,
+  MaxLength,
+  ValidateNested,
 } from 'class-validator';
 import { Channel, CampaignType } from '@/generated/prisma';
 import { CampaignFiltersDto } from './campaign-filters.dto';
-import { EmailProviderAllocationDto } from '@/modules/outreach/dto/email-provider.dto';
 
 export class CreateCampaignDto {
-    @ApiPropertyOptional({ enum: CampaignType, description: 'STANDARD (template) or PERSONALIZED (AI draft per contact)' })
-    @IsOptional()
-    @IsEnum(CampaignType)
-    campaign_type?: CampaignType;
+  @ApiPropertyOptional({
+    enum: CampaignType,
+    description: 'STANDARD (template) or PERSONALIZED (AI draft per contact)',
+  })
+  @IsOptional()
+  @IsEnum(CampaignType)
+  campaign_type?: CampaignType;
 
-    @ApiProperty({ maxLength: 120 })
-    @IsString()
-    @MaxLength(120)
-    name: string;
+  @ApiProperty({ maxLength: 120 })
+  @IsString()
+  @MaxLength(120)
+  name: string;
 
-    @ApiPropertyOptional({ maxLength: 1000 })
-    @IsOptional()
-    @IsString()
-    @MaxLength(1000)
-    description?: string;
+  @ApiPropertyOptional({ maxLength: 1000 })
+  @IsOptional()
+  @IsString()
+  @MaxLength(1000)
+  description?: string;
 
-    @ApiProperty({ enum: Channel, isArray: true, description: 'Exactly one channel per campaign' })
-    @IsArray()
-    @ArrayMinSize(1)
-    @ArrayMaxSize(1)
-    @ArrayUnique()
-    @IsEnum(Channel, { each: true })
-    channels: Channel[];
+  @ApiProperty({
+    enum: Channel,
+    isArray: true,
+    description: 'Exactly one channel per campaign',
+  })
+  @IsArray()
+  @ArrayMinSize(1)
+  @ArrayMaxSize(1)
+  @ArrayUnique()
+  @IsEnum(Channel, { each: true })
+  channels: Channel[];
 
-    @ApiPropertyOptional({ description: 'Email subject (required when EMAIL ∈ channels)' })
-    @IsOptional()
-    @IsString()
-    @MaxLength(200)
-    email_subject?: string;
+  @ApiPropertyOptional({
+    description: 'Email subject (required when EMAIL ∈ channels)',
+  })
+  @IsOptional()
+  @IsString()
+  @MaxLength(200)
+  email_subject?: string;
 
-    @ApiPropertyOptional({ description: 'Email HTML body (required when EMAIL ∈ channels)' })
-    @IsOptional()
-    @IsString()
-    email_content?: string;
+  @ApiPropertyOptional({
+    description: 'Email HTML body (required when EMAIL ∈ channels)',
+  })
+  @IsOptional()
+  @IsString()
+  email_content?: string;
 
-    @ApiPropertyOptional({ description: 'SMS body (required when SMS ∈ channels)' })
-    @IsOptional()
-    @IsString()
-    @MaxLength(1600)
-    sms_content?: string;
+  @ApiPropertyOptional({
+    description: 'SMS body (required when SMS ∈ channels)',
+  })
+  @IsOptional()
+  @IsString()
+  @MaxLength(1600)
+  sms_content?: string;
 
-    @ApiPropertyOptional({ description: 'LinkedIn DM body (required when LINKEDIN ∈ channels)' })
-    @IsOptional()
-    @IsString()
-    @MaxLength(2000)
-    linkedin_content?: string;
+  @ApiPropertyOptional({
+    description: 'LinkedIn DM body (required when LINKEDIN ∈ channels)',
+  })
+  @IsOptional()
+  @IsString()
+  @MaxLength(2000)
+  linkedin_content?: string;
 
-    @ApiPropertyOptional({ description: 'Override sender profile (default: user is_default)' })
-    @IsOptional()
-    @IsUUID()
-    sender_profile_uuid?: string;
+  @ApiPropertyOptional({
+    description: 'Override sender profile (default: user is_default)',
+  })
+  @IsOptional()
+  @IsUUID()
+  sender_profile_uuid?: string;
 
-    @ApiPropertyOptional({ description: 'ACTIVE OutreachSequence to enroll the resolved audience into (SEQUENCE campaigns only)' })
-    @IsOptional()
-    @IsUUID()
-    sequence_uuid?: string;
+  @ApiPropertyOptional({
+    description:
+      'ACTIVE OutreachSequence to enroll the resolved audience into (SEQUENCE campaigns only)',
+  })
+  @IsOptional()
+  @IsUUID()
+  sequence_uuid?: string;
 
-    @ApiPropertyOptional({ description: 'ISO datetime; if in future, campaign is queued for that time' })
-    @IsOptional()
-    @IsDateString()
-    scheduled_at?: string;
+  @ApiPropertyOptional({
+    description: 'ISO datetime; if in future, campaign is queued for that time',
+  })
+  @IsOptional()
+  @IsDateString()
+  scheduled_at?: string;
 
-    @ApiPropertyOptional({ description: 'AI prompt for PERSONALIZED campaigns', maxLength: 2000 })
-    @IsOptional()
-    @IsString()
-    @MaxLength(2000)
-    ai_prompt?: string;
+  @ApiPropertyOptional({
+    description: 'AI prompt for PERSONALIZED campaigns',
+    maxLength: 2000,
+  })
+  @IsOptional()
+  @IsString()
+  @MaxLength(2000)
+  ai_prompt?: string;
 
-    @ApiPropertyOptional({
-        description:
-            'When true on PERSONALIZED campaigns, draft generation uses the OpenAI Batch API (lower cost, up to 24h)',
-    })
-    @IsOptional()
-    @IsBoolean()
-    use_openai_batch?: boolean;
+  @ApiPropertyOptional({
+    description:
+      'When true on PERSONALIZED campaigns, draft generation uses the OpenAI Batch API (lower cost, up to 24h)',
+  })
+  @IsOptional()
+  @IsBoolean()
+  use_openai_batch?: boolean;
 
-    @ApiPropertyOptional({ type: CampaignFiltersDto })
-    @IsOptional()
-    @ValidateNested()
-    @Type(() => CampaignFiltersDto)
-    filters?: CampaignFiltersDto;
-
-    @ApiPropertyOptional({ type: [EmailProviderAllocationDto] })
-    @IsOptional()
-    @IsArray()
-    @ValidateNested({ each: true })
-    @Type(() => EmailProviderAllocationDto)
-    email_provider_allocations?: EmailProviderAllocationDto[];
+  @ApiPropertyOptional({ type: CampaignFiltersDto })
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => CampaignFiltersDto)
+  filters?: CampaignFiltersDto;
 }

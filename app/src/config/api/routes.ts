@@ -293,4 +293,30 @@ export const ApiRoutes = {
     unsubscribe: {
         confirm: (token: string) => `/unsubscribe/${encodeURIComponent(token)}`,
     },
+    sending_policies: {
+        list: "/sending-policies",
+        create: "/sending-policies",
+        get: (uuid: string) => `/sending-policies/${uuid}`,
+        update: (uuid: string) => `/sending-policies/${uuid}`,
+        remove: (uuid: string) => `/sending-policies/${uuid}`,
+        add_stage: (uuid: string) => `/sending-policies/${uuid}/stages`,
+        update_stage: (uuid: string, stageUuid: string) =>
+            `/sending-policies/${uuid}/stages/${stageUuid}`,
+        remove_stage: (uuid: string, stageUuid: string) =>
+            `/sending-policies/${uuid}/stages/${stageUuid}`,
+        reorder_stages: (uuid: string) => `/sending-policies/${uuid}/stages/reorder`,
+        preview: (uuid: string) => `/sending-policies/${uuid}/preview`,
+    },
+    campaign_integrations: {
+        list: (campaignUuid: string) => `/marketing-campaigns/${campaignUuid}/integrations`,
+        assign: (campaignUuid: string) => `/marketing-campaigns/${campaignUuid}/integrations`,
+        update_status: (campaignUuid: string, ciUuid: string) =>
+            `/marketing-campaigns/${campaignUuid}/integrations/${ciUuid}`,
+        remove: (campaignUuid: string, ciUuid: string) =>
+            `/marketing-campaigns/${campaignUuid}/integrations/${ciUuid}`,
+        capacity: (campaignUuid: string, ciUuid: string) =>
+            `/marketing-campaigns/${campaignUuid}/integrations/${ciUuid}/capacity`,
+        activity: (campaignUuid: string) => `/marketing-campaigns/${campaignUuid}/integrations/activity`,
+        list_for_organisation: "/campaign-integrations",
+    },
 }

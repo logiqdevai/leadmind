@@ -4,11 +4,14 @@ import { Channel } from "@/features/contacts/interfaces/contact.interface";
 import { CampaignType } from "@/features/marketing-campaigns/interfaces/campaign.interface";
 import type { MessageComposerValue } from "@/features/messaging/components/message-composer";
 import { useSequence } from "@/features/sequences/hooks/use-sequences";
+import { CampaignIntegrationPicker } from "../campaign-integrations/campaign-integration-picker";
 import type { BasicsValues } from "./step-basics";
 
 interface StepReviewProps {
+    campaignUuid: string;
     basics: BasicsValues;
     audienceCount: number | null;
+    emailAudienceCount: number;
     message: MessageComposerValue;
     aiPrompt: string;
     sequenceUuid?: string | null;
@@ -16,8 +19,10 @@ interface StepReviewProps {
 }
 
 export function StepReview({
+    campaignUuid,
     basics,
     audienceCount,
+    emailAudienceCount,
     message,
     aiPrompt,
     sequenceUuid = null,
@@ -26,6 +31,9 @@ export function StepReview({
     const isPersonalized = basics.campaign_type === CampaignType.PERSONALIZED;
     const isSequence = basics.campaign_type === CampaignType.SEQUENCE;
     const { data: sequence } = useSequence(isSequence ? sequenceUuid : null);
+    // PERSONALIZED campaigns assign their sending integration later, from the detail
+    // page, once drafts are ready to send - not at this review step.
+    const showIntegrationPicker = basics.channels.includes(Channel.EMAIL) && !isPersonalized;
 
     return (
         <div className="flex flex-col gap-5 max-w-3xl">
@@ -69,6 +77,12 @@ export function StepReview({
                     </Chip>
                 </div>
             </section>
+
+            {showIntegrationPicker && (
+                <section className="rounded-xl border border-border bg-surface p-4">
+                    <CampaignIntegrationPicker campaignUuid={campaignUuid} totalContacts={emailAudienceCount} />
+                </section>
+            )}
 
             {isPersonalized && (
                 <section className="rounded-xl border border-border bg-surface p-4 space-y-2">

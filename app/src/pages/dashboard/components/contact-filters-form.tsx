@@ -54,7 +54,7 @@ export function ContactFiltersForm({
     showSourceFilter = true,
     showLeadSourceType = false,
     showContactListFilter = false,
-    showSavedFilters = false,
+    showSavedFilters = true,
     savedFilterUuid,
     onSavedFilterUuidChange,
     onApplySavedFilter,

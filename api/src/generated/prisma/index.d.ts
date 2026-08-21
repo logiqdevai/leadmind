@@ -240,6 +240,40 @@ export type MessagingGoal = $Result.DefaultSelection<Prisma.$MessagingGoalPayloa
  */
 export type EmailSendLimit = $Result.DefaultSelection<Prisma.$EmailSendLimitPayload>
 /**
+ * Model SendingPolicy
+ * A reusable ramp-up / pacing configuration: an ordered list of SendingPolicyStages
+ * (e.g. 30/day x 3 days -> 40/day x 5 days -> 50/day until complete).
+ * `is_template` rows are the org's reusable library; assigning one to a
+ * CampaignIntegration clones it (is_template=false, source_policy_uuid set)
+ * into an immutable snapshot so editing the template never changes a running campaign.
+ */
+export type SendingPolicy = $Result.DefaultSelection<Prisma.$SendingPolicyPayload>
+/**
+ * Model SendingPolicyStage
+ * One ramp-up stage of a SendingPolicy. duration_value=null marks the final,
+ * indefinite stage (lasts until campaign completion).
+ */
+export type SendingPolicyStage = $Result.DefaultSelection<Prisma.$SendingPolicyStagePayload>
+/**
+ * Model CampaignIntegration
+ * Assigns one email IntegrationAccount to a campaign with a cloned SendingPolicy.
+ * This is the config layer; CampaignIntegrationState below is the runtime layer.
+ */
+export type CampaignIntegration = $Result.DefaultSelection<Prisma.$CampaignIntegrationPayload>
+/**
+ * Model CampaignIntegrationState
+ * Runtime state for a CampaignIntegration. Deliberately holds no "current stage" -
+ * the current stage is always derived from policy_started_at + the policy's stages.
+ */
+export type CampaignIntegrationState = $Result.DefaultSelection<Prisma.$CampaignIntegrationStatePayload>
+/**
+ * Model SendingUsageCounter
+ * Generic atomic counter primitive used by SendingCapacityService to enforce all
+ * three layered limits (provider / integration-account / campaign-integration-stage)
+ * via a single concurrency-safe conditional upsert - see SendingCapacityService.reserveSlot.
+ */
+export type SendingUsageCounter = $Result.DefaultSelection<Prisma.$SendingUsageCounterPayload>
+/**
  * Model GoalAchievement
  * 
  */
@@ -739,6 +773,33 @@ export const GoalAchievementType: {
 
 export type GoalAchievementType = (typeof GoalAchievementType)[keyof typeof GoalAchievementType]
 
+
+export const SendingPeriodUnit: {
+  HOUR: 'HOUR',
+  DAY: 'DAY',
+  WEEK: 'WEEK'
+};
+
+export type SendingPeriodUnit = (typeof SendingPeriodUnit)[keyof typeof SendingPeriodUnit]
+
+
+export const CampaignIntegrationStatus: {
+  ACTIVE: 'ACTIVE',
+  PAUSED: 'PAUSED',
+  REMOVED: 'REMOVED'
+};
+
+export type CampaignIntegrationStatus = (typeof CampaignIntegrationStatus)[keyof typeof CampaignIntegrationStatus]
+
+
+export const SendingUsageScopeType: {
+  PROVIDER: 'PROVIDER',
+  INTEGRATION_ACCOUNT: 'INTEGRATION_ACCOUNT',
+  CAMPAIGN_INTEGRATION: 'CAMPAIGN_INTEGRATION'
+};
+
+export type SendingUsageScopeType = (typeof SendingUsageScopeType)[keyof typeof SendingUsageScopeType]
+
 }
 
 export type WebsiteScrapeProvider = $Enums.WebsiteScrapeProvider
@@ -908,6 +969,18 @@ export const GoalPeriod: typeof $Enums.GoalPeriod
 export type GoalAchievementType = $Enums.GoalAchievementType
 
 export const GoalAchievementType: typeof $Enums.GoalAchievementType
+
+export type SendingPeriodUnit = $Enums.SendingPeriodUnit
+
+export const SendingPeriodUnit: typeof $Enums.SendingPeriodUnit
+
+export type CampaignIntegrationStatus = $Enums.CampaignIntegrationStatus
+
+export const CampaignIntegrationStatus: typeof $Enums.CampaignIntegrationStatus
+
+export type SendingUsageScopeType = $Enums.SendingUsageScopeType
+
+export const SendingUsageScopeType: typeof $Enums.SendingUsageScopeType
 
 /**
  * ##  Prisma Client ʲˢ
@@ -1477,6 +1550,56 @@ export class PrismaClient<
   get emailSendLimit(): Prisma.EmailSendLimitDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.sendingPolicy`: Exposes CRUD operations for the **SendingPolicy** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SendingPolicies
+    * const sendingPolicies = await prisma.sendingPolicy.findMany()
+    * ```
+    */
+  get sendingPolicy(): Prisma.SendingPolicyDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.sendingPolicyStage`: Exposes CRUD operations for the **SendingPolicyStage** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SendingPolicyStages
+    * const sendingPolicyStages = await prisma.sendingPolicyStage.findMany()
+    * ```
+    */
+  get sendingPolicyStage(): Prisma.SendingPolicyStageDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.campaignIntegration`: Exposes CRUD operations for the **CampaignIntegration** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CampaignIntegrations
+    * const campaignIntegrations = await prisma.campaignIntegration.findMany()
+    * ```
+    */
+  get campaignIntegration(): Prisma.CampaignIntegrationDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.campaignIntegrationState`: Exposes CRUD operations for the **CampaignIntegrationState** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CampaignIntegrationStates
+    * const campaignIntegrationStates = await prisma.campaignIntegrationState.findMany()
+    * ```
+    */
+  get campaignIntegrationState(): Prisma.CampaignIntegrationStateDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.sendingUsageCounter`: Exposes CRUD operations for the **SendingUsageCounter** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SendingUsageCounters
+    * const sendingUsageCounters = await prisma.sendingUsageCounter.findMany()
+    * ```
+    */
+  get sendingUsageCounter(): Prisma.SendingUsageCounterDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.goalAchievement`: Exposes CRUD operations for the **GoalAchievement** model.
     * Example usage:
     * ```ts
@@ -1984,6 +2107,11 @@ export namespace Prisma {
     ApifyUsageLog: 'ApifyUsageLog',
     MessagingGoal: 'MessagingGoal',
     EmailSendLimit: 'EmailSendLimit',
+    SendingPolicy: 'SendingPolicy',
+    SendingPolicyStage: 'SendingPolicyStage',
+    CampaignIntegration: 'CampaignIntegration',
+    CampaignIntegrationState: 'CampaignIntegrationState',
+    SendingUsageCounter: 'SendingUsageCounter',
     GoalAchievement: 'GoalAchievement',
     GoalPersonalBest: 'GoalPersonalBest',
     ActivityLog: 'ActivityLog'
@@ -2002,7 +2130,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "organisation" | "organisationMember" | "organisationInvitation" | "filter" | "savedContactFilter" | "scoringInstruction" | "filterScoringInstruction" | "rawLead" | "lead" | "leadEnrichment" | "contact" | "contactInfo" | "contactFilter" | "contactEnrichment" | "contactScore" | "contactList" | "contactListMember" | "contactTag" | "interaction" | "outreachMessage" | "outreachSequence" | "outreachSequenceStep" | "sequenceEnrollment" | "filterJob" | "bulkJob" | "websiteScrapeRequest" | "senderProfile" | "messageTemplate" | "marketingCampaign" | "marketingCampaignContact" | "openAiBatchJob" | "integration" | "integrationAccount" | "integrationKey" | "reminder" | "form" | "formField" | "formCompletion" | "formCompletionValue" | "contactAudienceAnalysis" | "aiUsageLog" | "apifyUsageLog" | "messagingGoal" | "emailSendLimit" | "goalAchievement" | "goalPersonalBest" | "activityLog"
+      modelProps: "user" | "organisation" | "organisationMember" | "organisationInvitation" | "filter" | "savedContactFilter" | "scoringInstruction" | "filterScoringInstruction" | "rawLead" | "lead" | "leadEnrichment" | "contact" | "contactInfo" | "contactFilter" | "contactEnrichment" | "contactScore" | "contactList" | "contactListMember" | "contactTag" | "interaction" | "outreachMessage" | "outreachSequence" | "outreachSequenceStep" | "sequenceEnrollment" | "filterJob" | "bulkJob" | "websiteScrapeRequest" | "senderProfile" | "messageTemplate" | "marketingCampaign" | "marketingCampaignContact" | "openAiBatchJob" | "integration" | "integrationAccount" | "integrationKey" | "reminder" | "form" | "formField" | "formCompletion" | "formCompletionValue" | "contactAudienceAnalysis" | "aiUsageLog" | "apifyUsageLog" | "messagingGoal" | "emailSendLimit" | "sendingPolicy" | "sendingPolicyStage" | "campaignIntegration" | "campaignIntegrationState" | "sendingUsageCounter" | "goalAchievement" | "goalPersonalBest" | "activityLog"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -5336,6 +5464,376 @@ export namespace Prisma {
           }
         }
       }
+      SendingPolicy: {
+        payload: Prisma.$SendingPolicyPayload<ExtArgs>
+        fields: Prisma.SendingPolicyFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SendingPolicyFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SendingPolicyPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SendingPolicyFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SendingPolicyPayload>
+          }
+          findFirst: {
+            args: Prisma.SendingPolicyFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SendingPolicyPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SendingPolicyFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SendingPolicyPayload>
+          }
+          findMany: {
+            args: Prisma.SendingPolicyFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SendingPolicyPayload>[]
+          }
+          create: {
+            args: Prisma.SendingPolicyCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SendingPolicyPayload>
+          }
+          createMany: {
+            args: Prisma.SendingPolicyCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SendingPolicyCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SendingPolicyPayload>[]
+          }
+          delete: {
+            args: Prisma.SendingPolicyDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SendingPolicyPayload>
+          }
+          update: {
+            args: Prisma.SendingPolicyUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SendingPolicyPayload>
+          }
+          deleteMany: {
+            args: Prisma.SendingPolicyDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SendingPolicyUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.SendingPolicyUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SendingPolicyPayload>[]
+          }
+          upsert: {
+            args: Prisma.SendingPolicyUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SendingPolicyPayload>
+          }
+          aggregate: {
+            args: Prisma.SendingPolicyAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSendingPolicy>
+          }
+          groupBy: {
+            args: Prisma.SendingPolicyGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SendingPolicyGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SendingPolicyCountArgs<ExtArgs>
+            result: $Utils.Optional<SendingPolicyCountAggregateOutputType> | number
+          }
+        }
+      }
+      SendingPolicyStage: {
+        payload: Prisma.$SendingPolicyStagePayload<ExtArgs>
+        fields: Prisma.SendingPolicyStageFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SendingPolicyStageFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SendingPolicyStagePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SendingPolicyStageFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SendingPolicyStagePayload>
+          }
+          findFirst: {
+            args: Prisma.SendingPolicyStageFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SendingPolicyStagePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SendingPolicyStageFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SendingPolicyStagePayload>
+          }
+          findMany: {
+            args: Prisma.SendingPolicyStageFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SendingPolicyStagePayload>[]
+          }
+          create: {
+            args: Prisma.SendingPolicyStageCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SendingPolicyStagePayload>
+          }
+          createMany: {
+            args: Prisma.SendingPolicyStageCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SendingPolicyStageCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SendingPolicyStagePayload>[]
+          }
+          delete: {
+            args: Prisma.SendingPolicyStageDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SendingPolicyStagePayload>
+          }
+          update: {
+            args: Prisma.SendingPolicyStageUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SendingPolicyStagePayload>
+          }
+          deleteMany: {
+            args: Prisma.SendingPolicyStageDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SendingPolicyStageUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.SendingPolicyStageUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SendingPolicyStagePayload>[]
+          }
+          upsert: {
+            args: Prisma.SendingPolicyStageUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SendingPolicyStagePayload>
+          }
+          aggregate: {
+            args: Prisma.SendingPolicyStageAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSendingPolicyStage>
+          }
+          groupBy: {
+            args: Prisma.SendingPolicyStageGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SendingPolicyStageGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SendingPolicyStageCountArgs<ExtArgs>
+            result: $Utils.Optional<SendingPolicyStageCountAggregateOutputType> | number
+          }
+        }
+      }
+      CampaignIntegration: {
+        payload: Prisma.$CampaignIntegrationPayload<ExtArgs>
+        fields: Prisma.CampaignIntegrationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CampaignIntegrationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignIntegrationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CampaignIntegrationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignIntegrationPayload>
+          }
+          findFirst: {
+            args: Prisma.CampaignIntegrationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignIntegrationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CampaignIntegrationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignIntegrationPayload>
+          }
+          findMany: {
+            args: Prisma.CampaignIntegrationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignIntegrationPayload>[]
+          }
+          create: {
+            args: Prisma.CampaignIntegrationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignIntegrationPayload>
+          }
+          createMany: {
+            args: Prisma.CampaignIntegrationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CampaignIntegrationCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignIntegrationPayload>[]
+          }
+          delete: {
+            args: Prisma.CampaignIntegrationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignIntegrationPayload>
+          }
+          update: {
+            args: Prisma.CampaignIntegrationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignIntegrationPayload>
+          }
+          deleteMany: {
+            args: Prisma.CampaignIntegrationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CampaignIntegrationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.CampaignIntegrationUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignIntegrationPayload>[]
+          }
+          upsert: {
+            args: Prisma.CampaignIntegrationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignIntegrationPayload>
+          }
+          aggregate: {
+            args: Prisma.CampaignIntegrationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCampaignIntegration>
+          }
+          groupBy: {
+            args: Prisma.CampaignIntegrationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CampaignIntegrationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CampaignIntegrationCountArgs<ExtArgs>
+            result: $Utils.Optional<CampaignIntegrationCountAggregateOutputType> | number
+          }
+        }
+      }
+      CampaignIntegrationState: {
+        payload: Prisma.$CampaignIntegrationStatePayload<ExtArgs>
+        fields: Prisma.CampaignIntegrationStateFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CampaignIntegrationStateFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignIntegrationStatePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CampaignIntegrationStateFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignIntegrationStatePayload>
+          }
+          findFirst: {
+            args: Prisma.CampaignIntegrationStateFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignIntegrationStatePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CampaignIntegrationStateFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignIntegrationStatePayload>
+          }
+          findMany: {
+            args: Prisma.CampaignIntegrationStateFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignIntegrationStatePayload>[]
+          }
+          create: {
+            args: Prisma.CampaignIntegrationStateCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignIntegrationStatePayload>
+          }
+          createMany: {
+            args: Prisma.CampaignIntegrationStateCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CampaignIntegrationStateCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignIntegrationStatePayload>[]
+          }
+          delete: {
+            args: Prisma.CampaignIntegrationStateDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignIntegrationStatePayload>
+          }
+          update: {
+            args: Prisma.CampaignIntegrationStateUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignIntegrationStatePayload>
+          }
+          deleteMany: {
+            args: Prisma.CampaignIntegrationStateDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CampaignIntegrationStateUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.CampaignIntegrationStateUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignIntegrationStatePayload>[]
+          }
+          upsert: {
+            args: Prisma.CampaignIntegrationStateUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CampaignIntegrationStatePayload>
+          }
+          aggregate: {
+            args: Prisma.CampaignIntegrationStateAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCampaignIntegrationState>
+          }
+          groupBy: {
+            args: Prisma.CampaignIntegrationStateGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CampaignIntegrationStateGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CampaignIntegrationStateCountArgs<ExtArgs>
+            result: $Utils.Optional<CampaignIntegrationStateCountAggregateOutputType> | number
+          }
+        }
+      }
+      SendingUsageCounter: {
+        payload: Prisma.$SendingUsageCounterPayload<ExtArgs>
+        fields: Prisma.SendingUsageCounterFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SendingUsageCounterFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SendingUsageCounterPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SendingUsageCounterFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SendingUsageCounterPayload>
+          }
+          findFirst: {
+            args: Prisma.SendingUsageCounterFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SendingUsageCounterPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SendingUsageCounterFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SendingUsageCounterPayload>
+          }
+          findMany: {
+            args: Prisma.SendingUsageCounterFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SendingUsageCounterPayload>[]
+          }
+          create: {
+            args: Prisma.SendingUsageCounterCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SendingUsageCounterPayload>
+          }
+          createMany: {
+            args: Prisma.SendingUsageCounterCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SendingUsageCounterCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SendingUsageCounterPayload>[]
+          }
+          delete: {
+            args: Prisma.SendingUsageCounterDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SendingUsageCounterPayload>
+          }
+          update: {
+            args: Prisma.SendingUsageCounterUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SendingUsageCounterPayload>
+          }
+          deleteMany: {
+            args: Prisma.SendingUsageCounterDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SendingUsageCounterUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.SendingUsageCounterUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SendingUsageCounterPayload>[]
+          }
+          upsert: {
+            args: Prisma.SendingUsageCounterUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SendingUsageCounterPayload>
+          }
+          aggregate: {
+            args: Prisma.SendingUsageCounterAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSendingUsageCounter>
+          }
+          groupBy: {
+            args: Prisma.SendingUsageCounterGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SendingUsageCounterGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SendingUsageCounterCountArgs<ExtArgs>
+            result: $Utils.Optional<SendingUsageCounterCountAggregateOutputType> | number
+          }
+        }
+      }
       GoalAchievement: {
         payload: Prisma.$GoalAchievementPayload<ExtArgs>
         fields: Prisma.GoalAchievementFieldRefs
@@ -5711,6 +6209,11 @@ export namespace Prisma {
     apifyUsageLog?: ApifyUsageLogOmit
     messagingGoal?: MessagingGoalOmit
     emailSendLimit?: EmailSendLimitOmit
+    sendingPolicy?: SendingPolicyOmit
+    sendingPolicyStage?: SendingPolicyStageOmit
+    campaignIntegration?: CampaignIntegrationOmit
+    campaignIntegrationState?: CampaignIntegrationStateOmit
+    sendingUsageCounter?: SendingUsageCounterOmit
     goalAchievement?: GoalAchievementOmit
     goalPersonalBest?: GoalPersonalBestOmit
     activityLog?: ActivityLogOmit
@@ -5924,6 +6427,7 @@ export namespace Prisma {
     bulk_jobs: number
     website_scrape_requests: number
     email_send_limits: number
+    sending_policies: number
   }
 
   export type OrganisationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5954,6 +6458,7 @@ export namespace Prisma {
     bulk_jobs?: boolean | OrganisationCountOutputTypeCountBulk_jobsArgs
     website_scrape_requests?: boolean | OrganisationCountOutputTypeCountWebsite_scrape_requestsArgs
     email_send_limits?: boolean | OrganisationCountOutputTypeCountEmail_send_limitsArgs
+    sending_policies?: boolean | OrganisationCountOutputTypeCountSending_policiesArgs
   }
 
   // Custom InputTypes
@@ -6154,6 +6659,13 @@ export namespace Prisma {
    */
   export type OrganisationCountOutputTypeCountEmail_send_limitsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: EmailSendLimitWhereInput
+  }
+
+  /**
+   * OrganisationCountOutputType without action
+   */
+  export type OrganisationCountOutputTypeCountSending_policiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SendingPolicyWhereInput
   }
 
 
@@ -6674,6 +7186,7 @@ export namespace Prisma {
     outreach_messages: number
     interactions: number
     sequence_enrollments: number
+    campaign_integrations: number
   }
 
   export type MarketingCampaignCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6681,6 +7194,7 @@ export namespace Prisma {
     outreach_messages?: boolean | MarketingCampaignCountOutputTypeCountOutreach_messagesArgs
     interactions?: boolean | MarketingCampaignCountOutputTypeCountInteractionsArgs
     sequence_enrollments?: boolean | MarketingCampaignCountOutputTypeCountSequence_enrollmentsArgs
+    campaign_integrations?: boolean | MarketingCampaignCountOutputTypeCountCampaign_integrationsArgs
   }
 
   // Custom InputTypes
@@ -6722,6 +7236,13 @@ export namespace Prisma {
     where?: SequenceEnrollmentWhereInput
   }
 
+  /**
+   * MarketingCampaignCountOutputType without action
+   */
+  export type MarketingCampaignCountOutputTypeCountCampaign_integrationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CampaignIntegrationWhereInput
+  }
+
 
   /**
    * Count Type IntegrationCountOutputType
@@ -6760,6 +7281,37 @@ export namespace Prisma {
    */
   export type IntegrationCountOutputTypeCountAccountsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: IntegrationAccountWhereInput
+  }
+
+
+  /**
+   * Count Type IntegrationAccountCountOutputType
+   */
+
+  export type IntegrationAccountCountOutputType = {
+    campaign_integrations: number
+  }
+
+  export type IntegrationAccountCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    campaign_integrations?: boolean | IntegrationAccountCountOutputTypeCountCampaign_integrationsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * IntegrationAccountCountOutputType without action
+   */
+  export type IntegrationAccountCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IntegrationAccountCountOutputType
+     */
+    select?: IntegrationAccountCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * IntegrationAccountCountOutputType without action
+   */
+  export type IntegrationAccountCountOutputTypeCountCampaign_integrationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CampaignIntegrationWhereInput
   }
 
 
@@ -6893,6 +7445,86 @@ export namespace Prisma {
    */
   export type MessagingGoalCountOutputTypeCountAchievementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: GoalAchievementWhereInput
+  }
+
+
+  /**
+   * Count Type SendingPolicyCountOutputType
+   */
+
+  export type SendingPolicyCountOutputType = {
+    cloned_instances: number
+    stages: number
+    campaign_integrations: number
+  }
+
+  export type SendingPolicyCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    cloned_instances?: boolean | SendingPolicyCountOutputTypeCountCloned_instancesArgs
+    stages?: boolean | SendingPolicyCountOutputTypeCountStagesArgs
+    campaign_integrations?: boolean | SendingPolicyCountOutputTypeCountCampaign_integrationsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * SendingPolicyCountOutputType without action
+   */
+  export type SendingPolicyCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SendingPolicyCountOutputType
+     */
+    select?: SendingPolicyCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * SendingPolicyCountOutputType without action
+   */
+  export type SendingPolicyCountOutputTypeCountCloned_instancesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SendingPolicyWhereInput
+  }
+
+  /**
+   * SendingPolicyCountOutputType without action
+   */
+  export type SendingPolicyCountOutputTypeCountStagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SendingPolicyStageWhereInput
+  }
+
+  /**
+   * SendingPolicyCountOutputType without action
+   */
+  export type SendingPolicyCountOutputTypeCountCampaign_integrationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CampaignIntegrationWhereInput
+  }
+
+
+  /**
+   * Count Type CampaignIntegrationCountOutputType
+   */
+
+  export type CampaignIntegrationCountOutputType = {
+    outreach_messages: number
+  }
+
+  export type CampaignIntegrationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    outreach_messages?: boolean | CampaignIntegrationCountOutputTypeCountOutreach_messagesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * CampaignIntegrationCountOutputType without action
+   */
+  export type CampaignIntegrationCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignIntegrationCountOutputType
+     */
+    select?: CampaignIntegrationCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * CampaignIntegrationCountOutputType without action
+   */
+  export type CampaignIntegrationCountOutputTypeCountOutreach_messagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OutreachMessageWhereInput
   }
 
 
@@ -8529,6 +9161,7 @@ export namespace Prisma {
     bulk_jobs?: boolean | Organisation$bulk_jobsArgs<ExtArgs>
     website_scrape_requests?: boolean | Organisation$website_scrape_requestsArgs<ExtArgs>
     email_send_limits?: boolean | Organisation$email_send_limitsArgs<ExtArgs>
+    sending_policies?: boolean | Organisation$sending_policiesArgs<ExtArgs>
     _count?: boolean | OrganisationCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["organisation"]>
 
@@ -8594,6 +9227,7 @@ export namespace Prisma {
     bulk_jobs?: boolean | Organisation$bulk_jobsArgs<ExtArgs>
     website_scrape_requests?: boolean | Organisation$website_scrape_requestsArgs<ExtArgs>
     email_send_limits?: boolean | Organisation$email_send_limitsArgs<ExtArgs>
+    sending_policies?: boolean | Organisation$sending_policiesArgs<ExtArgs>
     _count?: boolean | OrganisationCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type OrganisationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -8629,6 +9263,7 @@ export namespace Prisma {
       bulk_jobs: Prisma.$BulkJobPayload<ExtArgs>[]
       website_scrape_requests: Prisma.$WebsiteScrapeRequestPayload<ExtArgs>[]
       email_send_limits: Prisma.$EmailSendLimitPayload<ExtArgs>[]
+      sending_policies: Prisma.$SendingPolicyPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -9060,6 +9695,7 @@ export namespace Prisma {
     bulk_jobs<T extends Organisation$bulk_jobsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$bulk_jobsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BulkJobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     website_scrape_requests<T extends Organisation$website_scrape_requestsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$website_scrape_requestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WebsiteScrapeRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     email_send_limits<T extends Organisation$email_send_limitsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$email_send_limitsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmailSendLimitPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    sending_policies<T extends Organisation$sending_policiesArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$sending_policiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SendingPolicyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -10130,6 +10766,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: EmailSendLimitScalarFieldEnum | EmailSendLimitScalarFieldEnum[]
+  }
+
+  /**
+   * Organisation.sending_policies
+   */
+  export type Organisation$sending_policiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SendingPolicy
+     */
+    select?: SendingPolicySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SendingPolicy
+     */
+    omit?: SendingPolicyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SendingPolicyInclude<ExtArgs> | null
+    where?: SendingPolicyWhereInput
+    orderBy?: SendingPolicyOrderByWithRelationInput | SendingPolicyOrderByWithRelationInput[]
+    cursor?: SendingPolicyWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SendingPolicyScalarFieldEnum | SendingPolicyScalarFieldEnum[]
   }
 
   /**
@@ -31800,6 +32460,7 @@ export namespace Prisma {
     sms_provider: string | null
     sequence_enrollment_uuid: string | null
     sequence_step_uuid: string | null
+    campaign_integration_uuid: string | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -31831,6 +32492,7 @@ export namespace Prisma {
     sms_provider: string | null
     sequence_enrollment_uuid: string | null
     sequence_step_uuid: string | null
+    campaign_integration_uuid: string | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -31863,6 +32525,7 @@ export namespace Prisma {
     metadata: number
     sequence_enrollment_uuid: number
     sequence_step_uuid: number
+    campaign_integration_uuid: number
     created_at: number
     updated_at: number
     _all: number
@@ -31904,6 +32567,7 @@ export namespace Prisma {
     sms_provider?: true
     sequence_enrollment_uuid?: true
     sequence_step_uuid?: true
+    campaign_integration_uuid?: true
     created_at?: true
     updated_at?: true
   }
@@ -31935,6 +32599,7 @@ export namespace Prisma {
     sms_provider?: true
     sequence_enrollment_uuid?: true
     sequence_step_uuid?: true
+    campaign_integration_uuid?: true
     created_at?: true
     updated_at?: true
   }
@@ -31967,6 +32632,7 @@ export namespace Prisma {
     metadata?: true
     sequence_enrollment_uuid?: true
     sequence_step_uuid?: true
+    campaign_integration_uuid?: true
     created_at?: true
     updated_at?: true
     _all?: true
@@ -32086,6 +32752,7 @@ export namespace Prisma {
     metadata: JsonValue | null
     sequence_enrollment_uuid: string | null
     sequence_step_uuid: string | null
+    campaign_integration_uuid: string | null
     created_at: Date
     updated_at: Date
     _count: OutreachMessageCountAggregateOutputType | null
@@ -32137,6 +32804,7 @@ export namespace Prisma {
     metadata?: boolean
     sequence_enrollment_uuid?: boolean
     sequence_step_uuid?: boolean
+    campaign_integration_uuid?: boolean
     created_at?: boolean
     updated_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
@@ -32146,6 +32814,7 @@ export namespace Prisma {
     interaction?: boolean | OutreachMessage$interactionArgs<ExtArgs>
     sequence_enrollment?: boolean | OutreachMessage$sequence_enrollmentArgs<ExtArgs>
     sequence_step?: boolean | OutreachMessage$sequence_stepArgs<ExtArgs>
+    campaign_integration?: boolean | OutreachMessage$campaign_integrationArgs<ExtArgs>
   }, ExtArgs["result"]["outreachMessage"]>
 
   export type OutreachMessageSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -32176,6 +32845,7 @@ export namespace Prisma {
     metadata?: boolean
     sequence_enrollment_uuid?: boolean
     sequence_step_uuid?: boolean
+    campaign_integration_uuid?: boolean
     created_at?: boolean
     updated_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
@@ -32184,6 +32854,7 @@ export namespace Prisma {
     sent_by?: boolean | OutreachMessage$sent_byArgs<ExtArgs>
     sequence_enrollment?: boolean | OutreachMessage$sequence_enrollmentArgs<ExtArgs>
     sequence_step?: boolean | OutreachMessage$sequence_stepArgs<ExtArgs>
+    campaign_integration?: boolean | OutreachMessage$campaign_integrationArgs<ExtArgs>
   }, ExtArgs["result"]["outreachMessage"]>
 
   export type OutreachMessageSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -32214,6 +32885,7 @@ export namespace Prisma {
     metadata?: boolean
     sequence_enrollment_uuid?: boolean
     sequence_step_uuid?: boolean
+    campaign_integration_uuid?: boolean
     created_at?: boolean
     updated_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
@@ -32222,6 +32894,7 @@ export namespace Prisma {
     sent_by?: boolean | OutreachMessage$sent_byArgs<ExtArgs>
     sequence_enrollment?: boolean | OutreachMessage$sequence_enrollmentArgs<ExtArgs>
     sequence_step?: boolean | OutreachMessage$sequence_stepArgs<ExtArgs>
+    campaign_integration?: boolean | OutreachMessage$campaign_integrationArgs<ExtArgs>
   }, ExtArgs["result"]["outreachMessage"]>
 
   export type OutreachMessageSelectScalar = {
@@ -32252,11 +32925,12 @@ export namespace Prisma {
     metadata?: boolean
     sequence_enrollment_uuid?: boolean
     sequence_step_uuid?: boolean
+    campaign_integration_uuid?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
-  export type OutreachMessageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "contact_uuid" | "campaign_uuid" | "sent_by_user_uuid" | "channel" | "direction" | "subject" | "content" | "status" | "provider_message_id" | "idempotency_key" | "scheduled_at" | "sent_at" | "delivered_at" | "opened_at" | "clicked_at" | "replied_at" | "bounced_at" | "failed_at" | "email_provider" | "email_account" | "sms_provider" | "metadata" | "sequence_enrollment_uuid" | "sequence_step_uuid" | "created_at" | "updated_at", ExtArgs["result"]["outreachMessage"]>
+  export type OutreachMessageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "contact_uuid" | "campaign_uuid" | "sent_by_user_uuid" | "channel" | "direction" | "subject" | "content" | "status" | "provider_message_id" | "idempotency_key" | "scheduled_at" | "sent_at" | "delivered_at" | "opened_at" | "clicked_at" | "replied_at" | "bounced_at" | "failed_at" | "email_provider" | "email_account" | "sms_provider" | "metadata" | "sequence_enrollment_uuid" | "sequence_step_uuid" | "campaign_integration_uuid" | "created_at" | "updated_at", ExtArgs["result"]["outreachMessage"]>
   export type OutreachMessageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     contact?: boolean | ContactDefaultArgs<ExtArgs>
@@ -32265,6 +32939,7 @@ export namespace Prisma {
     interaction?: boolean | OutreachMessage$interactionArgs<ExtArgs>
     sequence_enrollment?: boolean | OutreachMessage$sequence_enrollmentArgs<ExtArgs>
     sequence_step?: boolean | OutreachMessage$sequence_stepArgs<ExtArgs>
+    campaign_integration?: boolean | OutreachMessage$campaign_integrationArgs<ExtArgs>
   }
   export type OutreachMessageIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
@@ -32273,6 +32948,7 @@ export namespace Prisma {
     sent_by?: boolean | OutreachMessage$sent_byArgs<ExtArgs>
     sequence_enrollment?: boolean | OutreachMessage$sequence_enrollmentArgs<ExtArgs>
     sequence_step?: boolean | OutreachMessage$sequence_stepArgs<ExtArgs>
+    campaign_integration?: boolean | OutreachMessage$campaign_integrationArgs<ExtArgs>
   }
   export type OutreachMessageIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
@@ -32281,6 +32957,7 @@ export namespace Prisma {
     sent_by?: boolean | OutreachMessage$sent_byArgs<ExtArgs>
     sequence_enrollment?: boolean | OutreachMessage$sequence_enrollmentArgs<ExtArgs>
     sequence_step?: boolean | OutreachMessage$sequence_stepArgs<ExtArgs>
+    campaign_integration?: boolean | OutreachMessage$campaign_integrationArgs<ExtArgs>
   }
 
   export type $OutreachMessagePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -32293,6 +32970,7 @@ export namespace Prisma {
       interaction: Prisma.$InteractionPayload<ExtArgs> | null
       sequence_enrollment: Prisma.$SequenceEnrollmentPayload<ExtArgs> | null
       sequence_step: Prisma.$OutreachSequenceStepPayload<ExtArgs> | null
+      campaign_integration: Prisma.$CampaignIntegrationPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -32322,6 +33000,7 @@ export namespace Prisma {
       metadata: Prisma.JsonValue | null
       sequence_enrollment_uuid: string | null
       sequence_step_uuid: string | null
+      campaign_integration_uuid: string | null
       created_at: Date
       updated_at: Date
     }, ExtArgs["result"]["outreachMessage"]>
@@ -32725,6 +33404,7 @@ export namespace Prisma {
     interaction<T extends OutreachMessage$interactionArgs<ExtArgs> = {}>(args?: Subset<T, OutreachMessage$interactionArgs<ExtArgs>>): Prisma__InteractionClient<$Result.GetResult<Prisma.$InteractionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     sequence_enrollment<T extends OutreachMessage$sequence_enrollmentArgs<ExtArgs> = {}>(args?: Subset<T, OutreachMessage$sequence_enrollmentArgs<ExtArgs>>): Prisma__SequenceEnrollmentClient<$Result.GetResult<Prisma.$SequenceEnrollmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     sequence_step<T extends OutreachMessage$sequence_stepArgs<ExtArgs> = {}>(args?: Subset<T, OutreachMessage$sequence_stepArgs<ExtArgs>>): Prisma__OutreachSequenceStepClient<$Result.GetResult<Prisma.$OutreachSequenceStepPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    campaign_integration<T extends OutreachMessage$campaign_integrationArgs<ExtArgs> = {}>(args?: Subset<T, OutreachMessage$campaign_integrationArgs<ExtArgs>>): Prisma__CampaignIntegrationClient<$Result.GetResult<Prisma.$CampaignIntegrationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -32781,6 +33461,7 @@ export namespace Prisma {
     readonly metadata: FieldRef<"OutreachMessage", 'Json'>
     readonly sequence_enrollment_uuid: FieldRef<"OutreachMessage", 'String'>
     readonly sequence_step_uuid: FieldRef<"OutreachMessage", 'String'>
+    readonly campaign_integration_uuid: FieldRef<"OutreachMessage", 'String'>
     readonly created_at: FieldRef<"OutreachMessage", 'DateTime'>
     readonly updated_at: FieldRef<"OutreachMessage", 'DateTime'>
   }
@@ -33271,6 +33952,25 @@ export namespace Prisma {
      */
     include?: OutreachSequenceStepInclude<ExtArgs> | null
     where?: OutreachSequenceStepWhereInput
+  }
+
+  /**
+   * OutreachMessage.campaign_integration
+   */
+  export type OutreachMessage$campaign_integrationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignIntegration
+     */
+    select?: CampaignIntegrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignIntegration
+     */
+    omit?: CampaignIntegrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignIntegrationInclude<ExtArgs> | null
+    where?: CampaignIntegrationWhereInput
   }
 
   /**
@@ -35810,10 +36510,12 @@ export namespace Prisma {
 
   export type SequenceEnrollmentAvgAggregateOutputType = {
     id: number | null
+    current_step_order_index: number | null
   }
 
   export type SequenceEnrollmentSumAggregateOutputType = {
     id: number | null
+    current_step_order_index: number | null
   }
 
   export type SequenceEnrollmentMinAggregateOutputType = {
@@ -35824,6 +36526,8 @@ export namespace Prisma {
     campaign_uuid: string | null
     status: $Enums.SequenceEnrollmentStatus | null
     enrolled_at: Date | null
+    current_step_order_index: number | null
+    first_step_sent_at: Date | null
     cancelled_at: Date | null
     completed_at: Date | null
     created_at: Date | null
@@ -35838,6 +36542,8 @@ export namespace Prisma {
     campaign_uuid: string | null
     status: $Enums.SequenceEnrollmentStatus | null
     enrolled_at: Date | null
+    current_step_order_index: number | null
+    first_step_sent_at: Date | null
     cancelled_at: Date | null
     completed_at: Date | null
     created_at: Date | null
@@ -35852,6 +36558,8 @@ export namespace Prisma {
     campaign_uuid: number
     status: number
     enrolled_at: number
+    current_step_order_index: number
+    first_step_sent_at: number
     cancelled_at: number
     completed_at: number
     created_at: number
@@ -35862,10 +36570,12 @@ export namespace Prisma {
 
   export type SequenceEnrollmentAvgAggregateInputType = {
     id?: true
+    current_step_order_index?: true
   }
 
   export type SequenceEnrollmentSumAggregateInputType = {
     id?: true
+    current_step_order_index?: true
   }
 
   export type SequenceEnrollmentMinAggregateInputType = {
@@ -35876,6 +36586,8 @@ export namespace Prisma {
     campaign_uuid?: true
     status?: true
     enrolled_at?: true
+    current_step_order_index?: true
+    first_step_sent_at?: true
     cancelled_at?: true
     completed_at?: true
     created_at?: true
@@ -35890,6 +36602,8 @@ export namespace Prisma {
     campaign_uuid?: true
     status?: true
     enrolled_at?: true
+    current_step_order_index?: true
+    first_step_sent_at?: true
     cancelled_at?: true
     completed_at?: true
     created_at?: true
@@ -35904,6 +36618,8 @@ export namespace Prisma {
     campaign_uuid?: true
     status?: true
     enrolled_at?: true
+    current_step_order_index?: true
+    first_step_sent_at?: true
     cancelled_at?: true
     completed_at?: true
     created_at?: true
@@ -36005,6 +36721,8 @@ export namespace Prisma {
     campaign_uuid: string | null
     status: $Enums.SequenceEnrollmentStatus
     enrolled_at: Date
+    current_step_order_index: number
+    first_step_sent_at: Date | null
     cancelled_at: Date | null
     completed_at: Date | null
     created_at: Date
@@ -36038,6 +36756,8 @@ export namespace Prisma {
     campaign_uuid?: boolean
     status?: boolean
     enrolled_at?: boolean
+    current_step_order_index?: boolean
+    first_step_sent_at?: boolean
     cancelled_at?: boolean
     completed_at?: boolean
     created_at?: boolean
@@ -36057,6 +36777,8 @@ export namespace Prisma {
     campaign_uuid?: boolean
     status?: boolean
     enrolled_at?: boolean
+    current_step_order_index?: boolean
+    first_step_sent_at?: boolean
     cancelled_at?: boolean
     completed_at?: boolean
     created_at?: boolean
@@ -36074,6 +36796,8 @@ export namespace Prisma {
     campaign_uuid?: boolean
     status?: boolean
     enrolled_at?: boolean
+    current_step_order_index?: boolean
+    first_step_sent_at?: boolean
     cancelled_at?: boolean
     completed_at?: boolean
     created_at?: boolean
@@ -36091,13 +36815,15 @@ export namespace Prisma {
     campaign_uuid?: boolean
     status?: boolean
     enrolled_at?: boolean
+    current_step_order_index?: boolean
+    first_step_sent_at?: boolean
     cancelled_at?: boolean
     completed_at?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
-  export type SequenceEnrollmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "sequence_uuid" | "contact_uuid" | "campaign_uuid" | "status" | "enrolled_at" | "cancelled_at" | "completed_at" | "created_at" | "updated_at", ExtArgs["result"]["sequenceEnrollment"]>
+  export type SequenceEnrollmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "sequence_uuid" | "contact_uuid" | "campaign_uuid" | "status" | "enrolled_at" | "current_step_order_index" | "first_step_sent_at" | "cancelled_at" | "completed_at" | "created_at" | "updated_at", ExtArgs["result"]["sequenceEnrollment"]>
   export type SequenceEnrollmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     sequence?: boolean | OutreachSequenceDefaultArgs<ExtArgs>
     contact?: boolean | ContactDefaultArgs<ExtArgs>
@@ -36132,6 +36858,8 @@ export namespace Prisma {
       campaign_uuid: string | null
       status: $Enums.SequenceEnrollmentStatus
       enrolled_at: Date
+      current_step_order_index: number
+      first_step_sent_at: Date | null
       cancelled_at: Date | null
       completed_at: Date | null
       created_at: Date
@@ -36570,6 +37298,8 @@ export namespace Prisma {
     readonly campaign_uuid: FieldRef<"SequenceEnrollment", 'String'>
     readonly status: FieldRef<"SequenceEnrollment", 'SequenceEnrollmentStatus'>
     readonly enrolled_at: FieldRef<"SequenceEnrollment", 'DateTime'>
+    readonly current_step_order_index: FieldRef<"SequenceEnrollment", 'Int'>
+    readonly first_step_sent_at: FieldRef<"SequenceEnrollment", 'DateTime'>
     readonly cancelled_at: FieldRef<"SequenceEnrollment", 'DateTime'>
     readonly completed_at: FieldRef<"SequenceEnrollment", 'DateTime'>
     readonly created_at: FieldRef<"SequenceEnrollment", 'DateTime'>
@@ -43827,6 +44557,7 @@ export namespace Prisma {
     outreach_messages?: boolean | MarketingCampaign$outreach_messagesArgs<ExtArgs>
     interactions?: boolean | MarketingCampaign$interactionsArgs<ExtArgs>
     sequence_enrollments?: boolean | MarketingCampaign$sequence_enrollmentsArgs<ExtArgs>
+    campaign_integrations?: boolean | MarketingCampaign$campaign_integrationsArgs<ExtArgs>
     _count?: boolean | MarketingCampaignCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["marketingCampaign"]>
 
@@ -43971,6 +44702,7 @@ export namespace Prisma {
     outreach_messages?: boolean | MarketingCampaign$outreach_messagesArgs<ExtArgs>
     interactions?: boolean | MarketingCampaign$interactionsArgs<ExtArgs>
     sequence_enrollments?: boolean | MarketingCampaign$sequence_enrollmentsArgs<ExtArgs>
+    campaign_integrations?: boolean | MarketingCampaign$campaign_integrationsArgs<ExtArgs>
     _count?: boolean | MarketingCampaignCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type MarketingCampaignIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -43994,6 +44726,7 @@ export namespace Prisma {
       outreach_messages: Prisma.$OutreachMessagePayload<ExtArgs>[]
       interactions: Prisma.$InteractionPayload<ExtArgs>[]
       sequence_enrollments: Prisma.$SequenceEnrollmentPayload<ExtArgs>[]
+      campaign_integrations: Prisma.$CampaignIntegrationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -44436,6 +45169,7 @@ export namespace Prisma {
     outreach_messages<T extends MarketingCampaign$outreach_messagesArgs<ExtArgs> = {}>(args?: Subset<T, MarketingCampaign$outreach_messagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OutreachMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     interactions<T extends MarketingCampaign$interactionsArgs<ExtArgs> = {}>(args?: Subset<T, MarketingCampaign$interactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InteractionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     sequence_enrollments<T extends MarketingCampaign$sequence_enrollmentsArgs<ExtArgs> = {}>(args?: Subset<T, MarketingCampaign$sequence_enrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SequenceEnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    campaign_integrations<T extends MarketingCampaign$campaign_integrationsArgs<ExtArgs> = {}>(args?: Subset<T, MarketingCampaign$campaign_integrationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CampaignIntegrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -45031,6 +45765,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: SequenceEnrollmentScalarFieldEnum | SequenceEnrollmentScalarFieldEnum[]
+  }
+
+  /**
+   * MarketingCampaign.campaign_integrations
+   */
+  export type MarketingCampaign$campaign_integrationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignIntegration
+     */
+    select?: CampaignIntegrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignIntegration
+     */
+    omit?: CampaignIntegrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignIntegrationInclude<ExtArgs> | null
+    where?: CampaignIntegrationWhereInput
+    orderBy?: CampaignIntegrationOrderByWithRelationInput | CampaignIntegrationOrderByWithRelationInput[]
+    cursor?: CampaignIntegrationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CampaignIntegrationScalarFieldEnum | CampaignIntegrationScalarFieldEnum[]
   }
 
   /**
@@ -48672,10 +49430,12 @@ export namespace Prisma {
 
   export type IntegrationAccountAvgAggregateOutputType = {
     id: number | null
+    max_messages_per_period: number | null
   }
 
   export type IntegrationAccountSumAggregateOutputType = {
     id: number | null
+    max_messages_per_period: number | null
   }
 
   export type IntegrationAccountMinAggregateOutputType = {
@@ -48684,6 +49444,8 @@ export namespace Prisma {
     integration_uuid: string | null
     account: string | null
     title: string | null
+    max_messages_per_period: number | null
+    max_messages_period_unit: $Enums.SendingPeriodUnit | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -48694,6 +49456,8 @@ export namespace Prisma {
     integration_uuid: string | null
     account: string | null
     title: string | null
+    max_messages_per_period: number | null
+    max_messages_period_unit: $Enums.SendingPeriodUnit | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -48704,6 +49468,8 @@ export namespace Prisma {
     integration_uuid: number
     account: number
     title: number
+    max_messages_per_period: number
+    max_messages_period_unit: number
     created_at: number
     updated_at: number
     _all: number
@@ -48712,10 +49478,12 @@ export namespace Prisma {
 
   export type IntegrationAccountAvgAggregateInputType = {
     id?: true
+    max_messages_per_period?: true
   }
 
   export type IntegrationAccountSumAggregateInputType = {
     id?: true
+    max_messages_per_period?: true
   }
 
   export type IntegrationAccountMinAggregateInputType = {
@@ -48724,6 +49492,8 @@ export namespace Prisma {
     integration_uuid?: true
     account?: true
     title?: true
+    max_messages_per_period?: true
+    max_messages_period_unit?: true
     created_at?: true
     updated_at?: true
   }
@@ -48734,6 +49504,8 @@ export namespace Prisma {
     integration_uuid?: true
     account?: true
     title?: true
+    max_messages_per_period?: true
+    max_messages_period_unit?: true
     created_at?: true
     updated_at?: true
   }
@@ -48744,6 +49516,8 @@ export namespace Prisma {
     integration_uuid?: true
     account?: true
     title?: true
+    max_messages_per_period?: true
+    max_messages_period_unit?: true
     created_at?: true
     updated_at?: true
     _all?: true
@@ -48841,6 +49615,8 @@ export namespace Prisma {
     integration_uuid: string
     account: string
     title: string
+    max_messages_per_period: number | null
+    max_messages_period_unit: $Enums.SendingPeriodUnit | null
     created_at: Date
     updated_at: Date
     _count: IntegrationAccountCountAggregateOutputType | null
@@ -48870,9 +49646,13 @@ export namespace Prisma {
     integration_uuid?: boolean
     account?: boolean
     title?: boolean
+    max_messages_per_period?: boolean
+    max_messages_period_unit?: boolean
     created_at?: boolean
     updated_at?: boolean
     integration?: boolean | IntegrationDefaultArgs<ExtArgs>
+    campaign_integrations?: boolean | IntegrationAccount$campaign_integrationsArgs<ExtArgs>
+    _count?: boolean | IntegrationAccountCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["integrationAccount"]>
 
   export type IntegrationAccountSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -48881,6 +49661,8 @@ export namespace Prisma {
     integration_uuid?: boolean
     account?: boolean
     title?: boolean
+    max_messages_per_period?: boolean
+    max_messages_period_unit?: boolean
     created_at?: boolean
     updated_at?: boolean
     integration?: boolean | IntegrationDefaultArgs<ExtArgs>
@@ -48892,6 +49674,8 @@ export namespace Prisma {
     integration_uuid?: boolean
     account?: boolean
     title?: boolean
+    max_messages_per_period?: boolean
+    max_messages_period_unit?: boolean
     created_at?: boolean
     updated_at?: boolean
     integration?: boolean | IntegrationDefaultArgs<ExtArgs>
@@ -48903,13 +49687,17 @@ export namespace Prisma {
     integration_uuid?: boolean
     account?: boolean
     title?: boolean
+    max_messages_per_period?: boolean
+    max_messages_period_unit?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
-  export type IntegrationAccountOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "integration_uuid" | "account" | "title" | "created_at" | "updated_at", ExtArgs["result"]["integrationAccount"]>
+  export type IntegrationAccountOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "integration_uuid" | "account" | "title" | "max_messages_per_period" | "max_messages_period_unit" | "created_at" | "updated_at", ExtArgs["result"]["integrationAccount"]>
   export type IntegrationAccountInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     integration?: boolean | IntegrationDefaultArgs<ExtArgs>
+    campaign_integrations?: boolean | IntegrationAccount$campaign_integrationsArgs<ExtArgs>
+    _count?: boolean | IntegrationAccountCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type IntegrationAccountIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     integration?: boolean | IntegrationDefaultArgs<ExtArgs>
@@ -48922,6 +49710,7 @@ export namespace Prisma {
     name: "IntegrationAccount"
     objects: {
       integration: Prisma.$IntegrationPayload<ExtArgs>
+      campaign_integrations: Prisma.$CampaignIntegrationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -48929,6 +49718,8 @@ export namespace Prisma {
       integration_uuid: string
       account: string
       title: string
+      max_messages_per_period: number | null
+      max_messages_period_unit: $Enums.SendingPeriodUnit | null
       created_at: Date
       updated_at: Date
     }, ExtArgs["result"]["integrationAccount"]>
@@ -49326,6 +50117,7 @@ export namespace Prisma {
   export interface Prisma__IntegrationAccountClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     integration<T extends IntegrationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, IntegrationDefaultArgs<ExtArgs>>): Prisma__IntegrationClient<$Result.GetResult<Prisma.$IntegrationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    campaign_integrations<T extends IntegrationAccount$campaign_integrationsArgs<ExtArgs> = {}>(args?: Subset<T, IntegrationAccount$campaign_integrationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CampaignIntegrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -49360,6 +50152,8 @@ export namespace Prisma {
     readonly integration_uuid: FieldRef<"IntegrationAccount", 'String'>
     readonly account: FieldRef<"IntegrationAccount", 'String'>
     readonly title: FieldRef<"IntegrationAccount", 'String'>
+    readonly max_messages_per_period: FieldRef<"IntegrationAccount", 'Int'>
+    readonly max_messages_period_unit: FieldRef<"IntegrationAccount", 'SendingPeriodUnit'>
     readonly created_at: FieldRef<"IntegrationAccount", 'DateTime'>
     readonly updated_at: FieldRef<"IntegrationAccount", 'DateTime'>
   }
@@ -49755,6 +50549,30 @@ export namespace Prisma {
      * Limit how many IntegrationAccounts to delete.
      */
     limit?: number
+  }
+
+  /**
+   * IntegrationAccount.campaign_integrations
+   */
+  export type IntegrationAccount$campaign_integrationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignIntegration
+     */
+    select?: CampaignIntegrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignIntegration
+     */
+    omit?: CampaignIntegrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignIntegrationInclude<ExtArgs> | null
+    where?: CampaignIntegrationWhereInput
+    orderBy?: CampaignIntegrationOrderByWithRelationInput | CampaignIntegrationOrderByWithRelationInput[]
+    cursor?: CampaignIntegrationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CampaignIntegrationScalarFieldEnum | CampaignIntegrationScalarFieldEnum[]
   }
 
   /**
@@ -63007,6 +63825,5920 @@ export namespace Prisma {
 
 
   /**
+   * Model SendingPolicy
+   */
+
+  export type AggregateSendingPolicy = {
+    _count: SendingPolicyCountAggregateOutputType | null
+    _avg: SendingPolicyAvgAggregateOutputType | null
+    _sum: SendingPolicySumAggregateOutputType | null
+    _min: SendingPolicyMinAggregateOutputType | null
+    _max: SendingPolicyMaxAggregateOutputType | null
+  }
+
+  export type SendingPolicyAvgAggregateOutputType = {
+    id: number | null
+    window_start_minute: number | null
+    window_end_minute: number | null
+    min_interval_seconds: number | null
+    min_interval_jitter_seconds: number | null
+  }
+
+  export type SendingPolicySumAggregateOutputType = {
+    id: number | null
+    window_start_minute: number | null
+    window_end_minute: number | null
+    min_interval_seconds: number | null
+    min_interval_jitter_seconds: number | null
+  }
+
+  export type SendingPolicyMinAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    organisation_uuid: string | null
+    name: string | null
+    description: string | null
+    is_template: boolean | null
+    source_policy_uuid: string | null
+    timezone: string | null
+    window_start_minute: number | null
+    window_end_minute: number | null
+    min_interval_seconds: number | null
+    min_interval_jitter_seconds: number | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type SendingPolicyMaxAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    organisation_uuid: string | null
+    name: string | null
+    description: string | null
+    is_template: boolean | null
+    source_policy_uuid: string | null
+    timezone: string | null
+    window_start_minute: number | null
+    window_end_minute: number | null
+    min_interval_seconds: number | null
+    min_interval_jitter_seconds: number | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type SendingPolicyCountAggregateOutputType = {
+    id: number
+    uuid: number
+    organisation_uuid: number
+    name: number
+    description: number
+    is_template: number
+    source_policy_uuid: number
+    timezone: number
+    window_start_minute: number
+    window_end_minute: number
+    min_interval_seconds: number
+    min_interval_jitter_seconds: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type SendingPolicyAvgAggregateInputType = {
+    id?: true
+    window_start_minute?: true
+    window_end_minute?: true
+    min_interval_seconds?: true
+    min_interval_jitter_seconds?: true
+  }
+
+  export type SendingPolicySumAggregateInputType = {
+    id?: true
+    window_start_minute?: true
+    window_end_minute?: true
+    min_interval_seconds?: true
+    min_interval_jitter_seconds?: true
+  }
+
+  export type SendingPolicyMinAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    name?: true
+    description?: true
+    is_template?: true
+    source_policy_uuid?: true
+    timezone?: true
+    window_start_minute?: true
+    window_end_minute?: true
+    min_interval_seconds?: true
+    min_interval_jitter_seconds?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type SendingPolicyMaxAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    name?: true
+    description?: true
+    is_template?: true
+    source_policy_uuid?: true
+    timezone?: true
+    window_start_minute?: true
+    window_end_minute?: true
+    min_interval_seconds?: true
+    min_interval_jitter_seconds?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type SendingPolicyCountAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    name?: true
+    description?: true
+    is_template?: true
+    source_policy_uuid?: true
+    timezone?: true
+    window_start_minute?: true
+    window_end_minute?: true
+    min_interval_seconds?: true
+    min_interval_jitter_seconds?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type SendingPolicyAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SendingPolicy to aggregate.
+     */
+    where?: SendingPolicyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SendingPolicies to fetch.
+     */
+    orderBy?: SendingPolicyOrderByWithRelationInput | SendingPolicyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SendingPolicyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SendingPolicies from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SendingPolicies.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SendingPolicies
+    **/
+    _count?: true | SendingPolicyCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: SendingPolicyAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: SendingPolicySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SendingPolicyMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SendingPolicyMaxAggregateInputType
+  }
+
+  export type GetSendingPolicyAggregateType<T extends SendingPolicyAggregateArgs> = {
+        [P in keyof T & keyof AggregateSendingPolicy]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSendingPolicy[P]>
+      : GetScalarType<T[P], AggregateSendingPolicy[P]>
+  }
+
+
+
+
+  export type SendingPolicyGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SendingPolicyWhereInput
+    orderBy?: SendingPolicyOrderByWithAggregationInput | SendingPolicyOrderByWithAggregationInput[]
+    by: SendingPolicyScalarFieldEnum[] | SendingPolicyScalarFieldEnum
+    having?: SendingPolicyScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SendingPolicyCountAggregateInputType | true
+    _avg?: SendingPolicyAvgAggregateInputType
+    _sum?: SendingPolicySumAggregateInputType
+    _min?: SendingPolicyMinAggregateInputType
+    _max?: SendingPolicyMaxAggregateInputType
+  }
+
+  export type SendingPolicyGroupByOutputType = {
+    id: number
+    uuid: string
+    organisation_uuid: string
+    name: string
+    description: string | null
+    is_template: boolean
+    source_policy_uuid: string | null
+    timezone: string
+    window_start_minute: number | null
+    window_end_minute: number | null
+    min_interval_seconds: number
+    min_interval_jitter_seconds: number
+    created_at: Date
+    updated_at: Date
+    _count: SendingPolicyCountAggregateOutputType | null
+    _avg: SendingPolicyAvgAggregateOutputType | null
+    _sum: SendingPolicySumAggregateOutputType | null
+    _min: SendingPolicyMinAggregateOutputType | null
+    _max: SendingPolicyMaxAggregateOutputType | null
+  }
+
+  type GetSendingPolicyGroupByPayload<T extends SendingPolicyGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SendingPolicyGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SendingPolicyGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SendingPolicyGroupByOutputType[P]>
+            : GetScalarType<T[P], SendingPolicyGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SendingPolicySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    name?: boolean
+    description?: boolean
+    is_template?: boolean
+    source_policy_uuid?: boolean
+    timezone?: boolean
+    window_start_minute?: boolean
+    window_end_minute?: boolean
+    min_interval_seconds?: boolean
+    min_interval_jitter_seconds?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    source_policy?: boolean | SendingPolicy$source_policyArgs<ExtArgs>
+    cloned_instances?: boolean | SendingPolicy$cloned_instancesArgs<ExtArgs>
+    stages?: boolean | SendingPolicy$stagesArgs<ExtArgs>
+    campaign_integrations?: boolean | SendingPolicy$campaign_integrationsArgs<ExtArgs>
+    _count?: boolean | SendingPolicyCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["sendingPolicy"]>
+
+  export type SendingPolicySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    name?: boolean
+    description?: boolean
+    is_template?: boolean
+    source_policy_uuid?: boolean
+    timezone?: boolean
+    window_start_minute?: boolean
+    window_end_minute?: boolean
+    min_interval_seconds?: boolean
+    min_interval_jitter_seconds?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    source_policy?: boolean | SendingPolicy$source_policyArgs<ExtArgs>
+  }, ExtArgs["result"]["sendingPolicy"]>
+
+  export type SendingPolicySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    name?: boolean
+    description?: boolean
+    is_template?: boolean
+    source_policy_uuid?: boolean
+    timezone?: boolean
+    window_start_minute?: boolean
+    window_end_minute?: boolean
+    min_interval_seconds?: boolean
+    min_interval_jitter_seconds?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    source_policy?: boolean | SendingPolicy$source_policyArgs<ExtArgs>
+  }, ExtArgs["result"]["sendingPolicy"]>
+
+  export type SendingPolicySelectScalar = {
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    name?: boolean
+    description?: boolean
+    is_template?: boolean
+    source_policy_uuid?: boolean
+    timezone?: boolean
+    window_start_minute?: boolean
+    window_end_minute?: boolean
+    min_interval_seconds?: boolean
+    min_interval_jitter_seconds?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type SendingPolicyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "name" | "description" | "is_template" | "source_policy_uuid" | "timezone" | "window_start_minute" | "window_end_minute" | "min_interval_seconds" | "min_interval_jitter_seconds" | "created_at" | "updated_at", ExtArgs["result"]["sendingPolicy"]>
+  export type SendingPolicyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    source_policy?: boolean | SendingPolicy$source_policyArgs<ExtArgs>
+    cloned_instances?: boolean | SendingPolicy$cloned_instancesArgs<ExtArgs>
+    stages?: boolean | SendingPolicy$stagesArgs<ExtArgs>
+    campaign_integrations?: boolean | SendingPolicy$campaign_integrationsArgs<ExtArgs>
+    _count?: boolean | SendingPolicyCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type SendingPolicyIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    source_policy?: boolean | SendingPolicy$source_policyArgs<ExtArgs>
+  }
+  export type SendingPolicyIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    source_policy?: boolean | SendingPolicy$source_policyArgs<ExtArgs>
+  }
+
+  export type $SendingPolicyPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SendingPolicy"
+    objects: {
+      organisation: Prisma.$OrganisationPayload<ExtArgs>
+      source_policy: Prisma.$SendingPolicyPayload<ExtArgs> | null
+      cloned_instances: Prisma.$SendingPolicyPayload<ExtArgs>[]
+      stages: Prisma.$SendingPolicyStagePayload<ExtArgs>[]
+      campaign_integrations: Prisma.$CampaignIntegrationPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      uuid: string
+      organisation_uuid: string
+      name: string
+      description: string | null
+      is_template: boolean
+      source_policy_uuid: string | null
+      timezone: string
+      window_start_minute: number | null
+      window_end_minute: number | null
+      min_interval_seconds: number
+      min_interval_jitter_seconds: number
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["sendingPolicy"]>
+    composites: {}
+  }
+
+  type SendingPolicyGetPayload<S extends boolean | null | undefined | SendingPolicyDefaultArgs> = $Result.GetResult<Prisma.$SendingPolicyPayload, S>
+
+  type SendingPolicyCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SendingPolicyFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SendingPolicyCountAggregateInputType | true
+    }
+
+  export interface SendingPolicyDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SendingPolicy'], meta: { name: 'SendingPolicy' } }
+    /**
+     * Find zero or one SendingPolicy that matches the filter.
+     * @param {SendingPolicyFindUniqueArgs} args - Arguments to find a SendingPolicy
+     * @example
+     * // Get one SendingPolicy
+     * const sendingPolicy = await prisma.sendingPolicy.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SendingPolicyFindUniqueArgs>(args: SelectSubset<T, SendingPolicyFindUniqueArgs<ExtArgs>>): Prisma__SendingPolicyClient<$Result.GetResult<Prisma.$SendingPolicyPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one SendingPolicy that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SendingPolicyFindUniqueOrThrowArgs} args - Arguments to find a SendingPolicy
+     * @example
+     * // Get one SendingPolicy
+     * const sendingPolicy = await prisma.sendingPolicy.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SendingPolicyFindUniqueOrThrowArgs>(args: SelectSubset<T, SendingPolicyFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SendingPolicyClient<$Result.GetResult<Prisma.$SendingPolicyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SendingPolicy that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SendingPolicyFindFirstArgs} args - Arguments to find a SendingPolicy
+     * @example
+     * // Get one SendingPolicy
+     * const sendingPolicy = await prisma.sendingPolicy.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SendingPolicyFindFirstArgs>(args?: SelectSubset<T, SendingPolicyFindFirstArgs<ExtArgs>>): Prisma__SendingPolicyClient<$Result.GetResult<Prisma.$SendingPolicyPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SendingPolicy that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SendingPolicyFindFirstOrThrowArgs} args - Arguments to find a SendingPolicy
+     * @example
+     * // Get one SendingPolicy
+     * const sendingPolicy = await prisma.sendingPolicy.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SendingPolicyFindFirstOrThrowArgs>(args?: SelectSubset<T, SendingPolicyFindFirstOrThrowArgs<ExtArgs>>): Prisma__SendingPolicyClient<$Result.GetResult<Prisma.$SendingPolicyPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more SendingPolicies that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SendingPolicyFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SendingPolicies
+     * const sendingPolicies = await prisma.sendingPolicy.findMany()
+     * 
+     * // Get first 10 SendingPolicies
+     * const sendingPolicies = await prisma.sendingPolicy.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const sendingPolicyWithIdOnly = await prisma.sendingPolicy.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SendingPolicyFindManyArgs>(args?: SelectSubset<T, SendingPolicyFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SendingPolicyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a SendingPolicy.
+     * @param {SendingPolicyCreateArgs} args - Arguments to create a SendingPolicy.
+     * @example
+     * // Create one SendingPolicy
+     * const SendingPolicy = await prisma.sendingPolicy.create({
+     *   data: {
+     *     // ... data to create a SendingPolicy
+     *   }
+     * })
+     * 
+     */
+    create<T extends SendingPolicyCreateArgs>(args: SelectSubset<T, SendingPolicyCreateArgs<ExtArgs>>): Prisma__SendingPolicyClient<$Result.GetResult<Prisma.$SendingPolicyPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many SendingPolicies.
+     * @param {SendingPolicyCreateManyArgs} args - Arguments to create many SendingPolicies.
+     * @example
+     * // Create many SendingPolicies
+     * const sendingPolicy = await prisma.sendingPolicy.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SendingPolicyCreateManyArgs>(args?: SelectSubset<T, SendingPolicyCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SendingPolicies and returns the data saved in the database.
+     * @param {SendingPolicyCreateManyAndReturnArgs} args - Arguments to create many SendingPolicies.
+     * @example
+     * // Create many SendingPolicies
+     * const sendingPolicy = await prisma.sendingPolicy.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SendingPolicies and only return the `id`
+     * const sendingPolicyWithIdOnly = await prisma.sendingPolicy.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SendingPolicyCreateManyAndReturnArgs>(args?: SelectSubset<T, SendingPolicyCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SendingPolicyPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a SendingPolicy.
+     * @param {SendingPolicyDeleteArgs} args - Arguments to delete one SendingPolicy.
+     * @example
+     * // Delete one SendingPolicy
+     * const SendingPolicy = await prisma.sendingPolicy.delete({
+     *   where: {
+     *     // ... filter to delete one SendingPolicy
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SendingPolicyDeleteArgs>(args: SelectSubset<T, SendingPolicyDeleteArgs<ExtArgs>>): Prisma__SendingPolicyClient<$Result.GetResult<Prisma.$SendingPolicyPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one SendingPolicy.
+     * @param {SendingPolicyUpdateArgs} args - Arguments to update one SendingPolicy.
+     * @example
+     * // Update one SendingPolicy
+     * const sendingPolicy = await prisma.sendingPolicy.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SendingPolicyUpdateArgs>(args: SelectSubset<T, SendingPolicyUpdateArgs<ExtArgs>>): Prisma__SendingPolicyClient<$Result.GetResult<Prisma.$SendingPolicyPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more SendingPolicies.
+     * @param {SendingPolicyDeleteManyArgs} args - Arguments to filter SendingPolicies to delete.
+     * @example
+     * // Delete a few SendingPolicies
+     * const { count } = await prisma.sendingPolicy.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SendingPolicyDeleteManyArgs>(args?: SelectSubset<T, SendingPolicyDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SendingPolicies.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SendingPolicyUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SendingPolicies
+     * const sendingPolicy = await prisma.sendingPolicy.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SendingPolicyUpdateManyArgs>(args: SelectSubset<T, SendingPolicyUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SendingPolicies and returns the data updated in the database.
+     * @param {SendingPolicyUpdateManyAndReturnArgs} args - Arguments to update many SendingPolicies.
+     * @example
+     * // Update many SendingPolicies
+     * const sendingPolicy = await prisma.sendingPolicy.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more SendingPolicies and only return the `id`
+     * const sendingPolicyWithIdOnly = await prisma.sendingPolicy.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SendingPolicyUpdateManyAndReturnArgs>(args: SelectSubset<T, SendingPolicyUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SendingPolicyPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one SendingPolicy.
+     * @param {SendingPolicyUpsertArgs} args - Arguments to update or create a SendingPolicy.
+     * @example
+     * // Update or create a SendingPolicy
+     * const sendingPolicy = await prisma.sendingPolicy.upsert({
+     *   create: {
+     *     // ... data to create a SendingPolicy
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SendingPolicy we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SendingPolicyUpsertArgs>(args: SelectSubset<T, SendingPolicyUpsertArgs<ExtArgs>>): Prisma__SendingPolicyClient<$Result.GetResult<Prisma.$SendingPolicyPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of SendingPolicies.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SendingPolicyCountArgs} args - Arguments to filter SendingPolicies to count.
+     * @example
+     * // Count the number of SendingPolicies
+     * const count = await prisma.sendingPolicy.count({
+     *   where: {
+     *     // ... the filter for the SendingPolicies we want to count
+     *   }
+     * })
+    **/
+    count<T extends SendingPolicyCountArgs>(
+      args?: Subset<T, SendingPolicyCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SendingPolicyCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SendingPolicy.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SendingPolicyAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SendingPolicyAggregateArgs>(args: Subset<T, SendingPolicyAggregateArgs>): Prisma.PrismaPromise<GetSendingPolicyAggregateType<T>>
+
+    /**
+     * Group by SendingPolicy.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SendingPolicyGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SendingPolicyGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SendingPolicyGroupByArgs['orderBy'] }
+        : { orderBy?: SendingPolicyGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SendingPolicyGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSendingPolicyGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SendingPolicy model
+   */
+  readonly fields: SendingPolicyFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SendingPolicy.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SendingPolicyClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    organisation<T extends OrganisationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganisationDefaultArgs<ExtArgs>>): Prisma__OrganisationClient<$Result.GetResult<Prisma.$OrganisationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    source_policy<T extends SendingPolicy$source_policyArgs<ExtArgs> = {}>(args?: Subset<T, SendingPolicy$source_policyArgs<ExtArgs>>): Prisma__SendingPolicyClient<$Result.GetResult<Prisma.$SendingPolicyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    cloned_instances<T extends SendingPolicy$cloned_instancesArgs<ExtArgs> = {}>(args?: Subset<T, SendingPolicy$cloned_instancesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SendingPolicyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    stages<T extends SendingPolicy$stagesArgs<ExtArgs> = {}>(args?: Subset<T, SendingPolicy$stagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SendingPolicyStagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    campaign_integrations<T extends SendingPolicy$campaign_integrationsArgs<ExtArgs> = {}>(args?: Subset<T, SendingPolicy$campaign_integrationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CampaignIntegrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SendingPolicy model
+   */
+  interface SendingPolicyFieldRefs {
+    readonly id: FieldRef<"SendingPolicy", 'Int'>
+    readonly uuid: FieldRef<"SendingPolicy", 'String'>
+    readonly organisation_uuid: FieldRef<"SendingPolicy", 'String'>
+    readonly name: FieldRef<"SendingPolicy", 'String'>
+    readonly description: FieldRef<"SendingPolicy", 'String'>
+    readonly is_template: FieldRef<"SendingPolicy", 'Boolean'>
+    readonly source_policy_uuid: FieldRef<"SendingPolicy", 'String'>
+    readonly timezone: FieldRef<"SendingPolicy", 'String'>
+    readonly window_start_minute: FieldRef<"SendingPolicy", 'Int'>
+    readonly window_end_minute: FieldRef<"SendingPolicy", 'Int'>
+    readonly min_interval_seconds: FieldRef<"SendingPolicy", 'Int'>
+    readonly min_interval_jitter_seconds: FieldRef<"SendingPolicy", 'Int'>
+    readonly created_at: FieldRef<"SendingPolicy", 'DateTime'>
+    readonly updated_at: FieldRef<"SendingPolicy", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SendingPolicy findUnique
+   */
+  export type SendingPolicyFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SendingPolicy
+     */
+    select?: SendingPolicySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SendingPolicy
+     */
+    omit?: SendingPolicyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SendingPolicyInclude<ExtArgs> | null
+    /**
+     * Filter, which SendingPolicy to fetch.
+     */
+    where: SendingPolicyWhereUniqueInput
+  }
+
+  /**
+   * SendingPolicy findUniqueOrThrow
+   */
+  export type SendingPolicyFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SendingPolicy
+     */
+    select?: SendingPolicySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SendingPolicy
+     */
+    omit?: SendingPolicyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SendingPolicyInclude<ExtArgs> | null
+    /**
+     * Filter, which SendingPolicy to fetch.
+     */
+    where: SendingPolicyWhereUniqueInput
+  }
+
+  /**
+   * SendingPolicy findFirst
+   */
+  export type SendingPolicyFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SendingPolicy
+     */
+    select?: SendingPolicySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SendingPolicy
+     */
+    omit?: SendingPolicyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SendingPolicyInclude<ExtArgs> | null
+    /**
+     * Filter, which SendingPolicy to fetch.
+     */
+    where?: SendingPolicyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SendingPolicies to fetch.
+     */
+    orderBy?: SendingPolicyOrderByWithRelationInput | SendingPolicyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SendingPolicies.
+     */
+    cursor?: SendingPolicyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SendingPolicies from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SendingPolicies.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SendingPolicies.
+     */
+    distinct?: SendingPolicyScalarFieldEnum | SendingPolicyScalarFieldEnum[]
+  }
+
+  /**
+   * SendingPolicy findFirstOrThrow
+   */
+  export type SendingPolicyFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SendingPolicy
+     */
+    select?: SendingPolicySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SendingPolicy
+     */
+    omit?: SendingPolicyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SendingPolicyInclude<ExtArgs> | null
+    /**
+     * Filter, which SendingPolicy to fetch.
+     */
+    where?: SendingPolicyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SendingPolicies to fetch.
+     */
+    orderBy?: SendingPolicyOrderByWithRelationInput | SendingPolicyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SendingPolicies.
+     */
+    cursor?: SendingPolicyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SendingPolicies from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SendingPolicies.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SendingPolicies.
+     */
+    distinct?: SendingPolicyScalarFieldEnum | SendingPolicyScalarFieldEnum[]
+  }
+
+  /**
+   * SendingPolicy findMany
+   */
+  export type SendingPolicyFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SendingPolicy
+     */
+    select?: SendingPolicySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SendingPolicy
+     */
+    omit?: SendingPolicyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SendingPolicyInclude<ExtArgs> | null
+    /**
+     * Filter, which SendingPolicies to fetch.
+     */
+    where?: SendingPolicyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SendingPolicies to fetch.
+     */
+    orderBy?: SendingPolicyOrderByWithRelationInput | SendingPolicyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SendingPolicies.
+     */
+    cursor?: SendingPolicyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SendingPolicies from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SendingPolicies.
+     */
+    skip?: number
+    distinct?: SendingPolicyScalarFieldEnum | SendingPolicyScalarFieldEnum[]
+  }
+
+  /**
+   * SendingPolicy create
+   */
+  export type SendingPolicyCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SendingPolicy
+     */
+    select?: SendingPolicySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SendingPolicy
+     */
+    omit?: SendingPolicyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SendingPolicyInclude<ExtArgs> | null
+    /**
+     * The data needed to create a SendingPolicy.
+     */
+    data: XOR<SendingPolicyCreateInput, SendingPolicyUncheckedCreateInput>
+  }
+
+  /**
+   * SendingPolicy createMany
+   */
+  export type SendingPolicyCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SendingPolicies.
+     */
+    data: SendingPolicyCreateManyInput | SendingPolicyCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SendingPolicy createManyAndReturn
+   */
+  export type SendingPolicyCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SendingPolicy
+     */
+    select?: SendingPolicySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SendingPolicy
+     */
+    omit?: SendingPolicyOmit<ExtArgs> | null
+    /**
+     * The data used to create many SendingPolicies.
+     */
+    data: SendingPolicyCreateManyInput | SendingPolicyCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SendingPolicyIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SendingPolicy update
+   */
+  export type SendingPolicyUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SendingPolicy
+     */
+    select?: SendingPolicySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SendingPolicy
+     */
+    omit?: SendingPolicyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SendingPolicyInclude<ExtArgs> | null
+    /**
+     * The data needed to update a SendingPolicy.
+     */
+    data: XOR<SendingPolicyUpdateInput, SendingPolicyUncheckedUpdateInput>
+    /**
+     * Choose, which SendingPolicy to update.
+     */
+    where: SendingPolicyWhereUniqueInput
+  }
+
+  /**
+   * SendingPolicy updateMany
+   */
+  export type SendingPolicyUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SendingPolicies.
+     */
+    data: XOR<SendingPolicyUpdateManyMutationInput, SendingPolicyUncheckedUpdateManyInput>
+    /**
+     * Filter which SendingPolicies to update
+     */
+    where?: SendingPolicyWhereInput
+    /**
+     * Limit how many SendingPolicies to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SendingPolicy updateManyAndReturn
+   */
+  export type SendingPolicyUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SendingPolicy
+     */
+    select?: SendingPolicySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SendingPolicy
+     */
+    omit?: SendingPolicyOmit<ExtArgs> | null
+    /**
+     * The data used to update SendingPolicies.
+     */
+    data: XOR<SendingPolicyUpdateManyMutationInput, SendingPolicyUncheckedUpdateManyInput>
+    /**
+     * Filter which SendingPolicies to update
+     */
+    where?: SendingPolicyWhereInput
+    /**
+     * Limit how many SendingPolicies to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SendingPolicyIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SendingPolicy upsert
+   */
+  export type SendingPolicyUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SendingPolicy
+     */
+    select?: SendingPolicySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SendingPolicy
+     */
+    omit?: SendingPolicyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SendingPolicyInclude<ExtArgs> | null
+    /**
+     * The filter to search for the SendingPolicy to update in case it exists.
+     */
+    where: SendingPolicyWhereUniqueInput
+    /**
+     * In case the SendingPolicy found by the `where` argument doesn't exist, create a new SendingPolicy with this data.
+     */
+    create: XOR<SendingPolicyCreateInput, SendingPolicyUncheckedCreateInput>
+    /**
+     * In case the SendingPolicy was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SendingPolicyUpdateInput, SendingPolicyUncheckedUpdateInput>
+  }
+
+  /**
+   * SendingPolicy delete
+   */
+  export type SendingPolicyDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SendingPolicy
+     */
+    select?: SendingPolicySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SendingPolicy
+     */
+    omit?: SendingPolicyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SendingPolicyInclude<ExtArgs> | null
+    /**
+     * Filter which SendingPolicy to delete.
+     */
+    where: SendingPolicyWhereUniqueInput
+  }
+
+  /**
+   * SendingPolicy deleteMany
+   */
+  export type SendingPolicyDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SendingPolicies to delete
+     */
+    where?: SendingPolicyWhereInput
+    /**
+     * Limit how many SendingPolicies to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * SendingPolicy.source_policy
+   */
+  export type SendingPolicy$source_policyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SendingPolicy
+     */
+    select?: SendingPolicySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SendingPolicy
+     */
+    omit?: SendingPolicyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SendingPolicyInclude<ExtArgs> | null
+    where?: SendingPolicyWhereInput
+  }
+
+  /**
+   * SendingPolicy.cloned_instances
+   */
+  export type SendingPolicy$cloned_instancesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SendingPolicy
+     */
+    select?: SendingPolicySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SendingPolicy
+     */
+    omit?: SendingPolicyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SendingPolicyInclude<ExtArgs> | null
+    where?: SendingPolicyWhereInput
+    orderBy?: SendingPolicyOrderByWithRelationInput | SendingPolicyOrderByWithRelationInput[]
+    cursor?: SendingPolicyWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SendingPolicyScalarFieldEnum | SendingPolicyScalarFieldEnum[]
+  }
+
+  /**
+   * SendingPolicy.stages
+   */
+  export type SendingPolicy$stagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SendingPolicyStage
+     */
+    select?: SendingPolicyStageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SendingPolicyStage
+     */
+    omit?: SendingPolicyStageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SendingPolicyStageInclude<ExtArgs> | null
+    where?: SendingPolicyStageWhereInput
+    orderBy?: SendingPolicyStageOrderByWithRelationInput | SendingPolicyStageOrderByWithRelationInput[]
+    cursor?: SendingPolicyStageWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SendingPolicyStageScalarFieldEnum | SendingPolicyStageScalarFieldEnum[]
+  }
+
+  /**
+   * SendingPolicy.campaign_integrations
+   */
+  export type SendingPolicy$campaign_integrationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignIntegration
+     */
+    select?: CampaignIntegrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignIntegration
+     */
+    omit?: CampaignIntegrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignIntegrationInclude<ExtArgs> | null
+    where?: CampaignIntegrationWhereInput
+    orderBy?: CampaignIntegrationOrderByWithRelationInput | CampaignIntegrationOrderByWithRelationInput[]
+    cursor?: CampaignIntegrationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CampaignIntegrationScalarFieldEnum | CampaignIntegrationScalarFieldEnum[]
+  }
+
+  /**
+   * SendingPolicy without action
+   */
+  export type SendingPolicyDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SendingPolicy
+     */
+    select?: SendingPolicySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SendingPolicy
+     */
+    omit?: SendingPolicyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SendingPolicyInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SendingPolicyStage
+   */
+
+  export type AggregateSendingPolicyStage = {
+    _count: SendingPolicyStageCountAggregateOutputType | null
+    _avg: SendingPolicyStageAvgAggregateOutputType | null
+    _sum: SendingPolicyStageSumAggregateOutputType | null
+    _min: SendingPolicyStageMinAggregateOutputType | null
+    _max: SendingPolicyStageMaxAggregateOutputType | null
+  }
+
+  export type SendingPolicyStageAvgAggregateOutputType = {
+    id: number | null
+    order_index: number | null
+    limit: number | null
+    duration_value: number | null
+  }
+
+  export type SendingPolicyStageSumAggregateOutputType = {
+    id: number | null
+    order_index: number | null
+    limit: number | null
+    duration_value: number | null
+  }
+
+  export type SendingPolicyStageMinAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    sending_policy_uuid: string | null
+    order_index: number | null
+    limit: number | null
+    period_unit: $Enums.SendingPeriodUnit | null
+    duration_value: number | null
+    duration_unit: $Enums.SendingPeriodUnit | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type SendingPolicyStageMaxAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    sending_policy_uuid: string | null
+    order_index: number | null
+    limit: number | null
+    period_unit: $Enums.SendingPeriodUnit | null
+    duration_value: number | null
+    duration_unit: $Enums.SendingPeriodUnit | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type SendingPolicyStageCountAggregateOutputType = {
+    id: number
+    uuid: number
+    sending_policy_uuid: number
+    order_index: number
+    limit: number
+    period_unit: number
+    duration_value: number
+    duration_unit: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type SendingPolicyStageAvgAggregateInputType = {
+    id?: true
+    order_index?: true
+    limit?: true
+    duration_value?: true
+  }
+
+  export type SendingPolicyStageSumAggregateInputType = {
+    id?: true
+    order_index?: true
+    limit?: true
+    duration_value?: true
+  }
+
+  export type SendingPolicyStageMinAggregateInputType = {
+    id?: true
+    uuid?: true
+    sending_policy_uuid?: true
+    order_index?: true
+    limit?: true
+    period_unit?: true
+    duration_value?: true
+    duration_unit?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type SendingPolicyStageMaxAggregateInputType = {
+    id?: true
+    uuid?: true
+    sending_policy_uuid?: true
+    order_index?: true
+    limit?: true
+    period_unit?: true
+    duration_value?: true
+    duration_unit?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type SendingPolicyStageCountAggregateInputType = {
+    id?: true
+    uuid?: true
+    sending_policy_uuid?: true
+    order_index?: true
+    limit?: true
+    period_unit?: true
+    duration_value?: true
+    duration_unit?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type SendingPolicyStageAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SendingPolicyStage to aggregate.
+     */
+    where?: SendingPolicyStageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SendingPolicyStages to fetch.
+     */
+    orderBy?: SendingPolicyStageOrderByWithRelationInput | SendingPolicyStageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SendingPolicyStageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SendingPolicyStages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SendingPolicyStages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SendingPolicyStages
+    **/
+    _count?: true | SendingPolicyStageCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: SendingPolicyStageAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: SendingPolicyStageSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SendingPolicyStageMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SendingPolicyStageMaxAggregateInputType
+  }
+
+  export type GetSendingPolicyStageAggregateType<T extends SendingPolicyStageAggregateArgs> = {
+        [P in keyof T & keyof AggregateSendingPolicyStage]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSendingPolicyStage[P]>
+      : GetScalarType<T[P], AggregateSendingPolicyStage[P]>
+  }
+
+
+
+
+  export type SendingPolicyStageGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SendingPolicyStageWhereInput
+    orderBy?: SendingPolicyStageOrderByWithAggregationInput | SendingPolicyStageOrderByWithAggregationInput[]
+    by: SendingPolicyStageScalarFieldEnum[] | SendingPolicyStageScalarFieldEnum
+    having?: SendingPolicyStageScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SendingPolicyStageCountAggregateInputType | true
+    _avg?: SendingPolicyStageAvgAggregateInputType
+    _sum?: SendingPolicyStageSumAggregateInputType
+    _min?: SendingPolicyStageMinAggregateInputType
+    _max?: SendingPolicyStageMaxAggregateInputType
+  }
+
+  export type SendingPolicyStageGroupByOutputType = {
+    id: number
+    uuid: string
+    sending_policy_uuid: string
+    order_index: number
+    limit: number
+    period_unit: $Enums.SendingPeriodUnit
+    duration_value: number | null
+    duration_unit: $Enums.SendingPeriodUnit | null
+    created_at: Date
+    updated_at: Date
+    _count: SendingPolicyStageCountAggregateOutputType | null
+    _avg: SendingPolicyStageAvgAggregateOutputType | null
+    _sum: SendingPolicyStageSumAggregateOutputType | null
+    _min: SendingPolicyStageMinAggregateOutputType | null
+    _max: SendingPolicyStageMaxAggregateOutputType | null
+  }
+
+  type GetSendingPolicyStageGroupByPayload<T extends SendingPolicyStageGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SendingPolicyStageGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SendingPolicyStageGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SendingPolicyStageGroupByOutputType[P]>
+            : GetScalarType<T[P], SendingPolicyStageGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SendingPolicyStageSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    sending_policy_uuid?: boolean
+    order_index?: boolean
+    limit?: boolean
+    period_unit?: boolean
+    duration_value?: boolean
+    duration_unit?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    sending_policy?: boolean | SendingPolicyDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["sendingPolicyStage"]>
+
+  export type SendingPolicyStageSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    sending_policy_uuid?: boolean
+    order_index?: boolean
+    limit?: boolean
+    period_unit?: boolean
+    duration_value?: boolean
+    duration_unit?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    sending_policy?: boolean | SendingPolicyDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["sendingPolicyStage"]>
+
+  export type SendingPolicyStageSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    sending_policy_uuid?: boolean
+    order_index?: boolean
+    limit?: boolean
+    period_unit?: boolean
+    duration_value?: boolean
+    duration_unit?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    sending_policy?: boolean | SendingPolicyDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["sendingPolicyStage"]>
+
+  export type SendingPolicyStageSelectScalar = {
+    id?: boolean
+    uuid?: boolean
+    sending_policy_uuid?: boolean
+    order_index?: boolean
+    limit?: boolean
+    period_unit?: boolean
+    duration_value?: boolean
+    duration_unit?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type SendingPolicyStageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "sending_policy_uuid" | "order_index" | "limit" | "period_unit" | "duration_value" | "duration_unit" | "created_at" | "updated_at", ExtArgs["result"]["sendingPolicyStage"]>
+  export type SendingPolicyStageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sending_policy?: boolean | SendingPolicyDefaultArgs<ExtArgs>
+  }
+  export type SendingPolicyStageIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sending_policy?: boolean | SendingPolicyDefaultArgs<ExtArgs>
+  }
+  export type SendingPolicyStageIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sending_policy?: boolean | SendingPolicyDefaultArgs<ExtArgs>
+  }
+
+  export type $SendingPolicyStagePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SendingPolicyStage"
+    objects: {
+      sending_policy: Prisma.$SendingPolicyPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      uuid: string
+      sending_policy_uuid: string
+      order_index: number
+      limit: number
+      period_unit: $Enums.SendingPeriodUnit
+      duration_value: number | null
+      duration_unit: $Enums.SendingPeriodUnit | null
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["sendingPolicyStage"]>
+    composites: {}
+  }
+
+  type SendingPolicyStageGetPayload<S extends boolean | null | undefined | SendingPolicyStageDefaultArgs> = $Result.GetResult<Prisma.$SendingPolicyStagePayload, S>
+
+  type SendingPolicyStageCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SendingPolicyStageFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SendingPolicyStageCountAggregateInputType | true
+    }
+
+  export interface SendingPolicyStageDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SendingPolicyStage'], meta: { name: 'SendingPolicyStage' } }
+    /**
+     * Find zero or one SendingPolicyStage that matches the filter.
+     * @param {SendingPolicyStageFindUniqueArgs} args - Arguments to find a SendingPolicyStage
+     * @example
+     * // Get one SendingPolicyStage
+     * const sendingPolicyStage = await prisma.sendingPolicyStage.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SendingPolicyStageFindUniqueArgs>(args: SelectSubset<T, SendingPolicyStageFindUniqueArgs<ExtArgs>>): Prisma__SendingPolicyStageClient<$Result.GetResult<Prisma.$SendingPolicyStagePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one SendingPolicyStage that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SendingPolicyStageFindUniqueOrThrowArgs} args - Arguments to find a SendingPolicyStage
+     * @example
+     * // Get one SendingPolicyStage
+     * const sendingPolicyStage = await prisma.sendingPolicyStage.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SendingPolicyStageFindUniqueOrThrowArgs>(args: SelectSubset<T, SendingPolicyStageFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SendingPolicyStageClient<$Result.GetResult<Prisma.$SendingPolicyStagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SendingPolicyStage that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SendingPolicyStageFindFirstArgs} args - Arguments to find a SendingPolicyStage
+     * @example
+     * // Get one SendingPolicyStage
+     * const sendingPolicyStage = await prisma.sendingPolicyStage.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SendingPolicyStageFindFirstArgs>(args?: SelectSubset<T, SendingPolicyStageFindFirstArgs<ExtArgs>>): Prisma__SendingPolicyStageClient<$Result.GetResult<Prisma.$SendingPolicyStagePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SendingPolicyStage that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SendingPolicyStageFindFirstOrThrowArgs} args - Arguments to find a SendingPolicyStage
+     * @example
+     * // Get one SendingPolicyStage
+     * const sendingPolicyStage = await prisma.sendingPolicyStage.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SendingPolicyStageFindFirstOrThrowArgs>(args?: SelectSubset<T, SendingPolicyStageFindFirstOrThrowArgs<ExtArgs>>): Prisma__SendingPolicyStageClient<$Result.GetResult<Prisma.$SendingPolicyStagePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more SendingPolicyStages that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SendingPolicyStageFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SendingPolicyStages
+     * const sendingPolicyStages = await prisma.sendingPolicyStage.findMany()
+     * 
+     * // Get first 10 SendingPolicyStages
+     * const sendingPolicyStages = await prisma.sendingPolicyStage.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const sendingPolicyStageWithIdOnly = await prisma.sendingPolicyStage.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SendingPolicyStageFindManyArgs>(args?: SelectSubset<T, SendingPolicyStageFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SendingPolicyStagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a SendingPolicyStage.
+     * @param {SendingPolicyStageCreateArgs} args - Arguments to create a SendingPolicyStage.
+     * @example
+     * // Create one SendingPolicyStage
+     * const SendingPolicyStage = await prisma.sendingPolicyStage.create({
+     *   data: {
+     *     // ... data to create a SendingPolicyStage
+     *   }
+     * })
+     * 
+     */
+    create<T extends SendingPolicyStageCreateArgs>(args: SelectSubset<T, SendingPolicyStageCreateArgs<ExtArgs>>): Prisma__SendingPolicyStageClient<$Result.GetResult<Prisma.$SendingPolicyStagePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many SendingPolicyStages.
+     * @param {SendingPolicyStageCreateManyArgs} args - Arguments to create many SendingPolicyStages.
+     * @example
+     * // Create many SendingPolicyStages
+     * const sendingPolicyStage = await prisma.sendingPolicyStage.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SendingPolicyStageCreateManyArgs>(args?: SelectSubset<T, SendingPolicyStageCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SendingPolicyStages and returns the data saved in the database.
+     * @param {SendingPolicyStageCreateManyAndReturnArgs} args - Arguments to create many SendingPolicyStages.
+     * @example
+     * // Create many SendingPolicyStages
+     * const sendingPolicyStage = await prisma.sendingPolicyStage.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SendingPolicyStages and only return the `id`
+     * const sendingPolicyStageWithIdOnly = await prisma.sendingPolicyStage.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SendingPolicyStageCreateManyAndReturnArgs>(args?: SelectSubset<T, SendingPolicyStageCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SendingPolicyStagePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a SendingPolicyStage.
+     * @param {SendingPolicyStageDeleteArgs} args - Arguments to delete one SendingPolicyStage.
+     * @example
+     * // Delete one SendingPolicyStage
+     * const SendingPolicyStage = await prisma.sendingPolicyStage.delete({
+     *   where: {
+     *     // ... filter to delete one SendingPolicyStage
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SendingPolicyStageDeleteArgs>(args: SelectSubset<T, SendingPolicyStageDeleteArgs<ExtArgs>>): Prisma__SendingPolicyStageClient<$Result.GetResult<Prisma.$SendingPolicyStagePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one SendingPolicyStage.
+     * @param {SendingPolicyStageUpdateArgs} args - Arguments to update one SendingPolicyStage.
+     * @example
+     * // Update one SendingPolicyStage
+     * const sendingPolicyStage = await prisma.sendingPolicyStage.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SendingPolicyStageUpdateArgs>(args: SelectSubset<T, SendingPolicyStageUpdateArgs<ExtArgs>>): Prisma__SendingPolicyStageClient<$Result.GetResult<Prisma.$SendingPolicyStagePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more SendingPolicyStages.
+     * @param {SendingPolicyStageDeleteManyArgs} args - Arguments to filter SendingPolicyStages to delete.
+     * @example
+     * // Delete a few SendingPolicyStages
+     * const { count } = await prisma.sendingPolicyStage.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SendingPolicyStageDeleteManyArgs>(args?: SelectSubset<T, SendingPolicyStageDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SendingPolicyStages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SendingPolicyStageUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SendingPolicyStages
+     * const sendingPolicyStage = await prisma.sendingPolicyStage.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SendingPolicyStageUpdateManyArgs>(args: SelectSubset<T, SendingPolicyStageUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SendingPolicyStages and returns the data updated in the database.
+     * @param {SendingPolicyStageUpdateManyAndReturnArgs} args - Arguments to update many SendingPolicyStages.
+     * @example
+     * // Update many SendingPolicyStages
+     * const sendingPolicyStage = await prisma.sendingPolicyStage.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more SendingPolicyStages and only return the `id`
+     * const sendingPolicyStageWithIdOnly = await prisma.sendingPolicyStage.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SendingPolicyStageUpdateManyAndReturnArgs>(args: SelectSubset<T, SendingPolicyStageUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SendingPolicyStagePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one SendingPolicyStage.
+     * @param {SendingPolicyStageUpsertArgs} args - Arguments to update or create a SendingPolicyStage.
+     * @example
+     * // Update or create a SendingPolicyStage
+     * const sendingPolicyStage = await prisma.sendingPolicyStage.upsert({
+     *   create: {
+     *     // ... data to create a SendingPolicyStage
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SendingPolicyStage we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SendingPolicyStageUpsertArgs>(args: SelectSubset<T, SendingPolicyStageUpsertArgs<ExtArgs>>): Prisma__SendingPolicyStageClient<$Result.GetResult<Prisma.$SendingPolicyStagePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of SendingPolicyStages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SendingPolicyStageCountArgs} args - Arguments to filter SendingPolicyStages to count.
+     * @example
+     * // Count the number of SendingPolicyStages
+     * const count = await prisma.sendingPolicyStage.count({
+     *   where: {
+     *     // ... the filter for the SendingPolicyStages we want to count
+     *   }
+     * })
+    **/
+    count<T extends SendingPolicyStageCountArgs>(
+      args?: Subset<T, SendingPolicyStageCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SendingPolicyStageCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SendingPolicyStage.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SendingPolicyStageAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SendingPolicyStageAggregateArgs>(args: Subset<T, SendingPolicyStageAggregateArgs>): Prisma.PrismaPromise<GetSendingPolicyStageAggregateType<T>>
+
+    /**
+     * Group by SendingPolicyStage.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SendingPolicyStageGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SendingPolicyStageGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SendingPolicyStageGroupByArgs['orderBy'] }
+        : { orderBy?: SendingPolicyStageGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SendingPolicyStageGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSendingPolicyStageGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SendingPolicyStage model
+   */
+  readonly fields: SendingPolicyStageFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SendingPolicyStage.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SendingPolicyStageClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    sending_policy<T extends SendingPolicyDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SendingPolicyDefaultArgs<ExtArgs>>): Prisma__SendingPolicyClient<$Result.GetResult<Prisma.$SendingPolicyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SendingPolicyStage model
+   */
+  interface SendingPolicyStageFieldRefs {
+    readonly id: FieldRef<"SendingPolicyStage", 'Int'>
+    readonly uuid: FieldRef<"SendingPolicyStage", 'String'>
+    readonly sending_policy_uuid: FieldRef<"SendingPolicyStage", 'String'>
+    readonly order_index: FieldRef<"SendingPolicyStage", 'Int'>
+    readonly limit: FieldRef<"SendingPolicyStage", 'Int'>
+    readonly period_unit: FieldRef<"SendingPolicyStage", 'SendingPeriodUnit'>
+    readonly duration_value: FieldRef<"SendingPolicyStage", 'Int'>
+    readonly duration_unit: FieldRef<"SendingPolicyStage", 'SendingPeriodUnit'>
+    readonly created_at: FieldRef<"SendingPolicyStage", 'DateTime'>
+    readonly updated_at: FieldRef<"SendingPolicyStage", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SendingPolicyStage findUnique
+   */
+  export type SendingPolicyStageFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SendingPolicyStage
+     */
+    select?: SendingPolicyStageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SendingPolicyStage
+     */
+    omit?: SendingPolicyStageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SendingPolicyStageInclude<ExtArgs> | null
+    /**
+     * Filter, which SendingPolicyStage to fetch.
+     */
+    where: SendingPolicyStageWhereUniqueInput
+  }
+
+  /**
+   * SendingPolicyStage findUniqueOrThrow
+   */
+  export type SendingPolicyStageFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SendingPolicyStage
+     */
+    select?: SendingPolicyStageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SendingPolicyStage
+     */
+    omit?: SendingPolicyStageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SendingPolicyStageInclude<ExtArgs> | null
+    /**
+     * Filter, which SendingPolicyStage to fetch.
+     */
+    where: SendingPolicyStageWhereUniqueInput
+  }
+
+  /**
+   * SendingPolicyStage findFirst
+   */
+  export type SendingPolicyStageFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SendingPolicyStage
+     */
+    select?: SendingPolicyStageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SendingPolicyStage
+     */
+    omit?: SendingPolicyStageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SendingPolicyStageInclude<ExtArgs> | null
+    /**
+     * Filter, which SendingPolicyStage to fetch.
+     */
+    where?: SendingPolicyStageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SendingPolicyStages to fetch.
+     */
+    orderBy?: SendingPolicyStageOrderByWithRelationInput | SendingPolicyStageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SendingPolicyStages.
+     */
+    cursor?: SendingPolicyStageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SendingPolicyStages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SendingPolicyStages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SendingPolicyStages.
+     */
+    distinct?: SendingPolicyStageScalarFieldEnum | SendingPolicyStageScalarFieldEnum[]
+  }
+
+  /**
+   * SendingPolicyStage findFirstOrThrow
+   */
+  export type SendingPolicyStageFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SendingPolicyStage
+     */
+    select?: SendingPolicyStageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SendingPolicyStage
+     */
+    omit?: SendingPolicyStageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SendingPolicyStageInclude<ExtArgs> | null
+    /**
+     * Filter, which SendingPolicyStage to fetch.
+     */
+    where?: SendingPolicyStageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SendingPolicyStages to fetch.
+     */
+    orderBy?: SendingPolicyStageOrderByWithRelationInput | SendingPolicyStageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SendingPolicyStages.
+     */
+    cursor?: SendingPolicyStageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SendingPolicyStages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SendingPolicyStages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SendingPolicyStages.
+     */
+    distinct?: SendingPolicyStageScalarFieldEnum | SendingPolicyStageScalarFieldEnum[]
+  }
+
+  /**
+   * SendingPolicyStage findMany
+   */
+  export type SendingPolicyStageFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SendingPolicyStage
+     */
+    select?: SendingPolicyStageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SendingPolicyStage
+     */
+    omit?: SendingPolicyStageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SendingPolicyStageInclude<ExtArgs> | null
+    /**
+     * Filter, which SendingPolicyStages to fetch.
+     */
+    where?: SendingPolicyStageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SendingPolicyStages to fetch.
+     */
+    orderBy?: SendingPolicyStageOrderByWithRelationInput | SendingPolicyStageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SendingPolicyStages.
+     */
+    cursor?: SendingPolicyStageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SendingPolicyStages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SendingPolicyStages.
+     */
+    skip?: number
+    distinct?: SendingPolicyStageScalarFieldEnum | SendingPolicyStageScalarFieldEnum[]
+  }
+
+  /**
+   * SendingPolicyStage create
+   */
+  export type SendingPolicyStageCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SendingPolicyStage
+     */
+    select?: SendingPolicyStageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SendingPolicyStage
+     */
+    omit?: SendingPolicyStageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SendingPolicyStageInclude<ExtArgs> | null
+    /**
+     * The data needed to create a SendingPolicyStage.
+     */
+    data: XOR<SendingPolicyStageCreateInput, SendingPolicyStageUncheckedCreateInput>
+  }
+
+  /**
+   * SendingPolicyStage createMany
+   */
+  export type SendingPolicyStageCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SendingPolicyStages.
+     */
+    data: SendingPolicyStageCreateManyInput | SendingPolicyStageCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SendingPolicyStage createManyAndReturn
+   */
+  export type SendingPolicyStageCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SendingPolicyStage
+     */
+    select?: SendingPolicyStageSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SendingPolicyStage
+     */
+    omit?: SendingPolicyStageOmit<ExtArgs> | null
+    /**
+     * The data used to create many SendingPolicyStages.
+     */
+    data: SendingPolicyStageCreateManyInput | SendingPolicyStageCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SendingPolicyStageIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SendingPolicyStage update
+   */
+  export type SendingPolicyStageUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SendingPolicyStage
+     */
+    select?: SendingPolicyStageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SendingPolicyStage
+     */
+    omit?: SendingPolicyStageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SendingPolicyStageInclude<ExtArgs> | null
+    /**
+     * The data needed to update a SendingPolicyStage.
+     */
+    data: XOR<SendingPolicyStageUpdateInput, SendingPolicyStageUncheckedUpdateInput>
+    /**
+     * Choose, which SendingPolicyStage to update.
+     */
+    where: SendingPolicyStageWhereUniqueInput
+  }
+
+  /**
+   * SendingPolicyStage updateMany
+   */
+  export type SendingPolicyStageUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SendingPolicyStages.
+     */
+    data: XOR<SendingPolicyStageUpdateManyMutationInput, SendingPolicyStageUncheckedUpdateManyInput>
+    /**
+     * Filter which SendingPolicyStages to update
+     */
+    where?: SendingPolicyStageWhereInput
+    /**
+     * Limit how many SendingPolicyStages to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SendingPolicyStage updateManyAndReturn
+   */
+  export type SendingPolicyStageUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SendingPolicyStage
+     */
+    select?: SendingPolicyStageSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SendingPolicyStage
+     */
+    omit?: SendingPolicyStageOmit<ExtArgs> | null
+    /**
+     * The data used to update SendingPolicyStages.
+     */
+    data: XOR<SendingPolicyStageUpdateManyMutationInput, SendingPolicyStageUncheckedUpdateManyInput>
+    /**
+     * Filter which SendingPolicyStages to update
+     */
+    where?: SendingPolicyStageWhereInput
+    /**
+     * Limit how many SendingPolicyStages to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SendingPolicyStageIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SendingPolicyStage upsert
+   */
+  export type SendingPolicyStageUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SendingPolicyStage
+     */
+    select?: SendingPolicyStageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SendingPolicyStage
+     */
+    omit?: SendingPolicyStageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SendingPolicyStageInclude<ExtArgs> | null
+    /**
+     * The filter to search for the SendingPolicyStage to update in case it exists.
+     */
+    where: SendingPolicyStageWhereUniqueInput
+    /**
+     * In case the SendingPolicyStage found by the `where` argument doesn't exist, create a new SendingPolicyStage with this data.
+     */
+    create: XOR<SendingPolicyStageCreateInput, SendingPolicyStageUncheckedCreateInput>
+    /**
+     * In case the SendingPolicyStage was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SendingPolicyStageUpdateInput, SendingPolicyStageUncheckedUpdateInput>
+  }
+
+  /**
+   * SendingPolicyStage delete
+   */
+  export type SendingPolicyStageDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SendingPolicyStage
+     */
+    select?: SendingPolicyStageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SendingPolicyStage
+     */
+    omit?: SendingPolicyStageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SendingPolicyStageInclude<ExtArgs> | null
+    /**
+     * Filter which SendingPolicyStage to delete.
+     */
+    where: SendingPolicyStageWhereUniqueInput
+  }
+
+  /**
+   * SendingPolicyStage deleteMany
+   */
+  export type SendingPolicyStageDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SendingPolicyStages to delete
+     */
+    where?: SendingPolicyStageWhereInput
+    /**
+     * Limit how many SendingPolicyStages to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * SendingPolicyStage without action
+   */
+  export type SendingPolicyStageDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SendingPolicyStage
+     */
+    select?: SendingPolicyStageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SendingPolicyStage
+     */
+    omit?: SendingPolicyStageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SendingPolicyStageInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model CampaignIntegration
+   */
+
+  export type AggregateCampaignIntegration = {
+    _count: CampaignIntegrationCountAggregateOutputType | null
+    _avg: CampaignIntegrationAvgAggregateOutputType | null
+    _sum: CampaignIntegrationSumAggregateOutputType | null
+    _min: CampaignIntegrationMinAggregateOutputType | null
+    _max: CampaignIntegrationMaxAggregateOutputType | null
+  }
+
+  export type CampaignIntegrationAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type CampaignIntegrationSumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type CampaignIntegrationMinAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    campaign_uuid: string | null
+    integration_account_uuid: string | null
+    sending_policy_uuid: string | null
+    status: $Enums.CampaignIntegrationStatus | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type CampaignIntegrationMaxAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    campaign_uuid: string | null
+    integration_account_uuid: string | null
+    sending_policy_uuid: string | null
+    status: $Enums.CampaignIntegrationStatus | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type CampaignIntegrationCountAggregateOutputType = {
+    id: number
+    uuid: number
+    campaign_uuid: number
+    integration_account_uuid: number
+    sending_policy_uuid: number
+    status: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type CampaignIntegrationAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type CampaignIntegrationSumAggregateInputType = {
+    id?: true
+  }
+
+  export type CampaignIntegrationMinAggregateInputType = {
+    id?: true
+    uuid?: true
+    campaign_uuid?: true
+    integration_account_uuid?: true
+    sending_policy_uuid?: true
+    status?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type CampaignIntegrationMaxAggregateInputType = {
+    id?: true
+    uuid?: true
+    campaign_uuid?: true
+    integration_account_uuid?: true
+    sending_policy_uuid?: true
+    status?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type CampaignIntegrationCountAggregateInputType = {
+    id?: true
+    uuid?: true
+    campaign_uuid?: true
+    integration_account_uuid?: true
+    sending_policy_uuid?: true
+    status?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type CampaignIntegrationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CampaignIntegration to aggregate.
+     */
+    where?: CampaignIntegrationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CampaignIntegrations to fetch.
+     */
+    orderBy?: CampaignIntegrationOrderByWithRelationInput | CampaignIntegrationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CampaignIntegrationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CampaignIntegrations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CampaignIntegrations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CampaignIntegrations
+    **/
+    _count?: true | CampaignIntegrationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: CampaignIntegrationAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CampaignIntegrationSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CampaignIntegrationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CampaignIntegrationMaxAggregateInputType
+  }
+
+  export type GetCampaignIntegrationAggregateType<T extends CampaignIntegrationAggregateArgs> = {
+        [P in keyof T & keyof AggregateCampaignIntegration]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCampaignIntegration[P]>
+      : GetScalarType<T[P], AggregateCampaignIntegration[P]>
+  }
+
+
+
+
+  export type CampaignIntegrationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CampaignIntegrationWhereInput
+    orderBy?: CampaignIntegrationOrderByWithAggregationInput | CampaignIntegrationOrderByWithAggregationInput[]
+    by: CampaignIntegrationScalarFieldEnum[] | CampaignIntegrationScalarFieldEnum
+    having?: CampaignIntegrationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CampaignIntegrationCountAggregateInputType | true
+    _avg?: CampaignIntegrationAvgAggregateInputType
+    _sum?: CampaignIntegrationSumAggregateInputType
+    _min?: CampaignIntegrationMinAggregateInputType
+    _max?: CampaignIntegrationMaxAggregateInputType
+  }
+
+  export type CampaignIntegrationGroupByOutputType = {
+    id: number
+    uuid: string
+    campaign_uuid: string
+    integration_account_uuid: string
+    sending_policy_uuid: string
+    status: $Enums.CampaignIntegrationStatus
+    created_at: Date
+    updated_at: Date
+    _count: CampaignIntegrationCountAggregateOutputType | null
+    _avg: CampaignIntegrationAvgAggregateOutputType | null
+    _sum: CampaignIntegrationSumAggregateOutputType | null
+    _min: CampaignIntegrationMinAggregateOutputType | null
+    _max: CampaignIntegrationMaxAggregateOutputType | null
+  }
+
+  type GetCampaignIntegrationGroupByPayload<T extends CampaignIntegrationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CampaignIntegrationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CampaignIntegrationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CampaignIntegrationGroupByOutputType[P]>
+            : GetScalarType<T[P], CampaignIntegrationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CampaignIntegrationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    campaign_uuid?: boolean
+    integration_account_uuid?: boolean
+    sending_policy_uuid?: boolean
+    status?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    campaign?: boolean | MarketingCampaignDefaultArgs<ExtArgs>
+    integration_account?: boolean | IntegrationAccountDefaultArgs<ExtArgs>
+    sending_policy?: boolean | SendingPolicyDefaultArgs<ExtArgs>
+    state?: boolean | CampaignIntegration$stateArgs<ExtArgs>
+    outreach_messages?: boolean | CampaignIntegration$outreach_messagesArgs<ExtArgs>
+    _count?: boolean | CampaignIntegrationCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["campaignIntegration"]>
+
+  export type CampaignIntegrationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    campaign_uuid?: boolean
+    integration_account_uuid?: boolean
+    sending_policy_uuid?: boolean
+    status?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    campaign?: boolean | MarketingCampaignDefaultArgs<ExtArgs>
+    integration_account?: boolean | IntegrationAccountDefaultArgs<ExtArgs>
+    sending_policy?: boolean | SendingPolicyDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["campaignIntegration"]>
+
+  export type CampaignIntegrationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    campaign_uuid?: boolean
+    integration_account_uuid?: boolean
+    sending_policy_uuid?: boolean
+    status?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    campaign?: boolean | MarketingCampaignDefaultArgs<ExtArgs>
+    integration_account?: boolean | IntegrationAccountDefaultArgs<ExtArgs>
+    sending_policy?: boolean | SendingPolicyDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["campaignIntegration"]>
+
+  export type CampaignIntegrationSelectScalar = {
+    id?: boolean
+    uuid?: boolean
+    campaign_uuid?: boolean
+    integration_account_uuid?: boolean
+    sending_policy_uuid?: boolean
+    status?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type CampaignIntegrationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "campaign_uuid" | "integration_account_uuid" | "sending_policy_uuid" | "status" | "created_at" | "updated_at", ExtArgs["result"]["campaignIntegration"]>
+  export type CampaignIntegrationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    campaign?: boolean | MarketingCampaignDefaultArgs<ExtArgs>
+    integration_account?: boolean | IntegrationAccountDefaultArgs<ExtArgs>
+    sending_policy?: boolean | SendingPolicyDefaultArgs<ExtArgs>
+    state?: boolean | CampaignIntegration$stateArgs<ExtArgs>
+    outreach_messages?: boolean | CampaignIntegration$outreach_messagesArgs<ExtArgs>
+    _count?: boolean | CampaignIntegrationCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type CampaignIntegrationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    campaign?: boolean | MarketingCampaignDefaultArgs<ExtArgs>
+    integration_account?: boolean | IntegrationAccountDefaultArgs<ExtArgs>
+    sending_policy?: boolean | SendingPolicyDefaultArgs<ExtArgs>
+  }
+  export type CampaignIntegrationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    campaign?: boolean | MarketingCampaignDefaultArgs<ExtArgs>
+    integration_account?: boolean | IntegrationAccountDefaultArgs<ExtArgs>
+    sending_policy?: boolean | SendingPolicyDefaultArgs<ExtArgs>
+  }
+
+  export type $CampaignIntegrationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CampaignIntegration"
+    objects: {
+      campaign: Prisma.$MarketingCampaignPayload<ExtArgs>
+      integration_account: Prisma.$IntegrationAccountPayload<ExtArgs>
+      sending_policy: Prisma.$SendingPolicyPayload<ExtArgs>
+      state: Prisma.$CampaignIntegrationStatePayload<ExtArgs> | null
+      outreach_messages: Prisma.$OutreachMessagePayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      uuid: string
+      campaign_uuid: string
+      integration_account_uuid: string
+      sending_policy_uuid: string
+      status: $Enums.CampaignIntegrationStatus
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["campaignIntegration"]>
+    composites: {}
+  }
+
+  type CampaignIntegrationGetPayload<S extends boolean | null | undefined | CampaignIntegrationDefaultArgs> = $Result.GetResult<Prisma.$CampaignIntegrationPayload, S>
+
+  type CampaignIntegrationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<CampaignIntegrationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: CampaignIntegrationCountAggregateInputType | true
+    }
+
+  export interface CampaignIntegrationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CampaignIntegration'], meta: { name: 'CampaignIntegration' } }
+    /**
+     * Find zero or one CampaignIntegration that matches the filter.
+     * @param {CampaignIntegrationFindUniqueArgs} args - Arguments to find a CampaignIntegration
+     * @example
+     * // Get one CampaignIntegration
+     * const campaignIntegration = await prisma.campaignIntegration.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CampaignIntegrationFindUniqueArgs>(args: SelectSubset<T, CampaignIntegrationFindUniqueArgs<ExtArgs>>): Prisma__CampaignIntegrationClient<$Result.GetResult<Prisma.$CampaignIntegrationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one CampaignIntegration that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {CampaignIntegrationFindUniqueOrThrowArgs} args - Arguments to find a CampaignIntegration
+     * @example
+     * // Get one CampaignIntegration
+     * const campaignIntegration = await prisma.campaignIntegration.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CampaignIntegrationFindUniqueOrThrowArgs>(args: SelectSubset<T, CampaignIntegrationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CampaignIntegrationClient<$Result.GetResult<Prisma.$CampaignIntegrationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CampaignIntegration that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CampaignIntegrationFindFirstArgs} args - Arguments to find a CampaignIntegration
+     * @example
+     * // Get one CampaignIntegration
+     * const campaignIntegration = await prisma.campaignIntegration.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CampaignIntegrationFindFirstArgs>(args?: SelectSubset<T, CampaignIntegrationFindFirstArgs<ExtArgs>>): Prisma__CampaignIntegrationClient<$Result.GetResult<Prisma.$CampaignIntegrationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CampaignIntegration that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CampaignIntegrationFindFirstOrThrowArgs} args - Arguments to find a CampaignIntegration
+     * @example
+     * // Get one CampaignIntegration
+     * const campaignIntegration = await prisma.campaignIntegration.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CampaignIntegrationFindFirstOrThrowArgs>(args?: SelectSubset<T, CampaignIntegrationFindFirstOrThrowArgs<ExtArgs>>): Prisma__CampaignIntegrationClient<$Result.GetResult<Prisma.$CampaignIntegrationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more CampaignIntegrations that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CampaignIntegrationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CampaignIntegrations
+     * const campaignIntegrations = await prisma.campaignIntegration.findMany()
+     * 
+     * // Get first 10 CampaignIntegrations
+     * const campaignIntegrations = await prisma.campaignIntegration.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const campaignIntegrationWithIdOnly = await prisma.campaignIntegration.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CampaignIntegrationFindManyArgs>(args?: SelectSubset<T, CampaignIntegrationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CampaignIntegrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a CampaignIntegration.
+     * @param {CampaignIntegrationCreateArgs} args - Arguments to create a CampaignIntegration.
+     * @example
+     * // Create one CampaignIntegration
+     * const CampaignIntegration = await prisma.campaignIntegration.create({
+     *   data: {
+     *     // ... data to create a CampaignIntegration
+     *   }
+     * })
+     * 
+     */
+    create<T extends CampaignIntegrationCreateArgs>(args: SelectSubset<T, CampaignIntegrationCreateArgs<ExtArgs>>): Prisma__CampaignIntegrationClient<$Result.GetResult<Prisma.$CampaignIntegrationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many CampaignIntegrations.
+     * @param {CampaignIntegrationCreateManyArgs} args - Arguments to create many CampaignIntegrations.
+     * @example
+     * // Create many CampaignIntegrations
+     * const campaignIntegration = await prisma.campaignIntegration.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CampaignIntegrationCreateManyArgs>(args?: SelectSubset<T, CampaignIntegrationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CampaignIntegrations and returns the data saved in the database.
+     * @param {CampaignIntegrationCreateManyAndReturnArgs} args - Arguments to create many CampaignIntegrations.
+     * @example
+     * // Create many CampaignIntegrations
+     * const campaignIntegration = await prisma.campaignIntegration.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CampaignIntegrations and only return the `id`
+     * const campaignIntegrationWithIdOnly = await prisma.campaignIntegration.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CampaignIntegrationCreateManyAndReturnArgs>(args?: SelectSubset<T, CampaignIntegrationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CampaignIntegrationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a CampaignIntegration.
+     * @param {CampaignIntegrationDeleteArgs} args - Arguments to delete one CampaignIntegration.
+     * @example
+     * // Delete one CampaignIntegration
+     * const CampaignIntegration = await prisma.campaignIntegration.delete({
+     *   where: {
+     *     // ... filter to delete one CampaignIntegration
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CampaignIntegrationDeleteArgs>(args: SelectSubset<T, CampaignIntegrationDeleteArgs<ExtArgs>>): Prisma__CampaignIntegrationClient<$Result.GetResult<Prisma.$CampaignIntegrationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one CampaignIntegration.
+     * @param {CampaignIntegrationUpdateArgs} args - Arguments to update one CampaignIntegration.
+     * @example
+     * // Update one CampaignIntegration
+     * const campaignIntegration = await prisma.campaignIntegration.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CampaignIntegrationUpdateArgs>(args: SelectSubset<T, CampaignIntegrationUpdateArgs<ExtArgs>>): Prisma__CampaignIntegrationClient<$Result.GetResult<Prisma.$CampaignIntegrationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more CampaignIntegrations.
+     * @param {CampaignIntegrationDeleteManyArgs} args - Arguments to filter CampaignIntegrations to delete.
+     * @example
+     * // Delete a few CampaignIntegrations
+     * const { count } = await prisma.campaignIntegration.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CampaignIntegrationDeleteManyArgs>(args?: SelectSubset<T, CampaignIntegrationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CampaignIntegrations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CampaignIntegrationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CampaignIntegrations
+     * const campaignIntegration = await prisma.campaignIntegration.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CampaignIntegrationUpdateManyArgs>(args: SelectSubset<T, CampaignIntegrationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CampaignIntegrations and returns the data updated in the database.
+     * @param {CampaignIntegrationUpdateManyAndReturnArgs} args - Arguments to update many CampaignIntegrations.
+     * @example
+     * // Update many CampaignIntegrations
+     * const campaignIntegration = await prisma.campaignIntegration.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more CampaignIntegrations and only return the `id`
+     * const campaignIntegrationWithIdOnly = await prisma.campaignIntegration.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends CampaignIntegrationUpdateManyAndReturnArgs>(args: SelectSubset<T, CampaignIntegrationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CampaignIntegrationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one CampaignIntegration.
+     * @param {CampaignIntegrationUpsertArgs} args - Arguments to update or create a CampaignIntegration.
+     * @example
+     * // Update or create a CampaignIntegration
+     * const campaignIntegration = await prisma.campaignIntegration.upsert({
+     *   create: {
+     *     // ... data to create a CampaignIntegration
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CampaignIntegration we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CampaignIntegrationUpsertArgs>(args: SelectSubset<T, CampaignIntegrationUpsertArgs<ExtArgs>>): Prisma__CampaignIntegrationClient<$Result.GetResult<Prisma.$CampaignIntegrationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of CampaignIntegrations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CampaignIntegrationCountArgs} args - Arguments to filter CampaignIntegrations to count.
+     * @example
+     * // Count the number of CampaignIntegrations
+     * const count = await prisma.campaignIntegration.count({
+     *   where: {
+     *     // ... the filter for the CampaignIntegrations we want to count
+     *   }
+     * })
+    **/
+    count<T extends CampaignIntegrationCountArgs>(
+      args?: Subset<T, CampaignIntegrationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CampaignIntegrationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CampaignIntegration.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CampaignIntegrationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CampaignIntegrationAggregateArgs>(args: Subset<T, CampaignIntegrationAggregateArgs>): Prisma.PrismaPromise<GetCampaignIntegrationAggregateType<T>>
+
+    /**
+     * Group by CampaignIntegration.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CampaignIntegrationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CampaignIntegrationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CampaignIntegrationGroupByArgs['orderBy'] }
+        : { orderBy?: CampaignIntegrationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CampaignIntegrationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCampaignIntegrationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CampaignIntegration model
+   */
+  readonly fields: CampaignIntegrationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CampaignIntegration.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CampaignIntegrationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    campaign<T extends MarketingCampaignDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MarketingCampaignDefaultArgs<ExtArgs>>): Prisma__MarketingCampaignClient<$Result.GetResult<Prisma.$MarketingCampaignPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    integration_account<T extends IntegrationAccountDefaultArgs<ExtArgs> = {}>(args?: Subset<T, IntegrationAccountDefaultArgs<ExtArgs>>): Prisma__IntegrationAccountClient<$Result.GetResult<Prisma.$IntegrationAccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    sending_policy<T extends SendingPolicyDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SendingPolicyDefaultArgs<ExtArgs>>): Prisma__SendingPolicyClient<$Result.GetResult<Prisma.$SendingPolicyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    state<T extends CampaignIntegration$stateArgs<ExtArgs> = {}>(args?: Subset<T, CampaignIntegration$stateArgs<ExtArgs>>): Prisma__CampaignIntegrationStateClient<$Result.GetResult<Prisma.$CampaignIntegrationStatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    outreach_messages<T extends CampaignIntegration$outreach_messagesArgs<ExtArgs> = {}>(args?: Subset<T, CampaignIntegration$outreach_messagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OutreachMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CampaignIntegration model
+   */
+  interface CampaignIntegrationFieldRefs {
+    readonly id: FieldRef<"CampaignIntegration", 'Int'>
+    readonly uuid: FieldRef<"CampaignIntegration", 'String'>
+    readonly campaign_uuid: FieldRef<"CampaignIntegration", 'String'>
+    readonly integration_account_uuid: FieldRef<"CampaignIntegration", 'String'>
+    readonly sending_policy_uuid: FieldRef<"CampaignIntegration", 'String'>
+    readonly status: FieldRef<"CampaignIntegration", 'CampaignIntegrationStatus'>
+    readonly created_at: FieldRef<"CampaignIntegration", 'DateTime'>
+    readonly updated_at: FieldRef<"CampaignIntegration", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CampaignIntegration findUnique
+   */
+  export type CampaignIntegrationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignIntegration
+     */
+    select?: CampaignIntegrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignIntegration
+     */
+    omit?: CampaignIntegrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignIntegrationInclude<ExtArgs> | null
+    /**
+     * Filter, which CampaignIntegration to fetch.
+     */
+    where: CampaignIntegrationWhereUniqueInput
+  }
+
+  /**
+   * CampaignIntegration findUniqueOrThrow
+   */
+  export type CampaignIntegrationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignIntegration
+     */
+    select?: CampaignIntegrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignIntegration
+     */
+    omit?: CampaignIntegrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignIntegrationInclude<ExtArgs> | null
+    /**
+     * Filter, which CampaignIntegration to fetch.
+     */
+    where: CampaignIntegrationWhereUniqueInput
+  }
+
+  /**
+   * CampaignIntegration findFirst
+   */
+  export type CampaignIntegrationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignIntegration
+     */
+    select?: CampaignIntegrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignIntegration
+     */
+    omit?: CampaignIntegrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignIntegrationInclude<ExtArgs> | null
+    /**
+     * Filter, which CampaignIntegration to fetch.
+     */
+    where?: CampaignIntegrationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CampaignIntegrations to fetch.
+     */
+    orderBy?: CampaignIntegrationOrderByWithRelationInput | CampaignIntegrationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CampaignIntegrations.
+     */
+    cursor?: CampaignIntegrationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CampaignIntegrations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CampaignIntegrations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CampaignIntegrations.
+     */
+    distinct?: CampaignIntegrationScalarFieldEnum | CampaignIntegrationScalarFieldEnum[]
+  }
+
+  /**
+   * CampaignIntegration findFirstOrThrow
+   */
+  export type CampaignIntegrationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignIntegration
+     */
+    select?: CampaignIntegrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignIntegration
+     */
+    omit?: CampaignIntegrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignIntegrationInclude<ExtArgs> | null
+    /**
+     * Filter, which CampaignIntegration to fetch.
+     */
+    where?: CampaignIntegrationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CampaignIntegrations to fetch.
+     */
+    orderBy?: CampaignIntegrationOrderByWithRelationInput | CampaignIntegrationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CampaignIntegrations.
+     */
+    cursor?: CampaignIntegrationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CampaignIntegrations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CampaignIntegrations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CampaignIntegrations.
+     */
+    distinct?: CampaignIntegrationScalarFieldEnum | CampaignIntegrationScalarFieldEnum[]
+  }
+
+  /**
+   * CampaignIntegration findMany
+   */
+  export type CampaignIntegrationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignIntegration
+     */
+    select?: CampaignIntegrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignIntegration
+     */
+    omit?: CampaignIntegrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignIntegrationInclude<ExtArgs> | null
+    /**
+     * Filter, which CampaignIntegrations to fetch.
+     */
+    where?: CampaignIntegrationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CampaignIntegrations to fetch.
+     */
+    orderBy?: CampaignIntegrationOrderByWithRelationInput | CampaignIntegrationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CampaignIntegrations.
+     */
+    cursor?: CampaignIntegrationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CampaignIntegrations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CampaignIntegrations.
+     */
+    skip?: number
+    distinct?: CampaignIntegrationScalarFieldEnum | CampaignIntegrationScalarFieldEnum[]
+  }
+
+  /**
+   * CampaignIntegration create
+   */
+  export type CampaignIntegrationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignIntegration
+     */
+    select?: CampaignIntegrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignIntegration
+     */
+    omit?: CampaignIntegrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignIntegrationInclude<ExtArgs> | null
+    /**
+     * The data needed to create a CampaignIntegration.
+     */
+    data: XOR<CampaignIntegrationCreateInput, CampaignIntegrationUncheckedCreateInput>
+  }
+
+  /**
+   * CampaignIntegration createMany
+   */
+  export type CampaignIntegrationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CampaignIntegrations.
+     */
+    data: CampaignIntegrationCreateManyInput | CampaignIntegrationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CampaignIntegration createManyAndReturn
+   */
+  export type CampaignIntegrationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignIntegration
+     */
+    select?: CampaignIntegrationSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignIntegration
+     */
+    omit?: CampaignIntegrationOmit<ExtArgs> | null
+    /**
+     * The data used to create many CampaignIntegrations.
+     */
+    data: CampaignIntegrationCreateManyInput | CampaignIntegrationCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignIntegrationIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CampaignIntegration update
+   */
+  export type CampaignIntegrationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignIntegration
+     */
+    select?: CampaignIntegrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignIntegration
+     */
+    omit?: CampaignIntegrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignIntegrationInclude<ExtArgs> | null
+    /**
+     * The data needed to update a CampaignIntegration.
+     */
+    data: XOR<CampaignIntegrationUpdateInput, CampaignIntegrationUncheckedUpdateInput>
+    /**
+     * Choose, which CampaignIntegration to update.
+     */
+    where: CampaignIntegrationWhereUniqueInput
+  }
+
+  /**
+   * CampaignIntegration updateMany
+   */
+  export type CampaignIntegrationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CampaignIntegrations.
+     */
+    data: XOR<CampaignIntegrationUpdateManyMutationInput, CampaignIntegrationUncheckedUpdateManyInput>
+    /**
+     * Filter which CampaignIntegrations to update
+     */
+    where?: CampaignIntegrationWhereInput
+    /**
+     * Limit how many CampaignIntegrations to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * CampaignIntegration updateManyAndReturn
+   */
+  export type CampaignIntegrationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignIntegration
+     */
+    select?: CampaignIntegrationSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignIntegration
+     */
+    omit?: CampaignIntegrationOmit<ExtArgs> | null
+    /**
+     * The data used to update CampaignIntegrations.
+     */
+    data: XOR<CampaignIntegrationUpdateManyMutationInput, CampaignIntegrationUncheckedUpdateManyInput>
+    /**
+     * Filter which CampaignIntegrations to update
+     */
+    where?: CampaignIntegrationWhereInput
+    /**
+     * Limit how many CampaignIntegrations to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignIntegrationIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CampaignIntegration upsert
+   */
+  export type CampaignIntegrationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignIntegration
+     */
+    select?: CampaignIntegrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignIntegration
+     */
+    omit?: CampaignIntegrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignIntegrationInclude<ExtArgs> | null
+    /**
+     * The filter to search for the CampaignIntegration to update in case it exists.
+     */
+    where: CampaignIntegrationWhereUniqueInput
+    /**
+     * In case the CampaignIntegration found by the `where` argument doesn't exist, create a new CampaignIntegration with this data.
+     */
+    create: XOR<CampaignIntegrationCreateInput, CampaignIntegrationUncheckedCreateInput>
+    /**
+     * In case the CampaignIntegration was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CampaignIntegrationUpdateInput, CampaignIntegrationUncheckedUpdateInput>
+  }
+
+  /**
+   * CampaignIntegration delete
+   */
+  export type CampaignIntegrationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignIntegration
+     */
+    select?: CampaignIntegrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignIntegration
+     */
+    omit?: CampaignIntegrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignIntegrationInclude<ExtArgs> | null
+    /**
+     * Filter which CampaignIntegration to delete.
+     */
+    where: CampaignIntegrationWhereUniqueInput
+  }
+
+  /**
+   * CampaignIntegration deleteMany
+   */
+  export type CampaignIntegrationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CampaignIntegrations to delete
+     */
+    where?: CampaignIntegrationWhereInput
+    /**
+     * Limit how many CampaignIntegrations to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * CampaignIntegration.state
+   */
+  export type CampaignIntegration$stateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignIntegrationState
+     */
+    select?: CampaignIntegrationStateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignIntegrationState
+     */
+    omit?: CampaignIntegrationStateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignIntegrationStateInclude<ExtArgs> | null
+    where?: CampaignIntegrationStateWhereInput
+  }
+
+  /**
+   * CampaignIntegration.outreach_messages
+   */
+  export type CampaignIntegration$outreach_messagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OutreachMessage
+     */
+    select?: OutreachMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OutreachMessage
+     */
+    omit?: OutreachMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OutreachMessageInclude<ExtArgs> | null
+    where?: OutreachMessageWhereInput
+    orderBy?: OutreachMessageOrderByWithRelationInput | OutreachMessageOrderByWithRelationInput[]
+    cursor?: OutreachMessageWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: OutreachMessageScalarFieldEnum | OutreachMessageScalarFieldEnum[]
+  }
+
+  /**
+   * CampaignIntegration without action
+   */
+  export type CampaignIntegrationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignIntegration
+     */
+    select?: CampaignIntegrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignIntegration
+     */
+    omit?: CampaignIntegrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignIntegrationInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model CampaignIntegrationState
+   */
+
+  export type AggregateCampaignIntegrationState = {
+    _count: CampaignIntegrationStateCountAggregateOutputType | null
+    _avg: CampaignIntegrationStateAvgAggregateOutputType | null
+    _sum: CampaignIntegrationStateSumAggregateOutputType | null
+    _min: CampaignIntegrationStateMinAggregateOutputType | null
+    _max: CampaignIntegrationStateMaxAggregateOutputType | null
+  }
+
+  export type CampaignIntegrationStateAvgAggregateOutputType = {
+    id: number | null
+    lifetime_sent_count: number | null
+  }
+
+  export type CampaignIntegrationStateSumAggregateOutputType = {
+    id: number | null
+    lifetime_sent_count: number | null
+  }
+
+  export type CampaignIntegrationStateMinAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    campaign_integration_uuid: string | null
+    policy_started_at: Date | null
+    last_sent_at: Date | null
+    lifetime_sent_count: number | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type CampaignIntegrationStateMaxAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    campaign_integration_uuid: string | null
+    policy_started_at: Date | null
+    last_sent_at: Date | null
+    lifetime_sent_count: number | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type CampaignIntegrationStateCountAggregateOutputType = {
+    id: number
+    uuid: number
+    campaign_integration_uuid: number
+    policy_started_at: number
+    last_sent_at: number
+    lifetime_sent_count: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type CampaignIntegrationStateAvgAggregateInputType = {
+    id?: true
+    lifetime_sent_count?: true
+  }
+
+  export type CampaignIntegrationStateSumAggregateInputType = {
+    id?: true
+    lifetime_sent_count?: true
+  }
+
+  export type CampaignIntegrationStateMinAggregateInputType = {
+    id?: true
+    uuid?: true
+    campaign_integration_uuid?: true
+    policy_started_at?: true
+    last_sent_at?: true
+    lifetime_sent_count?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type CampaignIntegrationStateMaxAggregateInputType = {
+    id?: true
+    uuid?: true
+    campaign_integration_uuid?: true
+    policy_started_at?: true
+    last_sent_at?: true
+    lifetime_sent_count?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type CampaignIntegrationStateCountAggregateInputType = {
+    id?: true
+    uuid?: true
+    campaign_integration_uuid?: true
+    policy_started_at?: true
+    last_sent_at?: true
+    lifetime_sent_count?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type CampaignIntegrationStateAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CampaignIntegrationState to aggregate.
+     */
+    where?: CampaignIntegrationStateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CampaignIntegrationStates to fetch.
+     */
+    orderBy?: CampaignIntegrationStateOrderByWithRelationInput | CampaignIntegrationStateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CampaignIntegrationStateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CampaignIntegrationStates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CampaignIntegrationStates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CampaignIntegrationStates
+    **/
+    _count?: true | CampaignIntegrationStateCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: CampaignIntegrationStateAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CampaignIntegrationStateSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CampaignIntegrationStateMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CampaignIntegrationStateMaxAggregateInputType
+  }
+
+  export type GetCampaignIntegrationStateAggregateType<T extends CampaignIntegrationStateAggregateArgs> = {
+        [P in keyof T & keyof AggregateCampaignIntegrationState]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCampaignIntegrationState[P]>
+      : GetScalarType<T[P], AggregateCampaignIntegrationState[P]>
+  }
+
+
+
+
+  export type CampaignIntegrationStateGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CampaignIntegrationStateWhereInput
+    orderBy?: CampaignIntegrationStateOrderByWithAggregationInput | CampaignIntegrationStateOrderByWithAggregationInput[]
+    by: CampaignIntegrationStateScalarFieldEnum[] | CampaignIntegrationStateScalarFieldEnum
+    having?: CampaignIntegrationStateScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CampaignIntegrationStateCountAggregateInputType | true
+    _avg?: CampaignIntegrationStateAvgAggregateInputType
+    _sum?: CampaignIntegrationStateSumAggregateInputType
+    _min?: CampaignIntegrationStateMinAggregateInputType
+    _max?: CampaignIntegrationStateMaxAggregateInputType
+  }
+
+  export type CampaignIntegrationStateGroupByOutputType = {
+    id: number
+    uuid: string
+    campaign_integration_uuid: string
+    policy_started_at: Date | null
+    last_sent_at: Date | null
+    lifetime_sent_count: number
+    created_at: Date
+    updated_at: Date
+    _count: CampaignIntegrationStateCountAggregateOutputType | null
+    _avg: CampaignIntegrationStateAvgAggregateOutputType | null
+    _sum: CampaignIntegrationStateSumAggregateOutputType | null
+    _min: CampaignIntegrationStateMinAggregateOutputType | null
+    _max: CampaignIntegrationStateMaxAggregateOutputType | null
+  }
+
+  type GetCampaignIntegrationStateGroupByPayload<T extends CampaignIntegrationStateGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CampaignIntegrationStateGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CampaignIntegrationStateGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CampaignIntegrationStateGroupByOutputType[P]>
+            : GetScalarType<T[P], CampaignIntegrationStateGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CampaignIntegrationStateSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    campaign_integration_uuid?: boolean
+    policy_started_at?: boolean
+    last_sent_at?: boolean
+    lifetime_sent_count?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    campaign_integration?: boolean | CampaignIntegrationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["campaignIntegrationState"]>
+
+  export type CampaignIntegrationStateSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    campaign_integration_uuid?: boolean
+    policy_started_at?: boolean
+    last_sent_at?: boolean
+    lifetime_sent_count?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    campaign_integration?: boolean | CampaignIntegrationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["campaignIntegrationState"]>
+
+  export type CampaignIntegrationStateSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    campaign_integration_uuid?: boolean
+    policy_started_at?: boolean
+    last_sent_at?: boolean
+    lifetime_sent_count?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    campaign_integration?: boolean | CampaignIntegrationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["campaignIntegrationState"]>
+
+  export type CampaignIntegrationStateSelectScalar = {
+    id?: boolean
+    uuid?: boolean
+    campaign_integration_uuid?: boolean
+    policy_started_at?: boolean
+    last_sent_at?: boolean
+    lifetime_sent_count?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type CampaignIntegrationStateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "campaign_integration_uuid" | "policy_started_at" | "last_sent_at" | "lifetime_sent_count" | "created_at" | "updated_at", ExtArgs["result"]["campaignIntegrationState"]>
+  export type CampaignIntegrationStateInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    campaign_integration?: boolean | CampaignIntegrationDefaultArgs<ExtArgs>
+  }
+  export type CampaignIntegrationStateIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    campaign_integration?: boolean | CampaignIntegrationDefaultArgs<ExtArgs>
+  }
+  export type CampaignIntegrationStateIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    campaign_integration?: boolean | CampaignIntegrationDefaultArgs<ExtArgs>
+  }
+
+  export type $CampaignIntegrationStatePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CampaignIntegrationState"
+    objects: {
+      campaign_integration: Prisma.$CampaignIntegrationPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      uuid: string
+      campaign_integration_uuid: string
+      policy_started_at: Date | null
+      last_sent_at: Date | null
+      lifetime_sent_count: number
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["campaignIntegrationState"]>
+    composites: {}
+  }
+
+  type CampaignIntegrationStateGetPayload<S extends boolean | null | undefined | CampaignIntegrationStateDefaultArgs> = $Result.GetResult<Prisma.$CampaignIntegrationStatePayload, S>
+
+  type CampaignIntegrationStateCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<CampaignIntegrationStateFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: CampaignIntegrationStateCountAggregateInputType | true
+    }
+
+  export interface CampaignIntegrationStateDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CampaignIntegrationState'], meta: { name: 'CampaignIntegrationState' } }
+    /**
+     * Find zero or one CampaignIntegrationState that matches the filter.
+     * @param {CampaignIntegrationStateFindUniqueArgs} args - Arguments to find a CampaignIntegrationState
+     * @example
+     * // Get one CampaignIntegrationState
+     * const campaignIntegrationState = await prisma.campaignIntegrationState.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CampaignIntegrationStateFindUniqueArgs>(args: SelectSubset<T, CampaignIntegrationStateFindUniqueArgs<ExtArgs>>): Prisma__CampaignIntegrationStateClient<$Result.GetResult<Prisma.$CampaignIntegrationStatePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one CampaignIntegrationState that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {CampaignIntegrationStateFindUniqueOrThrowArgs} args - Arguments to find a CampaignIntegrationState
+     * @example
+     * // Get one CampaignIntegrationState
+     * const campaignIntegrationState = await prisma.campaignIntegrationState.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CampaignIntegrationStateFindUniqueOrThrowArgs>(args: SelectSubset<T, CampaignIntegrationStateFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CampaignIntegrationStateClient<$Result.GetResult<Prisma.$CampaignIntegrationStatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CampaignIntegrationState that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CampaignIntegrationStateFindFirstArgs} args - Arguments to find a CampaignIntegrationState
+     * @example
+     * // Get one CampaignIntegrationState
+     * const campaignIntegrationState = await prisma.campaignIntegrationState.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CampaignIntegrationStateFindFirstArgs>(args?: SelectSubset<T, CampaignIntegrationStateFindFirstArgs<ExtArgs>>): Prisma__CampaignIntegrationStateClient<$Result.GetResult<Prisma.$CampaignIntegrationStatePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CampaignIntegrationState that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CampaignIntegrationStateFindFirstOrThrowArgs} args - Arguments to find a CampaignIntegrationState
+     * @example
+     * // Get one CampaignIntegrationState
+     * const campaignIntegrationState = await prisma.campaignIntegrationState.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CampaignIntegrationStateFindFirstOrThrowArgs>(args?: SelectSubset<T, CampaignIntegrationStateFindFirstOrThrowArgs<ExtArgs>>): Prisma__CampaignIntegrationStateClient<$Result.GetResult<Prisma.$CampaignIntegrationStatePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more CampaignIntegrationStates that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CampaignIntegrationStateFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CampaignIntegrationStates
+     * const campaignIntegrationStates = await prisma.campaignIntegrationState.findMany()
+     * 
+     * // Get first 10 CampaignIntegrationStates
+     * const campaignIntegrationStates = await prisma.campaignIntegrationState.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const campaignIntegrationStateWithIdOnly = await prisma.campaignIntegrationState.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CampaignIntegrationStateFindManyArgs>(args?: SelectSubset<T, CampaignIntegrationStateFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CampaignIntegrationStatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a CampaignIntegrationState.
+     * @param {CampaignIntegrationStateCreateArgs} args - Arguments to create a CampaignIntegrationState.
+     * @example
+     * // Create one CampaignIntegrationState
+     * const CampaignIntegrationState = await prisma.campaignIntegrationState.create({
+     *   data: {
+     *     // ... data to create a CampaignIntegrationState
+     *   }
+     * })
+     * 
+     */
+    create<T extends CampaignIntegrationStateCreateArgs>(args: SelectSubset<T, CampaignIntegrationStateCreateArgs<ExtArgs>>): Prisma__CampaignIntegrationStateClient<$Result.GetResult<Prisma.$CampaignIntegrationStatePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many CampaignIntegrationStates.
+     * @param {CampaignIntegrationStateCreateManyArgs} args - Arguments to create many CampaignIntegrationStates.
+     * @example
+     * // Create many CampaignIntegrationStates
+     * const campaignIntegrationState = await prisma.campaignIntegrationState.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CampaignIntegrationStateCreateManyArgs>(args?: SelectSubset<T, CampaignIntegrationStateCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CampaignIntegrationStates and returns the data saved in the database.
+     * @param {CampaignIntegrationStateCreateManyAndReturnArgs} args - Arguments to create many CampaignIntegrationStates.
+     * @example
+     * // Create many CampaignIntegrationStates
+     * const campaignIntegrationState = await prisma.campaignIntegrationState.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CampaignIntegrationStates and only return the `id`
+     * const campaignIntegrationStateWithIdOnly = await prisma.campaignIntegrationState.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CampaignIntegrationStateCreateManyAndReturnArgs>(args?: SelectSubset<T, CampaignIntegrationStateCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CampaignIntegrationStatePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a CampaignIntegrationState.
+     * @param {CampaignIntegrationStateDeleteArgs} args - Arguments to delete one CampaignIntegrationState.
+     * @example
+     * // Delete one CampaignIntegrationState
+     * const CampaignIntegrationState = await prisma.campaignIntegrationState.delete({
+     *   where: {
+     *     // ... filter to delete one CampaignIntegrationState
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CampaignIntegrationStateDeleteArgs>(args: SelectSubset<T, CampaignIntegrationStateDeleteArgs<ExtArgs>>): Prisma__CampaignIntegrationStateClient<$Result.GetResult<Prisma.$CampaignIntegrationStatePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one CampaignIntegrationState.
+     * @param {CampaignIntegrationStateUpdateArgs} args - Arguments to update one CampaignIntegrationState.
+     * @example
+     * // Update one CampaignIntegrationState
+     * const campaignIntegrationState = await prisma.campaignIntegrationState.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CampaignIntegrationStateUpdateArgs>(args: SelectSubset<T, CampaignIntegrationStateUpdateArgs<ExtArgs>>): Prisma__CampaignIntegrationStateClient<$Result.GetResult<Prisma.$CampaignIntegrationStatePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more CampaignIntegrationStates.
+     * @param {CampaignIntegrationStateDeleteManyArgs} args - Arguments to filter CampaignIntegrationStates to delete.
+     * @example
+     * // Delete a few CampaignIntegrationStates
+     * const { count } = await prisma.campaignIntegrationState.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CampaignIntegrationStateDeleteManyArgs>(args?: SelectSubset<T, CampaignIntegrationStateDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CampaignIntegrationStates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CampaignIntegrationStateUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CampaignIntegrationStates
+     * const campaignIntegrationState = await prisma.campaignIntegrationState.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CampaignIntegrationStateUpdateManyArgs>(args: SelectSubset<T, CampaignIntegrationStateUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CampaignIntegrationStates and returns the data updated in the database.
+     * @param {CampaignIntegrationStateUpdateManyAndReturnArgs} args - Arguments to update many CampaignIntegrationStates.
+     * @example
+     * // Update many CampaignIntegrationStates
+     * const campaignIntegrationState = await prisma.campaignIntegrationState.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more CampaignIntegrationStates and only return the `id`
+     * const campaignIntegrationStateWithIdOnly = await prisma.campaignIntegrationState.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends CampaignIntegrationStateUpdateManyAndReturnArgs>(args: SelectSubset<T, CampaignIntegrationStateUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CampaignIntegrationStatePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one CampaignIntegrationState.
+     * @param {CampaignIntegrationStateUpsertArgs} args - Arguments to update or create a CampaignIntegrationState.
+     * @example
+     * // Update or create a CampaignIntegrationState
+     * const campaignIntegrationState = await prisma.campaignIntegrationState.upsert({
+     *   create: {
+     *     // ... data to create a CampaignIntegrationState
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CampaignIntegrationState we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CampaignIntegrationStateUpsertArgs>(args: SelectSubset<T, CampaignIntegrationStateUpsertArgs<ExtArgs>>): Prisma__CampaignIntegrationStateClient<$Result.GetResult<Prisma.$CampaignIntegrationStatePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of CampaignIntegrationStates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CampaignIntegrationStateCountArgs} args - Arguments to filter CampaignIntegrationStates to count.
+     * @example
+     * // Count the number of CampaignIntegrationStates
+     * const count = await prisma.campaignIntegrationState.count({
+     *   where: {
+     *     // ... the filter for the CampaignIntegrationStates we want to count
+     *   }
+     * })
+    **/
+    count<T extends CampaignIntegrationStateCountArgs>(
+      args?: Subset<T, CampaignIntegrationStateCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CampaignIntegrationStateCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CampaignIntegrationState.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CampaignIntegrationStateAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CampaignIntegrationStateAggregateArgs>(args: Subset<T, CampaignIntegrationStateAggregateArgs>): Prisma.PrismaPromise<GetCampaignIntegrationStateAggregateType<T>>
+
+    /**
+     * Group by CampaignIntegrationState.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CampaignIntegrationStateGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CampaignIntegrationStateGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CampaignIntegrationStateGroupByArgs['orderBy'] }
+        : { orderBy?: CampaignIntegrationStateGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CampaignIntegrationStateGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCampaignIntegrationStateGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CampaignIntegrationState model
+   */
+  readonly fields: CampaignIntegrationStateFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CampaignIntegrationState.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CampaignIntegrationStateClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    campaign_integration<T extends CampaignIntegrationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CampaignIntegrationDefaultArgs<ExtArgs>>): Prisma__CampaignIntegrationClient<$Result.GetResult<Prisma.$CampaignIntegrationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CampaignIntegrationState model
+   */
+  interface CampaignIntegrationStateFieldRefs {
+    readonly id: FieldRef<"CampaignIntegrationState", 'Int'>
+    readonly uuid: FieldRef<"CampaignIntegrationState", 'String'>
+    readonly campaign_integration_uuid: FieldRef<"CampaignIntegrationState", 'String'>
+    readonly policy_started_at: FieldRef<"CampaignIntegrationState", 'DateTime'>
+    readonly last_sent_at: FieldRef<"CampaignIntegrationState", 'DateTime'>
+    readonly lifetime_sent_count: FieldRef<"CampaignIntegrationState", 'Int'>
+    readonly created_at: FieldRef<"CampaignIntegrationState", 'DateTime'>
+    readonly updated_at: FieldRef<"CampaignIntegrationState", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CampaignIntegrationState findUnique
+   */
+  export type CampaignIntegrationStateFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignIntegrationState
+     */
+    select?: CampaignIntegrationStateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignIntegrationState
+     */
+    omit?: CampaignIntegrationStateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignIntegrationStateInclude<ExtArgs> | null
+    /**
+     * Filter, which CampaignIntegrationState to fetch.
+     */
+    where: CampaignIntegrationStateWhereUniqueInput
+  }
+
+  /**
+   * CampaignIntegrationState findUniqueOrThrow
+   */
+  export type CampaignIntegrationStateFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignIntegrationState
+     */
+    select?: CampaignIntegrationStateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignIntegrationState
+     */
+    omit?: CampaignIntegrationStateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignIntegrationStateInclude<ExtArgs> | null
+    /**
+     * Filter, which CampaignIntegrationState to fetch.
+     */
+    where: CampaignIntegrationStateWhereUniqueInput
+  }
+
+  /**
+   * CampaignIntegrationState findFirst
+   */
+  export type CampaignIntegrationStateFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignIntegrationState
+     */
+    select?: CampaignIntegrationStateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignIntegrationState
+     */
+    omit?: CampaignIntegrationStateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignIntegrationStateInclude<ExtArgs> | null
+    /**
+     * Filter, which CampaignIntegrationState to fetch.
+     */
+    where?: CampaignIntegrationStateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CampaignIntegrationStates to fetch.
+     */
+    orderBy?: CampaignIntegrationStateOrderByWithRelationInput | CampaignIntegrationStateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CampaignIntegrationStates.
+     */
+    cursor?: CampaignIntegrationStateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CampaignIntegrationStates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CampaignIntegrationStates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CampaignIntegrationStates.
+     */
+    distinct?: CampaignIntegrationStateScalarFieldEnum | CampaignIntegrationStateScalarFieldEnum[]
+  }
+
+  /**
+   * CampaignIntegrationState findFirstOrThrow
+   */
+  export type CampaignIntegrationStateFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignIntegrationState
+     */
+    select?: CampaignIntegrationStateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignIntegrationState
+     */
+    omit?: CampaignIntegrationStateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignIntegrationStateInclude<ExtArgs> | null
+    /**
+     * Filter, which CampaignIntegrationState to fetch.
+     */
+    where?: CampaignIntegrationStateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CampaignIntegrationStates to fetch.
+     */
+    orderBy?: CampaignIntegrationStateOrderByWithRelationInput | CampaignIntegrationStateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CampaignIntegrationStates.
+     */
+    cursor?: CampaignIntegrationStateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CampaignIntegrationStates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CampaignIntegrationStates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CampaignIntegrationStates.
+     */
+    distinct?: CampaignIntegrationStateScalarFieldEnum | CampaignIntegrationStateScalarFieldEnum[]
+  }
+
+  /**
+   * CampaignIntegrationState findMany
+   */
+  export type CampaignIntegrationStateFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignIntegrationState
+     */
+    select?: CampaignIntegrationStateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignIntegrationState
+     */
+    omit?: CampaignIntegrationStateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignIntegrationStateInclude<ExtArgs> | null
+    /**
+     * Filter, which CampaignIntegrationStates to fetch.
+     */
+    where?: CampaignIntegrationStateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CampaignIntegrationStates to fetch.
+     */
+    orderBy?: CampaignIntegrationStateOrderByWithRelationInput | CampaignIntegrationStateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CampaignIntegrationStates.
+     */
+    cursor?: CampaignIntegrationStateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CampaignIntegrationStates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CampaignIntegrationStates.
+     */
+    skip?: number
+    distinct?: CampaignIntegrationStateScalarFieldEnum | CampaignIntegrationStateScalarFieldEnum[]
+  }
+
+  /**
+   * CampaignIntegrationState create
+   */
+  export type CampaignIntegrationStateCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignIntegrationState
+     */
+    select?: CampaignIntegrationStateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignIntegrationState
+     */
+    omit?: CampaignIntegrationStateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignIntegrationStateInclude<ExtArgs> | null
+    /**
+     * The data needed to create a CampaignIntegrationState.
+     */
+    data: XOR<CampaignIntegrationStateCreateInput, CampaignIntegrationStateUncheckedCreateInput>
+  }
+
+  /**
+   * CampaignIntegrationState createMany
+   */
+  export type CampaignIntegrationStateCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CampaignIntegrationStates.
+     */
+    data: CampaignIntegrationStateCreateManyInput | CampaignIntegrationStateCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CampaignIntegrationState createManyAndReturn
+   */
+  export type CampaignIntegrationStateCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignIntegrationState
+     */
+    select?: CampaignIntegrationStateSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignIntegrationState
+     */
+    omit?: CampaignIntegrationStateOmit<ExtArgs> | null
+    /**
+     * The data used to create many CampaignIntegrationStates.
+     */
+    data: CampaignIntegrationStateCreateManyInput | CampaignIntegrationStateCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignIntegrationStateIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CampaignIntegrationState update
+   */
+  export type CampaignIntegrationStateUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignIntegrationState
+     */
+    select?: CampaignIntegrationStateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignIntegrationState
+     */
+    omit?: CampaignIntegrationStateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignIntegrationStateInclude<ExtArgs> | null
+    /**
+     * The data needed to update a CampaignIntegrationState.
+     */
+    data: XOR<CampaignIntegrationStateUpdateInput, CampaignIntegrationStateUncheckedUpdateInput>
+    /**
+     * Choose, which CampaignIntegrationState to update.
+     */
+    where: CampaignIntegrationStateWhereUniqueInput
+  }
+
+  /**
+   * CampaignIntegrationState updateMany
+   */
+  export type CampaignIntegrationStateUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CampaignIntegrationStates.
+     */
+    data: XOR<CampaignIntegrationStateUpdateManyMutationInput, CampaignIntegrationStateUncheckedUpdateManyInput>
+    /**
+     * Filter which CampaignIntegrationStates to update
+     */
+    where?: CampaignIntegrationStateWhereInput
+    /**
+     * Limit how many CampaignIntegrationStates to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * CampaignIntegrationState updateManyAndReturn
+   */
+  export type CampaignIntegrationStateUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignIntegrationState
+     */
+    select?: CampaignIntegrationStateSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignIntegrationState
+     */
+    omit?: CampaignIntegrationStateOmit<ExtArgs> | null
+    /**
+     * The data used to update CampaignIntegrationStates.
+     */
+    data: XOR<CampaignIntegrationStateUpdateManyMutationInput, CampaignIntegrationStateUncheckedUpdateManyInput>
+    /**
+     * Filter which CampaignIntegrationStates to update
+     */
+    where?: CampaignIntegrationStateWhereInput
+    /**
+     * Limit how many CampaignIntegrationStates to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignIntegrationStateIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CampaignIntegrationState upsert
+   */
+  export type CampaignIntegrationStateUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignIntegrationState
+     */
+    select?: CampaignIntegrationStateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignIntegrationState
+     */
+    omit?: CampaignIntegrationStateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignIntegrationStateInclude<ExtArgs> | null
+    /**
+     * The filter to search for the CampaignIntegrationState to update in case it exists.
+     */
+    where: CampaignIntegrationStateWhereUniqueInput
+    /**
+     * In case the CampaignIntegrationState found by the `where` argument doesn't exist, create a new CampaignIntegrationState with this data.
+     */
+    create: XOR<CampaignIntegrationStateCreateInput, CampaignIntegrationStateUncheckedCreateInput>
+    /**
+     * In case the CampaignIntegrationState was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CampaignIntegrationStateUpdateInput, CampaignIntegrationStateUncheckedUpdateInput>
+  }
+
+  /**
+   * CampaignIntegrationState delete
+   */
+  export type CampaignIntegrationStateDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignIntegrationState
+     */
+    select?: CampaignIntegrationStateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignIntegrationState
+     */
+    omit?: CampaignIntegrationStateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignIntegrationStateInclude<ExtArgs> | null
+    /**
+     * Filter which CampaignIntegrationState to delete.
+     */
+    where: CampaignIntegrationStateWhereUniqueInput
+  }
+
+  /**
+   * CampaignIntegrationState deleteMany
+   */
+  export type CampaignIntegrationStateDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CampaignIntegrationStates to delete
+     */
+    where?: CampaignIntegrationStateWhereInput
+    /**
+     * Limit how many CampaignIntegrationStates to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * CampaignIntegrationState without action
+   */
+  export type CampaignIntegrationStateDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignIntegrationState
+     */
+    select?: CampaignIntegrationStateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignIntegrationState
+     */
+    omit?: CampaignIntegrationStateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignIntegrationStateInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SendingUsageCounter
+   */
+
+  export type AggregateSendingUsageCounter = {
+    _count: SendingUsageCounterCountAggregateOutputType | null
+    _avg: SendingUsageCounterAvgAggregateOutputType | null
+    _sum: SendingUsageCounterSumAggregateOutputType | null
+    _min: SendingUsageCounterMinAggregateOutputType | null
+    _max: SendingUsageCounterMaxAggregateOutputType | null
+  }
+
+  export type SendingUsageCounterAvgAggregateOutputType = {
+    id: number | null
+    count: number | null
+  }
+
+  export type SendingUsageCounterSumAggregateOutputType = {
+    id: number | null
+    count: number | null
+  }
+
+  export type SendingUsageCounterMinAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    scope_type: $Enums.SendingUsageScopeType | null
+    scope_uuid: string | null
+    period_key: string | null
+    count: number | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type SendingUsageCounterMaxAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    scope_type: $Enums.SendingUsageScopeType | null
+    scope_uuid: string | null
+    period_key: string | null
+    count: number | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type SendingUsageCounterCountAggregateOutputType = {
+    id: number
+    uuid: number
+    scope_type: number
+    scope_uuid: number
+    period_key: number
+    count: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type SendingUsageCounterAvgAggregateInputType = {
+    id?: true
+    count?: true
+  }
+
+  export type SendingUsageCounterSumAggregateInputType = {
+    id?: true
+    count?: true
+  }
+
+  export type SendingUsageCounterMinAggregateInputType = {
+    id?: true
+    uuid?: true
+    scope_type?: true
+    scope_uuid?: true
+    period_key?: true
+    count?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type SendingUsageCounterMaxAggregateInputType = {
+    id?: true
+    uuid?: true
+    scope_type?: true
+    scope_uuid?: true
+    period_key?: true
+    count?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type SendingUsageCounterCountAggregateInputType = {
+    id?: true
+    uuid?: true
+    scope_type?: true
+    scope_uuid?: true
+    period_key?: true
+    count?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type SendingUsageCounterAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SendingUsageCounter to aggregate.
+     */
+    where?: SendingUsageCounterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SendingUsageCounters to fetch.
+     */
+    orderBy?: SendingUsageCounterOrderByWithRelationInput | SendingUsageCounterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SendingUsageCounterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SendingUsageCounters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SendingUsageCounters.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SendingUsageCounters
+    **/
+    _count?: true | SendingUsageCounterCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: SendingUsageCounterAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: SendingUsageCounterSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SendingUsageCounterMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SendingUsageCounterMaxAggregateInputType
+  }
+
+  export type GetSendingUsageCounterAggregateType<T extends SendingUsageCounterAggregateArgs> = {
+        [P in keyof T & keyof AggregateSendingUsageCounter]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSendingUsageCounter[P]>
+      : GetScalarType<T[P], AggregateSendingUsageCounter[P]>
+  }
+
+
+
+
+  export type SendingUsageCounterGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SendingUsageCounterWhereInput
+    orderBy?: SendingUsageCounterOrderByWithAggregationInput | SendingUsageCounterOrderByWithAggregationInput[]
+    by: SendingUsageCounterScalarFieldEnum[] | SendingUsageCounterScalarFieldEnum
+    having?: SendingUsageCounterScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SendingUsageCounterCountAggregateInputType | true
+    _avg?: SendingUsageCounterAvgAggregateInputType
+    _sum?: SendingUsageCounterSumAggregateInputType
+    _min?: SendingUsageCounterMinAggregateInputType
+    _max?: SendingUsageCounterMaxAggregateInputType
+  }
+
+  export type SendingUsageCounterGroupByOutputType = {
+    id: number
+    uuid: string
+    scope_type: $Enums.SendingUsageScopeType
+    scope_uuid: string
+    period_key: string
+    count: number
+    created_at: Date
+    updated_at: Date
+    _count: SendingUsageCounterCountAggregateOutputType | null
+    _avg: SendingUsageCounterAvgAggregateOutputType | null
+    _sum: SendingUsageCounterSumAggregateOutputType | null
+    _min: SendingUsageCounterMinAggregateOutputType | null
+    _max: SendingUsageCounterMaxAggregateOutputType | null
+  }
+
+  type GetSendingUsageCounterGroupByPayload<T extends SendingUsageCounterGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SendingUsageCounterGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SendingUsageCounterGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SendingUsageCounterGroupByOutputType[P]>
+            : GetScalarType<T[P], SendingUsageCounterGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SendingUsageCounterSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    scope_type?: boolean
+    scope_uuid?: boolean
+    period_key?: boolean
+    count?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }, ExtArgs["result"]["sendingUsageCounter"]>
+
+  export type SendingUsageCounterSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    scope_type?: boolean
+    scope_uuid?: boolean
+    period_key?: boolean
+    count?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }, ExtArgs["result"]["sendingUsageCounter"]>
+
+  export type SendingUsageCounterSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    scope_type?: boolean
+    scope_uuid?: boolean
+    period_key?: boolean
+    count?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }, ExtArgs["result"]["sendingUsageCounter"]>
+
+  export type SendingUsageCounterSelectScalar = {
+    id?: boolean
+    uuid?: boolean
+    scope_type?: boolean
+    scope_uuid?: boolean
+    period_key?: boolean
+    count?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type SendingUsageCounterOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "scope_type" | "scope_uuid" | "period_key" | "count" | "created_at" | "updated_at", ExtArgs["result"]["sendingUsageCounter"]>
+
+  export type $SendingUsageCounterPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SendingUsageCounter"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      uuid: string
+      scope_type: $Enums.SendingUsageScopeType
+      scope_uuid: string
+      period_key: string
+      count: number
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["sendingUsageCounter"]>
+    composites: {}
+  }
+
+  type SendingUsageCounterGetPayload<S extends boolean | null | undefined | SendingUsageCounterDefaultArgs> = $Result.GetResult<Prisma.$SendingUsageCounterPayload, S>
+
+  type SendingUsageCounterCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SendingUsageCounterFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SendingUsageCounterCountAggregateInputType | true
+    }
+
+  export interface SendingUsageCounterDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SendingUsageCounter'], meta: { name: 'SendingUsageCounter' } }
+    /**
+     * Find zero or one SendingUsageCounter that matches the filter.
+     * @param {SendingUsageCounterFindUniqueArgs} args - Arguments to find a SendingUsageCounter
+     * @example
+     * // Get one SendingUsageCounter
+     * const sendingUsageCounter = await prisma.sendingUsageCounter.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SendingUsageCounterFindUniqueArgs>(args: SelectSubset<T, SendingUsageCounterFindUniqueArgs<ExtArgs>>): Prisma__SendingUsageCounterClient<$Result.GetResult<Prisma.$SendingUsageCounterPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one SendingUsageCounter that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SendingUsageCounterFindUniqueOrThrowArgs} args - Arguments to find a SendingUsageCounter
+     * @example
+     * // Get one SendingUsageCounter
+     * const sendingUsageCounter = await prisma.sendingUsageCounter.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SendingUsageCounterFindUniqueOrThrowArgs>(args: SelectSubset<T, SendingUsageCounterFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SendingUsageCounterClient<$Result.GetResult<Prisma.$SendingUsageCounterPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SendingUsageCounter that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SendingUsageCounterFindFirstArgs} args - Arguments to find a SendingUsageCounter
+     * @example
+     * // Get one SendingUsageCounter
+     * const sendingUsageCounter = await prisma.sendingUsageCounter.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SendingUsageCounterFindFirstArgs>(args?: SelectSubset<T, SendingUsageCounterFindFirstArgs<ExtArgs>>): Prisma__SendingUsageCounterClient<$Result.GetResult<Prisma.$SendingUsageCounterPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SendingUsageCounter that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SendingUsageCounterFindFirstOrThrowArgs} args - Arguments to find a SendingUsageCounter
+     * @example
+     * // Get one SendingUsageCounter
+     * const sendingUsageCounter = await prisma.sendingUsageCounter.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SendingUsageCounterFindFirstOrThrowArgs>(args?: SelectSubset<T, SendingUsageCounterFindFirstOrThrowArgs<ExtArgs>>): Prisma__SendingUsageCounterClient<$Result.GetResult<Prisma.$SendingUsageCounterPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more SendingUsageCounters that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SendingUsageCounterFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SendingUsageCounters
+     * const sendingUsageCounters = await prisma.sendingUsageCounter.findMany()
+     * 
+     * // Get first 10 SendingUsageCounters
+     * const sendingUsageCounters = await prisma.sendingUsageCounter.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const sendingUsageCounterWithIdOnly = await prisma.sendingUsageCounter.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SendingUsageCounterFindManyArgs>(args?: SelectSubset<T, SendingUsageCounterFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SendingUsageCounterPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a SendingUsageCounter.
+     * @param {SendingUsageCounterCreateArgs} args - Arguments to create a SendingUsageCounter.
+     * @example
+     * // Create one SendingUsageCounter
+     * const SendingUsageCounter = await prisma.sendingUsageCounter.create({
+     *   data: {
+     *     // ... data to create a SendingUsageCounter
+     *   }
+     * })
+     * 
+     */
+    create<T extends SendingUsageCounterCreateArgs>(args: SelectSubset<T, SendingUsageCounterCreateArgs<ExtArgs>>): Prisma__SendingUsageCounterClient<$Result.GetResult<Prisma.$SendingUsageCounterPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many SendingUsageCounters.
+     * @param {SendingUsageCounterCreateManyArgs} args - Arguments to create many SendingUsageCounters.
+     * @example
+     * // Create many SendingUsageCounters
+     * const sendingUsageCounter = await prisma.sendingUsageCounter.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SendingUsageCounterCreateManyArgs>(args?: SelectSubset<T, SendingUsageCounterCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SendingUsageCounters and returns the data saved in the database.
+     * @param {SendingUsageCounterCreateManyAndReturnArgs} args - Arguments to create many SendingUsageCounters.
+     * @example
+     * // Create many SendingUsageCounters
+     * const sendingUsageCounter = await prisma.sendingUsageCounter.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SendingUsageCounters and only return the `id`
+     * const sendingUsageCounterWithIdOnly = await prisma.sendingUsageCounter.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SendingUsageCounterCreateManyAndReturnArgs>(args?: SelectSubset<T, SendingUsageCounterCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SendingUsageCounterPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a SendingUsageCounter.
+     * @param {SendingUsageCounterDeleteArgs} args - Arguments to delete one SendingUsageCounter.
+     * @example
+     * // Delete one SendingUsageCounter
+     * const SendingUsageCounter = await prisma.sendingUsageCounter.delete({
+     *   where: {
+     *     // ... filter to delete one SendingUsageCounter
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SendingUsageCounterDeleteArgs>(args: SelectSubset<T, SendingUsageCounterDeleteArgs<ExtArgs>>): Prisma__SendingUsageCounterClient<$Result.GetResult<Prisma.$SendingUsageCounterPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one SendingUsageCounter.
+     * @param {SendingUsageCounterUpdateArgs} args - Arguments to update one SendingUsageCounter.
+     * @example
+     * // Update one SendingUsageCounter
+     * const sendingUsageCounter = await prisma.sendingUsageCounter.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SendingUsageCounterUpdateArgs>(args: SelectSubset<T, SendingUsageCounterUpdateArgs<ExtArgs>>): Prisma__SendingUsageCounterClient<$Result.GetResult<Prisma.$SendingUsageCounterPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more SendingUsageCounters.
+     * @param {SendingUsageCounterDeleteManyArgs} args - Arguments to filter SendingUsageCounters to delete.
+     * @example
+     * // Delete a few SendingUsageCounters
+     * const { count } = await prisma.sendingUsageCounter.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SendingUsageCounterDeleteManyArgs>(args?: SelectSubset<T, SendingUsageCounterDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SendingUsageCounters.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SendingUsageCounterUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SendingUsageCounters
+     * const sendingUsageCounter = await prisma.sendingUsageCounter.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SendingUsageCounterUpdateManyArgs>(args: SelectSubset<T, SendingUsageCounterUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SendingUsageCounters and returns the data updated in the database.
+     * @param {SendingUsageCounterUpdateManyAndReturnArgs} args - Arguments to update many SendingUsageCounters.
+     * @example
+     * // Update many SendingUsageCounters
+     * const sendingUsageCounter = await prisma.sendingUsageCounter.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more SendingUsageCounters and only return the `id`
+     * const sendingUsageCounterWithIdOnly = await prisma.sendingUsageCounter.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SendingUsageCounterUpdateManyAndReturnArgs>(args: SelectSubset<T, SendingUsageCounterUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SendingUsageCounterPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one SendingUsageCounter.
+     * @param {SendingUsageCounterUpsertArgs} args - Arguments to update or create a SendingUsageCounter.
+     * @example
+     * // Update or create a SendingUsageCounter
+     * const sendingUsageCounter = await prisma.sendingUsageCounter.upsert({
+     *   create: {
+     *     // ... data to create a SendingUsageCounter
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SendingUsageCounter we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SendingUsageCounterUpsertArgs>(args: SelectSubset<T, SendingUsageCounterUpsertArgs<ExtArgs>>): Prisma__SendingUsageCounterClient<$Result.GetResult<Prisma.$SendingUsageCounterPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of SendingUsageCounters.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SendingUsageCounterCountArgs} args - Arguments to filter SendingUsageCounters to count.
+     * @example
+     * // Count the number of SendingUsageCounters
+     * const count = await prisma.sendingUsageCounter.count({
+     *   where: {
+     *     // ... the filter for the SendingUsageCounters we want to count
+     *   }
+     * })
+    **/
+    count<T extends SendingUsageCounterCountArgs>(
+      args?: Subset<T, SendingUsageCounterCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SendingUsageCounterCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SendingUsageCounter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SendingUsageCounterAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SendingUsageCounterAggregateArgs>(args: Subset<T, SendingUsageCounterAggregateArgs>): Prisma.PrismaPromise<GetSendingUsageCounterAggregateType<T>>
+
+    /**
+     * Group by SendingUsageCounter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SendingUsageCounterGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SendingUsageCounterGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SendingUsageCounterGroupByArgs['orderBy'] }
+        : { orderBy?: SendingUsageCounterGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SendingUsageCounterGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSendingUsageCounterGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SendingUsageCounter model
+   */
+  readonly fields: SendingUsageCounterFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SendingUsageCounter.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SendingUsageCounterClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SendingUsageCounter model
+   */
+  interface SendingUsageCounterFieldRefs {
+    readonly id: FieldRef<"SendingUsageCounter", 'Int'>
+    readonly uuid: FieldRef<"SendingUsageCounter", 'String'>
+    readonly scope_type: FieldRef<"SendingUsageCounter", 'SendingUsageScopeType'>
+    readonly scope_uuid: FieldRef<"SendingUsageCounter", 'String'>
+    readonly period_key: FieldRef<"SendingUsageCounter", 'String'>
+    readonly count: FieldRef<"SendingUsageCounter", 'Int'>
+    readonly created_at: FieldRef<"SendingUsageCounter", 'DateTime'>
+    readonly updated_at: FieldRef<"SendingUsageCounter", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SendingUsageCounter findUnique
+   */
+  export type SendingUsageCounterFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SendingUsageCounter
+     */
+    select?: SendingUsageCounterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SendingUsageCounter
+     */
+    omit?: SendingUsageCounterOmit<ExtArgs> | null
+    /**
+     * Filter, which SendingUsageCounter to fetch.
+     */
+    where: SendingUsageCounterWhereUniqueInput
+  }
+
+  /**
+   * SendingUsageCounter findUniqueOrThrow
+   */
+  export type SendingUsageCounterFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SendingUsageCounter
+     */
+    select?: SendingUsageCounterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SendingUsageCounter
+     */
+    omit?: SendingUsageCounterOmit<ExtArgs> | null
+    /**
+     * Filter, which SendingUsageCounter to fetch.
+     */
+    where: SendingUsageCounterWhereUniqueInput
+  }
+
+  /**
+   * SendingUsageCounter findFirst
+   */
+  export type SendingUsageCounterFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SendingUsageCounter
+     */
+    select?: SendingUsageCounterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SendingUsageCounter
+     */
+    omit?: SendingUsageCounterOmit<ExtArgs> | null
+    /**
+     * Filter, which SendingUsageCounter to fetch.
+     */
+    where?: SendingUsageCounterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SendingUsageCounters to fetch.
+     */
+    orderBy?: SendingUsageCounterOrderByWithRelationInput | SendingUsageCounterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SendingUsageCounters.
+     */
+    cursor?: SendingUsageCounterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SendingUsageCounters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SendingUsageCounters.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SendingUsageCounters.
+     */
+    distinct?: SendingUsageCounterScalarFieldEnum | SendingUsageCounterScalarFieldEnum[]
+  }
+
+  /**
+   * SendingUsageCounter findFirstOrThrow
+   */
+  export type SendingUsageCounterFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SendingUsageCounter
+     */
+    select?: SendingUsageCounterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SendingUsageCounter
+     */
+    omit?: SendingUsageCounterOmit<ExtArgs> | null
+    /**
+     * Filter, which SendingUsageCounter to fetch.
+     */
+    where?: SendingUsageCounterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SendingUsageCounters to fetch.
+     */
+    orderBy?: SendingUsageCounterOrderByWithRelationInput | SendingUsageCounterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SendingUsageCounters.
+     */
+    cursor?: SendingUsageCounterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SendingUsageCounters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SendingUsageCounters.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SendingUsageCounters.
+     */
+    distinct?: SendingUsageCounterScalarFieldEnum | SendingUsageCounterScalarFieldEnum[]
+  }
+
+  /**
+   * SendingUsageCounter findMany
+   */
+  export type SendingUsageCounterFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SendingUsageCounter
+     */
+    select?: SendingUsageCounterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SendingUsageCounter
+     */
+    omit?: SendingUsageCounterOmit<ExtArgs> | null
+    /**
+     * Filter, which SendingUsageCounters to fetch.
+     */
+    where?: SendingUsageCounterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SendingUsageCounters to fetch.
+     */
+    orderBy?: SendingUsageCounterOrderByWithRelationInput | SendingUsageCounterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SendingUsageCounters.
+     */
+    cursor?: SendingUsageCounterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SendingUsageCounters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SendingUsageCounters.
+     */
+    skip?: number
+    distinct?: SendingUsageCounterScalarFieldEnum | SendingUsageCounterScalarFieldEnum[]
+  }
+
+  /**
+   * SendingUsageCounter create
+   */
+  export type SendingUsageCounterCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SendingUsageCounter
+     */
+    select?: SendingUsageCounterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SendingUsageCounter
+     */
+    omit?: SendingUsageCounterOmit<ExtArgs> | null
+    /**
+     * The data needed to create a SendingUsageCounter.
+     */
+    data: XOR<SendingUsageCounterCreateInput, SendingUsageCounterUncheckedCreateInput>
+  }
+
+  /**
+   * SendingUsageCounter createMany
+   */
+  export type SendingUsageCounterCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SendingUsageCounters.
+     */
+    data: SendingUsageCounterCreateManyInput | SendingUsageCounterCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SendingUsageCounter createManyAndReturn
+   */
+  export type SendingUsageCounterCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SendingUsageCounter
+     */
+    select?: SendingUsageCounterSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SendingUsageCounter
+     */
+    omit?: SendingUsageCounterOmit<ExtArgs> | null
+    /**
+     * The data used to create many SendingUsageCounters.
+     */
+    data: SendingUsageCounterCreateManyInput | SendingUsageCounterCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SendingUsageCounter update
+   */
+  export type SendingUsageCounterUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SendingUsageCounter
+     */
+    select?: SendingUsageCounterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SendingUsageCounter
+     */
+    omit?: SendingUsageCounterOmit<ExtArgs> | null
+    /**
+     * The data needed to update a SendingUsageCounter.
+     */
+    data: XOR<SendingUsageCounterUpdateInput, SendingUsageCounterUncheckedUpdateInput>
+    /**
+     * Choose, which SendingUsageCounter to update.
+     */
+    where: SendingUsageCounterWhereUniqueInput
+  }
+
+  /**
+   * SendingUsageCounter updateMany
+   */
+  export type SendingUsageCounterUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SendingUsageCounters.
+     */
+    data: XOR<SendingUsageCounterUpdateManyMutationInput, SendingUsageCounterUncheckedUpdateManyInput>
+    /**
+     * Filter which SendingUsageCounters to update
+     */
+    where?: SendingUsageCounterWhereInput
+    /**
+     * Limit how many SendingUsageCounters to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SendingUsageCounter updateManyAndReturn
+   */
+  export type SendingUsageCounterUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SendingUsageCounter
+     */
+    select?: SendingUsageCounterSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SendingUsageCounter
+     */
+    omit?: SendingUsageCounterOmit<ExtArgs> | null
+    /**
+     * The data used to update SendingUsageCounters.
+     */
+    data: XOR<SendingUsageCounterUpdateManyMutationInput, SendingUsageCounterUncheckedUpdateManyInput>
+    /**
+     * Filter which SendingUsageCounters to update
+     */
+    where?: SendingUsageCounterWhereInput
+    /**
+     * Limit how many SendingUsageCounters to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SendingUsageCounter upsert
+   */
+  export type SendingUsageCounterUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SendingUsageCounter
+     */
+    select?: SendingUsageCounterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SendingUsageCounter
+     */
+    omit?: SendingUsageCounterOmit<ExtArgs> | null
+    /**
+     * The filter to search for the SendingUsageCounter to update in case it exists.
+     */
+    where: SendingUsageCounterWhereUniqueInput
+    /**
+     * In case the SendingUsageCounter found by the `where` argument doesn't exist, create a new SendingUsageCounter with this data.
+     */
+    create: XOR<SendingUsageCounterCreateInput, SendingUsageCounterUncheckedCreateInput>
+    /**
+     * In case the SendingUsageCounter was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SendingUsageCounterUpdateInput, SendingUsageCounterUncheckedUpdateInput>
+  }
+
+  /**
+   * SendingUsageCounter delete
+   */
+  export type SendingUsageCounterDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SendingUsageCounter
+     */
+    select?: SendingUsageCounterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SendingUsageCounter
+     */
+    omit?: SendingUsageCounterOmit<ExtArgs> | null
+    /**
+     * Filter which SendingUsageCounter to delete.
+     */
+    where: SendingUsageCounterWhereUniqueInput
+  }
+
+  /**
+   * SendingUsageCounter deleteMany
+   */
+  export type SendingUsageCounterDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SendingUsageCounters to delete
+     */
+    where?: SendingUsageCounterWhereInput
+    /**
+     * Limit how many SendingUsageCounters to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * SendingUsageCounter without action
+   */
+  export type SendingUsageCounterDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SendingUsageCounter
+     */
+    select?: SendingUsageCounterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SendingUsageCounter
+     */
+    omit?: SendingUsageCounterOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Model GoalAchievement
    */
 
@@ -66862,6 +73594,7 @@ export namespace Prisma {
     metadata: 'metadata',
     sequence_enrollment_uuid: 'sequence_enrollment_uuid',
     sequence_step_uuid: 'sequence_step_uuid',
+    campaign_integration_uuid: 'campaign_integration_uuid',
     created_at: 'created_at',
     updated_at: 'updated_at'
   };
@@ -66912,6 +73645,8 @@ export namespace Prisma {
     campaign_uuid: 'campaign_uuid',
     status: 'status',
     enrolled_at: 'enrolled_at',
+    current_step_order_index: 'current_step_order_index',
+    first_step_sent_at: 'first_step_sent_at',
     cancelled_at: 'cancelled_at',
     completed_at: 'completed_at',
     created_at: 'created_at',
@@ -67138,6 +73873,8 @@ export namespace Prisma {
     integration_uuid: 'integration_uuid',
     account: 'account',
     title: 'title',
+    max_messages_per_period: 'max_messages_per_period',
+    max_messages_period_unit: 'max_messages_period_unit',
     created_at: 'created_at',
     updated_at: 'updated_at'
   };
@@ -67336,6 +74073,84 @@ export namespace Prisma {
   };
 
   export type EmailSendLimitScalarFieldEnum = (typeof EmailSendLimitScalarFieldEnum)[keyof typeof EmailSendLimitScalarFieldEnum]
+
+
+  export const SendingPolicyScalarFieldEnum: {
+    id: 'id',
+    uuid: 'uuid',
+    organisation_uuid: 'organisation_uuid',
+    name: 'name',
+    description: 'description',
+    is_template: 'is_template',
+    source_policy_uuid: 'source_policy_uuid',
+    timezone: 'timezone',
+    window_start_minute: 'window_start_minute',
+    window_end_minute: 'window_end_minute',
+    min_interval_seconds: 'min_interval_seconds',
+    min_interval_jitter_seconds: 'min_interval_jitter_seconds',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type SendingPolicyScalarFieldEnum = (typeof SendingPolicyScalarFieldEnum)[keyof typeof SendingPolicyScalarFieldEnum]
+
+
+  export const SendingPolicyStageScalarFieldEnum: {
+    id: 'id',
+    uuid: 'uuid',
+    sending_policy_uuid: 'sending_policy_uuid',
+    order_index: 'order_index',
+    limit: 'limit',
+    period_unit: 'period_unit',
+    duration_value: 'duration_value',
+    duration_unit: 'duration_unit',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type SendingPolicyStageScalarFieldEnum = (typeof SendingPolicyStageScalarFieldEnum)[keyof typeof SendingPolicyStageScalarFieldEnum]
+
+
+  export const CampaignIntegrationScalarFieldEnum: {
+    id: 'id',
+    uuid: 'uuid',
+    campaign_uuid: 'campaign_uuid',
+    integration_account_uuid: 'integration_account_uuid',
+    sending_policy_uuid: 'sending_policy_uuid',
+    status: 'status',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type CampaignIntegrationScalarFieldEnum = (typeof CampaignIntegrationScalarFieldEnum)[keyof typeof CampaignIntegrationScalarFieldEnum]
+
+
+  export const CampaignIntegrationStateScalarFieldEnum: {
+    id: 'id',
+    uuid: 'uuid',
+    campaign_integration_uuid: 'campaign_integration_uuid',
+    policy_started_at: 'policy_started_at',
+    last_sent_at: 'last_sent_at',
+    lifetime_sent_count: 'lifetime_sent_count',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type CampaignIntegrationStateScalarFieldEnum = (typeof CampaignIntegrationStateScalarFieldEnum)[keyof typeof CampaignIntegrationStateScalarFieldEnum]
+
+
+  export const SendingUsageCounterScalarFieldEnum: {
+    id: 'id',
+    uuid: 'uuid',
+    scope_type: 'scope_type',
+    scope_uuid: 'scope_uuid',
+    period_key: 'period_key',
+    count: 'count',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type SendingUsageCounterScalarFieldEnum = (typeof SendingUsageCounterScalarFieldEnum)[keyof typeof SendingUsageCounterScalarFieldEnum]
 
 
   export const GoalAchievementScalarFieldEnum: {
@@ -67936,6 +74751,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'SendingPeriodUnit'
+   */
+  export type EnumSendingPeriodUnitFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SendingPeriodUnit'>
+    
+
+
+  /**
+   * Reference to a field of type 'SendingPeriodUnit[]'
+   */
+  export type ListEnumSendingPeriodUnitFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SendingPeriodUnit[]'>
+    
+
+
+  /**
    * Reference to a field of type 'IntegrationKeyType'
    */
   export type EnumIntegrationKeyTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'IntegrationKeyType'>
@@ -68104,6 +74933,34 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'CampaignIntegrationStatus'
+   */
+  export type EnumCampaignIntegrationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CampaignIntegrationStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'CampaignIntegrationStatus[]'
+   */
+  export type ListEnumCampaignIntegrationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CampaignIntegrationStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'SendingUsageScopeType'
+   */
+  export type EnumSendingUsageScopeTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SendingUsageScopeType'>
+    
+
+
+  /**
+   * Reference to a field of type 'SendingUsageScopeType[]'
+   */
+  export type ListEnumSendingUsageScopeTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SendingUsageScopeType[]'>
+    
+
+
+  /**
    * Reference to a field of type 'GoalAchievementType'
    */
   export type EnumGoalAchievementTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GoalAchievementType'>
@@ -68260,6 +75117,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobListRelationFilter
     website_scrape_requests?: WebsiteScrapeRequestListRelationFilter
     email_send_limits?: EmailSendLimitListRelationFilter
+    sending_policies?: SendingPolicyListRelationFilter
   }
 
   export type OrganisationOrderByWithRelationInput = {
@@ -68298,6 +75156,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobOrderByRelationAggregateInput
     website_scrape_requests?: WebsiteScrapeRequestOrderByRelationAggregateInput
     email_send_limits?: EmailSendLimitOrderByRelationAggregateInput
+    sending_policies?: SendingPolicyOrderByRelationAggregateInput
   }
 
   export type OrganisationWhereUniqueInput = Prisma.AtLeast<{
@@ -68339,6 +75198,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobListRelationFilter
     website_scrape_requests?: WebsiteScrapeRequestListRelationFilter
     email_send_limits?: EmailSendLimitListRelationFilter
+    sending_policies?: SendingPolicyListRelationFilter
   }, "id" | "uuid" | "slug">
 
   export type OrganisationOrderByWithAggregationInput = {
@@ -69975,6 +76835,7 @@ export namespace Prisma {
     metadata?: JsonNullableFilter<"OutreachMessage">
     sequence_enrollment_uuid?: StringNullableFilter<"OutreachMessage"> | string | null
     sequence_step_uuid?: StringNullableFilter<"OutreachMessage"> | string | null
+    campaign_integration_uuid?: StringNullableFilter<"OutreachMessage"> | string | null
     created_at?: DateTimeFilter<"OutreachMessage"> | Date | string
     updated_at?: DateTimeFilter<"OutreachMessage"> | Date | string
     organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
@@ -69984,6 +76845,7 @@ export namespace Prisma {
     interaction?: XOR<InteractionNullableScalarRelationFilter, InteractionWhereInput> | null
     sequence_enrollment?: XOR<SequenceEnrollmentNullableScalarRelationFilter, SequenceEnrollmentWhereInput> | null
     sequence_step?: XOR<OutreachSequenceStepNullableScalarRelationFilter, OutreachSequenceStepWhereInput> | null
+    campaign_integration?: XOR<CampaignIntegrationNullableScalarRelationFilter, CampaignIntegrationWhereInput> | null
   }
 
   export type OutreachMessageOrderByWithRelationInput = {
@@ -70014,6 +76876,7 @@ export namespace Prisma {
     metadata?: SortOrderInput | SortOrder
     sequence_enrollment_uuid?: SortOrderInput | SortOrder
     sequence_step_uuid?: SortOrderInput | SortOrder
+    campaign_integration_uuid?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     organisation?: OrganisationOrderByWithRelationInput
@@ -70023,6 +76886,7 @@ export namespace Prisma {
     interaction?: InteractionOrderByWithRelationInput
     sequence_enrollment?: SequenceEnrollmentOrderByWithRelationInput
     sequence_step?: OutreachSequenceStepOrderByWithRelationInput
+    campaign_integration?: CampaignIntegrationOrderByWithRelationInput
   }
 
   export type OutreachMessageWhereUniqueInput = Prisma.AtLeast<{
@@ -70056,6 +76920,7 @@ export namespace Prisma {
     metadata?: JsonNullableFilter<"OutreachMessage">
     sequence_enrollment_uuid?: StringNullableFilter<"OutreachMessage"> | string | null
     sequence_step_uuid?: StringNullableFilter<"OutreachMessage"> | string | null
+    campaign_integration_uuid?: StringNullableFilter<"OutreachMessage"> | string | null
     created_at?: DateTimeFilter<"OutreachMessage"> | Date | string
     updated_at?: DateTimeFilter<"OutreachMessage"> | Date | string
     organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
@@ -70065,6 +76930,7 @@ export namespace Prisma {
     interaction?: XOR<InteractionNullableScalarRelationFilter, InteractionWhereInput> | null
     sequence_enrollment?: XOR<SequenceEnrollmentNullableScalarRelationFilter, SequenceEnrollmentWhereInput> | null
     sequence_step?: XOR<OutreachSequenceStepNullableScalarRelationFilter, OutreachSequenceStepWhereInput> | null
+    campaign_integration?: XOR<CampaignIntegrationNullableScalarRelationFilter, CampaignIntegrationWhereInput> | null
   }, "id" | "uuid" | "idempotency_key">
 
   export type OutreachMessageOrderByWithAggregationInput = {
@@ -70095,6 +76961,7 @@ export namespace Prisma {
     metadata?: SortOrderInput | SortOrder
     sequence_enrollment_uuid?: SortOrderInput | SortOrder
     sequence_step_uuid?: SortOrderInput | SortOrder
+    campaign_integration_uuid?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     _count?: OutreachMessageCountOrderByAggregateInput
@@ -70135,6 +77002,7 @@ export namespace Prisma {
     metadata?: JsonNullableWithAggregatesFilter<"OutreachMessage">
     sequence_enrollment_uuid?: StringNullableWithAggregatesFilter<"OutreachMessage"> | string | null
     sequence_step_uuid?: StringNullableWithAggregatesFilter<"OutreachMessage"> | string | null
+    campaign_integration_uuid?: StringNullableWithAggregatesFilter<"OutreachMessage"> | string | null
     created_at?: DateTimeWithAggregatesFilter<"OutreachMessage"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"OutreachMessage"> | Date | string
   }
@@ -70344,6 +77212,8 @@ export namespace Prisma {
     campaign_uuid?: StringNullableFilter<"SequenceEnrollment"> | string | null
     status?: EnumSequenceEnrollmentStatusFilter<"SequenceEnrollment"> | $Enums.SequenceEnrollmentStatus
     enrolled_at?: DateTimeFilter<"SequenceEnrollment"> | Date | string
+    current_step_order_index?: IntFilter<"SequenceEnrollment"> | number
+    first_step_sent_at?: DateTimeNullableFilter<"SequenceEnrollment"> | Date | string | null
     cancelled_at?: DateTimeNullableFilter<"SequenceEnrollment"> | Date | string | null
     completed_at?: DateTimeNullableFilter<"SequenceEnrollment"> | Date | string | null
     created_at?: DateTimeFilter<"SequenceEnrollment"> | Date | string
@@ -70362,6 +77232,8 @@ export namespace Prisma {
     campaign_uuid?: SortOrderInput | SortOrder
     status?: SortOrder
     enrolled_at?: SortOrder
+    current_step_order_index?: SortOrder
+    first_step_sent_at?: SortOrderInput | SortOrder
     cancelled_at?: SortOrderInput | SortOrder
     completed_at?: SortOrderInput | SortOrder
     created_at?: SortOrder
@@ -70384,6 +77256,8 @@ export namespace Prisma {
     campaign_uuid?: StringNullableFilter<"SequenceEnrollment"> | string | null
     status?: EnumSequenceEnrollmentStatusFilter<"SequenceEnrollment"> | $Enums.SequenceEnrollmentStatus
     enrolled_at?: DateTimeFilter<"SequenceEnrollment"> | Date | string
+    current_step_order_index?: IntFilter<"SequenceEnrollment"> | number
+    first_step_sent_at?: DateTimeNullableFilter<"SequenceEnrollment"> | Date | string | null
     cancelled_at?: DateTimeNullableFilter<"SequenceEnrollment"> | Date | string | null
     completed_at?: DateTimeNullableFilter<"SequenceEnrollment"> | Date | string | null
     created_at?: DateTimeFilter<"SequenceEnrollment"> | Date | string
@@ -70402,6 +77276,8 @@ export namespace Prisma {
     campaign_uuid?: SortOrderInput | SortOrder
     status?: SortOrder
     enrolled_at?: SortOrder
+    current_step_order_index?: SortOrder
+    first_step_sent_at?: SortOrderInput | SortOrder
     cancelled_at?: SortOrderInput | SortOrder
     completed_at?: SortOrderInput | SortOrder
     created_at?: SortOrder
@@ -70424,6 +77300,8 @@ export namespace Prisma {
     campaign_uuid?: StringNullableWithAggregatesFilter<"SequenceEnrollment"> | string | null
     status?: EnumSequenceEnrollmentStatusWithAggregatesFilter<"SequenceEnrollment"> | $Enums.SequenceEnrollmentStatus
     enrolled_at?: DateTimeWithAggregatesFilter<"SequenceEnrollment"> | Date | string
+    current_step_order_index?: IntWithAggregatesFilter<"SequenceEnrollment"> | number
+    first_step_sent_at?: DateTimeNullableWithAggregatesFilter<"SequenceEnrollment"> | Date | string | null
     cancelled_at?: DateTimeNullableWithAggregatesFilter<"SequenceEnrollment"> | Date | string | null
     completed_at?: DateTimeNullableWithAggregatesFilter<"SequenceEnrollment"> | Date | string | null
     created_at?: DateTimeWithAggregatesFilter<"SequenceEnrollment"> | Date | string
@@ -71062,6 +77940,7 @@ export namespace Prisma {
     outreach_messages?: OutreachMessageListRelationFilter
     interactions?: InteractionListRelationFilter
     sequence_enrollments?: SequenceEnrollmentListRelationFilter
+    campaign_integrations?: CampaignIntegrationListRelationFilter
   }
 
   export type MarketingCampaignOrderByWithRelationInput = {
@@ -71111,6 +77990,7 @@ export namespace Prisma {
     outreach_messages?: OutreachMessageOrderByRelationAggregateInput
     interactions?: InteractionOrderByRelationAggregateInput
     sequence_enrollments?: SequenceEnrollmentOrderByRelationAggregateInput
+    campaign_integrations?: CampaignIntegrationOrderByRelationAggregateInput
   }
 
   export type MarketingCampaignWhereUniqueInput = Prisma.AtLeast<{
@@ -71163,6 +78043,7 @@ export namespace Prisma {
     outreach_messages?: OutreachMessageListRelationFilter
     interactions?: InteractionListRelationFilter
     sequence_enrollments?: SequenceEnrollmentListRelationFilter
+    campaign_integrations?: CampaignIntegrationListRelationFilter
   }, "id" | "uuid">
 
   export type MarketingCampaignOrderByWithAggregationInput = {
@@ -71548,9 +78429,12 @@ export namespace Prisma {
     integration_uuid?: StringFilter<"IntegrationAccount"> | string
     account?: StringFilter<"IntegrationAccount"> | string
     title?: StringFilter<"IntegrationAccount"> | string
+    max_messages_per_period?: IntNullableFilter<"IntegrationAccount"> | number | null
+    max_messages_period_unit?: EnumSendingPeriodUnitNullableFilter<"IntegrationAccount"> | $Enums.SendingPeriodUnit | null
     created_at?: DateTimeFilter<"IntegrationAccount"> | Date | string
     updated_at?: DateTimeFilter<"IntegrationAccount"> | Date | string
     integration?: XOR<IntegrationScalarRelationFilter, IntegrationWhereInput>
+    campaign_integrations?: CampaignIntegrationListRelationFilter
   }
 
   export type IntegrationAccountOrderByWithRelationInput = {
@@ -71559,9 +78443,12 @@ export namespace Prisma {
     integration_uuid?: SortOrder
     account?: SortOrder
     title?: SortOrder
+    max_messages_per_period?: SortOrderInput | SortOrder
+    max_messages_period_unit?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     integration?: IntegrationOrderByWithRelationInput
+    campaign_integrations?: CampaignIntegrationOrderByRelationAggregateInput
   }
 
   export type IntegrationAccountWhereUniqueInput = Prisma.AtLeast<{
@@ -71574,9 +78461,12 @@ export namespace Prisma {
     integration_uuid?: StringFilter<"IntegrationAccount"> | string
     account?: StringFilter<"IntegrationAccount"> | string
     title?: StringFilter<"IntegrationAccount"> | string
+    max_messages_per_period?: IntNullableFilter<"IntegrationAccount"> | number | null
+    max_messages_period_unit?: EnumSendingPeriodUnitNullableFilter<"IntegrationAccount"> | $Enums.SendingPeriodUnit | null
     created_at?: DateTimeFilter<"IntegrationAccount"> | Date | string
     updated_at?: DateTimeFilter<"IntegrationAccount"> | Date | string
     integration?: XOR<IntegrationScalarRelationFilter, IntegrationWhereInput>
+    campaign_integrations?: CampaignIntegrationListRelationFilter
   }, "id" | "uuid" | "integration_uuid_account">
 
   export type IntegrationAccountOrderByWithAggregationInput = {
@@ -71585,6 +78475,8 @@ export namespace Prisma {
     integration_uuid?: SortOrder
     account?: SortOrder
     title?: SortOrder
+    max_messages_per_period?: SortOrderInput | SortOrder
+    max_messages_period_unit?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     _count?: IntegrationAccountCountOrderByAggregateInput
@@ -71603,6 +78495,8 @@ export namespace Prisma {
     integration_uuid?: StringWithAggregatesFilter<"IntegrationAccount"> | string
     account?: StringWithAggregatesFilter<"IntegrationAccount"> | string
     title?: StringWithAggregatesFilter<"IntegrationAccount"> | string
+    max_messages_per_period?: IntNullableWithAggregatesFilter<"IntegrationAccount"> | number | null
+    max_messages_period_unit?: EnumSendingPeriodUnitNullableWithAggregatesFilter<"IntegrationAccount"> | $Enums.SendingPeriodUnit | null
     created_at?: DateTimeWithAggregatesFilter<"IntegrationAccount"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"IntegrationAccount"> | Date | string
   }
@@ -72633,6 +79527,430 @@ export namespace Prisma {
     updated_at?: DateTimeWithAggregatesFilter<"EmailSendLimit"> | Date | string
   }
 
+  export type SendingPolicyWhereInput = {
+    AND?: SendingPolicyWhereInput | SendingPolicyWhereInput[]
+    OR?: SendingPolicyWhereInput[]
+    NOT?: SendingPolicyWhereInput | SendingPolicyWhereInput[]
+    id?: IntFilter<"SendingPolicy"> | number
+    uuid?: StringFilter<"SendingPolicy"> | string
+    organisation_uuid?: StringFilter<"SendingPolicy"> | string
+    name?: StringFilter<"SendingPolicy"> | string
+    description?: StringNullableFilter<"SendingPolicy"> | string | null
+    is_template?: BoolFilter<"SendingPolicy"> | boolean
+    source_policy_uuid?: StringNullableFilter<"SendingPolicy"> | string | null
+    timezone?: StringFilter<"SendingPolicy"> | string
+    window_start_minute?: IntNullableFilter<"SendingPolicy"> | number | null
+    window_end_minute?: IntNullableFilter<"SendingPolicy"> | number | null
+    min_interval_seconds?: IntFilter<"SendingPolicy"> | number
+    min_interval_jitter_seconds?: IntFilter<"SendingPolicy"> | number
+    created_at?: DateTimeFilter<"SendingPolicy"> | Date | string
+    updated_at?: DateTimeFilter<"SendingPolicy"> | Date | string
+    organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+    source_policy?: XOR<SendingPolicyNullableScalarRelationFilter, SendingPolicyWhereInput> | null
+    cloned_instances?: SendingPolicyListRelationFilter
+    stages?: SendingPolicyStageListRelationFilter
+    campaign_integrations?: CampaignIntegrationListRelationFilter
+  }
+
+  export type SendingPolicyOrderByWithRelationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    is_template?: SortOrder
+    source_policy_uuid?: SortOrderInput | SortOrder
+    timezone?: SortOrder
+    window_start_minute?: SortOrderInput | SortOrder
+    window_end_minute?: SortOrderInput | SortOrder
+    min_interval_seconds?: SortOrder
+    min_interval_jitter_seconds?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    organisation?: OrganisationOrderByWithRelationInput
+    source_policy?: SendingPolicyOrderByWithRelationInput
+    cloned_instances?: SendingPolicyOrderByRelationAggregateInput
+    stages?: SendingPolicyStageOrderByRelationAggregateInput
+    campaign_integrations?: CampaignIntegrationOrderByRelationAggregateInput
+  }
+
+  export type SendingPolicyWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    uuid?: string
+    AND?: SendingPolicyWhereInput | SendingPolicyWhereInput[]
+    OR?: SendingPolicyWhereInput[]
+    NOT?: SendingPolicyWhereInput | SendingPolicyWhereInput[]
+    organisation_uuid?: StringFilter<"SendingPolicy"> | string
+    name?: StringFilter<"SendingPolicy"> | string
+    description?: StringNullableFilter<"SendingPolicy"> | string | null
+    is_template?: BoolFilter<"SendingPolicy"> | boolean
+    source_policy_uuid?: StringNullableFilter<"SendingPolicy"> | string | null
+    timezone?: StringFilter<"SendingPolicy"> | string
+    window_start_minute?: IntNullableFilter<"SendingPolicy"> | number | null
+    window_end_minute?: IntNullableFilter<"SendingPolicy"> | number | null
+    min_interval_seconds?: IntFilter<"SendingPolicy"> | number
+    min_interval_jitter_seconds?: IntFilter<"SendingPolicy"> | number
+    created_at?: DateTimeFilter<"SendingPolicy"> | Date | string
+    updated_at?: DateTimeFilter<"SendingPolicy"> | Date | string
+    organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+    source_policy?: XOR<SendingPolicyNullableScalarRelationFilter, SendingPolicyWhereInput> | null
+    cloned_instances?: SendingPolicyListRelationFilter
+    stages?: SendingPolicyStageListRelationFilter
+    campaign_integrations?: CampaignIntegrationListRelationFilter
+  }, "id" | "uuid">
+
+  export type SendingPolicyOrderByWithAggregationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    is_template?: SortOrder
+    source_policy_uuid?: SortOrderInput | SortOrder
+    timezone?: SortOrder
+    window_start_minute?: SortOrderInput | SortOrder
+    window_end_minute?: SortOrderInput | SortOrder
+    min_interval_seconds?: SortOrder
+    min_interval_jitter_seconds?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: SendingPolicyCountOrderByAggregateInput
+    _avg?: SendingPolicyAvgOrderByAggregateInput
+    _max?: SendingPolicyMaxOrderByAggregateInput
+    _min?: SendingPolicyMinOrderByAggregateInput
+    _sum?: SendingPolicySumOrderByAggregateInput
+  }
+
+  export type SendingPolicyScalarWhereWithAggregatesInput = {
+    AND?: SendingPolicyScalarWhereWithAggregatesInput | SendingPolicyScalarWhereWithAggregatesInput[]
+    OR?: SendingPolicyScalarWhereWithAggregatesInput[]
+    NOT?: SendingPolicyScalarWhereWithAggregatesInput | SendingPolicyScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"SendingPolicy"> | number
+    uuid?: StringWithAggregatesFilter<"SendingPolicy"> | string
+    organisation_uuid?: StringWithAggregatesFilter<"SendingPolicy"> | string
+    name?: StringWithAggregatesFilter<"SendingPolicy"> | string
+    description?: StringNullableWithAggregatesFilter<"SendingPolicy"> | string | null
+    is_template?: BoolWithAggregatesFilter<"SendingPolicy"> | boolean
+    source_policy_uuid?: StringNullableWithAggregatesFilter<"SendingPolicy"> | string | null
+    timezone?: StringWithAggregatesFilter<"SendingPolicy"> | string
+    window_start_minute?: IntNullableWithAggregatesFilter<"SendingPolicy"> | number | null
+    window_end_minute?: IntNullableWithAggregatesFilter<"SendingPolicy"> | number | null
+    min_interval_seconds?: IntWithAggregatesFilter<"SendingPolicy"> | number
+    min_interval_jitter_seconds?: IntWithAggregatesFilter<"SendingPolicy"> | number
+    created_at?: DateTimeWithAggregatesFilter<"SendingPolicy"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"SendingPolicy"> | Date | string
+  }
+
+  export type SendingPolicyStageWhereInput = {
+    AND?: SendingPolicyStageWhereInput | SendingPolicyStageWhereInput[]
+    OR?: SendingPolicyStageWhereInput[]
+    NOT?: SendingPolicyStageWhereInput | SendingPolicyStageWhereInput[]
+    id?: IntFilter<"SendingPolicyStage"> | number
+    uuid?: StringFilter<"SendingPolicyStage"> | string
+    sending_policy_uuid?: StringFilter<"SendingPolicyStage"> | string
+    order_index?: IntFilter<"SendingPolicyStage"> | number
+    limit?: IntFilter<"SendingPolicyStage"> | number
+    period_unit?: EnumSendingPeriodUnitFilter<"SendingPolicyStage"> | $Enums.SendingPeriodUnit
+    duration_value?: IntNullableFilter<"SendingPolicyStage"> | number | null
+    duration_unit?: EnumSendingPeriodUnitNullableFilter<"SendingPolicyStage"> | $Enums.SendingPeriodUnit | null
+    created_at?: DateTimeFilter<"SendingPolicyStage"> | Date | string
+    updated_at?: DateTimeFilter<"SendingPolicyStage"> | Date | string
+    sending_policy?: XOR<SendingPolicyScalarRelationFilter, SendingPolicyWhereInput>
+  }
+
+  export type SendingPolicyStageOrderByWithRelationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    sending_policy_uuid?: SortOrder
+    order_index?: SortOrder
+    limit?: SortOrder
+    period_unit?: SortOrder
+    duration_value?: SortOrderInput | SortOrder
+    duration_unit?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    sending_policy?: SendingPolicyOrderByWithRelationInput
+  }
+
+  export type SendingPolicyStageWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    uuid?: string
+    sending_policy_uuid_order_index?: SendingPolicyStageSending_policy_uuidOrder_indexCompoundUniqueInput
+    AND?: SendingPolicyStageWhereInput | SendingPolicyStageWhereInput[]
+    OR?: SendingPolicyStageWhereInput[]
+    NOT?: SendingPolicyStageWhereInput | SendingPolicyStageWhereInput[]
+    sending_policy_uuid?: StringFilter<"SendingPolicyStage"> | string
+    order_index?: IntFilter<"SendingPolicyStage"> | number
+    limit?: IntFilter<"SendingPolicyStage"> | number
+    period_unit?: EnumSendingPeriodUnitFilter<"SendingPolicyStage"> | $Enums.SendingPeriodUnit
+    duration_value?: IntNullableFilter<"SendingPolicyStage"> | number | null
+    duration_unit?: EnumSendingPeriodUnitNullableFilter<"SendingPolicyStage"> | $Enums.SendingPeriodUnit | null
+    created_at?: DateTimeFilter<"SendingPolicyStage"> | Date | string
+    updated_at?: DateTimeFilter<"SendingPolicyStage"> | Date | string
+    sending_policy?: XOR<SendingPolicyScalarRelationFilter, SendingPolicyWhereInput>
+  }, "id" | "uuid" | "sending_policy_uuid_order_index">
+
+  export type SendingPolicyStageOrderByWithAggregationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    sending_policy_uuid?: SortOrder
+    order_index?: SortOrder
+    limit?: SortOrder
+    period_unit?: SortOrder
+    duration_value?: SortOrderInput | SortOrder
+    duration_unit?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: SendingPolicyStageCountOrderByAggregateInput
+    _avg?: SendingPolicyStageAvgOrderByAggregateInput
+    _max?: SendingPolicyStageMaxOrderByAggregateInput
+    _min?: SendingPolicyStageMinOrderByAggregateInput
+    _sum?: SendingPolicyStageSumOrderByAggregateInput
+  }
+
+  export type SendingPolicyStageScalarWhereWithAggregatesInput = {
+    AND?: SendingPolicyStageScalarWhereWithAggregatesInput | SendingPolicyStageScalarWhereWithAggregatesInput[]
+    OR?: SendingPolicyStageScalarWhereWithAggregatesInput[]
+    NOT?: SendingPolicyStageScalarWhereWithAggregatesInput | SendingPolicyStageScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"SendingPolicyStage"> | number
+    uuid?: StringWithAggregatesFilter<"SendingPolicyStage"> | string
+    sending_policy_uuid?: StringWithAggregatesFilter<"SendingPolicyStage"> | string
+    order_index?: IntWithAggregatesFilter<"SendingPolicyStage"> | number
+    limit?: IntWithAggregatesFilter<"SendingPolicyStage"> | number
+    period_unit?: EnumSendingPeriodUnitWithAggregatesFilter<"SendingPolicyStage"> | $Enums.SendingPeriodUnit
+    duration_value?: IntNullableWithAggregatesFilter<"SendingPolicyStage"> | number | null
+    duration_unit?: EnumSendingPeriodUnitNullableWithAggregatesFilter<"SendingPolicyStage"> | $Enums.SendingPeriodUnit | null
+    created_at?: DateTimeWithAggregatesFilter<"SendingPolicyStage"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"SendingPolicyStage"> | Date | string
+  }
+
+  export type CampaignIntegrationWhereInput = {
+    AND?: CampaignIntegrationWhereInput | CampaignIntegrationWhereInput[]
+    OR?: CampaignIntegrationWhereInput[]
+    NOT?: CampaignIntegrationWhereInput | CampaignIntegrationWhereInput[]
+    id?: IntFilter<"CampaignIntegration"> | number
+    uuid?: StringFilter<"CampaignIntegration"> | string
+    campaign_uuid?: StringFilter<"CampaignIntegration"> | string
+    integration_account_uuid?: StringFilter<"CampaignIntegration"> | string
+    sending_policy_uuid?: StringFilter<"CampaignIntegration"> | string
+    status?: EnumCampaignIntegrationStatusFilter<"CampaignIntegration"> | $Enums.CampaignIntegrationStatus
+    created_at?: DateTimeFilter<"CampaignIntegration"> | Date | string
+    updated_at?: DateTimeFilter<"CampaignIntegration"> | Date | string
+    campaign?: XOR<MarketingCampaignScalarRelationFilter, MarketingCampaignWhereInput>
+    integration_account?: XOR<IntegrationAccountScalarRelationFilter, IntegrationAccountWhereInput>
+    sending_policy?: XOR<SendingPolicyScalarRelationFilter, SendingPolicyWhereInput>
+    state?: XOR<CampaignIntegrationStateNullableScalarRelationFilter, CampaignIntegrationStateWhereInput> | null
+    outreach_messages?: OutreachMessageListRelationFilter
+  }
+
+  export type CampaignIntegrationOrderByWithRelationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    campaign_uuid?: SortOrder
+    integration_account_uuid?: SortOrder
+    sending_policy_uuid?: SortOrder
+    status?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    campaign?: MarketingCampaignOrderByWithRelationInput
+    integration_account?: IntegrationAccountOrderByWithRelationInput
+    sending_policy?: SendingPolicyOrderByWithRelationInput
+    state?: CampaignIntegrationStateOrderByWithRelationInput
+    outreach_messages?: OutreachMessageOrderByRelationAggregateInput
+  }
+
+  export type CampaignIntegrationWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    uuid?: string
+    campaign_uuid_integration_account_uuid?: CampaignIntegrationCampaign_uuidIntegration_account_uuidCompoundUniqueInput
+    AND?: CampaignIntegrationWhereInput | CampaignIntegrationWhereInput[]
+    OR?: CampaignIntegrationWhereInput[]
+    NOT?: CampaignIntegrationWhereInput | CampaignIntegrationWhereInput[]
+    campaign_uuid?: StringFilter<"CampaignIntegration"> | string
+    integration_account_uuid?: StringFilter<"CampaignIntegration"> | string
+    sending_policy_uuid?: StringFilter<"CampaignIntegration"> | string
+    status?: EnumCampaignIntegrationStatusFilter<"CampaignIntegration"> | $Enums.CampaignIntegrationStatus
+    created_at?: DateTimeFilter<"CampaignIntegration"> | Date | string
+    updated_at?: DateTimeFilter<"CampaignIntegration"> | Date | string
+    campaign?: XOR<MarketingCampaignScalarRelationFilter, MarketingCampaignWhereInput>
+    integration_account?: XOR<IntegrationAccountScalarRelationFilter, IntegrationAccountWhereInput>
+    sending_policy?: XOR<SendingPolicyScalarRelationFilter, SendingPolicyWhereInput>
+    state?: XOR<CampaignIntegrationStateNullableScalarRelationFilter, CampaignIntegrationStateWhereInput> | null
+    outreach_messages?: OutreachMessageListRelationFilter
+  }, "id" | "uuid" | "campaign_uuid_integration_account_uuid">
+
+  export type CampaignIntegrationOrderByWithAggregationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    campaign_uuid?: SortOrder
+    integration_account_uuid?: SortOrder
+    sending_policy_uuid?: SortOrder
+    status?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: CampaignIntegrationCountOrderByAggregateInput
+    _avg?: CampaignIntegrationAvgOrderByAggregateInput
+    _max?: CampaignIntegrationMaxOrderByAggregateInput
+    _min?: CampaignIntegrationMinOrderByAggregateInput
+    _sum?: CampaignIntegrationSumOrderByAggregateInput
+  }
+
+  export type CampaignIntegrationScalarWhereWithAggregatesInput = {
+    AND?: CampaignIntegrationScalarWhereWithAggregatesInput | CampaignIntegrationScalarWhereWithAggregatesInput[]
+    OR?: CampaignIntegrationScalarWhereWithAggregatesInput[]
+    NOT?: CampaignIntegrationScalarWhereWithAggregatesInput | CampaignIntegrationScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"CampaignIntegration"> | number
+    uuid?: StringWithAggregatesFilter<"CampaignIntegration"> | string
+    campaign_uuid?: StringWithAggregatesFilter<"CampaignIntegration"> | string
+    integration_account_uuid?: StringWithAggregatesFilter<"CampaignIntegration"> | string
+    sending_policy_uuid?: StringWithAggregatesFilter<"CampaignIntegration"> | string
+    status?: EnumCampaignIntegrationStatusWithAggregatesFilter<"CampaignIntegration"> | $Enums.CampaignIntegrationStatus
+    created_at?: DateTimeWithAggregatesFilter<"CampaignIntegration"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"CampaignIntegration"> | Date | string
+  }
+
+  export type CampaignIntegrationStateWhereInput = {
+    AND?: CampaignIntegrationStateWhereInput | CampaignIntegrationStateWhereInput[]
+    OR?: CampaignIntegrationStateWhereInput[]
+    NOT?: CampaignIntegrationStateWhereInput | CampaignIntegrationStateWhereInput[]
+    id?: IntFilter<"CampaignIntegrationState"> | number
+    uuid?: StringFilter<"CampaignIntegrationState"> | string
+    campaign_integration_uuid?: StringFilter<"CampaignIntegrationState"> | string
+    policy_started_at?: DateTimeNullableFilter<"CampaignIntegrationState"> | Date | string | null
+    last_sent_at?: DateTimeNullableFilter<"CampaignIntegrationState"> | Date | string | null
+    lifetime_sent_count?: IntFilter<"CampaignIntegrationState"> | number
+    created_at?: DateTimeFilter<"CampaignIntegrationState"> | Date | string
+    updated_at?: DateTimeFilter<"CampaignIntegrationState"> | Date | string
+    campaign_integration?: XOR<CampaignIntegrationScalarRelationFilter, CampaignIntegrationWhereInput>
+  }
+
+  export type CampaignIntegrationStateOrderByWithRelationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    campaign_integration_uuid?: SortOrder
+    policy_started_at?: SortOrderInput | SortOrder
+    last_sent_at?: SortOrderInput | SortOrder
+    lifetime_sent_count?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    campaign_integration?: CampaignIntegrationOrderByWithRelationInput
+  }
+
+  export type CampaignIntegrationStateWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    uuid?: string
+    campaign_integration_uuid?: string
+    AND?: CampaignIntegrationStateWhereInput | CampaignIntegrationStateWhereInput[]
+    OR?: CampaignIntegrationStateWhereInput[]
+    NOT?: CampaignIntegrationStateWhereInput | CampaignIntegrationStateWhereInput[]
+    policy_started_at?: DateTimeNullableFilter<"CampaignIntegrationState"> | Date | string | null
+    last_sent_at?: DateTimeNullableFilter<"CampaignIntegrationState"> | Date | string | null
+    lifetime_sent_count?: IntFilter<"CampaignIntegrationState"> | number
+    created_at?: DateTimeFilter<"CampaignIntegrationState"> | Date | string
+    updated_at?: DateTimeFilter<"CampaignIntegrationState"> | Date | string
+    campaign_integration?: XOR<CampaignIntegrationScalarRelationFilter, CampaignIntegrationWhereInput>
+  }, "id" | "uuid" | "campaign_integration_uuid">
+
+  export type CampaignIntegrationStateOrderByWithAggregationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    campaign_integration_uuid?: SortOrder
+    policy_started_at?: SortOrderInput | SortOrder
+    last_sent_at?: SortOrderInput | SortOrder
+    lifetime_sent_count?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: CampaignIntegrationStateCountOrderByAggregateInput
+    _avg?: CampaignIntegrationStateAvgOrderByAggregateInput
+    _max?: CampaignIntegrationStateMaxOrderByAggregateInput
+    _min?: CampaignIntegrationStateMinOrderByAggregateInput
+    _sum?: CampaignIntegrationStateSumOrderByAggregateInput
+  }
+
+  export type CampaignIntegrationStateScalarWhereWithAggregatesInput = {
+    AND?: CampaignIntegrationStateScalarWhereWithAggregatesInput | CampaignIntegrationStateScalarWhereWithAggregatesInput[]
+    OR?: CampaignIntegrationStateScalarWhereWithAggregatesInput[]
+    NOT?: CampaignIntegrationStateScalarWhereWithAggregatesInput | CampaignIntegrationStateScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"CampaignIntegrationState"> | number
+    uuid?: StringWithAggregatesFilter<"CampaignIntegrationState"> | string
+    campaign_integration_uuid?: StringWithAggregatesFilter<"CampaignIntegrationState"> | string
+    policy_started_at?: DateTimeNullableWithAggregatesFilter<"CampaignIntegrationState"> | Date | string | null
+    last_sent_at?: DateTimeNullableWithAggregatesFilter<"CampaignIntegrationState"> | Date | string | null
+    lifetime_sent_count?: IntWithAggregatesFilter<"CampaignIntegrationState"> | number
+    created_at?: DateTimeWithAggregatesFilter<"CampaignIntegrationState"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"CampaignIntegrationState"> | Date | string
+  }
+
+  export type SendingUsageCounterWhereInput = {
+    AND?: SendingUsageCounterWhereInput | SendingUsageCounterWhereInput[]
+    OR?: SendingUsageCounterWhereInput[]
+    NOT?: SendingUsageCounterWhereInput | SendingUsageCounterWhereInput[]
+    id?: IntFilter<"SendingUsageCounter"> | number
+    uuid?: StringFilter<"SendingUsageCounter"> | string
+    scope_type?: EnumSendingUsageScopeTypeFilter<"SendingUsageCounter"> | $Enums.SendingUsageScopeType
+    scope_uuid?: StringFilter<"SendingUsageCounter"> | string
+    period_key?: StringFilter<"SendingUsageCounter"> | string
+    count?: IntFilter<"SendingUsageCounter"> | number
+    created_at?: DateTimeFilter<"SendingUsageCounter"> | Date | string
+    updated_at?: DateTimeFilter<"SendingUsageCounter"> | Date | string
+  }
+
+  export type SendingUsageCounterOrderByWithRelationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    scope_type?: SortOrder
+    scope_uuid?: SortOrder
+    period_key?: SortOrder
+    count?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type SendingUsageCounterWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    uuid?: string
+    scope_type_scope_uuid_period_key?: SendingUsageCounterScope_typeScope_uuidPeriod_keyCompoundUniqueInput
+    AND?: SendingUsageCounterWhereInput | SendingUsageCounterWhereInput[]
+    OR?: SendingUsageCounterWhereInput[]
+    NOT?: SendingUsageCounterWhereInput | SendingUsageCounterWhereInput[]
+    scope_type?: EnumSendingUsageScopeTypeFilter<"SendingUsageCounter"> | $Enums.SendingUsageScopeType
+    scope_uuid?: StringFilter<"SendingUsageCounter"> | string
+    period_key?: StringFilter<"SendingUsageCounter"> | string
+    count?: IntFilter<"SendingUsageCounter"> | number
+    created_at?: DateTimeFilter<"SendingUsageCounter"> | Date | string
+    updated_at?: DateTimeFilter<"SendingUsageCounter"> | Date | string
+  }, "id" | "uuid" | "scope_type_scope_uuid_period_key">
+
+  export type SendingUsageCounterOrderByWithAggregationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    scope_type?: SortOrder
+    scope_uuid?: SortOrder
+    period_key?: SortOrder
+    count?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: SendingUsageCounterCountOrderByAggregateInput
+    _avg?: SendingUsageCounterAvgOrderByAggregateInput
+    _max?: SendingUsageCounterMaxOrderByAggregateInput
+    _min?: SendingUsageCounterMinOrderByAggregateInput
+    _sum?: SendingUsageCounterSumOrderByAggregateInput
+  }
+
+  export type SendingUsageCounterScalarWhereWithAggregatesInput = {
+    AND?: SendingUsageCounterScalarWhereWithAggregatesInput | SendingUsageCounterScalarWhereWithAggregatesInput[]
+    OR?: SendingUsageCounterScalarWhereWithAggregatesInput[]
+    NOT?: SendingUsageCounterScalarWhereWithAggregatesInput | SendingUsageCounterScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"SendingUsageCounter"> | number
+    uuid?: StringWithAggregatesFilter<"SendingUsageCounter"> | string
+    scope_type?: EnumSendingUsageScopeTypeWithAggregatesFilter<"SendingUsageCounter"> | $Enums.SendingUsageScopeType
+    scope_uuid?: StringWithAggregatesFilter<"SendingUsageCounter"> | string
+    period_key?: StringWithAggregatesFilter<"SendingUsageCounter"> | string
+    count?: IntWithAggregatesFilter<"SendingUsageCounter"> | number
+    created_at?: DateTimeWithAggregatesFilter<"SendingUsageCounter"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"SendingUsageCounter"> | Date | string
+  }
+
   export type GoalAchievementWhereInput = {
     AND?: GoalAchievementWhereInput | GoalAchievementWhereInput[]
     OR?: GoalAchievementWhereInput[]
@@ -73040,6 +80358,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateInput = {
@@ -73078,6 +80397,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUpdateInput = {
@@ -73115,6 +80435,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateInput = {
@@ -73153,6 +80474,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateManyInput = {
@@ -74853,6 +82175,7 @@ export namespace Prisma {
     interaction?: InteractionCreateNestedOneWithoutOutreach_messageInput
     sequence_enrollment?: SequenceEnrollmentCreateNestedOneWithoutOutreach_messagesInput
     sequence_step?: OutreachSequenceStepCreateNestedOneWithoutOutreach_messagesInput
+    campaign_integration?: CampaignIntegrationCreateNestedOneWithoutOutreach_messagesInput
   }
 
   export type OutreachMessageUncheckedCreateInput = {
@@ -74883,6 +82206,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: string | null
     sequence_step_uuid?: string | null
+    campaign_integration_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     interaction?: InteractionUncheckedCreateNestedOneWithoutOutreach_messageInput
@@ -74918,6 +82242,7 @@ export namespace Prisma {
     interaction?: InteractionUpdateOneWithoutOutreach_messageNestedInput
     sequence_enrollment?: SequenceEnrollmentUpdateOneWithoutOutreach_messagesNestedInput
     sequence_step?: OutreachSequenceStepUpdateOneWithoutOutreach_messagesNestedInput
+    campaign_integration?: CampaignIntegrationUpdateOneWithoutOutreach_messagesNestedInput
   }
 
   export type OutreachMessageUncheckedUpdateInput = {
@@ -74948,6 +82273,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     sequence_step_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    campaign_integration_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     interaction?: InteractionUncheckedUpdateOneWithoutOutreach_messageNestedInput
@@ -74981,6 +82307,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: string | null
     sequence_step_uuid?: string | null
+    campaign_integration_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -75038,6 +82365,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     sequence_step_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    campaign_integration_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -75256,6 +82584,8 @@ export namespace Prisma {
     uuid?: string
     status?: $Enums.SequenceEnrollmentStatus
     enrolled_at?: Date | string
+    current_step_order_index?: number
+    first_step_sent_at?: Date | string | null
     cancelled_at?: Date | string | null
     completed_at?: Date | string | null
     created_at?: Date | string
@@ -75274,6 +82604,8 @@ export namespace Prisma {
     campaign_uuid?: string | null
     status?: $Enums.SequenceEnrollmentStatus
     enrolled_at?: Date | string
+    current_step_order_index?: number
+    first_step_sent_at?: Date | string | null
     cancelled_at?: Date | string | null
     completed_at?: Date | string | null
     created_at?: Date | string
@@ -75285,6 +82617,8 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     status?: EnumSequenceEnrollmentStatusFieldUpdateOperationsInput | $Enums.SequenceEnrollmentStatus
     enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    current_step_order_index?: IntFieldUpdateOperationsInput | number
+    first_step_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -75303,6 +82637,8 @@ export namespace Prisma {
     campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSequenceEnrollmentStatusFieldUpdateOperationsInput | $Enums.SequenceEnrollmentStatus
     enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    current_step_order_index?: IntFieldUpdateOperationsInput | number
+    first_step_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -75318,6 +82654,8 @@ export namespace Prisma {
     campaign_uuid?: string | null
     status?: $Enums.SequenceEnrollmentStatus
     enrolled_at?: Date | string
+    current_step_order_index?: number
+    first_step_sent_at?: Date | string | null
     cancelled_at?: Date | string | null
     completed_at?: Date | string | null
     created_at?: Date | string
@@ -75328,6 +82666,8 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     status?: EnumSequenceEnrollmentStatusFieldUpdateOperationsInput | $Enums.SequenceEnrollmentStatus
     enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    current_step_order_index?: IntFieldUpdateOperationsInput | number
+    first_step_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -75342,6 +82682,8 @@ export namespace Prisma {
     campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSequenceEnrollmentStatusFieldUpdateOperationsInput | $Enums.SequenceEnrollmentStatus
     enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    current_step_order_index?: IntFieldUpdateOperationsInput | number
+    first_step_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -76067,6 +83409,7 @@ export namespace Prisma {
     outreach_messages?: OutreachMessageCreateNestedManyWithoutCampaignInput
     interactions?: InteractionCreateNestedManyWithoutCampaignInput
     sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutCampaignInput
+    campaign_integrations?: CampaignIntegrationCreateNestedManyWithoutCampaignInput
   }
 
   export type MarketingCampaignUncheckedCreateInput = {
@@ -76113,6 +83456,7 @@ export namespace Prisma {
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutCampaignInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutCampaignInput
     sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutCampaignInput
+    campaign_integrations?: CampaignIntegrationUncheckedCreateNestedManyWithoutCampaignInput
   }
 
   export type MarketingCampaignUpdateInput = {
@@ -76158,6 +83502,7 @@ export namespace Prisma {
     outreach_messages?: OutreachMessageUpdateManyWithoutCampaignNestedInput
     interactions?: InteractionUpdateManyWithoutCampaignNestedInput
     sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutCampaignNestedInput
+    campaign_integrations?: CampaignIntegrationUpdateManyWithoutCampaignNestedInput
   }
 
   export type MarketingCampaignUncheckedUpdateInput = {
@@ -76204,6 +83549,7 @@ export namespace Prisma {
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutCampaignNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutCampaignNestedInput
     sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutCampaignNestedInput
+    campaign_integrations?: CampaignIntegrationUncheckedUpdateManyWithoutCampaignNestedInput
   }
 
   export type MarketingCampaignCreateManyInput = {
@@ -76638,9 +83984,12 @@ export namespace Prisma {
     uuid?: string
     account: string
     title: string
+    max_messages_per_period?: number | null
+    max_messages_period_unit?: $Enums.SendingPeriodUnit | null
     created_at?: Date | string
     updated_at?: Date | string
     integration: IntegrationCreateNestedOneWithoutAccountsInput
+    campaign_integrations?: CampaignIntegrationCreateNestedManyWithoutIntegration_accountInput
   }
 
   export type IntegrationAccountUncheckedCreateInput = {
@@ -76649,17 +83998,23 @@ export namespace Prisma {
     integration_uuid: string
     account: string
     title: string
+    max_messages_per_period?: number | null
+    max_messages_period_unit?: $Enums.SendingPeriodUnit | null
     created_at?: Date | string
     updated_at?: Date | string
+    campaign_integrations?: CampaignIntegrationUncheckedCreateNestedManyWithoutIntegration_accountInput
   }
 
   export type IntegrationAccountUpdateInput = {
     uuid?: StringFieldUpdateOperationsInput | string
     account?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
+    max_messages_per_period?: NullableIntFieldUpdateOperationsInput | number | null
+    max_messages_period_unit?: NullableEnumSendingPeriodUnitFieldUpdateOperationsInput | $Enums.SendingPeriodUnit | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     integration?: IntegrationUpdateOneRequiredWithoutAccountsNestedInput
+    campaign_integrations?: CampaignIntegrationUpdateManyWithoutIntegration_accountNestedInput
   }
 
   export type IntegrationAccountUncheckedUpdateInput = {
@@ -76668,8 +84023,11 @@ export namespace Prisma {
     integration_uuid?: StringFieldUpdateOperationsInput | string
     account?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
+    max_messages_per_period?: NullableIntFieldUpdateOperationsInput | number | null
+    max_messages_period_unit?: NullableEnumSendingPeriodUnitFieldUpdateOperationsInput | $Enums.SendingPeriodUnit | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    campaign_integrations?: CampaignIntegrationUncheckedUpdateManyWithoutIntegration_accountNestedInput
   }
 
   export type IntegrationAccountCreateManyInput = {
@@ -76678,6 +84036,8 @@ export namespace Prisma {
     integration_uuid: string
     account: string
     title: string
+    max_messages_per_period?: number | null
+    max_messages_period_unit?: $Enums.SendingPeriodUnit | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -76686,6 +84046,8 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     account?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
+    max_messages_per_period?: NullableIntFieldUpdateOperationsInput | number | null
+    max_messages_period_unit?: NullableEnumSendingPeriodUnitFieldUpdateOperationsInput | $Enums.SendingPeriodUnit | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -76696,6 +84058,8 @@ export namespace Prisma {
     integration_uuid?: StringFieldUpdateOperationsInput | string
     account?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
+    max_messages_per_period?: NullableIntFieldUpdateOperationsInput | number | null
+    max_messages_period_unit?: NullableEnumSendingPeriodUnitFieldUpdateOperationsInput | $Enums.SendingPeriodUnit | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -77795,6 +85159,445 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type SendingPolicyCreateInput = {
+    uuid?: string
+    name: string
+    description?: string | null
+    is_template?: boolean
+    timezone?: string
+    window_start_minute?: number | null
+    window_end_minute?: number | null
+    min_interval_seconds?: number
+    min_interval_jitter_seconds?: number
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutSending_policiesInput
+    source_policy?: SendingPolicyCreateNestedOneWithoutCloned_instancesInput
+    cloned_instances?: SendingPolicyCreateNestedManyWithoutSource_policyInput
+    stages?: SendingPolicyStageCreateNestedManyWithoutSending_policyInput
+    campaign_integrations?: CampaignIntegrationCreateNestedManyWithoutSending_policyInput
+  }
+
+  export type SendingPolicyUncheckedCreateInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    name: string
+    description?: string | null
+    is_template?: boolean
+    source_policy_uuid?: string | null
+    timezone?: string
+    window_start_minute?: number | null
+    window_end_minute?: number | null
+    min_interval_seconds?: number
+    min_interval_jitter_seconds?: number
+    created_at?: Date | string
+    updated_at?: Date | string
+    cloned_instances?: SendingPolicyUncheckedCreateNestedManyWithoutSource_policyInput
+    stages?: SendingPolicyStageUncheckedCreateNestedManyWithoutSending_policyInput
+    campaign_integrations?: CampaignIntegrationUncheckedCreateNestedManyWithoutSending_policyInput
+  }
+
+  export type SendingPolicyUpdateInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    is_template?: BoolFieldUpdateOperationsInput | boolean
+    timezone?: StringFieldUpdateOperationsInput | string
+    window_start_minute?: NullableIntFieldUpdateOperationsInput | number | null
+    window_end_minute?: NullableIntFieldUpdateOperationsInput | number | null
+    min_interval_seconds?: IntFieldUpdateOperationsInput | number
+    min_interval_jitter_seconds?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutSending_policiesNestedInput
+    source_policy?: SendingPolicyUpdateOneWithoutCloned_instancesNestedInput
+    cloned_instances?: SendingPolicyUpdateManyWithoutSource_policyNestedInput
+    stages?: SendingPolicyStageUpdateManyWithoutSending_policyNestedInput
+    campaign_integrations?: CampaignIntegrationUpdateManyWithoutSending_policyNestedInput
+  }
+
+  export type SendingPolicyUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    is_template?: BoolFieldUpdateOperationsInput | boolean
+    source_policy_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    timezone?: StringFieldUpdateOperationsInput | string
+    window_start_minute?: NullableIntFieldUpdateOperationsInput | number | null
+    window_end_minute?: NullableIntFieldUpdateOperationsInput | number | null
+    min_interval_seconds?: IntFieldUpdateOperationsInput | number
+    min_interval_jitter_seconds?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    cloned_instances?: SendingPolicyUncheckedUpdateManyWithoutSource_policyNestedInput
+    stages?: SendingPolicyStageUncheckedUpdateManyWithoutSending_policyNestedInput
+    campaign_integrations?: CampaignIntegrationUncheckedUpdateManyWithoutSending_policyNestedInput
+  }
+
+  export type SendingPolicyCreateManyInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    name: string
+    description?: string | null
+    is_template?: boolean
+    source_policy_uuid?: string | null
+    timezone?: string
+    window_start_minute?: number | null
+    window_end_minute?: number | null
+    min_interval_seconds?: number
+    min_interval_jitter_seconds?: number
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type SendingPolicyUpdateManyMutationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    is_template?: BoolFieldUpdateOperationsInput | boolean
+    timezone?: StringFieldUpdateOperationsInput | string
+    window_start_minute?: NullableIntFieldUpdateOperationsInput | number | null
+    window_end_minute?: NullableIntFieldUpdateOperationsInput | number | null
+    min_interval_seconds?: IntFieldUpdateOperationsInput | number
+    min_interval_jitter_seconds?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SendingPolicyUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    is_template?: BoolFieldUpdateOperationsInput | boolean
+    source_policy_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    timezone?: StringFieldUpdateOperationsInput | string
+    window_start_minute?: NullableIntFieldUpdateOperationsInput | number | null
+    window_end_minute?: NullableIntFieldUpdateOperationsInput | number | null
+    min_interval_seconds?: IntFieldUpdateOperationsInput | number
+    min_interval_jitter_seconds?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SendingPolicyStageCreateInput = {
+    uuid?: string
+    order_index: number
+    limit: number
+    period_unit: $Enums.SendingPeriodUnit
+    duration_value?: number | null
+    duration_unit?: $Enums.SendingPeriodUnit | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    sending_policy: SendingPolicyCreateNestedOneWithoutStagesInput
+  }
+
+  export type SendingPolicyStageUncheckedCreateInput = {
+    id?: number
+    uuid?: string
+    sending_policy_uuid: string
+    order_index: number
+    limit: number
+    period_unit: $Enums.SendingPeriodUnit
+    duration_value?: number | null
+    duration_unit?: $Enums.SendingPeriodUnit | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type SendingPolicyStageUpdateInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    order_index?: IntFieldUpdateOperationsInput | number
+    limit?: IntFieldUpdateOperationsInput | number
+    period_unit?: EnumSendingPeriodUnitFieldUpdateOperationsInput | $Enums.SendingPeriodUnit
+    duration_value?: NullableIntFieldUpdateOperationsInput | number | null
+    duration_unit?: NullableEnumSendingPeriodUnitFieldUpdateOperationsInput | $Enums.SendingPeriodUnit | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    sending_policy?: SendingPolicyUpdateOneRequiredWithoutStagesNestedInput
+  }
+
+  export type SendingPolicyStageUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    sending_policy_uuid?: StringFieldUpdateOperationsInput | string
+    order_index?: IntFieldUpdateOperationsInput | number
+    limit?: IntFieldUpdateOperationsInput | number
+    period_unit?: EnumSendingPeriodUnitFieldUpdateOperationsInput | $Enums.SendingPeriodUnit
+    duration_value?: NullableIntFieldUpdateOperationsInput | number | null
+    duration_unit?: NullableEnumSendingPeriodUnitFieldUpdateOperationsInput | $Enums.SendingPeriodUnit | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SendingPolicyStageCreateManyInput = {
+    id?: number
+    uuid?: string
+    sending_policy_uuid: string
+    order_index: number
+    limit: number
+    period_unit: $Enums.SendingPeriodUnit
+    duration_value?: number | null
+    duration_unit?: $Enums.SendingPeriodUnit | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type SendingPolicyStageUpdateManyMutationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    order_index?: IntFieldUpdateOperationsInput | number
+    limit?: IntFieldUpdateOperationsInput | number
+    period_unit?: EnumSendingPeriodUnitFieldUpdateOperationsInput | $Enums.SendingPeriodUnit
+    duration_value?: NullableIntFieldUpdateOperationsInput | number | null
+    duration_unit?: NullableEnumSendingPeriodUnitFieldUpdateOperationsInput | $Enums.SendingPeriodUnit | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SendingPolicyStageUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    sending_policy_uuid?: StringFieldUpdateOperationsInput | string
+    order_index?: IntFieldUpdateOperationsInput | number
+    limit?: IntFieldUpdateOperationsInput | number
+    period_unit?: EnumSendingPeriodUnitFieldUpdateOperationsInput | $Enums.SendingPeriodUnit
+    duration_value?: NullableIntFieldUpdateOperationsInput | number | null
+    duration_unit?: NullableEnumSendingPeriodUnitFieldUpdateOperationsInput | $Enums.SendingPeriodUnit | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CampaignIntegrationCreateInput = {
+    uuid?: string
+    status?: $Enums.CampaignIntegrationStatus
+    created_at?: Date | string
+    updated_at?: Date | string
+    campaign: MarketingCampaignCreateNestedOneWithoutCampaign_integrationsInput
+    integration_account: IntegrationAccountCreateNestedOneWithoutCampaign_integrationsInput
+    sending_policy: SendingPolicyCreateNestedOneWithoutCampaign_integrationsInput
+    state?: CampaignIntegrationStateCreateNestedOneWithoutCampaign_integrationInput
+    outreach_messages?: OutreachMessageCreateNestedManyWithoutCampaign_integrationInput
+  }
+
+  export type CampaignIntegrationUncheckedCreateInput = {
+    id?: number
+    uuid?: string
+    campaign_uuid: string
+    integration_account_uuid: string
+    sending_policy_uuid: string
+    status?: $Enums.CampaignIntegrationStatus
+    created_at?: Date | string
+    updated_at?: Date | string
+    state?: CampaignIntegrationStateUncheckedCreateNestedOneWithoutCampaign_integrationInput
+    outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutCampaign_integrationInput
+  }
+
+  export type CampaignIntegrationUpdateInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumCampaignIntegrationStatusFieldUpdateOperationsInput | $Enums.CampaignIntegrationStatus
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    campaign?: MarketingCampaignUpdateOneRequiredWithoutCampaign_integrationsNestedInput
+    integration_account?: IntegrationAccountUpdateOneRequiredWithoutCampaign_integrationsNestedInput
+    sending_policy?: SendingPolicyUpdateOneRequiredWithoutCampaign_integrationsNestedInput
+    state?: CampaignIntegrationStateUpdateOneWithoutCampaign_integrationNestedInput
+    outreach_messages?: OutreachMessageUpdateManyWithoutCampaign_integrationNestedInput
+  }
+
+  export type CampaignIntegrationUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    campaign_uuid?: StringFieldUpdateOperationsInput | string
+    integration_account_uuid?: StringFieldUpdateOperationsInput | string
+    sending_policy_uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumCampaignIntegrationStatusFieldUpdateOperationsInput | $Enums.CampaignIntegrationStatus
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    state?: CampaignIntegrationStateUncheckedUpdateOneWithoutCampaign_integrationNestedInput
+    outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutCampaign_integrationNestedInput
+  }
+
+  export type CampaignIntegrationCreateManyInput = {
+    id?: number
+    uuid?: string
+    campaign_uuid: string
+    integration_account_uuid: string
+    sending_policy_uuid: string
+    status?: $Enums.CampaignIntegrationStatus
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type CampaignIntegrationUpdateManyMutationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumCampaignIntegrationStatusFieldUpdateOperationsInput | $Enums.CampaignIntegrationStatus
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CampaignIntegrationUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    campaign_uuid?: StringFieldUpdateOperationsInput | string
+    integration_account_uuid?: StringFieldUpdateOperationsInput | string
+    sending_policy_uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumCampaignIntegrationStatusFieldUpdateOperationsInput | $Enums.CampaignIntegrationStatus
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CampaignIntegrationStateCreateInput = {
+    uuid?: string
+    policy_started_at?: Date | string | null
+    last_sent_at?: Date | string | null
+    lifetime_sent_count?: number
+    created_at?: Date | string
+    updated_at?: Date | string
+    campaign_integration: CampaignIntegrationCreateNestedOneWithoutStateInput
+  }
+
+  export type CampaignIntegrationStateUncheckedCreateInput = {
+    id?: number
+    uuid?: string
+    campaign_integration_uuid: string
+    policy_started_at?: Date | string | null
+    last_sent_at?: Date | string | null
+    lifetime_sent_count?: number
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type CampaignIntegrationStateUpdateInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    policy_started_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    last_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lifetime_sent_count?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    campaign_integration?: CampaignIntegrationUpdateOneRequiredWithoutStateNestedInput
+  }
+
+  export type CampaignIntegrationStateUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    campaign_integration_uuid?: StringFieldUpdateOperationsInput | string
+    policy_started_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    last_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lifetime_sent_count?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CampaignIntegrationStateCreateManyInput = {
+    id?: number
+    uuid?: string
+    campaign_integration_uuid: string
+    policy_started_at?: Date | string | null
+    last_sent_at?: Date | string | null
+    lifetime_sent_count?: number
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type CampaignIntegrationStateUpdateManyMutationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    policy_started_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    last_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lifetime_sent_count?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CampaignIntegrationStateUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    campaign_integration_uuid?: StringFieldUpdateOperationsInput | string
+    policy_started_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    last_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lifetime_sent_count?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SendingUsageCounterCreateInput = {
+    uuid?: string
+    scope_type: $Enums.SendingUsageScopeType
+    scope_uuid: string
+    period_key: string
+    count?: number
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type SendingUsageCounterUncheckedCreateInput = {
+    id?: number
+    uuid?: string
+    scope_type: $Enums.SendingUsageScopeType
+    scope_uuid: string
+    period_key: string
+    count?: number
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type SendingUsageCounterUpdateInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    scope_type?: EnumSendingUsageScopeTypeFieldUpdateOperationsInput | $Enums.SendingUsageScopeType
+    scope_uuid?: StringFieldUpdateOperationsInput | string
+    period_key?: StringFieldUpdateOperationsInput | string
+    count?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SendingUsageCounterUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    scope_type?: EnumSendingUsageScopeTypeFieldUpdateOperationsInput | $Enums.SendingUsageScopeType
+    scope_uuid?: StringFieldUpdateOperationsInput | string
+    period_key?: StringFieldUpdateOperationsInput | string
+    count?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SendingUsageCounterCreateManyInput = {
+    id?: number
+    uuid?: string
+    scope_type: $Enums.SendingUsageScopeType
+    scope_uuid: string
+    period_key: string
+    count?: number
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type SendingUsageCounterUpdateManyMutationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    scope_type?: EnumSendingUsageScopeTypeFieldUpdateOperationsInput | $Enums.SendingUsageScopeType
+    scope_uuid?: StringFieldUpdateOperationsInput | string
+    period_key?: StringFieldUpdateOperationsInput | string
+    count?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SendingUsageCounterUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    scope_type?: EnumSendingUsageScopeTypeFieldUpdateOperationsInput | $Enums.SendingUsageScopeType
+    scope_uuid?: StringFieldUpdateOperationsInput | string
+    period_key?: StringFieldUpdateOperationsInput | string
+    count?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type GoalAchievementCreateInput = {
     uuid?: string
     type: $Enums.GoalAchievementType
@@ -78433,6 +86236,12 @@ export namespace Prisma {
     none?: EmailSendLimitWhereInput
   }
 
+  export type SendingPolicyListRelationFilter = {
+    every?: SendingPolicyWhereInput
+    some?: SendingPolicyWhereInput
+    none?: SendingPolicyWhereInput
+  }
+
   export type FilterOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -78506,6 +86315,10 @@ export namespace Prisma {
   }
 
   export type EmailSendLimitOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type SendingPolicyOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -79981,6 +87794,11 @@ export namespace Prisma {
     isNot?: OutreachSequenceStepWhereInput | null
   }
 
+  export type CampaignIntegrationNullableScalarRelationFilter = {
+    is?: CampaignIntegrationWhereInput | null
+    isNot?: CampaignIntegrationWhereInput | null
+  }
+
   export type OutreachMessageCountOrderByAggregateInput = {
     id?: SortOrder
     uuid?: SortOrder
@@ -80009,6 +87827,7 @@ export namespace Prisma {
     metadata?: SortOrder
     sequence_enrollment_uuid?: SortOrder
     sequence_step_uuid?: SortOrder
+    campaign_integration_uuid?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -80044,6 +87863,7 @@ export namespace Prisma {
     sms_provider?: SortOrder
     sequence_enrollment_uuid?: SortOrder
     sequence_step_uuid?: SortOrder
+    campaign_integration_uuid?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -80075,6 +87895,7 @@ export namespace Prisma {
     sms_provider?: SortOrder
     sequence_enrollment_uuid?: SortOrder
     sequence_step_uuid?: SortOrder
+    campaign_integration_uuid?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -80322,6 +88143,8 @@ export namespace Prisma {
     campaign_uuid?: SortOrder
     status?: SortOrder
     enrolled_at?: SortOrder
+    current_step_order_index?: SortOrder
+    first_step_sent_at?: SortOrder
     cancelled_at?: SortOrder
     completed_at?: SortOrder
     created_at?: SortOrder
@@ -80330,6 +88153,7 @@ export namespace Prisma {
 
   export type SequenceEnrollmentAvgOrderByAggregateInput = {
     id?: SortOrder
+    current_step_order_index?: SortOrder
   }
 
   export type SequenceEnrollmentMaxOrderByAggregateInput = {
@@ -80340,6 +88164,8 @@ export namespace Prisma {
     campaign_uuid?: SortOrder
     status?: SortOrder
     enrolled_at?: SortOrder
+    current_step_order_index?: SortOrder
+    first_step_sent_at?: SortOrder
     cancelled_at?: SortOrder
     completed_at?: SortOrder
     created_at?: SortOrder
@@ -80354,6 +88180,8 @@ export namespace Prisma {
     campaign_uuid?: SortOrder
     status?: SortOrder
     enrolled_at?: SortOrder
+    current_step_order_index?: SortOrder
+    first_step_sent_at?: SortOrder
     cancelled_at?: SortOrder
     completed_at?: SortOrder
     created_at?: SortOrder
@@ -80362,6 +88190,7 @@ export namespace Prisma {
 
   export type SequenceEnrollmentSumOrderByAggregateInput = {
     id?: SortOrder
+    current_step_order_index?: SortOrder
   }
 
   export type EnumSequenceEnrollmentStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -80847,6 +88676,16 @@ export namespace Prisma {
     isNot?: OutreachSequenceWhereInput | null
   }
 
+  export type CampaignIntegrationListRelationFilter = {
+    every?: CampaignIntegrationWhereInput
+    some?: CampaignIntegrationWhereInput
+    none?: CampaignIntegrationWhereInput
+  }
+
+  export type CampaignIntegrationOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type MarketingCampaignCountOrderByAggregateInput = {
     id?: SortOrder
     uuid?: SortOrder
@@ -81285,6 +89124,13 @@ export namespace Prisma {
     _max?: NestedEnumExternalIntegrationProviderFilter<$PrismaModel>
   }
 
+  export type EnumSendingPeriodUnitNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.SendingPeriodUnit | EnumSendingPeriodUnitFieldRefInput<$PrismaModel> | null
+    in?: $Enums.SendingPeriodUnit[] | ListEnumSendingPeriodUnitFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.SendingPeriodUnit[] | ListEnumSendingPeriodUnitFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumSendingPeriodUnitNullableFilter<$PrismaModel> | $Enums.SendingPeriodUnit | null
+  }
+
   export type IntegrationScalarRelationFilter = {
     is?: IntegrationWhereInput
     isNot?: IntegrationWhereInput
@@ -81301,12 +89147,15 @@ export namespace Prisma {
     integration_uuid?: SortOrder
     account?: SortOrder
     title?: SortOrder
+    max_messages_per_period?: SortOrder
+    max_messages_period_unit?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
 
   export type IntegrationAccountAvgOrderByAggregateInput = {
     id?: SortOrder
+    max_messages_per_period?: SortOrder
   }
 
   export type IntegrationAccountMaxOrderByAggregateInput = {
@@ -81315,6 +89164,8 @@ export namespace Prisma {
     integration_uuid?: SortOrder
     account?: SortOrder
     title?: SortOrder
+    max_messages_per_period?: SortOrder
+    max_messages_period_unit?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -81325,12 +89176,25 @@ export namespace Prisma {
     integration_uuid?: SortOrder
     account?: SortOrder
     title?: SortOrder
+    max_messages_per_period?: SortOrder
+    max_messages_period_unit?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
 
   export type IntegrationAccountSumOrderByAggregateInput = {
     id?: SortOrder
+    max_messages_per_period?: SortOrder
+  }
+
+  export type EnumSendingPeriodUnitNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SendingPeriodUnit | EnumSendingPeriodUnitFieldRefInput<$PrismaModel> | null
+    in?: $Enums.SendingPeriodUnit[] | ListEnumSendingPeriodUnitFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.SendingPeriodUnit[] | ListEnumSendingPeriodUnitFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumSendingPeriodUnitNullableWithAggregatesFilter<$PrismaModel> | $Enums.SendingPeriodUnit | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumSendingPeriodUnitNullableFilter<$PrismaModel>
+    _max?: NestedEnumSendingPeriodUnitNullableFilter<$PrismaModel>
   }
 
   export type EnumIntegrationKeyTypeFilter<$PrismaModel = never> = {
@@ -82188,6 +90052,355 @@ export namespace Prisma {
     max_count?: SortOrder
   }
 
+  export type SendingPolicyNullableScalarRelationFilter = {
+    is?: SendingPolicyWhereInput | null
+    isNot?: SendingPolicyWhereInput | null
+  }
+
+  export type SendingPolicyStageListRelationFilter = {
+    every?: SendingPolicyStageWhereInput
+    some?: SendingPolicyStageWhereInput
+    none?: SendingPolicyStageWhereInput
+  }
+
+  export type SendingPolicyStageOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type SendingPolicyCountOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    is_template?: SortOrder
+    source_policy_uuid?: SortOrder
+    timezone?: SortOrder
+    window_start_minute?: SortOrder
+    window_end_minute?: SortOrder
+    min_interval_seconds?: SortOrder
+    min_interval_jitter_seconds?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type SendingPolicyAvgOrderByAggregateInput = {
+    id?: SortOrder
+    window_start_minute?: SortOrder
+    window_end_minute?: SortOrder
+    min_interval_seconds?: SortOrder
+    min_interval_jitter_seconds?: SortOrder
+  }
+
+  export type SendingPolicyMaxOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    is_template?: SortOrder
+    source_policy_uuid?: SortOrder
+    timezone?: SortOrder
+    window_start_minute?: SortOrder
+    window_end_minute?: SortOrder
+    min_interval_seconds?: SortOrder
+    min_interval_jitter_seconds?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type SendingPolicyMinOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    is_template?: SortOrder
+    source_policy_uuid?: SortOrder
+    timezone?: SortOrder
+    window_start_minute?: SortOrder
+    window_end_minute?: SortOrder
+    min_interval_seconds?: SortOrder
+    min_interval_jitter_seconds?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type SendingPolicySumOrderByAggregateInput = {
+    id?: SortOrder
+    window_start_minute?: SortOrder
+    window_end_minute?: SortOrder
+    min_interval_seconds?: SortOrder
+    min_interval_jitter_seconds?: SortOrder
+  }
+
+  export type EnumSendingPeriodUnitFilter<$PrismaModel = never> = {
+    equals?: $Enums.SendingPeriodUnit | EnumSendingPeriodUnitFieldRefInput<$PrismaModel>
+    in?: $Enums.SendingPeriodUnit[] | ListEnumSendingPeriodUnitFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SendingPeriodUnit[] | ListEnumSendingPeriodUnitFieldRefInput<$PrismaModel>
+    not?: NestedEnumSendingPeriodUnitFilter<$PrismaModel> | $Enums.SendingPeriodUnit
+  }
+
+  export type SendingPolicyScalarRelationFilter = {
+    is?: SendingPolicyWhereInput
+    isNot?: SendingPolicyWhereInput
+  }
+
+  export type SendingPolicyStageSending_policy_uuidOrder_indexCompoundUniqueInput = {
+    sending_policy_uuid: string
+    order_index: number
+  }
+
+  export type SendingPolicyStageCountOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    sending_policy_uuid?: SortOrder
+    order_index?: SortOrder
+    limit?: SortOrder
+    period_unit?: SortOrder
+    duration_value?: SortOrder
+    duration_unit?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type SendingPolicyStageAvgOrderByAggregateInput = {
+    id?: SortOrder
+    order_index?: SortOrder
+    limit?: SortOrder
+    duration_value?: SortOrder
+  }
+
+  export type SendingPolicyStageMaxOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    sending_policy_uuid?: SortOrder
+    order_index?: SortOrder
+    limit?: SortOrder
+    period_unit?: SortOrder
+    duration_value?: SortOrder
+    duration_unit?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type SendingPolicyStageMinOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    sending_policy_uuid?: SortOrder
+    order_index?: SortOrder
+    limit?: SortOrder
+    period_unit?: SortOrder
+    duration_value?: SortOrder
+    duration_unit?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type SendingPolicyStageSumOrderByAggregateInput = {
+    id?: SortOrder
+    order_index?: SortOrder
+    limit?: SortOrder
+    duration_value?: SortOrder
+  }
+
+  export type EnumSendingPeriodUnitWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SendingPeriodUnit | EnumSendingPeriodUnitFieldRefInput<$PrismaModel>
+    in?: $Enums.SendingPeriodUnit[] | ListEnumSendingPeriodUnitFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SendingPeriodUnit[] | ListEnumSendingPeriodUnitFieldRefInput<$PrismaModel>
+    not?: NestedEnumSendingPeriodUnitWithAggregatesFilter<$PrismaModel> | $Enums.SendingPeriodUnit
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSendingPeriodUnitFilter<$PrismaModel>
+    _max?: NestedEnumSendingPeriodUnitFilter<$PrismaModel>
+  }
+
+  export type EnumCampaignIntegrationStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.CampaignIntegrationStatus | EnumCampaignIntegrationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.CampaignIntegrationStatus[] | ListEnumCampaignIntegrationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CampaignIntegrationStatus[] | ListEnumCampaignIntegrationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumCampaignIntegrationStatusFilter<$PrismaModel> | $Enums.CampaignIntegrationStatus
+  }
+
+  export type IntegrationAccountScalarRelationFilter = {
+    is?: IntegrationAccountWhereInput
+    isNot?: IntegrationAccountWhereInput
+  }
+
+  export type CampaignIntegrationStateNullableScalarRelationFilter = {
+    is?: CampaignIntegrationStateWhereInput | null
+    isNot?: CampaignIntegrationStateWhereInput | null
+  }
+
+  export type CampaignIntegrationCampaign_uuidIntegration_account_uuidCompoundUniqueInput = {
+    campaign_uuid: string
+    integration_account_uuid: string
+  }
+
+  export type CampaignIntegrationCountOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    campaign_uuid?: SortOrder
+    integration_account_uuid?: SortOrder
+    sending_policy_uuid?: SortOrder
+    status?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type CampaignIntegrationAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type CampaignIntegrationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    campaign_uuid?: SortOrder
+    integration_account_uuid?: SortOrder
+    sending_policy_uuid?: SortOrder
+    status?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type CampaignIntegrationMinOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    campaign_uuid?: SortOrder
+    integration_account_uuid?: SortOrder
+    sending_policy_uuid?: SortOrder
+    status?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type CampaignIntegrationSumOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type EnumCampaignIntegrationStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.CampaignIntegrationStatus | EnumCampaignIntegrationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.CampaignIntegrationStatus[] | ListEnumCampaignIntegrationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CampaignIntegrationStatus[] | ListEnumCampaignIntegrationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumCampaignIntegrationStatusWithAggregatesFilter<$PrismaModel> | $Enums.CampaignIntegrationStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumCampaignIntegrationStatusFilter<$PrismaModel>
+    _max?: NestedEnumCampaignIntegrationStatusFilter<$PrismaModel>
+  }
+
+  export type CampaignIntegrationScalarRelationFilter = {
+    is?: CampaignIntegrationWhereInput
+    isNot?: CampaignIntegrationWhereInput
+  }
+
+  export type CampaignIntegrationStateCountOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    campaign_integration_uuid?: SortOrder
+    policy_started_at?: SortOrder
+    last_sent_at?: SortOrder
+    lifetime_sent_count?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type CampaignIntegrationStateAvgOrderByAggregateInput = {
+    id?: SortOrder
+    lifetime_sent_count?: SortOrder
+  }
+
+  export type CampaignIntegrationStateMaxOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    campaign_integration_uuid?: SortOrder
+    policy_started_at?: SortOrder
+    last_sent_at?: SortOrder
+    lifetime_sent_count?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type CampaignIntegrationStateMinOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    campaign_integration_uuid?: SortOrder
+    policy_started_at?: SortOrder
+    last_sent_at?: SortOrder
+    lifetime_sent_count?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type CampaignIntegrationStateSumOrderByAggregateInput = {
+    id?: SortOrder
+    lifetime_sent_count?: SortOrder
+  }
+
+  export type EnumSendingUsageScopeTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.SendingUsageScopeType | EnumSendingUsageScopeTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.SendingUsageScopeType[] | ListEnumSendingUsageScopeTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SendingUsageScopeType[] | ListEnumSendingUsageScopeTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumSendingUsageScopeTypeFilter<$PrismaModel> | $Enums.SendingUsageScopeType
+  }
+
+  export type SendingUsageCounterScope_typeScope_uuidPeriod_keyCompoundUniqueInput = {
+    scope_type: $Enums.SendingUsageScopeType
+    scope_uuid: string
+    period_key: string
+  }
+
+  export type SendingUsageCounterCountOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    scope_type?: SortOrder
+    scope_uuid?: SortOrder
+    period_key?: SortOrder
+    count?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type SendingUsageCounterAvgOrderByAggregateInput = {
+    id?: SortOrder
+    count?: SortOrder
+  }
+
+  export type SendingUsageCounterMaxOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    scope_type?: SortOrder
+    scope_uuid?: SortOrder
+    period_key?: SortOrder
+    count?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type SendingUsageCounterMinOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    scope_type?: SortOrder
+    scope_uuid?: SortOrder
+    period_key?: SortOrder
+    count?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type SendingUsageCounterSumOrderByAggregateInput = {
+    id?: SortOrder
+    count?: SortOrder
+  }
+
+  export type EnumSendingUsageScopeTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SendingUsageScopeType | EnumSendingUsageScopeTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.SendingUsageScopeType[] | ListEnumSendingUsageScopeTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SendingUsageScopeType[] | ListEnumSendingUsageScopeTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumSendingUsageScopeTypeWithAggregatesFilter<$PrismaModel> | $Enums.SendingUsageScopeType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSendingUsageScopeTypeFilter<$PrismaModel>
+    _max?: NestedEnumSendingUsageScopeTypeFilter<$PrismaModel>
+  }
+
   export type EnumGoalAchievementTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.GoalAchievementType | EnumGoalAchievementTypeFieldRefInput<$PrismaModel>
     in?: $Enums.GoalAchievementType[] | ListEnumGoalAchievementTypeFieldRefInput<$PrismaModel>
@@ -82948,6 +91161,13 @@ export namespace Prisma {
     connect?: EmailSendLimitWhereUniqueInput | EmailSendLimitWhereUniqueInput[]
   }
 
+  export type SendingPolicyCreateNestedManyWithoutOrganisationInput = {
+    create?: XOR<SendingPolicyCreateWithoutOrganisationInput, SendingPolicyUncheckedCreateWithoutOrganisationInput> | SendingPolicyCreateWithoutOrganisationInput[] | SendingPolicyUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: SendingPolicyCreateOrConnectWithoutOrganisationInput | SendingPolicyCreateOrConnectWithoutOrganisationInput[]
+    createMany?: SendingPolicyCreateManyOrganisationInputEnvelope
+    connect?: SendingPolicyWhereUniqueInput | SendingPolicyWhereUniqueInput[]
+  }
+
   export type OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput = {
     create?: XOR<OrganisationMemberCreateWithoutOrganisationInput, OrganisationMemberUncheckedCreateWithoutOrganisationInput> | OrganisationMemberCreateWithoutOrganisationInput[] | OrganisationMemberUncheckedCreateWithoutOrganisationInput[]
     connectOrCreate?: OrganisationMemberCreateOrConnectWithoutOrganisationInput | OrganisationMemberCreateOrConnectWithoutOrganisationInput[]
@@ -83135,6 +91355,13 @@ export namespace Prisma {
     connectOrCreate?: EmailSendLimitCreateOrConnectWithoutOrganisationInput | EmailSendLimitCreateOrConnectWithoutOrganisationInput[]
     createMany?: EmailSendLimitCreateManyOrganisationInputEnvelope
     connect?: EmailSendLimitWhereUniqueInput | EmailSendLimitWhereUniqueInput[]
+  }
+
+  export type SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput = {
+    create?: XOR<SendingPolicyCreateWithoutOrganisationInput, SendingPolicyUncheckedCreateWithoutOrganisationInput> | SendingPolicyCreateWithoutOrganisationInput[] | SendingPolicyUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: SendingPolicyCreateOrConnectWithoutOrganisationInput | SendingPolicyCreateOrConnectWithoutOrganisationInput[]
+    createMany?: SendingPolicyCreateManyOrganisationInputEnvelope
+    connect?: SendingPolicyWhereUniqueInput | SendingPolicyWhereUniqueInput[]
   }
 
   export type OrganisationMemberUpdateManyWithoutOrganisationNestedInput = {
@@ -83515,6 +91742,20 @@ export namespace Prisma {
     deleteMany?: EmailSendLimitScalarWhereInput | EmailSendLimitScalarWhereInput[]
   }
 
+  export type SendingPolicyUpdateManyWithoutOrganisationNestedInput = {
+    create?: XOR<SendingPolicyCreateWithoutOrganisationInput, SendingPolicyUncheckedCreateWithoutOrganisationInput> | SendingPolicyCreateWithoutOrganisationInput[] | SendingPolicyUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: SendingPolicyCreateOrConnectWithoutOrganisationInput | SendingPolicyCreateOrConnectWithoutOrganisationInput[]
+    upsert?: SendingPolicyUpsertWithWhereUniqueWithoutOrganisationInput | SendingPolicyUpsertWithWhereUniqueWithoutOrganisationInput[]
+    createMany?: SendingPolicyCreateManyOrganisationInputEnvelope
+    set?: SendingPolicyWhereUniqueInput | SendingPolicyWhereUniqueInput[]
+    disconnect?: SendingPolicyWhereUniqueInput | SendingPolicyWhereUniqueInput[]
+    delete?: SendingPolicyWhereUniqueInput | SendingPolicyWhereUniqueInput[]
+    connect?: SendingPolicyWhereUniqueInput | SendingPolicyWhereUniqueInput[]
+    update?: SendingPolicyUpdateWithWhereUniqueWithoutOrganisationInput | SendingPolicyUpdateWithWhereUniqueWithoutOrganisationInput[]
+    updateMany?: SendingPolicyUpdateManyWithWhereWithoutOrganisationInput | SendingPolicyUpdateManyWithWhereWithoutOrganisationInput[]
+    deleteMany?: SendingPolicyScalarWhereInput | SendingPolicyScalarWhereInput[]
+  }
+
   export type OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput = {
     create?: XOR<OrganisationMemberCreateWithoutOrganisationInput, OrganisationMemberUncheckedCreateWithoutOrganisationInput> | OrganisationMemberCreateWithoutOrganisationInput[] | OrganisationMemberUncheckedCreateWithoutOrganisationInput[]
     connectOrCreate?: OrganisationMemberCreateOrConnectWithoutOrganisationInput | OrganisationMemberCreateOrConnectWithoutOrganisationInput[]
@@ -83891,6 +92132,20 @@ export namespace Prisma {
     update?: EmailSendLimitUpdateWithWhereUniqueWithoutOrganisationInput | EmailSendLimitUpdateWithWhereUniqueWithoutOrganisationInput[]
     updateMany?: EmailSendLimitUpdateManyWithWhereWithoutOrganisationInput | EmailSendLimitUpdateManyWithWhereWithoutOrganisationInput[]
     deleteMany?: EmailSendLimitScalarWhereInput | EmailSendLimitScalarWhereInput[]
+  }
+
+  export type SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput = {
+    create?: XOR<SendingPolicyCreateWithoutOrganisationInput, SendingPolicyUncheckedCreateWithoutOrganisationInput> | SendingPolicyCreateWithoutOrganisationInput[] | SendingPolicyUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: SendingPolicyCreateOrConnectWithoutOrganisationInput | SendingPolicyCreateOrConnectWithoutOrganisationInput[]
+    upsert?: SendingPolicyUpsertWithWhereUniqueWithoutOrganisationInput | SendingPolicyUpsertWithWhereUniqueWithoutOrganisationInput[]
+    createMany?: SendingPolicyCreateManyOrganisationInputEnvelope
+    set?: SendingPolicyWhereUniqueInput | SendingPolicyWhereUniqueInput[]
+    disconnect?: SendingPolicyWhereUniqueInput | SendingPolicyWhereUniqueInput[]
+    delete?: SendingPolicyWhereUniqueInput | SendingPolicyWhereUniqueInput[]
+    connect?: SendingPolicyWhereUniqueInput | SendingPolicyWhereUniqueInput[]
+    update?: SendingPolicyUpdateWithWhereUniqueWithoutOrganisationInput | SendingPolicyUpdateWithWhereUniqueWithoutOrganisationInput[]
+    updateMany?: SendingPolicyUpdateManyWithWhereWithoutOrganisationInput | SendingPolicyUpdateManyWithWhereWithoutOrganisationInput[]
+    deleteMany?: SendingPolicyScalarWhereInput | SendingPolicyScalarWhereInput[]
   }
 
   export type OrganisationCreateNestedOneWithoutMembersInput = {
@@ -85525,6 +93780,12 @@ export namespace Prisma {
     connect?: OutreachSequenceStepWhereUniqueInput
   }
 
+  export type CampaignIntegrationCreateNestedOneWithoutOutreach_messagesInput = {
+    create?: XOR<CampaignIntegrationCreateWithoutOutreach_messagesInput, CampaignIntegrationUncheckedCreateWithoutOutreach_messagesInput>
+    connectOrCreate?: CampaignIntegrationCreateOrConnectWithoutOutreach_messagesInput
+    connect?: CampaignIntegrationWhereUniqueInput
+  }
+
   export type InteractionUncheckedCreateNestedOneWithoutOutreach_messageInput = {
     create?: XOR<InteractionCreateWithoutOutreach_messageInput, InteractionUncheckedCreateWithoutOutreach_messageInput>
     connectOrCreate?: InteractionCreateOrConnectWithoutOutreach_messageInput
@@ -85611,6 +93872,16 @@ export namespace Prisma {
     delete?: OutreachSequenceStepWhereInput | boolean
     connect?: OutreachSequenceStepWhereUniqueInput
     update?: XOR<XOR<OutreachSequenceStepUpdateToOneWithWhereWithoutOutreach_messagesInput, OutreachSequenceStepUpdateWithoutOutreach_messagesInput>, OutreachSequenceStepUncheckedUpdateWithoutOutreach_messagesInput>
+  }
+
+  export type CampaignIntegrationUpdateOneWithoutOutreach_messagesNestedInput = {
+    create?: XOR<CampaignIntegrationCreateWithoutOutreach_messagesInput, CampaignIntegrationUncheckedCreateWithoutOutreach_messagesInput>
+    connectOrCreate?: CampaignIntegrationCreateOrConnectWithoutOutreach_messagesInput
+    upsert?: CampaignIntegrationUpsertWithoutOutreach_messagesInput
+    disconnect?: CampaignIntegrationWhereInput | boolean
+    delete?: CampaignIntegrationWhereInput | boolean
+    connect?: CampaignIntegrationWhereUniqueInput
+    update?: XOR<XOR<CampaignIntegrationUpdateToOneWithWhereWithoutOutreach_messagesInput, CampaignIntegrationUpdateWithoutOutreach_messagesInput>, CampaignIntegrationUncheckedUpdateWithoutOutreach_messagesInput>
   }
 
   export type InteractionUncheckedUpdateOneWithoutOutreach_messageNestedInput = {
@@ -86194,6 +94465,13 @@ export namespace Prisma {
     connect?: SequenceEnrollmentWhereUniqueInput | SequenceEnrollmentWhereUniqueInput[]
   }
 
+  export type CampaignIntegrationCreateNestedManyWithoutCampaignInput = {
+    create?: XOR<CampaignIntegrationCreateWithoutCampaignInput, CampaignIntegrationUncheckedCreateWithoutCampaignInput> | CampaignIntegrationCreateWithoutCampaignInput[] | CampaignIntegrationUncheckedCreateWithoutCampaignInput[]
+    connectOrCreate?: CampaignIntegrationCreateOrConnectWithoutCampaignInput | CampaignIntegrationCreateOrConnectWithoutCampaignInput[]
+    createMany?: CampaignIntegrationCreateManyCampaignInputEnvelope
+    connect?: CampaignIntegrationWhereUniqueInput | CampaignIntegrationWhereUniqueInput[]
+  }
+
   export type MarketingCampaignContactUncheckedCreateNestedManyWithoutCampaignInput = {
     create?: XOR<MarketingCampaignContactCreateWithoutCampaignInput, MarketingCampaignContactUncheckedCreateWithoutCampaignInput> | MarketingCampaignContactCreateWithoutCampaignInput[] | MarketingCampaignContactUncheckedCreateWithoutCampaignInput[]
     connectOrCreate?: MarketingCampaignContactCreateOrConnectWithoutCampaignInput | MarketingCampaignContactCreateOrConnectWithoutCampaignInput[]
@@ -86220,6 +94498,13 @@ export namespace Prisma {
     connectOrCreate?: SequenceEnrollmentCreateOrConnectWithoutCampaignInput | SequenceEnrollmentCreateOrConnectWithoutCampaignInput[]
     createMany?: SequenceEnrollmentCreateManyCampaignInputEnvelope
     connect?: SequenceEnrollmentWhereUniqueInput | SequenceEnrollmentWhereUniqueInput[]
+  }
+
+  export type CampaignIntegrationUncheckedCreateNestedManyWithoutCampaignInput = {
+    create?: XOR<CampaignIntegrationCreateWithoutCampaignInput, CampaignIntegrationUncheckedCreateWithoutCampaignInput> | CampaignIntegrationCreateWithoutCampaignInput[] | CampaignIntegrationUncheckedCreateWithoutCampaignInput[]
+    connectOrCreate?: CampaignIntegrationCreateOrConnectWithoutCampaignInput | CampaignIntegrationCreateOrConnectWithoutCampaignInput[]
+    createMany?: CampaignIntegrationCreateManyCampaignInputEnvelope
+    connect?: CampaignIntegrationWhereUniqueInput | CampaignIntegrationWhereUniqueInput[]
   }
 
   export type EnumCampaignStatusFieldUpdateOperationsInput = {
@@ -86319,6 +94604,20 @@ export namespace Prisma {
     deleteMany?: SequenceEnrollmentScalarWhereInput | SequenceEnrollmentScalarWhereInput[]
   }
 
+  export type CampaignIntegrationUpdateManyWithoutCampaignNestedInput = {
+    create?: XOR<CampaignIntegrationCreateWithoutCampaignInput, CampaignIntegrationUncheckedCreateWithoutCampaignInput> | CampaignIntegrationCreateWithoutCampaignInput[] | CampaignIntegrationUncheckedCreateWithoutCampaignInput[]
+    connectOrCreate?: CampaignIntegrationCreateOrConnectWithoutCampaignInput | CampaignIntegrationCreateOrConnectWithoutCampaignInput[]
+    upsert?: CampaignIntegrationUpsertWithWhereUniqueWithoutCampaignInput | CampaignIntegrationUpsertWithWhereUniqueWithoutCampaignInput[]
+    createMany?: CampaignIntegrationCreateManyCampaignInputEnvelope
+    set?: CampaignIntegrationWhereUniqueInput | CampaignIntegrationWhereUniqueInput[]
+    disconnect?: CampaignIntegrationWhereUniqueInput | CampaignIntegrationWhereUniqueInput[]
+    delete?: CampaignIntegrationWhereUniqueInput | CampaignIntegrationWhereUniqueInput[]
+    connect?: CampaignIntegrationWhereUniqueInput | CampaignIntegrationWhereUniqueInput[]
+    update?: CampaignIntegrationUpdateWithWhereUniqueWithoutCampaignInput | CampaignIntegrationUpdateWithWhereUniqueWithoutCampaignInput[]
+    updateMany?: CampaignIntegrationUpdateManyWithWhereWithoutCampaignInput | CampaignIntegrationUpdateManyWithWhereWithoutCampaignInput[]
+    deleteMany?: CampaignIntegrationScalarWhereInput | CampaignIntegrationScalarWhereInput[]
+  }
+
   export type MarketingCampaignContactUncheckedUpdateManyWithoutCampaignNestedInput = {
     create?: XOR<MarketingCampaignContactCreateWithoutCampaignInput, MarketingCampaignContactUncheckedCreateWithoutCampaignInput> | MarketingCampaignContactCreateWithoutCampaignInput[] | MarketingCampaignContactUncheckedCreateWithoutCampaignInput[]
     connectOrCreate?: MarketingCampaignContactCreateOrConnectWithoutCampaignInput | MarketingCampaignContactCreateOrConnectWithoutCampaignInput[]
@@ -86373,6 +94672,20 @@ export namespace Prisma {
     update?: SequenceEnrollmentUpdateWithWhereUniqueWithoutCampaignInput | SequenceEnrollmentUpdateWithWhereUniqueWithoutCampaignInput[]
     updateMany?: SequenceEnrollmentUpdateManyWithWhereWithoutCampaignInput | SequenceEnrollmentUpdateManyWithWhereWithoutCampaignInput[]
     deleteMany?: SequenceEnrollmentScalarWhereInput | SequenceEnrollmentScalarWhereInput[]
+  }
+
+  export type CampaignIntegrationUncheckedUpdateManyWithoutCampaignNestedInput = {
+    create?: XOR<CampaignIntegrationCreateWithoutCampaignInput, CampaignIntegrationUncheckedCreateWithoutCampaignInput> | CampaignIntegrationCreateWithoutCampaignInput[] | CampaignIntegrationUncheckedCreateWithoutCampaignInput[]
+    connectOrCreate?: CampaignIntegrationCreateOrConnectWithoutCampaignInput | CampaignIntegrationCreateOrConnectWithoutCampaignInput[]
+    upsert?: CampaignIntegrationUpsertWithWhereUniqueWithoutCampaignInput | CampaignIntegrationUpsertWithWhereUniqueWithoutCampaignInput[]
+    createMany?: CampaignIntegrationCreateManyCampaignInputEnvelope
+    set?: CampaignIntegrationWhereUniqueInput | CampaignIntegrationWhereUniqueInput[]
+    disconnect?: CampaignIntegrationWhereUniqueInput | CampaignIntegrationWhereUniqueInput[]
+    delete?: CampaignIntegrationWhereUniqueInput | CampaignIntegrationWhereUniqueInput[]
+    connect?: CampaignIntegrationWhereUniqueInput | CampaignIntegrationWhereUniqueInput[]
+    update?: CampaignIntegrationUpdateWithWhereUniqueWithoutCampaignInput | CampaignIntegrationUpdateWithWhereUniqueWithoutCampaignInput[]
+    updateMany?: CampaignIntegrationUpdateManyWithWhereWithoutCampaignInput | CampaignIntegrationUpdateManyWithWhereWithoutCampaignInput[]
+    deleteMany?: CampaignIntegrationScalarWhereInput | CampaignIntegrationScalarWhereInput[]
   }
 
   export type MarketingCampaignCreateNestedOneWithoutCampaign_contactsInput = {
@@ -86537,12 +94850,58 @@ export namespace Prisma {
     connect?: IntegrationWhereUniqueInput
   }
 
+  export type CampaignIntegrationCreateNestedManyWithoutIntegration_accountInput = {
+    create?: XOR<CampaignIntegrationCreateWithoutIntegration_accountInput, CampaignIntegrationUncheckedCreateWithoutIntegration_accountInput> | CampaignIntegrationCreateWithoutIntegration_accountInput[] | CampaignIntegrationUncheckedCreateWithoutIntegration_accountInput[]
+    connectOrCreate?: CampaignIntegrationCreateOrConnectWithoutIntegration_accountInput | CampaignIntegrationCreateOrConnectWithoutIntegration_accountInput[]
+    createMany?: CampaignIntegrationCreateManyIntegration_accountInputEnvelope
+    connect?: CampaignIntegrationWhereUniqueInput | CampaignIntegrationWhereUniqueInput[]
+  }
+
+  export type CampaignIntegrationUncheckedCreateNestedManyWithoutIntegration_accountInput = {
+    create?: XOR<CampaignIntegrationCreateWithoutIntegration_accountInput, CampaignIntegrationUncheckedCreateWithoutIntegration_accountInput> | CampaignIntegrationCreateWithoutIntegration_accountInput[] | CampaignIntegrationUncheckedCreateWithoutIntegration_accountInput[]
+    connectOrCreate?: CampaignIntegrationCreateOrConnectWithoutIntegration_accountInput | CampaignIntegrationCreateOrConnectWithoutIntegration_accountInput[]
+    createMany?: CampaignIntegrationCreateManyIntegration_accountInputEnvelope
+    connect?: CampaignIntegrationWhereUniqueInput | CampaignIntegrationWhereUniqueInput[]
+  }
+
+  export type NullableEnumSendingPeriodUnitFieldUpdateOperationsInput = {
+    set?: $Enums.SendingPeriodUnit | null
+  }
+
   export type IntegrationUpdateOneRequiredWithoutAccountsNestedInput = {
     create?: XOR<IntegrationCreateWithoutAccountsInput, IntegrationUncheckedCreateWithoutAccountsInput>
     connectOrCreate?: IntegrationCreateOrConnectWithoutAccountsInput
     upsert?: IntegrationUpsertWithoutAccountsInput
     connect?: IntegrationWhereUniqueInput
     update?: XOR<XOR<IntegrationUpdateToOneWithWhereWithoutAccountsInput, IntegrationUpdateWithoutAccountsInput>, IntegrationUncheckedUpdateWithoutAccountsInput>
+  }
+
+  export type CampaignIntegrationUpdateManyWithoutIntegration_accountNestedInput = {
+    create?: XOR<CampaignIntegrationCreateWithoutIntegration_accountInput, CampaignIntegrationUncheckedCreateWithoutIntegration_accountInput> | CampaignIntegrationCreateWithoutIntegration_accountInput[] | CampaignIntegrationUncheckedCreateWithoutIntegration_accountInput[]
+    connectOrCreate?: CampaignIntegrationCreateOrConnectWithoutIntegration_accountInput | CampaignIntegrationCreateOrConnectWithoutIntegration_accountInput[]
+    upsert?: CampaignIntegrationUpsertWithWhereUniqueWithoutIntegration_accountInput | CampaignIntegrationUpsertWithWhereUniqueWithoutIntegration_accountInput[]
+    createMany?: CampaignIntegrationCreateManyIntegration_accountInputEnvelope
+    set?: CampaignIntegrationWhereUniqueInput | CampaignIntegrationWhereUniqueInput[]
+    disconnect?: CampaignIntegrationWhereUniqueInput | CampaignIntegrationWhereUniqueInput[]
+    delete?: CampaignIntegrationWhereUniqueInput | CampaignIntegrationWhereUniqueInput[]
+    connect?: CampaignIntegrationWhereUniqueInput | CampaignIntegrationWhereUniqueInput[]
+    update?: CampaignIntegrationUpdateWithWhereUniqueWithoutIntegration_accountInput | CampaignIntegrationUpdateWithWhereUniqueWithoutIntegration_accountInput[]
+    updateMany?: CampaignIntegrationUpdateManyWithWhereWithoutIntegration_accountInput | CampaignIntegrationUpdateManyWithWhereWithoutIntegration_accountInput[]
+    deleteMany?: CampaignIntegrationScalarWhereInput | CampaignIntegrationScalarWhereInput[]
+  }
+
+  export type CampaignIntegrationUncheckedUpdateManyWithoutIntegration_accountNestedInput = {
+    create?: XOR<CampaignIntegrationCreateWithoutIntegration_accountInput, CampaignIntegrationUncheckedCreateWithoutIntegration_accountInput> | CampaignIntegrationCreateWithoutIntegration_accountInput[] | CampaignIntegrationUncheckedCreateWithoutIntegration_accountInput[]
+    connectOrCreate?: CampaignIntegrationCreateOrConnectWithoutIntegration_accountInput | CampaignIntegrationCreateOrConnectWithoutIntegration_accountInput[]
+    upsert?: CampaignIntegrationUpsertWithWhereUniqueWithoutIntegration_accountInput | CampaignIntegrationUpsertWithWhereUniqueWithoutIntegration_accountInput[]
+    createMany?: CampaignIntegrationCreateManyIntegration_accountInputEnvelope
+    set?: CampaignIntegrationWhereUniqueInput | CampaignIntegrationWhereUniqueInput[]
+    disconnect?: CampaignIntegrationWhereUniqueInput | CampaignIntegrationWhereUniqueInput[]
+    delete?: CampaignIntegrationWhereUniqueInput | CampaignIntegrationWhereUniqueInput[]
+    connect?: CampaignIntegrationWhereUniqueInput | CampaignIntegrationWhereUniqueInput[]
+    update?: CampaignIntegrationUpdateWithWhereUniqueWithoutIntegration_accountInput | CampaignIntegrationUpdateWithWhereUniqueWithoutIntegration_accountInput[]
+    updateMany?: CampaignIntegrationUpdateManyWithWhereWithoutIntegration_accountInput | CampaignIntegrationUpdateManyWithWhereWithoutIntegration_accountInput[]
+    deleteMany?: CampaignIntegrationScalarWhereInput | CampaignIntegrationScalarWhereInput[]
   }
 
   export type IntegrationCreateNestedOneWithoutKeysInput = {
@@ -87061,6 +95420,318 @@ export namespace Prisma {
     upsert?: OrganisationUpsertWithoutEmail_send_limitsInput
     connect?: OrganisationWhereUniqueInput
     update?: XOR<XOR<OrganisationUpdateToOneWithWhereWithoutEmail_send_limitsInput, OrganisationUpdateWithoutEmail_send_limitsInput>, OrganisationUncheckedUpdateWithoutEmail_send_limitsInput>
+  }
+
+  export type OrganisationCreateNestedOneWithoutSending_policiesInput = {
+    create?: XOR<OrganisationCreateWithoutSending_policiesInput, OrganisationUncheckedCreateWithoutSending_policiesInput>
+    connectOrCreate?: OrganisationCreateOrConnectWithoutSending_policiesInput
+    connect?: OrganisationWhereUniqueInput
+  }
+
+  export type SendingPolicyCreateNestedOneWithoutCloned_instancesInput = {
+    create?: XOR<SendingPolicyCreateWithoutCloned_instancesInput, SendingPolicyUncheckedCreateWithoutCloned_instancesInput>
+    connectOrCreate?: SendingPolicyCreateOrConnectWithoutCloned_instancesInput
+    connect?: SendingPolicyWhereUniqueInput
+  }
+
+  export type SendingPolicyCreateNestedManyWithoutSource_policyInput = {
+    create?: XOR<SendingPolicyCreateWithoutSource_policyInput, SendingPolicyUncheckedCreateWithoutSource_policyInput> | SendingPolicyCreateWithoutSource_policyInput[] | SendingPolicyUncheckedCreateWithoutSource_policyInput[]
+    connectOrCreate?: SendingPolicyCreateOrConnectWithoutSource_policyInput | SendingPolicyCreateOrConnectWithoutSource_policyInput[]
+    createMany?: SendingPolicyCreateManySource_policyInputEnvelope
+    connect?: SendingPolicyWhereUniqueInput | SendingPolicyWhereUniqueInput[]
+  }
+
+  export type SendingPolicyStageCreateNestedManyWithoutSending_policyInput = {
+    create?: XOR<SendingPolicyStageCreateWithoutSending_policyInput, SendingPolicyStageUncheckedCreateWithoutSending_policyInput> | SendingPolicyStageCreateWithoutSending_policyInput[] | SendingPolicyStageUncheckedCreateWithoutSending_policyInput[]
+    connectOrCreate?: SendingPolicyStageCreateOrConnectWithoutSending_policyInput | SendingPolicyStageCreateOrConnectWithoutSending_policyInput[]
+    createMany?: SendingPolicyStageCreateManySending_policyInputEnvelope
+    connect?: SendingPolicyStageWhereUniqueInput | SendingPolicyStageWhereUniqueInput[]
+  }
+
+  export type CampaignIntegrationCreateNestedManyWithoutSending_policyInput = {
+    create?: XOR<CampaignIntegrationCreateWithoutSending_policyInput, CampaignIntegrationUncheckedCreateWithoutSending_policyInput> | CampaignIntegrationCreateWithoutSending_policyInput[] | CampaignIntegrationUncheckedCreateWithoutSending_policyInput[]
+    connectOrCreate?: CampaignIntegrationCreateOrConnectWithoutSending_policyInput | CampaignIntegrationCreateOrConnectWithoutSending_policyInput[]
+    createMany?: CampaignIntegrationCreateManySending_policyInputEnvelope
+    connect?: CampaignIntegrationWhereUniqueInput | CampaignIntegrationWhereUniqueInput[]
+  }
+
+  export type SendingPolicyUncheckedCreateNestedManyWithoutSource_policyInput = {
+    create?: XOR<SendingPolicyCreateWithoutSource_policyInput, SendingPolicyUncheckedCreateWithoutSource_policyInput> | SendingPolicyCreateWithoutSource_policyInput[] | SendingPolicyUncheckedCreateWithoutSource_policyInput[]
+    connectOrCreate?: SendingPolicyCreateOrConnectWithoutSource_policyInput | SendingPolicyCreateOrConnectWithoutSource_policyInput[]
+    createMany?: SendingPolicyCreateManySource_policyInputEnvelope
+    connect?: SendingPolicyWhereUniqueInput | SendingPolicyWhereUniqueInput[]
+  }
+
+  export type SendingPolicyStageUncheckedCreateNestedManyWithoutSending_policyInput = {
+    create?: XOR<SendingPolicyStageCreateWithoutSending_policyInput, SendingPolicyStageUncheckedCreateWithoutSending_policyInput> | SendingPolicyStageCreateWithoutSending_policyInput[] | SendingPolicyStageUncheckedCreateWithoutSending_policyInput[]
+    connectOrCreate?: SendingPolicyStageCreateOrConnectWithoutSending_policyInput | SendingPolicyStageCreateOrConnectWithoutSending_policyInput[]
+    createMany?: SendingPolicyStageCreateManySending_policyInputEnvelope
+    connect?: SendingPolicyStageWhereUniqueInput | SendingPolicyStageWhereUniqueInput[]
+  }
+
+  export type CampaignIntegrationUncheckedCreateNestedManyWithoutSending_policyInput = {
+    create?: XOR<CampaignIntegrationCreateWithoutSending_policyInput, CampaignIntegrationUncheckedCreateWithoutSending_policyInput> | CampaignIntegrationCreateWithoutSending_policyInput[] | CampaignIntegrationUncheckedCreateWithoutSending_policyInput[]
+    connectOrCreate?: CampaignIntegrationCreateOrConnectWithoutSending_policyInput | CampaignIntegrationCreateOrConnectWithoutSending_policyInput[]
+    createMany?: CampaignIntegrationCreateManySending_policyInputEnvelope
+    connect?: CampaignIntegrationWhereUniqueInput | CampaignIntegrationWhereUniqueInput[]
+  }
+
+  export type OrganisationUpdateOneRequiredWithoutSending_policiesNestedInput = {
+    create?: XOR<OrganisationCreateWithoutSending_policiesInput, OrganisationUncheckedCreateWithoutSending_policiesInput>
+    connectOrCreate?: OrganisationCreateOrConnectWithoutSending_policiesInput
+    upsert?: OrganisationUpsertWithoutSending_policiesInput
+    connect?: OrganisationWhereUniqueInput
+    update?: XOR<XOR<OrganisationUpdateToOneWithWhereWithoutSending_policiesInput, OrganisationUpdateWithoutSending_policiesInput>, OrganisationUncheckedUpdateWithoutSending_policiesInput>
+  }
+
+  export type SendingPolicyUpdateOneWithoutCloned_instancesNestedInput = {
+    create?: XOR<SendingPolicyCreateWithoutCloned_instancesInput, SendingPolicyUncheckedCreateWithoutCloned_instancesInput>
+    connectOrCreate?: SendingPolicyCreateOrConnectWithoutCloned_instancesInput
+    upsert?: SendingPolicyUpsertWithoutCloned_instancesInput
+    disconnect?: SendingPolicyWhereInput | boolean
+    delete?: SendingPolicyWhereInput | boolean
+    connect?: SendingPolicyWhereUniqueInput
+    update?: XOR<XOR<SendingPolicyUpdateToOneWithWhereWithoutCloned_instancesInput, SendingPolicyUpdateWithoutCloned_instancesInput>, SendingPolicyUncheckedUpdateWithoutCloned_instancesInput>
+  }
+
+  export type SendingPolicyUpdateManyWithoutSource_policyNestedInput = {
+    create?: XOR<SendingPolicyCreateWithoutSource_policyInput, SendingPolicyUncheckedCreateWithoutSource_policyInput> | SendingPolicyCreateWithoutSource_policyInput[] | SendingPolicyUncheckedCreateWithoutSource_policyInput[]
+    connectOrCreate?: SendingPolicyCreateOrConnectWithoutSource_policyInput | SendingPolicyCreateOrConnectWithoutSource_policyInput[]
+    upsert?: SendingPolicyUpsertWithWhereUniqueWithoutSource_policyInput | SendingPolicyUpsertWithWhereUniqueWithoutSource_policyInput[]
+    createMany?: SendingPolicyCreateManySource_policyInputEnvelope
+    set?: SendingPolicyWhereUniqueInput | SendingPolicyWhereUniqueInput[]
+    disconnect?: SendingPolicyWhereUniqueInput | SendingPolicyWhereUniqueInput[]
+    delete?: SendingPolicyWhereUniqueInput | SendingPolicyWhereUniqueInput[]
+    connect?: SendingPolicyWhereUniqueInput | SendingPolicyWhereUniqueInput[]
+    update?: SendingPolicyUpdateWithWhereUniqueWithoutSource_policyInput | SendingPolicyUpdateWithWhereUniqueWithoutSource_policyInput[]
+    updateMany?: SendingPolicyUpdateManyWithWhereWithoutSource_policyInput | SendingPolicyUpdateManyWithWhereWithoutSource_policyInput[]
+    deleteMany?: SendingPolicyScalarWhereInput | SendingPolicyScalarWhereInput[]
+  }
+
+  export type SendingPolicyStageUpdateManyWithoutSending_policyNestedInput = {
+    create?: XOR<SendingPolicyStageCreateWithoutSending_policyInput, SendingPolicyStageUncheckedCreateWithoutSending_policyInput> | SendingPolicyStageCreateWithoutSending_policyInput[] | SendingPolicyStageUncheckedCreateWithoutSending_policyInput[]
+    connectOrCreate?: SendingPolicyStageCreateOrConnectWithoutSending_policyInput | SendingPolicyStageCreateOrConnectWithoutSending_policyInput[]
+    upsert?: SendingPolicyStageUpsertWithWhereUniqueWithoutSending_policyInput | SendingPolicyStageUpsertWithWhereUniqueWithoutSending_policyInput[]
+    createMany?: SendingPolicyStageCreateManySending_policyInputEnvelope
+    set?: SendingPolicyStageWhereUniqueInput | SendingPolicyStageWhereUniqueInput[]
+    disconnect?: SendingPolicyStageWhereUniqueInput | SendingPolicyStageWhereUniqueInput[]
+    delete?: SendingPolicyStageWhereUniqueInput | SendingPolicyStageWhereUniqueInput[]
+    connect?: SendingPolicyStageWhereUniqueInput | SendingPolicyStageWhereUniqueInput[]
+    update?: SendingPolicyStageUpdateWithWhereUniqueWithoutSending_policyInput | SendingPolicyStageUpdateWithWhereUniqueWithoutSending_policyInput[]
+    updateMany?: SendingPolicyStageUpdateManyWithWhereWithoutSending_policyInput | SendingPolicyStageUpdateManyWithWhereWithoutSending_policyInput[]
+    deleteMany?: SendingPolicyStageScalarWhereInput | SendingPolicyStageScalarWhereInput[]
+  }
+
+  export type CampaignIntegrationUpdateManyWithoutSending_policyNestedInput = {
+    create?: XOR<CampaignIntegrationCreateWithoutSending_policyInput, CampaignIntegrationUncheckedCreateWithoutSending_policyInput> | CampaignIntegrationCreateWithoutSending_policyInput[] | CampaignIntegrationUncheckedCreateWithoutSending_policyInput[]
+    connectOrCreate?: CampaignIntegrationCreateOrConnectWithoutSending_policyInput | CampaignIntegrationCreateOrConnectWithoutSending_policyInput[]
+    upsert?: CampaignIntegrationUpsertWithWhereUniqueWithoutSending_policyInput | CampaignIntegrationUpsertWithWhereUniqueWithoutSending_policyInput[]
+    createMany?: CampaignIntegrationCreateManySending_policyInputEnvelope
+    set?: CampaignIntegrationWhereUniqueInput | CampaignIntegrationWhereUniqueInput[]
+    disconnect?: CampaignIntegrationWhereUniqueInput | CampaignIntegrationWhereUniqueInput[]
+    delete?: CampaignIntegrationWhereUniqueInput | CampaignIntegrationWhereUniqueInput[]
+    connect?: CampaignIntegrationWhereUniqueInput | CampaignIntegrationWhereUniqueInput[]
+    update?: CampaignIntegrationUpdateWithWhereUniqueWithoutSending_policyInput | CampaignIntegrationUpdateWithWhereUniqueWithoutSending_policyInput[]
+    updateMany?: CampaignIntegrationUpdateManyWithWhereWithoutSending_policyInput | CampaignIntegrationUpdateManyWithWhereWithoutSending_policyInput[]
+    deleteMany?: CampaignIntegrationScalarWhereInput | CampaignIntegrationScalarWhereInput[]
+  }
+
+  export type SendingPolicyUncheckedUpdateManyWithoutSource_policyNestedInput = {
+    create?: XOR<SendingPolicyCreateWithoutSource_policyInput, SendingPolicyUncheckedCreateWithoutSource_policyInput> | SendingPolicyCreateWithoutSource_policyInput[] | SendingPolicyUncheckedCreateWithoutSource_policyInput[]
+    connectOrCreate?: SendingPolicyCreateOrConnectWithoutSource_policyInput | SendingPolicyCreateOrConnectWithoutSource_policyInput[]
+    upsert?: SendingPolicyUpsertWithWhereUniqueWithoutSource_policyInput | SendingPolicyUpsertWithWhereUniqueWithoutSource_policyInput[]
+    createMany?: SendingPolicyCreateManySource_policyInputEnvelope
+    set?: SendingPolicyWhereUniqueInput | SendingPolicyWhereUniqueInput[]
+    disconnect?: SendingPolicyWhereUniqueInput | SendingPolicyWhereUniqueInput[]
+    delete?: SendingPolicyWhereUniqueInput | SendingPolicyWhereUniqueInput[]
+    connect?: SendingPolicyWhereUniqueInput | SendingPolicyWhereUniqueInput[]
+    update?: SendingPolicyUpdateWithWhereUniqueWithoutSource_policyInput | SendingPolicyUpdateWithWhereUniqueWithoutSource_policyInput[]
+    updateMany?: SendingPolicyUpdateManyWithWhereWithoutSource_policyInput | SendingPolicyUpdateManyWithWhereWithoutSource_policyInput[]
+    deleteMany?: SendingPolicyScalarWhereInput | SendingPolicyScalarWhereInput[]
+  }
+
+  export type SendingPolicyStageUncheckedUpdateManyWithoutSending_policyNestedInput = {
+    create?: XOR<SendingPolicyStageCreateWithoutSending_policyInput, SendingPolicyStageUncheckedCreateWithoutSending_policyInput> | SendingPolicyStageCreateWithoutSending_policyInput[] | SendingPolicyStageUncheckedCreateWithoutSending_policyInput[]
+    connectOrCreate?: SendingPolicyStageCreateOrConnectWithoutSending_policyInput | SendingPolicyStageCreateOrConnectWithoutSending_policyInput[]
+    upsert?: SendingPolicyStageUpsertWithWhereUniqueWithoutSending_policyInput | SendingPolicyStageUpsertWithWhereUniqueWithoutSending_policyInput[]
+    createMany?: SendingPolicyStageCreateManySending_policyInputEnvelope
+    set?: SendingPolicyStageWhereUniqueInput | SendingPolicyStageWhereUniqueInput[]
+    disconnect?: SendingPolicyStageWhereUniqueInput | SendingPolicyStageWhereUniqueInput[]
+    delete?: SendingPolicyStageWhereUniqueInput | SendingPolicyStageWhereUniqueInput[]
+    connect?: SendingPolicyStageWhereUniqueInput | SendingPolicyStageWhereUniqueInput[]
+    update?: SendingPolicyStageUpdateWithWhereUniqueWithoutSending_policyInput | SendingPolicyStageUpdateWithWhereUniqueWithoutSending_policyInput[]
+    updateMany?: SendingPolicyStageUpdateManyWithWhereWithoutSending_policyInput | SendingPolicyStageUpdateManyWithWhereWithoutSending_policyInput[]
+    deleteMany?: SendingPolicyStageScalarWhereInput | SendingPolicyStageScalarWhereInput[]
+  }
+
+  export type CampaignIntegrationUncheckedUpdateManyWithoutSending_policyNestedInput = {
+    create?: XOR<CampaignIntegrationCreateWithoutSending_policyInput, CampaignIntegrationUncheckedCreateWithoutSending_policyInput> | CampaignIntegrationCreateWithoutSending_policyInput[] | CampaignIntegrationUncheckedCreateWithoutSending_policyInput[]
+    connectOrCreate?: CampaignIntegrationCreateOrConnectWithoutSending_policyInput | CampaignIntegrationCreateOrConnectWithoutSending_policyInput[]
+    upsert?: CampaignIntegrationUpsertWithWhereUniqueWithoutSending_policyInput | CampaignIntegrationUpsertWithWhereUniqueWithoutSending_policyInput[]
+    createMany?: CampaignIntegrationCreateManySending_policyInputEnvelope
+    set?: CampaignIntegrationWhereUniqueInput | CampaignIntegrationWhereUniqueInput[]
+    disconnect?: CampaignIntegrationWhereUniqueInput | CampaignIntegrationWhereUniqueInput[]
+    delete?: CampaignIntegrationWhereUniqueInput | CampaignIntegrationWhereUniqueInput[]
+    connect?: CampaignIntegrationWhereUniqueInput | CampaignIntegrationWhereUniqueInput[]
+    update?: CampaignIntegrationUpdateWithWhereUniqueWithoutSending_policyInput | CampaignIntegrationUpdateWithWhereUniqueWithoutSending_policyInput[]
+    updateMany?: CampaignIntegrationUpdateManyWithWhereWithoutSending_policyInput | CampaignIntegrationUpdateManyWithWhereWithoutSending_policyInput[]
+    deleteMany?: CampaignIntegrationScalarWhereInput | CampaignIntegrationScalarWhereInput[]
+  }
+
+  export type SendingPolicyCreateNestedOneWithoutStagesInput = {
+    create?: XOR<SendingPolicyCreateWithoutStagesInput, SendingPolicyUncheckedCreateWithoutStagesInput>
+    connectOrCreate?: SendingPolicyCreateOrConnectWithoutStagesInput
+    connect?: SendingPolicyWhereUniqueInput
+  }
+
+  export type EnumSendingPeriodUnitFieldUpdateOperationsInput = {
+    set?: $Enums.SendingPeriodUnit
+  }
+
+  export type SendingPolicyUpdateOneRequiredWithoutStagesNestedInput = {
+    create?: XOR<SendingPolicyCreateWithoutStagesInput, SendingPolicyUncheckedCreateWithoutStagesInput>
+    connectOrCreate?: SendingPolicyCreateOrConnectWithoutStagesInput
+    upsert?: SendingPolicyUpsertWithoutStagesInput
+    connect?: SendingPolicyWhereUniqueInput
+    update?: XOR<XOR<SendingPolicyUpdateToOneWithWhereWithoutStagesInput, SendingPolicyUpdateWithoutStagesInput>, SendingPolicyUncheckedUpdateWithoutStagesInput>
+  }
+
+  export type MarketingCampaignCreateNestedOneWithoutCampaign_integrationsInput = {
+    create?: XOR<MarketingCampaignCreateWithoutCampaign_integrationsInput, MarketingCampaignUncheckedCreateWithoutCampaign_integrationsInput>
+    connectOrCreate?: MarketingCampaignCreateOrConnectWithoutCampaign_integrationsInput
+    connect?: MarketingCampaignWhereUniqueInput
+  }
+
+  export type IntegrationAccountCreateNestedOneWithoutCampaign_integrationsInput = {
+    create?: XOR<IntegrationAccountCreateWithoutCampaign_integrationsInput, IntegrationAccountUncheckedCreateWithoutCampaign_integrationsInput>
+    connectOrCreate?: IntegrationAccountCreateOrConnectWithoutCampaign_integrationsInput
+    connect?: IntegrationAccountWhereUniqueInput
+  }
+
+  export type SendingPolicyCreateNestedOneWithoutCampaign_integrationsInput = {
+    create?: XOR<SendingPolicyCreateWithoutCampaign_integrationsInput, SendingPolicyUncheckedCreateWithoutCampaign_integrationsInput>
+    connectOrCreate?: SendingPolicyCreateOrConnectWithoutCampaign_integrationsInput
+    connect?: SendingPolicyWhereUniqueInput
+  }
+
+  export type CampaignIntegrationStateCreateNestedOneWithoutCampaign_integrationInput = {
+    create?: XOR<CampaignIntegrationStateCreateWithoutCampaign_integrationInput, CampaignIntegrationStateUncheckedCreateWithoutCampaign_integrationInput>
+    connectOrCreate?: CampaignIntegrationStateCreateOrConnectWithoutCampaign_integrationInput
+    connect?: CampaignIntegrationStateWhereUniqueInput
+  }
+
+  export type OutreachMessageCreateNestedManyWithoutCampaign_integrationInput = {
+    create?: XOR<OutreachMessageCreateWithoutCampaign_integrationInput, OutreachMessageUncheckedCreateWithoutCampaign_integrationInput> | OutreachMessageCreateWithoutCampaign_integrationInput[] | OutreachMessageUncheckedCreateWithoutCampaign_integrationInput[]
+    connectOrCreate?: OutreachMessageCreateOrConnectWithoutCampaign_integrationInput | OutreachMessageCreateOrConnectWithoutCampaign_integrationInput[]
+    createMany?: OutreachMessageCreateManyCampaign_integrationInputEnvelope
+    connect?: OutreachMessageWhereUniqueInput | OutreachMessageWhereUniqueInput[]
+  }
+
+  export type CampaignIntegrationStateUncheckedCreateNestedOneWithoutCampaign_integrationInput = {
+    create?: XOR<CampaignIntegrationStateCreateWithoutCampaign_integrationInput, CampaignIntegrationStateUncheckedCreateWithoutCampaign_integrationInput>
+    connectOrCreate?: CampaignIntegrationStateCreateOrConnectWithoutCampaign_integrationInput
+    connect?: CampaignIntegrationStateWhereUniqueInput
+  }
+
+  export type OutreachMessageUncheckedCreateNestedManyWithoutCampaign_integrationInput = {
+    create?: XOR<OutreachMessageCreateWithoutCampaign_integrationInput, OutreachMessageUncheckedCreateWithoutCampaign_integrationInput> | OutreachMessageCreateWithoutCampaign_integrationInput[] | OutreachMessageUncheckedCreateWithoutCampaign_integrationInput[]
+    connectOrCreate?: OutreachMessageCreateOrConnectWithoutCampaign_integrationInput | OutreachMessageCreateOrConnectWithoutCampaign_integrationInput[]
+    createMany?: OutreachMessageCreateManyCampaign_integrationInputEnvelope
+    connect?: OutreachMessageWhereUniqueInput | OutreachMessageWhereUniqueInput[]
+  }
+
+  export type EnumCampaignIntegrationStatusFieldUpdateOperationsInput = {
+    set?: $Enums.CampaignIntegrationStatus
+  }
+
+  export type MarketingCampaignUpdateOneRequiredWithoutCampaign_integrationsNestedInput = {
+    create?: XOR<MarketingCampaignCreateWithoutCampaign_integrationsInput, MarketingCampaignUncheckedCreateWithoutCampaign_integrationsInput>
+    connectOrCreate?: MarketingCampaignCreateOrConnectWithoutCampaign_integrationsInput
+    upsert?: MarketingCampaignUpsertWithoutCampaign_integrationsInput
+    connect?: MarketingCampaignWhereUniqueInput
+    update?: XOR<XOR<MarketingCampaignUpdateToOneWithWhereWithoutCampaign_integrationsInput, MarketingCampaignUpdateWithoutCampaign_integrationsInput>, MarketingCampaignUncheckedUpdateWithoutCampaign_integrationsInput>
+  }
+
+  export type IntegrationAccountUpdateOneRequiredWithoutCampaign_integrationsNestedInput = {
+    create?: XOR<IntegrationAccountCreateWithoutCampaign_integrationsInput, IntegrationAccountUncheckedCreateWithoutCampaign_integrationsInput>
+    connectOrCreate?: IntegrationAccountCreateOrConnectWithoutCampaign_integrationsInput
+    upsert?: IntegrationAccountUpsertWithoutCampaign_integrationsInput
+    connect?: IntegrationAccountWhereUniqueInput
+    update?: XOR<XOR<IntegrationAccountUpdateToOneWithWhereWithoutCampaign_integrationsInput, IntegrationAccountUpdateWithoutCampaign_integrationsInput>, IntegrationAccountUncheckedUpdateWithoutCampaign_integrationsInput>
+  }
+
+  export type SendingPolicyUpdateOneRequiredWithoutCampaign_integrationsNestedInput = {
+    create?: XOR<SendingPolicyCreateWithoutCampaign_integrationsInput, SendingPolicyUncheckedCreateWithoutCampaign_integrationsInput>
+    connectOrCreate?: SendingPolicyCreateOrConnectWithoutCampaign_integrationsInput
+    upsert?: SendingPolicyUpsertWithoutCampaign_integrationsInput
+    connect?: SendingPolicyWhereUniqueInput
+    update?: XOR<XOR<SendingPolicyUpdateToOneWithWhereWithoutCampaign_integrationsInput, SendingPolicyUpdateWithoutCampaign_integrationsInput>, SendingPolicyUncheckedUpdateWithoutCampaign_integrationsInput>
+  }
+
+  export type CampaignIntegrationStateUpdateOneWithoutCampaign_integrationNestedInput = {
+    create?: XOR<CampaignIntegrationStateCreateWithoutCampaign_integrationInput, CampaignIntegrationStateUncheckedCreateWithoutCampaign_integrationInput>
+    connectOrCreate?: CampaignIntegrationStateCreateOrConnectWithoutCampaign_integrationInput
+    upsert?: CampaignIntegrationStateUpsertWithoutCampaign_integrationInput
+    disconnect?: CampaignIntegrationStateWhereInput | boolean
+    delete?: CampaignIntegrationStateWhereInput | boolean
+    connect?: CampaignIntegrationStateWhereUniqueInput
+    update?: XOR<XOR<CampaignIntegrationStateUpdateToOneWithWhereWithoutCampaign_integrationInput, CampaignIntegrationStateUpdateWithoutCampaign_integrationInput>, CampaignIntegrationStateUncheckedUpdateWithoutCampaign_integrationInput>
+  }
+
+  export type OutreachMessageUpdateManyWithoutCampaign_integrationNestedInput = {
+    create?: XOR<OutreachMessageCreateWithoutCampaign_integrationInput, OutreachMessageUncheckedCreateWithoutCampaign_integrationInput> | OutreachMessageCreateWithoutCampaign_integrationInput[] | OutreachMessageUncheckedCreateWithoutCampaign_integrationInput[]
+    connectOrCreate?: OutreachMessageCreateOrConnectWithoutCampaign_integrationInput | OutreachMessageCreateOrConnectWithoutCampaign_integrationInput[]
+    upsert?: OutreachMessageUpsertWithWhereUniqueWithoutCampaign_integrationInput | OutreachMessageUpsertWithWhereUniqueWithoutCampaign_integrationInput[]
+    createMany?: OutreachMessageCreateManyCampaign_integrationInputEnvelope
+    set?: OutreachMessageWhereUniqueInput | OutreachMessageWhereUniqueInput[]
+    disconnect?: OutreachMessageWhereUniqueInput | OutreachMessageWhereUniqueInput[]
+    delete?: OutreachMessageWhereUniqueInput | OutreachMessageWhereUniqueInput[]
+    connect?: OutreachMessageWhereUniqueInput | OutreachMessageWhereUniqueInput[]
+    update?: OutreachMessageUpdateWithWhereUniqueWithoutCampaign_integrationInput | OutreachMessageUpdateWithWhereUniqueWithoutCampaign_integrationInput[]
+    updateMany?: OutreachMessageUpdateManyWithWhereWithoutCampaign_integrationInput | OutreachMessageUpdateManyWithWhereWithoutCampaign_integrationInput[]
+    deleteMany?: OutreachMessageScalarWhereInput | OutreachMessageScalarWhereInput[]
+  }
+
+  export type CampaignIntegrationStateUncheckedUpdateOneWithoutCampaign_integrationNestedInput = {
+    create?: XOR<CampaignIntegrationStateCreateWithoutCampaign_integrationInput, CampaignIntegrationStateUncheckedCreateWithoutCampaign_integrationInput>
+    connectOrCreate?: CampaignIntegrationStateCreateOrConnectWithoutCampaign_integrationInput
+    upsert?: CampaignIntegrationStateUpsertWithoutCampaign_integrationInput
+    disconnect?: CampaignIntegrationStateWhereInput | boolean
+    delete?: CampaignIntegrationStateWhereInput | boolean
+    connect?: CampaignIntegrationStateWhereUniqueInput
+    update?: XOR<XOR<CampaignIntegrationStateUpdateToOneWithWhereWithoutCampaign_integrationInput, CampaignIntegrationStateUpdateWithoutCampaign_integrationInput>, CampaignIntegrationStateUncheckedUpdateWithoutCampaign_integrationInput>
+  }
+
+  export type OutreachMessageUncheckedUpdateManyWithoutCampaign_integrationNestedInput = {
+    create?: XOR<OutreachMessageCreateWithoutCampaign_integrationInput, OutreachMessageUncheckedCreateWithoutCampaign_integrationInput> | OutreachMessageCreateWithoutCampaign_integrationInput[] | OutreachMessageUncheckedCreateWithoutCampaign_integrationInput[]
+    connectOrCreate?: OutreachMessageCreateOrConnectWithoutCampaign_integrationInput | OutreachMessageCreateOrConnectWithoutCampaign_integrationInput[]
+    upsert?: OutreachMessageUpsertWithWhereUniqueWithoutCampaign_integrationInput | OutreachMessageUpsertWithWhereUniqueWithoutCampaign_integrationInput[]
+    createMany?: OutreachMessageCreateManyCampaign_integrationInputEnvelope
+    set?: OutreachMessageWhereUniqueInput | OutreachMessageWhereUniqueInput[]
+    disconnect?: OutreachMessageWhereUniqueInput | OutreachMessageWhereUniqueInput[]
+    delete?: OutreachMessageWhereUniqueInput | OutreachMessageWhereUniqueInput[]
+    connect?: OutreachMessageWhereUniqueInput | OutreachMessageWhereUniqueInput[]
+    update?: OutreachMessageUpdateWithWhereUniqueWithoutCampaign_integrationInput | OutreachMessageUpdateWithWhereUniqueWithoutCampaign_integrationInput[]
+    updateMany?: OutreachMessageUpdateManyWithWhereWithoutCampaign_integrationInput | OutreachMessageUpdateManyWithWhereWithoutCampaign_integrationInput[]
+    deleteMany?: OutreachMessageScalarWhereInput | OutreachMessageScalarWhereInput[]
+  }
+
+  export type CampaignIntegrationCreateNestedOneWithoutStateInput = {
+    create?: XOR<CampaignIntegrationCreateWithoutStateInput, CampaignIntegrationUncheckedCreateWithoutStateInput>
+    connectOrCreate?: CampaignIntegrationCreateOrConnectWithoutStateInput
+    connect?: CampaignIntegrationWhereUniqueInput
+  }
+
+  export type CampaignIntegrationUpdateOneRequiredWithoutStateNestedInput = {
+    create?: XOR<CampaignIntegrationCreateWithoutStateInput, CampaignIntegrationUncheckedCreateWithoutStateInput>
+    connectOrCreate?: CampaignIntegrationCreateOrConnectWithoutStateInput
+    upsert?: CampaignIntegrationUpsertWithoutStateInput
+    connect?: CampaignIntegrationWhereUniqueInput
+    update?: XOR<XOR<CampaignIntegrationUpdateToOneWithWhereWithoutStateInput, CampaignIntegrationUpdateWithoutStateInput>, CampaignIntegrationUncheckedUpdateWithoutStateInput>
+  }
+
+  export type EnumSendingUsageScopeTypeFieldUpdateOperationsInput = {
+    set?: $Enums.SendingUsageScopeType
   }
 
   export type OrganisationCreateNestedOneWithoutGoal_achievementsInput = {
@@ -87968,6 +96639,23 @@ export namespace Prisma {
     _max?: NestedEnumExternalIntegrationProviderFilter<$PrismaModel>
   }
 
+  export type NestedEnumSendingPeriodUnitNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.SendingPeriodUnit | EnumSendingPeriodUnitFieldRefInput<$PrismaModel> | null
+    in?: $Enums.SendingPeriodUnit[] | ListEnumSendingPeriodUnitFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.SendingPeriodUnit[] | ListEnumSendingPeriodUnitFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumSendingPeriodUnitNullableFilter<$PrismaModel> | $Enums.SendingPeriodUnit | null
+  }
+
+  export type NestedEnumSendingPeriodUnitNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SendingPeriodUnit | EnumSendingPeriodUnitFieldRefInput<$PrismaModel> | null
+    in?: $Enums.SendingPeriodUnit[] | ListEnumSendingPeriodUnitFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.SendingPeriodUnit[] | ListEnumSendingPeriodUnitFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumSendingPeriodUnitNullableWithAggregatesFilter<$PrismaModel> | $Enums.SendingPeriodUnit | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumSendingPeriodUnitNullableFilter<$PrismaModel>
+    _max?: NestedEnumSendingPeriodUnitNullableFilter<$PrismaModel>
+  }
+
   export type NestedEnumIntegrationKeyTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.IntegrationKeyType | EnumIntegrationKeyTypeFieldRefInput<$PrismaModel>
     in?: $Enums.IntegrationKeyType[] | ListEnumIntegrationKeyTypeFieldRefInput<$PrismaModel>
@@ -88171,6 +96859,57 @@ export namespace Prisma {
     _max?: NestedEnumGoalPeriodFilter<$PrismaModel>
   }
 
+  export type NestedEnumSendingPeriodUnitFilter<$PrismaModel = never> = {
+    equals?: $Enums.SendingPeriodUnit | EnumSendingPeriodUnitFieldRefInput<$PrismaModel>
+    in?: $Enums.SendingPeriodUnit[] | ListEnumSendingPeriodUnitFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SendingPeriodUnit[] | ListEnumSendingPeriodUnitFieldRefInput<$PrismaModel>
+    not?: NestedEnumSendingPeriodUnitFilter<$PrismaModel> | $Enums.SendingPeriodUnit
+  }
+
+  export type NestedEnumSendingPeriodUnitWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SendingPeriodUnit | EnumSendingPeriodUnitFieldRefInput<$PrismaModel>
+    in?: $Enums.SendingPeriodUnit[] | ListEnumSendingPeriodUnitFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SendingPeriodUnit[] | ListEnumSendingPeriodUnitFieldRefInput<$PrismaModel>
+    not?: NestedEnumSendingPeriodUnitWithAggregatesFilter<$PrismaModel> | $Enums.SendingPeriodUnit
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSendingPeriodUnitFilter<$PrismaModel>
+    _max?: NestedEnumSendingPeriodUnitFilter<$PrismaModel>
+  }
+
+  export type NestedEnumCampaignIntegrationStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.CampaignIntegrationStatus | EnumCampaignIntegrationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.CampaignIntegrationStatus[] | ListEnumCampaignIntegrationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CampaignIntegrationStatus[] | ListEnumCampaignIntegrationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumCampaignIntegrationStatusFilter<$PrismaModel> | $Enums.CampaignIntegrationStatus
+  }
+
+  export type NestedEnumCampaignIntegrationStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.CampaignIntegrationStatus | EnumCampaignIntegrationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.CampaignIntegrationStatus[] | ListEnumCampaignIntegrationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CampaignIntegrationStatus[] | ListEnumCampaignIntegrationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumCampaignIntegrationStatusWithAggregatesFilter<$PrismaModel> | $Enums.CampaignIntegrationStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumCampaignIntegrationStatusFilter<$PrismaModel>
+    _max?: NestedEnumCampaignIntegrationStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumSendingUsageScopeTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.SendingUsageScopeType | EnumSendingUsageScopeTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.SendingUsageScopeType[] | ListEnumSendingUsageScopeTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SendingUsageScopeType[] | ListEnumSendingUsageScopeTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumSendingUsageScopeTypeFilter<$PrismaModel> | $Enums.SendingUsageScopeType
+  }
+
+  export type NestedEnumSendingUsageScopeTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SendingUsageScopeType | EnumSendingUsageScopeTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.SendingUsageScopeType[] | ListEnumSendingUsageScopeTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SendingUsageScopeType[] | ListEnumSendingUsageScopeTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumSendingUsageScopeTypeWithAggregatesFilter<$PrismaModel> | $Enums.SendingUsageScopeType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSendingUsageScopeTypeFilter<$PrismaModel>
+    _max?: NestedEnumSendingUsageScopeTypeFilter<$PrismaModel>
+  }
+
   export type NestedEnumGoalAchievementTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.GoalAchievementType | EnumGoalAchievementTypeFieldRefInput<$PrismaModel>
     in?: $Enums.GoalAchievementType[] | ListEnumGoalAchievementTypeFieldRefInput<$PrismaModel>
@@ -88310,6 +97049,7 @@ export namespace Prisma {
     interaction?: InteractionCreateNestedOneWithoutOutreach_messageInput
     sequence_enrollment?: SequenceEnrollmentCreateNestedOneWithoutOutreach_messagesInput
     sequence_step?: OutreachSequenceStepCreateNestedOneWithoutOutreach_messagesInput
+    campaign_integration?: CampaignIntegrationCreateNestedOneWithoutOutreach_messagesInput
   }
 
   export type OutreachMessageUncheckedCreateWithoutSent_byInput = {
@@ -88339,6 +97079,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: string | null
     sequence_step_uuid?: string | null
+    campaign_integration_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     interaction?: InteractionUncheckedCreateNestedOneWithoutOutreach_messageInput
@@ -88680,6 +97421,7 @@ export namespace Prisma {
     metadata?: JsonNullableFilter<"OutreachMessage">
     sequence_enrollment_uuid?: StringNullableFilter<"OutreachMessage"> | string | null
     sequence_step_uuid?: StringNullableFilter<"OutreachMessage"> | string | null
+    campaign_integration_uuid?: StringNullableFilter<"OutreachMessage"> | string | null
     created_at?: DateTimeFilter<"OutreachMessage"> | Date | string
     updated_at?: DateTimeFilter<"OutreachMessage"> | Date | string
   }
@@ -89091,6 +97833,7 @@ export namespace Prisma {
     interaction?: InteractionCreateNestedOneWithoutOutreach_messageInput
     sequence_enrollment?: SequenceEnrollmentCreateNestedOneWithoutOutreach_messagesInput
     sequence_step?: OutreachSequenceStepCreateNestedOneWithoutOutreach_messagesInput
+    campaign_integration?: CampaignIntegrationCreateNestedOneWithoutOutreach_messagesInput
   }
 
   export type OutreachMessageUncheckedCreateWithoutOrganisationInput = {
@@ -89120,6 +97863,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: string | null
     sequence_step_uuid?: string | null
+    campaign_integration_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     interaction?: InteractionUncheckedCreateNestedOneWithoutOutreach_messageInput
@@ -89312,6 +98056,7 @@ export namespace Prisma {
     outreach_messages?: OutreachMessageCreateNestedManyWithoutCampaignInput
     interactions?: InteractionCreateNestedManyWithoutCampaignInput
     sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutCampaignInput
+    campaign_integrations?: CampaignIntegrationCreateNestedManyWithoutCampaignInput
   }
 
   export type MarketingCampaignUncheckedCreateWithoutOrganisationInput = {
@@ -89357,6 +98102,7 @@ export namespace Prisma {
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutCampaignInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutCampaignInput
     sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutCampaignInput
+    campaign_integrations?: CampaignIntegrationUncheckedCreateNestedManyWithoutCampaignInput
   }
 
   export type MarketingCampaignCreateOrConnectWithoutOrganisationInput = {
@@ -90050,6 +98796,53 @@ export namespace Prisma {
 
   export type EmailSendLimitCreateManyOrganisationInputEnvelope = {
     data: EmailSendLimitCreateManyOrganisationInput | EmailSendLimitCreateManyOrganisationInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SendingPolicyCreateWithoutOrganisationInput = {
+    uuid?: string
+    name: string
+    description?: string | null
+    is_template?: boolean
+    timezone?: string
+    window_start_minute?: number | null
+    window_end_minute?: number | null
+    min_interval_seconds?: number
+    min_interval_jitter_seconds?: number
+    created_at?: Date | string
+    updated_at?: Date | string
+    source_policy?: SendingPolicyCreateNestedOneWithoutCloned_instancesInput
+    cloned_instances?: SendingPolicyCreateNestedManyWithoutSource_policyInput
+    stages?: SendingPolicyStageCreateNestedManyWithoutSending_policyInput
+    campaign_integrations?: CampaignIntegrationCreateNestedManyWithoutSending_policyInput
+  }
+
+  export type SendingPolicyUncheckedCreateWithoutOrganisationInput = {
+    id?: number
+    uuid?: string
+    name: string
+    description?: string | null
+    is_template?: boolean
+    source_policy_uuid?: string | null
+    timezone?: string
+    window_start_minute?: number | null
+    window_end_minute?: number | null
+    min_interval_seconds?: number
+    min_interval_jitter_seconds?: number
+    created_at?: Date | string
+    updated_at?: Date | string
+    cloned_instances?: SendingPolicyUncheckedCreateNestedManyWithoutSource_policyInput
+    stages?: SendingPolicyStageUncheckedCreateNestedManyWithoutSending_policyInput
+    campaign_integrations?: CampaignIntegrationUncheckedCreateNestedManyWithoutSending_policyInput
+  }
+
+  export type SendingPolicyCreateOrConnectWithoutOrganisationInput = {
+    where: SendingPolicyWhereUniqueInput
+    create: XOR<SendingPolicyCreateWithoutOrganisationInput, SendingPolicyUncheckedCreateWithoutOrganisationInput>
+  }
+
+  export type SendingPolicyCreateManyOrganisationInputEnvelope = {
+    data: SendingPolicyCreateManyOrganisationInput | SendingPolicyCreateManyOrganisationInput[]
     skipDuplicates?: boolean
   }
 
@@ -90875,6 +99668,42 @@ export namespace Prisma {
     updated_at?: DateTimeFilter<"EmailSendLimit"> | Date | string
   }
 
+  export type SendingPolicyUpsertWithWhereUniqueWithoutOrganisationInput = {
+    where: SendingPolicyWhereUniqueInput
+    update: XOR<SendingPolicyUpdateWithoutOrganisationInput, SendingPolicyUncheckedUpdateWithoutOrganisationInput>
+    create: XOR<SendingPolicyCreateWithoutOrganisationInput, SendingPolicyUncheckedCreateWithoutOrganisationInput>
+  }
+
+  export type SendingPolicyUpdateWithWhereUniqueWithoutOrganisationInput = {
+    where: SendingPolicyWhereUniqueInput
+    data: XOR<SendingPolicyUpdateWithoutOrganisationInput, SendingPolicyUncheckedUpdateWithoutOrganisationInput>
+  }
+
+  export type SendingPolicyUpdateManyWithWhereWithoutOrganisationInput = {
+    where: SendingPolicyScalarWhereInput
+    data: XOR<SendingPolicyUpdateManyMutationInput, SendingPolicyUncheckedUpdateManyWithoutOrganisationInput>
+  }
+
+  export type SendingPolicyScalarWhereInput = {
+    AND?: SendingPolicyScalarWhereInput | SendingPolicyScalarWhereInput[]
+    OR?: SendingPolicyScalarWhereInput[]
+    NOT?: SendingPolicyScalarWhereInput | SendingPolicyScalarWhereInput[]
+    id?: IntFilter<"SendingPolicy"> | number
+    uuid?: StringFilter<"SendingPolicy"> | string
+    organisation_uuid?: StringFilter<"SendingPolicy"> | string
+    name?: StringFilter<"SendingPolicy"> | string
+    description?: StringNullableFilter<"SendingPolicy"> | string | null
+    is_template?: BoolFilter<"SendingPolicy"> | boolean
+    source_policy_uuid?: StringNullableFilter<"SendingPolicy"> | string | null
+    timezone?: StringFilter<"SendingPolicy"> | string
+    window_start_minute?: IntNullableFilter<"SendingPolicy"> | number | null
+    window_end_minute?: IntNullableFilter<"SendingPolicy"> | number | null
+    min_interval_seconds?: IntFilter<"SendingPolicy"> | number
+    min_interval_jitter_seconds?: IntFilter<"SendingPolicy"> | number
+    created_at?: DateTimeFilter<"SendingPolicy"> | Date | string
+    updated_at?: DateTimeFilter<"SendingPolicy"> | Date | string
+  }
+
   export type OrganisationCreateWithoutMembersInput = {
     uuid?: string
     name: string
@@ -90909,6 +99738,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutMembersInput = {
@@ -90946,6 +99776,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutMembersInput = {
@@ -91042,6 +99873,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutMembersInput = {
@@ -91079,6 +99911,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutMembershipsInput = {
@@ -91165,6 +99998,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutInvitationsInput = {
@@ -91202,6 +100036,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutInvitationsInput = {
@@ -91298,6 +100133,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutInvitationsInput = {
@@ -91335,6 +100171,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutInvitations_sentInput = {
@@ -91421,6 +100258,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutFiltersInput = {
@@ -91458,6 +100296,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutFiltersInput = {
@@ -91760,6 +100599,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutFiltersInput = {
@@ -91797,6 +100637,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type RawLeadUpsertWithWhereUniqueWithoutFilterInput = {
@@ -91979,6 +100820,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutSaved_contact_filtersInput = {
@@ -92016,6 +100858,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutSaved_contact_filtersInput = {
@@ -92068,6 +100911,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutSaved_contact_filtersInput = {
@@ -92105,6 +100949,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutScoring_instructionsInput = {
@@ -92141,6 +100986,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutScoring_instructionsInput = {
@@ -92178,6 +101024,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutScoring_instructionsInput = {
@@ -92273,6 +101120,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutScoring_instructionsInput = {
@@ -92310,6 +101158,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type FilterScoringInstructionUpsertWithWhereUniqueWithoutScoring_instructionInput = {
@@ -93125,6 +101974,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutContactsInput = {
@@ -93162,6 +102012,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutContactsInput = {
@@ -93407,6 +102258,7 @@ export namespace Prisma {
     interaction?: InteractionCreateNestedOneWithoutOutreach_messageInput
     sequence_enrollment?: SequenceEnrollmentCreateNestedOneWithoutOutreach_messagesInput
     sequence_step?: OutreachSequenceStepCreateNestedOneWithoutOutreach_messagesInput
+    campaign_integration?: CampaignIntegrationCreateNestedOneWithoutOutreach_messagesInput
   }
 
   export type OutreachMessageUncheckedCreateWithoutContactInput = {
@@ -93436,6 +102288,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: string | null
     sequence_step_uuid?: string | null
+    campaign_integration_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     interaction?: InteractionUncheckedCreateNestedOneWithoutOutreach_messageInput
@@ -93637,6 +102490,8 @@ export namespace Prisma {
     uuid?: string
     status?: $Enums.SequenceEnrollmentStatus
     enrolled_at?: Date | string
+    current_step_order_index?: number
+    first_step_sent_at?: Date | string | null
     cancelled_at?: Date | string | null
     completed_at?: Date | string | null
     created_at?: Date | string
@@ -93653,6 +102508,8 @@ export namespace Prisma {
     campaign_uuid?: string | null
     status?: $Enums.SequenceEnrollmentStatus
     enrolled_at?: Date | string
+    current_step_order_index?: number
+    first_step_sent_at?: Date | string | null
     cancelled_at?: Date | string | null
     completed_at?: Date | string | null
     created_at?: Date | string
@@ -93715,6 +102572,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutContactsInput = {
@@ -93752,6 +102610,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type LeadUpsertWithoutContactsInput = {
@@ -94142,6 +103001,8 @@ export namespace Prisma {
     campaign_uuid?: StringNullableFilter<"SequenceEnrollment"> | string | null
     status?: EnumSequenceEnrollmentStatusFilter<"SequenceEnrollment"> | $Enums.SequenceEnrollmentStatus
     enrolled_at?: DateTimeFilter<"SequenceEnrollment"> | Date | string
+    current_step_order_index?: IntFilter<"SequenceEnrollment"> | number
+    first_step_sent_at?: DateTimeNullableFilter<"SequenceEnrollment"> | Date | string | null
     cancelled_at?: DateTimeNullableFilter<"SequenceEnrollment"> | Date | string | null
     completed_at?: DateTimeNullableFilter<"SequenceEnrollment"> | Date | string | null
     created_at?: DateTimeFilter<"SequenceEnrollment"> | Date | string
@@ -95066,6 +103927,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutContact_listsInput = {
@@ -95103,6 +103965,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutContact_listsInput = {
@@ -95292,6 +104155,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutContact_listsInput = {
@@ -95329,6 +104193,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type ContactListUpsertWithoutChildrenInput = {
@@ -95967,6 +104832,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutInteractionsInput = {
@@ -96004,6 +104870,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutInteractionsInput = {
@@ -96040,6 +104907,7 @@ export namespace Prisma {
     sent_by?: UserCreateNestedOneWithoutOutreach_messages_sentInput
     sequence_enrollment?: SequenceEnrollmentCreateNestedOneWithoutOutreach_messagesInput
     sequence_step?: OutreachSequenceStepCreateNestedOneWithoutOutreach_messagesInput
+    campaign_integration?: CampaignIntegrationCreateNestedOneWithoutOutreach_messagesInput
   }
 
   export type OutreachMessageUncheckedCreateWithoutInteractionInput = {
@@ -96070,6 +104938,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: string | null
     sequence_step_uuid?: string | null
+    campaign_integration_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -96121,6 +104990,7 @@ export namespace Prisma {
     campaign_contacts?: MarketingCampaignContactCreateNestedManyWithoutCampaignInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutCampaignInput
     sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutCampaignInput
+    campaign_integrations?: CampaignIntegrationCreateNestedManyWithoutCampaignInput
   }
 
   export type MarketingCampaignUncheckedCreateWithoutInteractionsInput = {
@@ -96166,6 +105036,7 @@ export namespace Prisma {
     campaign_contacts?: MarketingCampaignContactUncheckedCreateNestedManyWithoutCampaignInput
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutCampaignInput
     sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutCampaignInput
+    campaign_integrations?: CampaignIntegrationUncheckedCreateNestedManyWithoutCampaignInput
   }
 
   export type MarketingCampaignCreateOrConnectWithoutInteractionsInput = {
@@ -96312,6 +105183,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutInteractionsInput = {
@@ -96349,6 +105221,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OutreachMessageUpsertWithoutInteractionInput = {
@@ -96391,6 +105264,7 @@ export namespace Prisma {
     sent_by?: UserUpdateOneWithoutOutreach_messages_sentNestedInput
     sequence_enrollment?: SequenceEnrollmentUpdateOneWithoutOutreach_messagesNestedInput
     sequence_step?: OutreachSequenceStepUpdateOneWithoutOutreach_messagesNestedInput
+    campaign_integration?: CampaignIntegrationUpdateOneWithoutOutreach_messagesNestedInput
   }
 
   export type OutreachMessageUncheckedUpdateWithoutInteractionInput = {
@@ -96421,6 +105295,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     sequence_step_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    campaign_integration_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -96478,6 +105353,7 @@ export namespace Prisma {
     campaign_contacts?: MarketingCampaignContactUpdateManyWithoutCampaignNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutCampaignNestedInput
     sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutCampaignNestedInput
+    campaign_integrations?: CampaignIntegrationUpdateManyWithoutCampaignNestedInput
   }
 
   export type MarketingCampaignUncheckedUpdateWithoutInteractionsInput = {
@@ -96523,6 +105399,7 @@ export namespace Prisma {
     campaign_contacts?: MarketingCampaignContactUncheckedUpdateManyWithoutCampaignNestedInput
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutCampaignNestedInput
     sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutCampaignNestedInput
+    campaign_integrations?: CampaignIntegrationUncheckedUpdateManyWithoutCampaignNestedInput
   }
 
   export type OrganisationCreateWithoutOutreach_messagesInput = {
@@ -96559,6 +105436,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutOutreach_messagesInput = {
@@ -96596,6 +105474,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutOutreach_messagesInput = {
@@ -96733,6 +105612,7 @@ export namespace Prisma {
     campaign_contacts?: MarketingCampaignContactCreateNestedManyWithoutCampaignInput
     interactions?: InteractionCreateNestedManyWithoutCampaignInput
     sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutCampaignInput
+    campaign_integrations?: CampaignIntegrationCreateNestedManyWithoutCampaignInput
   }
 
   export type MarketingCampaignUncheckedCreateWithoutOutreach_messagesInput = {
@@ -96778,6 +105658,7 @@ export namespace Prisma {
     campaign_contacts?: MarketingCampaignContactUncheckedCreateNestedManyWithoutCampaignInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutCampaignInput
     sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutCampaignInput
+    campaign_integrations?: CampaignIntegrationUncheckedCreateNestedManyWithoutCampaignInput
   }
 
   export type MarketingCampaignCreateOrConnectWithoutOutreach_messagesInput = {
@@ -96865,6 +105746,8 @@ export namespace Prisma {
     uuid?: string
     status?: $Enums.SequenceEnrollmentStatus
     enrolled_at?: Date | string
+    current_step_order_index?: number
+    first_step_sent_at?: Date | string | null
     cancelled_at?: Date | string | null
     completed_at?: Date | string | null
     created_at?: Date | string
@@ -96882,6 +105765,8 @@ export namespace Prisma {
     campaign_uuid?: string | null
     status?: $Enums.SequenceEnrollmentStatus
     enrolled_at?: Date | string
+    current_step_order_index?: number
+    first_step_sent_at?: Date | string | null
     cancelled_at?: Date | string | null
     completed_at?: Date | string | null
     created_at?: Date | string
@@ -96933,6 +105818,34 @@ export namespace Prisma {
     create: XOR<OutreachSequenceStepCreateWithoutOutreach_messagesInput, OutreachSequenceStepUncheckedCreateWithoutOutreach_messagesInput>
   }
 
+  export type CampaignIntegrationCreateWithoutOutreach_messagesInput = {
+    uuid?: string
+    status?: $Enums.CampaignIntegrationStatus
+    created_at?: Date | string
+    updated_at?: Date | string
+    campaign: MarketingCampaignCreateNestedOneWithoutCampaign_integrationsInput
+    integration_account: IntegrationAccountCreateNestedOneWithoutCampaign_integrationsInput
+    sending_policy: SendingPolicyCreateNestedOneWithoutCampaign_integrationsInput
+    state?: CampaignIntegrationStateCreateNestedOneWithoutCampaign_integrationInput
+  }
+
+  export type CampaignIntegrationUncheckedCreateWithoutOutreach_messagesInput = {
+    id?: number
+    uuid?: string
+    campaign_uuid: string
+    integration_account_uuid: string
+    sending_policy_uuid: string
+    status?: $Enums.CampaignIntegrationStatus
+    created_at?: Date | string
+    updated_at?: Date | string
+    state?: CampaignIntegrationStateUncheckedCreateNestedOneWithoutCampaign_integrationInput
+  }
+
+  export type CampaignIntegrationCreateOrConnectWithoutOutreach_messagesInput = {
+    where: CampaignIntegrationWhereUniqueInput
+    create: XOR<CampaignIntegrationCreateWithoutOutreach_messagesInput, CampaignIntegrationUncheckedCreateWithoutOutreach_messagesInput>
+  }
+
   export type OrganisationUpsertWithoutOutreach_messagesInput = {
     update: XOR<OrganisationUpdateWithoutOutreach_messagesInput, OrganisationUncheckedUpdateWithoutOutreach_messagesInput>
     create: XOR<OrganisationCreateWithoutOutreach_messagesInput, OrganisationUncheckedCreateWithoutOutreach_messagesInput>
@@ -96978,6 +105891,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutOutreach_messagesInput = {
@@ -97015,6 +105929,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type ContactUpsertWithoutOutreach_messagesInput = {
@@ -97164,6 +106079,7 @@ export namespace Prisma {
     campaign_contacts?: MarketingCampaignContactUpdateManyWithoutCampaignNestedInput
     interactions?: InteractionUpdateManyWithoutCampaignNestedInput
     sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutCampaignNestedInput
+    campaign_integrations?: CampaignIntegrationUpdateManyWithoutCampaignNestedInput
   }
 
   export type MarketingCampaignUncheckedUpdateWithoutOutreach_messagesInput = {
@@ -97209,6 +106125,7 @@ export namespace Prisma {
     campaign_contacts?: MarketingCampaignContactUncheckedUpdateManyWithoutCampaignNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutCampaignNestedInput
     sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutCampaignNestedInput
+    campaign_integrations?: CampaignIntegrationUncheckedUpdateManyWithoutCampaignNestedInput
   }
 
   export type UserUpsertWithoutOutreach_messages_sentInput = {
@@ -97314,6 +106231,8 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     status?: EnumSequenceEnrollmentStatusFieldUpdateOperationsInput | $Enums.SequenceEnrollmentStatus
     enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    current_step_order_index?: IntFieldUpdateOperationsInput | number
+    first_step_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -97331,6 +106250,8 @@ export namespace Prisma {
     campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSequenceEnrollmentStatusFieldUpdateOperationsInput | $Enums.SequenceEnrollmentStatus
     enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    current_step_order_index?: IntFieldUpdateOperationsInput | number
+    first_step_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -97383,6 +106304,40 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type CampaignIntegrationUpsertWithoutOutreach_messagesInput = {
+    update: XOR<CampaignIntegrationUpdateWithoutOutreach_messagesInput, CampaignIntegrationUncheckedUpdateWithoutOutreach_messagesInput>
+    create: XOR<CampaignIntegrationCreateWithoutOutreach_messagesInput, CampaignIntegrationUncheckedCreateWithoutOutreach_messagesInput>
+    where?: CampaignIntegrationWhereInput
+  }
+
+  export type CampaignIntegrationUpdateToOneWithWhereWithoutOutreach_messagesInput = {
+    where?: CampaignIntegrationWhereInput
+    data: XOR<CampaignIntegrationUpdateWithoutOutreach_messagesInput, CampaignIntegrationUncheckedUpdateWithoutOutreach_messagesInput>
+  }
+
+  export type CampaignIntegrationUpdateWithoutOutreach_messagesInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumCampaignIntegrationStatusFieldUpdateOperationsInput | $Enums.CampaignIntegrationStatus
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    campaign?: MarketingCampaignUpdateOneRequiredWithoutCampaign_integrationsNestedInput
+    integration_account?: IntegrationAccountUpdateOneRequiredWithoutCampaign_integrationsNestedInput
+    sending_policy?: SendingPolicyUpdateOneRequiredWithoutCampaign_integrationsNestedInput
+    state?: CampaignIntegrationStateUpdateOneWithoutCampaign_integrationNestedInput
+  }
+
+  export type CampaignIntegrationUncheckedUpdateWithoutOutreach_messagesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    campaign_uuid?: StringFieldUpdateOperationsInput | string
+    integration_account_uuid?: StringFieldUpdateOperationsInput | string
+    sending_policy_uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumCampaignIntegrationStatusFieldUpdateOperationsInput | $Enums.CampaignIntegrationStatus
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    state?: CampaignIntegrationStateUncheckedUpdateOneWithoutCampaign_integrationNestedInput
+  }
+
   export type OrganisationCreateWithoutOutreach_sequencesInput = {
     uuid?: string
     name: string
@@ -97417,6 +106372,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutOutreach_sequencesInput = {
@@ -97454,6 +106410,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutOutreach_sequencesInput = {
@@ -97510,6 +106467,8 @@ export namespace Prisma {
     uuid?: string
     status?: $Enums.SequenceEnrollmentStatus
     enrolled_at?: Date | string
+    current_step_order_index?: number
+    first_step_sent_at?: Date | string | null
     cancelled_at?: Date | string | null
     completed_at?: Date | string | null
     created_at?: Date | string
@@ -97526,6 +106485,8 @@ export namespace Prisma {
     campaign_uuid?: string | null
     status?: $Enums.SequenceEnrollmentStatus
     enrolled_at?: Date | string
+    current_step_order_index?: number
+    first_step_sent_at?: Date | string | null
     cancelled_at?: Date | string | null
     completed_at?: Date | string | null
     created_at?: Date | string
@@ -97585,6 +106546,7 @@ export namespace Prisma {
     outreach_messages?: OutreachMessageCreateNestedManyWithoutCampaignInput
     interactions?: InteractionCreateNestedManyWithoutCampaignInput
     sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutCampaignInput
+    campaign_integrations?: CampaignIntegrationCreateNestedManyWithoutCampaignInput
   }
 
   export type MarketingCampaignUncheckedCreateWithoutSequenceInput = {
@@ -97630,6 +106592,7 @@ export namespace Prisma {
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutCampaignInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutCampaignInput
     sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutCampaignInput
+    campaign_integrations?: CampaignIntegrationUncheckedCreateNestedManyWithoutCampaignInput
   }
 
   export type MarketingCampaignCreateOrConnectWithoutSequenceInput = {
@@ -97687,6 +106650,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutOutreach_sequencesInput = {
@@ -97724,6 +106688,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OutreachSequenceStepUpsertWithWhereUniqueWithoutSequenceInput = {
@@ -97888,6 +106853,7 @@ export namespace Prisma {
     sent_by?: UserCreateNestedOneWithoutOutreach_messages_sentInput
     interaction?: InteractionCreateNestedOneWithoutOutreach_messageInput
     sequence_enrollment?: SequenceEnrollmentCreateNestedOneWithoutOutreach_messagesInput
+    campaign_integration?: CampaignIntegrationCreateNestedOneWithoutOutreach_messagesInput
   }
 
   export type OutreachMessageUncheckedCreateWithoutSequence_stepInput = {
@@ -97917,6 +106883,7 @@ export namespace Prisma {
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: string | null
+    campaign_integration_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     interaction?: InteractionUncheckedCreateNestedOneWithoutOutreach_messageInput
@@ -98184,6 +107151,7 @@ export namespace Prisma {
     campaign_contacts?: MarketingCampaignContactCreateNestedManyWithoutCampaignInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutCampaignInput
     interactions?: InteractionCreateNestedManyWithoutCampaignInput
+    campaign_integrations?: CampaignIntegrationCreateNestedManyWithoutCampaignInput
   }
 
   export type MarketingCampaignUncheckedCreateWithoutSequence_enrollmentsInput = {
@@ -98229,6 +107197,7 @@ export namespace Prisma {
     campaign_contacts?: MarketingCampaignContactUncheckedCreateNestedManyWithoutCampaignInput
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutCampaignInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutCampaignInput
+    campaign_integrations?: CampaignIntegrationUncheckedCreateNestedManyWithoutCampaignInput
   }
 
   export type MarketingCampaignCreateOrConnectWithoutSequence_enrollmentsInput = {
@@ -98265,6 +107234,7 @@ export namespace Prisma {
     sent_by?: UserCreateNestedOneWithoutOutreach_messages_sentInput
     interaction?: InteractionCreateNestedOneWithoutOutreach_messageInput
     sequence_step?: OutreachSequenceStepCreateNestedOneWithoutOutreach_messagesInput
+    campaign_integration?: CampaignIntegrationCreateNestedOneWithoutOutreach_messagesInput
   }
 
   export type OutreachMessageUncheckedCreateWithoutSequence_enrollmentInput = {
@@ -98294,6 +107264,7 @@ export namespace Prisma {
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_step_uuid?: string | null
+    campaign_integration_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     interaction?: InteractionUncheckedCreateNestedOneWithoutOutreach_messageInput
@@ -98492,6 +107463,7 @@ export namespace Prisma {
     campaign_contacts?: MarketingCampaignContactUpdateManyWithoutCampaignNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutCampaignNestedInput
     interactions?: InteractionUpdateManyWithoutCampaignNestedInput
+    campaign_integrations?: CampaignIntegrationUpdateManyWithoutCampaignNestedInput
   }
 
   export type MarketingCampaignUncheckedUpdateWithoutSequence_enrollmentsInput = {
@@ -98537,6 +107509,7 @@ export namespace Prisma {
     campaign_contacts?: MarketingCampaignContactUncheckedUpdateManyWithoutCampaignNestedInput
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutCampaignNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutCampaignNestedInput
+    campaign_integrations?: CampaignIntegrationUncheckedUpdateManyWithoutCampaignNestedInput
   }
 
   export type OutreachMessageUpsertWithWhereUniqueWithoutSequence_enrollmentInput = {
@@ -98687,6 +107660,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutBulk_jobsInput = {
@@ -98724,6 +107698,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutBulk_jobsInput = {
@@ -98820,6 +107795,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutBulk_jobsInput = {
@@ -98857,6 +107833,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutBulk_jobs_createdInput = {
@@ -98943,6 +107920,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutWebsite_scrape_requestsInput = {
@@ -98980,6 +107958,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutWebsite_scrape_requestsInput = {
@@ -99032,6 +108011,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutWebsite_scrape_requestsInput = {
@@ -99069,6 +108049,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutSender_profilesInput = {
@@ -99105,6 +108086,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutSender_profilesInput = {
@@ -99142,6 +108124,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutSender_profilesInput = {
@@ -99191,6 +108174,7 @@ export namespace Prisma {
     outreach_messages?: OutreachMessageCreateNestedManyWithoutCampaignInput
     interactions?: InteractionCreateNestedManyWithoutCampaignInput
     sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutCampaignInput
+    campaign_integrations?: CampaignIntegrationCreateNestedManyWithoutCampaignInput
   }
 
   export type MarketingCampaignUncheckedCreateWithoutSender_profileInput = {
@@ -99236,6 +108220,7 @@ export namespace Prisma {
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutCampaignInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutCampaignInput
     sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutCampaignInput
+    campaign_integrations?: CampaignIntegrationUncheckedCreateNestedManyWithoutCampaignInput
   }
 
   export type MarketingCampaignCreateOrConnectWithoutSender_profileInput = {
@@ -99293,6 +108278,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutSender_profilesInput = {
@@ -99330,6 +108316,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type MarketingCampaignUpsertWithWhereUniqueWithoutSender_profileInput = {
@@ -99382,6 +108369,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutMessage_templatesInput = {
@@ -99419,6 +108407,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutMessage_templatesInput = {
@@ -99516,6 +108505,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutMessage_templatesInput = {
@@ -99553,6 +108543,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OutreachSequenceStepUpsertWithWhereUniqueWithoutMessage_templateInput = {
@@ -99605,6 +108596,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutMarketing_campaignsInput = {
@@ -99642,6 +108634,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutMarketing_campaignsInput = {
@@ -99801,6 +108794,7 @@ export namespace Prisma {
     interaction?: InteractionCreateNestedOneWithoutOutreach_messageInput
     sequence_enrollment?: SequenceEnrollmentCreateNestedOneWithoutOutreach_messagesInput
     sequence_step?: OutreachSequenceStepCreateNestedOneWithoutOutreach_messagesInput
+    campaign_integration?: CampaignIntegrationCreateNestedOneWithoutOutreach_messagesInput
   }
 
   export type OutreachMessageUncheckedCreateWithoutCampaignInput = {
@@ -99830,6 +108824,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: string | null
     sequence_step_uuid?: string | null
+    campaign_integration_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     interaction?: InteractionUncheckedCreateNestedOneWithoutOutreach_messageInput
@@ -99886,6 +108881,8 @@ export namespace Prisma {
     uuid?: string
     status?: $Enums.SequenceEnrollmentStatus
     enrolled_at?: Date | string
+    current_step_order_index?: number
+    first_step_sent_at?: Date | string | null
     cancelled_at?: Date | string | null
     completed_at?: Date | string | null
     created_at?: Date | string
@@ -99902,6 +108899,8 @@ export namespace Prisma {
     contact_uuid: string
     status?: $Enums.SequenceEnrollmentStatus
     enrolled_at?: Date | string
+    current_step_order_index?: number
+    first_step_sent_at?: Date | string | null
     cancelled_at?: Date | string | null
     completed_at?: Date | string | null
     created_at?: Date | string
@@ -99916,6 +108915,39 @@ export namespace Prisma {
 
   export type SequenceEnrollmentCreateManyCampaignInputEnvelope = {
     data: SequenceEnrollmentCreateManyCampaignInput | SequenceEnrollmentCreateManyCampaignInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CampaignIntegrationCreateWithoutCampaignInput = {
+    uuid?: string
+    status?: $Enums.CampaignIntegrationStatus
+    created_at?: Date | string
+    updated_at?: Date | string
+    integration_account: IntegrationAccountCreateNestedOneWithoutCampaign_integrationsInput
+    sending_policy: SendingPolicyCreateNestedOneWithoutCampaign_integrationsInput
+    state?: CampaignIntegrationStateCreateNestedOneWithoutCampaign_integrationInput
+    outreach_messages?: OutreachMessageCreateNestedManyWithoutCampaign_integrationInput
+  }
+
+  export type CampaignIntegrationUncheckedCreateWithoutCampaignInput = {
+    id?: number
+    uuid?: string
+    integration_account_uuid: string
+    sending_policy_uuid: string
+    status?: $Enums.CampaignIntegrationStatus
+    created_at?: Date | string
+    updated_at?: Date | string
+    state?: CampaignIntegrationStateUncheckedCreateNestedOneWithoutCampaign_integrationInput
+    outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutCampaign_integrationInput
+  }
+
+  export type CampaignIntegrationCreateOrConnectWithoutCampaignInput = {
+    where: CampaignIntegrationWhereUniqueInput
+    create: XOR<CampaignIntegrationCreateWithoutCampaignInput, CampaignIntegrationUncheckedCreateWithoutCampaignInput>
+  }
+
+  export type CampaignIntegrationCreateManyCampaignInputEnvelope = {
+    data: CampaignIntegrationCreateManyCampaignInput | CampaignIntegrationCreateManyCampaignInput[]
     skipDuplicates?: boolean
   }
 
@@ -99964,6 +108996,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutMarketing_campaignsInput = {
@@ -100001,6 +109034,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type SenderProfileUpsertWithoutMarketing_campaignsInput = {
@@ -100167,6 +109201,36 @@ export namespace Prisma {
     data: XOR<SequenceEnrollmentUpdateManyMutationInput, SequenceEnrollmentUncheckedUpdateManyWithoutCampaignInput>
   }
 
+  export type CampaignIntegrationUpsertWithWhereUniqueWithoutCampaignInput = {
+    where: CampaignIntegrationWhereUniqueInput
+    update: XOR<CampaignIntegrationUpdateWithoutCampaignInput, CampaignIntegrationUncheckedUpdateWithoutCampaignInput>
+    create: XOR<CampaignIntegrationCreateWithoutCampaignInput, CampaignIntegrationUncheckedCreateWithoutCampaignInput>
+  }
+
+  export type CampaignIntegrationUpdateWithWhereUniqueWithoutCampaignInput = {
+    where: CampaignIntegrationWhereUniqueInput
+    data: XOR<CampaignIntegrationUpdateWithoutCampaignInput, CampaignIntegrationUncheckedUpdateWithoutCampaignInput>
+  }
+
+  export type CampaignIntegrationUpdateManyWithWhereWithoutCampaignInput = {
+    where: CampaignIntegrationScalarWhereInput
+    data: XOR<CampaignIntegrationUpdateManyMutationInput, CampaignIntegrationUncheckedUpdateManyWithoutCampaignInput>
+  }
+
+  export type CampaignIntegrationScalarWhereInput = {
+    AND?: CampaignIntegrationScalarWhereInput | CampaignIntegrationScalarWhereInput[]
+    OR?: CampaignIntegrationScalarWhereInput[]
+    NOT?: CampaignIntegrationScalarWhereInput | CampaignIntegrationScalarWhereInput[]
+    id?: IntFilter<"CampaignIntegration"> | number
+    uuid?: StringFilter<"CampaignIntegration"> | string
+    campaign_uuid?: StringFilter<"CampaignIntegration"> | string
+    integration_account_uuid?: StringFilter<"CampaignIntegration"> | string
+    sending_policy_uuid?: StringFilter<"CampaignIntegration"> | string
+    status?: EnumCampaignIntegrationStatusFilter<"CampaignIntegration"> | $Enums.CampaignIntegrationStatus
+    created_at?: DateTimeFilter<"CampaignIntegration"> | Date | string
+    updated_at?: DateTimeFilter<"CampaignIntegration"> | Date | string
+  }
+
   export type MarketingCampaignCreateWithoutCampaign_contactsInput = {
     uuid?: string
     name: string
@@ -100209,6 +109273,7 @@ export namespace Prisma {
     outreach_messages?: OutreachMessageCreateNestedManyWithoutCampaignInput
     interactions?: InteractionCreateNestedManyWithoutCampaignInput
     sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutCampaignInput
+    campaign_integrations?: CampaignIntegrationCreateNestedManyWithoutCampaignInput
   }
 
   export type MarketingCampaignUncheckedCreateWithoutCampaign_contactsInput = {
@@ -100254,6 +109319,7 @@ export namespace Prisma {
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutCampaignInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutCampaignInput
     sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutCampaignInput
+    campaign_integrations?: CampaignIntegrationUncheckedCreateNestedManyWithoutCampaignInput
   }
 
   export type MarketingCampaignCreateOrConnectWithoutCampaign_contactsInput = {
@@ -100402,6 +109468,7 @@ export namespace Prisma {
     outreach_messages?: OutreachMessageUpdateManyWithoutCampaignNestedInput
     interactions?: InteractionUpdateManyWithoutCampaignNestedInput
     sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutCampaignNestedInput
+    campaign_integrations?: CampaignIntegrationUpdateManyWithoutCampaignNestedInput
   }
 
   export type MarketingCampaignUncheckedUpdateWithoutCampaign_contactsInput = {
@@ -100447,6 +109514,7 @@ export namespace Prisma {
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutCampaignNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutCampaignNestedInput
     sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutCampaignNestedInput
+    campaign_integrations?: CampaignIntegrationUncheckedUpdateManyWithoutCampaignNestedInput
   }
 
   export type ContactUpsertWithoutCampaign_contactsInput = {
@@ -100577,6 +109645,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutOpenai_batch_jobsInput = {
@@ -100614,6 +109683,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutOpenai_batch_jobsInput = {
@@ -100666,6 +109736,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutOpenai_batch_jobsInput = {
@@ -100703,6 +109774,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutIntegrationsInput = {
@@ -100739,6 +109811,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutIntegrationsInput = {
@@ -100776,6 +109849,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutIntegrationsInput = {
@@ -100818,8 +109892,11 @@ export namespace Prisma {
     uuid?: string
     account: string
     title: string
+    max_messages_per_period?: number | null
+    max_messages_period_unit?: $Enums.SendingPeriodUnit | null
     created_at?: Date | string
     updated_at?: Date | string
+    campaign_integrations?: CampaignIntegrationCreateNestedManyWithoutIntegration_accountInput
   }
 
   export type IntegrationAccountUncheckedCreateWithoutIntegrationInput = {
@@ -100827,8 +109904,11 @@ export namespace Prisma {
     uuid?: string
     account: string
     title: string
+    max_messages_per_period?: number | null
+    max_messages_period_unit?: $Enums.SendingPeriodUnit | null
     created_at?: Date | string
     updated_at?: Date | string
+    campaign_integrations?: CampaignIntegrationUncheckedCreateNestedManyWithoutIntegration_accountInput
   }
 
   export type IntegrationAccountCreateOrConnectWithoutIntegrationInput = {
@@ -100886,6 +109966,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutIntegrationsInput = {
@@ -100923,6 +110004,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type IntegrationKeyUpsertWithWhereUniqueWithoutIntegrationInput = {
@@ -100981,6 +110063,8 @@ export namespace Prisma {
     integration_uuid?: StringFilter<"IntegrationAccount"> | string
     account?: StringFilter<"IntegrationAccount"> | string
     title?: StringFilter<"IntegrationAccount"> | string
+    max_messages_per_period?: IntNullableFilter<"IntegrationAccount"> | number | null
+    max_messages_period_unit?: EnumSendingPeriodUnitNullableFilter<"IntegrationAccount"> | $Enums.SendingPeriodUnit | null
     created_at?: DateTimeFilter<"IntegrationAccount"> | Date | string
     updated_at?: DateTimeFilter<"IntegrationAccount"> | Date | string
   }
@@ -101011,6 +110095,39 @@ export namespace Prisma {
   export type IntegrationCreateOrConnectWithoutAccountsInput = {
     where: IntegrationWhereUniqueInput
     create: XOR<IntegrationCreateWithoutAccountsInput, IntegrationUncheckedCreateWithoutAccountsInput>
+  }
+
+  export type CampaignIntegrationCreateWithoutIntegration_accountInput = {
+    uuid?: string
+    status?: $Enums.CampaignIntegrationStatus
+    created_at?: Date | string
+    updated_at?: Date | string
+    campaign: MarketingCampaignCreateNestedOneWithoutCampaign_integrationsInput
+    sending_policy: SendingPolicyCreateNestedOneWithoutCampaign_integrationsInput
+    state?: CampaignIntegrationStateCreateNestedOneWithoutCampaign_integrationInput
+    outreach_messages?: OutreachMessageCreateNestedManyWithoutCampaign_integrationInput
+  }
+
+  export type CampaignIntegrationUncheckedCreateWithoutIntegration_accountInput = {
+    id?: number
+    uuid?: string
+    campaign_uuid: string
+    sending_policy_uuid: string
+    status?: $Enums.CampaignIntegrationStatus
+    created_at?: Date | string
+    updated_at?: Date | string
+    state?: CampaignIntegrationStateUncheckedCreateNestedOneWithoutCampaign_integrationInput
+    outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutCampaign_integrationInput
+  }
+
+  export type CampaignIntegrationCreateOrConnectWithoutIntegration_accountInput = {
+    where: CampaignIntegrationWhereUniqueInput
+    create: XOR<CampaignIntegrationCreateWithoutIntegration_accountInput, CampaignIntegrationUncheckedCreateWithoutIntegration_accountInput>
+  }
+
+  export type CampaignIntegrationCreateManyIntegration_accountInputEnvelope = {
+    data: CampaignIntegrationCreateManyIntegration_accountInput | CampaignIntegrationCreateManyIntegration_accountInput[]
+    skipDuplicates?: boolean
   }
 
   export type IntegrationUpsertWithoutAccountsInput = {
@@ -101045,6 +110162,22 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     keys?: IntegrationKeyUncheckedUpdateManyWithoutIntegrationNestedInput
+  }
+
+  export type CampaignIntegrationUpsertWithWhereUniqueWithoutIntegration_accountInput = {
+    where: CampaignIntegrationWhereUniqueInput
+    update: XOR<CampaignIntegrationUpdateWithoutIntegration_accountInput, CampaignIntegrationUncheckedUpdateWithoutIntegration_accountInput>
+    create: XOR<CampaignIntegrationCreateWithoutIntegration_accountInput, CampaignIntegrationUncheckedCreateWithoutIntegration_accountInput>
+  }
+
+  export type CampaignIntegrationUpdateWithWhereUniqueWithoutIntegration_accountInput = {
+    where: CampaignIntegrationWhereUniqueInput
+    data: XOR<CampaignIntegrationUpdateWithoutIntegration_accountInput, CampaignIntegrationUncheckedUpdateWithoutIntegration_accountInput>
+  }
+
+  export type CampaignIntegrationUpdateManyWithWhereWithoutIntegration_accountInput = {
+    where: CampaignIntegrationScalarWhereInput
+    data: XOR<CampaignIntegrationUpdateManyMutationInput, CampaignIntegrationUncheckedUpdateManyWithoutIntegration_accountInput>
   }
 
   export type IntegrationCreateWithoutKeysInput = {
@@ -101143,6 +110276,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutRemindersInput = {
@@ -101180,6 +110314,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutRemindersInput = {
@@ -101320,6 +110455,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutRemindersInput = {
@@ -101357,6 +110493,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type ContactUpsertWithoutRemindersInput = {
@@ -101487,6 +110624,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutFormsInput = {
@@ -101524,6 +110662,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutFormsInput = {
@@ -101648,6 +110787,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutFormsInput = {
@@ -101685,6 +110825,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type FormFieldUpsertWithWhereUniqueWithoutFormInput = {
@@ -102400,6 +111541,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutContact_audience_analysesInput = {
@@ -102437,6 +111579,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutContact_audience_analysesInput = {
@@ -102565,6 +111708,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutContact_audience_analysesInput = {
@@ -102602,6 +111746,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type FilterUpsertWithoutAudience_analysesInput = {
@@ -102726,6 +111871,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutAi_usage_logsInput = {
@@ -102763,6 +111909,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutAi_usage_logsInput = {
@@ -102815,6 +111962,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutAi_usage_logsInput = {
@@ -102852,6 +112000,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutApify_usage_logsInput = {
@@ -102888,6 +112037,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutApify_usage_logsInput = {
@@ -102925,6 +112075,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutApify_usage_logsInput = {
@@ -102977,6 +112128,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutApify_usage_logsInput = {
@@ -103014,6 +112166,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutMessaging_goalsInput = {
@@ -103050,6 +112203,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutMessaging_goalsInput = {
@@ -103087,6 +112241,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutMessaging_goalsInput = {
@@ -103216,6 +112371,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutMessaging_goalsInput = {
@@ -103253,6 +112409,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutMessaging_goalsInput = {
@@ -103355,6 +112512,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutEmail_send_limitsInput = {
@@ -103392,6 +112550,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutEmail_send_limitsInput = {
@@ -103444,6 +112603,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutEmail_send_limitsInput = {
@@ -103481,6 +112641,1087 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
+  }
+
+  export type OrganisationCreateWithoutSending_policiesInput = {
+    uuid?: string
+    name: string
+    slug: string
+    timezone?: string
+    reply_to_email?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
+    invitations?: OrganisationInvitationCreateNestedManyWithoutOrganisationInput
+    filters?: FilterCreateNestedManyWithoutOrganisationInput
+    contacts?: ContactCreateNestedManyWithoutOrganisationInput
+    outreach_messages?: OutreachMessageCreateNestedManyWithoutOrganisationInput
+    outreach_sequences?: OutreachSequenceCreateNestedManyWithoutOrganisationInput
+    interactions?: InteractionCreateNestedManyWithoutOrganisationInput
+    sender_profiles?: SenderProfileCreateNestedManyWithoutOrganisationInput
+    marketing_campaigns?: MarketingCampaignCreateNestedManyWithoutOrganisationInput
+    scoring_instructions?: ScoringInstructionCreateNestedManyWithoutOrganisationInput
+    openai_batch_jobs?: OpenAiBatchJobCreateNestedManyWithoutOrganisationInput
+    integrations?: IntegrationCreateNestedManyWithoutOrganisationInput
+    reminders?: ReminderCreateNestedManyWithoutOrganisationInput
+    forms?: FormCreateNestedManyWithoutOrganisationInput
+    contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
+    contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
+    ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
+    apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
+    message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
+  }
+
+  export type OrganisationUncheckedCreateWithoutSending_policiesInput = {
+    id?: number
+    uuid?: string
+    name: string
+    slug: string
+    timezone?: string
+    reply_to_email?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
+    invitations?: OrganisationInvitationUncheckedCreateNestedManyWithoutOrganisationInput
+    filters?: FilterUncheckedCreateNestedManyWithoutOrganisationInput
+    contacts?: ContactUncheckedCreateNestedManyWithoutOrganisationInput
+    outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutOrganisationInput
+    outreach_sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutOrganisationInput
+    interactions?: InteractionUncheckedCreateNestedManyWithoutOrganisationInput
+    sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutOrganisationInput
+    marketing_campaigns?: MarketingCampaignUncheckedCreateNestedManyWithoutOrganisationInput
+    scoring_instructions?: ScoringInstructionUncheckedCreateNestedManyWithoutOrganisationInput
+    openai_batch_jobs?: OpenAiBatchJobUncheckedCreateNestedManyWithoutOrganisationInput
+    integrations?: IntegrationUncheckedCreateNestedManyWithoutOrganisationInput
+    reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
+    forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
+    contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
+    contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
+    ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
+    apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
+    message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
+  }
+
+  export type OrganisationCreateOrConnectWithoutSending_policiesInput = {
+    where: OrganisationWhereUniqueInput
+    create: XOR<OrganisationCreateWithoutSending_policiesInput, OrganisationUncheckedCreateWithoutSending_policiesInput>
+  }
+
+  export type SendingPolicyCreateWithoutCloned_instancesInput = {
+    uuid?: string
+    name: string
+    description?: string | null
+    is_template?: boolean
+    timezone?: string
+    window_start_minute?: number | null
+    window_end_minute?: number | null
+    min_interval_seconds?: number
+    min_interval_jitter_seconds?: number
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutSending_policiesInput
+    source_policy?: SendingPolicyCreateNestedOneWithoutCloned_instancesInput
+    stages?: SendingPolicyStageCreateNestedManyWithoutSending_policyInput
+    campaign_integrations?: CampaignIntegrationCreateNestedManyWithoutSending_policyInput
+  }
+
+  export type SendingPolicyUncheckedCreateWithoutCloned_instancesInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    name: string
+    description?: string | null
+    is_template?: boolean
+    source_policy_uuid?: string | null
+    timezone?: string
+    window_start_minute?: number | null
+    window_end_minute?: number | null
+    min_interval_seconds?: number
+    min_interval_jitter_seconds?: number
+    created_at?: Date | string
+    updated_at?: Date | string
+    stages?: SendingPolicyStageUncheckedCreateNestedManyWithoutSending_policyInput
+    campaign_integrations?: CampaignIntegrationUncheckedCreateNestedManyWithoutSending_policyInput
+  }
+
+  export type SendingPolicyCreateOrConnectWithoutCloned_instancesInput = {
+    where: SendingPolicyWhereUniqueInput
+    create: XOR<SendingPolicyCreateWithoutCloned_instancesInput, SendingPolicyUncheckedCreateWithoutCloned_instancesInput>
+  }
+
+  export type SendingPolicyCreateWithoutSource_policyInput = {
+    uuid?: string
+    name: string
+    description?: string | null
+    is_template?: boolean
+    timezone?: string
+    window_start_minute?: number | null
+    window_end_minute?: number | null
+    min_interval_seconds?: number
+    min_interval_jitter_seconds?: number
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutSending_policiesInput
+    cloned_instances?: SendingPolicyCreateNestedManyWithoutSource_policyInput
+    stages?: SendingPolicyStageCreateNestedManyWithoutSending_policyInput
+    campaign_integrations?: CampaignIntegrationCreateNestedManyWithoutSending_policyInput
+  }
+
+  export type SendingPolicyUncheckedCreateWithoutSource_policyInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    name: string
+    description?: string | null
+    is_template?: boolean
+    timezone?: string
+    window_start_minute?: number | null
+    window_end_minute?: number | null
+    min_interval_seconds?: number
+    min_interval_jitter_seconds?: number
+    created_at?: Date | string
+    updated_at?: Date | string
+    cloned_instances?: SendingPolicyUncheckedCreateNestedManyWithoutSource_policyInput
+    stages?: SendingPolicyStageUncheckedCreateNestedManyWithoutSending_policyInput
+    campaign_integrations?: CampaignIntegrationUncheckedCreateNestedManyWithoutSending_policyInput
+  }
+
+  export type SendingPolicyCreateOrConnectWithoutSource_policyInput = {
+    where: SendingPolicyWhereUniqueInput
+    create: XOR<SendingPolicyCreateWithoutSource_policyInput, SendingPolicyUncheckedCreateWithoutSource_policyInput>
+  }
+
+  export type SendingPolicyCreateManySource_policyInputEnvelope = {
+    data: SendingPolicyCreateManySource_policyInput | SendingPolicyCreateManySource_policyInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SendingPolicyStageCreateWithoutSending_policyInput = {
+    uuid?: string
+    order_index: number
+    limit: number
+    period_unit: $Enums.SendingPeriodUnit
+    duration_value?: number | null
+    duration_unit?: $Enums.SendingPeriodUnit | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type SendingPolicyStageUncheckedCreateWithoutSending_policyInput = {
+    id?: number
+    uuid?: string
+    order_index: number
+    limit: number
+    period_unit: $Enums.SendingPeriodUnit
+    duration_value?: number | null
+    duration_unit?: $Enums.SendingPeriodUnit | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type SendingPolicyStageCreateOrConnectWithoutSending_policyInput = {
+    where: SendingPolicyStageWhereUniqueInput
+    create: XOR<SendingPolicyStageCreateWithoutSending_policyInput, SendingPolicyStageUncheckedCreateWithoutSending_policyInput>
+  }
+
+  export type SendingPolicyStageCreateManySending_policyInputEnvelope = {
+    data: SendingPolicyStageCreateManySending_policyInput | SendingPolicyStageCreateManySending_policyInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CampaignIntegrationCreateWithoutSending_policyInput = {
+    uuid?: string
+    status?: $Enums.CampaignIntegrationStatus
+    created_at?: Date | string
+    updated_at?: Date | string
+    campaign: MarketingCampaignCreateNestedOneWithoutCampaign_integrationsInput
+    integration_account: IntegrationAccountCreateNestedOneWithoutCampaign_integrationsInput
+    state?: CampaignIntegrationStateCreateNestedOneWithoutCampaign_integrationInput
+    outreach_messages?: OutreachMessageCreateNestedManyWithoutCampaign_integrationInput
+  }
+
+  export type CampaignIntegrationUncheckedCreateWithoutSending_policyInput = {
+    id?: number
+    uuid?: string
+    campaign_uuid: string
+    integration_account_uuid: string
+    status?: $Enums.CampaignIntegrationStatus
+    created_at?: Date | string
+    updated_at?: Date | string
+    state?: CampaignIntegrationStateUncheckedCreateNestedOneWithoutCampaign_integrationInput
+    outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutCampaign_integrationInput
+  }
+
+  export type CampaignIntegrationCreateOrConnectWithoutSending_policyInput = {
+    where: CampaignIntegrationWhereUniqueInput
+    create: XOR<CampaignIntegrationCreateWithoutSending_policyInput, CampaignIntegrationUncheckedCreateWithoutSending_policyInput>
+  }
+
+  export type CampaignIntegrationCreateManySending_policyInputEnvelope = {
+    data: CampaignIntegrationCreateManySending_policyInput | CampaignIntegrationCreateManySending_policyInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type OrganisationUpsertWithoutSending_policiesInput = {
+    update: XOR<OrganisationUpdateWithoutSending_policiesInput, OrganisationUncheckedUpdateWithoutSending_policiesInput>
+    create: XOR<OrganisationCreateWithoutSending_policiesInput, OrganisationUncheckedCreateWithoutSending_policiesInput>
+    where?: OrganisationWhereInput
+  }
+
+  export type OrganisationUpdateToOneWithWhereWithoutSending_policiesInput = {
+    where?: OrganisationWhereInput
+    data: XOR<OrganisationUpdateWithoutSending_policiesInput, OrganisationUncheckedUpdateWithoutSending_policiesInput>
+  }
+
+  export type OrganisationUpdateWithoutSending_policiesInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
+    invitations?: OrganisationInvitationUpdateManyWithoutOrganisationNestedInput
+    filters?: FilterUpdateManyWithoutOrganisationNestedInput
+    contacts?: ContactUpdateManyWithoutOrganisationNestedInput
+    outreach_messages?: OutreachMessageUpdateManyWithoutOrganisationNestedInput
+    outreach_sequences?: OutreachSequenceUpdateManyWithoutOrganisationNestedInput
+    interactions?: InteractionUpdateManyWithoutOrganisationNestedInput
+    sender_profiles?: SenderProfileUpdateManyWithoutOrganisationNestedInput
+    marketing_campaigns?: MarketingCampaignUpdateManyWithoutOrganisationNestedInput
+    scoring_instructions?: ScoringInstructionUpdateManyWithoutOrganisationNestedInput
+    openai_batch_jobs?: OpenAiBatchJobUpdateManyWithoutOrganisationNestedInput
+    integrations?: IntegrationUpdateManyWithoutOrganisationNestedInput
+    reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
+    forms?: FormUpdateManyWithoutOrganisationNestedInput
+    contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
+    contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
+    ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
+    apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
+    message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
+  }
+
+  export type OrganisationUncheckedUpdateWithoutSending_policiesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
+    invitations?: OrganisationInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
+    filters?: FilterUncheckedUpdateManyWithoutOrganisationNestedInput
+    contacts?: ContactUncheckedUpdateManyWithoutOrganisationNestedInput
+    outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutOrganisationNestedInput
+    outreach_sequences?: OutreachSequenceUncheckedUpdateManyWithoutOrganisationNestedInput
+    interactions?: InteractionUncheckedUpdateManyWithoutOrganisationNestedInput
+    sender_profiles?: SenderProfileUncheckedUpdateManyWithoutOrganisationNestedInput
+    marketing_campaigns?: MarketingCampaignUncheckedUpdateManyWithoutOrganisationNestedInput
+    scoring_instructions?: ScoringInstructionUncheckedUpdateManyWithoutOrganisationNestedInput
+    openai_batch_jobs?: OpenAiBatchJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    integrations?: IntegrationUncheckedUpdateManyWithoutOrganisationNestedInput
+    reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
+    forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
+    contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
+    contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
+    ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
+  }
+
+  export type SendingPolicyUpsertWithoutCloned_instancesInput = {
+    update: XOR<SendingPolicyUpdateWithoutCloned_instancesInput, SendingPolicyUncheckedUpdateWithoutCloned_instancesInput>
+    create: XOR<SendingPolicyCreateWithoutCloned_instancesInput, SendingPolicyUncheckedCreateWithoutCloned_instancesInput>
+    where?: SendingPolicyWhereInput
+  }
+
+  export type SendingPolicyUpdateToOneWithWhereWithoutCloned_instancesInput = {
+    where?: SendingPolicyWhereInput
+    data: XOR<SendingPolicyUpdateWithoutCloned_instancesInput, SendingPolicyUncheckedUpdateWithoutCloned_instancesInput>
+  }
+
+  export type SendingPolicyUpdateWithoutCloned_instancesInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    is_template?: BoolFieldUpdateOperationsInput | boolean
+    timezone?: StringFieldUpdateOperationsInput | string
+    window_start_minute?: NullableIntFieldUpdateOperationsInput | number | null
+    window_end_minute?: NullableIntFieldUpdateOperationsInput | number | null
+    min_interval_seconds?: IntFieldUpdateOperationsInput | number
+    min_interval_jitter_seconds?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutSending_policiesNestedInput
+    source_policy?: SendingPolicyUpdateOneWithoutCloned_instancesNestedInput
+    stages?: SendingPolicyStageUpdateManyWithoutSending_policyNestedInput
+    campaign_integrations?: CampaignIntegrationUpdateManyWithoutSending_policyNestedInput
+  }
+
+  export type SendingPolicyUncheckedUpdateWithoutCloned_instancesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    is_template?: BoolFieldUpdateOperationsInput | boolean
+    source_policy_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    timezone?: StringFieldUpdateOperationsInput | string
+    window_start_minute?: NullableIntFieldUpdateOperationsInput | number | null
+    window_end_minute?: NullableIntFieldUpdateOperationsInput | number | null
+    min_interval_seconds?: IntFieldUpdateOperationsInput | number
+    min_interval_jitter_seconds?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    stages?: SendingPolicyStageUncheckedUpdateManyWithoutSending_policyNestedInput
+    campaign_integrations?: CampaignIntegrationUncheckedUpdateManyWithoutSending_policyNestedInput
+  }
+
+  export type SendingPolicyUpsertWithWhereUniqueWithoutSource_policyInput = {
+    where: SendingPolicyWhereUniqueInput
+    update: XOR<SendingPolicyUpdateWithoutSource_policyInput, SendingPolicyUncheckedUpdateWithoutSource_policyInput>
+    create: XOR<SendingPolicyCreateWithoutSource_policyInput, SendingPolicyUncheckedCreateWithoutSource_policyInput>
+  }
+
+  export type SendingPolicyUpdateWithWhereUniqueWithoutSource_policyInput = {
+    where: SendingPolicyWhereUniqueInput
+    data: XOR<SendingPolicyUpdateWithoutSource_policyInput, SendingPolicyUncheckedUpdateWithoutSource_policyInput>
+  }
+
+  export type SendingPolicyUpdateManyWithWhereWithoutSource_policyInput = {
+    where: SendingPolicyScalarWhereInput
+    data: XOR<SendingPolicyUpdateManyMutationInput, SendingPolicyUncheckedUpdateManyWithoutSource_policyInput>
+  }
+
+  export type SendingPolicyStageUpsertWithWhereUniqueWithoutSending_policyInput = {
+    where: SendingPolicyStageWhereUniqueInput
+    update: XOR<SendingPolicyStageUpdateWithoutSending_policyInput, SendingPolicyStageUncheckedUpdateWithoutSending_policyInput>
+    create: XOR<SendingPolicyStageCreateWithoutSending_policyInput, SendingPolicyStageUncheckedCreateWithoutSending_policyInput>
+  }
+
+  export type SendingPolicyStageUpdateWithWhereUniqueWithoutSending_policyInput = {
+    where: SendingPolicyStageWhereUniqueInput
+    data: XOR<SendingPolicyStageUpdateWithoutSending_policyInput, SendingPolicyStageUncheckedUpdateWithoutSending_policyInput>
+  }
+
+  export type SendingPolicyStageUpdateManyWithWhereWithoutSending_policyInput = {
+    where: SendingPolicyStageScalarWhereInput
+    data: XOR<SendingPolicyStageUpdateManyMutationInput, SendingPolicyStageUncheckedUpdateManyWithoutSending_policyInput>
+  }
+
+  export type SendingPolicyStageScalarWhereInput = {
+    AND?: SendingPolicyStageScalarWhereInput | SendingPolicyStageScalarWhereInput[]
+    OR?: SendingPolicyStageScalarWhereInput[]
+    NOT?: SendingPolicyStageScalarWhereInput | SendingPolicyStageScalarWhereInput[]
+    id?: IntFilter<"SendingPolicyStage"> | number
+    uuid?: StringFilter<"SendingPolicyStage"> | string
+    sending_policy_uuid?: StringFilter<"SendingPolicyStage"> | string
+    order_index?: IntFilter<"SendingPolicyStage"> | number
+    limit?: IntFilter<"SendingPolicyStage"> | number
+    period_unit?: EnumSendingPeriodUnitFilter<"SendingPolicyStage"> | $Enums.SendingPeriodUnit
+    duration_value?: IntNullableFilter<"SendingPolicyStage"> | number | null
+    duration_unit?: EnumSendingPeriodUnitNullableFilter<"SendingPolicyStage"> | $Enums.SendingPeriodUnit | null
+    created_at?: DateTimeFilter<"SendingPolicyStage"> | Date | string
+    updated_at?: DateTimeFilter<"SendingPolicyStage"> | Date | string
+  }
+
+  export type CampaignIntegrationUpsertWithWhereUniqueWithoutSending_policyInput = {
+    where: CampaignIntegrationWhereUniqueInput
+    update: XOR<CampaignIntegrationUpdateWithoutSending_policyInput, CampaignIntegrationUncheckedUpdateWithoutSending_policyInput>
+    create: XOR<CampaignIntegrationCreateWithoutSending_policyInput, CampaignIntegrationUncheckedCreateWithoutSending_policyInput>
+  }
+
+  export type CampaignIntegrationUpdateWithWhereUniqueWithoutSending_policyInput = {
+    where: CampaignIntegrationWhereUniqueInput
+    data: XOR<CampaignIntegrationUpdateWithoutSending_policyInput, CampaignIntegrationUncheckedUpdateWithoutSending_policyInput>
+  }
+
+  export type CampaignIntegrationUpdateManyWithWhereWithoutSending_policyInput = {
+    where: CampaignIntegrationScalarWhereInput
+    data: XOR<CampaignIntegrationUpdateManyMutationInput, CampaignIntegrationUncheckedUpdateManyWithoutSending_policyInput>
+  }
+
+  export type SendingPolicyCreateWithoutStagesInput = {
+    uuid?: string
+    name: string
+    description?: string | null
+    is_template?: boolean
+    timezone?: string
+    window_start_minute?: number | null
+    window_end_minute?: number | null
+    min_interval_seconds?: number
+    min_interval_jitter_seconds?: number
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutSending_policiesInput
+    source_policy?: SendingPolicyCreateNestedOneWithoutCloned_instancesInput
+    cloned_instances?: SendingPolicyCreateNestedManyWithoutSource_policyInput
+    campaign_integrations?: CampaignIntegrationCreateNestedManyWithoutSending_policyInput
+  }
+
+  export type SendingPolicyUncheckedCreateWithoutStagesInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    name: string
+    description?: string | null
+    is_template?: boolean
+    source_policy_uuid?: string | null
+    timezone?: string
+    window_start_minute?: number | null
+    window_end_minute?: number | null
+    min_interval_seconds?: number
+    min_interval_jitter_seconds?: number
+    created_at?: Date | string
+    updated_at?: Date | string
+    cloned_instances?: SendingPolicyUncheckedCreateNestedManyWithoutSource_policyInput
+    campaign_integrations?: CampaignIntegrationUncheckedCreateNestedManyWithoutSending_policyInput
+  }
+
+  export type SendingPolicyCreateOrConnectWithoutStagesInput = {
+    where: SendingPolicyWhereUniqueInput
+    create: XOR<SendingPolicyCreateWithoutStagesInput, SendingPolicyUncheckedCreateWithoutStagesInput>
+  }
+
+  export type SendingPolicyUpsertWithoutStagesInput = {
+    update: XOR<SendingPolicyUpdateWithoutStagesInput, SendingPolicyUncheckedUpdateWithoutStagesInput>
+    create: XOR<SendingPolicyCreateWithoutStagesInput, SendingPolicyUncheckedCreateWithoutStagesInput>
+    where?: SendingPolicyWhereInput
+  }
+
+  export type SendingPolicyUpdateToOneWithWhereWithoutStagesInput = {
+    where?: SendingPolicyWhereInput
+    data: XOR<SendingPolicyUpdateWithoutStagesInput, SendingPolicyUncheckedUpdateWithoutStagesInput>
+  }
+
+  export type SendingPolicyUpdateWithoutStagesInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    is_template?: BoolFieldUpdateOperationsInput | boolean
+    timezone?: StringFieldUpdateOperationsInput | string
+    window_start_minute?: NullableIntFieldUpdateOperationsInput | number | null
+    window_end_minute?: NullableIntFieldUpdateOperationsInput | number | null
+    min_interval_seconds?: IntFieldUpdateOperationsInput | number
+    min_interval_jitter_seconds?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutSending_policiesNestedInput
+    source_policy?: SendingPolicyUpdateOneWithoutCloned_instancesNestedInput
+    cloned_instances?: SendingPolicyUpdateManyWithoutSource_policyNestedInput
+    campaign_integrations?: CampaignIntegrationUpdateManyWithoutSending_policyNestedInput
+  }
+
+  export type SendingPolicyUncheckedUpdateWithoutStagesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    is_template?: BoolFieldUpdateOperationsInput | boolean
+    source_policy_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    timezone?: StringFieldUpdateOperationsInput | string
+    window_start_minute?: NullableIntFieldUpdateOperationsInput | number | null
+    window_end_minute?: NullableIntFieldUpdateOperationsInput | number | null
+    min_interval_seconds?: IntFieldUpdateOperationsInput | number
+    min_interval_jitter_seconds?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    cloned_instances?: SendingPolicyUncheckedUpdateManyWithoutSource_policyNestedInput
+    campaign_integrations?: CampaignIntegrationUncheckedUpdateManyWithoutSending_policyNestedInput
+  }
+
+  export type MarketingCampaignCreateWithoutCampaign_integrationsInput = {
+    uuid?: string
+    name: string
+    description?: string | null
+    status?: $Enums.CampaignStatus
+    campaign_type?: $Enums.CampaignType
+    channels?: MarketingCampaignCreatechannelsInput | $Enums.Channel[]
+    filters_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    email_subject?: string | null
+    email_content?: string | null
+    sms_content?: string | null
+    linkedin_content?: string | null
+    ai_prompt?: string | null
+    use_openai_batch?: boolean
+    draft_batch_id?: string | null
+    email_provider_allocations?: NullableJsonNullValueInput | InputJsonValue
+    scheduled_at?: Date | string | null
+    started_at?: Date | string | null
+    completed_at?: Date | string | null
+    cancelled_at?: Date | string | null
+    selected_contact_count?: number
+    total_messages?: number
+    queued_count?: number
+    sent_count?: number
+    failed_count?: number
+    skipped_count?: number
+    delivered_count?: number
+    opened_count?: number
+    clicked_count?: number
+    replied_count?: number
+    website_visit_count?: number
+    booking_visit_count?: number
+    bounced_count?: number
+    unsubscribed_count?: number
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutMarketing_campaignsInput
+    sender_profile?: SenderProfileCreateNestedOneWithoutMarketing_campaignsInput
+    sequence?: OutreachSequenceCreateNestedOneWithoutCampaignsInput
+    campaign_contacts?: MarketingCampaignContactCreateNestedManyWithoutCampaignInput
+    outreach_messages?: OutreachMessageCreateNestedManyWithoutCampaignInput
+    interactions?: InteractionCreateNestedManyWithoutCampaignInput
+    sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutCampaignInput
+  }
+
+  export type MarketingCampaignUncheckedCreateWithoutCampaign_integrationsInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    name: string
+    description?: string | null
+    status?: $Enums.CampaignStatus
+    campaign_type?: $Enums.CampaignType
+    channels?: MarketingCampaignCreatechannelsInput | $Enums.Channel[]
+    filters_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    email_subject?: string | null
+    email_content?: string | null
+    sms_content?: string | null
+    linkedin_content?: string | null
+    ai_prompt?: string | null
+    use_openai_batch?: boolean
+    draft_batch_id?: string | null
+    sender_profile_uuid?: string | null
+    email_provider_allocations?: NullableJsonNullValueInput | InputJsonValue
+    sequence_uuid?: string | null
+    scheduled_at?: Date | string | null
+    started_at?: Date | string | null
+    completed_at?: Date | string | null
+    cancelled_at?: Date | string | null
+    selected_contact_count?: number
+    total_messages?: number
+    queued_count?: number
+    sent_count?: number
+    failed_count?: number
+    skipped_count?: number
+    delivered_count?: number
+    opened_count?: number
+    clicked_count?: number
+    replied_count?: number
+    website_visit_count?: number
+    booking_visit_count?: number
+    bounced_count?: number
+    unsubscribed_count?: number
+    created_at?: Date | string
+    updated_at?: Date | string
+    campaign_contacts?: MarketingCampaignContactUncheckedCreateNestedManyWithoutCampaignInput
+    outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutCampaignInput
+    interactions?: InteractionUncheckedCreateNestedManyWithoutCampaignInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutCampaignInput
+  }
+
+  export type MarketingCampaignCreateOrConnectWithoutCampaign_integrationsInput = {
+    where: MarketingCampaignWhereUniqueInput
+    create: XOR<MarketingCampaignCreateWithoutCampaign_integrationsInput, MarketingCampaignUncheckedCreateWithoutCampaign_integrationsInput>
+  }
+
+  export type IntegrationAccountCreateWithoutCampaign_integrationsInput = {
+    uuid?: string
+    account: string
+    title: string
+    max_messages_per_period?: number | null
+    max_messages_period_unit?: $Enums.SendingPeriodUnit | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    integration: IntegrationCreateNestedOneWithoutAccountsInput
+  }
+
+  export type IntegrationAccountUncheckedCreateWithoutCampaign_integrationsInput = {
+    id?: number
+    uuid?: string
+    integration_uuid: string
+    account: string
+    title: string
+    max_messages_per_period?: number | null
+    max_messages_period_unit?: $Enums.SendingPeriodUnit | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type IntegrationAccountCreateOrConnectWithoutCampaign_integrationsInput = {
+    where: IntegrationAccountWhereUniqueInput
+    create: XOR<IntegrationAccountCreateWithoutCampaign_integrationsInput, IntegrationAccountUncheckedCreateWithoutCampaign_integrationsInput>
+  }
+
+  export type SendingPolicyCreateWithoutCampaign_integrationsInput = {
+    uuid?: string
+    name: string
+    description?: string | null
+    is_template?: boolean
+    timezone?: string
+    window_start_minute?: number | null
+    window_end_minute?: number | null
+    min_interval_seconds?: number
+    min_interval_jitter_seconds?: number
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutSending_policiesInput
+    source_policy?: SendingPolicyCreateNestedOneWithoutCloned_instancesInput
+    cloned_instances?: SendingPolicyCreateNestedManyWithoutSource_policyInput
+    stages?: SendingPolicyStageCreateNestedManyWithoutSending_policyInput
+  }
+
+  export type SendingPolicyUncheckedCreateWithoutCampaign_integrationsInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    name: string
+    description?: string | null
+    is_template?: boolean
+    source_policy_uuid?: string | null
+    timezone?: string
+    window_start_minute?: number | null
+    window_end_minute?: number | null
+    min_interval_seconds?: number
+    min_interval_jitter_seconds?: number
+    created_at?: Date | string
+    updated_at?: Date | string
+    cloned_instances?: SendingPolicyUncheckedCreateNestedManyWithoutSource_policyInput
+    stages?: SendingPolicyStageUncheckedCreateNestedManyWithoutSending_policyInput
+  }
+
+  export type SendingPolicyCreateOrConnectWithoutCampaign_integrationsInput = {
+    where: SendingPolicyWhereUniqueInput
+    create: XOR<SendingPolicyCreateWithoutCampaign_integrationsInput, SendingPolicyUncheckedCreateWithoutCampaign_integrationsInput>
+  }
+
+  export type CampaignIntegrationStateCreateWithoutCampaign_integrationInput = {
+    uuid?: string
+    policy_started_at?: Date | string | null
+    last_sent_at?: Date | string | null
+    lifetime_sent_count?: number
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type CampaignIntegrationStateUncheckedCreateWithoutCampaign_integrationInput = {
+    id?: number
+    uuid?: string
+    policy_started_at?: Date | string | null
+    last_sent_at?: Date | string | null
+    lifetime_sent_count?: number
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type CampaignIntegrationStateCreateOrConnectWithoutCampaign_integrationInput = {
+    where: CampaignIntegrationStateWhereUniqueInput
+    create: XOR<CampaignIntegrationStateCreateWithoutCampaign_integrationInput, CampaignIntegrationStateUncheckedCreateWithoutCampaign_integrationInput>
+  }
+
+  export type OutreachMessageCreateWithoutCampaign_integrationInput = {
+    uuid?: string
+    channel: $Enums.Channel
+    direction?: $Enums.MsgDirection
+    subject?: string | null
+    content: string
+    status?: $Enums.MsgStatus
+    provider_message_id?: string | null
+    idempotency_key?: string | null
+    scheduled_at?: Date | string | null
+    sent_at?: Date | string | null
+    delivered_at?: Date | string | null
+    opened_at?: Date | string | null
+    clicked_at?: Date | string | null
+    replied_at?: Date | string | null
+    bounced_at?: Date | string | null
+    failed_at?: Date | string | null
+    email_provider?: $Enums.ExternalIntegrationProvider | null
+    email_account?: string | null
+    sms_provider?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutOutreach_messagesInput
+    contact: ContactCreateNestedOneWithoutOutreach_messagesInput
+    campaign?: MarketingCampaignCreateNestedOneWithoutOutreach_messagesInput
+    sent_by?: UserCreateNestedOneWithoutOutreach_messages_sentInput
+    interaction?: InteractionCreateNestedOneWithoutOutreach_messageInput
+    sequence_enrollment?: SequenceEnrollmentCreateNestedOneWithoutOutreach_messagesInput
+    sequence_step?: OutreachSequenceStepCreateNestedOneWithoutOutreach_messagesInput
+  }
+
+  export type OutreachMessageUncheckedCreateWithoutCampaign_integrationInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    contact_uuid: string
+    campaign_uuid?: string | null
+    sent_by_user_uuid?: string | null
+    channel: $Enums.Channel
+    direction?: $Enums.MsgDirection
+    subject?: string | null
+    content: string
+    status?: $Enums.MsgStatus
+    provider_message_id?: string | null
+    idempotency_key?: string | null
+    scheduled_at?: Date | string | null
+    sent_at?: Date | string | null
+    delivered_at?: Date | string | null
+    opened_at?: Date | string | null
+    clicked_at?: Date | string | null
+    replied_at?: Date | string | null
+    bounced_at?: Date | string | null
+    failed_at?: Date | string | null
+    email_provider?: $Enums.ExternalIntegrationProvider | null
+    email_account?: string | null
+    sms_provider?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    sequence_enrollment_uuid?: string | null
+    sequence_step_uuid?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    interaction?: InteractionUncheckedCreateNestedOneWithoutOutreach_messageInput
+  }
+
+  export type OutreachMessageCreateOrConnectWithoutCampaign_integrationInput = {
+    where: OutreachMessageWhereUniqueInput
+    create: XOR<OutreachMessageCreateWithoutCampaign_integrationInput, OutreachMessageUncheckedCreateWithoutCampaign_integrationInput>
+  }
+
+  export type OutreachMessageCreateManyCampaign_integrationInputEnvelope = {
+    data: OutreachMessageCreateManyCampaign_integrationInput | OutreachMessageCreateManyCampaign_integrationInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type MarketingCampaignUpsertWithoutCampaign_integrationsInput = {
+    update: XOR<MarketingCampaignUpdateWithoutCampaign_integrationsInput, MarketingCampaignUncheckedUpdateWithoutCampaign_integrationsInput>
+    create: XOR<MarketingCampaignCreateWithoutCampaign_integrationsInput, MarketingCampaignUncheckedCreateWithoutCampaign_integrationsInput>
+    where?: MarketingCampaignWhereInput
+  }
+
+  export type MarketingCampaignUpdateToOneWithWhereWithoutCampaign_integrationsInput = {
+    where?: MarketingCampaignWhereInput
+    data: XOR<MarketingCampaignUpdateWithoutCampaign_integrationsInput, MarketingCampaignUncheckedUpdateWithoutCampaign_integrationsInput>
+  }
+
+  export type MarketingCampaignUpdateWithoutCampaign_integrationsInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
+    campaign_type?: EnumCampaignTypeFieldUpdateOperationsInput | $Enums.CampaignType
+    channels?: MarketingCampaignUpdatechannelsInput | $Enums.Channel[]
+    filters_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    email_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    email_content?: NullableStringFieldUpdateOperationsInput | string | null
+    sms_content?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedin_content?: NullableStringFieldUpdateOperationsInput | string | null
+    ai_prompt?: NullableStringFieldUpdateOperationsInput | string | null
+    use_openai_batch?: BoolFieldUpdateOperationsInput | boolean
+    draft_batch_id?: NullableStringFieldUpdateOperationsInput | string | null
+    email_provider_allocations?: NullableJsonNullValueInput | InputJsonValue
+    scheduled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    started_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    selected_contact_count?: IntFieldUpdateOperationsInput | number
+    total_messages?: IntFieldUpdateOperationsInput | number
+    queued_count?: IntFieldUpdateOperationsInput | number
+    sent_count?: IntFieldUpdateOperationsInput | number
+    failed_count?: IntFieldUpdateOperationsInput | number
+    skipped_count?: IntFieldUpdateOperationsInput | number
+    delivered_count?: IntFieldUpdateOperationsInput | number
+    opened_count?: IntFieldUpdateOperationsInput | number
+    clicked_count?: IntFieldUpdateOperationsInput | number
+    replied_count?: IntFieldUpdateOperationsInput | number
+    website_visit_count?: IntFieldUpdateOperationsInput | number
+    booking_visit_count?: IntFieldUpdateOperationsInput | number
+    bounced_count?: IntFieldUpdateOperationsInput | number
+    unsubscribed_count?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutMarketing_campaignsNestedInput
+    sender_profile?: SenderProfileUpdateOneWithoutMarketing_campaignsNestedInput
+    sequence?: OutreachSequenceUpdateOneWithoutCampaignsNestedInput
+    campaign_contacts?: MarketingCampaignContactUpdateManyWithoutCampaignNestedInput
+    outreach_messages?: OutreachMessageUpdateManyWithoutCampaignNestedInput
+    interactions?: InteractionUpdateManyWithoutCampaignNestedInput
+    sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutCampaignNestedInput
+  }
+
+  export type MarketingCampaignUncheckedUpdateWithoutCampaign_integrationsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
+    campaign_type?: EnumCampaignTypeFieldUpdateOperationsInput | $Enums.CampaignType
+    channels?: MarketingCampaignUpdatechannelsInput | $Enums.Channel[]
+    filters_snapshot?: NullableJsonNullValueInput | InputJsonValue
+    email_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    email_content?: NullableStringFieldUpdateOperationsInput | string | null
+    sms_content?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedin_content?: NullableStringFieldUpdateOperationsInput | string | null
+    ai_prompt?: NullableStringFieldUpdateOperationsInput | string | null
+    use_openai_batch?: BoolFieldUpdateOperationsInput | boolean
+    draft_batch_id?: NullableStringFieldUpdateOperationsInput | string | null
+    sender_profile_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    email_provider_allocations?: NullableJsonNullValueInput | InputJsonValue
+    sequence_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    started_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    selected_contact_count?: IntFieldUpdateOperationsInput | number
+    total_messages?: IntFieldUpdateOperationsInput | number
+    queued_count?: IntFieldUpdateOperationsInput | number
+    sent_count?: IntFieldUpdateOperationsInput | number
+    failed_count?: IntFieldUpdateOperationsInput | number
+    skipped_count?: IntFieldUpdateOperationsInput | number
+    delivered_count?: IntFieldUpdateOperationsInput | number
+    opened_count?: IntFieldUpdateOperationsInput | number
+    clicked_count?: IntFieldUpdateOperationsInput | number
+    replied_count?: IntFieldUpdateOperationsInput | number
+    website_visit_count?: IntFieldUpdateOperationsInput | number
+    booking_visit_count?: IntFieldUpdateOperationsInput | number
+    bounced_count?: IntFieldUpdateOperationsInput | number
+    unsubscribed_count?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    campaign_contacts?: MarketingCampaignContactUncheckedUpdateManyWithoutCampaignNestedInput
+    outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutCampaignNestedInput
+    interactions?: InteractionUncheckedUpdateManyWithoutCampaignNestedInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutCampaignNestedInput
+  }
+
+  export type IntegrationAccountUpsertWithoutCampaign_integrationsInput = {
+    update: XOR<IntegrationAccountUpdateWithoutCampaign_integrationsInput, IntegrationAccountUncheckedUpdateWithoutCampaign_integrationsInput>
+    create: XOR<IntegrationAccountCreateWithoutCampaign_integrationsInput, IntegrationAccountUncheckedCreateWithoutCampaign_integrationsInput>
+    where?: IntegrationAccountWhereInput
+  }
+
+  export type IntegrationAccountUpdateToOneWithWhereWithoutCampaign_integrationsInput = {
+    where?: IntegrationAccountWhereInput
+    data: XOR<IntegrationAccountUpdateWithoutCampaign_integrationsInput, IntegrationAccountUncheckedUpdateWithoutCampaign_integrationsInput>
+  }
+
+  export type IntegrationAccountUpdateWithoutCampaign_integrationsInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    account?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    max_messages_per_period?: NullableIntFieldUpdateOperationsInput | number | null
+    max_messages_period_unit?: NullableEnumSendingPeriodUnitFieldUpdateOperationsInput | $Enums.SendingPeriodUnit | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    integration?: IntegrationUpdateOneRequiredWithoutAccountsNestedInput
+  }
+
+  export type IntegrationAccountUncheckedUpdateWithoutCampaign_integrationsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    integration_uuid?: StringFieldUpdateOperationsInput | string
+    account?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    max_messages_per_period?: NullableIntFieldUpdateOperationsInput | number | null
+    max_messages_period_unit?: NullableEnumSendingPeriodUnitFieldUpdateOperationsInput | $Enums.SendingPeriodUnit | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SendingPolicyUpsertWithoutCampaign_integrationsInput = {
+    update: XOR<SendingPolicyUpdateWithoutCampaign_integrationsInput, SendingPolicyUncheckedUpdateWithoutCampaign_integrationsInput>
+    create: XOR<SendingPolicyCreateWithoutCampaign_integrationsInput, SendingPolicyUncheckedCreateWithoutCampaign_integrationsInput>
+    where?: SendingPolicyWhereInput
+  }
+
+  export type SendingPolicyUpdateToOneWithWhereWithoutCampaign_integrationsInput = {
+    where?: SendingPolicyWhereInput
+    data: XOR<SendingPolicyUpdateWithoutCampaign_integrationsInput, SendingPolicyUncheckedUpdateWithoutCampaign_integrationsInput>
+  }
+
+  export type SendingPolicyUpdateWithoutCampaign_integrationsInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    is_template?: BoolFieldUpdateOperationsInput | boolean
+    timezone?: StringFieldUpdateOperationsInput | string
+    window_start_minute?: NullableIntFieldUpdateOperationsInput | number | null
+    window_end_minute?: NullableIntFieldUpdateOperationsInput | number | null
+    min_interval_seconds?: IntFieldUpdateOperationsInput | number
+    min_interval_jitter_seconds?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutSending_policiesNestedInput
+    source_policy?: SendingPolicyUpdateOneWithoutCloned_instancesNestedInput
+    cloned_instances?: SendingPolicyUpdateManyWithoutSource_policyNestedInput
+    stages?: SendingPolicyStageUpdateManyWithoutSending_policyNestedInput
+  }
+
+  export type SendingPolicyUncheckedUpdateWithoutCampaign_integrationsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    is_template?: BoolFieldUpdateOperationsInput | boolean
+    source_policy_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    timezone?: StringFieldUpdateOperationsInput | string
+    window_start_minute?: NullableIntFieldUpdateOperationsInput | number | null
+    window_end_minute?: NullableIntFieldUpdateOperationsInput | number | null
+    min_interval_seconds?: IntFieldUpdateOperationsInput | number
+    min_interval_jitter_seconds?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    cloned_instances?: SendingPolicyUncheckedUpdateManyWithoutSource_policyNestedInput
+    stages?: SendingPolicyStageUncheckedUpdateManyWithoutSending_policyNestedInput
+  }
+
+  export type CampaignIntegrationStateUpsertWithoutCampaign_integrationInput = {
+    update: XOR<CampaignIntegrationStateUpdateWithoutCampaign_integrationInput, CampaignIntegrationStateUncheckedUpdateWithoutCampaign_integrationInput>
+    create: XOR<CampaignIntegrationStateCreateWithoutCampaign_integrationInput, CampaignIntegrationStateUncheckedCreateWithoutCampaign_integrationInput>
+    where?: CampaignIntegrationStateWhereInput
+  }
+
+  export type CampaignIntegrationStateUpdateToOneWithWhereWithoutCampaign_integrationInput = {
+    where?: CampaignIntegrationStateWhereInput
+    data: XOR<CampaignIntegrationStateUpdateWithoutCampaign_integrationInput, CampaignIntegrationStateUncheckedUpdateWithoutCampaign_integrationInput>
+  }
+
+  export type CampaignIntegrationStateUpdateWithoutCampaign_integrationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    policy_started_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    last_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lifetime_sent_count?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CampaignIntegrationStateUncheckedUpdateWithoutCampaign_integrationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    policy_started_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    last_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lifetime_sent_count?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OutreachMessageUpsertWithWhereUniqueWithoutCampaign_integrationInput = {
+    where: OutreachMessageWhereUniqueInput
+    update: XOR<OutreachMessageUpdateWithoutCampaign_integrationInput, OutreachMessageUncheckedUpdateWithoutCampaign_integrationInput>
+    create: XOR<OutreachMessageCreateWithoutCampaign_integrationInput, OutreachMessageUncheckedCreateWithoutCampaign_integrationInput>
+  }
+
+  export type OutreachMessageUpdateWithWhereUniqueWithoutCampaign_integrationInput = {
+    where: OutreachMessageWhereUniqueInput
+    data: XOR<OutreachMessageUpdateWithoutCampaign_integrationInput, OutreachMessageUncheckedUpdateWithoutCampaign_integrationInput>
+  }
+
+  export type OutreachMessageUpdateManyWithWhereWithoutCampaign_integrationInput = {
+    where: OutreachMessageScalarWhereInput
+    data: XOR<OutreachMessageUpdateManyMutationInput, OutreachMessageUncheckedUpdateManyWithoutCampaign_integrationInput>
+  }
+
+  export type CampaignIntegrationCreateWithoutStateInput = {
+    uuid?: string
+    status?: $Enums.CampaignIntegrationStatus
+    created_at?: Date | string
+    updated_at?: Date | string
+    campaign: MarketingCampaignCreateNestedOneWithoutCampaign_integrationsInput
+    integration_account: IntegrationAccountCreateNestedOneWithoutCampaign_integrationsInput
+    sending_policy: SendingPolicyCreateNestedOneWithoutCampaign_integrationsInput
+    outreach_messages?: OutreachMessageCreateNestedManyWithoutCampaign_integrationInput
+  }
+
+  export type CampaignIntegrationUncheckedCreateWithoutStateInput = {
+    id?: number
+    uuid?: string
+    campaign_uuid: string
+    integration_account_uuid: string
+    sending_policy_uuid: string
+    status?: $Enums.CampaignIntegrationStatus
+    created_at?: Date | string
+    updated_at?: Date | string
+    outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutCampaign_integrationInput
+  }
+
+  export type CampaignIntegrationCreateOrConnectWithoutStateInput = {
+    where: CampaignIntegrationWhereUniqueInput
+    create: XOR<CampaignIntegrationCreateWithoutStateInput, CampaignIntegrationUncheckedCreateWithoutStateInput>
+  }
+
+  export type CampaignIntegrationUpsertWithoutStateInput = {
+    update: XOR<CampaignIntegrationUpdateWithoutStateInput, CampaignIntegrationUncheckedUpdateWithoutStateInput>
+    create: XOR<CampaignIntegrationCreateWithoutStateInput, CampaignIntegrationUncheckedCreateWithoutStateInput>
+    where?: CampaignIntegrationWhereInput
+  }
+
+  export type CampaignIntegrationUpdateToOneWithWhereWithoutStateInput = {
+    where?: CampaignIntegrationWhereInput
+    data: XOR<CampaignIntegrationUpdateWithoutStateInput, CampaignIntegrationUncheckedUpdateWithoutStateInput>
+  }
+
+  export type CampaignIntegrationUpdateWithoutStateInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumCampaignIntegrationStatusFieldUpdateOperationsInput | $Enums.CampaignIntegrationStatus
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    campaign?: MarketingCampaignUpdateOneRequiredWithoutCampaign_integrationsNestedInput
+    integration_account?: IntegrationAccountUpdateOneRequiredWithoutCampaign_integrationsNestedInput
+    sending_policy?: SendingPolicyUpdateOneRequiredWithoutCampaign_integrationsNestedInput
+    outreach_messages?: OutreachMessageUpdateManyWithoutCampaign_integrationNestedInput
+  }
+
+  export type CampaignIntegrationUncheckedUpdateWithoutStateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    campaign_uuid?: StringFieldUpdateOperationsInput | string
+    integration_account_uuid?: StringFieldUpdateOperationsInput | string
+    sending_policy_uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumCampaignIntegrationStatusFieldUpdateOperationsInput | $Enums.CampaignIntegrationStatus
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutCampaign_integrationNestedInput
   }
 
   export type OrganisationCreateWithoutGoal_achievementsInput = {
@@ -103517,6 +113758,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutGoal_achievementsInput = {
@@ -103554,6 +113796,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutGoal_achievementsInput = {
@@ -103678,6 +113921,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutGoal_achievementsInput = {
@@ -103715,6 +113959,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutGoal_achievementsInput = {
@@ -103835,6 +114080,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutGoal_personal_bestsInput = {
@@ -103872,6 +114118,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutGoal_personal_bestsInput = {
@@ -103968,6 +114215,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutGoal_personal_bestsInput = {
@@ -104005,6 +114253,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutGoal_personal_bestsInput = {
@@ -104091,6 +114340,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutActivity_logsInput = {
@@ -104128,6 +114378,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutActivity_logsInput = {
@@ -104224,6 +114475,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutActivity_logsInput = {
@@ -104261,6 +114513,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutActivity_logsInput = {
@@ -104372,6 +114625,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: string | null
     sequence_step_uuid?: string | null
+    campaign_integration_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -104570,6 +114824,7 @@ export namespace Prisma {
     interaction?: InteractionUpdateOneWithoutOutreach_messageNestedInput
     sequence_enrollment?: SequenceEnrollmentUpdateOneWithoutOutreach_messagesNestedInput
     sequence_step?: OutreachSequenceStepUpdateOneWithoutOutreach_messagesNestedInput
+    campaign_integration?: CampaignIntegrationUpdateOneWithoutOutreach_messagesNestedInput
   }
 
   export type OutreachMessageUncheckedUpdateWithoutSent_byInput = {
@@ -104599,6 +114854,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     sequence_step_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    campaign_integration_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     interaction?: InteractionUncheckedUpdateOneWithoutOutreach_messageNestedInput
@@ -104631,6 +114887,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     sequence_step_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    campaign_integration_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -104937,6 +115194,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: string | null
     sequence_step_uuid?: string | null
+    campaign_integration_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -105280,6 +115538,22 @@ export namespace Prisma {
     updated_at?: Date | string
   }
 
+  export type SendingPolicyCreateManyOrganisationInput = {
+    id?: number
+    uuid?: string
+    name: string
+    description?: string | null
+    is_template?: boolean
+    source_policy_uuid?: string | null
+    timezone?: string
+    window_start_minute?: number | null
+    window_end_minute?: number | null
+    min_interval_seconds?: number
+    min_interval_jitter_seconds?: number
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
   export type OrganisationMemberUpdateWithoutOrganisationInput = {
     uuid?: StringFieldUpdateOperationsInput | string
     role?: EnumOrganisationRoleFieldUpdateOperationsInput | $Enums.OrganisationRole
@@ -105545,6 +115819,7 @@ export namespace Prisma {
     interaction?: InteractionUpdateOneWithoutOutreach_messageNestedInput
     sequence_enrollment?: SequenceEnrollmentUpdateOneWithoutOutreach_messagesNestedInput
     sequence_step?: OutreachSequenceStepUpdateOneWithoutOutreach_messagesNestedInput
+    campaign_integration?: CampaignIntegrationUpdateOneWithoutOutreach_messagesNestedInput
   }
 
   export type OutreachMessageUncheckedUpdateWithoutOrganisationInput = {
@@ -105574,6 +115849,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     sequence_step_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    campaign_integration_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     interaction?: InteractionUncheckedUpdateOneWithoutOutreach_messageNestedInput
@@ -105606,6 +115882,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     sequence_step_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    campaign_integration_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -105807,6 +116084,7 @@ export namespace Prisma {
     outreach_messages?: OutreachMessageUpdateManyWithoutCampaignNestedInput
     interactions?: InteractionUpdateManyWithoutCampaignNestedInput
     sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutCampaignNestedInput
+    campaign_integrations?: CampaignIntegrationUpdateManyWithoutCampaignNestedInput
   }
 
   export type MarketingCampaignUncheckedUpdateWithoutOrganisationInput = {
@@ -105852,6 +116130,7 @@ export namespace Prisma {
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutCampaignNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutCampaignNestedInput
     sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutCampaignNestedInput
+    campaign_integrations?: CampaignIntegrationUncheckedUpdateManyWithoutCampaignNestedInput
   }
 
   export type MarketingCampaignUncheckedUpdateManyWithoutOrganisationInput = {
@@ -106647,6 +116926,59 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type SendingPolicyUpdateWithoutOrganisationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    is_template?: BoolFieldUpdateOperationsInput | boolean
+    timezone?: StringFieldUpdateOperationsInput | string
+    window_start_minute?: NullableIntFieldUpdateOperationsInput | number | null
+    window_end_minute?: NullableIntFieldUpdateOperationsInput | number | null
+    min_interval_seconds?: IntFieldUpdateOperationsInput | number
+    min_interval_jitter_seconds?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    source_policy?: SendingPolicyUpdateOneWithoutCloned_instancesNestedInput
+    cloned_instances?: SendingPolicyUpdateManyWithoutSource_policyNestedInput
+    stages?: SendingPolicyStageUpdateManyWithoutSending_policyNestedInput
+    campaign_integrations?: CampaignIntegrationUpdateManyWithoutSending_policyNestedInput
+  }
+
+  export type SendingPolicyUncheckedUpdateWithoutOrganisationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    is_template?: BoolFieldUpdateOperationsInput | boolean
+    source_policy_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    timezone?: StringFieldUpdateOperationsInput | string
+    window_start_minute?: NullableIntFieldUpdateOperationsInput | number | null
+    window_end_minute?: NullableIntFieldUpdateOperationsInput | number | null
+    min_interval_seconds?: IntFieldUpdateOperationsInput | number
+    min_interval_jitter_seconds?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    cloned_instances?: SendingPolicyUncheckedUpdateManyWithoutSource_policyNestedInput
+    stages?: SendingPolicyStageUncheckedUpdateManyWithoutSending_policyNestedInput
+    campaign_integrations?: CampaignIntegrationUncheckedUpdateManyWithoutSending_policyNestedInput
+  }
+
+  export type SendingPolicyUncheckedUpdateManyWithoutOrganisationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    is_template?: BoolFieldUpdateOperationsInput | boolean
+    source_policy_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    timezone?: StringFieldUpdateOperationsInput | string
+    window_start_minute?: NullableIntFieldUpdateOperationsInput | number | null
+    window_end_minute?: NullableIntFieldUpdateOperationsInput | number | null
+    min_interval_seconds?: IntFieldUpdateOperationsInput | number
+    min_interval_jitter_seconds?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type RawLeadCreateManyFilterInput = {
     id?: number
     uuid?: string
@@ -107311,6 +117643,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: string | null
     sequence_step_uuid?: string | null
+    campaign_integration_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -107385,6 +117718,8 @@ export namespace Prisma {
     campaign_uuid?: string | null
     status?: $Enums.SequenceEnrollmentStatus
     enrolled_at?: Date | string
+    current_step_order_index?: number
+    first_step_sent_at?: Date | string | null
     cancelled_at?: Date | string | null
     completed_at?: Date | string | null
     created_at?: Date | string
@@ -107519,6 +117854,7 @@ export namespace Prisma {
     interaction?: InteractionUpdateOneWithoutOutreach_messageNestedInput
     sequence_enrollment?: SequenceEnrollmentUpdateOneWithoutOutreach_messagesNestedInput
     sequence_step?: OutreachSequenceStepUpdateOneWithoutOutreach_messagesNestedInput
+    campaign_integration?: CampaignIntegrationUpdateOneWithoutOutreach_messagesNestedInput
   }
 
   export type OutreachMessageUncheckedUpdateWithoutContactInput = {
@@ -107548,6 +117884,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     sequence_step_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    campaign_integration_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     interaction?: InteractionUncheckedUpdateOneWithoutOutreach_messageNestedInput
@@ -107580,6 +117917,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     sequence_step_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    campaign_integration_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -107773,6 +118111,8 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     status?: EnumSequenceEnrollmentStatusFieldUpdateOperationsInput | $Enums.SequenceEnrollmentStatus
     enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    current_step_order_index?: IntFieldUpdateOperationsInput | number
+    first_step_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -107789,6 +118129,8 @@ export namespace Prisma {
     campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSequenceEnrollmentStatusFieldUpdateOperationsInput | $Enums.SequenceEnrollmentStatus
     enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    current_step_order_index?: IntFieldUpdateOperationsInput | number
+    first_step_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -107803,6 +118145,8 @@ export namespace Prisma {
     campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSequenceEnrollmentStatusFieldUpdateOperationsInput | $Enums.SequenceEnrollmentStatus
     enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    current_step_order_index?: IntFieldUpdateOperationsInput | number
+    first_step_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -107984,6 +118328,8 @@ export namespace Prisma {
     campaign_uuid?: string | null
     status?: $Enums.SequenceEnrollmentStatus
     enrolled_at?: Date | string
+    current_step_order_index?: number
+    first_step_sent_at?: Date | string | null
     cancelled_at?: Date | string | null
     completed_at?: Date | string | null
     created_at?: Date | string
@@ -108087,6 +118433,8 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     status?: EnumSequenceEnrollmentStatusFieldUpdateOperationsInput | $Enums.SequenceEnrollmentStatus
     enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    current_step_order_index?: IntFieldUpdateOperationsInput | number
+    first_step_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -108103,6 +118451,8 @@ export namespace Prisma {
     campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSequenceEnrollmentStatusFieldUpdateOperationsInput | $Enums.SequenceEnrollmentStatus
     enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    current_step_order_index?: IntFieldUpdateOperationsInput | number
+    first_step_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -108117,6 +118467,8 @@ export namespace Prisma {
     campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSequenceEnrollmentStatusFieldUpdateOperationsInput | $Enums.SequenceEnrollmentStatus
     enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    current_step_order_index?: IntFieldUpdateOperationsInput | number
+    first_step_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -108165,6 +118517,7 @@ export namespace Prisma {
     outreach_messages?: OutreachMessageUpdateManyWithoutCampaignNestedInput
     interactions?: InteractionUpdateManyWithoutCampaignNestedInput
     sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutCampaignNestedInput
+    campaign_integrations?: CampaignIntegrationUpdateManyWithoutCampaignNestedInput
   }
 
   export type MarketingCampaignUncheckedUpdateWithoutSequenceInput = {
@@ -108210,6 +118563,7 @@ export namespace Prisma {
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutCampaignNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutCampaignNestedInput
     sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutCampaignNestedInput
+    campaign_integrations?: CampaignIntegrationUncheckedUpdateManyWithoutCampaignNestedInput
   }
 
   export type MarketingCampaignUncheckedUpdateManyWithoutSequenceInput = {
@@ -108280,6 +118634,7 @@ export namespace Prisma {
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: string | null
+    campaign_integration_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -108313,6 +118668,7 @@ export namespace Prisma {
     sent_by?: UserUpdateOneWithoutOutreach_messages_sentNestedInput
     interaction?: InteractionUpdateOneWithoutOutreach_messageNestedInput
     sequence_enrollment?: SequenceEnrollmentUpdateOneWithoutOutreach_messagesNestedInput
+    campaign_integration?: CampaignIntegrationUpdateOneWithoutOutreach_messagesNestedInput
   }
 
   export type OutreachMessageUncheckedUpdateWithoutSequence_stepInput = {
@@ -108342,6 +118698,7 @@ export namespace Prisma {
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    campaign_integration_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     interaction?: InteractionUncheckedUpdateOneWithoutOutreach_messageNestedInput
@@ -108374,6 +118731,7 @@ export namespace Prisma {
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    campaign_integration_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -108405,6 +118763,7 @@ export namespace Prisma {
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_step_uuid?: string | null
+    campaign_integration_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -108438,6 +118797,7 @@ export namespace Prisma {
     sent_by?: UserUpdateOneWithoutOutreach_messages_sentNestedInput
     interaction?: InteractionUpdateOneWithoutOutreach_messageNestedInput
     sequence_step?: OutreachSequenceStepUpdateOneWithoutOutreach_messagesNestedInput
+    campaign_integration?: CampaignIntegrationUpdateOneWithoutOutreach_messagesNestedInput
   }
 
   export type OutreachMessageUncheckedUpdateWithoutSequence_enrollmentInput = {
@@ -108467,6 +118827,7 @@ export namespace Prisma {
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_step_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    campaign_integration_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     interaction?: InteractionUncheckedUpdateOneWithoutOutreach_messageNestedInput
@@ -108499,6 +118860,7 @@ export namespace Prisma {
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_step_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    campaign_integration_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -108586,6 +118948,7 @@ export namespace Prisma {
     outreach_messages?: OutreachMessageUpdateManyWithoutCampaignNestedInput
     interactions?: InteractionUpdateManyWithoutCampaignNestedInput
     sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutCampaignNestedInput
+    campaign_integrations?: CampaignIntegrationUpdateManyWithoutCampaignNestedInput
   }
 
   export type MarketingCampaignUncheckedUpdateWithoutSender_profileInput = {
@@ -108631,6 +118994,7 @@ export namespace Prisma {
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutCampaignNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutCampaignNestedInput
     sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutCampaignNestedInput
+    campaign_integrations?: CampaignIntegrationUncheckedUpdateManyWithoutCampaignNestedInput
   }
 
   export type MarketingCampaignUncheckedUpdateManyWithoutSender_profileInput = {
@@ -108783,6 +119147,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: string | null
     sequence_step_uuid?: string | null
+    campaign_integration_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -108808,8 +119173,20 @@ export namespace Prisma {
     contact_uuid: string
     status?: $Enums.SequenceEnrollmentStatus
     enrolled_at?: Date | string
+    current_step_order_index?: number
+    first_step_sent_at?: Date | string | null
     cancelled_at?: Date | string | null
     completed_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type CampaignIntegrationCreateManyCampaignInput = {
+    id?: number
+    uuid?: string
+    integration_account_uuid: string
+    sending_policy_uuid: string
+    status?: $Enums.CampaignIntegrationStatus
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -108881,6 +119258,7 @@ export namespace Prisma {
     interaction?: InteractionUpdateOneWithoutOutreach_messageNestedInput
     sequence_enrollment?: SequenceEnrollmentUpdateOneWithoutOutreach_messagesNestedInput
     sequence_step?: OutreachSequenceStepUpdateOneWithoutOutreach_messagesNestedInput
+    campaign_integration?: CampaignIntegrationUpdateOneWithoutOutreach_messagesNestedInput
   }
 
   export type OutreachMessageUncheckedUpdateWithoutCampaignInput = {
@@ -108910,6 +119288,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     sequence_step_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    campaign_integration_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     interaction?: InteractionUncheckedUpdateOneWithoutOutreach_messageNestedInput
@@ -108942,6 +119321,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     sequence_step_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    campaign_integration_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -108991,6 +119371,8 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     status?: EnumSequenceEnrollmentStatusFieldUpdateOperationsInput | $Enums.SequenceEnrollmentStatus
     enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    current_step_order_index?: IntFieldUpdateOperationsInput | number
+    first_step_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -109007,6 +119389,8 @@ export namespace Prisma {
     contact_uuid?: StringFieldUpdateOperationsInput | string
     status?: EnumSequenceEnrollmentStatusFieldUpdateOperationsInput | $Enums.SequenceEnrollmentStatus
     enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    current_step_order_index?: IntFieldUpdateOperationsInput | number
+    first_step_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -109021,8 +119405,43 @@ export namespace Prisma {
     contact_uuid?: StringFieldUpdateOperationsInput | string
     status?: EnumSequenceEnrollmentStatusFieldUpdateOperationsInput | $Enums.SequenceEnrollmentStatus
     enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    current_step_order_index?: IntFieldUpdateOperationsInput | number
+    first_step_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CampaignIntegrationUpdateWithoutCampaignInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumCampaignIntegrationStatusFieldUpdateOperationsInput | $Enums.CampaignIntegrationStatus
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    integration_account?: IntegrationAccountUpdateOneRequiredWithoutCampaign_integrationsNestedInput
+    sending_policy?: SendingPolicyUpdateOneRequiredWithoutCampaign_integrationsNestedInput
+    state?: CampaignIntegrationStateUpdateOneWithoutCampaign_integrationNestedInput
+    outreach_messages?: OutreachMessageUpdateManyWithoutCampaign_integrationNestedInput
+  }
+
+  export type CampaignIntegrationUncheckedUpdateWithoutCampaignInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    integration_account_uuid?: StringFieldUpdateOperationsInput | string
+    sending_policy_uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumCampaignIntegrationStatusFieldUpdateOperationsInput | $Enums.CampaignIntegrationStatus
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    state?: CampaignIntegrationStateUncheckedUpdateOneWithoutCampaign_integrationNestedInput
+    outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutCampaign_integrationNestedInput
+  }
+
+  export type CampaignIntegrationUncheckedUpdateManyWithoutCampaignInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    integration_account_uuid?: StringFieldUpdateOperationsInput | string
+    sending_policy_uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumCampaignIntegrationStatusFieldUpdateOperationsInput | $Enums.CampaignIntegrationStatus
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -109043,6 +119462,8 @@ export namespace Prisma {
     uuid?: string
     account: string
     title: string
+    max_messages_per_period?: number | null
+    max_messages_period_unit?: $Enums.SendingPeriodUnit | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -109083,8 +119504,11 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     account?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
+    max_messages_per_period?: NullableIntFieldUpdateOperationsInput | number | null
+    max_messages_period_unit?: NullableEnumSendingPeriodUnitFieldUpdateOperationsInput | $Enums.SendingPeriodUnit | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    campaign_integrations?: CampaignIntegrationUpdateManyWithoutIntegration_accountNestedInput
   }
 
   export type IntegrationAccountUncheckedUpdateWithoutIntegrationInput = {
@@ -109092,8 +119516,11 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     account?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
+    max_messages_per_period?: NullableIntFieldUpdateOperationsInput | number | null
+    max_messages_period_unit?: NullableEnumSendingPeriodUnitFieldUpdateOperationsInput | $Enums.SendingPeriodUnit | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    campaign_integrations?: CampaignIntegrationUncheckedUpdateManyWithoutIntegration_accountNestedInput
   }
 
   export type IntegrationAccountUncheckedUpdateManyWithoutIntegrationInput = {
@@ -109101,6 +119528,51 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     account?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
+    max_messages_per_period?: NullableIntFieldUpdateOperationsInput | number | null
+    max_messages_period_unit?: NullableEnumSendingPeriodUnitFieldUpdateOperationsInput | $Enums.SendingPeriodUnit | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CampaignIntegrationCreateManyIntegration_accountInput = {
+    id?: number
+    uuid?: string
+    campaign_uuid: string
+    sending_policy_uuid: string
+    status?: $Enums.CampaignIntegrationStatus
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type CampaignIntegrationUpdateWithoutIntegration_accountInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumCampaignIntegrationStatusFieldUpdateOperationsInput | $Enums.CampaignIntegrationStatus
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    campaign?: MarketingCampaignUpdateOneRequiredWithoutCampaign_integrationsNestedInput
+    sending_policy?: SendingPolicyUpdateOneRequiredWithoutCampaign_integrationsNestedInput
+    state?: CampaignIntegrationStateUpdateOneWithoutCampaign_integrationNestedInput
+    outreach_messages?: OutreachMessageUpdateManyWithoutCampaign_integrationNestedInput
+  }
+
+  export type CampaignIntegrationUncheckedUpdateWithoutIntegration_accountInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    campaign_uuid?: StringFieldUpdateOperationsInput | string
+    sending_policy_uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumCampaignIntegrationStatusFieldUpdateOperationsInput | $Enums.CampaignIntegrationStatus
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    state?: CampaignIntegrationStateUncheckedUpdateOneWithoutCampaign_integrationNestedInput
+    outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutCampaign_integrationNestedInput
+  }
+
+  export type CampaignIntegrationUncheckedUpdateManyWithoutIntegration_accountInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    campaign_uuid?: StringFieldUpdateOperationsInput | string
+    sending_policy_uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumCampaignIntegrationStatusFieldUpdateOperationsInput | $Enums.CampaignIntegrationStatus
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -109322,6 +119794,294 @@ export namespace Prisma {
     payload?: NullableJsonNullValueInput | InputJsonValue
     seen_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SendingPolicyCreateManySource_policyInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    name: string
+    description?: string | null
+    is_template?: boolean
+    timezone?: string
+    window_start_minute?: number | null
+    window_end_minute?: number | null
+    min_interval_seconds?: number
+    min_interval_jitter_seconds?: number
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type SendingPolicyStageCreateManySending_policyInput = {
+    id?: number
+    uuid?: string
+    order_index: number
+    limit: number
+    period_unit: $Enums.SendingPeriodUnit
+    duration_value?: number | null
+    duration_unit?: $Enums.SendingPeriodUnit | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type CampaignIntegrationCreateManySending_policyInput = {
+    id?: number
+    uuid?: string
+    campaign_uuid: string
+    integration_account_uuid: string
+    status?: $Enums.CampaignIntegrationStatus
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type SendingPolicyUpdateWithoutSource_policyInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    is_template?: BoolFieldUpdateOperationsInput | boolean
+    timezone?: StringFieldUpdateOperationsInput | string
+    window_start_minute?: NullableIntFieldUpdateOperationsInput | number | null
+    window_end_minute?: NullableIntFieldUpdateOperationsInput | number | null
+    min_interval_seconds?: IntFieldUpdateOperationsInput | number
+    min_interval_jitter_seconds?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutSending_policiesNestedInput
+    cloned_instances?: SendingPolicyUpdateManyWithoutSource_policyNestedInput
+    stages?: SendingPolicyStageUpdateManyWithoutSending_policyNestedInput
+    campaign_integrations?: CampaignIntegrationUpdateManyWithoutSending_policyNestedInput
+  }
+
+  export type SendingPolicyUncheckedUpdateWithoutSource_policyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    is_template?: BoolFieldUpdateOperationsInput | boolean
+    timezone?: StringFieldUpdateOperationsInput | string
+    window_start_minute?: NullableIntFieldUpdateOperationsInput | number | null
+    window_end_minute?: NullableIntFieldUpdateOperationsInput | number | null
+    min_interval_seconds?: IntFieldUpdateOperationsInput | number
+    min_interval_jitter_seconds?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    cloned_instances?: SendingPolicyUncheckedUpdateManyWithoutSource_policyNestedInput
+    stages?: SendingPolicyStageUncheckedUpdateManyWithoutSending_policyNestedInput
+    campaign_integrations?: CampaignIntegrationUncheckedUpdateManyWithoutSending_policyNestedInput
+  }
+
+  export type SendingPolicyUncheckedUpdateManyWithoutSource_policyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    is_template?: BoolFieldUpdateOperationsInput | boolean
+    timezone?: StringFieldUpdateOperationsInput | string
+    window_start_minute?: NullableIntFieldUpdateOperationsInput | number | null
+    window_end_minute?: NullableIntFieldUpdateOperationsInput | number | null
+    min_interval_seconds?: IntFieldUpdateOperationsInput | number
+    min_interval_jitter_seconds?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SendingPolicyStageUpdateWithoutSending_policyInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    order_index?: IntFieldUpdateOperationsInput | number
+    limit?: IntFieldUpdateOperationsInput | number
+    period_unit?: EnumSendingPeriodUnitFieldUpdateOperationsInput | $Enums.SendingPeriodUnit
+    duration_value?: NullableIntFieldUpdateOperationsInput | number | null
+    duration_unit?: NullableEnumSendingPeriodUnitFieldUpdateOperationsInput | $Enums.SendingPeriodUnit | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SendingPolicyStageUncheckedUpdateWithoutSending_policyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    order_index?: IntFieldUpdateOperationsInput | number
+    limit?: IntFieldUpdateOperationsInput | number
+    period_unit?: EnumSendingPeriodUnitFieldUpdateOperationsInput | $Enums.SendingPeriodUnit
+    duration_value?: NullableIntFieldUpdateOperationsInput | number | null
+    duration_unit?: NullableEnumSendingPeriodUnitFieldUpdateOperationsInput | $Enums.SendingPeriodUnit | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SendingPolicyStageUncheckedUpdateManyWithoutSending_policyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    order_index?: IntFieldUpdateOperationsInput | number
+    limit?: IntFieldUpdateOperationsInput | number
+    period_unit?: EnumSendingPeriodUnitFieldUpdateOperationsInput | $Enums.SendingPeriodUnit
+    duration_value?: NullableIntFieldUpdateOperationsInput | number | null
+    duration_unit?: NullableEnumSendingPeriodUnitFieldUpdateOperationsInput | $Enums.SendingPeriodUnit | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CampaignIntegrationUpdateWithoutSending_policyInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumCampaignIntegrationStatusFieldUpdateOperationsInput | $Enums.CampaignIntegrationStatus
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    campaign?: MarketingCampaignUpdateOneRequiredWithoutCampaign_integrationsNestedInput
+    integration_account?: IntegrationAccountUpdateOneRequiredWithoutCampaign_integrationsNestedInput
+    state?: CampaignIntegrationStateUpdateOneWithoutCampaign_integrationNestedInput
+    outreach_messages?: OutreachMessageUpdateManyWithoutCampaign_integrationNestedInput
+  }
+
+  export type CampaignIntegrationUncheckedUpdateWithoutSending_policyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    campaign_uuid?: StringFieldUpdateOperationsInput | string
+    integration_account_uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumCampaignIntegrationStatusFieldUpdateOperationsInput | $Enums.CampaignIntegrationStatus
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    state?: CampaignIntegrationStateUncheckedUpdateOneWithoutCampaign_integrationNestedInput
+    outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutCampaign_integrationNestedInput
+  }
+
+  export type CampaignIntegrationUncheckedUpdateManyWithoutSending_policyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    campaign_uuid?: StringFieldUpdateOperationsInput | string
+    integration_account_uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumCampaignIntegrationStatusFieldUpdateOperationsInput | $Enums.CampaignIntegrationStatus
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OutreachMessageCreateManyCampaign_integrationInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    contact_uuid: string
+    campaign_uuid?: string | null
+    sent_by_user_uuid?: string | null
+    channel: $Enums.Channel
+    direction?: $Enums.MsgDirection
+    subject?: string | null
+    content: string
+    status?: $Enums.MsgStatus
+    provider_message_id?: string | null
+    idempotency_key?: string | null
+    scheduled_at?: Date | string | null
+    sent_at?: Date | string | null
+    delivered_at?: Date | string | null
+    opened_at?: Date | string | null
+    clicked_at?: Date | string | null
+    replied_at?: Date | string | null
+    bounced_at?: Date | string | null
+    failed_at?: Date | string | null
+    email_provider?: $Enums.ExternalIntegrationProvider | null
+    email_account?: string | null
+    sms_provider?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    sequence_enrollment_uuid?: string | null
+    sequence_step_uuid?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type OutreachMessageUpdateWithoutCampaign_integrationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    channel?: EnumChannelFieldUpdateOperationsInput | $Enums.Channel
+    direction?: EnumMsgDirectionFieldUpdateOperationsInput | $Enums.MsgDirection
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    content?: StringFieldUpdateOperationsInput | string
+    status?: EnumMsgStatusFieldUpdateOperationsInput | $Enums.MsgStatus
+    provider_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    idempotency_key?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    delivered_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    opened_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    clicked_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    replied_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
+    email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutOutreach_messagesNestedInput
+    contact?: ContactUpdateOneRequiredWithoutOutreach_messagesNestedInput
+    campaign?: MarketingCampaignUpdateOneWithoutOutreach_messagesNestedInput
+    sent_by?: UserUpdateOneWithoutOutreach_messages_sentNestedInput
+    interaction?: InteractionUpdateOneWithoutOutreach_messageNestedInput
+    sequence_enrollment?: SequenceEnrollmentUpdateOneWithoutOutreach_messagesNestedInput
+    sequence_step?: OutreachSequenceStepUpdateOneWithoutOutreach_messagesNestedInput
+  }
+
+  export type OutreachMessageUncheckedUpdateWithoutCampaign_integrationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    contact_uuid?: StringFieldUpdateOperationsInput | string
+    campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    sent_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    channel?: EnumChannelFieldUpdateOperationsInput | $Enums.Channel
+    direction?: EnumMsgDirectionFieldUpdateOperationsInput | $Enums.MsgDirection
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    content?: StringFieldUpdateOperationsInput | string
+    status?: EnumMsgStatusFieldUpdateOperationsInput | $Enums.MsgStatus
+    provider_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    idempotency_key?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    delivered_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    opened_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    clicked_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    replied_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
+    email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    sequence_step_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    interaction?: InteractionUncheckedUpdateOneWithoutOutreach_messageNestedInput
+  }
+
+  export type OutreachMessageUncheckedUpdateManyWithoutCampaign_integrationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    contact_uuid?: StringFieldUpdateOperationsInput | string
+    campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    sent_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    channel?: EnumChannelFieldUpdateOperationsInput | $Enums.Channel
+    direction?: EnumMsgDirectionFieldUpdateOperationsInput | $Enums.MsgDirection
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    content?: StringFieldUpdateOperationsInput | string
+    status?: EnumMsgStatusFieldUpdateOperationsInput | $Enums.MsgStatus
+    provider_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    idempotency_key?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    delivered_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    opened_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    clicked_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    replied_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
+    email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    sequence_step_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

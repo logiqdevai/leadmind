@@ -14,15 +14,12 @@ import {
     CampaignStatuses,
     type CampaignContactStatuses as CampaignContactStatus,
 } from "@/features/marketing-campaigns/interfaces/campaign.interface";
-import type { EmailProviderAllocation } from "@/features/integrations/interfaces/integrations.interface";
 import { Channel } from "@/features/contacts/interfaces/contact.interface";
 import { Routes } from "@/routes/routes";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
-import {
-    EmailProviderSelect,
-    isEmailProviderAllocationValid,
-} from "@/features/messaging/components/email-provider-select";
 import { SenderProfileSelect } from "@/features/messaging/components/sender-profile-select";
+import { CampaignIntegrationPicker } from "../../components/campaign-integrations/campaign-integration-picker";
+import { useCampaignIntegrations } from "@/features/campaign-integrations/hooks/use-campaign-integrations";
 import { CampaignStatusBadge } from "../../components/campaign-status-badge";
 import { CampaignStatsSection } from "../../components/campaign-stats-section";
 import { RecipientsTable } from "../../components/recipients-table";
@@ -57,7 +54,6 @@ export default function CampaignDetailPage() {
     const [templatePrefill, setTemplatePrefill] = useState<MessageComposerValue | null>(null);
     const [templateDefaultName, setTemplateDefaultName] = useState("");
     const [saveTemplateLoading, setSaveTemplateLoading] = useState(false);
-    const [emailAllocations, setEmailAllocations] = useState<EmailProviderAllocation[]>([]);
     const [senderProfileUuid, setSenderProfileUuid] = useState<string | null>(null);
     const { data: campaign, isLoading } = useCampaign(uuid);
     const { data: contactsPage } = useCampaignContacts(uuid, {
@@ -69,17 +65,13 @@ export default function CampaignDetailPage() {
         channel: Channel.EMAIL,
         limit: 1,
     });
+    const { data: campaignIntegrations } = useCampaignIntegrations(uuid ?? "");
     const sendDraftsMutation = useSendPersonalizedDrafts();
 
     useEffect(() => {
         if (!campaign?.sender_profile_uuid || senderProfileUuid) return;
         setSenderProfileUuid(campaign.sender_profile_uuid);
     }, [campaign?.sender_profile_uuid, senderProfileUuid]);
-
-    useEffect(() => {
-        if (!campaign?.email_provider_allocations?.length || emailAllocations.length > 0) return;
-        setEmailAllocations(campaign.email_provider_allocations);
-    }, [campaign?.email_provider_allocations, emailAllocations.length]);
 
     if (isLoading || !campaign) {
         return <CampaignDetailSkeleton />;
@@ -90,11 +82,9 @@ export default function CampaignDetailPage() {
     const batchDraftsPending = isPersonalized && !!campaign.draft_batch_id;
     const includesEmail = campaign.channels.includes(Channel.EMAIL);
     const pendingEmailCount = pendingEmailContacts?.total ?? 0;
-    const showEmailProvider = isPersonalized && includesEmail && isDraftsReady;
-    const emailProviderMissing =
-        showEmailProvider &&
-        pendingEmailCount > 0 &&
-        !isEmailProviderAllocationValid(emailAllocations, pendingEmailCount);
+    const showIntegrationPicker = isPersonalized && includesEmail && isDraftsReady;
+    const hasActiveIntegration = (campaignIntegrations ?? []).some((ci) => ci.status === "ACTIVE");
+    const integrationMissing = showIntegrationPicker && !hasActiveIntegration;
     const hasTemplateContent = !!(
         campaign.email_content?.trim() ||
         campaign.sms_content?.trim() ||
@@ -117,15 +107,10 @@ export default function CampaignDetailPage() {
     };
 
     const handleSendCampaign = async () => {
-        if (emailProviderMissing) return;
+        if (integrationMissing) return;
         if (!senderProfileUuid) return;
         await sendDraftsMutation.mutateAsync({
             uuid: campaign.uuid,
-            ...(showEmailProvider && emailAllocations.length > 0
-                ? {
-                      email_provider_allocations: emailAllocations,
-                  }
-                : {}),
             sender_profile_uuid: senderProfileUuid,
         });
         setConfirmSend(false);
@@ -198,6 +183,12 @@ export default function CampaignDetailPage() {
 
             <CampaignStatsSection campaign={campaign} />
 
+            {showIntegrationPicker ? (
+                <section className="rounded-xl border border-border bg-surface p-4">
+                    <CampaignIntegrationPicker campaignUuid={campaign.uuid} totalContacts={pendingEmailCount} />
+                </section>
+            ) : null}
+
             {isPersonalized && (isDraftsReady || campaign.status === CampaignStatuses.SENDING || campaign.status === CampaignStatuses.COMPLETED) ? (
                 <section className="space-y-3">
                     <h2 className="text-sm font-semibold text-foreground">Drafted Messages</h2>
@@ -249,18 +240,8 @@ export default function CampaignDetailPage() {
                 description={
                     <>
                         This will queue {pendingEmailCount} email
-                        {pendingEmailCount === 1 ? "" : "s"} for delivery using your selected
-                        provider account.
-                        {showEmailProvider ? (
-                            <div className="mt-4">
-                                <EmailProviderSelect
-                                    totalCount={pendingEmailCount}
-                                    value={emailAllocations}
-                                    onChange={setEmailAllocations}
-                                    disabled={sendDraftsMutation.isPending}
-                                />
-                            </div>
-                        ) : null}
+                        {pendingEmailCount === 1 ? "" : "s"} for delivery according to the sending
+                        schedule configured above.
                         <div className="mt-4">
                             <SenderProfileSelect
                                 value={senderProfileUuid}
@@ -272,7 +253,7 @@ export default function CampaignDetailPage() {
                 }
                 confirmLabel="Send now"
                 isPending={sendDraftsMutation.isPending}
-                isConfirmDisabled={emailProviderMissing || !senderProfileUuid}
+                isConfirmDisabled={integrationMissing || !senderProfileUuid}
                 onConfirm={handleSendCampaign}
             />
 

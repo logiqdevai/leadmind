@@ -401,6 +401,7 @@ exports.Prisma.OutreachMessageScalarFieldEnum = {
   metadata: 'metadata',
   sequence_enrollment_uuid: 'sequence_enrollment_uuid',
   sequence_step_uuid: 'sequence_step_uuid',
+  campaign_integration_uuid: 'campaign_integration_uuid',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };
@@ -442,6 +443,8 @@ exports.Prisma.SequenceEnrollmentScalarFieldEnum = {
   campaign_uuid: 'campaign_uuid',
   status: 'status',
   enrolled_at: 'enrolled_at',
+  current_step_order_index: 'current_step_order_index',
+  first_step_sent_at: 'first_step_sent_at',
   cancelled_at: 'cancelled_at',
   completed_at: 'completed_at',
   created_at: 'created_at',
@@ -638,6 +641,8 @@ exports.Prisma.IntegrationAccountScalarFieldEnum = {
   integration_uuid: 'integration_uuid',
   account: 'account',
   title: 'title',
+  max_messages_per_period: 'max_messages_per_period',
+  max_messages_period_unit: 'max_messages_period_unit',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };
@@ -798,6 +803,69 @@ exports.Prisma.EmailSendLimitScalarFieldEnum = {
   period: 'period',
   max_count: 'max_count',
   is_active: 'is_active',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.SendingPolicyScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  organisation_uuid: 'organisation_uuid',
+  name: 'name',
+  description: 'description',
+  is_template: 'is_template',
+  source_policy_uuid: 'source_policy_uuid',
+  timezone: 'timezone',
+  window_start_minute: 'window_start_minute',
+  window_end_minute: 'window_end_minute',
+  min_interval_seconds: 'min_interval_seconds',
+  min_interval_jitter_seconds: 'min_interval_jitter_seconds',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.SendingPolicyStageScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  sending_policy_uuid: 'sending_policy_uuid',
+  order_index: 'order_index',
+  limit: 'limit',
+  period_unit: 'period_unit',
+  duration_value: 'duration_value',
+  duration_unit: 'duration_unit',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.CampaignIntegrationScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  campaign_uuid: 'campaign_uuid',
+  integration_account_uuid: 'integration_account_uuid',
+  sending_policy_uuid: 'sending_policy_uuid',
+  status: 'status',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.CampaignIntegrationStateScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  campaign_integration_uuid: 'campaign_integration_uuid',
+  policy_started_at: 'policy_started_at',
+  last_sent_at: 'last_sent_at',
+  lifetime_sent_count: 'lifetime_sent_count',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.SendingUsageCounterScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  scope_type: 'scope_type',
+  scope_uuid: 'scope_uuid',
+  period_key: 'period_key',
+  count: 'count',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };
@@ -1124,6 +1192,12 @@ exports.OpenAiBatchStatus = exports.$Enums.OpenAiBatchStatus = {
   CANCELLED: 'CANCELLED'
 };
 
+exports.SendingPeriodUnit = exports.$Enums.SendingPeriodUnit = {
+  HOUR: 'HOUR',
+  DAY: 'DAY',
+  WEEK: 'WEEK'
+};
+
 exports.IntegrationKeyType = exports.$Enums.IntegrationKeyType = {
   API_KEY: 'API_KEY',
   WEBHOOK_SECRET: 'WEBHOOK_SECRET',
@@ -1215,6 +1289,18 @@ exports.GoalPeriod = exports.$Enums.GoalPeriod = {
   MONTH: 'MONTH'
 };
 
+exports.CampaignIntegrationStatus = exports.$Enums.CampaignIntegrationStatus = {
+  ACTIVE: 'ACTIVE',
+  PAUSED: 'PAUSED',
+  REMOVED: 'REMOVED'
+};
+
+exports.SendingUsageScopeType = exports.$Enums.SendingUsageScopeType = {
+  PROVIDER: 'PROVIDER',
+  INTEGRATION_ACCOUNT: 'INTEGRATION_ACCOUNT',
+  CAMPAIGN_INTEGRATION: 'CAMPAIGN_INTEGRATION'
+};
+
 exports.GoalAchievementType = exports.$Enums.GoalAchievementType = {
   MILESTONE_25: 'MILESTONE_25',
   MILESTONE_50: 'MILESTONE_50',
@@ -1270,6 +1356,11 @@ exports.Prisma.ModelName = {
   ApifyUsageLog: 'ApifyUsageLog',
   MessagingGoal: 'MessagingGoal',
   EmailSendLimit: 'EmailSendLimit',
+  SendingPolicy: 'SendingPolicy',
+  SendingPolicyStage: 'SendingPolicyStage',
+  CampaignIntegration: 'CampaignIntegration',
+  CampaignIntegrationState: 'CampaignIntegrationState',
+  SendingUsageCounter: 'SendingUsageCounter',
   GoalAchievement: 'GoalAchievement',
   GoalPersonalBest: 'GoalPersonalBest',
   ActivityLog: 'ActivityLog'

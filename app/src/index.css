@@ -76,6 +76,16 @@ main {
     oklch(0 0 0 / 0.4) 0 10px 15px -3px,
     oklch(0 0 0 / 0.25) 0 4px 6px -2px;
 
+  /* Categorical dataviz hues, fixed order (never cycled/reassigned by filtering). */
+  --viz-hue-1: #3987e5; /* blue */
+  --viz-hue-2: #d95926; /* orange */
+  --viz-hue-3: #199e70; /* aqua */
+  --viz-hue-4: #c98500; /* yellow */
+  --viz-hue-5: #d55181; /* magenta */
+  --viz-hue-6: #008300; /* green */
+  --viz-hue-7: #9085e9; /* violet */
+  --viz-hue-8: #e66767; /* red */
+
   --sans:    "DM Sans", system-ui, "Segoe UI", sans-serif;
   --heading: "DM Sans", system-ui, "Segoe UI", sans-serif;
   --mono:    ui-monospace, Consolas, monospace;
@@ -166,6 +176,15 @@ main {
   --overlay-shadow:
     oklch(0 0 0 / 0.10) 0 10px 15px -3px,
     oklch(0 0 0 / 0.06) 0 4px 6px -2px;
+
+  --viz-hue-1: #2a78d6;
+  --viz-hue-2: #eb6834;
+  --viz-hue-3: #1baf7a;
+  --viz-hue-4: #eda100;
+  --viz-hue-5: #e87ba4;
+  --viz-hue-6: #008300;
+  --viz-hue-7: #4a3aa7;
+  --viz-hue-8: #e34948;
 }
 
 .checkbox__control {
@@ -361,7 +380,7 @@ body,
   font-size: 16px !important;
 }
 
-#root *:not(svg):not(svg *) {
+#root *:not(svg):not(svg *):not(.lf-root):not(.lf-root *) {
   font-size: 16px !important;
 }
 
