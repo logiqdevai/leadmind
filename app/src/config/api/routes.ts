@@ -290,4 +290,7 @@ export const ApiRoutes = {
         upsert: "/email-send-limits",
         remove: (uuid: string) => `/email-send-limits/${uuid}`,
     },
+    unsubscribe: {
+        confirm: (token: string) => `/unsubscribe/${encodeURIComponent(token)}`,
+    },
 }

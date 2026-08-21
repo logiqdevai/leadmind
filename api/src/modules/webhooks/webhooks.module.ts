@@ -13,6 +13,7 @@ import { WEBSITE_SCRAPE_TIMEOUT_QUEUE } from '@/core/queues/queues.constants';
 import { ResendWebhookController } from './resend-webhook.controller';
 import { TwilioWebhookController } from './twilio-webhook.controller';
 import { UnsubscribeController } from './unsubscribe.controller';
+import { UnsubscribeService } from './services/unsubscribe.service';
 import { OpenAiWebhookController } from './openai-webhook.controller';
 import { ScrapioWebhookController } from './scrapio-webhook.controller';
 import { UtmAnalyticsWebhookController } from './utm-analytics-webhook.controller';
@@ -48,6 +49,7 @@ import { OpenAiBatchDispatchService } from './services/openai-batch-dispatch.ser
     EmailTrackingController,
   ],
   providers: [
+    UnsubscribeService,
     WebhookEventService,
     CampaignUtmAnalyticsService,
     OpenAiBatchDispatchService,

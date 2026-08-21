@@ -91,6 +91,17 @@ export class OutreachSendWorker extends WorkerHost implements OnModuleInit {
             );
             return;
         }
+        if (message.contact.unsubscribed_at) {
+            await this.prisma.outreachMessage.update({
+                where: { uuid: message.uuid },
+                data: {
+                    status: MsgStatus.SKIPPED,
+                    metadata: { error: 'Contact has unsubscribed' },
+                },
+            });
+            this.logger.warn(`Outreach send skipped message=${message.uuid}: Contact has unsubscribed`);
+            return;
+        }
 
         await this.prisma.outreachMessage.update({
             where: { uuid: message.uuid },

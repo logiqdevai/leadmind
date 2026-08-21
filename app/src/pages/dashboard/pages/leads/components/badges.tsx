@@ -17,6 +17,19 @@ export function StatusChip({ status }: { status: LeadStatus }) {
   );
 }
 
+export function UnsubscribedChip({ unsubscribedAt }: { unsubscribedAt: string | null | undefined }) {
+  if (!unsubscribedAt) {
+    return <span className="text-muted">—</span>;
+  }
+  return (
+    <span title={new Date(unsubscribedAt).toLocaleString()}>
+      <Chip size="sm" variant="soft" color="warning">
+        <Chip.Label>Unsubscribed</Chip.Label>
+      </Chip>
+    </span>
+  );
+}
+
 export function EmailValidationChip({
   status,
   reason,

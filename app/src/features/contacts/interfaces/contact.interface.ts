@@ -227,6 +227,7 @@ export interface Contact {
     email_validation_status: EmailValidationStatus;
     email_validation_reason: string | null;
     email_validated_at: string | null;
+    unsubscribed_at: string | null;
     phone: string | null;
     company: string | null;
     website: string | null;

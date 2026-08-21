@@ -105,13 +105,16 @@ export class MessageSendService {
         );
 
         if (message.channel === Channel.EMAIL) {
+            if (message.contact.unsubscribed_at) {
+                throw new Error('Contact has unsubscribed');
+            }
             const toEmail = normalizeContactEmail(message.contact.email)!;
             let html = sanitizeEmailHtml(rendered.content);
-            if (message.campaign_uuid) {
-                html = await this.appendUnsubscribeFooter(message.contact_uuid, html);
-            }
+            const token = await this.getOrCreateUnsubscribeToken(message.contact_uuid);
+            html = this.appendUnsubscribeFooter(html, token);
             const headers: Record<string, string> = {
                 'X-Message-Uuid': message.uuid,
+                ...this.unsubscribeHeaders(token),
             };
             if (message.campaign_uuid) {
                 headers['X-Campaign-Uuid'] = message.campaign_uuid;
@@ -438,10 +441,37 @@ export class MessageSendService {
         return EmailConfig.email_addresses.confirmation;
     }
 
-    private async appendUnsubscribeFooter(contact_uuid: string, html: string): Promise<string> {
-        const token = await this.getOrCreateUnsubscribeToken(contact_uuid);
-        const base = process.env.PUBLIC_APP_URL || process.env.APP_URL || '';
-        const url = `${base.replace(/\/$/, '')}/unsubscribe/${token}`;
+    private stripTrailingSlash(url: string): string {
+        return url.replace(/\/$/, '');
+    }
+
+    private publicUnsubscribeUrl(token: string): string {
+        const app = this.configService.get<string>('APP_URL') || '';
+        const api = this.configService.get<string>('API_URL') || '';
+        const base = this.stripTrailingSlash(app || api);
+        return `${base}/unsubscribe/${token}`;
+    }
+
+    private apiUnsubscribeUrl(token: string): string {
+        const api = this.configService.get<string>('API_URL') || '';
+        const app = this.configService.get<string>('APP_URL') || '';
+        const base = this.stripTrailingSlash(api || app);
+        return `${base}/unsubscribe/${token}`;
+    }
+
+    private unsubscribeHeaders(token: string): Record<string, string> {
+        const apiUrl = this.apiUnsubscribeUrl(token);
+        return {
+            'List-Unsubscribe': `<${apiUrl}>`,
+            'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
+        };
+    }
+
+    private appendUnsubscribeFooter(html: string, token: string): string {
+        if (/\/unsubscribe\//i.test(html)) {
+            return html;
+        }
+        const url = this.publicUnsubscribeUrl(token);
         return `${html}<hr style="margin-top:24px;border:none;border-top:1px solid #eee"/><p style="font-size:12px;color:#888;text-align:center;margin-top:12px">Don't want these emails? <a href="${url}" style="color:#888">Unsubscribe</a>.</p>`;
     }
 

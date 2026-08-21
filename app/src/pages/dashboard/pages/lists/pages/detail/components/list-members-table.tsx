@@ -10,7 +10,7 @@ import { LeadStatus } from "@/features/contacts/interfaces/contact.interface";
 import { STATUS_OPTIONS } from "@/features/contacts/constants/contacts.constants";
 import { useUpdateContactStatus } from "@/features/contacts/hooks/use-contacts";
 import { normalizeUrl } from "@/lib/profile";
-import { ContactScoresCompact } from "@/pages/dashboard/pages/leads/components/badges";
+import { ContactScoresCompact, UnsubscribedChip } from "@/pages/dashboard/pages/leads/components/badges";
 import {
     ContactTableDetailLink,
     ContactTableNameCell,
@@ -158,6 +158,11 @@ export function ListMembersTable({
                         </div>
                     );
                 },
+            }),
+            columnHelper.accessor((row) => row.unsubscribed_at, {
+                id: "unsubscribed",
+                header: "Unsubscribed",
+                cell: (info) => <UnsubscribedChip unsubscribedAt={info.getValue()} />,
             }),
             columnHelper.display({
                 id: "score",

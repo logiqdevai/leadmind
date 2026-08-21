@@ -7,6 +7,7 @@ export const CONTACT_TABLE_COLUMN_CLASS: Record<string, string> = {
     phone: `min-w-0 hidden ${WIDE} whitespace-nowrap overflow-hidden`,
     website: `min-w-0 hidden ${WIDE} overflow-hidden`,
     status: "hidden sm:table-cell w-40 overflow-hidden",
+    unsubscribed: "hidden md:table-cell w-32 overflow-hidden",
     score: "hidden xl:table-cell w-16 overflow-hidden",
     filters: `hidden ${WIDE} min-w-0 overflow-hidden`,
     tags: `hidden ${WIDE} min-w-0 overflow-hidden`,

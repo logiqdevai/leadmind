@@ -41,6 +41,7 @@ const SettingsOrganisationPage = lazy(() => import("@/pages/dashboard/pages/sett
 const SettingsActivityPage = lazy(() => import("@/pages/dashboard/pages/settings/activity"));
 const SettingsAccountPage = lazy(() => import("@/pages/dashboard/pages/settings/account"));
 const InviteAcceptPage = lazy(() => import("@/pages/auth/pages/invite"));
+const UnsubscribePage = lazy(() => import("@/pages/unsubscribe"));
 
 const DashboardFiltersLayout = lazy(() => import("@/pages/dashboard/pages/filters/layout"));
 const FiltersPage = lazy(() => import("@/pages/dashboard/pages/filters"));
@@ -443,6 +444,24 @@ export default function AppRoutes() {
                 <AdminSystemStatusPage />
               </Lazy>
             </ProtectedRoute>
+          }
+        />
+      </Route>
+
+      <Route
+        path={Routes.unsubscribe}
+        element={
+          <Lazy>
+            <AuthLayout />
+          </Lazy>
+        }
+      >
+        <Route
+          index
+          element={
+            <Lazy>
+              <UnsubscribePage />
+            </Lazy>
           }
         />
       </Route>
