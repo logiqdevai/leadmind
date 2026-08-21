@@ -8,6 +8,7 @@ import {
     assignCampaignIntegration,
     getCampaignIntegrationCapacity,
     listCampaignIntegrations,
+    listCampaignIntegrationsForOrganisation,
     removeCampaignIntegration,
     updateCampaignIntegrationStatus,
 } from "../services/campaign-integrations.service";
@@ -17,6 +18,8 @@ export const campaignIntegrationsQueryKeys = {
     list: (campaignUuid: string) => ["campaign-integrations", campaignUuid, "list"] as const,
     capacity: (campaignUuid: string, ciUuid: string) =>
         ["campaign-integrations", campaignUuid, "capacity", ciUuid] as const,
+    forOrganisation: (excludeCampaignUuid?: string) =>
+        ["campaign-integrations", "org", excludeCampaignUuid ?? "all"] as const,
 };
 
 export function useCampaignIntegrations(campaignUuid: string) {
@@ -24,6 +27,14 @@ export function useCampaignIntegrations(campaignUuid: string) {
         queryKey: campaignIntegrationsQueryKeys.list(campaignUuid),
         queryFn: () => listCampaignIntegrations(campaignUuid),
         enabled: Boolean(campaignUuid),
+    });
+}
+
+/** Sending integrations assigned across other campaigns in the org - for "copy from campaign". */
+export function useCampaignIntegrationsForOrganisation(excludeCampaignUuid?: string) {
+    return useQuery({
+        queryKey: campaignIntegrationsQueryKeys.forOrganisation(excludeCampaignUuid),
+        queryFn: () => listCampaignIntegrationsForOrganisation(excludeCampaignUuid),
     });
 }
 

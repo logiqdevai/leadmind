@@ -361,7 +361,7 @@ body,
   font-size: 16px !important;
 }
 
-#root *:not(svg):not(svg *) {
+#root *:not(svg):not(svg *):not(.lf-root):not(.lf-root *) {
   font-size: 16px !important;
 }
 

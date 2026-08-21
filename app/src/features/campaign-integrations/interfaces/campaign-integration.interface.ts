@@ -26,6 +26,7 @@ export interface CampaignIntegration {
     integration_account_uuid: string;
     sending_policy_uuid: string;
     status: CampaignIntegrationStatus;
+    campaign: { uuid: string; name: string };
     integration_account: CampaignIntegrationAccountView;
     sending_policy: SendingPolicy;
     created_at: string;

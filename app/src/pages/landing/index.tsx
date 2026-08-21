@@ -1,6 +1,28 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Brain, CheckCircle2, Filter, Mail, Moon, Search, Sparkles, Sun, TrendingUp } from "lucide-react";
+import {
+  ArrowRight,
+  Bell,
+  Bot,
+  Brain,
+  Building2,
+  CheckCircle2,
+  FileText,
+  Filter,
+  Globe,
+  Landmark,
+  Layers,
+  Mail,
+  MapPin,
+  Moon,
+  Phone,
+  Search,
+  ShieldCheck,
+  Sparkles,
+  Sun,
+  TrendingUp,
+  Workflow,
+} from "lucide-react";
 import { useAuthStore } from "@/stores/auth";
 import { Routes } from "@/routes/routes";
 import "./landing.css";
@@ -54,23 +76,30 @@ const FEATURES: { icon: typeof Search; variant: Variant; title: string; descript
   {
     icon: Search,
     variant: "blue",
-    title: "Intelligent Lead Discovery",
-    description: `Configure filters once and let ${environments.APP_NAME} automatically scrape qualified leads from LinkedIn and Google Maps on your schedule.`,
-    bullets: ["LinkedIn search scraping", "Google Maps business data", "Scheduled & on-demand runs"],
+    title: "Lead Discovery from Every Angle",
+    description: `Configure filters once and let ${environments.APP_NAME} scrape qualified leads from LinkedIn, Google Maps, and Greece's official GEMI business registry on your schedule.`,
+    bullets: ["LinkedIn & Google Maps scraping", "Official GEMI registry lookup", "Scheduled & on-demand runs"],
   },
   {
     icon: Brain,
     variant: "violet",
-    title: "AI Lead Scoring",
-    description: "Our AI analyses every lead against your ideal customer profile and assigns a fit score so your team focuses where it matters.",
-    bullets: ["ICP-based 0–100 score", "Automated qualification", "Priority inbox for high-fit leads"],
+    title: "AI Enrichment & Scoring",
+    description: "Every lead is enriched from multiple sources and scored against your ideal customer profile with AI, so your team always knows who to contact first.",
+    bullets: ["Multi-source AI enrichment", "Custom ICP scoring instructions", "Priority inbox for high-fit leads"],
   },
   {
-    icon: Mail,
+    icon: Workflow,
     variant: "green",
-    title: "Multi-channel Outreach",
-    description: "AI-drafted messages for email, SMS, and LinkedIn — personalised to each lead. Run campaigns, track opens, move deals.",
-    bullets: ["Email, SMS & LinkedIn drafts", "Campaign management", "Pipeline tracking"],
+    title: "AI-Personalised Sequences",
+    description: "Build multi-step email, SMS, and LinkedIn sequences with AI-drafted messaging personalised to every contact — enrolled one at a time or in bulk.",
+    bullets: ["Multi-step drip sequences", "AI-personalised messaging", "Bulk & single enrollment"],
+  },
+  {
+    icon: Layers,
+    variant: "blue",
+    title: "Powerful Segmentation",
+    description: "Group contacts into lists, save dynamic filters as reusable segments, and get instant AI-generated audience insights for any slice of your pipeline.",
+    bullets: ["Contact lists & saved filters", "AI audience analysis", "Fast full-text search"],
   },
 ];
 
@@ -79,22 +108,22 @@ const STEPS: { num: string; icon: typeof Filter; variant: Variant; title: string
     num: "01",
     icon: Filter,
     variant: "blue",
-    title: "Configure Your Filter",
-    body: `Tell ${environments.APP_NAME} who you're looking for — job title, location, industry, company size — and which source to scrape.`,
+    title: "Configure Your Sources",
+    body: `Tell ${environments.APP_NAME} who you're looking for — job title, location, industry, company size — and which source to scrape: LinkedIn, Google Maps, or the GEMI registry.`,
   },
   {
     num: "02",
     icon: Sparkles,
     variant: "violet",
-    title: "AI Discovers & Scores",
-    body: "Your filter runs on schedule. Every prospect is scraped and immediately scored with AI against your ideal customer profile.",
+    title: "AI Enriches & Scores",
+    body: "Your filter runs on schedule. Every prospect is scraped, enriched from multiple sources, and instantly scored with AI against your ideal customer profile.",
   },
   {
     num: "03",
     icon: TrendingUp,
     variant: "green",
-    title: "Outreach & Convert",
-    body: "Review scored leads, send AI-drafted messages across email, SMS and LinkedIn, and track every deal through your pipeline.",
+    title: "Sequence & Convert",
+    body: "Enroll scored leads into AI-personalised sequences across email, SMS and LinkedIn — sent safely with smart pacing, and tracked through your pipeline.",
   },
 ];
 
@@ -105,21 +134,8 @@ export default function LandingPage() {
   const isLoggedIn = Boolean(rawLoggedIn);
   const { isDark, toggle } = useLandingTheme();
 
-  useEffect(() => {
-    document.body.style.overflow = "auto";
-    document.body.style.height = "auto";
-    document.documentElement.style.overflow = "auto";
-    document.documentElement.style.height = "auto";
-    return () => {
-      document.body.style.overflow = "";
-      document.body.style.height = "";
-      document.documentElement.style.overflow = "";
-      document.documentElement.style.height = "";
-    };
-  }, []);
-
   return (
-    <div className={`lf-root min-h-screen${isDark ? "" : " lf-light"}`} style={{ backgroundColor: "var(--lf-bg)", fontFamily: "'DM Sans', system-ui, sans-serif", color: "var(--lf-tx)" }}>
+    <div className={`lf-root h-full overflow-y-auto overflow-x-hidden${isDark ? "" : " lf-light"}`} style={{ backgroundColor: "var(--lf-bg)", fontFamily: "'DM Sans', system-ui, sans-serif", color: "var(--lf-tx)" }}>
       {/* Fixed ambient layer */}
       <div className="lf-grid-bg fixed inset-0 pointer-events-none z-0" />
       <div className="fixed pointer-events-none z-0" style={{ top: "-300px", left: "-200px", width: "900px", height: "900px", background: `radial-gradient(ellipse, var(--lf-acc-glow) 0%, transparent 65%)` }} />
@@ -130,6 +146,9 @@ export default function LandingPage() {
         <HeroSection isLoggedIn={isLoggedIn} />
         <StatsSection />
         <FeaturesSection />
+        <IntegrationsSection />
+        <DeliverabilitySection />
+        <LeadCaptureSection />
         <HowItWorksSection />
         <CTASection isLoggedIn={isLoggedIn} />
         <LandingFooter />
@@ -158,7 +177,7 @@ function LandingNav({ isLoggedIn, isDark, toggle }: { isLoggedIn: boolean; isDar
         </Link>
 
         <div className="hidden md:flex items-center gap-7">
-          {["Features", "How it works"].map((label) => (
+          {["Features", "Integrations", "How it works"].map((label) => (
             <a key={label} href={`#${label.toLowerCase().replace(/\s+/g, "-")}`} className="lf-nav-link">
               {label}
             </a>
@@ -202,14 +221,14 @@ function HeroSection({ isLoggedIn }: { isLoggedIn: boolean }) {
           AI-powered lead intelligence
         </div>
 
-        <h1 style={{ fontFamily: "'Syne', system-ui, sans-serif", fontWeight: 800, fontSize: "clamp(38px,5vw,64px)", lineHeight: 1.05, color: "var(--lf-tx)", letterSpacing: "-0.025em" }}>
+        <h1 style={{ fontFamily: "'Syne', system-ui, sans-serif", fontWeight: 800, fontSize: "clamp(34px,3.2vw,48px)", lineHeight: 1.08, color: "var(--lf-tx)", letterSpacing: "-0.02em" }}>
           Turn Any Market
           <br />
           Into <span className="lf-accent-text">Your Pipeline</span>
         </h1>
 
         <p className="text-lg leading-relaxed" style={{ color: "var(--lf-mu)" }}>
-          {environments.APP_NAME} automatically discovers prospects from LinkedIn and Google Maps, scores them with AI, and prepares personalised outreach — so your team can focus on closing.
+          {environments.APP_NAME} automatically discovers prospects from LinkedIn, Google Maps, and Greece's official GEMI business registry, enriches and scores them with AI, then sequences personalised outreach — so your team can focus on closing.
         </p>
 
         <div className="flex flex-wrap gap-3">
@@ -393,21 +412,181 @@ function HeroTerminal() {
 function StatsSection() {
   const stats: { value: string; label: string; colorVar: string }[] = [
     { value: "50K+", label: "Leads Discovered", colorVar: "--lf-acc" },
-    { value: "89%", label: "AI Scoring Accuracy", colorVar: "--lf-vio" },
-    { value: "3.2×", label: "Avg Conversion Lift", colorVar: "--lf-grn" },
+    { value: "5+", label: "Integrated Data Sources", colorVar: "--lf-vio" },
+    { value: "89%", label: "AI Scoring Accuracy", colorVar: "--lf-grn" },
+    { value: "3.2×", label: "Avg Conversion Lift", colorVar: "--lf-acc" },
   ];
 
   return (
     <section className="max-w-6xl mx-auto px-6 pb-24">
-      <div className="rounded-2xl px-6 py-8 grid grid-cols-1 sm:grid-cols-3" style={{ backgroundColor: "var(--lf-stats-bg)", border: "1px solid var(--lf-stats-bd)" }}>
+      <div className="rounded-2xl px-6 py-8 grid grid-cols-2 lg:grid-cols-4" style={{ backgroundColor: "var(--lf-stats-bg)", border: "1px solid var(--lf-stats-bd)" }}>
         {stats.map(({ value, label, colorVar }, i) => (
-          <div key={label} className="py-6 sm:py-0 sm:px-8 flex flex-col items-center text-center gap-1" style={{ borderTop: i > 0 ? "1px solid var(--lf-acc-bd-xs)" : undefined }}>
+          <div
+            key={label}
+            className={`px-4 py-6 lg:py-0 flex flex-col items-center text-center gap-1 ${i % 2 === 1 ? "border-l" : ""} ${i >= 2 ? "border-t lg:border-t-0" : ""} ${i > 0 ? "lg:border-l" : ""}`}
+            style={{ borderColor: "var(--lf-acc-bd-xs)" }}
+          >
             <span style={{ fontFamily: "'Syne', sans-serif", fontSize: "clamp(32px,4vw,44px)", fontWeight: 800, color: v(colorVar), lineHeight: 1 }}>{value}</span>
             <span className="text-sm mt-1" style={{ color: "var(--lf-mu)" }}>
               {label}
             </span>
           </div>
         ))}
+      </div>
+    </section>
+  );
+}
+
+/* ─── Integrations ────────────────────────────────────────────────────────── */
+
+const INTEGRATIONS: { icon: typeof Bot; label: string }[] = [
+  { icon: Bot, label: "OpenAI & Anthropic" },
+  { icon: Mail, label: "Resend & SMTP" },
+  { icon: Phone, label: "Twilio SMS" },
+  { icon: Globe, label: "Apify Web Scraping" },
+  { icon: Building2, label: "HubSpot CRM" },
+  { icon: MapPin, label: "Google Maps" },
+  { icon: Landmark, label: "GEMI Registry" },
+];
+
+function IntegrationsSection() {
+  return (
+    <section id="integrations" className="max-w-6xl mx-auto px-6 pb-24">
+      <p className="text-center text-sm font-semibold mb-8" style={{ color: "var(--lf-mu)", letterSpacing: "0.06em", textTransform: "uppercase" }}>
+        Connects with the tools you already use
+      </p>
+      <div className="flex flex-wrap items-center justify-center gap-3">
+        {INTEGRATIONS.map(({ icon: Icon, label }) => (
+          <div key={label} className="flex items-center gap-2 px-4 py-2.5 rounded-full text-sm" style={{ backgroundColor: "var(--lf-ghost)", border: "1px solid var(--lf-ghost-bd)", color: "var(--lf-tx)" }}>
+            <Icon className="w-4 h-4 shrink-0" style={{ color: "var(--lf-acc)" }} />
+            {label}
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* ─── Deliverability ──────────────────────────────────────────────────────── */
+
+function DeliverabilitySection() {
+  const gauges: { label: string; pct: number; variant: Variant }[] = [
+    { label: "Email (Resend / SMTP)", pct: 78, variant: "blue" },
+    { label: "LinkedIn", pct: 52, variant: "violet" },
+    { label: "SMS (Twilio)", pct: 34, variant: "green" },
+  ];
+
+  return (
+    <section className="max-w-6xl mx-auto px-6 py-24">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_440px] gap-14 items-center">
+        <div className="space-y-6 max-w-xl">
+          <span className="lf-label lf-label-blue">Deliverability</span>
+
+          <h2 style={{ fontFamily: "'Syne', system-ui, sans-serif", fontWeight: 700, fontSize: "clamp(28px,4vw,44px)", color: "var(--lf-tx)", letterSpacing: "-0.02em", lineHeight: 1.1 }}>
+            Send at scale
+            <br />
+            <span className="lf-accent-text">without burning your reputation</span>
+          </h2>
+
+          <p className="text-lg leading-relaxed" style={{ color: "var(--lf-mu)" }}>
+            Stage-based sending policies and a real-time pacing engine spread volume across accounts and providers, so every message lands in the inbox — not the spam folder.
+          </p>
+
+          <ul className="space-y-3">
+            {["Per-account & provider rate limits", "Automatic capacity-based routing", "Email validation before every send"].map((b) => (
+              <li key={b} className="flex items-center gap-2.5 text-sm" style={{ color: "var(--lf-mu)" }}>
+                <ShieldCheck className="w-4 h-4 shrink-0" style={{ color: "var(--lf-acc)" }} />
+                {b}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="rounded-2xl p-6 space-y-5" style={{ backgroundColor: "var(--lf-sur)", border: "1px solid var(--lf-acc-bd)", boxShadow: "var(--lf-term-sh)" }}>
+          <div className="flex items-center justify-between">
+            <span className="text-sm font-semibold" style={{ color: "var(--lf-tx)" }}>
+              Sending capacity
+            </span>
+            <div className="flex items-center gap-2">
+              <span className="lf-pulse-dot w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: "var(--lf-grn)", borderRadius: "9999px" }} />
+              <span className="text-xs" style={{ color: "var(--lf-mu)" }}>
+                Live
+              </span>
+            </div>
+          </div>
+
+          {gauges.map((g) => {
+            const cv = VARIANT_CSS[g.variant];
+            return (
+              <div key={g.label} className="space-y-1.5">
+                <div className="flex justify-between text-xs" style={{ color: "var(--lf-mu)" }}>
+                  <span>{g.label}</span>
+                  <span>{g.pct}%</span>
+                </div>
+                <div className="h-2 rounded-full overflow-hidden" style={{ backgroundColor: "var(--lf-shimmer)" }}>
+                  <div className="h-full rounded-full" style={{ width: `${g.pct}%`, backgroundColor: v(cv.color) }} />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─── Lead capture & follow-up ────────────────────────────────────────────── */
+
+function LeadCaptureSection() {
+  const cards: { icon: typeof FileText; variant: Variant; title: string; description: string; bullets: string[] }[] = [
+    {
+      icon: FileText,
+      variant: "blue",
+      title: "Lead Capture Forms",
+      description: "Embed customisable lead-capture forms on your site and route every completion straight into your pipeline the moment it lands.",
+      bullets: ["Embeddable, customisable forms", "Instant real-time notifications"],
+    },
+    {
+      icon: Bell,
+      variant: "green",
+      title: "Follow-up Reminders",
+      description: "Set reminders on any contact so a hot lead never goes cold — with real-time alerts the moment something needs your attention.",
+      bullets: ["Reminders tied to contacts", "Real-time alerts & notifications"],
+    },
+  ];
+
+  return (
+    <section className="max-w-6xl mx-auto px-6 py-24">
+      <SectionLabel variant="green">Capture & follow-up</SectionLabel>
+      <SectionHeading>
+        Never miss a lead
+        <br />
+        <span className="lf-accent-text">or a follow-up</span>
+      </SectionHeading>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16">
+        {cards.map(({ icon: Icon, variant, title, description, bullets }) => {
+          const cv = VARIANT_CSS[variant];
+          return (
+            <div key={title} className="lf-card-hover rounded-2xl p-8 space-y-5" style={{ backgroundColor: "var(--lf-sur)", border: `1px solid ${v(cv.bd)}` }}>
+              <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: v(cv.bg) }}>
+                <Icon className="w-6 h-6" style={{ color: v(cv.color) }} />
+              </div>
+              <h3 style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: "18px", color: "var(--lf-tx)" }}>{title}</h3>
+              <p className="text-sm leading-relaxed" style={{ color: "var(--lf-mu)" }}>
+                {description}
+              </p>
+              <ul className="space-y-2.5">
+                {bullets.map((b) => (
+                  <li key={b} className="flex items-center gap-2.5 text-sm" style={{ color: "var(--lf-mu)" }}>
+                    <CheckCircle2 className="w-4 h-4 shrink-0" style={{ color: v(cv.color) }} />
+                    {b}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          );
+        })}
       </div>
     </section>
   );
@@ -429,7 +608,7 @@ function FeaturesSection() {
         From discovery to conversion — {environments.APP_NAME} handles the entire top of funnel with AI.
       </p>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {FEATURES.map(({ icon: Icon, variant, title, description, bullets }) => {
           const cv = VARIANT_CSS[variant];
           return (

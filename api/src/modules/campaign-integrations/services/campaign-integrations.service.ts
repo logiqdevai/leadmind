@@ -12,6 +12,7 @@ import { AssignCampaignIntegrationDto } from '../dto/assign-campaign-integration
 import { UpdateCampaignIntegrationStatusDto } from '../dto/update-campaign-integration-status.dto';
 
 const CAMPAIGN_INTEGRATION_INCLUDE = {
+  campaign: { select: { uuid: true, name: true } },
   integration_account: { include: { integration: true } },
   sending_policy: {
     include: { stages: { orderBy: { order_index: 'asc' as const } } },
@@ -42,6 +43,29 @@ export class CampaignIntegrationsService {
       },
       include: CAMPAIGN_INTEGRATION_INCLUDE,
       orderBy: { created_at: 'asc' },
+    });
+  }
+
+  /**
+   * Lists every non-removed CampaignIntegration across the organisation (optionally
+   * excluding one campaign) so the UI can offer "copy the sending policy used on
+   * campaign X" as an assignment source - assign() clones whatever policy uuid it's
+   * given, so copying is just assigning with another campaign integration's policy.
+   */
+  async listForOrganisation(
+    organisation_uuid: string,
+    exclude_campaign_uuid?: string,
+  ) {
+    return this.prisma.campaignIntegration.findMany({
+      where: {
+        status: { not: CampaignIntegrationStatus.REMOVED },
+        campaign: { organisation_uuid },
+        ...(exclude_campaign_uuid
+          ? { campaign_uuid: { not: exclude_campaign_uuid } }
+          : {}),
+      },
+      include: CAMPAIGN_INTEGRATION_INCLUDE,
+      orderBy: { created_at: 'desc' },
     });
   }
 

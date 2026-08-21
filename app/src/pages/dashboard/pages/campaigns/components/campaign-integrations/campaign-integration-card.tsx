@@ -1,25 +1,23 @@
+import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { Button, Chip, Switch } from "@heroui/react";
-import { Trash2 } from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import type { CampaignIntegration } from "@/features/campaign-integrations/interfaces/campaign-integration.interface";
 import { CampaignIntegrationStatus } from "@/features/campaign-integrations/interfaces/campaign-integration.interface";
-import { useCampaignIntegrationCapacity } from "@/features/campaign-integrations/hooks/use-campaign-integrations";
-
-function formatStages(policy: CampaignIntegration["sending_policy"]): string {
-    const ordered = [...policy.stages].sort((a, b) => a.order_index - b.order_index);
-    return ordered
-        .map((stage) => {
-            const rate = `${stage.limit}/${stage.period_unit.toLowerCase()}`;
-            if (stage.duration_value == null || stage.duration_unit == null) return rate;
-            return `${rate} × ${stage.duration_value} ${stage.duration_unit.toLowerCase()}${stage.duration_value === 1 ? "" : "s"}`;
-        })
-        .join(" → ");
-}
+import {
+    campaignIntegrationsQueryKeys,
+    useCampaignIntegrationCapacity,
+} from "@/features/campaign-integrations/hooks/use-campaign-integrations";
+import { formatSendingPolicyStages } from "@/features/sending-policy/utils/format-sending-policy";
+import { EditSendingPolicyModal } from "../sending-policy/edit-sending-policy-modal";
 
 interface CampaignIntegrationCardProps {
     campaignUuid: string;
     campaignIntegration: CampaignIntegration;
     onToggleStatus: (status: "ACTIVE" | "PAUSED") => void;
     onRemove: () => void;
+    isRemoving?: boolean;
     disabled?: boolean;
 }
 
@@ -28,10 +26,14 @@ export function CampaignIntegrationCard({
     campaignIntegration: ci,
     onToggleStatus,
     onRemove,
+    isRemoving = false,
     disabled = false,
 }: CampaignIntegrationCardProps) {
+    const qc = useQueryClient();
     const isActive = ci.status === CampaignIntegrationStatus.ACTIVE;
     const capacity = useCampaignIntegrationCapacity(campaignUuid, isActive ? ci.uuid : null);
+    const [showEditPolicy, setShowEditPolicy] = useState(false);
+    const [showConfirmRemove, setShowConfirmRemove] = useState(false);
 
     return (
         <div className="rounded-xl border border-border bg-surface p-4 flex flex-col gap-3">
@@ -45,7 +47,9 @@ export function CampaignIntegrationCard({
                             <Chip.Label>{ci.integration_account.integration.provider}</Chip.Label>
                         </Chip>
                     </div>
-                    <p className="mt-1 text-xs text-muted truncate">{formatStages(ci.sending_policy)}</p>
+                    <p className="mt-1 text-xs text-muted truncate">
+                        {formatSendingPolicyStages(ci.sending_policy)}
+                    </p>
                 </div>
                 <div className="flex items-center gap-1.5 shrink-0">
                     <Switch
@@ -65,7 +69,16 @@ export function CampaignIntegrationCard({
                     <Button
                         size="sm"
                         variant="tertiary"
-                        onPress={onRemove}
+                        onPress={() => setShowEditPolicy(true)}
+                        isDisabled={disabled}
+                        aria-label="Edit sending schedule"
+                    >
+                        <Pencil className="size-4" />
+                    </Button>
+                    <Button
+                        size="sm"
+                        variant="tertiary"
+                        onPress={() => setShowConfirmRemove(true)}
                         isDisabled={disabled}
                         aria-label="Remove integration"
                     >
@@ -97,6 +110,32 @@ export function CampaignIntegrationCard({
             ) : !isActive ? (
                 <p className="text-xs text-muted border-t border-border pt-2">Paused</p>
             ) : null}
+
+            <EditSendingPolicyModal
+                isOpen={showEditPolicy}
+                onOpenChange={setShowEditPolicy}
+                policy={ci.sending_policy}
+                onSaved={() => {
+                    void qc.invalidateQueries({ queryKey: campaignIntegrationsQueryKeys.list(campaignUuid) });
+                }}
+            />
+
+            <ConfirmDialog
+                isOpen={showConfirmRemove}
+                onOpenChange={setShowConfirmRemove}
+                title="Remove this sending integration?"
+                description={
+                    <>
+                        <span className="font-medium text-foreground">{ci.integration_account.title}</span>{" "}
+                        will stop sending for this campaign. This can't be undone, though you can add it back
+                        later with a new schedule.
+                    </>
+                }
+                confirmLabel="Remove"
+                variant="danger"
+                isPending={isRemoving}
+                onConfirm={onRemove}
+            />
         </div>
     );
 }

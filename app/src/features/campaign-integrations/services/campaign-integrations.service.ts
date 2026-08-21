@@ -18,6 +18,19 @@ export const listCampaignIntegrations = async (
     }
 };
 
+export const listCampaignIntegrationsForOrganisation = async (
+    excludeCampaignUuid?: string,
+): Promise<CampaignIntegration[]> => {
+    try {
+        const response = await axiosInstance.get(ApiRoutes.campaign_integrations.list_for_organisation, {
+            params: excludeCampaignUuid ? { exclude_campaign_uuid: excludeCampaignUuid } : undefined,
+        });
+        return response.data;
+    } catch {
+        throw new Error("Failed to load other campaigns' sending integrations. Please try again.");
+    }
+};
+
 export const assignCampaignIntegration = async (
     campaignUuid: string,
     payload: AssignCampaignIntegrationPayload,

@@ -69,7 +69,7 @@ export class SendingPolicyService {
     uuid: string,
     dto: UpdateSendingPolicyDto,
   ) {
-    const policy = await this.requireTemplate(organisation_uuid, uuid);
+    const policy = await this.requireOwnedPolicy(organisation_uuid, uuid);
     return this.prisma.sendingPolicy.update({
       where: { uuid: policy.uuid },
       data: {
@@ -101,7 +101,7 @@ export class SendingPolicyService {
     uuid: string,
     dto: UpsertSendingPolicyStageDto,
   ) {
-    const policy = await this.requireTemplate(organisation_uuid, uuid);
+    const policy = await this.requireOwnedPolicy(organisation_uuid, uuid);
     const maxOrder = await this.prisma.sendingPolicyStage.aggregate({
       where: { sending_policy_uuid: policy.uuid },
       _max: { order_index: true },
@@ -122,7 +122,7 @@ export class SendingPolicyService {
     stage_uuid: string,
     dto: UpsertSendingPolicyStageDto,
   ) {
-    const policy = await this.requireTemplate(organisation_uuid, uuid);
+    const policy = await this.requireOwnedPolicy(organisation_uuid, uuid);
     const stage = await this.prisma.sendingPolicyStage.findFirst({
       where: { uuid: stage_uuid, sending_policy_uuid: policy.uuid },
     });
@@ -144,7 +144,7 @@ export class SendingPolicyService {
     uuid: string,
     stage_uuid: string,
   ) {
-    const policy = await this.requireTemplate(organisation_uuid, uuid);
+    const policy = await this.requireOwnedPolicy(organisation_uuid, uuid);
     const stage = await this.prisma.sendingPolicyStage.findFirst({
       where: { uuid: stage_uuid, sending_policy_uuid: policy.uuid },
     });
@@ -168,7 +168,7 @@ export class SendingPolicyService {
     uuid: string,
     stage_uuids: string[],
   ) {
-    const policy = await this.requireTemplate(organisation_uuid, uuid);
+    const policy = await this.requireOwnedPolicy(organisation_uuid, uuid);
     const existing = await this.prisma.sendingPolicyStage.findMany({
       where: { sending_policy_uuid: policy.uuid },
       select: { uuid: true },
@@ -275,7 +275,13 @@ export class SendingPolicyService {
     };
   }
 
-  private async requireTemplate(
+  /**
+   * Edits (name/window/interval/stages) are allowed on any org-owned policy - template
+   * or campaign-assigned clone. A clone belongs 1:1 to a single CampaignIntegration, so
+   * editing it only changes that one campaign's schedule; it never retroactively
+   * changes a shared template or other campaigns' clones.
+   */
+  private async requireOwnedPolicy(
     organisation_uuid: string,
     uuid: string,
   ): Promise<SendingPolicy> {
@@ -284,9 +290,19 @@ export class SendingPolicyService {
     });
     if (!policy)
       throw new NotFoundException(`Sending policy ${uuid} not found`);
+    return policy;
+  }
+
+  /** Deleting a whole policy row stays template-only - a clone is protected by its
+   * CampaignIntegration's onDelete: Restrict foreign key regardless. */
+  private async requireTemplate(
+    organisation_uuid: string,
+    uuid: string,
+  ): Promise<SendingPolicy> {
+    const policy = await this.requireOwnedPolicy(organisation_uuid, uuid);
     if (!policy.is_template) {
       throw new ConflictException(
-        'This sending policy is a campaign-assigned clone and cannot be edited directly',
+        'This sending policy is a campaign-assigned clone and cannot be deleted directly',
       );
     }
     return policy;
