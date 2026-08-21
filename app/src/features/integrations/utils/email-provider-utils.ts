@@ -10,6 +10,7 @@ import type {
 } from "@/features/integrations/interfaces/integrations.interface";
 
 export interface SendableEmailAccount extends EmailProviderTarget {
+    uuid: string | null;
     title: string;
     label: string;
     detail: string | null;
@@ -98,6 +99,15 @@ function resolveAccountTitle(
     );
 }
 
+function resolveAccountUuid(
+    integration: IntegrationProviderView,
+    account: string,
+): string | null {
+    return (
+        integration.accounts?.find((row) => row.account === account)?.uuid ?? null
+    );
+}
+
 function listProviderAccounts(
     provider: EmailProviderTarget["provider"],
     keys: IntegrationKey[],
@@ -131,6 +141,7 @@ export function listSendableEmailAccounts(
             accounts.push({
                 provider,
                 account,
+                uuid: resolveAccountUuid(integration, account),
                 title,
                 label: buildAccountLabel(integration.label, title),
                 detail,

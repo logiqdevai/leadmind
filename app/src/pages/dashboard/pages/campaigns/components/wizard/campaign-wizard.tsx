@@ -14,16 +14,12 @@ import type {
     CampaignFilters,
 } from "@/features/marketing-campaigns/interfaces/campaign.interface";
 import { CampaignType, CampaignStatuses } from "@/features/marketing-campaigns/interfaces/campaign.interface";
-import type { EmailProviderAllocation } from "@/features/integrations/interfaces/integrations.interface";
 import { Channel } from "@/features/contacts/interfaces/contact.interface";
 import { Routes } from "@/routes/routes";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import type { MessageComposerValue } from "@/features/messaging/components/message-composer";
-import {
-    EmailProviderSelect,
-    isEmailProviderAllocationValid,
-} from "@/features/messaging/components/email-provider-select";
 import { SenderProfileSelect } from "@/features/messaging/components/sender-profile-select";
+import { useCampaignIntegrations } from "@/features/campaign-integrations/hooks/use-campaign-integrations";
 import { WizardShell, type WizardStepKey, WIZARD_STEPS } from "./wizard-shell";
 import { StepBasics, type BasicsValues } from "./step-basics";
 import { StepAudience } from "./step-audience";
@@ -89,9 +85,6 @@ export function CampaignWizard({ campaign }: CampaignWizardProps) {
     const [emailAudienceCount, setEmailAudienceCount] = useState<number>(
         campaign.selected_contact_count > 0 ? campaign.selected_contact_count : 0,
     );
-    const [emailAllocations, setEmailAllocations] = useState<EmailProviderAllocation[]>(
-        () => campaign.email_provider_allocations ?? [],
-    );
     const [senderProfileUuid, setSenderProfileUuid] = useState<string | null>(
         campaign.sender_profile_uuid,
     );
@@ -104,11 +97,12 @@ export function CampaignWizard({ campaign }: CampaignWizardProps) {
     const isPersonalized = basics.campaign_type === CampaignType.PERSONALIZED;
     const isSequence = basics.campaign_type === CampaignType.SEQUENCE;
     const includesEmail = basics.channels.includes(Channel.EMAIL);
-    const showEmailProvider = includesEmail && !isPersonalized && !isSequence;
-    const emailProviderMissing =
-        showEmailProvider &&
-        emailAudienceCount > 0 &&
-        !isEmailProviderAllocationValid(emailAllocations, emailAudienceCount);
+    // PERSONALIZED campaigns assign their sending integration later, from the detail
+    // page, once drafts are ready to send - not at this "start"/schedule step.
+    const showIntegrationPicker = includesEmail && !isPersonalized;
+    const { data: campaignIntegrations } = useCampaignIntegrations(campaign.uuid);
+    const hasActiveIntegration = (campaignIntegrations ?? []).some((ci) => ci.status === "ACTIVE");
+    const integrationMissing = showIntegrationPicker && !hasActiveIntegration;
 
     useEffect(() => {
         if (activeStep !== "review") return;
@@ -196,11 +190,6 @@ export function CampaignWizard({ campaign }: CampaignWizardProps) {
                           ? message.linkedinContent.trim() || null
                           : null,
                   }),
-            ...(showEmailProvider && emailAllocations.length > 0
-                ? {
-                      email_provider_allocations: emailAllocations,
-                  }
-                : {}),
             ...(senderProfileUuid ? { sender_profile_uuid: senderProfileUuid } : {}),
             ...extra,
         };
@@ -227,17 +216,12 @@ export function CampaignWizard({ campaign }: CampaignWizardProps) {
     };
 
     const handleStart = async () => {
-        if (emailProviderMissing) return;
+        if (integrationMissing) return;
         if (!senderProfileUuid) return;
         try {
             await persist();
             await startMutation.mutateAsync({
                 uuid: campaign.uuid,
-                ...(showEmailProvider && emailAllocations.length > 0
-                    ? {
-                          email_provider_allocations: emailAllocations,
-                      }
-                    : {}),
                 sender_profile_uuid: senderProfileUuid,
             });
             navigate(`/dashboard/campaigns/${campaign.uuid}`);
@@ -296,8 +280,10 @@ export function CampaignWizard({ campaign }: CampaignWizardProps) {
                 )}
                 {activeStep === "review" && (
                     <StepReview
+                        campaignUuid={campaign.uuid}
                         basics={basics}
                         audienceCount={audienceCount}
+                        emailAudienceCount={emailAudienceCount}
                         message={message}
                         aiPrompt={aiPrompt}
                         sequenceUuid={sequenceUuid}
@@ -386,16 +372,6 @@ export function CampaignWizard({ campaign }: CampaignWizardProps) {
                         ) : (
                             <>This will dispatch the campaign to all matched contacts immediately.</>
                         )}
-                        {showEmailProvider ? (
-                            <div className="mt-4">
-                                <EmailProviderSelect
-                                    totalCount={emailAudienceCount}
-                                    value={emailAllocations}
-                                    onChange={setEmailAllocations}
-                                    disabled={startMutation.isPending || updateMutation.isPending}
-                                />
-                            </div>
-                        ) : null}
                         <div className="mt-4">
                             <SenderProfileSelect
                                 value={senderProfileUuid}
@@ -409,7 +385,7 @@ export function CampaignWizard({ campaign }: CampaignWizardProps) {
                     isPersonalized ? "Generate Drafts" : basics.scheduled_at ? "Schedule" : "Start now"
                 }
                 isPending={startMutation.isPending || updateMutation.isPending}
-                isConfirmDisabled={emailProviderMissing || !senderProfileUuid}
+                isConfirmDisabled={integrationMissing || !senderProfileUuid}
                 onConfirm={handleStart}
             />
         </div>

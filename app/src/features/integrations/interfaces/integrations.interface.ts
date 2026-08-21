@@ -48,6 +48,7 @@ export interface IntegrationKey {
 }
 
 export interface IntegrationAccountView {
+    uuid: string | null;
     account: string;
     title: string;
 }

@@ -77,6 +77,7 @@ model Organisation {
   bulk_jobs                 BulkJob[]
   website_scrape_requests   WebsiteScrapeRequest[]
   email_send_limits         EmailSendLimit[]
+  sending_policies          SendingPolicy[]
 
   @@index([uuid])
   @@index([slug])
@@ -467,43 +468,45 @@ model Interaction {
 }
 
 model OutreachMessage {
-  id                       Int                          @id @default(autoincrement())
-  uuid                     String                       @unique @default(uuid())
-  organisation_uuid        String
-  contact_uuid             String
-  campaign_uuid            String?
-  sent_by_user_uuid        String?
-  channel                  Channel
-  direction                MsgDirection                 @default(OUTBOUND)
-  subject                  String?
-  content                  String
-  status                   MsgStatus                    @default(PENDING)
-  provider_message_id      String?
-  idempotency_key          String?                      @unique
-  scheduled_at             DateTime?
-  sent_at                  DateTime?
-  delivered_at             DateTime?
-  opened_at                DateTime?
-  clicked_at               DateTime?
-  replied_at               DateTime?
-  bounced_at               DateTime?
-  failed_at                DateTime?
-  email_provider           ExternalIntegrationProvider?
-  email_account            String?
-  sms_provider             String?
-  metadata                 Json?
-  sequence_enrollment_uuid String?
-  sequence_step_uuid       String?
-  created_at               DateTime                     @default(now())
-  updated_at               DateTime                     @updatedAt
+  id                        Int                          @id @default(autoincrement())
+  uuid                      String                       @unique @default(uuid())
+  organisation_uuid         String
+  contact_uuid              String
+  campaign_uuid             String?
+  sent_by_user_uuid         String?
+  channel                   Channel
+  direction                 MsgDirection                 @default(OUTBOUND)
+  subject                   String?
+  content                   String
+  status                    MsgStatus                    @default(PENDING)
+  provider_message_id       String?
+  idempotency_key           String?                      @unique
+  scheduled_at              DateTime?
+  sent_at                   DateTime?
+  delivered_at              DateTime?
+  opened_at                 DateTime?
+  clicked_at                DateTime?
+  replied_at                DateTime?
+  bounced_at                DateTime?
+  failed_at                 DateTime?
+  email_provider            ExternalIntegrationProvider?
+  email_account             String?
+  sms_provider              String?
+  metadata                  Json?
+  sequence_enrollment_uuid  String?
+  sequence_step_uuid        String?
+  campaign_integration_uuid String?
+  created_at                DateTime                     @default(now())
+  updated_at                DateTime                     @updatedAt
 
-  organisation        Organisation          @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
-  contact             Contact               @relation(fields: [contact_uuid], references: [uuid], onDelete: Cascade)
-  campaign            MarketingCampaign?    @relation(fields: [campaign_uuid], references: [uuid], onDelete: SetNull)
-  sent_by             User?                 @relation("OutreachMessageSentBy", fields: [sent_by_user_uuid], references: [uuid], onDelete: SetNull)
-  interaction         Interaction?
-  sequence_enrollment SequenceEnrollment?   @relation(fields: [sequence_enrollment_uuid], references: [uuid], onDelete: SetNull)
-  sequence_step       OutreachSequenceStep? @relation(fields: [sequence_step_uuid], references: [uuid], onDelete: SetNull)
+  organisation         Organisation          @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  contact              Contact               @relation(fields: [contact_uuid], references: [uuid], onDelete: Cascade)
+  campaign             MarketingCampaign?    @relation(fields: [campaign_uuid], references: [uuid], onDelete: SetNull)
+  sent_by              User?                 @relation("OutreachMessageSentBy", fields: [sent_by_user_uuid], references: [uuid], onDelete: SetNull)
+  interaction          Interaction?
+  sequence_enrollment  SequenceEnrollment?   @relation(fields: [sequence_enrollment_uuid], references: [uuid], onDelete: SetNull)
+  sequence_step        OutreachSequenceStep? @relation(fields: [sequence_step_uuid], references: [uuid], onDelete: SetNull)
+  campaign_integration CampaignIntegration?  @relation(fields: [campaign_integration_uuid], references: [uuid], onDelete: SetNull)
 
   @@index([organisation_uuid])
   @@index([contact_uuid])
@@ -516,6 +519,8 @@ model OutreachMessage {
   @@index([organisation_uuid, sent_by_user_uuid, sent_at])
   @@index([sequence_enrollment_uuid])
   @@index([sequence_step_uuid])
+  @@index([campaign_integration_uuid])
+  @@index([status, scheduled_at])
 }
 
 model OutreachSequence {
@@ -565,17 +570,19 @@ model OutreachSequenceStep {
 }
 
 model SequenceEnrollment {
-  id            Int                      @id @default(autoincrement())
-  uuid          String                   @unique @default(uuid())
-  sequence_uuid String
-  contact_uuid  String
-  campaign_uuid String?
-  status        SequenceEnrollmentStatus @default(ACTIVE)
-  enrolled_at   DateTime                 @default(now())
-  cancelled_at  DateTime?
-  completed_at  DateTime?
-  created_at    DateTime                 @default(now())
-  updated_at    DateTime                 @updatedAt
+  id                       Int                      @id @default(autoincrement())
+  uuid                     String                   @unique @default(uuid())
+  sequence_uuid            String
+  contact_uuid             String
+  campaign_uuid            String?
+  status                   SequenceEnrollmentStatus @default(ACTIVE)
+  enrolled_at              DateTime                 @default(now())
+  current_step_order_index Int                      @default(0)
+  first_step_sent_at       DateTime?
+  cancelled_at             DateTime?
+  completed_at             DateTime?
+  created_at               DateTime                 @default(now())
+  updated_at               DateTime                 @updatedAt
 
   sequence          OutreachSequence   @relation(fields: [sequence_uuid], references: [uuid], onDelete: Cascade)
   contact           Contact            @relation(fields: [contact_uuid], references: [uuid], onDelete: Cascade)
@@ -785,13 +792,14 @@ model MarketingCampaign {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  organisation         Organisation               @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
-  sender_profile       SenderProfile?             @relation(fields: [sender_profile_uuid], references: [uuid], onDelete: SetNull)
-  sequence             OutreachSequence?          @relation(fields: [sequence_uuid], references: [uuid], onDelete: SetNull)
-  campaign_contacts    MarketingCampaignContact[]
-  outreach_messages    OutreachMessage[]
-  interactions         Interaction[]
-  sequence_enrollments SequenceEnrollment[]
+  organisation          Organisation               @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  sender_profile        SenderProfile?             @relation(fields: [sender_profile_uuid], references: [uuid], onDelete: SetNull)
+  sequence              OutreachSequence?          @relation(fields: [sequence_uuid], references: [uuid], onDelete: SetNull)
+  campaign_contacts     MarketingCampaignContact[]
+  outreach_messages     OutreachMessage[]
+  interactions          Interaction[]
+  sequence_enrollments  SequenceEnrollment[]
+  campaign_integrations CampaignIntegration[]
 
   @@index([organisation_uuid])
   @@index([status])
@@ -1120,15 +1128,18 @@ model Integration {
 }
 
 model IntegrationAccount {
-  id               Int      @id @default(autoincrement())
-  uuid             String   @unique @default(uuid())
-  integration_uuid String
-  account          String
-  title            String
-  created_at       DateTime @default(now())
-  updated_at       DateTime @updatedAt
+  id                       Int                @id @default(autoincrement())
+  uuid                     String             @unique @default(uuid())
+  integration_uuid         String
+  account                  String
+  title                    String
+  max_messages_per_period  Int?
+  max_messages_period_unit SendingPeriodUnit?
+  created_at               DateTime           @default(now())
+  updated_at               DateTime           @updatedAt
 
-  integration Integration @relation(fields: [integration_uuid], references: [uuid], onDelete: Cascade)
+  integration           Integration           @relation(fields: [integration_uuid], references: [uuid], onDelete: Cascade)
+  campaign_integrations CampaignIntegration[]
 
   @@unique([integration_uuid, account])
   @@index([integration_uuid])
@@ -1471,6 +1482,134 @@ model EmailSendLimit {
   @@unique([organisation_uuid, provider, period])
   @@index([organisation_uuid])
   @@map("email_send_limits")
+}
+
+enum SendingPeriodUnit {
+  HOUR
+  DAY
+  WEEK
+}
+
+enum CampaignIntegrationStatus {
+  ACTIVE
+  PAUSED
+  REMOVED
+}
+
+enum SendingUsageScopeType {
+  PROVIDER
+  INTEGRATION_ACCOUNT
+  CAMPAIGN_INTEGRATION
+}
+
+/// A reusable ramp-up / pacing configuration: an ordered list of SendingPolicyStages
+/// (e.g. 30/day x 3 days -> 40/day x 5 days -> 50/day until complete).
+/// `is_template` rows are the org's reusable library; assigning one to a
+/// CampaignIntegration clones it (is_template=false, source_policy_uuid set)
+/// into an immutable snapshot so editing the template never changes a running campaign.
+model SendingPolicy {
+  id                          Int      @id @default(autoincrement())
+  uuid                        String   @unique @default(uuid())
+  organisation_uuid           String
+  name                        String
+  description                 String?
+  is_template                 Boolean  @default(true)
+  source_policy_uuid          String?
+  timezone                    String   @default("UTC")
+  window_start_minute         Int?
+  window_end_minute           Int?
+  min_interval_seconds        Int      @default(0)
+  min_interval_jitter_seconds Int      @default(0)
+  created_at                  DateTime @default(now())
+  updated_at                  DateTime @updatedAt
+
+  organisation          Organisation          @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  source_policy         SendingPolicy?        @relation("PolicyClone", fields: [source_policy_uuid], references: [uuid], onDelete: SetNull)
+  cloned_instances      SendingPolicy[]       @relation("PolicyClone")
+  stages                SendingPolicyStage[]
+  campaign_integrations CampaignIntegration[]
+
+  @@index([organisation_uuid, is_template])
+  @@index([source_policy_uuid])
+  @@map("sending_policies")
+}
+
+/// One ramp-up stage of a SendingPolicy. duration_value=null marks the final,
+/// indefinite stage (lasts until campaign completion).
+model SendingPolicyStage {
+  id                  Int                @id @default(autoincrement())
+  uuid                String             @unique @default(uuid())
+  sending_policy_uuid String
+  order_index         Int
+  limit               Int
+  period_unit         SendingPeriodUnit
+  duration_value      Int?
+  duration_unit       SendingPeriodUnit?
+  created_at          DateTime           @default(now())
+  updated_at          DateTime           @updatedAt
+
+  sending_policy SendingPolicy @relation(fields: [sending_policy_uuid], references: [uuid], onDelete: Cascade)
+
+  @@unique([sending_policy_uuid, order_index])
+  @@map("sending_policy_stages")
+}
+
+/// Assigns one email IntegrationAccount to a campaign with a cloned SendingPolicy.
+/// This is the config layer; CampaignIntegrationState below is the runtime layer.
+model CampaignIntegration {
+  id                       Int                       @id @default(autoincrement())
+  uuid                     String                    @unique @default(uuid())
+  campaign_uuid            String
+  integration_account_uuid String
+  sending_policy_uuid      String
+  status                   CampaignIntegrationStatus @default(ACTIVE)
+  created_at               DateTime                  @default(now())
+  updated_at               DateTime                  @updatedAt
+
+  campaign            MarketingCampaign         @relation(fields: [campaign_uuid], references: [uuid], onDelete: Cascade)
+  integration_account IntegrationAccount        @relation(fields: [integration_account_uuid], references: [uuid], onDelete: Cascade)
+  sending_policy      SendingPolicy             @relation(fields: [sending_policy_uuid], references: [uuid], onDelete: Restrict)
+  state               CampaignIntegrationState?
+  outreach_messages   OutreachMessage[]
+
+  @@unique([campaign_uuid, integration_account_uuid])
+  @@index([campaign_uuid, status])
+  @@index([integration_account_uuid])
+  @@map("campaign_integrations")
+}
+
+/// Runtime state for a CampaignIntegration. Deliberately holds no "current stage" -
+/// the current stage is always derived from policy_started_at + the policy's stages.
+model CampaignIntegrationState {
+  id                        Int       @id @default(autoincrement())
+  uuid                      String    @unique @default(uuid())
+  campaign_integration_uuid String    @unique
+  policy_started_at         DateTime?
+  last_sent_at              DateTime?
+  lifetime_sent_count       Int       @default(0)
+  created_at                DateTime  @default(now())
+  updated_at                DateTime  @updatedAt
+
+  campaign_integration CampaignIntegration @relation(fields: [campaign_integration_uuid], references: [uuid], onDelete: Cascade)
+
+  @@map("campaign_integration_states")
+}
+
+/// Generic atomic counter primitive used by SendingCapacityService to enforce all
+/// three layered limits (provider / integration-account / campaign-integration-stage)
+/// via a single concurrency-safe conditional upsert - see SendingCapacityService.reserveSlot.
+model SendingUsageCounter {
+  id         Int                   @id @default(autoincrement())
+  uuid       String                @unique @default(uuid())
+  scope_type SendingUsageScopeType
+  scope_uuid String
+  period_key String
+  count      Int                   @default(0)
+  created_at DateTime              @default(now())
+  updated_at DateTime              @updatedAt
+
+  @@unique([scope_type, scope_uuid, period_key])
+  @@map("sending_usage_counters")
 }
 
 model GoalAchievement {

@@ -1,42 +1,43 @@
 import {
-    ExternalIntegrationProvider,
-    IntegrationKeyType,
+  ExternalIntegrationProvider,
+  IntegrationKeyType,
 } from '@/generated/prisma';
 
 export interface IntegrationKeyTypeOption {
-    key_type: IntegrationKeyType;
-    label: string;
-    placeholder: string;
+  key_type: IntegrationKeyType;
+  label: string;
+  placeholder: string;
 }
 
 export interface IntegrationKeyResponse {
-    uuid: string;
-    key_type: IntegrationKeyType;
-    account: string;
-    label: string;
-    env_name: string;
-    last4: string | null;
-    display_value: string | null;
-    created_at: Date;
-    updated_at: Date;
+  uuid: string;
+  key_type: IntegrationKeyType;
+  account: string;
+  label: string;
+  env_name: string;
+  last4: string | null;
+  display_value: string | null;
+  created_at: Date;
+  updated_at: Date;
 }
 
 export interface IntegrationAccountResponse {
-    account: string;
-    title: string;
+  uuid: string | null;
+  account: string;
+  title: string;
 }
 
 export interface IntegrationResponse {
-    provider: ExternalIntegrationProvider;
-    uuid: string | null;
-    label: string;
-    description: string;
-    disabled?: boolean;
-    allows_multiple_accounts: boolean;
-    supports_default_account_selection: boolean;
-    default_account: string | null;
-    accounts: IntegrationAccountResponse[];
-    keyTypes: IntegrationKeyTypeOption[];
-    keys: IntegrationKeyResponse[];
-    webhook_url: string | null;
+  provider: ExternalIntegrationProvider;
+  uuid: string | null;
+  label: string;
+  description: string;
+  disabled?: boolean;
+  allows_multiple_accounts: boolean;
+  supports_default_account_selection: boolean;
+  default_account: string | null;
+  accounts: IntegrationAccountResponse[];
+  keyTypes: IntegrationKeyTypeOption[];
+  keys: IntegrationKeyResponse[];
+  webhook_url: string | null;
 }

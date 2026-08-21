@@ -176,7 +176,6 @@ export function useStartCampaign() {
     return useMutation({
         mutationFn: (vars: { uuid: string } & StartCampaignPayload) =>
             startCampaign(vars.uuid, {
-                email_provider_allocations: vars.email_provider_allocations,
                 sender_profile_uuid: vars.sender_profile_uuid,
             }),
         onSuccess: (data, vars) => {
@@ -309,7 +308,6 @@ export function useSendPersonalizedDrafts() {
     return useMutation({
         mutationFn: (vars: { uuid: string } & SendCampaignDraftsPayload) =>
             sendPersonalizedDrafts(vars.uuid, {
-                email_provider_allocations: vars.email_provider_allocations,
                 sender_profile_uuid: vars.sender_profile_uuid,
             }),
         onSuccess: (_data, vars) => {

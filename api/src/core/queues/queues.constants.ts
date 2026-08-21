@@ -14,4 +14,10 @@ export const MARKETING_MESSAGE_SEND_QUEUE = 'marketing-message-send';
 
 export const REMINDER_TRIGGER_QUEUE = 'reminder-trigger';
 
+export const SENDING_ENGINE_TICK_QUEUE = 'sending-engine-tick';
+
+export const SENDING_ENGINE_TICK_JOB_ID = 'sending-engine-tick';
+
+export const SENDING_ENGINE_TICK_INTERVAL_MS = 30_000;
+
 export const WEBSITE_SCRAPE_TIMEOUT_QUEUE = 'website-scrape-timeout';

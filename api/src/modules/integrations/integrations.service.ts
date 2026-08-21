@@ -605,13 +605,15 @@ export class IntegrationsService {
     keys: IntegrationKey[],
     accounts: IntegrationAccount[],
   ): IntegrationAccountResponse[] {
-    const titleByAccount = new Map(
-      accounts.map((row) => [row.account, row.title]),
-    );
-    return listDistinctIntegrationAccounts(keys).map((account) => ({
-      account,
-      title: titleByAccount.get(account) ?? account,
-    }));
+    const accountByAccount = new Map(accounts.map((row) => [row.account, row]));
+    return listDistinctIntegrationAccounts(keys).map((account) => {
+      const row = accountByAccount.get(account);
+      return {
+        uuid: row?.uuid ?? null,
+        account,
+        title: row?.title ?? account,
+      };
+    });
   }
 
   private toIntegrationResponse(

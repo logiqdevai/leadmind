@@ -44,6 +44,10 @@ import { UsersModule } from './modules/users/users.module';
 import { ActivityLogsModule } from './modules/activity-logs/activity-logs.module';
 import { MessagingGoalsModule } from './modules/messaging-goals/messaging-goals.module';
 import { EmailSendLimitsModule } from './modules/email-send-limits/email-send-limits.module';
+import { SendingPolicyModule } from './modules/sending-policy/sending-policy.module';
+import { SendingCapacityModule } from './modules/sending-capacity/sending-capacity.module';
+import { IntegrationSelectionModule } from './modules/integration-selection/integration-selection.module';
+import { CampaignIntegrationsModule } from './modules/campaign-integrations/campaign-integrations.module';
 
 @Module({
   imports: [
@@ -91,6 +95,10 @@ import { EmailSendLimitsModule } from './modules/email-send-limits/email-send-li
     ApifyUsageModule,
     MessageTemplatesModule,
     SequencesModule,
+    SendingPolicyModule,
+    SendingCapacityModule,
+    IntegrationSelectionModule,
+    CampaignIntegrationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
