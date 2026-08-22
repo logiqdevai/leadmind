@@ -16,7 +16,7 @@ interface MessageBodyPreviewProps {
 }
 
 const htmlStyles =
-    "text-sm text-muted " +
+    "max-w-prose text-sm leading-relaxed text-muted " +
     "[&_p]:my-1 [&_p:first-child]:mt-0 [&_p:last-child]:mb-0 " +
     "[&_ul]:list-disc [&_ul]:pl-5 [&_ul]:my-1 " +
     "[&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:my-1 " +
@@ -42,6 +42,6 @@ export function MessageBodyPreview({ channel, content, className }: MessageBodyP
         );
     }
     return (
-        <p className={cn("text-sm text-muted whitespace-pre-line", className)}>{rendered}</p>
+        <p className={cn("max-w-prose text-sm leading-relaxed text-muted whitespace-pre-line", className)}>{rendered}</p>
     );
 }

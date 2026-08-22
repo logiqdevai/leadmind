@@ -85,44 +85,50 @@ export function OutreachTab({ contact, highlightUuid, onHighlightConsumed, onNav
   }, [contact.outreach_messages]);
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-8">
       <Section
         title={`Drafted outreach (${drafts.length})`}
         action={
-          <div className="flex items-center gap-2">
-            <Button size="sm" variant="tertiary" onPress={() => setEnrollOpen(true)}>
+          <>
+            <Button size="sm" variant="tertiary" className="w-full justify-center sm:w-auto" onPress={() => setEnrollOpen(true)}>
               <Workflow className="size-3.5" />
               Enroll in sequence
             </Button>
-            <Button size="sm" variant="tertiary" onPress={() => setComposeOpen(true)}>
+            <Button size="sm" variant="primary" className="w-full justify-center sm:w-auto" onPress={() => setComposeOpen(true)}>
               <Plus className="size-3.5" />
               New message
             </Button>
-          </div>
+          </>
         }
         emptyText="No pending drafts. Click New message to compose one."
       >
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-3">
           {drafts.map((m) => {
             const Icon = channelIcon(m.channel);
             return (
-              <div
+              <article
                 key={m.uuid}
                 ref={setCardRef(m.uuid)}
                 className={cn(
-                  "rounded-lg border border-border bg-surface-secondary p-3 flex flex-col gap-2 transition-shadow",
+                  "flex flex-col gap-3 rounded-2xl border border-border/80 bg-surface/80 p-4 sm:p-5 transition-shadow",
                   ringedUuid === m.uuid && "ring-2 ring-accent ring-offset-1 ring-offset-background",
                 )}
               >
-                <div className="flex items-center justify-between gap-2 flex-wrap">
-                  <div className="flex items-center gap-2 min-w-0 flex-1">
-                    <Icon className="size-4 text-muted shrink-0" />
-                    <Chip size="sm" variant="soft">
-                      <Chip.Label>{m.channel}</Chip.Label>
-                    </Chip>
-                    {m.subject && <span className="min-w-0 truncate text-sm font-medium text-foreground">{m.subject}</span>}
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                  <div className="flex min-w-0 items-start gap-2.5">
+                    <Icon className="mt-0.5 size-4 shrink-0 text-muted" />
+                    <div className="min-w-0 flex flex-col gap-1.5">
+                      <div className="flex flex-wrap items-center gap-1.5">
+                        <Chip size="sm" variant="soft">
+                          <Chip.Label>{m.channel}</Chip.Label>
+                        </Chip>
+                      </div>
+                      {m.subject ? (
+                        <h4 className="text-sm font-medium leading-snug text-foreground">{m.subject}</h4>
+                      ) : null}
+                    </div>
                   </div>
-                  <div className="flex items-center gap-1 shrink-0 ml-auto">
+                  <div className="flex items-center gap-1 sm:shrink-0">
                     <Button size="sm" variant="tertiary" onPress={() => setEditingMessage(m)} aria-label="Edit draft">
                       <Pencil className="size-3.5 text-blue-400" />
                     </Button>
@@ -158,40 +164,43 @@ export function OutreachTab({ contact, highlightUuid, onHighlightConsumed, onNav
                   </div>
                 </div>
                 <MessageBodyPreview channel={m.channel} content={m.content} />
-              </div>
+              </article>
             );
           })}
         </div>
       </Section>
 
       <Section title={`Sent history (${sentHistory.length})`} emptyText="No messages have been sent yet.">
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-3">
           {sentHistory.map((m) => (
-            <div
+            <article
               key={m.uuid}
               ref={setCardRef(m.uuid)}
               className={cn(
-                "rounded-lg border border-border p-3 flex flex-col gap-1 transition-shadow",
+                "flex flex-col gap-3 rounded-2xl border border-border/80 bg-surface/60 p-4 sm:p-5 transition-shadow",
                 ringedUuid === m.uuid && "ring-2 ring-accent ring-offset-1 ring-offset-background",
               )}
             >
-              <div className="flex items-center gap-2 flex-wrap min-w-0">
-                <Chip size="sm" color={m.status === MsgStatus.SENT ? "success" : "danger"} variant="soft">
-                  <Chip.Label>{m.status}</Chip.Label>
-                </Chip>
-                <Chip size="sm" variant="soft">
-                  <Chip.Label>{m.channel}</Chip.Label>
-                </Chip>
-                {m.subject && (
-                  <span className="min-w-0 flex-1 basis-40 truncate text-sm font-medium text-foreground">
-                    {m.subject}
-                  </span>
-                )}
-                <div className="ml-auto flex items-center gap-2 shrink-0">
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+                <div className="min-w-0 flex flex-col gap-1.5">
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    <Chip size="sm" color={m.status === MsgStatus.SENT ? "success" : "danger"} variant="soft">
+                      <Chip.Label>{m.status}</Chip.Label>
+                    </Chip>
+                    <Chip size="sm" variant="soft">
+                      <Chip.Label>{m.channel}</Chip.Label>
+                    </Chip>
+                  </div>
+                  {m.subject ? (
+                    <h4 className="text-sm font-medium leading-snug text-foreground">{m.subject}</h4>
+                  ) : null}
+                </div>
+                <div className="flex flex-wrap items-center gap-2 sm:shrink-0 sm:justify-end">
                   {m.status === MsgStatus.FAILED ? (
                     <Button
                       size="sm"
                       variant="secondary"
+                      className="w-full justify-center sm:w-auto"
                       isDisabled={
                         sendMessage.isPending ||
                         (m.channel === Channel.EMAIL && emailLimitStatus.reached)
@@ -212,13 +221,13 @@ export function OutreachTab({ contact, highlightUuid, onHighlightConsumed, onNav
                       Resend
                     </Button>
                   ) : null}
-                  <span className="text-xs text-muted whitespace-nowrap">
+                  <time className="text-xs tabular-nums text-muted">
                     {m.sent_at ? new Date(m.sent_at).toLocaleString() : "—"}
-                  </span>
+                  </time>
                 </div>
               </div>
               <MessageBodyPreview channel={m.channel} content={m.content} />
-            </div>
+            </article>
           ))}
         </div>
       </Section>

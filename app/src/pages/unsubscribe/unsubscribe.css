@@ -1,0 +1,105 @@
+.unsub-root {
+  height: 100%;
+  min-height: 0;
+  overflow: auto;
+  background: var(--background);
+  color: var(--foreground);
+}
+
+.unsub-frame {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.unsub-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  padding: 1.25rem 1rem 0;
+}
+
+.unsub-brand-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.unsub-stage {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem 1rem 2.5rem;
+}
+
+.unsub-card {
+  width: min(24rem, 100%);
+  padding: 1.5rem 1.4rem 1.35rem;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  background: var(--surface);
+  box-shadow: 0 12px 32px oklch(0 0 0 / 0.18);
+}
+
+.unsub-title {
+  margin: 0 0 0.5rem;
+  font-size: 1.15rem;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+}
+
+.unsub-copy {
+  margin: 0 0 1.15rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--muted);
+  word-break: break-word;
+}
+
+.unsub-btn {
+  appearance: none;
+  width: 100%;
+  min-height: 2.5rem;
+  border: 0;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--accent-foreground);
+  background: var(--accent);
+}
+
+.unsub-btn:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+
+.unsub-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.unsub-skel {
+  width: 1.5rem;
+  height: 1.5rem;
+  margin: 0.5rem auto;
+  border: 1px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: unsub-spin 0.7s linear infinite;
+}
+
+@keyframes unsub-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .unsub-skel {
+    animation: none;
+  }
+}

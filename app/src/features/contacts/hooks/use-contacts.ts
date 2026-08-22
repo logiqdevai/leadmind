@@ -22,6 +22,7 @@ import {
     triggerContactsBulkScore,
     bulkScrapeContactEmails,
     triggerDraftMessages,
+    resubscribeContact,
     updateContact,
     updateContactInfo,
     updateContactNotes,
@@ -307,6 +308,30 @@ export function useUpdateContactTags() {
         onSettled: () => {
             qc.invalidateQueries({ queryKey: contactsQueryKeys.all });
             qc.invalidateQueries({ queryKey: contactsQueryKeys.tags });
+        },
+    });
+}
+
+export function useResubscribeContact() {
+    const qc = useQueryClient();
+    return useMutation({
+        mutationFn: (uuid: string) => resubscribeContact(uuid),
+        onSuccess: (data) => {
+            qc.setQueryData(contactsQueryKeys.detail(data.uuid), data);
+            qc.invalidateQueries({ queryKey: contactsQueryKeys.detail(data.uuid) });
+            qc.invalidateQueries({ queryKey: contactsQueryKeys.all });
+            toast({
+                title: "Email preference restored",
+                description: "This contact can receive marketing emails again.",
+                duration: 2000,
+            });
+        },
+        onError: (error: Error) => {
+            toast({
+                title: "Could not restore email preference",
+                description: error.message,
+                variant: "error",
+            });
         },
     });
 }

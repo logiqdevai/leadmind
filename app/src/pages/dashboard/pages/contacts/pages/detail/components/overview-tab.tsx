@@ -34,6 +34,7 @@ import { Routes } from "@/routes/routes";
 import type { ProfileDraft } from "../types";
 import { profileDraftFromContact, profileFieldPatch, sameUuidSet } from "../utils/profile-draft";
 import { ContactInfosSection } from "./contact-infos-section";
+import { MarketingPreferenceNotice } from "./marketing-opt-out-notice";
 
 interface OverviewTabProps {
     contact: Contact;
@@ -44,7 +45,7 @@ export function OverviewTab({ contact, onNavigationLockChange }: OverviewTabProp
     const [editing, setEditing] = useState(false);
 
     return (
-        <div className="flex flex-col gap-8 max-w-5xl lg:flex-row lg:items-start">
+        <div className="flex flex-col gap-8 lg:flex-row lg:items-start">
             <IdentitySidebar contact={contact} />
             <div className="flex-1 min-w-0">
                 {editing ? (
@@ -212,17 +213,23 @@ function DetailPanel({ contact, onEdit }: { contact: Contact; onEdit: () => void
 
             <SectionCard title="Contact" icon={AtSign}>
                 <Row label="Email">
-                    <div className="flex flex-wrap items-center gap-2">
-                        <ProfileValue
-                            value={contact.email}
-                            href={contact.email?.trim() ? `mailto:${contact.email.trim()}` : undefined}
-                        />
-                        {contact.email?.trim() ? (
-                            <EmailValidationChip
-                                status={contact.email_validation_status}
-                                reason={contact.email_validation_reason}
+                    <div>
+                        <div className="flex flex-wrap items-center gap-2">
+                            <ProfileValue
+                                value={contact.email}
+                                href={contact.email?.trim() ? `mailto:${contact.email.trim()}` : undefined}
                             />
-                        ) : null}
+                            {contact.email?.trim() ? (
+                                <EmailValidationChip
+                                    status={contact.email_validation_status}
+                                    reason={contact.email_validation_reason}
+                                />
+                            ) : null}
+                        </div>
+                        <MarketingPreferenceNotice
+                            contactUuid={contact.uuid}
+                            unsubscribedAt={contact.unsubscribed_at}
+                        />
                     </div>
                 </Row>
                 <Row label="Phone">

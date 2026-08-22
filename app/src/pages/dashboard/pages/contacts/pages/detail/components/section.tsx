@@ -18,11 +18,11 @@ export function Section({ title, action, children, emptyText }: SectionProps) {
   const empty = hasEmptyChildArray(children);
   return (
     <section className="flex flex-col gap-3">
-      <div className="flex items-center justify-between gap-2 flex-wrap">
-        <h3 className="text-sm font-semibold text-foreground">{title}</h3>
-        {action}
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <h3 className="text-sm font-semibold tracking-tight text-foreground">{title}</h3>
+        {action ? <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center">{action}</div> : null}
       </div>
-      {empty && emptyText ? <p className="text-sm text-muted italic">{emptyText}</p> : children}
+      {empty && emptyText ? <p className="text-sm leading-relaxed text-muted">{emptyText}</p> : children}
     </section>
   );
 }

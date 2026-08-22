@@ -1,7 +1,7 @@
 import { Button } from "@heroui/react";
 import { ArrowLeft } from "lucide-react";
 import type { Contact } from "@/features/contacts/interfaces/contact.interface";
-import { ContactScoresCompact, StatusChip, UnsubscribedChip } from "@/pages/dashboard/pages/leads/components/badges";
+import { ContactScoresCompact, StatusChip } from "@/pages/dashboard/pages/leads/components/badges";
 
 interface ContactDetailHeaderProps {
   isLoading: boolean;
@@ -39,9 +39,6 @@ export function ContactDetailHeader({
             {contact && (
               <div className="flex items-center gap-2 flex-wrap mt-1">
                 <StatusChip status={contact.status} />
-                {contact.unsubscribed_at ? (
-                  <UnsubscribedChip unsubscribedAt={contact.unsubscribed_at} />
-                ) : null}
                 <ContactScoresCompact contact={contact} />
                 {contact.company && <span className="text-sm text-muted truncate">{contact.company}</span>}
               </div>

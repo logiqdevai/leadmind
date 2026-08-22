@@ -38,16 +38,20 @@ function collectTabItems(children: ReactNode): { id: string; node: ReactNode }[]
 interface ScrollableTabsListProps {
     children: ReactNode;
     className?: string;
+    fullWidth?: boolean;
 }
 
-export const ScrollableTabsList: FC<ScrollableTabsListProps> = ({ children, className }) => {
+export const ScrollableTabsList: FC<ScrollableTabsListProps> = ({ children, className, fullWidth }) => {
     const nav = useContext(TabNavContext);
     const items = useMemo(() => collectTabItems(children), [children]);
 
     return (
         <>
             <div
-                className="grid w-full max-w-full grid-cols-2 gap-1.5 lg:hidden"
+                className={cn(
+                    "grid w-full max-w-full gap-1.5 lg:hidden",
+                    fullWidth ? "grid-cols-3" : "grid-cols-2",
+                )}
                 role="tablist"
                 aria-orientation="vertical"
             >
@@ -72,8 +76,21 @@ export const ScrollableTabsList: FC<ScrollableTabsListProps> = ({ children, clas
                     );
                 })}
             </div>
-            <Tabs.ListContainer className="hidden w-fit max-w-full min-w-0 overflow-x-auto lg:block">
-                <Tabs.List className={cn(tabListClassName, className)}>{children}</Tabs.List>
+            <Tabs.ListContainer
+                className={cn(
+                    "hidden max-w-full min-w-0 overflow-x-auto lg:block",
+                    fullWidth ? "w-full" : "w-fit",
+                )}
+            >
+                <Tabs.List
+                    className={cn(
+                        tabListClassName,
+                        fullWidth && "flex w-full *:w-auto *:min-w-0 *:flex-1 *:justify-center",
+                        className,
+                    )}
+                >
+                    {children}
+                </Tabs.List>
             </Tabs.ListContainer>
         </>
     );

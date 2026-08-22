@@ -37,6 +37,7 @@ export const ApiRoutes = {
         get: (uuid: string) => `/contacts/${uuid}`,
         update: (uuid: string) => `/contacts/${uuid}`,
         remove: (uuid: string) => `/contacts/${uuid}`,
+        resubscribe: (uuid: string) => `/contacts/${uuid}/resubscribe`,
         update_status: (uuid: string) => `/contacts/${uuid}/status`,
         update_tags: (uuid: string) => `/contacts/${uuid}/tags`,
         list_info: (uuid: string) => `/contacts/${uuid}/info`,
@@ -292,6 +293,8 @@ export const ApiRoutes = {
     },
     unsubscribe: {
         confirm: (token: string) => `/unsubscribe/${encodeURIComponent(token)}`,
+        resubscribe: (token: string) =>
+            `/unsubscribe/${encodeURIComponent(token)}/resubscribe`,
     },
     sending_policies: {
         list: "/sending-policies",

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState, type FC, type ReactNode } from "react";
 import { Dropdown, Tabs } from "@heroui/react";
 import { ScrollableTabs, ScrollableTabsList, tabTriggerClassName } from "@/components/ui/scrollable-tabs";
+import { cn } from "@/lib/utils";
 import { MoreVertical, Sparkles, Trash2 } from "lucide-react";
 import {
     defaultEnrichmentSourcesForLead,
@@ -71,7 +72,7 @@ export const ContactDetailView: FC<ContactDetailViewProps> = ({
     }, [navigationLocked, onNavigationLockChange]);
 
     return (
-        <div className="space-y-4 min-w-0">
+        <div className="mx-auto w-full min-w-0 max-w-5xl space-y-5">
             <div className="flex items-start gap-2 min-w-0">
                 <div className="min-w-0 flex-1">
                     <ContactDetailHeader
@@ -137,13 +138,17 @@ export const ContactDetailView: FC<ContactDetailViewProps> = ({
                 ) : null}
             </div>
 
-            <ScrollableTabs selectedKey={activeTab} onSelectionChange={(key) => setActiveTab(String(key))}>
-                <ScrollableTabsList>
+            <ScrollableTabs
+                className="w-full"
+                selectedKey={activeTab}
+                onSelectionChange={(key) => setActiveTab(String(key))}
+            >
+                <ScrollableTabsList fullWidth>
                     {CONTACT_DETAIL_TABS.map((t) => (
                         <Tabs.Tab
                             key={t.id}
                             id={t.id}
-                            className={tabTriggerClassName}
+                            className={cn(tabTriggerClassName, "flex w-auto min-w-0 flex-1 shrink justify-center")}
                         >
                             {t.label}
                         </Tabs.Tab>

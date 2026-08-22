@@ -563,6 +563,30 @@ export class ContactsService {
         return this.applyUpdateToContact(organisation_uuid, uuid, dto, emailPatch);
     }
 
+    async resubscribe(organisation_uuid: string, uuid: string) {
+        const contact = await this.requireOwnedContact(organisation_uuid, uuid);
+        if (!contact.unsubscribed_at) {
+            return this.findOne(organisation_uuid, uuid);
+        }
+
+        await this.prisma.$transaction([
+            this.prisma.contact.update({
+                where: { uuid: contact.uuid },
+                data: { unsubscribed_at: null },
+            }),
+            this.prisma.interaction.create({
+                data: {
+                    contact_uuid: contact.uuid,
+                    organisation_uuid,
+                    type: InteractionType.NOTE,
+                    content: 'Email preference restored to subscribed',
+                },
+            }),
+        ]);
+
+        return this.findOne(organisation_uuid, uuid);
+    }
+
     private async applyUpdateToContact(
         organisation_uuid: string,
         uuid: string,

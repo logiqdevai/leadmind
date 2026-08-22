@@ -117,7 +117,7 @@ export function FormsTab({ contactUuid, contactName }: FormsTabProps) {
     const selectedForm = allForms.find((f) => f.uuid === newCompleteFormUuid) ?? null;
 
     return (
-        <div className="flex flex-col gap-4 max-w-3xl">
+        <div className="flex flex-col gap-4">
             <div className="rounded-2xl border border-border/80 bg-surface/80">
                 <div className="flex items-center justify-between gap-2 border-b border-border/60 px-4 sm:px-5 py-3.5">
                     <div className="flex items-center gap-2">

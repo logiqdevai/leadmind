@@ -136,6 +136,15 @@ export const updateContact = async (
     }
 };
 
+export const resubscribeContact = async (uuid: string): Promise<Contact> => {
+    try {
+        const response = await axiosInstance.post(ApiRoutes.contacts.resubscribe(uuid));
+        return response.data;
+    } catch (error: any) {
+        throw new Error(error?.response?.data?.message || "Failed to restore email preference.");
+    }
+};
+
 export const updateContactNotes = async (
     uuid: string,
     notes: string,

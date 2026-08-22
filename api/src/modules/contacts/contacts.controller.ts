@@ -183,6 +183,17 @@ export class ContactsController {
         return this.contactsService.update(organisation_uuid, uuid, dto);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.CONTACT, action: ActivityAction.UPDATED, entityUuidFrom: 'params.uuid' })
+    @Post(':uuid/resubscribe')
+    @ApiOperation({ summary: 'Restore email marketing preference after an unsubscribe' })
+    @ApiResponse({ status: 404, description: 'Contact not found' })
+    resubscribe(
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
+        @Param('uuid') uuid: string,
+    ) {
+        return this.contactsService.resubscribe(organisation_uuid, uuid);
+    }
+
     @ActivityLog({ entityType: ActivityEntityType.CONTACT, action: ActivityAction.DELETED, entityUuidFrom: 'params.uuid' })
     @Delete(':uuid')
     @ApiOperation({ summary: 'Delete a contact' })
