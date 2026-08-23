@@ -402,7 +402,6 @@ export interface UpdateContactPayload {
 
 export interface BulkTriggerContactScorePayload {
     contact_uuids: string[];
-    filter_uuids: string[];
     scoring_instruction_uuids: string[];
     use_batch?: boolean;
 }

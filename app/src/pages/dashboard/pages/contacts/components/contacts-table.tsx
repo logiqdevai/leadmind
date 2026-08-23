@@ -10,7 +10,6 @@ import { LeadStatus } from "@/features/contacts/interfaces/contact.interface";
 import { useDeleteContact, useUpdateContactStatus } from "@/features/contacts/hooks/use-contacts";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { isTableNavInteractiveCell, renderTableNavCellContent, tableNavInteractiveCellClassName, tableNavRowClassName } from "@/components/ui/table-row-link";
-import { ContactScoresCompact } from "@/pages/dashboard/pages/leads/components/badges";
 import {
   ContactTableDetailLink,
   ContactTableNameCell,
@@ -143,11 +142,6 @@ export function ContactsTable({ contacts, isLoading, isFetching, page, pageSize,
             </div>
           );
         },
-      }),
-      columnHelper.display({
-        id: "score",
-        header: "Score",
-        cell: (info) => <ContactScoresCompact contact={info.row.original} />,
       }),
       columnHelper.display({
         id: "filters",

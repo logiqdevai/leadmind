@@ -10,7 +10,6 @@ import { LeadStatus } from "@/features/contacts/interfaces/contact.interface";
 import { STATUS_OPTIONS } from "@/features/contacts/constants/contacts.constants";
 import { useUpdateContactStatus } from "@/features/contacts/hooks/use-contacts";
 import { normalizeUrl } from "@/lib/profile";
-import { ContactScoresCompact } from "@/pages/dashboard/pages/leads/components/badges";
 import {
     ContactTableDetailLink,
     ContactTableNameCell,
@@ -158,11 +157,6 @@ export function ListMembersTable({
                         </div>
                     );
                 },
-            }),
-            columnHelper.display({
-                id: "score",
-                header: "Score",
-                cell: (info) => <ContactScoresCompact contact={info.row.original} />,
             }),
             columnHelper.display({
                 id: "filters",

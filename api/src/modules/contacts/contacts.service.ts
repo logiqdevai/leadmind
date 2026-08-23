@@ -1051,33 +1051,16 @@ export class ContactsService {
         | { batch_id: string; queued: number; skipped_contacts: number; is_batch: true }
     > {
         const contactUuids = [...new Set(dto.contact_uuids)];
-        const filterUuids = [...new Set(dto.filter_uuids)];
         const ruleUuids = [...new Set(dto.scoring_instruction_uuids)];
 
-        const filters = await this.prisma.filter.findMany({
-            where: { organisation_uuid, uuid: { in: filterUuids } },
-            include: {
-                filter_scoring_instructions: { select: { scoring_instruction_uuid: true } },
-            },
+        const instructions = await this.prisma.scoringInstruction.findMany({
+            where: { organisation_uuid, uuid: { in: ruleUuids } },
+            select: { uuid: true },
         });
-        if (filters.length !== filterUuids.length) {
-            const found = new Set(filters.map((f) => f.uuid));
-            const missing = filterUuids.filter((u) => !found.has(u));
-            throw new NotFoundException(`Filter(s) not found: ${missing.join(', ')}`);
-        }
-
-        const rulesAllowedByFilters = new Set<string>();
-        for (const f of filters) {
-            for (const link of f.filter_scoring_instructions) {
-                rulesAllowedByFilters.add(link.scoring_instruction_uuid);
-            }
-        }
-        for (const id of ruleUuids) {
-            if (!rulesAllowedByFilters.has(id)) {
-                throw new BadRequestException(
-                    `Scoring instruction ${id} is not attached to any of the selected filters.`,
-                );
-            }
+        if (instructions.length !== ruleUuids.length) {
+            const found = new Set(instructions.map((i) => i.uuid));
+            const missing = ruleUuids.filter((u) => !found.has(u));
+            throw new NotFoundException(`Scoring instruction(s) not found: ${missing.join(', ')}`);
         }
 
         const contacts = await this.prisma.contact.findMany({

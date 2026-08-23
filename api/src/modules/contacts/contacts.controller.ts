@@ -119,7 +119,7 @@ export class ContactsController {
 
     @ActivityLog({ entityType: ActivityEntityType.CONTACT, action: ActivityAction.BULK_SCORED, entityUuidFrom: 'none' })
     @Post('bulk-score')
-    @ApiOperation({ summary: 'Trigger AI scoring for multiple contacts (rules scoped to selected filters)' })
+    @ApiOperation({ summary: 'Trigger AI scoring for multiple contacts' })
     @ApiResponse({ status: 201 })
     @ApiResponse({ status: 400 })
     @ApiResponse({ status: 404 })

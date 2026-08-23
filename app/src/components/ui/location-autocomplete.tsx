@@ -1,7 +1,9 @@
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { Input } from "@heroui/react";
 import { Loader2, MapPin } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { isInsideOverlay, useAnchoredOverlay } from "@/hooks/use-anchored-overlay";
 
 interface PhotonProperties {
     name?: string;
@@ -81,6 +83,17 @@ export function LocationAutocomplete({
     const [highlight, setHighlight] = useState(-1);
 
     const containerRef = useRef<HTMLDivElement | null>(null);
+    const panelRef = useRef<HTMLElement | null>(null);
+    const [embedInOverlay, setEmbedInOverlay] = useState(false);
+    const overlayStyle = useAnchoredOverlay(open && !embedInOverlay, containerRef);
+
+    useLayoutEffect(() => {
+        if (!open) {
+            setEmbedInOverlay(false);
+            return;
+        }
+        setEmbedInOverlay(isInsideOverlay(containerRef.current));
+    }, [open]);
     const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
     const abortRef = useRef<AbortController | null>(null);
     /** Tracks the last text we resolved to avoid re-querying after a pick. */
@@ -95,8 +108,10 @@ export function LocationAutocomplete({
 
     useEffect(() => {
         const onDocClick = (e: MouseEvent) => {
-            if (!containerRef.current) return;
-            if (!containerRef.current.contains(e.target as Node)) setOpen(false);
+            const t = e.target as Node;
+            if (containerRef.current?.contains(t)) return;
+            if (panelRef.current?.contains(t)) return;
+            setOpen(false);
         };
         document.addEventListener("mousedown", onDocClick);
         return () => document.removeEventListener("mousedown", onDocClick);
@@ -226,42 +241,70 @@ export function LocationAutocomplete({
                 )}
             </div>
 
-            {open && suggestions.length > 0 && (
-                <ul
-                    id={listboxId}
-                    role="listbox"
-                    className="absolute z-50 mt-1 w-full max-h-64 overflow-auto rounded-lg border border-border bg-surface shadow-lg py-1"
-                >
-                    {suggestions.map((s, i) => (
-                        <li
-                            key={`${s.key}-${i}`}
-                            id={`${listboxId}-opt-${i}`}
-                            role="option"
-                            aria-selected={i === highlight}
-                            onMouseDown={(e) => {
-                                e.preventDefault();
-                                pick(s);
-                            }}
-                            onMouseEnter={() => setHighlight(i)}
+            {open &&
+                suggestions.length > 0 &&
+                (() => {
+                    const list = (
+                        <ul
+                            ref={panelRef}
+                            data-portaled-menu={embedInOverlay ? undefined : ""}
+                            id={listboxId}
+                            role="listbox"
+                            style={embedInOverlay ? undefined : overlayStyle}
                             className={cn(
-                                "px-3 py-2 text-sm cursor-pointer flex items-start gap-2",
-                                i === highlight
-                                    ? "bg-accent/15 text-foreground"
-                                    : "text-foreground hover:bg-surface-secondary",
+                                "overflow-y-auto overscroll-contain rounded-lg border border-border bg-surface py-1",
+                                embedInOverlay
+                                    ? "relative z-10 mt-1.5 max-h-52"
+                                    : "shadow-lg",
                             )}
                         >
-                            <MapPin className="size-3.5 mt-0.5 shrink-0 text-muted" />
-                            <span className="line-clamp-2">{s.display}</span>
-                        </li>
-                    ))}
-                </ul>
-            )}
+                            {suggestions.map((s, i) => (
+                                <li
+                                    key={`${s.key}-${i}`}
+                                    id={`${listboxId}-opt-${i}`}
+                                    role="option"
+                                    aria-selected={i === highlight}
+                                    onMouseDown={(e) => {
+                                        e.preventDefault();
+                                        pick(s);
+                                    }}
+                                    onMouseEnter={() => setHighlight(i)}
+                                    className={cn(
+                                        "px-3 py-2 text-sm cursor-pointer flex items-start gap-2",
+                                        i === highlight
+                                            ? "bg-accent/15 text-foreground"
+                                            : "text-foreground hover:bg-surface-secondary",
+                                    )}
+                                >
+                                    <MapPin className="size-3.5 mt-0.5 shrink-0 text-muted" />
+                                    <span className="line-clamp-2">{s.display}</span>
+                                </li>
+                            ))}
+                        </ul>
+                    );
+                    return embedInOverlay ? list : createPortal(list, document.body);
+                })()}
 
-            {open && !loading && suggestions.length === 0 && value.trim().length >= minChars && (
-                <div className="absolute z-50 mt-1 w-full rounded-lg border border-border bg-surface shadow-lg py-2 px-3 text-sm text-muted">
-                    No matches. Try a simpler form (e.g. "City, Country").
-                </div>
-            )}
+            {open &&
+                !loading &&
+                suggestions.length === 0 &&
+                value.trim().length >= minChars &&
+                (() => {
+                    const empty = (
+                        <div
+                            ref={panelRef}
+                            data-portaled-menu={embedInOverlay ? undefined : ""}
+                            style={embedInOverlay ? undefined : overlayStyle}
+                            className={cn(
+                                "rounded-lg border border-border bg-surface py-2 px-3 text-sm text-muted",
+                                embedInOverlay ? "relative z-10 mt-1.5" : "shadow-lg",
+                            )}
+                        >
+                            No matches. Try a simpler form (e.g. "City, Country").
+                        </div>
+                    );
+                    return embedInOverlay ? empty : createPortal(empty, document.body);
+                })()}
         </div>
     );
 }

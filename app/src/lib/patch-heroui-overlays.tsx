@@ -38,6 +38,7 @@ const OPEN_POPOVER_SELECTOR = [
     ".autocomplete__popover",
     ".date-picker__popover",
     ".date-range-picker__popover",
+    "[data-portaled-menu]",
 ].join(",");
 
 function isDismissButton(button: HTMLButtonElement): boolean {
@@ -152,6 +153,48 @@ function restoreInteractivityAfterOverlayClose(): void {
     }, true);
 }
 
+function findVerticalScroller(start: Element, boundary: Element): HTMLElement {
+    let node: Element | null = start;
+    while (node && boundary.contains(node)) {
+        if (node instanceof HTMLElement) {
+            const style = window.getComputedStyle(node);
+            const overflowY = style.overflowY;
+            if (
+                (overflowY === "auto" || overflowY === "scroll" || overflowY === "overlay") &&
+                node.scrollHeight > node.clientHeight
+            ) {
+                return node;
+            }
+        }
+        if (node === boundary) break;
+        node = node.parentElement;
+    }
+    return boundary instanceof HTMLElement ? boundary : (boundary.parentElement as HTMLElement);
+}
+
+function isolateOverlayWheel(): void {
+    if (typeof window === "undefined") return;
+
+    document.addEventListener(
+        "wheel",
+        (event) => {
+            const target = event.target;
+            if (!(target instanceof Element)) return;
+            const panel = target.closest(OPEN_POPOVER_SELECTOR);
+            if (!panel) return;
+
+            const scroller = findVerticalScroller(target, panel);
+            if (scroller.scrollHeight > scroller.clientHeight) {
+                scroller.scrollTop += event.deltaY;
+            }
+            event.preventDefault();
+            event.stopPropagation();
+        },
+        { capture: true, passive: false },
+    );
+}
+
 lockDocumentScroll();
 dismissOverlaysOnOutsidePointer();
 restoreInteractivityAfterOverlayClose();
+isolateOverlayWheel();
