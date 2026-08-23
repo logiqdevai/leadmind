@@ -135,11 +135,11 @@ export class ListContactsDto {
     @Min(1)
     page?: number = 1;
 
-    @ApiPropertyOptional({ default: 20, minimum: 1, maximum: 100 })
+    @ApiPropertyOptional({ default: 50, minimum: 1, maximum: 10000 })
     @IsOptional()
     @Type(() => Number)
     @IsInt()
     @Min(1)
-    @Max(100)
-    limit?: number = 20;
+    @Max(10000)
+    limit?: number = 50;
 }

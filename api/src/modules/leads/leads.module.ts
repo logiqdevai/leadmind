@@ -7,6 +7,7 @@ import { ApifyModule } from '@/integrations/apify/apify.module';
 import { WebsiteScraperModule } from '@/integrations/website-scraper/website-scraper.module';
 import { GemiModule } from '@/integrations/gemi/gemi.module';
 import { EnrichmentModule } from '@/modules/enrichment/enrichment.module';
+import { BulkJobsModule } from '@/modules/bulk-jobs/bulk-jobs.module';
 import { AiUsageModule } from '@/modules/ai-usage/ai-usage.module';
 import { LeadsController } from './leads.controller';
 import { LeadsService } from './leads.service';
@@ -23,6 +24,7 @@ import { LeadEnrichmentBatchService } from './services/lead-enrichment-batch.ser
         WebsiteScraperModule,
         GemiModule,
         forwardRef(() => EnrichmentModule),
+        BulkJobsModule,
         BullModule.registerQueue({ name: AI_PROCESS_QUEUE }),
         AiUsageModule,
     ],

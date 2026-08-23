@@ -44,6 +44,7 @@ export interface BulkJob {
     completed_at: string | null;
     created_at: string;
     updated_at: string;
+    organisation?: { uuid: string; name: string } | null;
 }
 
 export interface ListBulkJobsQuery {

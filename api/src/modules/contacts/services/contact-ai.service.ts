@@ -41,6 +41,7 @@ import {
 import { CONTACT_AI_SCORE_SCHEMA, type ContactAiScoreResult } from '../schemas/contact-ai-score.schema';
 import { OutreachRenderService } from '@/modules/outreach/services/outreach-render.service';
 import { AiUsageService } from '@/modules/ai-usage/ai-usage.service';
+import { BulkJobsService } from '@/modules/bulk-jobs/bulk-jobs.service';
 import { calculateAiCost } from '@/integrations/ai/utils/ai-cost';
 
 const filterForScoreInclude = {
@@ -65,6 +66,7 @@ export class ContactAiService {
         private readonly elasticsearchService: ElasticsearchService,
         private readonly outreachRenderService: OutreachRenderService,
         private readonly aiUsageService: AiUsageService,
+        private readonly bulkJobsService: BulkJobsService,
     ) { }
 
     async scoreContact(
@@ -210,6 +212,12 @@ export class ContactAiService {
                 input_file_id: result.input_file_id,
                 expires_at: result.expires_at,
             },
+        });
+        await this.bulkJobsService.createOpenAiMirror({
+            organisation_uuid,
+            batch_id: result.batch_id,
+            title: `OpenAI batch score (${requests.length})`,
+            total_requests: requests.length,
         });
 
         this.logger.log(`Batch scoring submitted: ${result.batch_id} (${requests.length} requests)`);
@@ -544,6 +552,12 @@ export class ContactAiService {
                 input_file_id: result.input_file_id,
                 expires_at: result.expires_at,
             },
+        });
+        await this.bulkJobsService.createOpenAiMirror({
+            organisation_uuid,
+            batch_id: result.batch_id,
+            title: `OpenAI batch drafts (${requests.length})`,
+            total_requests: requests.length,
         });
 
         this.logger.log(

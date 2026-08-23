@@ -34,12 +34,15 @@ export type CreateBulkJobInput = {
 export class BulkJobsService {
     constructor(private readonly prisma: PrismaService) {}
 
-    async findAll(organisation_uuid: string, query: ListBulkJobsDto) {
-        const where: Prisma.BulkJobWhereInput = { organisation_uuid };
+    async findAll(organisation_uuid: string | null, query: ListBulkJobsDto) {
+        const where: Prisma.BulkJobWhereInput = {};
+        if (organisation_uuid) {
+            where.organisation_uuid = organisation_uuid;
+        }
 
         if (query.status) {
             where.status = query.status;
-        } else if (query.active_only !== false) {
+        } else if (query.active_only) {
             where.status = { in: ACTIVE_STATUSES };
         }
 
@@ -57,6 +60,9 @@ export class BulkJobsService {
                 orderBy: { created_at: 'desc' },
                 skip,
                 take: limit,
+                ...(!organisation_uuid
+                    ? { include: { organisation: { select: { uuid: true, name: true } } } }
+                    : {}),
             }),
             this.prisma.bulkJob.count({ where }),
         ]);
@@ -130,6 +136,26 @@ export class BulkJobsService {
         return updated;
     }
 
+    async recordItemOutcome(uuid: string, opts: { failed: boolean }): Promise<void> {
+        if (opts.failed) {
+            await this.incrementFailure(uuid);
+        }
+        const job = await this.incrementProgress(uuid);
+        if (job.progress_current < job.progress_total) {
+            return;
+        }
+        if (job.progress_failed >= job.progress_total) {
+            await this.fail(uuid, `All ${job.progress_total} items failed`);
+            return;
+        }
+        await this.complete(
+            uuid,
+            job.progress_failed > 0
+                ? `${job.progress_failed}/${job.progress_total} items failed`
+                : null,
+        );
+    }
+
     async complete(uuid: string, error?: string | null) {
         return this.prisma.bulkJob.update({
             where: { uuid },
@@ -163,6 +189,44 @@ export class BulkJobsService {
                 error: error.slice(0, 4000),
                 completed_at: new Date(),
             },
+        });
+    }
+
+    createOpenAiMirror(input: {
+        organisation_uuid: string;
+        batch_id: string;
+        title: string;
+        total_requests: number;
+    }) {
+        return this.create({
+            organisation_uuid: input.organisation_uuid,
+            title: input.title,
+            type: BulkJobType.OPENAI_BATCH,
+            status: BulkJobStatus.RUNNING,
+            progress_total: input.total_requests,
+            progress_current: 0,
+            reference_type: 'openai_batch',
+            reference_uuid: input.batch_id,
+            metadata: { batch_id: input.batch_id },
+            started_at: new Date(),
+        });
+    }
+
+    async finishOpenAiMirror(
+        organisation_uuid: string,
+        batch_id: string,
+        opts: { failed: boolean; error?: string },
+    ) {
+        if (opts.failed) {
+            return this.updateByReference(organisation_uuid, 'openai_batch', batch_id, {
+                status: BulkJobStatus.FAILED,
+                error: (opts.error ?? 'OpenAI batch failed').slice(0, 4000),
+                completed_at: new Date(),
+            });
+        }
+        return this.updateByReference(organisation_uuid, 'openai_batch', batch_id, {
+            status: BulkJobStatus.COMPLETED,
+            completed_at: new Date(),
         });
     }
 

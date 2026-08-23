@@ -3,6 +3,7 @@ import { Logger } from '@nestjs/common';
 import { Job } from 'bullmq';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { ContactAiService } from '@/modules/contacts/services/contact-ai.service';
+import { BulkJobsService } from '@/modules/bulk-jobs/bulk-jobs.service';
 import { LeadEnrichmentOrchestrator } from '@/modules/leads/services/lead-enrichment.orchestrator';
 import { LeadEnrichmentBatchService } from '@/modules/leads/services/lead-enrichment-batch.service';
 import { AI_PROCESS_QUEUE } from '@/core/queues/queues.constants';
@@ -28,6 +29,7 @@ export class AiProcessWorker extends WorkerHost {
     constructor(
         private readonly prisma: PrismaService,
         private readonly contactAiService: ContactAiService,
+        private readonly bulkJobsService: BulkJobsService,
         private readonly leadEnrichmentOrchestrator: LeadEnrichmentOrchestrator,
         private readonly leadEnrichmentBatchService: LeadEnrichmentBatchService,
     ) {
@@ -58,10 +60,16 @@ export class AiProcessWorker extends WorkerHost {
                 data.lead_uuids,
                 sources,
             );
+            if (data.bulk_job_uuid) {
+                await this.bulkJobsService.complete(data.bulk_job_uuid);
+            }
         } catch (error) {
             this.logger.error(
                 `Lead batch enrich prepare failed: ${this.errMsg(error)}`,
             );
+            if (data.bulk_job_uuid) {
+                await this.bulkJobsService.fail(data.bulk_job_uuid, this.errMsg(error));
+            }
         }
     }
 
@@ -69,15 +77,23 @@ export class AiProcessWorker extends WorkerHost {
         const lead = await this.prisma.lead.findUnique({ where: { uuid: data.lead_uuid } });
         if (!lead) {
             this.logger.warn(`Lead ${data.lead_uuid} not found — skipping enrichment`);
+            if (data.bulk_job_uuid) {
+                await this.bulkJobsService.recordItemOutcome(data.bulk_job_uuid, { failed: true });
+            }
             return;
         }
         const sources = resolveLeadJobEnrichmentSources(data);
+        let failed = false;
         try {
             await this.leadEnrichmentOrchestrator.run(data.lead_uuid, sources, {
                 force: data.force_enrichment ?? false,
             });
         } catch (error) {
+            failed = true;
             this.logger.error(`Lead ${lead.uuid} enrichment failed: ${this.errMsg(error)}`);
+        }
+        if (data.bulk_job_uuid) {
+            await this.bulkJobsService.recordItemOutcome(data.bulk_job_uuid, { failed });
         }
     }
 
@@ -106,6 +122,9 @@ export class AiProcessWorker extends WorkerHost {
         });
         if (!contact) {
             this.logger.warn(`Contact ${data.contact_uuid} not found — skipping`);
+            if (data.bulk_job_uuid) {
+                await this.bulkJobsService.recordItemOutcome(data.bulk_job_uuid, { failed: true });
+            }
             return;
         }
 
@@ -136,6 +155,7 @@ export class AiProcessWorker extends WorkerHost {
         );
 
         if (full_pipeline || action === 'enrich') {
+            let enrichFailed = false;
             try {
                 this.logger.log(
                     `Contact ${contact.uuid} enrichment starting (sources: ${sources.join(', ')})`,
@@ -145,11 +165,16 @@ export class AiProcessWorker extends WorkerHost {
                 });
                 this.logger.log(`Contact ${contact.uuid} enrichment finished`);
             } catch (error) {
+                enrichFailed = true;
                 this.logger.error(`Contact ${contact.uuid} enrich step failed: ${this.errMsg(error)}`);
+            }
+            if (data.bulk_job_uuid) {
+                await this.bulkJobsService.recordItemOutcome(data.bulk_job_uuid, { failed: enrichFailed });
             }
         }
 
         if ((full_pipeline || action === 'score') && combinedFilter) {
+            let scoreFailed = false;
             try {
                 const fresh_lead = await this.prisma.lead.findUnique({ where: { uuid: lead.uuid } });
                 if (fresh_lead) {
@@ -163,10 +188,17 @@ export class AiProcessWorker extends WorkerHost {
                     );
                 }
             } catch (error) {
+                scoreFailed = true;
                 this.logger.error(`Contact ${contact.uuid} score step failed: ${this.errMsg(error)}`);
+            }
+            if (!full_pipeline && action === 'score' && data.bulk_job_uuid) {
+                await this.bulkJobsService.recordItemOutcome(data.bulk_job_uuid, { failed: scoreFailed });
             }
         } else if ((full_pipeline || action === 'score') && !combinedFilter) {
             this.logger.warn(`Contact ${contact.uuid} has no linked filters — skipping score`);
+            if (!full_pipeline && action === 'score' && data.bulk_job_uuid) {
+                await this.bulkJobsService.recordItemOutcome(data.bulk_job_uuid, { failed: true });
+            }
         }
 
         if (full_pipeline || action === 'draft') {
@@ -178,8 +210,12 @@ export class AiProcessWorker extends WorkerHost {
                       : [];
             if (draftFilters.length === 0) {
                 this.logger.warn(`Contact ${contact.uuid} has no linked filters — skipping draft`);
+                if (!full_pipeline && action === 'draft' && data.bulk_job_uuid) {
+                    await this.bulkJobsService.recordItemOutcome(data.bulk_job_uuid, { failed: true });
+                }
                 return;
             }
+            let draftFailed = false;
             try {
                 const fresh_lead = await this.prisma.lead.findUnique({ where: { uuid: lead.uuid } });
                 if (fresh_lead) {
@@ -188,7 +224,11 @@ export class AiProcessWorker extends WorkerHost {
                     }
                 }
             } catch (error) {
+                draftFailed = true;
                 this.logger.error(`Contact ${contact.uuid} draft step failed: ${this.errMsg(error)}`);
+            }
+            if (!full_pipeline && action === 'draft' && data.bulk_job_uuid) {
+                await this.bulkJobsService.recordItemOutcome(data.bulk_job_uuid, { failed: draftFailed });
             }
         }
     }

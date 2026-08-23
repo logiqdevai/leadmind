@@ -28,6 +28,13 @@ import {
     type ListMemberDeleteMode,
 } from "./components/list-members-delete-dialog";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
+import { BulkScoreContactsPopover } from "@/pages/dashboard/pages/contacts/components/bulk-score-contacts-popover";
+import { BulkEnrichmentRunModal } from "@/components/ui/bulk-enrichment-run-modal";
+import {
+    DEFAULT_ENRICHMENT_SOURCES,
+    enrichmentSourceOptionsForBulk,
+} from "@/features/enrichment/constants/enrichment-sources";
+import { useEnrichContactsBulk } from "@/features/enrichment/hooks/use-enrichment";
 import { BulkSendMessageModal } from "@/pages/dashboard/components/bulk-send-message-modal";
 import { BulkEnrollInSequenceModal } from "@/pages/dashboard/components/bulk-enroll-in-sequence-modal";
 import {
@@ -38,8 +45,8 @@ import {
 import { ContactAudienceAnalyticsPanel } from "@/pages/dashboard/components/audience-analytics/contact-audience-analytics-panel";
 import { ContactStackViewerScope } from "@/pages/dashboard/components/contact-stack-viewer";
 import { ListDetailSkeleton } from "./components/list-detail-skeleton";
+import { parsePageSize } from "@/lib/page-size";
 
-const MEMBERS_PAGE_SIZE = 20;
 const SUBLISTS_PAGE_SIZE = 20;
 
 const TABS = [
@@ -56,6 +63,8 @@ export default function ListDetailPage() {
     const [createSublistOpen, setCreateSublistOpen] = useState(false);
     const [addContactsOpen, setAddContactsOpen] = useState(false);
     const [selectedKeys, setSelectedKeys] = useState<Set<string>>(new Set());
+    const [scoreOpen, setScoreOpen] = useState(false);
+    const [enrichOpen, setEnrichOpen] = useState(false);
     const [scrapeConfirmOpen, setScrapeConfirmOpen] = useState(false);
     const [outreachChooserOpen, setOutreachChooserOpen] = useState(false);
     const [composeOpen, setComposeOpen] = useState(false);
@@ -63,6 +72,7 @@ export default function ListDetailPage() {
     const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
     const [pendingDeleteUuids, setPendingDeleteUuids] = useState<string[]>([]);
 
+    const enrichBulk = useEnrichContactsBulk();
     const scrapeEmailsBulk = useBulkScrapeContactEmails();
     const removeListContactsBulk = useRemoveListContactsBulk();
     const deleteContactsBulk = useDeleteContactsBulk();
@@ -71,6 +81,7 @@ export default function ListDetailPage() {
     const rawTab = searchParams.get(Routes.dashboard.lists_detail_tab_query);
 
     const membersPage = Math.max(1, Number(searchParams.get("page") ?? 1));
+    const membersPageSize = parsePageSize(searchParams.get("page_size"));
     const sublistsPage = Math.max(1, Number(searchParams.get("sublists_page") ?? 1));
 
     const { data: list, isLoading: listLoading } = useContactList(uuid);
@@ -80,7 +91,7 @@ export default function ListDetailPage() {
         isFetching: membersFetching,
     } = useContactListMembers(uuid, {
         page: membersPage,
-        limit: MEMBERS_PAGE_SIZE,
+        limit: membersPageSize.limit,
     });
 
     const {
@@ -131,6 +142,14 @@ export default function ListDetailPage() {
         const params = new URLSearchParams(searchParams);
         params.set("page", String(p));
         setSearchParams(params, { replace: true });
+    };
+
+    const handleMembersPageSizeChange = (value: string) => {
+        const params = new URLSearchParams(searchParams);
+        params.set("page_size", value);
+        params.set("page", "1");
+        setSearchParams(params, { replace: true });
+        setSelectedKeys(new Set());
     };
 
     const handleSublistsPageChange = (p: number) => {
@@ -217,7 +236,7 @@ export default function ListDetailPage() {
             contactUuids={memberUuids}
             page={membersPage}
             totalPages={totalPages}
-            pageSize={MEMBERS_PAGE_SIZE}
+            pageSize={membersPageSize.limit}
             totalCount={total}
             onPageChange={handleMembersPageChange}
         >
@@ -244,6 +263,18 @@ export default function ListDetailPage() {
                                 }
                                 onEditList={() => setEditOpen(true)}
                                 onMoveList={() => setMoveOpen(true)}
+                                onScoreSelected={
+                                    currentTab === ListDetailTabIds.CONTACTS
+                                        ? () => setScoreOpen(true)
+                                        : undefined
+                                }
+                                scoreDisabled={selectedKeys.size === 0}
+                                onEnrichSelected={
+                                    currentTab === ListDetailTabIds.CONTACTS
+                                        ? () => setEnrichOpen(true)
+                                        : undefined
+                                }
+                                enrichDisabled={selectedKeys.size === 0 || enrichBulk.isPending}
                                 onScrapeEmails={
                                     currentTab === ListDetailTabIds.CONTACTS
                                         ? () => setScrapeConfirmOpen(true)
@@ -328,10 +359,12 @@ export default function ListDetailPage() {
                                 isLoading={membersLoading}
                                 isFetching={membersFetching}
                                 page={membersPage}
-                                pageSize={MEMBERS_PAGE_SIZE}
+                                pageSize={membersPageSize.limit}
                                 total={total}
                                 totalPages={totalPages}
                                 onPageChange={handleMembersPageChange}
+                                pageSizeValue={membersPageSize.key}
+                                onPageSizeChange={handleMembersPageSizeChange}
                                 onContactOpen={quickBrowse.openAt}
                                 selectedKeys={selectedKeys}
                                 onSelectionChange={setSelectedKeys}
@@ -355,6 +388,28 @@ export default function ListDetailPage() {
                         listUuid={uuid}
                         isOpen={addContactsOpen}
                         onOpenChange={setAddContactsOpen}
+                    />
+                    <BulkScoreContactsPopover
+                        isOpen={scoreOpen}
+                        onOpenChange={setScoreOpen}
+                        selectedContactUuids={[...selectedKeys]}
+                        onScoringComplete={() => setSelectedKeys(new Set())}
+                    />
+                    <BulkEnrichmentRunModal
+                        isOpen={enrichOpen}
+                        onOpenChange={setEnrichOpen}
+                        mode="contact"
+                        selectedCount={selectedKeys.size}
+                        sourceOptions={enrichmentSourceOptionsForBulk()}
+                        initialSources={DEFAULT_ENRICHMENT_SOURCES}
+                        isPending={enrichBulk.isPending}
+                        onEnrich={(sources) => {
+                            if (selectedKeys.size === 0) return;
+                            enrichBulk.mutate(
+                                { uuids: [...selectedKeys], sources },
+                                { onSuccess: () => setSelectedKeys(new Set()) },
+                            );
+                        }}
                     />
                     <ConfirmDialog
                         isOpen={scrapeConfirmOpen}

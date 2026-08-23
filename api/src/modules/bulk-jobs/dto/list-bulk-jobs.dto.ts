@@ -15,18 +15,18 @@ export class ListBulkJobsDto {
     type?: BulkJobType;
 
     @ApiPropertyOptional({
-        default: true,
+        default: false,
         description: 'When true and status is omitted, only PENDING/QUEUED/RUNNING jobs are returned',
     })
     @IsOptional()
     @Transform(({ value }) => {
-        if (value === undefined || value === null || value === '') return true;
+        if (value === undefined || value === null || value === '') return false;
         if (value === true || value === 'true' || value === '1') return true;
         if (value === false || value === 'false' || value === '0') return false;
         return Boolean(value);
     })
     @IsBoolean()
-    active_only?: boolean = true;
+    active_only?: boolean = false;
 
     @ApiPropertyOptional({ default: 1, minimum: 1 })
     @IsOptional()

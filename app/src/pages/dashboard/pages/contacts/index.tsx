@@ -40,9 +40,8 @@ import {
 import type { ContactFilters } from "@/interfaces/contact-filters.interface";
 import { Routes } from "@/routes/routes";
 import { useDashboardNavbarTitle } from "@/components/providers/dashboard-navbar-provider";
+import { parsePageSize } from "@/lib/page-size";
 
-const TABLE_PAGE_SIZE = 20;
-const PIPELINE_PAGE_SIZE = 100;
 const VIEW_STORAGE_KEY = "contacts.view";
 
 type View = "table" | "pipeline";
@@ -67,6 +66,7 @@ export default function ContactsPage() {
   }, [view]);
 
   const page = Math.max(1, Number(searchParams.get("page") ?? 1));
+  const pageSizeState = parsePageSize(searchParams.get("page_size"));
   const filters = useMemo(
     () => parseContactFiltersFromSearchParams(searchParams),
     [searchParams],
@@ -96,6 +96,7 @@ export default function ContactsPage() {
       if (value != null && value !== "") params.set(key, value);
     }
     if (savedFilterUuid) params.set(SAVED_FILTER_PARAM, savedFilterUuid);
+    if (pageSizeState.key !== "50") params.set("page_size", pageSizeState.key);
     if (resetPage) params.set("page", "1");
     else if (page > 1) params.set("page", String(page));
     startTransition(() => {
@@ -121,6 +122,7 @@ export default function ContactsPage() {
       if (value != null && value !== "") params.set(key, value);
     }
     if (uuid) params.set(SAVED_FILTER_PARAM, uuid);
+    if (pageSizeState.key !== "50") params.set("page_size", pageSizeState.key);
     params.set("page", "1");
     startTransition(() => {
       setSearchParams(params, { replace: true });
@@ -128,7 +130,7 @@ export default function ContactsPage() {
     setSelectedKeys((prev) => (prev.size === 0 ? prev : new Set()));
   };
 
-  const pageSize = view === "pipeline" ? PIPELINE_PAGE_SIZE : TABLE_PAGE_SIZE;
+  const pageSize = pageSizeState.limit;
 
   const hasFilterScope = hasActiveContactFilters(filters);
   const canScrapeEmails = view === "table" && (selectedKeys.size > 0 || hasFilterScope);
@@ -168,7 +170,7 @@ export default function ContactsPage() {
   const query = useMemo(
     () =>
       contactFiltersToListQuery(filters, {
-        page: view === "pipeline" ? 1 : page,
+        page,
         limit: pageSize,
       }),
     [filters, view, page, pageSize],
@@ -192,6 +194,14 @@ export default function ContactsPage() {
     const params = new URLSearchParams(searchParams);
     params.set("page", String(p));
     setSearchParams(params, { replace: true });
+  };
+
+  const handlePageSizeChange = (value: string) => {
+    const params = new URLSearchParams(searchParams);
+    params.set("page_size", value);
+    params.set("page", "1");
+    setSearchParams(params, { replace: true });
+    setSelectedKeys(new Set());
   };
 
   const goToDetail = (uuid: string) => navigate(Routes.dashboard.contacts_detail.replace(":uuid", uuid));
@@ -281,12 +291,26 @@ export default function ContactsPage() {
               total={total}
               totalPages={totalPages}
               onPageChange={handlePageChange}
+              pageSizeValue={pageSizeState.key}
+              onPageSizeChange={handlePageSizeChange}
               selectedKeys={selectedKeys}
               onSelectionChange={setSelectedKeys}
               onContactOpen={quickBrowse.openAt}
             />
           ) : (
-            <PipelineView contacts={contacts} isLoading={isLoading} onCardClick={(c) => goToDetail(c.uuid)} />
+            <PipelineView
+              contacts={contacts}
+              isLoading={isLoading}
+              isFetching={isFetching}
+              onCardClick={(c) => goToDetail(c.uuid)}
+              page={page}
+              pageSize={pageSize}
+              total={total}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+              pageSizeValue={pageSizeState.key}
+              onPageSizeChange={handlePageSizeChange}
+            />
           )}
 
           <NewContactModal isOpen={createOpen} onOpenChange={setCreateOpen} />

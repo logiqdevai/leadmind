@@ -4,6 +4,7 @@ import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { OpenAiBatchService } from '@/integrations/ai/services/openai-batch.service';
 import { ContactAiService } from '@/modules/contacts/services/contact-ai.service';
 import { LeadEnrichmentBatchService } from '@/modules/leads/services/lead-enrichment-batch.service';
+import { BulkJobsService } from '@/modules/bulk-jobs/bulk-jobs.service';
 
 @Injectable()
 export class OpenAiBatchDispatchService {
@@ -14,6 +15,7 @@ export class OpenAiBatchDispatchService {
         private readonly openAiBatchService: OpenAiBatchService,
         private readonly contactAiService: ContactAiService,
         private readonly leadEnrichmentBatchService: LeadEnrichmentBatchService,
+        private readonly bulkJobsService: BulkJobsService,
     ) {}
 
     async processBatchCompletion(batchId: string): Promise<void> {
@@ -42,6 +44,10 @@ export class OpenAiBatchDispatchService {
                     total_requests: batchStatus.total_requests,
                 },
             });
+            await this.bulkJobsService.finishOpenAiMirror(job.organisation_uuid, batchId, {
+                failed: true,
+                error: `OpenAI batch ${batchStatus.status}`,
+            });
             this.logger.warn(`Batch ${batchId} ended with OpenAI status: ${batchStatus.status}`);
             return;
         }
@@ -66,6 +72,7 @@ export class OpenAiBatchDispatchService {
             default:
                 this.logger.warn(`Unknown batch job type for ${batchId}: ${job.type}`);
         }
+        await this.bulkJobsService.finishOpenAiMirror(job.organisation_uuid, batchId, { failed: false });
     }
 
     private mapTerminalStatus(openAiStatus: string): OpenAiBatchStatus {

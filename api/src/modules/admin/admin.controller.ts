@@ -6,6 +6,7 @@ import { RolesGuard } from '@/shared/guards/roles.guard';
 import { Roles } from '@/shared/decorators/roles.decorator';
 import { AdminService } from './admin.service';
 import { ListBatchJobsDto } from './dto/list-batch-jobs.dto';
+import { ListBulkJobsDto } from '@/modules/bulk-jobs/dto/list-bulk-jobs.dto';
 
 @ApiTags('admin')
 @ApiBearerAuth()
@@ -19,6 +20,12 @@ export class AdminController {
     @ApiOperation({ summary: 'Get API, database, and Redis health (admin only)' })
     getSystemStatus() {
         return this.adminService.getSystemStatus();
+    }
+
+    @Get('jobs')
+    @ApiOperation({ summary: 'List all organisation queue jobs (admin only)' })
+    listJobs(@Query() query: ListBulkJobsDto) {
+        return this.adminService.listJobs(query);
     }
 
     @Get('batch-jobs')

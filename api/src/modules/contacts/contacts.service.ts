@@ -69,9 +69,9 @@ import { contactProfileFromLead } from './utils/contact-profile.utils';
 import { ContactAiService } from './services/contact-ai.service';
 import { ListEnrichmentsDto } from '@/modules/enrichment/dto/list-enrichments.dto';
 import { EnrichmentQueryService } from '@/modules/enrichment/services/enrichment-query.service';
-import { EnrichmentOrchestrator } from '@/modules/enrichment/services/enrichment.orchestrator';
 import { OutreachService } from '@/modules/outreach/outreach.service';
 import { enqueueContactScoreJob } from './utils/contact-score-queue.utils';
+import { enqueueContactEnrichmentJob } from './utils/contact-enrichment-queue.utils';
 import { BulkAiDraftMessagesDto } from './dto/bulk-ai-draft-messages.dto';
 import { EmailCredentialsService } from '@/modules/integrations/services/email-credentials.service';
 import type { EmailProviderTarget } from '@/modules/integrations/interfaces/email-credentials.interface';
@@ -109,7 +109,6 @@ export class ContactsService {
         private readonly elasticsearchService: ElasticsearchService,
         private readonly contactAiService: ContactAiService,
         private readonly enrichmentQueryService: EnrichmentQueryService,
-        private readonly enrichmentOrchestrator: EnrichmentOrchestrator,
         private readonly outreachService: OutreachService,
         private readonly emailCredentialsService: EmailCredentialsService,
         private readonly senderProfilesService: SenderProfilesService,
@@ -1034,13 +1033,26 @@ export class ContactsService {
         const combined = combineFiltersForScore(linkedFilters);
         const allowed =
             combined?.filter_scoring_instructions.map((x) => x.scoring_instruction_uuid) ?? [];
-        return enqueueContactScoreJob(
+        const bulkJob = await this.bulkJobsService.create({
+            organisation_uuid,
+            title: `Score contact (${uuid})`,
+            type: BulkJobType.CONTACT_SCORE,
+            status: BulkJobStatus.QUEUED,
+            progress_total: 1,
+            queue_name: AI_PROCESS_QUEUE,
+            reference_type: 'contact',
+            reference_uuid: uuid,
+        });
+        const job = await enqueueContactScoreJob(
             this.aiProcessQueue,
             this.prisma,
             uuid,
             allowed,
             dto?.scoring_instruction_uuids,
+            bulkJob.uuid,
         );
+        await this.bulkJobsService.markRunning(bulkJob.uuid, { queue_job_id: job.jobId });
+        return job;
     }
 
     async triggerBulkScore(
@@ -1085,6 +1097,18 @@ export class ContactsService {
         const jobIds: string[] = [];
         const batchPlan: Array<{ contact_uuid: string; instruction_uuids: string[] }> = [];
         let skipped_contacts = 0;
+        const scoreBulkJob = dto.use_batch
+            ? null
+            : await this.bulkJobsService.create({
+                  organisation_uuid,
+                  title: `Score contacts (${contacts.length})`,
+                  type: BulkJobType.CONTACT_SCORE,
+                  status: BulkJobStatus.QUEUED,
+                  progress_total: contacts.length,
+                  queue_name: AI_PROCESS_QUEUE,
+                  reference_type: 'contacts',
+                  metadata: { contact_uuids: contactUuids },
+              });
 
         for (const c of contacts) {
             const combined = combineFiltersForScore(linkedMap.get(c.uuid) ?? []);
@@ -1105,6 +1129,7 @@ export class ContactsService {
                     c.uuid,
                     allowed,
                     perContactRequested,
+                    scoreBulkJob?.uuid,
                 );
                 jobIds.push(job.jobId);
             }
@@ -1121,9 +1146,22 @@ export class ContactsService {
         }
 
         if (jobIds.length === 0) {
+            if (scoreBulkJob) {
+                await this.bulkJobsService.cancel(scoreBulkJob.uuid, 'No eligible contacts to score');
+            }
             throw new BadRequestException(
                 'None of the selected contacts use any of the chosen scoring rules on their linked filters.',
             );
+        }
+
+        if (scoreBulkJob) {
+            await this.prisma.bulkJob.update({
+                where: { uuid: scoreBulkJob.uuid },
+                data: { progress_total: jobIds.length },
+            });
+            await this.bulkJobsService.markRunning(scoreBulkJob.uuid, {
+                queue_job_id: jobIds[0] ?? null,
+            });
         }
 
         return { jobIds, queued: jobIds.length, skipped_contacts, is_batch: false as const };
@@ -1256,11 +1294,22 @@ export class ContactsService {
         uuid: string,
     ): Promise<{ jobId: string }> {
         await this.requireOwnedContact(organisation_uuid, uuid);
+        const bulkJob = await this.bulkJobsService.create({
+            organisation_uuid,
+            title: `Draft messages (${uuid})`,
+            type: BulkJobType.AI_DRAFT_MESSAGES,
+            status: BulkJobStatus.QUEUED,
+            progress_total: 1,
+            queue_name: AI_PROCESS_QUEUE,
+            reference_type: 'contact',
+            reference_uuid: uuid,
+        });
         const job = await this.aiProcessQueue.add(
             `contact-draft:${uuid}`,
-            { contact_uuid: uuid, action: 'draft' as const },
+            { contact_uuid: uuid, action: 'draft' as const, bulk_job_uuid: bulkJob.uuid },
             { removeOnComplete: 100, removeOnFail: 100 },
         );
+        await this.bulkJobsService.markRunning(bulkJob.uuid, { queue_job_id: String(job.id) });
         return { jobId: String(job.id) };
     }
 
@@ -1275,7 +1324,8 @@ export class ContactsService {
         organisation_uuid: string,
         uuid: string,
         dto: EnrichContactDto,
-    ): Promise<{ jobId: string }> {
+        created_by_user_uuid?: string,
+    ): Promise<{ jobId: string; bulk_job_uuid: string }> {
         await this.requireOwnedContact(organisation_uuid, uuid);
         const row = await this.prisma.contact.findFirst({
             where: { uuid, organisation_uuid },
@@ -1285,20 +1335,34 @@ export class ContactsService {
             throw new NotFoundException(`Contact ${uuid} not found`);
         }
         const enrichment_sources = resolveContactEnrichmentSources(dto.sources, row.filter);
-        void this.enrichmentOrchestrator
-            .runForContact(uuid, enrichment_sources, { force: true })
-            .catch((error) => {
-                this.logger.error(
-                    `Contact ${uuid} enrichment failed: ${error instanceof Error ? error.message : error}`,
-                );
-            });
-        return { jobId: 'inline' };
+        const bulkJob = await this.bulkJobsService.create({
+            organisation_uuid,
+            created_by_user_uuid,
+            title: `Enrich contact (${row.name || uuid})`,
+            type: BulkJobType.CONTACT_ENRICH,
+            status: BulkJobStatus.QUEUED,
+            progress_total: 1,
+            progress_current: 0,
+            queue_name: AI_PROCESS_QUEUE,
+            reference_type: 'contact',
+            reference_uuid: uuid,
+            metadata: { contact_uuids: [uuid], sources: enrichment_sources },
+        });
+        const job = await enqueueContactEnrichmentJob(
+            this.aiProcessQueue,
+            uuid,
+            enrichment_sources,
+            bulkJob.uuid,
+        );
+        await this.bulkJobsService.markRunning(bulkJob.uuid, { queue_job_id: job.jobId });
+        return { jobId: job.jobId, bulk_job_uuid: bulkJob.uuid };
     }
 
     async triggerBulkEnrich(
         organisation_uuid: string,
         dto: BulkEnrichContactsDto,
-    ): Promise<{ queued: number }> {
+        created_by_user_uuid?: string,
+    ): Promise<{ jobIds: string[]; queued: number; bulk_job_uuid: string }> {
         const unique = [...new Set(dto.uuids)];
         const rows = await this.prisma.contact.findMany({
             where: { organisation_uuid, uuid: { in: unique } },
@@ -1310,18 +1374,33 @@ export class ContactsService {
             throw new NotFoundException(`Contact(s) not found: ${missing.join(', ')}`);
         }
 
-        for (const row of rows) {
-            const enrichment_sources = resolveContactEnrichmentSources(dto.sources, row.filter);
-            void this.enrichmentOrchestrator
-                .runForContact(row.uuid, enrichment_sources, { force: true })
-                .catch((error) => {
-                    this.logger.error(
-                        `Contact ${row.uuid} enrichment failed: ${error instanceof Error ? error.message : error}`,
-                    );
-                });
-        }
+        const bulkJob = await this.bulkJobsService.create({
+            organisation_uuid,
+            created_by_user_uuid,
+            title: `Enrich contacts (${rows.length})`,
+            type: BulkJobType.CONTACT_ENRICH,
+            status: BulkJobStatus.QUEUED,
+            progress_total: rows.length,
+            progress_current: 0,
+            queue_name: AI_PROCESS_QUEUE,
+            reference_type: 'contacts',
+            metadata: { contact_uuids: rows.map((r) => r.uuid), sources: dto.sources ?? [] },
+        });
 
-        return { queued: rows.length };
+        const jobs = await Promise.all(
+            rows.map((row) => {
+                const enrichment_sources = resolveContactEnrichmentSources(dto.sources, row.filter);
+                return enqueueContactEnrichmentJob(
+                    this.aiProcessQueue,
+                    row.uuid,
+                    enrichment_sources,
+                    bulkJob.uuid,
+                );
+            }),
+        );
+        const jobIds = jobs.map((j) => j.jobId);
+        await this.bulkJobsService.markRunning(bulkJob.uuid, { queue_job_id: jobIds[0] ?? null });
+        return { jobIds, queued: jobIds.length, bulk_job_uuid: bulkJob.uuid };
     }
 
     async triggerBulkScrapeEmailsFromWebsites(

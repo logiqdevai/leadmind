@@ -43,6 +43,6 @@ export type BulkEnrichLeadsResponse =
     | { prepare_job_id: string; queued: number; is_batch: true }
     | { jobIds: string[]; queued: number; is_batch: true; gemi_only: true };
 
-export type EnrichContactResponse = { jobId: string };
+export type EnrichContactResponse = { jobId: string; bulk_job_uuid: string };
 
-export type BulkEnrichContactsResponse = { queued: number };
+export type BulkEnrichContactsResponse = { jobIds: string[]; queued: number; bulk_job_uuid: string };

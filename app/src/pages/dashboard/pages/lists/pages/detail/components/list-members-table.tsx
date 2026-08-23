@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import type { Selection } from "@heroui/react";
 import { Button, Checkbox, ListBox, Select, Table } from "@heroui/react";
+import { PageSizeSelect } from "@/components/ui/page-size-select";
 import { Trash2 } from "lucide-react";
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { TablePagination } from "@/components/ui/table-pagination";
@@ -30,6 +31,8 @@ interface ListMembersTableProps {
     total: number;
     totalPages: number;
     onPageChange: (page: number) => void;
+    pageSizeValue: string;
+    onPageSizeChange: (value: string) => void;
     onContactOpen?: (contactUuid: string) => void;
     selectedKeys: Set<string>;
     onSelectionChange: (keys: Set<string>) => void;
@@ -46,6 +49,8 @@ export function ListMembersTable({
     total,
     totalPages,
     onPageChange,
+    pageSizeValue,
+    onPageSizeChange,
     onContactOpen,
     selectedKeys,
     onSelectionChange,
@@ -320,16 +325,19 @@ export function ListMembersTable({
                     </Table.Content>
                 </Table.ScrollContainer>
                 <Table.Footer>
-                    <TablePagination
-                        page={page}
-                        totalPages={totalPages}
-                        total={total}
-                        pageSize={pageSize}
-                        onPageChange={onPageChange}
-                        isFetching={isFetching}
-                        isLoading={isLoading}
-                        label="contacts"
-                    />
+                    <div className="flex flex-wrap items-center justify-between gap-3">
+                        <PageSizeSelect value={pageSizeValue} onChange={onPageSizeChange} />
+                        <TablePagination
+                            page={page}
+                            totalPages={totalPages}
+                            total={total}
+                            pageSize={pageSize}
+                            onPageChange={onPageChange}
+                            isFetching={isFetching}
+                            isLoading={isLoading}
+                            label="contacts"
+                        />
+                    </div>
                 </Table.Footer>
             </Table>
         </div>
