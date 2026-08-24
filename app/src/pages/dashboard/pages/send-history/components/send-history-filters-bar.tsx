@@ -17,6 +17,7 @@ interface SendHistoryFiltersBarProps {
     emailProvider: string;
     emailAccount: string;
     campaignUuid: string;
+    sequenceUuid: string;
     sentByUserUuid: string;
     dateFrom: string;
     dateTo: string;
@@ -26,6 +27,7 @@ interface SendHistoryFiltersBarProps {
     providerOptions: SendHistoryFilterOption[];
     emailAccountOptions: SendHistoryFilterOption[];
     campaignOptions: SendHistoryFilterOption[];
+    sequenceOptions: SendHistoryFilterOption[];
     userOptions: SendHistoryFilterOption[];
     hasActiveFilters: boolean;
     onSearchChange: (value: string) => void;
@@ -35,6 +37,7 @@ interface SendHistoryFiltersBarProps {
     onEmailProviderChange: (value: string) => void;
     onEmailAccountChange: (value: string) => void;
     onCampaignChange: (value: string) => void;
+    onSequenceChange: (value: string) => void;
     onSentByUserChange: (value: string) => void;
     onDateFromChange: (value: string) => void;
     onDateToChange: (value: string) => void;
@@ -49,6 +52,7 @@ export function SendHistoryFiltersBar({
     emailProvider,
     emailAccount,
     campaignUuid,
+    sequenceUuid,
     sentByUserUuid,
     dateFrom,
     dateTo,
@@ -58,6 +62,7 @@ export function SendHistoryFiltersBar({
     providerOptions,
     emailAccountOptions,
     campaignOptions,
+    sequenceOptions,
     userOptions,
     hasActiveFilters,
     onSearchChange,
@@ -67,6 +72,7 @@ export function SendHistoryFiltersBar({
     onEmailProviderChange,
     onEmailAccountChange,
     onCampaignChange,
+    onSequenceChange,
     onSentByUserChange,
     onDateFromChange,
     onDateToChange,
@@ -130,6 +136,13 @@ export function SendHistoryFiltersBar({
                 value={campaignUuid}
                 options={campaignOptions}
                 onChange={onCampaignChange}
+                className="w-[11rem]"
+            />
+            <FilterSelect
+                label="Sequence"
+                value={sequenceUuid}
+                options={sequenceOptions}
+                onChange={onSequenceChange}
                 className="w-[11rem]"
             />
             <FilterSelect

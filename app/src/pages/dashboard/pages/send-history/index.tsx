@@ -14,6 +14,7 @@ import {
 } from "@/features/outreach/interfaces/send-history.interface";
 import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import { useCampaigns } from "@/features/marketing-campaigns/hooks/use-marketing-campaigns";
+import { useSequences } from "@/features/sequences/hooks/use-sequences";
 import {
     useCurrentOrganisation,
     useOrganisationMembers,
@@ -44,6 +45,7 @@ const SOURCE_OPTIONS = [
     { id: "", label: "All sources" },
     { id: SendSource.DIRECT, label: "Direct contact" },
     { id: SendSource.CAMPAIGN, label: "Campaign" },
+    { id: SendSource.SEQUENCE, label: "Sequence" },
 ];
 
 const STATUS_OPTIONS = [
@@ -76,6 +78,7 @@ export default function SendHistoryPage() {
     const emailProvider = searchParams.get("email_provider") ?? "";
     const emailAccount = searchParams.get("email_account") ?? "";
     const campaignUuid = searchParams.get("campaign_uuid") ?? "";
+    const sequenceUuid = searchParams.get("sequence_uuid") ?? "";
     const sentByUserUuid = searchParams.get("sent_by_user_uuid") ?? "";
     const dateFrom = searchParams.get("date_from") ?? "";
     const dateTo = searchParams.get("date_to") ?? "";
@@ -109,6 +112,7 @@ export default function SendHistoryPage() {
             emailProvider ||
             emailAccount ||
             campaignUuid ||
+            sequenceUuid ||
             sentByUserUuid ||
             dateFrom ||
             dateTo,
@@ -127,6 +131,7 @@ export default function SendHistoryPage() {
                 (emailProvider as typeof EmailIntegrationProvider.RESEND) || undefined,
             email_account: emailAccount || undefined,
             campaign_uuid: campaignUuid || undefined,
+            sequence_uuid: sequenceUuid || undefined,
             sent_by_user_uuid: sentByUserUuid || undefined,
             date_from: dateFrom ? dateToStartIso(dateFrom) : undefined,
             date_to: dateTo ? dateToEndIso(dateTo) : undefined,
@@ -140,6 +145,7 @@ export default function SendHistoryPage() {
             emailProvider,
             emailAccount,
             campaignUuid,
+            sequenceUuid,
             sentByUserUuid,
             dateFrom,
             dateTo,
@@ -148,6 +154,7 @@ export default function SendHistoryPage() {
 
     const { data, isLoading, isFetching } = useSendHistory(query);
     const { data: campaignsData } = useCampaigns({ limit: 100 });
+    const { data: sequencesData } = useSequences();
 
     const rows = data?.data ?? [];
     const total = data?.total ?? 0;
@@ -191,6 +198,17 @@ export default function SendHistoryPage() {
         [campaignsData?.data],
     );
 
+    const sequenceOptions = useMemo(
+        () => [
+            { id: "", label: "All sequences" },
+            ...(sequencesData ?? []).map((sequence) => ({
+                id: sequence.uuid,
+                label: sequence.name,
+            })),
+        ],
+        [sequencesData],
+    );
+
     const userOptions = useMemo(
         () => [
             { id: "", label: "All users" },
@@ -218,6 +236,7 @@ export default function SendHistoryPage() {
                 emailProvider={emailProvider}
                 emailAccount={selectedEmailAccountKey}
                 campaignUuid={campaignUuid}
+                sequenceUuid={sequenceUuid}
                 sentByUserUuid={sentByUserUuid}
                 dateFrom={dateFrom}
                 dateTo={dateTo}
@@ -227,6 +246,7 @@ export default function SendHistoryPage() {
                 providerOptions={PROVIDER_OPTIONS}
                 emailAccountOptions={emailAccountOptions}
                 campaignOptions={campaignOptions}
+                sequenceOptions={sequenceOptions}
                 userOptions={userOptions}
                 hasActiveFilters={hasActiveFilters}
                 onSearchChange={(value) => updateParams({ search: value || null, page: "1" })}
@@ -258,6 +278,9 @@ export default function SendHistoryPage() {
                 }}
                 onCampaignChange={(value) =>
                     updateParams({ campaign_uuid: value || null, page: "1" })
+                }
+                onSequenceChange={(value) =>
+                    updateParams({ sequence_uuid: value || null, page: "1" })
                 }
                 onSentByUserChange={(value) =>
                     updateParams({ sent_by_user_uuid: value || null, page: "1" })
