@@ -9,6 +9,8 @@ import {
     type EmailValidationBackfillResult,
 } from '@/shared/utils/email-validation-backfill.util';
 import { ListBatchJobsDto } from './dto/list-batch-jobs.dto';
+import { ListBulkJobsDto } from '@/modules/bulk-jobs/dto/list-bulk-jobs.dto';
+import { BulkJobsService } from '@/modules/bulk-jobs/bulk-jobs.service';
 import {
     SystemServiceStatuses,
     type SystemServiceHealth,
@@ -20,8 +22,13 @@ export class AdminService {
     constructor(
         private readonly prisma: PrismaService,
         private readonly openAiBatchDispatchService: OpenAiBatchDispatchService,
+        private readonly bulkJobsService: BulkJobsService,
         @Inject(REDIS_OPTIONS) private readonly redisOptions: RedisOptions | null,
     ) { }
+
+    listJobs(query: ListBulkJobsDto) {
+        return this.bulkJobsService.findAll(null, query);
+    }
 
     getSystemStatus(): Promise<SystemStatusResponse> {
         return Promise.all([

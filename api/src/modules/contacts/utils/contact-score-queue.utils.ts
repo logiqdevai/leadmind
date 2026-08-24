@@ -8,6 +8,7 @@ export async function enqueueContactScoreJob(
     contactUuid: string,
     allowed: string[],
     scoringInstructionUuidsRequested?: string[],
+    bulk_job_uuid?: string,
 ): Promise<{ jobId: string }> {
     if (allowed.length === 0) {
         throw new BadRequestException('This filter has no scoring instructions to rescore.');
@@ -32,7 +33,12 @@ export async function enqueueContactScoreJob(
         contact_uuid: string;
         action: 'score';
         scoring_instruction_uuids?: string[];
-    } = { contact_uuid: contactUuid, action: 'score' as const };
+        bulk_job_uuid?: string;
+    } = {
+        contact_uuid: contactUuid,
+        action: 'score' as const,
+        ...(bulk_job_uuid ? { bulk_job_uuid } : {}),
+    };
     if (requested.length < allowed.length) {
         jobPayload.scoring_instruction_uuids = requested;
     }

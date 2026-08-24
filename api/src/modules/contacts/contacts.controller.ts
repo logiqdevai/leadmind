@@ -112,14 +112,15 @@ export class ContactsController {
     @ApiResponse({ status: 404 })
     triggerBulkEnrich(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
+        @CurrentUser('uuid') user_uuid: string,
         @Body() dto: BulkEnrichContactsDto,
     ) {
-        return this.contactsService.triggerBulkEnrich(organisation_uuid, dto);
+        return this.contactsService.triggerBulkEnrich(organisation_uuid, dto, user_uuid);
     }
 
     @ActivityLog({ entityType: ActivityEntityType.CONTACT, action: ActivityAction.BULK_SCORED, entityUuidFrom: 'none' })
     @Post('bulk-score')
-    @ApiOperation({ summary: 'Trigger AI scoring for multiple contacts (rules scoped to selected filters)' })
+    @ApiOperation({ summary: 'Trigger AI scoring for multiple contacts' })
     @ApiResponse({ status: 201 })
     @ApiResponse({ status: 400 })
     @ApiResponse({ status: 404 })
@@ -377,10 +378,11 @@ export class ContactsController {
     @ApiResponse({ status: 201 })
     enrichContact(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
+        @CurrentUser('uuid') user_uuid: string,
         @Param('uuid') uuid: string,
         @Body() dto: EnrichContactDto,
     ) {
-        return this.contactsService.enrichContact(organisation_uuid, uuid, dto);
+        return this.contactsService.enrichContact(organisation_uuid, uuid, dto, user_uuid);
     }
 
     @Get(':uuid/enrichments')

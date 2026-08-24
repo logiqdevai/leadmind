@@ -15,11 +15,21 @@ import {
 import { useUpdateContactStatus } from "@/features/contacts/hooks/use-contacts";
 import { ContactScoresCompact } from "@/pages/dashboard/pages/leads/components/badges";
 import { cn } from "@/lib/utils";
+import { PageSizeSelect } from "@/components/ui/page-size-select";
+import { TablePagination } from "@/components/ui/table-pagination";
 
 interface PipelineViewProps {
     contacts: Contact[];
     isLoading: boolean;
     onCardClick: (contact: Contact) => void;
+    page: number;
+    pageSize: number;
+    total: number;
+    totalPages: number;
+    onPageChange: (page: number) => void;
+    pageSizeValue: string;
+    onPageSizeChange: (value: string) => void;
+    isFetching?: boolean;
 }
 
 const PIPELINE_BOARD_CLASS =
@@ -35,7 +45,19 @@ function cardCompanyLine(name: string, company: string | null | undefined): stri
     return trimmed;
 }
 
-export function PipelineView({ contacts, isLoading, onCardClick }: PipelineViewProps) {
+export function PipelineView({
+    contacts,
+    isLoading,
+    onCardClick,
+    page,
+    pageSize,
+    total,
+    totalPages,
+    onPageChange,
+    pageSizeValue,
+    onPageSizeChange,
+    isFetching,
+}: PipelineViewProps) {
     const updateStatus = useUpdateContactStatus();
 
     const grouped = useMemo(() => {
@@ -79,6 +101,7 @@ export function PipelineView({ contacts, isLoading, onCardClick }: PipelineViewP
     }
 
     return (
+        <div className="flex flex-col gap-3">
         <DragDropContext onDragEnd={handleDragEnd}>
             <div className={PIPELINE_BOARD_CLASS}>
                 {PIPELINE_STATUS_OPTIONS.map((col) => {
@@ -184,5 +207,19 @@ export function PipelineView({ contacts, isLoading, onCardClick }: PipelineViewP
                 })}
             </div>
         </DragDropContext>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+            <PageSizeSelect value={pageSizeValue} onChange={onPageSizeChange} />
+            <TablePagination
+                page={page}
+                totalPages={totalPages}
+                total={total}
+                pageSize={pageSize}
+                onPageChange={onPageChange}
+                isFetching={isFetching}
+                isLoading={isLoading}
+                label="contacts"
+            />
+        </div>
+        </div>
     );
 }

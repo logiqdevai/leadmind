@@ -1,10 +1,11 @@
 import { InjectQueue } from '@nestjs/bullmq';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Queue } from 'bullmq';
-import { EnrichmentSource, Prisma, Lead } from '@/generated/prisma';
+import { BulkJobStatus, BulkJobType, EnrichmentSource, Prisma, Lead } from '@/generated/prisma';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { ElasticsearchService } from '@/integrations/elasticsearch/elasticsearch.service';
 import { AI_PROCESS_QUEUE } from '@/core/queues/queues.constants';
+import { BulkJobsService } from '@/modules/bulk-jobs/bulk-jobs.service';
 import { BulkEnrichLeadsDto } from './dto/bulk-enrich-leads.dto';
 import { EnrichLeadDto } from './dto/enrich-lead.dto';
 import { ListLeadEnrichmentsDto } from './dto/list-lead-enrichments.dto';
@@ -26,6 +27,7 @@ export class LeadsService {
         private readonly elasticsearchService: ElasticsearchService,
         private readonly leadEnrichmentBatchService: LeadEnrichmentBatchService,
         private readonly enrichmentQueryService: EnrichmentQueryService,
+        private readonly bulkJobsService: BulkJobsService,
     ) { }
 
     async findAll(query: ListLeadsDto): Promise<{
@@ -127,7 +129,24 @@ export class LeadsService {
             return { batch_id: result.batch_id, queued: result.queued, is_batch: true as const };
         }
 
-        const job = await enqueueLeadEnrichmentJob(this.aiProcessQueue, uuid, enrichment_sources);
+        const bulkJob = await this.bulkJobsService.create({
+            organisation_uuid,
+            title: `Enrich lead (${uuid})`,
+            type: BulkJobType.LEAD_ENRICH,
+            status: BulkJobStatus.QUEUED,
+            progress_total: 1,
+            queue_name: AI_PROCESS_QUEUE,
+            reference_type: 'lead',
+            reference_uuid: uuid,
+            metadata: { lead_uuids: [uuid], sources: enrichment_sources },
+        });
+        const job = await enqueueLeadEnrichmentJob(
+            this.aiProcessQueue,
+            uuid,
+            enrichment_sources,
+            bulkJob.uuid,
+        );
+        await this.bulkJobsService.markRunning(bulkJob.uuid, { queue_job_id: job.jobId });
         return { jobId: job.jobId, is_batch: false as const };
     }
 
@@ -165,19 +184,44 @@ export class LeadsService {
                 return { batch_id: result.batch_id, queued: result.queued, is_batch: true as const };
             }
 
+            const bulkJob = await this.bulkJobsService.create({
+                organisation_uuid,
+                title: `Prepare lead batch enrich (${unique.length})`,
+                type: BulkJobType.LEAD_ENRICH,
+                status: BulkJobStatus.QUEUED,
+                progress_total: unique.length,
+                queue_name: AI_PROCESS_QUEUE,
+                reference_type: 'leads',
+                metadata: { lead_uuids: unique, sources: enrichment_sources },
+            });
             const job = await enqueueLeadBatchEnrichPrepareJob(
                 this.aiProcessQueue,
                 organisation_uuid,
                 unique,
                 enrichment_sources,
+                bulkJob.uuid,
             );
+            await this.bulkJobsService.markRunning(bulkJob.uuid, { queue_job_id: job.jobId });
             return { prepare_job_id: job.jobId, queued: unique.length, is_batch: true as const };
         }
 
+        const bulkJob = await this.bulkJobsService.create({
+            organisation_uuid,
+            title: `Enrich leads (${unique.length})`,
+            type: BulkJobType.LEAD_ENRICH,
+            status: BulkJobStatus.QUEUED,
+            progress_total: unique.length,
+            queue_name: AI_PROCESS_QUEUE,
+            reference_type: 'leads',
+            metadata: { lead_uuids: unique, sources: enrichment_sources },
+        });
         const jobs = await Promise.all(
-            unique.map((leadUuid) => enqueueLeadEnrichmentJob(this.aiProcessQueue, leadUuid, enrichment_sources)),
+            unique.map((leadUuid) =>
+                enqueueLeadEnrichmentJob(this.aiProcessQueue, leadUuid, enrichment_sources, bulkJob.uuid),
+            ),
         );
         const jobIds = jobs.map((j) => j.jobId);
+        await this.bulkJobsService.markRunning(bulkJob.uuid, { queue_job_id: jobIds[0] ?? null });
         return { jobIds, queued: jobIds.length, is_batch: false as const };
     }
 }

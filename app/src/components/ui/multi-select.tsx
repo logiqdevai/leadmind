@@ -1,6 +1,8 @@
-import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { ChevronDown, Search, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { isInsideOverlay, useAnchoredOverlay } from "@/hooks/use-anchored-overlay";
 
 export interface MultiSelectOption {
     value: string;
@@ -48,7 +50,18 @@ export function MultiSelect({
     const [highlight, setHighlight] = useState(0);
 
     const containerRef = useRef<HTMLDivElement | null>(null);
+    const panelRef = useRef<HTMLDivElement | null>(null);
     const inputRef = useRef<HTMLInputElement | null>(null);
+    const [embedInOverlay, setEmbedInOverlay] = useState(false);
+    const overlayStyle = useAnchoredOverlay(open && !embedInOverlay, containerRef);
+
+    useLayoutEffect(() => {
+        if (!open) {
+            setEmbedInOverlay(false);
+            return;
+        }
+        setEmbedInOverlay(isInsideOverlay(containerRef.current));
+    }, [open]);
 
     const normalized = useMemo(() => options.map(toOption), [options]);
     const labelByValue = useMemo(() => {
@@ -69,11 +82,11 @@ export function MultiSelect({
 
     useEffect(() => {
         const onDocClick = (e: MouseEvent) => {
-            if (!containerRef.current) return;
-            if (!containerRef.current.contains(e.target as Node)) {
-                setOpen(false);
-                setQuery("");
-            }
+            const t = e.target as Node;
+            if (containerRef.current?.contains(t)) return;
+            if (panelRef.current?.contains(t)) return;
+            setOpen(false);
+            setQuery("");
         };
         document.addEventListener("mousedown", onDocClick);
         return () => document.removeEventListener("mousedown", onDocClick);
@@ -129,6 +142,95 @@ export function MultiSelect({
 
     const selectedOverflow = normalized.length - filtered.length;
 
+    const panel = open ? (
+        <div
+            ref={panelRef}
+            data-portaled-menu={embedInOverlay ? undefined : ""}
+            style={embedInOverlay ? undefined : overlayStyle}
+            className={cn(
+                "rounded-lg border border-border bg-surface overflow-hidden flex flex-col",
+                embedInOverlay
+                    ? "relative z-10 mt-1.5 max-h-52 shadow-none"
+                    : "shadow-lg",
+            )}
+        >
+            <div className="relative border-b border-border shrink-0">
+                <Search className="size-4 text-muted absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <input
+                    ref={inputRef}
+                    type="text"
+                    role="searchbox"
+                    aria-controls={listboxId}
+                    placeholder={searchPlaceholder}
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    className="w-full bg-transparent pl-9 pr-3 py-2 text-sm outline-none"
+                />
+            </div>
+
+            <ul
+                id={listboxId}
+                role="listbox"
+                aria-multiselectable={!single}
+                className="min-h-0 flex-1 overflow-y-auto overscroll-contain py-1"
+            >
+                {filtered.length === 0 ? (
+                    <li className="px-3 py-2 text-sm text-muted">No matches.</li>
+                ) : (
+                    filtered.map((opt, i) => {
+                        const checked = selectedSet.has(opt.value);
+                        return (
+                            <li
+                                key={opt.value}
+                                role="option"
+                                aria-selected={checked}
+                                onMouseEnter={() => setHighlight(i)}
+                                onMouseDown={(e) => {
+                                    e.preventDefault();
+                                    toggle(opt.value);
+                                }}
+                                className={cn(
+                                    "px-3 py-1.5 text-sm cursor-pointer flex items-center gap-2",
+                                    i === highlight
+                                        ? "bg-accent/15 text-foreground"
+                                        : "text-foreground hover:bg-surface-secondary",
+                                )}
+                            >
+                                <span
+                                    className={cn(
+                                        "size-4 rounded border flex items-center justify-center shrink-0",
+                                        checked
+                                            ? "bg-accent border-accent"
+                                            : "border-border",
+                                    )}
+                                >
+                                    {checked && (
+                                        <svg
+                                            viewBox="0 0 12 12"
+                                            className="size-3 text-white"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            strokeWidth="2"
+                                        >
+                                            <path d="M2.5 6.5l2.5 2.5 4.5-5" />
+                                        </svg>
+                                    )}
+                                </span>
+                                <span className="truncate">{opt.label ?? opt.value}</span>
+                            </li>
+                        );
+                    })
+                )}
+                {!query && selectedOverflow > 0 && (
+                    <li className="px-3 py-2 text-xs text-muted italic border-t border-border">
+                        Showing {filtered.length} of {normalized.length}. Type to search.
+                    </li>
+                )}
+            </ul>
+        </div>
+    ) : null;
+
     return (
         <div ref={containerRef} className={cn("relative", className)}>
             <button
@@ -180,84 +282,7 @@ export function MultiSelect({
                 />
             </button>
 
-            {open && (
-                <div className="absolute z-50 mt-1 w-full rounded-lg border border-border bg-surface shadow-lg overflow-hidden">
-                    <div className="relative border-b border-border">
-                        <Search className="size-4 text-muted absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-                        <input
-                            ref={inputRef}
-                            type="text"
-                            role="searchbox"
-                            aria-controls={listboxId}
-                            placeholder={searchPlaceholder}
-                            value={query}
-                            onChange={(e) => setQuery(e.target.value)}
-                            onKeyDown={handleKeyDown}
-                            className="w-full bg-transparent pl-9 pr-3 py-2 text-sm outline-none"
-                        />
-                    </div>
-
-                    <ul
-                        id={listboxId}
-                        role="listbox"
-                        aria-multiselectable={!single}
-                        className="max-h-64 overflow-y-auto overscroll-contain py-1"
-                    >
-                        {filtered.length === 0 ? (
-                            <li className="px-3 py-2 text-sm text-muted">No matches.</li>
-                        ) : (
-                            filtered.map((opt, i) => {
-                                const checked = selectedSet.has(opt.value);
-                                return (
-                                    <li
-                                        key={opt.value}
-                                        role="option"
-                                        aria-selected={checked}
-                                        onMouseEnter={() => setHighlight(i)}
-                                        onMouseDown={(e) => {
-                                            e.preventDefault();
-                                            toggle(opt.value);
-                                        }}
-                                        className={cn(
-                                            "px-3 py-1.5 text-sm cursor-pointer flex items-center gap-2",
-                                            i === highlight
-                                                ? "bg-accent/15 text-foreground"
-                                                : "text-foreground hover:bg-surface-secondary",
-                                        )}
-                                    >
-                                        <span
-                                            className={cn(
-                                                "size-4 rounded border flex items-center justify-center shrink-0",
-                                                checked
-                                                    ? "bg-accent border-accent"
-                                                    : "border-border",
-                                            )}
-                                        >
-                                            {checked && (
-                                                <svg
-                                                    viewBox="0 0 12 12"
-                                                    className="size-3 text-white"
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    strokeWidth="2"
-                                                >
-                                                    <path d="M2.5 6.5l2.5 2.5 4.5-5" />
-                                                </svg>
-                                            )}
-                                        </span>
-                                        <span className="truncate">{opt.label ?? opt.value}</span>
-                                    </li>
-                                );
-                            })
-                        )}
-                        {!query && selectedOverflow > 0 && (
-                            <li className="px-3 py-2 text-xs text-muted italic border-t border-border">
-                                Showing {filtered.length} of {normalized.length}. Type to search.
-                            </li>
-                        )}
-                    </ul>
-                </div>
-            )}
+            {embedInOverlay ? panel : open ? createPortal(panel, document.body) : null}
         </div>
     );
 }

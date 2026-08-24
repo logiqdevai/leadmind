@@ -118,7 +118,7 @@ export default function JobsPage() {
     const page = Math.max(1, Number(searchParams.get("page") ?? 1));
     const typeFilter = (searchParams.get("type") as BulkJobType) || undefined;
     const statusFilter = (searchParams.get("status") as BulkJobStatus) || undefined;
-    const scope = searchParams.get("scope") ?? "active";
+    const scope = searchParams.get("scope") ?? "all";
     const activeOnly = scope !== "all" && !statusFilter;
 
     const { data, isLoading } = useBulkJobs({

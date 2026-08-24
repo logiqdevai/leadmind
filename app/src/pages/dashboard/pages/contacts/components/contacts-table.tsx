@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import type { Selection } from "@heroui/react";
 import { Button, Checkbox, Chip, ListBox, Select, Table } from "@heroui/react";
 import { TablePagination } from "@/components/ui/table-pagination";
+import { PageSizeSelect } from "@/components/ui/page-size-select";
 import { Trash } from "lucide-react";
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { formatDistanceToNow } from "date-fns";
@@ -10,7 +11,6 @@ import { LeadStatus } from "@/features/contacts/interfaces/contact.interface";
 import { useDeleteContact, useUpdateContactStatus } from "@/features/contacts/hooks/use-contacts";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { isTableNavInteractiveCell, renderTableNavCellContent, tableNavInteractiveCellClassName, tableNavRowClassName } from "@/components/ui/table-row-link";
-import { ContactScoresCompact } from "@/pages/dashboard/pages/leads/components/badges";
 import {
   ContactTableDetailLink,
   ContactTableNameCell,
@@ -43,12 +43,14 @@ interface ContactsTableProps {
   total: number;
   totalPages: number;
   onPageChange: (page: number) => void;
+  pageSizeValue: string;
+  onPageSizeChange: (value: string) => void;
   selectedKeys: Set<string>;
   onSelectionChange: (keys: Set<string>) => void;
   onContactOpen?: (contactUuid: string) => void;
 }
 
-export function ContactsTable({ contacts, isLoading, isFetching, page, pageSize, total, totalPages, onPageChange, selectedKeys, onSelectionChange, onContactOpen }: ContactsTableProps) {
+export function ContactsTable({ contacts, isLoading, isFetching, page, pageSize, total, totalPages, onPageChange, pageSizeValue, onPageSizeChange, selectedKeys, onSelectionChange, onContactOpen }: ContactsTableProps) {
   const updateStatus = useUpdateContactStatus();
   const deleteContact = useDeleteContact();
   const [deleteTarget, setDeleteTarget] = useState<Contact | null>(null);
@@ -143,11 +145,6 @@ export function ContactsTable({ contacts, isLoading, isFetching, page, pageSize,
             </div>
           );
         },
-      }),
-      columnHelper.display({
-        id: "score",
-        header: "Score",
-        cell: (info) => <ContactScoresCompact contact={info.row.original} />,
       }),
       columnHelper.display({
         id: "filters",
@@ -334,7 +331,10 @@ export function ContactsTable({ contacts, isLoading, isFetching, page, pageSize,
           </Table.Content>
         </Table.ScrollContainer>
         <Table.Footer>
-          <TablePagination page={page} totalPages={totalPages} total={total} pageSize={pageSize} onPageChange={onPageChange} isFetching={isFetching} isLoading={isLoading} label="contacts" />
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <PageSizeSelect value={pageSizeValue} onChange={onPageSizeChange} />
+            <TablePagination page={page} totalPages={totalPages} total={total} pageSize={pageSize} onPageChange={onPageChange} isFetching={isFetching} isLoading={isLoading} label="contacts" />
+          </div>
         </Table.Footer>
       </Table>
 

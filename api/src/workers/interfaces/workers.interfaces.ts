@@ -8,12 +8,14 @@ export interface ContactJobData {
     enrichment_sources?: EnrichmentSource[];
     force_enrichment?: boolean;
     scoring_instruction_uuids?: string[];
+    bulk_job_uuid?: string;
 }
 
 export interface LeadJobData {
     lead_uuid: string;
     enrichment_sources?: EnrichmentSource[];
     force_enrichment?: boolean;
+    bulk_job_uuid?: string;
 }
 
 export interface LeadBatchEnrichPrepareJobData {
@@ -21,6 +23,7 @@ export interface LeadBatchEnrichPrepareJobData {
     organisation_uuid: string;
     lead_uuids: string[];
     enrichment_sources?: EnrichmentSource[];
+    bulk_job_uuid?: string;
 }
 
 export type AiProcessJobData = ContactJobData | LeadJobData | LeadBatchEnrichPrepareJobData;

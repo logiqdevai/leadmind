@@ -10,7 +10,6 @@ import { SourceBadge } from "@/components/ui/source-badge";
 import { useDeleteContact, useUpdateContactStatus } from "@/features/contacts/hooks/use-contacts";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { isTableNavInteractiveCell, renderTableNavCellContent, tableNavInteractiveCellClassName, tableNavRowClassName } from "@/components/ui/table-row-link";
-import { ContactScoresCompact } from "./badges";
 import { STATUS_OPTIONS } from "@/features/contacts/constants/contacts.constants";
 import { Routes } from "@/routes/routes";
 import { ContactAlsoFoundByHint } from "@/pages/dashboard/components/contact-also-found-by-hint";
@@ -76,11 +75,6 @@ export function LeadsTable({ contacts, isLoading, isFetching, page, pageSize, to
             </span>
           );
         },
-      }),
-      columnHelper.display({
-        id: "score",
-        header: "Score",
-        cell: (info) => <ContactScoresCompact contact={info.row.original} />,
       }),
       columnHelper.accessor((row) => row.lead.source_type, {
         id: "source",

@@ -9,6 +9,7 @@ import { MarketingCampaignsModule } from '@/modules/marketing-campaigns/marketin
 import { ContactsModule } from '@/modules/contacts/contacts.module';
 import { LeadsModule } from '@/modules/leads/leads.module';
 import { EnrichmentModule } from '@/modules/enrichment/enrichment.module';
+import { BulkJobsModule } from '@/modules/bulk-jobs/bulk-jobs.module';
 import { WEBSITE_SCRAPE_TIMEOUT_QUEUE } from '@/core/queues/queues.constants';
 import { ResendWebhookController } from './resend-webhook.controller';
 import { TwilioWebhookController } from './twilio-webhook.controller';
@@ -37,6 +38,7 @@ import { OpenAiBatchDispatchService } from './services/openai-batch-dispatch.ser
     ContactsModule,
     LeadsModule,
     EnrichmentModule,
+    BulkJobsModule,
     BullModule.registerQueue({ name: WEBSITE_SCRAPE_TIMEOUT_QUEUE }),
   ],
   controllers: [

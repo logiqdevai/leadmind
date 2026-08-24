@@ -143,6 +143,7 @@ export const ApiRoutes = {
             `/integrations/domains/${domainUuid}`,
     },
     admin: {
+        jobs: "/admin/jobs",
         batch_jobs: "/admin/batch-jobs",
         queues: "/admin/queues",
         system_status: "/admin/system-status",

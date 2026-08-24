@@ -47,9 +47,11 @@ main {
 .combo-box__popover,
 .autocomplete__popover,
 .date-picker__popover,
-.date-range-picker__popover {
+.date-range-picker__popover,
+[data-portaled-menu] {
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
+  overscroll-behavior: contain;
 }
 
 .drawer:not([data-open]),

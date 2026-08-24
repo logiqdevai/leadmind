@@ -40,6 +40,7 @@ import type {
 } from '../interfaces/lead-enrichment-batch.interface';
 import { AiConfig } from '@/integrations/ai/utils/ai.config';
 import { AiUsageService } from '@/modules/ai-usage/ai-usage.service';
+import { BulkJobsService } from '@/modules/bulk-jobs/bulk-jobs.service';
 import { calculateAiCost } from '@/integrations/ai/utils/ai-cost';
 
 @Injectable()
@@ -53,6 +54,7 @@ export class LeadEnrichmentBatchService {
         private readonly summaryService: LeadEnrichmentSummaryService,
         private readonly aiConfig: AiConfig,
         private readonly aiUsageService: AiUsageService,
+        private readonly bulkJobsService: BulkJobsService,
     ) {}
 
     async findBatchJob(batchId: string) {
@@ -126,6 +128,13 @@ export class LeadEnrichmentBatchService {
                 expires_at: result.expires_at,
                 context: context as unknown as Prisma.InputJsonValue,
             },
+        });
+
+        await this.bulkJobsService.createOpenAiMirror({
+            organisation_uuid,
+            batch_id: result.batch_id,
+            title: `OpenAI batch lead enrich (${requests.length})`,
+            total_requests: requests.length,
         });
 
         this.logger.log(
@@ -328,6 +337,13 @@ export class LeadEnrichmentBatchService {
                 expires_at: result.expires_at,
                 context: context as unknown as Prisma.InputJsonValue,
             },
+        });
+
+        await this.bulkJobsService.createOpenAiMirror({
+            organisation_uuid,
+            batch_id: result.batch_id,
+            title: `OpenAI batch lead summaries (${requests.length})`,
+            total_requests: requests.length,
         });
 
         this.logger.log(

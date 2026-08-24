@@ -4,8 +4,7 @@ import { Gauge } from "lucide-react";
 import { MultiSelect, type MultiSelectOption } from "@/components/ui/multi-select";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
 import { useBulkTriggerContactScore } from "@/features/contacts/hooks/use-contacts";
-import { useFilters } from "@/features/filters/hooks/use-filters";
-import type { Filter } from "@/features/filters/interfaces/filter.interface";
+import { useScoringInstructions } from "@/features/scoring-instructions/hooks/use-scoring-instructions";
 
 interface BulkScoreContactsPopoverProps {
     selectedContactUuids: string[];
@@ -20,54 +19,31 @@ export function BulkScoreContactsPopover({
     onOpenChange,
     onScoringComplete,
 }: BulkScoreContactsPopoverProps) {
-    const { data: filters = [] } = useFilters();
+    const { data: instructions = [] } = useScoringInstructions();
     const bulkScore = useBulkTriggerContactScore();
-    const [filterUuids, setFilterUuids] = useState<string[]>([]);
     const [ruleUuids, setRuleUuids] = useState<string[]>([]);
     const [useBatch, setUseBatch] = useState(false);
 
-    const selectedFilters = useMemo(
-        () => filters.filter((f: Filter) => filterUuids.includes(f.uuid)),
-        [filters, filterUuids],
+    const ruleOptions: MultiSelectOption[] = useMemo(
+        () => instructions.map((si) => ({ value: si.uuid, label: si.name })),
+        [instructions],
     );
-
-    const ruleOptions: MultiSelectOption[] = useMemo(() => {
-        const map = new Map<string, string>();
-        for (const f of selectedFilters) {
-            for (const si of f.scoring_instructions) {
-                const prev = map.get(si.uuid);
-                const piece = `${f.name} — ${si.name}`;
-                map.set(si.uuid, prev ? `${prev} · ${piece}` : piece);
-            }
-        }
-        return [...map.entries()].map(([value, label]) => ({ value, label }));
-    }, [selectedFilters]);
-
-    useEffect(() => {
-        const allowed = new Set(ruleOptions.map((o) => o.value));
-        setRuleUuids((prev) => prev.filter((id) => allowed.has(id)));
-    }, [ruleOptions]);
 
     useEffect(() => {
         if (!isOpen) {
-            setFilterUuids([]);
             setRuleUuids([]);
             setUseBatch(false);
         }
     }, [isOpen]);
 
     const canSubmit =
-        selectedContactUuids.length > 0 &&
-        filterUuids.length > 0 &&
-        ruleUuids.length > 0 &&
-        !bulkScore.isPending;
+        selectedContactUuids.length > 0 && ruleUuids.length > 0 && !bulkScore.isPending;
 
     const run = () => {
         if (!canSubmit) return;
         bulkScore.mutate(
             {
                 contact_uuids: selectedContactUuids,
-                filter_uuids: filterUuids,
                 scoring_instruction_uuids: ruleUuids,
                 use_batch: useBatch,
             },
@@ -91,20 +67,10 @@ export function BulkScoreContactsPopover({
                     <Modal.Body className="space-y-3">
                         <p className="text-[11px] text-muted leading-snug">
                             {selectedContactUuids.length} contact
-                            {selectedContactUuids.length === 1 ? "" : "s"} selected. Choose filters, then scoring
-                            rules attached to those filters. Each contact is only scored for rules that exist on its
-                            linked filters.
+                            {selectedContactUuids.length === 1 ? "" : "s"} selected. Choose scoring
+                            rules. Each contact is only scored for rules attached to its linked
+                            filters.
                         </p>
-                        <div>
-                            <Label className="mb-1 block text-xs text-muted">Filters</Label>
-                            <MultiSelect
-                                aria-label="Filters for scoring rules"
-                                options={filters.map((f) => ({ value: f.uuid, label: f.name }))}
-                                value={filterUuids}
-                                onChange={setFilterUuids}
-                                placeholder="Select filters…"
-                            />
-                        </div>
                         <div>
                             <Label className="mb-1 block text-xs text-muted">Scoring rules</Label>
                             <MultiSelect
@@ -113,13 +79,11 @@ export function BulkScoreContactsPopover({
                                 value={ruleUuids}
                                 onChange={setRuleUuids}
                                 placeholder={
-                                    filterUuids.length === 0
-                                        ? "Select filters first…"
-                                        : ruleOptions.length === 0
-                                          ? "No rules on selected filters"
-                                          : "Select scoring rules…"
+                                    ruleOptions.length === 0
+                                        ? "No scoring rules yet"
+                                        : "Select scoring rules…"
                                 }
-                                disabled={filterUuids.length === 0 || ruleOptions.length === 0}
+                                disabled={ruleOptions.length === 0}
                             />
                         </div>
                         <div>

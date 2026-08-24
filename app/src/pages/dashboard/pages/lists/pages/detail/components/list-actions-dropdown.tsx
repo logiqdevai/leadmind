@@ -1,6 +1,6 @@
 import type { FC } from "react";
 import { Button, Dropdown } from "@heroui/react";
-import { ChevronDown, ChevronsUpDown, FolderInput, Globe, Pencil, Send, Trash2, UserPlus } from "lucide-react";
+import { ChevronDown, ChevronsUpDown, FolderInput, Gauge, Globe, Pencil, Send, Sparkles, Trash2, UserPlus } from "lucide-react";
 
 interface ListActionsDropdownProps {
     showContactsActions?: boolean;
@@ -9,6 +9,10 @@ interface ListActionsDropdownProps {
     onAddContacts?: () => void;
     onEditList: () => void;
     onMoveList?: () => void;
+    onScoreSelected?: () => void;
+    scoreDisabled?: boolean;
+    onEnrichSelected?: () => void;
+    enrichDisabled?: boolean;
     onScrapeEmails?: () => void;
     scrapeEmailsDisabled?: boolean;
     scrapeEmailsPending?: boolean;
@@ -26,6 +30,10 @@ export const ListActionsDropdown: FC<ListActionsDropdownProps> = ({
     onAddContacts,
     onEditList,
     onMoveList,
+    onScoreSelected,
+    scoreDisabled = false,
+    onEnrichSelected,
+    enrichDisabled = false,
     onScrapeEmails,
     scrapeEmailsDisabled = false,
     scrapeEmailsPending = false,
@@ -53,6 +61,8 @@ export const ListActionsDropdown: FC<ListActionsDropdownProps> = ({
                     if (key === "add-contacts") onAddContacts?.();
                     if (key === "edit-list") onEditList();
                     if (key === "move-list") onMoveList?.();
+                    if (key === "score-selected") onScoreSelected?.();
+                    if (key === "enrich-selected") onEnrichSelected?.();
                     if (key === "scrape-emails") onScrapeEmails?.();
                     if (key === "send-to-selected") onSendToSelected?.();
                     if (key === "delete-selected") onDeleteSelected?.();
@@ -75,6 +85,30 @@ export const ListActionsDropdown: FC<ListActionsDropdownProps> = ({
                         <span className="flex items-center gap-2.5 antialiased">
                             <UserPlus className="size-4 shrink-0 text-accent" strokeWidth={2} />
                             <span className="font-medium text-foreground">Add contacts</span>
+                        </span>
+                    </Dropdown.Item>
+                ) : null}
+                {showContactsActions && onScoreSelected ? (
+                    <Dropdown.Item
+                        id="score-selected"
+                        textValue="Score selected"
+                        isDisabled={scoreDisabled}
+                    >
+                        <span className="flex items-center gap-2.5 antialiased">
+                            <Gauge className="size-4 shrink-0 text-muted" strokeWidth={2} />
+                            <span className="font-medium text-foreground">Score selected</span>
+                        </span>
+                    </Dropdown.Item>
+                ) : null}
+                {showContactsActions && onEnrichSelected ? (
+                    <Dropdown.Item
+                        id="enrich-selected"
+                        textValue="Enrich selected"
+                        isDisabled={enrichDisabled}
+                    >
+                        <span className="flex items-center gap-2.5 antialiased">
+                            <Sparkles className="size-4 shrink-0 text-violet-500" strokeWidth={2} />
+                            <span className="font-medium text-violet-400">Enrich selected</span>
                         </span>
                     </Dropdown.Item>
                 ) : null}

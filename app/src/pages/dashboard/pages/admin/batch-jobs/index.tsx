@@ -3,6 +3,12 @@ import { Chip, ListBox, Select, Table } from "@heroui/react";
 import { CheckCircle2, Clock, Layers, XCircle, AlertTriangle } from "lucide-react";
 import { useBatchJobs } from "@/features/openai-batch-jobs/hooks/use-openai-batch-jobs";
 import { OpenAiBatchJobType, OpenAiBatchStatus, type OpenAiBatchJob } from "@/features/openai-batch-jobs/interfaces/openai-batch-job.interface";
+import { useAdminBulkJobs } from "@/features/bulk-jobs/hooks/use-bulk-jobs";
+import {
+    BulkJobStatus,
+    BulkJobType,
+    type BulkJob,
+} from "@/features/bulk-jobs/interfaces/bulk-job.interface";
 import { TablePagination } from "@/components/ui/table-pagination";
 
 const PAGE_LIMIT = 20;
@@ -15,6 +21,28 @@ const STATUS_META: Record<OpenAiBatchStatus, { label: string; color: ChipColor; 
     FAILED: { label: "Failed", color: "danger", icon: AlertTriangle },
     EXPIRED: { label: "Expired", color: "default", icon: XCircle },
     CANCELLED: { label: "Cancelled", color: "default", icon: XCircle },
+};
+
+const BULK_TYPE_LABELS: Record<BulkJobType, string> = {
+    CONTACT_EMAIL_SCRAPE: "Email scrape",
+    FILTER_SCRAPE: "Filter scrape",
+    CONTACT_SCORE: "Contact score",
+    CONTACT_ENRICH: "Contact enrich",
+    LEAD_ENRICH: "Lead enrich",
+    AI_DRAFT_MESSAGES: "AI draft messages",
+    CAMPAIGN_DISPATCH: "Campaign dispatch",
+    CAMPAIGN_MESSAGE_SEND: "Campaign send",
+    OPENAI_BATCH: "OpenAI batch",
+    OTHER: "Other",
+};
+
+const BULK_STATUS_META: Record<BulkJobStatus, { label: string; color: ChipColor }> = {
+    PENDING: { label: "Pending", color: "default" },
+    QUEUED: { label: "Queued", color: "accent" },
+    RUNNING: { label: "Running", color: "warning" },
+    COMPLETED: { label: "Completed", color: "success" },
+    FAILED: { label: "Failed", color: "danger" },
+    CANCELLED: { label: "Cancelled", color: "default" },
 };
 
 const TYPE_LABELS: Record<OpenAiBatchJobType, string> = {
@@ -97,6 +125,13 @@ export default function AdminBatchJobsPage() {
     const statusFilter = (searchParams.get("status") as OpenAiBatchStatus) || undefined;
 
     const { data, isLoading } = useBatchJobs({ page, limit: PAGE_LIMIT, type: typeFilter, status: statusFilter });
+    const bulkPage = Number(searchParams.get("jobs_page") ?? 1);
+    const { data: bulkData, isLoading: bulkLoading } = useAdminBulkJobs({
+        page: bulkPage,
+        limit: PAGE_LIMIT,
+        active_only: false,
+    });
+    const bulkTotalPages = Math.ceil((bulkData?.total ?? 0) / PAGE_LIMIT);
 
     const setParam = (key: string, value: string) => {
         setSearchParams((prev) => {
@@ -125,8 +160,10 @@ export default function AdminBatchJobsPage() {
                 <div className="flex items-center gap-2.5">
                     <Layers className="size-5 text-muted shrink-0" />
                     <div>
-                        <h1 className="text-lg font-semibold text-foreground leading-tight">OpenAI Batch Jobs</h1>
-                        <p className="text-xs text-muted mt-0.5">{data?.total ?? "—"} total · super-admin view</p>
+                        <h1 className="text-lg font-semibold text-foreground leading-tight">All jobs</h1>
+                        <p className="text-xs text-muted mt-0.5">
+                            {bulkData?.total ?? "—"} queue jobs · {data?.total ?? "—"} OpenAI batches · super-admin view
+                        </p>
                     </div>
                 </div>
 
@@ -144,6 +181,93 @@ export default function AdminBatchJobsPage() {
                         onChange={(v) => setParam("status", v)}
                     />
                 </div>
+            </div>
+
+            <div className="rounded-xl overflow-hidden">
+                <Table>
+                    <Table.ScrollContainer className="w-full max-w-full overflow-x-auto">
+                        <Table.Content aria-label="All queue jobs" className="min-w-[960px]">
+                            <Table.Header>
+                                <Table.Column id="title" isRowHeader>Title</Table.Column>
+                                <Table.Column id="type">Type</Table.Column>
+                                <Table.Column id="status">Status</Table.Column>
+                                <Table.Column id="progress">Progress</Table.Column>
+                                <Table.Column id="organisation">Organisation</Table.Column>
+                                <Table.Column id="created">Created</Table.Column>
+                            </Table.Header>
+                            <Table.Body
+                                renderEmptyState={() =>
+                                    bulkLoading ? null : (
+                                        <div className="flex items-center justify-center py-12 text-center text-sm text-muted">
+                                            No queue jobs found.
+                                        </div>
+                                    )
+                                }
+                            >
+                                {bulkLoading
+                                    ? Array.from({ length: 5 }).map((_, i) => (
+                                          <Table.Row key={`bj-${i}`} id={`bj-${i}`}>
+                                              {Array.from({ length: 6 }).map((__, j) => (
+                                                  <Table.Cell key={j}>
+                                                      <div className="h-4 w-3/4 rounded bg-surface-secondary animate-pulse" />
+                                                  </Table.Cell>
+                                              ))}
+                                          </Table.Row>
+                                      ))
+                                    : (bulkData?.data ?? []).map((job: BulkJob) => (
+                                          <Table.Row key={job.uuid} id={job.uuid}>
+                                              <Table.Cell>
+                                                  <span className="text-sm text-foreground font-medium truncate block">
+                                                      {job.title}
+                                                  </span>
+                                              </Table.Cell>
+                                              <Table.Cell>
+                                                  <span className="text-xs">{BULK_TYPE_LABELS[job.type] ?? job.type}</span>
+                                              </Table.Cell>
+                                              <Table.Cell>
+                                                  <Chip size="sm" variant="soft" color={BULK_STATUS_META[job.status].color}>
+                                                      <Chip.Label>{BULK_STATUS_META[job.status].label}</Chip.Label>
+                                                  </Chip>
+                                              </Table.Cell>
+                                              <Table.Cell>
+                                                  <span className="text-xs tabular-nums">
+                                                      {job.progress_total
+                                                          ? `${job.progress_current}/${job.progress_total}`
+                                                          : "—"}
+                                                  </span>
+                                              </Table.Cell>
+                                              <Table.Cell>
+                                                  <span className="text-xs text-muted">
+                                                      {job.organisation?.name ?? "—"}
+                                                  </span>
+                                              </Table.Cell>
+                                              <Table.Cell>
+                                                  <span className="text-xs text-muted tabular-nums">
+                                                      {formatDate(job.created_at)}
+                                                  </span>
+                                              </Table.Cell>
+                                          </Table.Row>
+                                      ))}
+                            </Table.Body>
+                        </Table.Content>
+                    </Table.ScrollContainer>
+                </Table>
+            </div>
+
+            {bulkTotalPages > 1 && (
+                <TablePagination
+                    page={bulkPage}
+                    totalPages={bulkTotalPages}
+                    total={bulkData?.total ?? 0}
+                    pageSize={PAGE_LIMIT}
+                    onPageChange={(p) => setParam("jobs_page", String(p))}
+                    label="queue jobs"
+                />
+            )}
+
+            <div className="pt-2">
+                <h2 className="text-sm font-semibold text-foreground">OpenAI batches</h2>
+                <p className="text-xs text-muted mt-0.5">Raw OpenAI Batch API jobs</p>
             </div>
 
             <div className="rounded-xl overflow-hidden">
