@@ -509,22 +509,21 @@ export class IntegrationsService {
       domain_uuid,
     );
 
-    const domainCount = await this.prisma.integrationAccountDomain.count({
-      where: { integration_account_uuid: owned.integration_account_uuid },
-    });
-    if (domainCount <= 1) {
-      throw new BadRequestException(
-        'Cannot delete the only domain on this account. Delete the account instead.',
-      );
-    }
-    if (owned.is_default) {
-      throw new BadRequestException(
-        'Cannot delete the default domain. Set another domain as default first.',
-      );
-    }
+    await this.prisma.$transaction(async (tx) => {
+      await tx.integrationAccountDomain.delete({ where: { uuid: domain_uuid } });
 
-    await this.prisma.integrationAccountDomain.delete({
-      where: { uuid: domain_uuid },
+      if (owned.is_default) {
+        const nextDefault = await tx.integrationAccountDomain.findFirst({
+          where: { integration_account_uuid: owned.integration_account_uuid },
+          orderBy: { created_at: 'asc' },
+        });
+        if (nextDefault) {
+          await tx.integrationAccountDomain.update({
+            where: { uuid: nextDefault.uuid },
+            data: { is_default: true },
+          });
+        }
+      }
     });
     return { uuid: domain_uuid };
   }

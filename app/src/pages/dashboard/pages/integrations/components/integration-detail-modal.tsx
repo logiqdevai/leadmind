@@ -605,11 +605,6 @@ export function IntegrationDetailModal({
                                                                             <Button
                                                                                 size="sm"
                                                                                 variant="ghost"
-                                                                                isDisabled={
-                                                                                    domain.is_default ||
-                                                                                    accountDomains(group.account)
-                                                                                        .length <= 1
-                                                                                }
                                                                                 onPress={() => setDomainToDelete(domain)}
                                                                             >
                                                                                 <Trash2 className="size-3.5" />
