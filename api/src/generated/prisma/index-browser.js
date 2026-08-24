@@ -671,6 +671,23 @@ exports.Prisma.IntegrationAccountDomainScalarFieldEnum = {
   updated_at: 'updated_at'
 };
 
+exports.Prisma.MailTesterTestScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  organisation_uuid: 'organisation_uuid',
+  label: 'label',
+  test_identifier: 'test_identifier',
+  test_address: 'test_address',
+  from_provider: 'from_provider',
+  from_account: 'from_account',
+  status: 'status',
+  score: 'score',
+  result: 'result',
+  error_message: 'error_message',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
 exports.Prisma.ReminderScalarFieldEnum = {
   id: 'id',
   uuid: 'uuid',
@@ -1083,7 +1100,8 @@ exports.ExternalIntegrationProvider = exports.$Enums.ExternalIntegrationProvider
   TWILIO: 'TWILIO',
   APIFY: 'APIFY',
   HUBSPOT: 'HUBSPOT',
-  SCRAPIO: 'SCRAPIO'
+  SCRAPIO: 'SCRAPIO',
+  MAILTESTER: 'MAILTESTER'
 };
 
 exports.SequenceStatus = exports.$Enums.SequenceStatus = {
@@ -1225,6 +1243,12 @@ exports.IntegrationKeyType = exports.$Enums.IntegrationKeyType = {
   FROM_NAME: 'FROM_NAME'
 };
 
+exports.MailTesterTestStatus = exports.$Enums.MailTesterTestStatus = {
+  PENDING: 'PENDING',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED'
+};
+
 exports.ReminderStatus = exports.$Enums.ReminderStatus = {
   PENDING: 'PENDING',
   COMPLETED: 'COMPLETED',
@@ -1360,6 +1384,7 @@ exports.Prisma.ModelName = {
   IntegrationAccount: 'IntegrationAccount',
   IntegrationKey: 'IntegrationKey',
   IntegrationAccountDomain: 'IntegrationAccountDomain',
+  MailTesterTest: 'MailTesterTest',
   Reminder: 'Reminder',
   Form: 'Form',
   FormField: 'FormField',

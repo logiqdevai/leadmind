@@ -34,6 +34,7 @@ export const PROVIDER_KEY_TYPES: Record<
     IntegrationKeyType.WEBHOOK_SECRET,
   ],
   [ExternalIntegrationProvider.HUBSPOT]: [IntegrationKeyType.ACCESS_TOKEN],
+  [ExternalIntegrationProvider.MAILTESTER]: [IntegrationKeyType.USERNAME],
 };
 
 export const KEY_TYPE_LABELS: Record<IntegrationKeyType, string> = {

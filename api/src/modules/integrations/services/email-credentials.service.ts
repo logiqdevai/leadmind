@@ -60,27 +60,16 @@ export class EmailCredentialsService {
       },
     );
 
-    if (integrationAccount && integrationAccount.domains.length > 0) {
-      const domain = domain_uuid
-        ? integrationAccount.domains.find((row) => row.uuid === domain_uuid)
-        : (integrationAccount.domains.find((row) => row.is_default) ??
-          integrationAccount.domains[0]);
-      if (!domain) {
-        throw new BadRequestException(
-          `Domain ${domain_uuid} not found for Resend account "${account}"`,
-        );
-      }
-      return domain.from_email.trim();
+    const domain = domain_uuid
+      ? integrationAccount?.domains.find((row) => row.uuid === domain_uuid)
+      : (integrationAccount?.domains.find((row) => row.is_default) ??
+        integrationAccount?.domains[0]);
+    if (!domain) {
+      throw new BadRequestException(
+        `No domain configured for Resend account "${account}"`,
+      );
     }
-
-    // Legacy fallback for accounts not yet migrated to IntegrationAccountDomain.
-    const fromEmail = await this.integrationsService.getDecryptedSecret(
-      organisation_uuid,
-      ExternalIntegrationProvider.RESEND,
-      IntegrationKeyType.FROM_EMAIL,
-      account,
-    );
-    return fromEmail.trim();
+    return domain.from_email.trim();
   }
 
   async getResendApiKey(
@@ -401,11 +390,7 @@ export class EmailCredentialsService {
       const hasApiKey = accountKeys.some(
         (key) => key.key_type === IntegrationKeyType.API_KEY,
       );
-      const hasDomain = domains.length > 0;
-      const hasLegacyFromEmail = accountKeys.some(
-        (key) => key.key_type === IntegrationKeyType.FROM_EMAIL,
-      );
-      return hasApiKey && (hasDomain || hasLegacyFromEmail);
+      return hasApiKey && domains.length > 0;
     }
     if (provider === ExternalIntegrationProvider.SMTP) {
       const required = requiredKeyTypesForProvider(

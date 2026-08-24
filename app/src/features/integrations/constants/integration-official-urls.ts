@@ -11,6 +11,7 @@ export const INTEGRATION_PROVIDER_OFFICIAL_URLS: Partial<
     SCRAPIO: "https://scrapio.logiqdev.com",
     HUBSPOT:
         "https://developers.hubspot.com/docs/apps/legacy-apps/private-apps/overview",
+    MAILTESTER: "https://www.mail-tester.com",
 };
 
 export function getIntegrationOfficialUrl(

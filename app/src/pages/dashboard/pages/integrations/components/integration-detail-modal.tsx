@@ -220,10 +220,7 @@ export function IntegrationDetailModal({
         if (providerView.provider !== "RESEND") {
             return hasRequiredKeys;
         }
-        const hasLegacyFromEmail = providerView.keys.some(
-            (key) => key.account === account && key.key_type === "FROM_EMAIL",
-        );
-        return hasRequiredKeys && (accountDomains(account).length > 0 || hasLegacyFromEmail);
+        return hasRequiredKeys && accountDomains(account).length > 0;
     };
 
     const openAddDomain = (accountUuid: string | null) => {

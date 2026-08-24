@@ -154,26 +154,17 @@ export function listSendableEmailAccounts(
                     continue;
                 }
 
-                // Legacy fallback: account not yet migrated to IntegrationAccountDomain.
-                const legacyFromEmail = keyValueHint(integration.keys, account, "FROM_EMAIL");
-                const hasLegacyFromEmailKey = integration.keys.some(
-                    (key) => key.account === account && key.key_type === "FROM_EMAIL",
-                );
                 accounts.push({
                     provider,
                     account,
                     uuid,
                     title,
                     label: buildAccountLabel(integration.label, title),
-                    detail: legacyFromEmail
-                        ? `from ${legacyFromEmail}`
-                        : hasApiKey
-                          ? "from address missing"
-                          : null,
-                    last4: legacyFromEmail,
+                    detail: hasApiKey ? "no domain configured" : null,
+                    last4: null,
                     isDefault,
-                    canSend: hasApiKey && hasLegacyFromEmailKey,
-                    fromEmail: legacyFromEmail,
+                    canSend: false,
+                    fromEmail: null,
                     fromName: null,
                 });
                 continue;

@@ -157,9 +157,9 @@ export function EmailAccountCombobox({
                                                             </span>
                                                         ) : null}
                                                     </div>
-                                                    {account.detail === "from address missing" ? (
+                                                    {account.detail === "no domain configured" ? (
                                                         <span className="truncate text-xs text-danger">
-                                                            Add from address in Integrations
+                                                            Add a domain in Integrations
                                                         </span>
                                                     ) : account.detail ? (
                                                         <span className="truncate text-xs text-muted">

@@ -78,6 +78,7 @@ model Organisation {
   website_scrape_requests   WebsiteScrapeRequest[]
   email_send_limits         EmailSendLimit[]
   sending_policies          SendingPolicy[]
+  mail_tester_tests         MailTesterTest[]
 
   @@index([uuid])
   @@index([slug])
@@ -1092,6 +1093,7 @@ enum ExternalIntegrationProvider {
   APIFY
   HUBSPOT
   SCRAPIO
+  MAILTESTER
 }
 
 enum IntegrationKeyType {
@@ -1182,6 +1184,34 @@ model IntegrationAccountDomain {
   @@unique([integration_account_uuid, from_email])
   @@index([integration_account_uuid])
   @@map("integration_account_domains")
+}
+
+enum MailTesterTestStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+model MailTesterTest {
+  id                Int                         @id @default(autoincrement())
+  uuid              String                      @unique @default(uuid())
+  organisation_uuid String
+  label             String?
+  test_identifier   String
+  test_address      String
+  from_provider     ExternalIntegrationProvider
+  from_account      String
+  status            MailTesterTestStatus        @default(PENDING)
+  score             Float?
+  result            Json?
+  error_message     String?
+  created_at        DateTime                    @default(now())
+  updated_at        DateTime                    @updatedAt
+
+  organisation Organisation @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+
+  @@index([organisation_uuid])
+  @@map("mail_tester_tests")
 }
 
 enum ReminderStatus {

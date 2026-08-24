@@ -99,6 +99,7 @@ export const ActivityAction = {
   PAUSED: 'paused',
   RESUMED: 'resumed',
   REMOVED: 'removed',
+  MAIL_TEST_STARTED: 'mail_test_started',
 } as const;
 
 export type ActivityAction =

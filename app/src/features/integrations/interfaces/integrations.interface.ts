@@ -7,6 +7,7 @@ export const IntegrationProviders = {
     APIFY: "APIFY",
     SCRAPIO: "SCRAPIO",
     HUBSPOT: "HUBSPOT",
+    MAILTESTER: "MAILTESTER",
 } as const;
 
 export type IntegrationProvider =

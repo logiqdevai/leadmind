@@ -15,6 +15,7 @@ export const PROVIDER_KEY_TYPES: Record<IntegrationProvider, IntegrationKeyType[
         APIFY: ["API_KEY"],
         SCRAPIO: ["API_KEY", "WEBHOOK_SECRET"],
         HUBSPOT: ["ACCESS_TOKEN"],
+        MAILTESTER: ["USERNAME"],
     };
 
 export const DISABLED_INTEGRATION_PROVIDERS: IntegrationProvider[] = [
@@ -217,10 +218,8 @@ export function isEmailProviderAccountVisible(
 
 /**
  * Whether an account has the credentials required to send. For RESEND this only checks
- * API_KEY - a domain/from-email is no longer stored as an IntegrationKey (see
- * IntegrationAccountView.domains), so callers that need full domain-aware readiness
- * should check `account.domains.length > 0` (or the legacy FROM_EMAIL key, pre-backfill)
- * alongside this.
+ * API_KEY - a domain/from-email is stored separately (see IntegrationAccountView.domains),
+ * so callers that need full readiness should also check `account.domains.length > 0`.
  */
 export function isEmailAccountSendable(
     provider: Extract<IntegrationProvider, "RESEND" | "SMTP">,
@@ -246,10 +245,7 @@ export function countSendableEmailAccounts(
         return listDistinctIntegrationAccounts(providerView.keys).filter((account) => {
             const hasApiKey = isEmailAccountSendable("RESEND", providerView.keys, account);
             const domains = providerView.accounts?.find((row) => row.account === account)?.domains ?? [];
-            const hasLegacyFromEmail = providerView.keys.some(
-                (key) => key.account === account && key.key_type === "FROM_EMAIL",
-            );
-            return hasApiKey && (domains.length > 0 || hasLegacyFromEmail);
+            return hasApiKey && domains.length > 0;
         }).length;
     }
     return listDistinctIntegrationAccounts(providerView.keys).filter((account) =>

@@ -8,6 +8,7 @@ export const INTEGRATION_PROVIDERS: ExternalIntegrationProvider[] = [
   ExternalIntegrationProvider.APIFY,
   ExternalIntegrationProvider.SCRAPIO,
   ExternalIntegrationProvider.HUBSPOT,
+  ExternalIntegrationProvider.MAILTESTER,
 ];
 
 export const DISABLED_INTEGRATION_PROVIDERS: ExternalIntegrationProvider[] = [
@@ -45,6 +46,7 @@ export const INTEGRATION_PROVIDER_LABELS: Record<
   [ExternalIntegrationProvider.APIFY]: 'Apify',
   [ExternalIntegrationProvider.SCRAPIO]: 'Scrapio',
   [ExternalIntegrationProvider.HUBSPOT]: 'HubSpot',
+  [ExternalIntegrationProvider.MAILTESTER]: 'Mail-Tester',
 };
 
 export const INTEGRATION_PROVIDER_DESCRIPTIONS: Record<
@@ -64,4 +66,6 @@ export const INTEGRATION_PROVIDER_DESCRIPTIONS: Record<
   [ExternalIntegrationProvider.SCRAPIO]:
     'AI-built web scrapers for your own sites. Add your Scrapio API key, then paste the webhook URL into your Scrapio account and store the signing secret it gives you.',
   [ExternalIntegrationProvider.HUBSPOT]: 'CRM sync and marketing automation.',
+  [ExternalIntegrationProvider.MAILTESTER]:
+    'Email deliverability testing. Add your Mail-Tester username, then send a test email from one of your configured Resend or SMTP accounts to check spam score, authentication, and blacklist status.',
 };

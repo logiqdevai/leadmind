@@ -319,6 +319,11 @@ export const ApiRoutes = {
         reorder_stages: (uuid: string) => `/sending-policies/${uuid}/stages/reorder`,
         preview: (uuid: string) => `/sending-policies/${uuid}/preview`,
     },
+    mail_tester: {
+        list: "/mail-tester/tests",
+        create: "/mail-tester/tests",
+        refresh: (uuid: string) => `/mail-tester/tests/${uuid}/refresh`,
+    },
     campaign_integrations: {
         list: (campaignUuid: string) => `/marketing-campaigns/${campaignUuid}/integrations`,
         assign: (campaignUuid: string) => `/marketing-campaigns/${campaignUuid}/integrations`,

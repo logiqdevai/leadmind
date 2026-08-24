@@ -3,6 +3,7 @@ import { Button, Chip } from "@heroui/react";
 import {
     Bot,
     Cloud,
+    Gauge,
     KeyRound,
     Mail,
     MessageSquare,
@@ -33,6 +34,7 @@ const providerIcons: Record<string, ComponentType<{ className?: string }>> = {
     APIFY: Cloud,
     SCRAPIO: Bot,
     HUBSPOT: Plug,
+    MAILTESTER: Gauge,
 };
 
 const FALLBACK_PROVIDERS: IntegrationProviderView[] = [
@@ -161,6 +163,19 @@ const FALLBACK_PROVIDERS: IntegrationProviderView[] = [
                 label: "Access token",
                 placeholder: "pat-...",
             },
+        ],
+        keys: [],
+    },
+    {
+        provider: "MAILTESTER",
+        uuid: null,
+        label: "Mail-Tester",
+        description:
+            "Email deliverability testing. Add your Mail-Tester username, then send a test email from a connected Resend or SMTP account to check spam score, authentication, and blacklist status.",
+        default_account: null,
+        accounts: [],
+        keyTypes: [
+            { key_type: "USERNAME", label: "Username", placeholder: "yourusername" },
         ],
         keys: [],
     },

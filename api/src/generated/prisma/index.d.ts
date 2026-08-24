@@ -195,6 +195,11 @@ export type IntegrationKey = $Result.DefaultSelection<Prisma.$IntegrationKeyPayl
  */
 export type IntegrationAccountDomain = $Result.DefaultSelection<Prisma.$IntegrationAccountDomainPayload>
 /**
+ * Model MailTesterTest
+ * 
+ */
+export type MailTesterTest = $Result.DefaultSelection<Prisma.$MailTesterTestPayload>
+/**
  * Model Reminder
  * 
  */
@@ -637,7 +642,8 @@ export const ExternalIntegrationProvider: {
   TWILIO: 'TWILIO',
   APIFY: 'APIFY',
   HUBSPOT: 'HUBSPOT',
-  SCRAPIO: 'SCRAPIO'
+  SCRAPIO: 'SCRAPIO',
+  MAILTESTER: 'MAILTESTER'
 };
 
 export type ExternalIntegrationProvider = (typeof ExternalIntegrationProvider)[keyof typeof ExternalIntegrationProvider]
@@ -658,6 +664,15 @@ export const IntegrationKeyType: {
 };
 
 export type IntegrationKeyType = (typeof IntegrationKeyType)[keyof typeof IntegrationKeyType]
+
+
+export const MailTesterTestStatus: {
+  PENDING: 'PENDING',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED'
+};
+
+export type MailTesterTestStatus = (typeof MailTesterTestStatus)[keyof typeof MailTesterTestStatus]
 
 
 export const ReminderStatus: {
@@ -930,6 +945,10 @@ export const ExternalIntegrationProvider: typeof $Enums.ExternalIntegrationProvi
 export type IntegrationKeyType = $Enums.IntegrationKeyType
 
 export const IntegrationKeyType: typeof $Enums.IntegrationKeyType
+
+export type MailTesterTestStatus = $Enums.MailTesterTestStatus
+
+export const MailTesterTestStatus: typeof $Enums.MailTesterTestStatus
 
 export type ReminderStatus = $Enums.ReminderStatus
 
@@ -1463,6 +1482,16 @@ export class PrismaClient<
     * ```
     */
   get integrationAccountDomain(): Prisma.IntegrationAccountDomainDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.mailTesterTest`: Exposes CRUD operations for the **MailTesterTest** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more MailTesterTests
+    * const mailTesterTests = await prisma.mailTesterTest.findMany()
+    * ```
+    */
+  get mailTesterTest(): Prisma.MailTesterTestDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.reminder`: Exposes CRUD operations for the **Reminder** model.
@@ -2113,6 +2142,7 @@ export namespace Prisma {
     IntegrationAccount: 'IntegrationAccount',
     IntegrationKey: 'IntegrationKey',
     IntegrationAccountDomain: 'IntegrationAccountDomain',
+    MailTesterTest: 'MailTesterTest',
     Reminder: 'Reminder',
     Form: 'Form',
     FormField: 'FormField',
@@ -2146,7 +2176,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "organisation" | "organisationMember" | "organisationInvitation" | "filter" | "savedContactFilter" | "scoringInstruction" | "filterScoringInstruction" | "rawLead" | "lead" | "leadEnrichment" | "contact" | "contactInfo" | "contactFilter" | "contactEnrichment" | "contactScore" | "contactList" | "contactListMember" | "contactTag" | "interaction" | "outreachMessage" | "outreachSequence" | "outreachSequenceStep" | "sequenceEnrollment" | "filterJob" | "bulkJob" | "websiteScrapeRequest" | "senderProfile" | "messageTemplate" | "marketingCampaign" | "marketingCampaignContact" | "openAiBatchJob" | "integration" | "integrationAccount" | "integrationKey" | "integrationAccountDomain" | "reminder" | "form" | "formField" | "formCompletion" | "formCompletionValue" | "contactAudienceAnalysis" | "aiUsageLog" | "apifyUsageLog" | "messagingGoal" | "emailSendLimit" | "sendingPolicy" | "sendingPolicyStage" | "campaignIntegration" | "campaignIntegrationState" | "sendingUsageCounter" | "goalAchievement" | "goalPersonalBest" | "activityLog"
+      modelProps: "user" | "organisation" | "organisationMember" | "organisationInvitation" | "filter" | "savedContactFilter" | "scoringInstruction" | "filterScoringInstruction" | "rawLead" | "lead" | "leadEnrichment" | "contact" | "contactInfo" | "contactFilter" | "contactEnrichment" | "contactScore" | "contactList" | "contactListMember" | "contactTag" | "interaction" | "outreachMessage" | "outreachSequence" | "outreachSequenceStep" | "sequenceEnrollment" | "filterJob" | "bulkJob" | "websiteScrapeRequest" | "senderProfile" | "messageTemplate" | "marketingCampaign" | "marketingCampaignContact" | "openAiBatchJob" | "integration" | "integrationAccount" | "integrationKey" | "integrationAccountDomain" | "mailTesterTest" | "reminder" | "form" | "formField" | "formCompletion" | "formCompletionValue" | "contactAudienceAnalysis" | "aiUsageLog" | "apifyUsageLog" | "messagingGoal" | "emailSendLimit" | "sendingPolicy" | "sendingPolicyStage" | "campaignIntegration" | "campaignIntegrationState" | "sendingUsageCounter" | "goalAchievement" | "goalPersonalBest" | "activityLog"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -4814,6 +4844,80 @@ export namespace Prisma {
           }
         }
       }
+      MailTesterTest: {
+        payload: Prisma.$MailTesterTestPayload<ExtArgs>
+        fields: Prisma.MailTesterTestFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.MailTesterTestFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MailTesterTestPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.MailTesterTestFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MailTesterTestPayload>
+          }
+          findFirst: {
+            args: Prisma.MailTesterTestFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MailTesterTestPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.MailTesterTestFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MailTesterTestPayload>
+          }
+          findMany: {
+            args: Prisma.MailTesterTestFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MailTesterTestPayload>[]
+          }
+          create: {
+            args: Prisma.MailTesterTestCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MailTesterTestPayload>
+          }
+          createMany: {
+            args: Prisma.MailTesterTestCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.MailTesterTestCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MailTesterTestPayload>[]
+          }
+          delete: {
+            args: Prisma.MailTesterTestDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MailTesterTestPayload>
+          }
+          update: {
+            args: Prisma.MailTesterTestUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MailTesterTestPayload>
+          }
+          deleteMany: {
+            args: Prisma.MailTesterTestDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.MailTesterTestUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.MailTesterTestUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MailTesterTestPayload>[]
+          }
+          upsert: {
+            args: Prisma.MailTesterTestUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MailTesterTestPayload>
+          }
+          aggregate: {
+            args: Prisma.MailTesterTestAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMailTesterTest>
+          }
+          groupBy: {
+            args: Prisma.MailTesterTestGroupByArgs<ExtArgs>
+            result: $Utils.Optional<MailTesterTestGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.MailTesterTestCountArgs<ExtArgs>
+            result: $Utils.Optional<MailTesterTestCountAggregateOutputType> | number
+          }
+        }
+      }
       Reminder: {
         payload: Prisma.$ReminderPayload<ExtArgs>
         fields: Prisma.ReminderFieldRefs
@@ -6290,6 +6394,7 @@ export namespace Prisma {
     integrationAccount?: IntegrationAccountOmit
     integrationKey?: IntegrationKeyOmit
     integrationAccountDomain?: IntegrationAccountDomainOmit
+    mailTesterTest?: MailTesterTestOmit
     reminder?: ReminderOmit
     form?: FormOmit
     formField?: FormFieldOmit
@@ -6519,6 +6624,7 @@ export namespace Prisma {
     website_scrape_requests: number
     email_send_limits: number
     sending_policies: number
+    mail_tester_tests: number
   }
 
   export type OrganisationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6550,6 +6656,7 @@ export namespace Prisma {
     website_scrape_requests?: boolean | OrganisationCountOutputTypeCountWebsite_scrape_requestsArgs
     email_send_limits?: boolean | OrganisationCountOutputTypeCountEmail_send_limitsArgs
     sending_policies?: boolean | OrganisationCountOutputTypeCountSending_policiesArgs
+    mail_tester_tests?: boolean | OrganisationCountOutputTypeCountMail_tester_testsArgs
   }
 
   // Custom InputTypes
@@ -6757,6 +6864,13 @@ export namespace Prisma {
    */
   export type OrganisationCountOutputTypeCountSending_policiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: SendingPolicyWhereInput
+  }
+
+  /**
+   * OrganisationCountOutputType without action
+   */
+  export type OrganisationCountOutputTypeCountMail_tester_testsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MailTesterTestWhereInput
   }
 
 
@@ -9293,6 +9407,7 @@ export namespace Prisma {
     website_scrape_requests?: boolean | Organisation$website_scrape_requestsArgs<ExtArgs>
     email_send_limits?: boolean | Organisation$email_send_limitsArgs<ExtArgs>
     sending_policies?: boolean | Organisation$sending_policiesArgs<ExtArgs>
+    mail_tester_tests?: boolean | Organisation$mail_tester_testsArgs<ExtArgs>
     _count?: boolean | OrganisationCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["organisation"]>
 
@@ -9359,6 +9474,7 @@ export namespace Prisma {
     website_scrape_requests?: boolean | Organisation$website_scrape_requestsArgs<ExtArgs>
     email_send_limits?: boolean | Organisation$email_send_limitsArgs<ExtArgs>
     sending_policies?: boolean | Organisation$sending_policiesArgs<ExtArgs>
+    mail_tester_tests?: boolean | Organisation$mail_tester_testsArgs<ExtArgs>
     _count?: boolean | OrganisationCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type OrganisationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -9395,6 +9511,7 @@ export namespace Prisma {
       website_scrape_requests: Prisma.$WebsiteScrapeRequestPayload<ExtArgs>[]
       email_send_limits: Prisma.$EmailSendLimitPayload<ExtArgs>[]
       sending_policies: Prisma.$SendingPolicyPayload<ExtArgs>[]
+      mail_tester_tests: Prisma.$MailTesterTestPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -9827,6 +9944,7 @@ export namespace Prisma {
     website_scrape_requests<T extends Organisation$website_scrape_requestsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$website_scrape_requestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WebsiteScrapeRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     email_send_limits<T extends Organisation$email_send_limitsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$email_send_limitsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmailSendLimitPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     sending_policies<T extends Organisation$sending_policiesArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$sending_policiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SendingPolicyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    mail_tester_tests<T extends Organisation$mail_tester_testsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$mail_tester_testsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MailTesterTestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -10921,6 +11039,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: SendingPolicyScalarFieldEnum | SendingPolicyScalarFieldEnum[]
+  }
+
+  /**
+   * Organisation.mail_tester_tests
+   */
+  export type Organisation$mail_tester_testsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MailTesterTest
+     */
+    select?: MailTesterTestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MailTesterTest
+     */
+    omit?: MailTesterTestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MailTesterTestInclude<ExtArgs> | null
+    where?: MailTesterTestWhereInput
+    orderBy?: MailTesterTestOrderByWithRelationInput | MailTesterTestOrderByWithRelationInput[]
+    cursor?: MailTesterTestWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MailTesterTestScalarFieldEnum | MailTesterTestScalarFieldEnum[]
   }
 
   /**
@@ -53072,6 +53214,1215 @@ export namespace Prisma {
 
 
   /**
+   * Model MailTesterTest
+   */
+
+  export type AggregateMailTesterTest = {
+    _count: MailTesterTestCountAggregateOutputType | null
+    _avg: MailTesterTestAvgAggregateOutputType | null
+    _sum: MailTesterTestSumAggregateOutputType | null
+    _min: MailTesterTestMinAggregateOutputType | null
+    _max: MailTesterTestMaxAggregateOutputType | null
+  }
+
+  export type MailTesterTestAvgAggregateOutputType = {
+    id: number | null
+    score: number | null
+  }
+
+  export type MailTesterTestSumAggregateOutputType = {
+    id: number | null
+    score: number | null
+  }
+
+  export type MailTesterTestMinAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    organisation_uuid: string | null
+    label: string | null
+    test_identifier: string | null
+    test_address: string | null
+    from_provider: $Enums.ExternalIntegrationProvider | null
+    from_account: string | null
+    status: $Enums.MailTesterTestStatus | null
+    score: number | null
+    error_message: string | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type MailTesterTestMaxAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    organisation_uuid: string | null
+    label: string | null
+    test_identifier: string | null
+    test_address: string | null
+    from_provider: $Enums.ExternalIntegrationProvider | null
+    from_account: string | null
+    status: $Enums.MailTesterTestStatus | null
+    score: number | null
+    error_message: string | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type MailTesterTestCountAggregateOutputType = {
+    id: number
+    uuid: number
+    organisation_uuid: number
+    label: number
+    test_identifier: number
+    test_address: number
+    from_provider: number
+    from_account: number
+    status: number
+    score: number
+    result: number
+    error_message: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type MailTesterTestAvgAggregateInputType = {
+    id?: true
+    score?: true
+  }
+
+  export type MailTesterTestSumAggregateInputType = {
+    id?: true
+    score?: true
+  }
+
+  export type MailTesterTestMinAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    label?: true
+    test_identifier?: true
+    test_address?: true
+    from_provider?: true
+    from_account?: true
+    status?: true
+    score?: true
+    error_message?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type MailTesterTestMaxAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    label?: true
+    test_identifier?: true
+    test_address?: true
+    from_provider?: true
+    from_account?: true
+    status?: true
+    score?: true
+    error_message?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type MailTesterTestCountAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    label?: true
+    test_identifier?: true
+    test_address?: true
+    from_provider?: true
+    from_account?: true
+    status?: true
+    score?: true
+    result?: true
+    error_message?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type MailTesterTestAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MailTesterTest to aggregate.
+     */
+    where?: MailTesterTestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MailTesterTests to fetch.
+     */
+    orderBy?: MailTesterTestOrderByWithRelationInput | MailTesterTestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: MailTesterTestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MailTesterTests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MailTesterTests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned MailTesterTests
+    **/
+    _count?: true | MailTesterTestCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: MailTesterTestAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: MailTesterTestSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: MailTesterTestMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: MailTesterTestMaxAggregateInputType
+  }
+
+  export type GetMailTesterTestAggregateType<T extends MailTesterTestAggregateArgs> = {
+        [P in keyof T & keyof AggregateMailTesterTest]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMailTesterTest[P]>
+      : GetScalarType<T[P], AggregateMailTesterTest[P]>
+  }
+
+
+
+
+  export type MailTesterTestGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MailTesterTestWhereInput
+    orderBy?: MailTesterTestOrderByWithAggregationInput | MailTesterTestOrderByWithAggregationInput[]
+    by: MailTesterTestScalarFieldEnum[] | MailTesterTestScalarFieldEnum
+    having?: MailTesterTestScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: MailTesterTestCountAggregateInputType | true
+    _avg?: MailTesterTestAvgAggregateInputType
+    _sum?: MailTesterTestSumAggregateInputType
+    _min?: MailTesterTestMinAggregateInputType
+    _max?: MailTesterTestMaxAggregateInputType
+  }
+
+  export type MailTesterTestGroupByOutputType = {
+    id: number
+    uuid: string
+    organisation_uuid: string
+    label: string | null
+    test_identifier: string
+    test_address: string
+    from_provider: $Enums.ExternalIntegrationProvider
+    from_account: string
+    status: $Enums.MailTesterTestStatus
+    score: number | null
+    result: JsonValue | null
+    error_message: string | null
+    created_at: Date
+    updated_at: Date
+    _count: MailTesterTestCountAggregateOutputType | null
+    _avg: MailTesterTestAvgAggregateOutputType | null
+    _sum: MailTesterTestSumAggregateOutputType | null
+    _min: MailTesterTestMinAggregateOutputType | null
+    _max: MailTesterTestMaxAggregateOutputType | null
+  }
+
+  type GetMailTesterTestGroupByPayload<T extends MailTesterTestGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<MailTesterTestGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof MailTesterTestGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], MailTesterTestGroupByOutputType[P]>
+            : GetScalarType<T[P], MailTesterTestGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type MailTesterTestSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    label?: boolean
+    test_identifier?: boolean
+    test_address?: boolean
+    from_provider?: boolean
+    from_account?: boolean
+    status?: boolean
+    score?: boolean
+    result?: boolean
+    error_message?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["mailTesterTest"]>
+
+  export type MailTesterTestSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    label?: boolean
+    test_identifier?: boolean
+    test_address?: boolean
+    from_provider?: boolean
+    from_account?: boolean
+    status?: boolean
+    score?: boolean
+    result?: boolean
+    error_message?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["mailTesterTest"]>
+
+  export type MailTesterTestSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    label?: boolean
+    test_identifier?: boolean
+    test_address?: boolean
+    from_provider?: boolean
+    from_account?: boolean
+    status?: boolean
+    score?: boolean
+    result?: boolean
+    error_message?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["mailTesterTest"]>
+
+  export type MailTesterTestSelectScalar = {
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    label?: boolean
+    test_identifier?: boolean
+    test_address?: boolean
+    from_provider?: boolean
+    from_account?: boolean
+    status?: boolean
+    score?: boolean
+    result?: boolean
+    error_message?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type MailTesterTestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "label" | "test_identifier" | "test_address" | "from_provider" | "from_account" | "status" | "score" | "result" | "error_message" | "created_at" | "updated_at", ExtArgs["result"]["mailTesterTest"]>
+  export type MailTesterTestInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }
+  export type MailTesterTestIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }
+  export type MailTesterTestIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }
+
+  export type $MailTesterTestPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "MailTesterTest"
+    objects: {
+      organisation: Prisma.$OrganisationPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      uuid: string
+      organisation_uuid: string
+      label: string | null
+      test_identifier: string
+      test_address: string
+      from_provider: $Enums.ExternalIntegrationProvider
+      from_account: string
+      status: $Enums.MailTesterTestStatus
+      score: number | null
+      result: Prisma.JsonValue | null
+      error_message: string | null
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["mailTesterTest"]>
+    composites: {}
+  }
+
+  type MailTesterTestGetPayload<S extends boolean | null | undefined | MailTesterTestDefaultArgs> = $Result.GetResult<Prisma.$MailTesterTestPayload, S>
+
+  type MailTesterTestCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<MailTesterTestFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: MailTesterTestCountAggregateInputType | true
+    }
+
+  export interface MailTesterTestDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['MailTesterTest'], meta: { name: 'MailTesterTest' } }
+    /**
+     * Find zero or one MailTesterTest that matches the filter.
+     * @param {MailTesterTestFindUniqueArgs} args - Arguments to find a MailTesterTest
+     * @example
+     * // Get one MailTesterTest
+     * const mailTesterTest = await prisma.mailTesterTest.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends MailTesterTestFindUniqueArgs>(args: SelectSubset<T, MailTesterTestFindUniqueArgs<ExtArgs>>): Prisma__MailTesterTestClient<$Result.GetResult<Prisma.$MailTesterTestPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one MailTesterTest that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {MailTesterTestFindUniqueOrThrowArgs} args - Arguments to find a MailTesterTest
+     * @example
+     * // Get one MailTesterTest
+     * const mailTesterTest = await prisma.mailTesterTest.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends MailTesterTestFindUniqueOrThrowArgs>(args: SelectSubset<T, MailTesterTestFindUniqueOrThrowArgs<ExtArgs>>): Prisma__MailTesterTestClient<$Result.GetResult<Prisma.$MailTesterTestPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first MailTesterTest that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MailTesterTestFindFirstArgs} args - Arguments to find a MailTesterTest
+     * @example
+     * // Get one MailTesterTest
+     * const mailTesterTest = await prisma.mailTesterTest.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends MailTesterTestFindFirstArgs>(args?: SelectSubset<T, MailTesterTestFindFirstArgs<ExtArgs>>): Prisma__MailTesterTestClient<$Result.GetResult<Prisma.$MailTesterTestPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first MailTesterTest that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MailTesterTestFindFirstOrThrowArgs} args - Arguments to find a MailTesterTest
+     * @example
+     * // Get one MailTesterTest
+     * const mailTesterTest = await prisma.mailTesterTest.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends MailTesterTestFindFirstOrThrowArgs>(args?: SelectSubset<T, MailTesterTestFindFirstOrThrowArgs<ExtArgs>>): Prisma__MailTesterTestClient<$Result.GetResult<Prisma.$MailTesterTestPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more MailTesterTests that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MailTesterTestFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all MailTesterTests
+     * const mailTesterTests = await prisma.mailTesterTest.findMany()
+     * 
+     * // Get first 10 MailTesterTests
+     * const mailTesterTests = await prisma.mailTesterTest.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const mailTesterTestWithIdOnly = await prisma.mailTesterTest.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends MailTesterTestFindManyArgs>(args?: SelectSubset<T, MailTesterTestFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MailTesterTestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a MailTesterTest.
+     * @param {MailTesterTestCreateArgs} args - Arguments to create a MailTesterTest.
+     * @example
+     * // Create one MailTesterTest
+     * const MailTesterTest = await prisma.mailTesterTest.create({
+     *   data: {
+     *     // ... data to create a MailTesterTest
+     *   }
+     * })
+     * 
+     */
+    create<T extends MailTesterTestCreateArgs>(args: SelectSubset<T, MailTesterTestCreateArgs<ExtArgs>>): Prisma__MailTesterTestClient<$Result.GetResult<Prisma.$MailTesterTestPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many MailTesterTests.
+     * @param {MailTesterTestCreateManyArgs} args - Arguments to create many MailTesterTests.
+     * @example
+     * // Create many MailTesterTests
+     * const mailTesterTest = await prisma.mailTesterTest.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends MailTesterTestCreateManyArgs>(args?: SelectSubset<T, MailTesterTestCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many MailTesterTests and returns the data saved in the database.
+     * @param {MailTesterTestCreateManyAndReturnArgs} args - Arguments to create many MailTesterTests.
+     * @example
+     * // Create many MailTesterTests
+     * const mailTesterTest = await prisma.mailTesterTest.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many MailTesterTests and only return the `id`
+     * const mailTesterTestWithIdOnly = await prisma.mailTesterTest.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends MailTesterTestCreateManyAndReturnArgs>(args?: SelectSubset<T, MailTesterTestCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MailTesterTestPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a MailTesterTest.
+     * @param {MailTesterTestDeleteArgs} args - Arguments to delete one MailTesterTest.
+     * @example
+     * // Delete one MailTesterTest
+     * const MailTesterTest = await prisma.mailTesterTest.delete({
+     *   where: {
+     *     // ... filter to delete one MailTesterTest
+     *   }
+     * })
+     * 
+     */
+    delete<T extends MailTesterTestDeleteArgs>(args: SelectSubset<T, MailTesterTestDeleteArgs<ExtArgs>>): Prisma__MailTesterTestClient<$Result.GetResult<Prisma.$MailTesterTestPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one MailTesterTest.
+     * @param {MailTesterTestUpdateArgs} args - Arguments to update one MailTesterTest.
+     * @example
+     * // Update one MailTesterTest
+     * const mailTesterTest = await prisma.mailTesterTest.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends MailTesterTestUpdateArgs>(args: SelectSubset<T, MailTesterTestUpdateArgs<ExtArgs>>): Prisma__MailTesterTestClient<$Result.GetResult<Prisma.$MailTesterTestPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more MailTesterTests.
+     * @param {MailTesterTestDeleteManyArgs} args - Arguments to filter MailTesterTests to delete.
+     * @example
+     * // Delete a few MailTesterTests
+     * const { count } = await prisma.mailTesterTest.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends MailTesterTestDeleteManyArgs>(args?: SelectSubset<T, MailTesterTestDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MailTesterTests.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MailTesterTestUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many MailTesterTests
+     * const mailTesterTest = await prisma.mailTesterTest.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends MailTesterTestUpdateManyArgs>(args: SelectSubset<T, MailTesterTestUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MailTesterTests and returns the data updated in the database.
+     * @param {MailTesterTestUpdateManyAndReturnArgs} args - Arguments to update many MailTesterTests.
+     * @example
+     * // Update many MailTesterTests
+     * const mailTesterTest = await prisma.mailTesterTest.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more MailTesterTests and only return the `id`
+     * const mailTesterTestWithIdOnly = await prisma.mailTesterTest.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends MailTesterTestUpdateManyAndReturnArgs>(args: SelectSubset<T, MailTesterTestUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MailTesterTestPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one MailTesterTest.
+     * @param {MailTesterTestUpsertArgs} args - Arguments to update or create a MailTesterTest.
+     * @example
+     * // Update or create a MailTesterTest
+     * const mailTesterTest = await prisma.mailTesterTest.upsert({
+     *   create: {
+     *     // ... data to create a MailTesterTest
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the MailTesterTest we want to update
+     *   }
+     * })
+     */
+    upsert<T extends MailTesterTestUpsertArgs>(args: SelectSubset<T, MailTesterTestUpsertArgs<ExtArgs>>): Prisma__MailTesterTestClient<$Result.GetResult<Prisma.$MailTesterTestPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of MailTesterTests.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MailTesterTestCountArgs} args - Arguments to filter MailTesterTests to count.
+     * @example
+     * // Count the number of MailTesterTests
+     * const count = await prisma.mailTesterTest.count({
+     *   where: {
+     *     // ... the filter for the MailTesterTests we want to count
+     *   }
+     * })
+    **/
+    count<T extends MailTesterTestCountArgs>(
+      args?: Subset<T, MailTesterTestCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], MailTesterTestCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a MailTesterTest.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MailTesterTestAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends MailTesterTestAggregateArgs>(args: Subset<T, MailTesterTestAggregateArgs>): Prisma.PrismaPromise<GetMailTesterTestAggregateType<T>>
+
+    /**
+     * Group by MailTesterTest.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MailTesterTestGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends MailTesterTestGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: MailTesterTestGroupByArgs['orderBy'] }
+        : { orderBy?: MailTesterTestGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, MailTesterTestGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMailTesterTestGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the MailTesterTest model
+   */
+  readonly fields: MailTesterTestFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for MailTesterTest.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__MailTesterTestClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    organisation<T extends OrganisationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganisationDefaultArgs<ExtArgs>>): Prisma__OrganisationClient<$Result.GetResult<Prisma.$OrganisationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the MailTesterTest model
+   */
+  interface MailTesterTestFieldRefs {
+    readonly id: FieldRef<"MailTesterTest", 'Int'>
+    readonly uuid: FieldRef<"MailTesterTest", 'String'>
+    readonly organisation_uuid: FieldRef<"MailTesterTest", 'String'>
+    readonly label: FieldRef<"MailTesterTest", 'String'>
+    readonly test_identifier: FieldRef<"MailTesterTest", 'String'>
+    readonly test_address: FieldRef<"MailTesterTest", 'String'>
+    readonly from_provider: FieldRef<"MailTesterTest", 'ExternalIntegrationProvider'>
+    readonly from_account: FieldRef<"MailTesterTest", 'String'>
+    readonly status: FieldRef<"MailTesterTest", 'MailTesterTestStatus'>
+    readonly score: FieldRef<"MailTesterTest", 'Float'>
+    readonly result: FieldRef<"MailTesterTest", 'Json'>
+    readonly error_message: FieldRef<"MailTesterTest", 'String'>
+    readonly created_at: FieldRef<"MailTesterTest", 'DateTime'>
+    readonly updated_at: FieldRef<"MailTesterTest", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * MailTesterTest findUnique
+   */
+  export type MailTesterTestFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MailTesterTest
+     */
+    select?: MailTesterTestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MailTesterTest
+     */
+    omit?: MailTesterTestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MailTesterTestInclude<ExtArgs> | null
+    /**
+     * Filter, which MailTesterTest to fetch.
+     */
+    where: MailTesterTestWhereUniqueInput
+  }
+
+  /**
+   * MailTesterTest findUniqueOrThrow
+   */
+  export type MailTesterTestFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MailTesterTest
+     */
+    select?: MailTesterTestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MailTesterTest
+     */
+    omit?: MailTesterTestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MailTesterTestInclude<ExtArgs> | null
+    /**
+     * Filter, which MailTesterTest to fetch.
+     */
+    where: MailTesterTestWhereUniqueInput
+  }
+
+  /**
+   * MailTesterTest findFirst
+   */
+  export type MailTesterTestFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MailTesterTest
+     */
+    select?: MailTesterTestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MailTesterTest
+     */
+    omit?: MailTesterTestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MailTesterTestInclude<ExtArgs> | null
+    /**
+     * Filter, which MailTesterTest to fetch.
+     */
+    where?: MailTesterTestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MailTesterTests to fetch.
+     */
+    orderBy?: MailTesterTestOrderByWithRelationInput | MailTesterTestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MailTesterTests.
+     */
+    cursor?: MailTesterTestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MailTesterTests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MailTesterTests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MailTesterTests.
+     */
+    distinct?: MailTesterTestScalarFieldEnum | MailTesterTestScalarFieldEnum[]
+  }
+
+  /**
+   * MailTesterTest findFirstOrThrow
+   */
+  export type MailTesterTestFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MailTesterTest
+     */
+    select?: MailTesterTestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MailTesterTest
+     */
+    omit?: MailTesterTestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MailTesterTestInclude<ExtArgs> | null
+    /**
+     * Filter, which MailTesterTest to fetch.
+     */
+    where?: MailTesterTestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MailTesterTests to fetch.
+     */
+    orderBy?: MailTesterTestOrderByWithRelationInput | MailTesterTestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MailTesterTests.
+     */
+    cursor?: MailTesterTestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MailTesterTests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MailTesterTests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MailTesterTests.
+     */
+    distinct?: MailTesterTestScalarFieldEnum | MailTesterTestScalarFieldEnum[]
+  }
+
+  /**
+   * MailTesterTest findMany
+   */
+  export type MailTesterTestFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MailTesterTest
+     */
+    select?: MailTesterTestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MailTesterTest
+     */
+    omit?: MailTesterTestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MailTesterTestInclude<ExtArgs> | null
+    /**
+     * Filter, which MailTesterTests to fetch.
+     */
+    where?: MailTesterTestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MailTesterTests to fetch.
+     */
+    orderBy?: MailTesterTestOrderByWithRelationInput | MailTesterTestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing MailTesterTests.
+     */
+    cursor?: MailTesterTestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MailTesterTests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MailTesterTests.
+     */
+    skip?: number
+    distinct?: MailTesterTestScalarFieldEnum | MailTesterTestScalarFieldEnum[]
+  }
+
+  /**
+   * MailTesterTest create
+   */
+  export type MailTesterTestCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MailTesterTest
+     */
+    select?: MailTesterTestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MailTesterTest
+     */
+    omit?: MailTesterTestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MailTesterTestInclude<ExtArgs> | null
+    /**
+     * The data needed to create a MailTesterTest.
+     */
+    data: XOR<MailTesterTestCreateInput, MailTesterTestUncheckedCreateInput>
+  }
+
+  /**
+   * MailTesterTest createMany
+   */
+  export type MailTesterTestCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many MailTesterTests.
+     */
+    data: MailTesterTestCreateManyInput | MailTesterTestCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * MailTesterTest createManyAndReturn
+   */
+  export type MailTesterTestCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MailTesterTest
+     */
+    select?: MailTesterTestSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the MailTesterTest
+     */
+    omit?: MailTesterTestOmit<ExtArgs> | null
+    /**
+     * The data used to create many MailTesterTests.
+     */
+    data: MailTesterTestCreateManyInput | MailTesterTestCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MailTesterTestIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * MailTesterTest update
+   */
+  export type MailTesterTestUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MailTesterTest
+     */
+    select?: MailTesterTestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MailTesterTest
+     */
+    omit?: MailTesterTestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MailTesterTestInclude<ExtArgs> | null
+    /**
+     * The data needed to update a MailTesterTest.
+     */
+    data: XOR<MailTesterTestUpdateInput, MailTesterTestUncheckedUpdateInput>
+    /**
+     * Choose, which MailTesterTest to update.
+     */
+    where: MailTesterTestWhereUniqueInput
+  }
+
+  /**
+   * MailTesterTest updateMany
+   */
+  export type MailTesterTestUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update MailTesterTests.
+     */
+    data: XOR<MailTesterTestUpdateManyMutationInput, MailTesterTestUncheckedUpdateManyInput>
+    /**
+     * Filter which MailTesterTests to update
+     */
+    where?: MailTesterTestWhereInput
+    /**
+     * Limit how many MailTesterTests to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * MailTesterTest updateManyAndReturn
+   */
+  export type MailTesterTestUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MailTesterTest
+     */
+    select?: MailTesterTestSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the MailTesterTest
+     */
+    omit?: MailTesterTestOmit<ExtArgs> | null
+    /**
+     * The data used to update MailTesterTests.
+     */
+    data: XOR<MailTesterTestUpdateManyMutationInput, MailTesterTestUncheckedUpdateManyInput>
+    /**
+     * Filter which MailTesterTests to update
+     */
+    where?: MailTesterTestWhereInput
+    /**
+     * Limit how many MailTesterTests to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MailTesterTestIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * MailTesterTest upsert
+   */
+  export type MailTesterTestUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MailTesterTest
+     */
+    select?: MailTesterTestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MailTesterTest
+     */
+    omit?: MailTesterTestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MailTesterTestInclude<ExtArgs> | null
+    /**
+     * The filter to search for the MailTesterTest to update in case it exists.
+     */
+    where: MailTesterTestWhereUniqueInput
+    /**
+     * In case the MailTesterTest found by the `where` argument doesn't exist, create a new MailTesterTest with this data.
+     */
+    create: XOR<MailTesterTestCreateInput, MailTesterTestUncheckedCreateInput>
+    /**
+     * In case the MailTesterTest was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<MailTesterTestUpdateInput, MailTesterTestUncheckedUpdateInput>
+  }
+
+  /**
+   * MailTesterTest delete
+   */
+  export type MailTesterTestDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MailTesterTest
+     */
+    select?: MailTesterTestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MailTesterTest
+     */
+    omit?: MailTesterTestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MailTesterTestInclude<ExtArgs> | null
+    /**
+     * Filter which MailTesterTest to delete.
+     */
+    where: MailTesterTestWhereUniqueInput
+  }
+
+  /**
+   * MailTesterTest deleteMany
+   */
+  export type MailTesterTestDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MailTesterTests to delete
+     */
+    where?: MailTesterTestWhereInput
+    /**
+     * Limit how many MailTesterTests to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * MailTesterTest without action
+   */
+  export type MailTesterTestDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MailTesterTest
+     */
+    select?: MailTesterTestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MailTesterTest
+     */
+    omit?: MailTesterTestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MailTesterTestInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model Reminder
    */
 
@@ -75285,6 +76636,26 @@ export namespace Prisma {
   export type IntegrationAccountDomainScalarFieldEnum = (typeof IntegrationAccountDomainScalarFieldEnum)[keyof typeof IntegrationAccountDomainScalarFieldEnum]
 
 
+  export const MailTesterTestScalarFieldEnum: {
+    id: 'id',
+    uuid: 'uuid',
+    organisation_uuid: 'organisation_uuid',
+    label: 'label',
+    test_identifier: 'test_identifier',
+    test_address: 'test_address',
+    from_provider: 'from_provider',
+    from_account: 'from_account',
+    status: 'status',
+    score: 'score',
+    result: 'result',
+    error_message: 'error_message',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type MailTesterTestScalarFieldEnum = (typeof MailTesterTestScalarFieldEnum)[keyof typeof MailTesterTestScalarFieldEnum]
+
+
   export const ReminderScalarFieldEnum: {
     id: 'id',
     uuid: 'uuid',
@@ -76168,6 +77539,34 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'MailTesterTestStatus'
+   */
+  export type EnumMailTesterTestStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MailTesterTestStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'MailTesterTestStatus[]'
+   */
+  export type ListEnumMailTesterTestStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MailTesterTestStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Float'
+   */
+  export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+  /**
+   * Reference to a field of type 'Float[]'
+   */
+  export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+    
+
+
+  /**
    * Reference to a field of type 'ReminderStatus'
    */
   export type EnumReminderStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReminderStatus'>
@@ -76220,20 +77619,6 @@ export namespace Prisma {
    * Reference to a field of type 'ContactAudienceAnalysisStatus[]'
    */
   export type ListEnumContactAudienceAnalysisStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ContactAudienceAnalysisStatus[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'Float'
-   */
-  export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
-    
-
-
-  /**
-   * Reference to a field of type 'Float[]'
-   */
-  export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
 
 
@@ -76507,6 +77892,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestListRelationFilter
     email_send_limits?: EmailSendLimitListRelationFilter
     sending_policies?: SendingPolicyListRelationFilter
+    mail_tester_tests?: MailTesterTestListRelationFilter
   }
 
   export type OrganisationOrderByWithRelationInput = {
@@ -76546,6 +77932,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestOrderByRelationAggregateInput
     email_send_limits?: EmailSendLimitOrderByRelationAggregateInput
     sending_policies?: SendingPolicyOrderByRelationAggregateInput
+    mail_tester_tests?: MailTesterTestOrderByRelationAggregateInput
   }
 
   export type OrganisationWhereUniqueInput = Prisma.AtLeast<{
@@ -76588,6 +77975,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestListRelationFilter
     email_send_limits?: EmailSendLimitListRelationFilter
     sending_policies?: SendingPolicyListRelationFilter
+    mail_tester_tests?: MailTesterTestListRelationFilter
   }, "id" | "uuid" | "slug">
 
   export type OrganisationOrderByWithAggregationInput = {
@@ -80052,6 +81440,108 @@ export namespace Prisma {
     updated_at?: DateTimeWithAggregatesFilter<"IntegrationAccountDomain"> | Date | string
   }
 
+  export type MailTesterTestWhereInput = {
+    AND?: MailTesterTestWhereInput | MailTesterTestWhereInput[]
+    OR?: MailTesterTestWhereInput[]
+    NOT?: MailTesterTestWhereInput | MailTesterTestWhereInput[]
+    id?: IntFilter<"MailTesterTest"> | number
+    uuid?: StringFilter<"MailTesterTest"> | string
+    organisation_uuid?: StringFilter<"MailTesterTest"> | string
+    label?: StringNullableFilter<"MailTesterTest"> | string | null
+    test_identifier?: StringFilter<"MailTesterTest"> | string
+    test_address?: StringFilter<"MailTesterTest"> | string
+    from_provider?: EnumExternalIntegrationProviderFilter<"MailTesterTest"> | $Enums.ExternalIntegrationProvider
+    from_account?: StringFilter<"MailTesterTest"> | string
+    status?: EnumMailTesterTestStatusFilter<"MailTesterTest"> | $Enums.MailTesterTestStatus
+    score?: FloatNullableFilter<"MailTesterTest"> | number | null
+    result?: JsonNullableFilter<"MailTesterTest">
+    error_message?: StringNullableFilter<"MailTesterTest"> | string | null
+    created_at?: DateTimeFilter<"MailTesterTest"> | Date | string
+    updated_at?: DateTimeFilter<"MailTesterTest"> | Date | string
+    organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+  }
+
+  export type MailTesterTestOrderByWithRelationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    label?: SortOrderInput | SortOrder
+    test_identifier?: SortOrder
+    test_address?: SortOrder
+    from_provider?: SortOrder
+    from_account?: SortOrder
+    status?: SortOrder
+    score?: SortOrderInput | SortOrder
+    result?: SortOrderInput | SortOrder
+    error_message?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    organisation?: OrganisationOrderByWithRelationInput
+  }
+
+  export type MailTesterTestWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    uuid?: string
+    AND?: MailTesterTestWhereInput | MailTesterTestWhereInput[]
+    OR?: MailTesterTestWhereInput[]
+    NOT?: MailTesterTestWhereInput | MailTesterTestWhereInput[]
+    organisation_uuid?: StringFilter<"MailTesterTest"> | string
+    label?: StringNullableFilter<"MailTesterTest"> | string | null
+    test_identifier?: StringFilter<"MailTesterTest"> | string
+    test_address?: StringFilter<"MailTesterTest"> | string
+    from_provider?: EnumExternalIntegrationProviderFilter<"MailTesterTest"> | $Enums.ExternalIntegrationProvider
+    from_account?: StringFilter<"MailTesterTest"> | string
+    status?: EnumMailTesterTestStatusFilter<"MailTesterTest"> | $Enums.MailTesterTestStatus
+    score?: FloatNullableFilter<"MailTesterTest"> | number | null
+    result?: JsonNullableFilter<"MailTesterTest">
+    error_message?: StringNullableFilter<"MailTesterTest"> | string | null
+    created_at?: DateTimeFilter<"MailTesterTest"> | Date | string
+    updated_at?: DateTimeFilter<"MailTesterTest"> | Date | string
+    organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+  }, "id" | "uuid">
+
+  export type MailTesterTestOrderByWithAggregationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    label?: SortOrderInput | SortOrder
+    test_identifier?: SortOrder
+    test_address?: SortOrder
+    from_provider?: SortOrder
+    from_account?: SortOrder
+    status?: SortOrder
+    score?: SortOrderInput | SortOrder
+    result?: SortOrderInput | SortOrder
+    error_message?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: MailTesterTestCountOrderByAggregateInput
+    _avg?: MailTesterTestAvgOrderByAggregateInput
+    _max?: MailTesterTestMaxOrderByAggregateInput
+    _min?: MailTesterTestMinOrderByAggregateInput
+    _sum?: MailTesterTestSumOrderByAggregateInput
+  }
+
+  export type MailTesterTestScalarWhereWithAggregatesInput = {
+    AND?: MailTesterTestScalarWhereWithAggregatesInput | MailTesterTestScalarWhereWithAggregatesInput[]
+    OR?: MailTesterTestScalarWhereWithAggregatesInput[]
+    NOT?: MailTesterTestScalarWhereWithAggregatesInput | MailTesterTestScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"MailTesterTest"> | number
+    uuid?: StringWithAggregatesFilter<"MailTesterTest"> | string
+    organisation_uuid?: StringWithAggregatesFilter<"MailTesterTest"> | string
+    label?: StringNullableWithAggregatesFilter<"MailTesterTest"> | string | null
+    test_identifier?: StringWithAggregatesFilter<"MailTesterTest"> | string
+    test_address?: StringWithAggregatesFilter<"MailTesterTest"> | string
+    from_provider?: EnumExternalIntegrationProviderWithAggregatesFilter<"MailTesterTest"> | $Enums.ExternalIntegrationProvider
+    from_account?: StringWithAggregatesFilter<"MailTesterTest"> | string
+    status?: EnumMailTesterTestStatusWithAggregatesFilter<"MailTesterTest"> | $Enums.MailTesterTestStatus
+    score?: FloatNullableWithAggregatesFilter<"MailTesterTest"> | number | null
+    result?: JsonNullableWithAggregatesFilter<"MailTesterTest">
+    error_message?: StringNullableWithAggregatesFilter<"MailTesterTest"> | string | null
+    created_at?: DateTimeWithAggregatesFilter<"MailTesterTest"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"MailTesterTest"> | Date | string
+  }
+
   export type ReminderWhereInput = {
     AND?: ReminderWhereInput | ReminderWhereInput[]
     OR?: ReminderWhereInput[]
@@ -81840,6 +83330,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateInput = {
@@ -81879,6 +83370,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUpdateInput = {
@@ -81917,6 +83409,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateInput = {
@@ -81956,6 +83449,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateManyInput = {
@@ -85713,6 +87207,121 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type MailTesterTestCreateInput = {
+    uuid?: string
+    label?: string | null
+    test_identifier: string
+    test_address: string
+    from_provider: $Enums.ExternalIntegrationProvider
+    from_account: string
+    status?: $Enums.MailTesterTestStatus
+    score?: number | null
+    result?: NullableJsonNullValueInput | InputJsonValue
+    error_message?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutMail_tester_testsInput
+  }
+
+  export type MailTesterTestUncheckedCreateInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    label?: string | null
+    test_identifier: string
+    test_address: string
+    from_provider: $Enums.ExternalIntegrationProvider
+    from_account: string
+    status?: $Enums.MailTesterTestStatus
+    score?: number | null
+    result?: NullableJsonNullValueInput | InputJsonValue
+    error_message?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type MailTesterTestUpdateInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    label?: NullableStringFieldUpdateOperationsInput | string | null
+    test_identifier?: StringFieldUpdateOperationsInput | string
+    test_address?: StringFieldUpdateOperationsInput | string
+    from_provider?: EnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider
+    from_account?: StringFieldUpdateOperationsInput | string
+    status?: EnumMailTesterTestStatusFieldUpdateOperationsInput | $Enums.MailTesterTestStatus
+    score?: NullableFloatFieldUpdateOperationsInput | number | null
+    result?: NullableJsonNullValueInput | InputJsonValue
+    error_message?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutMail_tester_testsNestedInput
+  }
+
+  export type MailTesterTestUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    label?: NullableStringFieldUpdateOperationsInput | string | null
+    test_identifier?: StringFieldUpdateOperationsInput | string
+    test_address?: StringFieldUpdateOperationsInput | string
+    from_provider?: EnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider
+    from_account?: StringFieldUpdateOperationsInput | string
+    status?: EnumMailTesterTestStatusFieldUpdateOperationsInput | $Enums.MailTesterTestStatus
+    score?: NullableFloatFieldUpdateOperationsInput | number | null
+    result?: NullableJsonNullValueInput | InputJsonValue
+    error_message?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MailTesterTestCreateManyInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    label?: string | null
+    test_identifier: string
+    test_address: string
+    from_provider: $Enums.ExternalIntegrationProvider
+    from_account: string
+    status?: $Enums.MailTesterTestStatus
+    score?: number | null
+    result?: NullableJsonNullValueInput | InputJsonValue
+    error_message?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type MailTesterTestUpdateManyMutationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    label?: NullableStringFieldUpdateOperationsInput | string | null
+    test_identifier?: StringFieldUpdateOperationsInput | string
+    test_address?: StringFieldUpdateOperationsInput | string
+    from_provider?: EnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider
+    from_account?: StringFieldUpdateOperationsInput | string
+    status?: EnumMailTesterTestStatusFieldUpdateOperationsInput | $Enums.MailTesterTestStatus
+    score?: NullableFloatFieldUpdateOperationsInput | number | null
+    result?: NullableJsonNullValueInput | InputJsonValue
+    error_message?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MailTesterTestUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    label?: NullableStringFieldUpdateOperationsInput | string | null
+    test_identifier?: StringFieldUpdateOperationsInput | string
+    test_address?: StringFieldUpdateOperationsInput | string
+    from_provider?: EnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider
+    from_account?: StringFieldUpdateOperationsInput | string
+    status?: EnumMailTesterTestStatusFieldUpdateOperationsInput | $Enums.MailTesterTestStatus
+    score?: NullableFloatFieldUpdateOperationsInput | number | null
+    result?: NullableJsonNullValueInput | InputJsonValue
+    error_message?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type ReminderCreateInput = {
     uuid?: string
     title?: string | null
@@ -87817,6 +89426,12 @@ export namespace Prisma {
     none?: SendingPolicyWhereInput
   }
 
+  export type MailTesterTestListRelationFilter = {
+    every?: MailTesterTestWhereInput
+    some?: MailTesterTestWhereInput
+    none?: MailTesterTestWhereInput
+  }
+
   export type FilterOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -87894,6 +89509,10 @@ export namespace Prisma {
   }
 
   export type SendingPolicyOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type MailTesterTestOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -90903,6 +92522,109 @@ export namespace Prisma {
     id?: SortOrder
   }
 
+  export type EnumMailTesterTestStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.MailTesterTestStatus | EnumMailTesterTestStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.MailTesterTestStatus[] | ListEnumMailTesterTestStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MailTesterTestStatus[] | ListEnumMailTesterTestStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumMailTesterTestStatusFilter<$PrismaModel> | $Enums.MailTesterTestStatus
+  }
+
+  export type FloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type MailTesterTestCountOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    label?: SortOrder
+    test_identifier?: SortOrder
+    test_address?: SortOrder
+    from_provider?: SortOrder
+    from_account?: SortOrder
+    status?: SortOrder
+    score?: SortOrder
+    result?: SortOrder
+    error_message?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type MailTesterTestAvgOrderByAggregateInput = {
+    id?: SortOrder
+    score?: SortOrder
+  }
+
+  export type MailTesterTestMaxOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    label?: SortOrder
+    test_identifier?: SortOrder
+    test_address?: SortOrder
+    from_provider?: SortOrder
+    from_account?: SortOrder
+    status?: SortOrder
+    score?: SortOrder
+    error_message?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type MailTesterTestMinOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    label?: SortOrder
+    test_identifier?: SortOrder
+    test_address?: SortOrder
+    from_provider?: SortOrder
+    from_account?: SortOrder
+    status?: SortOrder
+    score?: SortOrder
+    error_message?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type MailTesterTestSumOrderByAggregateInput = {
+    id?: SortOrder
+    score?: SortOrder
+  }
+
+  export type EnumMailTesterTestStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MailTesterTestStatus | EnumMailTesterTestStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.MailTesterTestStatus[] | ListEnumMailTesterTestStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MailTesterTestStatus[] | ListEnumMailTesterTestStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumMailTesterTestStatusWithAggregatesFilter<$PrismaModel> | $Enums.MailTesterTestStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumMailTesterTestStatusFilter<$PrismaModel>
+    _max?: NestedEnumMailTesterTestStatusFilter<$PrismaModel>
+  }
+
+  export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
+  }
+
   export type EnumReminderStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.ReminderStatus | EnumReminderStatusFieldRefInput<$PrismaModel>
     in?: $Enums.ReminderStatus[] | ListEnumReminderStatusFieldRefInput<$PrismaModel>
@@ -91209,17 +92931,6 @@ export namespace Prisma {
     not?: NestedEnumContactAudienceAnalysisStatusFilter<$PrismaModel> | $Enums.ContactAudienceAnalysisStatus
   }
 
-  export type FloatNullableFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
-  }
-
   export type ContactAudienceAnalysisCountOrderByAggregateInput = {
     id?: SortOrder
     uuid?: SortOrder
@@ -91311,22 +93022,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumContactAudienceAnalysisStatusFilter<$PrismaModel>
     _max?: NestedEnumContactAudienceAnalysisStatusFilter<$PrismaModel>
-  }
-
-  export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedFloatNullableFilter<$PrismaModel>
-    _min?: NestedFloatNullableFilter<$PrismaModel>
-    _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
   export type EnumAiUsageOperationFilter<$PrismaModel = never> = {
@@ -92810,6 +94505,13 @@ export namespace Prisma {
     connect?: SendingPolicyWhereUniqueInput | SendingPolicyWhereUniqueInput[]
   }
 
+  export type MailTesterTestCreateNestedManyWithoutOrganisationInput = {
+    create?: XOR<MailTesterTestCreateWithoutOrganisationInput, MailTesterTestUncheckedCreateWithoutOrganisationInput> | MailTesterTestCreateWithoutOrganisationInput[] | MailTesterTestUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: MailTesterTestCreateOrConnectWithoutOrganisationInput | MailTesterTestCreateOrConnectWithoutOrganisationInput[]
+    createMany?: MailTesterTestCreateManyOrganisationInputEnvelope
+    connect?: MailTesterTestWhereUniqueInput | MailTesterTestWhereUniqueInput[]
+  }
+
   export type OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput = {
     create?: XOR<OrganisationMemberCreateWithoutOrganisationInput, OrganisationMemberUncheckedCreateWithoutOrganisationInput> | OrganisationMemberCreateWithoutOrganisationInput[] | OrganisationMemberUncheckedCreateWithoutOrganisationInput[]
     connectOrCreate?: OrganisationMemberCreateOrConnectWithoutOrganisationInput | OrganisationMemberCreateOrConnectWithoutOrganisationInput[]
@@ -93004,6 +94706,13 @@ export namespace Prisma {
     connectOrCreate?: SendingPolicyCreateOrConnectWithoutOrganisationInput | SendingPolicyCreateOrConnectWithoutOrganisationInput[]
     createMany?: SendingPolicyCreateManyOrganisationInputEnvelope
     connect?: SendingPolicyWhereUniqueInput | SendingPolicyWhereUniqueInput[]
+  }
+
+  export type MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput = {
+    create?: XOR<MailTesterTestCreateWithoutOrganisationInput, MailTesterTestUncheckedCreateWithoutOrganisationInput> | MailTesterTestCreateWithoutOrganisationInput[] | MailTesterTestUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: MailTesterTestCreateOrConnectWithoutOrganisationInput | MailTesterTestCreateOrConnectWithoutOrganisationInput[]
+    createMany?: MailTesterTestCreateManyOrganisationInputEnvelope
+    connect?: MailTesterTestWhereUniqueInput | MailTesterTestWhereUniqueInput[]
   }
 
   export type OrganisationMemberUpdateManyWithoutOrganisationNestedInput = {
@@ -93398,6 +95107,20 @@ export namespace Prisma {
     deleteMany?: SendingPolicyScalarWhereInput | SendingPolicyScalarWhereInput[]
   }
 
+  export type MailTesterTestUpdateManyWithoutOrganisationNestedInput = {
+    create?: XOR<MailTesterTestCreateWithoutOrganisationInput, MailTesterTestUncheckedCreateWithoutOrganisationInput> | MailTesterTestCreateWithoutOrganisationInput[] | MailTesterTestUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: MailTesterTestCreateOrConnectWithoutOrganisationInput | MailTesterTestCreateOrConnectWithoutOrganisationInput[]
+    upsert?: MailTesterTestUpsertWithWhereUniqueWithoutOrganisationInput | MailTesterTestUpsertWithWhereUniqueWithoutOrganisationInput[]
+    createMany?: MailTesterTestCreateManyOrganisationInputEnvelope
+    set?: MailTesterTestWhereUniqueInput | MailTesterTestWhereUniqueInput[]
+    disconnect?: MailTesterTestWhereUniqueInput | MailTesterTestWhereUniqueInput[]
+    delete?: MailTesterTestWhereUniqueInput | MailTesterTestWhereUniqueInput[]
+    connect?: MailTesterTestWhereUniqueInput | MailTesterTestWhereUniqueInput[]
+    update?: MailTesterTestUpdateWithWhereUniqueWithoutOrganisationInput | MailTesterTestUpdateWithWhereUniqueWithoutOrganisationInput[]
+    updateMany?: MailTesterTestUpdateManyWithWhereWithoutOrganisationInput | MailTesterTestUpdateManyWithWhereWithoutOrganisationInput[]
+    deleteMany?: MailTesterTestScalarWhereInput | MailTesterTestScalarWhereInput[]
+  }
+
   export type OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput = {
     create?: XOR<OrganisationMemberCreateWithoutOrganisationInput, OrganisationMemberUncheckedCreateWithoutOrganisationInput> | OrganisationMemberCreateWithoutOrganisationInput[] | OrganisationMemberUncheckedCreateWithoutOrganisationInput[]
     connectOrCreate?: OrganisationMemberCreateOrConnectWithoutOrganisationInput | OrganisationMemberCreateOrConnectWithoutOrganisationInput[]
@@ -93788,6 +95511,20 @@ export namespace Prisma {
     update?: SendingPolicyUpdateWithWhereUniqueWithoutOrganisationInput | SendingPolicyUpdateWithWhereUniqueWithoutOrganisationInput[]
     updateMany?: SendingPolicyUpdateManyWithWhereWithoutOrganisationInput | SendingPolicyUpdateManyWithWhereWithoutOrganisationInput[]
     deleteMany?: SendingPolicyScalarWhereInput | SendingPolicyScalarWhereInput[]
+  }
+
+  export type MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput = {
+    create?: XOR<MailTesterTestCreateWithoutOrganisationInput, MailTesterTestUncheckedCreateWithoutOrganisationInput> | MailTesterTestCreateWithoutOrganisationInput[] | MailTesterTestUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: MailTesterTestCreateOrConnectWithoutOrganisationInput | MailTesterTestCreateOrConnectWithoutOrganisationInput[]
+    upsert?: MailTesterTestUpsertWithWhereUniqueWithoutOrganisationInput | MailTesterTestUpsertWithWhereUniqueWithoutOrganisationInput[]
+    createMany?: MailTesterTestCreateManyOrganisationInputEnvelope
+    set?: MailTesterTestWhereUniqueInput | MailTesterTestWhereUniqueInput[]
+    disconnect?: MailTesterTestWhereUniqueInput | MailTesterTestWhereUniqueInput[]
+    delete?: MailTesterTestWhereUniqueInput | MailTesterTestWhereUniqueInput[]
+    connect?: MailTesterTestWhereUniqueInput | MailTesterTestWhereUniqueInput[]
+    update?: MailTesterTestUpdateWithWhereUniqueWithoutOrganisationInput | MailTesterTestUpdateWithWhereUniqueWithoutOrganisationInput[]
+    updateMany?: MailTesterTestUpdateManyWithWhereWithoutOrganisationInput | MailTesterTestUpdateManyWithWhereWithoutOrganisationInput[]
+    deleteMany?: MailTesterTestScalarWhereInput | MailTesterTestScalarWhereInput[]
   }
 
   export type OrganisationCreateNestedOneWithoutMembersInput = {
@@ -96662,6 +98399,32 @@ export namespace Prisma {
     deleteMany?: CampaignIntegrationScalarWhereInput | CampaignIntegrationScalarWhereInput[]
   }
 
+  export type OrganisationCreateNestedOneWithoutMail_tester_testsInput = {
+    create?: XOR<OrganisationCreateWithoutMail_tester_testsInput, OrganisationUncheckedCreateWithoutMail_tester_testsInput>
+    connectOrCreate?: OrganisationCreateOrConnectWithoutMail_tester_testsInput
+    connect?: OrganisationWhereUniqueInput
+  }
+
+  export type EnumMailTesterTestStatusFieldUpdateOperationsInput = {
+    set?: $Enums.MailTesterTestStatus
+  }
+
+  export type NullableFloatFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type OrganisationUpdateOneRequiredWithoutMail_tester_testsNestedInput = {
+    create?: XOR<OrganisationCreateWithoutMail_tester_testsInput, OrganisationUncheckedCreateWithoutMail_tester_testsInput>
+    connectOrCreate?: OrganisationCreateOrConnectWithoutMail_tester_testsInput
+    upsert?: OrganisationUpsertWithoutMail_tester_testsInput
+    connect?: OrganisationWhereUniqueInput
+    update?: XOR<XOR<OrganisationUpdateToOneWithWhereWithoutMail_tester_testsInput, OrganisationUpdateWithoutMail_tester_testsInput>, OrganisationUncheckedUpdateWithoutMail_tester_testsInput>
+  }
+
   export type OrganisationCreateNestedOneWithoutRemindersInput = {
     create?: XOR<OrganisationCreateWithoutRemindersInput, OrganisationUncheckedCreateWithoutRemindersInput>
     connectOrCreate?: OrganisationCreateOrConnectWithoutRemindersInput
@@ -96988,14 +98751,6 @@ export namespace Prisma {
 
   export type EnumContactAudienceAnalysisStatusFieldUpdateOperationsInput = {
     set?: $Enums.ContactAudienceAnalysisStatus
-  }
-
-  export type NullableFloatFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type OrganisationUpdateOneRequiredWithoutContact_audience_analysesNestedInput = {
@@ -98429,6 +100184,39 @@ export namespace Prisma {
     _max?: NestedEnumIntegrationKeyTypeFilter<$PrismaModel>
   }
 
+  export type NestedEnumMailTesterTestStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.MailTesterTestStatus | EnumMailTesterTestStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.MailTesterTestStatus[] | ListEnumMailTesterTestStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MailTesterTestStatus[] | ListEnumMailTesterTestStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumMailTesterTestStatusFilter<$PrismaModel> | $Enums.MailTesterTestStatus
+  }
+
+  export type NestedEnumMailTesterTestStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MailTesterTestStatus | EnumMailTesterTestStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.MailTesterTestStatus[] | ListEnumMailTesterTestStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MailTesterTestStatus[] | ListEnumMailTesterTestStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumMailTesterTestStatusWithAggregatesFilter<$PrismaModel> | $Enums.MailTesterTestStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumMailTesterTestStatusFilter<$PrismaModel>
+    _max?: NestedEnumMailTesterTestStatusFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
+  }
+
   export type NestedEnumReminderStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.ReminderStatus | EnumReminderStatusFieldRefInput<$PrismaModel>
     in?: $Enums.ReminderStatus[] | ListEnumReminderStatusFieldRefInput<$PrismaModel>
@@ -98495,22 +100283,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumContactAudienceAnalysisStatusFilter<$PrismaModel>
     _max?: NestedEnumContactAudienceAnalysisStatusFilter<$PrismaModel>
-  }
-
-  export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedFloatNullableFilter<$PrismaModel>
-    _min?: NestedFloatNullableFilter<$PrismaModel>
-    _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumAiUsageOperationFilter<$PrismaModel = never> = {
@@ -100607,6 +102379,47 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type MailTesterTestCreateWithoutOrganisationInput = {
+    uuid?: string
+    label?: string | null
+    test_identifier: string
+    test_address: string
+    from_provider: $Enums.ExternalIntegrationProvider
+    from_account: string
+    status?: $Enums.MailTesterTestStatus
+    score?: number | null
+    result?: NullableJsonNullValueInput | InputJsonValue
+    error_message?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type MailTesterTestUncheckedCreateWithoutOrganisationInput = {
+    id?: number
+    uuid?: string
+    label?: string | null
+    test_identifier: string
+    test_address: string
+    from_provider: $Enums.ExternalIntegrationProvider
+    from_account: string
+    status?: $Enums.MailTesterTestStatus
+    score?: number | null
+    result?: NullableJsonNullValueInput | InputJsonValue
+    error_message?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type MailTesterTestCreateOrConnectWithoutOrganisationInput = {
+    where: MailTesterTestWhereUniqueInput
+    create: XOR<MailTesterTestCreateWithoutOrganisationInput, MailTesterTestUncheckedCreateWithoutOrganisationInput>
+  }
+
+  export type MailTesterTestCreateManyOrganisationInputEnvelope = {
+    data: MailTesterTestCreateManyOrganisationInput | MailTesterTestCreateManyOrganisationInput[]
+    skipDuplicates?: boolean
+  }
+
   export type OrganisationMemberUpsertWithWhereUniqueWithoutOrganisationInput = {
     where: OrganisationMemberWhereUniqueInput
     update: XOR<OrganisationMemberUpdateWithoutOrganisationInput, OrganisationMemberUncheckedUpdateWithoutOrganisationInput>
@@ -101465,6 +103278,42 @@ export namespace Prisma {
     updated_at?: DateTimeFilter<"SendingPolicy"> | Date | string
   }
 
+  export type MailTesterTestUpsertWithWhereUniqueWithoutOrganisationInput = {
+    where: MailTesterTestWhereUniqueInput
+    update: XOR<MailTesterTestUpdateWithoutOrganisationInput, MailTesterTestUncheckedUpdateWithoutOrganisationInput>
+    create: XOR<MailTesterTestCreateWithoutOrganisationInput, MailTesterTestUncheckedCreateWithoutOrganisationInput>
+  }
+
+  export type MailTesterTestUpdateWithWhereUniqueWithoutOrganisationInput = {
+    where: MailTesterTestWhereUniqueInput
+    data: XOR<MailTesterTestUpdateWithoutOrganisationInput, MailTesterTestUncheckedUpdateWithoutOrganisationInput>
+  }
+
+  export type MailTesterTestUpdateManyWithWhereWithoutOrganisationInput = {
+    where: MailTesterTestScalarWhereInput
+    data: XOR<MailTesterTestUpdateManyMutationInput, MailTesterTestUncheckedUpdateManyWithoutOrganisationInput>
+  }
+
+  export type MailTesterTestScalarWhereInput = {
+    AND?: MailTesterTestScalarWhereInput | MailTesterTestScalarWhereInput[]
+    OR?: MailTesterTestScalarWhereInput[]
+    NOT?: MailTesterTestScalarWhereInput | MailTesterTestScalarWhereInput[]
+    id?: IntFilter<"MailTesterTest"> | number
+    uuid?: StringFilter<"MailTesterTest"> | string
+    organisation_uuid?: StringFilter<"MailTesterTest"> | string
+    label?: StringNullableFilter<"MailTesterTest"> | string | null
+    test_identifier?: StringFilter<"MailTesterTest"> | string
+    test_address?: StringFilter<"MailTesterTest"> | string
+    from_provider?: EnumExternalIntegrationProviderFilter<"MailTesterTest"> | $Enums.ExternalIntegrationProvider
+    from_account?: StringFilter<"MailTesterTest"> | string
+    status?: EnumMailTesterTestStatusFilter<"MailTesterTest"> | $Enums.MailTesterTestStatus
+    score?: FloatNullableFilter<"MailTesterTest"> | number | null
+    result?: JsonNullableFilter<"MailTesterTest">
+    error_message?: StringNullableFilter<"MailTesterTest"> | string | null
+    created_at?: DateTimeFilter<"MailTesterTest"> | Date | string
+    updated_at?: DateTimeFilter<"MailTesterTest"> | Date | string
+  }
+
   export type OrganisationCreateWithoutMembersInput = {
     uuid?: string
     name: string
@@ -101500,6 +103349,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutMembersInput = {
@@ -101538,6 +103388,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutMembersInput = {
@@ -101635,6 +103486,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutMembersInput = {
@@ -101673,6 +103525,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutMembershipsInput = {
@@ -101760,6 +103613,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutInvitationsInput = {
@@ -101798,6 +103652,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutInvitationsInput = {
@@ -101895,6 +103750,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutInvitationsInput = {
@@ -101933,6 +103789,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutInvitations_sentInput = {
@@ -102020,6 +103877,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutFiltersInput = {
@@ -102058,6 +103916,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutFiltersInput = {
@@ -102361,6 +104220,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutFiltersInput = {
@@ -102399,6 +104259,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type RawLeadUpsertWithWhereUniqueWithoutFilterInput = {
@@ -102582,6 +104443,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutSaved_contact_filtersInput = {
@@ -102620,6 +104482,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutSaved_contact_filtersInput = {
@@ -102673,6 +104536,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutSaved_contact_filtersInput = {
@@ -102711,6 +104575,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutScoring_instructionsInput = {
@@ -102748,6 +104613,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutScoring_instructionsInput = {
@@ -102786,6 +104652,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutScoring_instructionsInput = {
@@ -102882,6 +104749,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutScoring_instructionsInput = {
@@ -102920,6 +104788,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type FilterScoringInstructionUpsertWithWhereUniqueWithoutScoring_instructionInput = {
@@ -103736,6 +105605,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutContactsInput = {
@@ -103774,6 +105644,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutContactsInput = {
@@ -104336,6 +106207,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutContactsInput = {
@@ -104374,6 +106246,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type LeadUpsertWithoutContactsInput = {
@@ -105691,6 +107564,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutContact_listsInput = {
@@ -105729,6 +107603,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutContact_listsInput = {
@@ -105919,6 +107794,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutContact_listsInput = {
@@ -105957,6 +107833,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type ContactListUpsertWithoutChildrenInput = {
@@ -106596,6 +108473,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutInteractionsInput = {
@@ -106634,6 +108512,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutInteractionsInput = {
@@ -106949,6 +108828,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutInteractionsInput = {
@@ -106987,6 +108867,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OutreachMessageUpsertWithoutInteractionInput = {
@@ -107204,6 +109085,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutOutreach_messagesInput = {
@@ -107242,6 +109124,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutOutreach_messagesInput = {
@@ -107661,6 +109544,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutOutreach_messagesInput = {
@@ -107699,6 +109583,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type ContactUpsertWithoutOutreach_messagesInput = {
@@ -108144,6 +110029,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutOutreach_sequencesInput = {
@@ -108182,6 +110068,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutOutreach_sequencesInput = {
@@ -108422,6 +110309,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutOutreach_sequencesInput = {
@@ -108460,6 +110348,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OutreachSequenceStepUpsertWithWhereUniqueWithoutSequenceInput = {
@@ -109436,6 +111325,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutBulk_jobsInput = {
@@ -109474,6 +111364,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutBulk_jobsInput = {
@@ -109571,6 +111462,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutBulk_jobsInput = {
@@ -109609,6 +111501,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutBulk_jobs_createdInput = {
@@ -109696,6 +111589,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutWebsite_scrape_requestsInput = {
@@ -109734,6 +111628,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutWebsite_scrape_requestsInput = {
@@ -109787,6 +111682,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutWebsite_scrape_requestsInput = {
@@ -109825,6 +111721,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutSender_profilesInput = {
@@ -109862,6 +111759,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutSender_profilesInput = {
@@ -109900,6 +111798,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutSender_profilesInput = {
@@ -110054,6 +111953,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutSender_profilesInput = {
@@ -110092,6 +111992,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type MarketingCampaignUpsertWithWhereUniqueWithoutSender_profileInput = {
@@ -110145,6 +112046,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutMessage_templatesInput = {
@@ -110183,6 +112085,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutMessage_templatesInput = {
@@ -110281,6 +112184,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutMessage_templatesInput = {
@@ -110319,6 +112223,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OutreachSequenceStepUpsertWithWhereUniqueWithoutMessage_templateInput = {
@@ -110372,6 +112277,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutMarketing_campaignsInput = {
@@ -110410,6 +112316,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutMarketing_campaignsInput = {
@@ -110776,6 +112683,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutMarketing_campaignsInput = {
@@ -110814,6 +112722,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type SenderProfileUpsertWithoutMarketing_campaignsInput = {
@@ -111426,6 +113335,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutOpenai_batch_jobsInput = {
@@ -111464,6 +113374,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutOpenai_batch_jobsInput = {
@@ -111517,6 +113428,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutOpenai_batch_jobsInput = {
@@ -111555,6 +113467,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutIntegrationsInput = {
@@ -111592,6 +113505,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutIntegrationsInput = {
@@ -111630,6 +113544,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutIntegrationsInput = {
@@ -111749,6 +113664,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutIntegrationsInput = {
@@ -111787,6 +113703,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type IntegrationKeyUpsertWithWhereUniqueWithoutIntegrationInput = {
@@ -112204,6 +114121,176 @@ export namespace Prisma {
     data: XOR<CampaignIntegrationUpdateManyMutationInput, CampaignIntegrationUncheckedUpdateManyWithoutIntegration_account_domainInput>
   }
 
+  export type OrganisationCreateWithoutMail_tester_testsInput = {
+    uuid?: string
+    name: string
+    slug: string
+    timezone?: string
+    reply_to_email?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
+    invitations?: OrganisationInvitationCreateNestedManyWithoutOrganisationInput
+    filters?: FilterCreateNestedManyWithoutOrganisationInput
+    contacts?: ContactCreateNestedManyWithoutOrganisationInput
+    outreach_messages?: OutreachMessageCreateNestedManyWithoutOrganisationInput
+    outreach_sequences?: OutreachSequenceCreateNestedManyWithoutOrganisationInput
+    interactions?: InteractionCreateNestedManyWithoutOrganisationInput
+    sender_profiles?: SenderProfileCreateNestedManyWithoutOrganisationInput
+    marketing_campaigns?: MarketingCampaignCreateNestedManyWithoutOrganisationInput
+    scoring_instructions?: ScoringInstructionCreateNestedManyWithoutOrganisationInput
+    openai_batch_jobs?: OpenAiBatchJobCreateNestedManyWithoutOrganisationInput
+    integrations?: IntegrationCreateNestedManyWithoutOrganisationInput
+    reminders?: ReminderCreateNestedManyWithoutOrganisationInput
+    forms?: FormCreateNestedManyWithoutOrganisationInput
+    contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
+    contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
+    ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
+    apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
+    message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
+  }
+
+  export type OrganisationUncheckedCreateWithoutMail_tester_testsInput = {
+    id?: number
+    uuid?: string
+    name: string
+    slug: string
+    timezone?: string
+    reply_to_email?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
+    invitations?: OrganisationInvitationUncheckedCreateNestedManyWithoutOrganisationInput
+    filters?: FilterUncheckedCreateNestedManyWithoutOrganisationInput
+    contacts?: ContactUncheckedCreateNestedManyWithoutOrganisationInput
+    outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutOrganisationInput
+    outreach_sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutOrganisationInput
+    interactions?: InteractionUncheckedCreateNestedManyWithoutOrganisationInput
+    sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutOrganisationInput
+    marketing_campaigns?: MarketingCampaignUncheckedCreateNestedManyWithoutOrganisationInput
+    scoring_instructions?: ScoringInstructionUncheckedCreateNestedManyWithoutOrganisationInput
+    openai_batch_jobs?: OpenAiBatchJobUncheckedCreateNestedManyWithoutOrganisationInput
+    integrations?: IntegrationUncheckedCreateNestedManyWithoutOrganisationInput
+    reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
+    forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
+    contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
+    contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
+    ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
+    apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
+    message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
+  }
+
+  export type OrganisationCreateOrConnectWithoutMail_tester_testsInput = {
+    where: OrganisationWhereUniqueInput
+    create: XOR<OrganisationCreateWithoutMail_tester_testsInput, OrganisationUncheckedCreateWithoutMail_tester_testsInput>
+  }
+
+  export type OrganisationUpsertWithoutMail_tester_testsInput = {
+    update: XOR<OrganisationUpdateWithoutMail_tester_testsInput, OrganisationUncheckedUpdateWithoutMail_tester_testsInput>
+    create: XOR<OrganisationCreateWithoutMail_tester_testsInput, OrganisationUncheckedCreateWithoutMail_tester_testsInput>
+    where?: OrganisationWhereInput
+  }
+
+  export type OrganisationUpdateToOneWithWhereWithoutMail_tester_testsInput = {
+    where?: OrganisationWhereInput
+    data: XOR<OrganisationUpdateWithoutMail_tester_testsInput, OrganisationUncheckedUpdateWithoutMail_tester_testsInput>
+  }
+
+  export type OrganisationUpdateWithoutMail_tester_testsInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
+    invitations?: OrganisationInvitationUpdateManyWithoutOrganisationNestedInput
+    filters?: FilterUpdateManyWithoutOrganisationNestedInput
+    contacts?: ContactUpdateManyWithoutOrganisationNestedInput
+    outreach_messages?: OutreachMessageUpdateManyWithoutOrganisationNestedInput
+    outreach_sequences?: OutreachSequenceUpdateManyWithoutOrganisationNestedInput
+    interactions?: InteractionUpdateManyWithoutOrganisationNestedInput
+    sender_profiles?: SenderProfileUpdateManyWithoutOrganisationNestedInput
+    marketing_campaigns?: MarketingCampaignUpdateManyWithoutOrganisationNestedInput
+    scoring_instructions?: ScoringInstructionUpdateManyWithoutOrganisationNestedInput
+    openai_batch_jobs?: OpenAiBatchJobUpdateManyWithoutOrganisationNestedInput
+    integrations?: IntegrationUpdateManyWithoutOrganisationNestedInput
+    reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
+    forms?: FormUpdateManyWithoutOrganisationNestedInput
+    contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
+    contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
+    ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
+    apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
+    message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
+  }
+
+  export type OrganisationUncheckedUpdateWithoutMail_tester_testsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
+    invitations?: OrganisationInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
+    filters?: FilterUncheckedUpdateManyWithoutOrganisationNestedInput
+    contacts?: ContactUncheckedUpdateManyWithoutOrganisationNestedInput
+    outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutOrganisationNestedInput
+    outreach_sequences?: OutreachSequenceUncheckedUpdateManyWithoutOrganisationNestedInput
+    interactions?: InteractionUncheckedUpdateManyWithoutOrganisationNestedInput
+    sender_profiles?: SenderProfileUncheckedUpdateManyWithoutOrganisationNestedInput
+    marketing_campaigns?: MarketingCampaignUncheckedUpdateManyWithoutOrganisationNestedInput
+    scoring_instructions?: ScoringInstructionUncheckedUpdateManyWithoutOrganisationNestedInput
+    openai_batch_jobs?: OpenAiBatchJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    integrations?: IntegrationUncheckedUpdateManyWithoutOrganisationNestedInput
+    reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
+    forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
+    contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
+    contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
+    ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
+  }
+
   export type OrganisationCreateWithoutRemindersInput = {
     uuid?: string
     name: string
@@ -112239,6 +114326,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutRemindersInput = {
@@ -112277,6 +114365,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutRemindersInput = {
@@ -112418,6 +114507,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutRemindersInput = {
@@ -112456,6 +114546,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type ContactUpsertWithoutRemindersInput = {
@@ -112587,6 +114678,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutFormsInput = {
@@ -112625,6 +114717,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutFormsInput = {
@@ -112750,6 +114843,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutFormsInput = {
@@ -112788,6 +114882,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type FormFieldUpsertWithWhereUniqueWithoutFormInput = {
@@ -113504,6 +115599,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutContact_audience_analysesInput = {
@@ -113542,6 +115638,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutContact_audience_analysesInput = {
@@ -113671,6 +115768,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutContact_audience_analysesInput = {
@@ -113709,6 +115807,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type FilterUpsertWithoutAudience_analysesInput = {
@@ -113834,6 +115933,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutAi_usage_logsInput = {
@@ -113872,6 +115972,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutAi_usage_logsInput = {
@@ -113925,6 +116026,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutAi_usage_logsInput = {
@@ -113963,6 +116065,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutApify_usage_logsInput = {
@@ -114000,6 +116103,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutApify_usage_logsInput = {
@@ -114038,6 +116142,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutApify_usage_logsInput = {
@@ -114091,6 +116196,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutApify_usage_logsInput = {
@@ -114129,6 +116235,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutMessaging_goalsInput = {
@@ -114166,6 +116273,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutMessaging_goalsInput = {
@@ -114204,6 +116312,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutMessaging_goalsInput = {
@@ -114334,6 +116443,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutMessaging_goalsInput = {
@@ -114372,6 +116482,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutMessaging_goalsInput = {
@@ -114475,6 +116586,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutEmail_send_limitsInput = {
@@ -114513,6 +116625,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutEmail_send_limitsInput = {
@@ -114566,6 +116679,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutEmail_send_limitsInput = {
@@ -114604,6 +116718,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutSending_policiesInput = {
@@ -114641,6 +116756,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutSending_policiesInput = {
@@ -114679,6 +116795,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutSending_policiesInput = {
@@ -114889,6 +117006,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutSending_policiesInput = {
@@ -114927,6 +117045,7 @@ export namespace Prisma {
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type SendingPolicyUpsertWithoutCloned_instancesInput = {
@@ -115791,6 +117910,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutGoal_achievementsInput = {
@@ -115829,6 +117949,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutGoal_achievementsInput = {
@@ -115954,6 +118075,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutGoal_achievementsInput = {
@@ -115992,6 +118114,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutGoal_achievementsInput = {
@@ -116113,6 +118236,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutGoal_personal_bestsInput = {
@@ -116151,6 +118275,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutGoal_personal_bestsInput = {
@@ -116248,6 +118373,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutGoal_personal_bestsInput = {
@@ -116286,6 +118412,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutGoal_personal_bestsInput = {
@@ -116373,6 +118500,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutActivity_logsInput = {
@@ -116411,6 +118539,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutActivity_logsInput = {
@@ -116508,6 +118637,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutActivity_logsInput = {
@@ -116546,6 +118676,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutActivity_logsInput = {
@@ -117587,6 +119718,22 @@ export namespace Prisma {
     window_end_minute?: number | null
     min_interval_seconds?: number
     min_interval_jitter_seconds?: number
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type MailTesterTestCreateManyOrganisationInput = {
+    id?: number
+    uuid?: string
+    label?: string | null
+    test_identifier: string
+    test_address: string
+    from_provider: $Enums.ExternalIntegrationProvider
+    from_account: string
+    status?: $Enums.MailTesterTestStatus
+    score?: number | null
+    result?: NullableJsonNullValueInput | InputJsonValue
+    error_message?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -119015,6 +121162,53 @@ export namespace Prisma {
     window_end_minute?: NullableIntFieldUpdateOperationsInput | number | null
     min_interval_seconds?: IntFieldUpdateOperationsInput | number
     min_interval_jitter_seconds?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MailTesterTestUpdateWithoutOrganisationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    label?: NullableStringFieldUpdateOperationsInput | string | null
+    test_identifier?: StringFieldUpdateOperationsInput | string
+    test_address?: StringFieldUpdateOperationsInput | string
+    from_provider?: EnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider
+    from_account?: StringFieldUpdateOperationsInput | string
+    status?: EnumMailTesterTestStatusFieldUpdateOperationsInput | $Enums.MailTesterTestStatus
+    score?: NullableFloatFieldUpdateOperationsInput | number | null
+    result?: NullableJsonNullValueInput | InputJsonValue
+    error_message?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MailTesterTestUncheckedUpdateWithoutOrganisationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    label?: NullableStringFieldUpdateOperationsInput | string | null
+    test_identifier?: StringFieldUpdateOperationsInput | string
+    test_address?: StringFieldUpdateOperationsInput | string
+    from_provider?: EnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider
+    from_account?: StringFieldUpdateOperationsInput | string
+    status?: EnumMailTesterTestStatusFieldUpdateOperationsInput | $Enums.MailTesterTestStatus
+    score?: NullableFloatFieldUpdateOperationsInput | number | null
+    result?: NullableJsonNullValueInput | InputJsonValue
+    error_message?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MailTesterTestUncheckedUpdateManyWithoutOrganisationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    label?: NullableStringFieldUpdateOperationsInput | string | null
+    test_identifier?: StringFieldUpdateOperationsInput | string
+    test_address?: StringFieldUpdateOperationsInput | string
+    from_provider?: EnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider
+    from_account?: StringFieldUpdateOperationsInput | string
+    status?: EnumMailTesterTestStatusFieldUpdateOperationsInput | $Enums.MailTesterTestStatus
+    score?: NullableFloatFieldUpdateOperationsInput | number | null
+    result?: NullableJsonNullValueInput | InputJsonValue
+    error_message?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }

@@ -48,6 +48,7 @@ import { SendingPolicyModule } from './modules/sending-policy/sending-policy.mod
 import { SendingCapacityModule } from './modules/sending-capacity/sending-capacity.module';
 import { IntegrationSelectionModule } from './modules/integration-selection/integration-selection.module';
 import { CampaignIntegrationsModule } from './modules/campaign-integrations/campaign-integrations.module';
+import { MailTesterModule } from './modules/mail-tester/mail-tester.module';
 
 @Module({
   imports: [
@@ -99,6 +100,7 @@ import { CampaignIntegrationsModule } from './modules/campaign-integrations/camp
     SendingCapacityModule,
     IntegrationSelectionModule,
     CampaignIntegrationsModule,
+    MailTesterModule,
   ],
   controllers: [AppController],
   providers: [AppService],
