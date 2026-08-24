@@ -11,8 +11,11 @@ import {
 import { MailTesterResultModal } from "./mail-tester-result-modal";
 
 export function MailTesterTable({ rows }: { rows: MailTesterTest[] }) {
-    const [selected, setSelected] = useState<MailTesterTest | null>(null);
+    const [selectedUuid, setSelectedUuid] = useState<string | null>(null);
     const refreshTest = useRefreshMailTesterTest();
+    // Look up the selected row by uuid (rather than holding a snapshot) so the modal reflects
+    // fresh data - e.g. after an AI audit or refresh invalidates and refetches the list.
+    const selected = rows.find((row) => row.uuid === selectedUuid) ?? null;
 
     if (rows.length === 0) {
         return (
@@ -27,7 +30,7 @@ export function MailTesterTable({ rows }: { rows: MailTesterTest[] }) {
             <MailTesterResultModal
                 test={selected}
                 onOpenChange={(open) => {
-                    if (!open) setSelected(null);
+                    if (!open) setSelectedUuid(null);
                 }}
             />
             <table className="w-full text-sm">
@@ -74,26 +77,23 @@ export function MailTesterTable({ rows }: { rows: MailTesterTest[] }) {
                             </td>
                             <td className="px-3 py-2 align-top">
                                 <div className="flex items-center justify-end gap-1.5">
-                                    {row.status !== "COMPLETED" ? (
-                                        <Button
-                                            size="sm"
-                                            variant="secondary"
-                                            className="h-7 px-2 text-xs"
-                                            isPending={
-                                                refreshTest.isPending &&
-                                                refreshTest.variables === row.uuid
-                                            }
-                                            onPress={() => refreshTest.mutate(row.uuid)}
-                                        >
-                                            <RefreshCw className="size-3.5" />
-                                            Check results
-                                        </Button>
-                                    ) : null}
+                                    <Button
+                                        size="sm"
+                                        variant="secondary"
+                                        className="h-7 px-2 text-xs"
+                                        isPending={
+                                            refreshTest.isPending && refreshTest.variables === row.uuid
+                                        }
+                                        onPress={() => refreshTest.mutate(row.uuid)}
+                                    >
+                                        <RefreshCw className="size-3.5" />
+                                        {row.status === "COMPLETED" ? "Refresh" : "Check results"}
+                                    </Button>
                                     <Button
                                         size="sm"
                                         variant="ghost"
                                         className="shrink-0 min-w-7 h-7 px-1"
-                                        onPress={() => setSelected(row)}
+                                        onPress={() => setSelectedUuid(row.uuid)}
                                         aria-label="View result"
                                     >
                                         <Eye className="size-3.5 text-muted" />

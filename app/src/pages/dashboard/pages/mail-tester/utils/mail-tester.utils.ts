@@ -27,7 +27,10 @@ export function scoreColor(score: number | null | undefined): MailTesterChipColo
 }
 
 export function statusCheckColor(statusClass: string | undefined): MailTesterChipColor {
-    switch (statusClass) {
+    // Mail-Tester statusClass values often come combined with an icon class, e.g.
+    // "success icon-check" or "warning icon-check" - match on the leading word.
+    const normalized = statusClass?.split(" ")[0];
+    switch (normalized) {
         case "success":
             return "success";
         case "warning":
@@ -37,4 +40,34 @@ export function statusCheckColor(statusClass: string | undefined): MailTesterChi
         default:
             return "default";
     }
+}
+
+export function severityColor(
+    severity: "high" | "medium" | "low" | undefined,
+): MailTesterChipColor {
+    switch (severity) {
+        case "high":
+            return "danger";
+        case "medium":
+            return "warning";
+        case "low":
+            return "default";
+        default:
+            return "default";
+    }
+}
+
+export function stripHtml(value: string | null | undefined): string {
+    if (!value) return "";
+    return value
+        .replace(/<(script|style)[^>]*>[\s\S]*?<\/\1>/gi, " ")
+        .replace(/<[^>]*>/g, " ")
+        .replace(/&nbsp;/g, " ")
+        .replace(/&amp;/g, "&")
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'")
+        .replace(/&lt;/g, "<")
+        .replace(/&gt;/g, ">")
+        .replace(/\s+/g, " ")
+        .trim();
 }

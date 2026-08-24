@@ -729,6 +729,7 @@ export const AiUsageOperation: {
   EMBEDDING: 'EMBEDDING',
   ADMIN_GENERATE: 'ADMIN_GENERATE',
   BATCH_JOB: 'BATCH_JOB',
+  MAIL_TESTER_AUDIT: 'MAIL_TESTER_AUDIT',
   OTHER: 'OTHER'
 };
 
@@ -53247,6 +53248,7 @@ export namespace Prisma {
     status: $Enums.MailTesterTestStatus | null
     score: number | null
     error_message: string | null
+    ai_audit_generated_at: Date | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -53263,6 +53265,7 @@ export namespace Prisma {
     status: $Enums.MailTesterTestStatus | null
     score: number | null
     error_message: string | null
+    ai_audit_generated_at: Date | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -53280,6 +53283,8 @@ export namespace Prisma {
     score: number
     result: number
     error_message: number
+    ai_audit: number
+    ai_audit_generated_at: number
     created_at: number
     updated_at: number
     _all: number
@@ -53308,6 +53313,7 @@ export namespace Prisma {
     status?: true
     score?: true
     error_message?: true
+    ai_audit_generated_at?: true
     created_at?: true
     updated_at?: true
   }
@@ -53324,6 +53330,7 @@ export namespace Prisma {
     status?: true
     score?: true
     error_message?: true
+    ai_audit_generated_at?: true
     created_at?: true
     updated_at?: true
   }
@@ -53341,6 +53348,8 @@ export namespace Prisma {
     score?: true
     result?: true
     error_message?: true
+    ai_audit?: true
+    ai_audit_generated_at?: true
     created_at?: true
     updated_at?: true
     _all?: true
@@ -53445,6 +53454,8 @@ export namespace Prisma {
     score: number | null
     result: JsonValue | null
     error_message: string | null
+    ai_audit: JsonValue | null
+    ai_audit_generated_at: Date | null
     created_at: Date
     updated_at: Date
     _count: MailTesterTestCountAggregateOutputType | null
@@ -53481,6 +53492,8 @@ export namespace Prisma {
     score?: boolean
     result?: boolean
     error_message?: boolean
+    ai_audit?: boolean
+    ai_audit_generated_at?: boolean
     created_at?: boolean
     updated_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
@@ -53499,6 +53512,8 @@ export namespace Prisma {
     score?: boolean
     result?: boolean
     error_message?: boolean
+    ai_audit?: boolean
+    ai_audit_generated_at?: boolean
     created_at?: boolean
     updated_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
@@ -53517,6 +53532,8 @@ export namespace Prisma {
     score?: boolean
     result?: boolean
     error_message?: boolean
+    ai_audit?: boolean
+    ai_audit_generated_at?: boolean
     created_at?: boolean
     updated_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
@@ -53535,11 +53552,13 @@ export namespace Prisma {
     score?: boolean
     result?: boolean
     error_message?: boolean
+    ai_audit?: boolean
+    ai_audit_generated_at?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
-  export type MailTesterTestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "label" | "test_identifier" | "test_address" | "from_provider" | "from_account" | "status" | "score" | "result" | "error_message" | "created_at" | "updated_at", ExtArgs["result"]["mailTesterTest"]>
+  export type MailTesterTestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "label" | "test_identifier" | "test_address" | "from_provider" | "from_account" | "status" | "score" | "result" | "error_message" | "ai_audit" | "ai_audit_generated_at" | "created_at" | "updated_at", ExtArgs["result"]["mailTesterTest"]>
   export type MailTesterTestInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
   }
@@ -53568,6 +53587,8 @@ export namespace Prisma {
       score: number | null
       result: Prisma.JsonValue | null
       error_message: string | null
+      ai_audit: Prisma.JsonValue | null
+      ai_audit_generated_at: Date | null
       created_at: Date
       updated_at: Date
     }, ExtArgs["result"]["mailTesterTest"]>
@@ -54006,6 +54027,8 @@ export namespace Prisma {
     readonly score: FieldRef<"MailTesterTest", 'Float'>
     readonly result: FieldRef<"MailTesterTest", 'Json'>
     readonly error_message: FieldRef<"MailTesterTest", 'String'>
+    readonly ai_audit: FieldRef<"MailTesterTest", 'Json'>
+    readonly ai_audit_generated_at: FieldRef<"MailTesterTest", 'DateTime'>
     readonly created_at: FieldRef<"MailTesterTest", 'DateTime'>
     readonly updated_at: FieldRef<"MailTesterTest", 'DateTime'>
   }
@@ -76649,6 +76672,8 @@ export namespace Prisma {
     score: 'score',
     result: 'result',
     error_message: 'error_message',
+    ai_audit: 'ai_audit',
+    ai_audit_generated_at: 'ai_audit_generated_at',
     created_at: 'created_at',
     updated_at: 'updated_at'
   };
@@ -81456,6 +81481,8 @@ export namespace Prisma {
     score?: FloatNullableFilter<"MailTesterTest"> | number | null
     result?: JsonNullableFilter<"MailTesterTest">
     error_message?: StringNullableFilter<"MailTesterTest"> | string | null
+    ai_audit?: JsonNullableFilter<"MailTesterTest">
+    ai_audit_generated_at?: DateTimeNullableFilter<"MailTesterTest"> | Date | string | null
     created_at?: DateTimeFilter<"MailTesterTest"> | Date | string
     updated_at?: DateTimeFilter<"MailTesterTest"> | Date | string
     organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
@@ -81474,6 +81501,8 @@ export namespace Prisma {
     score?: SortOrderInput | SortOrder
     result?: SortOrderInput | SortOrder
     error_message?: SortOrderInput | SortOrder
+    ai_audit?: SortOrderInput | SortOrder
+    ai_audit_generated_at?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     organisation?: OrganisationOrderByWithRelationInput
@@ -81495,6 +81524,8 @@ export namespace Prisma {
     score?: FloatNullableFilter<"MailTesterTest"> | number | null
     result?: JsonNullableFilter<"MailTesterTest">
     error_message?: StringNullableFilter<"MailTesterTest"> | string | null
+    ai_audit?: JsonNullableFilter<"MailTesterTest">
+    ai_audit_generated_at?: DateTimeNullableFilter<"MailTesterTest"> | Date | string | null
     created_at?: DateTimeFilter<"MailTesterTest"> | Date | string
     updated_at?: DateTimeFilter<"MailTesterTest"> | Date | string
     organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
@@ -81513,6 +81544,8 @@ export namespace Prisma {
     score?: SortOrderInput | SortOrder
     result?: SortOrderInput | SortOrder
     error_message?: SortOrderInput | SortOrder
+    ai_audit?: SortOrderInput | SortOrder
+    ai_audit_generated_at?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     _count?: MailTesterTestCountOrderByAggregateInput
@@ -81538,6 +81571,8 @@ export namespace Prisma {
     score?: FloatNullableWithAggregatesFilter<"MailTesterTest"> | number | null
     result?: JsonNullableWithAggregatesFilter<"MailTesterTest">
     error_message?: StringNullableWithAggregatesFilter<"MailTesterTest"> | string | null
+    ai_audit?: JsonNullableWithAggregatesFilter<"MailTesterTest">
+    ai_audit_generated_at?: DateTimeNullableWithAggregatesFilter<"MailTesterTest"> | Date | string | null
     created_at?: DateTimeWithAggregatesFilter<"MailTesterTest"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"MailTesterTest"> | Date | string
   }
@@ -87218,6 +87253,8 @@ export namespace Prisma {
     score?: number | null
     result?: NullableJsonNullValueInput | InputJsonValue
     error_message?: string | null
+    ai_audit?: NullableJsonNullValueInput | InputJsonValue
+    ai_audit_generated_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutMail_tester_testsInput
@@ -87236,6 +87273,8 @@ export namespace Prisma {
     score?: number | null
     result?: NullableJsonNullValueInput | InputJsonValue
     error_message?: string | null
+    ai_audit?: NullableJsonNullValueInput | InputJsonValue
+    ai_audit_generated_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -87251,6 +87290,8 @@ export namespace Prisma {
     score?: NullableFloatFieldUpdateOperationsInput | number | null
     result?: NullableJsonNullValueInput | InputJsonValue
     error_message?: NullableStringFieldUpdateOperationsInput | string | null
+    ai_audit?: NullableJsonNullValueInput | InputJsonValue
+    ai_audit_generated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutMail_tester_testsNestedInput
@@ -87269,6 +87310,8 @@ export namespace Prisma {
     score?: NullableFloatFieldUpdateOperationsInput | number | null
     result?: NullableJsonNullValueInput | InputJsonValue
     error_message?: NullableStringFieldUpdateOperationsInput | string | null
+    ai_audit?: NullableJsonNullValueInput | InputJsonValue
+    ai_audit_generated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -87286,6 +87329,8 @@ export namespace Prisma {
     score?: number | null
     result?: NullableJsonNullValueInput | InputJsonValue
     error_message?: string | null
+    ai_audit?: NullableJsonNullValueInput | InputJsonValue
+    ai_audit_generated_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -87301,6 +87346,8 @@ export namespace Prisma {
     score?: NullableFloatFieldUpdateOperationsInput | number | null
     result?: NullableJsonNullValueInput | InputJsonValue
     error_message?: NullableStringFieldUpdateOperationsInput | string | null
+    ai_audit?: NullableJsonNullValueInput | InputJsonValue
+    ai_audit_generated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -87318,6 +87365,8 @@ export namespace Prisma {
     score?: NullableFloatFieldUpdateOperationsInput | number | null
     result?: NullableJsonNullValueInput | InputJsonValue
     error_message?: NullableStringFieldUpdateOperationsInput | string | null
+    ai_audit?: NullableJsonNullValueInput | InputJsonValue
+    ai_audit_generated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -92553,6 +92602,8 @@ export namespace Prisma {
     score?: SortOrder
     result?: SortOrder
     error_message?: SortOrder
+    ai_audit?: SortOrder
+    ai_audit_generated_at?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -92574,6 +92625,7 @@ export namespace Prisma {
     status?: SortOrder
     score?: SortOrder
     error_message?: SortOrder
+    ai_audit_generated_at?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -92590,6 +92642,7 @@ export namespace Prisma {
     status?: SortOrder
     score?: SortOrder
     error_message?: SortOrder
+    ai_audit_generated_at?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -102390,6 +102443,8 @@ export namespace Prisma {
     score?: number | null
     result?: NullableJsonNullValueInput | InputJsonValue
     error_message?: string | null
+    ai_audit?: NullableJsonNullValueInput | InputJsonValue
+    ai_audit_generated_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -102406,6 +102461,8 @@ export namespace Prisma {
     score?: number | null
     result?: NullableJsonNullValueInput | InputJsonValue
     error_message?: string | null
+    ai_audit?: NullableJsonNullValueInput | InputJsonValue
+    ai_audit_generated_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -103310,6 +103367,8 @@ export namespace Prisma {
     score?: FloatNullableFilter<"MailTesterTest"> | number | null
     result?: JsonNullableFilter<"MailTesterTest">
     error_message?: StringNullableFilter<"MailTesterTest"> | string | null
+    ai_audit?: JsonNullableFilter<"MailTesterTest">
+    ai_audit_generated_at?: DateTimeNullableFilter<"MailTesterTest"> | Date | string | null
     created_at?: DateTimeFilter<"MailTesterTest"> | Date | string
     updated_at?: DateTimeFilter<"MailTesterTest"> | Date | string
   }
@@ -119734,6 +119793,8 @@ export namespace Prisma {
     score?: number | null
     result?: NullableJsonNullValueInput | InputJsonValue
     error_message?: string | null
+    ai_audit?: NullableJsonNullValueInput | InputJsonValue
+    ai_audit_generated_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -121177,6 +121238,8 @@ export namespace Prisma {
     score?: NullableFloatFieldUpdateOperationsInput | number | null
     result?: NullableJsonNullValueInput | InputJsonValue
     error_message?: NullableStringFieldUpdateOperationsInput | string | null
+    ai_audit?: NullableJsonNullValueInput | InputJsonValue
+    ai_audit_generated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -121193,6 +121256,8 @@ export namespace Prisma {
     score?: NullableFloatFieldUpdateOperationsInput | number | null
     result?: NullableJsonNullValueInput | InputJsonValue
     error_message?: NullableStringFieldUpdateOperationsInput | string | null
+    ai_audit?: NullableJsonNullValueInput | InputJsonValue
+    ai_audit_generated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -121209,6 +121274,8 @@ export namespace Prisma {
     score?: NullableFloatFieldUpdateOperationsInput | number | null
     result?: NullableJsonNullValueInput | InputJsonValue
     error_message?: NullableStringFieldUpdateOperationsInput | string | null
+    ai_audit?: NullableJsonNullValueInput | InputJsonValue
+    ai_audit_generated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }

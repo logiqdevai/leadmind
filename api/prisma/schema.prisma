@@ -1193,20 +1193,22 @@ enum MailTesterTestStatus {
 }
 
 model MailTesterTest {
-  id                Int                   @id @default(autoincrement())
-  uuid              String                @unique @default(uuid())
-  organisation_uuid String
-  label             String?
-  test_identifier   String
-  test_address      String
-  from_provider     ExternalIntegrationProvider
-  from_account      String
-  status            MailTesterTestStatus @default(PENDING)
-  score             Float?
-  result            Json?
-  error_message     String?
-  created_at        DateTime              @default(now())
-  updated_at        DateTime              @updatedAt
+  id                    Int                         @id @default(autoincrement())
+  uuid                  String                      @unique @default(uuid())
+  organisation_uuid     String
+  label                 String?
+  test_identifier       String
+  test_address          String
+  from_provider         ExternalIntegrationProvider
+  from_account          String
+  status                MailTesterTestStatus        @default(PENDING)
+  score                 Float?
+  result                Json?
+  error_message         String?
+  ai_audit              Json?
+  ai_audit_generated_at DateTime?
+  created_at            DateTime                    @default(now())
+  updated_at            DateTime                    @updatedAt
 
   organisation Organisation @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
 
@@ -1394,6 +1396,7 @@ enum AiUsageOperation {
   EMBEDDING
   ADMIN_GENERATE
   BATCH_JOB
+  MAIL_TESTER_AUDIT
   OTHER
 }
 

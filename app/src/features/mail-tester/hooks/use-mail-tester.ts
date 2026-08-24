@@ -3,6 +3,7 @@ import { toast } from "@/hooks/use-toast";
 import {
     listMailTesterTests,
     refreshMailTesterTest,
+    runMailTesterAiAudit,
     startMailTesterTest,
 } from "../services/mail-tester.service";
 import type { CreateMailTesterTestPayload } from "../interfaces/mail-tester.interface";
@@ -48,6 +49,24 @@ export function useRefreshMailTesterTest() {
         onError: (error: Error) => {
             toast({
                 title: "Could not fetch result",
+                description: error.message,
+                variant: "error",
+                duration: 4000,
+            });
+        },
+    });
+}
+
+export function useRunMailTesterAiAudit() {
+    const qc = useQueryClient();
+    return useMutation({
+        mutationFn: (uuid: string) => runMailTesterAiAudit(uuid),
+        onSuccess: () => {
+            qc.invalidateQueries({ queryKey: mailTesterQueryKeys.all });
+        },
+        onError: (error: Error) => {
+            toast({
+                title: "Could not run AI audit",
                 description: error.message,
                 variant: "error",
                 duration: 4000,

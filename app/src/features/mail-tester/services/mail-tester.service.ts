@@ -45,3 +45,12 @@ export const refreshMailTesterTest = async (uuid: string): Promise<MailTesterTes
         throw new Error(apiErrorMessage(error, "Failed to refresh test result."));
     }
 };
+
+export const runMailTesterAiAudit = async (uuid: string): Promise<MailTesterTest> => {
+    try {
+        const response = await axiosInstance.post(ApiRoutes.mail_tester.ai_audit(uuid), {});
+        return response.data;
+    } catch (error) {
+        throw new Error(apiErrorMessage(error, "Failed to run AI audit."));
+    }
+};

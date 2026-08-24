@@ -1,5 +1,10 @@
 import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { CurrentUser } from '@/shared/decorators/current-user.decorator';
 import { JwtGuard } from '@/shared/guards/jwt.guard';
 import { ActivityLog } from '@/modules/activity-logs/decorators/activity-log.decorator';
@@ -29,7 +34,9 @@ export class MailTesterController {
     entityUuidFrom: 'result.uuid',
   })
   @Post('tests')
-  @ApiOperation({ summary: 'Send a deliverability test email and start tracking the result' })
+  @ApiOperation({
+    summary: 'Send a deliverability test email and start tracking the result',
+  })
   startTest(
     @CurrentUser('organisation_uuid') organisation_uuid: string,
     @Body() dto: CreateMailTesterTestDto,
@@ -45,5 +52,18 @@ export class MailTesterController {
     @Param('uuid') uuid: string,
   ) {
     return this.mailTesterService.refreshResult(organisation_uuid, uuid);
+  }
+
+  @Post('tests/:uuid/ai-audit')
+  @ApiOperation({
+    summary:
+      'Run an AI audit of a Mail-Tester result (overwrites the previous audit)',
+  })
+  @ApiResponse({ status: 404, description: 'Test not found' })
+  runAiAudit(
+    @CurrentUser('organisation_uuid') organisation_uuid: string,
+    @Param('uuid') uuid: string,
+  ) {
+    return this.mailTesterService.runAiAudit(organisation_uuid, uuid);
   }
 }

@@ -1,4 +1,8 @@
-import { Injectable, Logger, ServiceUnavailableException } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  ServiceUnavailableException,
+} from '@nestjs/common';
 import axios, { AxiosInstance } from 'axios';
 import {
   MAIL_TESTER_BASE_URL,

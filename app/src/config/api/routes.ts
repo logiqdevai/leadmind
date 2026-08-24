@@ -323,6 +323,7 @@ export const ApiRoutes = {
         list: "/mail-tester/tests",
         create: "/mail-tester/tests",
         refresh: (uuid: string) => `/mail-tester/tests/${uuid}/refresh`,
+        ai_audit: (uuid: string) => `/mail-tester/tests/${uuid}/ai-audit`,
     },
     campaign_integrations: {
         list: (campaignUuid: string) => `/marketing-campaigns/${campaignUuid}/integrations`,

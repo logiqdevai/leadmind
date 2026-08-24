@@ -684,6 +684,8 @@ exports.Prisma.MailTesterTestScalarFieldEnum = {
   score: 'score',
   result: 'result',
   error_message: 'error_message',
+  ai_audit: 'ai_audit',
+  ai_audit_generated_at: 'ai_audit_generated_at',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };
@@ -1291,6 +1293,7 @@ exports.AiUsageOperation = exports.$Enums.AiUsageOperation = {
   EMBEDDING: 'EMBEDDING',
   ADMIN_GENERATE: 'ADMIN_GENERATE',
   BATCH_JOB: 'BATCH_JOB',
+  MAIL_TESTER_AUDIT: 'MAIL_TESTER_AUDIT',
   OTHER: 'OTHER'
 };
 

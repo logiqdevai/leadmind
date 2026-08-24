@@ -10,6 +10,7 @@ export const AI_USAGE_OPERATION_LABELS: Record<AiUsageOperation, string> = {
     EMBEDDING: "Embedding",
     ADMIN_GENERATE: "Admin generate",
     BATCH_JOB: "Batch job",
+    MAIL_TESTER_AUDIT: "Mail-Tester audit",
     OTHER: "Other",
 };
 
