@@ -9,6 +9,7 @@ export const INTEGRATION_PROVIDERS: ExternalIntegrationProvider[] = [
   ExternalIntegrationProvider.SCRAPIO,
   ExternalIntegrationProvider.HUBSPOT,
   ExternalIntegrationProvider.MAILTESTER,
+  ExternalIntegrationProvider.MXTOOLBOX,
 ];
 
 export const DISABLED_INTEGRATION_PROVIDERS: ExternalIntegrationProvider[] = [
@@ -47,6 +48,7 @@ export const INTEGRATION_PROVIDER_LABELS: Record<
   [ExternalIntegrationProvider.SCRAPIO]: 'Scrapio',
   [ExternalIntegrationProvider.HUBSPOT]: 'HubSpot',
   [ExternalIntegrationProvider.MAILTESTER]: 'Mail-Tester',
+  [ExternalIntegrationProvider.MXTOOLBOX]: 'MxToolbox',
 };
 
 export const INTEGRATION_PROVIDER_DESCRIPTIONS: Record<
@@ -68,4 +70,6 @@ export const INTEGRATION_PROVIDER_DESCRIPTIONS: Record<
   [ExternalIntegrationProvider.HUBSPOT]: 'CRM sync and marketing automation.',
   [ExternalIntegrationProvider.MAILTESTER]:
     'Email deliverability testing. Add your Mail-Tester username, then send a test email from one of your configured Resend or SMTP accounts to check spam score, authentication, and blacklist status.',
+  [ExternalIntegrationProvider.MXTOOLBOX]:
+    'Domain health monitoring. Add your MxToolbox API key, then run DNS, email authentication (SPF/DKIM/DMARC/BIMI/MTA-STS), and blacklist checks against any domain - no email needs to be sent.',
 };

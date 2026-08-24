@@ -690,6 +690,23 @@ exports.Prisma.MailTesterTestScalarFieldEnum = {
   updated_at: 'updated_at'
 };
 
+exports.Prisma.MxToolboxCheckScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  organisation_uuid: 'organisation_uuid',
+  label: 'label',
+  domain: 'domain',
+  commands: 'commands',
+  status: 'status',
+  failed_count: 'failed_count',
+  warning_count: 'warning_count',
+  results: 'results',
+  ai_audit: 'ai_audit',
+  ai_audit_generated_at: 'ai_audit_generated_at',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
 exports.Prisma.ReminderScalarFieldEnum = {
   id: 'id',
   uuid: 'uuid',
@@ -1103,7 +1120,8 @@ exports.ExternalIntegrationProvider = exports.$Enums.ExternalIntegrationProvider
   APIFY: 'APIFY',
   HUBSPOT: 'HUBSPOT',
   SCRAPIO: 'SCRAPIO',
-  MAILTESTER: 'MAILTESTER'
+  MAILTESTER: 'MAILTESTER',
+  MXTOOLBOX: 'MXTOOLBOX'
 };
 
 exports.SequenceStatus = exports.$Enums.SequenceStatus = {
@@ -1251,6 +1269,12 @@ exports.MailTesterTestStatus = exports.$Enums.MailTesterTestStatus = {
   FAILED: 'FAILED'
 };
 
+exports.MxToolboxCheckStatus = exports.$Enums.MxToolboxCheckStatus = {
+  PASSED: 'PASSED',
+  WARNING: 'WARNING',
+  FAILED: 'FAILED'
+};
+
 exports.ReminderStatus = exports.$Enums.ReminderStatus = {
   PENDING: 'PENDING',
   COMPLETED: 'COMPLETED',
@@ -1294,6 +1318,7 @@ exports.AiUsageOperation = exports.$Enums.AiUsageOperation = {
   ADMIN_GENERATE: 'ADMIN_GENERATE',
   BATCH_JOB: 'BATCH_JOB',
   MAIL_TESTER_AUDIT: 'MAIL_TESTER_AUDIT',
+  MXTOOLBOX_AUDIT: 'MXTOOLBOX_AUDIT',
   OTHER: 'OTHER'
 };
 
@@ -1388,6 +1413,7 @@ exports.Prisma.ModelName = {
   IntegrationKey: 'IntegrationKey',
   IntegrationAccountDomain: 'IntegrationAccountDomain',
   MailTesterTest: 'MailTesterTest',
+  MxToolboxCheck: 'MxToolboxCheck',
   Reminder: 'Reminder',
   Form: 'Form',
   FormField: 'FormField',

@@ -16,6 +16,7 @@ export const PROVIDER_KEY_TYPES: Record<IntegrationProvider, IntegrationKeyType[
         SCRAPIO: ["API_KEY", "WEBHOOK_SECRET"],
         HUBSPOT: ["ACCESS_TOKEN"],
         MAILTESTER: ["USERNAME"],
+        MXTOOLBOX: ["API_KEY"],
     };
 
 export const DISABLED_INTEGRATION_PROVIDERS: IntegrationProvider[] = [

@@ -8,6 +8,7 @@ export const IntegrationProviders = {
     SCRAPIO: "SCRAPIO",
     HUBSPOT: "HUBSPOT",
     MAILTESTER: "MAILTESTER",
+    MXTOOLBOX: "MXTOOLBOX",
 } as const;
 
 export type IntegrationProvider =

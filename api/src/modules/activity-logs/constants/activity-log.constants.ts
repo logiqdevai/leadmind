@@ -100,6 +100,7 @@ export const ActivityAction = {
   RESUMED: 'resumed',
   REMOVED: 'removed',
   MAIL_TEST_STARTED: 'mail_test_started',
+  MXTOOLBOX_CHECK_STARTED: 'mxtoolbox_check_started',
 } as const;
 
 export type ActivityAction =

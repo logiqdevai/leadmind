@@ -37,6 +37,7 @@ export const Routes = {
         campaigns_edit: "/dashboard/campaigns/:uuid/edit",
         send_history: "/dashboard/send-history",
         mail_tester: "/dashboard/mail-tester",
+        mxtoolbox: "/dashboard/domain-health",
         message_templates: "/dashboard/message-templates",
         sequences: "/dashboard/sequences",
         sequences_new: "/dashboard/sequences/new",

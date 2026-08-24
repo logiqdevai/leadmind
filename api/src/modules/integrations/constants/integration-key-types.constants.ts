@@ -35,6 +35,7 @@ export const PROVIDER_KEY_TYPES: Record<
   ],
   [ExternalIntegrationProvider.HUBSPOT]: [IntegrationKeyType.ACCESS_TOKEN],
   [ExternalIntegrationProvider.MAILTESTER]: [IntegrationKeyType.USERNAME],
+  [ExternalIntegrationProvider.MXTOOLBOX]: [IntegrationKeyType.API_KEY],
 };
 
 export const KEY_TYPE_LABELS: Record<IntegrationKeyType, string> = {

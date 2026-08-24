@@ -12,6 +12,7 @@ export const INTEGRATION_PROVIDER_OFFICIAL_URLS: Partial<
     HUBSPOT:
         "https://developers.hubspot.com/docs/apps/legacy-apps/private-apps/overview",
     MAILTESTER: "https://www.mail-tester.com",
+    MXTOOLBOX: "https://mxtoolbox.com/user/account/apikeys",
 };
 
 export function getIntegrationOfficialUrl(

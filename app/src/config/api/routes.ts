@@ -325,6 +325,12 @@ export const ApiRoutes = {
         refresh: (uuid: string) => `/mail-tester/tests/${uuid}/refresh`,
         ai_audit: (uuid: string) => `/mail-tester/tests/${uuid}/ai-audit`,
     },
+    mxtoolbox: {
+        list: "/mxtoolbox/checks",
+        create: "/mxtoolbox/checks",
+        rerun: (uuid: string) => `/mxtoolbox/checks/${uuid}/rerun`,
+        ai_audit: (uuid: string) => `/mxtoolbox/checks/${uuid}/ai-audit`,
+    },
     campaign_integrations: {
         list: (campaignUuid: string) => `/marketing-campaigns/${campaignUuid}/integrations`,
         assign: (campaignUuid: string) => `/marketing-campaigns/${campaignUuid}/integrations`,

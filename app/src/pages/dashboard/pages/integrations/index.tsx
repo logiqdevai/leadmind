@@ -9,6 +9,7 @@ import {
     MessageSquare,
     Plug,
     Server,
+    Shield,
     Sparkles,
 } from "lucide-react";
 import {
@@ -35,6 +36,7 @@ const providerIcons: Record<string, ComponentType<{ className?: string }>> = {
     SCRAPIO: Bot,
     HUBSPOT: Plug,
     MAILTESTER: Gauge,
+    MXTOOLBOX: Shield,
 };
 
 const FALLBACK_PROVIDERS: IntegrationProviderView[] = [
@@ -176,6 +178,19 @@ const FALLBACK_PROVIDERS: IntegrationProviderView[] = [
         accounts: [],
         keyTypes: [
             { key_type: "USERNAME", label: "Username", placeholder: "yourusername" },
+        ],
+        keys: [],
+    },
+    {
+        provider: "MXTOOLBOX",
+        uuid: null,
+        label: "MxToolbox",
+        description:
+            "Domain health monitoring. Add your MxToolbox API key, then run DNS, email authentication (SPF/DKIM/DMARC/BIMI/MTA-STS), and blacklist checks against any domain - no email needs to be sent.",
+        default_account: null,
+        accounts: [],
+        keyTypes: [
+            { key_type: "API_KEY", label: "API key", placeholder: "00000000-0000-0000-0000-000000000000" },
         ],
         keys: [],
     },

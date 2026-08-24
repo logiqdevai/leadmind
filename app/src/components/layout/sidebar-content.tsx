@@ -21,6 +21,7 @@ import {
   Activity,
   Gauge,
   Mail,
+  Shield,
   FileText,
   Building2,
   User,
@@ -81,8 +82,14 @@ const navGroups: NavGroup[] = [
       { label: "Sequences", icon: Workflow, href: Routes.dashboard.sequences, end: false },
       { label: "Templates", icon: FileText, href: Routes.dashboard.message_templates, end: false },
       { label: "Send history", icon: Mail, href: Routes.dashboard.send_history, end: false },
-      { label: "Deliverability", icon: Gauge, href: Routes.dashboard.mail_tester, end: false },
       { label: "Sender Profiles", icon: IdCard, href: Routes.dashboard.sender_profiles, end: false },
+    ],
+  },
+  {
+    label: "Email Health",
+    items: [
+      { label: "Deliverability", icon: Gauge, href: Routes.dashboard.mail_tester, end: false },
+      { label: "Domain Health", icon: Shield, href: Routes.dashboard.mxtoolbox, end: false },
     ],
   },
   {

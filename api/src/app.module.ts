@@ -49,6 +49,7 @@ import { SendingCapacityModule } from './modules/sending-capacity/sending-capaci
 import { IntegrationSelectionModule } from './modules/integration-selection/integration-selection.module';
 import { CampaignIntegrationsModule } from './modules/campaign-integrations/campaign-integrations.module';
 import { MailTesterModule } from './modules/mail-tester/mail-tester.module';
+import { MxToolboxModule } from './modules/mxtoolbox/mxtoolbox.module';
 
 @Module({
   imports: [
@@ -101,6 +102,7 @@ import { MailTesterModule } from './modules/mail-tester/mail-tester.module';
     IntegrationSelectionModule,
     CampaignIntegrationsModule,
     MailTesterModule,
+    MxToolboxModule,
   ],
   controllers: [AppController],
   providers: [AppService],

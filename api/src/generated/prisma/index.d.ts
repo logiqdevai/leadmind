@@ -200,6 +200,11 @@ export type IntegrationAccountDomain = $Result.DefaultSelection<Prisma.$Integrat
  */
 export type MailTesterTest = $Result.DefaultSelection<Prisma.$MailTesterTestPayload>
 /**
+ * Model MxToolboxCheck
+ * 
+ */
+export type MxToolboxCheck = $Result.DefaultSelection<Prisma.$MxToolboxCheckPayload>
+/**
  * Model Reminder
  * 
  */
@@ -643,7 +648,8 @@ export const ExternalIntegrationProvider: {
   APIFY: 'APIFY',
   HUBSPOT: 'HUBSPOT',
   SCRAPIO: 'SCRAPIO',
-  MAILTESTER: 'MAILTESTER'
+  MAILTESTER: 'MAILTESTER',
+  MXTOOLBOX: 'MXTOOLBOX'
 };
 
 export type ExternalIntegrationProvider = (typeof ExternalIntegrationProvider)[keyof typeof ExternalIntegrationProvider]
@@ -673,6 +679,15 @@ export const MailTesterTestStatus: {
 };
 
 export type MailTesterTestStatus = (typeof MailTesterTestStatus)[keyof typeof MailTesterTestStatus]
+
+
+export const MxToolboxCheckStatus: {
+  PASSED: 'PASSED',
+  WARNING: 'WARNING',
+  FAILED: 'FAILED'
+};
+
+export type MxToolboxCheckStatus = (typeof MxToolboxCheckStatus)[keyof typeof MxToolboxCheckStatus]
 
 
 export const ReminderStatus: {
@@ -730,6 +745,7 @@ export const AiUsageOperation: {
   ADMIN_GENERATE: 'ADMIN_GENERATE',
   BATCH_JOB: 'BATCH_JOB',
   MAIL_TESTER_AUDIT: 'MAIL_TESTER_AUDIT',
+  MXTOOLBOX_AUDIT: 'MXTOOLBOX_AUDIT',
   OTHER: 'OTHER'
 };
 
@@ -950,6 +966,10 @@ export const IntegrationKeyType: typeof $Enums.IntegrationKeyType
 export type MailTesterTestStatus = $Enums.MailTesterTestStatus
 
 export const MailTesterTestStatus: typeof $Enums.MailTesterTestStatus
+
+export type MxToolboxCheckStatus = $Enums.MxToolboxCheckStatus
+
+export const MxToolboxCheckStatus: typeof $Enums.MxToolboxCheckStatus
 
 export type ReminderStatus = $Enums.ReminderStatus
 
@@ -1493,6 +1513,16 @@ export class PrismaClient<
     * ```
     */
   get mailTesterTest(): Prisma.MailTesterTestDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.mxToolboxCheck`: Exposes CRUD operations for the **MxToolboxCheck** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more MxToolboxChecks
+    * const mxToolboxChecks = await prisma.mxToolboxCheck.findMany()
+    * ```
+    */
+  get mxToolboxCheck(): Prisma.MxToolboxCheckDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.reminder`: Exposes CRUD operations for the **Reminder** model.
@@ -2144,6 +2174,7 @@ export namespace Prisma {
     IntegrationKey: 'IntegrationKey',
     IntegrationAccountDomain: 'IntegrationAccountDomain',
     MailTesterTest: 'MailTesterTest',
+    MxToolboxCheck: 'MxToolboxCheck',
     Reminder: 'Reminder',
     Form: 'Form',
     FormField: 'FormField',
@@ -2177,7 +2208,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "organisation" | "organisationMember" | "organisationInvitation" | "filter" | "savedContactFilter" | "scoringInstruction" | "filterScoringInstruction" | "rawLead" | "lead" | "leadEnrichment" | "contact" | "contactInfo" | "contactFilter" | "contactEnrichment" | "contactScore" | "contactList" | "contactListMember" | "contactTag" | "interaction" | "outreachMessage" | "outreachSequence" | "outreachSequenceStep" | "sequenceEnrollment" | "filterJob" | "bulkJob" | "websiteScrapeRequest" | "senderProfile" | "messageTemplate" | "marketingCampaign" | "marketingCampaignContact" | "openAiBatchJob" | "integration" | "integrationAccount" | "integrationKey" | "integrationAccountDomain" | "mailTesterTest" | "reminder" | "form" | "formField" | "formCompletion" | "formCompletionValue" | "contactAudienceAnalysis" | "aiUsageLog" | "apifyUsageLog" | "messagingGoal" | "emailSendLimit" | "sendingPolicy" | "sendingPolicyStage" | "campaignIntegration" | "campaignIntegrationState" | "sendingUsageCounter" | "goalAchievement" | "goalPersonalBest" | "activityLog"
+      modelProps: "user" | "organisation" | "organisationMember" | "organisationInvitation" | "filter" | "savedContactFilter" | "scoringInstruction" | "filterScoringInstruction" | "rawLead" | "lead" | "leadEnrichment" | "contact" | "contactInfo" | "contactFilter" | "contactEnrichment" | "contactScore" | "contactList" | "contactListMember" | "contactTag" | "interaction" | "outreachMessage" | "outreachSequence" | "outreachSequenceStep" | "sequenceEnrollment" | "filterJob" | "bulkJob" | "websiteScrapeRequest" | "senderProfile" | "messageTemplate" | "marketingCampaign" | "marketingCampaignContact" | "openAiBatchJob" | "integration" | "integrationAccount" | "integrationKey" | "integrationAccountDomain" | "mailTesterTest" | "mxToolboxCheck" | "reminder" | "form" | "formField" | "formCompletion" | "formCompletionValue" | "contactAudienceAnalysis" | "aiUsageLog" | "apifyUsageLog" | "messagingGoal" | "emailSendLimit" | "sendingPolicy" | "sendingPolicyStage" | "campaignIntegration" | "campaignIntegrationState" | "sendingUsageCounter" | "goalAchievement" | "goalPersonalBest" | "activityLog"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -4919,6 +4950,80 @@ export namespace Prisma {
           }
         }
       }
+      MxToolboxCheck: {
+        payload: Prisma.$MxToolboxCheckPayload<ExtArgs>
+        fields: Prisma.MxToolboxCheckFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.MxToolboxCheckFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MxToolboxCheckPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.MxToolboxCheckFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MxToolboxCheckPayload>
+          }
+          findFirst: {
+            args: Prisma.MxToolboxCheckFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MxToolboxCheckPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.MxToolboxCheckFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MxToolboxCheckPayload>
+          }
+          findMany: {
+            args: Prisma.MxToolboxCheckFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MxToolboxCheckPayload>[]
+          }
+          create: {
+            args: Prisma.MxToolboxCheckCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MxToolboxCheckPayload>
+          }
+          createMany: {
+            args: Prisma.MxToolboxCheckCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.MxToolboxCheckCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MxToolboxCheckPayload>[]
+          }
+          delete: {
+            args: Prisma.MxToolboxCheckDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MxToolboxCheckPayload>
+          }
+          update: {
+            args: Prisma.MxToolboxCheckUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MxToolboxCheckPayload>
+          }
+          deleteMany: {
+            args: Prisma.MxToolboxCheckDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.MxToolboxCheckUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.MxToolboxCheckUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MxToolboxCheckPayload>[]
+          }
+          upsert: {
+            args: Prisma.MxToolboxCheckUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MxToolboxCheckPayload>
+          }
+          aggregate: {
+            args: Prisma.MxToolboxCheckAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMxToolboxCheck>
+          }
+          groupBy: {
+            args: Prisma.MxToolboxCheckGroupByArgs<ExtArgs>
+            result: $Utils.Optional<MxToolboxCheckGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.MxToolboxCheckCountArgs<ExtArgs>
+            result: $Utils.Optional<MxToolboxCheckCountAggregateOutputType> | number
+          }
+        }
+      }
       Reminder: {
         payload: Prisma.$ReminderPayload<ExtArgs>
         fields: Prisma.ReminderFieldRefs
@@ -6396,6 +6501,7 @@ export namespace Prisma {
     integrationKey?: IntegrationKeyOmit
     integrationAccountDomain?: IntegrationAccountDomainOmit
     mailTesterTest?: MailTesterTestOmit
+    mxToolboxCheck?: MxToolboxCheckOmit
     reminder?: ReminderOmit
     form?: FormOmit
     formField?: FormFieldOmit
@@ -6626,6 +6732,7 @@ export namespace Prisma {
     email_send_limits: number
     sending_policies: number
     mail_tester_tests: number
+    mxtoolbox_checks: number
   }
 
   export type OrganisationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6658,6 +6765,7 @@ export namespace Prisma {
     email_send_limits?: boolean | OrganisationCountOutputTypeCountEmail_send_limitsArgs
     sending_policies?: boolean | OrganisationCountOutputTypeCountSending_policiesArgs
     mail_tester_tests?: boolean | OrganisationCountOutputTypeCountMail_tester_testsArgs
+    mxtoolbox_checks?: boolean | OrganisationCountOutputTypeCountMxtoolbox_checksArgs
   }
 
   // Custom InputTypes
@@ -6872,6 +6980,13 @@ export namespace Prisma {
    */
   export type OrganisationCountOutputTypeCountMail_tester_testsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: MailTesterTestWhereInput
+  }
+
+  /**
+   * OrganisationCountOutputType without action
+   */
+  export type OrganisationCountOutputTypeCountMxtoolbox_checksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MxToolboxCheckWhereInput
   }
 
 
@@ -9409,6 +9524,7 @@ export namespace Prisma {
     email_send_limits?: boolean | Organisation$email_send_limitsArgs<ExtArgs>
     sending_policies?: boolean | Organisation$sending_policiesArgs<ExtArgs>
     mail_tester_tests?: boolean | Organisation$mail_tester_testsArgs<ExtArgs>
+    mxtoolbox_checks?: boolean | Organisation$mxtoolbox_checksArgs<ExtArgs>
     _count?: boolean | OrganisationCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["organisation"]>
 
@@ -9476,6 +9592,7 @@ export namespace Prisma {
     email_send_limits?: boolean | Organisation$email_send_limitsArgs<ExtArgs>
     sending_policies?: boolean | Organisation$sending_policiesArgs<ExtArgs>
     mail_tester_tests?: boolean | Organisation$mail_tester_testsArgs<ExtArgs>
+    mxtoolbox_checks?: boolean | Organisation$mxtoolbox_checksArgs<ExtArgs>
     _count?: boolean | OrganisationCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type OrganisationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -9513,6 +9630,7 @@ export namespace Prisma {
       email_send_limits: Prisma.$EmailSendLimitPayload<ExtArgs>[]
       sending_policies: Prisma.$SendingPolicyPayload<ExtArgs>[]
       mail_tester_tests: Prisma.$MailTesterTestPayload<ExtArgs>[]
+      mxtoolbox_checks: Prisma.$MxToolboxCheckPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -9946,6 +10064,7 @@ export namespace Prisma {
     email_send_limits<T extends Organisation$email_send_limitsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$email_send_limitsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmailSendLimitPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     sending_policies<T extends Organisation$sending_policiesArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$sending_policiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SendingPolicyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     mail_tester_tests<T extends Organisation$mail_tester_testsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$mail_tester_testsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MailTesterTestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    mxtoolbox_checks<T extends Organisation$mxtoolbox_checksArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$mxtoolbox_checksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MxToolboxCheckPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -11064,6 +11183,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: MailTesterTestScalarFieldEnum | MailTesterTestScalarFieldEnum[]
+  }
+
+  /**
+   * Organisation.mxtoolbox_checks
+   */
+  export type Organisation$mxtoolbox_checksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MxToolboxCheck
+     */
+    select?: MxToolboxCheckSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MxToolboxCheck
+     */
+    omit?: MxToolboxCheckOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MxToolboxCheckInclude<ExtArgs> | null
+    where?: MxToolboxCheckWhereInput
+    orderBy?: MxToolboxCheckOrderByWithRelationInput | MxToolboxCheckOrderByWithRelationInput[]
+    cursor?: MxToolboxCheckWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MxToolboxCheckScalarFieldEnum | MxToolboxCheckScalarFieldEnum[]
   }
 
   /**
@@ -54446,6 +54589,1211 @@ export namespace Prisma {
 
 
   /**
+   * Model MxToolboxCheck
+   */
+
+  export type AggregateMxToolboxCheck = {
+    _count: MxToolboxCheckCountAggregateOutputType | null
+    _avg: MxToolboxCheckAvgAggregateOutputType | null
+    _sum: MxToolboxCheckSumAggregateOutputType | null
+    _min: MxToolboxCheckMinAggregateOutputType | null
+    _max: MxToolboxCheckMaxAggregateOutputType | null
+  }
+
+  export type MxToolboxCheckAvgAggregateOutputType = {
+    id: number | null
+    failed_count: number | null
+    warning_count: number | null
+  }
+
+  export type MxToolboxCheckSumAggregateOutputType = {
+    id: number | null
+    failed_count: number | null
+    warning_count: number | null
+  }
+
+  export type MxToolboxCheckMinAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    organisation_uuid: string | null
+    label: string | null
+    domain: string | null
+    status: $Enums.MxToolboxCheckStatus | null
+    failed_count: number | null
+    warning_count: number | null
+    ai_audit_generated_at: Date | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type MxToolboxCheckMaxAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    organisation_uuid: string | null
+    label: string | null
+    domain: string | null
+    status: $Enums.MxToolboxCheckStatus | null
+    failed_count: number | null
+    warning_count: number | null
+    ai_audit_generated_at: Date | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type MxToolboxCheckCountAggregateOutputType = {
+    id: number
+    uuid: number
+    organisation_uuid: number
+    label: number
+    domain: number
+    commands: number
+    status: number
+    failed_count: number
+    warning_count: number
+    results: number
+    ai_audit: number
+    ai_audit_generated_at: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type MxToolboxCheckAvgAggregateInputType = {
+    id?: true
+    failed_count?: true
+    warning_count?: true
+  }
+
+  export type MxToolboxCheckSumAggregateInputType = {
+    id?: true
+    failed_count?: true
+    warning_count?: true
+  }
+
+  export type MxToolboxCheckMinAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    label?: true
+    domain?: true
+    status?: true
+    failed_count?: true
+    warning_count?: true
+    ai_audit_generated_at?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type MxToolboxCheckMaxAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    label?: true
+    domain?: true
+    status?: true
+    failed_count?: true
+    warning_count?: true
+    ai_audit_generated_at?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type MxToolboxCheckCountAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    label?: true
+    domain?: true
+    commands?: true
+    status?: true
+    failed_count?: true
+    warning_count?: true
+    results?: true
+    ai_audit?: true
+    ai_audit_generated_at?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type MxToolboxCheckAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MxToolboxCheck to aggregate.
+     */
+    where?: MxToolboxCheckWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MxToolboxChecks to fetch.
+     */
+    orderBy?: MxToolboxCheckOrderByWithRelationInput | MxToolboxCheckOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: MxToolboxCheckWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MxToolboxChecks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MxToolboxChecks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned MxToolboxChecks
+    **/
+    _count?: true | MxToolboxCheckCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: MxToolboxCheckAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: MxToolboxCheckSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: MxToolboxCheckMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: MxToolboxCheckMaxAggregateInputType
+  }
+
+  export type GetMxToolboxCheckAggregateType<T extends MxToolboxCheckAggregateArgs> = {
+        [P in keyof T & keyof AggregateMxToolboxCheck]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMxToolboxCheck[P]>
+      : GetScalarType<T[P], AggregateMxToolboxCheck[P]>
+  }
+
+
+
+
+  export type MxToolboxCheckGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MxToolboxCheckWhereInput
+    orderBy?: MxToolboxCheckOrderByWithAggregationInput | MxToolboxCheckOrderByWithAggregationInput[]
+    by: MxToolboxCheckScalarFieldEnum[] | MxToolboxCheckScalarFieldEnum
+    having?: MxToolboxCheckScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: MxToolboxCheckCountAggregateInputType | true
+    _avg?: MxToolboxCheckAvgAggregateInputType
+    _sum?: MxToolboxCheckSumAggregateInputType
+    _min?: MxToolboxCheckMinAggregateInputType
+    _max?: MxToolboxCheckMaxAggregateInputType
+  }
+
+  export type MxToolboxCheckGroupByOutputType = {
+    id: number
+    uuid: string
+    organisation_uuid: string
+    label: string | null
+    domain: string
+    commands: string[]
+    status: $Enums.MxToolboxCheckStatus
+    failed_count: number
+    warning_count: number
+    results: JsonValue
+    ai_audit: JsonValue | null
+    ai_audit_generated_at: Date | null
+    created_at: Date
+    updated_at: Date
+    _count: MxToolboxCheckCountAggregateOutputType | null
+    _avg: MxToolboxCheckAvgAggregateOutputType | null
+    _sum: MxToolboxCheckSumAggregateOutputType | null
+    _min: MxToolboxCheckMinAggregateOutputType | null
+    _max: MxToolboxCheckMaxAggregateOutputType | null
+  }
+
+  type GetMxToolboxCheckGroupByPayload<T extends MxToolboxCheckGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<MxToolboxCheckGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof MxToolboxCheckGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], MxToolboxCheckGroupByOutputType[P]>
+            : GetScalarType<T[P], MxToolboxCheckGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type MxToolboxCheckSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    label?: boolean
+    domain?: boolean
+    commands?: boolean
+    status?: boolean
+    failed_count?: boolean
+    warning_count?: boolean
+    results?: boolean
+    ai_audit?: boolean
+    ai_audit_generated_at?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["mxToolboxCheck"]>
+
+  export type MxToolboxCheckSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    label?: boolean
+    domain?: boolean
+    commands?: boolean
+    status?: boolean
+    failed_count?: boolean
+    warning_count?: boolean
+    results?: boolean
+    ai_audit?: boolean
+    ai_audit_generated_at?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["mxToolboxCheck"]>
+
+  export type MxToolboxCheckSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    label?: boolean
+    domain?: boolean
+    commands?: boolean
+    status?: boolean
+    failed_count?: boolean
+    warning_count?: boolean
+    results?: boolean
+    ai_audit?: boolean
+    ai_audit_generated_at?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["mxToolboxCheck"]>
+
+  export type MxToolboxCheckSelectScalar = {
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    label?: boolean
+    domain?: boolean
+    commands?: boolean
+    status?: boolean
+    failed_count?: boolean
+    warning_count?: boolean
+    results?: boolean
+    ai_audit?: boolean
+    ai_audit_generated_at?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type MxToolboxCheckOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "label" | "domain" | "commands" | "status" | "failed_count" | "warning_count" | "results" | "ai_audit" | "ai_audit_generated_at" | "created_at" | "updated_at", ExtArgs["result"]["mxToolboxCheck"]>
+  export type MxToolboxCheckInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }
+  export type MxToolboxCheckIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }
+  export type MxToolboxCheckIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }
+
+  export type $MxToolboxCheckPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "MxToolboxCheck"
+    objects: {
+      organisation: Prisma.$OrganisationPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      uuid: string
+      organisation_uuid: string
+      label: string | null
+      domain: string
+      commands: string[]
+      status: $Enums.MxToolboxCheckStatus
+      failed_count: number
+      warning_count: number
+      results: Prisma.JsonValue
+      ai_audit: Prisma.JsonValue | null
+      ai_audit_generated_at: Date | null
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["mxToolboxCheck"]>
+    composites: {}
+  }
+
+  type MxToolboxCheckGetPayload<S extends boolean | null | undefined | MxToolboxCheckDefaultArgs> = $Result.GetResult<Prisma.$MxToolboxCheckPayload, S>
+
+  type MxToolboxCheckCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<MxToolboxCheckFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: MxToolboxCheckCountAggregateInputType | true
+    }
+
+  export interface MxToolboxCheckDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['MxToolboxCheck'], meta: { name: 'MxToolboxCheck' } }
+    /**
+     * Find zero or one MxToolboxCheck that matches the filter.
+     * @param {MxToolboxCheckFindUniqueArgs} args - Arguments to find a MxToolboxCheck
+     * @example
+     * // Get one MxToolboxCheck
+     * const mxToolboxCheck = await prisma.mxToolboxCheck.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends MxToolboxCheckFindUniqueArgs>(args: SelectSubset<T, MxToolboxCheckFindUniqueArgs<ExtArgs>>): Prisma__MxToolboxCheckClient<$Result.GetResult<Prisma.$MxToolboxCheckPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one MxToolboxCheck that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {MxToolboxCheckFindUniqueOrThrowArgs} args - Arguments to find a MxToolboxCheck
+     * @example
+     * // Get one MxToolboxCheck
+     * const mxToolboxCheck = await prisma.mxToolboxCheck.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends MxToolboxCheckFindUniqueOrThrowArgs>(args: SelectSubset<T, MxToolboxCheckFindUniqueOrThrowArgs<ExtArgs>>): Prisma__MxToolboxCheckClient<$Result.GetResult<Prisma.$MxToolboxCheckPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first MxToolboxCheck that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MxToolboxCheckFindFirstArgs} args - Arguments to find a MxToolboxCheck
+     * @example
+     * // Get one MxToolboxCheck
+     * const mxToolboxCheck = await prisma.mxToolboxCheck.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends MxToolboxCheckFindFirstArgs>(args?: SelectSubset<T, MxToolboxCheckFindFirstArgs<ExtArgs>>): Prisma__MxToolboxCheckClient<$Result.GetResult<Prisma.$MxToolboxCheckPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first MxToolboxCheck that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MxToolboxCheckFindFirstOrThrowArgs} args - Arguments to find a MxToolboxCheck
+     * @example
+     * // Get one MxToolboxCheck
+     * const mxToolboxCheck = await prisma.mxToolboxCheck.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends MxToolboxCheckFindFirstOrThrowArgs>(args?: SelectSubset<T, MxToolboxCheckFindFirstOrThrowArgs<ExtArgs>>): Prisma__MxToolboxCheckClient<$Result.GetResult<Prisma.$MxToolboxCheckPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more MxToolboxChecks that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MxToolboxCheckFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all MxToolboxChecks
+     * const mxToolboxChecks = await prisma.mxToolboxCheck.findMany()
+     * 
+     * // Get first 10 MxToolboxChecks
+     * const mxToolboxChecks = await prisma.mxToolboxCheck.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const mxToolboxCheckWithIdOnly = await prisma.mxToolboxCheck.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends MxToolboxCheckFindManyArgs>(args?: SelectSubset<T, MxToolboxCheckFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MxToolboxCheckPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a MxToolboxCheck.
+     * @param {MxToolboxCheckCreateArgs} args - Arguments to create a MxToolboxCheck.
+     * @example
+     * // Create one MxToolboxCheck
+     * const MxToolboxCheck = await prisma.mxToolboxCheck.create({
+     *   data: {
+     *     // ... data to create a MxToolboxCheck
+     *   }
+     * })
+     * 
+     */
+    create<T extends MxToolboxCheckCreateArgs>(args: SelectSubset<T, MxToolboxCheckCreateArgs<ExtArgs>>): Prisma__MxToolboxCheckClient<$Result.GetResult<Prisma.$MxToolboxCheckPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many MxToolboxChecks.
+     * @param {MxToolboxCheckCreateManyArgs} args - Arguments to create many MxToolboxChecks.
+     * @example
+     * // Create many MxToolboxChecks
+     * const mxToolboxCheck = await prisma.mxToolboxCheck.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends MxToolboxCheckCreateManyArgs>(args?: SelectSubset<T, MxToolboxCheckCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many MxToolboxChecks and returns the data saved in the database.
+     * @param {MxToolboxCheckCreateManyAndReturnArgs} args - Arguments to create many MxToolboxChecks.
+     * @example
+     * // Create many MxToolboxChecks
+     * const mxToolboxCheck = await prisma.mxToolboxCheck.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many MxToolboxChecks and only return the `id`
+     * const mxToolboxCheckWithIdOnly = await prisma.mxToolboxCheck.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends MxToolboxCheckCreateManyAndReturnArgs>(args?: SelectSubset<T, MxToolboxCheckCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MxToolboxCheckPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a MxToolboxCheck.
+     * @param {MxToolboxCheckDeleteArgs} args - Arguments to delete one MxToolboxCheck.
+     * @example
+     * // Delete one MxToolboxCheck
+     * const MxToolboxCheck = await prisma.mxToolboxCheck.delete({
+     *   where: {
+     *     // ... filter to delete one MxToolboxCheck
+     *   }
+     * })
+     * 
+     */
+    delete<T extends MxToolboxCheckDeleteArgs>(args: SelectSubset<T, MxToolboxCheckDeleteArgs<ExtArgs>>): Prisma__MxToolboxCheckClient<$Result.GetResult<Prisma.$MxToolboxCheckPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one MxToolboxCheck.
+     * @param {MxToolboxCheckUpdateArgs} args - Arguments to update one MxToolboxCheck.
+     * @example
+     * // Update one MxToolboxCheck
+     * const mxToolboxCheck = await prisma.mxToolboxCheck.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends MxToolboxCheckUpdateArgs>(args: SelectSubset<T, MxToolboxCheckUpdateArgs<ExtArgs>>): Prisma__MxToolboxCheckClient<$Result.GetResult<Prisma.$MxToolboxCheckPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more MxToolboxChecks.
+     * @param {MxToolboxCheckDeleteManyArgs} args - Arguments to filter MxToolboxChecks to delete.
+     * @example
+     * // Delete a few MxToolboxChecks
+     * const { count } = await prisma.mxToolboxCheck.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends MxToolboxCheckDeleteManyArgs>(args?: SelectSubset<T, MxToolboxCheckDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MxToolboxChecks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MxToolboxCheckUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many MxToolboxChecks
+     * const mxToolboxCheck = await prisma.mxToolboxCheck.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends MxToolboxCheckUpdateManyArgs>(args: SelectSubset<T, MxToolboxCheckUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MxToolboxChecks and returns the data updated in the database.
+     * @param {MxToolboxCheckUpdateManyAndReturnArgs} args - Arguments to update many MxToolboxChecks.
+     * @example
+     * // Update many MxToolboxChecks
+     * const mxToolboxCheck = await prisma.mxToolboxCheck.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more MxToolboxChecks and only return the `id`
+     * const mxToolboxCheckWithIdOnly = await prisma.mxToolboxCheck.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends MxToolboxCheckUpdateManyAndReturnArgs>(args: SelectSubset<T, MxToolboxCheckUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MxToolboxCheckPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one MxToolboxCheck.
+     * @param {MxToolboxCheckUpsertArgs} args - Arguments to update or create a MxToolboxCheck.
+     * @example
+     * // Update or create a MxToolboxCheck
+     * const mxToolboxCheck = await prisma.mxToolboxCheck.upsert({
+     *   create: {
+     *     // ... data to create a MxToolboxCheck
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the MxToolboxCheck we want to update
+     *   }
+     * })
+     */
+    upsert<T extends MxToolboxCheckUpsertArgs>(args: SelectSubset<T, MxToolboxCheckUpsertArgs<ExtArgs>>): Prisma__MxToolboxCheckClient<$Result.GetResult<Prisma.$MxToolboxCheckPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of MxToolboxChecks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MxToolboxCheckCountArgs} args - Arguments to filter MxToolboxChecks to count.
+     * @example
+     * // Count the number of MxToolboxChecks
+     * const count = await prisma.mxToolboxCheck.count({
+     *   where: {
+     *     // ... the filter for the MxToolboxChecks we want to count
+     *   }
+     * })
+    **/
+    count<T extends MxToolboxCheckCountArgs>(
+      args?: Subset<T, MxToolboxCheckCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], MxToolboxCheckCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a MxToolboxCheck.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MxToolboxCheckAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends MxToolboxCheckAggregateArgs>(args: Subset<T, MxToolboxCheckAggregateArgs>): Prisma.PrismaPromise<GetMxToolboxCheckAggregateType<T>>
+
+    /**
+     * Group by MxToolboxCheck.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MxToolboxCheckGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends MxToolboxCheckGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: MxToolboxCheckGroupByArgs['orderBy'] }
+        : { orderBy?: MxToolboxCheckGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, MxToolboxCheckGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMxToolboxCheckGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the MxToolboxCheck model
+   */
+  readonly fields: MxToolboxCheckFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for MxToolboxCheck.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__MxToolboxCheckClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    organisation<T extends OrganisationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganisationDefaultArgs<ExtArgs>>): Prisma__OrganisationClient<$Result.GetResult<Prisma.$OrganisationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the MxToolboxCheck model
+   */
+  interface MxToolboxCheckFieldRefs {
+    readonly id: FieldRef<"MxToolboxCheck", 'Int'>
+    readonly uuid: FieldRef<"MxToolboxCheck", 'String'>
+    readonly organisation_uuid: FieldRef<"MxToolboxCheck", 'String'>
+    readonly label: FieldRef<"MxToolboxCheck", 'String'>
+    readonly domain: FieldRef<"MxToolboxCheck", 'String'>
+    readonly commands: FieldRef<"MxToolboxCheck", 'String[]'>
+    readonly status: FieldRef<"MxToolboxCheck", 'MxToolboxCheckStatus'>
+    readonly failed_count: FieldRef<"MxToolboxCheck", 'Int'>
+    readonly warning_count: FieldRef<"MxToolboxCheck", 'Int'>
+    readonly results: FieldRef<"MxToolboxCheck", 'Json'>
+    readonly ai_audit: FieldRef<"MxToolboxCheck", 'Json'>
+    readonly ai_audit_generated_at: FieldRef<"MxToolboxCheck", 'DateTime'>
+    readonly created_at: FieldRef<"MxToolboxCheck", 'DateTime'>
+    readonly updated_at: FieldRef<"MxToolboxCheck", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * MxToolboxCheck findUnique
+   */
+  export type MxToolboxCheckFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MxToolboxCheck
+     */
+    select?: MxToolboxCheckSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MxToolboxCheck
+     */
+    omit?: MxToolboxCheckOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MxToolboxCheckInclude<ExtArgs> | null
+    /**
+     * Filter, which MxToolboxCheck to fetch.
+     */
+    where: MxToolboxCheckWhereUniqueInput
+  }
+
+  /**
+   * MxToolboxCheck findUniqueOrThrow
+   */
+  export type MxToolboxCheckFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MxToolboxCheck
+     */
+    select?: MxToolboxCheckSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MxToolboxCheck
+     */
+    omit?: MxToolboxCheckOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MxToolboxCheckInclude<ExtArgs> | null
+    /**
+     * Filter, which MxToolboxCheck to fetch.
+     */
+    where: MxToolboxCheckWhereUniqueInput
+  }
+
+  /**
+   * MxToolboxCheck findFirst
+   */
+  export type MxToolboxCheckFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MxToolboxCheck
+     */
+    select?: MxToolboxCheckSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MxToolboxCheck
+     */
+    omit?: MxToolboxCheckOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MxToolboxCheckInclude<ExtArgs> | null
+    /**
+     * Filter, which MxToolboxCheck to fetch.
+     */
+    where?: MxToolboxCheckWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MxToolboxChecks to fetch.
+     */
+    orderBy?: MxToolboxCheckOrderByWithRelationInput | MxToolboxCheckOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MxToolboxChecks.
+     */
+    cursor?: MxToolboxCheckWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MxToolboxChecks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MxToolboxChecks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MxToolboxChecks.
+     */
+    distinct?: MxToolboxCheckScalarFieldEnum | MxToolboxCheckScalarFieldEnum[]
+  }
+
+  /**
+   * MxToolboxCheck findFirstOrThrow
+   */
+  export type MxToolboxCheckFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MxToolboxCheck
+     */
+    select?: MxToolboxCheckSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MxToolboxCheck
+     */
+    omit?: MxToolboxCheckOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MxToolboxCheckInclude<ExtArgs> | null
+    /**
+     * Filter, which MxToolboxCheck to fetch.
+     */
+    where?: MxToolboxCheckWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MxToolboxChecks to fetch.
+     */
+    orderBy?: MxToolboxCheckOrderByWithRelationInput | MxToolboxCheckOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MxToolboxChecks.
+     */
+    cursor?: MxToolboxCheckWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MxToolboxChecks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MxToolboxChecks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MxToolboxChecks.
+     */
+    distinct?: MxToolboxCheckScalarFieldEnum | MxToolboxCheckScalarFieldEnum[]
+  }
+
+  /**
+   * MxToolboxCheck findMany
+   */
+  export type MxToolboxCheckFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MxToolboxCheck
+     */
+    select?: MxToolboxCheckSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MxToolboxCheck
+     */
+    omit?: MxToolboxCheckOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MxToolboxCheckInclude<ExtArgs> | null
+    /**
+     * Filter, which MxToolboxChecks to fetch.
+     */
+    where?: MxToolboxCheckWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MxToolboxChecks to fetch.
+     */
+    orderBy?: MxToolboxCheckOrderByWithRelationInput | MxToolboxCheckOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing MxToolboxChecks.
+     */
+    cursor?: MxToolboxCheckWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MxToolboxChecks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MxToolboxChecks.
+     */
+    skip?: number
+    distinct?: MxToolboxCheckScalarFieldEnum | MxToolboxCheckScalarFieldEnum[]
+  }
+
+  /**
+   * MxToolboxCheck create
+   */
+  export type MxToolboxCheckCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MxToolboxCheck
+     */
+    select?: MxToolboxCheckSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MxToolboxCheck
+     */
+    omit?: MxToolboxCheckOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MxToolboxCheckInclude<ExtArgs> | null
+    /**
+     * The data needed to create a MxToolboxCheck.
+     */
+    data: XOR<MxToolboxCheckCreateInput, MxToolboxCheckUncheckedCreateInput>
+  }
+
+  /**
+   * MxToolboxCheck createMany
+   */
+  export type MxToolboxCheckCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many MxToolboxChecks.
+     */
+    data: MxToolboxCheckCreateManyInput | MxToolboxCheckCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * MxToolboxCheck createManyAndReturn
+   */
+  export type MxToolboxCheckCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MxToolboxCheck
+     */
+    select?: MxToolboxCheckSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the MxToolboxCheck
+     */
+    omit?: MxToolboxCheckOmit<ExtArgs> | null
+    /**
+     * The data used to create many MxToolboxChecks.
+     */
+    data: MxToolboxCheckCreateManyInput | MxToolboxCheckCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MxToolboxCheckIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * MxToolboxCheck update
+   */
+  export type MxToolboxCheckUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MxToolboxCheck
+     */
+    select?: MxToolboxCheckSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MxToolboxCheck
+     */
+    omit?: MxToolboxCheckOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MxToolboxCheckInclude<ExtArgs> | null
+    /**
+     * The data needed to update a MxToolboxCheck.
+     */
+    data: XOR<MxToolboxCheckUpdateInput, MxToolboxCheckUncheckedUpdateInput>
+    /**
+     * Choose, which MxToolboxCheck to update.
+     */
+    where: MxToolboxCheckWhereUniqueInput
+  }
+
+  /**
+   * MxToolboxCheck updateMany
+   */
+  export type MxToolboxCheckUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update MxToolboxChecks.
+     */
+    data: XOR<MxToolboxCheckUpdateManyMutationInput, MxToolboxCheckUncheckedUpdateManyInput>
+    /**
+     * Filter which MxToolboxChecks to update
+     */
+    where?: MxToolboxCheckWhereInput
+    /**
+     * Limit how many MxToolboxChecks to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * MxToolboxCheck updateManyAndReturn
+   */
+  export type MxToolboxCheckUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MxToolboxCheck
+     */
+    select?: MxToolboxCheckSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the MxToolboxCheck
+     */
+    omit?: MxToolboxCheckOmit<ExtArgs> | null
+    /**
+     * The data used to update MxToolboxChecks.
+     */
+    data: XOR<MxToolboxCheckUpdateManyMutationInput, MxToolboxCheckUncheckedUpdateManyInput>
+    /**
+     * Filter which MxToolboxChecks to update
+     */
+    where?: MxToolboxCheckWhereInput
+    /**
+     * Limit how many MxToolboxChecks to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MxToolboxCheckIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * MxToolboxCheck upsert
+   */
+  export type MxToolboxCheckUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MxToolboxCheck
+     */
+    select?: MxToolboxCheckSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MxToolboxCheck
+     */
+    omit?: MxToolboxCheckOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MxToolboxCheckInclude<ExtArgs> | null
+    /**
+     * The filter to search for the MxToolboxCheck to update in case it exists.
+     */
+    where: MxToolboxCheckWhereUniqueInput
+    /**
+     * In case the MxToolboxCheck found by the `where` argument doesn't exist, create a new MxToolboxCheck with this data.
+     */
+    create: XOR<MxToolboxCheckCreateInput, MxToolboxCheckUncheckedCreateInput>
+    /**
+     * In case the MxToolboxCheck was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<MxToolboxCheckUpdateInput, MxToolboxCheckUncheckedUpdateInput>
+  }
+
+  /**
+   * MxToolboxCheck delete
+   */
+  export type MxToolboxCheckDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MxToolboxCheck
+     */
+    select?: MxToolboxCheckSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MxToolboxCheck
+     */
+    omit?: MxToolboxCheckOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MxToolboxCheckInclude<ExtArgs> | null
+    /**
+     * Filter which MxToolboxCheck to delete.
+     */
+    where: MxToolboxCheckWhereUniqueInput
+  }
+
+  /**
+   * MxToolboxCheck deleteMany
+   */
+  export type MxToolboxCheckDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MxToolboxChecks to delete
+     */
+    where?: MxToolboxCheckWhereInput
+    /**
+     * Limit how many MxToolboxChecks to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * MxToolboxCheck without action
+   */
+  export type MxToolboxCheckDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MxToolboxCheck
+     */
+    select?: MxToolboxCheckSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MxToolboxCheck
+     */
+    omit?: MxToolboxCheckOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MxToolboxCheckInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model Reminder
    */
 
@@ -76681,6 +78029,26 @@ export namespace Prisma {
   export type MailTesterTestScalarFieldEnum = (typeof MailTesterTestScalarFieldEnum)[keyof typeof MailTesterTestScalarFieldEnum]
 
 
+  export const MxToolboxCheckScalarFieldEnum: {
+    id: 'id',
+    uuid: 'uuid',
+    organisation_uuid: 'organisation_uuid',
+    label: 'label',
+    domain: 'domain',
+    commands: 'commands',
+    status: 'status',
+    failed_count: 'failed_count',
+    warning_count: 'warning_count',
+    results: 'results',
+    ai_audit: 'ai_audit',
+    ai_audit_generated_at: 'ai_audit_generated_at',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type MxToolboxCheckScalarFieldEnum = (typeof MxToolboxCheckScalarFieldEnum)[keyof typeof MxToolboxCheckScalarFieldEnum]
+
+
   export const ReminderScalarFieldEnum: {
     id: 'id',
     uuid: 'uuid',
@@ -77592,6 +78960,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'MxToolboxCheckStatus'
+   */
+  export type EnumMxToolboxCheckStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MxToolboxCheckStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'MxToolboxCheckStatus[]'
+   */
+  export type ListEnumMxToolboxCheckStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MxToolboxCheckStatus[]'>
+    
+
+
+  /**
    * Reference to a field of type 'ReminderStatus'
    */
   export type EnumReminderStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReminderStatus'>
@@ -77918,6 +79300,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitListRelationFilter
     sending_policies?: SendingPolicyListRelationFilter
     mail_tester_tests?: MailTesterTestListRelationFilter
+    mxtoolbox_checks?: MxToolboxCheckListRelationFilter
   }
 
   export type OrganisationOrderByWithRelationInput = {
@@ -77958,6 +79341,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitOrderByRelationAggregateInput
     sending_policies?: SendingPolicyOrderByRelationAggregateInput
     mail_tester_tests?: MailTesterTestOrderByRelationAggregateInput
+    mxtoolbox_checks?: MxToolboxCheckOrderByRelationAggregateInput
   }
 
   export type OrganisationWhereUniqueInput = Prisma.AtLeast<{
@@ -78001,6 +79385,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitListRelationFilter
     sending_policies?: SendingPolicyListRelationFilter
     mail_tester_tests?: MailTesterTestListRelationFilter
+    mxtoolbox_checks?: MxToolboxCheckListRelationFilter
   }, "id" | "uuid" | "slug">
 
   export type OrganisationOrderByWithAggregationInput = {
@@ -81577,6 +82962,108 @@ export namespace Prisma {
     updated_at?: DateTimeWithAggregatesFilter<"MailTesterTest"> | Date | string
   }
 
+  export type MxToolboxCheckWhereInput = {
+    AND?: MxToolboxCheckWhereInput | MxToolboxCheckWhereInput[]
+    OR?: MxToolboxCheckWhereInput[]
+    NOT?: MxToolboxCheckWhereInput | MxToolboxCheckWhereInput[]
+    id?: IntFilter<"MxToolboxCheck"> | number
+    uuid?: StringFilter<"MxToolboxCheck"> | string
+    organisation_uuid?: StringFilter<"MxToolboxCheck"> | string
+    label?: StringNullableFilter<"MxToolboxCheck"> | string | null
+    domain?: StringFilter<"MxToolboxCheck"> | string
+    commands?: StringNullableListFilter<"MxToolboxCheck">
+    status?: EnumMxToolboxCheckStatusFilter<"MxToolboxCheck"> | $Enums.MxToolboxCheckStatus
+    failed_count?: IntFilter<"MxToolboxCheck"> | number
+    warning_count?: IntFilter<"MxToolboxCheck"> | number
+    results?: JsonFilter<"MxToolboxCheck">
+    ai_audit?: JsonNullableFilter<"MxToolboxCheck">
+    ai_audit_generated_at?: DateTimeNullableFilter<"MxToolboxCheck"> | Date | string | null
+    created_at?: DateTimeFilter<"MxToolboxCheck"> | Date | string
+    updated_at?: DateTimeFilter<"MxToolboxCheck"> | Date | string
+    organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+  }
+
+  export type MxToolboxCheckOrderByWithRelationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    label?: SortOrderInput | SortOrder
+    domain?: SortOrder
+    commands?: SortOrder
+    status?: SortOrder
+    failed_count?: SortOrder
+    warning_count?: SortOrder
+    results?: SortOrder
+    ai_audit?: SortOrderInput | SortOrder
+    ai_audit_generated_at?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    organisation?: OrganisationOrderByWithRelationInput
+  }
+
+  export type MxToolboxCheckWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    uuid?: string
+    AND?: MxToolboxCheckWhereInput | MxToolboxCheckWhereInput[]
+    OR?: MxToolboxCheckWhereInput[]
+    NOT?: MxToolboxCheckWhereInput | MxToolboxCheckWhereInput[]
+    organisation_uuid?: StringFilter<"MxToolboxCheck"> | string
+    label?: StringNullableFilter<"MxToolboxCheck"> | string | null
+    domain?: StringFilter<"MxToolboxCheck"> | string
+    commands?: StringNullableListFilter<"MxToolboxCheck">
+    status?: EnumMxToolboxCheckStatusFilter<"MxToolboxCheck"> | $Enums.MxToolboxCheckStatus
+    failed_count?: IntFilter<"MxToolboxCheck"> | number
+    warning_count?: IntFilter<"MxToolboxCheck"> | number
+    results?: JsonFilter<"MxToolboxCheck">
+    ai_audit?: JsonNullableFilter<"MxToolboxCheck">
+    ai_audit_generated_at?: DateTimeNullableFilter<"MxToolboxCheck"> | Date | string | null
+    created_at?: DateTimeFilter<"MxToolboxCheck"> | Date | string
+    updated_at?: DateTimeFilter<"MxToolboxCheck"> | Date | string
+    organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+  }, "id" | "uuid">
+
+  export type MxToolboxCheckOrderByWithAggregationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    label?: SortOrderInput | SortOrder
+    domain?: SortOrder
+    commands?: SortOrder
+    status?: SortOrder
+    failed_count?: SortOrder
+    warning_count?: SortOrder
+    results?: SortOrder
+    ai_audit?: SortOrderInput | SortOrder
+    ai_audit_generated_at?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: MxToolboxCheckCountOrderByAggregateInput
+    _avg?: MxToolboxCheckAvgOrderByAggregateInput
+    _max?: MxToolboxCheckMaxOrderByAggregateInput
+    _min?: MxToolboxCheckMinOrderByAggregateInput
+    _sum?: MxToolboxCheckSumOrderByAggregateInput
+  }
+
+  export type MxToolboxCheckScalarWhereWithAggregatesInput = {
+    AND?: MxToolboxCheckScalarWhereWithAggregatesInput | MxToolboxCheckScalarWhereWithAggregatesInput[]
+    OR?: MxToolboxCheckScalarWhereWithAggregatesInput[]
+    NOT?: MxToolboxCheckScalarWhereWithAggregatesInput | MxToolboxCheckScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"MxToolboxCheck"> | number
+    uuid?: StringWithAggregatesFilter<"MxToolboxCheck"> | string
+    organisation_uuid?: StringWithAggregatesFilter<"MxToolboxCheck"> | string
+    label?: StringNullableWithAggregatesFilter<"MxToolboxCheck"> | string | null
+    domain?: StringWithAggregatesFilter<"MxToolboxCheck"> | string
+    commands?: StringNullableListFilter<"MxToolboxCheck">
+    status?: EnumMxToolboxCheckStatusWithAggregatesFilter<"MxToolboxCheck"> | $Enums.MxToolboxCheckStatus
+    failed_count?: IntWithAggregatesFilter<"MxToolboxCheck"> | number
+    warning_count?: IntWithAggregatesFilter<"MxToolboxCheck"> | number
+    results?: JsonWithAggregatesFilter<"MxToolboxCheck">
+    ai_audit?: JsonNullableWithAggregatesFilter<"MxToolboxCheck">
+    ai_audit_generated_at?: DateTimeNullableWithAggregatesFilter<"MxToolboxCheck"> | Date | string | null
+    created_at?: DateTimeWithAggregatesFilter<"MxToolboxCheck"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"MxToolboxCheck"> | Date | string
+  }
+
   export type ReminderWhereInput = {
     AND?: ReminderWhereInput | ReminderWhereInput[]
     OR?: ReminderWhereInput[]
@@ -83366,6 +84853,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateInput = {
@@ -83406,6 +84894,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUpdateInput = {
@@ -83445,6 +84934,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateInput = {
@@ -83485,6 +84975,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateManyInput = {
@@ -87371,6 +88862,121 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type MxToolboxCheckCreateInput = {
+    uuid?: string
+    label?: string | null
+    domain: string
+    commands?: MxToolboxCheckCreatecommandsInput | string[]
+    status?: $Enums.MxToolboxCheckStatus
+    failed_count?: number
+    warning_count?: number
+    results: JsonNullValueInput | InputJsonValue
+    ai_audit?: NullableJsonNullValueInput | InputJsonValue
+    ai_audit_generated_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutMxtoolbox_checksInput
+  }
+
+  export type MxToolboxCheckUncheckedCreateInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    label?: string | null
+    domain: string
+    commands?: MxToolboxCheckCreatecommandsInput | string[]
+    status?: $Enums.MxToolboxCheckStatus
+    failed_count?: number
+    warning_count?: number
+    results: JsonNullValueInput | InputJsonValue
+    ai_audit?: NullableJsonNullValueInput | InputJsonValue
+    ai_audit_generated_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type MxToolboxCheckUpdateInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    label?: NullableStringFieldUpdateOperationsInput | string | null
+    domain?: StringFieldUpdateOperationsInput | string
+    commands?: MxToolboxCheckUpdatecommandsInput | string[]
+    status?: EnumMxToolboxCheckStatusFieldUpdateOperationsInput | $Enums.MxToolboxCheckStatus
+    failed_count?: IntFieldUpdateOperationsInput | number
+    warning_count?: IntFieldUpdateOperationsInput | number
+    results?: JsonNullValueInput | InputJsonValue
+    ai_audit?: NullableJsonNullValueInput | InputJsonValue
+    ai_audit_generated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutMxtoolbox_checksNestedInput
+  }
+
+  export type MxToolboxCheckUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    label?: NullableStringFieldUpdateOperationsInput | string | null
+    domain?: StringFieldUpdateOperationsInput | string
+    commands?: MxToolboxCheckUpdatecommandsInput | string[]
+    status?: EnumMxToolboxCheckStatusFieldUpdateOperationsInput | $Enums.MxToolboxCheckStatus
+    failed_count?: IntFieldUpdateOperationsInput | number
+    warning_count?: IntFieldUpdateOperationsInput | number
+    results?: JsonNullValueInput | InputJsonValue
+    ai_audit?: NullableJsonNullValueInput | InputJsonValue
+    ai_audit_generated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MxToolboxCheckCreateManyInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    label?: string | null
+    domain: string
+    commands?: MxToolboxCheckCreatecommandsInput | string[]
+    status?: $Enums.MxToolboxCheckStatus
+    failed_count?: number
+    warning_count?: number
+    results: JsonNullValueInput | InputJsonValue
+    ai_audit?: NullableJsonNullValueInput | InputJsonValue
+    ai_audit_generated_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type MxToolboxCheckUpdateManyMutationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    label?: NullableStringFieldUpdateOperationsInput | string | null
+    domain?: StringFieldUpdateOperationsInput | string
+    commands?: MxToolboxCheckUpdatecommandsInput | string[]
+    status?: EnumMxToolboxCheckStatusFieldUpdateOperationsInput | $Enums.MxToolboxCheckStatus
+    failed_count?: IntFieldUpdateOperationsInput | number
+    warning_count?: IntFieldUpdateOperationsInput | number
+    results?: JsonNullValueInput | InputJsonValue
+    ai_audit?: NullableJsonNullValueInput | InputJsonValue
+    ai_audit_generated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MxToolboxCheckUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    label?: NullableStringFieldUpdateOperationsInput | string | null
+    domain?: StringFieldUpdateOperationsInput | string
+    commands?: MxToolboxCheckUpdatecommandsInput | string[]
+    status?: EnumMxToolboxCheckStatusFieldUpdateOperationsInput | $Enums.MxToolboxCheckStatus
+    failed_count?: IntFieldUpdateOperationsInput | number
+    warning_count?: IntFieldUpdateOperationsInput | number
+    results?: JsonNullValueInput | InputJsonValue
+    ai_audit?: NullableJsonNullValueInput | InputJsonValue
+    ai_audit_generated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type ReminderCreateInput = {
     uuid?: string
     title?: string | null
@@ -89481,6 +91087,12 @@ export namespace Prisma {
     none?: MailTesterTestWhereInput
   }
 
+  export type MxToolboxCheckListRelationFilter = {
+    every?: MxToolboxCheckWhereInput
+    some?: MxToolboxCheckWhereInput
+    none?: MxToolboxCheckWhereInput
+  }
+
   export type FilterOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -89562,6 +91174,10 @@ export namespace Prisma {
   }
 
   export type MailTesterTestOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type MxToolboxCheckOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -92678,6 +94294,88 @@ export namespace Prisma {
     _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
+  export type StringNullableListFilter<$PrismaModel = never> = {
+    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    has?: string | StringFieldRefInput<$PrismaModel> | null
+    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
+    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
+    isEmpty?: boolean
+  }
+
+  export type EnumMxToolboxCheckStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.MxToolboxCheckStatus | EnumMxToolboxCheckStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.MxToolboxCheckStatus[] | ListEnumMxToolboxCheckStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MxToolboxCheckStatus[] | ListEnumMxToolboxCheckStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumMxToolboxCheckStatusFilter<$PrismaModel> | $Enums.MxToolboxCheckStatus
+  }
+
+  export type MxToolboxCheckCountOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    label?: SortOrder
+    domain?: SortOrder
+    commands?: SortOrder
+    status?: SortOrder
+    failed_count?: SortOrder
+    warning_count?: SortOrder
+    results?: SortOrder
+    ai_audit?: SortOrder
+    ai_audit_generated_at?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type MxToolboxCheckAvgOrderByAggregateInput = {
+    id?: SortOrder
+    failed_count?: SortOrder
+    warning_count?: SortOrder
+  }
+
+  export type MxToolboxCheckMaxOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    label?: SortOrder
+    domain?: SortOrder
+    status?: SortOrder
+    failed_count?: SortOrder
+    warning_count?: SortOrder
+    ai_audit_generated_at?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type MxToolboxCheckMinOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    label?: SortOrder
+    domain?: SortOrder
+    status?: SortOrder
+    failed_count?: SortOrder
+    warning_count?: SortOrder
+    ai_audit_generated_at?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type MxToolboxCheckSumOrderByAggregateInput = {
+    id?: SortOrder
+    failed_count?: SortOrder
+    warning_count?: SortOrder
+  }
+
+  export type EnumMxToolboxCheckStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MxToolboxCheckStatus | EnumMxToolboxCheckStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.MxToolboxCheckStatus[] | ListEnumMxToolboxCheckStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MxToolboxCheckStatus[] | ListEnumMxToolboxCheckStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumMxToolboxCheckStatusWithAggregatesFilter<$PrismaModel> | $Enums.MxToolboxCheckStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumMxToolboxCheckStatusFilter<$PrismaModel>
+    _max?: NestedEnumMxToolboxCheckStatusFilter<$PrismaModel>
+  }
+
   export type EnumReminderStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.ReminderStatus | EnumReminderStatusFieldRefInput<$PrismaModel>
     in?: $Enums.ReminderStatus[] | ListEnumReminderStatusFieldRefInput<$PrismaModel>
@@ -94565,6 +96263,13 @@ export namespace Prisma {
     connect?: MailTesterTestWhereUniqueInput | MailTesterTestWhereUniqueInput[]
   }
 
+  export type MxToolboxCheckCreateNestedManyWithoutOrganisationInput = {
+    create?: XOR<MxToolboxCheckCreateWithoutOrganisationInput, MxToolboxCheckUncheckedCreateWithoutOrganisationInput> | MxToolboxCheckCreateWithoutOrganisationInput[] | MxToolboxCheckUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: MxToolboxCheckCreateOrConnectWithoutOrganisationInput | MxToolboxCheckCreateOrConnectWithoutOrganisationInput[]
+    createMany?: MxToolboxCheckCreateManyOrganisationInputEnvelope
+    connect?: MxToolboxCheckWhereUniqueInput | MxToolboxCheckWhereUniqueInput[]
+  }
+
   export type OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput = {
     create?: XOR<OrganisationMemberCreateWithoutOrganisationInput, OrganisationMemberUncheckedCreateWithoutOrganisationInput> | OrganisationMemberCreateWithoutOrganisationInput[] | OrganisationMemberUncheckedCreateWithoutOrganisationInput[]
     connectOrCreate?: OrganisationMemberCreateOrConnectWithoutOrganisationInput | OrganisationMemberCreateOrConnectWithoutOrganisationInput[]
@@ -94766,6 +96471,13 @@ export namespace Prisma {
     connectOrCreate?: MailTesterTestCreateOrConnectWithoutOrganisationInput | MailTesterTestCreateOrConnectWithoutOrganisationInput[]
     createMany?: MailTesterTestCreateManyOrganisationInputEnvelope
     connect?: MailTesterTestWhereUniqueInput | MailTesterTestWhereUniqueInput[]
+  }
+
+  export type MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput = {
+    create?: XOR<MxToolboxCheckCreateWithoutOrganisationInput, MxToolboxCheckUncheckedCreateWithoutOrganisationInput> | MxToolboxCheckCreateWithoutOrganisationInput[] | MxToolboxCheckUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: MxToolboxCheckCreateOrConnectWithoutOrganisationInput | MxToolboxCheckCreateOrConnectWithoutOrganisationInput[]
+    createMany?: MxToolboxCheckCreateManyOrganisationInputEnvelope
+    connect?: MxToolboxCheckWhereUniqueInput | MxToolboxCheckWhereUniqueInput[]
   }
 
   export type OrganisationMemberUpdateManyWithoutOrganisationNestedInput = {
@@ -95174,6 +96886,20 @@ export namespace Prisma {
     deleteMany?: MailTesterTestScalarWhereInput | MailTesterTestScalarWhereInput[]
   }
 
+  export type MxToolboxCheckUpdateManyWithoutOrganisationNestedInput = {
+    create?: XOR<MxToolboxCheckCreateWithoutOrganisationInput, MxToolboxCheckUncheckedCreateWithoutOrganisationInput> | MxToolboxCheckCreateWithoutOrganisationInput[] | MxToolboxCheckUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: MxToolboxCheckCreateOrConnectWithoutOrganisationInput | MxToolboxCheckCreateOrConnectWithoutOrganisationInput[]
+    upsert?: MxToolboxCheckUpsertWithWhereUniqueWithoutOrganisationInput | MxToolboxCheckUpsertWithWhereUniqueWithoutOrganisationInput[]
+    createMany?: MxToolboxCheckCreateManyOrganisationInputEnvelope
+    set?: MxToolboxCheckWhereUniqueInput | MxToolboxCheckWhereUniqueInput[]
+    disconnect?: MxToolboxCheckWhereUniqueInput | MxToolboxCheckWhereUniqueInput[]
+    delete?: MxToolboxCheckWhereUniqueInput | MxToolboxCheckWhereUniqueInput[]
+    connect?: MxToolboxCheckWhereUniqueInput | MxToolboxCheckWhereUniqueInput[]
+    update?: MxToolboxCheckUpdateWithWhereUniqueWithoutOrganisationInput | MxToolboxCheckUpdateWithWhereUniqueWithoutOrganisationInput[]
+    updateMany?: MxToolboxCheckUpdateManyWithWhereWithoutOrganisationInput | MxToolboxCheckUpdateManyWithWhereWithoutOrganisationInput[]
+    deleteMany?: MxToolboxCheckScalarWhereInput | MxToolboxCheckScalarWhereInput[]
+  }
+
   export type OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput = {
     create?: XOR<OrganisationMemberCreateWithoutOrganisationInput, OrganisationMemberUncheckedCreateWithoutOrganisationInput> | OrganisationMemberCreateWithoutOrganisationInput[] | OrganisationMemberUncheckedCreateWithoutOrganisationInput[]
     connectOrCreate?: OrganisationMemberCreateOrConnectWithoutOrganisationInput | OrganisationMemberCreateOrConnectWithoutOrganisationInput[]
@@ -95578,6 +97304,20 @@ export namespace Prisma {
     update?: MailTesterTestUpdateWithWhereUniqueWithoutOrganisationInput | MailTesterTestUpdateWithWhereUniqueWithoutOrganisationInput[]
     updateMany?: MailTesterTestUpdateManyWithWhereWithoutOrganisationInput | MailTesterTestUpdateManyWithWhereWithoutOrganisationInput[]
     deleteMany?: MailTesterTestScalarWhereInput | MailTesterTestScalarWhereInput[]
+  }
+
+  export type MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput = {
+    create?: XOR<MxToolboxCheckCreateWithoutOrganisationInput, MxToolboxCheckUncheckedCreateWithoutOrganisationInput> | MxToolboxCheckCreateWithoutOrganisationInput[] | MxToolboxCheckUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: MxToolboxCheckCreateOrConnectWithoutOrganisationInput | MxToolboxCheckCreateOrConnectWithoutOrganisationInput[]
+    upsert?: MxToolboxCheckUpsertWithWhereUniqueWithoutOrganisationInput | MxToolboxCheckUpsertWithWhereUniqueWithoutOrganisationInput[]
+    createMany?: MxToolboxCheckCreateManyOrganisationInputEnvelope
+    set?: MxToolboxCheckWhereUniqueInput | MxToolboxCheckWhereUniqueInput[]
+    disconnect?: MxToolboxCheckWhereUniqueInput | MxToolboxCheckWhereUniqueInput[]
+    delete?: MxToolboxCheckWhereUniqueInput | MxToolboxCheckWhereUniqueInput[]
+    connect?: MxToolboxCheckWhereUniqueInput | MxToolboxCheckWhereUniqueInput[]
+    update?: MxToolboxCheckUpdateWithWhereUniqueWithoutOrganisationInput | MxToolboxCheckUpdateWithWhereUniqueWithoutOrganisationInput[]
+    updateMany?: MxToolboxCheckUpdateManyWithWhereWithoutOrganisationInput | MxToolboxCheckUpdateManyWithWhereWithoutOrganisationInput[]
+    deleteMany?: MxToolboxCheckScalarWhereInput | MxToolboxCheckScalarWhereInput[]
   }
 
   export type OrganisationCreateNestedOneWithoutMembersInput = {
@@ -98478,6 +100218,33 @@ export namespace Prisma {
     update?: XOR<XOR<OrganisationUpdateToOneWithWhereWithoutMail_tester_testsInput, OrganisationUpdateWithoutMail_tester_testsInput>, OrganisationUncheckedUpdateWithoutMail_tester_testsInput>
   }
 
+  export type MxToolboxCheckCreatecommandsInput = {
+    set: string[]
+  }
+
+  export type OrganisationCreateNestedOneWithoutMxtoolbox_checksInput = {
+    create?: XOR<OrganisationCreateWithoutMxtoolbox_checksInput, OrganisationUncheckedCreateWithoutMxtoolbox_checksInput>
+    connectOrCreate?: OrganisationCreateOrConnectWithoutMxtoolbox_checksInput
+    connect?: OrganisationWhereUniqueInput
+  }
+
+  export type MxToolboxCheckUpdatecommandsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type EnumMxToolboxCheckStatusFieldUpdateOperationsInput = {
+    set?: $Enums.MxToolboxCheckStatus
+  }
+
+  export type OrganisationUpdateOneRequiredWithoutMxtoolbox_checksNestedInput = {
+    create?: XOR<OrganisationCreateWithoutMxtoolbox_checksInput, OrganisationUncheckedCreateWithoutMxtoolbox_checksInput>
+    connectOrCreate?: OrganisationCreateOrConnectWithoutMxtoolbox_checksInput
+    upsert?: OrganisationUpsertWithoutMxtoolbox_checksInput
+    connect?: OrganisationWhereUniqueInput
+    update?: XOR<XOR<OrganisationUpdateToOneWithWhereWithoutMxtoolbox_checksInput, OrganisationUpdateWithoutMxtoolbox_checksInput>, OrganisationUncheckedUpdateWithoutMxtoolbox_checksInput>
+  }
+
   export type OrganisationCreateNestedOneWithoutRemindersInput = {
     create?: XOR<OrganisationCreateWithoutRemindersInput, OrganisationUncheckedCreateWithoutRemindersInput>
     connectOrCreate?: OrganisationCreateOrConnectWithoutRemindersInput
@@ -100268,6 +102035,23 @@ export namespace Prisma {
     _sum?: NestedFloatNullableFilter<$PrismaModel>
     _min?: NestedFloatNullableFilter<$PrismaModel>
     _max?: NestedFloatNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumMxToolboxCheckStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.MxToolboxCheckStatus | EnumMxToolboxCheckStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.MxToolboxCheckStatus[] | ListEnumMxToolboxCheckStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MxToolboxCheckStatus[] | ListEnumMxToolboxCheckStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumMxToolboxCheckStatusFilter<$PrismaModel> | $Enums.MxToolboxCheckStatus
+  }
+
+  export type NestedEnumMxToolboxCheckStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MxToolboxCheckStatus | EnumMxToolboxCheckStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.MxToolboxCheckStatus[] | ListEnumMxToolboxCheckStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MxToolboxCheckStatus[] | ListEnumMxToolboxCheckStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumMxToolboxCheckStatusWithAggregatesFilter<$PrismaModel> | $Enums.MxToolboxCheckStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumMxToolboxCheckStatusFilter<$PrismaModel>
+    _max?: NestedEnumMxToolboxCheckStatusFilter<$PrismaModel>
   }
 
   export type NestedEnumReminderStatusFilter<$PrismaModel = never> = {
@@ -102477,6 +104261,47 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type MxToolboxCheckCreateWithoutOrganisationInput = {
+    uuid?: string
+    label?: string | null
+    domain: string
+    commands?: MxToolboxCheckCreatecommandsInput | string[]
+    status?: $Enums.MxToolboxCheckStatus
+    failed_count?: number
+    warning_count?: number
+    results: JsonNullValueInput | InputJsonValue
+    ai_audit?: NullableJsonNullValueInput | InputJsonValue
+    ai_audit_generated_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type MxToolboxCheckUncheckedCreateWithoutOrganisationInput = {
+    id?: number
+    uuid?: string
+    label?: string | null
+    domain: string
+    commands?: MxToolboxCheckCreatecommandsInput | string[]
+    status?: $Enums.MxToolboxCheckStatus
+    failed_count?: number
+    warning_count?: number
+    results: JsonNullValueInput | InputJsonValue
+    ai_audit?: NullableJsonNullValueInput | InputJsonValue
+    ai_audit_generated_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type MxToolboxCheckCreateOrConnectWithoutOrganisationInput = {
+    where: MxToolboxCheckWhereUniqueInput
+    create: XOR<MxToolboxCheckCreateWithoutOrganisationInput, MxToolboxCheckUncheckedCreateWithoutOrganisationInput>
+  }
+
+  export type MxToolboxCheckCreateManyOrganisationInputEnvelope = {
+    data: MxToolboxCheckCreateManyOrganisationInput | MxToolboxCheckCreateManyOrganisationInput[]
+    skipDuplicates?: boolean
+  }
+
   export type OrganisationMemberUpsertWithWhereUniqueWithoutOrganisationInput = {
     where: OrganisationMemberWhereUniqueInput
     update: XOR<OrganisationMemberUpdateWithoutOrganisationInput, OrganisationMemberUncheckedUpdateWithoutOrganisationInput>
@@ -103373,6 +105198,42 @@ export namespace Prisma {
     updated_at?: DateTimeFilter<"MailTesterTest"> | Date | string
   }
 
+  export type MxToolboxCheckUpsertWithWhereUniqueWithoutOrganisationInput = {
+    where: MxToolboxCheckWhereUniqueInput
+    update: XOR<MxToolboxCheckUpdateWithoutOrganisationInput, MxToolboxCheckUncheckedUpdateWithoutOrganisationInput>
+    create: XOR<MxToolboxCheckCreateWithoutOrganisationInput, MxToolboxCheckUncheckedCreateWithoutOrganisationInput>
+  }
+
+  export type MxToolboxCheckUpdateWithWhereUniqueWithoutOrganisationInput = {
+    where: MxToolboxCheckWhereUniqueInput
+    data: XOR<MxToolboxCheckUpdateWithoutOrganisationInput, MxToolboxCheckUncheckedUpdateWithoutOrganisationInput>
+  }
+
+  export type MxToolboxCheckUpdateManyWithWhereWithoutOrganisationInput = {
+    where: MxToolboxCheckScalarWhereInput
+    data: XOR<MxToolboxCheckUpdateManyMutationInput, MxToolboxCheckUncheckedUpdateManyWithoutOrganisationInput>
+  }
+
+  export type MxToolboxCheckScalarWhereInput = {
+    AND?: MxToolboxCheckScalarWhereInput | MxToolboxCheckScalarWhereInput[]
+    OR?: MxToolboxCheckScalarWhereInput[]
+    NOT?: MxToolboxCheckScalarWhereInput | MxToolboxCheckScalarWhereInput[]
+    id?: IntFilter<"MxToolboxCheck"> | number
+    uuid?: StringFilter<"MxToolboxCheck"> | string
+    organisation_uuid?: StringFilter<"MxToolboxCheck"> | string
+    label?: StringNullableFilter<"MxToolboxCheck"> | string | null
+    domain?: StringFilter<"MxToolboxCheck"> | string
+    commands?: StringNullableListFilter<"MxToolboxCheck">
+    status?: EnumMxToolboxCheckStatusFilter<"MxToolboxCheck"> | $Enums.MxToolboxCheckStatus
+    failed_count?: IntFilter<"MxToolboxCheck"> | number
+    warning_count?: IntFilter<"MxToolboxCheck"> | number
+    results?: JsonFilter<"MxToolboxCheck">
+    ai_audit?: JsonNullableFilter<"MxToolboxCheck">
+    ai_audit_generated_at?: DateTimeNullableFilter<"MxToolboxCheck"> | Date | string | null
+    created_at?: DateTimeFilter<"MxToolboxCheck"> | Date | string
+    updated_at?: DateTimeFilter<"MxToolboxCheck"> | Date | string
+  }
+
   export type OrganisationCreateWithoutMembersInput = {
     uuid?: string
     name: string
@@ -103409,6 +105270,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutMembersInput = {
@@ -103448,6 +105310,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutMembersInput = {
@@ -103546,6 +105409,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutMembersInput = {
@@ -103585,6 +105449,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutMembershipsInput = {
@@ -103673,6 +105538,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutInvitationsInput = {
@@ -103712,6 +105578,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutInvitationsInput = {
@@ -103810,6 +105677,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutInvitationsInput = {
@@ -103849,6 +105717,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutInvitations_sentInput = {
@@ -103937,6 +105806,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutFiltersInput = {
@@ -103976,6 +105846,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutFiltersInput = {
@@ -104280,6 +106151,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutFiltersInput = {
@@ -104319,6 +106191,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type RawLeadUpsertWithWhereUniqueWithoutFilterInput = {
@@ -104503,6 +106376,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutSaved_contact_filtersInput = {
@@ -104542,6 +106416,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutSaved_contact_filtersInput = {
@@ -104596,6 +106471,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutSaved_contact_filtersInput = {
@@ -104635,6 +106511,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutScoring_instructionsInput = {
@@ -104673,6 +106550,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutScoring_instructionsInput = {
@@ -104712,6 +106590,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutScoring_instructionsInput = {
@@ -104809,6 +106688,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutScoring_instructionsInput = {
@@ -104848,6 +106728,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type FilterScoringInstructionUpsertWithWhereUniqueWithoutScoring_instructionInput = {
@@ -105665,6 +107546,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutContactsInput = {
@@ -105704,6 +107586,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutContactsInput = {
@@ -106267,6 +108150,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutContactsInput = {
@@ -106306,6 +108190,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type LeadUpsertWithoutContactsInput = {
@@ -107624,6 +109509,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutContact_listsInput = {
@@ -107663,6 +109549,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutContact_listsInput = {
@@ -107854,6 +109741,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutContact_listsInput = {
@@ -107893,6 +109781,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type ContactListUpsertWithoutChildrenInput = {
@@ -108533,6 +110422,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutInteractionsInput = {
@@ -108572,6 +110462,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutInteractionsInput = {
@@ -108888,6 +110779,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutInteractionsInput = {
@@ -108927,6 +110819,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OutreachMessageUpsertWithoutInteractionInput = {
@@ -109145,6 +111038,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutOutreach_messagesInput = {
@@ -109184,6 +111078,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutOutreach_messagesInput = {
@@ -109604,6 +111499,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutOutreach_messagesInput = {
@@ -109643,6 +111539,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type ContactUpsertWithoutOutreach_messagesInput = {
@@ -110089,6 +111986,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutOutreach_sequencesInput = {
@@ -110128,6 +112026,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutOutreach_sequencesInput = {
@@ -110369,6 +112268,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutOutreach_sequencesInput = {
@@ -110408,6 +112308,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OutreachSequenceStepUpsertWithWhereUniqueWithoutSequenceInput = {
@@ -111385,6 +113286,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutBulk_jobsInput = {
@@ -111424,6 +113326,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutBulk_jobsInput = {
@@ -111522,6 +113425,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutBulk_jobsInput = {
@@ -111561,6 +113465,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutBulk_jobs_createdInput = {
@@ -111649,6 +113554,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutWebsite_scrape_requestsInput = {
@@ -111688,6 +113594,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutWebsite_scrape_requestsInput = {
@@ -111742,6 +113649,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutWebsite_scrape_requestsInput = {
@@ -111781,6 +113689,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutSender_profilesInput = {
@@ -111819,6 +113728,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutSender_profilesInput = {
@@ -111858,6 +113768,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutSender_profilesInput = {
@@ -112013,6 +113924,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutSender_profilesInput = {
@@ -112052,6 +113964,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type MarketingCampaignUpsertWithWhereUniqueWithoutSender_profileInput = {
@@ -112106,6 +114019,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutMessage_templatesInput = {
@@ -112145,6 +114059,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutMessage_templatesInput = {
@@ -112244,6 +114159,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutMessage_templatesInput = {
@@ -112283,6 +114199,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OutreachSequenceStepUpsertWithWhereUniqueWithoutMessage_templateInput = {
@@ -112337,6 +114254,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutMarketing_campaignsInput = {
@@ -112376,6 +114294,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutMarketing_campaignsInput = {
@@ -112743,6 +114662,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutMarketing_campaignsInput = {
@@ -112782,6 +114702,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type SenderProfileUpsertWithoutMarketing_campaignsInput = {
@@ -113395,6 +115316,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutOpenai_batch_jobsInput = {
@@ -113434,6 +115356,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutOpenai_batch_jobsInput = {
@@ -113488,6 +115411,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutOpenai_batch_jobsInput = {
@@ -113527,6 +115451,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutIntegrationsInput = {
@@ -113565,6 +115490,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutIntegrationsInput = {
@@ -113604,6 +115530,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutIntegrationsInput = {
@@ -113724,6 +115651,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutIntegrationsInput = {
@@ -113763,6 +115691,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type IntegrationKeyUpsertWithWhereUniqueWithoutIntegrationInput = {
@@ -114216,6 +116145,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutMail_tester_testsInput = {
@@ -114255,6 +116185,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutMail_tester_testsInput = {
@@ -114309,6 +116240,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutMail_tester_testsInput = {
@@ -114348,6 +116280,181 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+  }
+
+  export type OrganisationCreateWithoutMxtoolbox_checksInput = {
+    uuid?: string
+    name: string
+    slug: string
+    timezone?: string
+    reply_to_email?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
+    invitations?: OrganisationInvitationCreateNestedManyWithoutOrganisationInput
+    filters?: FilterCreateNestedManyWithoutOrganisationInput
+    contacts?: ContactCreateNestedManyWithoutOrganisationInput
+    outreach_messages?: OutreachMessageCreateNestedManyWithoutOrganisationInput
+    outreach_sequences?: OutreachSequenceCreateNestedManyWithoutOrganisationInput
+    interactions?: InteractionCreateNestedManyWithoutOrganisationInput
+    sender_profiles?: SenderProfileCreateNestedManyWithoutOrganisationInput
+    marketing_campaigns?: MarketingCampaignCreateNestedManyWithoutOrganisationInput
+    scoring_instructions?: ScoringInstructionCreateNestedManyWithoutOrganisationInput
+    openai_batch_jobs?: OpenAiBatchJobCreateNestedManyWithoutOrganisationInput
+    integrations?: IntegrationCreateNestedManyWithoutOrganisationInput
+    reminders?: ReminderCreateNestedManyWithoutOrganisationInput
+    forms?: FormCreateNestedManyWithoutOrganisationInput
+    contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
+    contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
+    ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
+    apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
+    message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
+  }
+
+  export type OrganisationUncheckedCreateWithoutMxtoolbox_checksInput = {
+    id?: number
+    uuid?: string
+    name: string
+    slug: string
+    timezone?: string
+    reply_to_email?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
+    invitations?: OrganisationInvitationUncheckedCreateNestedManyWithoutOrganisationInput
+    filters?: FilterUncheckedCreateNestedManyWithoutOrganisationInput
+    contacts?: ContactUncheckedCreateNestedManyWithoutOrganisationInput
+    outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutOrganisationInput
+    outreach_sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutOrganisationInput
+    interactions?: InteractionUncheckedCreateNestedManyWithoutOrganisationInput
+    sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutOrganisationInput
+    marketing_campaigns?: MarketingCampaignUncheckedCreateNestedManyWithoutOrganisationInput
+    scoring_instructions?: ScoringInstructionUncheckedCreateNestedManyWithoutOrganisationInput
+    openai_batch_jobs?: OpenAiBatchJobUncheckedCreateNestedManyWithoutOrganisationInput
+    integrations?: IntegrationUncheckedCreateNestedManyWithoutOrganisationInput
+    reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
+    forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
+    contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
+    contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
+    ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
+    apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
+    message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
+  }
+
+  export type OrganisationCreateOrConnectWithoutMxtoolbox_checksInput = {
+    where: OrganisationWhereUniqueInput
+    create: XOR<OrganisationCreateWithoutMxtoolbox_checksInput, OrganisationUncheckedCreateWithoutMxtoolbox_checksInput>
+  }
+
+  export type OrganisationUpsertWithoutMxtoolbox_checksInput = {
+    update: XOR<OrganisationUpdateWithoutMxtoolbox_checksInput, OrganisationUncheckedUpdateWithoutMxtoolbox_checksInput>
+    create: XOR<OrganisationCreateWithoutMxtoolbox_checksInput, OrganisationUncheckedCreateWithoutMxtoolbox_checksInput>
+    where?: OrganisationWhereInput
+  }
+
+  export type OrganisationUpdateToOneWithWhereWithoutMxtoolbox_checksInput = {
+    where?: OrganisationWhereInput
+    data: XOR<OrganisationUpdateWithoutMxtoolbox_checksInput, OrganisationUncheckedUpdateWithoutMxtoolbox_checksInput>
+  }
+
+  export type OrganisationUpdateWithoutMxtoolbox_checksInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
+    invitations?: OrganisationInvitationUpdateManyWithoutOrganisationNestedInput
+    filters?: FilterUpdateManyWithoutOrganisationNestedInput
+    contacts?: ContactUpdateManyWithoutOrganisationNestedInput
+    outreach_messages?: OutreachMessageUpdateManyWithoutOrganisationNestedInput
+    outreach_sequences?: OutreachSequenceUpdateManyWithoutOrganisationNestedInput
+    interactions?: InteractionUpdateManyWithoutOrganisationNestedInput
+    sender_profiles?: SenderProfileUpdateManyWithoutOrganisationNestedInput
+    marketing_campaigns?: MarketingCampaignUpdateManyWithoutOrganisationNestedInput
+    scoring_instructions?: ScoringInstructionUpdateManyWithoutOrganisationNestedInput
+    openai_batch_jobs?: OpenAiBatchJobUpdateManyWithoutOrganisationNestedInput
+    integrations?: IntegrationUpdateManyWithoutOrganisationNestedInput
+    reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
+    forms?: FormUpdateManyWithoutOrganisationNestedInput
+    contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
+    contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
+    ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
+    apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
+    message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
+  }
+
+  export type OrganisationUncheckedUpdateWithoutMxtoolbox_checksInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
+    invitations?: OrganisationInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
+    filters?: FilterUncheckedUpdateManyWithoutOrganisationNestedInput
+    contacts?: ContactUncheckedUpdateManyWithoutOrganisationNestedInput
+    outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutOrganisationNestedInput
+    outreach_sequences?: OutreachSequenceUncheckedUpdateManyWithoutOrganisationNestedInput
+    interactions?: InteractionUncheckedUpdateManyWithoutOrganisationNestedInput
+    sender_profiles?: SenderProfileUncheckedUpdateManyWithoutOrganisationNestedInput
+    marketing_campaigns?: MarketingCampaignUncheckedUpdateManyWithoutOrganisationNestedInput
+    scoring_instructions?: ScoringInstructionUncheckedUpdateManyWithoutOrganisationNestedInput
+    openai_batch_jobs?: OpenAiBatchJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    integrations?: IntegrationUncheckedUpdateManyWithoutOrganisationNestedInput
+    reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
+    forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
+    contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
+    contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
+    ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutRemindersInput = {
@@ -114386,6 +116493,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutRemindersInput = {
@@ -114425,6 +116533,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutRemindersInput = {
@@ -114567,6 +116676,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutRemindersInput = {
@@ -114606,6 +116716,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type ContactUpsertWithoutRemindersInput = {
@@ -114738,6 +116849,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutFormsInput = {
@@ -114777,6 +116889,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutFormsInput = {
@@ -114903,6 +117016,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutFormsInput = {
@@ -114942,6 +117056,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type FormFieldUpsertWithWhereUniqueWithoutFormInput = {
@@ -115659,6 +117774,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutContact_audience_analysesInput = {
@@ -115698,6 +117814,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutContact_audience_analysesInput = {
@@ -115828,6 +117945,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutContact_audience_analysesInput = {
@@ -115867,6 +117985,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type FilterUpsertWithoutAudience_analysesInput = {
@@ -115993,6 +118112,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutAi_usage_logsInput = {
@@ -116032,6 +118152,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutAi_usage_logsInput = {
@@ -116086,6 +118207,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutAi_usage_logsInput = {
@@ -116125,6 +118247,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutApify_usage_logsInput = {
@@ -116163,6 +118286,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutApify_usage_logsInput = {
@@ -116202,6 +118326,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutApify_usage_logsInput = {
@@ -116256,6 +118381,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutApify_usage_logsInput = {
@@ -116295,6 +118421,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutMessaging_goalsInput = {
@@ -116333,6 +118460,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutMessaging_goalsInput = {
@@ -116372,6 +118500,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutMessaging_goalsInput = {
@@ -116503,6 +118632,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutMessaging_goalsInput = {
@@ -116542,6 +118672,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutMessaging_goalsInput = {
@@ -116646,6 +118777,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutEmail_send_limitsInput = {
@@ -116685,6 +118817,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutEmail_send_limitsInput = {
@@ -116739,6 +118872,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutEmail_send_limitsInput = {
@@ -116778,6 +118912,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutSending_policiesInput = {
@@ -116816,6 +118951,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutSending_policiesInput = {
@@ -116855,6 +118991,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutSending_policiesInput = {
@@ -117066,6 +119203,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutSending_policiesInput = {
@@ -117105,6 +119243,7 @@ export namespace Prisma {
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type SendingPolicyUpsertWithoutCloned_instancesInput = {
@@ -117970,6 +120109,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutGoal_achievementsInput = {
@@ -118009,6 +120149,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutGoal_achievementsInput = {
@@ -118135,6 +120276,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutGoal_achievementsInput = {
@@ -118174,6 +120316,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutGoal_achievementsInput = {
@@ -118296,6 +120439,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutGoal_personal_bestsInput = {
@@ -118335,6 +120479,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutGoal_personal_bestsInput = {
@@ -118433,6 +120578,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutGoal_personal_bestsInput = {
@@ -118472,6 +120618,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutGoal_personal_bestsInput = {
@@ -118560,6 +120707,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutActivity_logsInput = {
@@ -118599,6 +120747,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutActivity_logsInput = {
@@ -118697,6 +120846,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutActivity_logsInput = {
@@ -118736,6 +120886,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutActivity_logsInput = {
@@ -119793,6 +121944,22 @@ export namespace Prisma {
     score?: number | null
     result?: NullableJsonNullValueInput | InputJsonValue
     error_message?: string | null
+    ai_audit?: NullableJsonNullValueInput | InputJsonValue
+    ai_audit_generated_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type MxToolboxCheckCreateManyOrganisationInput = {
+    id?: number
+    uuid?: string
+    label?: string | null
+    domain: string
+    commands?: MxToolboxCheckCreatecommandsInput | string[]
+    status?: $Enums.MxToolboxCheckStatus
+    failed_count?: number
+    warning_count?: number
+    results: JsonNullValueInput | InputJsonValue
     ai_audit?: NullableJsonNullValueInput | InputJsonValue
     ai_audit_generated_at?: Date | string | null
     created_at?: Date | string
@@ -121274,6 +123441,53 @@ export namespace Prisma {
     score?: NullableFloatFieldUpdateOperationsInput | number | null
     result?: NullableJsonNullValueInput | InputJsonValue
     error_message?: NullableStringFieldUpdateOperationsInput | string | null
+    ai_audit?: NullableJsonNullValueInput | InputJsonValue
+    ai_audit_generated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MxToolboxCheckUpdateWithoutOrganisationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    label?: NullableStringFieldUpdateOperationsInput | string | null
+    domain?: StringFieldUpdateOperationsInput | string
+    commands?: MxToolboxCheckUpdatecommandsInput | string[]
+    status?: EnumMxToolboxCheckStatusFieldUpdateOperationsInput | $Enums.MxToolboxCheckStatus
+    failed_count?: IntFieldUpdateOperationsInput | number
+    warning_count?: IntFieldUpdateOperationsInput | number
+    results?: JsonNullValueInput | InputJsonValue
+    ai_audit?: NullableJsonNullValueInput | InputJsonValue
+    ai_audit_generated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MxToolboxCheckUncheckedUpdateWithoutOrganisationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    label?: NullableStringFieldUpdateOperationsInput | string | null
+    domain?: StringFieldUpdateOperationsInput | string
+    commands?: MxToolboxCheckUpdatecommandsInput | string[]
+    status?: EnumMxToolboxCheckStatusFieldUpdateOperationsInput | $Enums.MxToolboxCheckStatus
+    failed_count?: IntFieldUpdateOperationsInput | number
+    warning_count?: IntFieldUpdateOperationsInput | number
+    results?: JsonNullValueInput | InputJsonValue
+    ai_audit?: NullableJsonNullValueInput | InputJsonValue
+    ai_audit_generated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MxToolboxCheckUncheckedUpdateManyWithoutOrganisationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    label?: NullableStringFieldUpdateOperationsInput | string | null
+    domain?: StringFieldUpdateOperationsInput | string
+    commands?: MxToolboxCheckUpdatecommandsInput | string[]
+    status?: EnumMxToolboxCheckStatusFieldUpdateOperationsInput | $Enums.MxToolboxCheckStatus
+    failed_count?: IntFieldUpdateOperationsInput | number
+    warning_count?: IntFieldUpdateOperationsInput | number
+    results?: JsonNullValueInput | InputJsonValue
     ai_audit?: NullableJsonNullValueInput | InputJsonValue
     ai_audit_generated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string

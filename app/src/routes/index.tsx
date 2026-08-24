@@ -33,6 +33,7 @@ const EditCampaignPage = lazy(() => import("@/pages/dashboard/pages/campaigns/pa
 const CampaignDetailPage = lazy(() => import("@/pages/dashboard/pages/campaigns/pages/detail"));
 const SendHistoryPage = lazy(() => import("@/pages/dashboard/pages/send-history"));
 const MailTesterPage = lazy(() => import("@/pages/dashboard/pages/mail-tester"));
+const MxToolboxPage = lazy(() => import("@/pages/dashboard/pages/mxtoolbox"));
 const MessageTemplatesPage = lazy(() => import("@/pages/dashboard/pages/message-templates"));
 const SequencesPage = lazy(() => import("@/pages/dashboard/pages/sequences"));
 const NewSequencePage = lazy(() => import("@/pages/dashboard/pages/sequences/pages/new"));
@@ -346,6 +347,14 @@ export default function AppRoutes() {
           element={
             <Lazy>
               <MailTesterPage />
+            </Lazy>
+          }
+        />
+        <Route
+          path="domain-health"
+          element={
+            <Lazy>
+              <MxToolboxPage />
             </Lazy>
           }
         />
