@@ -24,9 +24,12 @@ import { OrganisationRoles } from '@/shared/decorators/organisation-roles.decora
 import { JwtGuard } from '@/shared/guards/jwt.guard';
 import { OrganisationRolesGuard } from '@/shared/guards/organisation-roles.guard';
 import { IntegrationsService } from './integrations.service';
+import { AddIntegrationAccountDomainDto } from './dto/add-integration-account-domain.dto';
 import { CreateIntegrationKeyDto } from './dto/create-integration-key.dto';
+import { CreateResendAccountDto } from './dto/create-resend-account.dto';
 import { CreateSmtpAccountDto } from './dto/create-smtp-account.dto';
 import { SetDefaultIntegrationAccountDto } from './dto/set-default-integration-account.dto';
+import { UpdateIntegrationAccountDomainDto } from './dto/update-integration-account-domain.dto';
 import { UpdateIntegrationAccountDto } from './dto/update-integration-account.dto';
 import { UpdateIntegrationKeyDto } from './dto/update-integration-key.dto';
 import { ActivityLog } from '@/modules/activity-logs/decorators/activity-log.decorator';
@@ -72,6 +75,72 @@ export class IntegrationsController {
         @Body() dto: CreateSmtpAccountDto,
     ) {
         return this.integrationsService.createSmtpAccount(organisation_uuid, dto);
+    }
+
+    @ActivityLog({ entityType: ActivityEntityType.INTEGRATION, action: ActivityAction.RESEND_ACCOUNT_CREATED })
+    @Post('RESEND/accounts')
+    @UseGuards(OrganisationRolesGuard)
+    @OrganisationRoles(OrganisationRole.ADMIN)
+    @ApiOperation({ summary: 'Create a complete Resend account (API key + first domain) in one request' })
+    createResendAccount(
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
+        @Body() dto: CreateResendAccountDto,
+    ) {
+        return this.integrationsService.createResendAccount(organisation_uuid, dto);
+    }
+
+    @ActivityLog({ entityType: ActivityEntityType.INTEGRATION, action: ActivityAction.DOMAIN_ADDED, entityUuidFrom: 'params.account_uuid' })
+    @Post('accounts/:account_uuid/domains')
+    @UseGuards(OrganisationRolesGuard)
+    @OrganisationRoles(OrganisationRole.ADMIN)
+    @ApiOperation({ summary: 'Add another sending domain to an existing Resend account' })
+    @ApiResponse({ status: 404, description: 'Integration account not found' })
+    addAccountDomain(
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
+        @Param('account_uuid') account_uuid: string,
+        @Body() dto: AddIntegrationAccountDomainDto,
+    ) {
+        return this.integrationsService.addAccountDomain(organisation_uuid, account_uuid, dto);
+    }
+
+    @ActivityLog({ entityType: ActivityEntityType.INTEGRATION, action: ActivityAction.DOMAIN_UPDATED, entityUuidFrom: 'params.domain_uuid' })
+    @Patch('domains/:domain_uuid')
+    @UseGuards(OrganisationRolesGuard)
+    @OrganisationRoles(OrganisationRole.ADMIN)
+    @ApiOperation({ summary: 'Update a sending domain' })
+    @ApiResponse({ status: 404, description: 'Domain not found' })
+    updateAccountDomain(
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
+        @Param('domain_uuid') domain_uuid: string,
+        @Body() dto: UpdateIntegrationAccountDomainDto,
+    ) {
+        return this.integrationsService.updateAccountDomain(organisation_uuid, domain_uuid, dto);
+    }
+
+    @ActivityLog({ entityType: ActivityEntityType.INTEGRATION, action: ActivityAction.DEFAULT_DOMAIN_SET, entityUuidFrom: 'params.domain_uuid' })
+    @Patch('domains/:domain_uuid/default')
+    @UseGuards(OrganisationRolesGuard)
+    @OrganisationRoles(OrganisationRole.ADMIN)
+    @ApiOperation({ summary: 'Set a domain as the account default' })
+    @ApiResponse({ status: 404, description: 'Domain not found' })
+    setDefaultAccountDomain(
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
+        @Param('domain_uuid') domain_uuid: string,
+    ) {
+        return this.integrationsService.setDefaultAccountDomain(organisation_uuid, domain_uuid);
+    }
+
+    @ActivityLog({ entityType: ActivityEntityType.INTEGRATION, action: ActivityAction.DOMAIN_DELETED, entityUuidFrom: 'params.domain_uuid' })
+    @Delete('domains/:domain_uuid')
+    @UseGuards(OrganisationRolesGuard)
+    @OrganisationRoles(OrganisationRole.ADMIN)
+    @ApiOperation({ summary: 'Delete a sending domain' })
+    @ApiResponse({ status: 404, description: 'Domain not found' })
+    removeAccountDomain(
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
+        @Param('domain_uuid') domain_uuid: string,
+    ) {
+        return this.integrationsService.removeAccountDomain(organisation_uuid, domain_uuid);
     }
 
     @ActivityLog({ entityType: ActivityEntityType.INTEGRATION, action: ActivityAction.KEY_UPDATED, entityUuidFrom: 'params.uuid' })

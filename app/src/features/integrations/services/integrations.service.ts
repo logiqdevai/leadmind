@@ -2,12 +2,16 @@ import axios from "axios";
 import axiosInstance from "@/config/api/axios";
 import { ApiRoutes } from "@/config/api/routes";
 import type {
+    AddIntegrationAccountDomainPayload,
     CreateIntegrationKeyPayload,
+    CreateResendAccountPayload,
     CreateSmtpAccountPayload,
+    IntegrationAccountDomain,
     IntegrationKey,
     IntegrationProvider,
     IntegrationProviderView,
     SetDefaultIntegrationAccountPayload,
+    UpdateIntegrationAccountDomainPayload,
     UpdateIntegrationAccountPayload,
     UpdateIntegrationKeyPayload,
 } from "../interfaces/integrations.interface";
@@ -58,6 +62,79 @@ export const createSmtpAccount = async (
         return response.data;
     } catch (error) {
         throw new Error(apiErrorMessage(error, "Failed to save SMTP account."));
+    }
+};
+
+export const createResendAccount = async (
+    payload: CreateResendAccountPayload,
+): Promise<IntegrationProviderView> => {
+    try {
+        const response = await axiosInstance.post(
+            ApiRoutes.integrations.createResendAccount,
+            payload,
+        );
+        return response.data;
+    } catch (error) {
+        throw new Error(apiErrorMessage(error, "Failed to save Resend account."));
+    }
+};
+
+export const addAccountDomain = async (
+    accountUuid: string,
+    payload: AddIntegrationAccountDomainPayload,
+): Promise<IntegrationAccountDomain> => {
+    try {
+        const response = await axiosInstance.post(
+            ApiRoutes.integrations.addAccountDomain(accountUuid),
+            payload,
+        );
+        return response.data;
+    } catch (error) {
+        throw new Error(apiErrorMessage(error, "Failed to add domain."));
+    }
+};
+
+export const updateAccountDomain = async (
+    domainUuid: string,
+    payload: UpdateIntegrationAccountDomainPayload,
+): Promise<IntegrationAccountDomain> => {
+    try {
+        const response = await axiosInstance.patch(
+            ApiRoutes.integrations.updateAccountDomain(domainUuid),
+            payload,
+        );
+        return response.data;
+    } catch (error) {
+        throw new Error(apiErrorMessage(error, "Failed to update domain."));
+    }
+};
+
+export const setDefaultAccountDomain = async (
+    domainUuid: string,
+): Promise<IntegrationAccountDomain> => {
+    try {
+        const response = await axiosInstance.patch(
+            ApiRoutes.integrations.setDefaultAccountDomain(domainUuid),
+            {},
+        );
+        return response.data;
+    } catch (error) {
+        throw new Error(
+            apiErrorMessage(error, "Failed to set default domain."),
+        );
+    }
+};
+
+export const removeAccountDomain = async (
+    domainUuid: string,
+): Promise<{ uuid: string }> => {
+    try {
+        const response = await axiosInstance.delete(
+            ApiRoutes.integrations.removeAccountDomain(domainUuid),
+        );
+        return response.data;
+    } catch (error) {
+        throw new Error(apiErrorMessage(error, "Failed to delete domain."));
     }
 };
 

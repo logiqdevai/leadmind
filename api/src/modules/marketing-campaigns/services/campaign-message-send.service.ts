@@ -811,7 +811,10 @@ export class CampaignMessageSendService {
   ): Promise<EmailProviderTarget> {
     const ci = await this.prisma.campaignIntegration.findUnique({
       where: { uuid: campaign_integration_uuid },
-      select: { integration_account_uuid: true },
+      select: {
+        integration_account_uuid: true,
+        integration_account_domain_uuid: true,
+      },
     });
     if (!ci) {
       throw new NotFoundException(
@@ -820,6 +823,7 @@ export class CampaignMessageSendService {
     }
     return this.emailCredentialsService.resolveTargetByAccountUuid(
       ci.integration_account_uuid,
+      ci.integration_account_domain_uuid ?? undefined,
     );
   }
 

@@ -126,12 +126,21 @@ export const ApiRoutes = {
         list: "/integrations",
         createKey: (provider: string) => `/integrations/${provider}/keys`,
         createSmtpAccount: "/integrations/SMTP/accounts",
+        createResendAccount: "/integrations/RESEND/accounts",
         setDefaultAccount: (provider: string) =>
             `/integrations/${provider}/default-account`,
         updateAccount: (provider: string, account: string) =>
             `/integrations/${provider}/accounts/${encodeURIComponent(account)}`,
         updateKey: (uuid: string) => `/integrations/keys/${uuid}`,
         removeKey: (uuid: string) => `/integrations/keys/${uuid}`,
+        addAccountDomain: (accountUuid: string) =>
+            `/integrations/accounts/${accountUuid}/domains`,
+        updateAccountDomain: (domainUuid: string) =>
+            `/integrations/domains/${domainUuid}`,
+        setDefaultAccountDomain: (domainUuid: string) =>
+            `/integrations/domains/${domainUuid}/default`,
+        removeAccountDomain: (domainUuid: string) =>
+            `/integrations/domains/${domainUuid}`,
     },
     admin: {
         batch_jobs: "/admin/batch-jobs",

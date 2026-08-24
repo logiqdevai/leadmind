@@ -160,6 +160,7 @@ export interface SendCampaignDraftsPayload {
 export interface SendCampaignDraftMessagePayload {
     email_provider?: "RESEND" | "SMTP";
     email_account?: string;
+    email_domain_uuid?: string;
     sender_profile_uuid?: string;
 }
 

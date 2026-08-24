@@ -21,10 +21,20 @@ export interface IntegrationKeyResponse {
   updated_at: Date;
 }
 
+export interface IntegrationAccountDomainResponse {
+  uuid: string;
+  from_email: string;
+  from_name: string | null;
+  is_default: boolean;
+  created_at: Date;
+  updated_at: Date;
+}
+
 export interface IntegrationAccountResponse {
   uuid: string | null;
   account: string;
   title: string;
+  domains: IntegrationAccountDomainResponse[];
 }
 
 export interface IntegrationResponse {

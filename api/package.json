@@ -20,6 +20,8 @@
     "db:empty": "dotenv -e .env.staging -o -- ts-node scripts/empty-database.ts",
     "extract:kad": "ts-node scripts/extract-kad-codes.ts",
     "backfill:invalid-emails:staging": "dotenv -e .env.staging -o -- ts-node -r tsconfig-paths/register scripts/backfill-invalid-emails.ts",
+    "backfill:resend-domains:staging": "dotenv -e .env.staging -o -- ts-node -r tsconfig-paths/register scripts/backfill-resend-domains.ts",
+    "backfill:resend-domains:prod": "dotenv -e .env.production -o -- ts-node -r tsconfig-paths/register scripts/backfill-resend-domains.ts",
     "reset:dev": "npx dotenv -e .env.development -o -- npx prisma migrate reset",
     "start": "nest start",
     "start:local": "npx dotenv -e .env.local -o -- nest start --watch",

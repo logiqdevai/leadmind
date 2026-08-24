@@ -5,6 +5,7 @@ import {
 import type {
     EmailProviderAllocation,
     EmailProviderTarget,
+    IntegrationAccountDomain,
     IntegrationKey,
     IntegrationProviderView,
 } from "@/features/integrations/interfaces/integrations.interface";
@@ -17,6 +18,8 @@ export interface SendableEmailAccount extends EmailProviderTarget {
     last4: string | null;
     isDefault: boolean;
     canSend: boolean;
+    fromEmail: string | null;
+    fromName: string | null;
 }
 
 const EMAIL_PROVIDERS = ["RESEND", "SMTP"] as const;
@@ -35,29 +38,10 @@ function keyValueHint(keys: IntegrationKey[], account: string, keyType: Integrat
     return `····${key.last4}`;
 }
 
-function buildAccountDetail(
-    provider: EmailProviderTarget["provider"],
+function buildSmtpAccountDetail(
     keys: IntegrationKey[],
     account: string,
 ): string | null {
-    if (provider === "RESEND") {
-        const fromEmail = keys.find(
-            (row) => row.account === account && row.key_type === "FROM_EMAIL",
-        );
-        const fromHint =
-            fromEmail?.display_value ?? (fromEmail?.last4 ? fromEmail.last4 : null);
-        if (fromHint) {
-            return `from ${fromHint}`;
-        }
-        const hasApiKey = keys.some(
-            (row) => row.account === account && row.key_type === "API_KEY",
-        );
-        if (hasApiKey) {
-            return "from address missing";
-        }
-        return keyValueHint(keys, account, "API_KEY");
-    }
-
     const host = keys.find(
         (row) => row.account === account && row.key_type === "HOST",
     );
@@ -108,6 +92,13 @@ function resolveAccountUuid(
     );
 }
 
+function resolveAccountDomains(
+    integration: IntegrationProviderView,
+    account: string,
+): IntegrationAccountDomain[] {
+    return integration.accounts?.find((row) => row.account === account)?.domains ?? [];
+}
+
 function listProviderAccounts(
     provider: EmailProviderTarget["provider"],
     keys: IntegrationKey[],
@@ -135,30 +126,78 @@ export function listSendableEmailAccounts(
             if (!isEmailProviderAccountVisible(provider, integration.keys, account)) {
                 continue;
             }
-            const canSend = isEmailAccountSendable(provider, integration.keys, account);
-            const detail = buildAccountDetail(provider, integration.keys, account);
             const title = resolveAccountTitle(integration, account);
+            const uuid = resolveAccountUuid(integration, account);
+            const isDefault = integration.default_account === account;
+            const hasApiKey = isEmailAccountSendable(provider, integration.keys, account);
+
+            if (provider === "RESEND") {
+                const domains = resolveAccountDomains(integration, account);
+
+                if (domains.length > 0) {
+                    for (const domain of domains) {
+                        accounts.push({
+                            provider,
+                            account,
+                            domain_uuid: domain.uuid,
+                            uuid,
+                            title,
+                            label: buildAccountLabel(integration.label, title),
+                            detail: `from ${domain.from_email}`,
+                            last4: null,
+                            isDefault,
+                            canSend: hasApiKey,
+                            fromEmail: domain.from_email,
+                            fromName: domain.from_name,
+                        });
+                    }
+                    continue;
+                }
+
+                // Legacy fallback: account not yet migrated to IntegrationAccountDomain.
+                const legacyFromEmail = keyValueHint(integration.keys, account, "FROM_EMAIL");
+                const hasLegacyFromEmailKey = integration.keys.some(
+                    (key) => key.account === account && key.key_type === "FROM_EMAIL",
+                );
+                accounts.push({
+                    provider,
+                    account,
+                    uuid,
+                    title,
+                    label: buildAccountLabel(integration.label, title),
+                    detail: legacyFromEmail
+                        ? `from ${legacyFromEmail}`
+                        : hasApiKey
+                          ? "from address missing"
+                          : null,
+                    last4: legacyFromEmail,
+                    isDefault,
+                    canSend: hasApiKey && hasLegacyFromEmailKey,
+                    fromEmail: legacyFromEmail,
+                    fromName: null,
+                });
+                continue;
+            }
+
             accounts.push({
                 provider,
                 account,
-                uuid: resolveAccountUuid(integration, account),
+                uuid,
                 title,
                 label: buildAccountLabel(integration.label, title),
-                detail,
-                last4: keyValueHint(
-                    integration.keys,
-                    account,
-                    "FROM_EMAIL",
-                ),
-                isDefault: integration.default_account === account,
-                canSend,
+                detail: buildSmtpAccountDetail(integration.keys, account),
+                last4: keyValueHint(integration.keys, account, "FROM_EMAIL"),
+                isDefault,
+                canSend: hasApiKey,
+                fromEmail: keyValueHint(integration.keys, account, "FROM_EMAIL"),
+                fromName: keyValueHint(integration.keys, account, "FROM_NAME"),
             });
         }
     }
 
     return accounts.sort((left, right) =>
-        `${left.provider}:${left.account}`.localeCompare(
-            `${right.provider}:${right.account}`,
+        `${left.provider}:${left.account}:${left.domain_uuid ?? ""}`.localeCompare(
+            `${right.provider}:${right.account}:${right.domain_uuid ?? ""}`,
             undefined,
             { numeric: true },
         ),
@@ -218,6 +257,14 @@ export function validateAllocations(
     return null;
 }
 
+function toTarget(row: SendableEmailAccount): EmailProviderTarget {
+    return {
+        provider: row.provider,
+        account: row.account,
+        ...(row.domain_uuid ? { domain_uuid: row.domain_uuid } : {}),
+    };
+}
+
 export function resolveDefaultEmailTarget(
     integrations: IntegrationProviderView[] | undefined,
     preferred?: EmailProviderTarget | null,
@@ -225,13 +272,17 @@ export function resolveDefaultEmailTarget(
     if (!integrations?.length) return null;
 
     const ready = listReadyEmailAccounts(integrations);
+    if (ready.length === 0) return null;
 
     if (preferred) {
         const match = ready.find(
-            (row) => row.provider === preferred.provider && row.account === preferred.account,
+            (row) =>
+                row.provider === preferred.provider &&
+                row.account === preferred.account &&
+                (preferred.domain_uuid === undefined || row.domain_uuid === preferred.domain_uuid),
         );
         if (match) {
-            return { provider: match.provider, account: match.account };
+            return toTarget(match);
         }
     }
 
@@ -239,17 +290,21 @@ export function resolveDefaultEmailTarget(
         const integration = integrations.find((row) => row.provider === provider);
         if (!integration?.default_account) continue;
         const account = integration.default_account;
-        if (!isEmailAccountSendable(provider, integration.keys, account)) {
-            continue;
-        }
-        return { provider, account };
+        const candidates = ready.filter((row) => row.provider === provider && row.account === account);
+        if (candidates.length === 0) continue;
+        const defaultDomainUuid = resolveAccountDomains(integration, account).find(
+            (domain) => domain.is_default,
+        )?.uuid;
+        const preferredRow =
+            candidates.find((row) => row.domain_uuid === defaultDomainUuid) ?? candidates[0];
+        return toTarget(preferredRow);
     }
 
-    return ready[0] ?? null;
+    return toTarget(ready[0]);
 }
 
 export function allocationKey(row: EmailProviderTarget): string {
-    return `${row.provider}:${row.account}`;
+    return `${row.provider}:${row.account}:${row.domain_uuid ?? ""}`;
 }
 
 export function emailProviderFromAllocations(
@@ -257,7 +312,11 @@ export function emailProviderFromAllocations(
 ): EmailProviderTarget | null {
     const first = allocations?.[0];
     if (!first) return null;
-    return { provider: first.provider, account: first.account };
+    return {
+        provider: first.provider,
+        account: first.account,
+        ...(first.domain_uuid ? { domain_uuid: first.domain_uuid } : {}),
+    };
 }
 
 export function emailProviderToAllocations(
@@ -265,7 +324,14 @@ export function emailProviderToAllocations(
     count: number,
 ): EmailProviderAllocation[] {
     if (count <= 0) return [];
-    return [{ provider: target.provider, account: target.account, count }];
+    return [
+        {
+            provider: target.provider,
+            account: target.account,
+            ...(target.domain_uuid ? { domain_uuid: target.domain_uuid } : {}),
+            count,
+        },
+    ];
 }
 
 export function assignEmailProviders(
@@ -282,6 +348,7 @@ export function assignEmailProviders(
             assignments.set(sorted[index], {
                 provider: allocation.provider,
                 account: allocation.account,
+                ...(allocation.domain_uuid ? { domain_uuid: allocation.domain_uuid } : {}),
             });
             index += 1;
         }

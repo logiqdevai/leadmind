@@ -224,7 +224,7 @@ export class MessageSendService {
             );
             const [apiKey, fromEmail] = await Promise.all([
                 this.emailCredentialsService.getResendApiKey(organisation_uuid, target.account),
-                this.emailCredentialsService.getResendFromEmail(organisation_uuid, target.account),
+                this.emailCredentialsService.getResendFromEmail(organisation_uuid, target.account, target.domain_uuid),
             ]);
             const result = await this.resendMailService.sendEmail(
                 { ...createEmail, from: fromEmail },
@@ -258,18 +258,20 @@ export class MessageSendService {
         integration_metadata?: Record<string, string>,
     ): Pick<
         Prisma.OutreachMessageUpdateInput,
-        'email_provider' | 'email_account' | 'sms_provider'
+        'email_provider' | 'email_account' | 'email_domain_uuid' | 'sms_provider'
     > {
         if (!integration_metadata) {
             return {
                 email_provider: null,
                 email_account: null,
+                email_domain_uuid: null,
                 sms_provider: null,
             };
         }
 
         const emailProvider = integration_metadata.email_provider;
         const emailAccount = integration_metadata.email_account;
+        const emailDomainUuid = integration_metadata.email_domain_uuid;
         const smsProvider = integration_metadata.sms_provider;
 
         return {
@@ -279,6 +281,7 @@ export class MessageSendService {
                     ? emailProvider
                     : null,
             email_account: emailAccount ?? null,
+            email_domain_uuid: emailDomainUuid ?? null,
             sms_provider: smsProvider ?? null,
         };
     }
@@ -343,6 +346,10 @@ export class MessageSendService {
             metadata.email_account = provider.account;
             integration_metadata.email_provider = provider.provider;
             integration_metadata.email_account = provider.account;
+            if (provider.domain_uuid) {
+                metadata.email_domain_uuid = provider.domain_uuid;
+                integration_metadata.email_domain_uuid = provider.domain_uuid;
+            }
         }
         return this.prisma.outreachMessage.update({
             where: { uuid: message_uuid },

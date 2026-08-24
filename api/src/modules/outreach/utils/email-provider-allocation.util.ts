@@ -15,6 +15,7 @@ export function parseEmailProviderMetadata(
   const record = metadata as Record<string, unknown>;
   const provider = record.email_provider;
   const account = record.email_account;
+  const domain_uuid = record.email_domain_uuid;
   if (
     (provider !== ExternalIntegrationProvider.RESEND &&
       provider !== ExternalIntegrationProvider.SMTP) ||
@@ -23,7 +24,13 @@ export function parseEmailProviderMetadata(
   ) {
     return null;
   }
-  return { provider, account: account.trim() };
+  return {
+    provider,
+    account: account.trim(),
+    ...(typeof domain_uuid === 'string' && domain_uuid.trim()
+      ? { domain_uuid: domain_uuid.trim() }
+      : {}),
+  };
 }
 
 export function buildEmailProviderMetadata(
@@ -32,6 +39,7 @@ export function buildEmailProviderMetadata(
   return {
     email_provider: target.provider,
     email_account: target.account,
+    ...(target.domain_uuid ? { email_domain_uuid: target.domain_uuid } : {}),
   };
 }
 
@@ -63,6 +71,9 @@ export function assignEmailProviders(
       assignments.set(sorted[index], {
         provider: allocation.provider,
         account: allocation.account,
+        ...(allocation.domain_uuid
+          ? { domain_uuid: allocation.domain_uuid }
+          : {}),
       });
       index++;
     }
@@ -96,6 +107,7 @@ export function validateEmailProviderAllocations(
     provider: row.provider,
     account: row.account.trim(),
     count: row.count,
+    ...(row.domain_uuid ? { domain_uuid: row.domain_uuid } : {}),
   }));
 }
 

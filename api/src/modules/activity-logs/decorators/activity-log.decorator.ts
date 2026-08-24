@@ -21,6 +21,8 @@ export type ActivityUuidSource =
   | 'params.enrollment_uuid'
   | 'params.stage_uuid'
   | 'params.ci_uuid'
+  | 'params.account_uuid'
+  | 'params.domain_uuid'
   | 'body.uuid'
   | 'result.uuid'
   | 'result.jobId'

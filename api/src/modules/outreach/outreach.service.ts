@@ -108,6 +108,7 @@ export class OutreachService {
                     ...buildEmailProviderMetadata({
                         provider: dto.email_provider,
                         account: dto.email_account.trim(),
+                        domain_uuid: dto.email_domain_uuid,
                     }),
                 };
             } else {
@@ -204,6 +205,7 @@ export class OutreachService {
             data.metadata = mergeEmailProviderMetadata(message.metadata, {
                 provider: dto.email_provider,
                 account: dto.email_account.trim(),
+                domain_uuid: dto.email_domain_uuid,
             }) as Prisma.InputJsonValue;
             message = {
                 ...message,
@@ -303,6 +305,9 @@ export class OutreachService {
             ...(filters.email_provider && { email_provider: filters.email_provider }),
             ...(filters.email_account?.trim() && {
                 email_account: filters.email_account.trim(),
+            }),
+            ...(filters.email_domain_uuid && {
+                email_domain_uuid: filters.email_domain_uuid,
             }),
             ...(filters.sent_by_user_uuid && { sent_by_user_uuid: filters.sent_by_user_uuid }),
             ...((filters.date_from || filters.date_to) && {

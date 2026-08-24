@@ -37,6 +37,7 @@ export function AssignIntegrationModal({
     const assignMutation = useAssignCampaignIntegration(campaignUuid);
 
     const [accountUuid, setAccountUuid] = useState<string | null>(null);
+    const [domainUuid, setDomainUuid] = useState<string | undefined>(undefined);
     const [policyMode, setPolicyMode] = useState<"existing" | "copy" | "new">("existing");
     const [policyUuid, setPolicyUuid] = useState<string | null>(null);
     const [copiedCiUuid, setCopiedCiUuid] = useState<string | null>(null);
@@ -58,6 +59,11 @@ export function AssignIntegrationModal({
         [integrations, assignedAccountUuids],
     );
 
+    const rowKey = (row: { uuid: string | null; domain_uuid?: string }) =>
+        `${row.uuid ?? ""}::${row.domain_uuid ?? ""}`;
+    const selectedRowKey =
+        accountUuid !== null ? rowKey({ uuid: accountUuid, domain_uuid: domainUuid }) : undefined;
+
     useLayoutEffect(() => {
         if (!isOpen) {
             wasOpenRef.current = false;
@@ -66,6 +72,7 @@ export function AssignIntegrationModal({
         }
         if (!wasOpenRef.current) {
             setAccountUuid(null);
+            setDomainUuid(undefined);
             setPolicyUuid(null);
             setCopiedCiUuid(null);
             setPolicyMode(templates.length > 0 ? "existing" : copySources.length > 0 ? "copy" : "new");
@@ -110,9 +117,11 @@ export function AssignIntegrationModal({
 
             await assignMutation.mutateAsync({
                 integration_account_uuid: accountUuid,
+                ...(domainUuid ? { integration_account_domain_uuid: domainUuid } : {}),
                 sending_policy_uuid: resolvedPolicyUuid,
             });
             setAccountUuid(null);
+            setDomainUuid(undefined);
             setPolicyUuid(null);
             setCopiedCiUuid(null);
             onOpenChange(false);
@@ -145,9 +154,13 @@ export function AssignIntegrationModal({
                                 ) : (
                                     <Select
                                         aria-label="Email account"
-                                        value={accountUuid ?? undefined}
+                                        value={selectedRowKey}
                                         onChange={(v) => {
-                                            if (typeof v === "string") setAccountUuid(v);
+                                            if (typeof v !== "string") return;
+                                            const row = availableAccounts.find((item) => rowKey(item) === v);
+                                            if (!row) return;
+                                            setAccountUuid(row.uuid);
+                                            setDomainUuid(row.domain_uuid);
                                         }}
                                         placeholder="Choose an account…"
                                         isDisabled={isSaving}
@@ -160,11 +173,11 @@ export function AssignIntegrationModal({
                                             <ListBox>
                                                 {availableAccounts.map((row) => (
                                                     <ListBox.Item
-                                                        key={row.uuid as string}
-                                                        id={row.uuid as string}
+                                                        key={rowKey(row)}
+                                                        id={rowKey(row)}
                                                         textValue={row.label}
                                                     >
-                                                        {row.label}
+                                                        {row.detail ? `${row.label} — ${row.detail}` : row.label}
                                                         <ListBox.ItemIndicator />
                                                     </ListBox.Item>
                                                 ))}
@@ -282,7 +295,10 @@ export function AssignIntegrationModal({
                                                 <Select.Popover>
                                                     <ListBox>
                                                         {copySources.map((ci) => {
-                                                            const label = `${ci.campaign.name} — ${ci.integration_account.title} (${ci.integration_account.integration.provider})`;
+                                                            const domainSuffix = ci.integration_account_domain
+                                                                ? ` · ${ci.integration_account_domain.from_email}`
+                                                                : "";
+                                                            const label = `${ci.campaign.name} — ${ci.integration_account.title}${domainSuffix} (${ci.integration_account.integration.provider})`;
                                                             return (
                                                                 <ListBox.Item key={ci.uuid} id={ci.uuid} textValue={label}>
                                                                     {label}

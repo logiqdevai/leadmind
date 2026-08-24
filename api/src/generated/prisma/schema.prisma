@@ -491,6 +491,7 @@ model OutreachMessage {
   failed_at                 DateTime?
   email_provider            ExternalIntegrationProvider?
   email_account             String?
+  email_domain_uuid         String?
   sms_provider              String?
   metadata                  Json?
   sequence_enrollment_uuid  String?
@@ -1138,8 +1139,9 @@ model IntegrationAccount {
   created_at               DateTime           @default(now())
   updated_at               DateTime           @updatedAt
 
-  integration           Integration           @relation(fields: [integration_uuid], references: [uuid], onDelete: Cascade)
+  integration           Integration                @relation(fields: [integration_uuid], references: [uuid], onDelete: Cascade)
   campaign_integrations CampaignIntegration[]
+  domains               IntegrationAccountDomain[]
 
   @@unique([integration_uuid, account])
   @@index([integration_uuid])
@@ -1162,6 +1164,24 @@ model IntegrationKey {
   @@unique([integration_uuid, key_type, account])
   @@index([integration_uuid])
   @@map("integration_keys")
+}
+
+model IntegrationAccountDomain {
+  id                       Int      @id @default(autoincrement())
+  uuid                     String   @unique @default(uuid())
+  integration_account_uuid String
+  from_email               String
+  from_name                String?
+  is_default               Boolean  @default(false)
+  created_at               DateTime @default(now())
+  updated_at               DateTime @updatedAt
+
+  integration_account   IntegrationAccount    @relation(fields: [integration_account_uuid], references: [uuid], onDelete: Cascade)
+  campaign_integrations CampaignIntegration[]
+
+  @@unique([integration_account_uuid, from_email])
+  @@index([integration_account_uuid])
+  @@map("integration_account_domains")
 }
 
 enum ReminderStatus {
@@ -1557,24 +1577,27 @@ model SendingPolicyStage {
 /// Assigns one email IntegrationAccount to a campaign with a cloned SendingPolicy.
 /// This is the config layer; CampaignIntegrationState below is the runtime layer.
 model CampaignIntegration {
-  id                       Int                       @id @default(autoincrement())
-  uuid                     String                    @unique @default(uuid())
-  campaign_uuid            String
-  integration_account_uuid String
-  sending_policy_uuid      String
-  status                   CampaignIntegrationStatus @default(ACTIVE)
-  created_at               DateTime                  @default(now())
-  updated_at               DateTime                  @updatedAt
+  id                              Int                       @id @default(autoincrement())
+  uuid                            String                    @unique @default(uuid())
+  campaign_uuid                   String
+  integration_account_uuid        String
+  integration_account_domain_uuid String?
+  sending_policy_uuid             String
+  status                          CampaignIntegrationStatus @default(ACTIVE)
+  created_at                      DateTime                  @default(now())
+  updated_at                      DateTime                  @updatedAt
 
-  campaign            MarketingCampaign         @relation(fields: [campaign_uuid], references: [uuid], onDelete: Cascade)
-  integration_account IntegrationAccount        @relation(fields: [integration_account_uuid], references: [uuid], onDelete: Cascade)
-  sending_policy      SendingPolicy             @relation(fields: [sending_policy_uuid], references: [uuid], onDelete: Restrict)
-  state               CampaignIntegrationState?
-  outreach_messages   OutreachMessage[]
+  campaign                   MarketingCampaign         @relation(fields: [campaign_uuid], references: [uuid], onDelete: Cascade)
+  integration_account        IntegrationAccount        @relation(fields: [integration_account_uuid], references: [uuid], onDelete: Cascade)
+  integration_account_domain IntegrationAccountDomain? @relation(fields: [integration_account_domain_uuid], references: [uuid], onDelete: SetNull)
+  sending_policy             SendingPolicy             @relation(fields: [sending_policy_uuid], references: [uuid], onDelete: Restrict)
+  state                      CampaignIntegrationState?
+  outreach_messages          OutreachMessage[]
 
   @@unique([campaign_uuid, integration_account_uuid])
   @@index([campaign_uuid, status])
   @@index([integration_account_uuid])
+  @@index([integration_account_domain_uuid])
   @@map("campaign_integrations")
 }
 

@@ -237,7 +237,12 @@ function EmailProviderAllocationSelect({
             if (!nextTargets.some((row) => allocationKey(row) === key)) {
                 nextTargets = [
                     ...nextTargets,
-                    { provider: account.provider, account: account.account, count: 0 },
+                    {
+                        provider: account.provider,
+                        account: account.account,
+                        ...(account.domain_uuid ? { domain_uuid: account.domain_uuid } : {}),
+                        count: 0,
+                    },
                 ];
             }
         } else {
@@ -281,7 +286,11 @@ function EmailProviderAllocationSelect({
                                     <Checkbox.Control>
                                         <Checkbox.Indicator />
                                     </Checkbox.Control>
-                                    <span className="text-sm text-foreground">{account.title}</span>
+                                    <span className="text-sm text-foreground">
+                                        {account.fromEmail
+                                            ? `${account.title} — ${account.fromEmail}`
+                                            : account.title}
+                                    </span>
                                 </Checkbox>
                                 {selected ? (
                                     <TextField

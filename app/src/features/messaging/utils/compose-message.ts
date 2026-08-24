@@ -42,6 +42,9 @@ export function buildCreateMessagePayload(
             ? {
                   email_provider: emailProvider.provider,
                   email_account: emailProvider.account,
+                  ...(emailProvider.domain_uuid
+                      ? { email_domain_uuid: emailProvider.domain_uuid }
+                      : {}),
               }
             : {}),
         ...(senderProfileUuid ? { sender_profile_uuid: senderProfileUuid } : {}),

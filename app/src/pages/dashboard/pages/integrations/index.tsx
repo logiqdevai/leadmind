@@ -60,18 +60,13 @@ const FALLBACK_PROVIDERS: IntegrationProviderView[] = [
         uuid: null,
         label: "Resend",
         description:
-            "Transactional email and inbound webhooks. Add API key and from address per account, then paste the webhook URL into Resend and store the signing secret.",
+            "Transactional email and inbound webhooks. Add an API key, then attach one or more sending domains per account, and paste the webhook URL into Resend and store the signing secret.",
         allows_multiple_accounts: true,
         supports_default_account_selection: true,
         default_account: null,
         accounts: [],
         keyTypes: [
             { key_type: "API_KEY", label: "API key", placeholder: "re_..." },
-            {
-                key_type: "FROM_EMAIL",
-                label: "From email",
-                placeholder: "noreply@example.com",
-            },
             {
                 key_type: "WEBHOOK_SECRET",
                 label: "Webhook secret",

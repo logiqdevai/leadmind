@@ -66,6 +66,11 @@ export class ListMessagesDto {
     @ApiPropertyOptional()
     @IsOptional()
     @IsUUID()
+    email_domain_uuid?: string;
+
+    @ApiPropertyOptional()
+    @IsOptional()
+    @IsUUID()
     sent_by_user_uuid?: string;
 
     @ApiPropertyOptional()

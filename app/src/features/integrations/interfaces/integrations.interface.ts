@@ -47,10 +47,20 @@ export interface IntegrationKey {
     updated_at: string;
 }
 
+export interface IntegrationAccountDomain {
+    uuid: string;
+    from_email: string;
+    from_name: string | null;
+    is_default: boolean;
+    created_at: string;
+    updated_at: string;
+}
+
 export interface IntegrationAccountView {
     uuid: string | null;
     account: string;
     title: string;
+    domains: IntegrationAccountDomain[];
 }
 
 export interface IntegrationProviderView {
@@ -81,6 +91,8 @@ export type EmailDeliveryProvider = "RESEND" | "SMTP";
 export interface EmailProviderTarget {
     provider: EmailDeliveryProvider;
     account: string;
+    /** RESEND only - which domain/from-email to send from. Falls back to the account default when omitted. */
+    domain_uuid?: string;
 }
 
 export interface EmailProviderAllocation extends EmailProviderTarget {
@@ -102,6 +114,26 @@ export interface CreateSmtpAccountPayload {
     username: string;
     password: string;
     from_email: string;
+    from_name?: string;
+}
+
+export interface CreateResendAccountPayload {
+    account: string;
+    title: string;
+    api_key: string;
+    webhook_secret?: string;
+    from_email: string;
+    from_name?: string;
+}
+
+export interface AddIntegrationAccountDomainPayload {
+    from_email: string;
+    from_name?: string;
+    is_default?: boolean;
+}
+
+export interface UpdateIntegrationAccountDomainPayload {
+    from_email?: string;
     from_name?: string;
 }
 

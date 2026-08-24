@@ -397,6 +397,7 @@ exports.Prisma.OutreachMessageScalarFieldEnum = {
   failed_at: 'failed_at',
   email_provider: 'email_provider',
   email_account: 'email_account',
+  email_domain_uuid: 'email_domain_uuid',
   sms_provider: 'sms_provider',
   metadata: 'metadata',
   sequence_enrollment_uuid: 'sequence_enrollment_uuid',
@@ -659,6 +660,17 @@ exports.Prisma.IntegrationKeyScalarFieldEnum = {
   updated_at: 'updated_at'
 };
 
+exports.Prisma.IntegrationAccountDomainScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  integration_account_uuid: 'integration_account_uuid',
+  from_email: 'from_email',
+  from_name: 'from_name',
+  is_default: 'is_default',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
 exports.Prisma.ReminderScalarFieldEnum = {
   id: 'id',
   uuid: 'uuid',
@@ -842,6 +854,7 @@ exports.Prisma.CampaignIntegrationScalarFieldEnum = {
   uuid: 'uuid',
   campaign_uuid: 'campaign_uuid',
   integration_account_uuid: 'integration_account_uuid',
+  integration_account_domain_uuid: 'integration_account_domain_uuid',
   sending_policy_uuid: 'sending_policy_uuid',
   status: 'status',
   created_at: 'created_at',
@@ -1346,6 +1359,7 @@ exports.Prisma.ModelName = {
   Integration: 'Integration',
   IntegrationAccount: 'IntegrationAccount',
   IntegrationKey: 'IntegrationKey',
+  IntegrationAccountDomain: 'IntegrationAccountDomain',
   Reminder: 'Reminder',
   Form: 'Form',
   FormField: 'FormField',

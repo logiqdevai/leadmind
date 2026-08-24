@@ -190,6 +190,11 @@ export type IntegrationAccount = $Result.DefaultSelection<Prisma.$IntegrationAcc
  */
 export type IntegrationKey = $Result.DefaultSelection<Prisma.$IntegrationKeyPayload>
 /**
+ * Model IntegrationAccountDomain
+ * 
+ */
+export type IntegrationAccountDomain = $Result.DefaultSelection<Prisma.$IntegrationAccountDomainPayload>
+/**
  * Model Reminder
  * 
  */
@@ -1450,6 +1455,16 @@ export class PrismaClient<
   get integrationKey(): Prisma.IntegrationKeyDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.integrationAccountDomain`: Exposes CRUD operations for the **IntegrationAccountDomain** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more IntegrationAccountDomains
+    * const integrationAccountDomains = await prisma.integrationAccountDomain.findMany()
+    * ```
+    */
+  get integrationAccountDomain(): Prisma.IntegrationAccountDomainDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.reminder`: Exposes CRUD operations for the **Reminder** model.
     * Example usage:
     * ```ts
@@ -2097,6 +2112,7 @@ export namespace Prisma {
     Integration: 'Integration',
     IntegrationAccount: 'IntegrationAccount',
     IntegrationKey: 'IntegrationKey',
+    IntegrationAccountDomain: 'IntegrationAccountDomain',
     Reminder: 'Reminder',
     Form: 'Form',
     FormField: 'FormField',
@@ -2130,7 +2146,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "organisation" | "organisationMember" | "organisationInvitation" | "filter" | "savedContactFilter" | "scoringInstruction" | "filterScoringInstruction" | "rawLead" | "lead" | "leadEnrichment" | "contact" | "contactInfo" | "contactFilter" | "contactEnrichment" | "contactScore" | "contactList" | "contactListMember" | "contactTag" | "interaction" | "outreachMessage" | "outreachSequence" | "outreachSequenceStep" | "sequenceEnrollment" | "filterJob" | "bulkJob" | "websiteScrapeRequest" | "senderProfile" | "messageTemplate" | "marketingCampaign" | "marketingCampaignContact" | "openAiBatchJob" | "integration" | "integrationAccount" | "integrationKey" | "reminder" | "form" | "formField" | "formCompletion" | "formCompletionValue" | "contactAudienceAnalysis" | "aiUsageLog" | "apifyUsageLog" | "messagingGoal" | "emailSendLimit" | "sendingPolicy" | "sendingPolicyStage" | "campaignIntegration" | "campaignIntegrationState" | "sendingUsageCounter" | "goalAchievement" | "goalPersonalBest" | "activityLog"
+      modelProps: "user" | "organisation" | "organisationMember" | "organisationInvitation" | "filter" | "savedContactFilter" | "scoringInstruction" | "filterScoringInstruction" | "rawLead" | "lead" | "leadEnrichment" | "contact" | "contactInfo" | "contactFilter" | "contactEnrichment" | "contactScore" | "contactList" | "contactListMember" | "contactTag" | "interaction" | "outreachMessage" | "outreachSequence" | "outreachSequenceStep" | "sequenceEnrollment" | "filterJob" | "bulkJob" | "websiteScrapeRequest" | "senderProfile" | "messageTemplate" | "marketingCampaign" | "marketingCampaignContact" | "openAiBatchJob" | "integration" | "integrationAccount" | "integrationKey" | "integrationAccountDomain" | "reminder" | "form" | "formField" | "formCompletion" | "formCompletionValue" | "contactAudienceAnalysis" | "aiUsageLog" | "apifyUsageLog" | "messagingGoal" | "emailSendLimit" | "sendingPolicy" | "sendingPolicyStage" | "campaignIntegration" | "campaignIntegrationState" | "sendingUsageCounter" | "goalAchievement" | "goalPersonalBest" | "activityLog"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -4724,6 +4740,80 @@ export namespace Prisma {
           }
         }
       }
+      IntegrationAccountDomain: {
+        payload: Prisma.$IntegrationAccountDomainPayload<ExtArgs>
+        fields: Prisma.IntegrationAccountDomainFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.IntegrationAccountDomainFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IntegrationAccountDomainPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.IntegrationAccountDomainFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IntegrationAccountDomainPayload>
+          }
+          findFirst: {
+            args: Prisma.IntegrationAccountDomainFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IntegrationAccountDomainPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.IntegrationAccountDomainFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IntegrationAccountDomainPayload>
+          }
+          findMany: {
+            args: Prisma.IntegrationAccountDomainFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IntegrationAccountDomainPayload>[]
+          }
+          create: {
+            args: Prisma.IntegrationAccountDomainCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IntegrationAccountDomainPayload>
+          }
+          createMany: {
+            args: Prisma.IntegrationAccountDomainCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.IntegrationAccountDomainCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IntegrationAccountDomainPayload>[]
+          }
+          delete: {
+            args: Prisma.IntegrationAccountDomainDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IntegrationAccountDomainPayload>
+          }
+          update: {
+            args: Prisma.IntegrationAccountDomainUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IntegrationAccountDomainPayload>
+          }
+          deleteMany: {
+            args: Prisma.IntegrationAccountDomainDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.IntegrationAccountDomainUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.IntegrationAccountDomainUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IntegrationAccountDomainPayload>[]
+          }
+          upsert: {
+            args: Prisma.IntegrationAccountDomainUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IntegrationAccountDomainPayload>
+          }
+          aggregate: {
+            args: Prisma.IntegrationAccountDomainAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateIntegrationAccountDomain>
+          }
+          groupBy: {
+            args: Prisma.IntegrationAccountDomainGroupByArgs<ExtArgs>
+            result: $Utils.Optional<IntegrationAccountDomainGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.IntegrationAccountDomainCountArgs<ExtArgs>
+            result: $Utils.Optional<IntegrationAccountDomainCountAggregateOutputType> | number
+          }
+        }
+      }
       Reminder: {
         payload: Prisma.$ReminderPayload<ExtArgs>
         fields: Prisma.ReminderFieldRefs
@@ -6199,6 +6289,7 @@ export namespace Prisma {
     integration?: IntegrationOmit
     integrationAccount?: IntegrationAccountOmit
     integrationKey?: IntegrationKeyOmit
+    integrationAccountDomain?: IntegrationAccountDomainOmit
     reminder?: ReminderOmit
     form?: FormOmit
     formField?: FormFieldOmit
@@ -7290,10 +7381,12 @@ export namespace Prisma {
 
   export type IntegrationAccountCountOutputType = {
     campaign_integrations: number
+    domains: number
   }
 
   export type IntegrationAccountCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     campaign_integrations?: boolean | IntegrationAccountCountOutputTypeCountCampaign_integrationsArgs
+    domains?: boolean | IntegrationAccountCountOutputTypeCountDomainsArgs
   }
 
   // Custom InputTypes
@@ -7311,6 +7404,44 @@ export namespace Prisma {
    * IntegrationAccountCountOutputType without action
    */
   export type IntegrationAccountCountOutputTypeCountCampaign_integrationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CampaignIntegrationWhereInput
+  }
+
+  /**
+   * IntegrationAccountCountOutputType without action
+   */
+  export type IntegrationAccountCountOutputTypeCountDomainsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: IntegrationAccountDomainWhereInput
+  }
+
+
+  /**
+   * Count Type IntegrationAccountDomainCountOutputType
+   */
+
+  export type IntegrationAccountDomainCountOutputType = {
+    campaign_integrations: number
+  }
+
+  export type IntegrationAccountDomainCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    campaign_integrations?: boolean | IntegrationAccountDomainCountOutputTypeCountCampaign_integrationsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * IntegrationAccountDomainCountOutputType without action
+   */
+  export type IntegrationAccountDomainCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IntegrationAccountDomainCountOutputType
+     */
+    select?: IntegrationAccountDomainCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * IntegrationAccountDomainCountOutputType without action
+   */
+  export type IntegrationAccountDomainCountOutputTypeCountCampaign_integrationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CampaignIntegrationWhereInput
   }
 
@@ -32457,6 +32588,7 @@ export namespace Prisma {
     failed_at: Date | null
     email_provider: $Enums.ExternalIntegrationProvider | null
     email_account: string | null
+    email_domain_uuid: string | null
     sms_provider: string | null
     sequence_enrollment_uuid: string | null
     sequence_step_uuid: string | null
@@ -32489,6 +32621,7 @@ export namespace Prisma {
     failed_at: Date | null
     email_provider: $Enums.ExternalIntegrationProvider | null
     email_account: string | null
+    email_domain_uuid: string | null
     sms_provider: string | null
     sequence_enrollment_uuid: string | null
     sequence_step_uuid: string | null
@@ -32521,6 +32654,7 @@ export namespace Prisma {
     failed_at: number
     email_provider: number
     email_account: number
+    email_domain_uuid: number
     sms_provider: number
     metadata: number
     sequence_enrollment_uuid: number
@@ -32564,6 +32698,7 @@ export namespace Prisma {
     failed_at?: true
     email_provider?: true
     email_account?: true
+    email_domain_uuid?: true
     sms_provider?: true
     sequence_enrollment_uuid?: true
     sequence_step_uuid?: true
@@ -32596,6 +32731,7 @@ export namespace Prisma {
     failed_at?: true
     email_provider?: true
     email_account?: true
+    email_domain_uuid?: true
     sms_provider?: true
     sequence_enrollment_uuid?: true
     sequence_step_uuid?: true
@@ -32628,6 +32764,7 @@ export namespace Prisma {
     failed_at?: true
     email_provider?: true
     email_account?: true
+    email_domain_uuid?: true
     sms_provider?: true
     metadata?: true
     sequence_enrollment_uuid?: true
@@ -32748,6 +32885,7 @@ export namespace Prisma {
     failed_at: Date | null
     email_provider: $Enums.ExternalIntegrationProvider | null
     email_account: string | null
+    email_domain_uuid: string | null
     sms_provider: string | null
     metadata: JsonValue | null
     sequence_enrollment_uuid: string | null
@@ -32800,6 +32938,7 @@ export namespace Prisma {
     failed_at?: boolean
     email_provider?: boolean
     email_account?: boolean
+    email_domain_uuid?: boolean
     sms_provider?: boolean
     metadata?: boolean
     sequence_enrollment_uuid?: boolean
@@ -32841,6 +32980,7 @@ export namespace Prisma {
     failed_at?: boolean
     email_provider?: boolean
     email_account?: boolean
+    email_domain_uuid?: boolean
     sms_provider?: boolean
     metadata?: boolean
     sequence_enrollment_uuid?: boolean
@@ -32881,6 +33021,7 @@ export namespace Prisma {
     failed_at?: boolean
     email_provider?: boolean
     email_account?: boolean
+    email_domain_uuid?: boolean
     sms_provider?: boolean
     metadata?: boolean
     sequence_enrollment_uuid?: boolean
@@ -32921,6 +33062,7 @@ export namespace Prisma {
     failed_at?: boolean
     email_provider?: boolean
     email_account?: boolean
+    email_domain_uuid?: boolean
     sms_provider?: boolean
     metadata?: boolean
     sequence_enrollment_uuid?: boolean
@@ -32930,7 +33072,7 @@ export namespace Prisma {
     updated_at?: boolean
   }
 
-  export type OutreachMessageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "contact_uuid" | "campaign_uuid" | "sent_by_user_uuid" | "channel" | "direction" | "subject" | "content" | "status" | "provider_message_id" | "idempotency_key" | "scheduled_at" | "sent_at" | "delivered_at" | "opened_at" | "clicked_at" | "replied_at" | "bounced_at" | "failed_at" | "email_provider" | "email_account" | "sms_provider" | "metadata" | "sequence_enrollment_uuid" | "sequence_step_uuid" | "campaign_integration_uuid" | "created_at" | "updated_at", ExtArgs["result"]["outreachMessage"]>
+  export type OutreachMessageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "contact_uuid" | "campaign_uuid" | "sent_by_user_uuid" | "channel" | "direction" | "subject" | "content" | "status" | "provider_message_id" | "idempotency_key" | "scheduled_at" | "sent_at" | "delivered_at" | "opened_at" | "clicked_at" | "replied_at" | "bounced_at" | "failed_at" | "email_provider" | "email_account" | "email_domain_uuid" | "sms_provider" | "metadata" | "sequence_enrollment_uuid" | "sequence_step_uuid" | "campaign_integration_uuid" | "created_at" | "updated_at", ExtArgs["result"]["outreachMessage"]>
   export type OutreachMessageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     contact?: boolean | ContactDefaultArgs<ExtArgs>
@@ -32996,6 +33138,7 @@ export namespace Prisma {
       failed_at: Date | null
       email_provider: $Enums.ExternalIntegrationProvider | null
       email_account: string | null
+      email_domain_uuid: string | null
       sms_provider: string | null
       metadata: Prisma.JsonValue | null
       sequence_enrollment_uuid: string | null
@@ -33457,6 +33600,7 @@ export namespace Prisma {
     readonly failed_at: FieldRef<"OutreachMessage", 'DateTime'>
     readonly email_provider: FieldRef<"OutreachMessage", 'ExternalIntegrationProvider'>
     readonly email_account: FieldRef<"OutreachMessage", 'String'>
+    readonly email_domain_uuid: FieldRef<"OutreachMessage", 'String'>
     readonly sms_provider: FieldRef<"OutreachMessage", 'String'>
     readonly metadata: FieldRef<"OutreachMessage", 'Json'>
     readonly sequence_enrollment_uuid: FieldRef<"OutreachMessage", 'String'>
@@ -49652,6 +49796,7 @@ export namespace Prisma {
     updated_at?: boolean
     integration?: boolean | IntegrationDefaultArgs<ExtArgs>
     campaign_integrations?: boolean | IntegrationAccount$campaign_integrationsArgs<ExtArgs>
+    domains?: boolean | IntegrationAccount$domainsArgs<ExtArgs>
     _count?: boolean | IntegrationAccountCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["integrationAccount"]>
 
@@ -49697,6 +49842,7 @@ export namespace Prisma {
   export type IntegrationAccountInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     integration?: boolean | IntegrationDefaultArgs<ExtArgs>
     campaign_integrations?: boolean | IntegrationAccount$campaign_integrationsArgs<ExtArgs>
+    domains?: boolean | IntegrationAccount$domainsArgs<ExtArgs>
     _count?: boolean | IntegrationAccountCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type IntegrationAccountIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -49711,6 +49857,7 @@ export namespace Prisma {
     objects: {
       integration: Prisma.$IntegrationPayload<ExtArgs>
       campaign_integrations: Prisma.$CampaignIntegrationPayload<ExtArgs>[]
+      domains: Prisma.$IntegrationAccountDomainPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -50118,6 +50265,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     integration<T extends IntegrationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, IntegrationDefaultArgs<ExtArgs>>): Prisma__IntegrationClient<$Result.GetResult<Prisma.$IntegrationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     campaign_integrations<T extends IntegrationAccount$campaign_integrationsArgs<ExtArgs> = {}>(args?: Subset<T, IntegrationAccount$campaign_integrationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CampaignIntegrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    domains<T extends IntegrationAccount$domainsArgs<ExtArgs> = {}>(args?: Subset<T, IntegrationAccount$domainsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$IntegrationAccountDomainPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -50573,6 +50721,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: CampaignIntegrationScalarFieldEnum | CampaignIntegrationScalarFieldEnum[]
+  }
+
+  /**
+   * IntegrationAccount.domains
+   */
+  export type IntegrationAccount$domainsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IntegrationAccountDomain
+     */
+    select?: IntegrationAccountDomainSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the IntegrationAccountDomain
+     */
+    omit?: IntegrationAccountDomainOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IntegrationAccountDomainInclude<ExtArgs> | null
+    where?: IntegrationAccountDomainWhereInput
+    orderBy?: IntegrationAccountDomainOrderByWithRelationInput | IntegrationAccountDomainOrderByWithRelationInput[]
+    cursor?: IntegrationAccountDomainWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: IntegrationAccountDomainScalarFieldEnum | IntegrationAccountDomainScalarFieldEnum[]
   }
 
   /**
@@ -51735,6 +51907,1167 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: IntegrationKeyInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model IntegrationAccountDomain
+   */
+
+  export type AggregateIntegrationAccountDomain = {
+    _count: IntegrationAccountDomainCountAggregateOutputType | null
+    _avg: IntegrationAccountDomainAvgAggregateOutputType | null
+    _sum: IntegrationAccountDomainSumAggregateOutputType | null
+    _min: IntegrationAccountDomainMinAggregateOutputType | null
+    _max: IntegrationAccountDomainMaxAggregateOutputType | null
+  }
+
+  export type IntegrationAccountDomainAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type IntegrationAccountDomainSumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type IntegrationAccountDomainMinAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    integration_account_uuid: string | null
+    from_email: string | null
+    from_name: string | null
+    is_default: boolean | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type IntegrationAccountDomainMaxAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    integration_account_uuid: string | null
+    from_email: string | null
+    from_name: string | null
+    is_default: boolean | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type IntegrationAccountDomainCountAggregateOutputType = {
+    id: number
+    uuid: number
+    integration_account_uuid: number
+    from_email: number
+    from_name: number
+    is_default: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type IntegrationAccountDomainAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type IntegrationAccountDomainSumAggregateInputType = {
+    id?: true
+  }
+
+  export type IntegrationAccountDomainMinAggregateInputType = {
+    id?: true
+    uuid?: true
+    integration_account_uuid?: true
+    from_email?: true
+    from_name?: true
+    is_default?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type IntegrationAccountDomainMaxAggregateInputType = {
+    id?: true
+    uuid?: true
+    integration_account_uuid?: true
+    from_email?: true
+    from_name?: true
+    is_default?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type IntegrationAccountDomainCountAggregateInputType = {
+    id?: true
+    uuid?: true
+    integration_account_uuid?: true
+    from_email?: true
+    from_name?: true
+    is_default?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type IntegrationAccountDomainAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which IntegrationAccountDomain to aggregate.
+     */
+    where?: IntegrationAccountDomainWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of IntegrationAccountDomains to fetch.
+     */
+    orderBy?: IntegrationAccountDomainOrderByWithRelationInput | IntegrationAccountDomainOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: IntegrationAccountDomainWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` IntegrationAccountDomains from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` IntegrationAccountDomains.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned IntegrationAccountDomains
+    **/
+    _count?: true | IntegrationAccountDomainCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: IntegrationAccountDomainAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: IntegrationAccountDomainSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: IntegrationAccountDomainMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: IntegrationAccountDomainMaxAggregateInputType
+  }
+
+  export type GetIntegrationAccountDomainAggregateType<T extends IntegrationAccountDomainAggregateArgs> = {
+        [P in keyof T & keyof AggregateIntegrationAccountDomain]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateIntegrationAccountDomain[P]>
+      : GetScalarType<T[P], AggregateIntegrationAccountDomain[P]>
+  }
+
+
+
+
+  export type IntegrationAccountDomainGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: IntegrationAccountDomainWhereInput
+    orderBy?: IntegrationAccountDomainOrderByWithAggregationInput | IntegrationAccountDomainOrderByWithAggregationInput[]
+    by: IntegrationAccountDomainScalarFieldEnum[] | IntegrationAccountDomainScalarFieldEnum
+    having?: IntegrationAccountDomainScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: IntegrationAccountDomainCountAggregateInputType | true
+    _avg?: IntegrationAccountDomainAvgAggregateInputType
+    _sum?: IntegrationAccountDomainSumAggregateInputType
+    _min?: IntegrationAccountDomainMinAggregateInputType
+    _max?: IntegrationAccountDomainMaxAggregateInputType
+  }
+
+  export type IntegrationAccountDomainGroupByOutputType = {
+    id: number
+    uuid: string
+    integration_account_uuid: string
+    from_email: string
+    from_name: string | null
+    is_default: boolean
+    created_at: Date
+    updated_at: Date
+    _count: IntegrationAccountDomainCountAggregateOutputType | null
+    _avg: IntegrationAccountDomainAvgAggregateOutputType | null
+    _sum: IntegrationAccountDomainSumAggregateOutputType | null
+    _min: IntegrationAccountDomainMinAggregateOutputType | null
+    _max: IntegrationAccountDomainMaxAggregateOutputType | null
+  }
+
+  type GetIntegrationAccountDomainGroupByPayload<T extends IntegrationAccountDomainGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<IntegrationAccountDomainGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof IntegrationAccountDomainGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], IntegrationAccountDomainGroupByOutputType[P]>
+            : GetScalarType<T[P], IntegrationAccountDomainGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type IntegrationAccountDomainSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    integration_account_uuid?: boolean
+    from_email?: boolean
+    from_name?: boolean
+    is_default?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    integration_account?: boolean | IntegrationAccountDefaultArgs<ExtArgs>
+    campaign_integrations?: boolean | IntegrationAccountDomain$campaign_integrationsArgs<ExtArgs>
+    _count?: boolean | IntegrationAccountDomainCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["integrationAccountDomain"]>
+
+  export type IntegrationAccountDomainSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    integration_account_uuid?: boolean
+    from_email?: boolean
+    from_name?: boolean
+    is_default?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    integration_account?: boolean | IntegrationAccountDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["integrationAccountDomain"]>
+
+  export type IntegrationAccountDomainSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    integration_account_uuid?: boolean
+    from_email?: boolean
+    from_name?: boolean
+    is_default?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    integration_account?: boolean | IntegrationAccountDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["integrationAccountDomain"]>
+
+  export type IntegrationAccountDomainSelectScalar = {
+    id?: boolean
+    uuid?: boolean
+    integration_account_uuid?: boolean
+    from_email?: boolean
+    from_name?: boolean
+    is_default?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type IntegrationAccountDomainOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "integration_account_uuid" | "from_email" | "from_name" | "is_default" | "created_at" | "updated_at", ExtArgs["result"]["integrationAccountDomain"]>
+  export type IntegrationAccountDomainInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    integration_account?: boolean | IntegrationAccountDefaultArgs<ExtArgs>
+    campaign_integrations?: boolean | IntegrationAccountDomain$campaign_integrationsArgs<ExtArgs>
+    _count?: boolean | IntegrationAccountDomainCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type IntegrationAccountDomainIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    integration_account?: boolean | IntegrationAccountDefaultArgs<ExtArgs>
+  }
+  export type IntegrationAccountDomainIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    integration_account?: boolean | IntegrationAccountDefaultArgs<ExtArgs>
+  }
+
+  export type $IntegrationAccountDomainPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "IntegrationAccountDomain"
+    objects: {
+      integration_account: Prisma.$IntegrationAccountPayload<ExtArgs>
+      campaign_integrations: Prisma.$CampaignIntegrationPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      uuid: string
+      integration_account_uuid: string
+      from_email: string
+      from_name: string | null
+      is_default: boolean
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["integrationAccountDomain"]>
+    composites: {}
+  }
+
+  type IntegrationAccountDomainGetPayload<S extends boolean | null | undefined | IntegrationAccountDomainDefaultArgs> = $Result.GetResult<Prisma.$IntegrationAccountDomainPayload, S>
+
+  type IntegrationAccountDomainCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<IntegrationAccountDomainFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: IntegrationAccountDomainCountAggregateInputType | true
+    }
+
+  export interface IntegrationAccountDomainDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['IntegrationAccountDomain'], meta: { name: 'IntegrationAccountDomain' } }
+    /**
+     * Find zero or one IntegrationAccountDomain that matches the filter.
+     * @param {IntegrationAccountDomainFindUniqueArgs} args - Arguments to find a IntegrationAccountDomain
+     * @example
+     * // Get one IntegrationAccountDomain
+     * const integrationAccountDomain = await prisma.integrationAccountDomain.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends IntegrationAccountDomainFindUniqueArgs>(args: SelectSubset<T, IntegrationAccountDomainFindUniqueArgs<ExtArgs>>): Prisma__IntegrationAccountDomainClient<$Result.GetResult<Prisma.$IntegrationAccountDomainPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one IntegrationAccountDomain that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {IntegrationAccountDomainFindUniqueOrThrowArgs} args - Arguments to find a IntegrationAccountDomain
+     * @example
+     * // Get one IntegrationAccountDomain
+     * const integrationAccountDomain = await prisma.integrationAccountDomain.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends IntegrationAccountDomainFindUniqueOrThrowArgs>(args: SelectSubset<T, IntegrationAccountDomainFindUniqueOrThrowArgs<ExtArgs>>): Prisma__IntegrationAccountDomainClient<$Result.GetResult<Prisma.$IntegrationAccountDomainPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first IntegrationAccountDomain that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IntegrationAccountDomainFindFirstArgs} args - Arguments to find a IntegrationAccountDomain
+     * @example
+     * // Get one IntegrationAccountDomain
+     * const integrationAccountDomain = await prisma.integrationAccountDomain.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends IntegrationAccountDomainFindFirstArgs>(args?: SelectSubset<T, IntegrationAccountDomainFindFirstArgs<ExtArgs>>): Prisma__IntegrationAccountDomainClient<$Result.GetResult<Prisma.$IntegrationAccountDomainPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first IntegrationAccountDomain that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IntegrationAccountDomainFindFirstOrThrowArgs} args - Arguments to find a IntegrationAccountDomain
+     * @example
+     * // Get one IntegrationAccountDomain
+     * const integrationAccountDomain = await prisma.integrationAccountDomain.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends IntegrationAccountDomainFindFirstOrThrowArgs>(args?: SelectSubset<T, IntegrationAccountDomainFindFirstOrThrowArgs<ExtArgs>>): Prisma__IntegrationAccountDomainClient<$Result.GetResult<Prisma.$IntegrationAccountDomainPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more IntegrationAccountDomains that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IntegrationAccountDomainFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all IntegrationAccountDomains
+     * const integrationAccountDomains = await prisma.integrationAccountDomain.findMany()
+     * 
+     * // Get first 10 IntegrationAccountDomains
+     * const integrationAccountDomains = await prisma.integrationAccountDomain.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const integrationAccountDomainWithIdOnly = await prisma.integrationAccountDomain.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends IntegrationAccountDomainFindManyArgs>(args?: SelectSubset<T, IntegrationAccountDomainFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$IntegrationAccountDomainPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a IntegrationAccountDomain.
+     * @param {IntegrationAccountDomainCreateArgs} args - Arguments to create a IntegrationAccountDomain.
+     * @example
+     * // Create one IntegrationAccountDomain
+     * const IntegrationAccountDomain = await prisma.integrationAccountDomain.create({
+     *   data: {
+     *     // ... data to create a IntegrationAccountDomain
+     *   }
+     * })
+     * 
+     */
+    create<T extends IntegrationAccountDomainCreateArgs>(args: SelectSubset<T, IntegrationAccountDomainCreateArgs<ExtArgs>>): Prisma__IntegrationAccountDomainClient<$Result.GetResult<Prisma.$IntegrationAccountDomainPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many IntegrationAccountDomains.
+     * @param {IntegrationAccountDomainCreateManyArgs} args - Arguments to create many IntegrationAccountDomains.
+     * @example
+     * // Create many IntegrationAccountDomains
+     * const integrationAccountDomain = await prisma.integrationAccountDomain.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends IntegrationAccountDomainCreateManyArgs>(args?: SelectSubset<T, IntegrationAccountDomainCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many IntegrationAccountDomains and returns the data saved in the database.
+     * @param {IntegrationAccountDomainCreateManyAndReturnArgs} args - Arguments to create many IntegrationAccountDomains.
+     * @example
+     * // Create many IntegrationAccountDomains
+     * const integrationAccountDomain = await prisma.integrationAccountDomain.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many IntegrationAccountDomains and only return the `id`
+     * const integrationAccountDomainWithIdOnly = await prisma.integrationAccountDomain.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends IntegrationAccountDomainCreateManyAndReturnArgs>(args?: SelectSubset<T, IntegrationAccountDomainCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$IntegrationAccountDomainPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a IntegrationAccountDomain.
+     * @param {IntegrationAccountDomainDeleteArgs} args - Arguments to delete one IntegrationAccountDomain.
+     * @example
+     * // Delete one IntegrationAccountDomain
+     * const IntegrationAccountDomain = await prisma.integrationAccountDomain.delete({
+     *   where: {
+     *     // ... filter to delete one IntegrationAccountDomain
+     *   }
+     * })
+     * 
+     */
+    delete<T extends IntegrationAccountDomainDeleteArgs>(args: SelectSubset<T, IntegrationAccountDomainDeleteArgs<ExtArgs>>): Prisma__IntegrationAccountDomainClient<$Result.GetResult<Prisma.$IntegrationAccountDomainPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one IntegrationAccountDomain.
+     * @param {IntegrationAccountDomainUpdateArgs} args - Arguments to update one IntegrationAccountDomain.
+     * @example
+     * // Update one IntegrationAccountDomain
+     * const integrationAccountDomain = await prisma.integrationAccountDomain.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends IntegrationAccountDomainUpdateArgs>(args: SelectSubset<T, IntegrationAccountDomainUpdateArgs<ExtArgs>>): Prisma__IntegrationAccountDomainClient<$Result.GetResult<Prisma.$IntegrationAccountDomainPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more IntegrationAccountDomains.
+     * @param {IntegrationAccountDomainDeleteManyArgs} args - Arguments to filter IntegrationAccountDomains to delete.
+     * @example
+     * // Delete a few IntegrationAccountDomains
+     * const { count } = await prisma.integrationAccountDomain.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends IntegrationAccountDomainDeleteManyArgs>(args?: SelectSubset<T, IntegrationAccountDomainDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more IntegrationAccountDomains.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IntegrationAccountDomainUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many IntegrationAccountDomains
+     * const integrationAccountDomain = await prisma.integrationAccountDomain.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends IntegrationAccountDomainUpdateManyArgs>(args: SelectSubset<T, IntegrationAccountDomainUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more IntegrationAccountDomains and returns the data updated in the database.
+     * @param {IntegrationAccountDomainUpdateManyAndReturnArgs} args - Arguments to update many IntegrationAccountDomains.
+     * @example
+     * // Update many IntegrationAccountDomains
+     * const integrationAccountDomain = await prisma.integrationAccountDomain.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more IntegrationAccountDomains and only return the `id`
+     * const integrationAccountDomainWithIdOnly = await prisma.integrationAccountDomain.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends IntegrationAccountDomainUpdateManyAndReturnArgs>(args: SelectSubset<T, IntegrationAccountDomainUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$IntegrationAccountDomainPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one IntegrationAccountDomain.
+     * @param {IntegrationAccountDomainUpsertArgs} args - Arguments to update or create a IntegrationAccountDomain.
+     * @example
+     * // Update or create a IntegrationAccountDomain
+     * const integrationAccountDomain = await prisma.integrationAccountDomain.upsert({
+     *   create: {
+     *     // ... data to create a IntegrationAccountDomain
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the IntegrationAccountDomain we want to update
+     *   }
+     * })
+     */
+    upsert<T extends IntegrationAccountDomainUpsertArgs>(args: SelectSubset<T, IntegrationAccountDomainUpsertArgs<ExtArgs>>): Prisma__IntegrationAccountDomainClient<$Result.GetResult<Prisma.$IntegrationAccountDomainPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of IntegrationAccountDomains.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IntegrationAccountDomainCountArgs} args - Arguments to filter IntegrationAccountDomains to count.
+     * @example
+     * // Count the number of IntegrationAccountDomains
+     * const count = await prisma.integrationAccountDomain.count({
+     *   where: {
+     *     // ... the filter for the IntegrationAccountDomains we want to count
+     *   }
+     * })
+    **/
+    count<T extends IntegrationAccountDomainCountArgs>(
+      args?: Subset<T, IntegrationAccountDomainCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], IntegrationAccountDomainCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a IntegrationAccountDomain.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IntegrationAccountDomainAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends IntegrationAccountDomainAggregateArgs>(args: Subset<T, IntegrationAccountDomainAggregateArgs>): Prisma.PrismaPromise<GetIntegrationAccountDomainAggregateType<T>>
+
+    /**
+     * Group by IntegrationAccountDomain.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IntegrationAccountDomainGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends IntegrationAccountDomainGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: IntegrationAccountDomainGroupByArgs['orderBy'] }
+        : { orderBy?: IntegrationAccountDomainGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, IntegrationAccountDomainGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetIntegrationAccountDomainGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the IntegrationAccountDomain model
+   */
+  readonly fields: IntegrationAccountDomainFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for IntegrationAccountDomain.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__IntegrationAccountDomainClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    integration_account<T extends IntegrationAccountDefaultArgs<ExtArgs> = {}>(args?: Subset<T, IntegrationAccountDefaultArgs<ExtArgs>>): Prisma__IntegrationAccountClient<$Result.GetResult<Prisma.$IntegrationAccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    campaign_integrations<T extends IntegrationAccountDomain$campaign_integrationsArgs<ExtArgs> = {}>(args?: Subset<T, IntegrationAccountDomain$campaign_integrationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CampaignIntegrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the IntegrationAccountDomain model
+   */
+  interface IntegrationAccountDomainFieldRefs {
+    readonly id: FieldRef<"IntegrationAccountDomain", 'Int'>
+    readonly uuid: FieldRef<"IntegrationAccountDomain", 'String'>
+    readonly integration_account_uuid: FieldRef<"IntegrationAccountDomain", 'String'>
+    readonly from_email: FieldRef<"IntegrationAccountDomain", 'String'>
+    readonly from_name: FieldRef<"IntegrationAccountDomain", 'String'>
+    readonly is_default: FieldRef<"IntegrationAccountDomain", 'Boolean'>
+    readonly created_at: FieldRef<"IntegrationAccountDomain", 'DateTime'>
+    readonly updated_at: FieldRef<"IntegrationAccountDomain", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * IntegrationAccountDomain findUnique
+   */
+  export type IntegrationAccountDomainFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IntegrationAccountDomain
+     */
+    select?: IntegrationAccountDomainSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the IntegrationAccountDomain
+     */
+    omit?: IntegrationAccountDomainOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IntegrationAccountDomainInclude<ExtArgs> | null
+    /**
+     * Filter, which IntegrationAccountDomain to fetch.
+     */
+    where: IntegrationAccountDomainWhereUniqueInput
+  }
+
+  /**
+   * IntegrationAccountDomain findUniqueOrThrow
+   */
+  export type IntegrationAccountDomainFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IntegrationAccountDomain
+     */
+    select?: IntegrationAccountDomainSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the IntegrationAccountDomain
+     */
+    omit?: IntegrationAccountDomainOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IntegrationAccountDomainInclude<ExtArgs> | null
+    /**
+     * Filter, which IntegrationAccountDomain to fetch.
+     */
+    where: IntegrationAccountDomainWhereUniqueInput
+  }
+
+  /**
+   * IntegrationAccountDomain findFirst
+   */
+  export type IntegrationAccountDomainFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IntegrationAccountDomain
+     */
+    select?: IntegrationAccountDomainSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the IntegrationAccountDomain
+     */
+    omit?: IntegrationAccountDomainOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IntegrationAccountDomainInclude<ExtArgs> | null
+    /**
+     * Filter, which IntegrationAccountDomain to fetch.
+     */
+    where?: IntegrationAccountDomainWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of IntegrationAccountDomains to fetch.
+     */
+    orderBy?: IntegrationAccountDomainOrderByWithRelationInput | IntegrationAccountDomainOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for IntegrationAccountDomains.
+     */
+    cursor?: IntegrationAccountDomainWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` IntegrationAccountDomains from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` IntegrationAccountDomains.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of IntegrationAccountDomains.
+     */
+    distinct?: IntegrationAccountDomainScalarFieldEnum | IntegrationAccountDomainScalarFieldEnum[]
+  }
+
+  /**
+   * IntegrationAccountDomain findFirstOrThrow
+   */
+  export type IntegrationAccountDomainFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IntegrationAccountDomain
+     */
+    select?: IntegrationAccountDomainSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the IntegrationAccountDomain
+     */
+    omit?: IntegrationAccountDomainOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IntegrationAccountDomainInclude<ExtArgs> | null
+    /**
+     * Filter, which IntegrationAccountDomain to fetch.
+     */
+    where?: IntegrationAccountDomainWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of IntegrationAccountDomains to fetch.
+     */
+    orderBy?: IntegrationAccountDomainOrderByWithRelationInput | IntegrationAccountDomainOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for IntegrationAccountDomains.
+     */
+    cursor?: IntegrationAccountDomainWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` IntegrationAccountDomains from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` IntegrationAccountDomains.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of IntegrationAccountDomains.
+     */
+    distinct?: IntegrationAccountDomainScalarFieldEnum | IntegrationAccountDomainScalarFieldEnum[]
+  }
+
+  /**
+   * IntegrationAccountDomain findMany
+   */
+  export type IntegrationAccountDomainFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IntegrationAccountDomain
+     */
+    select?: IntegrationAccountDomainSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the IntegrationAccountDomain
+     */
+    omit?: IntegrationAccountDomainOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IntegrationAccountDomainInclude<ExtArgs> | null
+    /**
+     * Filter, which IntegrationAccountDomains to fetch.
+     */
+    where?: IntegrationAccountDomainWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of IntegrationAccountDomains to fetch.
+     */
+    orderBy?: IntegrationAccountDomainOrderByWithRelationInput | IntegrationAccountDomainOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing IntegrationAccountDomains.
+     */
+    cursor?: IntegrationAccountDomainWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` IntegrationAccountDomains from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` IntegrationAccountDomains.
+     */
+    skip?: number
+    distinct?: IntegrationAccountDomainScalarFieldEnum | IntegrationAccountDomainScalarFieldEnum[]
+  }
+
+  /**
+   * IntegrationAccountDomain create
+   */
+  export type IntegrationAccountDomainCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IntegrationAccountDomain
+     */
+    select?: IntegrationAccountDomainSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the IntegrationAccountDomain
+     */
+    omit?: IntegrationAccountDomainOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IntegrationAccountDomainInclude<ExtArgs> | null
+    /**
+     * The data needed to create a IntegrationAccountDomain.
+     */
+    data: XOR<IntegrationAccountDomainCreateInput, IntegrationAccountDomainUncheckedCreateInput>
+  }
+
+  /**
+   * IntegrationAccountDomain createMany
+   */
+  export type IntegrationAccountDomainCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many IntegrationAccountDomains.
+     */
+    data: IntegrationAccountDomainCreateManyInput | IntegrationAccountDomainCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * IntegrationAccountDomain createManyAndReturn
+   */
+  export type IntegrationAccountDomainCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IntegrationAccountDomain
+     */
+    select?: IntegrationAccountDomainSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the IntegrationAccountDomain
+     */
+    omit?: IntegrationAccountDomainOmit<ExtArgs> | null
+    /**
+     * The data used to create many IntegrationAccountDomains.
+     */
+    data: IntegrationAccountDomainCreateManyInput | IntegrationAccountDomainCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IntegrationAccountDomainIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * IntegrationAccountDomain update
+   */
+  export type IntegrationAccountDomainUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IntegrationAccountDomain
+     */
+    select?: IntegrationAccountDomainSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the IntegrationAccountDomain
+     */
+    omit?: IntegrationAccountDomainOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IntegrationAccountDomainInclude<ExtArgs> | null
+    /**
+     * The data needed to update a IntegrationAccountDomain.
+     */
+    data: XOR<IntegrationAccountDomainUpdateInput, IntegrationAccountDomainUncheckedUpdateInput>
+    /**
+     * Choose, which IntegrationAccountDomain to update.
+     */
+    where: IntegrationAccountDomainWhereUniqueInput
+  }
+
+  /**
+   * IntegrationAccountDomain updateMany
+   */
+  export type IntegrationAccountDomainUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update IntegrationAccountDomains.
+     */
+    data: XOR<IntegrationAccountDomainUpdateManyMutationInput, IntegrationAccountDomainUncheckedUpdateManyInput>
+    /**
+     * Filter which IntegrationAccountDomains to update
+     */
+    where?: IntegrationAccountDomainWhereInput
+    /**
+     * Limit how many IntegrationAccountDomains to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * IntegrationAccountDomain updateManyAndReturn
+   */
+  export type IntegrationAccountDomainUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IntegrationAccountDomain
+     */
+    select?: IntegrationAccountDomainSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the IntegrationAccountDomain
+     */
+    omit?: IntegrationAccountDomainOmit<ExtArgs> | null
+    /**
+     * The data used to update IntegrationAccountDomains.
+     */
+    data: XOR<IntegrationAccountDomainUpdateManyMutationInput, IntegrationAccountDomainUncheckedUpdateManyInput>
+    /**
+     * Filter which IntegrationAccountDomains to update
+     */
+    where?: IntegrationAccountDomainWhereInput
+    /**
+     * Limit how many IntegrationAccountDomains to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IntegrationAccountDomainIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * IntegrationAccountDomain upsert
+   */
+  export type IntegrationAccountDomainUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IntegrationAccountDomain
+     */
+    select?: IntegrationAccountDomainSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the IntegrationAccountDomain
+     */
+    omit?: IntegrationAccountDomainOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IntegrationAccountDomainInclude<ExtArgs> | null
+    /**
+     * The filter to search for the IntegrationAccountDomain to update in case it exists.
+     */
+    where: IntegrationAccountDomainWhereUniqueInput
+    /**
+     * In case the IntegrationAccountDomain found by the `where` argument doesn't exist, create a new IntegrationAccountDomain with this data.
+     */
+    create: XOR<IntegrationAccountDomainCreateInput, IntegrationAccountDomainUncheckedCreateInput>
+    /**
+     * In case the IntegrationAccountDomain was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<IntegrationAccountDomainUpdateInput, IntegrationAccountDomainUncheckedUpdateInput>
+  }
+
+  /**
+   * IntegrationAccountDomain delete
+   */
+  export type IntegrationAccountDomainDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IntegrationAccountDomain
+     */
+    select?: IntegrationAccountDomainSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the IntegrationAccountDomain
+     */
+    omit?: IntegrationAccountDomainOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IntegrationAccountDomainInclude<ExtArgs> | null
+    /**
+     * Filter which IntegrationAccountDomain to delete.
+     */
+    where: IntegrationAccountDomainWhereUniqueInput
+  }
+
+  /**
+   * IntegrationAccountDomain deleteMany
+   */
+  export type IntegrationAccountDomainDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which IntegrationAccountDomains to delete
+     */
+    where?: IntegrationAccountDomainWhereInput
+    /**
+     * Limit how many IntegrationAccountDomains to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * IntegrationAccountDomain.campaign_integrations
+   */
+  export type IntegrationAccountDomain$campaign_integrationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CampaignIntegration
+     */
+    select?: CampaignIntegrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CampaignIntegration
+     */
+    omit?: CampaignIntegrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignIntegrationInclude<ExtArgs> | null
+    where?: CampaignIntegrationWhereInput
+    orderBy?: CampaignIntegrationOrderByWithRelationInput | CampaignIntegrationOrderByWithRelationInput[]
+    cursor?: CampaignIntegrationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CampaignIntegrationScalarFieldEnum | CampaignIntegrationScalarFieldEnum[]
+  }
+
+  /**
+   * IntegrationAccountDomain without action
+   */
+  export type IntegrationAccountDomainDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IntegrationAccountDomain
+     */
+    select?: IntegrationAccountDomainSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the IntegrationAccountDomain
+     */
+    omit?: IntegrationAccountDomainOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IntegrationAccountDomainInclude<ExtArgs> | null
   }
 
 
@@ -66356,6 +67689,7 @@ export namespace Prisma {
     uuid: string | null
     campaign_uuid: string | null
     integration_account_uuid: string | null
+    integration_account_domain_uuid: string | null
     sending_policy_uuid: string | null
     status: $Enums.CampaignIntegrationStatus | null
     created_at: Date | null
@@ -66367,6 +67701,7 @@ export namespace Prisma {
     uuid: string | null
     campaign_uuid: string | null
     integration_account_uuid: string | null
+    integration_account_domain_uuid: string | null
     sending_policy_uuid: string | null
     status: $Enums.CampaignIntegrationStatus | null
     created_at: Date | null
@@ -66378,6 +67713,7 @@ export namespace Prisma {
     uuid: number
     campaign_uuid: number
     integration_account_uuid: number
+    integration_account_domain_uuid: number
     sending_policy_uuid: number
     status: number
     created_at: number
@@ -66399,6 +67735,7 @@ export namespace Prisma {
     uuid?: true
     campaign_uuid?: true
     integration_account_uuid?: true
+    integration_account_domain_uuid?: true
     sending_policy_uuid?: true
     status?: true
     created_at?: true
@@ -66410,6 +67747,7 @@ export namespace Prisma {
     uuid?: true
     campaign_uuid?: true
     integration_account_uuid?: true
+    integration_account_domain_uuid?: true
     sending_policy_uuid?: true
     status?: true
     created_at?: true
@@ -66421,6 +67759,7 @@ export namespace Prisma {
     uuid?: true
     campaign_uuid?: true
     integration_account_uuid?: true
+    integration_account_domain_uuid?: true
     sending_policy_uuid?: true
     status?: true
     created_at?: true
@@ -66519,6 +67858,7 @@ export namespace Prisma {
     uuid: string
     campaign_uuid: string
     integration_account_uuid: string
+    integration_account_domain_uuid: string | null
     sending_policy_uuid: string
     status: $Enums.CampaignIntegrationStatus
     created_at: Date
@@ -66549,12 +67889,14 @@ export namespace Prisma {
     uuid?: boolean
     campaign_uuid?: boolean
     integration_account_uuid?: boolean
+    integration_account_domain_uuid?: boolean
     sending_policy_uuid?: boolean
     status?: boolean
     created_at?: boolean
     updated_at?: boolean
     campaign?: boolean | MarketingCampaignDefaultArgs<ExtArgs>
     integration_account?: boolean | IntegrationAccountDefaultArgs<ExtArgs>
+    integration_account_domain?: boolean | CampaignIntegration$integration_account_domainArgs<ExtArgs>
     sending_policy?: boolean | SendingPolicyDefaultArgs<ExtArgs>
     state?: boolean | CampaignIntegration$stateArgs<ExtArgs>
     outreach_messages?: boolean | CampaignIntegration$outreach_messagesArgs<ExtArgs>
@@ -66566,12 +67908,14 @@ export namespace Prisma {
     uuid?: boolean
     campaign_uuid?: boolean
     integration_account_uuid?: boolean
+    integration_account_domain_uuid?: boolean
     sending_policy_uuid?: boolean
     status?: boolean
     created_at?: boolean
     updated_at?: boolean
     campaign?: boolean | MarketingCampaignDefaultArgs<ExtArgs>
     integration_account?: boolean | IntegrationAccountDefaultArgs<ExtArgs>
+    integration_account_domain?: boolean | CampaignIntegration$integration_account_domainArgs<ExtArgs>
     sending_policy?: boolean | SendingPolicyDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["campaignIntegration"]>
 
@@ -66580,12 +67924,14 @@ export namespace Prisma {
     uuid?: boolean
     campaign_uuid?: boolean
     integration_account_uuid?: boolean
+    integration_account_domain_uuid?: boolean
     sending_policy_uuid?: boolean
     status?: boolean
     created_at?: boolean
     updated_at?: boolean
     campaign?: boolean | MarketingCampaignDefaultArgs<ExtArgs>
     integration_account?: boolean | IntegrationAccountDefaultArgs<ExtArgs>
+    integration_account_domain?: boolean | CampaignIntegration$integration_account_domainArgs<ExtArgs>
     sending_policy?: boolean | SendingPolicyDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["campaignIntegration"]>
 
@@ -66594,16 +67940,18 @@ export namespace Prisma {
     uuid?: boolean
     campaign_uuid?: boolean
     integration_account_uuid?: boolean
+    integration_account_domain_uuid?: boolean
     sending_policy_uuid?: boolean
     status?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
-  export type CampaignIntegrationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "campaign_uuid" | "integration_account_uuid" | "sending_policy_uuid" | "status" | "created_at" | "updated_at", ExtArgs["result"]["campaignIntegration"]>
+  export type CampaignIntegrationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "campaign_uuid" | "integration_account_uuid" | "integration_account_domain_uuid" | "sending_policy_uuid" | "status" | "created_at" | "updated_at", ExtArgs["result"]["campaignIntegration"]>
   export type CampaignIntegrationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     campaign?: boolean | MarketingCampaignDefaultArgs<ExtArgs>
     integration_account?: boolean | IntegrationAccountDefaultArgs<ExtArgs>
+    integration_account_domain?: boolean | CampaignIntegration$integration_account_domainArgs<ExtArgs>
     sending_policy?: boolean | SendingPolicyDefaultArgs<ExtArgs>
     state?: boolean | CampaignIntegration$stateArgs<ExtArgs>
     outreach_messages?: boolean | CampaignIntegration$outreach_messagesArgs<ExtArgs>
@@ -66612,11 +67960,13 @@ export namespace Prisma {
   export type CampaignIntegrationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     campaign?: boolean | MarketingCampaignDefaultArgs<ExtArgs>
     integration_account?: boolean | IntegrationAccountDefaultArgs<ExtArgs>
+    integration_account_domain?: boolean | CampaignIntegration$integration_account_domainArgs<ExtArgs>
     sending_policy?: boolean | SendingPolicyDefaultArgs<ExtArgs>
   }
   export type CampaignIntegrationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     campaign?: boolean | MarketingCampaignDefaultArgs<ExtArgs>
     integration_account?: boolean | IntegrationAccountDefaultArgs<ExtArgs>
+    integration_account_domain?: boolean | CampaignIntegration$integration_account_domainArgs<ExtArgs>
     sending_policy?: boolean | SendingPolicyDefaultArgs<ExtArgs>
   }
 
@@ -66625,6 +67975,7 @@ export namespace Prisma {
     objects: {
       campaign: Prisma.$MarketingCampaignPayload<ExtArgs>
       integration_account: Prisma.$IntegrationAccountPayload<ExtArgs>
+      integration_account_domain: Prisma.$IntegrationAccountDomainPayload<ExtArgs> | null
       sending_policy: Prisma.$SendingPolicyPayload<ExtArgs>
       state: Prisma.$CampaignIntegrationStatePayload<ExtArgs> | null
       outreach_messages: Prisma.$OutreachMessagePayload<ExtArgs>[]
@@ -66634,6 +67985,7 @@ export namespace Prisma {
       uuid: string
       campaign_uuid: string
       integration_account_uuid: string
+      integration_account_domain_uuid: string | null
       sending_policy_uuid: string
       status: $Enums.CampaignIntegrationStatus
       created_at: Date
@@ -67034,6 +68386,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     campaign<T extends MarketingCampaignDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MarketingCampaignDefaultArgs<ExtArgs>>): Prisma__MarketingCampaignClient<$Result.GetResult<Prisma.$MarketingCampaignPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     integration_account<T extends IntegrationAccountDefaultArgs<ExtArgs> = {}>(args?: Subset<T, IntegrationAccountDefaultArgs<ExtArgs>>): Prisma__IntegrationAccountClient<$Result.GetResult<Prisma.$IntegrationAccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    integration_account_domain<T extends CampaignIntegration$integration_account_domainArgs<ExtArgs> = {}>(args?: Subset<T, CampaignIntegration$integration_account_domainArgs<ExtArgs>>): Prisma__IntegrationAccountDomainClient<$Result.GetResult<Prisma.$IntegrationAccountDomainPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     sending_policy<T extends SendingPolicyDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SendingPolicyDefaultArgs<ExtArgs>>): Prisma__SendingPolicyClient<$Result.GetResult<Prisma.$SendingPolicyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     state<T extends CampaignIntegration$stateArgs<ExtArgs> = {}>(args?: Subset<T, CampaignIntegration$stateArgs<ExtArgs>>): Prisma__CampaignIntegrationStateClient<$Result.GetResult<Prisma.$CampaignIntegrationStatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     outreach_messages<T extends CampaignIntegration$outreach_messagesArgs<ExtArgs> = {}>(args?: Subset<T, CampaignIntegration$outreach_messagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OutreachMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -67070,6 +68423,7 @@ export namespace Prisma {
     readonly uuid: FieldRef<"CampaignIntegration", 'String'>
     readonly campaign_uuid: FieldRef<"CampaignIntegration", 'String'>
     readonly integration_account_uuid: FieldRef<"CampaignIntegration", 'String'>
+    readonly integration_account_domain_uuid: FieldRef<"CampaignIntegration", 'String'>
     readonly sending_policy_uuid: FieldRef<"CampaignIntegration", 'String'>
     readonly status: FieldRef<"CampaignIntegration", 'CampaignIntegrationStatus'>
     readonly created_at: FieldRef<"CampaignIntegration", 'DateTime'>
@@ -67467,6 +68821,25 @@ export namespace Prisma {
      * Limit how many CampaignIntegrations to delete.
      */
     limit?: number
+  }
+
+  /**
+   * CampaignIntegration.integration_account_domain
+   */
+  export type CampaignIntegration$integration_account_domainArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IntegrationAccountDomain
+     */
+    select?: IntegrationAccountDomainSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the IntegrationAccountDomain
+     */
+    omit?: IntegrationAccountDomainOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IntegrationAccountDomainInclude<ExtArgs> | null
+    where?: IntegrationAccountDomainWhereInput
   }
 
   /**
@@ -73590,6 +74963,7 @@ export namespace Prisma {
     failed_at: 'failed_at',
     email_provider: 'email_provider',
     email_account: 'email_account',
+    email_domain_uuid: 'email_domain_uuid',
     sms_provider: 'sms_provider',
     metadata: 'metadata',
     sequence_enrollment_uuid: 'sequence_enrollment_uuid',
@@ -73897,6 +75271,20 @@ export namespace Prisma {
   export type IntegrationKeyScalarFieldEnum = (typeof IntegrationKeyScalarFieldEnum)[keyof typeof IntegrationKeyScalarFieldEnum]
 
 
+  export const IntegrationAccountDomainScalarFieldEnum: {
+    id: 'id',
+    uuid: 'uuid',
+    integration_account_uuid: 'integration_account_uuid',
+    from_email: 'from_email',
+    from_name: 'from_name',
+    is_default: 'is_default',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type IntegrationAccountDomainScalarFieldEnum = (typeof IntegrationAccountDomainScalarFieldEnum)[keyof typeof IntegrationAccountDomainScalarFieldEnum]
+
+
   export const ReminderScalarFieldEnum: {
     id: 'id',
     uuid: 'uuid',
@@ -74116,6 +75504,7 @@ export namespace Prisma {
     uuid: 'uuid',
     campaign_uuid: 'campaign_uuid',
     integration_account_uuid: 'integration_account_uuid',
+    integration_account_domain_uuid: 'integration_account_domain_uuid',
     sending_policy_uuid: 'sending_policy_uuid',
     status: 'status',
     created_at: 'created_at',
@@ -76831,6 +78220,7 @@ export namespace Prisma {
     failed_at?: DateTimeNullableFilter<"OutreachMessage"> | Date | string | null
     email_provider?: EnumExternalIntegrationProviderNullableFilter<"OutreachMessage"> | $Enums.ExternalIntegrationProvider | null
     email_account?: StringNullableFilter<"OutreachMessage"> | string | null
+    email_domain_uuid?: StringNullableFilter<"OutreachMessage"> | string | null
     sms_provider?: StringNullableFilter<"OutreachMessage"> | string | null
     metadata?: JsonNullableFilter<"OutreachMessage">
     sequence_enrollment_uuid?: StringNullableFilter<"OutreachMessage"> | string | null
@@ -76872,6 +78262,7 @@ export namespace Prisma {
     failed_at?: SortOrderInput | SortOrder
     email_provider?: SortOrderInput | SortOrder
     email_account?: SortOrderInput | SortOrder
+    email_domain_uuid?: SortOrderInput | SortOrder
     sms_provider?: SortOrderInput | SortOrder
     metadata?: SortOrderInput | SortOrder
     sequence_enrollment_uuid?: SortOrderInput | SortOrder
@@ -76916,6 +78307,7 @@ export namespace Prisma {
     failed_at?: DateTimeNullableFilter<"OutreachMessage"> | Date | string | null
     email_provider?: EnumExternalIntegrationProviderNullableFilter<"OutreachMessage"> | $Enums.ExternalIntegrationProvider | null
     email_account?: StringNullableFilter<"OutreachMessage"> | string | null
+    email_domain_uuid?: StringNullableFilter<"OutreachMessage"> | string | null
     sms_provider?: StringNullableFilter<"OutreachMessage"> | string | null
     metadata?: JsonNullableFilter<"OutreachMessage">
     sequence_enrollment_uuid?: StringNullableFilter<"OutreachMessage"> | string | null
@@ -76957,6 +78349,7 @@ export namespace Prisma {
     failed_at?: SortOrderInput | SortOrder
     email_provider?: SortOrderInput | SortOrder
     email_account?: SortOrderInput | SortOrder
+    email_domain_uuid?: SortOrderInput | SortOrder
     sms_provider?: SortOrderInput | SortOrder
     metadata?: SortOrderInput | SortOrder
     sequence_enrollment_uuid?: SortOrderInput | SortOrder
@@ -76998,6 +78391,7 @@ export namespace Prisma {
     failed_at?: DateTimeNullableWithAggregatesFilter<"OutreachMessage"> | Date | string | null
     email_provider?: EnumExternalIntegrationProviderNullableWithAggregatesFilter<"OutreachMessage"> | $Enums.ExternalIntegrationProvider | null
     email_account?: StringNullableWithAggregatesFilter<"OutreachMessage"> | string | null
+    email_domain_uuid?: StringNullableWithAggregatesFilter<"OutreachMessage"> | string | null
     sms_provider?: StringNullableWithAggregatesFilter<"OutreachMessage"> | string | null
     metadata?: JsonNullableWithAggregatesFilter<"OutreachMessage">
     sequence_enrollment_uuid?: StringNullableWithAggregatesFilter<"OutreachMessage"> | string | null
@@ -78435,6 +79829,7 @@ export namespace Prisma {
     updated_at?: DateTimeFilter<"IntegrationAccount"> | Date | string
     integration?: XOR<IntegrationScalarRelationFilter, IntegrationWhereInput>
     campaign_integrations?: CampaignIntegrationListRelationFilter
+    domains?: IntegrationAccountDomainListRelationFilter
   }
 
   export type IntegrationAccountOrderByWithRelationInput = {
@@ -78449,6 +79844,7 @@ export namespace Prisma {
     updated_at?: SortOrder
     integration?: IntegrationOrderByWithRelationInput
     campaign_integrations?: CampaignIntegrationOrderByRelationAggregateInput
+    domains?: IntegrationAccountDomainOrderByRelationAggregateInput
   }
 
   export type IntegrationAccountWhereUniqueInput = Prisma.AtLeast<{
@@ -78467,6 +79863,7 @@ export namespace Prisma {
     updated_at?: DateTimeFilter<"IntegrationAccount"> | Date | string
     integration?: XOR<IntegrationScalarRelationFilter, IntegrationWhereInput>
     campaign_integrations?: CampaignIntegrationListRelationFilter
+    domains?: IntegrationAccountDomainListRelationFilter
   }, "id" | "uuid" | "integration_uuid_account">
 
   export type IntegrationAccountOrderByWithAggregationInput = {
@@ -78577,6 +79974,82 @@ export namespace Prisma {
     last4?: StringNullableWithAggregatesFilter<"IntegrationKey"> | string | null
     created_at?: DateTimeWithAggregatesFilter<"IntegrationKey"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"IntegrationKey"> | Date | string
+  }
+
+  export type IntegrationAccountDomainWhereInput = {
+    AND?: IntegrationAccountDomainWhereInput | IntegrationAccountDomainWhereInput[]
+    OR?: IntegrationAccountDomainWhereInput[]
+    NOT?: IntegrationAccountDomainWhereInput | IntegrationAccountDomainWhereInput[]
+    id?: IntFilter<"IntegrationAccountDomain"> | number
+    uuid?: StringFilter<"IntegrationAccountDomain"> | string
+    integration_account_uuid?: StringFilter<"IntegrationAccountDomain"> | string
+    from_email?: StringFilter<"IntegrationAccountDomain"> | string
+    from_name?: StringNullableFilter<"IntegrationAccountDomain"> | string | null
+    is_default?: BoolFilter<"IntegrationAccountDomain"> | boolean
+    created_at?: DateTimeFilter<"IntegrationAccountDomain"> | Date | string
+    updated_at?: DateTimeFilter<"IntegrationAccountDomain"> | Date | string
+    integration_account?: XOR<IntegrationAccountScalarRelationFilter, IntegrationAccountWhereInput>
+    campaign_integrations?: CampaignIntegrationListRelationFilter
+  }
+
+  export type IntegrationAccountDomainOrderByWithRelationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    integration_account_uuid?: SortOrder
+    from_email?: SortOrder
+    from_name?: SortOrderInput | SortOrder
+    is_default?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    integration_account?: IntegrationAccountOrderByWithRelationInput
+    campaign_integrations?: CampaignIntegrationOrderByRelationAggregateInput
+  }
+
+  export type IntegrationAccountDomainWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    uuid?: string
+    integration_account_uuid_from_email?: IntegrationAccountDomainIntegration_account_uuidFrom_emailCompoundUniqueInput
+    AND?: IntegrationAccountDomainWhereInput | IntegrationAccountDomainWhereInput[]
+    OR?: IntegrationAccountDomainWhereInput[]
+    NOT?: IntegrationAccountDomainWhereInput | IntegrationAccountDomainWhereInput[]
+    integration_account_uuid?: StringFilter<"IntegrationAccountDomain"> | string
+    from_email?: StringFilter<"IntegrationAccountDomain"> | string
+    from_name?: StringNullableFilter<"IntegrationAccountDomain"> | string | null
+    is_default?: BoolFilter<"IntegrationAccountDomain"> | boolean
+    created_at?: DateTimeFilter<"IntegrationAccountDomain"> | Date | string
+    updated_at?: DateTimeFilter<"IntegrationAccountDomain"> | Date | string
+    integration_account?: XOR<IntegrationAccountScalarRelationFilter, IntegrationAccountWhereInput>
+    campaign_integrations?: CampaignIntegrationListRelationFilter
+  }, "id" | "uuid" | "integration_account_uuid_from_email">
+
+  export type IntegrationAccountDomainOrderByWithAggregationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    integration_account_uuid?: SortOrder
+    from_email?: SortOrder
+    from_name?: SortOrderInput | SortOrder
+    is_default?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: IntegrationAccountDomainCountOrderByAggregateInput
+    _avg?: IntegrationAccountDomainAvgOrderByAggregateInput
+    _max?: IntegrationAccountDomainMaxOrderByAggregateInput
+    _min?: IntegrationAccountDomainMinOrderByAggregateInput
+    _sum?: IntegrationAccountDomainSumOrderByAggregateInput
+  }
+
+  export type IntegrationAccountDomainScalarWhereWithAggregatesInput = {
+    AND?: IntegrationAccountDomainScalarWhereWithAggregatesInput | IntegrationAccountDomainScalarWhereWithAggregatesInput[]
+    OR?: IntegrationAccountDomainScalarWhereWithAggregatesInput[]
+    NOT?: IntegrationAccountDomainScalarWhereWithAggregatesInput | IntegrationAccountDomainScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"IntegrationAccountDomain"> | number
+    uuid?: StringWithAggregatesFilter<"IntegrationAccountDomain"> | string
+    integration_account_uuid?: StringWithAggregatesFilter<"IntegrationAccountDomain"> | string
+    from_email?: StringWithAggregatesFilter<"IntegrationAccountDomain"> | string
+    from_name?: StringNullableWithAggregatesFilter<"IntegrationAccountDomain"> | string | null
+    is_default?: BoolWithAggregatesFilter<"IntegrationAccountDomain"> | boolean
+    created_at?: DateTimeWithAggregatesFilter<"IntegrationAccountDomain"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"IntegrationAccountDomain"> | Date | string
   }
 
   export type ReminderWhereInput = {
@@ -79732,12 +81205,14 @@ export namespace Prisma {
     uuid?: StringFilter<"CampaignIntegration"> | string
     campaign_uuid?: StringFilter<"CampaignIntegration"> | string
     integration_account_uuid?: StringFilter<"CampaignIntegration"> | string
+    integration_account_domain_uuid?: StringNullableFilter<"CampaignIntegration"> | string | null
     sending_policy_uuid?: StringFilter<"CampaignIntegration"> | string
     status?: EnumCampaignIntegrationStatusFilter<"CampaignIntegration"> | $Enums.CampaignIntegrationStatus
     created_at?: DateTimeFilter<"CampaignIntegration"> | Date | string
     updated_at?: DateTimeFilter<"CampaignIntegration"> | Date | string
     campaign?: XOR<MarketingCampaignScalarRelationFilter, MarketingCampaignWhereInput>
     integration_account?: XOR<IntegrationAccountScalarRelationFilter, IntegrationAccountWhereInput>
+    integration_account_domain?: XOR<IntegrationAccountDomainNullableScalarRelationFilter, IntegrationAccountDomainWhereInput> | null
     sending_policy?: XOR<SendingPolicyScalarRelationFilter, SendingPolicyWhereInput>
     state?: XOR<CampaignIntegrationStateNullableScalarRelationFilter, CampaignIntegrationStateWhereInput> | null
     outreach_messages?: OutreachMessageListRelationFilter
@@ -79748,12 +81223,14 @@ export namespace Prisma {
     uuid?: SortOrder
     campaign_uuid?: SortOrder
     integration_account_uuid?: SortOrder
+    integration_account_domain_uuid?: SortOrderInput | SortOrder
     sending_policy_uuid?: SortOrder
     status?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     campaign?: MarketingCampaignOrderByWithRelationInput
     integration_account?: IntegrationAccountOrderByWithRelationInput
+    integration_account_domain?: IntegrationAccountDomainOrderByWithRelationInput
     sending_policy?: SendingPolicyOrderByWithRelationInput
     state?: CampaignIntegrationStateOrderByWithRelationInput
     outreach_messages?: OutreachMessageOrderByRelationAggregateInput
@@ -79768,12 +81245,14 @@ export namespace Prisma {
     NOT?: CampaignIntegrationWhereInput | CampaignIntegrationWhereInput[]
     campaign_uuid?: StringFilter<"CampaignIntegration"> | string
     integration_account_uuid?: StringFilter<"CampaignIntegration"> | string
+    integration_account_domain_uuid?: StringNullableFilter<"CampaignIntegration"> | string | null
     sending_policy_uuid?: StringFilter<"CampaignIntegration"> | string
     status?: EnumCampaignIntegrationStatusFilter<"CampaignIntegration"> | $Enums.CampaignIntegrationStatus
     created_at?: DateTimeFilter<"CampaignIntegration"> | Date | string
     updated_at?: DateTimeFilter<"CampaignIntegration"> | Date | string
     campaign?: XOR<MarketingCampaignScalarRelationFilter, MarketingCampaignWhereInput>
     integration_account?: XOR<IntegrationAccountScalarRelationFilter, IntegrationAccountWhereInput>
+    integration_account_domain?: XOR<IntegrationAccountDomainNullableScalarRelationFilter, IntegrationAccountDomainWhereInput> | null
     sending_policy?: XOR<SendingPolicyScalarRelationFilter, SendingPolicyWhereInput>
     state?: XOR<CampaignIntegrationStateNullableScalarRelationFilter, CampaignIntegrationStateWhereInput> | null
     outreach_messages?: OutreachMessageListRelationFilter
@@ -79784,6 +81263,7 @@ export namespace Prisma {
     uuid?: SortOrder
     campaign_uuid?: SortOrder
     integration_account_uuid?: SortOrder
+    integration_account_domain_uuid?: SortOrderInput | SortOrder
     sending_policy_uuid?: SortOrder
     status?: SortOrder
     created_at?: SortOrder
@@ -79803,6 +81283,7 @@ export namespace Prisma {
     uuid?: StringWithAggregatesFilter<"CampaignIntegration"> | string
     campaign_uuid?: StringWithAggregatesFilter<"CampaignIntegration"> | string
     integration_account_uuid?: StringWithAggregatesFilter<"CampaignIntegration"> | string
+    integration_account_domain_uuid?: StringNullableWithAggregatesFilter<"CampaignIntegration"> | string | null
     sending_policy_uuid?: StringWithAggregatesFilter<"CampaignIntegration"> | string
     status?: EnumCampaignIntegrationStatusWithAggregatesFilter<"CampaignIntegration"> | $Enums.CampaignIntegrationStatus
     created_at?: DateTimeWithAggregatesFilter<"CampaignIntegration"> | Date | string
@@ -82164,6 +83645,7 @@ export namespace Prisma {
     failed_at?: Date | string | null
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
+    email_domain_uuid?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
@@ -82202,6 +83684,7 @@ export namespace Prisma {
     failed_at?: Date | string | null
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
+    email_domain_uuid?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: string | null
@@ -82231,6 +83714,7 @@ export namespace Prisma {
     failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -82269,6 +83753,7 @@ export namespace Prisma {
     failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -82303,6 +83788,7 @@ export namespace Prisma {
     failed_at?: Date | string | null
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
+    email_domain_uuid?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: string | null
@@ -82331,6 +83817,7 @@ export namespace Prisma {
     failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -82361,6 +83848,7 @@ export namespace Prisma {
     failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -83990,6 +85478,7 @@ export namespace Prisma {
     updated_at?: Date | string
     integration: IntegrationCreateNestedOneWithoutAccountsInput
     campaign_integrations?: CampaignIntegrationCreateNestedManyWithoutIntegration_accountInput
+    domains?: IntegrationAccountDomainCreateNestedManyWithoutIntegration_accountInput
   }
 
   export type IntegrationAccountUncheckedCreateInput = {
@@ -84003,6 +85492,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     campaign_integrations?: CampaignIntegrationUncheckedCreateNestedManyWithoutIntegration_accountInput
+    domains?: IntegrationAccountDomainUncheckedCreateNestedManyWithoutIntegration_accountInput
   }
 
   export type IntegrationAccountUpdateInput = {
@@ -84015,6 +85505,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     integration?: IntegrationUpdateOneRequiredWithoutAccountsNestedInput
     campaign_integrations?: CampaignIntegrationUpdateManyWithoutIntegration_accountNestedInput
+    domains?: IntegrationAccountDomainUpdateManyWithoutIntegration_accountNestedInput
   }
 
   export type IntegrationAccountUncheckedUpdateInput = {
@@ -84028,6 +85519,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     campaign_integrations?: CampaignIntegrationUncheckedUpdateManyWithoutIntegration_accountNestedInput
+    domains?: IntegrationAccountDomainUncheckedUpdateManyWithoutIntegration_accountNestedInput
   }
 
   export type IntegrationAccountCreateManyInput = {
@@ -84140,6 +85632,83 @@ export namespace Prisma {
     account?: StringFieldUpdateOperationsInput | string
     secret?: StringFieldUpdateOperationsInput | string
     last4?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type IntegrationAccountDomainCreateInput = {
+    uuid?: string
+    from_email: string
+    from_name?: string | null
+    is_default?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    integration_account: IntegrationAccountCreateNestedOneWithoutDomainsInput
+    campaign_integrations?: CampaignIntegrationCreateNestedManyWithoutIntegration_account_domainInput
+  }
+
+  export type IntegrationAccountDomainUncheckedCreateInput = {
+    id?: number
+    uuid?: string
+    integration_account_uuid: string
+    from_email: string
+    from_name?: string | null
+    is_default?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    campaign_integrations?: CampaignIntegrationUncheckedCreateNestedManyWithoutIntegration_account_domainInput
+  }
+
+  export type IntegrationAccountDomainUpdateInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    from_email?: StringFieldUpdateOperationsInput | string
+    from_name?: NullableStringFieldUpdateOperationsInput | string | null
+    is_default?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    integration_account?: IntegrationAccountUpdateOneRequiredWithoutDomainsNestedInput
+    campaign_integrations?: CampaignIntegrationUpdateManyWithoutIntegration_account_domainNestedInput
+  }
+
+  export type IntegrationAccountDomainUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    integration_account_uuid?: StringFieldUpdateOperationsInput | string
+    from_email?: StringFieldUpdateOperationsInput | string
+    from_name?: NullableStringFieldUpdateOperationsInput | string | null
+    is_default?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    campaign_integrations?: CampaignIntegrationUncheckedUpdateManyWithoutIntegration_account_domainNestedInput
+  }
+
+  export type IntegrationAccountDomainCreateManyInput = {
+    id?: number
+    uuid?: string
+    integration_account_uuid: string
+    from_email: string
+    from_name?: string | null
+    is_default?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type IntegrationAccountDomainUpdateManyMutationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    from_email?: StringFieldUpdateOperationsInput | string
+    from_name?: NullableStringFieldUpdateOperationsInput | string | null
+    is_default?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type IntegrationAccountDomainUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    integration_account_uuid?: StringFieldUpdateOperationsInput | string
+    from_email?: StringFieldUpdateOperationsInput | string
+    from_name?: NullableStringFieldUpdateOperationsInput | string | null
+    is_default?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -85379,6 +86948,7 @@ export namespace Prisma {
     updated_at?: Date | string
     campaign: MarketingCampaignCreateNestedOneWithoutCampaign_integrationsInput
     integration_account: IntegrationAccountCreateNestedOneWithoutCampaign_integrationsInput
+    integration_account_domain?: IntegrationAccountDomainCreateNestedOneWithoutCampaign_integrationsInput
     sending_policy: SendingPolicyCreateNestedOneWithoutCampaign_integrationsInput
     state?: CampaignIntegrationStateCreateNestedOneWithoutCampaign_integrationInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutCampaign_integrationInput
@@ -85389,6 +86959,7 @@ export namespace Prisma {
     uuid?: string
     campaign_uuid: string
     integration_account_uuid: string
+    integration_account_domain_uuid?: string | null
     sending_policy_uuid: string
     status?: $Enums.CampaignIntegrationStatus
     created_at?: Date | string
@@ -85404,6 +86975,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     campaign?: MarketingCampaignUpdateOneRequiredWithoutCampaign_integrationsNestedInput
     integration_account?: IntegrationAccountUpdateOneRequiredWithoutCampaign_integrationsNestedInput
+    integration_account_domain?: IntegrationAccountDomainUpdateOneWithoutCampaign_integrationsNestedInput
     sending_policy?: SendingPolicyUpdateOneRequiredWithoutCampaign_integrationsNestedInput
     state?: CampaignIntegrationStateUpdateOneWithoutCampaign_integrationNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutCampaign_integrationNestedInput
@@ -85414,6 +86986,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     campaign_uuid?: StringFieldUpdateOperationsInput | string
     integration_account_uuid?: StringFieldUpdateOperationsInput | string
+    integration_account_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     sending_policy_uuid?: StringFieldUpdateOperationsInput | string
     status?: EnumCampaignIntegrationStatusFieldUpdateOperationsInput | $Enums.CampaignIntegrationStatus
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -85427,6 +87000,7 @@ export namespace Prisma {
     uuid?: string
     campaign_uuid: string
     integration_account_uuid: string
+    integration_account_domain_uuid?: string | null
     sending_policy_uuid: string
     status?: $Enums.CampaignIntegrationStatus
     created_at?: Date | string
@@ -85445,6 +87019,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     campaign_uuid?: StringFieldUpdateOperationsInput | string
     integration_account_uuid?: StringFieldUpdateOperationsInput | string
+    integration_account_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     sending_policy_uuid?: StringFieldUpdateOperationsInput | string
     status?: EnumCampaignIntegrationStatusFieldUpdateOperationsInput | $Enums.CampaignIntegrationStatus
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -87823,6 +89398,7 @@ export namespace Prisma {
     failed_at?: SortOrder
     email_provider?: SortOrder
     email_account?: SortOrder
+    email_domain_uuid?: SortOrder
     sms_provider?: SortOrder
     metadata?: SortOrder
     sequence_enrollment_uuid?: SortOrder
@@ -87860,6 +89436,7 @@ export namespace Prisma {
     failed_at?: SortOrder
     email_provider?: SortOrder
     email_account?: SortOrder
+    email_domain_uuid?: SortOrder
     sms_provider?: SortOrder
     sequence_enrollment_uuid?: SortOrder
     sequence_step_uuid?: SortOrder
@@ -87892,6 +89469,7 @@ export namespace Prisma {
     failed_at?: SortOrder
     email_provider?: SortOrder
     email_account?: SortOrder
+    email_domain_uuid?: SortOrder
     sms_provider?: SortOrder
     sequence_enrollment_uuid?: SortOrder
     sequence_step_uuid?: SortOrder
@@ -89136,6 +90714,16 @@ export namespace Prisma {
     isNot?: IntegrationWhereInput
   }
 
+  export type IntegrationAccountDomainListRelationFilter = {
+    every?: IntegrationAccountDomainWhereInput
+    some?: IntegrationAccountDomainWhereInput
+    none?: IntegrationAccountDomainWhereInput
+  }
+
+  export type IntegrationAccountDomainOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type IntegrationAccountIntegration_uuidAccountCompoundUniqueInput = {
     integration_uuid: string
     account: string
@@ -89262,6 +90850,57 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumIntegrationKeyTypeFilter<$PrismaModel>
     _max?: NestedEnumIntegrationKeyTypeFilter<$PrismaModel>
+  }
+
+  export type IntegrationAccountScalarRelationFilter = {
+    is?: IntegrationAccountWhereInput
+    isNot?: IntegrationAccountWhereInput
+  }
+
+  export type IntegrationAccountDomainIntegration_account_uuidFrom_emailCompoundUniqueInput = {
+    integration_account_uuid: string
+    from_email: string
+  }
+
+  export type IntegrationAccountDomainCountOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    integration_account_uuid?: SortOrder
+    from_email?: SortOrder
+    from_name?: SortOrder
+    is_default?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type IntegrationAccountDomainAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type IntegrationAccountDomainMaxOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    integration_account_uuid?: SortOrder
+    from_email?: SortOrder
+    from_name?: SortOrder
+    is_default?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type IntegrationAccountDomainMinOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    integration_account_uuid?: SortOrder
+    from_email?: SortOrder
+    from_name?: SortOrder
+    is_default?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type IntegrationAccountDomainSumOrderByAggregateInput = {
+    id?: SortOrder
   }
 
   export type EnumReminderStatusFilter<$PrismaModel = never> = {
@@ -90221,9 +91860,9 @@ export namespace Prisma {
     not?: NestedEnumCampaignIntegrationStatusFilter<$PrismaModel> | $Enums.CampaignIntegrationStatus
   }
 
-  export type IntegrationAccountScalarRelationFilter = {
-    is?: IntegrationAccountWhereInput
-    isNot?: IntegrationAccountWhereInput
+  export type IntegrationAccountDomainNullableScalarRelationFilter = {
+    is?: IntegrationAccountDomainWhereInput | null
+    isNot?: IntegrationAccountDomainWhereInput | null
   }
 
   export type CampaignIntegrationStateNullableScalarRelationFilter = {
@@ -90241,6 +91880,7 @@ export namespace Prisma {
     uuid?: SortOrder
     campaign_uuid?: SortOrder
     integration_account_uuid?: SortOrder
+    integration_account_domain_uuid?: SortOrder
     sending_policy_uuid?: SortOrder
     status?: SortOrder
     created_at?: SortOrder
@@ -90256,6 +91896,7 @@ export namespace Prisma {
     uuid?: SortOrder
     campaign_uuid?: SortOrder
     integration_account_uuid?: SortOrder
+    integration_account_domain_uuid?: SortOrder
     sending_policy_uuid?: SortOrder
     status?: SortOrder
     created_at?: SortOrder
@@ -90267,6 +91908,7 @@ export namespace Prisma {
     uuid?: SortOrder
     campaign_uuid?: SortOrder
     integration_account_uuid?: SortOrder
+    integration_account_domain_uuid?: SortOrder
     sending_policy_uuid?: SortOrder
     status?: SortOrder
     created_at?: SortOrder
@@ -94857,11 +96499,25 @@ export namespace Prisma {
     connect?: CampaignIntegrationWhereUniqueInput | CampaignIntegrationWhereUniqueInput[]
   }
 
+  export type IntegrationAccountDomainCreateNestedManyWithoutIntegration_accountInput = {
+    create?: XOR<IntegrationAccountDomainCreateWithoutIntegration_accountInput, IntegrationAccountDomainUncheckedCreateWithoutIntegration_accountInput> | IntegrationAccountDomainCreateWithoutIntegration_accountInput[] | IntegrationAccountDomainUncheckedCreateWithoutIntegration_accountInput[]
+    connectOrCreate?: IntegrationAccountDomainCreateOrConnectWithoutIntegration_accountInput | IntegrationAccountDomainCreateOrConnectWithoutIntegration_accountInput[]
+    createMany?: IntegrationAccountDomainCreateManyIntegration_accountInputEnvelope
+    connect?: IntegrationAccountDomainWhereUniqueInput | IntegrationAccountDomainWhereUniqueInput[]
+  }
+
   export type CampaignIntegrationUncheckedCreateNestedManyWithoutIntegration_accountInput = {
     create?: XOR<CampaignIntegrationCreateWithoutIntegration_accountInput, CampaignIntegrationUncheckedCreateWithoutIntegration_accountInput> | CampaignIntegrationCreateWithoutIntegration_accountInput[] | CampaignIntegrationUncheckedCreateWithoutIntegration_accountInput[]
     connectOrCreate?: CampaignIntegrationCreateOrConnectWithoutIntegration_accountInput | CampaignIntegrationCreateOrConnectWithoutIntegration_accountInput[]
     createMany?: CampaignIntegrationCreateManyIntegration_accountInputEnvelope
     connect?: CampaignIntegrationWhereUniqueInput | CampaignIntegrationWhereUniqueInput[]
+  }
+
+  export type IntegrationAccountDomainUncheckedCreateNestedManyWithoutIntegration_accountInput = {
+    create?: XOR<IntegrationAccountDomainCreateWithoutIntegration_accountInput, IntegrationAccountDomainUncheckedCreateWithoutIntegration_accountInput> | IntegrationAccountDomainCreateWithoutIntegration_accountInput[] | IntegrationAccountDomainUncheckedCreateWithoutIntegration_accountInput[]
+    connectOrCreate?: IntegrationAccountDomainCreateOrConnectWithoutIntegration_accountInput | IntegrationAccountDomainCreateOrConnectWithoutIntegration_accountInput[]
+    createMany?: IntegrationAccountDomainCreateManyIntegration_accountInputEnvelope
+    connect?: IntegrationAccountDomainWhereUniqueInput | IntegrationAccountDomainWhereUniqueInput[]
   }
 
   export type NullableEnumSendingPeriodUnitFieldUpdateOperationsInput = {
@@ -94890,6 +96546,20 @@ export namespace Prisma {
     deleteMany?: CampaignIntegrationScalarWhereInput | CampaignIntegrationScalarWhereInput[]
   }
 
+  export type IntegrationAccountDomainUpdateManyWithoutIntegration_accountNestedInput = {
+    create?: XOR<IntegrationAccountDomainCreateWithoutIntegration_accountInput, IntegrationAccountDomainUncheckedCreateWithoutIntegration_accountInput> | IntegrationAccountDomainCreateWithoutIntegration_accountInput[] | IntegrationAccountDomainUncheckedCreateWithoutIntegration_accountInput[]
+    connectOrCreate?: IntegrationAccountDomainCreateOrConnectWithoutIntegration_accountInput | IntegrationAccountDomainCreateOrConnectWithoutIntegration_accountInput[]
+    upsert?: IntegrationAccountDomainUpsertWithWhereUniqueWithoutIntegration_accountInput | IntegrationAccountDomainUpsertWithWhereUniqueWithoutIntegration_accountInput[]
+    createMany?: IntegrationAccountDomainCreateManyIntegration_accountInputEnvelope
+    set?: IntegrationAccountDomainWhereUniqueInput | IntegrationAccountDomainWhereUniqueInput[]
+    disconnect?: IntegrationAccountDomainWhereUniqueInput | IntegrationAccountDomainWhereUniqueInput[]
+    delete?: IntegrationAccountDomainWhereUniqueInput | IntegrationAccountDomainWhereUniqueInput[]
+    connect?: IntegrationAccountDomainWhereUniqueInput | IntegrationAccountDomainWhereUniqueInput[]
+    update?: IntegrationAccountDomainUpdateWithWhereUniqueWithoutIntegration_accountInput | IntegrationAccountDomainUpdateWithWhereUniqueWithoutIntegration_accountInput[]
+    updateMany?: IntegrationAccountDomainUpdateManyWithWhereWithoutIntegration_accountInput | IntegrationAccountDomainUpdateManyWithWhereWithoutIntegration_accountInput[]
+    deleteMany?: IntegrationAccountDomainScalarWhereInput | IntegrationAccountDomainScalarWhereInput[]
+  }
+
   export type CampaignIntegrationUncheckedUpdateManyWithoutIntegration_accountNestedInput = {
     create?: XOR<CampaignIntegrationCreateWithoutIntegration_accountInput, CampaignIntegrationUncheckedCreateWithoutIntegration_accountInput> | CampaignIntegrationCreateWithoutIntegration_accountInput[] | CampaignIntegrationUncheckedCreateWithoutIntegration_accountInput[]
     connectOrCreate?: CampaignIntegrationCreateOrConnectWithoutIntegration_accountInput | CampaignIntegrationCreateOrConnectWithoutIntegration_accountInput[]
@@ -94902,6 +96572,20 @@ export namespace Prisma {
     update?: CampaignIntegrationUpdateWithWhereUniqueWithoutIntegration_accountInput | CampaignIntegrationUpdateWithWhereUniqueWithoutIntegration_accountInput[]
     updateMany?: CampaignIntegrationUpdateManyWithWhereWithoutIntegration_accountInput | CampaignIntegrationUpdateManyWithWhereWithoutIntegration_accountInput[]
     deleteMany?: CampaignIntegrationScalarWhereInput | CampaignIntegrationScalarWhereInput[]
+  }
+
+  export type IntegrationAccountDomainUncheckedUpdateManyWithoutIntegration_accountNestedInput = {
+    create?: XOR<IntegrationAccountDomainCreateWithoutIntegration_accountInput, IntegrationAccountDomainUncheckedCreateWithoutIntegration_accountInput> | IntegrationAccountDomainCreateWithoutIntegration_accountInput[] | IntegrationAccountDomainUncheckedCreateWithoutIntegration_accountInput[]
+    connectOrCreate?: IntegrationAccountDomainCreateOrConnectWithoutIntegration_accountInput | IntegrationAccountDomainCreateOrConnectWithoutIntegration_accountInput[]
+    upsert?: IntegrationAccountDomainUpsertWithWhereUniqueWithoutIntegration_accountInput | IntegrationAccountDomainUpsertWithWhereUniqueWithoutIntegration_accountInput[]
+    createMany?: IntegrationAccountDomainCreateManyIntegration_accountInputEnvelope
+    set?: IntegrationAccountDomainWhereUniqueInput | IntegrationAccountDomainWhereUniqueInput[]
+    disconnect?: IntegrationAccountDomainWhereUniqueInput | IntegrationAccountDomainWhereUniqueInput[]
+    delete?: IntegrationAccountDomainWhereUniqueInput | IntegrationAccountDomainWhereUniqueInput[]
+    connect?: IntegrationAccountDomainWhereUniqueInput | IntegrationAccountDomainWhereUniqueInput[]
+    update?: IntegrationAccountDomainUpdateWithWhereUniqueWithoutIntegration_accountInput | IntegrationAccountDomainUpdateWithWhereUniqueWithoutIntegration_accountInput[]
+    updateMany?: IntegrationAccountDomainUpdateManyWithWhereWithoutIntegration_accountInput | IntegrationAccountDomainUpdateManyWithWhereWithoutIntegration_accountInput[]
+    deleteMany?: IntegrationAccountDomainScalarWhereInput | IntegrationAccountDomainScalarWhereInput[]
   }
 
   export type IntegrationCreateNestedOneWithoutKeysInput = {
@@ -94920,6 +96604,62 @@ export namespace Prisma {
     upsert?: IntegrationUpsertWithoutKeysInput
     connect?: IntegrationWhereUniqueInput
     update?: XOR<XOR<IntegrationUpdateToOneWithWhereWithoutKeysInput, IntegrationUpdateWithoutKeysInput>, IntegrationUncheckedUpdateWithoutKeysInput>
+  }
+
+  export type IntegrationAccountCreateNestedOneWithoutDomainsInput = {
+    create?: XOR<IntegrationAccountCreateWithoutDomainsInput, IntegrationAccountUncheckedCreateWithoutDomainsInput>
+    connectOrCreate?: IntegrationAccountCreateOrConnectWithoutDomainsInput
+    connect?: IntegrationAccountWhereUniqueInput
+  }
+
+  export type CampaignIntegrationCreateNestedManyWithoutIntegration_account_domainInput = {
+    create?: XOR<CampaignIntegrationCreateWithoutIntegration_account_domainInput, CampaignIntegrationUncheckedCreateWithoutIntegration_account_domainInput> | CampaignIntegrationCreateWithoutIntegration_account_domainInput[] | CampaignIntegrationUncheckedCreateWithoutIntegration_account_domainInput[]
+    connectOrCreate?: CampaignIntegrationCreateOrConnectWithoutIntegration_account_domainInput | CampaignIntegrationCreateOrConnectWithoutIntegration_account_domainInput[]
+    createMany?: CampaignIntegrationCreateManyIntegration_account_domainInputEnvelope
+    connect?: CampaignIntegrationWhereUniqueInput | CampaignIntegrationWhereUniqueInput[]
+  }
+
+  export type CampaignIntegrationUncheckedCreateNestedManyWithoutIntegration_account_domainInput = {
+    create?: XOR<CampaignIntegrationCreateWithoutIntegration_account_domainInput, CampaignIntegrationUncheckedCreateWithoutIntegration_account_domainInput> | CampaignIntegrationCreateWithoutIntegration_account_domainInput[] | CampaignIntegrationUncheckedCreateWithoutIntegration_account_domainInput[]
+    connectOrCreate?: CampaignIntegrationCreateOrConnectWithoutIntegration_account_domainInput | CampaignIntegrationCreateOrConnectWithoutIntegration_account_domainInput[]
+    createMany?: CampaignIntegrationCreateManyIntegration_account_domainInputEnvelope
+    connect?: CampaignIntegrationWhereUniqueInput | CampaignIntegrationWhereUniqueInput[]
+  }
+
+  export type IntegrationAccountUpdateOneRequiredWithoutDomainsNestedInput = {
+    create?: XOR<IntegrationAccountCreateWithoutDomainsInput, IntegrationAccountUncheckedCreateWithoutDomainsInput>
+    connectOrCreate?: IntegrationAccountCreateOrConnectWithoutDomainsInput
+    upsert?: IntegrationAccountUpsertWithoutDomainsInput
+    connect?: IntegrationAccountWhereUniqueInput
+    update?: XOR<XOR<IntegrationAccountUpdateToOneWithWhereWithoutDomainsInput, IntegrationAccountUpdateWithoutDomainsInput>, IntegrationAccountUncheckedUpdateWithoutDomainsInput>
+  }
+
+  export type CampaignIntegrationUpdateManyWithoutIntegration_account_domainNestedInput = {
+    create?: XOR<CampaignIntegrationCreateWithoutIntegration_account_domainInput, CampaignIntegrationUncheckedCreateWithoutIntegration_account_domainInput> | CampaignIntegrationCreateWithoutIntegration_account_domainInput[] | CampaignIntegrationUncheckedCreateWithoutIntegration_account_domainInput[]
+    connectOrCreate?: CampaignIntegrationCreateOrConnectWithoutIntegration_account_domainInput | CampaignIntegrationCreateOrConnectWithoutIntegration_account_domainInput[]
+    upsert?: CampaignIntegrationUpsertWithWhereUniqueWithoutIntegration_account_domainInput | CampaignIntegrationUpsertWithWhereUniqueWithoutIntegration_account_domainInput[]
+    createMany?: CampaignIntegrationCreateManyIntegration_account_domainInputEnvelope
+    set?: CampaignIntegrationWhereUniqueInput | CampaignIntegrationWhereUniqueInput[]
+    disconnect?: CampaignIntegrationWhereUniqueInput | CampaignIntegrationWhereUniqueInput[]
+    delete?: CampaignIntegrationWhereUniqueInput | CampaignIntegrationWhereUniqueInput[]
+    connect?: CampaignIntegrationWhereUniqueInput | CampaignIntegrationWhereUniqueInput[]
+    update?: CampaignIntegrationUpdateWithWhereUniqueWithoutIntegration_account_domainInput | CampaignIntegrationUpdateWithWhereUniqueWithoutIntegration_account_domainInput[]
+    updateMany?: CampaignIntegrationUpdateManyWithWhereWithoutIntegration_account_domainInput | CampaignIntegrationUpdateManyWithWhereWithoutIntegration_account_domainInput[]
+    deleteMany?: CampaignIntegrationScalarWhereInput | CampaignIntegrationScalarWhereInput[]
+  }
+
+  export type CampaignIntegrationUncheckedUpdateManyWithoutIntegration_account_domainNestedInput = {
+    create?: XOR<CampaignIntegrationCreateWithoutIntegration_account_domainInput, CampaignIntegrationUncheckedCreateWithoutIntegration_account_domainInput> | CampaignIntegrationCreateWithoutIntegration_account_domainInput[] | CampaignIntegrationUncheckedCreateWithoutIntegration_account_domainInput[]
+    connectOrCreate?: CampaignIntegrationCreateOrConnectWithoutIntegration_account_domainInput | CampaignIntegrationCreateOrConnectWithoutIntegration_account_domainInput[]
+    upsert?: CampaignIntegrationUpsertWithWhereUniqueWithoutIntegration_account_domainInput | CampaignIntegrationUpsertWithWhereUniqueWithoutIntegration_account_domainInput[]
+    createMany?: CampaignIntegrationCreateManyIntegration_account_domainInputEnvelope
+    set?: CampaignIntegrationWhereUniqueInput | CampaignIntegrationWhereUniqueInput[]
+    disconnect?: CampaignIntegrationWhereUniqueInput | CampaignIntegrationWhereUniqueInput[]
+    delete?: CampaignIntegrationWhereUniqueInput | CampaignIntegrationWhereUniqueInput[]
+    connect?: CampaignIntegrationWhereUniqueInput | CampaignIntegrationWhereUniqueInput[]
+    update?: CampaignIntegrationUpdateWithWhereUniqueWithoutIntegration_account_domainInput | CampaignIntegrationUpdateWithWhereUniqueWithoutIntegration_account_domainInput[]
+    updateMany?: CampaignIntegrationUpdateManyWithWhereWithoutIntegration_account_domainInput | CampaignIntegrationUpdateManyWithWhereWithoutIntegration_account_domainInput[]
+    deleteMany?: CampaignIntegrationScalarWhereInput | CampaignIntegrationScalarWhereInput[]
   }
 
   export type OrganisationCreateNestedOneWithoutRemindersInput = {
@@ -95608,6 +97348,12 @@ export namespace Prisma {
     connect?: IntegrationAccountWhereUniqueInput
   }
 
+  export type IntegrationAccountDomainCreateNestedOneWithoutCampaign_integrationsInput = {
+    create?: XOR<IntegrationAccountDomainCreateWithoutCampaign_integrationsInput, IntegrationAccountDomainUncheckedCreateWithoutCampaign_integrationsInput>
+    connectOrCreate?: IntegrationAccountDomainCreateOrConnectWithoutCampaign_integrationsInput
+    connect?: IntegrationAccountDomainWhereUniqueInput
+  }
+
   export type SendingPolicyCreateNestedOneWithoutCampaign_integrationsInput = {
     create?: XOR<SendingPolicyCreateWithoutCampaign_integrationsInput, SendingPolicyUncheckedCreateWithoutCampaign_integrationsInput>
     connectOrCreate?: SendingPolicyCreateOrConnectWithoutCampaign_integrationsInput
@@ -95658,6 +97404,16 @@ export namespace Prisma {
     upsert?: IntegrationAccountUpsertWithoutCampaign_integrationsInput
     connect?: IntegrationAccountWhereUniqueInput
     update?: XOR<XOR<IntegrationAccountUpdateToOneWithWhereWithoutCampaign_integrationsInput, IntegrationAccountUpdateWithoutCampaign_integrationsInput>, IntegrationAccountUncheckedUpdateWithoutCampaign_integrationsInput>
+  }
+
+  export type IntegrationAccountDomainUpdateOneWithoutCampaign_integrationsNestedInput = {
+    create?: XOR<IntegrationAccountDomainCreateWithoutCampaign_integrationsInput, IntegrationAccountDomainUncheckedCreateWithoutCampaign_integrationsInput>
+    connectOrCreate?: IntegrationAccountDomainCreateOrConnectWithoutCampaign_integrationsInput
+    upsert?: IntegrationAccountDomainUpsertWithoutCampaign_integrationsInput
+    disconnect?: IntegrationAccountDomainWhereInput | boolean
+    delete?: IntegrationAccountDomainWhereInput | boolean
+    connect?: IntegrationAccountDomainWhereUniqueInput
+    update?: XOR<XOR<IntegrationAccountDomainUpdateToOneWithWhereWithoutCampaign_integrationsInput, IntegrationAccountDomainUpdateWithoutCampaign_integrationsInput>, IntegrationAccountDomainUncheckedUpdateWithoutCampaign_integrationsInput>
   }
 
   export type SendingPolicyUpdateOneRequiredWithoutCampaign_integrationsNestedInput = {
@@ -97039,6 +98795,7 @@ export namespace Prisma {
     failed_at?: Date | string | null
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
+    email_domain_uuid?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
@@ -97075,6 +98832,7 @@ export namespace Prisma {
     failed_at?: Date | string | null
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
+    email_domain_uuid?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: string | null
@@ -97417,6 +99175,7 @@ export namespace Prisma {
     failed_at?: DateTimeNullableFilter<"OutreachMessage"> | Date | string | null
     email_provider?: EnumExternalIntegrationProviderNullableFilter<"OutreachMessage"> | $Enums.ExternalIntegrationProvider | null
     email_account?: StringNullableFilter<"OutreachMessage"> | string | null
+    email_domain_uuid?: StringNullableFilter<"OutreachMessage"> | string | null
     sms_provider?: StringNullableFilter<"OutreachMessage"> | string | null
     metadata?: JsonNullableFilter<"OutreachMessage">
     sequence_enrollment_uuid?: StringNullableFilter<"OutreachMessage"> | string | null
@@ -97823,6 +99582,7 @@ export namespace Prisma {
     failed_at?: Date | string | null
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
+    email_domain_uuid?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
@@ -97859,6 +99619,7 @@ export namespace Prisma {
     failed_at?: Date | string | null
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
+    email_domain_uuid?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: string | null
@@ -102248,6 +104009,7 @@ export namespace Prisma {
     failed_at?: Date | string | null
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
+    email_domain_uuid?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
@@ -102284,6 +104046,7 @@ export namespace Prisma {
     failed_at?: Date | string | null
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
+    email_domain_uuid?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: string | null
@@ -104897,6 +106660,7 @@ export namespace Prisma {
     failed_at?: Date | string | null
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
+    email_domain_uuid?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
@@ -104934,6 +106698,7 @@ export namespace Prisma {
     failed_at?: Date | string | null
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
+    email_domain_uuid?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: string | null
@@ -105254,6 +107019,7 @@ export namespace Prisma {
     failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -105291,6 +107057,7 @@ export namespace Prisma {
     failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -105825,6 +107592,7 @@ export namespace Prisma {
     updated_at?: Date | string
     campaign: MarketingCampaignCreateNestedOneWithoutCampaign_integrationsInput
     integration_account: IntegrationAccountCreateNestedOneWithoutCampaign_integrationsInput
+    integration_account_domain?: IntegrationAccountDomainCreateNestedOneWithoutCampaign_integrationsInput
     sending_policy: SendingPolicyCreateNestedOneWithoutCampaign_integrationsInput
     state?: CampaignIntegrationStateCreateNestedOneWithoutCampaign_integrationInput
   }
@@ -105834,6 +107602,7 @@ export namespace Prisma {
     uuid?: string
     campaign_uuid: string
     integration_account_uuid: string
+    integration_account_domain_uuid?: string | null
     sending_policy_uuid: string
     status?: $Enums.CampaignIntegrationStatus
     created_at?: Date | string
@@ -106322,6 +108091,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     campaign?: MarketingCampaignUpdateOneRequiredWithoutCampaign_integrationsNestedInput
     integration_account?: IntegrationAccountUpdateOneRequiredWithoutCampaign_integrationsNestedInput
+    integration_account_domain?: IntegrationAccountDomainUpdateOneWithoutCampaign_integrationsNestedInput
     sending_policy?: SendingPolicyUpdateOneRequiredWithoutCampaign_integrationsNestedInput
     state?: CampaignIntegrationStateUpdateOneWithoutCampaign_integrationNestedInput
   }
@@ -106331,6 +108101,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     campaign_uuid?: StringFieldUpdateOperationsInput | string
     integration_account_uuid?: StringFieldUpdateOperationsInput | string
+    integration_account_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     sending_policy_uuid?: StringFieldUpdateOperationsInput | string
     status?: EnumCampaignIntegrationStatusFieldUpdateOperationsInput | $Enums.CampaignIntegrationStatus
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -106843,6 +108614,7 @@ export namespace Prisma {
     failed_at?: Date | string | null
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
+    email_domain_uuid?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
@@ -106880,6 +108652,7 @@ export namespace Prisma {
     failed_at?: Date | string | null
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
+    email_domain_uuid?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: string | null
@@ -107224,6 +108997,7 @@ export namespace Prisma {
     failed_at?: Date | string | null
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
+    email_domain_uuid?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
@@ -107261,6 +109035,7 @@ export namespace Prisma {
     failed_at?: Date | string | null
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
+    email_domain_uuid?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_step_uuid?: string | null
@@ -108784,6 +110559,7 @@ export namespace Prisma {
     failed_at?: Date | string | null
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
+    email_domain_uuid?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
@@ -108820,6 +110596,7 @@ export namespace Prisma {
     failed_at?: Date | string | null
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
+    email_domain_uuid?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: string | null
@@ -108924,6 +110701,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     integration_account: IntegrationAccountCreateNestedOneWithoutCampaign_integrationsInput
+    integration_account_domain?: IntegrationAccountDomainCreateNestedOneWithoutCampaign_integrationsInput
     sending_policy: SendingPolicyCreateNestedOneWithoutCampaign_integrationsInput
     state?: CampaignIntegrationStateCreateNestedOneWithoutCampaign_integrationInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutCampaign_integrationInput
@@ -108933,6 +110711,7 @@ export namespace Prisma {
     id?: number
     uuid?: string
     integration_account_uuid: string
+    integration_account_domain_uuid?: string | null
     sending_policy_uuid: string
     status?: $Enums.CampaignIntegrationStatus
     created_at?: Date | string
@@ -109225,6 +111004,7 @@ export namespace Prisma {
     uuid?: StringFilter<"CampaignIntegration"> | string
     campaign_uuid?: StringFilter<"CampaignIntegration"> | string
     integration_account_uuid?: StringFilter<"CampaignIntegration"> | string
+    integration_account_domain_uuid?: StringNullableFilter<"CampaignIntegration"> | string | null
     sending_policy_uuid?: StringFilter<"CampaignIntegration"> | string
     status?: EnumCampaignIntegrationStatusFilter<"CampaignIntegration"> | $Enums.CampaignIntegrationStatus
     created_at?: DateTimeFilter<"CampaignIntegration"> | Date | string
@@ -109897,6 +111677,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     campaign_integrations?: CampaignIntegrationCreateNestedManyWithoutIntegration_accountInput
+    domains?: IntegrationAccountDomainCreateNestedManyWithoutIntegration_accountInput
   }
 
   export type IntegrationAccountUncheckedCreateWithoutIntegrationInput = {
@@ -109909,6 +111690,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     campaign_integrations?: CampaignIntegrationUncheckedCreateNestedManyWithoutIntegration_accountInput
+    domains?: IntegrationAccountDomainUncheckedCreateNestedManyWithoutIntegration_accountInput
   }
 
   export type IntegrationAccountCreateOrConnectWithoutIntegrationInput = {
@@ -110103,6 +111885,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     campaign: MarketingCampaignCreateNestedOneWithoutCampaign_integrationsInput
+    integration_account_domain?: IntegrationAccountDomainCreateNestedOneWithoutCampaign_integrationsInput
     sending_policy: SendingPolicyCreateNestedOneWithoutCampaign_integrationsInput
     state?: CampaignIntegrationStateCreateNestedOneWithoutCampaign_integrationInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutCampaign_integrationInput
@@ -110112,6 +111895,7 @@ export namespace Prisma {
     id?: number
     uuid?: string
     campaign_uuid: string
+    integration_account_domain_uuid?: string | null
     sending_policy_uuid: string
     status?: $Enums.CampaignIntegrationStatus
     created_at?: Date | string
@@ -110127,6 +111911,37 @@ export namespace Prisma {
 
   export type CampaignIntegrationCreateManyIntegration_accountInputEnvelope = {
     data: CampaignIntegrationCreateManyIntegration_accountInput | CampaignIntegrationCreateManyIntegration_accountInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type IntegrationAccountDomainCreateWithoutIntegration_accountInput = {
+    uuid?: string
+    from_email: string
+    from_name?: string | null
+    is_default?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    campaign_integrations?: CampaignIntegrationCreateNestedManyWithoutIntegration_account_domainInput
+  }
+
+  export type IntegrationAccountDomainUncheckedCreateWithoutIntegration_accountInput = {
+    id?: number
+    uuid?: string
+    from_email: string
+    from_name?: string | null
+    is_default?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    campaign_integrations?: CampaignIntegrationUncheckedCreateNestedManyWithoutIntegration_account_domainInput
+  }
+
+  export type IntegrationAccountDomainCreateOrConnectWithoutIntegration_accountInput = {
+    where: IntegrationAccountDomainWhereUniqueInput
+    create: XOR<IntegrationAccountDomainCreateWithoutIntegration_accountInput, IntegrationAccountDomainUncheckedCreateWithoutIntegration_accountInput>
+  }
+
+  export type IntegrationAccountDomainCreateManyIntegration_accountInputEnvelope = {
+    data: IntegrationAccountDomainCreateManyIntegration_accountInput | IntegrationAccountDomainCreateManyIntegration_accountInput[]
     skipDuplicates?: boolean
   }
 
@@ -110178,6 +111993,36 @@ export namespace Prisma {
   export type CampaignIntegrationUpdateManyWithWhereWithoutIntegration_accountInput = {
     where: CampaignIntegrationScalarWhereInput
     data: XOR<CampaignIntegrationUpdateManyMutationInput, CampaignIntegrationUncheckedUpdateManyWithoutIntegration_accountInput>
+  }
+
+  export type IntegrationAccountDomainUpsertWithWhereUniqueWithoutIntegration_accountInput = {
+    where: IntegrationAccountDomainWhereUniqueInput
+    update: XOR<IntegrationAccountDomainUpdateWithoutIntegration_accountInput, IntegrationAccountDomainUncheckedUpdateWithoutIntegration_accountInput>
+    create: XOR<IntegrationAccountDomainCreateWithoutIntegration_accountInput, IntegrationAccountDomainUncheckedCreateWithoutIntegration_accountInput>
+  }
+
+  export type IntegrationAccountDomainUpdateWithWhereUniqueWithoutIntegration_accountInput = {
+    where: IntegrationAccountDomainWhereUniqueInput
+    data: XOR<IntegrationAccountDomainUpdateWithoutIntegration_accountInput, IntegrationAccountDomainUncheckedUpdateWithoutIntegration_accountInput>
+  }
+
+  export type IntegrationAccountDomainUpdateManyWithWhereWithoutIntegration_accountInput = {
+    where: IntegrationAccountDomainScalarWhereInput
+    data: XOR<IntegrationAccountDomainUpdateManyMutationInput, IntegrationAccountDomainUncheckedUpdateManyWithoutIntegration_accountInput>
+  }
+
+  export type IntegrationAccountDomainScalarWhereInput = {
+    AND?: IntegrationAccountDomainScalarWhereInput | IntegrationAccountDomainScalarWhereInput[]
+    OR?: IntegrationAccountDomainScalarWhereInput[]
+    NOT?: IntegrationAccountDomainScalarWhereInput | IntegrationAccountDomainScalarWhereInput[]
+    id?: IntFilter<"IntegrationAccountDomain"> | number
+    uuid?: StringFilter<"IntegrationAccountDomain"> | string
+    integration_account_uuid?: StringFilter<"IntegrationAccountDomain"> | string
+    from_email?: StringFilter<"IntegrationAccountDomain"> | string
+    from_name?: StringNullableFilter<"IntegrationAccountDomain"> | string | null
+    is_default?: BoolFilter<"IntegrationAccountDomain"> | boolean
+    created_at?: DateTimeFilter<"IntegrationAccountDomain"> | Date | string
+    updated_at?: DateTimeFilter<"IntegrationAccountDomain"> | Date | string
   }
 
   export type IntegrationCreateWithoutKeysInput = {
@@ -110240,6 +112085,123 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     accounts?: IntegrationAccountUncheckedUpdateManyWithoutIntegrationNestedInput
+  }
+
+  export type IntegrationAccountCreateWithoutDomainsInput = {
+    uuid?: string
+    account: string
+    title: string
+    max_messages_per_period?: number | null
+    max_messages_period_unit?: $Enums.SendingPeriodUnit | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    integration: IntegrationCreateNestedOneWithoutAccountsInput
+    campaign_integrations?: CampaignIntegrationCreateNestedManyWithoutIntegration_accountInput
+  }
+
+  export type IntegrationAccountUncheckedCreateWithoutDomainsInput = {
+    id?: number
+    uuid?: string
+    integration_uuid: string
+    account: string
+    title: string
+    max_messages_per_period?: number | null
+    max_messages_period_unit?: $Enums.SendingPeriodUnit | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    campaign_integrations?: CampaignIntegrationUncheckedCreateNestedManyWithoutIntegration_accountInput
+  }
+
+  export type IntegrationAccountCreateOrConnectWithoutDomainsInput = {
+    where: IntegrationAccountWhereUniqueInput
+    create: XOR<IntegrationAccountCreateWithoutDomainsInput, IntegrationAccountUncheckedCreateWithoutDomainsInput>
+  }
+
+  export type CampaignIntegrationCreateWithoutIntegration_account_domainInput = {
+    uuid?: string
+    status?: $Enums.CampaignIntegrationStatus
+    created_at?: Date | string
+    updated_at?: Date | string
+    campaign: MarketingCampaignCreateNestedOneWithoutCampaign_integrationsInput
+    integration_account: IntegrationAccountCreateNestedOneWithoutCampaign_integrationsInput
+    sending_policy: SendingPolicyCreateNestedOneWithoutCampaign_integrationsInput
+    state?: CampaignIntegrationStateCreateNestedOneWithoutCampaign_integrationInput
+    outreach_messages?: OutreachMessageCreateNestedManyWithoutCampaign_integrationInput
+  }
+
+  export type CampaignIntegrationUncheckedCreateWithoutIntegration_account_domainInput = {
+    id?: number
+    uuid?: string
+    campaign_uuid: string
+    integration_account_uuid: string
+    sending_policy_uuid: string
+    status?: $Enums.CampaignIntegrationStatus
+    created_at?: Date | string
+    updated_at?: Date | string
+    state?: CampaignIntegrationStateUncheckedCreateNestedOneWithoutCampaign_integrationInput
+    outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutCampaign_integrationInput
+  }
+
+  export type CampaignIntegrationCreateOrConnectWithoutIntegration_account_domainInput = {
+    where: CampaignIntegrationWhereUniqueInput
+    create: XOR<CampaignIntegrationCreateWithoutIntegration_account_domainInput, CampaignIntegrationUncheckedCreateWithoutIntegration_account_domainInput>
+  }
+
+  export type CampaignIntegrationCreateManyIntegration_account_domainInputEnvelope = {
+    data: CampaignIntegrationCreateManyIntegration_account_domainInput | CampaignIntegrationCreateManyIntegration_account_domainInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type IntegrationAccountUpsertWithoutDomainsInput = {
+    update: XOR<IntegrationAccountUpdateWithoutDomainsInput, IntegrationAccountUncheckedUpdateWithoutDomainsInput>
+    create: XOR<IntegrationAccountCreateWithoutDomainsInput, IntegrationAccountUncheckedCreateWithoutDomainsInput>
+    where?: IntegrationAccountWhereInput
+  }
+
+  export type IntegrationAccountUpdateToOneWithWhereWithoutDomainsInput = {
+    where?: IntegrationAccountWhereInput
+    data: XOR<IntegrationAccountUpdateWithoutDomainsInput, IntegrationAccountUncheckedUpdateWithoutDomainsInput>
+  }
+
+  export type IntegrationAccountUpdateWithoutDomainsInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    account?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    max_messages_per_period?: NullableIntFieldUpdateOperationsInput | number | null
+    max_messages_period_unit?: NullableEnumSendingPeriodUnitFieldUpdateOperationsInput | $Enums.SendingPeriodUnit | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    integration?: IntegrationUpdateOneRequiredWithoutAccountsNestedInput
+    campaign_integrations?: CampaignIntegrationUpdateManyWithoutIntegration_accountNestedInput
+  }
+
+  export type IntegrationAccountUncheckedUpdateWithoutDomainsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    integration_uuid?: StringFieldUpdateOperationsInput | string
+    account?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    max_messages_per_period?: NullableIntFieldUpdateOperationsInput | number | null
+    max_messages_period_unit?: NullableEnumSendingPeriodUnitFieldUpdateOperationsInput | $Enums.SendingPeriodUnit | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    campaign_integrations?: CampaignIntegrationUncheckedUpdateManyWithoutIntegration_accountNestedInput
+  }
+
+  export type CampaignIntegrationUpsertWithWhereUniqueWithoutIntegration_account_domainInput = {
+    where: CampaignIntegrationWhereUniqueInput
+    update: XOR<CampaignIntegrationUpdateWithoutIntegration_account_domainInput, CampaignIntegrationUncheckedUpdateWithoutIntegration_account_domainInput>
+    create: XOR<CampaignIntegrationCreateWithoutIntegration_account_domainInput, CampaignIntegrationUncheckedCreateWithoutIntegration_account_domainInput>
+  }
+
+  export type CampaignIntegrationUpdateWithWhereUniqueWithoutIntegration_account_domainInput = {
+    where: CampaignIntegrationWhereUniqueInput
+    data: XOR<CampaignIntegrationUpdateWithoutIntegration_account_domainInput, CampaignIntegrationUncheckedUpdateWithoutIntegration_account_domainInput>
+  }
+
+  export type CampaignIntegrationUpdateManyWithWhereWithoutIntegration_account_domainInput = {
+    where: CampaignIntegrationScalarWhereInput
+    data: XOR<CampaignIntegrationUpdateManyMutationInput, CampaignIntegrationUncheckedUpdateManyWithoutIntegration_account_domainInput>
   }
 
   export type OrganisationCreateWithoutRemindersInput = {
@@ -112853,6 +114815,7 @@ export namespace Prisma {
     updated_at?: Date | string
     campaign: MarketingCampaignCreateNestedOneWithoutCampaign_integrationsInput
     integration_account: IntegrationAccountCreateNestedOneWithoutCampaign_integrationsInput
+    integration_account_domain?: IntegrationAccountDomainCreateNestedOneWithoutCampaign_integrationsInput
     state?: CampaignIntegrationStateCreateNestedOneWithoutCampaign_integrationInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutCampaign_integrationInput
   }
@@ -112862,6 +114825,7 @@ export namespace Prisma {
     uuid?: string
     campaign_uuid: string
     integration_account_uuid: string
+    integration_account_domain_uuid?: string | null
     status?: $Enums.CampaignIntegrationStatus
     created_at?: Date | string
     updated_at?: Date | string
@@ -113272,6 +115236,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     integration: IntegrationCreateNestedOneWithoutAccountsInput
+    domains?: IntegrationAccountDomainCreateNestedManyWithoutIntegration_accountInput
   }
 
   export type IntegrationAccountUncheckedCreateWithoutCampaign_integrationsInput = {
@@ -113284,11 +115249,38 @@ export namespace Prisma {
     max_messages_period_unit?: $Enums.SendingPeriodUnit | null
     created_at?: Date | string
     updated_at?: Date | string
+    domains?: IntegrationAccountDomainUncheckedCreateNestedManyWithoutIntegration_accountInput
   }
 
   export type IntegrationAccountCreateOrConnectWithoutCampaign_integrationsInput = {
     where: IntegrationAccountWhereUniqueInput
     create: XOR<IntegrationAccountCreateWithoutCampaign_integrationsInput, IntegrationAccountUncheckedCreateWithoutCampaign_integrationsInput>
+  }
+
+  export type IntegrationAccountDomainCreateWithoutCampaign_integrationsInput = {
+    uuid?: string
+    from_email: string
+    from_name?: string | null
+    is_default?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    integration_account: IntegrationAccountCreateNestedOneWithoutDomainsInput
+  }
+
+  export type IntegrationAccountDomainUncheckedCreateWithoutCampaign_integrationsInput = {
+    id?: number
+    uuid?: string
+    integration_account_uuid: string
+    from_email: string
+    from_name?: string | null
+    is_default?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type IntegrationAccountDomainCreateOrConnectWithoutCampaign_integrationsInput = {
+    where: IntegrationAccountDomainWhereUniqueInput
+    create: XOR<IntegrationAccountDomainCreateWithoutCampaign_integrationsInput, IntegrationAccountDomainUncheckedCreateWithoutCampaign_integrationsInput>
   }
 
   export type SendingPolicyCreateWithoutCampaign_integrationsInput = {
@@ -113376,6 +115368,7 @@ export namespace Prisma {
     failed_at?: Date | string | null
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
+    email_domain_uuid?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
@@ -113413,6 +115406,7 @@ export namespace Prisma {
     failed_at?: Date | string | null
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
+    email_domain_uuid?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: string | null
@@ -113554,6 +115548,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     integration?: IntegrationUpdateOneRequiredWithoutAccountsNestedInput
+    domains?: IntegrationAccountDomainUpdateManyWithoutIntegration_accountNestedInput
   }
 
   export type IntegrationAccountUncheckedUpdateWithoutCampaign_integrationsInput = {
@@ -113564,6 +115559,39 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     max_messages_per_period?: NullableIntFieldUpdateOperationsInput | number | null
     max_messages_period_unit?: NullableEnumSendingPeriodUnitFieldUpdateOperationsInput | $Enums.SendingPeriodUnit | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    domains?: IntegrationAccountDomainUncheckedUpdateManyWithoutIntegration_accountNestedInput
+  }
+
+  export type IntegrationAccountDomainUpsertWithoutCampaign_integrationsInput = {
+    update: XOR<IntegrationAccountDomainUpdateWithoutCampaign_integrationsInput, IntegrationAccountDomainUncheckedUpdateWithoutCampaign_integrationsInput>
+    create: XOR<IntegrationAccountDomainCreateWithoutCampaign_integrationsInput, IntegrationAccountDomainUncheckedCreateWithoutCampaign_integrationsInput>
+    where?: IntegrationAccountDomainWhereInput
+  }
+
+  export type IntegrationAccountDomainUpdateToOneWithWhereWithoutCampaign_integrationsInput = {
+    where?: IntegrationAccountDomainWhereInput
+    data: XOR<IntegrationAccountDomainUpdateWithoutCampaign_integrationsInput, IntegrationAccountDomainUncheckedUpdateWithoutCampaign_integrationsInput>
+  }
+
+  export type IntegrationAccountDomainUpdateWithoutCampaign_integrationsInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    from_email?: StringFieldUpdateOperationsInput | string
+    from_name?: NullableStringFieldUpdateOperationsInput | string | null
+    is_default?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    integration_account?: IntegrationAccountUpdateOneRequiredWithoutDomainsNestedInput
+  }
+
+  export type IntegrationAccountDomainUncheckedUpdateWithoutCampaign_integrationsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    integration_account_uuid?: StringFieldUpdateOperationsInput | string
+    from_email?: StringFieldUpdateOperationsInput | string
+    from_name?: NullableStringFieldUpdateOperationsInput | string | null
+    is_default?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -113669,6 +115697,7 @@ export namespace Prisma {
     updated_at?: Date | string
     campaign: MarketingCampaignCreateNestedOneWithoutCampaign_integrationsInput
     integration_account: IntegrationAccountCreateNestedOneWithoutCampaign_integrationsInput
+    integration_account_domain?: IntegrationAccountDomainCreateNestedOneWithoutCampaign_integrationsInput
     sending_policy: SendingPolicyCreateNestedOneWithoutCampaign_integrationsInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutCampaign_integrationInput
   }
@@ -113678,6 +115707,7 @@ export namespace Prisma {
     uuid?: string
     campaign_uuid: string
     integration_account_uuid: string
+    integration_account_domain_uuid?: string | null
     sending_policy_uuid: string
     status?: $Enums.CampaignIntegrationStatus
     created_at?: Date | string
@@ -113708,6 +115738,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     campaign?: MarketingCampaignUpdateOneRequiredWithoutCampaign_integrationsNestedInput
     integration_account?: IntegrationAccountUpdateOneRequiredWithoutCampaign_integrationsNestedInput
+    integration_account_domain?: IntegrationAccountDomainUpdateOneWithoutCampaign_integrationsNestedInput
     sending_policy?: SendingPolicyUpdateOneRequiredWithoutCampaign_integrationsNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutCampaign_integrationNestedInput
   }
@@ -113717,6 +115748,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     campaign_uuid?: StringFieldUpdateOperationsInput | string
     integration_account_uuid?: StringFieldUpdateOperationsInput | string
+    integration_account_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     sending_policy_uuid?: StringFieldUpdateOperationsInput | string
     status?: EnumCampaignIntegrationStatusFieldUpdateOperationsInput | $Enums.CampaignIntegrationStatus
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -114621,6 +116653,7 @@ export namespace Prisma {
     failed_at?: Date | string | null
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
+    email_domain_uuid?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: string | null
@@ -114814,6 +116847,7 @@ export namespace Prisma {
     failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -114850,6 +116884,7 @@ export namespace Prisma {
     failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -114883,6 +116918,7 @@ export namespace Prisma {
     failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -115190,6 +117226,7 @@ export namespace Prisma {
     failed_at?: Date | string | null
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
+    email_domain_uuid?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: string | null
@@ -115809,6 +117846,7 @@ export namespace Prisma {
     failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -115845,6 +117883,7 @@ export namespace Prisma {
     failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -115878,6 +117917,7 @@ export namespace Prisma {
     failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -117639,6 +119679,7 @@ export namespace Prisma {
     failed_at?: Date | string | null
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
+    email_domain_uuid?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: string | null
@@ -117844,6 +119885,7 @@ export namespace Prisma {
     failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -117880,6 +119922,7 @@ export namespace Prisma {
     failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -117913,6 +119956,7 @@ export namespace Prisma {
     failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -118631,6 +120675,7 @@ export namespace Prisma {
     failed_at?: Date | string | null
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
+    email_domain_uuid?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: string | null
@@ -118658,6 +120703,7 @@ export namespace Prisma {
     failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -118695,6 +120741,7 @@ export namespace Prisma {
     failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -118728,6 +120775,7 @@ export namespace Prisma {
     failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -118760,6 +120808,7 @@ export namespace Prisma {
     failed_at?: Date | string | null
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
+    email_domain_uuid?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_step_uuid?: string | null
@@ -118787,6 +120836,7 @@ export namespace Prisma {
     failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -118824,6 +120874,7 @@ export namespace Prisma {
     failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_step_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -118857,6 +120908,7 @@ export namespace Prisma {
     failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_step_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -119143,6 +121195,7 @@ export namespace Prisma {
     failed_at?: Date | string | null
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
+    email_domain_uuid?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: string | null
@@ -119185,6 +121238,7 @@ export namespace Prisma {
     id?: number
     uuid?: string
     integration_account_uuid: string
+    integration_account_domain_uuid?: string | null
     sending_policy_uuid: string
     status?: $Enums.CampaignIntegrationStatus
     created_at?: Date | string
@@ -119248,6 +121302,7 @@ export namespace Prisma {
     failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -119284,6 +121339,7 @@ export namespace Prisma {
     failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -119317,6 +121373,7 @@ export namespace Prisma {
     failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -119419,6 +121476,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     integration_account?: IntegrationAccountUpdateOneRequiredWithoutCampaign_integrationsNestedInput
+    integration_account_domain?: IntegrationAccountDomainUpdateOneWithoutCampaign_integrationsNestedInput
     sending_policy?: SendingPolicyUpdateOneRequiredWithoutCampaign_integrationsNestedInput
     state?: CampaignIntegrationStateUpdateOneWithoutCampaign_integrationNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutCampaign_integrationNestedInput
@@ -119428,6 +121486,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     uuid?: StringFieldUpdateOperationsInput | string
     integration_account_uuid?: StringFieldUpdateOperationsInput | string
+    integration_account_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     sending_policy_uuid?: StringFieldUpdateOperationsInput | string
     status?: EnumCampaignIntegrationStatusFieldUpdateOperationsInput | $Enums.CampaignIntegrationStatus
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -119440,6 +121499,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     uuid?: StringFieldUpdateOperationsInput | string
     integration_account_uuid?: StringFieldUpdateOperationsInput | string
+    integration_account_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     sending_policy_uuid?: StringFieldUpdateOperationsInput | string
     status?: EnumCampaignIntegrationStatusFieldUpdateOperationsInput | $Enums.CampaignIntegrationStatus
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -119509,6 +121569,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     campaign_integrations?: CampaignIntegrationUpdateManyWithoutIntegration_accountNestedInput
+    domains?: IntegrationAccountDomainUpdateManyWithoutIntegration_accountNestedInput
   }
 
   export type IntegrationAccountUncheckedUpdateWithoutIntegrationInput = {
@@ -119521,6 +121582,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     campaign_integrations?: CampaignIntegrationUncheckedUpdateManyWithoutIntegration_accountNestedInput
+    domains?: IntegrationAccountDomainUncheckedUpdateManyWithoutIntegration_accountNestedInput
   }
 
   export type IntegrationAccountUncheckedUpdateManyWithoutIntegrationInput = {
@@ -119538,8 +121600,19 @@ export namespace Prisma {
     id?: number
     uuid?: string
     campaign_uuid: string
+    integration_account_domain_uuid?: string | null
     sending_policy_uuid: string
     status?: $Enums.CampaignIntegrationStatus
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type IntegrationAccountDomainCreateManyIntegration_accountInput = {
+    id?: number
+    uuid?: string
+    from_email: string
+    from_name?: string | null
+    is_default?: boolean
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -119550,6 +121623,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     campaign?: MarketingCampaignUpdateOneRequiredWithoutCampaign_integrationsNestedInput
+    integration_account_domain?: IntegrationAccountDomainUpdateOneWithoutCampaign_integrationsNestedInput
     sending_policy?: SendingPolicyUpdateOneRequiredWithoutCampaign_integrationsNestedInput
     state?: CampaignIntegrationStateUpdateOneWithoutCampaign_integrationNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutCampaign_integrationNestedInput
@@ -119559,6 +121633,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     uuid?: StringFieldUpdateOperationsInput | string
     campaign_uuid?: StringFieldUpdateOperationsInput | string
+    integration_account_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     sending_policy_uuid?: StringFieldUpdateOperationsInput | string
     status?: EnumCampaignIntegrationStatusFieldUpdateOperationsInput | $Enums.CampaignIntegrationStatus
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -119571,6 +121646,85 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     uuid?: StringFieldUpdateOperationsInput | string
     campaign_uuid?: StringFieldUpdateOperationsInput | string
+    integration_account_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    sending_policy_uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumCampaignIntegrationStatusFieldUpdateOperationsInput | $Enums.CampaignIntegrationStatus
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type IntegrationAccountDomainUpdateWithoutIntegration_accountInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    from_email?: StringFieldUpdateOperationsInput | string
+    from_name?: NullableStringFieldUpdateOperationsInput | string | null
+    is_default?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    campaign_integrations?: CampaignIntegrationUpdateManyWithoutIntegration_account_domainNestedInput
+  }
+
+  export type IntegrationAccountDomainUncheckedUpdateWithoutIntegration_accountInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    from_email?: StringFieldUpdateOperationsInput | string
+    from_name?: NullableStringFieldUpdateOperationsInput | string | null
+    is_default?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    campaign_integrations?: CampaignIntegrationUncheckedUpdateManyWithoutIntegration_account_domainNestedInput
+  }
+
+  export type IntegrationAccountDomainUncheckedUpdateManyWithoutIntegration_accountInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    from_email?: StringFieldUpdateOperationsInput | string
+    from_name?: NullableStringFieldUpdateOperationsInput | string | null
+    is_default?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CampaignIntegrationCreateManyIntegration_account_domainInput = {
+    id?: number
+    uuid?: string
+    campaign_uuid: string
+    integration_account_uuid: string
+    sending_policy_uuid: string
+    status?: $Enums.CampaignIntegrationStatus
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type CampaignIntegrationUpdateWithoutIntegration_account_domainInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumCampaignIntegrationStatusFieldUpdateOperationsInput | $Enums.CampaignIntegrationStatus
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    campaign?: MarketingCampaignUpdateOneRequiredWithoutCampaign_integrationsNestedInput
+    integration_account?: IntegrationAccountUpdateOneRequiredWithoutCampaign_integrationsNestedInput
+    sending_policy?: SendingPolicyUpdateOneRequiredWithoutCampaign_integrationsNestedInput
+    state?: CampaignIntegrationStateUpdateOneWithoutCampaign_integrationNestedInput
+    outreach_messages?: OutreachMessageUpdateManyWithoutCampaign_integrationNestedInput
+  }
+
+  export type CampaignIntegrationUncheckedUpdateWithoutIntegration_account_domainInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    campaign_uuid?: StringFieldUpdateOperationsInput | string
+    integration_account_uuid?: StringFieldUpdateOperationsInput | string
+    sending_policy_uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumCampaignIntegrationStatusFieldUpdateOperationsInput | $Enums.CampaignIntegrationStatus
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    state?: CampaignIntegrationStateUncheckedUpdateOneWithoutCampaign_integrationNestedInput
+    outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutCampaign_integrationNestedInput
+  }
+
+  export type CampaignIntegrationUncheckedUpdateManyWithoutIntegration_account_domainInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    campaign_uuid?: StringFieldUpdateOperationsInput | string
+    integration_account_uuid?: StringFieldUpdateOperationsInput | string
     sending_policy_uuid?: StringFieldUpdateOperationsInput | string
     status?: EnumCampaignIntegrationStatusFieldUpdateOperationsInput | $Enums.CampaignIntegrationStatus
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -119829,6 +121983,7 @@ export namespace Prisma {
     uuid?: string
     campaign_uuid: string
     integration_account_uuid: string
+    integration_account_domain_uuid?: string | null
     status?: $Enums.CampaignIntegrationStatus
     created_at?: Date | string
     updated_at?: Date | string
@@ -119929,6 +122084,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     campaign?: MarketingCampaignUpdateOneRequiredWithoutCampaign_integrationsNestedInput
     integration_account?: IntegrationAccountUpdateOneRequiredWithoutCampaign_integrationsNestedInput
+    integration_account_domain?: IntegrationAccountDomainUpdateOneWithoutCampaign_integrationsNestedInput
     state?: CampaignIntegrationStateUpdateOneWithoutCampaign_integrationNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutCampaign_integrationNestedInput
   }
@@ -119938,6 +122094,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     campaign_uuid?: StringFieldUpdateOperationsInput | string
     integration_account_uuid?: StringFieldUpdateOperationsInput | string
+    integration_account_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCampaignIntegrationStatusFieldUpdateOperationsInput | $Enums.CampaignIntegrationStatus
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -119950,6 +122107,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     campaign_uuid?: StringFieldUpdateOperationsInput | string
     integration_account_uuid?: StringFieldUpdateOperationsInput | string
+    integration_account_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCampaignIntegrationStatusFieldUpdateOperationsInput | $Enums.CampaignIntegrationStatus
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -119979,6 +122137,7 @@ export namespace Prisma {
     failed_at?: Date | string | null
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
+    email_domain_uuid?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: string | null
@@ -120006,6 +122165,7 @@ export namespace Prisma {
     failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -120043,6 +122203,7 @@ export namespace Prisma {
     failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -120076,6 +122237,7 @@ export namespace Prisma {
     failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null

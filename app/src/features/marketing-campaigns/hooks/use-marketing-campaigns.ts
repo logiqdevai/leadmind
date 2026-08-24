@@ -366,6 +366,7 @@ export function useSendCampaignDraftMessage() {
             sendCampaignDraftMessage(vars.campaignUuid, vars.messageUuid, {
                 email_provider: vars.email_provider,
                 email_account: vars.email_account,
+                email_domain_uuid: vars.email_domain_uuid,
                 sender_profile_uuid: vars.sender_profile_uuid,
             }),
         onSuccess: (_data, vars) => {

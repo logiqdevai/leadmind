@@ -10,6 +10,7 @@ import {
   ExternalIntegrationProvider,
   Integration,
   IntegrationAccount,
+  IntegrationAccountDomain,
   IntegrationKey,
   IntegrationKeyType,
   Prisma,
@@ -40,21 +41,34 @@ import {
   shouldExposeIntegrationKeyDisplayValue,
   suggestNextIntegrationAccount,
 } from './constants/integration-key-types.constants';
+import { AddIntegrationAccountDomainDto } from './dto/add-integration-account-domain.dto';
 import { CreateIntegrationKeyDto } from './dto/create-integration-key.dto';
+import { CreateResendAccountDto } from './dto/create-resend-account.dto';
 import { CreateSmtpAccountDto } from './dto/create-smtp-account.dto';
 import { SetDefaultIntegrationAccountDto } from './dto/set-default-integration-account.dto';
+import { UpdateIntegrationAccountDomainDto } from './dto/update-integration-account-domain.dto';
 import { UpdateIntegrationAccountDto } from './dto/update-integration-account.dto';
 import { UpdateIntegrationKeyDto } from './dto/update-integration-key.dto';
 import {
+  IntegrationAccountDomainResponse,
   IntegrationAccountResponse,
   IntegrationKeyResponse,
   IntegrationKeyTypeOption,
   IntegrationResponse,
 } from './interfaces/integration.interface';
 
+type IntegrationAccountWithDomains = IntegrationAccount & {
+  domains: IntegrationAccountDomain[];
+};
+
 type IntegrationWithRelations = Integration & {
   keys: IntegrationKey[];
-  accounts: IntegrationAccount[];
+  accounts: IntegrationAccountWithDomains[];
+};
+
+const ACCOUNTS_INCLUDE = {
+  orderBy: { account: 'asc' as const },
+  include: { domains: { orderBy: { created_at: 'asc' as const } } },
 };
 
 @Injectable()
@@ -73,9 +87,7 @@ export class IntegrationsService {
         keys: {
           orderBy: [{ account: 'asc' }, { key_type: 'asc' }],
         },
-        accounts: {
-          orderBy: { account: 'asc' },
-        },
+        accounts: ACCOUNTS_INCLUDE,
       },
     });
     const byProvider = new Map(integrations.map((row) => [row.provider, row]));
@@ -275,13 +287,246 @@ export class IntegrationsService {
         keys: {
           orderBy: [{ account: 'asc' }, { key_type: 'asc' }],
         },
-        accounts: {
-          orderBy: { account: 'asc' },
-        },
+        accounts: ACCOUNTS_INCLUDE,
       },
     });
 
     return this.toIntegrationResponse(provider, refreshed ?? undefined);
+  }
+
+  async createResendAccount(
+    organisation_uuid: string,
+    dto: CreateResendAccountDto,
+  ): Promise<IntegrationResponse> {
+    const provider = ExternalIntegrationProvider.RESEND;
+    const account = dto.account.trim();
+    const title = dto.title.trim();
+    const fromEmail = dto.from_email.trim().toLowerCase();
+    const fromName = dto.from_name?.trim();
+
+    const integration = await this.ensureIntegration(
+      organisation_uuid,
+      provider,
+    );
+    const integrationWithKeys = await this.prisma.integration.findUnique({
+      where: { uuid: integration.uuid },
+      include: { keys: true },
+    });
+    const existingKeys = integrationWithKeys?.keys ?? [];
+    const hasAccountKeys = existingKeys.some((key) => key.account === account);
+    if (hasAccountKeys) {
+      const suggestedAccount = suggestNextIntegrationAccount(existingKeys);
+      throw new ConflictException(
+        `Resend account "${account}" already exists. Use a different account label (for example "${suggestedAccount}").`,
+      );
+    }
+
+    const encryptionKey = this.encryptionKey();
+
+    await this.prisma.$transaction(async (tx) => {
+      const integrationAccount = await tx.integrationAccount.create({
+        data: {
+          integration_uuid: integration.uuid,
+          account,
+          title,
+        },
+      });
+
+      await tx.integrationKey.create({
+        data: {
+          integration_uuid: integration.uuid,
+          key_type: IntegrationKeyType.API_KEY,
+          account,
+          secret: encryptIntegrationSecret(dto.api_key.trim(), encryptionKey),
+          last4: secretLast4(dto.api_key),
+        },
+      });
+
+      if (dto.webhook_secret) {
+        await tx.integrationKey.create({
+          data: {
+            integration_uuid: integration.uuid,
+            key_type: IntegrationKeyType.WEBHOOK_SECRET,
+            account,
+            secret: encryptIntegrationSecret(
+              dto.webhook_secret.trim(),
+              encryptionKey,
+            ),
+            last4: secretLast4(dto.webhook_secret),
+          },
+        });
+      }
+
+      await tx.integrationAccountDomain.create({
+        data: {
+          integration_account_uuid: integrationAccount.uuid,
+          from_email: fromEmail,
+          from_name: fromName || null,
+          is_default: true,
+        },
+      });
+    });
+
+    await this.ensureDefaultAccountAfterKeyChange(integration.uuid, provider);
+
+    const refreshed = await this.prisma.integration.findUnique({
+      where: { uuid: integration.uuid },
+      include: {
+        keys: {
+          orderBy: [{ account: 'asc' }, { key_type: 'asc' }],
+        },
+        accounts: ACCOUNTS_INCLUDE,
+      },
+    });
+
+    return this.toIntegrationResponse(provider, refreshed ?? undefined);
+  }
+
+  async addAccountDomain(
+    organisation_uuid: string,
+    account_uuid: string,
+    dto: AddIntegrationAccountDomainDto,
+  ): Promise<IntegrationAccountDomainResponse> {
+    const owned = await this.requireOwnedAccount(
+      organisation_uuid,
+      account_uuid,
+    );
+    if (owned.integration.provider !== ExternalIntegrationProvider.RESEND) {
+      throw new BadRequestException(
+        'Domains are only supported for Resend accounts',
+      );
+    }
+
+    const fromEmail = dto.from_email.trim().toLowerCase();
+    const existing = await this.prisma.integrationAccountDomain.findFirst({
+      where: { integration_account_uuid: owned.uuid, from_email: fromEmail },
+    });
+    if (existing) {
+      throw new ConflictException(
+        `Domain "${fromEmail}" already exists for this account`,
+      );
+    }
+
+    const domainCount = await this.prisma.integrationAccountDomain.count({
+      where: { integration_account_uuid: owned.uuid },
+    });
+    const makeDefault = domainCount === 0 || dto.is_default === true;
+
+    const domain = await this.prisma.$transaction(async (tx) => {
+      if (makeDefault) {
+        await tx.integrationAccountDomain.updateMany({
+          where: { integration_account_uuid: owned.uuid, is_default: true },
+          data: { is_default: false },
+        });
+      }
+      return tx.integrationAccountDomain.create({
+        data: {
+          integration_account_uuid: owned.uuid,
+          from_email: fromEmail,
+          from_name: dto.from_name?.trim() || null,
+          is_default: makeDefault,
+        },
+      });
+    });
+
+    return this.toDomainResponse(domain);
+  }
+
+  async updateAccountDomain(
+    organisation_uuid: string,
+    domain_uuid: string,
+    dto: UpdateIntegrationAccountDomainDto,
+  ): Promise<IntegrationAccountDomainResponse> {
+    const owned = await this.requireOwnedDomain(
+      organisation_uuid,
+      domain_uuid,
+    );
+
+    const data: Prisma.IntegrationAccountDomainUpdateInput = {};
+    if (dto.from_email) {
+      const fromEmail = dto.from_email.trim().toLowerCase();
+      if (fromEmail !== owned.from_email) {
+        const existing = await this.prisma.integrationAccountDomain.findFirst(
+          {
+            where: {
+              integration_account_uuid: owned.integration_account_uuid,
+              from_email: fromEmail,
+              uuid: { not: domain_uuid },
+            },
+          },
+        );
+        if (existing) {
+          throw new ConflictException(
+            `Domain "${fromEmail}" already exists for this account`,
+          );
+        }
+      }
+      data.from_email = fromEmail;
+    }
+    if (dto.from_name !== undefined) {
+      data.from_name = dto.from_name?.trim() || null;
+    }
+
+    const domain = await this.prisma.integrationAccountDomain.update({
+      where: { uuid: domain_uuid },
+      data,
+    });
+    return this.toDomainResponse(domain);
+  }
+
+  async setDefaultAccountDomain(
+    organisation_uuid: string,
+    domain_uuid: string,
+  ): Promise<IntegrationAccountDomainResponse> {
+    const owned = await this.requireOwnedDomain(
+      organisation_uuid,
+      domain_uuid,
+    );
+
+    const domain = await this.prisma.$transaction(async (tx) => {
+      await tx.integrationAccountDomain.updateMany({
+        where: {
+          integration_account_uuid: owned.integration_account_uuid,
+          is_default: true,
+        },
+        data: { is_default: false },
+      });
+      return tx.integrationAccountDomain.update({
+        where: { uuid: domain_uuid },
+        data: { is_default: true },
+      });
+    });
+
+    return this.toDomainResponse(domain);
+  }
+
+  async removeAccountDomain(
+    organisation_uuid: string,
+    domain_uuid: string,
+  ): Promise<{ uuid: string }> {
+    const owned = await this.requireOwnedDomain(
+      organisation_uuid,
+      domain_uuid,
+    );
+
+    const domainCount = await this.prisma.integrationAccountDomain.count({
+      where: { integration_account_uuid: owned.integration_account_uuid },
+    });
+    if (domainCount <= 1) {
+      throw new BadRequestException(
+        'Cannot delete the only domain on this account. Delete the account instead.',
+      );
+    }
+    if (owned.is_default) {
+      throw new BadRequestException(
+        'Cannot delete the default domain. Set another domain as default first.',
+      );
+    }
+
+    await this.prisma.integrationAccountDomain.delete({
+      where: { uuid: domain_uuid },
+    });
+    return { uuid: domain_uuid };
   }
 
   async updateAccountTitle(
@@ -326,9 +571,7 @@ export class IntegrationsService {
         keys: {
           orderBy: [{ account: 'asc' }, { key_type: 'asc' }],
         },
-        accounts: {
-          orderBy: { account: 'asc' },
-        },
+        accounts: ACCOUNTS_INCLUDE,
       },
     });
 
@@ -421,9 +664,7 @@ export class IntegrationsService {
         keys: {
           orderBy: [{ account: 'asc' }, { key_type: 'asc' }],
         },
-        accounts: {
-          orderBy: { account: 'asc' },
-        },
+        accounts: ACCOUNTS_INCLUDE,
       },
     });
 
@@ -548,6 +789,43 @@ export class IntegrationsService {
     return key;
   }
 
+  private async requireOwnedAccount(
+    organisation_uuid: string,
+    account_uuid: string,
+  ): Promise<IntegrationAccount & { integration: Integration }> {
+    const account = await this.prisma.integrationAccount.findFirst({
+      where: { uuid: account_uuid, integration: { organisation_uuid } },
+      include: { integration: true },
+    });
+    if (!account) {
+      throw new NotFoundException(
+        `Integration account ${account_uuid} not found`,
+      );
+    }
+    return account;
+  }
+
+  private async requireOwnedDomain(
+    organisation_uuid: string,
+    domain_uuid: string,
+  ): Promise<
+    IntegrationAccountDomain & {
+      integration_account: IntegrationAccount & { integration: Integration };
+    }
+  > {
+    const domain = await this.prisma.integrationAccountDomain.findFirst({
+      where: {
+        uuid: domain_uuid,
+        integration_account: { integration: { organisation_uuid } },
+      },
+      include: { integration_account: { include: { integration: true } } },
+    });
+    if (!domain) {
+      throw new NotFoundException(`Domain ${domain_uuid} not found`);
+    }
+    return domain;
+  }
+
   private async ensureDefaultAccountAfterKeyChange(
     integration_uuid: string,
     provider: ExternalIntegrationProvider,
@@ -603,7 +881,7 @@ export class IntegrationsService {
 
   private toAccountResponses(
     keys: IntegrationKey[],
-    accounts: IntegrationAccount[],
+    accounts: IntegrationAccountWithDomains[],
   ): IntegrationAccountResponse[] {
     const accountByAccount = new Map(accounts.map((row) => [row.account, row]));
     return listDistinctIntegrationAccounts(keys).map((account) => {
@@ -612,8 +890,24 @@ export class IntegrationsService {
         uuid: row?.uuid ?? null,
         account,
         title: row?.title ?? account,
+        domains: (row?.domains ?? []).map((domain) =>
+          this.toDomainResponse(domain),
+        ),
       };
     });
+  }
+
+  private toDomainResponse(
+    domain: IntegrationAccountDomain,
+  ): IntegrationAccountDomainResponse {
+    return {
+      uuid: domain.uuid,
+      from_email: domain.from_email,
+      from_name: domain.from_name,
+      is_default: domain.is_default,
+      created_at: domain.created_at,
+      updated_at: domain.updated_at,
+    };
   }
 
   private toIntegrationResponse(

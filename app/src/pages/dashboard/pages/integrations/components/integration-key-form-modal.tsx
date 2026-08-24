@@ -148,15 +148,6 @@ export function IntegrationKeyFormModal({
         setSecretCopied(false);
     }, [isOpen, initialAccount, keyItem, initialKeyType, defaultKeyType, suggestedAccount, providerView.provider]);
 
-    useEffect(() => {
-        if (!isOpen || isEdit) return;
-        if (providerView.provider === "RESEND" && keyType === "FROM_EMAIL") {
-            setAccount(
-                suggestAccountForKeyType(providerView.provider, providerView.keys, keyType),
-            );
-        }
-    }, [isEdit, isOpen, keyType, providerView.keys, providerView.provider]);
-
     const pending = createKey.isPending || updateKey.isPending;
     const envPreview = formatIntegrationKeyEnvName(
         providerView.provider,

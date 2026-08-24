@@ -39,12 +39,41 @@ export class EmailCredentialsService {
   async getResendFromEmail(
     organisation_uuid: string,
     account: string,
+    domain_uuid?: string,
   ): Promise<string> {
     await this.assertSendableAccount(
       organisation_uuid,
       ExternalIntegrationProvider.RESEND,
       account,
     );
+
+    const integrationAccount = await this.prisma.integrationAccount.findFirst(
+      {
+        where: {
+          account: account.trim(),
+          integration: {
+            organisation_uuid,
+            provider: ExternalIntegrationProvider.RESEND,
+          },
+        },
+        include: { domains: true },
+      },
+    );
+
+    if (integrationAccount && integrationAccount.domains.length > 0) {
+      const domain = domain_uuid
+        ? integrationAccount.domains.find((row) => row.uuid === domain_uuid)
+        : (integrationAccount.domains.find((row) => row.is_default) ??
+          integrationAccount.domains[0]);
+      if (!domain) {
+        throw new BadRequestException(
+          `Domain ${domain_uuid} not found for Resend account "${account}"`,
+        );
+      }
+      return domain.from_email.trim();
+    }
+
+    // Legacy fallback for accounts not yet migrated to IntegrationAccountDomain.
     const fromEmail = await this.integrationsService.getDecryptedSecret(
       organisation_uuid,
       ExternalIntegrationProvider.RESEND,
@@ -232,14 +261,14 @@ export class EmailCredentialsService {
         organisation_uuid,
         provider: { in: [...EMAIL_PROVIDERS] },
       },
-      include: { keys: true, accounts: true },
+      include: { keys: true, accounts: { include: { domains: true } } },
     });
 
     const accounts: SendableEmailAccount[] = [];
 
     for (const integration of integrations) {
-      const titleByAccount = new Map(
-        integration.accounts.map((row) => [row.account, row.title]),
+      const accountRowByAccount = new Map(
+        integration.accounts.map((row) => [row.account, row]),
       );
       const distinctAccounts = listDistinctIntegrationAccounts(
         integration.keys,
@@ -250,13 +279,21 @@ export class EmailCredentialsService {
             integration.provider,
             integration.keys,
             account,
+            accountRowByAccount.get(account)?.domains ?? [],
           )
         ) {
-          const title = titleByAccount.get(account) ?? account;
+          const row = accountRowByAccount.get(account);
+          const title = row?.title ?? account;
           accounts.push({
             provider: integration.provider as EmailProviderTarget['provider'],
             account,
             label: `${integration.provider} · ${title}`,
+            domains: row?.domains.map((domain) => ({
+              uuid: domain.uuid,
+              from_email: domain.from_email,
+              from_name: domain.from_name,
+              is_default: domain.is_default,
+            })),
           });
         }
       }
@@ -279,10 +316,11 @@ export class EmailCredentialsService {
    */
   async resolveTargetByAccountUuid(
     integration_account_uuid: string,
+    domain_uuid?: string,
   ): Promise<EmailProviderTarget> {
     const account = await this.prisma.integrationAccount.findUnique({
       where: { uuid: integration_account_uuid },
-      include: { integration: true },
+      include: { integration: true, domains: true },
     });
     if (!account) {
       throw new NotFoundException(
@@ -296,7 +334,24 @@ export class EmailCredentialsService {
       provider,
       account.account,
     );
-    return { provider, account: account.account };
+
+    if (domain_uuid) {
+      if (provider !== ExternalIntegrationProvider.RESEND) {
+        throw new BadRequestException(
+          `${provider} accounts do not support domain selection`,
+        );
+      }
+      const domainExists = account.domains.some(
+        (row) => row.uuid === domain_uuid,
+      );
+      if (!domainExists) {
+        throw new BadRequestException(
+          `Domain ${domain_uuid} does not belong to account "${account.account}"`,
+        );
+      }
+    }
+
+    return { provider, account: account.account, domain_uuid };
   }
 
   async resolveDefaultTarget(
@@ -308,7 +363,7 @@ export class EmailCredentialsService {
         organisation_uuid,
         provider: { in: [...EMAIL_PROVIDERS] },
       },
-      include: { keys: true },
+      include: { keys: true, accounts: { include: { domains: true } } },
     });
 
     for (const provider of EMAIL_PROVIDERS) {
@@ -319,7 +374,12 @@ export class EmailCredentialsService {
         integration.keys,
       );
       if (!account) continue;
-      if (!this.isAccountComplete(provider, integration.keys, account)) {
+      const domains =
+        integration.accounts.find((row) => row.account === account)
+          ?.domains ?? [];
+      if (
+        !this.isAccountComplete(provider, integration.keys, account, domains)
+      ) {
         continue;
       }
       return { provider, account };
@@ -332,18 +392,20 @@ export class EmailCredentialsService {
     provider: ExternalIntegrationProvider,
     keys: { key_type: IntegrationKeyType; account: string }[],
     account: string,
+    domains: { uuid: string }[] = [],
   ): boolean {
     const accountKeys = keys.filter(
       (key) => key.account.trim() === account.trim(),
     );
     if (provider === ExternalIntegrationProvider.RESEND) {
-      const required = [
-        IntegrationKeyType.API_KEY,
-        IntegrationKeyType.FROM_EMAIL,
-      ];
-      return required.every((key_type) =>
-        accountKeys.some((key) => key.key_type === key_type),
+      const hasApiKey = accountKeys.some(
+        (key) => key.key_type === IntegrationKeyType.API_KEY,
       );
+      const hasDomain = domains.length > 0;
+      const hasLegacyFromEmail = accountKeys.some(
+        (key) => key.key_type === IntegrationKeyType.FROM_EMAIL,
+      );
+      return hasApiKey && (hasDomain || hasLegacyFromEmail);
     }
     if (provider === ExternalIntegrationProvider.SMTP) {
       const required = requiredKeyTypesForProvider(

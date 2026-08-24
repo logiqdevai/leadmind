@@ -18,6 +18,14 @@ export class EmailProviderTargetDto {
     @IsString()
     @MinLength(1)
     account: string;
+
+    @ApiProperty({
+        required: false,
+        description: 'RESEND only - which domain/from-email to send from. Defaults to the account default domain.',
+    })
+    @IsOptional()
+    @IsUUID()
+    domain_uuid?: string;
 }
 
 export class EmailProviderAllocationDto extends EmailProviderTargetDto {
@@ -38,6 +46,14 @@ export class SendExistingMessageDto {
     @IsString()
     @MinLength(1)
     email_account?: string;
+
+    @ApiProperty({
+        required: false,
+        description: 'RESEND only - which domain/from-email to send from. Defaults to the account default domain.',
+    })
+    @IsOptional()
+    @IsUUID()
+    email_domain_uuid?: string;
 
     @ApiProperty({ required: false })
     @IsOptional()
