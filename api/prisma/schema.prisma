@@ -491,6 +491,9 @@ model OutreachMessage {
   replied_at                DateTime?
   bounced_at                DateTime?
   failed_at                 DateTime?
+  reply_subject             String?
+  reply_text                String?
+  reply_html                String?
   email_provider            ExternalIntegrationProvider?
   email_account             String?
   email_domain_uuid         String?

@@ -172,6 +172,7 @@ describe('WebhookEventService', () => {
             kind: 'replied',
             provider_message_id,
             metadata: { from: 'lead@example.com' },
+            reply: { subject: 'Re: hello', text: 'Sounds good', html: '<p>Sounds good</p>' },
         });
 
         expect(prisma.outreachMessage.update).toHaveBeenCalledWith(
@@ -179,6 +180,9 @@ describe('WebhookEventService', () => {
                 data: expect.objectContaining({
                     status: MsgStatus.REPLIED,
                     replied_at: expect.any(Date),
+                    reply_subject: 'Re: hello',
+                    reply_text: 'Sounds good',
+                    reply_html: '<p>Sounds good</p>',
                 }),
             }),
         );
@@ -272,7 +276,7 @@ describe('WebhookEventService', () => {
             'lead@example.com',
         );
 
-        expect(resolved).toBe(provider_message_id);
+        expect(resolved?.provider_message_id).toBe(provider_message_id);
         expect(prisma.outreachMessage.findFirst).toHaveBeenCalled();
     });
 });

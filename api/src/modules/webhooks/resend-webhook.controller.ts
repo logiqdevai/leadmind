@@ -166,12 +166,11 @@ export class ResendWebhookController {
             return;
         }
 
-        const provider_message_id =
-            await this.webhookEventService.resolveOutboundMessageIdFromReceived(
-                provider_received_id,
-                from,
-            );
-        if (!provider_message_id) {
+        const resolved = await this.webhookEventService.resolveOutboundMessageIdFromReceived(
+            provider_received_id,
+            from,
+        );
+        if (!resolved) {
             this.logger.warn(
                 `email.received — no matching outbound message for received=${provider_received_id} from=${from}`,
             );
@@ -180,11 +179,16 @@ export class ResendWebhookController {
 
         await this.webhookEventService.ingest({
             kind: 'replied',
-            provider_message_id,
+            provider_message_id: resolved.provider_message_id,
             metadata: {
                 provider_received_id,
                 from,
                 subject: body.data?.subject,
+            },
+            reply: {
+                subject: resolved.email?.subject ?? body.data?.subject ?? null,
+                text: resolved.email?.text ?? null,
+                html: resolved.email?.html ?? null,
             },
         });
     }

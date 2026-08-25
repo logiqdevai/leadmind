@@ -32872,6 +32872,9 @@ export namespace Prisma {
     replied_at: Date | null
     bounced_at: Date | null
     failed_at: Date | null
+    reply_subject: string | null
+    reply_text: string | null
+    reply_html: string | null
     email_provider: $Enums.ExternalIntegrationProvider | null
     email_account: string | null
     email_domain_uuid: string | null
@@ -32905,6 +32908,9 @@ export namespace Prisma {
     replied_at: Date | null
     bounced_at: Date | null
     failed_at: Date | null
+    reply_subject: string | null
+    reply_text: string | null
+    reply_html: string | null
     email_provider: $Enums.ExternalIntegrationProvider | null
     email_account: string | null
     email_domain_uuid: string | null
@@ -32938,6 +32944,9 @@ export namespace Prisma {
     replied_at: number
     bounced_at: number
     failed_at: number
+    reply_subject: number
+    reply_text: number
+    reply_html: number
     email_provider: number
     email_account: number
     email_domain_uuid: number
@@ -32982,6 +32991,9 @@ export namespace Prisma {
     replied_at?: true
     bounced_at?: true
     failed_at?: true
+    reply_subject?: true
+    reply_text?: true
+    reply_html?: true
     email_provider?: true
     email_account?: true
     email_domain_uuid?: true
@@ -33015,6 +33027,9 @@ export namespace Prisma {
     replied_at?: true
     bounced_at?: true
     failed_at?: true
+    reply_subject?: true
+    reply_text?: true
+    reply_html?: true
     email_provider?: true
     email_account?: true
     email_domain_uuid?: true
@@ -33048,6 +33063,9 @@ export namespace Prisma {
     replied_at?: true
     bounced_at?: true
     failed_at?: true
+    reply_subject?: true
+    reply_text?: true
+    reply_html?: true
     email_provider?: true
     email_account?: true
     email_domain_uuid?: true
@@ -33169,6 +33187,9 @@ export namespace Prisma {
     replied_at: Date | null
     bounced_at: Date | null
     failed_at: Date | null
+    reply_subject: string | null
+    reply_text: string | null
+    reply_html: string | null
     email_provider: $Enums.ExternalIntegrationProvider | null
     email_account: string | null
     email_domain_uuid: string | null
@@ -33222,6 +33243,9 @@ export namespace Prisma {
     replied_at?: boolean
     bounced_at?: boolean
     failed_at?: boolean
+    reply_subject?: boolean
+    reply_text?: boolean
+    reply_html?: boolean
     email_provider?: boolean
     email_account?: boolean
     email_domain_uuid?: boolean
@@ -33264,6 +33288,9 @@ export namespace Prisma {
     replied_at?: boolean
     bounced_at?: boolean
     failed_at?: boolean
+    reply_subject?: boolean
+    reply_text?: boolean
+    reply_html?: boolean
     email_provider?: boolean
     email_account?: boolean
     email_domain_uuid?: boolean
@@ -33305,6 +33332,9 @@ export namespace Prisma {
     replied_at?: boolean
     bounced_at?: boolean
     failed_at?: boolean
+    reply_subject?: boolean
+    reply_text?: boolean
+    reply_html?: boolean
     email_provider?: boolean
     email_account?: boolean
     email_domain_uuid?: boolean
@@ -33346,6 +33376,9 @@ export namespace Prisma {
     replied_at?: boolean
     bounced_at?: boolean
     failed_at?: boolean
+    reply_subject?: boolean
+    reply_text?: boolean
+    reply_html?: boolean
     email_provider?: boolean
     email_account?: boolean
     email_domain_uuid?: boolean
@@ -33358,7 +33391,7 @@ export namespace Prisma {
     updated_at?: boolean
   }
 
-  export type OutreachMessageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "contact_uuid" | "campaign_uuid" | "sent_by_user_uuid" | "channel" | "direction" | "subject" | "content" | "status" | "provider_message_id" | "idempotency_key" | "scheduled_at" | "sent_at" | "delivered_at" | "opened_at" | "clicked_at" | "replied_at" | "bounced_at" | "failed_at" | "email_provider" | "email_account" | "email_domain_uuid" | "sms_provider" | "metadata" | "sequence_enrollment_uuid" | "sequence_step_uuid" | "campaign_integration_uuid" | "created_at" | "updated_at", ExtArgs["result"]["outreachMessage"]>
+  export type OutreachMessageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "contact_uuid" | "campaign_uuid" | "sent_by_user_uuid" | "channel" | "direction" | "subject" | "content" | "status" | "provider_message_id" | "idempotency_key" | "scheduled_at" | "sent_at" | "delivered_at" | "opened_at" | "clicked_at" | "replied_at" | "bounced_at" | "failed_at" | "reply_subject" | "reply_text" | "reply_html" | "email_provider" | "email_account" | "email_domain_uuid" | "sms_provider" | "metadata" | "sequence_enrollment_uuid" | "sequence_step_uuid" | "campaign_integration_uuid" | "created_at" | "updated_at", ExtArgs["result"]["outreachMessage"]>
   export type OutreachMessageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     contact?: boolean | ContactDefaultArgs<ExtArgs>
@@ -33422,6 +33455,9 @@ export namespace Prisma {
       replied_at: Date | null
       bounced_at: Date | null
       failed_at: Date | null
+      reply_subject: string | null
+      reply_text: string | null
+      reply_html: string | null
       email_provider: $Enums.ExternalIntegrationProvider | null
       email_account: string | null
       email_domain_uuid: string | null
@@ -33884,6 +33920,9 @@ export namespace Prisma {
     readonly replied_at: FieldRef<"OutreachMessage", 'DateTime'>
     readonly bounced_at: FieldRef<"OutreachMessage", 'DateTime'>
     readonly failed_at: FieldRef<"OutreachMessage", 'DateTime'>
+    readonly reply_subject: FieldRef<"OutreachMessage", 'String'>
+    readonly reply_text: FieldRef<"OutreachMessage", 'String'>
+    readonly reply_html: FieldRef<"OutreachMessage", 'String'>
     readonly email_provider: FieldRef<"OutreachMessage", 'ExternalIntegrationProvider'>
     readonly email_account: FieldRef<"OutreachMessage", 'String'>
     readonly email_domain_uuid: FieldRef<"OutreachMessage", 'String'>
@@ -77683,6 +77722,9 @@ export namespace Prisma {
     replied_at: 'replied_at',
     bounced_at: 'bounced_at',
     failed_at: 'failed_at',
+    reply_subject: 'reply_subject',
+    reply_text: 'reply_text',
+    reply_html: 'reply_html',
     email_provider: 'email_provider',
     email_account: 'email_account',
     email_domain_uuid: 'email_domain_uuid',
@@ -81016,6 +81058,9 @@ export namespace Prisma {
     replied_at?: DateTimeNullableFilter<"OutreachMessage"> | Date | string | null
     bounced_at?: DateTimeNullableFilter<"OutreachMessage"> | Date | string | null
     failed_at?: DateTimeNullableFilter<"OutreachMessage"> | Date | string | null
+    reply_subject?: StringNullableFilter<"OutreachMessage"> | string | null
+    reply_text?: StringNullableFilter<"OutreachMessage"> | string | null
+    reply_html?: StringNullableFilter<"OutreachMessage"> | string | null
     email_provider?: EnumExternalIntegrationProviderNullableFilter<"OutreachMessage"> | $Enums.ExternalIntegrationProvider | null
     email_account?: StringNullableFilter<"OutreachMessage"> | string | null
     email_domain_uuid?: StringNullableFilter<"OutreachMessage"> | string | null
@@ -81058,6 +81103,9 @@ export namespace Prisma {
     replied_at?: SortOrderInput | SortOrder
     bounced_at?: SortOrderInput | SortOrder
     failed_at?: SortOrderInput | SortOrder
+    reply_subject?: SortOrderInput | SortOrder
+    reply_text?: SortOrderInput | SortOrder
+    reply_html?: SortOrderInput | SortOrder
     email_provider?: SortOrderInput | SortOrder
     email_account?: SortOrderInput | SortOrder
     email_domain_uuid?: SortOrderInput | SortOrder
@@ -81103,6 +81151,9 @@ export namespace Prisma {
     replied_at?: DateTimeNullableFilter<"OutreachMessage"> | Date | string | null
     bounced_at?: DateTimeNullableFilter<"OutreachMessage"> | Date | string | null
     failed_at?: DateTimeNullableFilter<"OutreachMessage"> | Date | string | null
+    reply_subject?: StringNullableFilter<"OutreachMessage"> | string | null
+    reply_text?: StringNullableFilter<"OutreachMessage"> | string | null
+    reply_html?: StringNullableFilter<"OutreachMessage"> | string | null
     email_provider?: EnumExternalIntegrationProviderNullableFilter<"OutreachMessage"> | $Enums.ExternalIntegrationProvider | null
     email_account?: StringNullableFilter<"OutreachMessage"> | string | null
     email_domain_uuid?: StringNullableFilter<"OutreachMessage"> | string | null
@@ -81145,6 +81196,9 @@ export namespace Prisma {
     replied_at?: SortOrderInput | SortOrder
     bounced_at?: SortOrderInput | SortOrder
     failed_at?: SortOrderInput | SortOrder
+    reply_subject?: SortOrderInput | SortOrder
+    reply_text?: SortOrderInput | SortOrder
+    reply_html?: SortOrderInput | SortOrder
     email_provider?: SortOrderInput | SortOrder
     email_account?: SortOrderInput | SortOrder
     email_domain_uuid?: SortOrderInput | SortOrder
@@ -81187,6 +81241,9 @@ export namespace Prisma {
     replied_at?: DateTimeNullableWithAggregatesFilter<"OutreachMessage"> | Date | string | null
     bounced_at?: DateTimeNullableWithAggregatesFilter<"OutreachMessage"> | Date | string | null
     failed_at?: DateTimeNullableWithAggregatesFilter<"OutreachMessage"> | Date | string | null
+    reply_subject?: StringNullableWithAggregatesFilter<"OutreachMessage"> | string | null
+    reply_text?: StringNullableWithAggregatesFilter<"OutreachMessage"> | string | null
+    reply_html?: StringNullableWithAggregatesFilter<"OutreachMessage"> | string | null
     email_provider?: EnumExternalIntegrationProviderNullableWithAggregatesFilter<"OutreachMessage"> | $Enums.ExternalIntegrationProvider | null
     email_account?: StringNullableWithAggregatesFilter<"OutreachMessage"> | string | null
     email_domain_uuid?: StringNullableWithAggregatesFilter<"OutreachMessage"> | string | null
@@ -86663,6 +86720,9 @@ export namespace Prisma {
     replied_at?: Date | string | null
     bounced_at?: Date | string | null
     failed_at?: Date | string | null
+    reply_subject?: string | null
+    reply_text?: string | null
+    reply_html?: string | null
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
@@ -86702,6 +86762,9 @@ export namespace Prisma {
     replied_at?: Date | string | null
     bounced_at?: Date | string | null
     failed_at?: Date | string | null
+    reply_subject?: string | null
+    reply_text?: string | null
+    reply_html?: string | null
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
@@ -86732,6 +86795,9 @@ export namespace Prisma {
     replied_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reply_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_text?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -86771,6 +86837,9 @@ export namespace Prisma {
     replied_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reply_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_text?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -86806,6 +86875,9 @@ export namespace Prisma {
     replied_at?: Date | string | null
     bounced_at?: Date | string | null
     failed_at?: Date | string | null
+    reply_subject?: string | null
+    reply_text?: string | null
+    reply_html?: string | null
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
@@ -86835,6 +86907,9 @@ export namespace Prisma {
     replied_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reply_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_text?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -86866,6 +86941,9 @@ export namespace Prisma {
     replied_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reply_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_text?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -92680,6 +92758,9 @@ export namespace Prisma {
     replied_at?: SortOrder
     bounced_at?: SortOrder
     failed_at?: SortOrder
+    reply_subject?: SortOrder
+    reply_text?: SortOrder
+    reply_html?: SortOrder
     email_provider?: SortOrder
     email_account?: SortOrder
     email_domain_uuid?: SortOrder
@@ -92718,6 +92799,9 @@ export namespace Prisma {
     replied_at?: SortOrder
     bounced_at?: SortOrder
     failed_at?: SortOrder
+    reply_subject?: SortOrder
+    reply_text?: SortOrder
+    reply_html?: SortOrder
     email_provider?: SortOrder
     email_account?: SortOrder
     email_domain_uuid?: SortOrder
@@ -92751,6 +92835,9 @@ export namespace Prisma {
     replied_at?: SortOrder
     bounced_at?: SortOrder
     failed_at?: SortOrder
+    reply_subject?: SortOrder
+    reply_text?: SortOrder
+    reply_html?: SortOrder
     email_provider?: SortOrder
     email_account?: SortOrder
     email_domain_uuid?: SortOrder
@@ -102402,6 +102489,9 @@ export namespace Prisma {
     replied_at?: Date | string | null
     bounced_at?: Date | string | null
     failed_at?: Date | string | null
+    reply_subject?: string | null
+    reply_text?: string | null
+    reply_html?: string | null
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
@@ -102439,6 +102529,9 @@ export namespace Prisma {
     replied_at?: Date | string | null
     bounced_at?: Date | string | null
     failed_at?: Date | string | null
+    reply_subject?: string | null
+    reply_text?: string | null
+    reply_html?: string | null
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
@@ -102782,6 +102875,9 @@ export namespace Prisma {
     replied_at?: DateTimeNullableFilter<"OutreachMessage"> | Date | string | null
     bounced_at?: DateTimeNullableFilter<"OutreachMessage"> | Date | string | null
     failed_at?: DateTimeNullableFilter<"OutreachMessage"> | Date | string | null
+    reply_subject?: StringNullableFilter<"OutreachMessage"> | string | null
+    reply_text?: StringNullableFilter<"OutreachMessage"> | string | null
+    reply_html?: StringNullableFilter<"OutreachMessage"> | string | null
     email_provider?: EnumExternalIntegrationProviderNullableFilter<"OutreachMessage"> | $Enums.ExternalIntegrationProvider | null
     email_account?: StringNullableFilter<"OutreachMessage"> | string | null
     email_domain_uuid?: StringNullableFilter<"OutreachMessage"> | string | null
@@ -103189,6 +103285,9 @@ export namespace Prisma {
     replied_at?: Date | string | null
     bounced_at?: Date | string | null
     failed_at?: Date | string | null
+    reply_subject?: string | null
+    reply_text?: string | null
+    reply_html?: string | null
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
@@ -103226,6 +103325,9 @@ export namespace Prisma {
     replied_at?: Date | string | null
     bounced_at?: Date | string | null
     failed_at?: Date | string | null
+    reply_subject?: string | null
+    reply_text?: string | null
+    reply_html?: string | null
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
@@ -107820,6 +107922,9 @@ export namespace Prisma {
     replied_at?: Date | string | null
     bounced_at?: Date | string | null
     failed_at?: Date | string | null
+    reply_subject?: string | null
+    reply_text?: string | null
+    reply_html?: string | null
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
@@ -107857,6 +107962,9 @@ export namespace Prisma {
     replied_at?: Date | string | null
     bounced_at?: Date | string | null
     failed_at?: Date | string | null
+    reply_subject?: string | null
+    reply_text?: string | null
+    reply_html?: string | null
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
@@ -110487,6 +110595,9 @@ export namespace Prisma {
     replied_at?: Date | string | null
     bounced_at?: Date | string | null
     failed_at?: Date | string | null
+    reply_subject?: string | null
+    reply_text?: string | null
+    reply_html?: string | null
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
@@ -110525,6 +110636,9 @@ export namespace Prisma {
     replied_at?: Date | string | null
     bounced_at?: Date | string | null
     failed_at?: Date | string | null
+    reply_subject?: string | null
+    reply_text?: string | null
+    reply_html?: string | null
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
@@ -110850,6 +110964,9 @@ export namespace Prisma {
     replied_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reply_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_text?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -110888,6 +111005,9 @@ export namespace Prisma {
     replied_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reply_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_text?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -112461,6 +112581,9 @@ export namespace Prisma {
     replied_at?: Date | string | null
     bounced_at?: Date | string | null
     failed_at?: Date | string | null
+    reply_subject?: string | null
+    reply_text?: string | null
+    reply_html?: string | null
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
@@ -112499,6 +112622,9 @@ export namespace Prisma {
     replied_at?: Date | string | null
     bounced_at?: Date | string | null
     failed_at?: Date | string | null
+    reply_subject?: string | null
+    reply_text?: string | null
+    reply_html?: string | null
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
@@ -112844,6 +112970,9 @@ export namespace Prisma {
     replied_at?: Date | string | null
     bounced_at?: Date | string | null
     failed_at?: Date | string | null
+    reply_subject?: string | null
+    reply_text?: string | null
+    reply_html?: string | null
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
@@ -112882,6 +113011,9 @@ export namespace Prisma {
     replied_at?: Date | string | null
     bounced_at?: Date | string | null
     failed_at?: Date | string | null
+    reply_subject?: string | null
+    reply_text?: string | null
+    reply_html?: string | null
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
@@ -114442,6 +114574,9 @@ export namespace Prisma {
     replied_at?: Date | string | null
     bounced_at?: Date | string | null
     failed_at?: Date | string | null
+    reply_subject?: string | null
+    reply_text?: string | null
+    reply_html?: string | null
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
@@ -114479,6 +114614,9 @@ export namespace Prisma {
     replied_at?: Date | string | null
     bounced_at?: Date | string | null
     failed_at?: Date | string | null
+    reply_subject?: string | null
+    reply_text?: string | null
+    reply_html?: string | null
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
@@ -119683,6 +119821,9 @@ export namespace Prisma {
     replied_at?: Date | string | null
     bounced_at?: Date | string | null
     failed_at?: Date | string | null
+    reply_subject?: string | null
+    reply_text?: string | null
+    reply_html?: string | null
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
@@ -119721,6 +119862,9 @@ export namespace Prisma {
     replied_at?: Date | string | null
     bounced_at?: Date | string | null
     failed_at?: Date | string | null
+    reply_subject?: string | null
+    reply_text?: string | null
+    reply_html?: string | null
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
@@ -120992,6 +121136,9 @@ export namespace Prisma {
     replied_at?: Date | string | null
     bounced_at?: Date | string | null
     failed_at?: Date | string | null
+    reply_subject?: string | null
+    reply_text?: string | null
+    reply_html?: string | null
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
@@ -121186,6 +121333,9 @@ export namespace Prisma {
     replied_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reply_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_text?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -121223,6 +121373,9 @@ export namespace Prisma {
     replied_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reply_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_text?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -121257,6 +121410,9 @@ export namespace Prisma {
     replied_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reply_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_text?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -121565,6 +121721,9 @@ export namespace Prisma {
     replied_at?: Date | string | null
     bounced_at?: Date | string | null
     failed_at?: Date | string | null
+    reply_subject?: string | null
+    reply_text?: string | null
+    reply_html?: string | null
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
@@ -122219,6 +122378,9 @@ export namespace Prisma {
     replied_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reply_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_text?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -122256,6 +122418,9 @@ export namespace Prisma {
     replied_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reply_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_text?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -122290,6 +122455,9 @@ export namespace Prisma {
     replied_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reply_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_text?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -124152,6 +124320,9 @@ export namespace Prisma {
     replied_at?: Date | string | null
     bounced_at?: Date | string | null
     failed_at?: Date | string | null
+    reply_subject?: string | null
+    reply_text?: string | null
+    reply_html?: string | null
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
@@ -124358,6 +124529,9 @@ export namespace Prisma {
     replied_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reply_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_text?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -124395,6 +124569,9 @@ export namespace Prisma {
     replied_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reply_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_text?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -124429,6 +124606,9 @@ export namespace Prisma {
     replied_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reply_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_text?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -125148,6 +125328,9 @@ export namespace Prisma {
     replied_at?: Date | string | null
     bounced_at?: Date | string | null
     failed_at?: Date | string | null
+    reply_subject?: string | null
+    reply_text?: string | null
+    reply_html?: string | null
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
@@ -125176,6 +125359,9 @@ export namespace Prisma {
     replied_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reply_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_text?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -125214,6 +125400,9 @@ export namespace Prisma {
     replied_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reply_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_text?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -125248,6 +125437,9 @@ export namespace Prisma {
     replied_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reply_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_text?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -125281,6 +125473,9 @@ export namespace Prisma {
     replied_at?: Date | string | null
     bounced_at?: Date | string | null
     failed_at?: Date | string | null
+    reply_subject?: string | null
+    reply_text?: string | null
+    reply_html?: string | null
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
@@ -125309,6 +125504,9 @@ export namespace Prisma {
     replied_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reply_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_text?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -125347,6 +125545,9 @@ export namespace Prisma {
     replied_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reply_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_text?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -125381,6 +125582,9 @@ export namespace Prisma {
     replied_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reply_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_text?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -125668,6 +125872,9 @@ export namespace Prisma {
     replied_at?: Date | string | null
     bounced_at?: Date | string | null
     failed_at?: Date | string | null
+    reply_subject?: string | null
+    reply_text?: string | null
+    reply_html?: string | null
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
@@ -125775,6 +125982,9 @@ export namespace Prisma {
     replied_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reply_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_text?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -125812,6 +126022,9 @@ export namespace Prisma {
     replied_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reply_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_text?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -125846,6 +126059,9 @@ export namespace Prisma {
     replied_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reply_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_text?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -126610,6 +126826,9 @@ export namespace Prisma {
     replied_at?: Date | string | null
     bounced_at?: Date | string | null
     failed_at?: Date | string | null
+    reply_subject?: string | null
+    reply_text?: string | null
+    reply_html?: string | null
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
@@ -126638,6 +126857,9 @@ export namespace Prisma {
     replied_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reply_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_text?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -126676,6 +126898,9 @@ export namespace Prisma {
     replied_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reply_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_text?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -126710,6 +126935,9 @@ export namespace Prisma {
     replied_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reply_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_text?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null

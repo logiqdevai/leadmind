@@ -12,12 +12,24 @@ import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { ResendAdapter } from '@/integrations/notifications/resend/resend/resend.adapter';
 import { ContactsService } from '@/modules/contacts/contacts.service';
 import { CampaignMessageSendService } from '@/modules/marketing-campaigns/services/campaign-message-send.service';
+import { sanitizeEmailHtml } from '@/shared/utils/sanitize-html.util';
+
+export interface ReceivedEmailContent {
+    subject?: string | null;
+    text?: string | null;
+    html?: string | null;
+}
 
 export type WebhookEvent =
     | { kind: 'delivered'; channel: 'email' | 'sms'; provider_message_id: string; metadata?: any }
     | { kind: 'opened'; provider_message_id: string; metadata?: any }
     | { kind: 'clicked'; provider_message_id: string; metadata?: any }
-    | { kind: 'replied'; provider_message_id: string; metadata?: any }
+    | {
+          kind: 'replied';
+          provider_message_id: string;
+          metadata?: any;
+          reply?: ReceivedEmailContent;
+      }
     | { kind: 'bounced'; provider_message_id: string; metadata?: any }
     | { kind: 'failed'; channel: 'email' | 'sms'; provider_message_id: string; metadata?: any }
     | { kind: 'complained'; provider_message_id: string; metadata?: any };
@@ -53,15 +65,15 @@ export class WebhookEventService {
     async resolveOutboundMessageIdFromReceived(
         provider_received_id: string,
         from: string,
-    ): Promise<string | null> {
-        const headerIds = await this.extractOutboundIdsFromReceivedEmail(provider_received_id);
+    ): Promise<{ provider_message_id: string; email: ReceivedEmailContent | null } | null> {
+        const { ids: headerIds, email } = await this.fetchReceivedEmail(provider_received_id);
         for (const provider_message_id of headerIds) {
             const message = await this.prisma.outreachMessage.findFirst({
                 where: { provider_message_id },
                 select: { provider_message_id: true },
             });
             if (message?.provider_message_id) {
-                return message.provider_message_id;
+                return { provider_message_id: message.provider_message_id, email };
             }
         }
 
@@ -94,7 +106,9 @@ export class WebhookEventService {
             select: { provider_message_id: true },
         });
 
-        return message?.provider_message_id ?? null;
+        return message?.provider_message_id
+            ? { provider_message_id: message.provider_message_id, email }
+            : null;
     }
 
     async ingest(event: WebhookEvent): Promise<void> {
@@ -176,6 +190,15 @@ export class WebhookEventService {
                 updates.replied_at = now;
                 if (this.canProgress(message.status, MsgStatus.REPLIED)) {
                     updates.status = MsgStatus.REPLIED;
+                }
+                if (event.reply?.subject !== undefined) {
+                    updates.reply_subject = event.reply.subject;
+                }
+                if (event.reply?.text !== undefined) {
+                    updates.reply_text = event.reply.text;
+                }
+                if (event.reply?.html !== undefined) {
+                    updates.reply_html = event.reply.html;
                 }
                 interactionType = InteractionType.REPLY_RECEIVED;
                 mccStatus = CampaignContactStatus.REPLIED;
@@ -330,15 +353,21 @@ export class WebhookEventService {
         }
     }
 
-    private async extractOutboundIdsFromReceivedEmail(
+    private async fetchReceivedEmail(
         provider_received_id: string,
-    ): Promise<string[]> {
+    ): Promise<{ ids: string[]; email: ReceivedEmailContent | null }> {
         try {
             const result = await this.resendAdapter.getReceivedEmail(provider_received_id);
             const email = result?.data;
             if (!email) {
-                return [];
+                return { ids: [], email: null };
             }
+
+            const content: ReceivedEmailContent = {
+                subject: email.subject,
+                text: email.text,
+                html: email.html ? sanitizeEmailHtml(email.html) : email.html,
+            };
 
             const headerValues: string[] = [];
             const headers = email.headers ?? {};
@@ -356,7 +385,7 @@ export class WebhookEventService {
                     select: { provider_message_id: true },
                 });
                 if (byUuid?.provider_message_id) {
-                    return [byUuid.provider_message_id];
+                    return { ids: [byUuid.provider_message_id], email: content };
                 }
             }
 
@@ -367,12 +396,12 @@ export class WebhookEventService {
                     ids.add(match.toLowerCase());
                 }
             }
-            return [...ids];
+            return { ids: [...ids], email: content };
         } catch (error) {
             this.logger.warn(
                 `Could not fetch received email ${provider_received_id}: ${error instanceof Error ? error.message : error}`,
             );
-            return [];
+            return { ids: [], email: null };
         }
     }
 
