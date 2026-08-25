@@ -1,17 +1,25 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "@/hooks/use-toast";
 import {
+    addAccountDomain,
     createIntegrationKey,
+    createResendAccount,
     deleteIntegrationKey,
     listIntegrations,
+    removeAccountDomain,
+    setDefaultAccountDomain,
     setDefaultIntegrationAccount,
+    updateAccountDomain,
     updateIntegrationAccount,
     updateIntegrationKey,
 } from "../services/integrations.service";
 import type {
+    AddIntegrationAccountDomainPayload,
     CreateIntegrationKeyPayload,
+    CreateResendAccountPayload,
     IntegrationProvider,
     SetDefaultIntegrationAccountPayload,
+    UpdateIntegrationAccountDomainPayload,
     UpdateIntegrationAccountPayload,
     UpdateIntegrationKeyPayload,
 } from "../interfaces/integrations.interface";
@@ -103,6 +111,108 @@ export function useSetDefaultIntegrationAccount() {
         onError: (error: Error) => {
             toast({
                 title: "Could not set default account",
+                description: error.message,
+                variant: "error",
+                duration: 4000,
+            });
+        },
+    });
+}
+
+export function useCreateResendAccount() {
+    const qc = useQueryClient();
+    return useMutation({
+        mutationFn: (payload: CreateResendAccountPayload) =>
+            createResendAccount(payload),
+        onSuccess: () => {
+            qc.invalidateQueries({ queryKey: integrationsQueryKeys.all });
+            toast({ title: "Resend account saved", duration: 1500 });
+        },
+        onError: (error: Error) => {
+            toast({
+                title: "Could not save Resend account",
+                description: error.message,
+                variant: "error",
+                duration: 4000,
+            });
+        },
+    });
+}
+
+export function useAddAccountDomain() {
+    const qc = useQueryClient();
+    return useMutation({
+        mutationFn: (vars: {
+            accountUuid: string;
+            payload: AddIntegrationAccountDomainPayload;
+        }) => addAccountDomain(vars.accountUuid, vars.payload),
+        onSuccess: () => {
+            qc.invalidateQueries({ queryKey: integrationsQueryKeys.all });
+            toast({ title: "Domain added", duration: 1500 });
+        },
+        onError: (error: Error) => {
+            toast({
+                title: "Could not add domain",
+                description: error.message,
+                variant: "error",
+                duration: 4000,
+            });
+        },
+    });
+}
+
+export function useUpdateAccountDomain() {
+    const qc = useQueryClient();
+    return useMutation({
+        mutationFn: (vars: {
+            domainUuid: string;
+            payload: UpdateIntegrationAccountDomainPayload;
+        }) => updateAccountDomain(vars.domainUuid, vars.payload),
+        onSuccess: () => {
+            qc.invalidateQueries({ queryKey: integrationsQueryKeys.all });
+            toast({ title: "Domain updated", duration: 1500 });
+        },
+        onError: (error: Error) => {
+            toast({
+                title: "Could not update domain",
+                description: error.message,
+                variant: "error",
+                duration: 4000,
+            });
+        },
+    });
+}
+
+export function useSetDefaultAccountDomain() {
+    const qc = useQueryClient();
+    return useMutation({
+        mutationFn: (domainUuid: string) => setDefaultAccountDomain(domainUuid),
+        onSuccess: () => {
+            qc.invalidateQueries({ queryKey: integrationsQueryKeys.all });
+            toast({ title: "Default domain updated", duration: 1500 });
+        },
+        onError: (error: Error) => {
+            toast({
+                title: "Could not set default domain",
+                description: error.message,
+                variant: "error",
+                duration: 4000,
+            });
+        },
+    });
+}
+
+export function useRemoveAccountDomain() {
+    const qc = useQueryClient();
+    return useMutation({
+        mutationFn: (domainUuid: string) => removeAccountDomain(domainUuid),
+        onSuccess: () => {
+            qc.invalidateQueries({ queryKey: integrationsQueryKeys.all });
+            toast({ title: "Domain deleted", duration: 1500 });
+        },
+        onError: (error: Error) => {
+            toast({
+                title: "Could not delete domain",
                 description: error.message,
                 variant: "error",
                 duration: 4000,

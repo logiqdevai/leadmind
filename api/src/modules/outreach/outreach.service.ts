@@ -108,6 +108,7 @@ export class OutreachService {
                     ...buildEmailProviderMetadata({
                         provider: dto.email_provider,
                         account: dto.email_account.trim(),
+                        domain_uuid: dto.email_domain_uuid,
                     }),
                 };
             } else {
@@ -204,6 +205,7 @@ export class OutreachService {
             data.metadata = mergeEmailProviderMetadata(message.metadata, {
                 provider: dto.email_provider,
                 account: dto.email_account.trim(),
+                domain_uuid: dto.email_domain_uuid,
             }) as Prisma.InputJsonValue;
             message = {
                 ...message,
@@ -286,11 +288,26 @@ export class OutreachService {
                   ? { status: { notIn: [MsgStatus.PENDING, MsgStatus.QUEUED] } }
                   : {}),
             ...(filters.channel && { channel: filters.channel }),
-            ...(filters.source === SendSource.DIRECT && { campaign_uuid: null }),
-            ...(filters.source === SendSource.CAMPAIGN && { campaign_uuid: { not: null } }),
+            ...(filters.source === SendSource.DIRECT && {
+                campaign_uuid: null,
+                sequence_enrollment_uuid: null,
+            }),
+            ...(filters.source === SendSource.CAMPAIGN && {
+                campaign_uuid: { not: null },
+                sequence_enrollment_uuid: null,
+            }),
+            ...(filters.source === SendSource.SEQUENCE && {
+                sequence_enrollment_uuid: { not: null },
+            }),
+            ...(filters.sequence_uuid && {
+                sequence_enrollment: { sequence_uuid: filters.sequence_uuid },
+            }),
             ...(filters.email_provider && { email_provider: filters.email_provider }),
             ...(filters.email_account?.trim() && {
                 email_account: filters.email_account.trim(),
+            }),
+            ...(filters.email_domain_uuid && {
+                email_domain_uuid: filters.email_domain_uuid,
             }),
             ...(filters.sent_by_user_uuid && { sent_by_user_uuid: filters.sent_by_user_uuid }),
             ...((filters.date_from || filters.date_to) && {
@@ -333,6 +350,23 @@ export class OutreachService {
                             uuid: true,
                             full_name: true,
                             email: true,
+                        },
+                    },
+                    sequence_enrollment: {
+                        select: {
+                            uuid: true,
+                            sequence: {
+                                select: {
+                                    uuid: true,
+                                    name: true,
+                                },
+                            },
+                        },
+                    },
+                    sequence_step: {
+                        select: {
+                            uuid: true,
+                            order_index: true,
                         },
                     },
                 },

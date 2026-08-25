@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import {
   CampaignIntegrationStatus,
+  ExternalIntegrationProvider,
   SendingUsageScopeType,
 } from '@/generated/prisma';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
@@ -18,6 +19,7 @@ import { UpdateCampaignIntegrationStatusDto } from '../dto/update-campaign-integ
 const CAMPAIGN_INTEGRATION_INCLUDE = {
   campaign: { select: { uuid: true, name: true } },
   integration_account: { include: { integration: true } },
+  integration_account_domain: true,
   sending_policy: {
     include: { stages: { orderBy: { order_index: 'asc' as const } } },
   },
@@ -85,11 +87,28 @@ export class CampaignIntegrationsService {
         uuid: dto.integration_account_uuid,
         integration: { organisation_uuid },
       },
+      include: { integration: true, domains: true },
     });
     if (!account) {
       throw new NotFoundException(
         `Integration account ${dto.integration_account_uuid} not found`,
       );
+    }
+
+    if (dto.integration_account_domain_uuid) {
+      if (account.integration.provider !== ExternalIntegrationProvider.RESEND) {
+        throw new BadRequestException(
+          `${account.integration.provider} accounts do not support domain selection`,
+        );
+      }
+      const domainExists = account.domains.some(
+        (row) => row.uuid === dto.integration_account_domain_uuid,
+      );
+      if (!domainExists) {
+        throw new BadRequestException(
+          `Domain ${dto.integration_account_domain_uuid} does not belong to account ${dto.integration_account_uuid}`,
+        );
+      }
     }
 
     const clonedPolicy = await this.sendingPolicyService.cloneForAssignment(
@@ -118,6 +137,8 @@ export class CampaignIntegrationsService {
         where: { uuid: existing.uuid },
         data: {
           sending_policy_uuid: clonedPolicy.uuid,
+          integration_account_domain_uuid:
+            dto.integration_account_domain_uuid ?? null,
           status: CampaignIntegrationStatus.ACTIVE,
         },
       });
@@ -134,6 +155,8 @@ export class CampaignIntegrationsService {
       data: {
         campaign_uuid,
         integration_account_uuid: dto.integration_account_uuid,
+        integration_account_domain_uuid:
+          dto.integration_account_domain_uuid ?? null,
         sending_policy_uuid: clonedPolicy.uuid,
         status: CampaignIntegrationStatus.ACTIVE,
         state: { create: {} },

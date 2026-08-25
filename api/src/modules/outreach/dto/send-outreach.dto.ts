@@ -39,6 +39,13 @@ export class SendOutreachDto {
     @MinLength(1)
     email_account?: string;
 
+    @ApiPropertyOptional({
+        description: 'RESEND only - which domain/from-email to send from. Defaults to the account default domain.',
+    })
+    @IsOptional()
+    @IsUUID()
+    email_domain_uuid?: string;
+
     @ApiPropertyOptional()
     @IsOptional()
     @IsUUID()

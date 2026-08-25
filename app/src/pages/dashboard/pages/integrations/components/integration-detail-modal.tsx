@@ -5,6 +5,7 @@ import {
     CheckCircle2,
     Copy,
     KeyRound,
+    Mail,
     Pencil,
     Plus,
     Star,
@@ -14,6 +15,8 @@ import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
 import {
     useDeleteIntegrationKey,
+    useRemoveAccountDomain,
+    useSetDefaultAccountDomain,
     useSetDefaultIntegrationAccount,
     useUpdateIntegrationAccount,
 } from "@/features/integrations/hooks/use-integrations";
@@ -29,11 +32,13 @@ import {
     suggestNextAccountLabel,
 } from "@/features/integrations/constants/integration-key-types";
 import type {
+    IntegrationAccountDomain,
     IntegrationKey,
     IntegrationKeyType,
     IntegrationProviderView,
 } from "@/features/integrations/interfaces/integrations.interface";
 import { toast } from "@/hooks/use-toast";
+import { DomainFormModal } from "./domain-form-modal";
 import { IntegrationKeyFormModal } from "./integration-key-form-modal";
 import { IntegrationOfficialLink } from "./integration-official-link";
 import { ResendAccountFormModal } from "./resend-account-form-modal";
@@ -59,6 +64,8 @@ export function IntegrationDetailModal({
     const deleteKey = useDeleteIntegrationKey();
     const setDefaultAccount = useSetDefaultIntegrationAccount();
     const updateAccount = useUpdateIntegrationAccount();
+    const setDefaultDomain = useSetDefaultAccountDomain();
+    const removeDomain = useRemoveAccountDomain();
 
     const [formOpen, setFormOpen] = useState(false);
     const [smtpFormOpen, setSmtpFormOpen] = useState(false);
@@ -72,6 +79,14 @@ export function IntegrationDetailModal({
     const [renamingAccount, setRenamingAccount] = useState<string | null>(null);
     const [renameTitle, setRenameTitle] = useState("");
     const [webhookUrlCopied, setWebhookUrlCopied] = useState(false);
+    const [domainFormOpen, setDomainFormOpen] = useState(false);
+    const [domainFormAccountUuid, setDomainFormAccountUuid] = useState<
+        string | null
+    >(null);
+    const [editingDomain, setEditingDomain] =
+        useState<IntegrationAccountDomain | null>(null);
+    const [domainToDelete, setDomainToDelete] =
+        useState<IntegrationAccountDomain | null>(null);
 
     const groupedKeys = useMemo(
         () => (providerView ? groupKeysByAccount(providerView.keys) : []),
@@ -87,6 +102,10 @@ export function IntegrationDetailModal({
         setRenamingAccount(null);
         setRenameTitle("");
         setWebhookUrlCopied(false);
+        setDomainFormOpen(false);
+        setDomainFormAccountUuid(null);
+        setEditingDomain(null);
+        setDomainToDelete(null);
     }, [isOpen]);
 
     if (!providerView) {
@@ -186,11 +205,52 @@ export function IntegrationDetailModal({
         }
     };
 
+    const accountDomains = (account: string): IntegrationAccountDomain[] =>
+        providerView.accounts?.find((row) => row.account === account)?.domains ?? [];
+
     const accountIsSendable = (account: string) => {
         if (providerView.provider !== "RESEND" && providerView.provider !== "SMTP") {
             return null;
         }
-        return isEmailAccountSendable(providerView.provider, providerView.keys, account);
+        const hasRequiredKeys = isEmailAccountSendable(
+            providerView.provider,
+            providerView.keys,
+            account,
+        );
+        if (providerView.provider !== "RESEND") {
+            return hasRequiredKeys;
+        }
+        return hasRequiredKeys && accountDomains(account).length > 0;
+    };
+
+    const openAddDomain = (accountUuid: string | null) => {
+        if (!accountUuid) return;
+        setEditingDomain(null);
+        setDomainFormAccountUuid(accountUuid);
+        setDomainFormOpen(true);
+    };
+
+    const openEditDomain = (accountUuid: string | null, domain: IntegrationAccountDomain) => {
+        setEditingDomain(domain);
+        setDomainFormAccountUuid(accountUuid);
+        setDomainFormOpen(true);
+    };
+
+    const handleSetDefaultDomain = async (domain: IntegrationAccountDomain) => {
+        if (domain.is_default) return;
+        try {
+            await setDefaultDomain.mutateAsync(domain.uuid);
+        } catch {
+        }
+    };
+
+    const handleDeleteDomain = async () => {
+        if (!domainToDelete) return;
+        try {
+            await removeDomain.mutateAsync(domainToDelete.uuid);
+            setDomainToDelete(null);
+        } catch {
+        }
     };
 
     const webhookUrl = providerView.webhook_url ?? null;
@@ -462,6 +522,96 @@ export function IntegrationDetailModal({
                                                             </div>
                                                         </div>
                                                     )}
+                                                    {providerView.provider === "RESEND" && (
+                                                        <div className="px-3 py-2.5 border-b border-border space-y-2">
+                                                            <div className="flex items-center justify-between gap-2">
+                                                                <p className="text-xs font-medium uppercase tracking-wide text-muted">
+                                                                    Domains
+                                                                </p>
+                                                                <Button
+                                                                    size="sm"
+                                                                    variant="ghost"
+                                                                    onPress={() =>
+                                                                        openAddDomain(
+                                                                            providerView.accounts?.find(
+                                                                                (row) =>
+                                                                                    row.account === group.account,
+                                                                            )?.uuid ?? null,
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    <Plus className="size-3.5" />
+                                                                    Add domain
+                                                                </Button>
+                                                            </div>
+                                                            {accountDomains(group.account).length === 0 ? (
+                                                                <p className="text-xs text-muted">
+                                                                    No domains yet. Add a sending address for this
+                                                                    account.
+                                                                </p>
+                                                            ) : (
+                                                                <ul className="space-y-1.5">
+                                                                    {accountDomains(group.account).map((domain) => (
+                                                                        <li
+                                                                            key={domain.uuid}
+                                                                            className="flex items-center gap-2 rounded-md border border-border bg-surface-primary px-2.5 py-1.5"
+                                                                        >
+                                                                            <Mail className="size-3.5 text-accent shrink-0" />
+                                                                            <div className="flex-1 min-w-0">
+                                                                                <p className="text-sm text-foreground truncate">
+                                                                                    {domain.from_name
+                                                                                        ? `${domain.from_name} <${domain.from_email}>`
+                                                                                        : domain.from_email}
+                                                                                </p>
+                                                                            </div>
+                                                                            {domain.is_default ? (
+                                                                                <Chip size="sm" variant="soft" color="warning">
+                                                                                    <Chip.Label className="inline-flex items-center gap-1">
+                                                                                        <Star className="size-3 fill-current" />
+                                                                                        Default
+                                                                                    </Chip.Label>
+                                                                                </Chip>
+                                                                            ) : (
+                                                                                <Button
+                                                                                    size="sm"
+                                                                                    variant="ghost"
+                                                                                    isDisabled={setDefaultDomain.isPending}
+                                                                                    onPress={() =>
+                                                                                        handleSetDefaultDomain(domain)
+                                                                                    }
+                                                                                >
+                                                                                    Set default
+                                                                                </Button>
+                                                                            )}
+                                                                            <Button
+                                                                                size="sm"
+                                                                                variant="ghost"
+                                                                                onPress={() =>
+                                                                                    openEditDomain(
+                                                                                        providerView.accounts?.find(
+                                                                                            (row) =>
+                                                                                                row.account ===
+                                                                                                group.account,
+                                                                                        )?.uuid ?? null,
+                                                                                        domain,
+                                                                                    )
+                                                                                }
+                                                                            >
+                                                                                <Pencil className="size-3.5" />
+                                                                            </Button>
+                                                                            <Button
+                                                                                size="sm"
+                                                                                variant="ghost"
+                                                                                onPress={() => setDomainToDelete(domain)}
+                                                                            >
+                                                                                <Trash2 className="size-3.5" />
+                                                                            </Button>
+                                                                        </li>
+                                                                    ))}
+                                                                </ul>
+                                                            )}
+                                                        </div>
+                                                    )}
                                                     <ul className="divide-y divide-border">
                                                         {group.keys.map((key) => {
                                                             const valueDisplay =
@@ -586,6 +736,13 @@ export function IntegrationDetailModal({
                 providerView={providerView}
             />
 
+            <DomainFormModal
+                isOpen={domainFormOpen}
+                onOpenChange={setDomainFormOpen}
+                accountUuid={domainFormAccountUuid}
+                domain={editingDomain}
+            />
+
             <ConfirmDialog
                 isOpen={!!keyToDelete}
                 onOpenChange={(open) => {
@@ -607,6 +764,29 @@ export function IntegrationDetailModal({
                 variant="danger"
                 isPending={deleteKey.isPending}
                 onConfirm={handleDelete}
+            />
+
+            <ConfirmDialog
+                isOpen={!!domainToDelete}
+                onOpenChange={(open) => {
+                    if (!open) setDomainToDelete(null);
+                }}
+                title="Delete domain?"
+                description={
+                    domainToDelete ? (
+                        <>
+                            Remove{" "}
+                            <span className="font-medium text-foreground">
+                                {domainToDelete.from_email}
+                            </span>
+                            ? This cannot be undone.
+                        </>
+                    ) : null
+                }
+                confirmLabel="Delete"
+                variant="danger"
+                isPending={removeDomain.isPending}
+                onConfirm={handleDeleteDomain}
             />
         </>
     );

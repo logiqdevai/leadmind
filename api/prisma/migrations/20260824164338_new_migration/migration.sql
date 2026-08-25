@@ -1,0 +1,2 @@
+-- RenameIndex
+ALTER INDEX "integration_account_domains_integration_account_uuid_from__key" RENAME TO "integration_account_domains_integration_account_uuid_from_e_key";

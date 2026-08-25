@@ -8,12 +8,9 @@ import {
 } from "@heroui/react";
 import { Save } from "lucide-react";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
-import { createIntegrationKey } from "@/features/integrations/services/integrations.service";
+import { useCreateResendAccount } from "@/features/integrations/hooks/use-integrations";
 import { suggestNextAccountLabel } from "@/features/integrations/constants/integration-key-types";
 import type { IntegrationProviderView } from "@/features/integrations/interfaces/integrations.interface";
-import { useQueryClient } from "@tanstack/react-query";
-import { integrationsQueryKeys } from "@/features/integrations/hooks/use-integrations";
-import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { IntegrationOfficialLink } from "./integration-official-link";
 
@@ -33,8 +30,7 @@ export function ResendAccountFormModal({
     onOpenChange,
     providerView,
 }: ResendAccountFormModalProps) {
-    const qc = useQueryClient();
-    const [pending, setPending] = useState(false);
+    const createResendAccount = useCreateResendAccount();
     const defaultAccount = useMemo(
         () => suggestNextAccountLabel(providerView.keys),
         [providerView.keys],
@@ -43,7 +39,9 @@ export function ResendAccountFormModal({
     const [account, setAccount] = useState(defaultAccount);
     const [title, setTitle] = useState("");
     const [apiKey, setApiKey] = useState("");
+    const [webhookSecret, setWebhookSecret] = useState("");
     const [fromEmail, setFromEmail] = useState("");
+    const [fromName, setFromName] = useState("");
     const [formError, setFormError] = useState<string | null>(null);
 
     useEffect(() => {
@@ -51,17 +49,19 @@ export function ResendAccountFormModal({
         setAccount(defaultAccount);
         setTitle("");
         setApiKey("");
+        setWebhookSecret("");
         setFromEmail("");
+        setFromName("");
         setFormError(null);
     }, [defaultAccount, isOpen]);
 
     const handleSubmit = async () => {
         const trimmedAccount = account.trim();
         const trimmedTitle = title.trim();
-        const fields = {
-            API_KEY: apiKey.trim(),
-            FROM_EMAIL: fromEmail.trim(),
-        };
+        const trimmedApiKey = apiKey.trim();
+        const trimmedFromEmail = fromEmail.trim();
+        const trimmedWebhookSecret = webhookSecret.trim();
+        const trimmedFromName = fromName.trim();
 
         if (!trimmedTitle) {
             setFormError("Title is required.");
@@ -73,33 +73,25 @@ export function ResendAccountFormModal({
             return;
         }
 
-        if (Object.values(fields).some((value) => !value)) {
+        if (!trimmedApiKey || !trimmedFromEmail) {
             setFormError("API key and from email are required.");
             return;
         }
 
-        setPending(true);
         setFormError(null);
 
         try {
-            const entries = Object.entries(fields) as Array<
-                ["API_KEY" | "FROM_EMAIL", string]
-            >;
-            for (const [index, [key_type, secret]] of entries.entries()) {
-                await createIntegrationKey("RESEND", {
-                    key_type,
-                    account: trimmedAccount,
-                    secret,
-                    ...(index === 0 ? { title: trimmedTitle } : {}),
-                });
-            }
-            await qc.invalidateQueries({ queryKey: integrationsQueryKeys.all });
-            toast({ title: "Resend account saved", duration: 1500 });
+            await createResendAccount.mutateAsync({
+                account: trimmedAccount,
+                title: trimmedTitle,
+                api_key: trimmedApiKey,
+                from_email: trimmedFromEmail,
+                ...(trimmedWebhookSecret ? { webhook_secret: trimmedWebhookSecret } : {}),
+                ...(trimmedFromName ? { from_name: trimmedFromName } : {}),
+            });
             onOpenChange(false);
         } catch (error) {
             setFormError(error instanceof Error ? error.message : "Could not save Resend account.");
-        } finally {
-            setPending(false);
         }
     };
 
@@ -161,6 +153,18 @@ export function ResendAccountFormModal({
                                     />
                                 </div>
                                 <div className="flex flex-col gap-1.5">
+                                    <Label htmlFor="resend-webhook-secret">Webhook secret (optional)</Label>
+                                    <Input
+                                        id="resend-webhook-secret"
+                                        className={borderedFieldClass}
+                                        type="password"
+                                        autoComplete="off"
+                                        value={webhookSecret}
+                                        onChange={(e) => setWebhookSecret(e.target.value)}
+                                        placeholder="whsec_..."
+                                    />
+                                </div>
+                                <div className="flex flex-col gap-1.5">
                                     <Label htmlFor="resend-from">From address</Label>
                                     <Input
                                         id="resend-from"
@@ -170,8 +174,19 @@ export function ResendAccountFormModal({
                                         placeholder="noreply@yourdomain.com"
                                     />
                                     <p className="text-xs text-muted">
-                                        Must be a verified domain or address in your Resend account.
+                                        Must be a verified domain or address in your Resend account. You can add more
+                                        domains to this account later without re-entering the API key.
                                     </p>
+                                </div>
+                                <div className="flex flex-col gap-1.5">
+                                    <Label htmlFor="resend-from-name">Sender name (optional)</Label>
+                                    <Input
+                                        id="resend-from-name"
+                                        className={borderedFieldClass}
+                                        value={fromName}
+                                        onChange={(e) => setFromName(e.target.value)}
+                                        placeholder="Acme Sales"
+                                    />
                                 </div>
                             </div>
 
@@ -181,7 +196,10 @@ export function ResendAccountFormModal({
                             <Button variant="secondary" onPress={() => onOpenChange(false)}>
                                 Cancel
                             </Button>
-                            <ActionButtonWithPending isPending={pending} onPress={handleSubmit}>
+                            <ActionButtonWithPending
+                                isPending={createResendAccount.isPending}
+                                onPress={handleSubmit}
+                            >
                                 <Save className="size-4" />
                                 Save Resend account
                             </ActionButtonWithPending>

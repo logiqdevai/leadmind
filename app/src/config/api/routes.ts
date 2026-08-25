@@ -126,12 +126,21 @@ export const ApiRoutes = {
         list: "/integrations",
         createKey: (provider: string) => `/integrations/${provider}/keys`,
         createSmtpAccount: "/integrations/SMTP/accounts",
+        createResendAccount: "/integrations/RESEND/accounts",
         setDefaultAccount: (provider: string) =>
             `/integrations/${provider}/default-account`,
         updateAccount: (provider: string, account: string) =>
             `/integrations/${provider}/accounts/${encodeURIComponent(account)}`,
         updateKey: (uuid: string) => `/integrations/keys/${uuid}`,
         removeKey: (uuid: string) => `/integrations/keys/${uuid}`,
+        addAccountDomain: (accountUuid: string) =>
+            `/integrations/accounts/${accountUuid}/domains`,
+        updateAccountDomain: (domainUuid: string) =>
+            `/integrations/domains/${domainUuid}`,
+        setDefaultAccountDomain: (domainUuid: string) =>
+            `/integrations/domains/${domainUuid}/default`,
+        removeAccountDomain: (domainUuid: string) =>
+            `/integrations/domains/${domainUuid}`,
     },
     admin: {
         jobs: "/admin/jobs",
@@ -313,6 +322,18 @@ export const ApiRoutes = {
             `/sending-policies/${uuid}/stages/${stageUuid}`,
         reorder_stages: (uuid: string) => `/sending-policies/${uuid}/stages/reorder`,
         preview: (uuid: string) => `/sending-policies/${uuid}/preview`,
+    },
+    mail_tester: {
+        list: "/mail-tester/tests",
+        create: "/mail-tester/tests",
+        refresh: (uuid: string) => `/mail-tester/tests/${uuid}/refresh`,
+        ai_audit: (uuid: string) => `/mail-tester/tests/${uuid}/ai-audit`,
+    },
+    mxtoolbox: {
+        list: "/mxtoolbox/checks",
+        create: "/mxtoolbox/checks",
+        rerun: (uuid: string) => `/mxtoolbox/checks/${uuid}/rerun`,
+        ai_audit: (uuid: string) => `/mxtoolbox/checks/${uuid}/ai-audit`,
     },
     campaign_integrations: {
         list: (campaignUuid: string) => `/marketing-campaigns/${campaignUuid}/integrations`,

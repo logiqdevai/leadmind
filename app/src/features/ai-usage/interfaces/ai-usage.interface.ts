@@ -8,6 +8,7 @@ export type AiUsageOperation =
     | "EMBEDDING"
     | "ADMIN_GENERATE"
     | "BATCH_JOB"
+    | "MAIL_TESTER_AUDIT"
     | "OTHER";
 
 export type AiUsageRequestMode = "SYNC" | "BATCH" | "STREAM";

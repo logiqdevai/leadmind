@@ -47,6 +47,11 @@ export function CampaignIntegrationCard({
                             <Chip.Label>{ci.integration_account.integration.provider}</Chip.Label>
                         </Chip>
                     </div>
+                    {ci.integration_account_domain ? (
+                        <p className="mt-0.5 text-xs text-muted truncate">
+                            {ci.integration_account_domain.from_email}
+                        </p>
+                    ) : null}
                     <p className="mt-1 text-xs text-muted truncate">
                         {formatSendingPolicyStages(ci.sending_policy)}
                     </p>

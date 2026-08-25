@@ -1,4 +1,6 @@
-import { Chip } from "@heroui/react";
+import { useState } from "react";
+import { Button, Chip } from "@heroui/react";
+import { Eye } from "lucide-react";
 import { Link } from "react-router-dom";
 import type { MsgStatus } from "@/features/contacts/interfaces/contact.interface";
 import { useIntegrations } from "@/features/integrations/hooks/use-integrations";
@@ -8,9 +10,11 @@ import {
     formatSendHistoryDate,
     getContactDestination,
     getSendIntegrationLabel,
+    getSendSourceLabel,
 } from "../utils/send-history.utils";
+import { SendHistoryMessageModal } from "./send-history-message-modal";
 
-const STATUS_COLOR: Record<
+export const STATUS_COLOR: Record<
     MsgStatus,
     "default" | "accent" | "success" | "warning" | "danger"
 > = {
@@ -29,6 +33,7 @@ const STATUS_COLOR: Record<
 
 export function SendHistoryTable({ rows }: { rows: SendHistoryMessage[] }) {
     const { data: integrations } = useIntegrations();
+    const [selected, setSelected] = useState<SendHistoryMessage | null>(null);
 
     if (rows.length === 0) {
         return (
@@ -40,16 +45,23 @@ export function SendHistoryTable({ rows }: { rows: SendHistoryMessage[] }) {
 
     return (
         <div className="overflow-x-hidden rounded-xl">
+            <SendHistoryMessageModal
+                message={selected}
+                onOpenChange={(open) => {
+                    if (!open) setSelected(null);
+                }}
+            />
             <table className="w-full table-fixed text-sm">
                 <thead className="bg-surface-secondary/40 text-muted">
                     <tr>
                         <th className="min-w-0 max-w-0 overflow-hidden px-3 py-2 text-left font-medium">Contact</th>
                         <th className="hidden lg:table-cell px-3 py-2 text-left font-medium">Channel</th>
                         <th className="hidden lg:table-cell px-3 py-2 text-left font-medium">Integration</th>
+                        <th className="hidden lg:table-cell px-3 py-2 text-left font-medium">Source</th>
                         <th className="px-3 py-2 text-left font-medium w-28">Status</th>
                         <th className="hidden lg:table-cell px-3 py-2 text-left font-medium">Subject / preview</th>
                         <th className="hidden lg:table-cell px-3 py-2 text-left font-medium">Sent by</th>
-                        <th className="hidden lg:table-cell px-3 py-2 text-left font-medium">Sent</th>
+                        <th className="hidden lg:table-cell px-3 py-2 text-left font-medium">Date</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -71,28 +83,42 @@ export function SendHistoryTable({ rows }: { rows: SendHistoryMessage[] }) {
                             <td className="hidden lg:table-cell px-3 py-2 align-top text-foreground/90">
                                 {getSendIntegrationLabel(row, integrations)}
                             </td>
+                            <td className="hidden lg:table-cell px-3 py-2 align-top text-xs text-foreground/90 truncate max-w-[10rem]">
+                                {getSendSourceLabel(row)}
+                            </td>
                             <td className="px-3 py-2 align-top">
                                 <Chip size="sm" variant="soft" color={STATUS_COLOR[row.status]}>
                                     <Chip.Label>{row.status}</Chip.Label>
                                 </Chip>
                             </td>
                             <td className="hidden lg:table-cell px-3 py-2 align-top max-w-xs">
-                                {row.channel === "EMAIL" && row.subject ? (
-                                    <div className="font-medium text-foreground truncate">
-                                        {row.subject}
+                                <div className="flex items-start gap-1.5">
+                                    <div className="min-w-0 flex-1">
+                                        {row.channel === "EMAIL" && row.subject ? (
+                                            <div className="font-medium text-foreground truncate">
+                                                {row.subject}
+                                            </div>
+                                        ) : null}
+                                        <div className="text-xs text-muted line-clamp-2">
+                                            {stripHtml(row.content)}
+                                        </div>
                                     </div>
-                                ) : null}
-                                <div className="text-xs text-muted line-clamp-2">
-                                    {stripHtml(row.content)}
+                                    <Button
+                                        size="sm"
+                                        variant="ghost"
+                                        className="shrink-0 min-w-7 h-7 px-1"
+                                        onPress={() => setSelected(row)}
+                                        aria-label="View full message"
+                                    >
+                                        <Eye className="size-3.5 text-muted" />
+                                    </Button>
                                 </div>
                             </td>
                             <td className="hidden lg:table-cell px-3 py-2 align-top text-xs text-muted">
-                                {row.sent_by?.full_name?.trim() ||
-                                    row.sent_by?.email ||
-                                    (row.campaign_uuid ? "Campaign" : "—")}
+                                {row.sent_by?.full_name?.trim() || row.sent_by?.email || "—"}
                             </td>
                             <td className="hidden lg:table-cell px-3 py-2 align-top text-xs text-muted whitespace-nowrap">
-                                {formatSendHistoryDate(row.sent_at)}
+                                {formatSendHistoryDate(row.sent_at ?? row.created_at)}
                             </td>
                         </tr>
                     ))}

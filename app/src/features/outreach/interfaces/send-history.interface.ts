@@ -3,6 +3,7 @@ import type { Channel, MsgStatus } from "@/features/contacts/interfaces/contact.
 export const SendSource = {
     DIRECT: "direct",
     CAMPAIGN: "campaign",
+    SEQUENCE: "sequence",
 } as const;
 
 export type SendSource = (typeof SendSource)[keyof typeof SendSource];
@@ -27,6 +28,21 @@ export interface SendHistoryCampaign {
     name: string;
 }
 
+export interface SendHistorySequence {
+    uuid: string;
+    name: string;
+}
+
+export interface SendHistorySequenceEnrollment {
+    uuid: string;
+    sequence: SendHistorySequence;
+}
+
+export interface SendHistorySequenceStep {
+    uuid: string;
+    order_index: number;
+}
+
 export interface SendHistorySentBy {
     uuid: string;
     full_name: string | null;
@@ -38,6 +54,8 @@ export interface SendHistoryMessage {
     organisation_uuid: string;
     contact_uuid: string;
     campaign_uuid: string | null;
+    sequence_enrollment_uuid: string | null;
+    sequence_step_uuid: string | null;
     sent_by_user_uuid: string | null;
     channel: Channel;
     subject: string | null;
@@ -55,6 +73,8 @@ export interface SendHistoryMessage {
     contact: SendHistoryContact;
     campaign: SendHistoryCampaign | null;
     sent_by: SendHistorySentBy | null;
+    sequence_enrollment: SendHistorySequenceEnrollment | null;
+    sequence_step: SendHistorySequenceStep | null;
 }
 
 export interface ListSendHistoryQuery {
@@ -64,6 +84,7 @@ export interface ListSendHistoryQuery {
     status?: MsgStatus;
     contact_uuid?: string;
     campaign_uuid?: string;
+    sequence_uuid?: string;
     source?: SendSource;
     email_provider?: EmailIntegrationProvider;
     email_account?: string;

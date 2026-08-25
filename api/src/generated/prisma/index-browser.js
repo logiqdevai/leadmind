@@ -397,6 +397,7 @@ exports.Prisma.OutreachMessageScalarFieldEnum = {
   failed_at: 'failed_at',
   email_provider: 'email_provider',
   email_account: 'email_account',
+  email_domain_uuid: 'email_domain_uuid',
   sms_provider: 'sms_provider',
   metadata: 'metadata',
   sequence_enrollment_uuid: 'sequence_enrollment_uuid',
@@ -659,6 +660,53 @@ exports.Prisma.IntegrationKeyScalarFieldEnum = {
   updated_at: 'updated_at'
 };
 
+exports.Prisma.IntegrationAccountDomainScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  integration_account_uuid: 'integration_account_uuid',
+  from_email: 'from_email',
+  from_name: 'from_name',
+  is_default: 'is_default',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.MailTesterTestScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  organisation_uuid: 'organisation_uuid',
+  label: 'label',
+  test_identifier: 'test_identifier',
+  test_address: 'test_address',
+  from_provider: 'from_provider',
+  from_account: 'from_account',
+  status: 'status',
+  score: 'score',
+  result: 'result',
+  error_message: 'error_message',
+  ai_audit: 'ai_audit',
+  ai_audit_generated_at: 'ai_audit_generated_at',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.MxToolboxCheckScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  organisation_uuid: 'organisation_uuid',
+  label: 'label',
+  domain: 'domain',
+  commands: 'commands',
+  status: 'status',
+  failed_count: 'failed_count',
+  warning_count: 'warning_count',
+  results: 'results',
+  ai_audit: 'ai_audit',
+  ai_audit_generated_at: 'ai_audit_generated_at',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
 exports.Prisma.ReminderScalarFieldEnum = {
   id: 'id',
   uuid: 'uuid',
@@ -842,6 +890,7 @@ exports.Prisma.CampaignIntegrationScalarFieldEnum = {
   uuid: 'uuid',
   campaign_uuid: 'campaign_uuid',
   integration_account_uuid: 'integration_account_uuid',
+  integration_account_domain_uuid: 'integration_account_domain_uuid',
   sending_policy_uuid: 'sending_policy_uuid',
   status: 'status',
   created_at: 'created_at',
@@ -1071,7 +1120,12 @@ exports.ExternalIntegrationProvider = exports.$Enums.ExternalIntegrationProvider
   APIFY: 'APIFY',
   HUBSPOT: 'HUBSPOT',
   SCRAPIO: 'SCRAPIO',
+<<<<<<< HEAD
   MAILTESTER: 'MAILTESTER'
+=======
+  MAILTESTER: 'MAILTESTER',
+  MXTOOLBOX: 'MXTOOLBOX'
+>>>>>>> b2de3bbfae29094781daa9b7d9709e2f681a4189
 };
 
 exports.SequenceStatus = exports.$Enums.SequenceStatus = {
@@ -1213,6 +1267,18 @@ exports.IntegrationKeyType = exports.$Enums.IntegrationKeyType = {
   FROM_NAME: 'FROM_NAME'
 };
 
+exports.MailTesterTestStatus = exports.$Enums.MailTesterTestStatus = {
+  PENDING: 'PENDING',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED'
+};
+
+exports.MxToolboxCheckStatus = exports.$Enums.MxToolboxCheckStatus = {
+  PASSED: 'PASSED',
+  WARNING: 'WARNING',
+  FAILED: 'FAILED'
+};
+
 exports.ReminderStatus = exports.$Enums.ReminderStatus = {
   PENDING: 'PENDING',
   COMPLETED: 'COMPLETED',
@@ -1255,6 +1321,8 @@ exports.AiUsageOperation = exports.$Enums.AiUsageOperation = {
   EMBEDDING: 'EMBEDDING',
   ADMIN_GENERATE: 'ADMIN_GENERATE',
   BATCH_JOB: 'BATCH_JOB',
+  MAIL_TESTER_AUDIT: 'MAIL_TESTER_AUDIT',
+  MXTOOLBOX_AUDIT: 'MXTOOLBOX_AUDIT',
   OTHER: 'OTHER'
 };
 
@@ -1347,6 +1415,9 @@ exports.Prisma.ModelName = {
   Integration: 'Integration',
   IntegrationAccount: 'IntegrationAccount',
   IntegrationKey: 'IntegrationKey',
+  IntegrationAccountDomain: 'IntegrationAccountDomain',
+  MailTesterTest: 'MailTesterTest',
+  MxToolboxCheck: 'MxToolboxCheck',
   Reminder: 'Reminder',
   Form: 'Form',
   FormField: 'FormField',

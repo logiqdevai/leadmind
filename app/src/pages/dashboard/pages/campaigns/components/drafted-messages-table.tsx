@@ -150,6 +150,9 @@ export function DraftedMessagesTable({ campaignUuid }: DraftedMessagesTableProps
                             ? {
                                   email_provider: sendEmailProvider.provider,
                                   email_account: sendEmailProvider.account,
+                                  ...(sendEmailProvider.domain_uuid
+                                      ? { email_domain_uuid: sendEmailProvider.domain_uuid }
+                                      : {}),
                               }
                             : {}),
                         sender_profile_uuid: sendSenderProfileUuid,

@@ -9,12 +9,14 @@ export const PROVIDER_KEY_TYPES: Record<IntegrationProvider, IntegrationKeyType[
     {
         OPENAI: ["API_KEY", "WEBHOOK_SECRET"],
         ANTHROPIC: ["API_KEY"],
-        RESEND: ["API_KEY", "FROM_EMAIL", "WEBHOOK_SECRET"],
+        RESEND: ["API_KEY", "WEBHOOK_SECRET"],
         SMTP: ["HOST", "PORT", "USERNAME", "PASSWORD", "FROM_EMAIL", "FROM_NAME"],
         TWILIO: ["ACCOUNT_SID", "AUTH_TOKEN"],
         APIFY: ["API_KEY"],
         SCRAPIO: ["API_KEY", "WEBHOOK_SECRET"],
         HUBSPOT: ["ACCESS_TOKEN"],
+        MAILTESTER: ["USERNAME"],
+        MXTOOLBOX: ["API_KEY"],
     };
 
 export const DISABLED_INTEGRATION_PROVIDERS: IntegrationProvider[] = [
@@ -81,16 +83,11 @@ const SMTP_DISPLAYABLE_KEY_TYPES = new Set<IntegrationKeyType>([
     "FROM_NAME",
 ]);
 
-const RESEND_DISPLAYABLE_KEY_TYPES = new Set<IntegrationKeyType>(["FROM_EMAIL"]);
-
 export function shouldExposeIntegrationKeyDisplayValue(
     provider: IntegrationProvider,
     keyType: IntegrationKeyType,
 ): boolean {
-    if (provider === "SMTP" && SMTP_DISPLAYABLE_KEY_TYPES.has(keyType)) {
-        return true;
-    }
-    return provider === "RESEND" && RESEND_DISPLAYABLE_KEY_TYPES.has(keyType);
+    return provider === "SMTP" && SMTP_DISPLAYABLE_KEY_TYPES.has(keyType);
 }
 
 export function formatIntegrationKeyDisplay(
@@ -168,24 +165,10 @@ export function resolveEffectiveDefaultAccount(
 }
 
 export function suggestAccountForKeyType(
-    provider: IntegrationProvider,
+    _provider: IntegrationProvider,
     keys: IntegrationKey[],
-    keyType: IntegrationKeyType,
+    _keyType: IntegrationKeyType,
 ): string {
-    if (provider === "RESEND" && keyType === "FROM_EMAIL") {
-        const apiKeyAccounts = keys
-            .filter((key) => key.key_type === "API_KEY")
-            .map((key) => key.account);
-        const missingFrom = apiKeyAccounts.find(
-            (account) =>
-                !keys.some(
-                    (key) => key.account === account && key.key_type === "FROM_EMAIL",
-                ),
-        );
-        if (missingFrom) {
-            return missingFrom;
-        }
-    }
     return suggestNextAccountLabel(keys);
 }
 
@@ -234,6 +217,11 @@ export function isEmailProviderAccountVisible(
     );
 }
 
+/**
+ * Whether an account has the credentials required to send. For RESEND this only checks
+ * API_KEY - a domain/from-email is stored separately (see IntegrationAccountView.domains),
+ * so callers that need full readiness should also check `account.domains.length > 0`.
+ */
 export function isEmailAccountSendable(
     provider: Extract<IntegrationProvider, "RESEND" | "SMTP">,
     keys: IntegrationKey[],
@@ -241,10 +229,7 @@ export function isEmailAccountSendable(
 ): boolean {
     const accountKeys = keys.filter((key) => key.account === account);
     if (provider === "RESEND") {
-        const required: IntegrationKeyType[] = ["API_KEY", "FROM_EMAIL"];
-        return required.every((keyType) =>
-            accountKeys.some((key) => key.key_type === keyType),
-        );
+        return accountKeys.some((key) => key.key_type === "API_KEY");
     }
     return requiredKeyTypesForProvider("SMTP").every((keyType) =>
         accountKeys.some((key) => key.key_type === keyType),
@@ -257,8 +242,15 @@ export function countSendableEmailAccounts(
     if (providerView.provider !== "RESEND" && providerView.provider !== "SMTP") {
         return 0;
     }
+    if (providerView.provider === "RESEND") {
+        return listDistinctIntegrationAccounts(providerView.keys).filter((account) => {
+            const hasApiKey = isEmailAccountSendable("RESEND", providerView.keys, account);
+            const domains = providerView.accounts?.find((row) => row.account === account)?.domains ?? [];
+            return hasApiKey && domains.length > 0;
+        }).length;
+    }
     return listDistinctIntegrationAccounts(providerView.keys).filter((account) =>
-        isEmailAccountSendable(providerView.provider as "RESEND" | "SMTP", providerView.keys, account),
+        isEmailAccountSendable("SMTP", providerView.keys, account),
     ).length;
 }
 

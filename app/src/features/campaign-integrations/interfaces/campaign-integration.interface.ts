@@ -20,14 +20,22 @@ export interface CampaignIntegrationAccountView {
     };
 }
 
+export interface CampaignIntegrationDomainView {
+    uuid: string;
+    from_email: string;
+    from_name: string | null;
+}
+
 export interface CampaignIntegration {
     uuid: string;
     campaign_uuid: string;
     integration_account_uuid: string;
+    integration_account_domain_uuid: string | null;
     sending_policy_uuid: string;
     status: CampaignIntegrationStatus;
     campaign: { uuid: string; name: string };
     integration_account: CampaignIntegrationAccountView;
+    integration_account_domain: CampaignIntegrationDomainView | null;
     sending_policy: SendingPolicy;
     created_at: string;
     updated_at: string;
@@ -35,6 +43,7 @@ export interface CampaignIntegration {
 
 export interface AssignCampaignIntegrationPayload {
     integration_account_uuid: string;
+    integration_account_domain_uuid?: string;
     sending_policy_uuid: string;
 }
 

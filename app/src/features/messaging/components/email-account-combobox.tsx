@@ -20,10 +20,21 @@ export interface EmailAccountComboboxProps {
 }
 
 function accountSearchText(account: SendableEmailAccount): string {
-    return [account.title, account.label, account.detail, account.provider, account.account]
+    return [
+        account.title,
+        account.label,
+        account.detail,
+        account.provider,
+        account.account,
+        account.fromEmail,
+    ]
         .filter(Boolean)
         .join(" ")
         .toLowerCase();
+}
+
+function accountDisplayLabel(account: SendableEmailAccount): string {
+    return account.fromEmail ? `${account.title} — ${account.fromEmail}` : account.title;
 }
 
 export function EmailAccountCombobox({
@@ -63,7 +74,11 @@ export function EmailAccountCombobox({
                 onSelectionChange={(key) => {
                     const match = accounts.find((row) => allocationKey(row) === key);
                     if (match?.canSend) {
-                        onChange({ provider: match.provider, account: match.account });
+                        onChange({
+                            provider: match.provider,
+                            account: match.account,
+                            ...(match.domain_uuid ? { domain_uuid: match.domain_uuid } : {}),
+                        });
                     }
                 }}
                 onOpenChange={(isOpen) => {
@@ -81,7 +96,7 @@ export function EmailAccountCombobox({
                     <Select.Value className="min-w-0 flex-1 overflow-hidden">
                         {selectedAccount ? (
                             <span className="truncate text-sm text-foreground">
-                                {selectedAccount.title}
+                                {accountDisplayLabel(selectedAccount)}
                             </span>
                         ) : (
                             <span className="truncate text-sm text-muted">{placeholder}</span>
@@ -119,7 +134,7 @@ export function EmailAccountCombobox({
                                             <ListBox.Item
                                                 key={key}
                                                 id={key}
-                                                textValue={account.title}
+                                                textValue={accountDisplayLabel(account)}
                                                 isDisabled={incomplete}
                                                 className={cn(
                                                     "grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3",
@@ -142,9 +157,9 @@ export function EmailAccountCombobox({
                                                             </span>
                                                         ) : null}
                                                     </div>
-                                                    {account.detail === "from address missing" ? (
+                                                    {account.detail === "no domain configured" ? (
                                                         <span className="truncate text-xs text-danger">
-                                                            Add from address in Integrations
+                                                            Add a domain in Integrations
                                                         </span>
                                                     ) : account.detail ? (
                                                         <span className="truncate text-xs text-muted">

@@ -317,6 +317,7 @@ export interface PaginatedContacts {
 export interface SendMessagePayload {
     email_provider?: "RESEND" | "SMTP";
     email_account?: string;
+    email_domain_uuid?: string;
     sender_profile_uuid?: string;
 }
 
@@ -332,6 +333,7 @@ export interface CreateMessagePayload {
     contact_uuid: string;
     email_provider?: "RESEND" | "SMTP";
     email_account?: string;
+    email_domain_uuid?: string;
     sender_profile_uuid?: string;
 }
 

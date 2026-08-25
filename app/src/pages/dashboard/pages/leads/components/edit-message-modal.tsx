@@ -104,6 +104,9 @@ function MessageForm({ message, contact_uuid, onClose }: MessageFormProps) {
                     ? {
                           email_provider: emailProvider.provider,
                           email_account: emailProvider.account,
+                          ...(emailProvider.domain_uuid
+                              ? { email_domain_uuid: emailProvider.domain_uuid }
+                              : {}),
                       }
                     : {}),
                 sender_profile_uuid: senderProfileUuid,

@@ -17,6 +17,7 @@ import {
 export const SendSource = {
     DIRECT: 'direct',
     CAMPAIGN: 'campaign',
+    SEQUENCE: 'sequence',
 } as const;
 
 export type SendSourceType = (typeof SendSource)[keyof typeof SendSource];
@@ -44,8 +45,13 @@ export class ListMessagesDto {
 
     @ApiPropertyOptional({ enum: SendSource })
     @IsOptional()
-    @IsIn([SendSource.DIRECT, SendSource.CAMPAIGN])
+    @IsIn([SendSource.DIRECT, SendSource.CAMPAIGN, SendSource.SEQUENCE])
     source?: SendSourceType;
+
+    @ApiPropertyOptional()
+    @IsOptional()
+    @IsUUID()
+    sequence_uuid?: string;
 
     @ApiPropertyOptional({ enum: ExternalIntegrationProvider })
     @IsOptional()
@@ -56,6 +62,11 @@ export class ListMessagesDto {
     @IsOptional()
     @IsString()
     email_account?: string;
+
+    @ApiPropertyOptional()
+    @IsOptional()
+    @IsUUID()
+    email_domain_uuid?: string;
 
     @ApiPropertyOptional()
     @IsOptional()

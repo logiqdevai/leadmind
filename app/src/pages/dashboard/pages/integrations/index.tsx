@@ -3,11 +3,13 @@ import { Button, Chip } from "@heroui/react";
 import {
     Bot,
     Cloud,
+    Gauge,
     KeyRound,
     Mail,
     MessageSquare,
     Plug,
     Server,
+    Shield,
     Sparkles,
 } from "lucide-react";
 import {
@@ -33,6 +35,8 @@ const providerIcons: Record<string, ComponentType<{ className?: string }>> = {
     APIFY: Cloud,
     SCRAPIO: Bot,
     HUBSPOT: Plug,
+    MAILTESTER: Gauge,
+    MXTOOLBOX: Shield,
 };
 
 const FALLBACK_PROVIDERS: IntegrationProviderView[] = [
@@ -60,18 +64,13 @@ const FALLBACK_PROVIDERS: IntegrationProviderView[] = [
         uuid: null,
         label: "Resend",
         description:
-            "Transactional email and inbound webhooks. Add API key and from address per account, then paste the webhook URL into Resend and store the signing secret.",
+            "Transactional email and inbound webhooks. Add an API key, then attach one or more sending domains per account, and paste the webhook URL into Resend and store the signing secret.",
         allows_multiple_accounts: true,
         supports_default_account_selection: true,
         default_account: null,
         accounts: [],
         keyTypes: [
             { key_type: "API_KEY", label: "API key", placeholder: "re_..." },
-            {
-                key_type: "FROM_EMAIL",
-                label: "From email",
-                placeholder: "noreply@example.com",
-            },
             {
                 key_type: "WEBHOOK_SECRET",
                 label: "Webhook secret",
@@ -166,6 +165,32 @@ const FALLBACK_PROVIDERS: IntegrationProviderView[] = [
                 label: "Access token",
                 placeholder: "pat-...",
             },
+        ],
+        keys: [],
+    },
+    {
+        provider: "MAILTESTER",
+        uuid: null,
+        label: "Mail-Tester",
+        description:
+            "Email deliverability testing. Add your Mail-Tester username, then send a test email from a connected Resend or SMTP account to check spam score, authentication, and blacklist status.",
+        default_account: null,
+        accounts: [],
+        keyTypes: [
+            { key_type: "USERNAME", label: "Username", placeholder: "yourusername" },
+        ],
+        keys: [],
+    },
+    {
+        provider: "MXTOOLBOX",
+        uuid: null,
+        label: "MxToolbox",
+        description:
+            "Domain health monitoring. Add your MxToolbox API key, then run DNS, email authentication (SPF/DKIM/DMARC/BIMI/MTA-STS), and blacklist checks against any domain - no email needs to be sent.",
+        default_account: null,
+        accounts: [],
+        keyTypes: [
+            { key_type: "API_KEY", label: "API key", placeholder: "00000000-0000-0000-0000-000000000000" },
         ],
         keys: [],
     },

@@ -84,6 +84,11 @@ export const ActivityAction = {
   KEY_UPDATED: 'key_updated',
   KEY_DELETED: 'key_deleted',
   SMTP_ACCOUNT_CREATED: 'smtp_account_created',
+  RESEND_ACCOUNT_CREATED: 'resend_account_created',
+  DOMAIN_ADDED: 'domain_added',
+  DOMAIN_UPDATED: 'domain_updated',
+  DOMAIN_DELETED: 'domain_deleted',
+  DEFAULT_DOMAIN_SET: 'default_domain_set',
   DEFAULT_ACCOUNT_SET: 'default_account_set',
   ACCOUNT_TITLE_UPDATED: 'account_title_updated',
   COMPLETED: 'completed',
@@ -94,6 +99,8 @@ export const ActivityAction = {
   PAUSED: 'paused',
   RESUMED: 'resumed',
   REMOVED: 'removed',
+  MAIL_TEST_STARTED: 'mail_test_started',
+  MXTOOLBOX_CHECK_STARTED: 'mxtoolbox_check_started',
 } as const;
 
 export type ActivityAction =
