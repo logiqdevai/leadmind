@@ -1120,12 +1120,8 @@ exports.ExternalIntegrationProvider = exports.$Enums.ExternalIntegrationProvider
   APIFY: 'APIFY',
   HUBSPOT: 'HUBSPOT',
   SCRAPIO: 'SCRAPIO',
-<<<<<<< HEAD
-  MAILTESTER: 'MAILTESTER'
-=======
   MAILTESTER: 'MAILTESTER',
   MXTOOLBOX: 'MXTOOLBOX'
->>>>>>> b2de3bbfae29094781daa9b7d9709e2f681a4189
 };
 
 exports.SequenceStatus = exports.$Enums.SequenceStatus = {

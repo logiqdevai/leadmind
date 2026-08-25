@@ -33,7 +33,6 @@ export const PROVIDER_KEY_TYPES: Record<
     IntegrationKeyType.API_KEY,
     IntegrationKeyType.WEBHOOK_SECRET,
   ],
-  [ExternalIntegrationProvider.MAILTESTER]: [IntegrationKeyType.API_KEY],
   [ExternalIntegrationProvider.HUBSPOT]: [IntegrationKeyType.ACCESS_TOKEN],
   [ExternalIntegrationProvider.MAILTESTER]: [IntegrationKeyType.USERNAME],
   [ExternalIntegrationProvider.MXTOOLBOX]: [IntegrationKeyType.API_KEY],
