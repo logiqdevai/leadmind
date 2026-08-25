@@ -1,4 +1,4 @@
-import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useId, useLayoutEffect, useRef, useState, type Ref } from "react";
 import { createPortal } from "react-dom";
 import { Input } from "@heroui/react";
 import { Loader2, MapPin } from "lucide-react";
@@ -246,7 +246,7 @@ export function LocationAutocomplete({
                 (() => {
                     const list = (
                         <ul
-                            ref={panelRef}
+                            ref={panelRef as Ref<HTMLUListElement>}
                             data-portaled-menu={embedInOverlay ? undefined : ""}
                             id={listboxId}
                             role="listbox"
@@ -292,7 +292,7 @@ export function LocationAutocomplete({
                 (() => {
                     const empty = (
                         <div
-                            ref={panelRef}
+                            ref={panelRef as Ref<HTMLDivElement>}
                             data-portaled-menu={embedInOverlay ? undefined : ""}
                             style={embedInOverlay ? undefined : overlayStyle}
                             className={cn(
