@@ -32,27 +32,20 @@ export class OpenAiBatchDispatchService {
         const batchStatus = await this.openAiBatchService.waitForBatchReady(job.organisation_uuid, batchId);
 
         if (['failed', 'expired', 'cancelled'].includes(batchStatus.status)) {
-            await this.prisma.openAiBatchJob.update({
-                where: { batch_id: batchId },
-                data: {
-                    status: this.mapTerminalStatus(batchStatus.status),
-                    finished_at: new Date(),
-                    output_file_id: batchStatus.output_file_id,
-                    error_file_id: batchStatus.error_file_id,
-                    completed_requests: batchStatus.completed_requests,
-                    failed_requests: batchStatus.failed_requests,
-                    total_requests: batchStatus.total_requests,
-                },
-            });
-            await this.bulkJobsService.finishOpenAiMirror(job.organisation_uuid, batchId, {
-                failed: true,
-                error: `OpenAI batch ${batchStatus.status}`,
-            });
-            this.logger.warn(`Batch ${batchId} ended with OpenAI status: ${batchStatus.status}`);
+            await this.finalizeFailedBatch(batchId, job.organisation_uuid, batchStatus, `OpenAI batch ${batchStatus.status}`);
             return;
         }
 
         if (!batchStatus.output_file_id) {
+            if (batchStatus.status === 'completed') {
+                await this.finalizeFailedBatch(
+                    batchId,
+                    job.organisation_uuid,
+                    batchStatus,
+                    `OpenAI batch completed with 0 successful requests (${batchStatus.failed_requests}/${batchStatus.total_requests} failed)`,
+                );
+                return;
+            }
             this.logger.warn(
                 `Batch ${batchId} not ready for processing (OpenAI status=${batchStatus.status}, no output file)`,
             );
@@ -73,6 +66,38 @@ export class OpenAiBatchDispatchService {
                 this.logger.warn(`Unknown batch job type for ${batchId}: ${job.type}`);
         }
         await this.bulkJobsService.finishOpenAiMirror(job.organisation_uuid, batchId, { failed: false });
+    }
+
+    private async finalizeFailedBatch(
+        batchId: string,
+        organisation_uuid: string,
+        batchStatus: {
+            status: string;
+            output_file_id: string | null;
+            error_file_id: string | null;
+            completed_requests: number;
+            failed_requests: number;
+            total_requests: number;
+        },
+        error: string,
+    ): Promise<void> {
+        await this.prisma.openAiBatchJob.update({
+            where: { batch_id: batchId },
+            data: {
+                status: this.mapTerminalStatus(batchStatus.status),
+                finished_at: new Date(),
+                output_file_id: batchStatus.output_file_id,
+                error_file_id: batchStatus.error_file_id,
+                completed_requests: batchStatus.completed_requests,
+                failed_requests: batchStatus.failed_requests,
+                total_requests: batchStatus.total_requests,
+            },
+        });
+        await this.bulkJobsService.finishOpenAiMirror(organisation_uuid, batchId, {
+            failed: true,
+            error,
+        });
+        this.logger.warn(`Batch ${batchId} finalized as failed: ${error}`);
     }
 
     private mapTerminalStatus(openAiStatus: string): OpenAiBatchStatus {

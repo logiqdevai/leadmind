@@ -1091,6 +1091,7 @@ enum ExternalIntegrationProvider {
   APIFY
   HUBSPOT
   SCRAPIO
+  MAILTESTER
 }
 
 enum IntegrationKeyType {

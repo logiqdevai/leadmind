@@ -1070,7 +1070,8 @@ exports.ExternalIntegrationProvider = exports.$Enums.ExternalIntegrationProvider
   TWILIO: 'TWILIO',
   APIFY: 'APIFY',
   HUBSPOT: 'HUBSPOT',
-  SCRAPIO: 'SCRAPIO'
+  SCRAPIO: 'SCRAPIO',
+  MAILTESTER: 'MAILTESTER'
 };
 
 exports.SequenceStatus = exports.$Enums.SequenceStatus = {

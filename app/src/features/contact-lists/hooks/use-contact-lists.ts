@@ -9,6 +9,7 @@ import {
     listContactListMembers,
     listContactLists,
     removeListContact,
+    removeListContactsBelowScore,
     removeListContactsBulk,
     updateContactList,
 } from "../services/contact-lists.service";
@@ -18,8 +19,10 @@ import type {
     CreateContactListPayload,
     ListContactListMembersQuery,
     ListContactListsQuery,
+    PaginatedListMembers,
     UpdateContactListPayload,
 } from "../interfaces/contact-list.interface";
+import { contactAwaitingScore } from "@/lib/pending-contact-scores";
 
 export const contactListQueryKeys = {
     all: ["contact-lists"] as const,
@@ -53,6 +56,11 @@ export function useContactListMembers(listUuid: string, query: ListContactListMe
         queryFn: () => listContactListMembers(listUuid, query),
         staleTime: 30_000,
         enabled: !!listUuid,
+        refetchInterval: (q) => {
+            const data = q.state.data as PaginatedListMembers | undefined;
+            if (!data) return false;
+            return data.data.some((c) => contactAwaitingScore(c)) ? 5_000 : false;
+        },
     });
 }
 
@@ -186,6 +194,39 @@ export function useRemoveListContact() {
         onError: (error: Error) => {
             toast({
                 title: "Could not remove contact",
+                description: error.message,
+                duration: 3000,
+                variant: "error",
+            });
+        },
+    });
+}
+
+export function useRemoveListContactsBelowScore() {
+    const qc = useQueryClient();
+    return useMutation({
+        mutationFn: (listUuid: string) => removeListContactsBelowScore(listUuid),
+        onSuccess: (data, listUuid) => {
+            qc.invalidateQueries({ queryKey: contactListQueryKeys.all });
+            qc.invalidateQueries({ queryKey: contactListQueryKeys.detail(listUuid) });
+            qc.invalidateQueries({ queryKey: contactListQueryKeys.members(listUuid, {}) });
+            toast({
+                title:
+                    data.removed === 0
+                        ? "No low-score contacts"
+                        : data.removed === 1
+                          ? "Contact removed from list"
+                          : "Low-score contacts removed",
+                description:
+                    data.removed === 0
+                        ? "No contacts in this list have a score under 6."
+                        : `${data.removed} contact${data.removed === 1 ? "" : "s"} with a score under 6 removed from this list.`,
+                duration: 2000,
+            });
+        },
+        onError: (error: Error) => {
+            toast({
+                title: "Could not remove low-score contacts",
                 description: error.message,
                 duration: 3000,
                 variant: "error",

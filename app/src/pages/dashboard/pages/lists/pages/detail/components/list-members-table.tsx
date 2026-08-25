@@ -17,6 +17,7 @@ import {
     ContactTableQuickViewButton,
 } from "@/pages/dashboard/components/contact-stack-viewer";
 import { ContactAlsoFoundByHint } from "@/pages/dashboard/components/contact-also-found-by-hint";
+import { ContactScoresCompact } from "@/pages/dashboard/pages/leads/components/badges";
 import { contactTableColumnClass } from "@/pages/dashboard/components/contact-table-column-classes";
 import { cn } from "@/lib/utils";
 
@@ -126,6 +127,11 @@ export function ListMembersTable({
                         </div>
                     );
                 },
+            }),
+            columnHelper.display({
+                id: "score",
+                header: "Score",
+                cell: (info) => <ContactScoresCompact contact={info.row.original} />,
             }),
             columnHelper.accessor("status", {
                 id: "status",

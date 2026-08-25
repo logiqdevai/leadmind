@@ -8,6 +8,7 @@ import {
     useContactList,
     useContactListMembers,
     useContactLists,
+    useRemoveListContactsBelowScore,
     useRemoveListContactsBulk,
 } from "@/features/contact-lists/hooks/use-contact-lists";
 import {
@@ -66,6 +67,7 @@ export default function ListDetailPage() {
     const [scoreOpen, setScoreOpen] = useState(false);
     const [enrichOpen, setEnrichOpen] = useState(false);
     const [scrapeConfirmOpen, setScrapeConfirmOpen] = useState(false);
+    const [removeBelowScoreOpen, setRemoveBelowScoreOpen] = useState(false);
     const [outreachChooserOpen, setOutreachChooserOpen] = useState(false);
     const [composeOpen, setComposeOpen] = useState(false);
     const [enrollOpen, setEnrollOpen] = useState(false);
@@ -75,6 +77,7 @@ export default function ListDetailPage() {
     const enrichBulk = useEnrichContactsBulk();
     const scrapeEmailsBulk = useBulkScrapeContactEmails();
     const removeListContactsBulk = useRemoveListContactsBulk();
+    const removeBelowScore = useRemoveListContactsBelowScore();
     const deleteContactsBulk = useDeleteContactsBulk();
 
     const allowedTabIds = new Set<string>(TABS.map((t) => t.id));
@@ -282,6 +285,13 @@ export default function ListDetailPage() {
                                 }
                                 scrapeEmailsDisabled={!canScrapeEmails}
                                 scrapeEmailsPending={scrapeEmailsBulk.isPending}
+                                onRemoveBelowScore={
+                                    currentTab === ListDetailTabIds.CONTACTS
+                                        ? () => setRemoveBelowScoreOpen(true)
+                                        : undefined
+                                }
+                                removeBelowScoreDisabled={total === 0}
+                                removeBelowScorePending={removeBelowScore.isPending}
                                 onSendToSelected={
                                     currentTab === ListDetailTabIds.CONTACTS
                                         ? () => setOutreachChooserOpen(true)
@@ -419,6 +429,21 @@ export default function ListDetailPage() {
                         confirmLabel="Start lookup"
                         isPending={scrapeEmailsBulk.isPending}
                         onConfirm={handleScrapeEmails}
+                    />
+                    <ConfirmDialog
+                        isOpen={removeBelowScoreOpen}
+                        onOpenChange={setRemoveBelowScoreOpen}
+                        title="Remove contacts scoring under 6?"
+                        description="Looks at each contact's current score (highest if they have more than one). Contacts with a score under 6 are removed from this list. Unscored contacts stay. Contacts themselves are not deleted."
+                        confirmLabel="Remove from list"
+                        variant="danger"
+                        isPending={removeBelowScore.isPending}
+                        onConfirm={async () => {
+                            if (!uuid) return;
+                            await removeBelowScore.mutateAsync(uuid);
+                            setSelectedKeys(new Set());
+                            setRemoveBelowScoreOpen(false);
+                        }}
                     />
                     <ListMembersDeleteDialog
                         isOpen={deleteConfirmOpen}

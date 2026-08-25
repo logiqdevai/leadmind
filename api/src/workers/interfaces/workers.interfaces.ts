@@ -11,6 +11,19 @@ export interface ContactJobData {
     bulk_job_uuid?: string;
 }
 
+export interface ContactBatchEnrichJobData {
+    job_kind: 'contact_batch_enrich';
+    items: ContactJobData[];
+    force_enrichment?: boolean;
+    bulk_job_uuid?: string;
+}
+
+export interface ContactBatchScoreJobData {
+    job_kind: 'contact_batch_score';
+    items: ContactJobData[];
+    bulk_job_uuid?: string;
+}
+
 export interface LeadJobData {
     lead_uuid: string;
     enrichment_sources?: EnrichmentSource[];
@@ -26,4 +39,9 @@ export interface LeadBatchEnrichPrepareJobData {
     bulk_job_uuid?: string;
 }
 
-export type AiProcessJobData = ContactJobData | LeadJobData | LeadBatchEnrichPrepareJobData;
+export type AiProcessJobData =
+    | ContactJobData
+    | ContactBatchEnrichJobData
+    | ContactBatchScoreJobData
+    | LeadJobData
+    | LeadBatchEnrichPrepareJobData;

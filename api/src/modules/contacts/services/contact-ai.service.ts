@@ -72,28 +72,43 @@ export class ContactAiService {
     async scoreContact(
         contact: Contact,
         lead: Lead,
-        filter: FilterForScore,
+        filter: FilterForScore | null,
         opts?: { onlyInstructionUuids?: string[] },
-    ): Promise<void> {
-        const linksAll = filter.filter_scoring_instructions ?? [];
+    ): Promise<{ scored: number }> {
         const only = opts?.onlyInstructionUuids?.filter(Boolean);
-        const links =
-            only && only.length > 0
-                ? linksAll.filter((l) => only.includes(l.scoring_instruction.uuid))
-                : linksAll;
-        if (links.length === 0) {
-            this.logger.warn(`Contact ${contact.uuid}: filter has no scoring instructions, skipping score`);
-            return;
+        let instructions: Array<{ uuid: string; instructions: string }>;
+        if (only && only.length > 0) {
+            instructions = await this.prisma.scoringInstruction.findMany({
+                where: {
+                    organisation_uuid: contact.organisation_uuid,
+                    uuid: { in: only },
+                },
+                select: { uuid: true, instructions: true },
+            });
+            if (instructions.length !== only.length) {
+                const found = new Set(instructions.map((i) => i.uuid));
+                const missing = only.filter((uuid) => !found.has(uuid));
+                throw new Error(`Scoring instruction(s) not found: ${missing.join(', ')}`);
+            }
+        } else {
+            instructions = (filter?.filter_scoring_instructions ?? []).map((l) => l.scoring_instruction);
+        }
+        if (instructions.length === 0) {
+            this.logger.warn(`Contact ${contact.uuid}: no scoring instructions to apply, skipping score`);
+            return { scored: 0 };
         }
 
-        const existingRows = await this.prisma.contactScore.findMany({
-            where: { contact_uuid: contact.uuid },
-            select: { scoring_instruction_uuid: true },
-        });
+        const forceRescore = Boolean(only && only.length > 0);
+        const existingRows = forceRescore
+            ? []
+            : await this.prisma.contactScore.findMany({
+                  where: { contact_uuid: contact.uuid },
+                  select: { scoring_instruction_uuid: true },
+              });
         const done = new Set(existingRows.map((r) => r.scoring_instruction_uuid));
+        let scored = 0;
 
-        for (const link of links) {
-            const instr = link.scoring_instruction;
+        for (const instr of instructions) {
             if (done.has(instr.uuid)) continue;
 
             const { response, usage } = await this.aiService.generateObjectWithSchema<ContactAiScoreResult>({
@@ -125,6 +140,7 @@ export class ContactAiService {
                 update: { score: response.score },
             });
             done.add(instr.uuid);
+            scored += 1;
 
             this.logger.log(
                 `Contact ${contact.uuid} / ${instr.uuid}: scored ${response.score}/10 (${usage.totalTokens} tokens, $${usage.totalCost.toFixed(5)})`,
@@ -144,6 +160,7 @@ export class ContactAiService {
         if (fresh) {
             await this.elasticsearchService.indexContact(fresh);
         }
+        return { scored };
     }
 
     async submitBatchScore(

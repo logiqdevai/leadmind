@@ -13,6 +13,13 @@ import { AiConfig } from '../utils/ai.config';
 import { z } from 'zod';
 import { calculateAiCost } from '../utils/ai-cost';
 import { AiUsageService } from '@/modules/ai-usage/ai-usage.service';
+import { AI_GENERATE_OBJECT_TIMEOUT_MS } from '@/core/queues/queues.constants';
+
+function isAbortError(error: Error): boolean {
+    const name = error.name.toLowerCase();
+    const message = error.message.toLowerCase();
+    return name.includes('abort') || message.includes('abort') || message.includes('timed out');
+}
 
 @Injectable()
 export class AiService {
@@ -160,6 +167,7 @@ export class AiService {
                     system: options?.system || 'You are a helpful assistant.',
                     temperature: options.temperature,
                     maxTokens: options.maxTokens,
+                    abortSignal: AbortSignal.timeout(AI_GENERATE_OBJECT_TIMEOUT_MS),
                 });
 
                 const cost = calculateAiCost({
@@ -186,24 +194,23 @@ export class AiService {
             } catch (error) {
                 lastError = error instanceof Error ? error : new Error(String(error));
 
-                if (attempt < maxRetries) {
-                    this.logger.warn(
-                        `Schema validation error on attempt ${attempt}, retrying... Error: ${lastError.message}`,
-                    );
-                    continue;
+                if (isAbortError(lastError) || attempt >= maxRetries) {
+                    this.aiUsageService.logFromSyncCall({
+                        organisation_uuid: options.organisation_uuid,
+                        provider,
+                        model,
+                        usageContext: options.usage,
+                        duration_ms: Date.now() - startedAt,
+                        status: AiUsageStatus.ERROR,
+                        error_message: lastError.message,
+                    });
+                    this.logger.error(`Error generating object on attempt ${attempt}: ${lastError.message}`);
+                    throw new Error(`Failed to generate object: ${lastError.message}`);
                 }
 
-                this.aiUsageService.logFromSyncCall({
-                    organisation_uuid: options.organisation_uuid,
-                    provider,
-                    model,
-                    usageContext: options.usage,
-                    duration_ms: Date.now() - startedAt,
-                    status: AiUsageStatus.ERROR,
-                    error_message: lastError.message,
-                });
-                this.logger.error(`Error generating object on attempt ${attempt}: ${lastError.message}`);
-                throw new Error(`Failed to generate object: ${lastError.message}`);
+                this.logger.warn(
+                    `Schema validation error on attempt ${attempt}, retrying... Error: ${lastError.message}`,
+                );
             }
         }
 

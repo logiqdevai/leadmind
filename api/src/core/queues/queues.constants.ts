@@ -6,6 +6,16 @@ export const FILTER_SCRAPE_LOCK_DURATION_MS = 900_000;
 
 export const AI_PROCESS_QUEUE = 'ai-process';
 
+export const AI_PROCESS_CONCURRENCY = 5;
+
+export const AI_PROCESS_WORKER_CONCURRENCY = AI_PROCESS_CONCURRENCY;
+
+export const AI_PROCESS_JOB_TIMEOUT_MS = 900_000;
+
+export const AI_GENERATE_OBJECT_TIMEOUT_MS = 90_000;
+
+export const BULK_JOB_STALL_MS = 4 * 60 * 1000;
+
 export const OUTREACH_SEND_QUEUE = 'outreach-send';
 
 export const MARKETING_CAMPAIGN_DISPATCH_QUEUE = 'marketing-campaign-dispatch';

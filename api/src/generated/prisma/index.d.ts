@@ -632,7 +632,8 @@ export const ExternalIntegrationProvider: {
   TWILIO: 'TWILIO',
   APIFY: 'APIFY',
   HUBSPOT: 'HUBSPOT',
-  SCRAPIO: 'SCRAPIO'
+  SCRAPIO: 'SCRAPIO',
+  MAILTESTER: 'MAILTESTER'
 };
 
 export type ExternalIntegrationProvider = (typeof ExternalIntegrationProvider)[keyof typeof ExternalIntegrationProvider]

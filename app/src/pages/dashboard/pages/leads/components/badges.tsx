@@ -1,5 +1,6 @@
 import { Chip } from "@heroui/react";
 import type { Contact, ContactScoreRow } from "@/features/contacts/interfaces/contact.interface";
+import { contactScoreDisplayRows } from "@/lib/contact-score-display";
 import type { EmailValidationStatus, LeadStatus } from "@/features/contacts/interfaces/contact.interface";
 import {
   EMAIL_VALIDATION_STATUS_CHIP_COLOR,
@@ -63,20 +64,9 @@ export function maxContactScore(rows: ContactScoreRow[] | null | undefined): num
 }
 
 function contactScoresTooltip(contact: Contact): string {
-  const defs = contact.filter?.scoring_instructions ?? [];
-  const scoreRows = Array.isArray(contact.contact_scores) ? contact.contact_scores : [];
-  const byInstr = new Map(scoreRows.map((r) => [r.scoring_instruction_uuid, r.score]));
-  if (defs.length > 0) {
-    return defs
-      .map((d) => {
-        const s = byInstr.get(d.uuid);
-        return s != null ? `${d.name}: ${s}/10` : `${d.name}: …`;
-      })
-      .join("\n");
-  }
-  const rows = scoreRows;
+  const rows = contactScoreDisplayRows(contact).filter((r) => r.score != null);
   if (!rows.length) return "";
-  return rows.map((r) => `${r.score}/10`).join("\n");
+  return rows.map((r) => `${r.name}: ${r.score}/10`).join("\n");
 }
 
 export function ContactScoresCompact({ contact }: { contact: Contact }) {

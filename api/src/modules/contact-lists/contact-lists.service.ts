@@ -309,6 +309,35 @@ export class ContactListsService {
         return { contact_uuid: contactUuid };
     }
 
+    async removeContactsBelowScore(
+        organisation_uuid: string,
+        listUuid: string,
+        minScore = 6,
+    ) {
+        await this.ensureListOwned(organisation_uuid, listUuid);
+
+        const result = await this.prisma.contactListMember.deleteMany({
+            where: {
+                list_uuid: listUuid,
+                contact: {
+                    AND: [
+                        { contact_scores: { some: { score: { lt: minScore } } } },
+                        { contact_scores: { none: { score: { gte: minScore } } } },
+                    ],
+                },
+            },
+        });
+
+        if (result.count > 0) {
+            await this.prisma.contactList.update({
+                where: { uuid: listUuid },
+                data: { updated_at: new Date() },
+            });
+        }
+
+        return { removed: result.count };
+    }
+
     async removeContacts(organisation_uuid: string, listUuid: string, contactUuids: string[]) {
         await this.ensureListOwned(organisation_uuid, listUuid);
 

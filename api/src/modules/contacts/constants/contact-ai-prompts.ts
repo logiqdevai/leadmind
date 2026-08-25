@@ -154,7 +154,7 @@ LEAD PROFILE:
 ${formatContactForAi(contact, lead)}
 """
 
-Return:
+Return a JSON object with:
 - score: integer 1-10
 - reasoning: 1-2 sentences explaining the rating, referencing the targeting criteria
 `.trim();
@@ -322,4 +322,5 @@ Output: only the call script body. No commentary.
 
 export const AiScoringSystemPrompt = `
 You are a sales-qualification assistant scoring leads against targeting criteria.
+Always respond with a JSON object containing integer "score" (1-10) and string "reasoning".
 `;
