@@ -269,6 +269,15 @@ export class OutreachService {
         await this.prisma.outreachMessage.delete({ where: { uuid: message_uuid } });
     }
 
+    async getThread(organisation_uuid: string, message_uuid: string) {
+        const message = await this.requireOwnedMessage(organisation_uuid, message_uuid);
+        const interactions = await this.prisma.interaction.findMany({
+            where: { outreach_message_uuid: message_uuid },
+            orderBy: { created_at: 'asc' },
+        });
+        return { message, interactions };
+    }
+
     async listMessages(organisation_uuid: string, filters: ListMessagesDto) {
         if (filters.contact_uuid) {
             await this.requireOwnedContact(organisation_uuid, filters.contact_uuid);

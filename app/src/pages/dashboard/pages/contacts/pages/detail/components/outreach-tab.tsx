@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Button, Chip } from "@heroui/react";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
-import { Pencil, Plus, RefreshCcw, Send, Trash, Workflow } from "lucide-react";
+import { MessageCircleReply, Pencil, Plus, RefreshCcw, Send, Trash, Workflow } from "lucide-react";
 import { Channel, type Contact } from "@/features/contacts/interfaces/contact.interface";
 import { MsgStatus, type OutreachMessage } from "@/features/contacts/interfaces/contact.interface";
 import { useDeleteOutreachMessage, useSendOutreachMessage } from "@/features/outreach/hooks/use-outreach";
@@ -14,8 +14,23 @@ import { useIntegrations } from "@/features/integrations/hooks/use-integrations"
 import { resolveDefaultEmailTarget } from "@/features/integrations/utils/email-provider-utils";
 import { useEmailProviderSendLimitStatus } from "@/features/email-send-limits/hooks/use-email-provider-send-limit-status";
 import { MessageBodyPreview } from "./message-body-preview";
+import { MessageThreadModal } from "./message-thread-modal";
 import { Section } from "./section";
 import { channelIcon } from "../utils/channel-icon";
+
+const STATUS_COLOR: Record<MsgStatus, "default" | "success" | "warning" | "danger"> = {
+  [MsgStatus.PENDING]: "default",
+  [MsgStatus.QUEUED]: "default",
+  [MsgStatus.SENT]: "success",
+  [MsgStatus.DELIVERED]: "success",
+  [MsgStatus.OPENED]: "success",
+  [MsgStatus.CLICKED]: "success",
+  [MsgStatus.REPLIED]: "success",
+  [MsgStatus.FAILED]: "danger",
+  [MsgStatus.BOUNCED]: "danger",
+  [MsgStatus.UNSUBSCRIBED]: "warning",
+  [MsgStatus.SKIPPED]: "warning",
+};
 
 interface OutreachTabProps {
   contact: Contact;
@@ -39,6 +54,7 @@ export function OutreachTab({ contact, highlightUuid, onHighlightConsumed, onNav
   const [draftPendingSend, setDraftPendingSend] = useState<OutreachMessage | null>(null);
   const [composeOpen, setComposeOpen] = useState(false);
   const [enrollOpen, setEnrollOpen] = useState(false);
+  const [threadUuid, setThreadUuid] = useState<string | null>(null);
   const [ringedUuid, setRingedUuid] = useState<string | null>(null);
   const cardRefs = useRef(new Map<string, HTMLDivElement>());
 
@@ -75,7 +91,7 @@ export function OutreachTab({ contact, highlightUuid, onHighlightConsumed, onNav
     const messages = contact.outreach_messages ?? [];
     const drafts = messages.filter((m) => m.status === MsgStatus.PENDING);
     const sentHistory = messages
-      .filter((m) => m.status === MsgStatus.SENT || m.status === MsgStatus.FAILED)
+      .filter((m) => m.status !== MsgStatus.PENDING && m.status !== MsgStatus.QUEUED)
       .sort((a, b) => {
         const at = a.sent_at ?? a.updated_at;
         const bt = b.sent_at ?? b.updated_at;
@@ -184,7 +200,7 @@ export function OutreachTab({ contact, highlightUuid, onHighlightConsumed, onNav
               <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
                 <div className="min-w-0 flex flex-col gap-1.5">
                   <div className="flex flex-wrap items-center gap-1.5">
-                    <Chip size="sm" color={m.status === MsgStatus.SENT ? "success" : "danger"} variant="soft">
+                    <Chip size="sm" color={STATUS_COLOR[m.status]} variant="soft">
                       <Chip.Label>{m.status}</Chip.Label>
                     </Chip>
                     <Chip size="sm" variant="soft">
@@ -196,6 +212,17 @@ export function OutreachTab({ contact, highlightUuid, onHighlightConsumed, onNav
                   ) : null}
                 </div>
                 <div className="flex flex-wrap items-center gap-2 sm:shrink-0 sm:justify-end">
+                  {m.channel === Channel.EMAIL && m.status !== MsgStatus.PENDING && m.status !== MsgStatus.QUEUED ? (
+                    <Button
+                      size="sm"
+                      variant="tertiary"
+                      className="w-full justify-center sm:w-auto"
+                      onPress={() => setThreadUuid(m.uuid)}
+                    >
+                      <MessageCircleReply className="size-3.5" />
+                      {m.status === MsgStatus.REPLIED ? "View conversation" : "View activity"}
+                    </Button>
+                  ) : null}
                   {m.status === MsgStatus.FAILED ? (
                     <Button
                       size="sm"
@@ -239,6 +266,14 @@ export function OutreachTab({ contact, highlightUuid, onHighlightConsumed, onNav
           if (!open) setEditingMessage(null);
         }}
         contact_uuid={contact.uuid}
+      />
+
+      <MessageThreadModal
+        messageUuid={threadUuid}
+        isOpen={threadUuid !== null}
+        onOpenChange={(open) => {
+          if (!open) setThreadUuid(null);
+        }}
       />
 
       <ComposeMessageModal

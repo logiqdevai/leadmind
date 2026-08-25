@@ -65,11 +65,15 @@ export class WebhookEventService {
     async resolveOutboundMessageIdFromReceived(
         provider_received_id: string,
         from: string,
+        organisation_uuid: string,
     ): Promise<{ provider_message_id: string; email: ReceivedEmailContent | null } | null> {
-        const { ids: headerIds, email } = await this.fetchReceivedEmail(provider_received_id);
+        const { ids: headerIds, email } = await this.fetchReceivedEmail(
+            provider_received_id,
+            organisation_uuid,
+        );
         for (const provider_message_id of headerIds) {
             const message = await this.prisma.outreachMessage.findFirst({
-                where: { provider_message_id },
+                where: { provider_message_id, organisation_uuid },
                 select: { provider_message_id: true },
             });
             if (message?.provider_message_id) {
@@ -79,7 +83,7 @@ export class WebhookEventService {
 
         const normalizedFrom = from.trim().toLowerCase();
         const contact = await this.prisma.contact.findFirst({
-            where: { email: { equals: normalizedFrom, mode: 'insensitive' } },
+            where: { email: { equals: normalizedFrom, mode: 'insensitive' }, organisation_uuid },
             select: { uuid: true },
         });
         if (!contact) {
@@ -89,6 +93,7 @@ export class WebhookEventService {
         const message = await this.prisma.outreachMessage.findFirst({
             where: {
                 contact_uuid: contact.uuid,
+                organisation_uuid,
                 channel: Channel.EMAIL,
                 direction: MsgDirection.OUTBOUND,
                 provider_message_id: { not: null },
@@ -144,6 +149,8 @@ export class WebhookEventService {
         const now = new Date();
         const updates: Prisma.OutreachMessageUpdateInput = {};
         let interactionType: InteractionType | null = null;
+        let interactionContent: string | null = null;
+        let interactionMetadata: Record<string, unknown> | null = null;
         let mccStatus: CampaignContactStatus | null = null;
         let counterField:
             | 'delivered_count'
@@ -191,6 +198,10 @@ export class WebhookEventService {
                 if (this.canProgress(message.status, MsgStatus.REPLIED)) {
                     updates.status = MsgStatus.REPLIED;
                 }
+                // Latest-reply snapshot on the message, kept for quick access by existing
+                // consumers. The Interaction row created below (linked via
+                // outreach_message_uuid) is the source of truth for full reply history —
+                // it is never overwritten by a later reply.
                 if (event.reply?.subject !== undefined) {
                     updates.reply_subject = event.reply.subject;
                 }
@@ -201,6 +212,12 @@ export class WebhookEventService {
                     updates.reply_html = event.reply.html;
                 }
                 interactionType = InteractionType.REPLY_RECEIVED;
+                interactionContent = event.reply?.text ?? null;
+                interactionMetadata = {
+                    ...(event.metadata ?? {}),
+                    subject: event.reply?.subject ?? null,
+                    html: event.reply?.html ?? null,
+                };
                 mccStatus = CampaignContactStatus.REPLIED;
                 counterField = 'replied_count';
                 break;
@@ -241,16 +258,18 @@ export class WebhookEventService {
         ];
 
         if (interactionType) {
+            const metadata = interactionMetadata ?? event.metadata ?? undefined;
             ops.push(
                 this.prisma.interaction.create({
                     data: {
                         contact_uuid: message.contact_uuid,
                         organisation_uuid: message.organisation_uuid,
                         campaign_uuid: message.campaign_uuid,
-                        outreach_message_uuid: null, // unique 1:1 FK already taken by the original send interaction
+                        outreach_message_uuid: message.uuid,
                         type: interactionType,
-                        metadata: event.metadata
-                            ? (event.metadata as Prisma.InputJsonValue)
+                        content: interactionContent ?? undefined,
+                        metadata: metadata
+                            ? (metadata as Prisma.InputJsonValue)
                             : undefined,
                     },
                 }),
@@ -355,6 +374,7 @@ export class WebhookEventService {
 
     private async fetchReceivedEmail(
         provider_received_id: string,
+        organisation_uuid: string,
     ): Promise<{ ids: string[]; email: ReceivedEmailContent | null }> {
         try {
             const result = await this.resendAdapter.getReceivedEmail(provider_received_id);
@@ -380,8 +400,8 @@ export class WebhookEventService {
 
             const customMessageUuid = headers['x-message-uuid'] ?? headers['X-Message-Uuid'];
             if (typeof customMessageUuid === 'string' && customMessageUuid.trim()) {
-                const byUuid = await this.prisma.outreachMessage.findUnique({
-                    where: { uuid: customMessageUuid.trim() },
+                const byUuid = await this.prisma.outreachMessage.findFirst({
+                    where: { uuid: customMessageUuid.trim(), organisation_uuid },
                     select: { provider_message_id: true },
                 });
                 if (byUuid?.provider_message_id) {
@@ -389,11 +409,22 @@ export class WebhookEventService {
                 }
             }
 
+            // Message-ID tokens are provider-agnostic: Resend generates a bare UUID,
+            // while SMTP relays (nodemailer) generate an RFC-5322 `<local@domain>` id.
+            // Extract both shapes so threads sent via either provider can be matched.
             const ids = new Set<string>();
             for (const value of headerValues) {
-                const matches = value.match(RESEND_EMAIL_ID_PATTERN) ?? [];
-                for (const match of matches) {
+                const uuidMatches = value.match(RESEND_EMAIL_ID_PATTERN) ?? [];
+                for (const match of uuidMatches) {
                     ids.add(match.toLowerCase());
+                }
+
+                const bracketedTokens = value.match(/<[^<>\s]+>/g) ?? [];
+                for (const token of bracketedTokens) {
+                    const bare = token.slice(1, -1).trim();
+                    if (!bare) continue;
+                    ids.add(bare);
+                    ids.add(`<${bare}>`);
                 }
             }
             return { ids: [...ids], email: content };

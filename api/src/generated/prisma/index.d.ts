@@ -7326,6 +7326,37 @@ export namespace Prisma {
 
 
   /**
+   * Count Type OutreachMessageCountOutputType
+   */
+
+  export type OutreachMessageCountOutputType = {
+    interactions: number
+  }
+
+  export type OutreachMessageCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    interactions?: boolean | OutreachMessageCountOutputTypeCountInteractionsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * OutreachMessageCountOutputType without action
+   */
+  export type OutreachMessageCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OutreachMessageCountOutputType
+     */
+    select?: OutreachMessageCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * OutreachMessageCountOutputType without action
+   */
+  export type OutreachMessageCountOutputTypeCountInteractionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InteractionWhereInput
+  }
+
+
+  /**
    * Count Type OutreachSequenceCountOutputType
    */
 
@@ -33260,10 +33291,11 @@ export namespace Prisma {
     contact?: boolean | ContactDefaultArgs<ExtArgs>
     campaign?: boolean | OutreachMessage$campaignArgs<ExtArgs>
     sent_by?: boolean | OutreachMessage$sent_byArgs<ExtArgs>
-    interaction?: boolean | OutreachMessage$interactionArgs<ExtArgs>
+    interactions?: boolean | OutreachMessage$interactionsArgs<ExtArgs>
     sequence_enrollment?: boolean | OutreachMessage$sequence_enrollmentArgs<ExtArgs>
     sequence_step?: boolean | OutreachMessage$sequence_stepArgs<ExtArgs>
     campaign_integration?: boolean | OutreachMessage$campaign_integrationArgs<ExtArgs>
+    _count?: boolean | OutreachMessageCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["outreachMessage"]>
 
   export type OutreachMessageSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -33397,10 +33429,11 @@ export namespace Prisma {
     contact?: boolean | ContactDefaultArgs<ExtArgs>
     campaign?: boolean | OutreachMessage$campaignArgs<ExtArgs>
     sent_by?: boolean | OutreachMessage$sent_byArgs<ExtArgs>
-    interaction?: boolean | OutreachMessage$interactionArgs<ExtArgs>
+    interactions?: boolean | OutreachMessage$interactionsArgs<ExtArgs>
     sequence_enrollment?: boolean | OutreachMessage$sequence_enrollmentArgs<ExtArgs>
     sequence_step?: boolean | OutreachMessage$sequence_stepArgs<ExtArgs>
     campaign_integration?: boolean | OutreachMessage$campaign_integrationArgs<ExtArgs>
+    _count?: boolean | OutreachMessageCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type OutreachMessageIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
@@ -33428,7 +33461,7 @@ export namespace Prisma {
       contact: Prisma.$ContactPayload<ExtArgs>
       campaign: Prisma.$MarketingCampaignPayload<ExtArgs> | null
       sent_by: Prisma.$UserPayload<ExtArgs> | null
-      interaction: Prisma.$InteractionPayload<ExtArgs> | null
+      interactions: Prisma.$InteractionPayload<ExtArgs>[]
       sequence_enrollment: Prisma.$SequenceEnrollmentPayload<ExtArgs> | null
       sequence_step: Prisma.$OutreachSequenceStepPayload<ExtArgs> | null
       campaign_integration: Prisma.$CampaignIntegrationPayload<ExtArgs> | null
@@ -33866,7 +33899,7 @@ export namespace Prisma {
     contact<T extends ContactDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ContactDefaultArgs<ExtArgs>>): Prisma__ContactClient<$Result.GetResult<Prisma.$ContactPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     campaign<T extends OutreachMessage$campaignArgs<ExtArgs> = {}>(args?: Subset<T, OutreachMessage$campaignArgs<ExtArgs>>): Prisma__MarketingCampaignClient<$Result.GetResult<Prisma.$MarketingCampaignPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     sent_by<T extends OutreachMessage$sent_byArgs<ExtArgs> = {}>(args?: Subset<T, OutreachMessage$sent_byArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    interaction<T extends OutreachMessage$interactionArgs<ExtArgs> = {}>(args?: Subset<T, OutreachMessage$interactionArgs<ExtArgs>>): Prisma__InteractionClient<$Result.GetResult<Prisma.$InteractionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    interactions<T extends OutreachMessage$interactionsArgs<ExtArgs> = {}>(args?: Subset<T, OutreachMessage$interactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InteractionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     sequence_enrollment<T extends OutreachMessage$sequence_enrollmentArgs<ExtArgs> = {}>(args?: Subset<T, OutreachMessage$sequence_enrollmentArgs<ExtArgs>>): Prisma__SequenceEnrollmentClient<$Result.GetResult<Prisma.$SequenceEnrollmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     sequence_step<T extends OutreachMessage$sequence_stepArgs<ExtArgs> = {}>(args?: Subset<T, OutreachMessage$sequence_stepArgs<ExtArgs>>): Prisma__OutreachSequenceStepClient<$Result.GetResult<Prisma.$OutreachSequenceStepPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     campaign_integration<T extends OutreachMessage$campaign_integrationArgs<ExtArgs> = {}>(args?: Subset<T, OutreachMessage$campaign_integrationArgs<ExtArgs>>): Prisma__CampaignIntegrationClient<$Result.GetResult<Prisma.$CampaignIntegrationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
@@ -34367,9 +34400,9 @@ export namespace Prisma {
   }
 
   /**
-   * OutreachMessage.interaction
+   * OutreachMessage.interactions
    */
-  export type OutreachMessage$interactionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type OutreachMessage$interactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Interaction
      */
@@ -34383,6 +34416,11 @@ export namespace Prisma {
      */
     include?: InteractionInclude<ExtArgs> | null
     where?: InteractionWhereInput
+    orderBy?: InteractionOrderByWithRelationInput | InteractionOrderByWithRelationInput[]
+    cursor?: InteractionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: InteractionScalarFieldEnum | InteractionScalarFieldEnum[]
   }
 
   /**
@@ -79390,12 +79428,12 @@ export namespace Prisma {
     id?: number
     uuid?: string
     slug?: string
+    reply_to_email?: string
     AND?: OrganisationWhereInput | OrganisationWhereInput[]
     OR?: OrganisationWhereInput[]
     NOT?: OrganisationWhereInput | OrganisationWhereInput[]
     name?: StringFilter<"Organisation"> | string
     timezone?: StringFilter<"Organisation"> | string
-    reply_to_email?: StringNullableFilter<"Organisation"> | string | null
     created_at?: DateTimeFilter<"Organisation"> | Date | string
     updated_at?: DateTimeFilter<"Organisation"> | Date | string
     members?: OrganisationMemberListRelationFilter
@@ -79428,7 +79466,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyListRelationFilter
     mail_tester_tests?: MailTesterTestListRelationFilter
     mxtoolbox_checks?: MxToolboxCheckListRelationFilter
-  }, "id" | "uuid" | "slug">
+  }, "id" | "uuid" | "slug" | "reply_to_email">
 
   export type OrganisationOrderByWithAggregationInput = {
     id?: SortOrder
@@ -80976,7 +81014,6 @@ export namespace Prisma {
   export type InteractionWhereUniqueInput = Prisma.AtLeast<{
     id?: number
     uuid?: string
-    outreach_message_uuid?: string
     AND?: InteractionWhereInput | InteractionWhereInput[]
     OR?: InteractionWhereInput[]
     NOT?: InteractionWhereInput | InteractionWhereInput[]
@@ -80987,13 +81024,14 @@ export namespace Prisma {
     content?: StringNullableFilter<"Interaction"> | string | null
     metadata?: JsonNullableFilter<"Interaction">
     status_change?: JsonNullableFilter<"Interaction">
+    outreach_message_uuid?: StringNullableFilter<"Interaction"> | string | null
     created_at?: DateTimeFilter<"Interaction"> | Date | string
     updated_at?: DateTimeFilter<"Interaction"> | Date | string
     contact?: XOR<ContactScalarRelationFilter, ContactWhereInput>
     organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
     outreach_message?: XOR<OutreachMessageNullableScalarRelationFilter, OutreachMessageWhereInput> | null
     campaign?: XOR<MarketingCampaignNullableScalarRelationFilter, MarketingCampaignWhereInput> | null
-  }, "id" | "uuid" | "outreach_message_uuid">
+  }, "id" | "uuid">
 
   export type InteractionOrderByWithAggregationInput = {
     id?: SortOrder
@@ -81075,7 +81113,7 @@ export namespace Prisma {
     contact?: XOR<ContactScalarRelationFilter, ContactWhereInput>
     campaign?: XOR<MarketingCampaignNullableScalarRelationFilter, MarketingCampaignWhereInput> | null
     sent_by?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
-    interaction?: XOR<InteractionNullableScalarRelationFilter, InteractionWhereInput> | null
+    interactions?: InteractionListRelationFilter
     sequence_enrollment?: XOR<SequenceEnrollmentNullableScalarRelationFilter, SequenceEnrollmentWhereInput> | null
     sequence_step?: XOR<OutreachSequenceStepNullableScalarRelationFilter, OutreachSequenceStepWhereInput> | null
     campaign_integration?: XOR<CampaignIntegrationNullableScalarRelationFilter, CampaignIntegrationWhereInput> | null
@@ -81120,7 +81158,7 @@ export namespace Prisma {
     contact?: ContactOrderByWithRelationInput
     campaign?: MarketingCampaignOrderByWithRelationInput
     sent_by?: UserOrderByWithRelationInput
-    interaction?: InteractionOrderByWithRelationInput
+    interactions?: InteractionOrderByRelationAggregateInput
     sequence_enrollment?: SequenceEnrollmentOrderByWithRelationInput
     sequence_step?: OutreachSequenceStepOrderByWithRelationInput
     campaign_integration?: CampaignIntegrationOrderByWithRelationInput
@@ -81168,7 +81206,7 @@ export namespace Prisma {
     contact?: XOR<ContactScalarRelationFilter, ContactWhereInput>
     campaign?: XOR<MarketingCampaignNullableScalarRelationFilter, MarketingCampaignWhereInput> | null
     sent_by?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
-    interaction?: XOR<InteractionNullableScalarRelationFilter, InteractionWhereInput> | null
+    interactions?: InteractionListRelationFilter
     sequence_enrollment?: XOR<SequenceEnrollmentNullableScalarRelationFilter, SequenceEnrollmentWhereInput> | null
     sequence_step?: XOR<OutreachSequenceStepNullableScalarRelationFilter, OutreachSequenceStepWhereInput> | null
     campaign_integration?: XOR<CampaignIntegrationNullableScalarRelationFilter, CampaignIntegrationWhereInput> | null
@@ -86615,7 +86653,7 @@ export namespace Prisma {
     updated_at?: Date | string
     contact: ContactCreateNestedOneWithoutInteractionsInput
     organisation: OrganisationCreateNestedOneWithoutInteractionsInput
-    outreach_message?: OutreachMessageCreateNestedOneWithoutInteractionInput
+    outreach_message?: OutreachMessageCreateNestedOneWithoutInteractionsInput
     campaign?: MarketingCampaignCreateNestedOneWithoutInteractionsInput
   }
 
@@ -86644,7 +86682,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     contact?: ContactUpdateOneRequiredWithoutInteractionsNestedInput
     organisation?: OrganisationUpdateOneRequiredWithoutInteractionsNestedInput
-    outreach_message?: OutreachMessageUpdateOneWithoutInteractionNestedInput
+    outreach_message?: OutreachMessageUpdateOneWithoutInteractionsNestedInput
     campaign?: MarketingCampaignUpdateOneWithoutInteractionsNestedInput
   }
 
@@ -86734,7 +86772,7 @@ export namespace Prisma {
     contact: ContactCreateNestedOneWithoutOutreach_messagesInput
     campaign?: MarketingCampaignCreateNestedOneWithoutOutreach_messagesInput
     sent_by?: UserCreateNestedOneWithoutOutreach_messages_sentInput
-    interaction?: InteractionCreateNestedOneWithoutOutreach_messageInput
+    interactions?: InteractionCreateNestedManyWithoutOutreach_messageInput
     sequence_enrollment?: SequenceEnrollmentCreateNestedOneWithoutOutreach_messagesInput
     sequence_step?: OutreachSequenceStepCreateNestedOneWithoutOutreach_messagesInput
     campaign_integration?: CampaignIntegrationCreateNestedOneWithoutOutreach_messagesInput
@@ -86775,7 +86813,7 @@ export namespace Prisma {
     campaign_integration_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
-    interaction?: InteractionUncheckedCreateNestedOneWithoutOutreach_messageInput
+    interactions?: InteractionUncheckedCreateNestedManyWithoutOutreach_messageInput
   }
 
   export type OutreachMessageUpdateInput = {
@@ -86809,7 +86847,7 @@ export namespace Prisma {
     contact?: ContactUpdateOneRequiredWithoutOutreach_messagesNestedInput
     campaign?: MarketingCampaignUpdateOneWithoutOutreach_messagesNestedInput
     sent_by?: UserUpdateOneWithoutOutreach_messages_sentNestedInput
-    interaction?: InteractionUpdateOneWithoutOutreach_messageNestedInput
+    interactions?: InteractionUpdateManyWithoutOutreach_messageNestedInput
     sequence_enrollment?: SequenceEnrollmentUpdateOneWithoutOutreach_messagesNestedInput
     sequence_step?: OutreachSequenceStepUpdateOneWithoutOutreach_messagesNestedInput
     campaign_integration?: CampaignIntegrationUpdateOneWithoutOutreach_messagesNestedInput
@@ -86850,7 +86888,7 @@ export namespace Prisma {
     campaign_integration_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    interaction?: InteractionUncheckedUpdateOneWithoutOutreach_messageNestedInput
+    interactions?: InteractionUncheckedUpdateManyWithoutOutreach_messageNestedInput
   }
 
   export type OutreachMessageCreateManyInput = {
@@ -92714,11 +92752,6 @@ export namespace Prisma {
   export type UserNullableScalarRelationFilter = {
     is?: UserWhereInput | null
     isNot?: UserWhereInput | null
-  }
-
-  export type InteractionNullableScalarRelationFilter = {
-    is?: InteractionWhereInput | null
-    isNot?: InteractionWhereInput | null
   }
 
   export type SequenceEnrollmentNullableScalarRelationFilter = {
@@ -98945,9 +98978,9 @@ export namespace Prisma {
     connect?: OrganisationWhereUniqueInput
   }
 
-  export type OutreachMessageCreateNestedOneWithoutInteractionInput = {
-    create?: XOR<OutreachMessageCreateWithoutInteractionInput, OutreachMessageUncheckedCreateWithoutInteractionInput>
-    connectOrCreate?: OutreachMessageCreateOrConnectWithoutInteractionInput
+  export type OutreachMessageCreateNestedOneWithoutInteractionsInput = {
+    create?: XOR<OutreachMessageCreateWithoutInteractionsInput, OutreachMessageUncheckedCreateWithoutInteractionsInput>
+    connectOrCreate?: OutreachMessageCreateOrConnectWithoutInteractionsInput
     connect?: OutreachMessageWhereUniqueInput
   }
 
@@ -98977,14 +99010,14 @@ export namespace Prisma {
     update?: XOR<XOR<OrganisationUpdateToOneWithWhereWithoutInteractionsInput, OrganisationUpdateWithoutInteractionsInput>, OrganisationUncheckedUpdateWithoutInteractionsInput>
   }
 
-  export type OutreachMessageUpdateOneWithoutInteractionNestedInput = {
-    create?: XOR<OutreachMessageCreateWithoutInteractionInput, OutreachMessageUncheckedCreateWithoutInteractionInput>
-    connectOrCreate?: OutreachMessageCreateOrConnectWithoutInteractionInput
-    upsert?: OutreachMessageUpsertWithoutInteractionInput
+  export type OutreachMessageUpdateOneWithoutInteractionsNestedInput = {
+    create?: XOR<OutreachMessageCreateWithoutInteractionsInput, OutreachMessageUncheckedCreateWithoutInteractionsInput>
+    connectOrCreate?: OutreachMessageCreateOrConnectWithoutInteractionsInput
+    upsert?: OutreachMessageUpsertWithoutInteractionsInput
     disconnect?: OutreachMessageWhereInput | boolean
     delete?: OutreachMessageWhereInput | boolean
     connect?: OutreachMessageWhereUniqueInput
-    update?: XOR<XOR<OutreachMessageUpdateToOneWithWhereWithoutInteractionInput, OutreachMessageUpdateWithoutInteractionInput>, OutreachMessageUncheckedUpdateWithoutInteractionInput>
+    update?: XOR<XOR<OutreachMessageUpdateToOneWithWhereWithoutInteractionsInput, OutreachMessageUpdateWithoutInteractionsInput>, OutreachMessageUncheckedUpdateWithoutInteractionsInput>
   }
 
   export type MarketingCampaignUpdateOneWithoutInteractionsNestedInput = {
@@ -99021,10 +99054,11 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
-  export type InteractionCreateNestedOneWithoutOutreach_messageInput = {
-    create?: XOR<InteractionCreateWithoutOutreach_messageInput, InteractionUncheckedCreateWithoutOutreach_messageInput>
-    connectOrCreate?: InteractionCreateOrConnectWithoutOutreach_messageInput
-    connect?: InteractionWhereUniqueInput
+  export type InteractionCreateNestedManyWithoutOutreach_messageInput = {
+    create?: XOR<InteractionCreateWithoutOutreach_messageInput, InteractionUncheckedCreateWithoutOutreach_messageInput> | InteractionCreateWithoutOutreach_messageInput[] | InteractionUncheckedCreateWithoutOutreach_messageInput[]
+    connectOrCreate?: InteractionCreateOrConnectWithoutOutreach_messageInput | InteractionCreateOrConnectWithoutOutreach_messageInput[]
+    createMany?: InteractionCreateManyOutreach_messageInputEnvelope
+    connect?: InteractionWhereUniqueInput | InteractionWhereUniqueInput[]
   }
 
   export type SequenceEnrollmentCreateNestedOneWithoutOutreach_messagesInput = {
@@ -99045,10 +99079,11 @@ export namespace Prisma {
     connect?: CampaignIntegrationWhereUniqueInput
   }
 
-  export type InteractionUncheckedCreateNestedOneWithoutOutreach_messageInput = {
-    create?: XOR<InteractionCreateWithoutOutreach_messageInput, InteractionUncheckedCreateWithoutOutreach_messageInput>
-    connectOrCreate?: InteractionCreateOrConnectWithoutOutreach_messageInput
-    connect?: InteractionWhereUniqueInput
+  export type InteractionUncheckedCreateNestedManyWithoutOutreach_messageInput = {
+    create?: XOR<InteractionCreateWithoutOutreach_messageInput, InteractionUncheckedCreateWithoutOutreach_messageInput> | InteractionCreateWithoutOutreach_messageInput[] | InteractionUncheckedCreateWithoutOutreach_messageInput[]
+    connectOrCreate?: InteractionCreateOrConnectWithoutOutreach_messageInput | InteractionCreateOrConnectWithoutOutreach_messageInput[]
+    createMany?: InteractionCreateManyOutreach_messageInputEnvelope
+    connect?: InteractionWhereUniqueInput | InteractionWhereUniqueInput[]
   }
 
   export type EnumChannelFieldUpdateOperationsInput = {
@@ -99103,14 +99138,18 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutOutreach_messages_sentInput, UserUpdateWithoutOutreach_messages_sentInput>, UserUncheckedUpdateWithoutOutreach_messages_sentInput>
   }
 
-  export type InteractionUpdateOneWithoutOutreach_messageNestedInput = {
-    create?: XOR<InteractionCreateWithoutOutreach_messageInput, InteractionUncheckedCreateWithoutOutreach_messageInput>
-    connectOrCreate?: InteractionCreateOrConnectWithoutOutreach_messageInput
-    upsert?: InteractionUpsertWithoutOutreach_messageInput
-    disconnect?: InteractionWhereInput | boolean
-    delete?: InteractionWhereInput | boolean
-    connect?: InteractionWhereUniqueInput
-    update?: XOR<XOR<InteractionUpdateToOneWithWhereWithoutOutreach_messageInput, InteractionUpdateWithoutOutreach_messageInput>, InteractionUncheckedUpdateWithoutOutreach_messageInput>
+  export type InteractionUpdateManyWithoutOutreach_messageNestedInput = {
+    create?: XOR<InteractionCreateWithoutOutreach_messageInput, InteractionUncheckedCreateWithoutOutreach_messageInput> | InteractionCreateWithoutOutreach_messageInput[] | InteractionUncheckedCreateWithoutOutreach_messageInput[]
+    connectOrCreate?: InteractionCreateOrConnectWithoutOutreach_messageInput | InteractionCreateOrConnectWithoutOutreach_messageInput[]
+    upsert?: InteractionUpsertWithWhereUniqueWithoutOutreach_messageInput | InteractionUpsertWithWhereUniqueWithoutOutreach_messageInput[]
+    createMany?: InteractionCreateManyOutreach_messageInputEnvelope
+    set?: InteractionWhereUniqueInput | InteractionWhereUniqueInput[]
+    disconnect?: InteractionWhereUniqueInput | InteractionWhereUniqueInput[]
+    delete?: InteractionWhereUniqueInput | InteractionWhereUniqueInput[]
+    connect?: InteractionWhereUniqueInput | InteractionWhereUniqueInput[]
+    update?: InteractionUpdateWithWhereUniqueWithoutOutreach_messageInput | InteractionUpdateWithWhereUniqueWithoutOutreach_messageInput[]
+    updateMany?: InteractionUpdateManyWithWhereWithoutOutreach_messageInput | InteractionUpdateManyWithWhereWithoutOutreach_messageInput[]
+    deleteMany?: InteractionScalarWhereInput | InteractionScalarWhereInput[]
   }
 
   export type SequenceEnrollmentUpdateOneWithoutOutreach_messagesNestedInput = {
@@ -99143,14 +99182,18 @@ export namespace Prisma {
     update?: XOR<XOR<CampaignIntegrationUpdateToOneWithWhereWithoutOutreach_messagesInput, CampaignIntegrationUpdateWithoutOutreach_messagesInput>, CampaignIntegrationUncheckedUpdateWithoutOutreach_messagesInput>
   }
 
-  export type InteractionUncheckedUpdateOneWithoutOutreach_messageNestedInput = {
-    create?: XOR<InteractionCreateWithoutOutreach_messageInput, InteractionUncheckedCreateWithoutOutreach_messageInput>
-    connectOrCreate?: InteractionCreateOrConnectWithoutOutreach_messageInput
-    upsert?: InteractionUpsertWithoutOutreach_messageInput
-    disconnect?: InteractionWhereInput | boolean
-    delete?: InteractionWhereInput | boolean
-    connect?: InteractionWhereUniqueInput
-    update?: XOR<XOR<InteractionUpdateToOneWithWhereWithoutOutreach_messageInput, InteractionUpdateWithoutOutreach_messageInput>, InteractionUncheckedUpdateWithoutOutreach_messageInput>
+  export type InteractionUncheckedUpdateManyWithoutOutreach_messageNestedInput = {
+    create?: XOR<InteractionCreateWithoutOutreach_messageInput, InteractionUncheckedCreateWithoutOutreach_messageInput> | InteractionCreateWithoutOutreach_messageInput[] | InteractionUncheckedCreateWithoutOutreach_messageInput[]
+    connectOrCreate?: InteractionCreateOrConnectWithoutOutreach_messageInput | InteractionCreateOrConnectWithoutOutreach_messageInput[]
+    upsert?: InteractionUpsertWithWhereUniqueWithoutOutreach_messageInput | InteractionUpsertWithWhereUniqueWithoutOutreach_messageInput[]
+    createMany?: InteractionCreateManyOutreach_messageInputEnvelope
+    set?: InteractionWhereUniqueInput | InteractionWhereUniqueInput[]
+    disconnect?: InteractionWhereUniqueInput | InteractionWhereUniqueInput[]
+    delete?: InteractionWhereUniqueInput | InteractionWhereUniqueInput[]
+    connect?: InteractionWhereUniqueInput | InteractionWhereUniqueInput[]
+    update?: InteractionUpdateWithWhereUniqueWithoutOutreach_messageInput | InteractionUpdateWithWhereUniqueWithoutOutreach_messageInput[]
+    updateMany?: InteractionUpdateManyWithWhereWithoutOutreach_messageInput | InteractionUpdateManyWithWhereWithoutOutreach_messageInput[]
+    deleteMany?: InteractionScalarWhereInput | InteractionScalarWhereInput[]
   }
 
   export type OrganisationCreateNestedOneWithoutOutreach_sequencesInput = {
@@ -102502,7 +102545,7 @@ export namespace Prisma {
     organisation: OrganisationCreateNestedOneWithoutOutreach_messagesInput
     contact: ContactCreateNestedOneWithoutOutreach_messagesInput
     campaign?: MarketingCampaignCreateNestedOneWithoutOutreach_messagesInput
-    interaction?: InteractionCreateNestedOneWithoutOutreach_messageInput
+    interactions?: InteractionCreateNestedManyWithoutOutreach_messageInput
     sequence_enrollment?: SequenceEnrollmentCreateNestedOneWithoutOutreach_messagesInput
     sequence_step?: OutreachSequenceStepCreateNestedOneWithoutOutreach_messagesInput
     campaign_integration?: CampaignIntegrationCreateNestedOneWithoutOutreach_messagesInput
@@ -102542,7 +102585,7 @@ export namespace Prisma {
     campaign_integration_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
-    interaction?: InteractionUncheckedCreateNestedOneWithoutOutreach_messageInput
+    interactions?: InteractionUncheckedCreateNestedManyWithoutOutreach_messageInput
   }
 
   export type OutreachMessageCreateOrConnectWithoutSent_byInput = {
@@ -103298,7 +103341,7 @@ export namespace Prisma {
     contact: ContactCreateNestedOneWithoutOutreach_messagesInput
     campaign?: MarketingCampaignCreateNestedOneWithoutOutreach_messagesInput
     sent_by?: UserCreateNestedOneWithoutOutreach_messages_sentInput
-    interaction?: InteractionCreateNestedOneWithoutOutreach_messageInput
+    interactions?: InteractionCreateNestedManyWithoutOutreach_messageInput
     sequence_enrollment?: SequenceEnrollmentCreateNestedOneWithoutOutreach_messagesInput
     sequence_step?: OutreachSequenceStepCreateNestedOneWithoutOutreach_messagesInput
     campaign_integration?: CampaignIntegrationCreateNestedOneWithoutOutreach_messagesInput
@@ -103338,7 +103381,7 @@ export namespace Prisma {
     campaign_integration_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
-    interaction?: InteractionUncheckedCreateNestedOneWithoutOutreach_messageInput
+    interactions?: InteractionUncheckedCreateNestedManyWithoutOutreach_messageInput
   }
 
   export type OutreachMessageCreateOrConnectWithoutOrganisationInput = {
@@ -103395,7 +103438,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     contact: ContactCreateNestedOneWithoutInteractionsInput
-    outreach_message?: OutreachMessageCreateNestedOneWithoutInteractionInput
+    outreach_message?: OutreachMessageCreateNestedOneWithoutInteractionsInput
     campaign?: MarketingCampaignCreateNestedOneWithoutInteractionsInput
   }
 
@@ -107877,7 +107920,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutInteractionsInput
-    outreach_message?: OutreachMessageCreateNestedOneWithoutInteractionInput
+    outreach_message?: OutreachMessageCreateNestedOneWithoutInteractionsInput
     campaign?: MarketingCampaignCreateNestedOneWithoutInteractionsInput
   }
 
@@ -107935,7 +107978,7 @@ export namespace Prisma {
     organisation: OrganisationCreateNestedOneWithoutOutreach_messagesInput
     campaign?: MarketingCampaignCreateNestedOneWithoutOutreach_messagesInput
     sent_by?: UserCreateNestedOneWithoutOutreach_messages_sentInput
-    interaction?: InteractionCreateNestedOneWithoutOutreach_messageInput
+    interactions?: InteractionCreateNestedManyWithoutOutreach_messageInput
     sequence_enrollment?: SequenceEnrollmentCreateNestedOneWithoutOutreach_messagesInput
     sequence_step?: OutreachSequenceStepCreateNestedOneWithoutOutreach_messagesInput
     campaign_integration?: CampaignIntegrationCreateNestedOneWithoutOutreach_messagesInput
@@ -107975,7 +108018,7 @@ export namespace Prisma {
     campaign_integration_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
-    interaction?: InteractionUncheckedCreateNestedOneWithoutOutreach_messageInput
+    interactions?: InteractionUncheckedCreateNestedManyWithoutOutreach_messageInput
   }
 
   export type OutreachMessageCreateOrConnectWithoutContactInput = {
@@ -110578,7 +110621,7 @@ export namespace Prisma {
     create: XOR<OrganisationCreateWithoutInteractionsInput, OrganisationUncheckedCreateWithoutInteractionsInput>
   }
 
-  export type OutreachMessageCreateWithoutInteractionInput = {
+  export type OutreachMessageCreateWithoutInteractionsInput = {
     uuid?: string
     channel: $Enums.Channel
     direction?: $Enums.MsgDirection
@@ -110614,7 +110657,7 @@ export namespace Prisma {
     campaign_integration?: CampaignIntegrationCreateNestedOneWithoutOutreach_messagesInput
   }
 
-  export type OutreachMessageUncheckedCreateWithoutInteractionInput = {
+  export type OutreachMessageUncheckedCreateWithoutInteractionsInput = {
     id?: number
     uuid?: string
     organisation_uuid: string
@@ -110651,9 +110694,9 @@ export namespace Prisma {
     updated_at?: Date | string
   }
 
-  export type OutreachMessageCreateOrConnectWithoutInteractionInput = {
+  export type OutreachMessageCreateOrConnectWithoutInteractionsInput = {
     where: OutreachMessageWhereUniqueInput
-    create: XOR<OutreachMessageCreateWithoutInteractionInput, OutreachMessageUncheckedCreateWithoutInteractionInput>
+    create: XOR<OutreachMessageCreateWithoutInteractionsInput, OutreachMessageUncheckedCreateWithoutInteractionsInput>
   }
 
   export type MarketingCampaignCreateWithoutInteractionsInput = {
@@ -110936,18 +110979,18 @@ export namespace Prisma {
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
-  export type OutreachMessageUpsertWithoutInteractionInput = {
-    update: XOR<OutreachMessageUpdateWithoutInteractionInput, OutreachMessageUncheckedUpdateWithoutInteractionInput>
-    create: XOR<OutreachMessageCreateWithoutInteractionInput, OutreachMessageUncheckedCreateWithoutInteractionInput>
+  export type OutreachMessageUpsertWithoutInteractionsInput = {
+    update: XOR<OutreachMessageUpdateWithoutInteractionsInput, OutreachMessageUncheckedUpdateWithoutInteractionsInput>
+    create: XOR<OutreachMessageCreateWithoutInteractionsInput, OutreachMessageUncheckedCreateWithoutInteractionsInput>
     where?: OutreachMessageWhereInput
   }
 
-  export type OutreachMessageUpdateToOneWithWhereWithoutInteractionInput = {
+  export type OutreachMessageUpdateToOneWithWhereWithoutInteractionsInput = {
     where?: OutreachMessageWhereInput
-    data: XOR<OutreachMessageUpdateWithoutInteractionInput, OutreachMessageUncheckedUpdateWithoutInteractionInput>
+    data: XOR<OutreachMessageUpdateWithoutInteractionsInput, OutreachMessageUncheckedUpdateWithoutInteractionsInput>
   }
 
-  export type OutreachMessageUpdateWithoutInteractionInput = {
+  export type OutreachMessageUpdateWithoutInteractionsInput = {
     uuid?: StringFieldUpdateOperationsInput | string
     channel?: EnumChannelFieldUpdateOperationsInput | $Enums.Channel
     direction?: EnumMsgDirectionFieldUpdateOperationsInput | $Enums.MsgDirection
@@ -110983,7 +111026,7 @@ export namespace Prisma {
     campaign_integration?: CampaignIntegrationUpdateOneWithoutOutreach_messagesNestedInput
   }
 
-  export type OutreachMessageUncheckedUpdateWithoutInteractionInput = {
+  export type OutreachMessageUncheckedUpdateWithoutInteractionsInput = {
     id?: IntFieldUpdateOperationsInput | number
     uuid?: StringFieldUpdateOperationsInput | string
     organisation_uuid?: StringFieldUpdateOperationsInput | string
@@ -111466,6 +111509,11 @@ export namespace Prisma {
     create: XOR<InteractionCreateWithoutOutreach_messageInput, InteractionUncheckedCreateWithoutOutreach_messageInput>
   }
 
+  export type InteractionCreateManyOutreach_messageInputEnvelope = {
+    data: InteractionCreateManyOutreach_messageInput | InteractionCreateManyOutreach_messageInput[]
+    skipDuplicates?: boolean
+  }
+
   export type SequenceEnrollmentCreateWithoutOutreach_messagesInput = {
     uuid?: string
     status?: $Enums.SequenceEnrollmentStatus
@@ -111908,42 +111956,20 @@ export namespace Prisma {
     bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
   }
 
-  export type InteractionUpsertWithoutOutreach_messageInput = {
+  export type InteractionUpsertWithWhereUniqueWithoutOutreach_messageInput = {
+    where: InteractionWhereUniqueInput
     update: XOR<InteractionUpdateWithoutOutreach_messageInput, InteractionUncheckedUpdateWithoutOutreach_messageInput>
     create: XOR<InteractionCreateWithoutOutreach_messageInput, InteractionUncheckedCreateWithoutOutreach_messageInput>
-    where?: InteractionWhereInput
   }
 
-  export type InteractionUpdateToOneWithWhereWithoutOutreach_messageInput = {
-    where?: InteractionWhereInput
+  export type InteractionUpdateWithWhereUniqueWithoutOutreach_messageInput = {
+    where: InteractionWhereUniqueInput
     data: XOR<InteractionUpdateWithoutOutreach_messageInput, InteractionUncheckedUpdateWithoutOutreach_messageInput>
   }
 
-  export type InteractionUpdateWithoutOutreach_messageInput = {
-    uuid?: StringFieldUpdateOperationsInput | string
-    type?: EnumInteractionTypeFieldUpdateOperationsInput | $Enums.InteractionType
-    content?: NullableStringFieldUpdateOperationsInput | string | null
-    metadata?: NullableJsonNullValueInput | InputJsonValue
-    status_change?: NullableJsonNullValueInput | InputJsonValue
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    contact?: ContactUpdateOneRequiredWithoutInteractionsNestedInput
-    organisation?: OrganisationUpdateOneRequiredWithoutInteractionsNestedInput
-    campaign?: MarketingCampaignUpdateOneWithoutInteractionsNestedInput
-  }
-
-  export type InteractionUncheckedUpdateWithoutOutreach_messageInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    uuid?: StringFieldUpdateOperationsInput | string
-    contact_uuid?: StringFieldUpdateOperationsInput | string
-    organisation_uuid?: StringFieldUpdateOperationsInput | string
-    campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
-    type?: EnumInteractionTypeFieldUpdateOperationsInput | $Enums.InteractionType
-    content?: NullableStringFieldUpdateOperationsInput | string | null
-    metadata?: NullableJsonNullValueInput | InputJsonValue
-    status_change?: NullableJsonNullValueInput | InputJsonValue
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  export type InteractionUpdateManyWithWhereWithoutOutreach_messageInput = {
+    where: InteractionScalarWhereInput
+    data: XOR<InteractionUpdateManyMutationInput, InteractionUncheckedUpdateManyWithoutOutreach_messageInput>
   }
 
   export type SequenceEnrollmentUpsertWithoutOutreach_messagesInput = {
@@ -112595,7 +112621,7 @@ export namespace Prisma {
     contact: ContactCreateNestedOneWithoutOutreach_messagesInput
     campaign?: MarketingCampaignCreateNestedOneWithoutOutreach_messagesInput
     sent_by?: UserCreateNestedOneWithoutOutreach_messages_sentInput
-    interaction?: InteractionCreateNestedOneWithoutOutreach_messageInput
+    interactions?: InteractionCreateNestedManyWithoutOutreach_messageInput
     sequence_enrollment?: SequenceEnrollmentCreateNestedOneWithoutOutreach_messagesInput
     campaign_integration?: CampaignIntegrationCreateNestedOneWithoutOutreach_messagesInput
   }
@@ -112634,7 +112660,7 @@ export namespace Prisma {
     campaign_integration_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
-    interaction?: InteractionUncheckedCreateNestedOneWithoutOutreach_messageInput
+    interactions?: InteractionUncheckedCreateNestedManyWithoutOutreach_messageInput
   }
 
   export type OutreachMessageCreateOrConnectWithoutSequence_stepInput = {
@@ -112984,7 +113010,7 @@ export namespace Prisma {
     contact: ContactCreateNestedOneWithoutOutreach_messagesInput
     campaign?: MarketingCampaignCreateNestedOneWithoutOutreach_messagesInput
     sent_by?: UserCreateNestedOneWithoutOutreach_messages_sentInput
-    interaction?: InteractionCreateNestedOneWithoutOutreach_messageInput
+    interactions?: InteractionCreateNestedManyWithoutOutreach_messageInput
     sequence_step?: OutreachSequenceStepCreateNestedOneWithoutOutreach_messagesInput
     campaign_integration?: CampaignIntegrationCreateNestedOneWithoutOutreach_messagesInput
   }
@@ -113023,7 +113049,7 @@ export namespace Prisma {
     campaign_integration_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
-    interaction?: InteractionUncheckedCreateNestedOneWithoutOutreach_messageInput
+    interactions?: InteractionUncheckedCreateNestedManyWithoutOutreach_messageInput
   }
 
   export type OutreachMessageCreateOrConnectWithoutSequence_enrollmentInput = {
@@ -114587,7 +114613,7 @@ export namespace Prisma {
     organisation: OrganisationCreateNestedOneWithoutOutreach_messagesInput
     contact: ContactCreateNestedOneWithoutOutreach_messagesInput
     sent_by?: UserCreateNestedOneWithoutOutreach_messages_sentInput
-    interaction?: InteractionCreateNestedOneWithoutOutreach_messageInput
+    interactions?: InteractionCreateNestedManyWithoutOutreach_messageInput
     sequence_enrollment?: SequenceEnrollmentCreateNestedOneWithoutOutreach_messagesInput
     sequence_step?: OutreachSequenceStepCreateNestedOneWithoutOutreach_messagesInput
     campaign_integration?: CampaignIntegrationCreateNestedOneWithoutOutreach_messagesInput
@@ -114627,7 +114653,7 @@ export namespace Prisma {
     campaign_integration_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
-    interaction?: InteractionUncheckedCreateNestedOneWithoutOutreach_messageInput
+    interactions?: InteractionUncheckedCreateNestedManyWithoutOutreach_messageInput
   }
 
   export type OutreachMessageCreateOrConnectWithoutCampaignInput = {
@@ -114650,7 +114676,7 @@ export namespace Prisma {
     updated_at?: Date | string
     contact: ContactCreateNestedOneWithoutInteractionsInput
     organisation: OrganisationCreateNestedOneWithoutInteractionsInput
-    outreach_message?: OutreachMessageCreateNestedOneWithoutInteractionInput
+    outreach_message?: OutreachMessageCreateNestedOneWithoutInteractionsInput
   }
 
   export type InteractionUncheckedCreateWithoutCampaignInput = {
@@ -119835,7 +119861,7 @@ export namespace Prisma {
     contact: ContactCreateNestedOneWithoutOutreach_messagesInput
     campaign?: MarketingCampaignCreateNestedOneWithoutOutreach_messagesInput
     sent_by?: UserCreateNestedOneWithoutOutreach_messages_sentInput
-    interaction?: InteractionCreateNestedOneWithoutOutreach_messageInput
+    interactions?: InteractionCreateNestedManyWithoutOutreach_messageInput
     sequence_enrollment?: SequenceEnrollmentCreateNestedOneWithoutOutreach_messagesInput
     sequence_step?: OutreachSequenceStepCreateNestedOneWithoutOutreach_messagesInput
   }
@@ -119874,7 +119900,7 @@ export namespace Prisma {
     sequence_step_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
-    interaction?: InteractionUncheckedCreateNestedOneWithoutOutreach_messageInput
+    interactions?: InteractionUncheckedCreateNestedManyWithoutOutreach_messageInput
   }
 
   export type OutreachMessageCreateOrConnectWithoutCampaign_integrationInput = {
@@ -121346,7 +121372,7 @@ export namespace Prisma {
     organisation?: OrganisationUpdateOneRequiredWithoutOutreach_messagesNestedInput
     contact?: ContactUpdateOneRequiredWithoutOutreach_messagesNestedInput
     campaign?: MarketingCampaignUpdateOneWithoutOutreach_messagesNestedInput
-    interaction?: InteractionUpdateOneWithoutOutreach_messageNestedInput
+    interactions?: InteractionUpdateManyWithoutOutreach_messageNestedInput
     sequence_enrollment?: SequenceEnrollmentUpdateOneWithoutOutreach_messagesNestedInput
     sequence_step?: OutreachSequenceStepUpdateOneWithoutOutreach_messagesNestedInput
     campaign_integration?: CampaignIntegrationUpdateOneWithoutOutreach_messagesNestedInput
@@ -121386,7 +121412,7 @@ export namespace Prisma {
     campaign_integration_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    interaction?: InteractionUncheckedUpdateOneWithoutOutreach_messageNestedInput
+    interactions?: InteractionUncheckedUpdateManyWithoutOutreach_messageNestedInput
   }
 
   export type OutreachMessageUncheckedUpdateManyWithoutSent_byInput = {
@@ -122391,7 +122417,7 @@ export namespace Prisma {
     contact?: ContactUpdateOneRequiredWithoutOutreach_messagesNestedInput
     campaign?: MarketingCampaignUpdateOneWithoutOutreach_messagesNestedInput
     sent_by?: UserUpdateOneWithoutOutreach_messages_sentNestedInput
-    interaction?: InteractionUpdateOneWithoutOutreach_messageNestedInput
+    interactions?: InteractionUpdateManyWithoutOutreach_messageNestedInput
     sequence_enrollment?: SequenceEnrollmentUpdateOneWithoutOutreach_messagesNestedInput
     sequence_step?: OutreachSequenceStepUpdateOneWithoutOutreach_messagesNestedInput
     campaign_integration?: CampaignIntegrationUpdateOneWithoutOutreach_messagesNestedInput
@@ -122431,7 +122457,7 @@ export namespace Prisma {
     campaign_integration_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    interaction?: InteractionUncheckedUpdateOneWithoutOutreach_messageNestedInput
+    interactions?: InteractionUncheckedUpdateManyWithoutOutreach_messageNestedInput
   }
 
   export type OutreachMessageUncheckedUpdateManyWithoutOrganisationInput = {
@@ -122514,7 +122540,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     contact?: ContactUpdateOneRequiredWithoutInteractionsNestedInput
-    outreach_message?: OutreachMessageUpdateOneWithoutInteractionNestedInput
+    outreach_message?: OutreachMessageUpdateOneWithoutInteractionsNestedInput
     campaign?: MarketingCampaignUpdateOneWithoutInteractionsNestedInput
   }
 
@@ -124480,7 +124506,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutInteractionsNestedInput
-    outreach_message?: OutreachMessageUpdateOneWithoutInteractionNestedInput
+    outreach_message?: OutreachMessageUpdateOneWithoutInteractionsNestedInput
     campaign?: MarketingCampaignUpdateOneWithoutInteractionsNestedInput
   }
 
@@ -124542,7 +124568,7 @@ export namespace Prisma {
     organisation?: OrganisationUpdateOneRequiredWithoutOutreach_messagesNestedInput
     campaign?: MarketingCampaignUpdateOneWithoutOutreach_messagesNestedInput
     sent_by?: UserUpdateOneWithoutOutreach_messages_sentNestedInput
-    interaction?: InteractionUpdateOneWithoutOutreach_messageNestedInput
+    interactions?: InteractionUpdateManyWithoutOutreach_messageNestedInput
     sequence_enrollment?: SequenceEnrollmentUpdateOneWithoutOutreach_messagesNestedInput
     sequence_step?: OutreachSequenceStepUpdateOneWithoutOutreach_messagesNestedInput
     campaign_integration?: CampaignIntegrationUpdateOneWithoutOutreach_messagesNestedInput
@@ -124582,7 +124608,7 @@ export namespace Prisma {
     campaign_integration_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    interaction?: InteractionUncheckedUpdateOneWithoutOutreach_messageNestedInput
+    interactions?: InteractionUncheckedUpdateManyWithoutOutreach_messageNestedInput
   }
 
   export type OutreachMessageUncheckedUpdateManyWithoutContactInput = {
@@ -125003,6 +125029,61 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type InteractionCreateManyOutreach_messageInput = {
+    id?: number
+    uuid?: string
+    contact_uuid: string
+    organisation_uuid: string
+    campaign_uuid?: string | null
+    type: $Enums.InteractionType
+    content?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    status_change?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type InteractionUpdateWithoutOutreach_messageInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    type?: EnumInteractionTypeFieldUpdateOperationsInput | $Enums.InteractionType
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    status_change?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    contact?: ContactUpdateOneRequiredWithoutInteractionsNestedInput
+    organisation?: OrganisationUpdateOneRequiredWithoutInteractionsNestedInput
+    campaign?: MarketingCampaignUpdateOneWithoutInteractionsNestedInput
+  }
+
+  export type InteractionUncheckedUpdateWithoutOutreach_messageInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    contact_uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: EnumInteractionTypeFieldUpdateOperationsInput | $Enums.InteractionType
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    status_change?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InteractionUncheckedUpdateManyWithoutOutreach_messageInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    contact_uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: EnumInteractionTypeFieldUpdateOperationsInput | $Enums.InteractionType
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    status_change?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type OutreachSequenceStepCreateManySequenceInput = {
     id?: number
     uuid?: string
@@ -125373,7 +125454,7 @@ export namespace Prisma {
     contact?: ContactUpdateOneRequiredWithoutOutreach_messagesNestedInput
     campaign?: MarketingCampaignUpdateOneWithoutOutreach_messagesNestedInput
     sent_by?: UserUpdateOneWithoutOutreach_messages_sentNestedInput
-    interaction?: InteractionUpdateOneWithoutOutreach_messageNestedInput
+    interactions?: InteractionUpdateManyWithoutOutreach_messageNestedInput
     sequence_enrollment?: SequenceEnrollmentUpdateOneWithoutOutreach_messagesNestedInput
     campaign_integration?: CampaignIntegrationUpdateOneWithoutOutreach_messagesNestedInput
   }
@@ -125412,7 +125493,7 @@ export namespace Prisma {
     campaign_integration_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    interaction?: InteractionUncheckedUpdateOneWithoutOutreach_messageNestedInput
+    interactions?: InteractionUncheckedUpdateManyWithoutOutreach_messageNestedInput
   }
 
   export type OutreachMessageUncheckedUpdateManyWithoutSequence_stepInput = {
@@ -125518,7 +125599,7 @@ export namespace Prisma {
     contact?: ContactUpdateOneRequiredWithoutOutreach_messagesNestedInput
     campaign?: MarketingCampaignUpdateOneWithoutOutreach_messagesNestedInput
     sent_by?: UserUpdateOneWithoutOutreach_messages_sentNestedInput
-    interaction?: InteractionUpdateOneWithoutOutreach_messageNestedInput
+    interactions?: InteractionUpdateManyWithoutOutreach_messageNestedInput
     sequence_step?: OutreachSequenceStepUpdateOneWithoutOutreach_messagesNestedInput
     campaign_integration?: CampaignIntegrationUpdateOneWithoutOutreach_messagesNestedInput
   }
@@ -125557,7 +125638,7 @@ export namespace Prisma {
     campaign_integration_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    interaction?: InteractionUncheckedUpdateOneWithoutOutreach_messageNestedInput
+    interactions?: InteractionUncheckedUpdateManyWithoutOutreach_messageNestedInput
   }
 
   export type OutreachMessageUncheckedUpdateManyWithoutSequence_enrollmentInput = {
@@ -125995,7 +126076,7 @@ export namespace Prisma {
     organisation?: OrganisationUpdateOneRequiredWithoutOutreach_messagesNestedInput
     contact?: ContactUpdateOneRequiredWithoutOutreach_messagesNestedInput
     sent_by?: UserUpdateOneWithoutOutreach_messages_sentNestedInput
-    interaction?: InteractionUpdateOneWithoutOutreach_messageNestedInput
+    interactions?: InteractionUpdateManyWithoutOutreach_messageNestedInput
     sequence_enrollment?: SequenceEnrollmentUpdateOneWithoutOutreach_messagesNestedInput
     sequence_step?: OutreachSequenceStepUpdateOneWithoutOutreach_messagesNestedInput
     campaign_integration?: CampaignIntegrationUpdateOneWithoutOutreach_messagesNestedInput
@@ -126035,7 +126116,7 @@ export namespace Prisma {
     campaign_integration_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    interaction?: InteractionUncheckedUpdateOneWithoutOutreach_messageNestedInput
+    interactions?: InteractionUncheckedUpdateManyWithoutOutreach_messageNestedInput
   }
 
   export type OutreachMessageUncheckedUpdateManyWithoutCampaignInput = {
@@ -126084,7 +126165,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     contact?: ContactUpdateOneRequiredWithoutInteractionsNestedInput
     organisation?: OrganisationUpdateOneRequiredWithoutInteractionsNestedInput
-    outreach_message?: OutreachMessageUpdateOneWithoutInteractionNestedInput
+    outreach_message?: OutreachMessageUpdateOneWithoutInteractionsNestedInput
   }
 
   export type InteractionUncheckedUpdateWithoutCampaignInput = {
@@ -126871,7 +126952,7 @@ export namespace Prisma {
     contact?: ContactUpdateOneRequiredWithoutOutreach_messagesNestedInput
     campaign?: MarketingCampaignUpdateOneWithoutOutreach_messagesNestedInput
     sent_by?: UserUpdateOneWithoutOutreach_messages_sentNestedInput
-    interaction?: InteractionUpdateOneWithoutOutreach_messageNestedInput
+    interactions?: InteractionUpdateManyWithoutOutreach_messageNestedInput
     sequence_enrollment?: SequenceEnrollmentUpdateOneWithoutOutreach_messagesNestedInput
     sequence_step?: OutreachSequenceStepUpdateOneWithoutOutreach_messagesNestedInput
   }
@@ -126910,7 +126991,7 @@ export namespace Prisma {
     sequence_step_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    interaction?: InteractionUncheckedUpdateOneWithoutOutreach_messageNestedInput
+    interactions?: InteractionUncheckedUpdateManyWithoutOutreach_messageNestedInput
   }
 
   export type OutreachMessageUncheckedUpdateManyWithoutCampaign_integrationInput = {

@@ -51,6 +51,14 @@ function parseFromAddress(from: string | undefined): string | null {
     return (match?.[1] ?? from).trim().toLowerCase() || null;
 }
 
+function parseToAddresses(to: string[] | string | undefined): string[] {
+    const raw = Array.isArray(to) ? to : to ? [to] : [];
+    const addresses = raw
+        .map((entry) => parseFromAddress(entry))
+        .filter((entry): entry is string => Boolean(entry));
+    return [...new Set(addresses)];
+}
+
 @ApiTags('webhooks')
 @Controller('webhooks/resend')
 export class ResendWebhookController {
@@ -107,7 +115,7 @@ export class ResendWebhookController {
 
         if (body.type === 'email.received') {
             try {
-                await this.handleReceived(body);
+                await this.handleReceived(body, userUuid);
             } catch (error) {
                 this.logger.error(
                     `Failed processing Resend event ${body.type}: ${error instanceof Error ? error.message : error}`,
@@ -135,15 +143,20 @@ export class ResendWebhookController {
 
     private async resolveOrganisationUuid(body: ResendWebhookBody): Promise<string | null> {
         if (body.type === 'email.received') {
-            const from = parseFromAddress(body.data?.from);
-            if (!from) {
+            const toAddresses = parseToAddresses(body.data?.to);
+            if (toAddresses.length === 0) {
                 return null;
             }
-            const contact = await this.prisma.contact.findFirst({
-                where: { email: { equals: from, mode: 'insensitive' } },
-                select: { organisation_uuid: true },
+            // The receiving address is the org's own verified Resend domain
+            // (Organisation.reply_to_email, unique), so this is safe to trust for both
+            // org resolution and webhook-secret selection — unlike matching on the
+            // sender's `from` address, which is an arbitrary external address that could
+            // coincidentally match a Contact in more than one organisation.
+            const organisation = await this.prisma.organisation.findFirst({
+                where: { reply_to_email: { in: toAddresses, mode: 'insensitive' } },
+                select: { uuid: true },
             });
-            return contact?.organisation_uuid ?? null;
+            return organisation?.uuid ?? null;
         }
 
         const providerMessageId = body.data?.email_id;
@@ -158,7 +171,10 @@ export class ResendWebhookController {
         return message?.organisation_uuid ?? null;
     }
 
-    private async handleReceived(body: ResendWebhookBody): Promise<void> {
+    private async handleReceived(
+        body: ResendWebhookBody,
+        organisation_uuid: string,
+    ): Promise<void> {
         const provider_received_id = body.data?.email_id;
         const from = parseFromAddress(body.data?.from);
         if (!provider_received_id || !from) {
@@ -169,6 +185,7 @@ export class ResendWebhookController {
         const resolved = await this.webhookEventService.resolveOutboundMessageIdFromReceived(
             provider_received_id,
             from,
+            organisation_uuid,
         );
         if (!resolved) {
             this.logger.warn(

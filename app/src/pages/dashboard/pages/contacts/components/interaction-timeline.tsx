@@ -408,6 +408,33 @@ export function InteractionTimeline({ contactUuid, onNavigateToOutreach }: Inter
                                         </p>
                                     ) : null}
                                 </>
+                            ) : interaction.type === InteractionType.REPLY_RECEIVED ? (
+                                <button
+                                    type="button"
+                                    onClick={() =>
+                                        interaction.outreach_message &&
+                                        onNavigateToOutreach?.(interaction.outreach_message.uuid)
+                                    }
+                                    disabled={!interaction.outreach_message}
+                                    className="group mt-2 flex w-full min-w-0 max-w-full flex-col items-start gap-1 text-left disabled:cursor-default"
+                                    title={interaction.outreach_message ? "Open conversation" : undefined}
+                                >
+                                    {interaction.metadata &&
+                                    typeof interaction.metadata === "object" &&
+                                    typeof (interaction.metadata as Record<string, unknown>).subject === "string" ? (
+                                        <span className="flex items-center gap-1.5 text-sm font-medium text-foreground group-hover:text-accent transition-colors">
+                                            {(interaction.metadata as Record<string, unknown>).subject as string}
+                                            {interaction.outreach_message ? (
+                                                <ExternalLink className="size-3.5 shrink-0 text-muted group-hover:text-accent" />
+                                            ) : null}
+                                        </span>
+                                    ) : null}
+                                    {interaction.content?.trim() ? (
+                                        <p className="text-sm text-foreground whitespace-pre-line break-words line-clamp-3">
+                                            {interaction.content}
+                                        </p>
+                                    ) : null}
+                                </button>
                             ) : interaction.outreach_message ? (
                                 <button
                                     type="button"

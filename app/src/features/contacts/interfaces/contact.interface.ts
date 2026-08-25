@@ -168,6 +168,11 @@ export interface OutreachMessage {
     scheduled_at: string | null;
     sent_at: string | null;
     delivered_at?: string | null;
+    replied_at?: string | null;
+    /** Latest-reply snapshot only — see the message thread endpoint for full reply history. */
+    reply_subject?: string | null;
+    reply_text?: string | null;
+    reply_html?: string | null;
     metadata: Record<string, unknown> | null;
     created_at: string;
     updated_at: string;
@@ -179,6 +184,14 @@ export interface InteractionOutreachRef {
     channel: Channel;
     status: MsgStatus;
     sent_at: string | null;
+    reply_subject?: string | null;
+    reply_text?: string | null;
+    reply_html?: string | null;
+}
+
+export interface MessageThread {
+    message: OutreachMessage;
+    interactions: Interaction[];
 }
 
 export interface Interaction {
