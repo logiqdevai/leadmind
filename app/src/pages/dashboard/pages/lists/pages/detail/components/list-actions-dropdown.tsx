@@ -1,6 +1,6 @@
 import type { FC } from "react";
 import { Button, Dropdown } from "@heroui/react";
-import { ChevronDown, ChevronsUpDown, FolderInput, Gauge, Globe, Pencil, Send, Sparkles, Trash2, UserPlus } from "lucide-react";
+import { ChevronDown, ChevronsUpDown, FolderInput, Gauge, Globe, Pencil, Send, Sparkles, Trash2, UserMinus, UserPlus } from "lucide-react";
 
 interface ListActionsDropdownProps {
     showContactsActions?: boolean;
@@ -16,6 +16,9 @@ interface ListActionsDropdownProps {
     onScrapeEmails?: () => void;
     scrapeEmailsDisabled?: boolean;
     scrapeEmailsPending?: boolean;
+    onRemoveBelowScore?: () => void;
+    removeBelowScoreDisabled?: boolean;
+    removeBelowScorePending?: boolean;
     onSendToSelected?: () => void;
     sendToSelectedDisabled?: boolean;
     onDeleteSelected?: () => void;
@@ -37,6 +40,9 @@ export const ListActionsDropdown: FC<ListActionsDropdownProps> = ({
     onScrapeEmails,
     scrapeEmailsDisabled = false,
     scrapeEmailsPending = false,
+    onRemoveBelowScore,
+    removeBelowScoreDisabled = false,
+    removeBelowScorePending = false,
     onSendToSelected,
     sendToSelectedDisabled = false,
     onDeleteSelected,
@@ -64,6 +70,7 @@ export const ListActionsDropdown: FC<ListActionsDropdownProps> = ({
                     if (key === "score-selected") onScoreSelected?.();
                     if (key === "enrich-selected") onEnrichSelected?.();
                     if (key === "scrape-emails") onScrapeEmails?.();
+                    if (key === "remove-below-score") onRemoveBelowScore?.();
                     if (key === "send-to-selected") onSendToSelected?.();
                     if (key === "delete-selected") onDeleteSelected?.();
                 }}
@@ -133,6 +140,18 @@ export const ListActionsDropdown: FC<ListActionsDropdownProps> = ({
                         <span className="flex items-center gap-2.5 antialiased">
                             <Globe className="size-4 shrink-0 text-muted" strokeWidth={2} />
                             <span className="font-medium text-foreground">Find emails from websites</span>
+                        </span>
+                    </Dropdown.Item>
+                ) : null}
+                {showContactsActions && onRemoveBelowScore ? (
+                    <Dropdown.Item
+                        id="remove-below-score"
+                        textValue="Remove score under 6"
+                        isDisabled={removeBelowScoreDisabled || removeBelowScorePending}
+                    >
+                        <span className="flex items-center gap-2.5 antialiased">
+                            <UserMinus className="size-4 shrink-0 text-danger" strokeWidth={2} />
+                            <span className="font-medium text-danger">Remove score under 6</span>
                         </span>
                     </Dropdown.Item>
                 ) : null}

@@ -394,6 +394,20 @@ body,
   font-size: 13px !important;
 }
 
+#root .filters-page .chip,
+#root .filters-page .chip *:not(svg):not(svg *),
+#root .filters-page .chip__label,
+#root .filters-page [data-slot="chip"],
+#root .filters-page [data-slot="chip"] *:not(svg):not(svg *),
+#root .jobs-page .chip,
+#root .jobs-page .chip *:not(svg):not(svg *),
+#root .jobs-page .chip__label,
+#root .jobs-page [data-slot="chip"],
+#root .jobs-page [data-slot="chip"] *:not(svg):not(svg *),
+#root .jobs-page .job-error-text {
+  font-size: 11px !important;
+}
+
 @keyframes celebration-bubble-fall {
   0% {
     top: -12%;

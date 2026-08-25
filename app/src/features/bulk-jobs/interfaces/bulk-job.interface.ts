@@ -61,3 +61,9 @@ export interface ListBulkJobsResult {
     page: number;
     limit: number;
 }
+
+export interface BulkJobActionResult {
+    uuid: string;
+    ok: boolean;
+    error?: string;
+}

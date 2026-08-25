@@ -32,6 +32,7 @@ import { MarketingCampaignDispatchWorker } from './marketing-campaign-dispatch.w
 import { MarketingMessageSendWorker } from './marketing-message-send.worker';
 import { ReminderTriggerWorker } from './reminder-trigger.worker';
 import { SendingEngineTickWorker } from './sending-engine-tick.worker';
+import { BulkJobWatchdogService } from './bulk-job-watchdog.service';
 
 @Module({
   imports: [
@@ -69,6 +70,7 @@ import { SendingEngineTickWorker } from './sending-engine-tick.worker';
     MarketingMessageSendWorker,
     ReminderTriggerWorker,
     SendingEngineTickWorker,
+    BulkJobWatchdogService,
   ],
   exports: [
     FilterScrapeWorker,

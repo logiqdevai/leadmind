@@ -70,8 +70,8 @@ import { ContactAiService } from './services/contact-ai.service';
 import { ListEnrichmentsDto } from '@/modules/enrichment/dto/list-enrichments.dto';
 import { EnrichmentQueryService } from '@/modules/enrichment/services/enrichment-query.service';
 import { OutreachService } from '@/modules/outreach/outreach.service';
-import { enqueueContactScoreJob } from './utils/contact-score-queue.utils';
-import { enqueueContactEnrichmentJob } from './utils/contact-enrichment-queue.utils';
+import { enqueueContactScoreJob, enqueueContactScoreJobs } from './utils/contact-score-queue.utils';
+import { enqueueContactEnrichmentJob, enqueueContactEnrichmentJobs } from './utils/contact-enrichment-queue.utils';
 import { BulkAiDraftMessagesDto } from './dto/bulk-ai-draft-messages.dto';
 import { EmailCredentialsService } from '@/modules/integrations/services/email-credentials.service';
 import type { EmailProviderTarget } from '@/modules/integrations/interfaces/email-credentials.interface';
@@ -1087,16 +1087,6 @@ export class ContactsService {
             throw new NotFoundException(`Contact(s) not found: ${missing.join(', ')}`);
         }
 
-        const linkedFiltersByContact = await Promise.all(
-            contacts.map(async (c) => ({
-                contact_uuid: c.uuid,
-                filters: await loadLinkedFiltersForScore(this.prisma, c.uuid),
-            })),
-        );
-        const linkedMap = new Map(
-            linkedFiltersByContact.map((row) => [row.contact_uuid, row.filters]),
-        );
-
         const jobIds: string[] = [];
         const batchPlan: Array<{ contact_uuid: string; instruction_uuids: string[] }> = [];
         let skipped_contacts = 0;
@@ -1110,38 +1100,34 @@ export class ContactsService {
                   progress_total: contacts.length,
                   queue_name: AI_PROCESS_QUEUE,
                   reference_type: 'contacts',
-                  metadata: { contact_uuids: contactUuids },
+                  metadata: {
+                      contact_uuids: contactUuids,
+                      scoring_instruction_uuids: ruleUuids,
+                  },
               });
 
-        for (const c of contacts) {
-            const combined = combineFiltersForScore(linkedMap.get(c.uuid) ?? []);
-            const allowed =
-                combined?.filter_scoring_instructions.map((x) => x.scoring_instruction_uuid) ?? [];
-            const perContactRequested = ruleUuids.filter((id) => allowed.includes(id));
-            if (perContactRequested.length === 0) {
-                skipped_contacts += 1;
-                continue;
+        if (dto.use_batch) {
+            for (const c of contacts) {
+                batchPlan.push({ contact_uuid: c.uuid, instruction_uuids: ruleUuids });
             }
-
-            if (dto.use_batch) {
-                batchPlan.push({ contact_uuid: c.uuid, instruction_uuids: perContactRequested });
-            } else {
-                const job = await enqueueContactScoreJob(
-                    this.aiProcessQueue,
-                    this.prisma,
-                    c.uuid,
-                    allowed,
-                    perContactRequested,
-                    scoreBulkJob?.uuid,
-                );
-                jobIds.push(job.jobId);
-            }
+        } else {
+            const { jobIds: queuedJobIds } = await enqueueContactScoreJobs(
+                this.aiProcessQueue,
+                this.prisma,
+                contacts.map((c) => ({
+                    contactUuid: c.uuid,
+                    allowed: ruleUuids,
+                    scoringInstructionUuidsRequested: ruleUuids,
+                })),
+                scoreBulkJob?.uuid,
+            );
+            jobIds.push(...queuedJobIds);
         }
 
         if (dto.use_batch) {
             if (batchPlan.length === 0) {
                 throw new BadRequestException(
-                    'None of the selected contacts use any of the chosen scoring rules on their linked filters.',
+                    'No contacts to score with the chosen scoring rules.',
                 );
             }
             const { batch_id, queued } = await this.contactAiService.submitBatchScore(organisation_uuid, batchPlan);
@@ -1153,17 +1139,18 @@ export class ContactsService {
                 await this.bulkJobsService.cancel(scoreBulkJob.uuid, 'No eligible contacts to score');
             }
             throw new BadRequestException(
-                'None of the selected contacts use any of the chosen scoring rules on their linked filters.',
+                'No contacts to score with the chosen scoring rules.',
             );
         }
 
         if (scoreBulkJob) {
             await this.prisma.bulkJob.update({
                 where: { uuid: scoreBulkJob.uuid },
-                data: { progress_total: jobIds.length },
+                data: { progress_total: jobIds.length > 0 ? contacts.length : 0 },
             });
             await this.bulkJobsService.markRunning(scoreBulkJob.uuid, {
                 queue_job_id: jobIds[0] ?? null,
+                queue_job_ids: jobIds,
             });
         }
 
@@ -1390,20 +1377,19 @@ export class ContactsService {
             metadata: { contact_uuids: rows.map((r) => r.uuid), sources: dto.sources ?? [] },
         });
 
-        const jobs = await Promise.all(
-            rows.map((row) => {
-                const enrichment_sources = resolveContactEnrichmentSources(dto.sources, row.filter);
-                return enqueueContactEnrichmentJob(
-                    this.aiProcessQueue,
-                    row.uuid,
-                    enrichment_sources,
-                    bulkJob.uuid,
-                );
-            }),
+        const { jobIds } = await enqueueContactEnrichmentJobs(
+            this.aiProcessQueue,
+            rows.map((row) => ({
+                contactUuid: row.uuid,
+                enrichment_sources: resolveContactEnrichmentSources(dto.sources, row.filter),
+            })),
+            bulkJob.uuid,
         );
-        const jobIds = jobs.map((j) => j.jobId);
-        await this.bulkJobsService.markRunning(bulkJob.uuid, { queue_job_id: jobIds[0] ?? null });
-        return { jobIds, queued: jobIds.length, bulk_job_uuid: bulkJob.uuid };
+        await this.bulkJobsService.markRunning(bulkJob.uuid, {
+            queue_job_id: jobIds[0] ?? null,
+            queue_job_ids: jobIds,
+        });
+        return { jobIds, queued: rows.length, bulk_job_uuid: bulkJob.uuid };
     }
 
     async triggerBulkScrapeEmailsFromWebsites(
@@ -1566,6 +1552,18 @@ export class ContactsService {
 
     /** Called once per contact, whichever path resolves it (sync Apify, or the async Scrapio dispatcher/timeout). */
     async completeBulkEmailScrapeItem(bulk_job_uuid: string, opts: { failed: boolean }): Promise<void> {
+        const existing = await this.prisma.bulkJob.findUnique({
+            where: { uuid: bulk_job_uuid },
+            select: { status: true },
+        });
+        if (
+            !existing ||
+            (existing.status !== BulkJobStatus.PENDING &&
+                existing.status !== BulkJobStatus.QUEUED &&
+                existing.status !== BulkJobStatus.RUNNING)
+        ) {
+            return;
+        }
         if (opts.failed) {
             await this.bulkJobsService.incrementFailure(bulk_job_uuid);
         }

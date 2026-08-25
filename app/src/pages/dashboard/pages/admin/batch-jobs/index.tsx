@@ -2,47 +2,26 @@ import { useSearchParams } from "react-router-dom";
 import { Chip, ListBox, Select, Table } from "@heroui/react";
 import { CheckCircle2, Clock, Layers, XCircle, AlertTriangle } from "lucide-react";
 import { useBatchJobs } from "@/features/openai-batch-jobs/hooks/use-openai-batch-jobs";
-import { OpenAiBatchJobType, OpenAiBatchStatus, type OpenAiBatchJob } from "@/features/openai-batch-jobs/interfaces/openai-batch-job.interface";
-import { useAdminBulkJobs } from "@/features/bulk-jobs/hooks/use-bulk-jobs";
 import {
-    BulkJobStatus,
-    BulkJobType,
-    type BulkJob,
-} from "@/features/bulk-jobs/interfaces/bulk-job.interface";
+    OpenAiBatchJobType,
+    OpenAiBatchStatus,
+    type OpenAiBatchJob,
+} from "@/features/openai-batch-jobs/interfaces/openai-batch-job.interface";
 import { TablePagination } from "@/components/ui/table-pagination";
 
 const PAGE_LIMIT = 20;
 
 type ChipColor = "default" | "accent" | "success" | "warning" | "danger";
 
-const STATUS_META: Record<OpenAiBatchStatus, { label: string; color: ChipColor; icon: React.ComponentType<{ className?: string }> }> = {
+const STATUS_META: Record<
+    OpenAiBatchStatus,
+    { label: string; color: ChipColor; icon: React.ComponentType<{ className?: string }> }
+> = {
     IN_PROGRESS: { label: "In Progress", color: "warning", icon: Clock },
     COMPLETED: { label: "Completed", color: "success", icon: CheckCircle2 },
     FAILED: { label: "Failed", color: "danger", icon: AlertTriangle },
     EXPIRED: { label: "Expired", color: "default", icon: XCircle },
     CANCELLED: { label: "Cancelled", color: "default", icon: XCircle },
-};
-
-const BULK_TYPE_LABELS: Record<BulkJobType, string> = {
-    CONTACT_EMAIL_SCRAPE: "Email scrape",
-    FILTER_SCRAPE: "Filter scrape",
-    CONTACT_SCORE: "Contact score",
-    CONTACT_ENRICH: "Contact enrich",
-    LEAD_ENRICH: "Lead enrich",
-    AI_DRAFT_MESSAGES: "AI draft messages",
-    CAMPAIGN_DISPATCH: "Campaign dispatch",
-    CAMPAIGN_MESSAGE_SEND: "Campaign send",
-    OPENAI_BATCH: "OpenAI batch",
-    OTHER: "Other",
-};
-
-const BULK_STATUS_META: Record<BulkJobStatus, { label: string; color: ChipColor }> = {
-    PENDING: { label: "Pending", color: "default" },
-    QUEUED: { label: "Queued", color: "accent" },
-    RUNNING: { label: "Running", color: "warning" },
-    COMPLETED: { label: "Completed", color: "success" },
-    FAILED: { label: "Failed", color: "danger" },
-    CANCELLED: { label: "Cancelled", color: "default" },
 };
 
 const TYPE_LABELS: Record<OpenAiBatchJobType, string> = {
@@ -62,8 +41,11 @@ function formatDuration(createdAt: string, finishedAt: string | null): string {
 function formatDate(iso: string | null): string {
     if (!iso) return "—";
     return new Date(iso).toLocaleString("en-GB", {
-        day: "2-digit", month: "short", year: "numeric",
-        hour: "2-digit", minute: "2-digit",
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
     });
 }
 
@@ -124,23 +106,24 @@ export default function AdminBatchJobsPage() {
     const typeFilter = (searchParams.get("type") as OpenAiBatchJobType) || undefined;
     const statusFilter = (searchParams.get("status") as OpenAiBatchStatus) || undefined;
 
-    const { data, isLoading } = useBatchJobs({ page, limit: PAGE_LIMIT, type: typeFilter, status: statusFilter });
-    const bulkPage = Number(searchParams.get("jobs_page") ?? 1);
-    const { data: bulkData, isLoading: bulkLoading } = useAdminBulkJobs({
-        page: bulkPage,
+    const { data, isLoading } = useBatchJobs({
+        page,
         limit: PAGE_LIMIT,
-        active_only: false,
+        type: typeFilter,
+        status: statusFilter,
     });
-    const bulkTotalPages = Math.ceil((bulkData?.total ?? 0) / PAGE_LIMIT);
 
     const setParam = (key: string, value: string) => {
-        setSearchParams((prev) => {
-            const next = new URLSearchParams(prev);
-            if (value) next.set(key, value);
-            else next.delete(key);
-            next.delete("page");
-            return next;
-        }, { replace: true });
+        setSearchParams(
+            (prev) => {
+                const next = new URLSearchParams(prev);
+                if (value) next.set(key, value);
+                else next.delete(key);
+                next.delete("page");
+                return next;
+            },
+            { replace: true },
+        );
     };
 
     const setPage = (p: number) => {
@@ -148,21 +131,22 @@ export default function AdminBatchJobsPage() {
             const next = new URLSearchParams(prev);
             next.set("page", String(p));
             return next;
-        }, { replace: true });
+        });
     };
 
     const totalPages = Math.ceil((data?.total ?? 0) / PAGE_LIMIT);
 
     return (
         <div className="space-y-4">
-            {/* Header */}
             <div className="flex items-start justify-between gap-3 flex-wrap">
                 <div className="flex items-center gap-2.5">
                     <Layers className="size-5 text-muted shrink-0" />
                     <div>
-                        <h1 className="text-lg font-semibold text-foreground leading-tight">All jobs</h1>
+                        <h1 className="text-lg font-semibold text-foreground leading-tight">
+                            Batch jobs
+                        </h1>
                         <p className="text-xs text-muted mt-0.5">
-                            {bulkData?.total ?? "—"} queue jobs · {data?.total ?? "—"} OpenAI batches · super-admin view
+                            {data?.total ?? "—"} OpenAI Batch API jobs · super-admin view
                         </p>
                     </div>
                 </div>
@@ -171,103 +155,22 @@ export default function AdminBatchJobsPage() {
                     <FilterSelect
                         label="All types"
                         value={typeFilter ?? ""}
-                        options={Object.entries(TYPE_LABELS).map(([key, label]) => ({ key, label }))}
+                        options={Object.entries(TYPE_LABELS).map(([key, label]) => ({
+                            key,
+                            label,
+                        }))}
                         onChange={(v) => setParam("type", v)}
                     />
                     <FilterSelect
                         label="All statuses"
                         value={statusFilter ?? ""}
-                        options={Object.keys(STATUS_META).map((s) => ({ key: s, label: STATUS_META[s as OpenAiBatchStatus].label }))}
+                        options={Object.keys(STATUS_META).map((s) => ({
+                            key: s,
+                            label: STATUS_META[s as OpenAiBatchStatus].label,
+                        }))}
                         onChange={(v) => setParam("status", v)}
                     />
                 </div>
-            </div>
-
-            <div className="rounded-xl overflow-hidden">
-                <Table>
-                    <Table.ScrollContainer className="w-full max-w-full overflow-x-auto">
-                        <Table.Content aria-label="All queue jobs" className="min-w-[960px]">
-                            <Table.Header>
-                                <Table.Column id="title" isRowHeader>Title</Table.Column>
-                                <Table.Column id="type">Type</Table.Column>
-                                <Table.Column id="status">Status</Table.Column>
-                                <Table.Column id="progress">Progress</Table.Column>
-                                <Table.Column id="organisation">Organisation</Table.Column>
-                                <Table.Column id="created">Created</Table.Column>
-                            </Table.Header>
-                            <Table.Body
-                                renderEmptyState={() =>
-                                    bulkLoading ? null : (
-                                        <div className="flex items-center justify-center py-12 text-center text-sm text-muted">
-                                            No queue jobs found.
-                                        </div>
-                                    )
-                                }
-                            >
-                                {bulkLoading
-                                    ? Array.from({ length: 5 }).map((_, i) => (
-                                          <Table.Row key={`bj-${i}`} id={`bj-${i}`}>
-                                              {Array.from({ length: 6 }).map((__, j) => (
-                                                  <Table.Cell key={j}>
-                                                      <div className="h-4 w-3/4 rounded bg-surface-secondary animate-pulse" />
-                                                  </Table.Cell>
-                                              ))}
-                                          </Table.Row>
-                                      ))
-                                    : (bulkData?.data ?? []).map((job: BulkJob) => (
-                                          <Table.Row key={job.uuid} id={job.uuid}>
-                                              <Table.Cell>
-                                                  <span className="text-sm text-foreground font-medium truncate block">
-                                                      {job.title}
-                                                  </span>
-                                              </Table.Cell>
-                                              <Table.Cell>
-                                                  <span className="text-xs">{BULK_TYPE_LABELS[job.type] ?? job.type}</span>
-                                              </Table.Cell>
-                                              <Table.Cell>
-                                                  <Chip size="sm" variant="soft" color={BULK_STATUS_META[job.status].color}>
-                                                      <Chip.Label>{BULK_STATUS_META[job.status].label}</Chip.Label>
-                                                  </Chip>
-                                              </Table.Cell>
-                                              <Table.Cell>
-                                                  <span className="text-xs tabular-nums">
-                                                      {job.progress_total
-                                                          ? `${job.progress_current}/${job.progress_total}`
-                                                          : "—"}
-                                                  </span>
-                                              </Table.Cell>
-                                              <Table.Cell>
-                                                  <span className="text-xs text-muted">
-                                                      {job.organisation?.name ?? "—"}
-                                                  </span>
-                                              </Table.Cell>
-                                              <Table.Cell>
-                                                  <span className="text-xs text-muted tabular-nums">
-                                                      {formatDate(job.created_at)}
-                                                  </span>
-                                              </Table.Cell>
-                                          </Table.Row>
-                                      ))}
-                            </Table.Body>
-                        </Table.Content>
-                    </Table.ScrollContainer>
-                </Table>
-            </div>
-
-            {bulkTotalPages > 1 && (
-                <TablePagination
-                    page={bulkPage}
-                    totalPages={bulkTotalPages}
-                    total={bulkData?.total ?? 0}
-                    pageSize={PAGE_LIMIT}
-                    onPageChange={(p) => setParam("jobs_page", String(p))}
-                    label="queue jobs"
-                />
-            )}
-
-            <div className="pt-2">
-                <h2 className="text-sm font-semibold text-foreground">OpenAI batches</h2>
-                <p className="text-xs text-muted mt-0.5">Raw OpenAI Batch API jobs</p>
             </div>
 
             <div className="rounded-xl overflow-hidden">
@@ -316,37 +219,55 @@ export default function AdminBatchJobsPage() {
                                                   </span>
                                               </Table.Cell>
                                               <Table.Cell>
-                                                  <span className="text-xs text-foreground">{TYPE_LABELS[job.type]}</span>
+                                                  <span className="text-xs text-foreground">
+                                                      {TYPE_LABELS[job.type]}
+                                                  </span>
                                               </Table.Cell>
                                               <Table.Cell>
                                                   <StatusChip status={job.status} />
                                               </Table.Cell>
                                               <Table.Cell>
                                                   <div className="text-xs leading-snug">
-                                                      <span className="text-foreground font-medium">{job.total_requests}</span>
+                                                      <span className="text-foreground font-medium">
+                                                          {job.total_requests}
+                                                      </span>
                                                       <span className="text-muted"> total</span>
-                                                      {(job.completed_requests > 0 || job.failed_requests > 0) && (
+                                                      {(job.completed_requests > 0 ||
+                                                          job.failed_requests > 0) && (
                                                           <div className="text-muted mt-0.5">
-                                                              <span className="text-[color:var(--success,#22c55e)]">{job.completed_requests} ok</span>
+                                                              <span className="text-[color:var(--success,#22c55e)]">
+                                                                  {job.completed_requests} ok
+                                                              </span>
                                                               {" · "}
-                                                              <span className="text-[color:var(--danger,#ef4444)]">{job.failed_requests} fail</span>
+                                                              <span className="text-[color:var(--danger,#ef4444)]">
+                                                                  {job.failed_requests} fail
+                                                              </span>
                                                           </div>
                                                       )}
                                                   </div>
                                               </Table.Cell>
                                               <Table.Cell>
                                                   <span className="text-xs text-foreground tabular-nums">
-                                                      {formatDuration(job.created_at, job.finished_at)}
+                                                      {formatDuration(
+                                                          job.created_at,
+                                                          job.finished_at,
+                                                      )}
                                                   </span>
                                               </Table.Cell>
                                               <Table.Cell>
-                                                  <span className="text-xs text-muted">{job.organisation?.name ?? "—"}</span>
+                                                  <span className="text-xs text-muted">
+                                                      {job.organisation?.name ?? "—"}
+                                                  </span>
                                               </Table.Cell>
                                               <Table.Cell>
-                                                  <span className="text-xs text-muted tabular-nums">{formatDate(job.expires_at)}</span>
+                                                  <span className="text-xs text-muted tabular-nums">
+                                                      {formatDate(job.expires_at)}
+                                                  </span>
                                               </Table.Cell>
                                               <Table.Cell>
-                                                  <span className="text-xs text-muted tabular-nums">{formatDate(job.created_at)}</span>
+                                                  <span className="text-xs text-muted tabular-nums">
+                                                      {formatDate(job.created_at)}
+                                                  </span>
                                               </Table.Cell>
                                           </Table.Row>
                                       ))}

@@ -53,6 +53,7 @@ import { contactListQueryKeys } from "@/features/contact-lists/hooks/use-contact
 import type { PaginatedListMembers } from "@/features/contact-lists/interfaces/contact-list.interface";
 import type { EnrichmentSource } from "@/features/enrichment/constants/enrichment-sources";
 import { toast } from "@/hooks/use-toast";
+import { contactAwaitingScore, markContactsPendingScore } from "@/lib/pending-contact-scores";
 
 export const contactsQueryKeys = {
     all: ["contacts"] as const,
@@ -63,16 +64,9 @@ export const contactsQueryKeys = {
     tags: ["contact-tags"] as const,
 };
 
-function contactNeedsScoring(c: Contact): boolean {
-    const defs = c.filter?.scoring_instructions ?? [];
-    if (defs.length === 0) return false;
-    const scored = new Set((c.contact_scores ?? []).map((s) => s.scoring_instruction_uuid));
-    return defs.some((d) => !scored.has(d.uuid));
-}
-
 const anyContactProcessing = (page: PaginatedContacts | undefined): boolean => {
     if (!page) return false;
-    return page.data.some((c) => contactNeedsScoring(c));
+    return page.data.some((c) => contactAwaitingScore(c));
 };
 
 export function useContactTags() {
@@ -101,8 +95,9 @@ export function useContact(uuid: string | null | undefined) {
             const c = q.state.data as Contact | undefined;
             if (!c) return false;
             const drafting = c.outreach_messages?.length === 0;
-            const scoring = contactNeedsScoring(c);
-            return drafting || scoring ? 30_000 : false;
+            const scoring = contactAwaitingScore(c);
+            if (scoring) return 5_000;
+            return drafting ? 30_000 : false;
         },
     });
 }
@@ -420,7 +415,9 @@ export function useUpdateContactNotes() {
     });
 }
 
-function ensureContactCanRescore(contact: Contact): void {
+function ensureContactCanRescore(contact: Contact, scoring_instruction_uuids?: string[]): void {
+    if (scoring_instruction_uuids && scoring_instruction_uuids.length > 0) return;
+    if ((contact.contact_scores ?? []).length > 0) return;
     if (!contact.filter) {
         throw new Error("This contact has no filter. Assign a filter before rescoring.");
     }
@@ -434,7 +431,7 @@ export function useRescoreContact() {
     const qc = useQueryClient();
     return useMutation({
         mutationFn: (vars: { contact: Contact; scoring_instruction_uuids?: string[] }) => {
-            ensureContactCanRescore(vars.contact);
+            ensureContactCanRescore(vars.contact, vars.scoring_instruction_uuids);
             return triggerContactScore(
                 vars.contact.uuid,
                 vars.scoring_instruction_uuids,
@@ -446,6 +443,11 @@ export function useRescoreContact() {
                 description: "We'll refresh the AI score shortly.",
                 duration: 2500,
             });
+            markContactsPendingScore(
+                [vars.contact.uuid],
+                vars.scoring_instruction_uuids ??
+                    (vars.contact.contact_scores ?? []).map((s) => s.scoring_instruction_uuid),
+            );
             qc.invalidateQueries({ queryKey: contactsQueryKeys.detail(vars.contact.uuid) });
             qc.invalidateQueries({ queryKey: contactsQueryKeys.all });
         },
@@ -478,7 +480,9 @@ export function useBulkTriggerContactScore() {
                     description: `${data.queued} job${data.queued === 1 ? "" : "s"} enqueued.${skip}`,
                     duration: 3500,
                 });
+                markContactsPendingScore(vars.contact_uuids, vars.scoring_instruction_uuids);
                 qc.invalidateQueries({ queryKey: contactsQueryKeys.all });
+                qc.invalidateQueries({ queryKey: ["contact-lists"] });
                 for (const uuid of vars.contact_uuids) {
                     qc.invalidateQueries({ queryKey: contactsQueryKeys.detail(uuid) });
                 }

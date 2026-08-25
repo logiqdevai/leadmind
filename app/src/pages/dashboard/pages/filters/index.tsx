@@ -10,7 +10,7 @@ export default function FiltersPage() {
     const { data: filters, isLoading } = useFilters();
 
     return (
-        <div className="space-y-4">
+        <div className="filters-page space-y-4">
             <div className="flex items-center justify-between gap-3">
                 <div>
                     <h1 className="text-xl font-semibold text-foreground">Filters</h1>

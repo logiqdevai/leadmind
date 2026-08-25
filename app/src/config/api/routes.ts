@@ -163,6 +163,8 @@ export const ApiRoutes = {
         prefix: "/bulk-jobs",
         list: "/bulk-jobs",
         get: (uuid: string) => `/bulk-jobs/${uuid}`,
+        cancel: "/bulk-jobs/cancel",
+        retry: "/bulk-jobs/retry",
     },
     message_templates: {
         prefix: "/message-templates",
@@ -247,6 +249,7 @@ export const ApiRoutes = {
         add_contacts: (uuid: string) => `/contact-lists/${uuid}/contacts`,
         bulk_add_contacts: (uuid: string) => `/contact-lists/${uuid}/contacts/bulk`,
         bulk_remove_contacts: (uuid: string) => `/contact-lists/${uuid}/contacts/bulk-remove`,
+        remove_below_score: (uuid: string) => `/contact-lists/${uuid}/contacts/remove-below-score`,
         remove_contact: (listUuid: string, contactUuid: string) =>
             `/contact-lists/${listUuid}/contacts/${contactUuid}`,
         stats: (uuid: string) => `/contact-lists/${uuid}/stats`,

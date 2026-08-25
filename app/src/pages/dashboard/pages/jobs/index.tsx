@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { Chip, ListBox, Select, Table } from "@heroui/react";
+import { Checkbox, Chip, ListBox, Select, Table, type Selection } from "@heroui/react";
 import {
     AlertTriangle,
     CheckCircle2,
@@ -8,16 +9,37 @@ import {
     ListTodo,
     XCircle,
 } from "lucide-react";
-import { useBulkJobs } from "@/features/bulk-jobs/hooks/use-bulk-jobs";
+import {
+    useBulkJobs,
+    useCancelBulkJobs,
+    useRetryBulkJobs,
+} from "@/features/bulk-jobs/hooks/use-bulk-jobs";
 import {
     BulkJobStatus,
     BulkJobType,
     type BulkJob,
 } from "@/features/bulk-jobs/interfaces/bulk-job.interface";
 import { TablePagination } from "@/components/ui/table-pagination";
-import { MobileListFilters } from "@/components/ui/mobile-list-filters";
+import { JobsActionsDropdown } from "./components/jobs-actions-dropdown";
 
 const PAGE_LIMIT = 20;
+
+const ACTIVE_STATUSES = new Set<BulkJobStatus>([
+    BulkJobStatus.PENDING,
+    BulkJobStatus.QUEUED,
+    BulkJobStatus.RUNNING,
+]);
+
+const RETRYABLE_STATUSES = new Set<BulkJobStatus>([
+    BulkJobStatus.CANCELLED,
+    BulkJobStatus.FAILED,
+]);
+
+const RESUMABLE_TYPES = new Set<BulkJobType>([
+    BulkJobType.CONTACT_SCORE,
+    BulkJobType.CONTACT_ENRICH,
+    BulkJobType.LEAD_ENRICH,
+]);
 
 type ChipColor = "default" | "accent" | "success" | "warning" | "danger";
 
@@ -72,6 +94,8 @@ function StatusChip({ status }: { status: BulkJobStatus }) {
     );
 }
 
+const FILTER_ALL = "all";
+
 function FilterSelect({
     label,
     value,
@@ -83,12 +107,16 @@ function FilterSelect({
     options: { key: string; label: string }[];
     onChange: (key: string) => void;
 }) {
+    const selected = value || FILTER_ALL;
     return (
         <Select
             aria-label={label}
             placeholder={label}
-            value={value || null}
-            onChange={(v) => onChange(v != null ? String(v) : "")}
+            value={selected}
+            onChange={(v) => {
+                const key = v != null ? String(v) : FILTER_ALL;
+                onChange(key === FILTER_ALL ? "" : key);
+            }}
         >
             <Select.Trigger className="min-w-36 h-8 text-xs">
                 <Select.Value />
@@ -96,7 +124,7 @@ function FilterSelect({
             </Select.Trigger>
             <Select.Popover>
                 <ListBox>
-                    <ListBox.Item key="" id="" textValue={label}>
+                    <ListBox.Item id={FILTER_ALL} textValue={label}>
                         {label}
                         <ListBox.ItemIndicator />
                     </ListBox.Item>
@@ -114,20 +142,30 @@ function FilterSelect({
 
 export default function JobsPage() {
     const [searchParams, setSearchParams] = useSearchParams();
+    const [selectedKeys, setSelectedKeys] = useState<Set<string>>(new Set());
 
     const page = Math.max(1, Number(searchParams.get("page") ?? 1));
     const typeFilter = (searchParams.get("type") as BulkJobType) || undefined;
     const statusFilter = (searchParams.get("status") as BulkJobStatus) || undefined;
-    const scope = searchParams.get("scope") ?? "all";
-    const activeOnly = scope !== "all" && !statusFilter;
 
     const { data, isLoading } = useBulkJobs({
         page,
         limit: PAGE_LIMIT,
         type: typeFilter,
         status: statusFilter,
-        active_only: activeOnly,
     });
+    const cancelJobs = useCancelBulkJobs();
+    const retryJobs = useRetryBulkJobs();
+
+    const jobs = data?.data ?? [];
+    const selectedJobs = jobs.filter((job) => selectedKeys.has(job.uuid));
+    const canCancel = selectedJobs.some((job) => ACTIVE_STATUSES.has(job.status));
+    const canRetry = selectedJobs.some(
+        (job) =>
+            RETRYABLE_STATUSES.has(job.status) &&
+            RESUMABLE_TYPES.has(job.type) &&
+            (job.progress_total === 0 || job.progress_current < job.progress_total),
+    );
 
     const setParam = (key: string, value: string) => {
         setSearchParams(
@@ -136,24 +174,12 @@ export default function JobsPage() {
                 if (value) next.set(key, value);
                 else next.delete(key);
                 next.delete("page");
+                next.delete("scope");
                 return next;
             },
             { replace: true },
         );
-    };
-
-    const setScope = (value: string) => {
-        setSearchParams(
-            (prev) => {
-                const next = new URLSearchParams(prev);
-                if (value === "all") next.set("scope", "all");
-                else next.delete("scope");
-                next.delete("status");
-                next.delete("page");
-                return next;
-            },
-            { replace: true },
-        );
+        setSelectedKeys(new Set());
     };
 
     const setPage = (p: number) => {
@@ -165,37 +191,67 @@ export default function JobsPage() {
             },
             { replace: true },
         );
+        setSelectedKeys(new Set());
+    };
+
+    const handleSelectionChange = (keys: Selection) => {
+        if (keys === "all") {
+            setSelectedKeys(new Set(jobs.map((job) => job.uuid)));
+            return;
+        }
+        setSelectedKeys(new Set(Array.from(keys, String)));
+    };
+
+    const handleCancel = async () => {
+        const uuids = selectedJobs
+            .filter((job) => ACTIVE_STATUSES.has(job.status))
+            .map((job) => job.uuid);
+        if (uuids.length === 0) return;
+        await cancelJobs.mutateAsync(uuids);
+        setSelectedKeys(new Set());
+    };
+
+    const handleRetry = async () => {
+        const uuids = selectedJobs
+            .filter(
+                (job) =>
+                    RETRYABLE_STATUSES.has(job.status) &&
+                    RESUMABLE_TYPES.has(job.type) &&
+                    (job.progress_total === 0 || job.progress_current < job.progress_total),
+            )
+            .map((job) => job.uuid);
+        if (uuids.length === 0) return;
+        await retryJobs.mutateAsync(uuids);
+        setSelectedKeys(new Set());
     };
 
     const totalPages = Math.ceil((data?.total ?? 0) / PAGE_LIMIT);
 
     return (
-        <div className="space-y-4">
-            <div className="flex items-start justify-between gap-3 flex-wrap">
-                <div className="flex items-center gap-2.5">
-                    <ListTodo className="size-5 text-muted shrink-0" />
-                    <div>
-                        <h1 className="text-lg font-semibold text-foreground leading-tight">Jobs</h1>
-                        <p className="text-xs text-muted mt-0.5">
-                            {data?.total ?? "—"} {scope === "all" || statusFilter ? "jobs" : "active jobs"}
-                        </p>
+        <div className="jobs-page space-y-4">
+            <div className="flex flex-col gap-3">
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                    <div className="flex items-center gap-2.5">
+                        <ListTodo className="size-5 text-muted shrink-0" />
+                        <div>
+                            <h1 className="text-lg font-semibold text-foreground leading-tight">Jobs</h1>
+                            <p className="text-xs text-muted mt-0.5">
+                                {data?.total ?? "—"} jobs
+                                {selectedKeys.size > 0 ? ` · ${selectedKeys.size} selected` : ""}
+                            </p>
+                        </div>
                     </div>
+                    <JobsActionsDropdown
+                        onCancelSelected={handleCancel}
+                        cancelDisabled={!canCancel}
+                        cancelPending={cancelJobs.isPending}
+                        onRetrySelected={handleRetry}
+                        retryDisabled={!canRetry}
+                        retryPending={retryJobs.isPending}
+                    />
                 </div>
 
-                <MobileListFilters
-                    search={
-                    <FilterSelect
-                        label="Active only"
-                        value={statusFilter ? "" : scope === "all" ? "all" : "active"}
-                        options={[
-                            { key: "active", label: "Active only" },
-                            { key: "all", label: "All jobs" },
-                        ]}
-                        onChange={(v) => setScope(v === "all" ? "all" : "active")}
-                    />
-                    }
-                    extras={
-                        <>
+                <div className="flex flex-wrap items-center gap-2">
                     <FilterSelect
                         label="All types"
                         value={typeFilter ?? ""}
@@ -209,33 +265,30 @@ export default function JobsPage() {
                             key: s,
                             label: STATUS_META[s as BulkJobStatus].label,
                         }))}
-                        onChange={(v) => {
-                            setSearchParams(
-                                (prev) => {
-                                    const next = new URLSearchParams(prev);
-                                    if (v) {
-                                        next.set("status", v);
-                                        next.set("scope", "all");
-                                    } else {
-                                        next.delete("status");
-                                    }
-                                    next.delete("page");
-                                    return next;
-                                },
-                                { replace: true },
-                            );
-                        }}
+                        onChange={(v) => setParam("status", v)}
                     />
-                        </>
-                    }
-                />
+                </div>
             </div>
 
             <div className="rounded-xl overflow-hidden">
                 <Table>
                     <Table.ScrollContainer className="w-full max-w-full overflow-x-hidden">
-                        <Table.Content aria-label="Jobs" className="w-full table-fixed">
+                        <Table.Content
+                            aria-label="Jobs"
+                            className="w-full table-fixed"
+                            selectionMode="multiple"
+                            selectionBehavior="toggle"
+                            selectedKeys={selectedKeys}
+                            onSelectionChange={handleSelectionChange}
+                        >
                             <Table.Header>
+                                <Table.Column className="pr-0 w-10">
+                                    <Checkbox aria-label="Select all" slot="selection">
+                                        <Checkbox.Control>
+                                            <Checkbox.Indicator />
+                                        </Checkbox.Control>
+                                    </Checkbox>
+                                </Table.Column>
                                 <Table.Column id="title" isRowHeader className="min-w-0 overflow-hidden">
                                     Title
                                 </Table.Column>
@@ -260,6 +313,9 @@ export default function JobsPage() {
                                 {isLoading
                                     ? Array.from({ length: 5 }).map((_, i) => (
                                           <Table.Row key={`sk-${i}`} id={`sk-${i}`}>
+                                              <Table.Cell className="pr-0">
+                                                  <div className="h-4 w-4 rounded bg-surface-secondary animate-pulse" />
+                                              </Table.Cell>
                                               {Array.from({ length: 9 }).map((__, j) => (
                                                   <Table.Cell key={j} className={j >= 3 ? "hidden lg:table-cell" : undefined}>
                                                       <div className="h-4 w-3/4 rounded bg-surface-secondary animate-pulse" />
@@ -267,8 +323,15 @@ export default function JobsPage() {
                                               ))}
                                           </Table.Row>
                                       ))
-                                    : (data?.data ?? []).map((job) => (
+                                    : jobs.map((job) => (
                                           <Table.Row key={job.uuid} id={job.uuid}>
+                                              <Table.Cell className="pr-0">
+                                                  <Checkbox aria-label={`Select ${job.title}`} slot="selection">
+                                                      <Checkbox.Control>
+                                                          <Checkbox.Indicator />
+                                                      </Checkbox.Control>
+                                                  </Checkbox>
+                                              </Table.Cell>
                                               <Table.Cell className="min-w-0 overflow-hidden">
                                                   <span className="text-sm text-foreground font-medium truncate block">
                                                       {job.title}
@@ -295,7 +358,7 @@ export default function JobsPage() {
                                               <Table.Cell className="hidden lg:table-cell">
                                                   {job.error ? (
                                                       <span
-                                                          className="text-xs text-danger line-clamp-2 max-w-[200px]"
+                                                          className="job-error-text text-danger line-clamp-2 max-w-[200px]"
                                                           title={job.error}
                                                       >
                                                           {job.error}

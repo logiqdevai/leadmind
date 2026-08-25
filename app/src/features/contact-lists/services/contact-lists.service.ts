@@ -124,6 +124,21 @@ export const removeListContact = async (
     }
 };
 
+export const removeListContactsBelowScore = async (
+    listUuid: string,
+): Promise<RemoveListContactsResult> => {
+    try {
+        const response = await axiosInstance.post(
+            ApiRoutes.contact_lists.remove_below_score(listUuid),
+        );
+        return response.data;
+    } catch (error: any) {
+        throw new Error(
+            error?.response?.data?.message || "Failed to remove low-score contacts from list.",
+        );
+    }
+};
+
 export const removeListContactsBulk = async (
     listUuid: string,
     contact_uuids: string[],

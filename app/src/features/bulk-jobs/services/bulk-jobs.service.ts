@@ -1,6 +1,10 @@
 import axiosInstance from "@/config/api/axios";
 import { ApiRoutes } from "@/config/api/routes";
-import type { ListBulkJobsQuery, ListBulkJobsResult } from "../interfaces/bulk-job.interface";
+import type {
+    BulkJobActionResult,
+    ListBulkJobsQuery,
+    ListBulkJobsResult,
+} from "../interfaces/bulk-job.interface";
 
 export const listBulkJobs = async (query: ListBulkJobsQuery = {}): Promise<ListBulkJobsResult> => {
     const params = new URLSearchParams();
@@ -16,4 +20,26 @@ export const listBulkJobs = async (query: ListBulkJobsQuery = {}): Promise<ListB
         qs ? `${ApiRoutes.bulk_jobs.list}?${qs}` : ApiRoutes.bulk_jobs.list,
     );
     return response.data;
+};
+
+export const cancelBulkJobs = async (
+    uuids: string[],
+): Promise<{ results: BulkJobActionResult[] }> => {
+    try {
+        const response = await axiosInstance.post(ApiRoutes.bulk_jobs.cancel, { uuids });
+        return response.data;
+    } catch {
+        throw new Error("Failed to cancel jobs. Please try again.");
+    }
+};
+
+export const retryBulkJobs = async (
+    uuids: string[],
+): Promise<{ results: BulkJobActionResult[] }> => {
+    try {
+        const response = await axiosInstance.post(ApiRoutes.bulk_jobs.retry, { uuids });
+        return response.data;
+    } catch {
+        throw new Error("Failed to retry jobs. Please try again.");
+    }
 };

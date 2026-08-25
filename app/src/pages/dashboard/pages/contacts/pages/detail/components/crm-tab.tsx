@@ -6,6 +6,7 @@ import type { Contact, LeadStatus } from "@/features/contacts/interfaces/contact
 import { STATUS_OPTIONS } from "@/features/contacts/constants/contacts.constants";
 import { useContactTags, useRescoreContact, useUpdateContactNotes, useUpdateContactStatus, useUpdateContactTags } from "@/features/contacts/hooks/use-contacts";
 import { cn } from "@/lib/utils";
+import { contactScoreDisplayRows } from "@/lib/contact-score-display";
 import { ScoreBadge } from "@/pages/dashboard/pages/leads/components/badges";
 import { InteractionTimeline } from "@/pages/dashboard/pages/contacts/components/interaction-timeline";
 import { ChangeStatusModal } from "./change-status-modal";
@@ -83,7 +84,7 @@ export function CrmTab({ contact, onNavigateToOutreach }: CrmTabProps) {
     );
   };
 
-  const scoringDefs = contact.filter?.scoring_instructions ?? [];
+  const scoringDefs = contactScoreDisplayRows(contact);
   const canRescore = scoringDefs.length > 0;
 
   const handleRescoreOpenChange = (next: boolean) => {
@@ -95,9 +96,8 @@ export function CrmTab({ contact, onNavigateToOutreach }: CrmTabProps) {
 
   const applyRescore = () => {
     if (rescoreSelected.length === 0) return;
-    const allSelected = rescoreSelected.length === scoringDefs.length;
     rescore.mutate(
-      allSelected ? { contact } : { contact, scoring_instruction_uuids: rescoreSelected },
+      { contact, scoring_instruction_uuids: rescoreSelected },
       {
         onSuccess: () => {
           setRescoreOpen(false);
@@ -120,10 +120,9 @@ export function CrmTab({ contact, onNavigateToOutreach }: CrmTabProps) {
         isPending={updateStatus.isPending}
       />
 
-      {/* CRM State */}
       <div className="rounded-2xl border border-border/80 bg-surface/80">
         <div className="flex items-center justify-between gap-2 border-b border-border/60 px-4 sm:px-5 py-3.5">
-          <h3 className="text-sm font-semibold text-foreground">CRM State</h3>
+          <h3 className="text-sm font-semibold text-foreground">AI scores</h3>
           <Popover isOpen={rescoreOpen} onOpenChange={handleRescoreOpenChange}>
             <Popover.Trigger>
               <Button
@@ -212,67 +211,69 @@ export function CrmTab({ contact, onNavigateToOutreach }: CrmTabProps) {
             </Popover.Content>
           </Popover>
         </div>
+        <div className="px-4 sm:px-5 py-4">
+          {scoringDefs.length === 0 ? (
+            <span className="text-sm text-muted">No scores yet.</span>
+          ) : (
+            <div className="flex flex-col gap-3">
+              {scoringDefs.map((def) => (
+                <div key={def.uuid} className="flex items-center justify-between gap-3">
+                  <div className="min-w-0 flex items-center gap-1">
+                    <span className="text-sm text-foreground truncate">{def.name}</span>
+                    {def.instructions ? (
+                      <Tooltip>
+                        <Tooltip.Trigger>
+                          <Info className="size-3 shrink-0 text-muted cursor-default" />
+                        </Tooltip.Trigger>
+                        <Tooltip.Content className="max-w-xs text-xs whitespace-pre-line">
+                          {def.instructions}
+                        </Tooltip.Content>
+                      </Tooltip>
+                    ) : null}
+                  </div>
+                  <ScoreBadge score={def.score} />
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* CRM State */}
+      <div className="rounded-2xl border border-border/80 bg-surface/80">
+        <div className="flex items-center justify-between gap-2 border-b border-border/60 px-4 sm:px-5 py-3.5">
+          <h3 className="text-sm font-semibold text-foreground">CRM State</h3>
+        </div>
 
         <div className="px-4 sm:px-5 py-4 space-y-5">
-          <div className="flex flex-wrap gap-5">
-            <div className="flex min-w-0 w-full flex-1 flex-col gap-2 sm:min-w-0">
-              <p className={LABEL_CLASS}>Status</p>
-              <Select
-                className="w-full"
-                value={contact.status}
-                onChange={(v) => {
-                  const next = v as LeadStatus;
-                  if (next === contact.status) return;
-                  setPendingStatus(next);
-                  setStatusNote("");
-                  setStatusModalOpen(true);
-                }}
-              >
-                <Select.Trigger>
-                  <Select.Value />
-                  <Select.Indicator />
-                </Select.Trigger>
-                <Select.Popover>
-                  <ListBox>
-                    {STATUS_OPTIONS.map((opt) => (
-                      <ListBox.Item key={opt.id} id={opt.id} textValue={opt.label}>
-                        {opt.label}
-                        <ListBox.ItemIndicator />
-                      </ListBox.Item>
-                    ))}
-                  </ListBox>
-                </Select.Popover>
-              </Select>
-            </div>
-
-            <div className="flex min-w-0 w-full flex-1 flex-col gap-2">
-              <p className={LABEL_CLASS}>AI scores</p>
-              <div className="flex flex-col gap-2 pt-0.5">
-                {(contact.filter?.scoring_instructions ?? []).length === 0 ? (
-                  <span className="text-sm text-muted">No scoring instructions on this filter.</span>
-                ) : (
-                  (contact.filter?.scoring_instructions ?? []).map((def) => {
-                    const row = contact.contact_scores?.find((s) => s.scoring_instruction_uuid === def.uuid);
-                    return (
-                      <div key={def.uuid} className="flex items-center justify-between gap-3">
-                        <div className="min-w-0 flex items-center gap-1">
-                          <span className="text-sm text-foreground truncate">{def.name}</span>
-                          <Tooltip>
-                            <Tooltip.Trigger>
-                              <Info className="size-3 shrink-0 text-muted cursor-default" />
-                            </Tooltip.Trigger>
-                            <Tooltip.Content className="max-w-xs text-xs whitespace-pre-line">
-                              {def.instructions}
-                            </Tooltip.Content>
-                          </Tooltip>
-                        </div>
-                        <ScoreBadge score={row?.score ?? null} />
-                      </div>
-                    );
-                  })
-                )}
-              </div>
-            </div>
+          <div className="flex flex-col gap-2">
+            <p className={LABEL_CLASS}>Status</p>
+            <Select
+              className="w-full"
+              value={contact.status}
+              onChange={(v) => {
+                const next = v as LeadStatus;
+                if (next === contact.status) return;
+                setPendingStatus(next);
+                setStatusNote("");
+                setStatusModalOpen(true);
+              }}
+            >
+              <Select.Trigger>
+                <Select.Value />
+                <Select.Indicator />
+              </Select.Trigger>
+              <Select.Popover>
+                <ListBox>
+                  {STATUS_OPTIONS.map((opt) => (
+                    <ListBox.Item key={opt.id} id={opt.id} textValue={opt.label}>
+                      {opt.label}
+                      <ListBox.ItemIndicator />
+                    </ListBox.Item>
+                  ))}
+                </ListBox>
+              </Select.Popover>
+            </Select>
           </div>
 
           <div className="border-t border-border/50" />

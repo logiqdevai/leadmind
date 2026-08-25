@@ -111,6 +111,16 @@ export class ContactListsController {
     }
 
     @ActivityLog({ entityType: ActivityEntityType.CONTACT_LIST, action: ActivityAction.CONTACTS_REMOVED, entityUuidFrom: 'params.uuid' })
+    @Post(':uuid/contacts/remove-below-score')
+    @ApiOperation({ summary: 'Remove contacts from a list whose current score is below 6' })
+    removeContactsBelowScore(
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
+        @Param('uuid') uuid: string,
+    ) {
+        return this.contactListsService.removeContactsBelowScore(organisation_uuid, uuid);
+    }
+
+    @ActivityLog({ entityType: ActivityEntityType.CONTACT_LIST, action: ActivityAction.CONTACTS_REMOVED, entityUuidFrom: 'params.uuid' })
     @Post(':uuid/contacts/bulk-remove')
     @ApiOperation({ summary: 'Remove multiple contacts from a list' })
     removeContacts(
