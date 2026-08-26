@@ -16,10 +16,11 @@ export const userQueryKeys = {
     me: ["user", "me"] as const,
 };
 
-export function useGetMe() {
+export function useGetMe(options?: { enabled?: boolean }) {
     return useQuery({
         queryKey: userQueryKeys.me,
         queryFn: getMe,
+        enabled: options?.enabled,
     });
 }
 
