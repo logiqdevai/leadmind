@@ -46,7 +46,7 @@ model Organisation {
   name           String
   slug           String   @unique
   timezone       String   @default("UTC")
-  reply_to_email String?
+  reply_to_email String?  @unique
   created_at     DateTime @default(now())
   updated_at     DateTime @updatedAt
 
@@ -453,7 +453,7 @@ model Interaction {
   content               String?
   metadata              Json?
   status_change         Json?
-  outreach_message_uuid String?         @unique
+  outreach_message_uuid String?
   created_at            DateTime        @default(now())
   updated_at            DateTime        @updatedAt
 
@@ -467,6 +467,7 @@ model Interaction {
   @@index([campaign_uuid])
   @@index([type])
   @@index([created_at])
+  @@index([outreach_message_uuid])
 }
 
 model OutreachMessage {
@@ -491,6 +492,9 @@ model OutreachMessage {
   replied_at                DateTime?
   bounced_at                DateTime?
   failed_at                 DateTime?
+  reply_subject             String?
+  reply_text                String?
+  reply_html                String?
   email_provider            ExternalIntegrationProvider?
   email_account             String?
   email_domain_uuid         String?
@@ -506,7 +510,7 @@ model OutreachMessage {
   contact              Contact               @relation(fields: [contact_uuid], references: [uuid], onDelete: Cascade)
   campaign             MarketingCampaign?    @relation(fields: [campaign_uuid], references: [uuid], onDelete: SetNull)
   sent_by              User?                 @relation("OutreachMessageSentBy", fields: [sent_by_user_uuid], references: [uuid], onDelete: SetNull)
-  interaction          Interaction?
+  interactions         Interaction[]
   sequence_enrollment  SequenceEnrollment?   @relation(fields: [sequence_enrollment_uuid], references: [uuid], onDelete: SetNull)
   sequence_step        OutreachSequenceStep? @relation(fields: [sequence_step_uuid], references: [uuid], onDelete: SetNull)
   campaign_integration CampaignIntegration?  @relation(fields: [campaign_integration_uuid], references: [uuid], onDelete: SetNull)

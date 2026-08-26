@@ -1,8 +1,9 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
     createAndSendMessage,
     createDraftMessage,
     deleteOutreachMessage,
+    getOutreachMessageThread,
     sendOutreachMessage,
     updateOutreachMessage,
 } from "../services/outreach.service";
@@ -120,6 +121,14 @@ export function useCreateAndSendMessage() {
                 variant: "error",
             });
         },
+    });
+}
+
+export function useOutreachMessageThread(uuid: string | null | undefined) {
+    return useQuery({
+        queryKey: ["outreach-message-thread", uuid],
+        queryFn: () => getOutreachMessageThread(uuid as string),
+        enabled: !!uuid,
     });
 }
 

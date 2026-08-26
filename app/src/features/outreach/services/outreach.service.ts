@@ -2,6 +2,7 @@ import axiosInstance from "@/config/api/axios";
 import { ApiRoutes } from "@/config/api/routes";
 import type {
     CreateMessagePayload,
+    MessageThread,
     OutreachMessage,
     SendMessagePayload,
     UpdateMessagePayload,
@@ -79,6 +80,15 @@ export const sendOutreachMessage = async (
             throw new Error("Only pending or failed messages can be sent.");
         }
         throw new Error(error?.response?.data?.message || "Failed to send message.");
+    }
+};
+
+export const getOutreachMessageThread = async (uuid: string): Promise<MessageThread> => {
+    try {
+        const response = await axiosInstance.get(ApiRoutes.outreach.thread(uuid));
+        return response.data;
+    } catch (error: any) {
+        throw new Error(error?.response?.data?.message || "Failed to load conversation.");
     }
 };
 

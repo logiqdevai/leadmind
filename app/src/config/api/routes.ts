@@ -70,6 +70,7 @@ export const ApiRoutes = {
         update_message: (uuid: string) => `/outreach/messages/${uuid}`,
         send_message: (uuid: string) => `/outreach/messages/${uuid}/send`,
         delete_message: (uuid: string) => `/outreach/messages/${uuid}`,
+        thread: (uuid: string) => `/outreach/messages/${uuid}/thread`,
     },
     dashboard: {
         prefix: "/dashboard",

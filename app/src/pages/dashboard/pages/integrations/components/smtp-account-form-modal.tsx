@@ -7,6 +7,7 @@ import {
     Modal,
 } from "@heroui/react";
 import { Save } from "lucide-react";
+import { Link } from "react-router-dom";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
 import { createSmtpAccount } from "@/features/integrations/services/integrations.service";
 import { suggestNextAccountLabel } from "@/features/integrations/constants/integration-key-types";
@@ -15,6 +16,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { integrationsQueryKeys } from "@/features/integrations/hooks/use-integrations";
 import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { Routes } from "@/routes/routes";
 
 const borderedFieldClass = cn(
     "rounded-md border border-border bg-surface-primary",
@@ -218,6 +220,21 @@ export function SmtpAccountFormModal({
                                     />
                                 </div>
                             </div>
+
+                            <p className="text-xs text-muted">
+                                Sending from Gmail or another personal inbox? Replies
+                                land in that inbox, not your CRM, unless you set an{" "}
+                                <Link
+                                    to={Routes.dashboard.settings_organisation}
+                                    className="text-xs font-medium text-primary hover:underline"
+                                    onClick={() => onOpenChange(false)}
+                                >
+                                    organisation Reply-to email
+                                </Link>{" "}
+                                pointed at your Resend-managed receiving address —
+                                that's what routes replies back onto the contact's
+                                timeline.
+                            </p>
 
                             {formError ? <FieldError>{formError}</FieldError> : null}
                         </Modal.Body>

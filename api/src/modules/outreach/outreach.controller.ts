@@ -46,6 +46,16 @@ export class OutreachController {
         return this.outreachService.listMessages(organisation_uuid, query);
     }
 
+    @Get('messages/:uuid/thread')
+    @ApiOperation({ summary: 'Get the original message plus its full ordered event/reply history' })
+    @ApiResponse({ status: 200 })
+    getThread(
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
+        @Param('uuid') message_uuid: string,
+    ) {
+        return this.outreachService.getThread(organisation_uuid, message_uuid);
+    }
+
     @ActivityLog({ entityType: ActivityEntityType.OUTREACH_MESSAGE, action: ActivityAction.MESSAGE_UPDATED, entityUuidFrom: 'params.uuid' })
     @Put('messages/:uuid')
     @ApiOperation({ summary: 'Update pending outreach message' })
