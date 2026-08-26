@@ -93,6 +93,7 @@ export function StepAudience({
                 value={value}
                 onChange={handleChange}
                 showContactListFilter
+                showLeadSourceType
             />
 
             <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-surface p-3">

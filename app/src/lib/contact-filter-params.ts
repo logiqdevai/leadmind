@@ -46,6 +46,7 @@ export function parseContactFiltersFromSearchParams(
     return {
         search: searchParams.get("search") || undefined,
         filter_uuid: searchParams.get("filter_uuid") || undefined,
+        contact_list_uuid: searchParams.get("contact_list_uuid") || undefined,
         status: isLeadStatus(statusParam) ? statusParam : undefined,
         source_type: isSourceType(sourceTypeParam) ? sourceTypeParam : undefined,
         tags: tags.length > 0 ? tags : undefined,
@@ -72,6 +73,7 @@ export function serializeContactFiltersToSearchParams(
     return {
         search: filters.search,
         filter_uuid: filters.filter_uuid,
+        contact_list_uuid: filters.contact_list_uuid,
         status: filters.status,
         source_type: filters.source_type,
         tags: filters.tags?.length ? filters.tags.join(",") : undefined,
@@ -95,7 +97,7 @@ export function serializeContactFiltersToSearchParams(
 }
 
 export function contactFiltersToListQuery(
-    filters: ContactFilters & { contact_list_uuid?: string },
+    filters: ContactFilters,
     pagination?: Pick<ListContactsQuery, "page" | "limit" | "exclude_list_uuid">,
 ): ListContactsQuery {
     return {
@@ -103,7 +105,6 @@ export function contactFiltersToListQuery(
         page: pagination?.page,
         limit: pagination?.limit,
         exclude_list_uuid: pagination?.exclude_list_uuid,
-        contact_list_uuid: filters.contact_list_uuid,
     };
 }
 

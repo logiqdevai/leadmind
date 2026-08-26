@@ -20,8 +20,8 @@ import type { SourceType } from "@/features/leads/interfaces/lead.interface";
 import { cn } from "@/lib/utils";
 
 interface ContactFiltersFormProps {
-    value: ContactFilters & { contact_list_uuid?: string };
-    onChange: (patch: Partial<ContactFilters & { contact_list_uuid?: string }>) => void;
+    value: ContactFilters;
+    onChange: (patch: Partial<ContactFilters>) => void;
     disabled?: boolean;
     sections?: ContactFiltersFormSections;
     showSourceFilter?: boolean;
@@ -31,7 +31,7 @@ interface ContactFiltersFormProps {
     savedFilterUuid?: string | null;
     onSavedFilterUuidChange?: (uuid: string | null) => void;
     onApplySavedFilter?: (
-        patch: Partial<ContactFilters & { contact_list_uuid?: string }>,
+        patch: Partial<ContactFilters>,
         uuid: string | null,
     ) => void;
     collapsible?: boolean;

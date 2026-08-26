@@ -35,6 +35,7 @@ export class CampaignContactResolverService {
             search: filters.search,
             filter_uuid: filters.filter_uuid,
             lead_uuid: filters.lead_uuid,
+            source_type: filters.source_type,
             score_rules: filters.score_rules,
             profile_field: filters.profile_field,
             has_profile_field: filters.has_profile_field,

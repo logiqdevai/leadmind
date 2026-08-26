@@ -5,6 +5,7 @@ import type { SourceType } from "@/features/leads/interfaces/lead.interface";
 export interface ContactFilters {
     search?: string;
     filter_uuid?: string;
+    contact_list_uuid?: string;
     source_type?: SourceType;
     status?: LeadStatus;
     tags?: string[];

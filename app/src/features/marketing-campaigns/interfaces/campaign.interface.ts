@@ -40,7 +40,6 @@ export type CampaignContactStatuses =
 
 export interface CampaignFilters extends ContactFilters {
     lead_uuid?: string;
-    contact_list_uuid?: string;
     exclude_uuids?: string[];
 }
 

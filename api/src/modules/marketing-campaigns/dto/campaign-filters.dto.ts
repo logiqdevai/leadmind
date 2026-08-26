@@ -11,7 +11,7 @@ import {
     IsUUID,
     ValidateNested,
 } from 'class-validator';
-import { LeadStatus } from '@/generated/prisma';
+import { LeadStatus, SourceType } from '@/generated/prisma';
 import {
     CampaignProfileField,
     CAMPAIGN_PROFILE_FIELD_KEYS,
@@ -72,6 +72,11 @@ export class CampaignFiltersDto {
     @IsOptional()
     @IsUUID()
     lead_uuid?: string;
+
+    @ApiPropertyOptional({ enum: SourceType })
+    @IsOptional()
+    @IsEnum(SourceType)
+    source_type?: SourceType;
 
     @ApiPropertyOptional({ description: 'Only contacts with an email address' })
     @IsOptional()

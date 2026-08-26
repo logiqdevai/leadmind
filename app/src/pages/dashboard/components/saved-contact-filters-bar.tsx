@@ -21,6 +21,7 @@ import {
 const FILTER_KEYS: (keyof ContactFilters)[] = [
     "search",
     "filter_uuid",
+    "contact_list_uuid",
     "source_type",
     "status",
     "tags",

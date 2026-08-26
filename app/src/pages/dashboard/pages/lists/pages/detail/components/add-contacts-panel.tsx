@@ -119,6 +119,7 @@ export function AddContactsPanel({
                 value={filters}
                 onChange={handleFilterChange}
                 showContactListFilter
+                showLeadSourceType
             />
 
             <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-surface p-3">
