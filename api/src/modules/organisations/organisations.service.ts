@@ -22,6 +22,7 @@ import { UpdateOrganisationDto } from './dto/update-organisation.dto';
 import { CreateInvitationDto } from './dto/create-invitation.dto';
 import { UpdateMemberRoleDto } from './dto/update-member-role.dto';
 import { slugifyOrganisationName } from './utils/organisation-slug.utils';
+import { OrganisationDataCopyService } from './services/organisation-data-copy.service';
 import { randomBytes } from 'crypto';
 
 const INVITE_EXPIRY_DAYS = 7;
@@ -35,6 +36,7 @@ export class OrganisationsService {
         private readonly jwtService: CreateJwtService,
         private readonly mailService: MailService,
         private readonly configService: ConfigService,
+        private readonly dataCopyService: OrganisationDataCopyService,
     ) {}
 
     async createForUser(userUuid: string, name: string) {
@@ -94,8 +96,24 @@ export class OrganisationsService {
     }
 
     async create(userUuid: string, dto: CreateOrganisationDto) {
+        if (dto.source_organisation_uuid) {
+            await this.requireMembership(dto.source_organisation_uuid, userUuid);
+        }
+
         const organisation = await this.createForUser(userUuid, dto.name);
-        return this.buildAuthResponse(userUuid, organisation.uuid);
+        const authResponse = await this.buildAuthResponse(userUuid, organisation.uuid);
+
+        if (dto.source_organisation_uuid && dto.copy_categories?.length) {
+            const { bulkJobUuid } = await this.dataCopyService.enqueue({
+                sourceOrganisationUuid: dto.source_organisation_uuid,
+                targetOrganisationUuid: organisation.uuid,
+                categories: dto.copy_categories,
+                actorUserUuid: userUuid,
+            });
+            return { ...authResponse, data_copy_job_uuid: bulkJobUuid };
+        }
+
+        return authResponse;
     }
 
     async update(organisationUuid: string, userUuid: string, dto: UpdateOrganisationDto) {

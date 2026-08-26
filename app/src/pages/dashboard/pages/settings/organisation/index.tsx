@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Building2, Plus } from "lucide-react";
-import { Button, Input, Label, ListBox, Modal, Select } from "@heroui/react";
+import { Button, Checkbox, Input, Label, ListBox, Modal, Select } from "@heroui/react";
 import { useAuthStore } from "@/stores/auth";
 import { Routes } from "@/routes/routes";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
@@ -26,8 +26,10 @@ import {
     useUpdateOrganisation,
 } from "@/features/organisations/hooks/use-organisations";
 import {
+    OrganisationCopyCategoryLabels,
     OrganisationInviteRoles,
     OrganisationRoles,
+    type OrganisationCopyCategory,
     type OrganisationRole,
 } from "@/features/organisations/interfaces/organisation.interfaces";
 import {
@@ -38,6 +40,11 @@ import {
     type CreateOrganisationFormData,
     type UpdateOrganisationFormData,
 } from "@/features/organisations/validation-schemas/organisation.schema";
+
+const COPY_CATEGORY_ENTRIES = Object.entries(OrganisationCopyCategoryLabels) as [
+    OrganisationCopyCategory,
+    string,
+][];
 
 const SettingsOrganisationPage: FC = () => {
     const navigate = useNavigate();
@@ -77,6 +84,7 @@ const SettingsOrganisationPage: FC = () => {
     const [inviteOpen, setInviteOpen] = useState(false);
     const [createOpen, setCreateOpen] = useState(false);
     const [deleteOpen, setDeleteOpen] = useState(false);
+    const [copyDataEnabled, setCopyDataEnabled] = useState(false);
 
     const canDeleteOrg = canDelete && organisations.length > 1;
 
@@ -102,8 +110,11 @@ const SettingsOrganisationPage: FC = () => {
 
     const createForm = useForm<CreateOrganisationFormData>({
         resolver: zodResolver(createOrganisationSchema),
-        defaultValues: { name: "" },
+        defaultValues: { name: "", source_organisation_uuid: "", copy_categories: [] },
     });
+
+    const sourceOrganisationUuid = createForm.watch("source_organisation_uuid");
+    const selectedCopyCategories = createForm.watch("copy_categories") ?? [];
 
     const inviteForm = useForm<CreateInvitationFormData>({
         resolver: zodResolver(createInvitationSchema),
@@ -125,13 +136,28 @@ const SettingsOrganisationPage: FC = () => {
     });
 
     const onCreateOrganisation = createForm.handleSubmit((data) => {
-        createOrganisation.mutate(data, {
-            onSuccess: () => {
-                setCreateOpen(false);
-                createForm.reset();
-                navigate(Routes.dashboard.root);
+        const shouldCopy =
+            copyDataEnabled && !!data.source_organisation_uuid && (data.copy_categories?.length ?? 0) > 0;
+
+        createOrganisation.mutate(
+            {
+                name: data.name,
+                ...(shouldCopy
+                    ? {
+                          source_organisation_uuid: data.source_organisation_uuid,
+                          copy_categories: data.copy_categories,
+                      }
+                    : {}),
             },
-        });
+            {
+                onSuccess: () => {
+                    setCreateOpen(false);
+                    setCopyDataEnabled(false);
+                    createForm.reset();
+                    navigate(Routes.dashboard.root);
+                },
+            },
+        );
     });
 
     const onInvite = inviteForm.handleSubmit((data) => {
@@ -511,6 +537,126 @@ const SettingsOrganisationPage: FC = () => {
                                         </p>
                                     ) : null}
                                 </div>
+
+                                {organisations.length > 0 ? (
+                                    <>
+                                        <Checkbox
+                                            isSelected={copyDataEnabled}
+                                            onChange={(checked: boolean) => {
+                                                setCopyDataEnabled(checked);
+                                                if (!checked) {
+                                                    createForm.setValue("source_organisation_uuid", "");
+                                                    createForm.setValue("copy_categories", []);
+                                                }
+                                            }}
+                                        >
+                                            <Checkbox.Control>
+                                                <Checkbox.Indicator />
+                                            </Checkbox.Control>
+                                            <span className="text-sm text-foreground">
+                                                Copy data from another organisation
+                                            </span>
+                                        </Checkbox>
+
+                                        {copyDataEnabled ? (
+                                            <div className="space-y-3 rounded-lg border border-border p-3">
+                                                <div className="flex flex-col gap-1.5">
+                                                    <Label>Source organisation</Label>
+                                                    <Select
+                                                        aria-label="Source organisation"
+                                                        value={sourceOrganisationUuid || undefined}
+                                                        placeholder="Select an organisation"
+                                                        onChange={(v) =>
+                                                            createForm.setValue(
+                                                                "source_organisation_uuid",
+                                                                (v as string) ?? "",
+                                                                { shouldValidate: true },
+                                                            )
+                                                        }
+                                                    >
+                                                        <Select.Trigger className="w-full">
+                                                            <Select.Value />
+                                                            <Select.Indicator />
+                                                        </Select.Trigger>
+                                                        <Select.Popover>
+                                                            <ListBox>
+                                                                {organisations.map((org) => (
+                                                                    <ListBox.Item
+                                                                        key={org.uuid}
+                                                                        id={org.uuid}
+                                                                        textValue={org.name}
+                                                                    >
+                                                                        {org.name}
+                                                                        <ListBox.ItemIndicator />
+                                                                    </ListBox.Item>
+                                                                ))}
+                                                            </ListBox>
+                                                        </Select.Popover>
+                                                    </Select>
+                                                </div>
+
+                                                <div className="flex flex-col gap-1.5">
+                                                    <div className="flex items-center justify-between">
+                                                        <Label>Data to copy</Label>
+                                                        <button
+                                                            type="button"
+                                                            className="text-xs font-medium text-primary hover:underline"
+                                                            onClick={() =>
+                                                                createForm.setValue(
+                                                                    "copy_categories",
+                                                                    selectedCopyCategories.length ===
+                                                                        COPY_CATEGORY_ENTRIES.length
+                                                                        ? []
+                                                                        : COPY_CATEGORY_ENTRIES.map(
+                                                                              ([key]) => key,
+                                                                          ),
+                                                                )
+                                                            }
+                                                        >
+                                                            {selectedCopyCategories.length ===
+                                                            COPY_CATEGORY_ENTRIES.length
+                                                                ? "Clear all"
+                                                                : "Select all"}
+                                                        </button>
+                                                    </div>
+                                                    <div className="grid grid-cols-2 gap-x-3 gap-y-1.5">
+                                                        {COPY_CATEGORY_ENTRIES.map(([key, label]) => (
+                                                            <Checkbox
+                                                                key={key}
+                                                                isSelected={selectedCopyCategories.includes(
+                                                                    key,
+                                                                )}
+                                                                onChange={(checked: boolean) => {
+                                                                    const next = checked
+                                                                        ? [...selectedCopyCategories, key]
+                                                                        : selectedCopyCategories.filter(
+                                                                              (c) => c !== key,
+                                                                          );
+                                                                    createForm.setValue(
+                                                                        "copy_categories",
+                                                                        next,
+                                                                    );
+                                                                }}
+                                                            >
+                                                                <Checkbox.Control>
+                                                                    <Checkbox.Indicator />
+                                                                </Checkbox.Control>
+                                                                <span className="text-xs text-foreground">
+                                                                    {label}
+                                                                </span>
+                                                            </Checkbox>
+                                                        ))}
+                                                    </div>
+                                                    {!sourceOrganisationUuid ? (
+                                                        <p className="text-xs text-muted">
+                                                            Select a source organisation to enable copying.
+                                                        </p>
+                                                    ) : null}
+                                                </div>
+                                            </div>
+                                        ) : null}
+                                    </>
+                                ) : null}
                             </form>
                         </Modal.Body>
                         <Modal.Footer>
@@ -521,7 +667,11 @@ const SettingsOrganisationPage: FC = () => {
                                 type="submit"
                                 form="create-org-form"
                                 variant="primary"
-                                isDisabled={createOrganisation.isPending}
+                                isDisabled={
+                                    createOrganisation.isPending ||
+                                    (copyDataEnabled &&
+                                        (!sourceOrganisationUuid || selectedCopyCategories.length === 0))
+                                }
                             >
                                 Create
                             </Button>

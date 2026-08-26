@@ -16,11 +16,13 @@ import { BulkJobsModule } from '@/modules/bulk-jobs/bulk-jobs.module';
 import { SequencesModule } from '@/modules/sequences/sequences.module';
 import { SendingEngineModule } from '@/modules/sending-engine/sending-engine.module';
 import { SendingCapacityModule } from '@/modules/sending-capacity/sending-capacity.module';
+import { OrganisationsModule } from '@/modules/organisations/organisations.module';
 import {
   AI_PROCESS_QUEUE,
   FILTER_SCRAPE_QUEUE,
   MARKETING_CAMPAIGN_DISPATCH_QUEUE,
   MARKETING_MESSAGE_SEND_QUEUE,
+  ORGANISATION_DATA_COPY_QUEUE,
   OUTREACH_SEND_QUEUE,
   REMINDER_TRIGGER_QUEUE,
   SENDING_ENGINE_TICK_QUEUE,
@@ -32,6 +34,7 @@ import { MarketingCampaignDispatchWorker } from './marketing-campaign-dispatch.w
 import { MarketingMessageSendWorker } from './marketing-message-send.worker';
 import { ReminderTriggerWorker } from './reminder-trigger.worker';
 import { SendingEngineTickWorker } from './sending-engine-tick.worker';
+import { OrganisationDataCopyWorker } from './organisation-data-copy.worker';
 import { BulkJobWatchdogService } from './bulk-job-watchdog.service';
 
 @Module({
@@ -52,6 +55,7 @@ import { BulkJobWatchdogService } from './bulk-job-watchdog.service';
     SequencesModule,
     SendingEngineModule,
     SendingCapacityModule,
+    OrganisationsModule,
     BullModule.registerQueue(
       { name: FILTER_SCRAPE_QUEUE },
       { name: AI_PROCESS_QUEUE },
@@ -60,6 +64,7 @@ import { BulkJobWatchdogService } from './bulk-job-watchdog.service';
       { name: MARKETING_MESSAGE_SEND_QUEUE },
       { name: REMINDER_TRIGGER_QUEUE },
       { name: SENDING_ENGINE_TICK_QUEUE },
+      { name: ORGANISATION_DATA_COPY_QUEUE },
     ),
   ],
   providers: [
@@ -70,6 +75,7 @@ import { BulkJobWatchdogService } from './bulk-job-watchdog.service';
     MarketingMessageSendWorker,
     ReminderTriggerWorker,
     SendingEngineTickWorker,
+    OrganisationDataCopyWorker,
     BulkJobWatchdogService,
   ],
   exports: [
@@ -80,6 +86,7 @@ import { BulkJobWatchdogService } from './bulk-job-watchdog.service';
     MarketingMessageSendWorker,
     ReminderTriggerWorker,
     SendingEngineTickWorker,
+    OrganisationDataCopyWorker,
   ],
 })
 export class WorkersModule {}

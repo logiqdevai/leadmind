@@ -18,6 +18,7 @@ export const BulkJobType = {
     CAMPAIGN_DISPATCH: "CAMPAIGN_DISPATCH",
     CAMPAIGN_MESSAGE_SEND: "CAMPAIGN_MESSAGE_SEND",
     OPENAI_BATCH: "OPENAI_BATCH",
+    ORGANISATION_DATA_COPY: "ORGANISATION_DATA_COPY",
     OTHER: "OTHER",
 } as const;
 export type BulkJobType = (typeof BulkJobType)[keyof typeof BulkJobType];

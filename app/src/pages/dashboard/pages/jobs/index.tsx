@@ -65,6 +65,7 @@ const TYPE_LABELS: Record<BulkJobType, string> = {
     CAMPAIGN_DISPATCH: "Campaign dispatch",
     CAMPAIGN_MESSAGE_SEND: "Campaign send",
     OPENAI_BATCH: "OpenAI batch",
+    ORGANISATION_DATA_COPY: "Organisation data copy",
     OTHER: "Other",
 };
 

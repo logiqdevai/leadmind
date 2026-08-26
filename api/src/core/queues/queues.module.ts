@@ -6,6 +6,7 @@ import { REDIS_OPTIONS } from '../databases/redis/redis.constants';
 import {
     MARKETING_CAMPAIGN_DISPATCH_QUEUE,
     MARKETING_MESSAGE_SEND_QUEUE,
+    ORGANISATION_DATA_COPY_QUEUE,
     OUTREACH_SEND_QUEUE,
     REMINDER_TRIGGER_QUEUE,
 } from './queues.constants';
@@ -36,6 +37,7 @@ import { logBullMqPrefix, resolveBullMqPrefix } from './bullmq-prefix.util';
         BullModule.registerQueue({ name: MARKETING_CAMPAIGN_DISPATCH_QUEUE }),
         BullModule.registerQueue({ name: MARKETING_MESSAGE_SEND_QUEUE }),
         BullModule.registerQueue({ name: REMINDER_TRIGGER_QUEUE }),
+        BullModule.registerQueue({ name: ORGANISATION_DATA_COPY_QUEUE }),
     ],
     exports: [BullModule],
 })

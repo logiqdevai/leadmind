@@ -56,8 +56,45 @@ export interface InvitationPreview {
     expires_at: string;
 }
 
+export const OrganisationCopyCategories = {
+    SENDER_PROFILES: "SENDER_PROFILES",
+    TEMPLATES: "TEMPLATES",
+    INTEGRATIONS: "INTEGRATIONS",
+    FILTERS: "FILTERS",
+    CONTACTS: "CONTACTS",
+    LISTS: "LISTS",
+    SEQUENCES: "SEQUENCES",
+    CAMPAIGNS: "CAMPAIGNS",
+    FORMS: "FORMS",
+    REMINDERS: "REMINDERS",
+    USERS: "USERS",
+    GOALS: "GOALS",
+    INTEGRATION_GOALS: "INTEGRATION_GOALS",
+} as const;
+
+export type OrganisationCopyCategory =
+    (typeof OrganisationCopyCategories)[keyof typeof OrganisationCopyCategories];
+
+export const OrganisationCopyCategoryLabels: Record<OrganisationCopyCategory, string> = {
+    SENDER_PROFILES: "Sender profiles",
+    TEMPLATES: "Templates",
+    INTEGRATIONS: "Integrations",
+    FILTERS: "Filters",
+    CONTACTS: "Contacts",
+    LISTS: "Lists",
+    SEQUENCES: "Sequences",
+    CAMPAIGNS: "Campaigns",
+    FORMS: "Forms",
+    REMINDERS: "Reminders",
+    USERS: "Users",
+    GOALS: "Goals",
+    INTEGRATION_GOALS: "Integration goals",
+};
+
 export interface CreateOrganisationDto {
     name: string;
+    source_organisation_uuid?: string;
+    copy_categories?: OrganisationCopyCategory[];
 }
 
 export interface UpdateOrganisationDto {

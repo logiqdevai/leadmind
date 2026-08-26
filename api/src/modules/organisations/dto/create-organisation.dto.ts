@@ -1,15 +1,20 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import {
+    ArrayUnique,
+    IsArray,
     IsEmail,
+    IsEnum,
     IsIn,
     IsOptional,
     IsString,
+    IsUUID,
     MaxLength,
     MinLength,
     ValidateIf,
 } from 'class-validator';
 import { ORGANISATION_TIMEZONES } from '../constants/organisation-timezones';
+import { OrganisationCopyCategory } from '../constants/organisation-copy-category.constants';
 
 export class CreateOrganisationDto {
     @ApiProperty({ example: 'Acme Inc' })
@@ -37,4 +42,22 @@ export class CreateOrganisationDto {
     @IsEmail()
     @MaxLength(320)
     reply_to_email?: string | null;
+
+    @ApiPropertyOptional({
+        description: 'Existing organisation (that the requester belongs to) to copy data from',
+    })
+    @IsOptional()
+    @IsUUID()
+    source_organisation_uuid?: string;
+
+    @ApiPropertyOptional({
+        enum: OrganisationCopyCategory,
+        isArray: true,
+        description: 'Data categories to copy from source_organisation_uuid into the new organisation',
+    })
+    @IsOptional()
+    @IsArray()
+    @ArrayUnique()
+    @IsEnum(OrganisationCopyCategory, { each: true })
+    copy_categories?: OrganisationCopyCategory[];
 }

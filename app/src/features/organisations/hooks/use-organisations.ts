@@ -84,6 +84,13 @@ export function useCreateOrganisation() {
             login({ ...formatAuthUser(data), isLoggedIn: true });
             queryClient.clear();
             toast({ title: "Organisation created", duration: 2000 });
+            if (data?.data_copy_job_uuid) {
+                toast({
+                    title: "Copying selected data",
+                    description: "Track progress on the Jobs page.",
+                    duration: 4000,
+                });
+            }
         },
         onError: (error: Error) => {
             toast({

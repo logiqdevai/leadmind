@@ -24,6 +24,8 @@ export const MARKETING_MESSAGE_SEND_QUEUE = 'marketing-message-send';
 
 export const REMINDER_TRIGGER_QUEUE = 'reminder-trigger';
 
+export const ORGANISATION_DATA_COPY_QUEUE = 'organisation-data-copy';
+
 export const SENDING_ENGINE_TICK_QUEUE = 'sending-engine-tick';
 
 export const SENDING_ENGINE_TICK_JOB_ID = 'sending-engine-tick';
