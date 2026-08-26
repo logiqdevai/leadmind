@@ -12,7 +12,10 @@ interface ParentListSelectProps {
   onChange: (uuid: string | null) => void;
   enabled?: boolean;
   excludeUuid?: string;
+  excludeDescendants?: boolean;
   label?: string;
+  includeRoot?: boolean;
+  rootLabel?: string;
 }
 
 export const ParentListSelect: FC<ParentListSelectProps> = ({
@@ -20,26 +23,37 @@ export const ParentListSelect: FC<ParentListSelectProps> = ({
   onChange,
   enabled = true,
   excludeUuid,
+  excludeDescendants = true,
   label = "Parent list",
+  includeRoot = true,
+  rootLabel = "Top level",
 }) => {
   const { data: listsPage, isLoading } = useContactLists({ limit: 100 }, enabled);
   const allLists = listsPage?.data ?? [];
   const [query, setQuery] = useState("");
 
   const candidates = useMemo(() => {
-    const descendants = excludeUuid ? collectDescendantUuids(allLists, excludeUuid) : new Set<string>();
+    const descendants =
+      excludeUuid && excludeDescendants
+        ? collectDescendantUuids(allLists, excludeUuid)
+        : new Set<string>();
     const q = query.trim().toLowerCase();
     return allLists
       .filter((item) => item.uuid !== excludeUuid && !descendants.has(item.uuid))
       .map((item) => ({ list: item, label: listPathLabel(allLists, item.uuid) }))
       .filter((item) => (q ? item.label.toLowerCase().includes(q) : true))
       .toSorted((a, b) => a.label.localeCompare(b.label));
-  }, [allLists, excludeUuid, query]);
+  }, [allLists, excludeDescendants, excludeUuid, query]);
 
-  const selectedKey = value ?? ROOT_KEY;
+  const selectedKey = value ?? (includeRoot ? ROOT_KEY : undefined);
   const selectedLabel =
-    value == null ? "Top level" : listPathLabel(allLists, value) || "Selected list";
-  const showRoot = !query.trim() || "top level".includes(query.trim().toLowerCase());
+    value == null
+      ? includeRoot
+        ? rootLabel
+        : "Select a list"
+      : listPathLabel(allLists, value) || "Selected list";
+  const showRoot =
+    includeRoot && (!query.trim() || rootLabel.toLowerCase().includes(query.trim().toLowerCase()));
 
   return (
     <div className="flex flex-col gap-1.5">
@@ -47,6 +61,7 @@ export const ParentListSelect: FC<ParentListSelectProps> = ({
       <Select
         aria-label={label}
         selectedKey={selectedKey}
+        placeholder="Select a list"
         onSelectionChange={(key) => {
           if (key == null) return;
           const next = String(key);
@@ -89,8 +104,8 @@ export const ParentListSelect: FC<ParentListSelectProps> = ({
                 <Header className="px-2 py-1 text-xs font-medium uppercase tracking-wide text-muted">
                   Location
                 </Header>
-                <ListBox.Item id={ROOT_KEY} textValue="Top level">
-                  <span className="truncate text-sm">Top level</span>
+                <ListBox.Item id={ROOT_KEY} textValue={rootLabel}>
+                  <span className="truncate text-sm">{rootLabel}</span>
                   <ListBox.ItemIndicator />
                 </ListBox.Item>
               </ListBox.Section>

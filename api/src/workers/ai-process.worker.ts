@@ -52,6 +52,17 @@ export class AiProcessWorker extends WorkerHost {
     }
 
     async process(job: Job<AiProcessJobData>): Promise<void> {
+        console.log('[bulk-enrich-debug] AiProcessWorker.process', {
+            id: job.id,
+            name: job.name,
+            attemptsMade: job.attemptsMade,
+            timestamp: job.timestamp,
+            processedOn: job.processedOn,
+            dataKeys: job.data ? Object.keys(job.data) : [],
+            bulk_job_uuid: 'bulk_job_uuid' in job.data ? job.data.bulk_job_uuid : undefined,
+            contact_uuid: 'contact_uuid' in job.data ? job.data.contact_uuid : undefined,
+            action: 'action' in job.data ? job.data.action : undefined,
+        });
         if (isLeadBatchEnrichPrepareJob(job.data)) {
             await this.processLeadBatchEnrichPrepare(job.data);
             return;
@@ -71,15 +82,60 @@ export class AiProcessWorker extends WorkerHost {
         if (isContactJob(job.data)) {
             const attempts = job.opts.attempts ?? 1;
             const isFinalAttempt = (job.attemptsMade ?? 0) + 1 >= attempts;
+            console.log('[bulk-enrich-debug] routing to processContactJob', {
+                jobId: job.id,
+                contact_uuid: job.data.contact_uuid,
+                isFinalAttempt,
+                attempts,
+                attemptsMade: job.attemptsMade,
+                enrichment_sources: job.data.enrichment_sources,
+                force_enrichment: job.data.force_enrichment,
+                bulk_job_uuid: job.data.bulk_job_uuid,
+            });
             await this.processContactJob(job.data, isFinalAttempt);
+            console.log('[bulk-enrich-debug] processContactJob returned', {
+                jobId: job.id,
+                contact_uuid: job.data.contact_uuid,
+            });
             return;
         }
         this.logger.warn(`Unknown ai-process job payload: ${JSON.stringify(job.data)}`);
         await this.failBulkFromPayload(job.data, 'Unknown ai-process job payload');
     }
 
+    @OnWorkerEvent('active')
+    onActive(job: Job<AiProcessJobData>): void {
+        console.log('[bulk-enrich-debug] worker event:active', {
+            id: job.id,
+            name: job.name,
+            bulk_job_uuid: 'bulk_job_uuid' in job.data ? job.data.bulk_job_uuid : undefined,
+            contact_uuid: 'contact_uuid' in job.data ? job.data.contact_uuid : undefined,
+        });
+    }
+
+    @OnWorkerEvent('completed')
+    onCompleted(job: Job<AiProcessJobData>): void {
+        console.log('[bulk-enrich-debug] worker event:completed', {
+            id: job.id,
+            name: job.name,
+            bulk_job_uuid: 'bulk_job_uuid' in job.data ? job.data.bulk_job_uuid : undefined,
+            contact_uuid: 'contact_uuid' in job.data ? job.data.contact_uuid : undefined,
+        });
+    }
+
     @OnWorkerEvent('failed')
     async onFailed(job: Job<AiProcessJobData> | undefined, error: Error): Promise<void> {
+        console.log('[bulk-enrich-debug] worker event:failed', {
+            id: job?.id,
+            name: job?.name,
+            attemptsMade: job?.attemptsMade,
+            attempts: job?.opts.attempts,
+            error: error.message,
+            bulk_job_uuid:
+                job && 'bulk_job_uuid' in job.data ? job.data.bulk_job_uuid : undefined,
+            contact_uuid:
+                job && 'contact_uuid' in job.data ? job.data.contact_uuid : undefined,
+        });
         if (!job) return;
         const attempts = job.opts.attempts ?? 1;
         if ((job.attemptsMade ?? 1) < attempts) return;
@@ -179,13 +235,41 @@ export class AiProcessWorker extends WorkerHost {
     }
 
     private async processContactJob(data: ContactJobData, isFinalAttempt = true): Promise<void> {
+        const t0 = Date.now();
+        console.log('[bulk-enrich-debug] processContactJob enter', {
+            contact_uuid: data.contact_uuid,
+            action: data.action,
+            bulk_job_uuid: data.bulk_job_uuid,
+            isFinalAttempt,
+            enrichment_sources: data.enrichment_sources,
+            force_enrichment: data.force_enrichment,
+        });
         let recorded = false;
         const record = async (failed: boolean) => {
-            if (!data.bulk_job_uuid || recorded) return;
+            if (!data.bulk_job_uuid || recorded) {
+                console.log('[bulk-enrich-debug] record skip', {
+                    contact_uuid: data.contact_uuid,
+                    bulk_job_uuid: data.bulk_job_uuid,
+                    recorded,
+                    failed,
+                });
+                return;
+            }
             recorded = true;
+            console.log('[bulk-enrich-debug] recordItemOutcome call', {
+                bulk_job_uuid: data.bulk_job_uuid,
+                contact_uuid: data.contact_uuid,
+                failed,
+                elapsedMs: Date.now() - t0,
+            });
             await this.bulkJobsService.recordItemOutcome(data.bulk_job_uuid, {
                 failed,
                 item_uuid: data.contact_uuid,
+            });
+            console.log('[bulk-enrich-debug] recordItemOutcome done', {
+                bulk_job_uuid: data.bulk_job_uuid,
+                contact_uuid: data.contact_uuid,
+                failed,
             });
         };
 
@@ -213,6 +297,9 @@ export class AiProcessWorker extends WorkerHost {
             },
         });
         if (!contact) {
+            console.log('[bulk-enrich-debug] contact not found', {
+                contact_uuid: data.contact_uuid,
+            });
             this.logger.warn(`Contact ${data.contact_uuid} not found — skipping`);
             await record(true);
             return;
@@ -243,6 +330,15 @@ export class AiProcessWorker extends WorkerHost {
             combinedFilter,
             linkedFilters.slice(1),
         );
+        console.log('[bulk-enrich-debug] contact resolved', {
+            contact_uuid: contact.uuid,
+            hasLead: Boolean(lead),
+            lead_uuid: lead?.uuid,
+            linkedFilterCount: linkedFilters.length,
+            action,
+            full_pipeline,
+            sources,
+        });
 
         if (full_pipeline || action === 'enrich') {
             let enrichFailed = false;
@@ -250,12 +346,27 @@ export class AiProcessWorker extends WorkerHost {
                 this.logger.log(
                     `Contact ${contact.uuid} enrichment starting (sources: ${sources.join(', ')})`,
                 );
+                console.log('[bulk-enrich-debug] runForContact start', {
+                    contact_uuid: contact.uuid,
+                    sources,
+                    force: data.force_enrichment ?? false,
+                });
                 await this.leadEnrichmentOrchestrator.runForContact(contact.uuid, sources, {
                     force: data.force_enrichment ?? false,
+                });
+                console.log('[bulk-enrich-debug] runForContact finished', {
+                    contact_uuid: contact.uuid,
+                    elapsedMs: Date.now() - t0,
                 });
                 this.logger.log(`Contact ${contact.uuid} enrichment finished`);
             } catch (error) {
                 enrichFailed = true;
+                console.log('[bulk-enrich-debug] runForContact error', {
+                    contact_uuid: contact.uuid,
+                    error: this.errMsg(error),
+                    isFinalAttempt,
+                    elapsedMs: Date.now() - t0,
+                });
                 this.logger.error(`Contact ${contact.uuid} enrich step failed: ${this.errMsg(error)}`);
                 if (!isFinalAttempt && action === 'enrich') {
                     throw error instanceof Error ? error : new Error(this.errMsg(error));
@@ -345,6 +456,12 @@ export class AiProcessWorker extends WorkerHost {
             }
         }
         } catch (error) {
+            console.log('[bulk-enrich-debug] processContactJob catch', {
+                contact_uuid: data.contact_uuid,
+                error: this.errMsg(error),
+                isFinalAttempt,
+                recorded,
+            });
             if (!isFinalAttempt) {
                 throw error;
             }
@@ -352,6 +469,12 @@ export class AiProcessWorker extends WorkerHost {
             await record(true);
             throw error;
         } finally {
+            console.log('[bulk-enrich-debug] processContactJob finally', {
+                contact_uuid: data.contact_uuid,
+                recorded,
+                isFinalAttempt,
+                hasBulk: Boolean(data.bulk_job_uuid),
+            });
             if (data.bulk_job_uuid && !recorded && isFinalAttempt) {
                 await record(true);
             }

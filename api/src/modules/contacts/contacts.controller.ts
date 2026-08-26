@@ -56,7 +56,7 @@ export class ContactsController {
     @Post()
     @ApiOperation({
         summary:
-            'Create a contact (creates a MANUAL Lead behind the scenes). If email already exists for this user, links the selected filter to that contact and returns it.',
+            'Create a contact (creates a MANUAL Lead behind the scenes). If email already exists for this user, updates that contact and returns it.',
     })
     @ApiResponse({ status: 201 })
     create(@CurrentUser('organisation_uuid') organisation_uuid: string, @Body() dto: CreateContactDto) {
@@ -115,6 +115,12 @@ export class ContactsController {
         @CurrentUser('uuid') user_uuid: string,
         @Body() dto: BulkEnrichContactsDto,
     ) {
+        console.log('[bulk-enrich-debug] POST /contacts/bulk-enrich', {
+            organisation_uuid,
+            user_uuid,
+            uuidCount: dto.uuids?.length,
+            sources: dto.sources,
+        });
         return this.contactsService.triggerBulkEnrich(organisation_uuid, dto, user_uuid);
     }
 

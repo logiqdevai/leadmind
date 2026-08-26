@@ -10,6 +10,7 @@ import {
     listContactLists,
     removeListContact,
     removeListContactsBelowScore,
+    moveListContactsBelowScore,
     removeListContactsBulk,
     updateContactList,
 } from "../services/contact-lists.service";
@@ -17,8 +18,10 @@ import type {
     AddListContactsPayload,
     BulkAddListContactsPayload,
     CreateContactListPayload,
+    FilterListContactsByScorePayload,
     ListContactListMembersQuery,
     ListContactListsQuery,
+    MoveListContactsBelowScorePayload,
     PaginatedListMembers,
     UpdateContactListPayload,
 } from "../interfaces/contact-list.interface";
@@ -205,11 +208,12 @@ export function useRemoveListContact() {
 export function useRemoveListContactsBelowScore() {
     const qc = useQueryClient();
     return useMutation({
-        mutationFn: (listUuid: string) => removeListContactsBelowScore(listUuid),
-        onSuccess: (data, listUuid) => {
+        mutationFn: (vars: { listUuid: string } & FilterListContactsByScorePayload) =>
+            removeListContactsBelowScore(vars.listUuid, { min_score: vars.min_score }),
+        onSuccess: (data, vars) => {
             qc.invalidateQueries({ queryKey: contactListQueryKeys.all });
-            qc.invalidateQueries({ queryKey: contactListQueryKeys.detail(listUuid) });
-            qc.invalidateQueries({ queryKey: contactListQueryKeys.members(listUuid, {}) });
+            qc.invalidateQueries({ queryKey: contactListQueryKeys.detail(vars.listUuid) });
+            qc.invalidateQueries({ queryKey: contactListQueryKeys.members(vars.listUuid, {}) });
             toast({
                 title:
                     data.removed === 0
@@ -219,14 +223,55 @@ export function useRemoveListContactsBelowScore() {
                           : "Low-score contacts removed",
                 description:
                     data.removed === 0
-                        ? "No contacts in this list have a score under 6."
-                        : `${data.removed} contact${data.removed === 1 ? "" : "s"} with a score under 6 removed from this list.`,
+                        ? `No contacts in this list have a score under ${vars.min_score}.`
+                        : `${data.removed} contact${data.removed === 1 ? "" : "s"} with a score under ${vars.min_score} removed from this list.`,
                 duration: 2000,
             });
         },
         onError: (error: Error) => {
             toast({
                 title: "Could not remove low-score contacts",
+                description: error.message,
+                duration: 3000,
+                variant: "error",
+            });
+        },
+    });
+}
+
+export function useMoveListContactsBelowScore() {
+    const qc = useQueryClient();
+    return useMutation({
+        mutationFn: (vars: { listUuid: string } & MoveListContactsBelowScorePayload) =>
+            moveListContactsBelowScore(vars.listUuid, {
+                min_score: vars.min_score,
+                target_list_uuid: vars.target_list_uuid,
+            }),
+        onSuccess: (data, vars) => {
+            qc.invalidateQueries({ queryKey: contactListQueryKeys.all });
+            qc.invalidateQueries({ queryKey: contactListQueryKeys.detail(vars.listUuid) });
+            qc.invalidateQueries({ queryKey: contactListQueryKeys.members(vars.listUuid, {}) });
+            qc.invalidateQueries({ queryKey: contactListQueryKeys.detail(vars.target_list_uuid) });
+            qc.invalidateQueries({
+                queryKey: contactListQueryKeys.members(vars.target_list_uuid, {}),
+            });
+            toast({
+                title:
+                    data.moved === 0
+                        ? "No low-score contacts"
+                        : data.moved === 1
+                          ? "Contact moved"
+                          : "Contacts moved",
+                description:
+                    data.moved === 0
+                        ? `No contacts in this list have a score under ${vars.min_score}.`
+                        : `${data.moved} contact${data.moved === 1 ? "" : "s"} with a score under ${vars.min_score} moved to the selected list.`,
+                duration: 2000,
+            });
+        },
+        onError: (error: Error) => {
+            toast({
+                title: "Could not move low-score contacts",
                 description: error.message,
                 duration: 3000,
                 variant: "error",

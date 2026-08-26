@@ -221,10 +221,19 @@ export class BulkJobsService {
         uuid: string,
         opts: { failed: boolean; item_uuid?: string },
     ): Promise<void> {
+        console.log('[bulk-enrich-debug] BulkJobsService.recordItemOutcome enter', {
+            uuid,
+            ...opts,
+        });
         await this.prisma.$transaction(async (tx) => {
             await tx.$executeRaw`SELECT uuid FROM bulk_jobs WHERE uuid = ${uuid} FOR UPDATE`;
             const existing = await tx.bulkJob.findUnique({ where: { uuid } });
             if (!existing || !ACTIVE_STATUSES.includes(existing.status)) {
+                console.log('[bulk-enrich-debug] recordItemOutcome noop', {
+                    uuid,
+                    exists: Boolean(existing),
+                    status: existing?.status,
+                });
                 return;
             }
 
@@ -232,6 +241,12 @@ export class BulkJobsService {
             const processed = new Set(stringArrayFromMetadata(metadata, 'processed_uuids'));
             if (opts.item_uuid) {
                 if (processed.has(opts.item_uuid)) {
+                    console.log('[bulk-enrich-debug] recordItemOutcome duplicate skip', {
+                        uuid,
+                        item_uuid: opts.item_uuid,
+                        progress_current: existing.progress_current,
+                        progress_total: existing.progress_total,
+                    });
                     return;
                 }
                 processed.add(opts.item_uuid);
@@ -269,6 +284,14 @@ export class BulkJobsService {
                 }
             }
 
+            console.log('[bulk-enrich-debug] recordItemOutcome update', {
+                uuid,
+                progress_current,
+                progress_failed,
+                expected,
+                doneCount,
+                nextStatus: data.status ?? existing.status,
+            });
             await tx.bulkJob.update({ where: { uuid }, data });
         });
     }

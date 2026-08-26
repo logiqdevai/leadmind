@@ -74,3 +74,16 @@ export interface AddListContactsResult {
 export interface RemoveListContactsResult {
     removed: number;
 }
+
+export interface MoveListContactsBelowScoreResult {
+    moved: number;
+}
+
+export interface FilterListContactsByScorePayload {
+    min_score: number;
+}
+
+export interface MoveListContactsBelowScorePayload {
+    min_score: number;
+    target_list_uuid: string;
+}

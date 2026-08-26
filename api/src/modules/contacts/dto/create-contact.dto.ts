@@ -11,9 +11,10 @@ import {
 } from 'class-validator';
 
 export class CreateContactDto {
-    @ApiProperty({ format: 'uuid' })
+    @ApiPropertyOptional({ format: 'uuid' })
+    @IsOptional()
     @IsUUID()
-    filter_uuid: string;
+    filter_uuid?: string;
 
     @ApiPropertyOptional({ maxLength: 200 })
     @IsOptional()
@@ -93,4 +94,15 @@ export class CreateContactDto {
     @IsString()
     @MaxLength(5000)
     notes?: string;
+
+    @ApiPropertyOptional({
+        type: [String],
+        format: 'uuid',
+        description: 'Optional list memberships to add for the new contact.',
+    })
+    @IsOptional()
+    @IsArray()
+    @ArrayUnique()
+    @IsUUID('4', { each: true })
+    list_uuids?: string[];
 }

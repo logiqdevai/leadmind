@@ -119,11 +119,14 @@ export class ContactsService {
     ) { }
 
     async create(organisation_uuid: string, dto: CreateContactDto) {
-        const filter = await this.prisma.filter.findFirst({
-            where: { uuid: dto.filter_uuid, organisation_uuid },
-        });
-        if (!filter) {
-            throw new NotFoundException('Filter not found');
+        const filterUuid = dto.filter_uuid?.trim();
+        if (filterUuid) {
+            const filter = await this.prisma.filter.findFirst({
+                where: { uuid: filterUuid, organisation_uuid },
+            });
+            if (!filter) {
+                throw new NotFoundException('Filter not found');
+            }
         }
 
         const emailFields = await resolveEmailFieldsForWrite(dto.email);
@@ -131,8 +134,11 @@ export class ContactsService {
         if (emailFields) {
             const existing = await findOwnedContactByEmail(this.prisma, organisation_uuid, emailFields.email);
             if (existing) {
-                await linkContactToFilter(this.prisma, existing, dto.filter_uuid);
+                if (filterUuid) {
+                    await linkContactToFilter(this.prisma, existing, filterUuid);
+                }
                 await this.applyManualCreateExtras(organisation_uuid, existing.uuid, dto);
+                await this.addContactListMemberships(organisation_uuid, existing.uuid, dto.list_uuids ?? []);
                 await this.reindexContact(existing.uuid);
                 return this.findOne(organisation_uuid, existing.uuid);
             }
@@ -161,7 +167,7 @@ export class ContactsService {
             data: {
                 organisation_uuid,
                 lead_uuid: lead.uuid,
-                filter_uuid: dto.filter_uuid,
+                ...(filterUuid ? { filter_uuid: filterUuid } : {}),
                 status: LeadStatus.NEW,
                 notes: dto.notes,
                 ...profile,
@@ -178,7 +184,11 @@ export class ContactsService {
             },
         });
 
-        await ensureContactFilterLink(this.prisma, contact.uuid, dto.filter_uuid);
+        if (filterUuid) {
+            await ensureContactFilterLink(this.prisma, contact.uuid, filterUuid);
+        }
+
+        await this.addContactListMemberships(organisation_uuid, contact.uuid, dto.list_uuids ?? []);
 
         if (dto.notes) {
             await this.prisma.interaction.create({
@@ -616,6 +626,33 @@ export class ContactsService {
         }
         await this.reindexContact(uuid);
         return this.findOne(organisation_uuid, uuid);
+    }
+
+    private async addContactListMemberships(
+        organisation_uuid: string,
+        contact_uuid: string,
+        list_uuids: string[],
+    ): Promise<void> {
+        const unique = [...new Set(list_uuids)];
+        if (unique.length === 0) return;
+
+        const lists = await this.prisma.contactList.findMany({
+            where: { organisation_uuid, uuid: { in: unique } },
+            select: { uuid: true },
+        });
+        if (lists.length !== unique.length) {
+            const found = new Set(lists.map((l) => l.uuid));
+            const missing = unique.filter((id) => !found.has(id));
+            throw new NotFoundException(`List(s) not found: ${missing.join(', ')}`);
+        }
+
+        await this.prisma.contactListMember.createMany({
+            data: unique.map((list_uuid) => ({
+                list_uuid,
+                contact_uuid,
+            })),
+            skipDuplicates: true,
+        });
     }
 
     private async replaceContactListMemberships(
@@ -1360,13 +1397,29 @@ export class ContactsService {
         created_by_user_uuid?: string,
     ): Promise<{ jobIds: string[]; queued: number; bulk_job_uuid: string }> {
         const unique = [...new Set(dto.uuids)];
+        console.log('[bulk-enrich-debug] triggerBulkEnrich start', {
+            organisation_uuid,
+            created_by_user_uuid,
+            uniqueCount: unique.length,
+            sources: dto.sources,
+        });
         const rows = await this.prisma.contact.findMany({
             where: { organisation_uuid, uuid: { in: unique } },
             include: { filter: true },
         });
+        console.log('[bulk-enrich-debug] contacts loaded', {
+            requested: unique.length,
+            found: rows.length,
+            sample: rows.slice(0, 3).map((r) => ({
+                uuid: r.uuid,
+                filter_uuid: r.filter_uuid,
+                filter_sources: r.filter?.enrichment_sources,
+            })),
+        });
         if (rows.length !== unique.length) {
             const found = new Set(rows.map((r) => r.uuid));
             const missing = unique.filter((u) => !found.has(u));
+            console.log('[bulk-enrich-debug] contacts missing', missing);
             throw new NotFoundException(`Contact(s) not found: ${missing.join(', ')}`);
         }
 
@@ -1382,18 +1435,39 @@ export class ContactsService {
             reference_type: 'contacts',
             metadata: { contact_uuids: rows.map((r) => r.uuid), sources: dto.sources ?? [] },
         });
+        console.log('[bulk-enrich-debug] bulk job created', {
+            bulk_job_uuid: bulkJob.uuid,
+            status: bulkJob.status,
+            progress_total: bulkJob.progress_total,
+            queue_name: bulkJob.queue_name,
+        });
+
+        const enqueueItems = rows.map((row) => ({
+            contactUuid: row.uuid,
+            enrichment_sources: resolveContactEnrichmentSources(dto.sources, row.filter),
+        }));
+        console.log('[bulk-enrich-debug] enqueue items', enqueueItems.map((i) => ({
+            contactUuid: i.contactUuid,
+            enrichment_sources: i.enrichment_sources,
+        })));
 
         const { jobIds } = await enqueueContactEnrichmentJobs(
             this.aiProcessQueue,
-            rows.map((row) => ({
-                contactUuid: row.uuid,
-                enrichment_sources: resolveContactEnrichmentSources(dto.sources, row.filter),
-            })),
+            enqueueItems,
             bulkJob.uuid,
         );
+        console.log('[bulk-enrich-debug] queue jobs added', {
+            jobIds,
+            queue: AI_PROCESS_QUEUE,
+            bulk_job_uuid: bulkJob.uuid,
+        });
         await this.bulkJobsService.markRunning(bulkJob.uuid, {
             queue_job_id: jobIds[0] ?? null,
             queue_job_ids: jobIds,
+        });
+        console.log('[bulk-enrich-debug] bulk job marked RUNNING', {
+            bulk_job_uuid: bulkJob.uuid,
+            jobIds,
         });
         return { jobIds, queued: rows.length, bulk_job_uuid: bulkJob.uuid };
     }

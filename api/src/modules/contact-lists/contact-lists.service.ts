@@ -309,6 +309,15 @@ export class ContactListsService {
         return { contact_uuid: contactUuid };
     }
 
+    private belowScoreContactFilter(minScore: number): Prisma.ContactWhereInput {
+        return {
+            AND: [
+                { contact_scores: { some: { score: { lt: minScore } } } },
+                { contact_scores: { none: { score: { gte: minScore } } } },
+            ],
+        };
+    }
+
     async removeContactsBelowScore(
         organisation_uuid: string,
         listUuid: string,
@@ -319,12 +328,7 @@ export class ContactListsService {
         const result = await this.prisma.contactListMember.deleteMany({
             where: {
                 list_uuid: listUuid,
-                contact: {
-                    AND: [
-                        { contact_scores: { some: { score: { lt: minScore } } } },
-                        { contact_scores: { none: { score: { gte: minScore } } } },
-                    ],
-                },
+                contact: this.belowScoreContactFilter(minScore),
             },
         });
 
@@ -336,6 +340,67 @@ export class ContactListsService {
         }
 
         return { removed: result.count };
+    }
+
+    async moveContactsBelowScore(
+        organisation_uuid: string,
+        listUuid: string,
+        targetListUuid: string,
+        minScore = 6,
+    ) {
+        if (listUuid === targetListUuid) {
+            throw new BadRequestException('Source and destination lists must be different');
+        }
+
+        await Promise.all([
+            this.ensureListOwned(organisation_uuid, listUuid),
+            this.ensureListOwned(organisation_uuid, targetListUuid),
+        ]);
+
+        const members = await this.prisma.contactListMember.findMany({
+            where: {
+                list_uuid: listUuid,
+                contact: this.belowScoreContactFilter(minScore),
+            },
+            select: { contact_uuid: true },
+        });
+
+        if (members.length === 0) {
+            return { moved: 0 };
+        }
+
+        const contactUuids = members.map((m) => m.contact_uuid);
+
+        await this.prisma.$transaction(async (tx) => {
+            await tx.contactListMember.createMany({
+                data: contactUuids.map((contact_uuid) => ({
+                    list_uuid: targetListUuid,
+                    contact_uuid,
+                })),
+                skipDuplicates: true,
+            });
+
+            await tx.contactListMember.deleteMany({
+                where: {
+                    list_uuid: listUuid,
+                    contact_uuid: { in: contactUuids },
+                },
+            });
+
+            const now = new Date();
+            await Promise.all([
+                tx.contactList.update({
+                    where: { uuid: listUuid },
+                    data: { updated_at: now },
+                }),
+                tx.contactList.update({
+                    where: { uuid: targetListUuid },
+                    data: { updated_at: now },
+                }),
+            ]);
+        });
+
+        return { moved: contactUuids.length };
     }
 
     async removeContacts(organisation_uuid: string, listUuid: string, contactUuids: string[]) {

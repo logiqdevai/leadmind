@@ -254,6 +254,7 @@ export const ApiRoutes = {
         bulk_add_contacts: (uuid: string) => `/contact-lists/${uuid}/contacts/bulk`,
         bulk_remove_contacts: (uuid: string) => `/contact-lists/${uuid}/contacts/bulk-remove`,
         remove_below_score: (uuid: string) => `/contact-lists/${uuid}/contacts/remove-below-score`,
+        move_below_score: (uuid: string) => `/contact-lists/${uuid}/contacts/move-below-score`,
         remove_contact: (listUuid: string, contactUuid: string) =>
             `/contact-lists/${listUuid}/contacts/${contactUuid}`,
         stats: (uuid: string) => `/contact-lists/${uuid}/stats`,
