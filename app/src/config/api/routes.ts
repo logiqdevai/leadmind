@@ -145,7 +145,6 @@ export const ApiRoutes = {
     },
     admin: {
         jobs: "/admin/jobs",
-        batch_jobs: "/admin/batch-jobs",
         queues: "/admin/queues",
         system_status: "/admin/system-status",
         email_validation_backfill: "/admin/email-validation-backfill",
@@ -166,6 +165,10 @@ export const ApiRoutes = {
         get: (uuid: string) => `/bulk-jobs/${uuid}`,
         cancel: "/bulk-jobs/cancel",
         retry: "/bulk-jobs/retry",
+    },
+    openai_batch_jobs: {
+        prefix: "/openai-batch-jobs",
+        list: "/openai-batch-jobs",
     },
     message_templates: {
         prefix: "/message-templates",

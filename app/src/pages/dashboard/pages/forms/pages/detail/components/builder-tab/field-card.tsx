@@ -104,9 +104,10 @@ export const FieldCard = forwardRef<HTMLDivElement, FieldCardProps>(
                     cancelLabel="Cancel"
                     variant="danger"
                     isPending={deleteField.isPending}
-                    onConfirm={() =>
-                        deleteField.mutate(field.uuid, { onSuccess: () => setDeleteOpen(false) })
-                    }
+                    onConfirm={async () => {
+                        await deleteField.mutateAsync(field.uuid);
+                        setDeleteOpen(false);
+                    }}
                 />
             </div>
         );

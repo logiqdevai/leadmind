@@ -50,6 +50,7 @@ import { IntegrationSelectionModule } from './modules/integration-selection/inte
 import { CampaignIntegrationsModule } from './modules/campaign-integrations/campaign-integrations.module';
 import { MailTesterModule } from './modules/mail-tester/mail-tester.module';
 import { MxToolboxModule } from './modules/mxtoolbox/mxtoolbox.module';
+import { OpenAiBatchJobsModule } from './modules/openai-batch-jobs/openai-batch-jobs.module';
 
 @Module({
   imports: [
@@ -88,6 +89,7 @@ import { MxToolboxModule } from './modules/mxtoolbox/mxtoolbox.module';
     IntegrationsModule,
     RemindersModule,
     BulkJobsModule,
+    OpenAiBatchJobsModule,
     FormsModule,
     ContactListsModule,
     SavedContactFiltersModule,

@@ -153,12 +153,10 @@ export function AudienceAiAnalysisSection({ scope }: AudienceAiAnalysisSectionPr
     const history = useMemo(() => data?.items.slice(1) ?? [], [data?.items]);
     const latestContent = latest && isAnalysisContent(latest.analysis) ? latest.analysis : null;
 
-    const handleConfirmDelete = () => {
+    const handleConfirmDelete = async () => {
         if (!deleteTarget) return;
-        deleteAnalysis.mutate(
-            { scope, analysisUuid: deleteTarget.uuid },
-            { onSuccess: () => setDeleteTarget(null) },
-        );
+        await deleteAnalysis.mutateAsync({ scope, analysisUuid: deleteTarget.uuid });
+        setDeleteTarget(null);
     };
 
     return (

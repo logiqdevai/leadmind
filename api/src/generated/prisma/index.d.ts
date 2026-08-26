@@ -6610,6 +6610,7 @@ export namespace Prisma {
     goal_achievements: number
     goal_personal_bests: number
     bulk_jobs_created: number
+    openai_batch_jobs_created: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6622,6 +6623,7 @@ export namespace Prisma {
     goal_achievements?: boolean | UserCountOutputTypeCountGoal_achievementsArgs
     goal_personal_bests?: boolean | UserCountOutputTypeCountGoal_personal_bestsArgs
     bulk_jobs_created?: boolean | UserCountOutputTypeCountBulk_jobs_createdArgs
+    openai_batch_jobs_created?: boolean | UserCountOutputTypeCountOpenai_batch_jobs_createdArgs
   }
 
   // Custom InputTypes
@@ -6696,6 +6698,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountBulk_jobs_createdArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: BulkJobWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountOpenai_batch_jobs_createdArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OpenAiBatchJobWhereInput
   }
 
 
@@ -8164,6 +8173,7 @@ export namespace Prisma {
     goal_achievements?: boolean | User$goal_achievementsArgs<ExtArgs>
     goal_personal_bests?: boolean | User$goal_personal_bestsArgs<ExtArgs>
     bulk_jobs_created?: boolean | User$bulk_jobs_createdArgs<ExtArgs>
+    openai_batch_jobs_created?: boolean | User$openai_batch_jobs_createdArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -8214,6 +8224,7 @@ export namespace Prisma {
     goal_achievements?: boolean | User$goal_achievementsArgs<ExtArgs>
     goal_personal_bests?: boolean | User$goal_personal_bestsArgs<ExtArgs>
     bulk_jobs_created?: boolean | User$bulk_jobs_createdArgs<ExtArgs>
+    openai_batch_jobs_created?: boolean | User$openai_batch_jobs_createdArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -8231,6 +8242,7 @@ export namespace Prisma {
       goal_achievements: Prisma.$GoalAchievementPayload<ExtArgs>[]
       goal_personal_bests: Prisma.$GoalPersonalBestPayload<ExtArgs>[]
       bulk_jobs_created: Prisma.$BulkJobPayload<ExtArgs>[]
+      openai_batch_jobs_created: Prisma.$OpenAiBatchJobPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -8645,6 +8657,7 @@ export namespace Prisma {
     goal_achievements<T extends User$goal_achievementsArgs<ExtArgs> = {}>(args?: Subset<T, User$goal_achievementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GoalAchievementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     goal_personal_bests<T extends User$goal_personal_bestsArgs<ExtArgs> = {}>(args?: Subset<T, User$goal_personal_bestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GoalPersonalBestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     bulk_jobs_created<T extends User$bulk_jobs_createdArgs<ExtArgs> = {}>(args?: Subset<T, User$bulk_jobs_createdArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BulkJobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    openai_batch_jobs_created<T extends User$openai_batch_jobs_createdArgs<ExtArgs> = {}>(args?: Subset<T, User$openai_batch_jobs_createdArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OpenAiBatchJobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9284,6 +9297,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: BulkJobScalarFieldEnum | BulkJobScalarFieldEnum[]
+  }
+
+  /**
+   * User.openai_batch_jobs_created
+   */
+  export type User$openai_batch_jobs_createdArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OpenAiBatchJob
+     */
+    select?: OpenAiBatchJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OpenAiBatchJob
+     */
+    omit?: OpenAiBatchJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OpenAiBatchJobInclude<ExtArgs> | null
+    where?: OpenAiBatchJobWhereInput
+    orderBy?: OpenAiBatchJobOrderByWithRelationInput | OpenAiBatchJobOrderByWithRelationInput[]
+    cursor?: OpenAiBatchJobWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: OpenAiBatchJobScalarFieldEnum | OpenAiBatchJobScalarFieldEnum[]
   }
 
   /**
@@ -47524,6 +47561,7 @@ export namespace Prisma {
     id: string | null
     batch_id: string | null
     organisation_uuid: string | null
+    user_uuid: string | null
     type: $Enums.OpenAiBatchJobType | null
     status: $Enums.OpenAiBatchStatus | null
     total_requests: number | null
@@ -47542,6 +47580,7 @@ export namespace Prisma {
     id: string | null
     batch_id: string | null
     organisation_uuid: string | null
+    user_uuid: string | null
     type: $Enums.OpenAiBatchJobType | null
     status: $Enums.OpenAiBatchStatus | null
     total_requests: number | null
@@ -47560,6 +47599,7 @@ export namespace Prisma {
     id: number
     batch_id: number
     organisation_uuid: number
+    user_uuid: number
     type: number
     status: number
     total_requests: number
@@ -47593,6 +47633,7 @@ export namespace Prisma {
     id?: true
     batch_id?: true
     organisation_uuid?: true
+    user_uuid?: true
     type?: true
     status?: true
     total_requests?: true
@@ -47611,6 +47652,7 @@ export namespace Prisma {
     id?: true
     batch_id?: true
     organisation_uuid?: true
+    user_uuid?: true
     type?: true
     status?: true
     total_requests?: true
@@ -47629,6 +47671,7 @@ export namespace Prisma {
     id?: true
     batch_id?: true
     organisation_uuid?: true
+    user_uuid?: true
     type?: true
     status?: true
     total_requests?: true
@@ -47735,6 +47778,7 @@ export namespace Prisma {
     id: string
     batch_id: string
     organisation_uuid: string
+    user_uuid: string | null
     type: $Enums.OpenAiBatchJobType
     status: $Enums.OpenAiBatchStatus
     total_requests: number
@@ -47773,6 +47817,7 @@ export namespace Prisma {
     id?: boolean
     batch_id?: boolean
     organisation_uuid?: boolean
+    user_uuid?: boolean
     type?: boolean
     status?: boolean
     total_requests?: boolean
@@ -47787,12 +47832,14 @@ export namespace Prisma {
     created_at?: boolean
     updated_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    user?: boolean | OpenAiBatchJob$userArgs<ExtArgs>
   }, ExtArgs["result"]["openAiBatchJob"]>
 
   export type OpenAiBatchJobSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     batch_id?: boolean
     organisation_uuid?: boolean
+    user_uuid?: boolean
     type?: boolean
     status?: boolean
     total_requests?: boolean
@@ -47807,12 +47854,14 @@ export namespace Prisma {
     created_at?: boolean
     updated_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    user?: boolean | OpenAiBatchJob$userArgs<ExtArgs>
   }, ExtArgs["result"]["openAiBatchJob"]>
 
   export type OpenAiBatchJobSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     batch_id?: boolean
     organisation_uuid?: boolean
+    user_uuid?: boolean
     type?: boolean
     status?: boolean
     total_requests?: boolean
@@ -47827,12 +47876,14 @@ export namespace Prisma {
     created_at?: boolean
     updated_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    user?: boolean | OpenAiBatchJob$userArgs<ExtArgs>
   }, ExtArgs["result"]["openAiBatchJob"]>
 
   export type OpenAiBatchJobSelectScalar = {
     id?: boolean
     batch_id?: boolean
     organisation_uuid?: boolean
+    user_uuid?: boolean
     type?: boolean
     status?: boolean
     total_requests?: boolean
@@ -47848,26 +47899,31 @@ export namespace Prisma {
     updated_at?: boolean
   }
 
-  export type OpenAiBatchJobOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "batch_id" | "organisation_uuid" | "type" | "status" | "total_requests" | "completed_requests" | "failed_requests" | "input_file_id" | "output_file_id" | "error_file_id" | "expires_at" | "finished_at" | "context" | "created_at" | "updated_at", ExtArgs["result"]["openAiBatchJob"]>
+  export type OpenAiBatchJobOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "batch_id" | "organisation_uuid" | "user_uuid" | "type" | "status" | "total_requests" | "completed_requests" | "failed_requests" | "input_file_id" | "output_file_id" | "error_file_id" | "expires_at" | "finished_at" | "context" | "created_at" | "updated_at", ExtArgs["result"]["openAiBatchJob"]>
   export type OpenAiBatchJobInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    user?: boolean | OpenAiBatchJob$userArgs<ExtArgs>
   }
   export type OpenAiBatchJobIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    user?: boolean | OpenAiBatchJob$userArgs<ExtArgs>
   }
   export type OpenAiBatchJobIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    user?: boolean | OpenAiBatchJob$userArgs<ExtArgs>
   }
 
   export type $OpenAiBatchJobPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "OpenAiBatchJob"
     objects: {
       organisation: Prisma.$OrganisationPayload<ExtArgs>
+      user: Prisma.$UserPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       batch_id: string
       organisation_uuid: string
+      user_uuid: string | null
       type: $Enums.OpenAiBatchJobType
       status: $Enums.OpenAiBatchStatus
       total_requests: number
@@ -48276,6 +48332,7 @@ export namespace Prisma {
   export interface Prisma__OpenAiBatchJobClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     organisation<T extends OrganisationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganisationDefaultArgs<ExtArgs>>): Prisma__OrganisationClient<$Result.GetResult<Prisma.$OrganisationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    user<T extends OpenAiBatchJob$userArgs<ExtArgs> = {}>(args?: Subset<T, OpenAiBatchJob$userArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -48308,6 +48365,7 @@ export namespace Prisma {
     readonly id: FieldRef<"OpenAiBatchJob", 'String'>
     readonly batch_id: FieldRef<"OpenAiBatchJob", 'String'>
     readonly organisation_uuid: FieldRef<"OpenAiBatchJob", 'String'>
+    readonly user_uuid: FieldRef<"OpenAiBatchJob", 'String'>
     readonly type: FieldRef<"OpenAiBatchJob", 'OpenAiBatchJobType'>
     readonly status: FieldRef<"OpenAiBatchJob", 'OpenAiBatchStatus'>
     readonly total_requests: FieldRef<"OpenAiBatchJob", 'Int'>
@@ -48714,6 +48772,25 @@ export namespace Prisma {
      * Limit how many OpenAiBatchJobs to delete.
      */
     limit?: number
+  }
+
+  /**
+   * OpenAiBatchJob.user
+   */
+  export type OpenAiBatchJob$userArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
   }
 
   /**
@@ -78012,6 +78089,7 @@ export namespace Prisma {
     id: 'id',
     batch_id: 'batch_id',
     organisation_uuid: 'organisation_uuid',
+    user_uuid: 'user_uuid',
     type: 'type',
     status: 'status',
     total_requests: 'total_requests',
@@ -79261,6 +79339,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementListRelationFilter
     goal_personal_bests?: GoalPersonalBestListRelationFilter
     bulk_jobs_created?: BulkJobListRelationFilter
+    openai_batch_jobs_created?: OpenAiBatchJobListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -79282,6 +79361,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementOrderByRelationAggregateInput
     goal_personal_bests?: GoalPersonalBestOrderByRelationAggregateInput
     bulk_jobs_created?: BulkJobOrderByRelationAggregateInput
+    openai_batch_jobs_created?: OpenAiBatchJobOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -79306,6 +79386,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementListRelationFilter
     goal_personal_bests?: GoalPersonalBestListRelationFilter
     bulk_jobs_created?: BulkJobListRelationFilter
+    openai_batch_jobs_created?: OpenAiBatchJobListRelationFilter
   }, "id" | "uuid" | "email" | "phone">
 
   export type UserOrderByWithAggregationInput = {
@@ -82524,6 +82605,7 @@ export namespace Prisma {
     id?: StringFilter<"OpenAiBatchJob"> | string
     batch_id?: StringFilter<"OpenAiBatchJob"> | string
     organisation_uuid?: StringFilter<"OpenAiBatchJob"> | string
+    user_uuid?: StringNullableFilter<"OpenAiBatchJob"> | string | null
     type?: EnumOpenAiBatchJobTypeFilter<"OpenAiBatchJob"> | $Enums.OpenAiBatchJobType
     status?: EnumOpenAiBatchStatusFilter<"OpenAiBatchJob"> | $Enums.OpenAiBatchStatus
     total_requests?: IntFilter<"OpenAiBatchJob"> | number
@@ -82538,12 +82620,14 @@ export namespace Prisma {
     created_at?: DateTimeFilter<"OpenAiBatchJob"> | Date | string
     updated_at?: DateTimeFilter<"OpenAiBatchJob"> | Date | string
     organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+    user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
   }
 
   export type OpenAiBatchJobOrderByWithRelationInput = {
     id?: SortOrder
     batch_id?: SortOrder
     organisation_uuid?: SortOrder
+    user_uuid?: SortOrderInput | SortOrder
     type?: SortOrder
     status?: SortOrder
     total_requests?: SortOrder
@@ -82558,6 +82642,7 @@ export namespace Prisma {
     created_at?: SortOrder
     updated_at?: SortOrder
     organisation?: OrganisationOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
   }
 
   export type OpenAiBatchJobWhereUniqueInput = Prisma.AtLeast<{
@@ -82567,6 +82652,7 @@ export namespace Prisma {
     OR?: OpenAiBatchJobWhereInput[]
     NOT?: OpenAiBatchJobWhereInput | OpenAiBatchJobWhereInput[]
     organisation_uuid?: StringFilter<"OpenAiBatchJob"> | string
+    user_uuid?: StringNullableFilter<"OpenAiBatchJob"> | string | null
     type?: EnumOpenAiBatchJobTypeFilter<"OpenAiBatchJob"> | $Enums.OpenAiBatchJobType
     status?: EnumOpenAiBatchStatusFilter<"OpenAiBatchJob"> | $Enums.OpenAiBatchStatus
     total_requests?: IntFilter<"OpenAiBatchJob"> | number
@@ -82581,12 +82667,14 @@ export namespace Prisma {
     created_at?: DateTimeFilter<"OpenAiBatchJob"> | Date | string
     updated_at?: DateTimeFilter<"OpenAiBatchJob"> | Date | string
     organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+    user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
   }, "id" | "batch_id">
 
   export type OpenAiBatchJobOrderByWithAggregationInput = {
     id?: SortOrder
     batch_id?: SortOrder
     organisation_uuid?: SortOrder
+    user_uuid?: SortOrderInput | SortOrder
     type?: SortOrder
     status?: SortOrder
     total_requests?: SortOrder
@@ -82614,6 +82702,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"OpenAiBatchJob"> | string
     batch_id?: StringWithAggregatesFilter<"OpenAiBatchJob"> | string
     organisation_uuid?: StringWithAggregatesFilter<"OpenAiBatchJob"> | string
+    user_uuid?: StringNullableWithAggregatesFilter<"OpenAiBatchJob"> | string | null
     type?: EnumOpenAiBatchJobTypeWithAggregatesFilter<"OpenAiBatchJob"> | $Enums.OpenAiBatchJobType
     status?: EnumOpenAiBatchStatusWithAggregatesFilter<"OpenAiBatchJob"> | $Enums.OpenAiBatchStatus
     total_requests?: IntWithAggregatesFilter<"OpenAiBatchJob"> | number
@@ -84813,6 +84902,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementCreateNestedManyWithoutUserInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
     bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
+    openai_batch_jobs_created?: OpenAiBatchJobCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -84834,6 +84924,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutUserInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
     bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
+    openai_batch_jobs_created?: OpenAiBatchJobUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -84854,6 +84945,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementUpdateManyWithoutUserNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
     bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
+    openai_batch_jobs_created?: OpenAiBatchJobUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -84875,6 +84967,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutUserNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
     bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
+    openai_batch_jobs_created?: OpenAiBatchJobUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -88409,12 +88502,14 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutOpenai_batch_jobsInput
+    user?: UserCreateNestedOneWithoutOpenai_batch_jobs_createdInput
   }
 
   export type OpenAiBatchJobUncheckedCreateInput = {
     id?: string
     batch_id: string
     organisation_uuid: string
+    user_uuid?: string | null
     type: $Enums.OpenAiBatchJobType
     status?: $Enums.OpenAiBatchStatus
     total_requests?: number
@@ -88447,12 +88542,14 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutOpenai_batch_jobsNestedInput
+    user?: UserUpdateOneWithoutOpenai_batch_jobs_createdNestedInput
   }
 
   export type OpenAiBatchJobUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     batch_id?: StringFieldUpdateOperationsInput | string
     organisation_uuid?: StringFieldUpdateOperationsInput | string
+    user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     type?: EnumOpenAiBatchJobTypeFieldUpdateOperationsInput | $Enums.OpenAiBatchJobType
     status?: EnumOpenAiBatchStatusFieldUpdateOperationsInput | $Enums.OpenAiBatchStatus
     total_requests?: IntFieldUpdateOperationsInput | number
@@ -88472,6 +88569,7 @@ export namespace Prisma {
     id?: string
     batch_id: string
     organisation_uuid: string
+    user_uuid?: string | null
     type: $Enums.OpenAiBatchJobType
     status?: $Enums.OpenAiBatchStatus
     total_requests?: number
@@ -88509,6 +88607,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     batch_id?: StringFieldUpdateOperationsInput | string
     organisation_uuid?: StringFieldUpdateOperationsInput | string
+    user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     type?: EnumOpenAiBatchJobTypeFieldUpdateOperationsInput | $Enums.OpenAiBatchJobType
     status?: EnumOpenAiBatchStatusFieldUpdateOperationsInput | $Enums.OpenAiBatchStatus
     total_requests?: IntFieldUpdateOperationsInput | number
@@ -90917,6 +91016,12 @@ export namespace Prisma {
     none?: BulkJobWhereInput
   }
 
+  export type OpenAiBatchJobListRelationFilter = {
+    every?: OpenAiBatchJobWhereInput
+    some?: OpenAiBatchJobWhereInput
+    none?: OpenAiBatchJobWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -90955,6 +91060,10 @@ export namespace Prisma {
   }
 
   export type BulkJobOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type OpenAiBatchJobOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -91120,12 +91229,6 @@ export namespace Prisma {
     none?: ScoringInstructionWhereInput
   }
 
-  export type OpenAiBatchJobListRelationFilter = {
-    every?: OpenAiBatchJobWhereInput
-    some?: OpenAiBatchJobWhereInput
-    none?: OpenAiBatchJobWhereInput
-  }
-
   export type IntegrationListRelationFilter = {
     every?: IntegrationWhereInput
     some?: IntegrationWhereInput
@@ -91235,10 +91338,6 @@ export namespace Prisma {
   }
 
   export type ScoringInstructionOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type OpenAiBatchJobOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -93941,6 +94040,7 @@ export namespace Prisma {
     id?: SortOrder
     batch_id?: SortOrder
     organisation_uuid?: SortOrder
+    user_uuid?: SortOrder
     type?: SortOrder
     status?: SortOrder
     total_requests?: SortOrder
@@ -93966,6 +94066,7 @@ export namespace Prisma {
     id?: SortOrder
     batch_id?: SortOrder
     organisation_uuid?: SortOrder
+    user_uuid?: SortOrder
     type?: SortOrder
     status?: SortOrder
     total_requests?: SortOrder
@@ -93984,6 +94085,7 @@ export namespace Prisma {
     id?: SortOrder
     batch_id?: SortOrder
     organisation_uuid?: SortOrder
+    user_uuid?: SortOrder
     type?: SortOrder
     status?: SortOrder
     total_requests?: SortOrder
@@ -95842,6 +95944,13 @@ export namespace Prisma {
     connect?: BulkJobWhereUniqueInput | BulkJobWhereUniqueInput[]
   }
 
+  export type OpenAiBatchJobCreateNestedManyWithoutUserInput = {
+    create?: XOR<OpenAiBatchJobCreateWithoutUserInput, OpenAiBatchJobUncheckedCreateWithoutUserInput> | OpenAiBatchJobCreateWithoutUserInput[] | OpenAiBatchJobUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: OpenAiBatchJobCreateOrConnectWithoutUserInput | OpenAiBatchJobCreateOrConnectWithoutUserInput[]
+    createMany?: OpenAiBatchJobCreateManyUserInputEnvelope
+    connect?: OpenAiBatchJobWhereUniqueInput | OpenAiBatchJobWhereUniqueInput[]
+  }
+
   export type OrganisationMemberUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<OrganisationMemberCreateWithoutUserInput, OrganisationMemberUncheckedCreateWithoutUserInput> | OrganisationMemberCreateWithoutUserInput[] | OrganisationMemberUncheckedCreateWithoutUserInput[]
     connectOrCreate?: OrganisationMemberCreateOrConnectWithoutUserInput | OrganisationMemberCreateOrConnectWithoutUserInput[]
@@ -95903,6 +96012,13 @@ export namespace Prisma {
     connectOrCreate?: BulkJobCreateOrConnectWithoutCreated_byInput | BulkJobCreateOrConnectWithoutCreated_byInput[]
     createMany?: BulkJobCreateManyCreated_byInputEnvelope
     connect?: BulkJobWhereUniqueInput | BulkJobWhereUniqueInput[]
+  }
+
+  export type OpenAiBatchJobUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<OpenAiBatchJobCreateWithoutUserInput, OpenAiBatchJobUncheckedCreateWithoutUserInput> | OpenAiBatchJobCreateWithoutUserInput[] | OpenAiBatchJobUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: OpenAiBatchJobCreateOrConnectWithoutUserInput | OpenAiBatchJobCreateOrConnectWithoutUserInput[]
+    createMany?: OpenAiBatchJobCreateManyUserInputEnvelope
+    connect?: OpenAiBatchJobWhereUniqueInput | OpenAiBatchJobWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -96047,6 +96163,20 @@ export namespace Prisma {
     deleteMany?: BulkJobScalarWhereInput | BulkJobScalarWhereInput[]
   }
 
+  export type OpenAiBatchJobUpdateManyWithoutUserNestedInput = {
+    create?: XOR<OpenAiBatchJobCreateWithoutUserInput, OpenAiBatchJobUncheckedCreateWithoutUserInput> | OpenAiBatchJobCreateWithoutUserInput[] | OpenAiBatchJobUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: OpenAiBatchJobCreateOrConnectWithoutUserInput | OpenAiBatchJobCreateOrConnectWithoutUserInput[]
+    upsert?: OpenAiBatchJobUpsertWithWhereUniqueWithoutUserInput | OpenAiBatchJobUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: OpenAiBatchJobCreateManyUserInputEnvelope
+    set?: OpenAiBatchJobWhereUniqueInput | OpenAiBatchJobWhereUniqueInput[]
+    disconnect?: OpenAiBatchJobWhereUniqueInput | OpenAiBatchJobWhereUniqueInput[]
+    delete?: OpenAiBatchJobWhereUniqueInput | OpenAiBatchJobWhereUniqueInput[]
+    connect?: OpenAiBatchJobWhereUniqueInput | OpenAiBatchJobWhereUniqueInput[]
+    update?: OpenAiBatchJobUpdateWithWhereUniqueWithoutUserInput | OpenAiBatchJobUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: OpenAiBatchJobUpdateManyWithWhereWithoutUserInput | OpenAiBatchJobUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: OpenAiBatchJobScalarWhereInput | OpenAiBatchJobScalarWhereInput[]
+  }
+
   export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
@@ -96179,6 +96309,20 @@ export namespace Prisma {
     update?: BulkJobUpdateWithWhereUniqueWithoutCreated_byInput | BulkJobUpdateWithWhereUniqueWithoutCreated_byInput[]
     updateMany?: BulkJobUpdateManyWithWhereWithoutCreated_byInput | BulkJobUpdateManyWithWhereWithoutCreated_byInput[]
     deleteMany?: BulkJobScalarWhereInput | BulkJobScalarWhereInput[]
+  }
+
+  export type OpenAiBatchJobUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<OpenAiBatchJobCreateWithoutUserInput, OpenAiBatchJobUncheckedCreateWithoutUserInput> | OpenAiBatchJobCreateWithoutUserInput[] | OpenAiBatchJobUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: OpenAiBatchJobCreateOrConnectWithoutUserInput | OpenAiBatchJobCreateOrConnectWithoutUserInput[]
+    upsert?: OpenAiBatchJobUpsertWithWhereUniqueWithoutUserInput | OpenAiBatchJobUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: OpenAiBatchJobCreateManyUserInputEnvelope
+    set?: OpenAiBatchJobWhereUniqueInput | OpenAiBatchJobWhereUniqueInput[]
+    disconnect?: OpenAiBatchJobWhereUniqueInput | OpenAiBatchJobWhereUniqueInput[]
+    delete?: OpenAiBatchJobWhereUniqueInput | OpenAiBatchJobWhereUniqueInput[]
+    connect?: OpenAiBatchJobWhereUniqueInput | OpenAiBatchJobWhereUniqueInput[]
+    update?: OpenAiBatchJobUpdateWithWhereUniqueWithoutUserInput | OpenAiBatchJobUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: OpenAiBatchJobUpdateManyWithWhereWithoutUserInput | OpenAiBatchJobUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: OpenAiBatchJobScalarWhereInput | OpenAiBatchJobScalarWhereInput[]
   }
 
   export type OrganisationMemberCreateNestedManyWithoutOrganisationInput = {
@@ -100029,6 +100173,12 @@ export namespace Prisma {
     connect?: OrganisationWhereUniqueInput
   }
 
+  export type UserCreateNestedOneWithoutOpenai_batch_jobs_createdInput = {
+    create?: XOR<UserCreateWithoutOpenai_batch_jobs_createdInput, UserUncheckedCreateWithoutOpenai_batch_jobs_createdInput>
+    connectOrCreate?: UserCreateOrConnectWithoutOpenai_batch_jobs_createdInput
+    connect?: UserWhereUniqueInput
+  }
+
   export type EnumOpenAiBatchJobTypeFieldUpdateOperationsInput = {
     set?: $Enums.OpenAiBatchJobType
   }
@@ -100043,6 +100193,16 @@ export namespace Prisma {
     upsert?: OrganisationUpsertWithoutOpenai_batch_jobsInput
     connect?: OrganisationWhereUniqueInput
     update?: XOR<XOR<OrganisationUpdateToOneWithWhereWithoutOpenai_batch_jobsInput, OrganisationUpdateWithoutOpenai_batch_jobsInput>, OrganisationUncheckedUpdateWithoutOpenai_batch_jobsInput>
+  }
+
+  export type UserUpdateOneWithoutOpenai_batch_jobs_createdNestedInput = {
+    create?: XOR<UserCreateWithoutOpenai_batch_jobs_createdInput, UserUncheckedCreateWithoutOpenai_batch_jobs_createdInput>
+    connectOrCreate?: UserCreateOrConnectWithoutOpenai_batch_jobs_createdInput
+    upsert?: UserUpsertWithoutOpenai_batch_jobs_createdInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutOpenai_batch_jobs_createdInput, UserUpdateWithoutOpenai_batch_jobs_createdInput>, UserUncheckedUpdateWithoutOpenai_batch_jobs_createdInput>
   }
 
   export type OrganisationCreateNestedOneWithoutIntegrationsInput = {
@@ -102786,6 +102946,54 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type OpenAiBatchJobCreateWithoutUserInput = {
+    id?: string
+    batch_id: string
+    type: $Enums.OpenAiBatchJobType
+    status?: $Enums.OpenAiBatchStatus
+    total_requests?: number
+    completed_requests?: number
+    failed_requests?: number
+    input_file_id?: string | null
+    output_file_id?: string | null
+    error_file_id?: string | null
+    expires_at?: Date | string | null
+    finished_at?: Date | string | null
+    context?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutOpenai_batch_jobsInput
+  }
+
+  export type OpenAiBatchJobUncheckedCreateWithoutUserInput = {
+    id?: string
+    batch_id: string
+    organisation_uuid: string
+    type: $Enums.OpenAiBatchJobType
+    status?: $Enums.OpenAiBatchStatus
+    total_requests?: number
+    completed_requests?: number
+    failed_requests?: number
+    input_file_id?: string | null
+    output_file_id?: string | null
+    error_file_id?: string | null
+    expires_at?: Date | string | null
+    finished_at?: Date | string | null
+    context?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type OpenAiBatchJobCreateOrConnectWithoutUserInput = {
+    where: OpenAiBatchJobWhereUniqueInput
+    create: XOR<OpenAiBatchJobCreateWithoutUserInput, OpenAiBatchJobUncheckedCreateWithoutUserInput>
+  }
+
+  export type OpenAiBatchJobCreateManyUserInputEnvelope = {
+    data: OpenAiBatchJobCreateManyUserInput | OpenAiBatchJobCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type OrganisationMemberUpsertWithWhereUniqueWithoutUserInput = {
     where: OrganisationMemberWhereUniqueInput
     update: XOR<OrganisationMemberUpdateWithoutUserInput, OrganisationMemberUncheckedUpdateWithoutUserInput>
@@ -103102,6 +103310,45 @@ export namespace Prisma {
     completed_at?: DateTimeNullableFilter<"BulkJob"> | Date | string | null
     created_at?: DateTimeFilter<"BulkJob"> | Date | string
     updated_at?: DateTimeFilter<"BulkJob"> | Date | string
+  }
+
+  export type OpenAiBatchJobUpsertWithWhereUniqueWithoutUserInput = {
+    where: OpenAiBatchJobWhereUniqueInput
+    update: XOR<OpenAiBatchJobUpdateWithoutUserInput, OpenAiBatchJobUncheckedUpdateWithoutUserInput>
+    create: XOR<OpenAiBatchJobCreateWithoutUserInput, OpenAiBatchJobUncheckedCreateWithoutUserInput>
+  }
+
+  export type OpenAiBatchJobUpdateWithWhereUniqueWithoutUserInput = {
+    where: OpenAiBatchJobWhereUniqueInput
+    data: XOR<OpenAiBatchJobUpdateWithoutUserInput, OpenAiBatchJobUncheckedUpdateWithoutUserInput>
+  }
+
+  export type OpenAiBatchJobUpdateManyWithWhereWithoutUserInput = {
+    where: OpenAiBatchJobScalarWhereInput
+    data: XOR<OpenAiBatchJobUpdateManyMutationInput, OpenAiBatchJobUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type OpenAiBatchJobScalarWhereInput = {
+    AND?: OpenAiBatchJobScalarWhereInput | OpenAiBatchJobScalarWhereInput[]
+    OR?: OpenAiBatchJobScalarWhereInput[]
+    NOT?: OpenAiBatchJobScalarWhereInput | OpenAiBatchJobScalarWhereInput[]
+    id?: StringFilter<"OpenAiBatchJob"> | string
+    batch_id?: StringFilter<"OpenAiBatchJob"> | string
+    organisation_uuid?: StringFilter<"OpenAiBatchJob"> | string
+    user_uuid?: StringNullableFilter<"OpenAiBatchJob"> | string | null
+    type?: EnumOpenAiBatchJobTypeFilter<"OpenAiBatchJob"> | $Enums.OpenAiBatchJobType
+    status?: EnumOpenAiBatchStatusFilter<"OpenAiBatchJob"> | $Enums.OpenAiBatchStatus
+    total_requests?: IntFilter<"OpenAiBatchJob"> | number
+    completed_requests?: IntFilter<"OpenAiBatchJob"> | number
+    failed_requests?: IntFilter<"OpenAiBatchJob"> | number
+    input_file_id?: StringNullableFilter<"OpenAiBatchJob"> | string | null
+    output_file_id?: StringNullableFilter<"OpenAiBatchJob"> | string | null
+    error_file_id?: StringNullableFilter<"OpenAiBatchJob"> | string | null
+    expires_at?: DateTimeNullableFilter<"OpenAiBatchJob"> | Date | string | null
+    finished_at?: DateTimeNullableFilter<"OpenAiBatchJob"> | Date | string | null
+    context?: JsonNullableFilter<"OpenAiBatchJob">
+    created_at?: DateTimeFilter<"OpenAiBatchJob"> | Date | string
+    updated_at?: DateTimeFilter<"OpenAiBatchJob"> | Date | string
   }
 
   export type OrganisationMemberCreateWithoutOrganisationInput = {
@@ -103678,11 +103925,13 @@ export namespace Prisma {
     context?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
     updated_at?: Date | string
+    user?: UserCreateNestedOneWithoutOpenai_batch_jobs_createdInput
   }
 
   export type OpenAiBatchJobUncheckedCreateWithoutOrganisationInput = {
     id?: string
     batch_id: string
+    user_uuid?: string | null
     type: $Enums.OpenAiBatchJobType
     status?: $Enums.OpenAiBatchStatus
     total_requests?: number
@@ -104797,28 +105046,6 @@ export namespace Prisma {
     data: XOR<OpenAiBatchJobUpdateManyMutationInput, OpenAiBatchJobUncheckedUpdateManyWithoutOrganisationInput>
   }
 
-  export type OpenAiBatchJobScalarWhereInput = {
-    AND?: OpenAiBatchJobScalarWhereInput | OpenAiBatchJobScalarWhereInput[]
-    OR?: OpenAiBatchJobScalarWhereInput[]
-    NOT?: OpenAiBatchJobScalarWhereInput | OpenAiBatchJobScalarWhereInput[]
-    id?: StringFilter<"OpenAiBatchJob"> | string
-    batch_id?: StringFilter<"OpenAiBatchJob"> | string
-    organisation_uuid?: StringFilter<"OpenAiBatchJob"> | string
-    type?: EnumOpenAiBatchJobTypeFilter<"OpenAiBatchJob"> | $Enums.OpenAiBatchJobType
-    status?: EnumOpenAiBatchStatusFilter<"OpenAiBatchJob"> | $Enums.OpenAiBatchStatus
-    total_requests?: IntFilter<"OpenAiBatchJob"> | number
-    completed_requests?: IntFilter<"OpenAiBatchJob"> | number
-    failed_requests?: IntFilter<"OpenAiBatchJob"> | number
-    input_file_id?: StringNullableFilter<"OpenAiBatchJob"> | string | null
-    output_file_id?: StringNullableFilter<"OpenAiBatchJob"> | string | null
-    error_file_id?: StringNullableFilter<"OpenAiBatchJob"> | string | null
-    expires_at?: DateTimeNullableFilter<"OpenAiBatchJob"> | Date | string | null
-    finished_at?: DateTimeNullableFilter<"OpenAiBatchJob"> | Date | string | null
-    context?: JsonNullableFilter<"OpenAiBatchJob">
-    created_at?: DateTimeFilter<"OpenAiBatchJob"> | Date | string
-    updated_at?: DateTimeFilter<"OpenAiBatchJob"> | Date | string
-  }
-
   export type IntegrationUpsertWithWhereUniqueWithoutOrganisationInput = {
     where: IntegrationWhereUniqueInput
     update: XOR<IntegrationUpdateWithoutOrganisationInput, IntegrationUncheckedUpdateWithoutOrganisationInput>
@@ -105481,6 +105708,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementCreateNestedManyWithoutUserInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
     bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
+    openai_batch_jobs_created?: OpenAiBatchJobCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutMembershipsInput = {
@@ -105501,6 +105729,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutUserInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
     bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
+    openai_batch_jobs_created?: OpenAiBatchJobUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutMembershipsInput = {
@@ -105626,6 +105855,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementUpdateManyWithoutUserNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
     bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
+    openai_batch_jobs_created?: OpenAiBatchJobUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMembershipsInput = {
@@ -105646,6 +105876,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutUserNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
     bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
+    openai_batch_jobs_created?: OpenAiBatchJobUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganisationCreateWithoutInvitationsInput = {
@@ -105749,6 +105980,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementCreateNestedManyWithoutUserInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
     bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
+    openai_batch_jobs_created?: OpenAiBatchJobCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutInvitations_sentInput = {
@@ -105769,6 +106001,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutUserInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
     bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
+    openai_batch_jobs_created?: OpenAiBatchJobUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutInvitations_sentInput = {
@@ -105894,6 +106127,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementUpdateManyWithoutUserNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
     bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
+    openai_batch_jobs_created?: OpenAiBatchJobUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInvitations_sentInput = {
@@ -105914,6 +106148,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutUserNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
     bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
+    openai_batch_jobs_created?: OpenAiBatchJobUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganisationCreateWithoutFiltersInput = {
@@ -111451,6 +111686,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementCreateNestedManyWithoutUserInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
     bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
+    openai_batch_jobs_created?: OpenAiBatchJobCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutOutreach_messages_sentInput = {
@@ -111471,6 +111707,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutUserInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
     bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
+    openai_batch_jobs_created?: OpenAiBatchJobUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutOutreach_messages_sentInput = {
@@ -111935,6 +112172,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementUpdateManyWithoutUserNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
     bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
+    openai_batch_jobs_created?: OpenAiBatchJobUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOutreach_messages_sentInput = {
@@ -111955,6 +112193,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutUserNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
     bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
+    openai_batch_jobs_created?: OpenAiBatchJobUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type InteractionUpsertWithWhereUniqueWithoutOutreach_messageInput = {
@@ -113510,6 +113749,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutUserInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutUserInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
+    openai_batch_jobs_created?: OpenAiBatchJobCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBulk_jobs_createdInput = {
@@ -113530,6 +113770,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutUserInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutUserInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
+    openai_batch_jobs_created?: OpenAiBatchJobUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBulk_jobs_createdInput = {
@@ -113655,6 +113896,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutUserNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutUserNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
+    openai_batch_jobs_created?: OpenAiBatchJobUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBulk_jobs_createdInput = {
@@ -113675,6 +113917,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutUserNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutUserNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
+    openai_batch_jobs_created?: OpenAiBatchJobUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganisationCreateWithoutWebsite_scrape_requestsInput = {
@@ -115529,6 +115772,52 @@ export namespace Prisma {
     create: XOR<OrganisationCreateWithoutOpenai_batch_jobsInput, OrganisationUncheckedCreateWithoutOpenai_batch_jobsInput>
   }
 
+  export type UserCreateWithoutOpenai_batch_jobs_createdInput = {
+    uuid?: string
+    email: string
+    phone?: string | null
+    full_name?: string | null
+    password: string
+    role?: $Enums.AuthRole
+    created_at?: Date | string
+    updated_at?: Date | string
+    memberships?: OrganisationMemberCreateNestedManyWithoutUserInput
+    invitations_sent?: OrganisationInvitationCreateNestedManyWithoutInvited_byInput
+    form_completions?: FormCompletionCreateNestedManyWithoutCompleted_byInput
+    outreach_messages_sent?: OutreachMessageCreateNestedManyWithoutSent_byInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutActorInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutUserInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutUserInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
+    bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
+  }
+
+  export type UserUncheckedCreateWithoutOpenai_batch_jobs_createdInput = {
+    id?: number
+    uuid?: string
+    email: string
+    phone?: string | null
+    full_name?: string | null
+    password: string
+    role?: $Enums.AuthRole
+    created_at?: Date | string
+    updated_at?: Date | string
+    memberships?: OrganisationMemberUncheckedCreateNestedManyWithoutUserInput
+    invitations_sent?: OrganisationInvitationUncheckedCreateNestedManyWithoutInvited_byInput
+    form_completions?: FormCompletionUncheckedCreateNestedManyWithoutCompleted_byInput
+    outreach_messages_sent?: OutreachMessageUncheckedCreateNestedManyWithoutSent_byInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutActorInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutUserInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutUserInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
+    bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
+  }
+
+  export type UserCreateOrConnectWithoutOpenai_batch_jobs_createdInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutOpenai_batch_jobs_createdInput, UserUncheckedCreateWithoutOpenai_batch_jobs_createdInput>
+  }
+
   export type OrganisationUpsertWithoutOpenai_batch_jobsInput = {
     update: XOR<OrganisationUpdateWithoutOpenai_batch_jobsInput, OrganisationUncheckedUpdateWithoutOpenai_batch_jobsInput>
     create: XOR<OrganisationCreateWithoutOpenai_batch_jobsInput, OrganisationUncheckedCreateWithoutOpenai_batch_jobsInput>
@@ -115617,6 +115906,58 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+  }
+
+  export type UserUpsertWithoutOpenai_batch_jobs_createdInput = {
+    update: XOR<UserUpdateWithoutOpenai_batch_jobs_createdInput, UserUncheckedUpdateWithoutOpenai_batch_jobs_createdInput>
+    create: XOR<UserCreateWithoutOpenai_batch_jobs_createdInput, UserUncheckedCreateWithoutOpenai_batch_jobs_createdInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutOpenai_batch_jobs_createdInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutOpenai_batch_jobs_createdInput, UserUncheckedUpdateWithoutOpenai_batch_jobs_createdInput>
+  }
+
+  export type UserUpdateWithoutOpenai_batch_jobs_createdInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    full_name?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumAuthRoleFieldUpdateOperationsInput | $Enums.AuthRole
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: OrganisationMemberUpdateManyWithoutUserNestedInput
+    invitations_sent?: OrganisationInvitationUpdateManyWithoutInvited_byNestedInput
+    form_completions?: FormCompletionUpdateManyWithoutCompleted_byNestedInput
+    outreach_messages_sent?: OutreachMessageUpdateManyWithoutSent_byNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutActorNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutUserNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutUserNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
+    bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutOpenai_batch_jobs_createdInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    full_name?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumAuthRoleFieldUpdateOperationsInput | $Enums.AuthRole
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: OrganisationMemberUncheckedUpdateManyWithoutUserNestedInput
+    invitations_sent?: OrganisationInvitationUncheckedUpdateManyWithoutInvited_byNestedInput
+    form_completions?: FormCompletionUncheckedUpdateManyWithoutCompleted_byNestedInput
+    outreach_messages_sent?: OutreachMessageUncheckedUpdateManyWithoutSent_byNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutActorNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutUserNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutUserNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
+    bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
   }
 
   export type OrganisationCreateWithoutIntegrationsInput = {
@@ -117521,6 +117862,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementCreateNestedManyWithoutUserInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
     bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
+    openai_batch_jobs_created?: OpenAiBatchJobCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutForm_completionsInput = {
@@ -117541,6 +117883,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutUserInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
     bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
+    openai_batch_jobs_created?: OpenAiBatchJobUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutForm_completionsInput = {
@@ -117729,6 +118072,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementUpdateManyWithoutUserNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
     bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
+    openai_batch_jobs_created?: OpenAiBatchJobUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutForm_completionsInput = {
@@ -117749,6 +118093,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutUserNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
     bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
+    openai_batch_jobs_created?: OpenAiBatchJobUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type FormCompletionValueUpsertWithWhereUniqueWithoutCompletionInput = {
@@ -118690,6 +119035,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementCreateNestedManyWithoutUserInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
     bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
+    openai_batch_jobs_created?: OpenAiBatchJobCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutMessaging_goalsInput = {
@@ -118710,6 +119056,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutUserInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
     bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
+    openai_batch_jobs_created?: OpenAiBatchJobUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutMessaging_goalsInput = {
@@ -118868,6 +119215,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementUpdateManyWithoutUserNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
     bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
+    openai_batch_jobs_created?: OpenAiBatchJobUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMessaging_goalsInput = {
@@ -118888,6 +119236,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutUserNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
     bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
+    openai_batch_jobs_created?: OpenAiBatchJobUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type GoalAchievementUpsertWithWhereUniqueWithoutGoalInput = {
@@ -120345,6 +120694,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutUserInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
     bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
+    openai_batch_jobs_created?: OpenAiBatchJobCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutGoal_achievementsInput = {
@@ -120365,6 +120715,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutUserInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
     bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
+    openai_batch_jobs_created?: OpenAiBatchJobUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutGoal_achievementsInput = {
@@ -120518,6 +120869,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutUserNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
     bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
+    openai_batch_jobs_created?: OpenAiBatchJobUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutGoal_achievementsInput = {
@@ -120538,6 +120890,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutUserNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
     bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
+    openai_batch_jobs_created?: OpenAiBatchJobUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type MessagingGoalUpsertWithoutAchievementsInput = {
@@ -120675,6 +121028,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalCreateNestedManyWithoutUserInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutUserInput
     bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
+    openai_batch_jobs_created?: OpenAiBatchJobCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutGoal_personal_bestsInput = {
@@ -120695,6 +121049,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutUserInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutUserInput
     bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
+    openai_batch_jobs_created?: OpenAiBatchJobUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutGoal_personal_bestsInput = {
@@ -120820,6 +121175,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUpdateManyWithoutUserNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutUserNestedInput
     bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
+    openai_batch_jobs_created?: OpenAiBatchJobUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutGoal_personal_bestsInput = {
@@ -120840,6 +121196,7 @@ export namespace Prisma {
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutUserNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutUserNestedInput
     bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
+    openai_batch_jobs_created?: OpenAiBatchJobUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganisationCreateWithoutActivity_logsInput = {
@@ -120943,6 +121300,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementCreateNestedManyWithoutUserInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
     bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
+    openai_batch_jobs_created?: OpenAiBatchJobCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutActivity_logsInput = {
@@ -120963,6 +121321,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutUserInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
     bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
+    openai_batch_jobs_created?: OpenAiBatchJobUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutActivity_logsInput = {
@@ -121088,6 +121447,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementUpdateManyWithoutUserNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
     bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
+    openai_batch_jobs_created?: OpenAiBatchJobUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutActivity_logsInput = {
@@ -121108,6 +121468,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutUserNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
     bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
+    openai_batch_jobs_created?: OpenAiBatchJobUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganisationMemberCreateManyUserInput = {
@@ -121244,6 +121605,25 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     started_at?: Date | string | null
     completed_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type OpenAiBatchJobCreateManyUserInput = {
+    id?: string
+    batch_id: string
+    organisation_uuid: string
+    type: $Enums.OpenAiBatchJobType
+    status?: $Enums.OpenAiBatchStatus
+    total_requests?: number
+    completed_requests?: number
+    failed_requests?: number
+    input_file_id?: string | null
+    output_file_id?: string | null
+    error_file_id?: string | null
+    expires_at?: Date | string | null
+    finished_at?: Date | string | null
+    context?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -121659,6 +122039,63 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type OpenAiBatchJobUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batch_id?: StringFieldUpdateOperationsInput | string
+    type?: EnumOpenAiBatchJobTypeFieldUpdateOperationsInput | $Enums.OpenAiBatchJobType
+    status?: EnumOpenAiBatchStatusFieldUpdateOperationsInput | $Enums.OpenAiBatchStatus
+    total_requests?: IntFieldUpdateOperationsInput | number
+    completed_requests?: IntFieldUpdateOperationsInput | number
+    failed_requests?: IntFieldUpdateOperationsInput | number
+    input_file_id?: NullableStringFieldUpdateOperationsInput | string | null
+    output_file_id?: NullableStringFieldUpdateOperationsInput | string | null
+    error_file_id?: NullableStringFieldUpdateOperationsInput | string | null
+    expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    finished_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    context?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutOpenai_batch_jobsNestedInput
+  }
+
+  export type OpenAiBatchJobUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batch_id?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    type?: EnumOpenAiBatchJobTypeFieldUpdateOperationsInput | $Enums.OpenAiBatchJobType
+    status?: EnumOpenAiBatchStatusFieldUpdateOperationsInput | $Enums.OpenAiBatchStatus
+    total_requests?: IntFieldUpdateOperationsInput | number
+    completed_requests?: IntFieldUpdateOperationsInput | number
+    failed_requests?: IntFieldUpdateOperationsInput | number
+    input_file_id?: NullableStringFieldUpdateOperationsInput | string | null
+    output_file_id?: NullableStringFieldUpdateOperationsInput | string | null
+    error_file_id?: NullableStringFieldUpdateOperationsInput | string | null
+    expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    finished_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    context?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OpenAiBatchJobUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batch_id?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    type?: EnumOpenAiBatchJobTypeFieldUpdateOperationsInput | $Enums.OpenAiBatchJobType
+    status?: EnumOpenAiBatchStatusFieldUpdateOperationsInput | $Enums.OpenAiBatchStatus
+    total_requests?: IntFieldUpdateOperationsInput | number
+    completed_requests?: IntFieldUpdateOperationsInput | number
+    failed_requests?: IntFieldUpdateOperationsInput | number
+    input_file_id?: NullableStringFieldUpdateOperationsInput | string | null
+    output_file_id?: NullableStringFieldUpdateOperationsInput | string | null
+    error_file_id?: NullableStringFieldUpdateOperationsInput | string | null
+    expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    finished_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    context?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type OrganisationMemberCreateManyOrganisationInput = {
     id?: number
     uuid?: string
@@ -121866,6 +122303,7 @@ export namespace Prisma {
   export type OpenAiBatchJobCreateManyOrganisationInput = {
     id?: string
     batch_id: string
+    user_uuid?: string | null
     type: $Enums.OpenAiBatchJobType
     status?: $Enums.OpenAiBatchStatus
     total_requests?: number
@@ -122830,11 +123268,13 @@ export namespace Prisma {
     context?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneWithoutOpenai_batch_jobs_createdNestedInput
   }
 
   export type OpenAiBatchJobUncheckedUpdateWithoutOrganisationInput = {
     id?: StringFieldUpdateOperationsInput | string
     batch_id?: StringFieldUpdateOperationsInput | string
+    user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     type?: EnumOpenAiBatchJobTypeFieldUpdateOperationsInput | $Enums.OpenAiBatchJobType
     status?: EnumOpenAiBatchStatusFieldUpdateOperationsInput | $Enums.OpenAiBatchStatus
     total_requests?: IntFieldUpdateOperationsInput | number
@@ -122853,6 +123293,7 @@ export namespace Prisma {
   export type OpenAiBatchJobUncheckedUpdateManyWithoutOrganisationInput = {
     id?: StringFieldUpdateOperationsInput | string
     batch_id?: StringFieldUpdateOperationsInput | string
+    user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     type?: EnumOpenAiBatchJobTypeFieldUpdateOperationsInput | $Enums.OpenAiBatchJobType
     status?: EnumOpenAiBatchStatusFieldUpdateOperationsInput | $Enums.OpenAiBatchStatus
     total_requests?: IntFieldUpdateOperationsInput | number

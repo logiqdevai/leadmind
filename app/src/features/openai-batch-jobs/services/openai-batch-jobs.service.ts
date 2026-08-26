@@ -9,6 +9,6 @@ export const listBatchJobs = async (query: ListBatchJobsQuery): Promise<ListBatc
     if (query.type) params.set("type", query.type);
     if (query.status) params.set("status", query.status);
 
-    const response = await axiosInstance.get(`${ApiRoutes.admin.batch_jobs}?${params.toString()}`);
+    const response = await axiosInstance.get(`${ApiRoutes.openai_batch_jobs.list}?${params.toString()}`);
     return response.data;
 };

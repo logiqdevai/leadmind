@@ -613,6 +613,7 @@ exports.Prisma.OpenAiBatchJobScalarFieldEnum = {
   id: 'id',
   batch_id: 'batch_id',
   organisation_uuid: 'organisation_uuid',
+  user_uuid: 'user_uuid',
   type: 'type',
   status: 'status',
   total_requests: 'total_requests',

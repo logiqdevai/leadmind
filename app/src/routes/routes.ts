@@ -44,6 +44,7 @@ export const Routes = {
         sequences_edit: "/dashboard/sequences/:uuid/edit",
         reminders: "/dashboard/reminders",
         jobs: "/dashboard/jobs",
+        batch_jobs: "/dashboard/batch-jobs",
         goals: "/dashboard/goals",
         forms: "/dashboard/forms",
         forms_detail: "/dashboard/forms/:uuid",
@@ -51,7 +52,6 @@ export const Routes = {
         lists_detail: "/dashboard/lists/:uuid",
         lists_detail_tab_query: "tab",
         admin_controls: "/dashboard/admin",
-        admin_batch_jobs: "/dashboard/admin/batch-jobs",
         admin_system_status: "/dashboard/admin/system-status",
     },
 };

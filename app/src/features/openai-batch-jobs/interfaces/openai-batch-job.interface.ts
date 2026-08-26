@@ -18,6 +18,7 @@ export interface OpenAiBatchJob {
     id: string;
     batch_id: string;
     organisation_uuid: string;
+    user_uuid: string | null;
     type: OpenAiBatchJobType;
     status: OpenAiBatchStatus;
     total_requests: number;
@@ -31,6 +32,7 @@ export interface OpenAiBatchJob {
     created_at: string;
     updated_at: string;
     organisation: { uuid: string; name: string };
+    user: { uuid: string; email: string; full_name: string | null } | null;
 }
 
 export interface ListBatchJobsQuery {

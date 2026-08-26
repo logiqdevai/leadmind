@@ -166,6 +166,7 @@ export class ContactAiService {
     async submitBatchScore(
         organisation_uuid: string,
         plan: ContactBatchScoringItem[],
+        user_uuid?: string | null,
     ): Promise<{ batch_id: string; queued: number }> {
         const allInstrUuids = [...new Set(plan.flatMap((p) => p.instruction_uuids))];
         const contactUuids = plan.map((p) => p.contact_uuid);
@@ -223,6 +224,7 @@ export class ContactAiService {
             data: {
                 batch_id: result.batch_id,
                 organisation_uuid,
+                user_uuid: user_uuid ?? null,
                 type: OpenAiBatchJobType.CONTACT_SCORE,
                 status: OpenAiBatchStatus.IN_PROGRESS,
                 total_requests: requests.length,
@@ -232,6 +234,7 @@ export class ContactAiService {
         });
         await this.bulkJobsService.createOpenAiMirror({
             organisation_uuid,
+            created_by_user_uuid: user_uuid,
             batch_id: result.batch_id,
             title: `OpenAI batch score (${requests.length})`,
             total_requests: requests.length,

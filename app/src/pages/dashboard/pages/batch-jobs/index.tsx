@@ -99,7 +99,7 @@ function FilterSelect({
     );
 }
 
-export default function AdminBatchJobsPage() {
+export default function BatchJobsPage() {
     const [searchParams, setSearchParams] = useSearchParams();
 
     const page = Number(searchParams.get("page") ?? 1);
@@ -146,7 +146,7 @@ export default function AdminBatchJobsPage() {
                             Batch jobs
                         </h1>
                         <p className="text-xs text-muted mt-0.5">
-                            {data?.total ?? "—"} OpenAI Batch API jobs · super-admin view
+                            {data?.total ?? "—"} OpenAI Batch API jobs
                         </p>
                     </div>
                 </div>
@@ -186,6 +186,7 @@ export default function AdminBatchJobsPage() {
                                 <Table.Column id="requests">Requests</Table.Column>
                                 <Table.Column id="duration">Duration</Table.Column>
                                 <Table.Column id="organisation">Organisation</Table.Column>
+                                <Table.Column id="started_by">Started by</Table.Column>
                                 <Table.Column id="expires">Expires</Table.Column>
                                 <Table.Column id="created">Created</Table.Column>
                             </Table.Header>
@@ -201,7 +202,7 @@ export default function AdminBatchJobsPage() {
                                 {isLoading
                                     ? Array.from({ length: 5 }).map((_, i) => (
                                           <Table.Row key={`sk-${i}`} id={`sk-${i}`}>
-                                              {Array.from({ length: 8 }).map((__, j) => (
+                                              {Array.from({ length: 9 }).map((__, j) => (
                                                   <Table.Cell key={j}>
                                                       <div className="h-4 w-3/4 rounded bg-surface-secondary animate-pulse" />
                                                   </Table.Cell>
@@ -257,6 +258,11 @@ export default function AdminBatchJobsPage() {
                                               <Table.Cell>
                                                   <span className="text-xs text-muted">
                                                       {job.organisation?.name ?? "—"}
+                                                  </span>
+                                              </Table.Cell>
+                                              <Table.Cell>
+                                                  <span className="text-xs text-muted truncate max-w-[160px] block">
+                                                      {job.user?.full_name || job.user?.email || "—"}
                                                   </span>
                                               </Table.Cell>
                                               <Table.Cell>

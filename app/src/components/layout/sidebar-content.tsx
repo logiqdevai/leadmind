@@ -63,7 +63,6 @@ const navGroups: NavGroup[] = [
       { label: "Contacts", icon: Users, href: Routes.dashboard.contacts, end: false },
       { label: "Lists", icon: List, href: Routes.dashboard.lists, end: false },
       { label: "Reminders", icon: Bell, href: Routes.dashboard.reminders, end: false },
-      { label: "Jobs", icon: ListTodo, href: Routes.dashboard.jobs, end: false },
       { label: "Goals", icon: Trophy, href: Routes.dashboard.goals, end: false },
       { label: "Forms", icon: ClipboardList, href: Routes.dashboard.forms, end: false },
     ],
@@ -86,8 +85,10 @@ const navGroups: NavGroup[] = [
     ],
   },
   {
-    label: "Email Health",
+    label: "Monitoring",
     items: [
+      { label: "Jobs", icon: ListTodo, href: Routes.dashboard.jobs, end: false },
+      { label: "Batch Jobs", icon: Layers, href: Routes.dashboard.batch_jobs, end: false },
       { label: "Deliverability", icon: Gauge, href: Routes.dashboard.mail_tester, end: false },
       { label: "Domain Health", icon: Shield, href: Routes.dashboard.mxtoolbox, end: false },
     ],
@@ -102,7 +103,6 @@ const navGroups: NavGroup[] = [
 
 const adminSubItems: NavItemConfig[] = [
   { label: "Controls", icon: Wrench, href: Routes.dashboard.admin_controls, end: true },
-  { label: "Batch Jobs", icon: Layers, href: Routes.dashboard.admin_batch_jobs, end: false },
   { label: "System Status", icon: Activity, href: Routes.dashboard.admin_system_status, end: false },
 ];
 

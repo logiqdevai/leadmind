@@ -69,7 +69,10 @@ function RowActions({ list }: { list: ContactList }) {
                 cancelLabel="Cancel"
                 variant="danger"
                 isPending={del.isPending}
-                onConfirm={() => del.mutate(list.uuid, { onSuccess: () => setDeleteOpen(false) })}
+                onConfirm={async () => {
+                    await del.mutateAsync(list.uuid);
+                    setDeleteOpen(false);
+                }}
             />
         </div>
     );

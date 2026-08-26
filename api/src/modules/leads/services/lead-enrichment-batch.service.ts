@@ -65,6 +65,7 @@ export class LeadEnrichmentBatchService {
         organisation_uuid: string,
         leadUuids: string[],
         sources?: EnrichmentSource[],
+        user_uuid?: string | null,
     ): Promise<{ batch_id: string; queued: number; gemi_only?: boolean }> {
         const enrichment_sources = resolveLeadEnrichmentSources(sources);
         const leads = await this.prisma.lead.findMany({
@@ -121,6 +122,7 @@ export class LeadEnrichmentBatchService {
             data: {
                 batch_id: result.batch_id,
                 organisation_uuid,
+                user_uuid: user_uuid ?? null,
                 type: OpenAiBatchJobType.LEAD_ENRICH,
                 status: OpenAiBatchStatus.IN_PROGRESS,
                 total_requests: requests.length,
@@ -132,6 +134,7 @@ export class LeadEnrichmentBatchService {
 
         await this.bulkJobsService.createOpenAiMirror({
             organisation_uuid,
+            created_by_user_uuid: user_uuid,
             batch_id: result.batch_id,
             title: `OpenAI batch lead enrich (${requests.length})`,
             total_requests: requests.length,
@@ -253,6 +256,7 @@ export class LeadEnrichmentBatchService {
                 [...leadsForCombined],
                 context,
                 batchId,
+                job.user_uuid,
             );
         } else if (results.length > 0) {
             this.logger.warn(
@@ -278,6 +282,7 @@ export class LeadEnrichmentBatchService {
         leadUuids: string[],
         parentContext: LeadEnrichmentBatchContext,
         parentBatchId: string,
+        user_uuid?: string | null,
     ): Promise<void> {
         if (!(await this.aiConfig.isOpenAiConfigured(organisation_uuid))) {
             for (const leadUuid of leadUuids) {
@@ -330,6 +335,7 @@ export class LeadEnrichmentBatchService {
             data: {
                 batch_id: result.batch_id,
                 organisation_uuid,
+                user_uuid: user_uuid ?? null,
                 type: OpenAiBatchJobType.LEAD_ENRICH,
                 status: OpenAiBatchStatus.IN_PROGRESS,
                 total_requests: requests.length,
@@ -341,6 +347,7 @@ export class LeadEnrichmentBatchService {
 
         await this.bulkJobsService.createOpenAiMirror({
             organisation_uuid,
+            created_by_user_uuid: user_uuid,
             batch_id: result.batch_id,
             title: `OpenAI batch lead summaries (${requests.length})`,
             total_requests: requests.length,

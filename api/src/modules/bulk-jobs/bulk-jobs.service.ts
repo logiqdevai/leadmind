@@ -662,9 +662,11 @@ export class BulkJobsService {
         batch_id: string;
         title: string;
         total_requests: number;
+        created_by_user_uuid?: string | null;
     }) {
         return this.create({
             organisation_uuid: input.organisation_uuid,
+            created_by_user_uuid: input.created_by_user_uuid ?? null,
             title: input.title,
             type: BulkJobType.OPENAI_BATCH,
             status: BulkJobStatus.RUNNING,

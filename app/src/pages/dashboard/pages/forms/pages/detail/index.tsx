@@ -26,14 +26,11 @@ export default function FormDetailPage() {
     const [editOpen, setEditOpen] = useState(false);
     const [deleteOpen, setDeleteOpen] = useState(false);
 
-    const handleDelete = () => {
+    const handleDelete = async () => {
         if (!form) return;
-        deleteForm.mutate(form.uuid, {
-            onSuccess: () => {
-                setDeleteOpen(false);
-                navigate(Routes.dashboard.forms);
-            },
-        });
+        await deleteForm.mutateAsync(form.uuid);
+        setDeleteOpen(false);
+        navigate(Routes.dashboard.forms);
     };
 
     return (

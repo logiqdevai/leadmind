@@ -109,6 +109,7 @@ export class LeadsService {
         organisation_uuid: string,
         uuid: string,
         dto: EnrichLeadDto,
+        user_uuid?: string | null,
     ): Promise<
         | { jobId: string; is_batch: false }
         | { batch_id: string; queued: number; is_batch: true }
@@ -122,6 +123,7 @@ export class LeadsService {
                 organisation_uuid,
                 [uuid],
                 enrichment_sources,
+                user_uuid,
             );
             if (result.gemi_only) {
                 return { jobId: '', queued: 0, is_batch: true, gemi_only: true };
@@ -131,6 +133,7 @@ export class LeadsService {
 
         const bulkJob = await this.bulkJobsService.create({
             organisation_uuid,
+            created_by_user_uuid: user_uuid,
             title: `Enrich lead (${uuid})`,
             type: BulkJobType.LEAD_ENRICH,
             status: BulkJobStatus.QUEUED,
@@ -153,6 +156,7 @@ export class LeadsService {
     async triggerBulkEnrich(
         organisation_uuid: string,
         dto: BulkEnrichLeadsDto,
+        user_uuid?: string | null,
     ): Promise<
         | { jobIds: string[]; queued: number; is_batch: false }
         | { batch_id: string; queued: number; is_batch: true }
@@ -177,6 +181,7 @@ export class LeadsService {
                     organisation_uuid,
                     unique,
                     enrichment_sources,
+                    user_uuid,
                 );
                 if (result.gemi_only) {
                     return { jobIds: [], queued: 0, is_batch: true, gemi_only: true };
@@ -186,6 +191,7 @@ export class LeadsService {
 
             const bulkJob = await this.bulkJobsService.create({
                 organisation_uuid,
+                created_by_user_uuid: user_uuid,
                 title: `Prepare lead batch enrich (${unique.length})`,
                 type: BulkJobType.LEAD_ENRICH,
                 status: BulkJobStatus.QUEUED,
@@ -207,6 +213,7 @@ export class LeadsService {
 
         const bulkJob = await this.bulkJobsService.create({
             organisation_uuid,
+            created_by_user_uuid: user_uuid,
             title: `Enrich leads (${unique.length})`,
             type: BulkJobType.LEAD_ENRICH,
             status: BulkJobStatus.QUEUED,

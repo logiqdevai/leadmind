@@ -140,9 +140,10 @@ function ReminderRow({ reminder }: { reminder: Reminder }) {
                 cancelLabel="Cancel"
                 variant="danger"
                 isPending={del.isPending}
-                onConfirm={() =>
-                    del.mutate(reminder.uuid, { onSuccess: () => setDeleteOpen(false) })
-                }
+                onConfirm={async () => {
+                    await del.mutateAsync(reminder.uuid);
+                    setDeleteOpen(false);
+                }}
             />
         </>
     );

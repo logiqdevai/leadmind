@@ -539,28 +539,20 @@ function AccountChecklist({
         return <p className="text-xs text-muted">No unassigned, ready email accounts found.</p>;
     }
 
+    const allSelected = accounts.every((row) => selectedKeys.has(rowKey(row)));
+
     return (
         <div className="space-y-1.5">
             <div className="flex items-center justify-between">
                 <Label>Apply to accounts</Label>
-                <div className="flex items-center gap-2">
-                    <button
-                        type="button"
-                        className="text-xs font-medium text-primary hover:underline disabled:opacity-50"
-                        onClick={onSelectAll}
-                        disabled={disabled}
-                    >
-                        Select all
-                    </button>
-                    <button
-                        type="button"
-                        className="text-xs font-medium text-muted hover:underline disabled:opacity-50"
-                        onClick={onDeselectAll}
-                        disabled={disabled}
-                    >
-                        Deselect all
-                    </button>
-                </div>
+                <button
+                    type="button"
+                    className="text-xs font-medium text-primary hover:underline disabled:opacity-50"
+                    onClick={allSelected ? onDeselectAll : onSelectAll}
+                    disabled={disabled}
+                >
+                    {allSelected ? "Deselect all" : "Select all"}
+                </button>
             </div>
             <div className="space-y-2 max-h-64 overflow-y-auto pr-1">
                 {accounts.map((row) => {
@@ -611,28 +603,21 @@ function CopySourceChecklist({
         return <p className="text-xs text-muted">This campaign has no sending integrations configured.</p>;
     }
 
+    const selectableRows = rows.filter((ci) => !assignedAccountUuids.has(ci.integration_account_uuid));
+    const allSelected = selectableRows.length > 0 && selectableRows.every((ci) => selectedUuids.has(ci.uuid));
+
     return (
         <div className="space-y-1.5">
             <div className="flex items-center justify-between">
                 <Label>Accounts to copy</Label>
-                <div className="flex items-center gap-2">
-                    <button
-                        type="button"
-                        className="text-xs font-medium text-primary hover:underline disabled:opacity-50"
-                        onClick={onSelectAll}
-                        disabled={disabled}
-                    >
-                        Select all
-                    </button>
-                    <button
-                        type="button"
-                        className="text-xs font-medium text-muted hover:underline disabled:opacity-50"
-                        onClick={onDeselectAll}
-                        disabled={disabled}
-                    >
-                        Deselect all
-                    </button>
-                </div>
+                <button
+                    type="button"
+                    className="text-xs font-medium text-primary hover:underline disabled:opacity-50"
+                    onClick={allSelected ? onDeselectAll : onSelectAll}
+                    disabled={disabled || selectableRows.length === 0}
+                >
+                    {allSelected ? "Deselect all" : "Select all"}
+                </button>
             </div>
             <div className="space-y-2 max-h-72 overflow-y-auto pr-1">
                 {rows.map((ci) => {

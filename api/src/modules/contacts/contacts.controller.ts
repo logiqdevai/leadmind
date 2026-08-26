@@ -126,9 +126,10 @@ export class ContactsController {
     @ApiResponse({ status: 404 })
     triggerBulkScore(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
+        @CurrentUser('uuid') user_uuid: string,
         @Body() dto: BulkTriggerScoreDto,
     ) {
-        return this.contactsService.triggerBulkScore(organisation_uuid, dto);
+        return this.contactsService.triggerBulkScore(organisation_uuid, dto, user_uuid);
     }
 
     @ActivityLog({ entityType: ActivityEntityType.CONTACT, action: ActivityAction.EMAIL_SCRAPED, entityUuidFrom: 'none' })

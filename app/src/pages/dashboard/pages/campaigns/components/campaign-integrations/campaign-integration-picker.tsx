@@ -119,7 +119,7 @@ export function CampaignIntegrationPicker({
                             disabled={disabled || updateStatus.isPending || removeMutation.isPending}
                             isRemoving={removeMutation.isPending}
                             onToggleStatus={(status) => updateStatus.mutate({ ciUuid: ci.uuid, payload: { status } })}
-                            onRemove={() => removeMutation.mutate(ci.uuid)}
+                            onRemove={() => removeMutation.mutateAsync(ci.uuid)}
                         />
                     ))}
                 </div>

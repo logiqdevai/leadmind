@@ -24,15 +24,16 @@ model User {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  memberships            OrganisationMember[]
-  invitations_sent       OrganisationInvitation[] @relation("InvitationInvitedBy")
-  form_completions       FormCompletion[]         @relation("CompletedByUser")
-  outreach_messages_sent OutreachMessage[]        @relation("OutreachMessageSentBy")
-  activity_logs          ActivityLog[]            @relation("ActivityLogActor")
-  messaging_goals        MessagingGoal[]
-  goal_achievements      GoalAchievement[]
-  goal_personal_bests    GoalPersonalBest[]
-  bulk_jobs_created      BulkJob[]                @relation("BulkJobCreatedBy")
+  memberships               OrganisationMember[]
+  invitations_sent          OrganisationInvitation[] @relation("InvitationInvitedBy")
+  form_completions          FormCompletion[]         @relation("CompletedByUser")
+  outreach_messages_sent    OutreachMessage[]        @relation("OutreachMessageSentBy")
+  activity_logs             ActivityLog[]            @relation("ActivityLogActor")
+  messaging_goals           MessagingGoal[]
+  goal_achievements         GoalAchievement[]
+  goal_personal_bests       GoalPersonalBest[]
+  bulk_jobs_created         BulkJob[]                @relation("BulkJobCreatedBy")
+  openai_batch_jobs_created OpenAiBatchJob[]         @relation("OpenAiBatchJobCreatedBy")
 
   @@index([email])
   @@index([phone])
@@ -1058,6 +1059,7 @@ model OpenAiBatchJob {
   id                 String             @id @default(uuid())
   batch_id           String             @unique
   organisation_uuid  String
+  user_uuid          String?
   type               OpenAiBatchJobType
   status             OpenAiBatchStatus  @default(IN_PROGRESS)
   total_requests     Int                @default(0)
@@ -1072,7 +1074,9 @@ model OpenAiBatchJob {
   created_at         DateTime           @default(now())
   updated_at         DateTime           @updatedAt
   organisation       Organisation       @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  user               User?              @relation("OpenAiBatchJobCreatedBy", fields: [user_uuid], references: [uuid], onDelete: SetNull)
 
+  @@index([organisation_uuid, user_uuid])
   @@map("openai_batch_jobs")
 }
 

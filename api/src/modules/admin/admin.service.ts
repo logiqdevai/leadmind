@@ -117,6 +117,7 @@ export class AdminService {
                 take: limit,
                 include: {
                     organisation: { select: { uuid: true, name: true } },
+                    user: { select: { uuid: true, email: true, full_name: true } },
                 },
             }),
             this.prisma.openAiBatchJob.count({ where }),
@@ -129,7 +130,10 @@ export class AdminService {
         await this.openAiBatchDispatchService.processBatchCompletion(batchId);
         return this.prisma.openAiBatchJob.findUnique({
             where: { batch_id: batchId },
-            include: { organisation: { select: { uuid: true, name: true } } },
+            include: {
+                organisation: { select: { uuid: true, name: true } },
+                user: { select: { uuid: true, email: true, full_name: true } },
+            },
         });
     }
 

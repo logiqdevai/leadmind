@@ -1061,6 +1061,7 @@ export class ContactsService {
     async triggerBulkScore(
         organisation_uuid: string,
         dto: BulkTriggerScoreDto,
+        user_uuid?: string | null,
     ): Promise<
         | { jobIds: string[]; queued: number; skipped_contacts: number; is_batch: false }
         | { batch_id: string; queued: number; skipped_contacts: number; is_batch: true }
@@ -1094,6 +1095,7 @@ export class ContactsService {
             ? null
             : await this.bulkJobsService.create({
                   organisation_uuid,
+                  created_by_user_uuid: user_uuid,
                   title: `Score contacts (${contacts.length})`,
                   type: BulkJobType.CONTACT_SCORE,
                   status: BulkJobStatus.QUEUED,
@@ -1130,7 +1132,11 @@ export class ContactsService {
                     'No contacts to score with the chosen scoring rules.',
                 );
             }
-            const { batch_id, queued } = await this.contactAiService.submitBatchScore(organisation_uuid, batchPlan);
+            const { batch_id, queued } = await this.contactAiService.submitBatchScore(
+                organisation_uuid,
+                batchPlan,
+                user_uuid,
+            );
             return { batch_id, queued, skipped_contacts, is_batch: true as const };
         }
 

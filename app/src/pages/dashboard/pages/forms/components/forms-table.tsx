@@ -73,7 +73,10 @@ function RowActions({ form }: { form: Form }) {
                 cancelLabel="Cancel"
                 variant="danger"
                 isPending={del.isPending}
-                onConfirm={() => del.mutate(form.uuid, { onSuccess: () => setDeleteOpen(false) })}
+                onConfirm={async () => {
+                    await del.mutateAsync(form.uuid);
+                    setDeleteOpen(false);
+                }}
             />
         </div>
     );
