@@ -73,6 +73,7 @@ export class OrganisationsService {
             slug: m.organisation.slug,
             timezone: m.organisation.timezone,
             reply_to_email: m.organisation.reply_to_email,
+            reply_forward_email: m.organisation.reply_forward_email,
             role: m.role,
             created_at: m.organisation.created_at,
             updated_at: m.organisation.updated_at,
@@ -127,6 +128,7 @@ export class OrganisationsService {
             slug?: string;
             timezone?: string;
             reply_to_email?: string | null;
+            reply_forward_email?: string | null;
         } = {};
         if (dto.name) {
             data.name = dto.name;
@@ -137,6 +139,9 @@ export class OrganisationsService {
         }
         if (dto.reply_to_email !== undefined) {
             data.reply_to_email = dto.reply_to_email?.trim() || null;
+        }
+        if (dto.reply_forward_email !== undefined) {
+            data.reply_forward_email = dto.reply_forward_email?.trim() || null;
         }
 
         return this.prisma.organisation.update({

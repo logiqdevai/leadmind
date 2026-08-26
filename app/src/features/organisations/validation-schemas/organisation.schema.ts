@@ -31,6 +31,10 @@ export const updateOrganisationSchema = z.object({
         z.literal(""),
         z.string().trim().email("Valid email required").max(320),
     ]),
+    reply_forward_email: z.union([
+        z.literal(""),
+        z.string().trim().email("Valid email required").max(320),
+    ]),
 });
 
 export type UpdateOrganisationFormData = z.infer<typeof updateOrganisationSchema>;

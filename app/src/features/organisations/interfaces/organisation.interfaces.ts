@@ -21,6 +21,7 @@ export interface OrganisationSummary {
     slug: string;
     timezone: string;
     reply_to_email: string | null;
+    reply_forward_email: string | null;
     role: OrganisationRole;
     created_at: string;
     updated_at: string;
@@ -101,6 +102,7 @@ export interface UpdateOrganisationDto {
     name?: string;
     timezone?: string;
     reply_to_email?: string | null;
+    reply_forward_email?: string | null;
 }
 
 export interface CreateInvitationDto {

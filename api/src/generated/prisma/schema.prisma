@@ -42,14 +42,15 @@ model User {
 }
 
 model Organisation {
-  id             Int      @id @default(autoincrement())
-  uuid           String   @unique @default(uuid())
-  name           String
-  slug           String   @unique
-  timezone       String   @default("UTC")
-  reply_to_email String?  @unique
-  created_at     DateTime @default(now())
-  updated_at     DateTime @updatedAt
+  id                  Int      @id @default(autoincrement())
+  uuid                String   @unique @default(uuid())
+  name                String
+  slug                String   @unique
+  timezone            String   @default("UTC")
+  reply_to_email      String?  @unique
+  reply_forward_email String?
+  created_at          DateTime @default(now())
+  updated_at          DateTime @updatedAt
 
   members                   OrganisationMember[]
   invitations               OrganisationInvitation[]

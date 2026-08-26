@@ -44,6 +44,20 @@ export class CreateOrganisationDto {
     reply_to_email?: string | null;
 
     @ApiPropertyOptional({
+        example: 'info@acme.com',
+        description: 'Mailbox that gets a forwarded copy of every captured reply',
+        nullable: true,
+    })
+    @IsOptional()
+    @Transform(({ value }) =>
+        typeof value === 'string' && value.trim() === '' ? null : value,
+    )
+    @ValidateIf((_, value) => value !== null && value !== undefined)
+    @IsEmail()
+    @MaxLength(320)
+    reply_forward_email?: string | null;
+
+    @ApiPropertyOptional({
         description: 'Existing organisation (that the requester belongs to) to copy data from',
     })
     @IsOptional()

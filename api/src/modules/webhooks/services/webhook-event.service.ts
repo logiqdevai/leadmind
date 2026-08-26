@@ -11,7 +11,9 @@ import {
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { ResendAdapter } from '@/integrations/notifications/resend/resend/resend.adapter';
 import { ContactsService } from '@/modules/contacts/contacts.service';
+import { MailService } from '@/modules/internal/mail/mail.service';
 import { CampaignMessageSendService } from '@/modules/marketing-campaigns/services/campaign-message-send.service';
+import { EmailConfig } from '@/shared/config/email';
 import { sanitizeEmailHtml } from '@/shared/utils/sanitize-html.util';
 
 export interface ReceivedEmailContent {
@@ -60,6 +62,7 @@ export class WebhookEventService {
         private readonly resendAdapter: ResendAdapter,
         private readonly campaignSendService: CampaignMessageSendService,
         private readonly contactsService: ContactsService,
+        private readonly mailService: MailService,
     ) { }
 
     async resolveOutboundMessageIdFromReceived(
@@ -369,6 +372,45 @@ export class WebhookEventService {
 
         if (message.campaign_uuid) {
             await this.campaignSendService.checkCompletion(message.campaign_uuid);
+        }
+
+        if (event.kind === 'replied') {
+            await this.forwardReplyIfConfigured(message.organisation_uuid, event);
+        }
+    }
+
+    private async forwardReplyIfConfigured(
+        organisation_uuid: string,
+        event: Extract<WebhookEvent, { kind: 'replied' }>,
+    ): Promise<void> {
+        const organisation = await this.prisma.organisation.findUnique({
+            where: { uuid: organisation_uuid },
+            select: { name: true, reply_forward_email: true },
+        });
+        const forwardTo = organisation?.reply_forward_email?.trim();
+        if (!forwardTo) {
+            return;
+        }
+
+        const from =
+            typeof event.metadata?.from === 'string' ? event.metadata.from : 'a contact';
+        const subject = event.reply?.subject ?? 'New reply';
+        const text = event.reply?.text ?? '';
+        const html = event.reply?.html;
+
+        try {
+            await this.mailService.create({
+                to: forwardTo,
+                from: `${organisation?.name ?? 'Leadmind'} <${EmailConfig.email_addresses.confirmation}>`,
+                subject: `Fwd: ${subject}`,
+                text: `Reply from ${from}:\n\n${text}`,
+                html: html ? `<p>Reply from ${from}:</p>${html}` : undefined,
+                replyTo: from,
+            });
+        } catch (error) {
+            this.logger.error(
+                `Failed to forward reply to ${forwardTo}: ${error instanceof Error ? error.message : error}`,
+            );
         }
     }
 

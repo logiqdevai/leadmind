@@ -102,6 +102,7 @@ const SettingsOrganisationPage: FC = () => {
             name: currentOrganisation?.name ?? organisationName ?? "",
             timezone: currentOrganisation?.timezone ?? "UTC",
             reply_to_email: currentOrganisation?.reply_to_email ?? "",
+            reply_forward_email: currentOrganisation?.reply_forward_email ?? "",
         },
     });
 
@@ -132,6 +133,7 @@ const SettingsOrganisationPage: FC = () => {
             name: data.name,
             timezone: data.timezone,
             reply_to_email: data.reply_to_email?.trim() || null,
+            reply_forward_email: data.reply_forward_email?.trim() || null,
         });
     });
 
@@ -320,6 +322,25 @@ const SettingsOrganisationPage: FC = () => {
                     {settingsForm.formState.errors.reply_to_email ? (
                         <p className="text-xs text-danger">
                             {settingsForm.formState.errors.reply_to_email.message}
+                        </p>
+                    ) : null}
+                </div>
+                <div className="space-y-1.5">
+                    <Label>Forward replies to</Label>
+                    <Input
+                        {...settingsForm.register("reply_forward_email")}
+                        type="email"
+                        disabled={!canEdit || updateOrganisation.isPending}
+                        placeholder="info@yourdomain.com"
+                        fullWidth
+                    />
+                    <p className="text-xs text-muted">
+                        Optional. Sends a copy of every captured reply to this mailbox,
+                        so you can also see it outside the app.
+                    </p>
+                    {settingsForm.formState.errors.reply_forward_email ? (
+                        <p className="text-xs text-danger">
+                            {settingsForm.formState.errors.reply_forward_email.message}
                         </p>
                     ) : null}
                 </div>

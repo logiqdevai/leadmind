@@ -79,6 +79,9 @@ describe('WebhookEventService', () => {
                 }),
                 update: jest.fn().mockResolvedValue({}),
             },
+            organisation: {
+                findUnique: jest.fn().mockResolvedValue(null),
+            },
             $transaction: jest.fn(async (ops: unknown[]) => {
                 for (const op of ops) {
                     await op;
@@ -109,6 +112,9 @@ describe('WebhookEventService', () => {
             ]),
             syncContactSearchIndex: jest.fn().mockResolvedValue(undefined),
         };
+        const mailService = {
+            create: jest.fn().mockResolvedValue(undefined),
+        };
 
         return {
             service: new WebhookEventService(
@@ -116,11 +122,13 @@ describe('WebhookEventService', () => {
                 resendAdapter as any,
                 campaignSendService as any,
                 contactsService as any,
+                mailService as any,
             ),
             prisma,
             resendAdapter,
             campaignSendService,
             contactsService,
+            mailService,
         };
     }
 

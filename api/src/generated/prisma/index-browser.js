@@ -139,6 +139,7 @@ exports.Prisma.OrganisationScalarFieldEnum = {
   slug: 'slug',
   timezone: 'timezone',
   reply_to_email: 'reply_to_email',
+  reply_forward_email: 'reply_forward_email',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };

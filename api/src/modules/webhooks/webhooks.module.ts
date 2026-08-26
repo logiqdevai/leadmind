@@ -5,6 +5,7 @@ import { AiIntegrationModule } from '@/integrations/ai/ai.module';
 import { ResendModule } from '@/integrations/notifications/resend/resend.module';
 import { ScrapioModule } from '@/integrations/scrapio/scrapio.module';
 import { IntegrationsModule } from '@/modules/integrations/integrations.module';
+import { MailModule } from '@/modules/internal/mail/mail.module';
 import { MarketingCampaignsModule } from '@/modules/marketing-campaigns/marketing-campaigns.module';
 import { ContactsModule } from '@/modules/contacts/contacts.module';
 import { LeadsModule } from '@/modules/leads/leads.module';
@@ -31,6 +32,7 @@ import { OpenAiBatchDispatchService } from './services/openai-batch-dispatch.ser
   imports: [
     PrismaModule,
     IntegrationsModule,
+    MailModule,
     ResendModule,
     ScrapioModule,
     AiIntegrationModule,
