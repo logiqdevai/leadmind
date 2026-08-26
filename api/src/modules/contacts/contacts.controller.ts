@@ -56,7 +56,7 @@ export class ContactsController {
     @Post()
     @ApiOperation({
         summary:
-            'Create a contact (creates a MANUAL Lead behind the scenes). If email already exists for this user, links the selected filter to that contact and returns it.',
+            'Create a contact (creates a MANUAL Lead behind the scenes). If email already exists for this user, updates that contact and returns it.',
     })
     @ApiResponse({ status: 201 })
     create(@CurrentUser('organisation_uuid') organisation_uuid: string, @Body() dto: CreateContactDto) {

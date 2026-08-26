@@ -124,6 +124,7 @@ export function useCreateContact() {
         mutationFn: (payload: CreateContactPayload) => createContact(payload),
         onSuccess: () => {
             qc.invalidateQueries({ queryKey: contactsQueryKeys.all });
+            qc.invalidateQueries({ queryKey: ["contact-lists"] });
             toast({ title: "Contact saved", duration: 1500 });
         },
         onError: (error: Error) => {

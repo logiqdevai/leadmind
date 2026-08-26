@@ -383,7 +383,8 @@ export interface AiDraftMessageResult {
 }
 
 export interface CreateContactPayload {
-    filter_uuid: string;
+    filter_uuid?: string;
+    list_uuids?: string[];
     name?: string;
     email?: string;
     phone?: string;

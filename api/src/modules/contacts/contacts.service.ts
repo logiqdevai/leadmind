@@ -119,11 +119,14 @@ export class ContactsService {
     ) { }
 
     async create(organisation_uuid: string, dto: CreateContactDto) {
-        const filter = await this.prisma.filter.findFirst({
-            where: { uuid: dto.filter_uuid, organisation_uuid },
-        });
-        if (!filter) {
-            throw new NotFoundException('Filter not found');
+        const filterUuid = dto.filter_uuid?.trim();
+        if (filterUuid) {
+            const filter = await this.prisma.filter.findFirst({
+                where: { uuid: filterUuid, organisation_uuid },
+            });
+            if (!filter) {
+                throw new NotFoundException('Filter not found');
+            }
         }
 
         const emailFields = await resolveEmailFieldsForWrite(dto.email);
@@ -131,8 +134,11 @@ export class ContactsService {
         if (emailFields) {
             const existing = await findOwnedContactByEmail(this.prisma, organisation_uuid, emailFields.email);
             if (existing) {
-                await linkContactToFilter(this.prisma, existing, dto.filter_uuid);
+                if (filterUuid) {
+                    await linkContactToFilter(this.prisma, existing, filterUuid);
+                }
                 await this.applyManualCreateExtras(organisation_uuid, existing.uuid, dto);
+                await this.addContactListMemberships(organisation_uuid, existing.uuid, dto.list_uuids ?? []);
                 await this.reindexContact(existing.uuid);
                 return this.findOne(organisation_uuid, existing.uuid);
             }
@@ -161,7 +167,7 @@ export class ContactsService {
             data: {
                 organisation_uuid,
                 lead_uuid: lead.uuid,
-                filter_uuid: dto.filter_uuid,
+                ...(filterUuid ? { filter_uuid: filterUuid } : {}),
                 status: LeadStatus.NEW,
                 notes: dto.notes,
                 ...profile,
@@ -178,7 +184,11 @@ export class ContactsService {
             },
         });
 
-        await ensureContactFilterLink(this.prisma, contact.uuid, dto.filter_uuid);
+        if (filterUuid) {
+            await ensureContactFilterLink(this.prisma, contact.uuid, filterUuid);
+        }
+
+        await this.addContactListMemberships(organisation_uuid, contact.uuid, dto.list_uuids ?? []);
 
         if (dto.notes) {
             await this.prisma.interaction.create({
@@ -616,6 +626,33 @@ export class ContactsService {
         }
         await this.reindexContact(uuid);
         return this.findOne(organisation_uuid, uuid);
+    }
+
+    private async addContactListMemberships(
+        organisation_uuid: string,
+        contact_uuid: string,
+        list_uuids: string[],
+    ): Promise<void> {
+        const unique = [...new Set(list_uuids)];
+        if (unique.length === 0) return;
+
+        const lists = await this.prisma.contactList.findMany({
+            where: { organisation_uuid, uuid: { in: unique } },
+            select: { uuid: true },
+        });
+        if (lists.length !== unique.length) {
+            const found = new Set(lists.map((l) => l.uuid));
+            const missing = unique.filter((id) => !found.has(id));
+            throw new NotFoundException(`List(s) not found: ${missing.join(', ')}`);
+        }
+
+        await this.prisma.contactListMember.createMany({
+            data: unique.map((list_uuid) => ({
+                list_uuid,
+                contact_uuid,
+            })),
+            skipDuplicates: true,
+        });
     }
 
     private async replaceContactListMemberships(

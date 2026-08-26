@@ -4,9 +4,9 @@ import { Button, Chip, FieldError, Input, Label, Modal, TextArea } from "@heroui
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { Plus, X } from "lucide-react";
+import { useContactLists } from "@/features/contact-lists/hooks/use-contact-lists";
 import { useCreateContact } from "@/features/contacts/hooks/use-contacts";
 import type { CreateContactPayload } from "@/features/contacts/interfaces/contact.interface";
-import { useFilters } from "@/features/filters/hooks/use-filters";
 import { Routes } from "@/routes/routes";
 
 interface CreateContactModalProps {
@@ -15,7 +15,6 @@ interface CreateContactModalProps {
 }
 
 const emptyForm = (): CreateContactPayload => ({
-  filter_uuid: "",
   name: "",
   email: "",
   phone: "",
@@ -28,12 +27,14 @@ const emptyForm = (): CreateContactPayload => ({
   description: "",
   tags: [],
   notes: "",
+  list_uuids: [],
 });
 
 export function CreateContactModal({ isOpen, onOpenChange }: CreateContactModalProps) {
   const navigate = useNavigate();
   const createContact = useCreateContact();
-  const { data: filters = [] } = useFilters();
+  const { data: listsPage, isLoading: listsLoading } = useContactLists({ limit: 100 }, isOpen);
+  const allLists = listsPage?.data ?? [];
 
   const [form, setForm] = useState<CreateContactPayload>(emptyForm());
   const [tagDraft, setTagDraft] = useState("");
@@ -46,16 +47,6 @@ export function CreateContactModal({ isOpen, onOpenChange }: CreateContactModalP
       setError(null);
     }
   }, [isOpen]);
-
-  useEffect(() => {
-    if (!isOpen || filters.length === 0) return;
-    setForm((prev) => {
-      if (prev.filter_uuid && filters.some((f) => f.uuid === prev.filter_uuid)) {
-        return prev;
-      }
-      return { ...prev, filter_uuid: filters[0].uuid };
-    });
-  }, [isOpen, filters]);
 
   const set = <K extends keyof CreateContactPayload>(key: K, value: CreateContactPayload[K]) => setForm((f) => ({ ...f, [key]: value }));
 
@@ -87,12 +78,7 @@ export function CreateContactModal({ isOpen, onOpenChange }: CreateContactModalP
       if (v) trimmed[k] = v;
     }
     if (form.tags && form.tags.length > 0) trimmed.tags = form.tags;
-
-    const filterUuid = form.filter_uuid?.trim() ?? "";
-    if (!filterUuid) {
-      setError(filters.length === 0 ? "Create a filter in Filters before adding a lead." : "Select a filter.");
-      return;
-    }
+    if (form.list_uuids && form.list_uuids.length > 0) trimmed.list_uuids = form.list_uuids;
 
     const hasIdentifier = !!trimmed.name || !!trimmed.email || !!trimmed.phone || !!trimmed.company;
     if (!hasIdentifier) {
@@ -101,10 +87,7 @@ export function CreateContactModal({ isOpen, onOpenChange }: CreateContactModalP
     }
 
     try {
-      const created = await createContact.mutateAsync({
-        ...trimmed,
-        filter_uuid: filterUuid,
-      } as CreateContactPayload);
+      const created = await createContact.mutateAsync(trimmed as CreateContactPayload);
       onOpenChange(false);
       navigate(Routes.dashboard.contacts_detail.replace(":uuid", created.uuid));
     } catch {
@@ -124,18 +107,24 @@ export function CreateContactModal({ isOpen, onOpenChange }: CreateContactModalP
             <Modal.Body className="min-h-0 flex-1 overflow-y-auto">
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="flex flex-col gap-1.5 sm:col-span-2">
-                  <Label>Filter</Label>
+                  <Label>List</Label>
                   <MultiSelect
                     selectionMode="single"
-                    aria-label="Filter"
-                    placeholder={filters.length === 0 ? "No filters yet" : "Select a filter"}
-                    searchPlaceholder="Search filters…"
-                    disabled={filters.length === 0}
-                    options={[...filters]
-                      .toSorted((a, b) => a.name.localeCompare(b.name))
-                      .map((f) => ({ value: f.uuid, label: f.name }))}
-                    value={form.filter_uuid ? [form.filter_uuid] : []}
-                    onChange={(next) => set("filter_uuid", next[0] ?? "")}
+                    aria-label="List"
+                    placeholder={
+                      listsLoading
+                        ? "Loading lists…"
+                        : allLists.length === 0
+                          ? "No lists yet"
+                          : "Select a list (optional)"
+                    }
+                    searchPlaceholder="Search lists…"
+                    disabled={listsLoading || allLists.length === 0}
+                    options={[...allLists]
+                      .toSorted((a, b) => a.title.localeCompare(b.title))
+                      .map((l) => ({ value: l.uuid, label: l.title }))}
+                    value={form.list_uuids?.[0] ? [form.list_uuids[0]] : []}
+                    onChange={(next) => set("list_uuids", next[0] ? [next[0]] : [])}
                   />
                 </div>
                 <div className="flex flex-col gap-1.5 sm:col-span-2">
@@ -227,7 +216,7 @@ export function CreateContactModal({ isOpen, onOpenChange }: CreateContactModalP
               </Button>
               <ActionButtonWithPending
                 type="submit"
-                isDisabled={createContact.isPending || filters.length === 0}
+                isDisabled={createContact.isPending}
                 isPending={createContact.isPending}
                 idleLeading={<Plus className="size-4" />}
               >
