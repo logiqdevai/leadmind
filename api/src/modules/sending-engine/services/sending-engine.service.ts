@@ -1,5 +1,5 @@
 import { InjectQueue } from '@nestjs/bullmq';
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Queue } from 'bullmq';
 import {
   CampaignContactStatus,
@@ -39,8 +39,6 @@ interface ClaimedSequenceMessage {
  */
 @Injectable()
 export class SendingEngineService {
-  private readonly logger = new Logger(SendingEngineService.name);
-
   constructor(
     private readonly prisma: PrismaService,
     private readonly sendingCapacityService: SendingCapacityService,
@@ -246,9 +244,6 @@ export class SendingEngineService {
       return true;
     } catch (error) {
       if (error instanceof SendingCapacityDeniedError) {
-        this.logger.debug(
-          `Reservation denied campaign_integration=${campaign_integration_uuid} message=${message_uuid} reason=${error.reason}`,
-        );
         return false;
       }
       throw error;

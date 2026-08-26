@@ -1,6 +1,6 @@
 import { InjectQueue } from '@nestjs/bullmq';
 import { BullModule } from '@nestjs/bullmq';
-import { Logger, Module, OnModuleInit } from '@nestjs/common';
+import { Module, OnModuleInit } from '@nestjs/common';
 import { Queue } from 'bullmq';
 import { PrismaModule } from '@/core/databases/prisma/prisma.module';
 import {
@@ -23,8 +23,6 @@ import { SendingEngineService } from './services/sending-engine.service';
   exports: [SendingEngineService],
 })
 export class SendingEngineModule implements OnModuleInit {
-  private readonly logger = new Logger(SendingEngineModule.name);
-
   constructor(
     @InjectQueue(SENDING_ENGINE_TICK_QUEUE)
     private readonly tickQueue: Queue,
@@ -41,9 +39,6 @@ export class SendingEngineModule implements OnModuleInit {
         removeOnComplete: 10,
         removeOnFail: 10,
       },
-    );
-    this.logger.log(
-      `Sending engine tick scheduled every ${SENDING_ENGINE_TICK_INTERVAL_MS}ms`,
     );
   }
 }
