@@ -19,6 +19,10 @@ import { ListContactListsDto } from './dto/list-contact-lists.dto';
 import { AddListContactsDto } from './dto/add-list-contacts.dto';
 import { BulkAddListContactsDto } from './dto/bulk-add-list-contacts.dto';
 import { BulkRemoveListContactsDto } from './dto/bulk-remove-list-contacts.dto';
+import {
+    FilterListContactsByScoreDto,
+    MoveListContactsBelowScoreDto,
+} from './dto/filter-list-contacts-by-score.dto';
 import { ListContactListMembersDto } from './dto/list-contact-list-members.dto';
 import { ContactAudienceStatsService } from '@/modules/contact-audience-stats/contact-audience-stats.service';
 import { ContactAudienceAnalysisService } from '@/modules/contact-audience-stats/contact-audience-analysis.service';
@@ -112,12 +116,33 @@ export class ContactListsController {
 
     @ActivityLog({ entityType: ActivityEntityType.CONTACT_LIST, action: ActivityAction.CONTACTS_REMOVED, entityUuidFrom: 'params.uuid' })
     @Post(':uuid/contacts/remove-below-score')
-    @ApiOperation({ summary: 'Remove contacts from a list whose current score is below 6' })
+    @ApiOperation({ summary: 'Remove contacts from a list whose current score is below the given threshold' })
     removeContactsBelowScore(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') uuid: string,
+        @Body() dto: FilterListContactsByScoreDto,
     ) {
-        return this.contactListsService.removeContactsBelowScore(organisation_uuid, uuid);
+        return this.contactListsService.removeContactsBelowScore(
+            organisation_uuid,
+            uuid,
+            dto.min_score ?? 6,
+        );
+    }
+
+    @ActivityLog({ entityType: ActivityEntityType.CONTACT_LIST, action: ActivityAction.CONTACTS_REMOVED, entityUuidFrom: 'params.uuid' })
+    @Post(':uuid/contacts/move-below-score')
+    @ApiOperation({ summary: 'Move contacts whose current score is below the given threshold to another list' })
+    moveContactsBelowScore(
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
+        @Param('uuid') uuid: string,
+        @Body() dto: MoveListContactsBelowScoreDto,
+    ) {
+        return this.contactListsService.moveContactsBelowScore(
+            organisation_uuid,
+            uuid,
+            dto.target_list_uuid,
+            dto.min_score ?? 6,
+        );
     }
 
     @ActivityLog({ entityType: ActivityEntityType.CONTACT_LIST, action: ActivityAction.CONTACTS_REMOVED, entityUuidFrom: 'params.uuid' })

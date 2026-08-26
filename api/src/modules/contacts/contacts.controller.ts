@@ -115,6 +115,12 @@ export class ContactsController {
         @CurrentUser('uuid') user_uuid: string,
         @Body() dto: BulkEnrichContactsDto,
     ) {
+        console.log('[bulk-enrich-debug] POST /contacts/bulk-enrich', {
+            organisation_uuid,
+            user_uuid,
+            uuidCount: dto.uuids?.length,
+            sources: dto.sources,
+        });
         return this.contactsService.triggerBulkEnrich(organisation_uuid, dto, user_uuid);
     }
 

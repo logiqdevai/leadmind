@@ -11,6 +11,9 @@ import type {
     PaginatedContactLists,
     PaginatedListMembers,
     RemoveListContactsResult,
+    MoveListContactsBelowScoreResult,
+    FilterListContactsByScorePayload,
+    MoveListContactsBelowScorePayload,
     UpdateContactListPayload,
 } from "../interfaces/contact-list.interface";
 
@@ -126,15 +129,34 @@ export const removeListContact = async (
 
 export const removeListContactsBelowScore = async (
     listUuid: string,
+    payload: FilterListContactsByScorePayload,
 ): Promise<RemoveListContactsResult> => {
     try {
         const response = await axiosInstance.post(
             ApiRoutes.contact_lists.remove_below_score(listUuid),
+            payload,
         );
         return response.data;
     } catch (error: any) {
         throw new Error(
             error?.response?.data?.message || "Failed to remove low-score contacts from list.",
+        );
+    }
+};
+
+export const moveListContactsBelowScore = async (
+    listUuid: string,
+    payload: MoveListContactsBelowScorePayload,
+): Promise<MoveListContactsBelowScoreResult> => {
+    try {
+        const response = await axiosInstance.post(
+            ApiRoutes.contact_lists.move_below_score(listUuid),
+            payload,
+        );
+        return response.data;
+    } catch (error: any) {
+        throw new Error(
+            error?.response?.data?.message || "Failed to move low-score contacts to list.",
         );
     }
 };

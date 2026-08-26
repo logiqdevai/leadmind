@@ -20,8 +20,16 @@ export async function enqueueContactEnrichmentJobs(
     bulk_job_uuid?: string,
 ): Promise<{ jobIds: string[] }> {
     if (items.length === 0) {
+        console.log('[bulk-enrich-debug] enqueueContactEnrichmentJobs empty items', {
+            bulk_job_uuid,
+        });
         return { jobIds: [] };
     }
+    console.log('[bulk-enrich-debug] enqueueContactEnrichmentJobs before addBulk', {
+        count: items.length,
+        bulk_job_uuid,
+        queueName: queue.name,
+    });
     const jobs = await queue.addBulk(
         items.map((item) => {
             const payload: ContactJobData = {
@@ -38,7 +46,12 @@ export async function enqueueContactEnrichmentJobs(
             };
         }),
     );
-    return { jobIds: jobs.map((job) => String(job.id)) };
+    const jobIds = jobs.map((job) => String(job.id));
+    console.log('[bulk-enrich-debug] enqueueContactEnrichmentJobs after addBulk', {
+        jobIds,
+        bulk_job_uuid,
+    });
+    return { jobIds };
 }
 
 export async function enqueueContactEnrichmentJob(

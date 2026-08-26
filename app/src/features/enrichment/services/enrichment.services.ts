@@ -80,9 +80,15 @@ export const enrichContactsBulk = async (payload: {
     sources?: EnrichmentSource[];
 }): Promise<BulkEnrichContactsResponse> => {
     try {
+        console.log("[bulk-enrich-debug] FE enrichContactsBulk request", payload);
         const response = await axiosInstance.post(ApiRoutes.contacts.bulk_enrich, payload);
+        console.log("[bulk-enrich-debug] FE enrichContactsBulk response", response.data);
         return response.data;
     } catch (error: any) {
+        console.log("[bulk-enrich-debug] FE enrichContactsBulk error", {
+            message: error?.response?.data?.message || error?.message,
+            status: error?.response?.status,
+        });
         throw new Error(error?.response?.data?.message || "Failed to enqueue bulk enrichment.");
     }
 };

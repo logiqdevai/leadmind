@@ -98,9 +98,16 @@ export class EnrichmentOrchestrator {
     ): Promise<void> {
         const force = opts?.force ?? false;
         const ordered = normalizeEnrichmentSources(sources);
+        console.log('[bulk-enrich-debug] orchestrator.runInternal start', {
+            kind: target.kind,
+            uuid: target.uuid,
+            sources: ordered,
+            force,
+        });
 
         let subject = await this.loadSubject(target);
         if (!subject) {
+            console.log('[bulk-enrich-debug] orchestrator subject missing', target);
             this.logger.warn(`${target.kind} ${target.uuid} not found`);
             return;
         }
@@ -108,15 +115,33 @@ export class EnrichmentOrchestrator {
         for (const src of ordered) {
             subject = (await this.loadSubject(target)) ?? subject;
             if (!subject) {
+                console.log('[bulk-enrich-debug] orchestrator subject lost mid-loop', {
+                    ...target,
+                    src,
+                });
                 return;
             }
 
             if (!force && (await this.hasSourceEnrichment(target, src))) {
+                console.log('[bulk-enrich-debug] orchestrator skip existing source', {
+                    ...target,
+                    src,
+                });
                 continue;
             }
 
+            console.log('[bulk-enrich-debug] orchestrator.runSource start', {
+                ...target,
+                src,
+                force,
+            });
             await this.runSource(target, subject, src, force);
+            console.log('[bulk-enrich-debug] orchestrator.runSource done', {
+                ...target,
+                src,
+            });
         }
+        console.log('[bulk-enrich-debug] orchestrator.runInternal done', target);
     }
 
     async hasSourceEnrichment(target: EnrichmentTarget, source: EnrichmentSource): Promise<boolean> {
@@ -147,15 +172,36 @@ export class EnrichmentOrchestrator {
         source: EnrichmentSource,
         force: boolean,
     ): Promise<void> {
+        const t0 = Date.now();
         try {
+            console.log('[bulk-enrich-debug] executeSource await', {
+                ...target,
+                source,
+                force,
+            });
             const result = await this.executeSource(target, subject, source, force);
+            console.log('[bulk-enrich-debug] executeSource ok', {
+                ...target,
+                source,
+                elapsedMs: Date.now() - t0,
+            });
             await this.persistAttempt(target, { ...result, status: 'success' });
         } catch (error) {
             if (error instanceof DeferredEnrichmentError) {
-                // A Scrapio run was kicked off for this source; nothing to persist yet — the
-                // webhook/timeout dispatcher will call finishWebsiteEnrichment() once it resolves.
+                console.log('[bulk-enrich-debug] DeferredEnrichmentError (async scrape)', {
+                    ...target,
+                    source,
+                    message: error.message,
+                    elapsedMs: Date.now() - t0,
+                });
                 return;
             }
+            console.log('[bulk-enrich-debug] executeSource failed', {
+                ...target,
+                source,
+                error: error instanceof Error ? error.message : error,
+                elapsedMs: Date.now() - t0,
+            });
             this.logger.warn(
                 `${target.kind} ${target.uuid} ${source} enrichment failed: ${error instanceof Error ? error.message : error}`,
             );
