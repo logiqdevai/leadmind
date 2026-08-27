@@ -8,6 +8,10 @@ import {
     runEmailValidationBackfill,
     type EmailValidationBackfillResult,
 } from '@/shared/utils/email-validation-backfill.util';
+import {
+    runWebsiteValidationBackfill,
+    type WebsiteValidationBackfillResult,
+} from '@/shared/utils/website-validation-backfill.util';
 import { ListBatchJobsDto } from './dto/list-batch-jobs.dto';
 import { ListBulkJobsDto } from '@/modules/bulk-jobs/dto/list-bulk-jobs.dto';
 import { BulkJobsService } from '@/modules/bulk-jobs/bulk-jobs.service';
@@ -139,5 +143,9 @@ export class AdminService {
 
     runEmailValidationBackfill(): Promise<EmailValidationBackfillResult> {
         return runEmailValidationBackfill(this.prisma, { dryRun: false });
+    }
+
+    runWebsiteValidationBackfill(): Promise<WebsiteValidationBackfillResult> {
+        return runWebsiteValidationBackfill(this.prisma, { dryRun: false });
     }
 }

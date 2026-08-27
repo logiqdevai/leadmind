@@ -1,4 +1,11 @@
-import { Contact, EmailValidationStatus, Lead, Prisma, SourceType } from '@/generated/prisma';
+import {
+    Contact,
+    DomainValidationStatus,
+    EmailValidationStatus,
+    Lead,
+    Prisma,
+    SourceType,
+} from '@/generated/prisma';
 
 export type EnrichmentProfileUpdate = {
     name?: string;
@@ -102,6 +109,9 @@ export function subjectAsLeadLike(subject: EnrichmentSubject): Lead {
         email_validation_status: EmailValidationStatus.UNKNOWN,
         email_validation_reason: null,
         email_validated_at: null,
+        website_validation_status: DomainValidationStatus.UNKNOWN,
+        website_validation_reason: null,
+        website_validated_at: null,
         created_at: new Date(),
         updated_at: new Date(),
     };

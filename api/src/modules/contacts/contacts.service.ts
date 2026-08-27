@@ -14,6 +14,7 @@ import {
     CampaignContactStatus,
     Channel,
     Contact,
+    DomainValidationStatus,
     EmailValidationStatus,
     Interaction,
     InteractionType,
@@ -31,6 +32,7 @@ import { AI_PROCESS_QUEUE } from '@/core/queues/queues.constants';
 import { BulkJobsService } from '@/modules/bulk-jobs/bulk-jobs.service';
 import { resolveContactEnrichmentSources } from '@/modules/leads/utils/enrichment-sources.utils';
 import { resolveEmailFieldsForWrite } from '@/shared/utils/email-domain-validation.util';
+import { resolveWebsiteFieldsForWrite } from '@/shared/utils/website-domain-validation.util';
 import { AddNoteDto } from './dto/add-note.dto';
 import { AiDraftMessageDto } from './dto/ai-draft-message.dto';
 import { BulkTriggerScoreDto } from './dto/bulk-trigger-score.dto';
@@ -130,6 +132,7 @@ export class ContactsService {
         }
 
         const emailFields = await resolveEmailFieldsForWrite(dto.email);
+        const websiteFields = await resolveWebsiteFieldsForWrite(dto.website);
 
         if (emailFields) {
             const existing = await findOwnedContactByEmail(this.prisma, organisation_uuid, emailFields.email);
@@ -150,7 +153,6 @@ export class ContactsService {
                 name: dto.name,
                 phone: dto.phone,
                 company: dto.company,
-                website: dto.website,
                 google_maps_url: dto.google_maps_url,
                 title: dto.title,
                 location: dto.location,
@@ -158,6 +160,7 @@ export class ContactsService {
                 industry: dto.industry,
                 description: dto.description,
                 ...(emailFields ?? {}),
+                ...(websiteFields ?? {}),
             },
         });
 
@@ -174,6 +177,9 @@ export class ContactsService {
                 email_validation_status: lead.email_validation_status,
                 email_validation_reason: lead.email_validation_reason,
                 email_validated_at: lead.email_validated_at,
+                website_validation_status: lead.website_validation_status,
+                website_validation_reason: lead.website_validation_reason,
+                website_validated_at: lead.website_validated_at,
                 ...(dto.tags && dto.tags.length > 0
                     ? {
                         tags: {
@@ -535,6 +541,24 @@ export class ContactsService {
             }
         }
 
+        let websitePatch: Prisma.ContactUpdateInput | undefined;
+        if (dto.website !== undefined) {
+            const trimmed = dto.website?.trim() || null;
+            if (!trimmed) {
+                websitePatch = {
+                    website: null,
+                    website_validation_status: DomainValidationStatus.UNKNOWN,
+                    website_validation_reason: null,
+                    website_validated_at: null,
+                };
+            } else {
+                const fields = await resolveWebsiteFieldsForWrite(trimmed);
+                if (fields) {
+                    websitePatch = fields;
+                }
+            }
+        }
+
         if (emailPatch?.email) {
             const existingByEmail = await findOwnedContactByEmail(
                 this.prisma,
@@ -549,7 +573,7 @@ export class ContactsService {
                     uuid,
                     existingByEmail.uuid,
                 );
-                const data: Prisma.ContactUpdateInput = { ...emailPatch };
+                const data: Prisma.ContactUpdateInput = { ...emailPatch, ...websitePatch };
                 if (dto.notes !== undefined) {
                     data.notes = dto.notes;
                 }
@@ -569,7 +593,7 @@ export class ContactsService {
             }
         }
 
-        return this.applyUpdateToContact(organisation_uuid, uuid, dto, emailPatch);
+        return this.applyUpdateToContact(organisation_uuid, uuid, dto, emailPatch, websitePatch);
     }
 
     async resubscribe(organisation_uuid: string, uuid: string) {
@@ -601,6 +625,7 @@ export class ContactsService {
         uuid: string,
         dto: UpdateContactDto,
         emailPatch?: Prisma.ContactUpdateInput,
+        websitePatch?: Prisma.ContactUpdateInput,
     ) {
         const data: Prisma.ContactUpdateInput = {};
         if (dto.notes !== undefined) {
@@ -609,8 +634,11 @@ export class ContactsService {
         if (emailPatch) {
             Object.assign(data, emailPatch);
         }
+        if (websitePatch) {
+            Object.assign(data, websitePatch);
+        }
         for (const key of CONTACT_PROFILE_UPDATE_KEYS) {
-            if (key === 'email') continue;
+            if (key === 'email' || key === 'website') continue;
             if (dto[key] !== undefined) {
                 data[key] = dto[key] as never;
             }

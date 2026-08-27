@@ -47,4 +47,12 @@ export class AdminController {
     runEmailValidationBackfill() {
         return this.adminService.runEmailValidationBackfill();
     }
+
+    @Post('website-validation-backfill')
+    @ApiOperation({
+        summary: 'Validate every Lead/Contact website and clear invalid ones (admin only)',
+    })
+    runWebsiteValidationBackfill() {
+        return this.adminService.runWebsiteValidationBackfill();
+    }
 }

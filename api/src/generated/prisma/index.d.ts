@@ -392,6 +392,15 @@ export const EmailValidationStatus: {
 export type EmailValidationStatus = (typeof EmailValidationStatus)[keyof typeof EmailValidationStatus]
 
 
+export const DomainValidationStatus: {
+  UNKNOWN: 'UNKNOWN',
+  VALID: 'VALID',
+  INVALID: 'INVALID'
+};
+
+export type DomainValidationStatus = (typeof DomainValidationStatus)[keyof typeof DomainValidationStatus]
+
+
 export const EnrichmentSource: {
   LINKEDIN: 'LINKEDIN',
   WEBSITE: 'WEBSITE',
@@ -875,6 +884,10 @@ export const SourceType: typeof $Enums.SourceType
 export type EmailValidationStatus = $Enums.EmailValidationStatus
 
 export const EmailValidationStatus: typeof $Enums.EmailValidationStatus
+
+export type DomainValidationStatus = $Enums.DomainValidationStatus
+
+export const DomainValidationStatus: typeof $Enums.DomainValidationStatus
 
 export type EnrichmentSource = $Enums.EnrichmentSource
 
@@ -19550,6 +19563,9 @@ export namespace Prisma {
     email_validation_status: $Enums.EmailValidationStatus | null
     email_validation_reason: string | null
     email_validated_at: Date | null
+    website_validation_status: $Enums.DomainValidationStatus | null
+    website_validation_reason: string | null
+    website_validated_at: Date | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -19574,6 +19590,9 @@ export namespace Prisma {
     email_validation_status: $Enums.EmailValidationStatus | null
     email_validation_reason: string | null
     email_validated_at: Date | null
+    website_validation_status: $Enums.DomainValidationStatus | null
+    website_validation_reason: string | null
+    website_validated_at: Date | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -19600,6 +19619,9 @@ export namespace Prisma {
     email_validation_status: number
     email_validation_reason: number
     email_validated_at: number
+    website_validation_status: number
+    website_validation_reason: number
+    website_validated_at: number
     created_at: number
     updated_at: number
     _all: number
@@ -19634,6 +19656,9 @@ export namespace Prisma {
     email_validation_status?: true
     email_validation_reason?: true
     email_validated_at?: true
+    website_validation_status?: true
+    website_validation_reason?: true
+    website_validated_at?: true
     created_at?: true
     updated_at?: true
   }
@@ -19658,6 +19683,9 @@ export namespace Prisma {
     email_validation_status?: true
     email_validation_reason?: true
     email_validated_at?: true
+    website_validation_status?: true
+    website_validation_reason?: true
+    website_validated_at?: true
     created_at?: true
     updated_at?: true
   }
@@ -19684,6 +19712,9 @@ export namespace Prisma {
     email_validation_status?: true
     email_validation_reason?: true
     email_validated_at?: true
+    website_validation_status?: true
+    website_validation_reason?: true
+    website_validated_at?: true
     created_at?: true
     updated_at?: true
     _all?: true
@@ -19797,6 +19828,9 @@ export namespace Prisma {
     email_validation_status: $Enums.EmailValidationStatus
     email_validation_reason: string | null
     email_validated_at: Date | null
+    website_validation_status: $Enums.DomainValidationStatus
+    website_validation_reason: string | null
+    website_validated_at: Date | null
     created_at: Date
     updated_at: Date
     _count: LeadCountAggregateOutputType | null
@@ -19842,6 +19876,9 @@ export namespace Prisma {
     email_validation_status?: boolean
     email_validation_reason?: boolean
     email_validated_at?: boolean
+    website_validation_status?: boolean
+    website_validation_reason?: boolean
+    website_validated_at?: boolean
     created_at?: boolean
     updated_at?: boolean
     raw_lead?: boolean | Lead$raw_leadArgs<ExtArgs>
@@ -19872,6 +19909,9 @@ export namespace Prisma {
     email_validation_status?: boolean
     email_validation_reason?: boolean
     email_validated_at?: boolean
+    website_validation_status?: boolean
+    website_validation_reason?: boolean
+    website_validated_at?: boolean
     created_at?: boolean
     updated_at?: boolean
     raw_lead?: boolean | Lead$raw_leadArgs<ExtArgs>
@@ -19899,6 +19939,9 @@ export namespace Prisma {
     email_validation_status?: boolean
     email_validation_reason?: boolean
     email_validated_at?: boolean
+    website_validation_status?: boolean
+    website_validation_reason?: boolean
+    website_validated_at?: boolean
     created_at?: boolean
     updated_at?: boolean
     raw_lead?: boolean | Lead$raw_leadArgs<ExtArgs>
@@ -19926,11 +19969,14 @@ export namespace Prisma {
     email_validation_status?: boolean
     email_validation_reason?: boolean
     email_validated_at?: boolean
+    website_validation_status?: boolean
+    website_validation_reason?: boolean
+    website_validated_at?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
-  export type LeadOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "raw_lead_uuid" | "name" | "email" | "phone" | "company" | "website" | "google_maps_url" | "linkedin_url" | "title" | "location" | "industry" | "description" | "source_type" | "raw_data" | "enrichment_summary" | "enrichment_metadata" | "email_validation_status" | "email_validation_reason" | "email_validated_at" | "created_at" | "updated_at", ExtArgs["result"]["lead"]>
+  export type LeadOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "raw_lead_uuid" | "name" | "email" | "phone" | "company" | "website" | "google_maps_url" | "linkedin_url" | "title" | "location" | "industry" | "description" | "source_type" | "raw_data" | "enrichment_summary" | "enrichment_metadata" | "email_validation_status" | "email_validation_reason" | "email_validated_at" | "website_validation_status" | "website_validation_reason" | "website_validated_at" | "created_at" | "updated_at", ExtArgs["result"]["lead"]>
   export type LeadInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     raw_lead?: boolean | Lead$raw_leadArgs<ExtArgs>
     contacts?: boolean | Lead$contactsArgs<ExtArgs>
@@ -19973,6 +20019,9 @@ export namespace Prisma {
       email_validation_status: $Enums.EmailValidationStatus
       email_validation_reason: string | null
       email_validated_at: Date | null
+      website_validation_status: $Enums.DomainValidationStatus
+      website_validation_reason: string | null
+      website_validated_at: Date | null
       created_at: Date
       updated_at: Date
     }, ExtArgs["result"]["lead"]>
@@ -20422,6 +20471,9 @@ export namespace Prisma {
     readonly email_validation_status: FieldRef<"Lead", 'EmailValidationStatus'>
     readonly email_validation_reason: FieldRef<"Lead", 'String'>
     readonly email_validated_at: FieldRef<"Lead", 'DateTime'>
+    readonly website_validation_status: FieldRef<"Lead", 'DomainValidationStatus'>
+    readonly website_validation_reason: FieldRef<"Lead", 'String'>
+    readonly website_validated_at: FieldRef<"Lead", 'DateTime'>
     readonly created_at: FieldRef<"Lead", 'DateTime'>
     readonly updated_at: FieldRef<"Lead", 'DateTime'>
   }
@@ -22135,6 +22187,9 @@ export namespace Prisma {
     email_validation_status: $Enums.EmailValidationStatus | null
     email_validation_reason: string | null
     email_validated_at: Date | null
+    website_validation_status: $Enums.DomainValidationStatus | null
+    website_validation_reason: string | null
+    website_validated_at: Date | null
     unsubscribed_at: Date | null
     unsubscribe_token: string | null
     last_interaction_at: Date | null
@@ -22165,6 +22220,9 @@ export namespace Prisma {
     email_validation_status: $Enums.EmailValidationStatus | null
     email_validation_reason: string | null
     email_validated_at: Date | null
+    website_validation_status: $Enums.DomainValidationStatus | null
+    website_validation_reason: string | null
+    website_validated_at: Date | null
     unsubscribed_at: Date | null
     unsubscribe_token: string | null
     last_interaction_at: Date | null
@@ -22196,6 +22254,9 @@ export namespace Prisma {
     email_validation_status: number
     email_validation_reason: number
     email_validated_at: number
+    website_validation_status: number
+    website_validation_reason: number
+    website_validated_at: number
     unsubscribed_at: number
     unsubscribe_token: number
     last_interaction_at: number
@@ -22236,6 +22297,9 @@ export namespace Prisma {
     email_validation_status?: true
     email_validation_reason?: true
     email_validated_at?: true
+    website_validation_status?: true
+    website_validation_reason?: true
+    website_validated_at?: true
     unsubscribed_at?: true
     unsubscribe_token?: true
     last_interaction_at?: true
@@ -22266,6 +22330,9 @@ export namespace Prisma {
     email_validation_status?: true
     email_validation_reason?: true
     email_validated_at?: true
+    website_validation_status?: true
+    website_validation_reason?: true
+    website_validated_at?: true
     unsubscribed_at?: true
     unsubscribe_token?: true
     last_interaction_at?: true
@@ -22297,6 +22364,9 @@ export namespace Prisma {
     email_validation_status?: true
     email_validation_reason?: true
     email_validated_at?: true
+    website_validation_status?: true
+    website_validation_reason?: true
+    website_validated_at?: true
     unsubscribed_at?: true
     unsubscribe_token?: true
     last_interaction_at?: true
@@ -22415,6 +22485,9 @@ export namespace Prisma {
     email_validation_status: $Enums.EmailValidationStatus
     email_validation_reason: string | null
     email_validated_at: Date | null
+    website_validation_status: $Enums.DomainValidationStatus
+    website_validation_reason: string | null
+    website_validated_at: Date | null
     unsubscribed_at: Date | null
     unsubscribe_token: string | null
     last_interaction_at: Date | null
@@ -22465,6 +22538,9 @@ export namespace Prisma {
     email_validation_status?: boolean
     email_validation_reason?: boolean
     email_validated_at?: boolean
+    website_validation_status?: boolean
+    website_validation_reason?: boolean
+    website_validated_at?: boolean
     unsubscribed_at?: boolean
     unsubscribe_token?: boolean
     last_interaction_at?: boolean
@@ -22512,6 +22588,9 @@ export namespace Prisma {
     email_validation_status?: boolean
     email_validation_reason?: boolean
     email_validated_at?: boolean
+    website_validation_status?: boolean
+    website_validation_reason?: boolean
+    website_validated_at?: boolean
     unsubscribed_at?: boolean
     unsubscribe_token?: boolean
     last_interaction_at?: boolean
@@ -22546,6 +22625,9 @@ export namespace Prisma {
     email_validation_status?: boolean
     email_validation_reason?: boolean
     email_validated_at?: boolean
+    website_validation_status?: boolean
+    website_validation_reason?: boolean
+    website_validated_at?: boolean
     unsubscribed_at?: boolean
     unsubscribe_token?: boolean
     last_interaction_at?: boolean
@@ -22580,6 +22662,9 @@ export namespace Prisma {
     email_validation_status?: boolean
     email_validation_reason?: boolean
     email_validated_at?: boolean
+    website_validation_status?: boolean
+    website_validation_reason?: boolean
+    website_validated_at?: boolean
     unsubscribed_at?: boolean
     unsubscribe_token?: boolean
     last_interaction_at?: boolean
@@ -22587,7 +22672,7 @@ export namespace Prisma {
     updated_at?: boolean
   }
 
-  export type ContactOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "lead_uuid" | "filter_uuid" | "status" | "notes" | "name" | "email" | "phone" | "company" | "website" | "google_maps_url" | "linkedin_url" | "title" | "location" | "industry" | "description" | "enrichment_summary" | "enrichment_metadata" | "email_validation_status" | "email_validation_reason" | "email_validated_at" | "unsubscribed_at" | "unsubscribe_token" | "last_interaction_at" | "created_at" | "updated_at", ExtArgs["result"]["contact"]>
+  export type ContactOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "lead_uuid" | "filter_uuid" | "status" | "notes" | "name" | "email" | "phone" | "company" | "website" | "google_maps_url" | "linkedin_url" | "title" | "location" | "industry" | "description" | "enrichment_summary" | "enrichment_metadata" | "email_validation_status" | "email_validation_reason" | "email_validated_at" | "website_validation_status" | "website_validation_reason" | "website_validated_at" | "unsubscribed_at" | "unsubscribe_token" | "last_interaction_at" | "created_at" | "updated_at", ExtArgs["result"]["contact"]>
   export type ContactInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     lead?: boolean | LeadDefaultArgs<ExtArgs>
@@ -22660,6 +22745,9 @@ export namespace Prisma {
       email_validation_status: $Enums.EmailValidationStatus
       email_validation_reason: string | null
       email_validated_at: Date | null
+      website_validation_status: $Enums.DomainValidationStatus
+      website_validation_reason: string | null
+      website_validated_at: Date | null
       unsubscribed_at: Date | null
       unsubscribe_token: string | null
       last_interaction_at: Date | null
@@ -23126,6 +23214,9 @@ export namespace Prisma {
     readonly email_validation_status: FieldRef<"Contact", 'EmailValidationStatus'>
     readonly email_validation_reason: FieldRef<"Contact", 'String'>
     readonly email_validated_at: FieldRef<"Contact", 'DateTime'>
+    readonly website_validation_status: FieldRef<"Contact", 'DomainValidationStatus'>
+    readonly website_validation_reason: FieldRef<"Contact", 'String'>
+    readonly website_validated_at: FieldRef<"Contact", 'DateTime'>
     readonly unsubscribed_at: FieldRef<"Contact", 'DateTime'>
     readonly unsubscribe_token: FieldRef<"Contact", 'String'>
     readonly last_interaction_at: FieldRef<"Contact", 'DateTime'>
@@ -77758,6 +77849,9 @@ export namespace Prisma {
     email_validation_status: 'email_validation_status',
     email_validation_reason: 'email_validation_reason',
     email_validated_at: 'email_validated_at',
+    website_validation_status: 'website_validation_status',
+    website_validation_reason: 'website_validation_reason',
+    website_validated_at: 'website_validated_at',
     created_at: 'created_at',
     updated_at: 'updated_at'
   };
@@ -77807,6 +77901,9 @@ export namespace Prisma {
     email_validation_status: 'email_validation_status',
     email_validation_reason: 'email_validation_reason',
     email_validated_at: 'email_validated_at',
+    website_validation_status: 'website_validation_status',
+    website_validation_reason: 'website_validation_reason',
+    website_validated_at: 'website_validated_at',
     unsubscribed_at: 'unsubscribed_at',
     unsubscribe_token: 'unsubscribe_token',
     last_interaction_at: 'last_interaction_at',
@@ -78843,6 +78940,20 @@ export namespace Prisma {
    * Reference to a field of type 'EmailValidationStatus[]'
    */
   export type ListEnumEmailValidationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EmailValidationStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'DomainValidationStatus'
+   */
+  export type EnumDomainValidationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DomainValidationStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'DomainValidationStatus[]'
+   */
+  export type ListEnumDomainValidationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DomainValidationStatus[]'>
     
 
 
@@ -80269,6 +80380,9 @@ export namespace Prisma {
     email_validation_status?: EnumEmailValidationStatusFilter<"Lead"> | $Enums.EmailValidationStatus
     email_validation_reason?: StringNullableFilter<"Lead"> | string | null
     email_validated_at?: DateTimeNullableFilter<"Lead"> | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFilter<"Lead"> | $Enums.DomainValidationStatus
+    website_validation_reason?: StringNullableFilter<"Lead"> | string | null
+    website_validated_at?: DateTimeNullableFilter<"Lead"> | Date | string | null
     created_at?: DateTimeFilter<"Lead"> | Date | string
     updated_at?: DateTimeFilter<"Lead"> | Date | string
     raw_lead?: XOR<RawLeadNullableScalarRelationFilter, RawLeadWhereInput> | null
@@ -80298,6 +80412,9 @@ export namespace Prisma {
     email_validation_status?: SortOrder
     email_validation_reason?: SortOrderInput | SortOrder
     email_validated_at?: SortOrderInput | SortOrder
+    website_validation_status?: SortOrder
+    website_validation_reason?: SortOrderInput | SortOrder
+    website_validated_at?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     raw_lead?: RawLeadOrderByWithRelationInput
@@ -80330,6 +80447,9 @@ export namespace Prisma {
     email_validation_status?: EnumEmailValidationStatusFilter<"Lead"> | $Enums.EmailValidationStatus
     email_validation_reason?: StringNullableFilter<"Lead"> | string | null
     email_validated_at?: DateTimeNullableFilter<"Lead"> | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFilter<"Lead"> | $Enums.DomainValidationStatus
+    website_validation_reason?: StringNullableFilter<"Lead"> | string | null
+    website_validated_at?: DateTimeNullableFilter<"Lead"> | Date | string | null
     created_at?: DateTimeFilter<"Lead"> | Date | string
     updated_at?: DateTimeFilter<"Lead"> | Date | string
     raw_lead?: XOR<RawLeadNullableScalarRelationFilter, RawLeadWhereInput> | null
@@ -80359,6 +80479,9 @@ export namespace Prisma {
     email_validation_status?: SortOrder
     email_validation_reason?: SortOrderInput | SortOrder
     email_validated_at?: SortOrderInput | SortOrder
+    website_validation_status?: SortOrder
+    website_validation_reason?: SortOrderInput | SortOrder
+    website_validated_at?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     _count?: LeadCountOrderByAggregateInput
@@ -80393,6 +80516,9 @@ export namespace Prisma {
     email_validation_status?: EnumEmailValidationStatusWithAggregatesFilter<"Lead"> | $Enums.EmailValidationStatus
     email_validation_reason?: StringNullableWithAggregatesFilter<"Lead"> | string | null
     email_validated_at?: DateTimeNullableWithAggregatesFilter<"Lead"> | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusWithAggregatesFilter<"Lead"> | $Enums.DomainValidationStatus
+    website_validation_reason?: StringNullableWithAggregatesFilter<"Lead"> | string | null
+    website_validated_at?: DateTimeNullableWithAggregatesFilter<"Lead"> | Date | string | null
     created_at?: DateTimeWithAggregatesFilter<"Lead"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"Lead"> | Date | string
   }
@@ -80516,6 +80642,9 @@ export namespace Prisma {
     email_validation_status?: EnumEmailValidationStatusFilter<"Contact"> | $Enums.EmailValidationStatus
     email_validation_reason?: StringNullableFilter<"Contact"> | string | null
     email_validated_at?: DateTimeNullableFilter<"Contact"> | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFilter<"Contact"> | $Enums.DomainValidationStatus
+    website_validation_reason?: StringNullableFilter<"Contact"> | string | null
+    website_validated_at?: DateTimeNullableFilter<"Contact"> | Date | string | null
     unsubscribed_at?: DateTimeNullableFilter<"Contact"> | Date | string | null
     unsubscribe_token?: StringNullableFilter<"Contact"> | string | null
     last_interaction_at?: DateTimeNullableFilter<"Contact"> | Date | string | null
@@ -80562,6 +80691,9 @@ export namespace Prisma {
     email_validation_status?: SortOrder
     email_validation_reason?: SortOrderInput | SortOrder
     email_validated_at?: SortOrderInput | SortOrder
+    website_validation_status?: SortOrder
+    website_validation_reason?: SortOrderInput | SortOrder
+    website_validated_at?: SortOrderInput | SortOrder
     unsubscribed_at?: SortOrderInput | SortOrder
     unsubscribe_token?: SortOrderInput | SortOrder
     last_interaction_at?: SortOrderInput | SortOrder
@@ -80613,6 +80745,9 @@ export namespace Prisma {
     email_validation_status?: EnumEmailValidationStatusFilter<"Contact"> | $Enums.EmailValidationStatus
     email_validation_reason?: StringNullableFilter<"Contact"> | string | null
     email_validated_at?: DateTimeNullableFilter<"Contact"> | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFilter<"Contact"> | $Enums.DomainValidationStatus
+    website_validation_reason?: StringNullableFilter<"Contact"> | string | null
+    website_validated_at?: DateTimeNullableFilter<"Contact"> | Date | string | null
     unsubscribed_at?: DateTimeNullableFilter<"Contact"> | Date | string | null
     last_interaction_at?: DateTimeNullableFilter<"Contact"> | Date | string | null
     created_at?: DateTimeFilter<"Contact"> | Date | string
@@ -80658,6 +80793,9 @@ export namespace Prisma {
     email_validation_status?: SortOrder
     email_validation_reason?: SortOrderInput | SortOrder
     email_validated_at?: SortOrderInput | SortOrder
+    website_validation_status?: SortOrder
+    website_validation_reason?: SortOrderInput | SortOrder
+    website_validated_at?: SortOrderInput | SortOrder
     unsubscribed_at?: SortOrderInput | SortOrder
     unsubscribe_token?: SortOrderInput | SortOrder
     last_interaction_at?: SortOrderInput | SortOrder
@@ -80697,6 +80835,9 @@ export namespace Prisma {
     email_validation_status?: EnumEmailValidationStatusWithAggregatesFilter<"Contact"> | $Enums.EmailValidationStatus
     email_validation_reason?: StringNullableWithAggregatesFilter<"Contact"> | string | null
     email_validated_at?: DateTimeNullableWithAggregatesFilter<"Contact"> | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusWithAggregatesFilter<"Contact"> | $Enums.DomainValidationStatus
+    website_validation_reason?: StringNullableWithAggregatesFilter<"Contact"> | string | null
+    website_validated_at?: DateTimeNullableWithAggregatesFilter<"Contact"> | Date | string | null
     unsubscribed_at?: DateTimeNullableWithAggregatesFilter<"Contact"> | Date | string | null
     unsubscribe_token?: StringNullableWithAggregatesFilter<"Contact"> | string | null
     last_interaction_at?: DateTimeNullableWithAggregatesFilter<"Contact"> | Date | string | null
@@ -85913,6 +86054,9 @@ export namespace Prisma {
     email_validation_status?: $Enums.EmailValidationStatus
     email_validation_reason?: string | null
     email_validated_at?: Date | string | null
+    website_validation_status?: $Enums.DomainValidationStatus
+    website_validation_reason?: string | null
+    website_validated_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     raw_lead?: RawLeadCreateNestedOneWithoutLeadInput
@@ -85942,6 +86086,9 @@ export namespace Prisma {
     email_validation_status?: $Enums.EmailValidationStatus
     email_validation_reason?: string | null
     email_validated_at?: Date | string | null
+    website_validation_status?: $Enums.DomainValidationStatus
+    website_validation_reason?: string | null
+    website_validated_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     contacts?: ContactUncheckedCreateNestedManyWithoutLeadInput
@@ -85968,6 +86115,9 @@ export namespace Prisma {
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
     email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
     email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFieldUpdateOperationsInput | $Enums.DomainValidationStatus
+    website_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     raw_lead?: RawLeadUpdateOneWithoutLeadNestedInput
@@ -85997,6 +86147,9 @@ export namespace Prisma {
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
     email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
     email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFieldUpdateOperationsInput | $Enums.DomainValidationStatus
+    website_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     contacts?: ContactUncheckedUpdateManyWithoutLeadNestedInput
@@ -86025,6 +86178,9 @@ export namespace Prisma {
     email_validation_status?: $Enums.EmailValidationStatus
     email_validation_reason?: string | null
     email_validated_at?: Date | string | null
+    website_validation_status?: $Enums.DomainValidationStatus
+    website_validation_reason?: string | null
+    website_validated_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -86049,6 +86205,9 @@ export namespace Prisma {
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
     email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
     email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFieldUpdateOperationsInput | $Enums.DomainValidationStatus
+    website_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -86075,6 +86234,9 @@ export namespace Prisma {
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
     email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
     email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFieldUpdateOperationsInput | $Enums.DomainValidationStatus
+    website_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -86200,6 +86362,9 @@ export namespace Prisma {
     email_validation_status?: $Enums.EmailValidationStatus
     email_validation_reason?: string | null
     email_validated_at?: Date | string | null
+    website_validation_status?: $Enums.DomainValidationStatus
+    website_validation_reason?: string | null
+    website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -86246,6 +86411,9 @@ export namespace Prisma {
     email_validation_status?: $Enums.EmailValidationStatus
     email_validation_reason?: string | null
     email_validated_at?: Date | string | null
+    website_validation_status?: $Enums.DomainValidationStatus
+    website_validation_reason?: string | null
+    website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -86285,6 +86453,9 @@ export namespace Prisma {
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
     email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
     email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFieldUpdateOperationsInput | $Enums.DomainValidationStatus
+    website_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -86331,6 +86502,9 @@ export namespace Prisma {
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
     email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
     email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFieldUpdateOperationsInput | $Enums.DomainValidationStatus
+    website_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -86374,6 +86548,9 @@ export namespace Prisma {
     email_validation_status?: $Enums.EmailValidationStatus
     email_validation_reason?: string | null
     email_validated_at?: Date | string | null
+    website_validation_status?: $Enums.DomainValidationStatus
+    website_validation_reason?: string | null
+    website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -86401,6 +86578,9 @@ export namespace Prisma {
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
     email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
     email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFieldUpdateOperationsInput | $Enums.DomainValidationStatus
+    website_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -86432,6 +86612,9 @@ export namespace Prisma {
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
     email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
     email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFieldUpdateOperationsInput | $Enums.DomainValidationStatus
+    website_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -92158,6 +92341,13 @@ export namespace Prisma {
     not?: NestedEnumEmailValidationStatusFilter<$PrismaModel> | $Enums.EmailValidationStatus
   }
 
+  export type EnumDomainValidationStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.DomainValidationStatus | EnumDomainValidationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.DomainValidationStatus[] | ListEnumDomainValidationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DomainValidationStatus[] | ListEnumDomainValidationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumDomainValidationStatusFilter<$PrismaModel> | $Enums.DomainValidationStatus
+  }
+
   export type RawLeadNullableScalarRelationFilter = {
     is?: RawLeadWhereInput | null
     isNot?: RawLeadWhereInput | null
@@ -92195,6 +92385,9 @@ export namespace Prisma {
     email_validation_status?: SortOrder
     email_validation_reason?: SortOrder
     email_validated_at?: SortOrder
+    website_validation_status?: SortOrder
+    website_validation_reason?: SortOrder
+    website_validated_at?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -92223,6 +92416,9 @@ export namespace Prisma {
     email_validation_status?: SortOrder
     email_validation_reason?: SortOrder
     email_validated_at?: SortOrder
+    website_validation_status?: SortOrder
+    website_validation_reason?: SortOrder
+    website_validated_at?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -92247,6 +92443,9 @@ export namespace Prisma {
     email_validation_status?: SortOrder
     email_validation_reason?: SortOrder
     email_validated_at?: SortOrder
+    website_validation_status?: SortOrder
+    website_validation_reason?: SortOrder
+    website_validated_at?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -92289,6 +92488,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumEmailValidationStatusFilter<$PrismaModel>
     _max?: NestedEnumEmailValidationStatusFilter<$PrismaModel>
+  }
+
+  export type EnumDomainValidationStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.DomainValidationStatus | EnumDomainValidationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.DomainValidationStatus[] | ListEnumDomainValidationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DomainValidationStatus[] | ListEnumDomainValidationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumDomainValidationStatusWithAggregatesFilter<$PrismaModel> | $Enums.DomainValidationStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumDomainValidationStatusFilter<$PrismaModel>
+    _max?: NestedEnumDomainValidationStatusFilter<$PrismaModel>
   }
 
   export type EnumEnrichmentSourceFilter<$PrismaModel = never> = {
@@ -92523,6 +92732,9 @@ export namespace Prisma {
     email_validation_status?: SortOrder
     email_validation_reason?: SortOrder
     email_validated_at?: SortOrder
+    website_validation_status?: SortOrder
+    website_validation_reason?: SortOrder
+    website_validated_at?: SortOrder
     unsubscribed_at?: SortOrder
     unsubscribe_token?: SortOrder
     last_interaction_at?: SortOrder
@@ -92557,6 +92769,9 @@ export namespace Prisma {
     email_validation_status?: SortOrder
     email_validation_reason?: SortOrder
     email_validated_at?: SortOrder
+    website_validation_status?: SortOrder
+    website_validation_reason?: SortOrder
+    website_validated_at?: SortOrder
     unsubscribed_at?: SortOrder
     unsubscribe_token?: SortOrder
     last_interaction_at?: SortOrder
@@ -92587,6 +92802,9 @@ export namespace Prisma {
     email_validation_status?: SortOrder
     email_validation_reason?: SortOrder
     email_validated_at?: SortOrder
+    website_validation_status?: SortOrder
+    website_validation_reason?: SortOrder
+    website_validated_at?: SortOrder
     unsubscribed_at?: SortOrder
     unsubscribe_token?: SortOrder
     last_interaction_at?: SortOrder
@@ -98349,6 +98567,10 @@ export namespace Prisma {
     set?: $Enums.EmailValidationStatus
   }
 
+  export type EnumDomainValidationStatusFieldUpdateOperationsInput = {
+    set?: $Enums.DomainValidationStatus
+  }
+
   export type RawLeadUpdateOneWithoutLeadNestedInput = {
     create?: XOR<RawLeadCreateWithoutLeadInput, RawLeadUncheckedCreateWithoutLeadInput>
     connectOrCreate?: RawLeadCreateOrConnectWithoutLeadInput
@@ -101966,6 +102188,13 @@ export namespace Prisma {
     notIn?: $Enums.EmailValidationStatus[] | ListEnumEmailValidationStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumEmailValidationStatusFilter<$PrismaModel> | $Enums.EmailValidationStatus
   }
+
+  export type NestedEnumDomainValidationStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.DomainValidationStatus | EnumDomainValidationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.DomainValidationStatus[] | ListEnumDomainValidationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DomainValidationStatus[] | ListEnumDomainValidationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumDomainValidationStatusFilter<$PrismaModel> | $Enums.DomainValidationStatus
+  }
   export type NestedJsonNullableFilter<$PrismaModel = never> =
     | PatchUndefined<
         Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
@@ -101998,6 +102227,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumEmailValidationStatusFilter<$PrismaModel>
     _max?: NestedEnumEmailValidationStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumDomainValidationStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.DomainValidationStatus | EnumDomainValidationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.DomainValidationStatus[] | ListEnumDomainValidationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DomainValidationStatus[] | ListEnumDomainValidationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumDomainValidationStatusWithAggregatesFilter<$PrismaModel> | $Enums.DomainValidationStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumDomainValidationStatusFilter<$PrismaModel>
+    _max?: NestedEnumDomainValidationStatusFilter<$PrismaModel>
   }
 
   export type NestedEnumEnrichmentSourceFilter<$PrismaModel = never> = {
@@ -103706,6 +103945,9 @@ export namespace Prisma {
     email_validation_status?: $Enums.EmailValidationStatus
     email_validation_reason?: string | null
     email_validated_at?: Date | string | null
+    website_validation_status?: $Enums.DomainValidationStatus
+    website_validation_reason?: string | null
+    website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -103750,6 +103992,9 @@ export namespace Prisma {
     email_validation_status?: $Enums.EmailValidationStatus
     email_validation_reason?: string | null
     email_validated_at?: Date | string | null
+    website_validation_status?: $Enums.DomainValidationStatus
+    website_validation_reason?: string | null
+    website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -105032,6 +105277,9 @@ export namespace Prisma {
     email_validation_status?: EnumEmailValidationStatusFilter<"Contact"> | $Enums.EmailValidationStatus
     email_validation_reason?: StringNullableFilter<"Contact"> | string | null
     email_validated_at?: DateTimeNullableFilter<"Contact"> | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFilter<"Contact"> | $Enums.DomainValidationStatus
+    website_validation_reason?: StringNullableFilter<"Contact"> | string | null
+    website_validated_at?: DateTimeNullableFilter<"Contact"> | Date | string | null
     unsubscribed_at?: DateTimeNullableFilter<"Contact"> | Date | string | null
     unsubscribe_token?: StringNullableFilter<"Contact"> | string | null
     last_interaction_at?: DateTimeNullableFilter<"Contact"> | Date | string | null
@@ -106554,6 +106802,9 @@ export namespace Prisma {
     email_validation_status?: $Enums.EmailValidationStatus
     email_validation_reason?: string | null
     email_validated_at?: Date | string | null
+    website_validation_status?: $Enums.DomainValidationStatus
+    website_validation_reason?: string | null
+    website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -106598,6 +106849,9 @@ export namespace Prisma {
     email_validation_status?: $Enums.EmailValidationStatus
     email_validation_reason?: string | null
     email_validated_at?: Date | string | null
+    website_validation_status?: $Enums.DomainValidationStatus
+    website_validation_reason?: string | null
+    website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -107699,6 +107953,9 @@ export namespace Prisma {
     email_validation_status?: $Enums.EmailValidationStatus
     email_validation_reason?: string | null
     email_validated_at?: Date | string | null
+    website_validation_status?: $Enums.DomainValidationStatus
+    website_validation_reason?: string | null
+    website_validated_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     contacts?: ContactCreateNestedManyWithoutLeadInput
@@ -107726,6 +107983,9 @@ export namespace Prisma {
     email_validation_status?: $Enums.EmailValidationStatus
     email_validation_reason?: string | null
     email_validated_at?: Date | string | null
+    website_validation_status?: $Enums.DomainValidationStatus
+    website_validation_reason?: string | null
+    website_validated_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     contacts?: ContactUncheckedCreateNestedManyWithoutLeadInput
@@ -107822,6 +108082,9 @@ export namespace Prisma {
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
     email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
     email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFieldUpdateOperationsInput | $Enums.DomainValidationStatus
+    website_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     contacts?: ContactUpdateManyWithoutLeadNestedInput
@@ -107849,6 +108112,9 @@ export namespace Prisma {
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
     email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
     email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFieldUpdateOperationsInput | $Enums.DomainValidationStatus
+    website_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     contacts?: ContactUncheckedUpdateManyWithoutLeadNestedInput
@@ -107901,6 +108167,9 @@ export namespace Prisma {
     email_validation_status?: $Enums.EmailValidationStatus
     email_validation_reason?: string | null
     email_validated_at?: Date | string | null
+    website_validation_status?: $Enums.DomainValidationStatus
+    website_validation_reason?: string | null
+    website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -107945,6 +108214,9 @@ export namespace Prisma {
     email_validation_status?: $Enums.EmailValidationStatus
     email_validation_reason?: string | null
     email_validated_at?: Date | string | null
+    website_validation_status?: $Enums.DomainValidationStatus
+    website_validation_reason?: string | null
+    website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -108113,6 +108385,9 @@ export namespace Prisma {
     email_validation_status?: $Enums.EmailValidationStatus
     email_validation_reason?: string | null
     email_validated_at?: Date | string | null
+    website_validation_status?: $Enums.DomainValidationStatus
+    website_validation_reason?: string | null
+    website_validated_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     raw_lead?: RawLeadCreateNestedOneWithoutLeadInput
@@ -108141,6 +108416,9 @@ export namespace Prisma {
     email_validation_status?: $Enums.EmailValidationStatus
     email_validation_reason?: string | null
     email_validated_at?: Date | string | null
+    website_validation_status?: $Enums.DomainValidationStatus
+    website_validation_reason?: string | null
+    website_validated_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     contacts?: ContactUncheckedCreateNestedManyWithoutLeadInput
@@ -108182,6 +108460,9 @@ export namespace Prisma {
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
     email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
     email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFieldUpdateOperationsInput | $Enums.DomainValidationStatus
+    website_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     raw_lead?: RawLeadUpdateOneWithoutLeadNestedInput
@@ -108210,6 +108491,9 @@ export namespace Prisma {
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
     email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
     email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFieldUpdateOperationsInput | $Enums.DomainValidationStatus
+    website_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     contacts?: ContactUncheckedUpdateManyWithoutLeadNestedInput
@@ -108321,6 +108605,9 @@ export namespace Prisma {
     email_validation_status?: $Enums.EmailValidationStatus
     email_validation_reason?: string | null
     email_validated_at?: Date | string | null
+    website_validation_status?: $Enums.DomainValidationStatus
+    website_validation_reason?: string | null
+    website_validated_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     raw_lead?: RawLeadCreateNestedOneWithoutLeadInput
@@ -108349,6 +108636,9 @@ export namespace Prisma {
     email_validation_status?: $Enums.EmailValidationStatus
     email_validation_reason?: string | null
     email_validated_at?: Date | string | null
+    website_validation_status?: $Enums.DomainValidationStatus
+    website_validation_reason?: string | null
+    website_validated_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     enrichments?: LeadEnrichmentUncheckedCreateNestedManyWithoutLeadInput
@@ -108941,6 +109231,9 @@ export namespace Prisma {
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
     email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
     email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFieldUpdateOperationsInput | $Enums.DomainValidationStatus
+    website_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     raw_lead?: RawLeadUpdateOneWithoutLeadNestedInput
@@ -108969,6 +109262,9 @@ export namespace Prisma {
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
     email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
     email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFieldUpdateOperationsInput | $Enums.DomainValidationStatus
+    website_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     enrichments?: LeadEnrichmentUncheckedUpdateManyWithoutLeadNestedInput
@@ -109328,6 +109624,9 @@ export namespace Prisma {
     email_validation_status?: $Enums.EmailValidationStatus
     email_validation_reason?: string | null
     email_validated_at?: Date | string | null
+    website_validation_status?: $Enums.DomainValidationStatus
+    website_validation_reason?: string | null
+    website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -109373,6 +109672,9 @@ export namespace Prisma {
     email_validation_status?: $Enums.EmailValidationStatus
     email_validation_reason?: string | null
     email_validated_at?: Date | string | null
+    website_validation_status?: $Enums.DomainValidationStatus
+    website_validation_reason?: string | null
+    website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -109427,6 +109729,9 @@ export namespace Prisma {
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
     email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
     email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFieldUpdateOperationsInput | $Enums.DomainValidationStatus
+    website_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -109472,6 +109777,9 @@ export namespace Prisma {
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
     email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
     email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFieldUpdateOperationsInput | $Enums.DomainValidationStatus
+    website_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -109510,6 +109818,9 @@ export namespace Prisma {
     email_validation_status?: $Enums.EmailValidationStatus
     email_validation_reason?: string | null
     email_validated_at?: Date | string | null
+    website_validation_status?: $Enums.DomainValidationStatus
+    website_validation_reason?: string | null
+    website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -109555,6 +109866,9 @@ export namespace Prisma {
     email_validation_status?: $Enums.EmailValidationStatus
     email_validation_reason?: string | null
     email_validated_at?: Date | string | null
+    website_validation_status?: $Enums.DomainValidationStatus
+    website_validation_reason?: string | null
+    website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -109657,6 +109971,9 @@ export namespace Prisma {
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
     email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
     email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFieldUpdateOperationsInput | $Enums.DomainValidationStatus
+    website_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -109702,6 +110019,9 @@ export namespace Prisma {
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
     email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
     email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFieldUpdateOperationsInput | $Enums.DomainValidationStatus
+    website_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -109794,6 +110114,9 @@ export namespace Prisma {
     email_validation_status?: $Enums.EmailValidationStatus
     email_validation_reason?: string | null
     email_validated_at?: Date | string | null
+    website_validation_status?: $Enums.DomainValidationStatus
+    website_validation_reason?: string | null
+    website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -109839,6 +110162,9 @@ export namespace Prisma {
     email_validation_status?: $Enums.EmailValidationStatus
     email_validation_reason?: string | null
     email_validated_at?: Date | string | null
+    website_validation_status?: $Enums.DomainValidationStatus
+    website_validation_reason?: string | null
+    website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -109893,6 +110219,9 @@ export namespace Prisma {
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
     email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
     email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFieldUpdateOperationsInput | $Enums.DomainValidationStatus
+    website_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -109938,6 +110267,9 @@ export namespace Prisma {
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
     email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
     email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFieldUpdateOperationsInput | $Enums.DomainValidationStatus
+    website_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -109976,6 +110308,9 @@ export namespace Prisma {
     email_validation_status?: $Enums.EmailValidationStatus
     email_validation_reason?: string | null
     email_validated_at?: Date | string | null
+    website_validation_status?: $Enums.DomainValidationStatus
+    website_validation_reason?: string | null
+    website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -110021,6 +110356,9 @@ export namespace Prisma {
     email_validation_status?: $Enums.EmailValidationStatus
     email_validation_reason?: string | null
     email_validated_at?: Date | string | null
+    website_validation_status?: $Enums.DomainValidationStatus
+    website_validation_reason?: string | null
+    website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -110101,6 +110439,9 @@ export namespace Prisma {
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
     email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
     email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFieldUpdateOperationsInput | $Enums.DomainValidationStatus
+    website_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -110146,6 +110487,9 @@ export namespace Prisma {
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
     email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
     email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFieldUpdateOperationsInput | $Enums.DomainValidationStatus
+    website_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -110722,6 +111066,9 @@ export namespace Prisma {
     email_validation_status?: $Enums.EmailValidationStatus
     email_validation_reason?: string | null
     email_validated_at?: Date | string | null
+    website_validation_status?: $Enums.DomainValidationStatus
+    website_validation_reason?: string | null
+    website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -110767,6 +111114,9 @@ export namespace Prisma {
     email_validation_status?: $Enums.EmailValidationStatus
     email_validation_reason?: string | null
     email_validated_at?: Date | string | null
+    website_validation_status?: $Enums.DomainValidationStatus
+    website_validation_reason?: string | null
+    website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -110859,6 +111209,9 @@ export namespace Prisma {
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
     email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
     email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFieldUpdateOperationsInput | $Enums.DomainValidationStatus
+    website_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -110904,6 +111257,9 @@ export namespace Prisma {
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
     email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
     email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFieldUpdateOperationsInput | $Enums.DomainValidationStatus
+    website_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -110942,6 +111298,9 @@ export namespace Prisma {
     email_validation_status?: $Enums.EmailValidationStatus
     email_validation_reason?: string | null
     email_validated_at?: Date | string | null
+    website_validation_status?: $Enums.DomainValidationStatus
+    website_validation_reason?: string | null
+    website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -110987,6 +111346,9 @@ export namespace Prisma {
     email_validation_status?: $Enums.EmailValidationStatus
     email_validation_reason?: string | null
     email_validated_at?: Date | string | null
+    website_validation_status?: $Enums.DomainValidationStatus
+    website_validation_reason?: string | null
+    website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -111041,6 +111403,9 @@ export namespace Prisma {
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
     email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
     email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFieldUpdateOperationsInput | $Enums.DomainValidationStatus
+    website_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -111086,6 +111451,9 @@ export namespace Prisma {
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
     email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
     email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFieldUpdateOperationsInput | $Enums.DomainValidationStatus
+    website_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -111124,6 +111492,9 @@ export namespace Prisma {
     email_validation_status?: $Enums.EmailValidationStatus
     email_validation_reason?: string | null
     email_validated_at?: Date | string | null
+    website_validation_status?: $Enums.DomainValidationStatus
+    website_validation_reason?: string | null
+    website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -111169,6 +111540,9 @@ export namespace Prisma {
     email_validation_status?: $Enums.EmailValidationStatus
     email_validation_reason?: string | null
     email_validated_at?: Date | string | null
+    website_validation_status?: $Enums.DomainValidationStatus
+    website_validation_reason?: string | null
+    website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -111483,6 +111857,9 @@ export namespace Prisma {
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
     email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
     email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFieldUpdateOperationsInput | $Enums.DomainValidationStatus
+    website_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -111528,6 +111905,9 @@ export namespace Prisma {
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
     email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
     email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFieldUpdateOperationsInput | $Enums.DomainValidationStatus
+    website_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -111930,6 +112310,9 @@ export namespace Prisma {
     email_validation_status?: $Enums.EmailValidationStatus
     email_validation_reason?: string | null
     email_validated_at?: Date | string | null
+    website_validation_status?: $Enums.DomainValidationStatus
+    website_validation_reason?: string | null
+    website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -111975,6 +112358,9 @@ export namespace Prisma {
     email_validation_status?: $Enums.EmailValidationStatus
     email_validation_reason?: string | null
     email_validated_at?: Date | string | null
+    website_validation_status?: $Enums.DomainValidationStatus
+    website_validation_reason?: string | null
+    website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -112406,6 +112792,9 @@ export namespace Prisma {
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
     email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
     email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFieldUpdateOperationsInput | $Enums.DomainValidationStatus
+    website_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -112451,6 +112840,9 @@ export namespace Prisma {
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
     email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
     email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFieldUpdateOperationsInput | $Enums.DomainValidationStatus
+    website_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -113492,6 +113884,9 @@ export namespace Prisma {
     email_validation_status?: $Enums.EmailValidationStatus
     email_validation_reason?: string | null
     email_validated_at?: Date | string | null
+    website_validation_status?: $Enums.DomainValidationStatus
+    website_validation_reason?: string | null
+    website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -113537,6 +113932,9 @@ export namespace Prisma {
     email_validation_status?: $Enums.EmailValidationStatus
     email_validation_reason?: string | null
     email_validated_at?: Date | string | null
+    website_validation_status?: $Enums.DomainValidationStatus
+    website_validation_reason?: string | null
+    website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -113808,6 +114206,9 @@ export namespace Prisma {
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
     email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
     email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFieldUpdateOperationsInput | $Enums.DomainValidationStatus
+    website_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -113853,6 +114254,9 @@ export namespace Prisma {
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
     email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
     email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFieldUpdateOperationsInput | $Enums.DomainValidationStatus
+    website_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -115891,6 +116295,9 @@ export namespace Prisma {
     email_validation_status?: $Enums.EmailValidationStatus
     email_validation_reason?: string | null
     email_validated_at?: Date | string | null
+    website_validation_status?: $Enums.DomainValidationStatus
+    website_validation_reason?: string | null
+    website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -115936,6 +116343,9 @@ export namespace Prisma {
     email_validation_status?: $Enums.EmailValidationStatus
     email_validation_reason?: string | null
     email_validated_at?: Date | string | null
+    website_validation_status?: $Enums.DomainValidationStatus
+    website_validation_reason?: string | null
+    website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -116092,6 +116502,9 @@ export namespace Prisma {
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
     email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
     email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFieldUpdateOperationsInput | $Enums.DomainValidationStatus
+    website_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -116137,6 +116550,9 @@ export namespace Prisma {
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
     email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
     email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFieldUpdateOperationsInput | $Enums.DomainValidationStatus
+    website_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -117552,6 +117968,9 @@ export namespace Prisma {
     email_validation_status?: $Enums.EmailValidationStatus
     email_validation_reason?: string | null
     email_validated_at?: Date | string | null
+    website_validation_status?: $Enums.DomainValidationStatus
+    website_validation_reason?: string | null
+    website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -117597,6 +118016,9 @@ export namespace Prisma {
     email_validation_status?: $Enums.EmailValidationStatus
     email_validation_reason?: string | null
     email_validated_at?: Date | string | null
+    website_validation_status?: $Enums.DomainValidationStatus
+    website_validation_reason?: string | null
+    website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -117743,6 +118165,9 @@ export namespace Prisma {
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
     email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
     email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFieldUpdateOperationsInput | $Enums.DomainValidationStatus
+    website_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -117788,6 +118213,9 @@ export namespace Prisma {
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
     email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
     email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFieldUpdateOperationsInput | $Enums.DomainValidationStatus
+    website_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -118268,6 +118696,9 @@ export namespace Prisma {
     email_validation_status?: $Enums.EmailValidationStatus
     email_validation_reason?: string | null
     email_validated_at?: Date | string | null
+    website_validation_status?: $Enums.DomainValidationStatus
+    website_validation_reason?: string | null
+    website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -118313,6 +118744,9 @@ export namespace Prisma {
     email_validation_status?: $Enums.EmailValidationStatus
     email_validation_reason?: string | null
     email_validated_at?: Date | string | null
+    website_validation_status?: $Enums.DomainValidationStatus
+    website_validation_reason?: string | null
+    website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -118472,6 +118906,9 @@ export namespace Prisma {
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
     email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
     email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFieldUpdateOperationsInput | $Enums.DomainValidationStatus
+    website_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -118517,6 +118954,9 @@ export namespace Prisma {
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
     email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
     email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFieldUpdateOperationsInput | $Enums.DomainValidationStatus
+    website_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -122693,6 +123133,9 @@ export namespace Prisma {
     email_validation_status?: $Enums.EmailValidationStatus
     email_validation_reason?: string | null
     email_validated_at?: Date | string | null
+    website_validation_status?: $Enums.DomainValidationStatus
+    website_validation_reason?: string | null
+    website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -123273,6 +123716,9 @@ export namespace Prisma {
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
     email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
     email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFieldUpdateOperationsInput | $Enums.DomainValidationStatus
+    website_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -123317,6 +123763,9 @@ export namespace Prisma {
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
     email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
     email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFieldUpdateOperationsInput | $Enums.DomainValidationStatus
+    website_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -123359,6 +123808,9 @@ export namespace Prisma {
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
     email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
     email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFieldUpdateOperationsInput | $Enums.DomainValidationStatus
+    website_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -124708,6 +125160,9 @@ export namespace Prisma {
     email_validation_status?: $Enums.EmailValidationStatus
     email_validation_reason?: string | null
     email_validated_at?: Date | string | null
+    website_validation_status?: $Enums.DomainValidationStatus
+    website_validation_reason?: string | null
+    website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -124810,6 +125265,9 @@ export namespace Prisma {
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
     email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
     email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFieldUpdateOperationsInput | $Enums.DomainValidationStatus
+    website_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -124854,6 +125312,9 @@ export namespace Prisma {
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
     email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
     email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFieldUpdateOperationsInput | $Enums.DomainValidationStatus
+    website_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -124896,6 +125357,9 @@ export namespace Prisma {
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
     email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
     email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFieldUpdateOperationsInput | $Enums.DomainValidationStatus
+    website_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -125103,6 +125567,9 @@ export namespace Prisma {
     email_validation_status?: $Enums.EmailValidationStatus
     email_validation_reason?: string | null
     email_validated_at?: Date | string | null
+    website_validation_status?: $Enums.DomainValidationStatus
+    website_validation_reason?: string | null
+    website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
     last_interaction_at?: Date | string | null
@@ -125144,6 +125611,9 @@ export namespace Prisma {
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
     email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
     email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFieldUpdateOperationsInput | $Enums.DomainValidationStatus
+    website_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -125188,6 +125658,9 @@ export namespace Prisma {
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
     email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
     email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFieldUpdateOperationsInput | $Enums.DomainValidationStatus
+    website_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -125230,6 +125703,9 @@ export namespace Prisma {
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
     email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
     email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFieldUpdateOperationsInput | $Enums.DomainValidationStatus
+    website_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null

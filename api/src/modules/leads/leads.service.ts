@@ -1,8 +1,16 @@
 import { InjectQueue } from '@nestjs/bullmq';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Queue } from 'bullmq';
-import { BulkJobStatus, BulkJobType, EnrichmentSource, Prisma, Lead } from '@/generated/prisma';
+import {
+    BulkJobStatus,
+    BulkJobType,
+    DomainValidationStatus,
+    EnrichmentSource,
+    Prisma,
+    Lead,
+} from '@/generated/prisma';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
+import { resolveWebsiteFieldsForWrite } from '@/shared/utils/website-domain-validation.util';
 import { ElasticsearchService } from '@/integrations/elasticsearch/elasticsearch.service';
 import { AI_PROCESS_QUEUE } from '@/core/queues/queues.constants';
 import { BulkJobsService } from '@/modules/bulk-jobs/bulk-jobs.service';
@@ -82,9 +90,27 @@ export class LeadsService {
 
     async update(uuid: string, dto: UpdateLeadDto): Promise<Lead> {
         await this.findOne(uuid);
+        const { website, ...rest } = dto;
+        const data: Prisma.LeadUpdateInput = { ...rest };
+
+        if (website !== undefined) {
+            const trimmed = website?.trim() || null;
+            if (!trimmed) {
+                data.website = null;
+                data.website_validation_status = DomainValidationStatus.UNKNOWN;
+                data.website_validation_reason = null;
+                data.website_validated_at = null;
+            } else {
+                const fields = await resolveWebsiteFieldsForWrite(trimmed);
+                if (fields) {
+                    Object.assign(data, fields);
+                }
+            }
+        }
+
         return this.prisma.lead.update({
             where: { uuid },
-            data: dto,
+            data,
         });
     }
 
