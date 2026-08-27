@@ -13,6 +13,8 @@
     "migrate:dev": "dotenv -e .env.development -o -- npx prisma migrate dev --name init && npx prisma generate",
     "migrate:prod": "dotenv -e .env.production -o -- npx prisma migrate deploy",
     "migrate:staging": "dotenv -e .env.staging -o -- npx prisma migrate dev --name init && npx prisma generate",
+    "migrate:staging:create": "dotenv -e .env.staging -o -- npx prisma migrate dev --create-only --name new-migration",
+    "migrate:staging:deploy": "dotenv -e .env.staging -o -- npx prisma migrate deploy && dotenv -e .env.staging -o -- npx prisma generate",
     "studio:local": "npx dotenv -e .env.local -o -- npx prisma studio",
     "studio:dev": "npx dotenv -e .env.development -o -- npx prisma studio",
     "studio:prod": "npx dotenv -e .env.production -o -- npx prisma studio",
