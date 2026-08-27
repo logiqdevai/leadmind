@@ -1,6 +1,17 @@
 import type { SendHistoryMessage } from "@/features/outreach/interfaces/send-history.interface";
 import type { IntegrationProviderView } from "@/features/integrations/interfaces/integrations.interface";
 
+export function getSendHistorySortTime(message: SendHistoryMessage): number {
+    const iso = message.sent_at ?? message.created_at;
+    if (!iso) return 0;
+    const time = Date.parse(iso);
+    return Number.isFinite(time) ? time : 0;
+}
+
+export function sortSendHistoryByDateDesc(messages: SendHistoryMessage[]): SendHistoryMessage[] {
+    return messages.toSorted((a, b) => getSendHistorySortTime(b) - getSendHistorySortTime(a));
+}
+
 export function formatSendHistoryDate(iso: string | null | undefined): string {
     if (!iso) return "—";
     return new Date(iso).toLocaleString(undefined, {

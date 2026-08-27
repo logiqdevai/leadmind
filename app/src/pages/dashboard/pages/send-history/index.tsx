@@ -24,6 +24,7 @@ import { ContactsToolbar } from "@/pages/dashboard/pages/contacts/components/con
 import { SendHistoryTable } from "./components/send-history-table";
 import { SendHistoryTableSkeleton } from "./components/send-history-table-skeleton";
 import { SendHistoryFiltersBar } from "./components/send-history-filters-bar";
+import { sortSendHistoryByDateDesc } from "./utils/send-history.utils";
 
 const PAGE_SIZE = 25;
 
@@ -156,7 +157,10 @@ export default function SendHistoryPage() {
     const { data: campaignsData } = useCampaigns({ limit: 100 });
     const { data: sequencesData } = useSequences();
 
-    const rows = data?.data ?? [];
+    const rows = useMemo(
+        () => sortSendHistoryByDateDesc(data?.data ?? []),
+        [data?.data],
+    );
     const total = data?.total ?? 0;
     const totalPages = data?.totalPages ?? 1;
 
