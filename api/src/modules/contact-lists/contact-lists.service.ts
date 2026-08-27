@@ -152,6 +152,7 @@ export class ContactListsService {
         const skip = (page - 1) * limit;
 
         const contactWhere = this.contactsService.buildWhereInput(organisation_uuid, query);
+        this.contactsService.applyAudienceFilters(contactWhere, query);
 
         const where: Prisma.ContactListMemberWhereInput = {
             list_uuid: listUuid,

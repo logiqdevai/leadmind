@@ -1,5 +1,6 @@
 import axiosInstance from "@/config/api/axios";
 import { ApiRoutes } from "@/config/api/routes";
+import { buildContactListApiParams } from "@/lib/contact-filter-params";
 import type {
     AddListContactsPayload,
     AddListContactsResult,
@@ -75,7 +76,7 @@ export const listContactListMembers = async (
 ): Promise<PaginatedListMembers> => {
     try {
         const response = await axiosInstance.get(ApiRoutes.contact_lists.contacts(listUuid), {
-            params: query,
+            params: buildContactListApiParams(query),
         });
         return response.data;
     } catch (error: any) {

@@ -1,4 +1,4 @@
-import { useMemo, useState, type Key } from "react";
+import { startTransition, useMemo, useState, type Key } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import { Button, Tabs } from "@heroui/react";
 import { ScrollableTabs, ScrollableTabsList, tabTriggerClassName } from "@/components/ui/scrollable-tabs";
@@ -45,10 +45,18 @@ import {
 } from "@/pages/dashboard/components/bulk-outreach-chooser-modal";
 import { ContactAudienceAnalyticsPanel } from "@/pages/dashboard/components/audience-analytics/contact-audience-analytics-panel";
 import { ContactStackViewerScope } from "@/pages/dashboard/components/contact-stack-viewer";
+import { ContactFiltersForm } from "@/pages/dashboard/components/contact-filters-form";
+import {
+    contactFiltersToListQuery,
+    parseContactFiltersFromSearchParams,
+    serializeContactFiltersToSearchParams,
+} from "@/lib/contact-filter-params";
+import type { ContactFilters } from "@/interfaces/contact-filters.interface";
 import { ListDetailSkeleton } from "./components/list-detail-skeleton";
 import { parsePageSize } from "@/lib/page-size";
 
 const SUBLISTS_PAGE_SIZE = 20;
+const SAVED_FILTER_PARAM = "saved_filter_uuid";
 
 const TABS = [
     { id: ListDetailTabIds.SUBLISTS, label: "Sublists" },
@@ -85,16 +93,27 @@ export default function ListDetailPage() {
     const membersPage = Math.max(1, Number(searchParams.get("page") ?? 1));
     const membersPageSize = parsePageSize(searchParams.get("page_size"));
     const sublistsPage = Math.max(1, Number(searchParams.get("sublists_page") ?? 1));
+    const filters = useMemo(
+        () => parseContactFiltersFromSearchParams(searchParams),
+        [searchParams],
+    );
+    const savedFilterUuid = searchParams.get(SAVED_FILTER_PARAM);
+
+    const membersQuery = useMemo(
+        () =>
+            contactFiltersToListQuery(filters, {
+                page: membersPage,
+                limit: membersPageSize.limit,
+            }),
+        [filters, membersPage, membersPageSize.limit],
+    );
 
     const { data: list, isLoading: listLoading } = useContactList(uuid);
     const {
         data: membersData,
         isLoading: membersLoading,
         isFetching: membersFetching,
-    } = useContactListMembers(uuid, {
-        page: membersPage,
-        limit: membersPageSize.limit,
-    });
+    } = useContactListMembers(uuid, membersQuery);
 
     const {
         data: childrenPage,
@@ -154,6 +173,50 @@ export default function ListDetailPage() {
         setSelectedKeys(new Set());
     };
 
+    const updateFilters = (patch: Partial<ContactFilters>, resetPage = true) => {
+        const next = { ...filters, ...patch };
+        const serialized = serializeContactFiltersToSearchParams(next);
+        const params = new URLSearchParams();
+        params.set(Routes.dashboard.lists_detail_tab_query, currentTab);
+        for (const [key, value] of Object.entries(serialized)) {
+            if (value != null && value !== "") params.set(key, value);
+        }
+        if (savedFilterUuid) params.set(SAVED_FILTER_PARAM, savedFilterUuid);
+        if (membersPageSize.key !== "50") params.set("page_size", membersPageSize.key);
+        if (resetPage) params.set("page", "1");
+        else if (membersPage > 1) params.set("page", String(membersPage));
+        startTransition(() => {
+            setSearchParams(params, { replace: true });
+        });
+        setSelectedKeys((prev) => (prev.size === 0 ? prev : new Set()));
+    };
+
+    const updateSavedFilterUuid = (uuidValue: string | null) => {
+        const params = new URLSearchParams(searchParams);
+        if (uuidValue) params.set(SAVED_FILTER_PARAM, uuidValue);
+        else params.delete(SAVED_FILTER_PARAM);
+        startTransition(() => {
+            setSearchParams(params, { replace: true });
+        });
+    };
+
+    const applySavedFilter = (patch: Partial<ContactFilters>, uuidValue: string | null) => {
+        const next = { ...filters, ...patch };
+        const serialized = serializeContactFiltersToSearchParams(next);
+        const params = new URLSearchParams();
+        params.set(Routes.dashboard.lists_detail_tab_query, currentTab);
+        for (const [key, value] of Object.entries(serialized)) {
+            if (value != null && value !== "") params.set(key, value);
+        }
+        if (uuidValue) params.set(SAVED_FILTER_PARAM, uuidValue);
+        if (membersPageSize.key !== "50") params.set("page_size", membersPageSize.key);
+        params.set("page", "1");
+        startTransition(() => {
+            setSearchParams(params, { replace: true });
+        });
+        setSelectedKeys((prev) => (prev.size === 0 ? prev : new Set()));
+    };
+
     const handleSublistsPageChange = (p: number) => {
         const params = new URLSearchParams(searchParams);
         params.set("sublists_page", String(p));
@@ -162,7 +225,7 @@ export default function ListDetailPage() {
 
     const handleTabChange = (key: Key) => {
         if (!uuid) return;
-        const next = new URLSearchParams();
+        const next = new URLSearchParams(searchParams);
         next.set(Routes.dashboard.lists_detail_tab_query, String(key));
         setSearchParams(next, { replace: true });
     };
@@ -359,6 +422,17 @@ export default function ListDetailPage() {
                     )}
                     {currentTab === ListDetailTabIds.CONTACTS && (
                         <section className="flex flex-col gap-4">
+                            <ContactFiltersForm
+                                value={filters}
+                                onChange={(patch) => updateFilters(patch)}
+                                showLeadSourceType
+                                savedFilterUuid={savedFilterUuid}
+                                onSavedFilterUuidChange={updateSavedFilterUuid}
+                                onApplySavedFilter={applySavedFilter}
+                                collapsible
+                                defaultOpen={false}
+                                sections={{ engagement: true, outreach: true }}
+                            />
                             <p className="text-xs text-muted">
                                 Click a name or use the up/down icon to open quick browse. Use arrow keys to move between contacts.
                             </p>
