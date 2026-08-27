@@ -63,6 +63,7 @@ export class FiltersService {
         await this.assertApifyForSourceType(organisation_uuid, dto.source_type);
         const uuids = dto.scoring_instruction_uuids ?? [];
         await this.scoringInstructionsService.assertAllOwnedByUser(organisation_uuid, uuids);
+        await this.assertContactListOwned(organisation_uuid, dto.contact_list_uuid);
 
         const filter = await this.prisma.filter.create({
             data: {
@@ -74,6 +75,7 @@ export class FiltersService {
                 cron_schedule: dto.cron_schedule,
                 channels: dto.channels,
                 outreach_instructions: dto.outreach_instructions,
+                contact_list_uuid: dto.contact_list_uuid,
                 ...(dto.enrichment_sources !== undefined
                     ? { enrichment_sources: dto.enrichment_sources }
                     : {}),
@@ -129,6 +131,10 @@ export class FiltersService {
             );
         }
 
+        if (dto.contact_list_uuid !== undefined) {
+            await this.assertContactListOwned(organisation_uuid, dto.contact_list_uuid);
+        }
+
         const data: Prisma.FilterUpdateInput = {
             ...(dto.name !== undefined && { name: dto.name }),
             ...(dto.source_type !== undefined && { source_type: dto.source_type }),
@@ -140,6 +146,9 @@ export class FiltersService {
                 outreach_instructions: dto.outreach_instructions,
             }),
             ...(dto.enrichment_sources !== undefined && { enrichment_sources: dto.enrichment_sources }),
+            ...(dto.contact_list_uuid !== undefined && {
+                contact_list_uuid: dto.contact_list_uuid,
+            }),
             ...(dto.scoring_instruction_uuids !== undefined && {
                 filter_scoring_instructions: {
                     deleteMany: {},
@@ -414,6 +423,22 @@ export class FiltersService {
         ];
         if (apify_sources.includes(source_type)) {
             await this.apifyCredentials.assertApifyConfigured(organisation_uuid);
+        }
+    }
+
+    private async assertContactListOwned(
+        organisation_uuid: string,
+        contact_list_uuid?: string | null,
+    ): Promise<void> {
+        if (!contact_list_uuid) return;
+
+        const list = await this.prisma.contactList.findFirst({
+            where: { uuid: contact_list_uuid, organisation_uuid },
+            select: { uuid: true },
+        });
+
+        if (!list) {
+            throw new BadRequestException('Contact list not found');
         }
     }
 

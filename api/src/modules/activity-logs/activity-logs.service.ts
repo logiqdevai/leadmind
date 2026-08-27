@@ -17,10 +17,21 @@ export class ActivityLogsService {
 
     setImmediate(async () => {
       try {
+        let actor_user_uuid = input.actor_user_uuid ?? null;
+        if (actor_user_uuid) {
+          const actor = await this.prisma.user.findUnique({
+            where: { uuid: actor_user_uuid },
+            select: { uuid: true },
+          });
+          if (!actor) {
+            actor_user_uuid = null;
+          }
+        }
+
         await this.prisma.activityLog.create({
           data: {
             organisation_uuid: input.organisation_uuid,
-            actor_user_uuid: input.actor_user_uuid ?? null,
+            actor_user_uuid,
             entity_type: input.entity_type,
             entity_uuid: input.entity_uuid ?? null,
             action: input.action,

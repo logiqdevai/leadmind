@@ -24,6 +24,7 @@ export function buildDefaults(initial?: Filter): FilterFormValues {
     const enrichment_sources = (
         initial?.enrichment_sources?.length ? initial.enrichment_sources : []
     ) as EnrichmentSource[];
+    const contact_list_uuid = initial?.contact_list_uuid ?? "";
 
     if (source_type === SourceType.LINKEDIN) {
         return {
@@ -48,6 +49,7 @@ export function buildDefaults(initial?: Filter): FilterFormValues {
             scoring_instruction_uuids,
             outreach_instructions,
             enrichment_sources,
+            contact_list_uuid,
         };
     }
     if (source_type === SourceType.GOOGLE_MAPS) {
@@ -65,6 +67,7 @@ export function buildDefaults(initial?: Filter): FilterFormValues {
             scoring_instruction_uuids,
             outreach_instructions,
             enrichment_sources,
+            contact_list_uuid,
         };
     }
     if (source_type === SourceType.GENERIC_LEAD) {
@@ -93,6 +96,7 @@ export function buildDefaults(initial?: Filter): FilterFormValues {
             scoring_instruction_uuids,
             outreach_instructions,
             enrichment_sources,
+            contact_list_uuid,
         };
     }
     if (source_type === SourceType.GEMI) {
@@ -117,6 +121,7 @@ export function buildDefaults(initial?: Filter): FilterFormValues {
             scoring_instruction_uuids,
             outreach_instructions,
             enrichment_sources,
+            contact_list_uuid,
         };
     }
     const manualConfig: Record<string, string> = {};
@@ -134,5 +139,6 @@ export function buildDefaults(initial?: Filter): FilterFormValues {
         scoring_instruction_uuids,
         outreach_instructions,
         enrichment_sources,
+        contact_list_uuid,
     };
 }

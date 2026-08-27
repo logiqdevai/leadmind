@@ -181,6 +181,7 @@ exports.Prisma.FilterScalarFieldEnum = {
   cron_schedule: 'cron_schedule',
   channels: 'channels',
   outreach_instructions: 'outreach_instructions',
+  contact_list_uuid: 'contact_list_uuid',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };

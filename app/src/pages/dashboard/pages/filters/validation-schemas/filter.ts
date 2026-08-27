@@ -73,6 +73,7 @@ const baseSchema = z.object({
     channels: channelSchema,
     scoring_instruction_uuids: z.array(z.string().uuid()).optional(),
     outreach_instructions: z.string().max(2000).optional(),
+    contact_list_uuid: z.string().uuid("Select a list"),
 });
 
 export const FilterFormSchema = z.discriminatedUnion("source_type", [

@@ -142,10 +142,12 @@ model Filter {
   cron_schedule         String?
   channels              Channel[]          @default([EMAIL])
   outreach_instructions String?
+  contact_list_uuid     String?
   created_at            DateTime           @default(now())
   updated_at            DateTime           @updatedAt
 
   organisation                Organisation               @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  contactList                 ContactList?               @relation(fields: [contact_list_uuid], references: [uuid], onDelete: SetNull)
   raw_leads                   RawLead[]
   contacts                    Contact[]
   contact_filters             ContactFilter[]
@@ -154,6 +156,7 @@ model Filter {
   audience_analyses           ContactAudienceAnalysis[]
 
   @@index([organisation_uuid])
+  @@index([contact_list_uuid])
 }
 
 model SavedContactFilter {
@@ -411,6 +414,7 @@ model ContactList {
   children          ContactList[]             @relation("ContactListHierarchy")
   members           ContactListMember[]
   audience_analyses ContactAudienceAnalysis[]
+  filters           Filter[]
 
   @@index([organisation_uuid])
   @@index([parent_list_uuid])
