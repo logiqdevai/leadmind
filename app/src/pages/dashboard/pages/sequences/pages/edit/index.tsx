@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { Button, Input, Label, TextArea, TextField } from "@heroui/react";
+import { Button, Input, Label, Switch, TextArea, TextField } from "@heroui/react";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
 import { ChevronLeft, Plus } from "lucide-react";
 import {
@@ -31,6 +31,7 @@ export default function EditSequencePage() {
 
     const [name, setName] = useState<string | null>(null);
     const [description, setDescription] = useState<string | null>(null);
+    const [stopOnReply, setStopOnReply] = useState<boolean | null>(null);
     const [stepModalOpen, setStepModalOpen] = useState(false);
     const [editingStep, setEditingStep] = useState<SequenceStep | null>(null);
     const [deleteTarget, setDeleteTarget] = useState<SequenceStep | null>(null);
@@ -53,8 +54,10 @@ export default function EditSequencePage() {
 
     const currentName = name ?? sequence.name;
     const currentDescription = description ?? sequence.description ?? "";
+    const currentStopOnReply = stopOnReply ?? sequence.stop_on_reply;
     const nameDirty = name !== null && name !== sequence.name;
     const descriptionDirty = description !== null && description !== (sequence.description ?? "");
+    const stopOnReplyDirty = stopOnReply !== null && stopOnReply !== sequence.stop_on_reply;
     const isDraft = sequence.status === SequenceStatus.DRAFT;
     const firstEnabledStepUuid = [...sequence.steps]
         .filter((s) => s.enabled)
@@ -64,16 +67,18 @@ export default function EditSequencePage() {
         : sequence.steps.filter((s) => s.enabled).length === 0;
 
     const saveBasics = async () => {
-        if (!nameDirty && !descriptionDirty) return;
+        if (!nameDirty && !descriptionDirty && !stopOnReplyDirty) return;
         await updateSequenceMut.mutateAsync({
             uuid: sequence.uuid,
             payload: {
                 ...(nameDirty ? { name: currentName.trim() } : {}),
                 ...(descriptionDirty ? { description: currentDescription.trim() } : {}),
+                ...(stopOnReplyDirty ? { stop_on_reply: currentStopOnReply } : {}),
             },
         });
         setName(null);
         setDescription(null);
+        setStopOnReply(null);
     };
 
     return (
@@ -107,7 +112,25 @@ export default function EditSequencePage() {
                         maxLength={1000}
                     />
                 </TextField>
-                {(nameDirty || descriptionDirty) && (
+                <div className="flex items-center justify-between gap-3 rounded-lg border border-border p-3">
+                    <div>
+                        <p className="text-sm font-medium text-foreground">Stop when contact replies</p>
+                        <p className="text-xs text-muted">
+                            Automatically cancel remaining steps for a contact once they reply to any step in this
+                            sequence.
+                        </p>
+                    </div>
+                    <Switch
+                        isSelected={currentStopOnReply}
+                        onChange={(v) => setStopOnReply(typeof v === "boolean" ? v : !currentStopOnReply)}
+                        aria-label="Stop sequence when contact replies"
+                    >
+                        <Switch.Control>
+                            <Switch.Thumb />
+                        </Switch.Control>
+                    </Switch>
+                </div>
+                {(nameDirty || descriptionDirty || stopOnReplyDirty) && (
                     <div>
                         <ActionButtonWithPending
                             size="sm"

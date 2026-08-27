@@ -1,6 +1,7 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CampaignContactStatus, InteractionType } from '@/generated/prisma';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
+import { SequenceEnrollmentService } from '@/modules/sequences/services/sequence-enrollment.service';
 
 export interface UnsubscribeResult {
     email: string | null;
@@ -11,7 +12,10 @@ export interface UnsubscribeResult {
 export class UnsubscribeService {
     private readonly logger = new Logger(UnsubscribeService.name);
 
-    constructor(private readonly prisma: PrismaService) {}
+    constructor(
+        private readonly prisma: PrismaService,
+        private readonly sequenceEnrollmentService: SequenceEnrollmentService,
+    ) {}
 
     async previewByToken(token: string): Promise<UnsubscribeResult> {
         const contact = await this.findByToken(token);
@@ -52,7 +56,13 @@ export class UnsubscribeService {
                 data: { status: CampaignContactStatus.UNSUBSCRIBED },
             }),
         ]);
-        this.logger.log(`Contact ${contact.uuid} unsubscribed via token`);
+        const { cancelled } = await this.sequenceEnrollmentService.cancelAllForContact(
+            contact.organisation_uuid,
+            contact.uuid,
+        );
+        this.logger.log(
+            `Contact ${contact.uuid} unsubscribed via token (${cancelled} sequence enrollment(s) cancelled)`,
+        );
         return { email: contact.email, already: false };
     }
 

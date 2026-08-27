@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueries, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "@/hooks/use-toast";
 import type {
     AssignCampaignIntegrationPayload,
@@ -46,6 +46,19 @@ export function useCampaignIntegrationCapacity(campaignUuid: string, ciUuid: str
         queryFn: () => getCampaignIntegrationCapacity(campaignUuid, ciUuid as string),
         enabled: Boolean(campaignUuid) && Boolean(ciUuid),
         refetchInterval: 30_000,
+    });
+}
+
+/** Capacity for several integrations at once - shares its cache with useCampaignIntegrationCapacity
+ * (same query keys), so this doesn't duplicate whatever a CampaignIntegrationCard already fetched. */
+export function useCampaignIntegrationsCapacities(campaignUuid: string, ciUuids: string[]) {
+    return useQueries({
+        queries: ciUuids.map((ciUuid) => ({
+            queryKey: campaignIntegrationsQueryKeys.capacity(campaignUuid, ciUuid),
+            queryFn: () => getCampaignIntegrationCapacity(campaignUuid, ciUuid),
+            enabled: Boolean(campaignUuid) && Boolean(ciUuid),
+            refetchInterval: 30_000,
+        })),
     });
 }
 

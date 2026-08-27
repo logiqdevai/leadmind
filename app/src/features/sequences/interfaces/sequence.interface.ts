@@ -53,6 +53,7 @@ export interface OutreachSequence {
     name: string;
     description: string | null;
     status: SequenceStatus;
+    stop_on_reply: boolean;
     steps: SequenceStep[];
     created_at: string;
     updated_at: string;
@@ -86,6 +87,7 @@ export interface PaginatedSequenceEnrollments {
 export type CreateSequencePayload = {
     name: string;
     description?: string;
+    stop_on_reply?: boolean;
 };
 
 export type UpdateSequencePayload = Partial<CreateSequencePayload>;

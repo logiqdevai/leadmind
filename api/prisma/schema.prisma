@@ -539,6 +539,7 @@ model OutreachSequence {
   name              String
   description       String?
   status            SequenceStatus @default(DRAFT)
+  stop_on_reply     Boolean        @default(true)
   created_at        DateTime       @default(now())
   updated_at        DateTime       @updatedAt
 

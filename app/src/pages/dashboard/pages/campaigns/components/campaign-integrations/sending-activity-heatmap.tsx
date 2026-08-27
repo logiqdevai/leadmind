@@ -35,16 +35,25 @@ function startOfWeek(date: Date): Date {
     return d;
 }
 
-interface RowLayout {
-    series: SendingActivitySeries;
+interface AccountMeta {
+    campaign_integration_uuid: string;
+    title: string;
+    provider: string;
+    status: string;
     hueVar: string;
     total: number;
-    peak: { date: string; count: number } | null;
-    dayMap: Map<string, number>;
-    sortedNonZero: number[];
 }
 
-function buildRows(series: SendingActivitySeries[]): RowLayout[] {
+interface DayCell {
+    date: string;
+    total: number;
+    byAccount: { title: string; hueVar: string; count: number }[];
+}
+
+function buildDayIndex(series: SendingActivitySeries[]): {
+    days: Map<string, DayCell>;
+    accounts: AccountMeta[];
+} {
     // Hue assignment is keyed off a stable sort of the uuid, independent of the
     // list's fetch/display order, so a status change or reordering never repaints
     // an integration's colour (colour follows the entity, never its rank).
@@ -52,33 +61,51 @@ function buildRows(series: SendingActivitySeries[]): RowLayout[] {
         .map((s) => s.campaign_integration_uuid)
         .sort((a, b) => a.localeCompare(b));
 
-    return series.map((s) => {
-        const dayMap = new Map(s.days.map((d) => [d.date, d.count]));
-        const total = s.days.reduce((sum, d) => sum + d.count, 0);
-        const peak = s.days.reduce<{ date: string; count: number } | null>(
-            (best, d) => (!best || d.count > best.count ? { date: d.date, count: d.count } : best),
-            null,
-        );
-        const sortedNonZero = s.days.map((d) => d.count).filter((c) => c > 0).sort((a, b) => a - b);
-        return {
-            series: s,
-            hueVar: vizHueVar(hueOrder.indexOf(s.campaign_integration_uuid)),
-            total,
-            peak,
-            dayMap,
-            sortedNonZero,
-        };
-    });
+    const accounts: AccountMeta[] = series.map((s) => ({
+        campaign_integration_uuid: s.campaign_integration_uuid,
+        title: s.integration_account.title,
+        provider: s.integration_account.provider,
+        status: s.status,
+        hueVar: vizHueVar(hueOrder.indexOf(s.campaign_integration_uuid)),
+        total: s.days.reduce((sum, d) => sum + d.count, 0),
+    }));
+    const metaByUuid = new Map(accounts.map((a) => [a.campaign_integration_uuid, a]));
+
+    const days = new Map<string, DayCell>();
+    for (const s of series) {
+        const meta = metaByUuid.get(s.campaign_integration_uuid);
+        if (!meta) continue;
+        for (const d of s.days) {
+            if (d.count <= 0) continue;
+            let cell = days.get(d.date);
+            if (!cell) {
+                cell = { date: d.date, total: 0, byAccount: [] };
+                days.set(d.date, cell);
+            }
+            cell.total += d.count;
+            cell.byAccount.push({ title: meta.title, hueVar: meta.hueVar, count: d.count });
+        }
+    }
+
+    return { days, accounts };
 }
 
+/** One unified calendar - a single day can be fed by several accounts, so the grid
+ * shows the combined total (GitHub-style single graph) while the legend + tooltip
+ * keep the per-account breakdown, instead of stacking a separate calendar per account. */
 export function SendingActivityHeatmap({ campaignUuid }: { campaignUuid: string }) {
     const { data: series, isLoading } = useCampaignIntegrationsActivity(campaignUuid);
     const [showTable, setShowTable] = useState(false);
 
-    const rows = useMemo(() => buildRows(series ?? []), [series]);
+    const { days, accounts } = useMemo(() => buildDayIndex(series ?? []), [series]);
+
+    const sortedNonZero = useMemo(
+        () => [...days.values()].map((d) => d.total).filter((t) => t > 0).sort((a, b) => a - b),
+        [days],
+    );
 
     const { weeks, gridStart, today } = useMemo(() => {
-        const allDates = rows.flatMap((r) => r.series.days.map((d) => d.date));
+        const allDates = [...days.keys()];
         const now = startOfDay(new Date());
         if (allDates.length === 0) {
             return { weeks: 0, gridStart: startOfWeek(now), today: now };
@@ -92,7 +119,7 @@ export function SendingActivityHeatmap({ campaignUuid }: { campaignUuid: string 
         const start = new Date(thisWeekStart);
         start.setDate(start.getDate() - (clamped - 1) * 7);
         return { weeks: clamped, gridStart: start, today: now };
-    }, [rows]);
+    }, [days]);
 
     const monthMarkers = useMemo(() => {
         const markers: { col: number; label: string }[] = [];
@@ -108,21 +135,24 @@ export function SendingActivityHeatmap({ campaignUuid }: { campaignUuid: string 
         return markers;
     }, [gridStart, weeks]);
 
+    const { totalSent, peak } = useMemo(() => {
+        let total = 0;
+        let best: { date: string; count: number } | null = null;
+        for (const cell of days.values()) {
+            total += cell.total;
+            if (!best || cell.total > best.count) best = { date: cell.date, count: cell.total };
+        }
+        return { totalSent: total, peak: best };
+    }, [days]);
+
     const tableRows = useMemo(
         () =>
-            rows
-                .flatMap((r) =>
-                    r.series.days
-                        .filter((d) => d.count > 0)
-                        .map((d) => ({
-                            date: d.date,
-                            count: d.count,
-                            label: r.series.integration_account.title,
-                            hueVar: r.hueVar,
-                        })),
+            [...days.values()]
+                .flatMap((cell) =>
+                    cell.byAccount.map((a) => ({ date: cell.date, count: a.count, label: a.title, hueVar: a.hueVar })),
                 )
                 .sort((a, b) => (a.date < b.date ? 1 : -1)),
-        [rows],
+        [days],
     );
 
     if (isLoading) {
@@ -133,11 +163,11 @@ export function SendingActivityHeatmap({ campaignUuid }: { campaignUuid: string 
         );
     }
 
-    if (rows.length === 0) {
+    if (accounts.length === 0) {
         return null;
     }
 
-    const hasAnyData = tableRows.length > 0;
+    const hasAnyData = days.size > 0;
 
     return (
         <div className="space-y-4">
@@ -145,8 +175,9 @@ export function SendingActivityHeatmap({ campaignUuid }: { campaignUuid: string 
                 <div>
                     <p className="text-sm font-medium text-foreground">Sending activity</p>
                     <p className="text-xs text-muted">
-                        Real sends per day, per email account. Colour intensity is relative to each
-                        account's own busiest day - hover a day for the exact count.
+                        {hasAnyData
+                            ? `${totalSent} sent across ${accounts.length} account${accounts.length === 1 ? "" : "s"}${peak ? ` · peak ${peak.count} on ${peak.date}` : ""}.`
+                            : "Real sends per day, combined across every connected account."}
                     </p>
                 </div>
                 {hasAnyData ? (
@@ -191,79 +222,86 @@ export function SendingActivityHeatmap({ campaignUuid }: { campaignUuid: string 
                     </table>
                 </div>
             ) : (
-                <div className="overflow-x-auto">
-                    <div className="inline-flex flex-col gap-3 min-w-full">
-                        <div
-                            className="grid text-[10px] text-muted"
-                            style={{
-                                gridTemplateColumns: `repeat(${weeks}, ${CELL_PX}px)`,
-                                gap: `${CELL_GAP_PX}px`,
-                            }}
-                        >
-                            {monthMarkers.map((m) => (
-                                <span key={m.col} style={{ gridColumnStart: m.col + 1 }}>
-                                    {m.label}
+                <div className="space-y-3">
+                    {accounts.length > 1 ? (
+                        <div className="flex flex-wrap gap-x-4 gap-y-1.5">
+                            {accounts.map((a) => (
+                                <span
+                                    key={a.campaign_integration_uuid}
+                                    className="inline-flex items-center gap-1.5 text-xs"
+                                >
+                                    <span
+                                        className="inline-block size-2 rounded-full shrink-0"
+                                        style={{ background: a.hueVar }}
+                                        aria-hidden
+                                    />
+                                    <span className="font-medium text-foreground">{a.title}</span>
+                                    <span className="text-muted">
+                                        {a.total} sent{a.status !== "ACTIVE" ? ` · ${a.status.toLowerCase()}` : ""}
+                                    </span>
                                 </span>
                             ))}
                         </div>
+                    ) : null}
 
-                        {rows.map((row) => (
-                            <div key={row.series.campaign_integration_uuid} className="space-y-1">
-                                <div className="flex items-center gap-2 text-xs">
-                                    <span
-                                        className="inline-block size-2.5 rounded-full shrink-0"
-                                        style={{ background: row.hueVar }}
-                                        aria-hidden
-                                    />
-                                    <span className="font-medium text-foreground truncate">
-                                        {row.series.integration_account.title}
+                    <div className="overflow-x-auto">
+                        <div className="inline-flex flex-col gap-2 min-w-full">
+                            <div
+                                className="grid text-[10px] text-muted"
+                                style={{
+                                    gridTemplateColumns: `repeat(${weeks}, ${CELL_PX}px)`,
+                                    gap: `${CELL_GAP_PX}px`,
+                                }}
+                            >
+                                {monthMarkers.map((m) => (
+                                    <span key={m.col} style={{ gridColumnStart: m.col + 1 }}>
+                                        {m.label}
                                     </span>
-                                    <span className="text-muted">({row.series.integration_account.provider})</span>
-                                    {row.series.status !== "ACTIVE" ? (
-                                        <span className="text-muted italic">- {row.series.status.toLowerCase()}</span>
-                                    ) : null}
-                                    <span className="text-muted ml-auto shrink-0">
-                                        {row.total} sent
-                                        {row.peak ? ` · peak ${row.peak.count} on ${row.peak.date}` : ""}
-                                    </span>
-                                </div>
-                                <div
-                                    className="grid"
-                                    style={{
-                                        gridTemplateColumns: `repeat(${weeks}, ${CELL_PX}px)`,
-                                        gridTemplateRows: `repeat(7, ${CELL_PX}px)`,
-                                        gridAutoFlow: "column",
-                                        gap: `${CELL_GAP_PX}px`,
-                                    }}
-                                >
-                                    {Array.from({ length: weeks * 7 }, (_, i) => {
-                                        const cellDate = new Date(gridStart);
-                                        cellDate.setDate(cellDate.getDate() + i);
-                                        if (cellDate > today) {
-                                            return <span key={i} aria-hidden />;
-                                        }
-                                        const iso = toISODate(cellDate);
-                                        const count = row.dayMap.get(iso) ?? 0;
-                                        const level = computeLevel(count, row.sortedNonZero);
-                                        const label = `${count} sent on ${iso} via ${row.series.integration_account.title}`;
-                                        return (
-                                            <button
-                                                key={i}
-                                                type="button"
-                                                title={label}
-                                                aria-label={label}
-                                                className="rounded-[2px] border border-border/40 hover:outline hover:outline-1 hover:outline-foreground/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent"
-                                                style={{
-                                                    width: CELL_PX,
-                                                    height: CELL_PX,
-                                                    background: levelBackground(level, row.hueVar),
-                                                }}
-                                            />
-                                        );
-                                    })}
-                                </div>
+                                ))}
                             </div>
-                        ))}
+
+                            <div
+                                className="grid"
+                                style={{
+                                    gridTemplateColumns: `repeat(${weeks}, ${CELL_PX}px)`,
+                                    gridTemplateRows: `repeat(7, ${CELL_PX}px)`,
+                                    gridAutoFlow: "column",
+                                    gap: `${CELL_GAP_PX}px`,
+                                }}
+                            >
+                                {Array.from({ length: weeks * 7 }, (_, i) => {
+                                    const cellDate = new Date(gridStart);
+                                    cellDate.setDate(cellDate.getDate() + i);
+                                    if (cellDate > today) {
+                                        return <span key={i} aria-hidden />;
+                                    }
+                                    const iso = toISODate(cellDate);
+                                    const cell = days.get(iso);
+                                    const total = cell?.total ?? 0;
+                                    const level = computeLevel(total, sortedNonZero);
+                                    const breakdown =
+                                        cell && cell.byAccount.length > 1
+                                            ? ` (${cell.byAccount.map((a) => `${a.title}: ${a.count}`).join(", ")})`
+                                            : "";
+                                    const label =
+                                        total > 0 ? `${total} sent on ${iso}${breakdown}` : `No sends on ${iso}`;
+                                    return (
+                                        <button
+                                            key={i}
+                                            type="button"
+                                            title={label}
+                                            aria-label={label}
+                                            className="rounded-[2px] border border-border/40 hover:outline hover:outline-1 hover:outline-foreground/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent"
+                                            style={{
+                                                width: CELL_PX,
+                                                height: CELL_PX,
+                                                background: levelBackground(level, "var(--accent)"),
+                                            }}
+                                        />
+                                    );
+                                })}
+                            </div>
+                        </div>
                     </div>
                 </div>
             )}

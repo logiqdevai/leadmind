@@ -1,4 +1,5 @@
 import type { Channel, MsgStatus } from "@/features/contacts/interfaces/contact.interface";
+import type { SequenceEnrollmentStatus } from "@/features/sequences/interfaces/sequence.interface";
 
 export const SendSource = {
     DIRECT: "direct",
@@ -35,6 +36,7 @@ export interface SendHistorySequence {
 
 export interface SendHistorySequenceEnrollment {
     uuid: string;
+    status: SequenceEnrollmentStatus;
     sequence: SendHistorySequence;
 }
 

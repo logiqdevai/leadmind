@@ -377,6 +377,29 @@ export class SequenceEnrollmentService {
     return { cancelled: enrollments.length };
   }
 
+  /**
+   * Cancels every ACTIVE enrollment a contact currently has, across all sequences -
+   * used when a contact opts out entirely (unsubscribe / spam complaint), as opposed
+   * to cancelEnrollment's single-enrollment scope.
+   */
+  async cancelAllForContact(
+    organisation_uuid: string,
+    contact_uuid: string,
+  ): Promise<{ cancelled: number }> {
+    const enrollments = await this.prisma.sequenceEnrollment.findMany({
+      where: {
+        contact_uuid,
+        status: SequenceEnrollmentStatus.ACTIVE,
+        sequence: { organisation_uuid },
+      },
+      select: { uuid: true },
+    });
+    for (const enrollment of enrollments) {
+      await this.cancelEnrollment(organisation_uuid, enrollment.uuid);
+    }
+    return { cancelled: enrollments.length };
+  }
+
   async listEnrollments(
     organisation_uuid: string,
     sequence_uuid: string,

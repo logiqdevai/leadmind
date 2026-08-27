@@ -418,6 +418,7 @@ exports.Prisma.OutreachSequenceScalarFieldEnum = {
   name: 'name',
   description: 'description',
   status: 'status',
+  stop_on_reply: 'stop_on_reply',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };

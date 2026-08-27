@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { Button, Chip } from "@heroui/react";
-import { Eye } from "lucide-react";
+import { Eye, XCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import type { MsgStatus } from "@/features/contacts/interfaces/contact.interface";
 import { useIntegrations } from "@/features/integrations/hooks/use-integrations";
 import type { SendHistoryMessage } from "@/features/outreach/interfaces/send-history.interface";
+import { SequenceEnrollmentStatus } from "@/features/sequences/interfaces/sequence.interface";
+import { useCancelEnrollment } from "@/features/sequences/hooks/use-sequences";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { Routes } from "@/routes/routes";
 import {
     formatSendHistoryDate,
@@ -34,6 +37,8 @@ export const STATUS_COLOR: Record<
 export function SendHistoryTable({ rows }: { rows: SendHistoryMessage[] }) {
     const { data: integrations } = useIntegrations();
     const [selected, setSelected] = useState<SendHistoryMessage | null>(null);
+    const [cancelTarget, setCancelTarget] = useState<SendHistoryMessage | null>(null);
+    const cancelEnrollmentMut = useCancelEnrollment();
 
     if (rows.length === 0) {
         return (
@@ -49,6 +54,27 @@ export function SendHistoryTable({ rows }: { rows: SendHistoryMessage[] }) {
                 message={selected}
                 onOpenChange={(open) => {
                     if (!open) setSelected(null);
+                }}
+            />
+            <ConfirmDialog
+                isOpen={!!cancelTarget}
+                onOpenChange={(open) => !open && setCancelTarget(null)}
+                title="Cancel sequence for this contact?"
+                description={
+                    cancelTarget
+                        ? `${cancelTarget.contact.name ?? "This contact"} will not receive any further steps of "${cancelTarget.sequence_enrollment?.sequence.name}".`
+                        : undefined
+                }
+                confirmLabel="Cancel sequence"
+                variant="danger"
+                isPending={cancelEnrollmentMut.isPending}
+                onConfirm={async () => {
+                    if (!cancelTarget?.sequence_enrollment) return;
+                    await cancelEnrollmentMut.mutateAsync({
+                        uuid: cancelTarget.sequence_enrollment.sequence.uuid,
+                        enrollmentUuid: cancelTarget.sequence_enrollment.uuid,
+                    });
+                    setCancelTarget(null);
                 }}
             />
             <table className="w-full table-fixed text-sm">
@@ -83,8 +109,18 @@ export function SendHistoryTable({ rows }: { rows: SendHistoryMessage[] }) {
                             <td className="hidden lg:table-cell px-3 py-2 align-top text-foreground/90">
                                 {getSendIntegrationLabel(row, integrations)}
                             </td>
-                            <td className="hidden lg:table-cell px-3 py-2 align-top text-xs text-foreground/90 truncate max-w-[10rem]">
-                                {getSendSourceLabel(row)}
+                            <td className="hidden lg:table-cell px-3 py-2 align-top text-xs text-foreground/90 max-w-[10rem]">
+                                <div className="truncate">{getSendSourceLabel(row)}</div>
+                                {row.sequence_enrollment?.status === SequenceEnrollmentStatus.ACTIVE ? (
+                                    <button
+                                        type="button"
+                                        onClick={() => setCancelTarget(row)}
+                                        className="mt-0.5 inline-flex items-center gap-1 text-danger hover:underline"
+                                    >
+                                        <XCircle className="size-3" />
+                                        Cancel sequence
+                                    </button>
+                                ) : null}
                             </td>
                             <td className="px-3 py-2 align-top">
                                 <Chip size="sm" variant="soft" color={STATUS_COLOR[row.status]}>

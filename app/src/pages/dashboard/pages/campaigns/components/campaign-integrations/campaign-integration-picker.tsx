@@ -3,11 +3,13 @@ import { Button } from "@heroui/react";
 import { AlertTriangle, Info, Plus } from "lucide-react";
 import {
     useCampaignIntegrations,
+    useCampaignIntegrationsCapacities,
     useRemoveCampaignIntegration,
     useUpdateCampaignIntegrationStatus,
 } from "@/features/campaign-integrations/hooks/use-campaign-integrations";
 import { CampaignIntegrationStatus } from "@/features/campaign-integrations/interfaces/campaign-integration.interface";
 import { firstStageDailyCapacity } from "@/features/sending-policy/utils/sending-policy-validation";
+import { computeSendingForecast } from "@/features/campaign-integrations/utils/sending-forecast.util";
 import { CampaignIntegrationCard } from "./campaign-integration-card";
 import { AssignIntegrationModal } from "./assign-integration-modal";
 import { SendingActivityHeatmap } from "./sending-activity-heatmap";
@@ -35,6 +37,28 @@ export function CampaignIntegrationPicker({
     const assignedAccountUuids = useMemo(
         () => new Set((campaignIntegrations ?? []).map((ci) => ci.integration_account_uuid)),
         [campaignIntegrations],
+    );
+
+    const activeIntegrations = useMemo(
+        () => (campaignIntegrations ?? []).filter((ci) => ci.status === CampaignIntegrationStatus.ACTIVE),
+        [campaignIntegrations],
+    );
+    const activeCiUuids = useMemo(() => activeIntegrations.map((ci) => ci.uuid), [activeIntegrations]);
+    const capacityQueries = useCampaignIntegrationsCapacities(campaignUuid, activeCiUuids);
+    const capacityFingerprint = capacityQueries.map((q) => q.dataUpdatedAt).join(",");
+
+    const forecast = useMemo(
+        () =>
+            computeSendingForecast(
+                activeIntegrations.map((ci, i) => ({
+                    campaign_integration_uuid: ci.uuid,
+                    stages: ci.sending_policy.stages,
+                    capacity: capacityQueries[i]?.data,
+                })),
+                totalContacts ?? 0,
+            ),
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [activeIntegrations, totalContacts, capacityFingerprint],
     );
 
     const capacityMessage = useMemo(() => {
@@ -116,6 +140,7 @@ export function CampaignIntegrationPicker({
                             key={ci.uuid}
                             campaignUuid={campaignUuid}
                             campaignIntegration={ci}
+                            forecast={forecast.byAccount[ci.uuid]}
                             disabled={disabled || updateStatus.isPending || removeMutation.isPending}
                             isRemoving={removeMutation.isPending}
                             onToggleStatus={(status) => updateStatus.mutate({ ciUuid: ci.uuid, payload: { status } })}

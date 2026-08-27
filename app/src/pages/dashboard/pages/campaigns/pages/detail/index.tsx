@@ -19,7 +19,6 @@ import { Routes } from "@/routes/routes";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { SenderProfileSelect } from "@/features/messaging/components/sender-profile-select";
 import { CampaignIntegrationPicker } from "../../components/campaign-integrations/campaign-integration-picker";
-import { SendingActivityHeatmap } from "../../components/campaign-integrations/sending-activity-heatmap";
 import { useCampaignIntegrations } from "@/features/campaign-integrations/hooks/use-campaign-integrations";
 import { CampaignStatusBadge } from "../../components/campaign-status-badge";
 import { CampaignStatsSection } from "../../components/campaign-stats-section";
@@ -201,9 +200,7 @@ export default function CampaignDetailPage() {
 
             <CampaignStatsSection campaign={campaign} />
 
-            <SendingActivityHeatmap campaignUuid={campaign.uuid} />
-
-            {showIntegrationPicker ? (
+            {includesEmail ? (
                 <section className="rounded-xl border border-border bg-surface p-4">
                     <CampaignIntegrationPicker campaignUuid={campaign.uuid} totalContacts={pendingEmailCount} />
                 </section>

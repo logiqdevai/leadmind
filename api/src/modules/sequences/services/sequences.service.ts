@@ -73,6 +73,7 @@ export class SequencesService {
                 name: dto.name.trim(),
                 description: dto.description?.trim() || null,
                 status: SequenceStatus.DRAFT,
+                stop_on_reply: dto.stop_on_reply ?? true,
             },
         });
     }
@@ -110,6 +111,9 @@ export class SequencesService {
                 ...(dto.name !== undefined && { name: dto.name.trim() }),
                 ...(dto.description !== undefined && {
                     description: dto.description?.trim() || null,
+                }),
+                ...(dto.stop_on_reply !== undefined && {
+                    stop_on_reply: dto.stop_on_reply,
                 }),
             },
         });

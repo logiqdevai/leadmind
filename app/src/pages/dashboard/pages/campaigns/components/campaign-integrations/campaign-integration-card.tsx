@@ -10,20 +10,32 @@ import {
     useCampaignIntegrationCapacity,
 } from "@/features/campaign-integrations/hooks/use-campaign-integrations";
 import { formatSendingPolicyStages } from "@/features/sending-policy/utils/format-sending-policy";
+import type { ForecastDay } from "@/features/campaign-integrations/utils/sending-forecast.util";
 import { EditSendingPolicyModal } from "../sending-policy/edit-sending-policy-modal";
 
 interface CampaignIntegrationCardProps {
     campaignUuid: string;
     campaignIntegration: CampaignIntegration;
+    /** Projected sends for the next couple of weeks, sharing the campaign's remaining contact
+     * pool with every other active account - undefined while its forecast hasn't loaded yet. */
+    forecast?: { days: ForecastDay[]; total: number };
     onToggleStatus: (status: "ACTIVE" | "PAUSED") => void;
     onRemove: () => void;
     isRemoving?: boolean;
     disabled?: boolean;
 }
 
+const FORECAST_DAY_LABEL = new Intl.DateTimeFormat(undefined, { month: "short", day: "numeric" });
+
+function formatForecastDay(isoDate: string): string {
+    const [year, month, day] = isoDate.split("-").map(Number);
+    return FORECAST_DAY_LABEL.format(new Date(year, month - 1, day));
+}
+
 export function CampaignIntegrationCard({
     campaignUuid,
     campaignIntegration: ci,
+    forecast,
     onToggleStatus,
     onRemove,
     isRemoving = false,
@@ -114,6 +126,25 @@ export function CampaignIntegrationCard({
                 </div>
             ) : !isActive ? (
                 <p className="text-xs text-muted border-t border-border pt-2">Paused</p>
+            ) : null}
+
+            {isActive && forecast && forecast.days.length > 0 ? (
+                <div className="border-t border-border pt-2">
+                    <p className="mb-1.5 text-xs text-muted">
+                        Projected sends over the next {forecast.days.length} days — {forecast.total} total
+                        (shares the campaign's remaining contacts with every other active account):
+                    </p>
+                    <div className="flex gap-1.5 overflow-x-auto pb-0.5">
+                        {forecast.days.map((day) => (
+                            <span
+                                key={day.date}
+                                className="shrink-0 rounded-md bg-surface-secondary px-1.5 py-1 text-[11px] text-foreground/90 tabular-nums"
+                            >
+                                {formatForecastDay(day.date)} · {day.count}
+                            </span>
+                        ))}
+                    </div>
+                </div>
             ) : null}
 
             <EditSendingPolicyModal

@@ -364,6 +364,7 @@ export class OutreachService {
                     sequence_enrollment: {
                         select: {
                             uuid: true,
+                            status: true,
                             sequence: {
                                 select: {
                                     uuid: true,

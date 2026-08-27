@@ -34577,6 +34577,7 @@ export namespace Prisma {
     name: string | null
     description: string | null
     status: $Enums.SequenceStatus | null
+    stop_on_reply: boolean | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -34588,6 +34589,7 @@ export namespace Prisma {
     name: string | null
     description: string | null
     status: $Enums.SequenceStatus | null
+    stop_on_reply: boolean | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -34599,6 +34601,7 @@ export namespace Prisma {
     name: number
     description: number
     status: number
+    stop_on_reply: number
     created_at: number
     updated_at: number
     _all: number
@@ -34620,6 +34623,7 @@ export namespace Prisma {
     name?: true
     description?: true
     status?: true
+    stop_on_reply?: true
     created_at?: true
     updated_at?: true
   }
@@ -34631,6 +34635,7 @@ export namespace Prisma {
     name?: true
     description?: true
     status?: true
+    stop_on_reply?: true
     created_at?: true
     updated_at?: true
   }
@@ -34642,6 +34647,7 @@ export namespace Prisma {
     name?: true
     description?: true
     status?: true
+    stop_on_reply?: true
     created_at?: true
     updated_at?: true
     _all?: true
@@ -34740,6 +34746,7 @@ export namespace Prisma {
     name: string
     description: string | null
     status: $Enums.SequenceStatus
+    stop_on_reply: boolean
     created_at: Date
     updated_at: Date
     _count: OutreachSequenceCountAggregateOutputType | null
@@ -34770,6 +34777,7 @@ export namespace Prisma {
     name?: boolean
     description?: boolean
     status?: boolean
+    stop_on_reply?: boolean
     created_at?: boolean
     updated_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
@@ -34786,6 +34794,7 @@ export namespace Prisma {
     name?: boolean
     description?: boolean
     status?: boolean
+    stop_on_reply?: boolean
     created_at?: boolean
     updated_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
@@ -34798,6 +34807,7 @@ export namespace Prisma {
     name?: boolean
     description?: boolean
     status?: boolean
+    stop_on_reply?: boolean
     created_at?: boolean
     updated_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
@@ -34810,11 +34820,12 @@ export namespace Prisma {
     name?: boolean
     description?: boolean
     status?: boolean
+    stop_on_reply?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
-  export type OutreachSequenceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "name" | "description" | "status" | "created_at" | "updated_at", ExtArgs["result"]["outreachSequence"]>
+  export type OutreachSequenceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "name" | "description" | "status" | "stop_on_reply" | "created_at" | "updated_at", ExtArgs["result"]["outreachSequence"]>
   export type OutreachSequenceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     steps?: boolean | OutreachSequence$stepsArgs<ExtArgs>
@@ -34844,6 +34855,7 @@ export namespace Prisma {
       name: string
       description: string | null
       status: $Enums.SequenceStatus
+      stop_on_reply: boolean
       created_at: Date
       updated_at: Date
     }, ExtArgs["result"]["outreachSequence"]>
@@ -35279,6 +35291,7 @@ export namespace Prisma {
     readonly name: FieldRef<"OutreachSequence", 'String'>
     readonly description: FieldRef<"OutreachSequence", 'String'>
     readonly status: FieldRef<"OutreachSequence", 'SequenceStatus'>
+    readonly stop_on_reply: FieldRef<"OutreachSequence", 'Boolean'>
     readonly created_at: FieldRef<"OutreachSequence", 'DateTime'>
     readonly updated_at: FieldRef<"OutreachSequence", 'DateTime'>
   }
@@ -77877,6 +77890,7 @@ export namespace Prisma {
     name: 'name',
     description: 'description',
     status: 'status',
+    stop_on_reply: 'stop_on_reply',
     created_at: 'created_at',
     updated_at: 'updated_at'
   };
@@ -81405,6 +81419,7 @@ export namespace Prisma {
     name?: StringFilter<"OutreachSequence"> | string
     description?: StringNullableFilter<"OutreachSequence"> | string | null
     status?: EnumSequenceStatusFilter<"OutreachSequence"> | $Enums.SequenceStatus
+    stop_on_reply?: BoolFilter<"OutreachSequence"> | boolean
     created_at?: DateTimeFilter<"OutreachSequence"> | Date | string
     updated_at?: DateTimeFilter<"OutreachSequence"> | Date | string
     organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
@@ -81420,6 +81435,7 @@ export namespace Prisma {
     name?: SortOrder
     description?: SortOrderInput | SortOrder
     status?: SortOrder
+    stop_on_reply?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     organisation?: OrganisationOrderByWithRelationInput
@@ -81438,6 +81454,7 @@ export namespace Prisma {
     name?: StringFilter<"OutreachSequence"> | string
     description?: StringNullableFilter<"OutreachSequence"> | string | null
     status?: EnumSequenceStatusFilter<"OutreachSequence"> | $Enums.SequenceStatus
+    stop_on_reply?: BoolFilter<"OutreachSequence"> | boolean
     created_at?: DateTimeFilter<"OutreachSequence"> | Date | string
     updated_at?: DateTimeFilter<"OutreachSequence"> | Date | string
     organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
@@ -81453,6 +81470,7 @@ export namespace Prisma {
     name?: SortOrder
     description?: SortOrderInput | SortOrder
     status?: SortOrder
+    stop_on_reply?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     _count?: OutreachSequenceCountOrderByAggregateInput
@@ -81472,6 +81490,7 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"OutreachSequence"> | string
     description?: StringNullableWithAggregatesFilter<"OutreachSequence"> | string | null
     status?: EnumSequenceStatusWithAggregatesFilter<"OutreachSequence"> | $Enums.SequenceStatus
+    stop_on_reply?: BoolWithAggregatesFilter<"OutreachSequence"> | boolean
     created_at?: DateTimeWithAggregatesFilter<"OutreachSequence"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"OutreachSequence"> | Date | string
   }
@@ -87119,6 +87138,7 @@ export namespace Prisma {
     name: string
     description?: string | null
     status?: $Enums.SequenceStatus
+    stop_on_reply?: boolean
     created_at?: Date | string
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutOutreach_sequencesInput
@@ -87134,6 +87154,7 @@ export namespace Prisma {
     name: string
     description?: string | null
     status?: $Enums.SequenceStatus
+    stop_on_reply?: boolean
     created_at?: Date | string
     updated_at?: Date | string
     steps?: OutreachSequenceStepUncheckedCreateNestedManyWithoutSequenceInput
@@ -87146,6 +87167,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSequenceStatusFieldUpdateOperationsInput | $Enums.SequenceStatus
+    stop_on_reply?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutOutreach_sequencesNestedInput
@@ -87161,6 +87183,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSequenceStatusFieldUpdateOperationsInput | $Enums.SequenceStatus
+    stop_on_reply?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     steps?: OutreachSequenceStepUncheckedUpdateManyWithoutSequenceNestedInput
@@ -87175,6 +87198,7 @@ export namespace Prisma {
     name: string
     description?: string | null
     status?: $Enums.SequenceStatus
+    stop_on_reply?: boolean
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -87184,6 +87208,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSequenceStatusFieldUpdateOperationsInput | $Enums.SequenceStatus
+    stop_on_reply?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -87195,6 +87220,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSequenceStatusFieldUpdateOperationsInput | $Enums.SequenceStatus
+    stop_on_reply?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -93079,6 +93105,7 @@ export namespace Prisma {
     name?: SortOrder
     description?: SortOrder
     status?: SortOrder
+    stop_on_reply?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -93094,6 +93121,7 @@ export namespace Prisma {
     name?: SortOrder
     description?: SortOrder
     status?: SortOrder
+    stop_on_reply?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -93105,6 +93133,7 @@ export namespace Prisma {
     name?: SortOrder
     description?: SortOrder
     status?: SortOrder
+    stop_on_reply?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -103676,6 +103705,7 @@ export namespace Prisma {
     name: string
     description?: string | null
     status?: $Enums.SequenceStatus
+    stop_on_reply?: boolean
     created_at?: Date | string
     updated_at?: Date | string
     steps?: OutreachSequenceStepCreateNestedManyWithoutSequenceInput
@@ -103689,6 +103719,7 @@ export namespace Prisma {
     name: string
     description?: string | null
     status?: $Enums.SequenceStatus
+    stop_on_reply?: boolean
     created_at?: Date | string
     updated_at?: Date | string
     steps?: OutreachSequenceStepUncheckedCreateNestedManyWithoutSequenceInput
@@ -104885,6 +104916,7 @@ export namespace Prisma {
     name?: StringFilter<"OutreachSequence"> | string
     description?: StringNullableFilter<"OutreachSequence"> | string | null
     status?: EnumSequenceStatusFilter<"OutreachSequence"> | $Enums.SequenceStatus
+    stop_on_reply?: BoolFilter<"OutreachSequence"> | boolean
     created_at?: DateTimeFilter<"OutreachSequence"> | Date | string
     updated_at?: DateTimeFilter<"OutreachSequence"> | Date | string
   }
@@ -112840,6 +112872,7 @@ export namespace Prisma {
     name: string
     description?: string | null
     status?: $Enums.SequenceStatus
+    stop_on_reply?: boolean
     created_at?: Date | string
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutOutreach_sequencesInput
@@ -112854,6 +112887,7 @@ export namespace Prisma {
     name: string
     description?: string | null
     status?: $Enums.SequenceStatus
+    stop_on_reply?: boolean
     created_at?: Date | string
     updated_at?: Date | string
     enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutSequenceInput
@@ -112998,6 +113032,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSequenceStatusFieldUpdateOperationsInput | $Enums.SequenceStatus
+    stop_on_reply?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutOutreach_sequencesNestedInput
@@ -113012,6 +113047,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSequenceStatusFieldUpdateOperationsInput | $Enums.SequenceStatus
+    stop_on_reply?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutSequenceNestedInput
@@ -113079,6 +113115,7 @@ export namespace Prisma {
     name: string
     description?: string | null
     status?: $Enums.SequenceStatus
+    stop_on_reply?: boolean
     created_at?: Date | string
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutOutreach_sequencesInput
@@ -113093,6 +113130,7 @@ export namespace Prisma {
     name: string
     description?: string | null
     status?: $Enums.SequenceStatus
+    stop_on_reply?: boolean
     created_at?: Date | string
     updated_at?: Date | string
     steps?: OutreachSequenceStepUncheckedCreateNestedManyWithoutSequenceInput
@@ -113387,6 +113425,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSequenceStatusFieldUpdateOperationsInput | $Enums.SequenceStatus
+    stop_on_reply?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutOutreach_sequencesNestedInput
@@ -113401,6 +113440,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSequenceStatusFieldUpdateOperationsInput | $Enums.SequenceStatus
+    stop_on_reply?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     steps?: OutreachSequenceStepUncheckedUpdateManyWithoutSequenceNestedInput
@@ -114854,6 +114894,7 @@ export namespace Prisma {
     name: string
     description?: string | null
     status?: $Enums.SequenceStatus
+    stop_on_reply?: boolean
     created_at?: Date | string
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutOutreach_sequencesInput
@@ -114868,6 +114909,7 @@ export namespace Prisma {
     name: string
     description?: string | null
     status?: $Enums.SequenceStatus
+    stop_on_reply?: boolean
     created_at?: Date | string
     updated_at?: Date | string
     steps?: OutreachSequenceStepUncheckedCreateNestedManyWithoutSequenceInput
@@ -115282,6 +115324,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSequenceStatusFieldUpdateOperationsInput | $Enums.SequenceStatus
+    stop_on_reply?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutOutreach_sequencesNestedInput
@@ -115296,6 +115339,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSequenceStatusFieldUpdateOperationsInput | $Enums.SequenceStatus
+    stop_on_reply?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     steps?: OutreachSequenceStepUncheckedUpdateManyWithoutSequenceNestedInput
@@ -122355,6 +122399,7 @@ export namespace Prisma {
     name: string
     description?: string | null
     status?: $Enums.SequenceStatus
+    stop_on_reply?: boolean
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -123089,6 +123134,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSequenceStatusFieldUpdateOperationsInput | $Enums.SequenceStatus
+    stop_on_reply?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     steps?: OutreachSequenceStepUpdateManyWithoutSequenceNestedInput
@@ -123102,6 +123148,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSequenceStatusFieldUpdateOperationsInput | $Enums.SequenceStatus
+    stop_on_reply?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     steps?: OutreachSequenceStepUncheckedUpdateManyWithoutSequenceNestedInput
@@ -123115,6 +123162,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSequenceStatusFieldUpdateOperationsInput | $Enums.SequenceStatus
+    stop_on_reply?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }

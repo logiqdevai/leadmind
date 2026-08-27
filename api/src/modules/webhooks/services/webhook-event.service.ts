@@ -6,13 +6,16 @@ import {
     LeadStatus,
     MsgDirection,
     MsgStatus,
+    OutreachMessage,
     Prisma,
+    SequenceEnrollmentStatus,
 } from '@/generated/prisma';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { ResendAdapter } from '@/integrations/notifications/resend/resend/resend.adapter';
 import { ContactsService } from '@/modules/contacts/contacts.service';
 import { MailService } from '@/modules/internal/mail/mail.service';
 import { CampaignMessageSendService } from '@/modules/marketing-campaigns/services/campaign-message-send.service';
+import { SequenceEnrollmentService } from '@/modules/sequences/services/sequence-enrollment.service';
 import { EmailConfig } from '@/shared/config/email';
 import { sanitizeEmailHtml } from '@/shared/utils/sanitize-html.util';
 
@@ -63,6 +66,7 @@ export class WebhookEventService {
         private readonly campaignSendService: CampaignMessageSendService,
         private readonly contactsService: ContactsService,
         private readonly mailService: MailService,
+        private readonly sequenceEnrollmentService: SequenceEnrollmentService,
     ) { }
 
     async resolveOutboundMessageIdFromReceived(
@@ -376,7 +380,53 @@ export class WebhookEventService {
 
         if (event.kind === 'replied') {
             await this.forwardReplyIfConfigured(message.organisation_uuid, event);
+            await this.cancelEnrollmentOnReplyIfConfigured(message);
         }
+
+        if (event.kind === 'complained') {
+            const { cancelled } = await this.sequenceEnrollmentService.cancelAllForContact(
+                message.organisation_uuid,
+                message.contact_uuid,
+            );
+            if (cancelled > 0) {
+                this.logger.log(
+                    `[ingest] Spam complaint from contact=${message.contact_uuid} cancelled ${cancelled} sequence enrollment(s)`,
+                );
+            }
+        }
+    }
+
+    /**
+     * A reply only cancels the enrollment tied to the message actually replied to -
+     * not every active enrollment for the contact - so a reply on one sequence never
+     * stops an unrelated sequence the same contact is also enrolled in.
+     */
+    private async cancelEnrollmentOnReplyIfConfigured(
+        message: OutreachMessage,
+    ): Promise<void> {
+        if (!message.sequence_enrollment_uuid) return;
+
+        const enrollment = await this.prisma.sequenceEnrollment.findUnique({
+            where: { uuid: message.sequence_enrollment_uuid },
+            select: {
+                status: true,
+                sequence: { select: { stop_on_reply: true } },
+            },
+        });
+        if (!enrollment || enrollment.status !== SequenceEnrollmentStatus.ACTIVE) {
+            return;
+        }
+        if (!enrollment.sequence.stop_on_reply) {
+            return;
+        }
+
+        await this.sequenceEnrollmentService.cancelEnrollment(
+            message.organisation_uuid,
+            message.sequence_enrollment_uuid,
+        );
+        this.logger.log(
+            `[ingest] Reply cancelled sequence enrollment=${message.sequence_enrollment_uuid}`,
+        );
     }
 
     private async forwardReplyIfConfigured(
