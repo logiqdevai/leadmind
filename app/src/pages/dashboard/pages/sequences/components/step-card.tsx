@@ -100,7 +100,7 @@ export function StepCard({
                     <span
                         title={
                             deleteDisabled
-                                ? "Disable this step instead — it can't be deleted once the sequence is active"
+                                ? "Disable this step instead — it can't be deleted while contacts are actively enrolled"
                                 : undefined
                         }
                     >
