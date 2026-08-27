@@ -74,6 +74,10 @@ const SettingsOrganisationPage: FC = () => {
     const [inviteOpen, setInviteOpen] = useState(false);
     const [createOpen, setCreateOpen] = useState(false);
     const [deleteOpen, setDeleteOpen] = useState(false);
+    const [memberToRemove, setMemberToRemove] = useState<{
+        userUuid: string;
+        label: string;
+    } | null>(null);
     const [copyDataEnabled, setCopyDataEnabled] = useState(false);
 
     const canDeleteOrg = canDelete && organisations.length > 1;
@@ -165,6 +169,12 @@ const SettingsOrganisationPage: FC = () => {
         await deleteOrganisation.mutateAsync(organisationUuid);
         setDeleteOpen(false);
         navigate(Routes.dashboard.root);
+    };
+
+    const handleRemoveMember = async () => {
+        if (!memberToRemove) return;
+        await removeMember.mutateAsync(memberToRemove.userUuid);
+        setMemberToRemove(null);
     };
 
     return (
@@ -379,7 +389,12 @@ const SettingsOrganisationPage: FC = () => {
                                             size="sm"
                                             variant="ghost"
                                             onPress={() =>
-                                                removeMember.mutate(member.user_uuid)
+                                                setMemberToRemove({
+                                                    userUuid: member.user_uuid,
+                                                    label:
+                                                        member.full_name?.trim() ||
+                                                        member.email,
+                                                })
                                             }
                                         >
                                             Remove
@@ -485,6 +500,20 @@ const SettingsOrganisationPage: FC = () => {
                 variant="danger"
                 isPending={deleteOrganisation.isPending}
                 onConfirm={handleDeleteOrganisation}
+            />
+
+            <ConfirmDialog
+                isOpen={!!memberToRemove}
+                onOpenChange={(open) => {
+                    if (!open) setMemberToRemove(null);
+                }}
+                title={`Remove "${memberToRemove?.label ?? "this member"}"?`}
+                description="They will lose access to this organisation. You can invite them again later."
+                confirmLabel="Remove member"
+                cancelLabel="Cancel"
+                variant="danger"
+                isPending={removeMember.isPending}
+                onConfirm={handleRemoveMember}
             />
 
             <Modal.Backdrop isOpen={createOpen} onOpenChange={setCreateOpen}>

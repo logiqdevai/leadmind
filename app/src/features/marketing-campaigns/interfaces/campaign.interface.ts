@@ -95,6 +95,14 @@ export interface MarketingCampaignContact {
     created_at: string;
     updated_at: string;
     contact: Contact;
+    // Present only for SEQUENCE campaigns, where each row is one sequence-step
+    // send rather than one row per recipient - see MarketingCampaignsService.listSequenceContacts.
+    step_order_index?: number | null;
+    scheduled_at?: string | null;
+    opened_at?: string | null;
+    clicked_at?: string | null;
+    replied_at?: string | null;
+    bounced_at?: string | null;
 }
 
 export interface PaginatedCampaigns {

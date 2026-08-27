@@ -45,10 +45,16 @@ export default function Sidebar() {
         `,
       }}
     >
-      {/* Header */}
-      <div className="h-[54px] flex items-center shrink-0 px-3 border-b border-border">
+      <div
+        className={cn(
+          "flex shrink-0 border-b border-border",
+          collapsed
+            ? "flex-col items-center gap-1 px-2 py-2"
+            : "h-[54px] items-center px-3",
+        )}
+      >
         {collapsed ? (
-          <div className="flex flex-col items-center justify-center w-full gap-1.5 py-0.5">
+          <>
             <NavLink
               to={Routes.root}
               aria-label={environments.APP_NAME}
@@ -64,7 +70,7 @@ export default function Sidebar() {
             >
               <PanelLeftOpen className="h-3.5 w-3.5" />
             </button>
-          </div>
+          </>
         ) : (
           <>
             <NavLink

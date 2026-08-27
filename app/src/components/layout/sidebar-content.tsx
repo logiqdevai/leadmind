@@ -234,18 +234,26 @@ export default function SidebarContent({ collapsed, onNavigate }: SidebarContent
   const [settingsOpen, setSettingsOpen] = useState(() => pathMatchesAnySettingsRoute(pathname));
 
   useEffect(() => {
+    if (collapsed) {
+      setAdminOpen(false);
+      setSettingsOpen(false);
+    }
+  }, [collapsed]);
+
+  useEffect(() => {
     const nowAdmin = pathMatchesAnyAdminRoute(pathname);
     const prevAdmin = pathMatchesAnyAdminRoute(prevPathname.current);
     const nowSettings = pathMatchesAnySettingsRoute(pathname);
     const prevSettings = pathMatchesAnySettingsRoute(prevPathname.current);
     prevPathname.current = pathname;
+    if (collapsed) return;
     if (nowAdmin && !prevAdmin) {
       setAdminOpen(true);
     }
     if (nowSettings && !prevSettings) {
       setSettingsOpen(true);
     }
-  }, [pathname]);
+  }, [pathname, collapsed]);
 
   const disclosureTriggerClass = cn(
     "group flex w-full rounded-xl transition-all duration-200 outline-none",

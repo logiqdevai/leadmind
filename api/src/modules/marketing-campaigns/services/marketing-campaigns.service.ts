@@ -15,6 +15,7 @@ import {
   Contact,
   Lead,
   MarketingCampaign,
+  MsgStatus,
   OpenAiBatchStatus,
   Prisma,
 } from '@/generated/prisma';
@@ -286,7 +287,11 @@ export class MarketingCampaignsService {
     uuid: string,
     query: ListCampaignContactsDto,
   ) {
-    await this.requireOwned(organisation_uuid, uuid);
+    const campaign = await this.requireOwned(organisation_uuid, uuid);
+
+    if (campaign.campaign_type === CampaignType.SEQUENCE) {
+      return this.listSequenceContacts(uuid, query);
+    }
 
     const page = query.page ?? 1;
     const limit = query.limit ?? 20;
@@ -317,6 +322,82 @@ export class MarketingCampaignsService {
       }),
       this.prisma.marketingCampaignContact.count({ where }),
     ]);
+
+    return {
+      data,
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+    };
+  }
+
+  /**
+   * SEQUENCE campaigns never populate MarketingCampaignContact (dispatch enrolls
+   * contacts into the sequence instead - see MarketingCampaignDispatchWorker).
+   * Recipients + their per-step send schedule live on OutreachMessage rows keyed
+   * by sequence_step_uuid, so the "recipients" list is one row per step-send here
+   * rather than one row per contact - that's what actually shows a sending schedule.
+   */
+  private async listSequenceContacts(
+    campaign_uuid: string,
+    query: ListCampaignContactsDto,
+  ) {
+    const page = query.page ?? 1;
+    const limit = query.limit ?? 20;
+    const skip = (page - 1) * limit;
+
+    const where: Prisma.OutreachMessageWhereInput = {
+      campaign_uuid,
+      sequence_step_uuid: { not: null },
+      ...(query.status && { status: query.status as unknown as MsgStatus }),
+      ...(query.channel && { channel: query.channel }),
+      ...(query.search && {
+        contact: {
+          OR: [
+            { name: { contains: query.search, mode: 'insensitive' } },
+            { email: { contains: query.search, mode: 'insensitive' } },
+            { company: { contains: query.search, mode: 'insensitive' } },
+          ],
+        },
+      }),
+    };
+
+    const [messages, total] = await Promise.all([
+      this.prisma.outreachMessage.findMany({
+        where,
+        include: {
+          contact: true,
+          sequence_step: { select: { order_index: true } },
+        },
+        orderBy: [{ scheduled_at: 'asc' }, { created_at: 'asc' }],
+        skip,
+        take: limit,
+      }),
+      this.prisma.outreachMessage.count({ where }),
+    ]);
+
+    const data = messages.map((message) => ({
+      uuid: message.uuid,
+      campaign_uuid: campaign_uuid,
+      contact_uuid: message.contact_uuid,
+      contact: message.contact,
+      channel: message.channel,
+      status: message.status,
+      step_order_index: message.sequence_step?.order_index ?? null,
+      scheduled_at: message.scheduled_at,
+      sent_at: message.sent_at,
+      delivered_at: message.delivered_at,
+      opened_at: message.opened_at,
+      clicked_at: message.clicked_at,
+      replied_at: message.replied_at,
+      bounced_at: message.bounced_at,
+      error_message:
+        ((message.metadata as Record<string, unknown> | null)
+          ?.error as string) ?? null,
+      created_at: message.created_at,
+      updated_at: message.updated_at,
+    }));
 
     return {
       data,
