@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { Label, ListBox, Select } from "@heroui/react";
-import { ChevronLeft, FileText, Send } from "lucide-react";
+import { Button, Label, ListBox, Select } from "@heroui/react";
+import { ChevronLeft, FileText, ListOrdered, Send } from "lucide-react";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
 import {
     useCampaign,
@@ -19,6 +19,7 @@ import { Routes } from "@/routes/routes";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { SenderProfileSelect } from "@/features/messaging/components/sender-profile-select";
 import { CampaignIntegrationPicker } from "../../components/campaign-integrations/campaign-integration-picker";
+import { SendingActivityHeatmap } from "../../components/campaign-integrations/sending-activity-heatmap";
 import { useCampaignIntegrations } from "@/features/campaign-integrations/hooks/use-campaign-integrations";
 import { CampaignStatusBadge } from "../../components/campaign-status-badge";
 import { CampaignStatsSection } from "../../components/campaign-stats-section";
@@ -142,6 +143,23 @@ export default function CampaignDetailPage() {
                     </p>
                 </div>
                 <div className="flex items-center gap-2">
+                    {campaign.campaign_type === CampaignType.SEQUENCE && campaign.sequence_uuid ? (
+                        <Button
+                            size="sm"
+                            variant="secondary"
+                            onPress={() =>
+                                navigate(
+                                    Routes.dashboard.sequences_edit.replace(
+                                        ":uuid",
+                                        campaign.sequence_uuid as string,
+                                    ),
+                                )
+                            }
+                        >
+                            <ListOrdered className="size-4" />
+                            View sequence
+                        </Button>
+                    ) : null}
                     {hasTemplateContent ? (
                         <ActionButtonWithPending
                             size="sm"
@@ -182,6 +200,8 @@ export default function CampaignDetailPage() {
             )}
 
             <CampaignStatsSection campaign={campaign} />
+
+            <SendingActivityHeatmap campaignUuid={campaign.uuid} />
 
             {showIntegrationPicker ? (
                 <section className="rounded-xl border border-border bg-surface p-4">
