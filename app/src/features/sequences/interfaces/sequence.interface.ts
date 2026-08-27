@@ -43,6 +43,7 @@ export interface SequenceStep {
     delay_value: number;
     delay_unit: SequenceDelayUnit;
     delay_reference: SequenceDelayReference;
+    send_time: string | null;
     created_at: string;
     updated_at: string;
 }
@@ -101,6 +102,7 @@ export type CreateSequenceStepPayload = {
     delay_value: number;
     delay_unit: SequenceDelayUnit;
     delay_reference: SequenceDelayReference;
+    send_time?: string | null;
     enabled?: boolean;
 };
 

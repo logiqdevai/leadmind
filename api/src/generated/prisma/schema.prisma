@@ -576,6 +576,7 @@ model OutreachSequenceStep {
   delay_value           Int
   delay_unit            SequenceDelayUnit      @default(HOURS)
   delay_reference       SequenceDelayReference @default(PREVIOUS_STEP)
+  send_time             String?                @db.VarChar(5)
   created_at            DateTime               @default(now())
   updated_at            DateTime               @updatedAt
 

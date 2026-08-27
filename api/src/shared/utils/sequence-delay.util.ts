@@ -25,3 +25,36 @@ export function addDelay(
             return new Date(base.getTime());
     }
 }
+
+const SEND_TIME_PATTERN = /^([01]\d|2[0-3]):([0-5]\d)$/;
+
+/**
+ * Pins `result`'s wall-clock time (server-local) to `send_time` ("HH:MM", 24h),
+ * rolling forward one calendar day if that pin would land at or before `base`.
+ * No-op when send_time is null/undefined.
+ */
+export function applySendTime(
+    result: Date,
+    base: Date,
+    send_time?: string | null,
+): Date {
+    if (!send_time) return result;
+    const match = SEND_TIME_PATTERN.exec(send_time);
+    if (!match) return result;
+    const pinned = new Date(result.getTime());
+    pinned.setHours(Number(match[1]), Number(match[2]), 0, 0);
+    if (pinned.getTime() <= base.getTime()) {
+        pinned.setDate(pinned.getDate() + 1);
+    }
+    return pinned;
+}
+
+/** addDelay + applySendTime composed - the function callers should use for step scheduling. */
+export function resolveStepScheduledAt(
+    base: Date,
+    value: number,
+    unit: SequenceDelayUnit,
+    send_time?: string | null,
+): Date {
+    return applySendTime(addDelay(base, value, unit), base, send_time);
+}

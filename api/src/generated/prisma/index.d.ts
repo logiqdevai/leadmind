@@ -35986,6 +35986,7 @@ export namespace Prisma {
     delay_value: number | null
     delay_unit: $Enums.SequenceDelayUnit | null
     delay_reference: $Enums.SequenceDelayReference | null
+    send_time: string | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -36004,6 +36005,7 @@ export namespace Prisma {
     delay_value: number | null
     delay_unit: $Enums.SequenceDelayUnit | null
     delay_reference: $Enums.SequenceDelayReference | null
+    send_time: string | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -36022,6 +36024,7 @@ export namespace Prisma {
     delay_value: number
     delay_unit: number
     delay_reference: number
+    send_time: number
     created_at: number
     updated_at: number
     _all: number
@@ -36054,6 +36057,7 @@ export namespace Prisma {
     delay_value?: true
     delay_unit?: true
     delay_reference?: true
+    send_time?: true
     created_at?: true
     updated_at?: true
   }
@@ -36072,6 +36076,7 @@ export namespace Prisma {
     delay_value?: true
     delay_unit?: true
     delay_reference?: true
+    send_time?: true
     created_at?: true
     updated_at?: true
   }
@@ -36090,6 +36095,7 @@ export namespace Prisma {
     delay_value?: true
     delay_unit?: true
     delay_reference?: true
+    send_time?: true
     created_at?: true
     updated_at?: true
     _all?: true
@@ -36195,6 +36201,7 @@ export namespace Prisma {
     delay_value: number
     delay_unit: $Enums.SequenceDelayUnit
     delay_reference: $Enums.SequenceDelayReference
+    send_time: string | null
     created_at: Date
     updated_at: Date
     _count: OutreachSequenceStepCountAggregateOutputType | null
@@ -36232,6 +36239,7 @@ export namespace Prisma {
     delay_value?: boolean
     delay_unit?: boolean
     delay_reference?: boolean
+    send_time?: boolean
     created_at?: boolean
     updated_at?: boolean
     sequence?: boolean | OutreachSequenceDefaultArgs<ExtArgs>
@@ -36254,6 +36262,7 @@ export namespace Prisma {
     delay_value?: boolean
     delay_unit?: boolean
     delay_reference?: boolean
+    send_time?: boolean
     created_at?: boolean
     updated_at?: boolean
     sequence?: boolean | OutreachSequenceDefaultArgs<ExtArgs>
@@ -36274,6 +36283,7 @@ export namespace Prisma {
     delay_value?: boolean
     delay_unit?: boolean
     delay_reference?: boolean
+    send_time?: boolean
     created_at?: boolean
     updated_at?: boolean
     sequence?: boolean | OutreachSequenceDefaultArgs<ExtArgs>
@@ -36294,11 +36304,12 @@ export namespace Prisma {
     delay_value?: boolean
     delay_unit?: boolean
     delay_reference?: boolean
+    send_time?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
-  export type OutreachSequenceStepOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "sequence_uuid" | "order_index" | "enabled" | "channel" | "email_subject" | "email_content" | "sms_content" | "message_template_uuid" | "delay_value" | "delay_unit" | "delay_reference" | "created_at" | "updated_at", ExtArgs["result"]["outreachSequenceStep"]>
+  export type OutreachSequenceStepOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "sequence_uuid" | "order_index" | "enabled" | "channel" | "email_subject" | "email_content" | "sms_content" | "message_template_uuid" | "delay_value" | "delay_unit" | "delay_reference" | "send_time" | "created_at" | "updated_at", ExtArgs["result"]["outreachSequenceStep"]>
   export type OutreachSequenceStepInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     sequence?: boolean | OutreachSequenceDefaultArgs<ExtArgs>
     message_template?: boolean | OutreachSequenceStep$message_templateArgs<ExtArgs>
@@ -36335,6 +36346,7 @@ export namespace Prisma {
       delay_value: number
       delay_unit: $Enums.SequenceDelayUnit
       delay_reference: $Enums.SequenceDelayReference
+      send_time: string | null
       created_at: Date
       updated_at: Date
     }, ExtArgs["result"]["outreachSequenceStep"]>
@@ -36776,6 +36788,7 @@ export namespace Prisma {
     readonly delay_value: FieldRef<"OutreachSequenceStep", 'Int'>
     readonly delay_unit: FieldRef<"OutreachSequenceStep", 'SequenceDelayUnit'>
     readonly delay_reference: FieldRef<"OutreachSequenceStep", 'SequenceDelayReference'>
+    readonly send_time: FieldRef<"OutreachSequenceStep", 'String'>
     readonly created_at: FieldRef<"OutreachSequenceStep", 'DateTime'>
     readonly updated_at: FieldRef<"OutreachSequenceStep", 'DateTime'>
   }
@@ -78087,6 +78100,7 @@ export namespace Prisma {
     delay_value: 'delay_value',
     delay_unit: 'delay_unit',
     delay_reference: 'delay_reference',
+    send_time: 'send_time',
     created_at: 'created_at',
     updated_at: 'updated_at'
   };
@@ -81742,6 +81756,7 @@ export namespace Prisma {
     delay_value?: IntFilter<"OutreachSequenceStep"> | number
     delay_unit?: EnumSequenceDelayUnitFilter<"OutreachSequenceStep"> | $Enums.SequenceDelayUnit
     delay_reference?: EnumSequenceDelayReferenceFilter<"OutreachSequenceStep"> | $Enums.SequenceDelayReference
+    send_time?: StringNullableFilter<"OutreachSequenceStep"> | string | null
     created_at?: DateTimeFilter<"OutreachSequenceStep"> | Date | string
     updated_at?: DateTimeFilter<"OutreachSequenceStep"> | Date | string
     sequence?: XOR<OutreachSequenceScalarRelationFilter, OutreachSequenceWhereInput>
@@ -81763,6 +81778,7 @@ export namespace Prisma {
     delay_value?: SortOrder
     delay_unit?: SortOrder
     delay_reference?: SortOrder
+    send_time?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     sequence?: OutreachSequenceOrderByWithRelationInput
@@ -81787,6 +81803,7 @@ export namespace Prisma {
     delay_value?: IntFilter<"OutreachSequenceStep"> | number
     delay_unit?: EnumSequenceDelayUnitFilter<"OutreachSequenceStep"> | $Enums.SequenceDelayUnit
     delay_reference?: EnumSequenceDelayReferenceFilter<"OutreachSequenceStep"> | $Enums.SequenceDelayReference
+    send_time?: StringNullableFilter<"OutreachSequenceStep"> | string | null
     created_at?: DateTimeFilter<"OutreachSequenceStep"> | Date | string
     updated_at?: DateTimeFilter<"OutreachSequenceStep"> | Date | string
     sequence?: XOR<OutreachSequenceScalarRelationFilter, OutreachSequenceWhereInput>
@@ -81808,6 +81825,7 @@ export namespace Prisma {
     delay_value?: SortOrder
     delay_unit?: SortOrder
     delay_reference?: SortOrder
+    send_time?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     _count?: OutreachSequenceStepCountOrderByAggregateInput
@@ -81834,6 +81852,7 @@ export namespace Prisma {
     delay_value?: IntWithAggregatesFilter<"OutreachSequenceStep"> | number
     delay_unit?: EnumSequenceDelayUnitWithAggregatesFilter<"OutreachSequenceStep"> | $Enums.SequenceDelayUnit
     delay_reference?: EnumSequenceDelayReferenceWithAggregatesFilter<"OutreachSequenceStep"> | $Enums.SequenceDelayReference
+    send_time?: StringNullableWithAggregatesFilter<"OutreachSequenceStep"> | string | null
     created_at?: DateTimeWithAggregatesFilter<"OutreachSequenceStep"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"OutreachSequenceStep"> | Date | string
   }
@@ -87518,6 +87537,7 @@ export namespace Prisma {
     delay_value: number
     delay_unit?: $Enums.SequenceDelayUnit
     delay_reference?: $Enums.SequenceDelayReference
+    send_time?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     sequence: OutreachSequenceCreateNestedOneWithoutStepsInput
@@ -87539,6 +87559,7 @@ export namespace Prisma {
     delay_value: number
     delay_unit?: $Enums.SequenceDelayUnit
     delay_reference?: $Enums.SequenceDelayReference
+    send_time?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutSequence_stepInput
@@ -87555,6 +87576,7 @@ export namespace Prisma {
     delay_value?: IntFieldUpdateOperationsInput | number
     delay_unit?: EnumSequenceDelayUnitFieldUpdateOperationsInput | $Enums.SequenceDelayUnit
     delay_reference?: EnumSequenceDelayReferenceFieldUpdateOperationsInput | $Enums.SequenceDelayReference
+    send_time?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     sequence?: OutreachSequenceUpdateOneRequiredWithoutStepsNestedInput
@@ -87576,6 +87598,7 @@ export namespace Prisma {
     delay_value?: IntFieldUpdateOperationsInput | number
     delay_unit?: EnumSequenceDelayUnitFieldUpdateOperationsInput | $Enums.SequenceDelayUnit
     delay_reference?: EnumSequenceDelayReferenceFieldUpdateOperationsInput | $Enums.SequenceDelayReference
+    send_time?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutSequence_stepNestedInput
@@ -87595,6 +87618,7 @@ export namespace Prisma {
     delay_value: number
     delay_unit?: $Enums.SequenceDelayUnit
     delay_reference?: $Enums.SequenceDelayReference
+    send_time?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -87610,6 +87634,7 @@ export namespace Prisma {
     delay_value?: IntFieldUpdateOperationsInput | number
     delay_unit?: EnumSequenceDelayUnitFieldUpdateOperationsInput | $Enums.SequenceDelayUnit
     delay_reference?: EnumSequenceDelayReferenceFieldUpdateOperationsInput | $Enums.SequenceDelayReference
+    send_time?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -87628,6 +87653,7 @@ export namespace Prisma {
     delay_value?: IntFieldUpdateOperationsInput | number
     delay_unit?: EnumSequenceDelayUnitFieldUpdateOperationsInput | $Enums.SequenceDelayUnit
     delay_reference?: EnumSequenceDelayReferenceFieldUpdateOperationsInput | $Enums.SequenceDelayReference
+    send_time?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -93510,6 +93536,7 @@ export namespace Prisma {
     delay_value?: SortOrder
     delay_unit?: SortOrder
     delay_reference?: SortOrder
+    send_time?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -93534,6 +93561,7 @@ export namespace Prisma {
     delay_value?: SortOrder
     delay_unit?: SortOrder
     delay_reference?: SortOrder
+    send_time?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -93552,6 +93580,7 @@ export namespace Prisma {
     delay_value?: SortOrder
     delay_unit?: SortOrder
     delay_reference?: SortOrder
+    send_time?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -112610,6 +112639,7 @@ export namespace Prisma {
     delay_value: number
     delay_unit?: $Enums.SequenceDelayUnit
     delay_reference?: $Enums.SequenceDelayReference
+    send_time?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     sequence: OutreachSequenceCreateNestedOneWithoutStepsInput
@@ -112630,6 +112660,7 @@ export namespace Prisma {
     delay_value: number
     delay_unit?: $Enums.SequenceDelayUnit
     delay_reference?: $Enums.SequenceDelayReference
+    send_time?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -113095,6 +113126,7 @@ export namespace Prisma {
     delay_value?: IntFieldUpdateOperationsInput | number
     delay_unit?: EnumSequenceDelayUnitFieldUpdateOperationsInput | $Enums.SequenceDelayUnit
     delay_reference?: EnumSequenceDelayReferenceFieldUpdateOperationsInput | $Enums.SequenceDelayReference
+    send_time?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     sequence?: OutreachSequenceUpdateOneRequiredWithoutStepsNestedInput
@@ -113115,6 +113147,7 @@ export namespace Prisma {
     delay_value?: IntFieldUpdateOperationsInput | number
     delay_unit?: EnumSequenceDelayUnitFieldUpdateOperationsInput | $Enums.SequenceDelayUnit
     delay_reference?: EnumSequenceDelayReferenceFieldUpdateOperationsInput | $Enums.SequenceDelayReference
+    send_time?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -113252,6 +113285,7 @@ export namespace Prisma {
     delay_value: number
     delay_unit?: $Enums.SequenceDelayUnit
     delay_reference?: $Enums.SequenceDelayReference
+    send_time?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     message_template?: MessageTemplateCreateNestedOneWithoutSequence_stepsInput
@@ -113271,6 +113305,7 @@ export namespace Prisma {
     delay_value: number
     delay_unit?: $Enums.SequenceDelayUnit
     delay_reference?: $Enums.SequenceDelayReference
+    send_time?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutSequence_stepInput
@@ -113553,6 +113588,7 @@ export namespace Prisma {
     delay_value?: IntFilter<"OutreachSequenceStep"> | number
     delay_unit?: EnumSequenceDelayUnitFilter<"OutreachSequenceStep"> | $Enums.SequenceDelayUnit
     delay_reference?: EnumSequenceDelayReferenceFilter<"OutreachSequenceStep"> | $Enums.SequenceDelayReference
+    send_time?: StringNullableFilter<"OutreachSequenceStep"> | string | null
     created_at?: DateTimeFilter<"OutreachSequenceStep"> | Date | string
     updated_at?: DateTimeFilter<"OutreachSequenceStep"> | Date | string
   }
@@ -115341,6 +115377,7 @@ export namespace Prisma {
     delay_value: number
     delay_unit?: $Enums.SequenceDelayUnit
     delay_reference?: $Enums.SequenceDelayReference
+    send_time?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     sequence: OutreachSequenceCreateNestedOneWithoutStepsInput
@@ -115360,6 +115397,7 @@ export namespace Prisma {
     delay_value: number
     delay_unit?: $Enums.SequenceDelayUnit
     delay_reference?: $Enums.SequenceDelayReference
+    send_time?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutSequence_stepInput
@@ -126637,6 +126675,7 @@ export namespace Prisma {
     delay_value: number
     delay_unit?: $Enums.SequenceDelayUnit
     delay_reference?: $Enums.SequenceDelayReference
+    send_time?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -126708,6 +126747,7 @@ export namespace Prisma {
     delay_value?: IntFieldUpdateOperationsInput | number
     delay_unit?: EnumSequenceDelayUnitFieldUpdateOperationsInput | $Enums.SequenceDelayUnit
     delay_reference?: EnumSequenceDelayReferenceFieldUpdateOperationsInput | $Enums.SequenceDelayReference
+    send_time?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     message_template?: MessageTemplateUpdateOneWithoutSequence_stepsNestedInput
@@ -126727,6 +126767,7 @@ export namespace Prisma {
     delay_value?: IntFieldUpdateOperationsInput | number
     delay_unit?: EnumSequenceDelayUnitFieldUpdateOperationsInput | $Enums.SequenceDelayUnit
     delay_reference?: EnumSequenceDelayReferenceFieldUpdateOperationsInput | $Enums.SequenceDelayReference
+    send_time?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutSequence_stepNestedInput
@@ -126745,6 +126786,7 @@ export namespace Prisma {
     delay_value?: IntFieldUpdateOperationsInput | number
     delay_unit?: EnumSequenceDelayUnitFieldUpdateOperationsInput | $Enums.SequenceDelayUnit
     delay_reference?: EnumSequenceDelayReferenceFieldUpdateOperationsInput | $Enums.SequenceDelayReference
+    send_time?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -127403,6 +127445,7 @@ export namespace Prisma {
     delay_value: number
     delay_unit?: $Enums.SequenceDelayUnit
     delay_reference?: $Enums.SequenceDelayReference
+    send_time?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -127418,6 +127461,7 @@ export namespace Prisma {
     delay_value?: IntFieldUpdateOperationsInput | number
     delay_unit?: EnumSequenceDelayUnitFieldUpdateOperationsInput | $Enums.SequenceDelayUnit
     delay_reference?: EnumSequenceDelayReferenceFieldUpdateOperationsInput | $Enums.SequenceDelayReference
+    send_time?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     sequence?: OutreachSequenceUpdateOneRequiredWithoutStepsNestedInput
@@ -127437,6 +127481,7 @@ export namespace Prisma {
     delay_value?: IntFieldUpdateOperationsInput | number
     delay_unit?: EnumSequenceDelayUnitFieldUpdateOperationsInput | $Enums.SequenceDelayUnit
     delay_reference?: EnumSequenceDelayReferenceFieldUpdateOperationsInput | $Enums.SequenceDelayReference
+    send_time?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutSequence_stepNestedInput
@@ -127455,6 +127500,7 @@ export namespace Prisma {
     delay_value?: IntFieldUpdateOperationsInput | number
     delay_unit?: EnumSequenceDelayUnitFieldUpdateOperationsInput | $Enums.SequenceDelayUnit
     delay_reference?: EnumSequenceDelayReferenceFieldUpdateOperationsInput | $Enums.SequenceDelayReference
+    send_time?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }

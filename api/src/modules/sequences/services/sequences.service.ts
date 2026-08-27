@@ -213,6 +213,7 @@ export class SequencesService {
                 delay_value: dto.delay_value,
                 delay_unit: dto.delay_unit,
                 delay_reference: dto.delay_reference,
+                send_time: dto.send_time ?? null,
             },
         });
     }
@@ -265,6 +266,9 @@ export class SequencesService {
                 }),
                 ...(dto.delay_reference !== undefined && {
                     delay_reference: dto.delay_reference,
+                }),
+                ...(dto.send_time !== undefined && {
+                    send_time: dto.send_time,
                 }),
                 ...(dto.enabled !== undefined && { enabled: dto.enabled }),
             },

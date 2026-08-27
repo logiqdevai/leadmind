@@ -564,6 +564,7 @@ export class OrganisationDataCopyService {
                         delay_value: step.delay_value,
                         delay_unit: step.delay_unit,
                         delay_reference: step.delay_reference,
+                        send_time: step.send_time,
                     })),
                 });
             }

@@ -8,8 +8,10 @@ import {
     IsOptional,
     IsString,
     IsUUID,
+    Matches,
     MaxLength,
     Min,
+    ValidateIf,
 } from 'class-validator';
 import {
     Channel,
@@ -62,6 +64,19 @@ export class CreateSequenceStepDto {
     @ApiProperty({ enum: SequenceDelayReference })
     @IsEnum(SequenceDelayReference)
     delay_reference!: SequenceDelayReference;
+
+    @ApiPropertyOptional({
+        description:
+            'Optional 24h "HH:MM" clock time (server-local) to pin this step\'s send to. Omitted/null preserves pure offset-based scheduling.',
+        example: '09:30',
+        nullable: true,
+    })
+    @IsOptional()
+    @ValidateIf((o) => o.send_time !== null)
+    @Matches(/^([01]\d|2[0-3]):([0-5]\d)$/, {
+        message: 'send_time must be in 24-hour HH:MM format',
+    })
+    send_time?: string | null;
 
     @ApiPropertyOptional({ default: true })
     @IsOptional()

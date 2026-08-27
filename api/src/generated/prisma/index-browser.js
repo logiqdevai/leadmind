@@ -444,6 +444,7 @@ exports.Prisma.OutreachSequenceStepScalarFieldEnum = {
   delay_value: 'delay_value',
   delay_unit: 'delay_unit',
   delay_reference: 'delay_reference',
+  send_time: 'send_time',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };

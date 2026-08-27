@@ -72,6 +72,7 @@ export const StepEditorModal: FC<StepEditorModalProps> = ({
     const [delayReference, setDelayReference] = useState<SequenceDelayReference>(
         SequenceDelayReference.PREVIOUS_STEP,
     );
+    const [sendTime, setSendTime] = useState("");
     const [contentError, setContentError] = useState<string | null>(null);
     const [composerKey, setComposerKey] = useState(0);
     const [composerReady, setComposerReady] = useState(false);
@@ -91,6 +92,7 @@ export const StepEditorModal: FC<StepEditorModalProps> = ({
                 setDelayValue(String(initial.delay_value));
                 setDelayUnit(initial.delay_unit);
                 setDelayReference(initial.delay_reference);
+                setSendTime(initial.send_time ?? "");
             } else {
                 setChannel(Channel.EMAIL);
                 setComposerValue(EMPTY_MESSAGE_COMPOSER_VALUE);
@@ -98,6 +100,7 @@ export const StepEditorModal: FC<StepEditorModalProps> = ({
                 setDelayValue(isFirstStep ? "0" : "1");
                 setDelayUnit(SequenceDelayUnit.DAYS);
                 setDelayReference(SequenceDelayReference.PREVIOUS_STEP);
+                setSendTime("");
             }
             setComposerKey((k) => k + 1);
             setContentError(null);
@@ -129,6 +132,7 @@ export const StepEditorModal: FC<StepEditorModalProps> = ({
             delay_value: numericDelay,
             delay_unit: delayUnit,
             delay_reference: delayReference,
+            send_time: sendTime || null,
         };
         await onSave(payload);
     };
@@ -227,11 +231,20 @@ export const StepEditorModal: FC<StepEditorModalProps> = ({
                                                 </Select.Popover>
                                             </Select>
                                         </div>
+                                        <TextField name="send-time" className="min-w-[140px]">
+                                            <Label>At time (optional)</Label>
+                                            <Input
+                                                type="time"
+                                                value={sendTime}
+                                                onChange={(e) => setSendTime(e.target.value)}
+                                                disabled={isSaving}
+                                            />
+                                        </TextField>
                                     </div>
                                     <p className="text-xs text-muted">
                                         {isFirstStep
-                                            ? "This is the first step — its delay counts from enrollment. Leave it at 0 to send this immediately when a contact enrolls."
-                                            : "The \"After\" choice above is ignored for the sequence's first enabled step, which always counts its delay from enrollment."}
+                                            ? "This is the first step — its delay counts from enrollment. Leave it at 0 to send this immediately when a contact enrolls. Set a time to pin sends to a specific clock time (waiting until the next day if that time already passed); when this sequence runs inside a campaign, the campaign's own start time is used instead and this delay/time is ignored."
+                                            : "The \"After\" choice above is ignored for the sequence's first enabled step, which always counts its delay from enrollment. Set a time to pin this step's send to a specific clock time on the day its delay lands on."}
                                     </p>
                                 </div>
                             </>

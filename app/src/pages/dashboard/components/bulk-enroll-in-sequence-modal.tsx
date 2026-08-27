@@ -174,9 +174,9 @@ export const BulkEnrollInSequenceModal: FC<BulkEnrollInSequenceModalProps> = ({
                                 </div>
                                 <p className="text-xs text-muted">
                                     Each contact will be scheduled to receive the sequence's enabled
-                                    steps at their configured delays, starting now. Contacts already
-                                    actively enrolled or unreachable on a step's channel are skipped
-                                    individually.
+                                    steps at their configured delays and times of day, based on their
+                                    own enrollment moment. Contacts already actively enrolled or
+                                    unreachable on a step's channel are skipped individually.
                                 </p>
                             </Modal.Body>
                             <Modal.Footer className="gap-2 justify-end">
