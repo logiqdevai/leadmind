@@ -336,56 +336,76 @@ export class OutreachService {
             }),
         };
 
-        const [data, total] = await Promise.all([
-            this.prisma.outreachMessage.findMany({
-                where,
-                include: {
-                    contact: {
+        const messageInclude = {
+            contact: {
+                select: {
+                    uuid: true,
+                    name: true,
+                    email: true,
+                    phone: true,
+                },
+            },
+            campaign: {
+                select: {
+                    uuid: true,
+                    name: true,
+                },
+            },
+            sent_by: {
+                select: {
+                    uuid: true,
+                    full_name: true,
+                    email: true,
+                },
+            },
+            sequence_enrollment: {
+                select: {
+                    uuid: true,
+                    status: true,
+                    sequence: {
                         select: {
                             uuid: true,
                             name: true,
-                            email: true,
-                            phone: true,
-                        },
-                    },
-                    campaign: {
-                        select: {
-                            uuid: true,
-                            name: true,
-                        },
-                    },
-                    sent_by: {
-                        select: {
-                            uuid: true,
-                            full_name: true,
-                            email: true,
-                        },
-                    },
-                    sequence_enrollment: {
-                        select: {
-                            uuid: true,
-                            status: true,
-                            sequence: {
-                                select: {
-                                    uuid: true,
-                                    name: true,
-                                },
-                            },
-                        },
-                    },
-                    sequence_step: {
-                        select: {
-                            uuid: true,
-                            order_index: true,
                         },
                     },
                 },
-                orderBy: [{ sent_at: 'desc' }, { created_at: 'desc' }],
-                skip,
-                take: limit,
+            },
+            sequence_step: {
+                select: {
+                    uuid: true,
+                    order_index: true,
+                },
+            },
+        } satisfies Prisma.OutreachMessageInclude;
+
+        const [orderedCandidates, total] = await Promise.all([
+            this.prisma.outreachMessage.findMany({
+                where,
+                select: { uuid: true, sent_at: true, created_at: true },
             }),
             this.prisma.outreachMessage.count({ where }),
         ]);
+
+        const pageUuids = orderedCandidates
+            .toSorted(
+                (a, b) =>
+                    (b.sent_at ?? b.created_at).getTime() - (a.sent_at ?? a.created_at).getTime(),
+            )
+            .slice(skip, skip + limit)
+            .map((row) => row.uuid);
+
+        const rows =
+            pageUuids.length === 0
+                ? []
+                : await this.prisma.outreachMessage.findMany({
+                      where: { uuid: { in: pageUuids } },
+                      include: messageInclude,
+                  });
+
+        const order = new Map(pageUuids.map((uuid, index) => [uuid, index]));
+        const data = rows.toSorted(
+            (a, b) => (order.get(a.uuid) ?? 0) - (order.get(b.uuid) ?? 0),
+        );
 
         return {
             data,

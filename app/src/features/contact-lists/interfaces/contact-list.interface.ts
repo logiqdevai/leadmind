@@ -1,4 +1,4 @@
-import type { Contact } from "@/features/contacts/interfaces/contact.interface";
+import type { Contact, ListContactsQuery } from "@/features/contacts/interfaces/contact.interface";
 import type { CampaignFilters } from "@/features/marketing-campaigns/interfaces/campaign.interface";
 
 export interface ContactList {
@@ -42,14 +42,10 @@ export interface UpdateContactListPayload {
     parent_list_uuid?: string | null;
 }
 
-export interface ListContactListMembersQuery {
-    page?: number;
-    limit?: number;
-    search?: string;
-    status?: Contact["status"];
-    tags?: string[];
-    filter_uuid?: string;
-}
+export type ListContactListMembersQuery = Omit<
+    ListContactsQuery,
+    "contact_list_uuid" | "exclude_list_uuid"
+>;
 
 export interface PaginatedListMembers {
     data: Contact[];
