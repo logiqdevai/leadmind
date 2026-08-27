@@ -386,8 +386,8 @@ export class OutreachService {
             this.prisma.outreachMessage.count({ where }),
         ]);
 
-        const pageUuids = orderedCandidates
-            .toSorted(
+        const pageUuids = [...orderedCandidates]
+            .sort(
                 (a, b) =>
                     (b.sent_at ?? b.created_at).getTime() - (a.sent_at ?? a.created_at).getTime(),
             )
@@ -403,7 +403,7 @@ export class OutreachService {
                   });
 
         const order = new Map(pageUuids.map((uuid, index) => [uuid, index]));
-        const data = rows.toSorted(
+        const data = [...rows].sort(
             (a, b) => (order.get(a.uuid) ?? 0) - (order.get(b.uuid) ?? 0),
         );
 
