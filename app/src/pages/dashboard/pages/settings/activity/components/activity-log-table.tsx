@@ -3,12 +3,35 @@ import { Button } from "@heroui/react";
 import type { ActivityLog } from "@/features/activity-logs/interfaces/activity-log.interface";
 import {
     formatActivityActor,
-    formatActivityDate,
     formatActivityDescription,
     formatActivityEntityType,
     formatChangeValue,
     formatFieldName,
 } from "../utils/activity-log.utils";
+
+function ActivityWhenCell({ iso }: { iso: string }) {
+    const date = new Date(iso);
+    if (Number.isNaN(date.getTime())) {
+        return <span>—</span>;
+    }
+    return (
+        <>
+            <div>
+                {date.toLocaleDateString(undefined, {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                })}
+            </div>
+            <div className="text-muted/80">
+                {date.toLocaleTimeString(undefined, {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                })}
+            </div>
+        </>
+    );
+}
 
 export function ActivityLogTable({ rows }: { rows: ActivityLog[] }) {
     const [expanded, setExpanded] = useState<Set<string>>(new Set());
@@ -31,15 +54,17 @@ export function ActivityLogTable({ rows }: { rows: ActivityLog[] }) {
     };
 
     return (
-        <div className="overflow-x-auto rounded-xl">
-            <table className="w-full min-w-[36rem] table-fixed text-sm">
+        <div className="w-full max-w-full overflow-x-auto rounded-xl">
+            <table className="w-full min-w-[40rem] border-collapse text-sm">
                 <thead className="bg-surface-secondary/40 text-muted">
                     <tr>
-                        <th className="w-40 px-3 py-2 text-left font-medium">When</th>
-                        <th className="w-[28%] px-3 py-2 text-left font-medium">User</th>
-                        <th className="hidden lg:table-cell px-3 py-2 text-left font-medium">Action</th>
-                        <th className="hidden lg:table-cell w-36 px-3 py-2 text-left font-medium">Entity</th>
-                        <th className="w-28 px-3 py-2 text-left font-medium">Details</th>
+                        <th className="w-[7.5rem] px-3 py-2 text-left font-medium">When</th>
+                        <th className="min-w-[10rem] px-3 py-2 text-left font-medium">User</th>
+                        <th className="min-w-[12rem] px-3 py-2 text-left font-medium">Action</th>
+                        <th className="hidden min-w-[8rem] md:table-cell px-3 py-2 text-left font-medium">
+                            Entity
+                        </th>
+                        <th className="w-[7rem] px-3 py-2 text-left font-medium">Details</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -50,10 +75,10 @@ export function ActivityLogTable({ rows }: { rows: ActivityLog[] }) {
                         return (
                             <Fragment key={row.uuid}>
                                 <tr className="border-t border-border">
-                                    <td className="px-3 py-2 align-top text-xs text-muted whitespace-nowrap">
-                                        {formatActivityDate(row.created_at)}
+                                    <td className="px-3 py-2 align-top text-xs text-muted">
+                                        <ActivityWhenCell iso={row.created_at} />
                                     </td>
-                                    <td className="min-w-0 px-3 py-2 align-top">
+                                    <td className="max-w-[14rem] px-3 py-2 align-top">
                                         <div className="truncate font-medium text-foreground">
                                             {formatActivityActor(row.actor)}
                                         </div>
@@ -63,12 +88,12 @@ export function ActivityLogTable({ rows }: { rows: ActivityLog[] }) {
                                             </div>
                                         ) : null}
                                     </td>
-                                    <td className="hidden min-w-0 lg:table-cell px-3 py-2 align-top text-foreground/90">
+                                    <td className="max-w-[18rem] px-3 py-2 align-top text-foreground/90">
                                         <div className="truncate">
                                             {formatActivityDescription(row)}
                                         </div>
                                     </td>
-                                    <td className="hidden min-w-0 lg:table-cell px-3 py-2 align-top text-foreground/90">
+                                    <td className="hidden max-w-[12rem] md:table-cell px-3 py-2 align-top text-foreground/90">
                                         <div className="truncate">
                                             {formatActivityEntityType(row.entity_type)}
                                         </div>
@@ -114,7 +139,10 @@ export function ActivityLogTable({ rows }: { rows: ActivityLog[] }) {
                                                 </thead>
                                                 <tbody>
                                                     {changeEntries.map(([field, change]) => (
-                                                        <tr key={field} className="border-t border-border/60">
+                                                        <tr
+                                                            key={field}
+                                                            className="border-t border-border/60"
+                                                        >
                                                             <td className="px-2 py-1 align-top font-medium text-foreground/90 whitespace-nowrap">
                                                                 {formatFieldName(field)}
                                                             </td>

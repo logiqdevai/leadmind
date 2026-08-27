@@ -1,4 +1,4 @@
-import { type FC, useEffect, useMemo, useState } from "react";
+import { type FC, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
@@ -9,8 +9,6 @@ import { Routes } from "@/routes/routes";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { useOrganisationPermission } from "@/hooks/use-organisation-permission";
 import { TimezoneOptions } from "@/config/constants/dropdowns/timezone.options";
-import { useIntegrations } from "@/features/integrations/hooks/use-integrations";
-import { IntegrationProviders } from "@/features/integrations/interfaces/integrations.interface";
 import {
     useCreateInvitation,
     useCreateOrganisation,
@@ -59,14 +57,6 @@ const SettingsOrganisationPage: FC = () => {
 
     const { data: organisations = [] } = useOrganisations();
     const { data: currentOrganisation } = useCurrentOrganisation();
-    const { data: integrations = [] } = useIntegrations();
-    const resendDomains = useMemo(
-        () =>
-            integrations
-                .find((p) => p.provider === IntegrationProviders.RESEND)
-                ?.accounts?.flatMap((a) => a.domains) ?? [],
-        [integrations],
-    );
     const createOrganisation = useCreateOrganisation();
     const deleteOrganisation = useDeleteOrganisation();
     const updateOrganisation = useUpdateOrganisation(organisationUuid);
@@ -107,7 +97,6 @@ const SettingsOrganisationPage: FC = () => {
     });
 
     const timezoneValue = settingsForm.watch("timezone");
-    const replyToValue = settingsForm.watch("reply_to_email");
 
     const createForm = useForm<CreateOrganisationFormData>({
         resolver: zodResolver(createOrganisationSchema),
@@ -272,52 +261,23 @@ const SettingsOrganisationPage: FC = () => {
                 </div>
                 <div className="space-y-1.5">
                     <Label>Reply-to email</Label>
-                    <Select
-                        aria-label="Reply-to email"
-                        value={replyToValue || undefined}
-                        placeholder={
-                            resendDomains.length === 0
-                                ? "No Resend domains yet"
-                                : "Select a Resend domain"
-                        }
-                        onChange={(v) =>
-                            settingsForm.setValue("reply_to_email", (v as string) ?? "", {
-                                shouldDirty: true,
-                            })
-                        }
-                        isDisabled={!canEdit || updateOrganisation.isPending || resendDomains.length === 0}
-                    >
-                        <Select.Trigger className="w-full">
-                            <Select.Value />
-                            <Select.Indicator />
-                        </Select.Trigger>
-                        <Select.Popover>
-                            <ListBox>
-                                {resendDomains.map((domain) => (
-                                    <ListBox.Item
-                                        key={domain.uuid}
-                                        id={domain.from_email}
-                                        textValue={domain.from_email}
-                                    >
-                                        {domain.from_email}
-                                        {domain.is_default ? " (default)" : ""}
-                                        <ListBox.ItemIndicator />
-                                    </ListBox.Item>
-                                ))}
-                            </ListBox>
-                        </Select.Popover>
-                    </Select>
+                    <Input
+                        {...settingsForm.register("reply_to_email")}
+                        type="email"
+                        disabled={!canEdit || updateOrganisation.isPending}
+                        placeholder="replies@yourdomain.com"
+                        fullWidth
+                    />
                     <p className="text-xs text-muted">
-                        Where contact replies get captured, across every sending
-                        method.{" "}
-                        {resendDomains.length === 0 ? (
-                            <Link
-                                to={Routes.dashboard.integrations}
-                                className="font-medium text-primary hover:underline"
-                            >
-                                Add a Resend domain
-                            </Link>
-                        ) : null}
+                        Where contact replies get captured, across every sending method.
+                        Must be an address on a domain with{" "}
+                        <Link
+                            to={Routes.dashboard.integrations}
+                            className="font-medium text-primary hover:underline"
+                        >
+                            Resend inbound receiving
+                        </Link>{" "}
+                        enabled.
                     </p>
                     {settingsForm.formState.errors.reply_to_email ? (
                         <p className="text-xs text-danger">
