@@ -74,6 +74,7 @@ export interface Filter {
         instructions: string;
     }>;
     outreach_instructions: string | null;
+    contact_list_uuid: string | null;
     created_at: string;
     updated_at: string;
 }
@@ -102,6 +103,7 @@ export interface CreateFilterPayload {
     channels: Channel[];
     scoring_instruction_uuids?: string[];
     outreach_instructions?: string | null;
+    contact_list_uuid?: string;
 }
 
 export type UpdateFilterPayload = Partial<CreateFilterPayload>;

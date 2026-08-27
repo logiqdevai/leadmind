@@ -42,6 +42,7 @@ import { buildDefaults } from "./defaults";
 import { resetQueryConfigForSource } from "./empty-query-config";
 import { QueryConfigFields } from "./query-config-fields";
 import { serializeQueryConfig } from "./serialize-query-config";
+import { FilterContactListFields } from "./filter-contact-list-fields";
 import { useScoringInstructions } from "@/features/scoring-instructions/hooks/use-scoring-instructions";
 import { ScoringInstructionModal } from "@/pages/dashboard/pages/filters/components/scoring-instruction-modal";
 import { cn } from "@/lib/utils";
@@ -129,6 +130,7 @@ export function FilterForm({
                 values.scoring_instruction_uuids && values.scoring_instruction_uuids.length > 0
                     ? values.scoring_instruction_uuids
                     : undefined,
+            contact_list_uuid: values.contact_list_uuid,
             ...(canEditOutreachInstructions
                 ? {
                       outreach_instructions:
@@ -196,6 +198,13 @@ export function FilterForm({
                         />
                     </div>
                 </div>
+
+                <SectionDivider title="List destination" />
+                <FilterContactListFields
+                    control={control}
+                    errors={errors}
+                    isPending={isPending}
+                />
             </div>
 
             {/* ── Filter criteria ── */}

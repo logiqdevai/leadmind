@@ -68,4 +68,9 @@ export class CreateFilterDto {
     @IsString()
     @MaxLength(2000)
     outreach_instructions?: string;
+
+    @ApiPropertyOptional({ description: 'Contact list UUID where scraped contacts are added' })
+    @IsOptional()
+    @IsUUID()
+    contact_list_uuid?: string;
 }

@@ -36,6 +36,7 @@ interface FilterScrapeJobData {
 interface PersistLeadsResult {
     new_contact_uuids: string[];
     leads_processed: number;
+    list_contact_uuids: string[];
 }
 
 @Processor(FILTER_SCRAPE_QUEUE, {
@@ -175,12 +176,26 @@ export class FilterScrapeWorker extends WorkerHost {
                 return null;
             }
 
-            const { new_contact_uuids, leads_processed } = await this.persistLeads(
+            const { new_contact_uuids, leads_processed, list_contact_uuids } = await this.persistLeads(
                 filter,
                 normalized_leads,
             );
             leads_found = leads_processed;
             new_contacts = new_contact_uuids.length;
+
+            if (filter.contact_list_uuid && list_contact_uuids.length > 0) {
+                await this.prisma.contactListMember.createMany({
+                    data: list_contact_uuids.map((contact_uuid) => ({
+                        list_uuid: filter.contact_list_uuid!,
+                        contact_uuid,
+                    })),
+                    skipDuplicates: true,
+                });
+                await this.prisma.contactList.update({
+                    where: { uuid: filter.contact_list_uuid },
+                    data: { updated_at: new Date() },
+                });
+            }
 
             for (const contact_uuid of new_contact_uuids) {
                 await this.aiProcessQueue.add(
@@ -303,11 +318,13 @@ export class FilterScrapeWorker extends WorkerHost {
         normalized_leads: NormalizedLead[],
     ): Promise<PersistLeadsResult> {
         const new_contact_uuids: string[] = [];
+        const list_contact_uuids: string[] = [];
         let leads_processed = 0;
 
         for (const normalized of normalized_leads) {
             if (!normalized.email && !normalized.phone) continue;
             leads_processed++;
+            let resolved_contact_uuid: string | undefined;
 
             const raw_lead = await this.prisma.rawLead.create({
                 data: {
@@ -373,6 +390,7 @@ export class FilterScrapeWorker extends WorkerHost {
             }
 
             if (existing_contact) {
+                resolved_contact_uuid = existing_contact.uuid;
                 await linkContactToFilter(this.prisma, existing_contact, filter.uuid);
                 const profilePatch = fillEmptyContactProfileFromLead(existing_contact, lead);
                 const emailValidationPatch =
@@ -430,6 +448,7 @@ export class FilterScrapeWorker extends WorkerHost {
                     await ensureContactFilterLink(this.prisma, contact.uuid, filter.uuid);
                     await this.elasticsearchService.indexContact({ ...contact, lead, tags: [] });
                     new_contact_uuids.push(contact.uuid);
+                    resolved_contact_uuid = contact.uuid;
                 } catch (error) {
                     if (
                         !(
@@ -456,6 +475,7 @@ export class FilterScrapeWorker extends WorkerHost {
                             },
                         }));
                     if (!raced) throw error;
+                    resolved_contact_uuid = raced.uuid;
                     await linkContactToFilter(this.prisma, raced, filter.uuid);
                     await this.reindexContactsForLead(lead.uuid);
                 }
@@ -465,9 +485,13 @@ export class FilterScrapeWorker extends WorkerHost {
                 where: { uuid: raw_lead.uuid },
                 data: { processed_at: new Date() },
             });
+
+            if (resolved_contact_uuid) {
+                list_contact_uuids.push(resolved_contact_uuid);
+            }
         }
 
-        return { new_contact_uuids, leads_processed };
+        return { new_contact_uuids, leads_processed, list_contact_uuids };
     }
 
     private async reindexContactsForLead(lead_uuid: string): Promise<void> {
