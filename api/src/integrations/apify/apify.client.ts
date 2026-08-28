@@ -146,8 +146,10 @@ export class ApifyClient {
                 if (terminal === 'ABORTED') {
                     throw new Error('Filter scrape aborted');
                 }
-                throw new InternalServerErrorException(
-                    `Apify actor ${actor_id} failed with status ${terminal}`,
+                throw this.markLogged(
+                    new InternalServerErrorException(
+                        `Apify actor ${actor_id} failed with status ${terminal}`,
+                    ),
                 );
             }
 
@@ -183,8 +185,50 @@ export class ApifyClient {
                 });
                 throw new Error('Filter scrape aborted');
             }
-            throw error;
+
+            if (error instanceof InternalServerErrorException) {
+                if (!this.isLogged(error)) {
+                    this.logUsage({
+                        usage,
+                        actor_id,
+                        status: ApifyUsageStatus.ERROR,
+                        duration_ms: Date.now() - started_at,
+                        error_message: error.message,
+                        run_id,
+                    });
+                }
+                throw error;
+            }
+
+            const axios_err = (error as AxiosError)?.isAxiosError
+                ? (error as AxiosError<any>)
+                : null;
+            const detail = axios_err
+                ? await this.resolveApifyErrorDetail(token, axios_err)
+                : null;
+            const fallback = error instanceof Error ? error.message : 'Unknown Apify error';
+            const error_message = detail ?? fallback;
+            this.logUsage({
+                usage,
+                actor_id,
+                status: ApifyUsageStatus.ERROR,
+                duration_ms: Date.now() - started_at,
+                error_message,
+                run_id: axios_err ? (this.extractRunId(axios_err, detail) ?? run_id) : run_id,
+            });
+            throw new InternalServerErrorException(
+                `Apify actor ${actor_id} failed: ${error_message}`,
+            );
         }
+    }
+
+    private markLogged<T extends object>(error: T): T {
+        (error as T & { __apify_logged?: boolean }).__apify_logged = true;
+        return error;
+    }
+
+    private isLogged(error: unknown): boolean {
+        return Boolean((error as { __apify_logged?: boolean })?.__apify_logged);
     }
 
     private async waitForRunTerminal(
