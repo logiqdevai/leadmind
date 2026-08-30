@@ -1,14 +1,20 @@
 import { useState } from "react";
 import type { ComponentType, ReactNode } from "react";
 import { Button, Modal } from "@heroui/react";
-import { ShieldCheck } from "lucide-react";
+import { Globe, ShieldCheck } from "lucide-react";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
 import { useRunEmailValidationBackfill } from "@/features/admin-email-validation/hooks/use-email-validation-backfill";
-import type {
-    EmailBackfillCounters,
-    EmailValidationBackfillResult,
-} from "@/features/admin-email-validation/interfaces/email-validation-backfill.interface";
+import type { EmailValidationBackfillResult } from "@/features/admin-email-validation/interfaces/email-validation-backfill.interface";
+import { useRunWebsiteValidationBackfill } from "@/features/admin-website-validation/hooks/use-website-validation-backfill";
+import type { WebsiteValidationBackfillResult } from "@/features/admin-website-validation/interfaces/website-validation-backfill.interface";
 import { toast } from "@/hooks/use-toast";
+
+interface BackfillCounters {
+    checked: number;
+    invalidated: number;
+    statusUpdated: number;
+    errors: number;
+}
 
 function AdminActionCard({
     icon: Icon,
@@ -33,7 +39,7 @@ function AdminActionCard({
     );
 }
 
-function CounterRow({ label, counters }: { label: string; counters: EmailBackfillCounters }) {
+function CounterRow({ label, counters }: { label: string; counters: BackfillCounters }) {
     return (
         <div className="space-y-1.5">
             <p className="text-xs font-medium uppercase tracking-wide text-muted">{label}</p>
@@ -99,16 +105,77 @@ function EmailValidationResultModal({
     );
 }
 
-export default function AdminControlsPage() {
-    const [modalOpen, setModalOpen] = useState(false);
-    const [result, setResult] = useState<EmailValidationBackfillResult | null>(null);
-    const runBackfill = useRunEmailValidationBackfill();
+function WebsiteValidationResultModal({
+    result,
+    isOpen,
+    onOpenChange,
+}: {
+    result: WebsiteValidationBackfillResult | null;
+    isOpen: boolean;
+    onOpenChange: (open: boolean) => void;
+}) {
+    return (
+        <Modal.Backdrop isOpen={isOpen} onOpenChange={onOpenChange}>
+            <Modal.Container>
+                <Modal.Dialog className="sm:max-w-md">
+                    <Modal.CloseTrigger />
+                    <Modal.Header>
+                        <Modal.Heading>Website validation complete</Modal.Heading>
+                    </Modal.Header>
+                    <Modal.Body className="space-y-4">
+                        {result ? (
+                            <>
+                                <CounterRow label="Leads" counters={result.leads} />
+                                <CounterRow label="Contacts" counters={result.contacts} />
+                                <p className="text-xs text-muted">
+                                    Invalid websites were cleared, not overwritten — each cleared contact also got an
+                                    audit note recording what was removed and why, so nothing is lost silently.
+                                </p>
+                            </>
+                        ) : null}
+                    </Modal.Body>
+                    <Modal.Footer className="justify-end">
+                        <Button size="sm" variant="secondary" slot="close">
+                            Close
+                        </Button>
+                    </Modal.Footer>
+                </Modal.Dialog>
+            </Modal.Container>
+        </Modal.Backdrop>
+    );
+}
 
-    const handleRun = () => {
-        runBackfill.mutate(undefined, {
+export default function AdminControlsPage() {
+    const [emailModalOpen, setEmailModalOpen] = useState(false);
+    const [emailResult, setEmailResult] = useState<EmailValidationBackfillResult | null>(null);
+    const runEmailBackfill = useRunEmailValidationBackfill();
+
+    const [websiteModalOpen, setWebsiteModalOpen] = useState(false);
+    const [websiteResult, setWebsiteResult] = useState<WebsiteValidationBackfillResult | null>(null);
+    const runWebsiteBackfill = useRunWebsiteValidationBackfill();
+
+    const handleRunEmailBackfill = () => {
+        runEmailBackfill.mutate(undefined, {
             onSuccess: (data) => {
-                setResult(data);
-                setModalOpen(true);
+                setEmailResult(data);
+                setEmailModalOpen(true);
+            },
+            onError: (error) => {
+                toast({
+                    title: "Backfill failed",
+                    description: error instanceof Error ? error.message : "Something went wrong.",
+                    duration: 4000,
+                    variant: "error",
+                });
+            },
+        });
+    };
+
+    const handleRunWebsiteBackfill = () => {
+        runWebsiteBackfill.mutate(undefined, {
+            onSuccess: (data) => {
+                setWebsiteResult(data);
+                setWebsiteModalOpen(true);
             },
             onError: (error) => {
                 toast({
@@ -136,14 +203,34 @@ export default function AdminControlsPage() {
                 <ActionButtonWithPending
                     size="sm"
                     variant="secondary"
-                    isPending={runBackfill.isPending}
-                    onPress={handleRun}
+                    isPending={runEmailBackfill.isPending}
+                    onPress={handleRunEmailBackfill}
                 >
                     Run validation
                 </ActionButtonWithPending>
             </AdminActionCard>
 
-            <EmailValidationResultModal result={result} isOpen={modalOpen} onOpenChange={setModalOpen} />
+            <AdminActionCard
+                icon={Globe}
+                title="Validate lead & contact websites"
+                description="Re-checks every lead and contact website (hostname syntax, DNS records). Invalid ones are cleared, not overwritten — contact clears get an audit note so nothing is lost silently. This can take a few minutes on a large database."
+            >
+                <ActionButtonWithPending
+                    size="sm"
+                    variant="secondary"
+                    isPending={runWebsiteBackfill.isPending}
+                    onPress={handleRunWebsiteBackfill}
+                >
+                    Run validation
+                </ActionButtonWithPending>
+            </AdminActionCard>
+
+            <EmailValidationResultModal result={emailResult} isOpen={emailModalOpen} onOpenChange={setEmailModalOpen} />
+            <WebsiteValidationResultModal
+                result={websiteResult}
+                isOpen={websiteModalOpen}
+                onOpenChange={setWebsiteModalOpen}
+            />
         </div>
     );
 }

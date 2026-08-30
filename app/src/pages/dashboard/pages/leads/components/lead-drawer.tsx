@@ -4,6 +4,7 @@ import { Button, Chip, Drawer } from "@heroui/react";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
 import { ExternalLink, Mail, MessageCircle, RefreshCcw } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { normalizeUrl } from "@/lib/profile";
 import { Channel, MsgStatus } from "@/features/contacts/interfaces/contact.interface";
 import { SourceBadge } from "@/components/ui/source-badge";
 import { useContact } from "@/features/contacts/hooks/use-contacts";
@@ -210,7 +211,7 @@ function Field({ label, value, link = false, children }: { label: string; value?
         ) : !value ? (
           <p className="text-sm text-muted italic">Not provided</p>
         ) : link ? (
-          <a href={value} target="_blank" rel="noopener noreferrer" className="text-sm text-accent hover:underline break-all">
+          <a href={normalizeUrl(value)} target="_blank" rel="noopener noreferrer" className="text-sm text-accent hover:underline break-all">
             {value}
           </a>
         ) : (

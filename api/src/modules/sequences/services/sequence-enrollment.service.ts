@@ -21,7 +21,7 @@ import {
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { OUTREACH_SEND_QUEUE } from '@/core/queues/queues.constants';
 import { hasUsableContactEmail } from '@/shared/utils/contact-email.util';
-import { addDelay } from '@/shared/utils/sequence-delay.util';
+import { resolveStepScheduledAt } from '@/shared/utils/sequence-delay.util';
 
 const BULK_ENROLL_CHUNK_SIZE = 200;
 
@@ -88,11 +88,16 @@ export class SequenceEnrollmentService {
     }
 
     const enrolled_at = new Date();
-    const firstStepAt = addDelay(
-      enrolled_at,
-      enabledSteps[0].delay_value,
-      enabledSteps[0].delay_unit,
-    );
+    // Campaign-linked enrollments bypass the first step's own delay/time entirely -
+    // the campaign's actual dispatch moment (== enrolled_at here) is the send time.
+    const firstStepAt = campaign_uuid
+      ? enrolled_at
+      : resolveStepScheduledAt(
+          enrolled_at,
+          enabledSteps[0].delay_value,
+          enabledSteps[0].delay_unit,
+          enabledSteps[0].send_time,
+        );
 
     const { enrollment, materializedIndex } = await this.prisma.$transaction(
       async (tx) => {
@@ -458,11 +463,22 @@ export class SequenceEnrollmentService {
 
     for (let i = startIndex; i < enabledSteps.length; i++) {
       const step = enabledSteps[i];
-      const base =
-        step.delay_reference === SequenceDelayReference.FIRST_STEP
+      // Step 0 is never re-derived from its own delay/time here - firstStepAt is
+      // already the fully-resolved value (bypassed for campaigns, time-pinned
+      // otherwise) computed by the caller. Re-deriving it via delay_reference/
+      // addDelay would silently undo the campaign bypass and double-apply the
+      // delay when delay_reference is (degenerately) FIRST_STEP on step 0 itself.
+      const scheduled_at =
+        i === 0
           ? firstStepAt
-          : prevAt;
-      const scheduled_at = addDelay(base, step.delay_value, step.delay_unit);
+          : resolveStepScheduledAt(
+              step.delay_reference === SequenceDelayReference.FIRST_STEP
+                ? firstStepAt
+                : prevAt,
+              step.delay_value,
+              step.delay_unit,
+              step.send_time,
+            );
 
       if (this.contactCanReceiveChannel(contact, step.channel)) {
         await tx.outreachMessage.create({

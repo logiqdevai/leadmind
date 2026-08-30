@@ -265,7 +265,11 @@ export function CampaignWizard({ campaign }: CampaignWizardProps) {
                 )}
                 {activeStep === "message" && (
                     isSequence ? (
-                        <StepSequence value={sequenceUuid} onChange={setSequenceUuid} />
+                        <StepSequence
+                            value={sequenceUuid}
+                            onChange={setSequenceUuid}
+                            campaignScheduledAt={basics.scheduled_at}
+                        />
                     ) : (
                         <StepMessage
                             campaignUuid={campaign.uuid}

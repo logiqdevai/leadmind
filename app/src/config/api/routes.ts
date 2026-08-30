@@ -148,6 +148,7 @@ export const ApiRoutes = {
         queues: "/admin/queues",
         system_status: "/admin/system-status",
         email_validation_backfill: "/admin/email-validation-backfill",
+        website_validation_backfill: "/admin/website-validation-backfill",
     },
     reminders: {
         prefix: "/reminders",

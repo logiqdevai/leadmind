@@ -72,7 +72,7 @@ export class SequencesService {
                 organisation_uuid,
                 name: dto.name.trim(),
                 description: dto.description?.trim() || null,
-                status: SequenceStatus.DRAFT,
+                status: SequenceStatus.ACTIVE,
                 stop_on_reply: dto.stop_on_reply ?? true,
             },
         });
@@ -213,6 +213,7 @@ export class SequencesService {
                 delay_value: dto.delay_value,
                 delay_unit: dto.delay_unit,
                 delay_reference: dto.delay_reference,
+                send_time: dto.send_time ?? null,
             },
         });
     }
@@ -266,6 +267,9 @@ export class SequencesService {
                 ...(dto.delay_reference !== undefined && {
                     delay_reference: dto.delay_reference,
                 }),
+                ...(dto.send_time !== undefined && {
+                    send_time: dto.send_time,
+                }),
                 ...(dto.enabled !== undefined && { enabled: dto.enabled }),
             },
         });
@@ -276,14 +280,17 @@ export class SequencesService {
         sequence_uuid: string,
         step_uuid: string,
     ): Promise<{ uuid: string }> {
-        const sequence = await this.requireOwned(
-            organisation_uuid,
-            sequence_uuid,
-        );
+        await this.requireOwned(organisation_uuid, sequence_uuid);
         await this.requireOwnedStep(sequence_uuid, step_uuid);
-        if (sequence.status !== SequenceStatus.DRAFT) {
+        const activeEnrollments = await this.prisma.sequenceEnrollment.count({
+            where: {
+                sequence_uuid,
+                status: SequenceEnrollmentStatus.ACTIVE,
+            },
+        });
+        if (activeEnrollments > 0) {
             throw new ConflictException(
-                'Steps can only be deleted while the sequence is a draft; disable the step instead',
+                'Sequence has active enrollments and steps cannot be deleted; disable the step instead',
             );
         }
         await this.prisma.outreachSequenceStep.delete({

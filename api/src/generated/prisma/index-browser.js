@@ -245,6 +245,9 @@ exports.Prisma.LeadScalarFieldEnum = {
   email_validation_status: 'email_validation_status',
   email_validation_reason: 'email_validation_reason',
   email_validated_at: 'email_validated_at',
+  website_validation_status: 'website_validation_status',
+  website_validation_reason: 'website_validation_reason',
+  website_validated_at: 'website_validated_at',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };
@@ -288,6 +291,9 @@ exports.Prisma.ContactScalarFieldEnum = {
   email_validation_status: 'email_validation_status',
   email_validation_reason: 'email_validation_reason',
   email_validated_at: 'email_validated_at',
+  website_validation_status: 'website_validation_status',
+  website_validation_reason: 'website_validation_reason',
+  website_validated_at: 'website_validated_at',
   unsubscribed_at: 'unsubscribed_at',
   unsubscribe_token: 'unsubscribe_token',
   last_interaction_at: 'last_interaction_at',
@@ -438,6 +444,7 @@ exports.Prisma.OutreachSequenceStepScalarFieldEnum = {
   delay_value: 'delay_value',
   delay_unit: 'delay_unit',
   delay_reference: 'delay_reference',
+  send_time: 'send_time',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };
@@ -1044,6 +1051,12 @@ exports.Channel = exports.$Enums.Channel = {
 };
 
 exports.EmailValidationStatus = exports.$Enums.EmailValidationStatus = {
+  UNKNOWN: 'UNKNOWN',
+  VALID: 'VALID',
+  INVALID: 'INVALID'
+};
+
+exports.DomainValidationStatus = exports.$Enums.DomainValidationStatus = {
   UNKNOWN: 'UNKNOWN',
   VALID: 'VALID',
   INVALID: 'INVALID'

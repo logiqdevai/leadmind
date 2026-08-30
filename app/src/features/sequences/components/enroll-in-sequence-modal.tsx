@@ -74,8 +74,8 @@ export const EnrollInSequenceModal: FC<EnrollInSequenceModalProps> = ({
                             </Select>
                         </div>
                         <p className="text-xs text-muted">
-                            The contact will be scheduled to receive each enabled step at the configured
-                            delay, starting now.
+                            The contact will be scheduled to receive each enabled step at its configured
+                            delay (and time of day, if set).
                         </p>
                     </Modal.Body>
                     <Modal.Footer className="gap-2 justify-end">

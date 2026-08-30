@@ -11,7 +11,7 @@ import {
     useUpdateSequence,
     useUpdateSequenceStep,
 } from "@/features/sequences/hooks/use-sequences";
-import { SequenceStatus, type SequenceStep } from "@/features/sequences/interfaces/sequence.interface";
+import type { SequenceStep } from "@/features/sequences/interfaces/sequence.interface";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { Routes } from "@/routes/routes";
 import { SequenceStatusBadge } from "../../components/sequence-status-badge";
@@ -58,7 +58,6 @@ export default function EditSequencePage() {
     const nameDirty = name !== null && name !== sequence.name;
     const descriptionDirty = description !== null && description !== (sequence.description ?? "");
     const stopOnReplyDirty = stopOnReply !== null && stopOnReply !== sequence.stop_on_reply;
-    const isDraft = sequence.status === SequenceStatus.DRAFT;
     const firstEnabledStepUuid = [...sequence.steps]
         .filter((s) => s.enabled)
         .sort((a, b) => a.order_index - b.order_index)[0]?.uuid;
@@ -159,7 +158,7 @@ export default function EditSequencePage() {
                 </div>
                 <StepList
                     steps={sequence.steps}
-                    canDeleteSteps={isDraft}
+                    canDeleteSteps={true}
                     onReorder={(step_uuids) => reorderMut.mutate({ uuid: sequence.uuid, step_uuids })}
                     onEdit={(step) => {
                         setEditingStep(step);

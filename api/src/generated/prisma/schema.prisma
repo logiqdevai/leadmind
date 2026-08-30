@@ -225,29 +225,32 @@ model RawLead {
 // Each Lead is created from a RawLead (`raw_lead_uuid`), which is the audit
 // record of what the scraper returned.
 model Lead {
-  id                      Int                   @id @default(autoincrement())
-  uuid                    String                @unique @default(uuid())
-  raw_lead_uuid           String?               @unique
-  name                    String?
-  email                   String?
-  phone                   String?
-  company                 String?
-  website                 String?
-  google_maps_url         String?
-  linkedin_url            String?
-  title                   String?
-  location                String?
-  industry                String?
-  description             String?
-  source_type             SourceType
-  raw_data                Json?
-  enrichment_summary      String?               @db.Text
-  enrichment_metadata     Json?
-  email_validation_status EmailValidationStatus @default(UNKNOWN)
-  email_validation_reason String?
-  email_validated_at      DateTime?
-  created_at              DateTime              @default(now())
-  updated_at              DateTime              @updatedAt
+  id                        Int                    @id @default(autoincrement())
+  uuid                      String                 @unique @default(uuid())
+  raw_lead_uuid             String?                @unique
+  name                      String?
+  email                     String?
+  phone                     String?
+  company                   String?
+  website                   String?
+  google_maps_url           String?
+  linkedin_url              String?
+  title                     String?
+  location                  String?
+  industry                  String?
+  description               String?
+  source_type               SourceType
+  raw_data                  Json?
+  enrichment_summary        String?                @db.Text
+  enrichment_metadata       Json?
+  email_validation_status   EmailValidationStatus  @default(UNKNOWN)
+  email_validation_reason   String?
+  email_validated_at        DateTime?
+  website_validation_status DomainValidationStatus @default(UNKNOWN)
+  website_validation_reason String?
+  website_validated_at      DateTime?
+  created_at                DateTime               @default(now())
+  updated_at                DateTime               @updatedAt
 
   raw_lead    RawLead?         @relation(fields: [raw_lead_uuid], references: [uuid], onDelete: SetNull)
   contacts    Contact[]
@@ -279,34 +282,37 @@ model LeadEnrichment {
 }
 
 model Contact {
-  id                      Int                   @id @default(autoincrement())
-  uuid                    String                @unique @default(uuid())
-  organisation_uuid       String
-  lead_uuid               String
-  filter_uuid             String?
-  status                  LeadStatus            @default(NEW)
-  notes                   String?
-  name                    String?
-  email                   String?
-  phone                   String?
-  company                 String?
-  website                 String?
-  google_maps_url         String?
-  linkedin_url            String?
-  title                   String?
-  location                String?
-  industry                String?
-  description             String?
-  enrichment_summary      String?               @db.Text
-  enrichment_metadata     Json?
-  email_validation_status EmailValidationStatus @default(UNKNOWN)
-  email_validation_reason String?
-  email_validated_at      DateTime?
-  unsubscribed_at         DateTime?
-  unsubscribe_token       String?               @unique
-  last_interaction_at     DateTime?
-  created_at              DateTime              @default(now())
-  updated_at              DateTime              @updatedAt
+  id                        Int                    @id @default(autoincrement())
+  uuid                      String                 @unique @default(uuid())
+  organisation_uuid         String
+  lead_uuid                 String
+  filter_uuid               String?
+  status                    LeadStatus             @default(NEW)
+  notes                     String?
+  name                      String?
+  email                     String?
+  phone                     String?
+  company                   String?
+  website                   String?
+  google_maps_url           String?
+  linkedin_url              String?
+  title                     String?
+  location                  String?
+  industry                  String?
+  description               String?
+  enrichment_summary        String?                @db.Text
+  enrichment_metadata       Json?
+  email_validation_status   EmailValidationStatus  @default(UNKNOWN)
+  email_validation_reason   String?
+  email_validated_at        DateTime?
+  website_validation_status DomainValidationStatus @default(UNKNOWN)
+  website_validation_reason String?
+  website_validated_at      DateTime?
+  unsubscribed_at           DateTime?
+  unsubscribe_token         String?                @unique
+  last_interaction_at       DateTime?
+  created_at                DateTime               @default(now())
+  updated_at                DateTime               @updatedAt
 
   organisation         Organisation               @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
   lead                 Lead                       @relation(fields: [lead_uuid], references: [uuid], onDelete: Cascade)
@@ -570,6 +576,7 @@ model OutreachSequenceStep {
   delay_value           Int
   delay_unit            SequenceDelayUnit      @default(HOURS)
   delay_reference       SequenceDelayReference @default(PREVIOUS_STEP)
+  send_time             String?                @db.VarChar(5)
   created_at            DateTime               @default(now())
   updated_at            DateTime               @updatedAt
 
@@ -882,6 +889,12 @@ enum SourceType {
 }
 
 enum EmailValidationStatus {
+  UNKNOWN
+  VALID
+  INVALID
+}
+
+enum DomainValidationStatus {
   UNKNOWN
   VALID
   INVALID

@@ -11,11 +11,16 @@ import { Routes } from "@/routes/routes";
 interface StepSequenceProps {
     value: string | null;
     onChange: (sequence_uuid: string | null) => void;
+    campaignScheduledAt: string | null;
 }
 
-export function StepSequence({ value, onChange }: StepSequenceProps) {
+export function StepSequence({ value, onChange, campaignScheduledAt }: StepSequenceProps) {
     const { data: sequences = [], isLoading } = useSequences({ status: SequenceStatus.ACTIVE });
     const selected = sequences.find((s) => s.uuid === value) ?? null;
+
+    const campaignStartLabel = campaignScheduledAt
+        ? `the campaign's scheduled start (${new Date(campaignScheduledAt).toLocaleString()})`
+        : "the campaign's start (immediately when it launches)";
 
     const handleChange = (key: Key | null) => {
         if (typeof key === "string") onChange(key);
@@ -79,6 +84,7 @@ export function StepSequence({ value, onChange }: StepSequenceProps) {
                     <ol className="space-y-2">
                         {enabledSteps.map((step, index) => {
                             const Icon = step.channel === Channel.EMAIL ? Mail : MessageSquare;
+                            const isFirst = step.uuid === firstEnabledUuid;
                             return (
                                 <li key={step.uuid} className="flex items-center gap-2 text-sm">
                                     <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-surface text-[11px] font-semibold text-muted">
@@ -89,7 +95,9 @@ export function StepSequence({ value, onChange }: StepSequenceProps) {
                                         <Chip.Label>{step.channel === Channel.EMAIL ? "Email" : "SMS"}</Chip.Label>
                                     </Chip>
                                     <span className="text-muted truncate">
-                                        {formatStepDelay(step, step.uuid === firstEnabledUuid)}
+                                        {isFirst
+                                            ? `Sent at ${campaignStartLabel} (its own delay/time is ignored inside a campaign)`
+                                            : formatStepDelay(step, false)}
                                     </span>
                                 </li>
                             );

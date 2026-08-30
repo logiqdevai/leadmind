@@ -246,6 +246,9 @@ model Lead {
   email_validation_status EmailValidationStatus @default(UNKNOWN)
   email_validation_reason String?
   email_validated_at      DateTime?
+  website_validation_status DomainValidationStatus @default(UNKNOWN)
+  website_validation_reason String?
+  website_validated_at      DateTime?
   created_at              DateTime              @default(now())
   updated_at              DateTime              @updatedAt
 
@@ -302,6 +305,9 @@ model Contact {
   email_validation_status EmailValidationStatus @default(UNKNOWN)
   email_validation_reason String?
   email_validated_at      DateTime?
+  website_validation_status DomainValidationStatus @default(UNKNOWN)
+  website_validation_reason String?
+  website_validated_at      DateTime?
   unsubscribed_at         DateTime?
   unsubscribe_token       String?               @unique
   last_interaction_at     DateTime?
@@ -570,6 +576,7 @@ model OutreachSequenceStep {
   delay_value           Int
   delay_unit            SequenceDelayUnit      @default(HOURS)
   delay_reference       SequenceDelayReference @default(PREVIOUS_STEP)
+  send_time             String?                @db.VarChar(5)
   created_at            DateTime               @default(now())
   updated_at            DateTime               @updatedAt
 
@@ -882,6 +889,12 @@ enum SourceType {
 }
 
 enum EmailValidationStatus {
+  UNKNOWN
+  VALID
+  INVALID
+}
+
+enum DomainValidationStatus {
   UNKNOWN
   VALID
   INVALID
