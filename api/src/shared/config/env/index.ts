@@ -1,6 +1,6 @@
 export default () => ({
     NODE_ENV: process.env.NODE_ENV,
-    PORT: Number(process.env.PORT),
+    PORT: process.env.PORT ? Number(process.env.PORT) : undefined,
     APP_URL: process.env.APP_URL,
     LANDING_URL: process.env.LANDING_URL,
     API_URL: process.env.API_URL,

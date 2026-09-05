@@ -52,6 +52,6 @@ async function bootstrap() {
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Access-Control-Allow-Origin'],
   });
 
-  await app.listen(3000);
+  await app.listen(configService.get<number>('PORT') || 3000);
 }
 bootstrap();
