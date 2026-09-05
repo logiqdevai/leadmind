@@ -189,10 +189,6 @@ main {
   --viz-hue-8: #e34948;
 }
 
-.checkbox__control {
-  border: 1px solid oklch(0.48 0.008 192);
-}
-
 [data-theme="light"] .checkbox__control {
   border-color: var(--field-border);
 }
