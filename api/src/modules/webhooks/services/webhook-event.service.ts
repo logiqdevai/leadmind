@@ -397,36 +397,35 @@ export class WebhookEventService {
     }
 
     /**
-     * A reply only cancels the enrollment tied to the message actually replied to -
-     * not every active enrollment for the contact - so a reply on one sequence never
-     * stops an unrelated sequence the same contact is also enrolled in.
+     * A reply cancels every ACTIVE enrollment the contact has, across all sequences -
+     * not just the enrollment tied to the message actually replied to - so a contact
+     * replying stops all outreach sequences targeting them. Sequences configured with
+     * stop_on_reply=false are left running.
      */
     private async cancelEnrollmentOnReplyIfConfigured(
         message: OutreachMessage,
     ): Promise<void> {
-        if (!message.sequence_enrollment_uuid) return;
-
-        const enrollment = await this.prisma.sequenceEnrollment.findUnique({
-            where: { uuid: message.sequence_enrollment_uuid },
-            select: {
-                status: true,
-                sequence: { select: { stop_on_reply: true } },
+        const enrollments = await this.prisma.sequenceEnrollment.findMany({
+            where: {
+                contact_uuid: message.contact_uuid,
+                status: SequenceEnrollmentStatus.ACTIVE,
+                sequence: {
+                    organisation_uuid: message.organisation_uuid,
+                    stop_on_reply: true,
+                },
             },
+            select: { uuid: true },
         });
-        if (!enrollment || enrollment.status !== SequenceEnrollmentStatus.ACTIVE) {
-            return;
-        }
-        if (!enrollment.sequence.stop_on_reply) {
-            return;
-        }
 
-        await this.sequenceEnrollmentService.cancelEnrollment(
-            message.organisation_uuid,
-            message.sequence_enrollment_uuid,
-        );
-        this.logger.log(
-            `[ingest] Reply cancelled sequence enrollment=${message.sequence_enrollment_uuid}`,
-        );
+        for (const enrollment of enrollments) {
+            await this.sequenceEnrollmentService.cancelEnrollment(
+                message.organisation_uuid,
+                enrollment.uuid,
+            );
+            this.logger.log(
+                `[ingest] Reply cancelled sequence enrollment=${enrollment.uuid}`,
+            );
+        }
     }
 
     private async forwardReplyIfConfigured(
