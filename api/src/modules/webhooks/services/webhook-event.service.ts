@@ -339,14 +339,43 @@ export class WebhookEventService {
                     data: { last_interaction_at: now },
                 }),
             );
+
+            const replyNoteContent = event.reply?.text?.trim();
+            if (replyNoteContent) {
+                ops.push(
+                    this.prisma.interaction.create({
+                        data: {
+                            contact_uuid: message.contact_uuid,
+                            organisation_uuid: message.organisation_uuid,
+                            campaign_uuid: message.campaign_uuid,
+                            type: InteractionType.NOTE,
+                            content: `Reply received: ${replyNoteContent}`,
+                        },
+                    }),
+                );
+            }
         }
 
         let shouldSyncContactSearchIndex = false;
-        const shouldPromoteCrmStatus =
-            (event.kind === 'delivered' && event.channel === 'email') ||
-            (event.kind === 'replied' && message.channel === Channel.EMAIL);
 
-        if (shouldPromoteCrmStatus) {
+        if (event.kind === 'replied' && message.channel === Channel.EMAIL) {
+            const contact = await this.prisma.contact.findUnique({
+                where: { uuid: message.contact_uuid },
+                select: { status: true },
+            });
+
+            if (contact) {
+                const engagedOps = this.contactsService.buildPromoteToEngagedOnReplyOps(
+                    message.contact_uuid,
+                    message.organisation_uuid,
+                    contact.status,
+                );
+                if (engagedOps.length > 0) {
+                    ops.push(...engagedOps);
+                    shouldSyncContactSearchIndex = true;
+                }
+            }
+        } else if (event.kind === 'delivered' && event.channel === 'email') {
             const contact = await this.prisma.contact.findUnique({
                 where: { uuid: message.contact_uuid },
                 select: { status: true },
@@ -357,7 +386,7 @@ export class WebhookEventService {
                     ...this.contactsService.buildPromoteToContactedIfNewOps(
                         message.contact_uuid,
                         message.organisation_uuid,
-                        event.kind === 'delivered' ? 'email_delivered' : 'email_replied',
+                        'email_delivered',
                         contact.status,
                     ),
                 );
@@ -397,35 +426,36 @@ export class WebhookEventService {
     }
 
     /**
-     * A reply cancels every ACTIVE enrollment the contact has, across all sequences -
-     * not just the enrollment tied to the message actually replied to - so a contact
-     * replying stops all outreach sequences targeting them. Sequences configured with
-     * stop_on_reply=false are left running.
+     * A reply only cancels the enrollment tied to the message actually replied to -
+     * not every active enrollment for the contact - so a reply on one sequence never
+     * stops an unrelated sequence the same contact is also enrolled in.
      */
     private async cancelEnrollmentOnReplyIfConfigured(
         message: OutreachMessage,
     ): Promise<void> {
-        const enrollments = await this.prisma.sequenceEnrollment.findMany({
-            where: {
-                contact_uuid: message.contact_uuid,
-                status: SequenceEnrollmentStatus.ACTIVE,
-                sequence: {
-                    organisation_uuid: message.organisation_uuid,
-                    stop_on_reply: true,
-                },
-            },
-            select: { uuid: true },
-        });
+        if (!message.sequence_enrollment_uuid) return;
 
-        for (const enrollment of enrollments) {
-            await this.sequenceEnrollmentService.cancelEnrollment(
-                message.organisation_uuid,
-                enrollment.uuid,
-            );
-            this.logger.log(
-                `[ingest] Reply cancelled sequence enrollment=${enrollment.uuid}`,
-            );
+        const enrollment = await this.prisma.sequenceEnrollment.findUnique({
+            where: { uuid: message.sequence_enrollment_uuid },
+            select: {
+                status: true,
+                sequence: { select: { stop_on_reply: true } },
+            },
+        });
+        if (!enrollment || enrollment.status !== SequenceEnrollmentStatus.ACTIVE) {
+            return;
         }
+        if (!enrollment.sequence.stop_on_reply) {
+            return;
+        }
+
+        await this.sequenceEnrollmentService.cancelEnrollment(
+            message.organisation_uuid,
+            message.sequence_enrollment_uuid,
+        );
+        this.logger.log(
+            `[ingest] Reply cancelled sequence enrollment=${message.sequence_enrollment_uuid}`,
+        );
     }
 
     private async forwardReplyIfConfigured(

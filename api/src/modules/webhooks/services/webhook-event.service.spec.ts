@@ -113,6 +113,26 @@ describe('WebhookEventService', () => {
                     },
                 }),
             ]),
+            buildPromoteToEngagedOnReplyOps: jest.fn(
+                (_contact_uuid: string, _organisation_uuid: string, currentStatus: LeadStatus) => {
+                    if (currentStatus !== LeadStatus.NEW && currentStatus !== LeadStatus.CONTACTED) {
+                        return [];
+                    }
+                    return [
+                        prisma.contact.update({
+                            where: { uuid: 'contact-uuid' },
+                            data: { status: LeadStatus.ENGAGED },
+                        }),
+                        prisma.interaction.create({
+                            data: {
+                                contact_uuid: 'contact-uuid',
+                                organisation_uuid,
+                                type: InteractionType.STATUS_CHANGE,
+                            },
+                        }),
+                    ];
+                },
+            ),
             syncContactSearchIndex: jest.fn().mockResolvedValue(undefined),
         };
         const mailService = {
@@ -209,9 +229,10 @@ describe('WebhookEventService', () => {
     });
 
     it('records email reply engagement, snapshotting onto the message and linking an Interaction', async () => {
-        const { service, prisma } = createService({
+        const { service, prisma, contactsService } = createService({
             message: { status: MsgStatus.OPENED },
             mcc: { uuid: 'mcc-uuid', status: CampaignContactStatus.OPENED },
+            contactStatus: LeadStatus.CONTACTED,
         });
 
         await service.ingest({
@@ -245,19 +266,59 @@ describe('WebhookEventService', () => {
                 }),
             }),
         );
+        expect(prisma.interaction.create).toHaveBeenCalledWith(
+            expect.objectContaining({
+                data: expect.objectContaining({
+                    type: InteractionType.NOTE,
+                    contact_uuid: 'contact-uuid',
+                    content: 'Reply received: Sounds good',
+                }),
+            }),
+        );
         expect(prisma.marketingCampaign.update).toHaveBeenCalledWith(
             expect.objectContaining({
                 data: { replied_count: { increment: 1 } },
             }),
         );
         expect(prisma.contact.update).toHaveBeenCalled();
+        expect(contactsService.buildPromoteToEngagedOnReplyOps).toHaveBeenCalledWith(
+            'contact-uuid',
+            organisation_uuid,
+            LeadStatus.CONTACTED,
+        );
+        expect(prisma.contact.update).toHaveBeenCalledWith(
+            expect.objectContaining({ data: { status: LeadStatus.ENGAGED } }),
+        );
+    });
+
+    it('does not promote to ENGAGED when the contact has already moved past it', async () => {
+        const { service, contactsService, prisma } = createService({
+            message: { status: MsgStatus.OPENED },
+            mcc: { uuid: 'mcc-uuid', status: CampaignContactStatus.OPENED },
+            contactStatus: LeadStatus.QUALIFIED,
+        });
+
+        await service.ingest({
+            kind: 'replied',
+            provider_message_id,
+            reply: { subject: 'Re: hello', text: 'Sounds good', html: '<p>Sounds good</p>' },
+        });
+
+        expect(contactsService.buildPromoteToEngagedOnReplyOps).toHaveBeenCalledWith(
+            'contact-uuid',
+            organisation_uuid,
+            LeadStatus.QUALIFIED,
+        );
+        expect(prisma.contact.update).not.toHaveBeenCalledWith(
+            expect.objectContaining({ data: { status: LeadStatus.ENGAGED } }),
+        );
     });
 
     it('preserves every reply as its own Interaction instead of overwriting the prior one', async () => {
         const { service, prisma } = createService({
             message: { status: MsgStatus.OPENED },
             mcc: { uuid: 'mcc-uuid', status: CampaignContactStatus.OPENED },
-            contactStatus: LeadStatus.CONTACTED, // isolate reply-interaction creation from the NEW->CONTACTED promotion path
+            contactStatus: LeadStatus.QUALIFIED, // isolate reply-interaction creation from the ENGAGED promotion path
         });
 
         await service.ingest({
@@ -271,17 +332,44 @@ describe('WebhookEventService', () => {
             reply: { subject: 'Re: hello', text: 'Second reply', html: '<p>Second reply</p>' },
         });
 
-        expect(prisma.interaction.create).toHaveBeenCalledTimes(2);
+        // Each reply creates two Interactions: the REPLY_RECEIVED thread entry and a NOTE snapshot.
+        expect(prisma.interaction.create).toHaveBeenCalledTimes(4);
         expect(prisma.interaction.create).toHaveBeenNthCalledWith(
             1,
             expect.objectContaining({
-                data: expect.objectContaining({ outreach_message_uuid: 'msg-uuid', content: 'First reply' }),
+                data: expect.objectContaining({
+                    type: InteractionType.REPLY_RECEIVED,
+                    outreach_message_uuid: 'msg-uuid',
+                    content: 'First reply',
+                }),
             }),
         );
         expect(prisma.interaction.create).toHaveBeenNthCalledWith(
             2,
             expect.objectContaining({
-                data: expect.objectContaining({ outreach_message_uuid: 'msg-uuid', content: 'Second reply' }),
+                data: expect.objectContaining({
+                    type: InteractionType.NOTE,
+                    content: 'Reply received: First reply',
+                }),
+            }),
+        );
+        expect(prisma.interaction.create).toHaveBeenNthCalledWith(
+            3,
+            expect.objectContaining({
+                data: expect.objectContaining({
+                    type: InteractionType.REPLY_RECEIVED,
+                    outreach_message_uuid: 'msg-uuid',
+                    content: 'Second reply',
+                }),
+            }),
+        );
+        expect(prisma.interaction.create).toHaveBeenNthCalledWith(
+            4,
+            expect.objectContaining({
+                data: expect.objectContaining({
+                    type: InteractionType.NOTE,
+                    content: 'Reply received: Second reply',
+                }),
             }),
         );
     });

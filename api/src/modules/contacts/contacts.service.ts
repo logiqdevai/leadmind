@@ -820,6 +820,41 @@ export class ContactsService {
         ];
     }
 
+    /**
+     * Promotes a contact to ENGAGED when they reply to outreach, but only if they
+     * haven't already moved further down the pipeline (QUALIFIED and beyond) - a
+     * reply should never downgrade an already-advanced contact.
+     */
+    buildPromoteToEngagedOnReplyOps(
+        contact_uuid: string,
+        organisation_uuid: string,
+        currentStatus: LeadStatus,
+    ): Prisma.PrismaPromise<unknown>[] {
+        if (currentStatus !== LeadStatus.NEW && currentStatus !== LeadStatus.CONTACTED) {
+            return [];
+        }
+
+        return [
+            this.prisma.contact.update({
+                where: { uuid: contact_uuid },
+                data: { status: LeadStatus.ENGAGED },
+            }),
+            this.prisma.interaction.create({
+                data: {
+                    contact_uuid,
+                    organisation_uuid,
+                    type: InteractionType.STATUS_CHANGE,
+                    status_change: {
+                        from: currentStatus,
+                        to: LeadStatus.ENGAGED,
+                        auto: true,
+                        trigger: 'email_replied',
+                    },
+                },
+            }),
+        ];
+    }
+
     async syncContactSearchIndex(contact_uuid: string): Promise<void> {
         await this.reindexContact(contact_uuid);
     }
