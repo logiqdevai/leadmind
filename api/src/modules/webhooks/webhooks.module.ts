@@ -12,7 +12,8 @@ import { LeadsModule } from '@/modules/leads/leads.module';
 import { EnrichmentModule } from '@/modules/enrichment/enrichment.module';
 import { BulkJobsModule } from '@/modules/bulk-jobs/bulk-jobs.module';
 import { SequencesModule } from '@/modules/sequences/sequences.module';
-import { WEBSITE_SCRAPE_TIMEOUT_QUEUE } from '@/core/queues/queues.constants';
+import { RemindersModule } from '@/modules/reminders/reminders.module';
+import { REPLY_ANALYSIS_QUEUE, WEBSITE_SCRAPE_TIMEOUT_QUEUE } from '@/core/queues/queues.constants';
 import { ResendWebhookController } from './resend-webhook.controller';
 import { TwilioWebhookController } from './twilio-webhook.controller';
 import { UnsubscribeController } from './unsubscribe.controller';
@@ -26,6 +27,8 @@ import { CampaignUtmAnalyticsService } from './services/campaign-utm-analytics.s
 import { EmailTrackingService } from './services/email-tracking.service';
 import { WebsiteScrapeDispatchService } from './services/website-scrape-dispatch.service';
 import { WebsiteScrapeTimeoutWorker } from './workers/website-scrape-timeout.worker';
+import { ReplyAnalysisService } from './services/reply-analysis.service';
+import { ReplyAnalysisWorker } from './workers/reply-analysis.worker';
 
 import { OpenAiBatchDispatchService } from './services/openai-batch-dispatch.service';
 
@@ -43,7 +46,9 @@ import { OpenAiBatchDispatchService } from './services/openai-batch-dispatch.ser
     EnrichmentModule,
     BulkJobsModule,
     SequencesModule,
+    RemindersModule,
     BullModule.registerQueue({ name: WEBSITE_SCRAPE_TIMEOUT_QUEUE }),
+    BullModule.registerQueue({ name: REPLY_ANALYSIS_QUEUE }),
   ],
   controllers: [
     ResendWebhookController,
@@ -62,6 +67,8 @@ import { OpenAiBatchDispatchService } from './services/openai-batch-dispatch.ser
     EmailTrackingService,
     WebsiteScrapeDispatchService,
     WebsiteScrapeTimeoutWorker,
+    ReplyAnalysisService,
+    ReplyAnalysisWorker,
   ],
   exports: [
     WebhookEventService,

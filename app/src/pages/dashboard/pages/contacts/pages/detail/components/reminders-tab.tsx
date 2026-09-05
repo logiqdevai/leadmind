@@ -11,7 +11,7 @@ import {
 } from "@/features/reminders/hooks/use-reminders";
 import type { Reminder } from "@/features/reminders/interfaces/reminder.interface";
 import { cn } from "@/lib/utils";
-import { ReminderFormModal, ReminderStatusBadge } from "@/components/reminders";
+import { ReminderAiBadge, ReminderFormModal, ReminderStatusBadge } from "@/components/reminders";
 
 interface RemindersTabProps {
     contactUuid: string;
@@ -77,6 +77,7 @@ function ReminderRow({ reminder }: { reminder: Reminder }) {
                             {reminder.title ?? "Reminder"}
                         </span>
                         <ReminderStatusBadge status={reminder.status} />
+                        {reminder.source === "AI" && <ReminderAiBadge />}
                     </div>
                     <div className="flex items-center gap-2 text-xs text-muted flex-wrap">
                         <span>{formatReminderDate(reminder.remind_at)}</span>

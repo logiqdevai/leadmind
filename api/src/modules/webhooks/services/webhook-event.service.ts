@@ -1,4 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
+import { InjectQueue } from '@nestjs/bullmq';
+import { Queue } from 'bullmq';
 import {
     CampaignContactStatus,
     Channel,
@@ -11,6 +13,7 @@ import {
     SequenceEnrollmentStatus,
 } from '@/generated/prisma';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
+import { REPLY_ANALYSIS_QUEUE } from '@/core/queues/queues.constants';
 import { ResendAdapter } from '@/integrations/notifications/resend/resend/resend.adapter';
 import { ContactsService } from '@/modules/contacts/contacts.service';
 import { MailService } from '@/modules/internal/mail/mail.service';
@@ -18,6 +21,7 @@ import { CampaignMessageSendService } from '@/modules/marketing-campaigns/servic
 import { SequenceEnrollmentService } from '@/modules/sequences/services/sequence-enrollment.service';
 import { EmailConfig } from '@/shared/config/email';
 import { sanitizeEmailHtml } from '@/shared/utils/sanitize-html.util';
+import type { ReplyAnalysisJobData } from '../interfaces/reply-analysis-job.interface';
 
 export interface ReceivedEmailContent {
     subject?: string | null;
@@ -67,6 +71,7 @@ export class WebhookEventService {
         private readonly contactsService: ContactsService,
         private readonly mailService: MailService,
         private readonly sequenceEnrollmentService: SequenceEnrollmentService,
+        @InjectQueue(REPLY_ANALYSIS_QUEUE) private readonly replyAnalysisQueue: Queue,
     ) { }
 
     async resolveOutboundMessageIdFromReceived(
@@ -332,6 +337,8 @@ export class WebhookEventService {
             }
         }
 
+        let noteOpIndex: number | null = null;
+
         if (event.kind === 'replied') {
             ops.push(
                 this.prisma.contact.update({
@@ -342,6 +349,11 @@ export class WebhookEventService {
 
             const replyNoteContent = event.reply?.text?.trim();
             if (replyNoteContent) {
+                // Immediate placeholder note, shown the instant the reply arrives. Once the
+                // async ReplyAnalysisWorker finishes, it updates this same Interaction row in
+                // place with an AI summary (see enqueueReplyAnalysis) rather than creating a
+                // second note — if AI is unavailable/fails, this raw text stands as-is.
+                noteOpIndex = ops.length;
                 ops.push(
                     this.prisma.interaction.create({
                         data: {
@@ -394,10 +406,12 @@ export class WebhookEventService {
             }
         }
 
-        await this.prisma.$transaction(ops);
+        const results = await this.prisma.$transaction(ops);
         this.logger.log(
             `[ingest] Transaction committed: kind=${event.kind} message=${message.uuid}`,
         );
+        const replyNoteUuid =
+            noteOpIndex !== null ? (results[noteOpIndex] as { uuid: string }).uuid : null;
 
         if (shouldSyncContactSearchIndex) {
             await this.contactsService.syncContactSearchIndex(message.contact_uuid);
@@ -410,6 +424,9 @@ export class WebhookEventService {
         if (event.kind === 'replied') {
             await this.forwardReplyIfConfigured(message.organisation_uuid, event);
             await this.cancelEnrollmentOnReplyIfConfigured(message);
+            if (replyNoteUuid) {
+                await this.enqueueReplyAnalysis(message, replyNoteUuid);
+            }
         }
 
         if (event.kind === 'complained') {
@@ -489,6 +506,27 @@ export class WebhookEventService {
         } catch (error) {
             this.logger.error(
                 `Failed to forward reply to ${forwardTo}: ${error instanceof Error ? error.message : error}`,
+            );
+        }
+    }
+
+    private async enqueueReplyAnalysis(
+        message: OutreachMessage,
+        note_uuid: string,
+    ): Promise<void> {
+        try {
+            await this.replyAnalysisQueue.add(
+                'analyze',
+                { message_uuid: message.uuid, note_uuid } satisfies ReplyAnalysisJobData,
+                {
+                    attempts: 1,
+                    removeOnComplete: { age: 86400 },
+                    removeOnFail: { age: 86400 },
+                },
+            );
+        } catch (error) {
+            this.logger.error(
+                `Failed to enqueue reply analysis for message=${message.uuid}: ${error instanceof Error ? error.message : error}`,
             );
         }
     }

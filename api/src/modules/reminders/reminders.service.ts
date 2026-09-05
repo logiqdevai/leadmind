@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
-import { Prisma, ReminderStatus } from '@/generated/prisma';
+import { Prisma, ReminderSource, ReminderStatus, ReminderType } from '@/generated/prisma';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { REMINDER_TRIGGER_QUEUE } from '@/core/queues/queues.constants';
 import { NotificationsGateway } from '@/gateways/notifications.gateway';
@@ -28,7 +28,11 @@ export class RemindersService {
         @InjectQueue(REMINDER_TRIGGER_QUEUE) private readonly reminderQueue: Queue,
     ) {}
 
-    async create(organisation_uuid: string, dto: CreateReminderDto) {
+    async create(
+        organisation_uuid: string,
+        dto: CreateReminderDto,
+        opts?: { source?: ReminderSource; type?: ReminderType },
+    ) {
         const contact = await this.prisma.contact.findFirst({
             where: { uuid: dto.contact_uuid, organisation_uuid },
         });
@@ -47,6 +51,8 @@ export class RemindersService {
                 notes: dto.notes,
                 remind_at: remindAt,
                 status: dto.status ?? ReminderStatus.PENDING,
+                source: opts?.source ?? ReminderSource.MANUAL,
+                type: opts?.type ?? ReminderType.GENERAL,
             },
             include: { contact: { select: CONTACT_SELECT } },
         });

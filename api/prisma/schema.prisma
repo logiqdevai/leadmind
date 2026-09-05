@@ -1280,6 +1280,19 @@ enum ReminderStatus {
   CANCELLED
 }
 
+enum ReminderSource {
+  MANUAL
+  AI
+}
+
+enum ReminderType {
+  GENERAL
+  CALL
+  EMAIL
+  MEETING
+  TASK
+}
+
 model Reminder {
   id                Int            @id @default(autoincrement())
   uuid              String         @unique @default(uuid())
@@ -1289,6 +1302,8 @@ model Reminder {
   notes             String?        @db.Text
   remind_at         DateTime
   status            ReminderStatus @default(PENDING)
+  source            ReminderSource @default(MANUAL)
+  type              ReminderType   @default(GENERAL)
   job_id            String?        @unique
 
   created_at DateTime @default(now())
@@ -1456,6 +1471,7 @@ enum AiUsageOperation {
   BATCH_JOB
   MAIL_TESTER_AUDIT
   MXTOOLBOX_AUDIT
+  REPLY_ANALYSIS
   OTHER
 }
 

@@ -709,6 +709,25 @@ export const ReminderStatus: {
 export type ReminderStatus = (typeof ReminderStatus)[keyof typeof ReminderStatus]
 
 
+export const ReminderSource: {
+  MANUAL: 'MANUAL',
+  AI: 'AI'
+};
+
+export type ReminderSource = (typeof ReminderSource)[keyof typeof ReminderSource]
+
+
+export const ReminderType: {
+  GENERAL: 'GENERAL',
+  CALL: 'CALL',
+  EMAIL: 'EMAIL',
+  MEETING: 'MEETING',
+  TASK: 'TASK'
+};
+
+export type ReminderType = (typeof ReminderType)[keyof typeof ReminderType]
+
+
 export const FieldType: {
   TEXT_INPUT: 'TEXT_INPUT',
   TEXTAREA: 'TEXTAREA',
@@ -756,6 +775,7 @@ export const AiUsageOperation: {
   BATCH_JOB: 'BATCH_JOB',
   MAIL_TESTER_AUDIT: 'MAIL_TESTER_AUDIT',
   MXTOOLBOX_AUDIT: 'MXTOOLBOX_AUDIT',
+  REPLY_ANALYSIS: 'REPLY_ANALYSIS',
   OTHER: 'OTHER'
 };
 
@@ -988,6 +1008,14 @@ export const MxToolboxCheckStatus: typeof $Enums.MxToolboxCheckStatus
 export type ReminderStatus = $Enums.ReminderStatus
 
 export const ReminderStatus: typeof $Enums.ReminderStatus
+
+export type ReminderSource = $Enums.ReminderSource
+
+export const ReminderSource: typeof $Enums.ReminderSource
+
+export type ReminderType = $Enums.ReminderType
+
+export const ReminderType: typeof $Enums.ReminderType
 
 export type FieldType = $Enums.FieldType
 
@@ -56184,6 +56212,8 @@ export namespace Prisma {
     notes: string | null
     remind_at: Date | null
     status: $Enums.ReminderStatus | null
+    source: $Enums.ReminderSource | null
+    type: $Enums.ReminderType | null
     job_id: string | null
     created_at: Date | null
     updated_at: Date | null
@@ -56198,6 +56228,8 @@ export namespace Prisma {
     notes: string | null
     remind_at: Date | null
     status: $Enums.ReminderStatus | null
+    source: $Enums.ReminderSource | null
+    type: $Enums.ReminderType | null
     job_id: string | null
     created_at: Date | null
     updated_at: Date | null
@@ -56212,6 +56244,8 @@ export namespace Prisma {
     notes: number
     remind_at: number
     status: number
+    source: number
+    type: number
     job_id: number
     created_at: number
     updated_at: number
@@ -56236,6 +56270,8 @@ export namespace Prisma {
     notes?: true
     remind_at?: true
     status?: true
+    source?: true
+    type?: true
     job_id?: true
     created_at?: true
     updated_at?: true
@@ -56250,6 +56286,8 @@ export namespace Prisma {
     notes?: true
     remind_at?: true
     status?: true
+    source?: true
+    type?: true
     job_id?: true
     created_at?: true
     updated_at?: true
@@ -56264,6 +56302,8 @@ export namespace Prisma {
     notes?: true
     remind_at?: true
     status?: true
+    source?: true
+    type?: true
     job_id?: true
     created_at?: true
     updated_at?: true
@@ -56365,6 +56405,8 @@ export namespace Prisma {
     notes: string | null
     remind_at: Date
     status: $Enums.ReminderStatus
+    source: $Enums.ReminderSource
+    type: $Enums.ReminderType
     job_id: string | null
     created_at: Date
     updated_at: Date
@@ -56398,6 +56440,8 @@ export namespace Prisma {
     notes?: boolean
     remind_at?: boolean
     status?: boolean
+    source?: boolean
+    type?: boolean
     job_id?: boolean
     created_at?: boolean
     updated_at?: boolean
@@ -56414,6 +56458,8 @@ export namespace Prisma {
     notes?: boolean
     remind_at?: boolean
     status?: boolean
+    source?: boolean
+    type?: boolean
     job_id?: boolean
     created_at?: boolean
     updated_at?: boolean
@@ -56430,6 +56476,8 @@ export namespace Prisma {
     notes?: boolean
     remind_at?: boolean
     status?: boolean
+    source?: boolean
+    type?: boolean
     job_id?: boolean
     created_at?: boolean
     updated_at?: boolean
@@ -56446,12 +56494,14 @@ export namespace Prisma {
     notes?: boolean
     remind_at?: boolean
     status?: boolean
+    source?: boolean
+    type?: boolean
     job_id?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
-  export type ReminderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "contact_uuid" | "title" | "notes" | "remind_at" | "status" | "job_id" | "created_at" | "updated_at", ExtArgs["result"]["reminder"]>
+  export type ReminderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "contact_uuid" | "title" | "notes" | "remind_at" | "status" | "source" | "type" | "job_id" | "created_at" | "updated_at", ExtArgs["result"]["reminder"]>
   export type ReminderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     contact?: boolean | ContactDefaultArgs<ExtArgs>
@@ -56480,6 +56530,8 @@ export namespace Prisma {
       notes: string | null
       remind_at: Date
       status: $Enums.ReminderStatus
+      source: $Enums.ReminderSource
+      type: $Enums.ReminderType
       job_id: string | null
       created_at: Date
       updated_at: Date
@@ -56916,6 +56968,8 @@ export namespace Prisma {
     readonly notes: FieldRef<"Reminder", 'String'>
     readonly remind_at: FieldRef<"Reminder", 'DateTime'>
     readonly status: FieldRef<"Reminder", 'ReminderStatus'>
+    readonly source: FieldRef<"Reminder", 'ReminderSource'>
+    readonly type: FieldRef<"Reminder", 'ReminderType'>
     readonly job_id: FieldRef<"Reminder", 'String'>
     readonly created_at: FieldRef<"Reminder", 'DateTime'>
     readonly updated_at: FieldRef<"Reminder", 'DateTime'>
@@ -78434,6 +78488,8 @@ export namespace Prisma {
     notes: 'notes',
     remind_at: 'remind_at',
     status: 'status',
+    source: 'source',
+    type: 'type',
     job_id: 'job_id',
     created_at: 'created_at',
     updated_at: 'updated_at'
@@ -79374,6 +79430,34 @@ export namespace Prisma {
    * Reference to a field of type 'ReminderStatus[]'
    */
   export type ListEnumReminderStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReminderStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'ReminderSource'
+   */
+  export type EnumReminderSourceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReminderSource'>
+    
+
+
+  /**
+   * Reference to a field of type 'ReminderSource[]'
+   */
+  export type ListEnumReminderSourceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReminderSource[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'ReminderType'
+   */
+  export type EnumReminderTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReminderType'>
+    
+
+
+  /**
+   * Reference to a field of type 'ReminderType[]'
+   */
+  export type ListEnumReminderTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReminderType[]'>
     
 
 
@@ -83548,6 +83632,8 @@ export namespace Prisma {
     notes?: StringNullableFilter<"Reminder"> | string | null
     remind_at?: DateTimeFilter<"Reminder"> | Date | string
     status?: EnumReminderStatusFilter<"Reminder"> | $Enums.ReminderStatus
+    source?: EnumReminderSourceFilter<"Reminder"> | $Enums.ReminderSource
+    type?: EnumReminderTypeFilter<"Reminder"> | $Enums.ReminderType
     job_id?: StringNullableFilter<"Reminder"> | string | null
     created_at?: DateTimeFilter<"Reminder"> | Date | string
     updated_at?: DateTimeFilter<"Reminder"> | Date | string
@@ -83564,6 +83650,8 @@ export namespace Prisma {
     notes?: SortOrderInput | SortOrder
     remind_at?: SortOrder
     status?: SortOrder
+    source?: SortOrder
+    type?: SortOrder
     job_id?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -83584,6 +83672,8 @@ export namespace Prisma {
     notes?: StringNullableFilter<"Reminder"> | string | null
     remind_at?: DateTimeFilter<"Reminder"> | Date | string
     status?: EnumReminderStatusFilter<"Reminder"> | $Enums.ReminderStatus
+    source?: EnumReminderSourceFilter<"Reminder"> | $Enums.ReminderSource
+    type?: EnumReminderTypeFilter<"Reminder"> | $Enums.ReminderType
     created_at?: DateTimeFilter<"Reminder"> | Date | string
     updated_at?: DateTimeFilter<"Reminder"> | Date | string
     organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
@@ -83599,6 +83689,8 @@ export namespace Prisma {
     notes?: SortOrderInput | SortOrder
     remind_at?: SortOrder
     status?: SortOrder
+    source?: SortOrder
+    type?: SortOrder
     job_id?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -83621,6 +83713,8 @@ export namespace Prisma {
     notes?: StringNullableWithAggregatesFilter<"Reminder"> | string | null
     remind_at?: DateTimeWithAggregatesFilter<"Reminder"> | Date | string
     status?: EnumReminderStatusWithAggregatesFilter<"Reminder"> | $Enums.ReminderStatus
+    source?: EnumReminderSourceWithAggregatesFilter<"Reminder"> | $Enums.ReminderSource
+    type?: EnumReminderTypeWithAggregatesFilter<"Reminder"> | $Enums.ReminderType
     job_id?: StringNullableWithAggregatesFilter<"Reminder"> | string | null
     created_at?: DateTimeWithAggregatesFilter<"Reminder"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"Reminder"> | Date | string
@@ -89559,6 +89653,8 @@ export namespace Prisma {
     notes?: string | null
     remind_at: Date | string
     status?: $Enums.ReminderStatus
+    source?: $Enums.ReminderSource
+    type?: $Enums.ReminderType
     job_id?: string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -89575,6 +89671,8 @@ export namespace Prisma {
     notes?: string | null
     remind_at: Date | string
     status?: $Enums.ReminderStatus
+    source?: $Enums.ReminderSource
+    type?: $Enums.ReminderType
     job_id?: string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -89586,6 +89684,8 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     remind_at?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumReminderStatusFieldUpdateOperationsInput | $Enums.ReminderStatus
+    source?: EnumReminderSourceFieldUpdateOperationsInput | $Enums.ReminderSource
+    type?: EnumReminderTypeFieldUpdateOperationsInput | $Enums.ReminderType
     job_id?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -89602,6 +89702,8 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     remind_at?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumReminderStatusFieldUpdateOperationsInput | $Enums.ReminderStatus
+    source?: EnumReminderSourceFieldUpdateOperationsInput | $Enums.ReminderSource
+    type?: EnumReminderTypeFieldUpdateOperationsInput | $Enums.ReminderType
     job_id?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -89616,6 +89718,8 @@ export namespace Prisma {
     notes?: string | null
     remind_at: Date | string
     status?: $Enums.ReminderStatus
+    source?: $Enums.ReminderSource
+    type?: $Enums.ReminderType
     job_id?: string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -89627,6 +89731,8 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     remind_at?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumReminderStatusFieldUpdateOperationsInput | $Enums.ReminderStatus
+    source?: EnumReminderSourceFieldUpdateOperationsInput | $Enums.ReminderSource
+    type?: EnumReminderTypeFieldUpdateOperationsInput | $Enums.ReminderType
     job_id?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -89641,6 +89747,8 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     remind_at?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumReminderStatusFieldUpdateOperationsInput | $Enums.ReminderStatus
+    source?: EnumReminderSourceFieldUpdateOperationsInput | $Enums.ReminderSource
+    type?: EnumReminderTypeFieldUpdateOperationsInput | $Enums.ReminderType
     job_id?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -95013,6 +95121,20 @@ export namespace Prisma {
     not?: NestedEnumReminderStatusFilter<$PrismaModel> | $Enums.ReminderStatus
   }
 
+  export type EnumReminderSourceFilter<$PrismaModel = never> = {
+    equals?: $Enums.ReminderSource | EnumReminderSourceFieldRefInput<$PrismaModel>
+    in?: $Enums.ReminderSource[] | ListEnumReminderSourceFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ReminderSource[] | ListEnumReminderSourceFieldRefInput<$PrismaModel>
+    not?: NestedEnumReminderSourceFilter<$PrismaModel> | $Enums.ReminderSource
+  }
+
+  export type EnumReminderTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.ReminderType | EnumReminderTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.ReminderType[] | ListEnumReminderTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ReminderType[] | ListEnumReminderTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumReminderTypeFilter<$PrismaModel> | $Enums.ReminderType
+  }
+
   export type ReminderCountOrderByAggregateInput = {
     id?: SortOrder
     uuid?: SortOrder
@@ -95022,6 +95144,8 @@ export namespace Prisma {
     notes?: SortOrder
     remind_at?: SortOrder
     status?: SortOrder
+    source?: SortOrder
+    type?: SortOrder
     job_id?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -95040,6 +95164,8 @@ export namespace Prisma {
     notes?: SortOrder
     remind_at?: SortOrder
     status?: SortOrder
+    source?: SortOrder
+    type?: SortOrder
     job_id?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -95054,6 +95180,8 @@ export namespace Prisma {
     notes?: SortOrder
     remind_at?: SortOrder
     status?: SortOrder
+    source?: SortOrder
+    type?: SortOrder
     job_id?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -95071,6 +95199,26 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumReminderStatusFilter<$PrismaModel>
     _max?: NestedEnumReminderStatusFilter<$PrismaModel>
+  }
+
+  export type EnumReminderSourceWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ReminderSource | EnumReminderSourceFieldRefInput<$PrismaModel>
+    in?: $Enums.ReminderSource[] | ListEnumReminderSourceFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ReminderSource[] | ListEnumReminderSourceFieldRefInput<$PrismaModel>
+    not?: NestedEnumReminderSourceWithAggregatesFilter<$PrismaModel> | $Enums.ReminderSource
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumReminderSourceFilter<$PrismaModel>
+    _max?: NestedEnumReminderSourceFilter<$PrismaModel>
+  }
+
+  export type EnumReminderTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ReminderType | EnumReminderTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.ReminderType[] | ListEnumReminderTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ReminderType[] | ListEnumReminderTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumReminderTypeWithAggregatesFilter<$PrismaModel> | $Enums.ReminderType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumReminderTypeFilter<$PrismaModel>
+    _max?: NestedEnumReminderTypeFilter<$PrismaModel>
   }
 
   export type FormFieldListRelationFilter = {
@@ -101021,6 +101169,14 @@ export namespace Prisma {
     set?: $Enums.ReminderStatus
   }
 
+  export type EnumReminderSourceFieldUpdateOperationsInput = {
+    set?: $Enums.ReminderSource
+  }
+
+  export type EnumReminderTypeFieldUpdateOperationsInput = {
+    set?: $Enums.ReminderType
+  }
+
   export type OrganisationUpdateOneRequiredWithoutRemindersNestedInput = {
     create?: XOR<OrganisationCreateWithoutRemindersInput, OrganisationUncheckedCreateWithoutRemindersInput>
     connectOrCreate?: OrganisationCreateOrConnectWithoutRemindersInput
@@ -102838,6 +102994,20 @@ export namespace Prisma {
     not?: NestedEnumReminderStatusFilter<$PrismaModel> | $Enums.ReminderStatus
   }
 
+  export type NestedEnumReminderSourceFilter<$PrismaModel = never> = {
+    equals?: $Enums.ReminderSource | EnumReminderSourceFieldRefInput<$PrismaModel>
+    in?: $Enums.ReminderSource[] | ListEnumReminderSourceFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ReminderSource[] | ListEnumReminderSourceFieldRefInput<$PrismaModel>
+    not?: NestedEnumReminderSourceFilter<$PrismaModel> | $Enums.ReminderSource
+  }
+
+  export type NestedEnumReminderTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.ReminderType | EnumReminderTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.ReminderType[] | ListEnumReminderTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ReminderType[] | ListEnumReminderTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumReminderTypeFilter<$PrismaModel> | $Enums.ReminderType
+  }
+
   export type NestedEnumReminderStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.ReminderStatus | EnumReminderStatusFieldRefInput<$PrismaModel>
     in?: $Enums.ReminderStatus[] | ListEnumReminderStatusFieldRefInput<$PrismaModel>
@@ -102846,6 +103016,26 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumReminderStatusFilter<$PrismaModel>
     _max?: NestedEnumReminderStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumReminderSourceWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ReminderSource | EnumReminderSourceFieldRefInput<$PrismaModel>
+    in?: $Enums.ReminderSource[] | ListEnumReminderSourceFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ReminderSource[] | ListEnumReminderSourceFieldRefInput<$PrismaModel>
+    not?: NestedEnumReminderSourceWithAggregatesFilter<$PrismaModel> | $Enums.ReminderSource
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumReminderSourceFilter<$PrismaModel>
+    _max?: NestedEnumReminderSourceFilter<$PrismaModel>
+  }
+
+  export type NestedEnumReminderTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ReminderType | EnumReminderTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.ReminderType[] | ListEnumReminderTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ReminderType[] | ListEnumReminderTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumReminderTypeWithAggregatesFilter<$PrismaModel> | $Enums.ReminderType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumReminderTypeFilter<$PrismaModel>
+    _max?: NestedEnumReminderTypeFilter<$PrismaModel>
   }
 
   export type NestedEnumFieldTypeFilter<$PrismaModel = never> = {
@@ -104492,6 +104682,8 @@ export namespace Prisma {
     notes?: string | null
     remind_at: Date | string
     status?: $Enums.ReminderStatus
+    source?: $Enums.ReminderSource
+    type?: $Enums.ReminderType
     job_id?: string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -104506,6 +104698,8 @@ export namespace Prisma {
     notes?: string | null
     remind_at: Date | string
     status?: $Enums.ReminderStatus
+    source?: $Enums.ReminderSource
+    type?: $Enums.ReminderType
     job_id?: string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -105607,6 +105801,8 @@ export namespace Prisma {
     notes?: StringNullableFilter<"Reminder"> | string | null
     remind_at?: DateTimeFilter<"Reminder"> | Date | string
     status?: EnumReminderStatusFilter<"Reminder"> | $Enums.ReminderStatus
+    source?: EnumReminderSourceFilter<"Reminder"> | $Enums.ReminderSource
+    type?: EnumReminderTypeFilter<"Reminder"> | $Enums.ReminderType
     job_id?: StringNullableFilter<"Reminder"> | string | null
     created_at?: DateTimeFilter<"Reminder"> | Date | string
     updated_at?: DateTimeFilter<"Reminder"> | Date | string
@@ -108978,6 +109174,8 @@ export namespace Prisma {
     notes?: string | null
     remind_at: Date | string
     status?: $Enums.ReminderStatus
+    source?: $Enums.ReminderSource
+    type?: $Enums.ReminderType
     job_id?: string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -108992,6 +109190,8 @@ export namespace Prisma {
     notes?: string | null
     remind_at: Date | string
     status?: $Enums.ReminderStatus
+    source?: $Enums.ReminderSource
+    type?: $Enums.ReminderType
     job_id?: string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -123355,6 +123555,8 @@ export namespace Prisma {
     notes?: string | null
     remind_at: Date | string
     status?: $Enums.ReminderStatus
+    source?: $Enums.ReminderSource
+    type?: $Enums.ReminderType
     job_id?: string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -124381,6 +124583,8 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     remind_at?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumReminderStatusFieldUpdateOperationsInput | $Enums.ReminderStatus
+    source?: EnumReminderSourceFieldUpdateOperationsInput | $Enums.ReminderSource
+    type?: EnumReminderTypeFieldUpdateOperationsInput | $Enums.ReminderType
     job_id?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -124395,6 +124599,8 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     remind_at?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumReminderStatusFieldUpdateOperationsInput | $Enums.ReminderStatus
+    source?: EnumReminderSourceFieldUpdateOperationsInput | $Enums.ReminderSource
+    type?: EnumReminderTypeFieldUpdateOperationsInput | $Enums.ReminderType
     job_id?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -124408,6 +124614,8 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     remind_at?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumReminderStatusFieldUpdateOperationsInput | $Enums.ReminderStatus
+    source?: EnumReminderSourceFieldUpdateOperationsInput | $Enums.ReminderSource
+    type?: EnumReminderTypeFieldUpdateOperationsInput | $Enums.ReminderType
     job_id?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -125890,6 +126098,8 @@ export namespace Prisma {
     notes?: string | null
     remind_at: Date | string
     status?: $Enums.ReminderStatus
+    source?: $Enums.ReminderSource
+    type?: $Enums.ReminderType
     job_id?: string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -126212,6 +126422,8 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     remind_at?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumReminderStatusFieldUpdateOperationsInput | $Enums.ReminderStatus
+    source?: EnumReminderSourceFieldUpdateOperationsInput | $Enums.ReminderSource
+    type?: EnumReminderTypeFieldUpdateOperationsInput | $Enums.ReminderType
     job_id?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -126226,6 +126438,8 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     remind_at?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumReminderStatusFieldUpdateOperationsInput | $Enums.ReminderStatus
+    source?: EnumReminderSourceFieldUpdateOperationsInput | $Enums.ReminderSource
+    type?: EnumReminderTypeFieldUpdateOperationsInput | $Enums.ReminderType
     job_id?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -126239,6 +126453,8 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     remind_at?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumReminderStatusFieldUpdateOperationsInput | $Enums.ReminderStatus
+    source?: EnumReminderSourceFieldUpdateOperationsInput | $Enums.ReminderSource
+    type?: EnumReminderTypeFieldUpdateOperationsInput | $Enums.ReminderType
     job_id?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string

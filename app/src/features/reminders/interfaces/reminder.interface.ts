@@ -1,5 +1,9 @@
 export type ReminderStatus = "PENDING" | "COMPLETED" | "CANCELLED";
 
+export type ReminderSource = "MANUAL" | "AI";
+
+export type ReminderType = "GENERAL" | "CALL" | "EMAIL" | "MEETING" | "TASK";
+
 export interface ReminderContact {
     uuid: string;
     name: string | null;
@@ -15,6 +19,8 @@ export interface Reminder {
     notes: string | null;
     remind_at: string;
     status: ReminderStatus;
+    source: ReminderSource;
+    type: ReminderType;
     job_id: string | null;
     contact: ReminderContact;
     created_at: string;

@@ -33,3 +33,5 @@ export const SENDING_ENGINE_TICK_JOB_ID = 'sending-engine-tick';
 export const SENDING_ENGINE_TICK_INTERVAL_MS = 30_000;
 
 export const WEBSITE_SCRAPE_TIMEOUT_QUEUE = 'website-scrape-timeout';
+
+export const REPLY_ANALYSIS_QUEUE = 'reply-analysis';

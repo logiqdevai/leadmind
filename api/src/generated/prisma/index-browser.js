@@ -730,6 +730,8 @@ exports.Prisma.ReminderScalarFieldEnum = {
   notes: 'notes',
   remind_at: 'remind_at',
   status: 'status',
+  source: 'source',
+  type: 'type',
   job_id: 'job_id',
   created_at: 'created_at',
   updated_at: 'updated_at'
@@ -1302,6 +1304,19 @@ exports.ReminderStatus = exports.$Enums.ReminderStatus = {
   CANCELLED: 'CANCELLED'
 };
 
+exports.ReminderSource = exports.$Enums.ReminderSource = {
+  MANUAL: 'MANUAL',
+  AI: 'AI'
+};
+
+exports.ReminderType = exports.$Enums.ReminderType = {
+  GENERAL: 'GENERAL',
+  CALL: 'CALL',
+  EMAIL: 'EMAIL',
+  MEETING: 'MEETING',
+  TASK: 'TASK'
+};
+
 exports.FieldType = exports.$Enums.FieldType = {
   TEXT_INPUT: 'TEXT_INPUT',
   TEXTAREA: 'TEXTAREA',
@@ -1340,6 +1355,7 @@ exports.AiUsageOperation = exports.$Enums.AiUsageOperation = {
   BATCH_JOB: 'BATCH_JOB',
   MAIL_TESTER_AUDIT: 'MAIL_TESTER_AUDIT',
   MXTOOLBOX_AUDIT: 'MXTOOLBOX_AUDIT',
+  REPLY_ANALYSIS: 'REPLY_ANALYSIS',
   OTHER: 'OTHER'
 };
 

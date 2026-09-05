@@ -63,7 +63,8 @@ describe('WebhookEventService', () => {
                 update: jest.fn().mockResolvedValue({}),
             },
             interaction: {
-                create: jest.fn().mockResolvedValue({}),
+                create: jest.fn().mockResolvedValue({ uuid: 'note-uuid' }),
+                update: jest.fn().mockResolvedValue({}),
             },
             contact: {
                 findFirst: jest.fn((args: any) => {
@@ -86,9 +87,11 @@ describe('WebhookEventService', () => {
                 findUnique: jest.fn().mockResolvedValue(null),
             },
             $transaction: jest.fn(async (ops: unknown[]) => {
+                const results: unknown[] = [];
                 for (const op of ops) {
-                    await op;
+                    results.push(await op);
                 }
+                return results;
             }),
         };
         const resendAdapter = {
@@ -142,6 +145,9 @@ describe('WebhookEventService', () => {
             cancelEnrollment: jest.fn().mockResolvedValue(undefined),
             cancelAllForContact: jest.fn().mockResolvedValue({ cancelled: 0 }),
         };
+        const replyAnalysisQueue = {
+            add: jest.fn().mockResolvedValue(undefined),
+        };
 
         return {
             service: new WebhookEventService(
@@ -151,6 +157,7 @@ describe('WebhookEventService', () => {
                 contactsService as any,
                 mailService as any,
                 sequenceEnrollmentService as any,
+                replyAnalysisQueue as any,
             ),
             prisma,
             resendAdapter,
@@ -158,6 +165,7 @@ describe('WebhookEventService', () => {
             contactsService,
             mailService,
             sequenceEnrollmentService,
+            replyAnalysisQueue,
         };
     }
 
@@ -289,6 +297,59 @@ describe('WebhookEventService', () => {
         expect(prisma.contact.update).toHaveBeenCalledWith(
             expect.objectContaining({ data: { status: LeadStatus.ENGAGED } }),
         );
+    });
+
+    it('enqueues a reply-analysis job for the placeholder note after a reply is ingested', async () => {
+        const { service, replyAnalysisQueue } = createService({
+            message: { status: MsgStatus.OPENED },
+            mcc: { uuid: 'mcc-uuid', status: CampaignContactStatus.OPENED },
+            contactStatus: LeadStatus.QUALIFIED,
+        });
+
+        await service.ingest({
+            kind: 'replied',
+            provider_message_id,
+            reply: { subject: 'Re: hello', text: 'Sounds good', html: '<p>Sounds good</p>' },
+        });
+
+        expect(replyAnalysisQueue.add).toHaveBeenCalledWith(
+            'analyze',
+            { message_uuid: 'msg-uuid', note_uuid: 'note-uuid' },
+            expect.objectContaining({ attempts: 1 }),
+        );
+    });
+
+    it('does not enqueue reply-analysis when the reply has no text', async () => {
+        const { service, replyAnalysisQueue } = createService({
+            message: { status: MsgStatus.OPENED },
+            mcc: { uuid: 'mcc-uuid', status: CampaignContactStatus.OPENED },
+            contactStatus: LeadStatus.QUALIFIED,
+        });
+
+        await service.ingest({
+            kind: 'replied',
+            provider_message_id,
+            reply: { subject: 'Re: hello', text: null },
+        });
+
+        expect(replyAnalysisQueue.add).not.toHaveBeenCalled();
+    });
+
+    it('does not fail ingest when enqueueing reply-analysis throws', async () => {
+        const { service, replyAnalysisQueue } = createService({
+            message: { status: MsgStatus.OPENED },
+            mcc: { uuid: 'mcc-uuid', status: CampaignContactStatus.OPENED },
+            contactStatus: LeadStatus.QUALIFIED,
+        });
+        replyAnalysisQueue.add.mockRejectedValueOnce(new Error('queue unavailable'));
+
+        await expect(
+            service.ingest({
+                kind: 'replied',
+                provider_message_id,
+                reply: { subject: 'Re: hello', text: 'Sounds good' },
+            }),
+        ).resolves.toBeUndefined();
     });
 
     it('does not promote to ENGAGED when the contact has already moved past it', async () => {
