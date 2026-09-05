@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { Button, Chip } from "@heroui/react";
-import { Eye, XCircle } from "lucide-react";
+import { Eye, MessageCircleReply, XCircle } from "lucide-react";
 import { Link } from "react-router-dom";
-import type { MsgStatus } from "@/features/contacts/interfaces/contact.interface";
+import { MsgStatus } from "@/features/contacts/interfaces/contact.interface";
 import { useIntegrations } from "@/features/integrations/hooks/use-integrations";
 import type { SendHistoryMessage } from "@/features/outreach/interfaces/send-history.interface";
 import { SequenceEnrollmentStatus } from "@/features/sequences/interfaces/sequence.interface";
 import { useCancelEnrollment } from "@/features/sequences/hooks/use-sequences";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
+import { MessageThreadModal } from "@/pages/dashboard/pages/contacts/pages/detail/components/message-thread-modal";
 import { Routes } from "@/routes/routes";
 import {
     formatSendHistoryDate,
@@ -37,6 +38,7 @@ export const STATUS_COLOR: Record<
 export function SendHistoryTable({ rows }: { rows: SendHistoryMessage[] }) {
     const { data: integrations } = useIntegrations();
     const [selected, setSelected] = useState<SendHistoryMessage | null>(null);
+    const [threadUuid, setThreadUuid] = useState<string | null>(null);
     const [cancelTarget, setCancelTarget] = useState<SendHistoryMessage | null>(null);
     const cancelEnrollmentMut = useCancelEnrollment();
 
@@ -54,6 +56,13 @@ export function SendHistoryTable({ rows }: { rows: SendHistoryMessage[] }) {
                 message={selected}
                 onOpenChange={(open) => {
                     if (!open) setSelected(null);
+                }}
+            />
+            <MessageThreadModal
+                messageUuid={threadUuid}
+                isOpen={threadUuid !== null}
+                onOpenChange={(open) => {
+                    if (!open) setThreadUuid(null);
                 }}
             />
             <ConfirmDialog
@@ -139,6 +148,29 @@ export function SendHistoryTable({ rows }: { rows: SendHistoryMessage[] }) {
                                             {stripHtml(row.content)}
                                         </div>
                                     </div>
+                                    {row.channel === "EMAIL" &&
+                                    row.status !== MsgStatus.PENDING &&
+                                    row.status !== MsgStatus.QUEUED ? (
+                                        <Button
+                                            size="sm"
+                                            variant="ghost"
+                                            className="shrink-0 min-w-7 h-7 px-1"
+                                            onPress={() => setThreadUuid(row.uuid)}
+                                            aria-label={
+                                                row.status === MsgStatus.REPLIED
+                                                    ? "View conversation"
+                                                    : "View activity"
+                                            }
+                                        >
+                                            <MessageCircleReply
+                                                className={
+                                                    row.status === MsgStatus.REPLIED
+                                                        ? "size-3.5 text-success"
+                                                        : "size-3.5 text-muted"
+                                                }
+                                            />
+                                        </Button>
+                                    ) : null}
                                     <Button
                                         size="sm"
                                         variant="ghost"
