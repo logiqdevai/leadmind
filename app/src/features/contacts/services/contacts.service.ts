@@ -21,6 +21,7 @@ import type {
     LogSmsPayload,
     OutreachMessage,
     PaginatedContacts,
+    ReplyToContactPayload,
     UpdateContactPayload,
     ContactInfo,
     CreateContactInfoPayload,
@@ -323,6 +324,18 @@ export const logSms = async (
         return response.data;
     } catch (error: any) {
         throw new Error(error?.response?.data?.message || "Failed to log SMS.");
+    }
+};
+
+export const replyToContact = async (
+    uuid: string,
+    payload: ReplyToContactPayload,
+): Promise<OutreachMessage> => {
+    try {
+        const response = await axiosInstance.post(ApiRoutes.contacts.reply(uuid), payload);
+        return response.data;
+    } catch (error: any) {
+        throw new Error(error?.response?.data?.message || "Failed to send reply.");
     }
 };
 

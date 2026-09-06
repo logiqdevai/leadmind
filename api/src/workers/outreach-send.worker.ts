@@ -15,6 +15,8 @@ import { MessagingGoalsService } from '@/modules/messaging-goals/messaging-goals
 import { CampaignMessageSendService } from '@/modules/marketing-campaigns/services/campaign-message-send.service';
 import { SequenceEnrollmentService } from '@/modules/sequences/services/sequence-enrollment.service';
 import { SendingCapacityService } from '@/modules/sending-capacity/services/sending-capacity.service';
+import { RemindersService } from '@/modules/reminders/reminders.service';
+import { FOLLOW_UP_DEFAULT_DELAY_DAYS } from '@/modules/reminders/reminders.constants';
 import { hasUsableContactEmail } from '@/shared/utils/contact-email.util';
 
 interface OutreachSendJobData {
@@ -33,6 +35,7 @@ export class OutreachSendWorker extends WorkerHost implements OnModuleInit {
     private readonly campaignMessageSendService: CampaignMessageSendService,
     private readonly sequenceEnrollmentService: SequenceEnrollmentService,
     private readonly sendingCapacityService: SendingCapacityService,
+    private readonly remindersService: RemindersService,
   ) {
     super();
   }
@@ -183,6 +186,20 @@ export class OutreachSendWorker extends WorkerHost implements OnModuleInit {
           message.sequence_enrollment_uuid,
           message.sequence_step_uuid,
           new Date(),
+        );
+      }
+
+      // A manual reply (enrollment set, no sequence step — that's what distinguishes it
+      // from an automated sequence-step send) starts the "did they go quiet again" clock.
+      if (message.sequence_enrollment_uuid && !message.sequence_step_uuid) {
+        const remindAt = new Date(
+          Date.now() + FOLLOW_UP_DEFAULT_DELAY_DAYS * 24 * 60 * 60 * 1000,
+        );
+        await this.remindersService.upsertFollowUp(
+          message.organisation_uuid,
+          message.contact_uuid,
+          message.sequence_enrollment_uuid,
+          remindAt,
         );
       }
 

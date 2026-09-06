@@ -8,7 +8,7 @@ import { extraListColumnClass } from "@/components/ui/mobile-list-filters";
 import { isTableNavInteractiveCell, renderTableNavCellContent, tableNavInteractiveCellClassName, tableNavRowClassName } from "@/components/ui/table-row-link";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { TablePagination } from "@/components/ui/table-pagination";
-import { ReminderStatusBadge, ReminderFormModal } from "@/components/reminders";
+import { ReminderStatusBadge, ReminderFormModal, ReminderTypeBadge } from "@/components/reminders";
 import { useCompleteReminder, useDeleteReminder } from "@/features/reminders/hooks/use-reminders";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
 import type { Reminder } from "@/features/reminders/interfaces/reminder.interface";
@@ -115,8 +115,11 @@ export function RemindersTable({
                 id: "title",
                 header: "Title",
                 cell: (info) => (
-                    <span className="block min-w-0 truncate font-medium text-foreground">
-                        {info.getValue() ?? "Reminder"}
+                    <span className="flex min-w-0 items-center gap-1.5">
+                        <span className="truncate font-medium text-foreground">
+                            {info.getValue() ?? "Reminder"}
+                        </span>
+                        <ReminderTypeBadge type={info.row.original.type} />
                     </span>
                 ),
             }),

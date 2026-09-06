@@ -507,6 +507,8 @@ model OutreachMessage {
   reply_subject             String?
   reply_text                String?
   reply_html                String?
+  inbound_message_id        String?
+  in_reply_to_message_id    String?
   email_provider            ExternalIntegrationProvider?
   email_account             String?
   email_domain_uuid         String?
@@ -609,6 +611,7 @@ model SequenceEnrollment {
   contact           Contact            @relation(fields: [contact_uuid], references: [uuid], onDelete: Cascade)
   campaign          MarketingCampaign? @relation(fields: [campaign_uuid], references: [uuid], onDelete: SetNull)
   outreach_messages OutreachMessage[]
+  reminders         Reminder[]
 
   @@unique([sequence_uuid, contact_uuid, campaign_uuid], map: "sequence_enrollments_target_key")
   @@index([sequence_uuid])
@@ -1283,6 +1286,7 @@ enum ReminderStatus {
 enum ReminderSource {
   MANUAL
   AI
+  SYSTEM
 }
 
 enum ReminderType {
@@ -1291,26 +1295,30 @@ enum ReminderType {
   EMAIL
   MEETING
   TASK
+  FOLLOW_UP
 }
 
 model Reminder {
-  id                Int            @id @default(autoincrement())
-  uuid              String         @unique @default(uuid())
-  organisation_uuid String
-  contact_uuid      String
-  title             String?
-  notes             String?        @db.Text
-  remind_at         DateTime
-  status            ReminderStatus @default(PENDING)
-  source            ReminderSource @default(MANUAL)
-  type              ReminderType   @default(GENERAL)
-  job_id            String?        @unique
+  id                       Int            @id @default(autoincrement())
+  uuid                     String         @unique @default(uuid())
+  organisation_uuid        String
+  contact_uuid             String
+  title                    String?
+  notes                    String?        @db.Text
+  remind_at                DateTime
+  status                   ReminderStatus @default(PENDING)
+  source                   ReminderSource @default(MANUAL)
+  type                     ReminderType   @default(GENERAL)
+  job_id                   String?        @unique
+  sequence_enrollment_uuid String?
+  metadata                 Json?
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  organisation Organisation @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
-  contact      Contact      @relation(fields: [contact_uuid], references: [uuid], onDelete: Cascade)
+  organisation        Organisation        @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  contact             Contact             @relation(fields: [contact_uuid], references: [uuid], onDelete: Cascade)
+  sequence_enrollment SequenceEnrollment? @relation(fields: [sequence_enrollment_uuid], references: [uuid], onDelete: SetNull)
 
   @@index([organisation_uuid])
   @@index([contact_uuid])
@@ -1318,6 +1326,7 @@ model Reminder {
   @@index([status])
   @@index([organisation_uuid, status])
   @@index([organisation_uuid, remind_at])
+  @@index([sequence_enrollment_uuid])
   @@map("reminders")
 }
 
@@ -1472,6 +1481,7 @@ enum AiUsageOperation {
   MAIL_TESTER_AUDIT
   MXTOOLBOX_AUDIT
   REPLY_ANALYSIS
+  FOLLOW_UP_DRAFT
   OTHER
 }
 

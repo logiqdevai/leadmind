@@ -432,7 +432,7 @@ export class OutreachService {
         this.logger.log(`Removed stale outreach job message=${message_uuid} state=${state}`);
     }
 
-    private async enqueueMessage(message_uuid: string, scheduled_at?: Date) {
+    async enqueueMessage(message_uuid: string, scheduled_at?: Date) {
         await this.removeStaleOutreachSendJob(message_uuid);
 
         const delay = scheduled_at ? Math.max(0, scheduled_at.getTime() - Date.now()) : 0;

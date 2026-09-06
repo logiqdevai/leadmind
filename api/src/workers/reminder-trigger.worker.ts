@@ -1,10 +1,12 @@
 import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { Logger } from '@nestjs/common';
 import { Job } from 'bullmq';
-import { ReminderStatus } from '@/generated/prisma';
+import { ReminderStatus, ReminderType } from '@/generated/prisma';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { NotificationsGateway } from '@/gateways/notifications.gateway';
 import { REMINDER_TRIGGER_QUEUE } from '@/core/queues/queues.constants';
+import { RemindersService } from '@/modules/reminders/reminders.service';
+import { FollowUpDraftService } from '@/modules/reminders/services/follow-up-draft.service';
 
 interface ReminderTriggerJobData {
     reminder_uuid: string;
@@ -17,12 +19,14 @@ export class ReminderTriggerWorker extends WorkerHost {
     constructor(
         private readonly prisma: PrismaService,
         private readonly gateway: NotificationsGateway,
+        private readonly remindersService: RemindersService,
+        private readonly followUpDraftService: FollowUpDraftService,
     ) {
         super();
     }
 
     async process(job: Job<ReminderTriggerJobData>): Promise<void> {
-        const reminder = await this.prisma.reminder.findUnique({
+        let reminder = await this.prisma.reminder.findUnique({
             where: { uuid: job.data.reminder_uuid },
             include: {
                 contact: {
@@ -44,6 +48,26 @@ export class ReminderTriggerWorker extends WorkerHost {
         if (reminder.status !== ReminderStatus.PENDING) {
             this.logger.warn(`Reminder ${reminder.uuid} is ${reminder.status} — skipping`);
             return;
+        }
+
+        if (
+            reminder.type === ReminderType.FOLLOW_UP &&
+            reminder.sequence_enrollment_uuid &&
+            !(reminder.metadata as { ai_draft?: unknown } | null)?.ai_draft
+        ) {
+            const draft = await this.followUpDraftService.draftFollowUp(
+                reminder.organisation_uuid,
+                reminder.sequence_enrollment_uuid,
+            );
+            if (draft) {
+                const ai_draft = {
+                    subject: draft.subject,
+                    body: draft.body,
+                    generated_at: new Date().toISOString(),
+                };
+                await this.remindersService.setFollowUpDraft(reminder.uuid, ai_draft);
+                reminder = { ...reminder, metadata: { ai_draft } as typeof reminder.metadata };
+            }
         }
 
         const members = await this.prisma.organisationMember.findMany({

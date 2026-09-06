@@ -5,7 +5,7 @@ import { useReminders, useReminderStats } from "@/features/reminders/hooks/use-r
 import type { Reminder } from "@/features/reminders/interfaces/reminder.interface";
 import { Routes } from "@/routes/routes";
 import { cn } from "@/lib/utils";
-import { ReminderAiBadge } from "@/components/reminders";
+import { ReminderAiBadge, ReminderTypeBadge } from "@/components/reminders";
 
 function formatShortDate(dateStr: string): string {
     return new Date(dateStr).toLocaleString(undefined, {
@@ -119,6 +119,7 @@ export function DashboardRemindersCard({ isLoading }: DashboardRemindersCardProp
                                             {reminder.title ?? "Reminder"}
                                         </p>
                                         {reminder.source === "AI" && <ReminderAiBadge />}
+                                        <ReminderTypeBadge type={reminder.type} />
                                     </div>
                                     <p className="text-xs text-muted truncate">
                                         {reminder.contact?.company ??

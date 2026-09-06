@@ -1,5 +1,5 @@
-import type { ComponentType } from "react";
-import { Chip, Modal } from "@heroui/react";
+import { type ComponentType, useState } from "react";
+import { Chip, Label, Modal, TextArea } from "@heroui/react";
 import { formatDistanceToNow } from "date-fns";
 import {
     Mail,
@@ -9,17 +9,21 @@ import {
     Send,
     XCircle,
 } from "lucide-react";
+import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
 import {
+    Channel,
     InteractionType,
     MsgStatus,
     type Interaction,
 } from "@/features/contacts/interfaces/contact.interface";
+import { useReplyToContact } from "@/features/contacts/hooks/use-contacts";
 import { useOutreachMessageThread } from "@/features/outreach/hooks/use-outreach";
 import { sanitizeEmailHtml } from "@/lib/sanitize-html";
 import { MessageBodyPreview } from "./message-body-preview";
 
 interface MessageThreadModalProps {
     messageUuid: string | null;
+    contactUuid: string | null;
     isOpen: boolean;
     onOpenChange: (open: boolean) => void;
 }
@@ -113,8 +117,95 @@ function ThreadEvent({ interaction }: { interaction: Interaction }) {
     );
 }
 
-export function MessageThreadModal({ messageUuid, isOpen, onOpenChange }: MessageThreadModalProps) {
+function ReplyBox({
+    contactUuid,
+    outreachMessageUuid,
+    defaultSubject,
+    onSent,
+}: {
+    contactUuid: string;
+    outreachMessageUuid: string;
+    defaultSubject: string;
+    onSent: () => void;
+}) {
+    const replyMut = useReplyToContact();
+    const [subject, setSubject] = useState(defaultSubject);
+    const [content, setContent] = useState("");
+
+    const handleSend = () => {
+        const trimmedContent = content.trim();
+        if (!trimmedContent) return;
+        replyMut.mutate(
+            {
+                uuid: contactUuid,
+                payload: {
+                    outreach_message_uuid: outreachMessageUuid,
+                    subject: subject.trim() || undefined,
+                    content: trimmedContent,
+                },
+            },
+            {
+                onSuccess: () => {
+                    setContent("");
+                    onSent();
+                },
+            },
+        );
+    };
+
+    return (
+        <div className="rounded-xl border border-border/80 bg-surface/60 p-3">
+            <div className="mb-2 flex items-center gap-2">
+                <MessageCircleReply className="size-3.5 text-muted" />
+                <span className="text-sm font-medium text-foreground">Reply</span>
+            </div>
+            <div className="flex flex-col gap-2">
+                <Label htmlFor="thread-reply-subject" className="sr-only">
+                    Subject
+                </Label>
+                <input
+                    id="thread-reply-subject"
+                    type="text"
+                    placeholder="Subject"
+                    value={subject}
+                    onChange={(e) => setSubject(e.target.value)}
+                    className="w-full rounded-md border border-border bg-surface px-3 py-1.5 text-sm text-foreground outline-none focus:border-accent"
+                />
+                <Label htmlFor="thread-reply-content" className="sr-only">
+                    Message
+                </Label>
+                <TextArea
+                    id="thread-reply-content"
+                    rows={4}
+                    placeholder="Write a reply…"
+                    value={content}
+                    onChange={(e) => setContent(e.target.value)}
+                />
+                <div className="flex justify-end">
+                    <ActionButtonWithPending
+                        size="sm"
+                        variant="secondary"
+                        isDisabled={replyMut.isPending || !content.trim()}
+                        isPending={replyMut.isPending}
+                        onPress={handleSend}
+                    >
+                        Send reply
+                    </ActionButtonWithPending>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+export function MessageThreadModal({
+    messageUuid,
+    contactUuid,
+    isOpen,
+    onOpenChange,
+}: MessageThreadModalProps) {
     const { data, isLoading } = useOutreachMessageThread(isOpen ? messageUuid : null);
+    const hasReply = data?.interactions.some((i) => i.type === InteractionType.REPLY_RECEIVED) ?? false;
+    const canReply = Boolean(contactUuid && messageUuid && hasReply && data?.message.channel === Channel.EMAIL);
 
     return (
         <Modal.Backdrop isOpen={isOpen} onOpenChange={onOpenChange}>
@@ -168,6 +259,19 @@ export function MessageThreadModal({ messageUuid, isOpen, onOpenChange }: Messag
                                         ))}
                                     </div>
                                 )}
+
+                                {canReply ? (
+                                    <ReplyBox
+                                        contactUuid={contactUuid!}
+                                        outreachMessageUuid={messageUuid!}
+                                        defaultSubject={
+                                            data.message.reply_subject || data.message.subject
+                                                ? `Re: ${(data.message.reply_subject ?? data.message.subject ?? "").replace(/^re:\s*/i, "")}`
+                                                : ""
+                                        }
+                                        onSent={() => {}}
+                                    />
+                                ) : null}
                             </div>
                         )}
                     </Modal.Body>

@@ -48,6 +48,7 @@ export const ApiRoutes = {
         log_call: (uuid: string) => `/contacts/${uuid}/calls`,
         log_meeting: (uuid: string) => `/contacts/${uuid}/meetings`,
         log_email: (uuid: string) => `/contacts/${uuid}/emails`,
+        reply: (uuid: string) => `/contacts/${uuid}/reply`,
         log_sms: (uuid: string) => `/contacts/${uuid}/sms`,
         interactions: (uuid: string) => `/contacts/${uuid}/interactions`,
         score: (uuid: string) => `/contacts/${uuid}/score`,

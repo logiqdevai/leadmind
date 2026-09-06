@@ -18,6 +18,7 @@ import { ResendAdapter } from '@/integrations/notifications/resend/resend/resend
 import { ContactsService } from '@/modules/contacts/contacts.service';
 import { MailService } from '@/modules/internal/mail/mail.service';
 import { CampaignMessageSendService } from '@/modules/marketing-campaigns/services/campaign-message-send.service';
+import { RemindersService } from '@/modules/reminders/reminders.service';
 import { SequenceEnrollmentService } from '@/modules/sequences/services/sequence-enrollment.service';
 import { EmailConfig } from '@/shared/config/email';
 import { sanitizeEmailHtml } from '@/shared/utils/sanitize-html.util';
@@ -27,6 +28,7 @@ export interface ReceivedEmailContent {
     subject?: string | null;
     text?: string | null;
     html?: string | null;
+    message_id?: string | null;
 }
 
 export type WebhookEvent =
@@ -71,6 +73,7 @@ export class WebhookEventService {
         private readonly contactsService: ContactsService,
         private readonly mailService: MailService,
         private readonly sequenceEnrollmentService: SequenceEnrollmentService,
+        private readonly remindersService: RemindersService,
         @InjectQueue(REPLY_ANALYSIS_QUEUE) private readonly replyAnalysisQueue: Queue,
     ) { }
 
@@ -222,6 +225,9 @@ export class WebhookEventService {
                 }
                 if (event.reply?.html !== undefined) {
                     updates.reply_html = event.reply.html;
+                }
+                if (event.reply?.message_id) {
+                    updates.inbound_message_id = event.reply.message_id;
                 }
                 interactionType = InteractionType.REPLY_RECEIVED;
                 interactionContent = event.reply?.text ?? null;
@@ -424,6 +430,7 @@ export class WebhookEventService {
         if (event.kind === 'replied') {
             await this.forwardReplyIfConfigured(message.organisation_uuid, event);
             await this.cancelEnrollmentOnReplyIfConfigured(message);
+            await this.cancelFollowUpReminderIfPending(message);
             if (replyNoteUuid) {
                 await this.enqueueReplyAnalysis(message, replyNoteUuid);
             }
@@ -473,6 +480,24 @@ export class WebhookEventService {
         this.logger.log(
             `[ingest] Reply cancelled sequence enrollment=${message.sequence_enrollment_uuid}`,
         );
+    }
+
+    /**
+     * A reply also cancels any pending "did they go quiet after we replied" follow-up
+     * check scheduled for this thread, mirroring cancelEnrollmentOnReplyIfConfigured above.
+     */
+    private async cancelFollowUpReminderIfPending(message: OutreachMessage): Promise<void> {
+        if (!message.sequence_enrollment_uuid) return;
+
+        const cancelled = await this.remindersService.cancelPendingFollowUp(
+            message.organisation_uuid,
+            message.sequence_enrollment_uuid,
+        );
+        if (cancelled) {
+            this.logger.log(
+                `[ingest] Reply cancelled pending follow-up reminder for enrollment=${message.sequence_enrollment_uuid}`,
+            );
+        }
     }
 
     private async forwardReplyIfConfigured(
@@ -542,14 +567,16 @@ export class WebhookEventService {
                 return { ids: [], email: null };
             }
 
+            const headers = email.headers ?? {};
+            const rawMessageId = headers['message-id'] ?? headers['Message-Id'];
             const content: ReceivedEmailContent = {
                 subject: email.subject,
                 text: email.text,
                 html: email.html ? sanitizeEmailHtml(email.html) : email.html,
+                message_id: typeof rawMessageId === 'string' ? rawMessageId.trim() : null,
             };
 
             const headerValues: string[] = [];
-            const headers = email.headers ?? {};
             for (const key of ['in-reply-to', 'references', 'message-id']) {
                 const value = headers[key] ?? headers[key.toLowerCase()];
                 if (typeof value === 'string') {

@@ -406,6 +406,8 @@ exports.Prisma.OutreachMessageScalarFieldEnum = {
   reply_subject: 'reply_subject',
   reply_text: 'reply_text',
   reply_html: 'reply_html',
+  inbound_message_id: 'inbound_message_id',
+  in_reply_to_message_id: 'in_reply_to_message_id',
   email_provider: 'email_provider',
   email_account: 'email_account',
   email_domain_uuid: 'email_domain_uuid',
@@ -733,6 +735,8 @@ exports.Prisma.ReminderScalarFieldEnum = {
   source: 'source',
   type: 'type',
   job_id: 'job_id',
+  sequence_enrollment_uuid: 'sequence_enrollment_uuid',
+  metadata: 'metadata',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };
@@ -1306,7 +1310,8 @@ exports.ReminderStatus = exports.$Enums.ReminderStatus = {
 
 exports.ReminderSource = exports.$Enums.ReminderSource = {
   MANUAL: 'MANUAL',
-  AI: 'AI'
+  AI: 'AI',
+  SYSTEM: 'SYSTEM'
 };
 
 exports.ReminderType = exports.$Enums.ReminderType = {
@@ -1314,7 +1319,8 @@ exports.ReminderType = exports.$Enums.ReminderType = {
   CALL: 'CALL',
   EMAIL: 'EMAIL',
   MEETING: 'MEETING',
-  TASK: 'TASK'
+  TASK: 'TASK',
+  FOLLOW_UP: 'FOLLOW_UP'
 };
 
 exports.FieldType = exports.$Enums.FieldType = {
@@ -1356,6 +1362,7 @@ exports.AiUsageOperation = exports.$Enums.AiUsageOperation = {
   MAIL_TESTER_AUDIT: 'MAIL_TESTER_AUDIT',
   MXTOOLBOX_AUDIT: 'MXTOOLBOX_AUDIT',
   REPLY_ANALYSIS: 'REPLY_ANALYSIS',
+  FOLLOW_UP_DRAFT: 'FOLLOW_UP_DRAFT',
   OTHER: 'OTHER'
 };
 

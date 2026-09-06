@@ -151,6 +151,12 @@ export interface LogSmsPayload {
     content?: string;
 }
 
+export interface ReplyToContactPayload {
+    outreach_message_uuid: string;
+    subject?: string;
+    content: string;
+}
+
 export interface InteractionStatusChange {
     from: LeadStatus;
     to: LeadStatus;

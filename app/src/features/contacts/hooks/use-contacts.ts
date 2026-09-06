@@ -19,6 +19,7 @@ import {
     logEmail,
     logMeeting,
     logSms,
+    replyToContact,
     triggerContactScore,
     triggerContactsBulkScore,
     bulkScrapeContactEmails,
@@ -46,6 +47,7 @@ import type {
     LogMeetingPayload,
     LogSmsPayload,
     PaginatedContacts,
+    ReplyToContactPayload,
     UpdateContactInfoPayload,
     UpdateContactPayload,
 } from "../interfaces/contact.interface";
@@ -654,6 +656,28 @@ export function useLogEmail() {
         onError: (error: Error) => {
             toast({
                 title: "Could not log email",
+                description: error.message,
+                duration: 3000,
+                variant: "error",
+            });
+        },
+    });
+}
+
+export function useReplyToContact() {
+    const qc = useQueryClient();
+    return useMutation({
+        mutationFn: (vars: { uuid: string; payload: ReplyToContactPayload }) =>
+            replyToContact(vars.uuid, vars.payload),
+        onSuccess: (_data, vars) => {
+            qc.invalidateQueries({ queryKey: contactsQueryKeys.messages(vars.uuid) });
+            qc.invalidateQueries({ queryKey: contactsQueryKeys.interactions(vars.uuid) });
+            qc.invalidateQueries({ queryKey: contactsQueryKeys.detail(vars.uuid) });
+            toast({ title: "Reply sent", duration: 1500 });
+        },
+        onError: (error: Error) => {
+            toast({
+                title: "Could not send reply",
                 description: error.message,
                 duration: 3000,
                 variant: "error",

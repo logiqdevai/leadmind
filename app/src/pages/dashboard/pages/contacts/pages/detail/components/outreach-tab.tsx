@@ -270,6 +270,7 @@ export function OutreachTab({ contact, highlightUuid, onHighlightConsumed, onNav
 
       <MessageThreadModal
         messageUuid={threadUuid}
+        contactUuid={contact.uuid}
         isOpen={threadUuid !== null}
         onOpenChange={(open) => {
           if (!open) setThreadUuid(null);

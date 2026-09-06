@@ -148,6 +148,9 @@ describe('WebhookEventService', () => {
         const replyAnalysisQueue = {
             add: jest.fn().mockResolvedValue(undefined),
         };
+        const remindersService = {
+            cancelPendingFollowUp: jest.fn().mockResolvedValue(false),
+        };
 
         return {
             service: new WebhookEventService(
@@ -157,6 +160,7 @@ describe('WebhookEventService', () => {
                 contactsService as any,
                 mailService as any,
                 sequenceEnrollmentService as any,
+                remindersService as any,
                 replyAnalysisQueue as any,
             ),
             prisma,
@@ -165,6 +169,7 @@ describe('WebhookEventService', () => {
             contactsService,
             mailService,
             sequenceEnrollmentService,
+            remindersService,
             replyAnalysisQueue,
         };
     }

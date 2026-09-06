@@ -32,6 +32,7 @@ import { LogCallDto } from './dto/log-call.dto';
 import { LogEmailDto } from './dto/log-email.dto';
 import { LogMeetingDto } from './dto/log-meeting.dto';
 import { LogSmsDto } from './dto/log-sms.dto';
+import { ReplyToContactDto } from './dto/reply-to-contact.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
 import { UpdateStatusDto } from './dto/update-status.dto';
 import { UpdateTagsDto } from './dto/update-tags.dto';
@@ -333,6 +334,19 @@ export class ContactsController {
         @Body() dto: LogEmailDto,
     ) {
         return this.contactsService.logEmail(organisation_uuid, uuid, dto);
+    }
+
+    @ActivityLog({ entityType: ActivityEntityType.OUTREACH_MESSAGE, action: ActivityAction.MESSAGE_SENT, entityUuidFrom: 'params.uuid' })
+    @Post(':uuid/reply')
+    @ApiOperation({ summary: 'Send a freeform reply inside an existing sequence conversation thread' })
+    @ApiResponse({ status: 201 })
+    replyToContact(
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
+        @CurrentUser('uuid') user_uuid: string,
+        @Param('uuid') uuid: string,
+        @Body() dto: ReplyToContactDto,
+    ) {
+        return this.contactsService.replyToContact(organisation_uuid, uuid, dto, user_uuid);
     }
 
     @ActivityLog({ entityType: ActivityEntityType.CONTACT, action: ActivityAction.SMS_LOGGED, entityUuidFrom: 'params.uuid' })

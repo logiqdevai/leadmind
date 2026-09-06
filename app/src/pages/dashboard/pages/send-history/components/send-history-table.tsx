@@ -38,7 +38,7 @@ export const STATUS_COLOR: Record<
 export function SendHistoryTable({ rows }: { rows: SendHistoryMessage[] }) {
     const { data: integrations } = useIntegrations();
     const [selected, setSelected] = useState<SendHistoryMessage | null>(null);
-    const [threadUuid, setThreadUuid] = useState<string | null>(null);
+    const [thread, setThread] = useState<{ messageUuid: string; contactUuid: string } | null>(null);
     const [cancelTarget, setCancelTarget] = useState<SendHistoryMessage | null>(null);
     const cancelEnrollmentMut = useCancelEnrollment();
 
@@ -59,10 +59,11 @@ export function SendHistoryTable({ rows }: { rows: SendHistoryMessage[] }) {
                 }}
             />
             <MessageThreadModal
-                messageUuid={threadUuid}
-                isOpen={threadUuid !== null}
+                messageUuid={thread?.messageUuid ?? null}
+                contactUuid={thread?.contactUuid ?? null}
+                isOpen={thread !== null}
                 onOpenChange={(open) => {
-                    if (!open) setThreadUuid(null);
+                    if (!open) setThread(null);
                 }}
             />
             <ConfirmDialog
@@ -155,7 +156,7 @@ export function SendHistoryTable({ rows }: { rows: SendHistoryMessage[] }) {
                                             size="sm"
                                             variant="ghost"
                                             className="shrink-0 min-w-7 h-7 px-1"
-                                            onPress={() => setThreadUuid(row.uuid)}
+                                            onPress={() => setThread({ messageUuid: row.uuid, contactUuid: row.contact.uuid })}
                                             aria-label={
                                                 row.status === MsgStatus.REPLIED
                                                     ? "View conversation"

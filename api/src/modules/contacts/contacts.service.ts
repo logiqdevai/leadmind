@@ -19,6 +19,7 @@ import {
     Interaction,
     InteractionType,
     LeadStatus,
+    MsgStatus,
     OutreachMessage,
     Prisma,
     SourceType,
@@ -26,6 +27,8 @@ import {
 } from '@/generated/prisma';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { ElasticsearchService } from '@/integrations/elasticsearch/elasticsearch.service';
+import { hasUsableContactEmail } from '@/shared/utils/contact-email.util';
+import { isEmailHtmlEmpty, sanitizeEmailHtml } from '@/shared/utils/sanitize-html.util';
 import { ScrapioScrapeRequestService } from '@/integrations/scrapio/services/scrapio-scrape-request.service';
 import { SCRAPIO_EMAIL_REGEX_FIELD } from '@/integrations/scrapio/scrapio.constants';
 import { AI_PROCESS_QUEUE } from '@/core/queues/queues.constants';
@@ -63,6 +66,7 @@ import { LogCallDto } from './dto/log-call.dto';
 import { LogEmailDto } from './dto/log-email.dto';
 import { LogMeetingDto } from './dto/log-meeting.dto';
 import { LogSmsDto } from './dto/log-sms.dto';
+import { ReplyToContactDto } from './dto/reply-to-contact.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
 import { UpdateStatusDto } from './dto/update-status.dto';
 import { UpdateTagsDto } from './dto/update-tags.dto';
@@ -1079,6 +1083,61 @@ export class ContactsService {
                 metadata,
             },
         });
+    }
+
+    /**
+     * Sends a freeform reply inside an existing sequence conversation thread. Scoped to
+     * the enrollment behind `outreach_message_uuid` (not "any reply to this contact")
+     * so a contact with multiple concurrent enrollments doesn't have their threads mixed
+     * up — mirrors how reply-triggered sequence cancellation is scoped in webhook ingest.
+     */
+    async replyToContact(
+        organisation_uuid: string,
+        uuid: string,
+        dto: ReplyToContactDto,
+        sent_by_user_uuid: string,
+    ): Promise<OutreachMessage> {
+        const contact = await this.requireOwnedContact(organisation_uuid, uuid);
+        if (!hasUsableContactEmail(contact.email)) {
+            throw new BadRequestException('Contact has no email');
+        }
+
+        const sourceMessage = await this.prisma.outreachMessage.findFirst({
+            where: { uuid: dto.outreach_message_uuid, organisation_uuid, contact_uuid: uuid },
+        });
+        if (!sourceMessage) {
+            throw new NotFoundException(`Outreach message ${dto.outreach_message_uuid} not found`);
+        }
+        if (!sourceMessage.sequence_enrollment_uuid) {
+            throw new BadRequestException('Can only reply within a sequence conversation thread');
+        }
+
+        const sanitized = sanitizeEmailHtml(dto.content);
+        if (isEmailHtmlEmpty(sanitized)) {
+            throw new BadRequestException('Reply body cannot be empty');
+        }
+
+        const baseSubject = (sourceMessage.reply_subject ?? sourceMessage.subject)?.trim();
+        const subject =
+            dto.subject?.trim() ||
+            (baseSubject ? `Re: ${baseSubject.replace(/^re:\s*/i, '')}` : 'Re: your message');
+
+        const message = await this.prisma.outreachMessage.create({
+            data: {
+                organisation_uuid,
+                contact_uuid: uuid,
+                sent_by_user_uuid,
+                channel: Channel.EMAIL,
+                subject,
+                content: sanitized,
+                status: MsgStatus.PENDING,
+                sequence_enrollment_uuid: sourceMessage.sequence_enrollment_uuid,
+                in_reply_to_message_id: sourceMessage.inbound_message_id,
+            },
+        });
+
+        await this.outreachService.enqueueMessage(message.uuid);
+        return message;
     }
 
     async getInteractions(organisation_uuid: string, uuid: string) {

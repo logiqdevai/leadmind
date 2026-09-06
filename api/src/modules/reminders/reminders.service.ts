@@ -31,7 +31,11 @@ export class RemindersService {
     async create(
         organisation_uuid: string,
         dto: CreateReminderDto,
-        opts?: { source?: ReminderSource; type?: ReminderType },
+        opts?: {
+            source?: ReminderSource;
+            type?: ReminderType;
+            sequence_enrollment_uuid?: string;
+        },
     ) {
         const contact = await this.prisma.contact.findFirst({
             where: { uuid: dto.contact_uuid, organisation_uuid },
@@ -53,6 +57,7 @@ export class RemindersService {
                 status: dto.status ?? ReminderStatus.PENDING,
                 source: opts?.source ?? ReminderSource.MANUAL,
                 type: opts?.type ?? ReminderType.GENERAL,
+                sequence_enrollment_uuid: opts?.sequence_enrollment_uuid,
             },
             include: { contact: { select: CONTACT_SELECT } },
         });
@@ -246,6 +251,78 @@ export class RemindersService {
         ]);
 
         return { pending, due_today, overdue, completed_this_week };
+    }
+
+    /**
+     * Cancels the pending FOLLOW_UP reminder (if any) tracking "did they go quiet
+     * after we replied" for this thread. Called when a new reply arrives.
+     */
+    async cancelPendingFollowUp(
+        organisation_uuid: string,
+        sequence_enrollment_uuid: string,
+    ): Promise<boolean> {
+        const existing = await this.prisma.reminder.findFirst({
+            where: {
+                organisation_uuid,
+                sequence_enrollment_uuid,
+                type: ReminderType.FOLLOW_UP,
+                status: ReminderStatus.PENDING,
+            },
+        });
+        if (!existing) return false;
+
+        await this.update(organisation_uuid, existing.uuid, {
+            status: ReminderStatus.CANCELLED,
+        });
+        return true;
+    }
+
+    /**
+     * Reschedules the thread's pending FOLLOW_UP reminder if one exists, otherwise
+     * creates one. Called after a manual reply is sent, so there's always exactly one
+     * "check back if they're still quiet" reminder per thread at a time.
+     */
+    async upsertFollowUp(
+        organisation_uuid: string,
+        contact_uuid: string,
+        sequence_enrollment_uuid: string,
+        remind_at: Date,
+    ) {
+        const existing = await this.prisma.reminder.findFirst({
+            where: {
+                organisation_uuid,
+                sequence_enrollment_uuid,
+                type: ReminderType.FOLLOW_UP,
+                status: ReminderStatus.PENDING,
+            },
+        });
+
+        if (existing) {
+            return this.update(organisation_uuid, existing.uuid, {
+                remind_at: remind_at.toISOString(),
+            });
+        }
+
+        return this.create(
+            organisation_uuid,
+            {
+                contact_uuid,
+                title: 'Follow up: no reply yet',
+                remind_at: remind_at.toISOString(),
+            },
+            { source: ReminderSource.SYSTEM, type: ReminderType.FOLLOW_UP, sequence_enrollment_uuid },
+        );
+    }
+
+    /** Attaches an AI-drafted follow-up suggestion to a reminder without touching its schedule/status. */
+    async setFollowUpDraft(
+        uuid: string,
+        ai_draft: { subject: string; body: string; generated_at: string },
+    ) {
+        return this.prisma.reminder.update({
+            where: { uuid },
+            data: { metadata: { ai_draft } as Prisma.InputJsonValue },
+        });
     }
 
     private async cancelJob(job_id: string | null) {
