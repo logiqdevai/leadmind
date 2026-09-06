@@ -189,16 +189,18 @@ export class OutreachSendWorker extends WorkerHost implements OnModuleInit {
         );
       }
 
-      // A manual reply (enrollment set, no sequence step — that's what distinguishes it
-      // from an automated sequence-step send) starts the "did they go quiet again" clock.
-      if (message.sequence_enrollment_uuid && !message.sequence_step_uuid) {
+      // Only a manual reply to a contact who has already replied to us starts the
+      // "are they still quiet" clock — not automated sequence steps (governed by their
+      // own cadence/stop_on_reply) and not one-off cold sends (nothing to "go quiet" on
+      // yet). See ContactsService.replyToContact, the sole place is_manual_reply is set.
+      if (message.channel === Channel.EMAIL && message.is_manual_reply) {
         const remindAt = new Date(
           Date.now() + FOLLOW_UP_DEFAULT_DELAY_DAYS * 24 * 60 * 60 * 1000,
         );
         await this.remindersService.upsertFollowUp(
           message.organisation_uuid,
           message.contact_uuid,
-          message.sequence_enrollment_uuid,
+          message.uuid,
           remindAt,
         );
       }

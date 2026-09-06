@@ -28,7 +28,7 @@ export interface Reminder {
     source: ReminderSource;
     type: ReminderType;
     job_id: string | null;
-    sequence_enrollment_uuid?: string | null;
+    outreach_message_uuid?: string | null;
     metadata?: { ai_draft?: ReminderAiDraft } | null;
     contact: ReminderContact;
     created_at: string;

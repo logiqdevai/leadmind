@@ -408,6 +408,7 @@ exports.Prisma.OutreachMessageScalarFieldEnum = {
   reply_html: 'reply_html',
   inbound_message_id: 'inbound_message_id',
   in_reply_to_message_id: 'in_reply_to_message_id',
+  is_manual_reply: 'is_manual_reply',
   email_provider: 'email_provider',
   email_account: 'email_account',
   email_domain_uuid: 'email_domain_uuid',
@@ -735,7 +736,7 @@ exports.Prisma.ReminderScalarFieldEnum = {
   source: 'source',
   type: 'type',
   job_id: 'job_id',
-  sequence_enrollment_uuid: 'sequence_enrollment_uuid',
+  outreach_message_uuid: 'outreach_message_uuid',
   metadata: 'metadata',
   created_at: 'created_at',
   updated_at: 'updated_at'

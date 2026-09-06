@@ -7394,10 +7394,12 @@ export namespace Prisma {
 
   export type OutreachMessageCountOutputType = {
     interactions: number
+    reminders: number
   }
 
   export type OutreachMessageCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     interactions?: boolean | OutreachMessageCountOutputTypeCountInteractionsArgs
+    reminders?: boolean | OutreachMessageCountOutputTypeCountRemindersArgs
   }
 
   // Custom InputTypes
@@ -7416,6 +7418,13 @@ export namespace Prisma {
    */
   export type OutreachMessageCountOutputTypeCountInteractionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: InteractionWhereInput
+  }
+
+  /**
+   * OutreachMessageCountOutputType without action
+   */
+  export type OutreachMessageCountOutputTypeCountRemindersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ReminderWhereInput
   }
 
 
@@ -7505,12 +7514,10 @@ export namespace Prisma {
 
   export type SequenceEnrollmentCountOutputType = {
     outreach_messages: number
-    reminders: number
   }
 
   export type SequenceEnrollmentCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     outreach_messages?: boolean | SequenceEnrollmentCountOutputTypeCountOutreach_messagesArgs
-    reminders?: boolean | SequenceEnrollmentCountOutputTypeCountRemindersArgs
   }
 
   // Custom InputTypes
@@ -7529,13 +7536,6 @@ export namespace Prisma {
    */
   export type SequenceEnrollmentCountOutputTypeCountOutreach_messagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: OutreachMessageWhereInput
-  }
-
-  /**
-   * SequenceEnrollmentCountOutputType without action
-   */
-  export type SequenceEnrollmentCountOutputTypeCountRemindersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ReminderWhereInput
   }
 
 
@@ -33167,6 +33167,7 @@ export namespace Prisma {
     reply_html: string | null
     inbound_message_id: string | null
     in_reply_to_message_id: string | null
+    is_manual_reply: boolean | null
     email_provider: $Enums.ExternalIntegrationProvider | null
     email_account: string | null
     email_domain_uuid: string | null
@@ -33205,6 +33206,7 @@ export namespace Prisma {
     reply_html: string | null
     inbound_message_id: string | null
     in_reply_to_message_id: string | null
+    is_manual_reply: boolean | null
     email_provider: $Enums.ExternalIntegrationProvider | null
     email_account: string | null
     email_domain_uuid: string | null
@@ -33243,6 +33245,7 @@ export namespace Prisma {
     reply_html: number
     inbound_message_id: number
     in_reply_to_message_id: number
+    is_manual_reply: number
     email_provider: number
     email_account: number
     email_domain_uuid: number
@@ -33292,6 +33295,7 @@ export namespace Prisma {
     reply_html?: true
     inbound_message_id?: true
     in_reply_to_message_id?: true
+    is_manual_reply?: true
     email_provider?: true
     email_account?: true
     email_domain_uuid?: true
@@ -33330,6 +33334,7 @@ export namespace Prisma {
     reply_html?: true
     inbound_message_id?: true
     in_reply_to_message_id?: true
+    is_manual_reply?: true
     email_provider?: true
     email_account?: true
     email_domain_uuid?: true
@@ -33368,6 +33373,7 @@ export namespace Prisma {
     reply_html?: true
     inbound_message_id?: true
     in_reply_to_message_id?: true
+    is_manual_reply?: true
     email_provider?: true
     email_account?: true
     email_domain_uuid?: true
@@ -33494,6 +33500,7 @@ export namespace Prisma {
     reply_html: string | null
     inbound_message_id: string | null
     in_reply_to_message_id: string | null
+    is_manual_reply: boolean
     email_provider: $Enums.ExternalIntegrationProvider | null
     email_account: string | null
     email_domain_uuid: string | null
@@ -33552,6 +33559,7 @@ export namespace Prisma {
     reply_html?: boolean
     inbound_message_id?: boolean
     in_reply_to_message_id?: boolean
+    is_manual_reply?: boolean
     email_provider?: boolean
     email_account?: boolean
     email_domain_uuid?: boolean
@@ -33570,6 +33578,7 @@ export namespace Prisma {
     sequence_enrollment?: boolean | OutreachMessage$sequence_enrollmentArgs<ExtArgs>
     sequence_step?: boolean | OutreachMessage$sequence_stepArgs<ExtArgs>
     campaign_integration?: boolean | OutreachMessage$campaign_integrationArgs<ExtArgs>
+    reminders?: boolean | OutreachMessage$remindersArgs<ExtArgs>
     _count?: boolean | OutreachMessageCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["outreachMessage"]>
 
@@ -33600,6 +33609,7 @@ export namespace Prisma {
     reply_html?: boolean
     inbound_message_id?: boolean
     in_reply_to_message_id?: boolean
+    is_manual_reply?: boolean
     email_provider?: boolean
     email_account?: boolean
     email_domain_uuid?: boolean
@@ -33646,6 +33656,7 @@ export namespace Prisma {
     reply_html?: boolean
     inbound_message_id?: boolean
     in_reply_to_message_id?: boolean
+    is_manual_reply?: boolean
     email_provider?: boolean
     email_account?: boolean
     email_domain_uuid?: boolean
@@ -33692,6 +33703,7 @@ export namespace Prisma {
     reply_html?: boolean
     inbound_message_id?: boolean
     in_reply_to_message_id?: boolean
+    is_manual_reply?: boolean
     email_provider?: boolean
     email_account?: boolean
     email_domain_uuid?: boolean
@@ -33704,7 +33716,7 @@ export namespace Prisma {
     updated_at?: boolean
   }
 
-  export type OutreachMessageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "contact_uuid" | "campaign_uuid" | "sent_by_user_uuid" | "channel" | "direction" | "subject" | "content" | "status" | "provider_message_id" | "idempotency_key" | "scheduled_at" | "sent_at" | "delivered_at" | "opened_at" | "clicked_at" | "replied_at" | "bounced_at" | "failed_at" | "reply_subject" | "reply_text" | "reply_html" | "inbound_message_id" | "in_reply_to_message_id" | "email_provider" | "email_account" | "email_domain_uuid" | "sms_provider" | "metadata" | "sequence_enrollment_uuid" | "sequence_step_uuid" | "campaign_integration_uuid" | "created_at" | "updated_at", ExtArgs["result"]["outreachMessage"]>
+  export type OutreachMessageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "contact_uuid" | "campaign_uuid" | "sent_by_user_uuid" | "channel" | "direction" | "subject" | "content" | "status" | "provider_message_id" | "idempotency_key" | "scheduled_at" | "sent_at" | "delivered_at" | "opened_at" | "clicked_at" | "replied_at" | "bounced_at" | "failed_at" | "reply_subject" | "reply_text" | "reply_html" | "inbound_message_id" | "in_reply_to_message_id" | "is_manual_reply" | "email_provider" | "email_account" | "email_domain_uuid" | "sms_provider" | "metadata" | "sequence_enrollment_uuid" | "sequence_step_uuid" | "campaign_integration_uuid" | "created_at" | "updated_at", ExtArgs["result"]["outreachMessage"]>
   export type OutreachMessageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     contact?: boolean | ContactDefaultArgs<ExtArgs>
@@ -33714,6 +33726,7 @@ export namespace Prisma {
     sequence_enrollment?: boolean | OutreachMessage$sequence_enrollmentArgs<ExtArgs>
     sequence_step?: boolean | OutreachMessage$sequence_stepArgs<ExtArgs>
     campaign_integration?: boolean | OutreachMessage$campaign_integrationArgs<ExtArgs>
+    reminders?: boolean | OutreachMessage$remindersArgs<ExtArgs>
     _count?: boolean | OutreachMessageCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type OutreachMessageIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -33746,6 +33759,7 @@ export namespace Prisma {
       sequence_enrollment: Prisma.$SequenceEnrollmentPayload<ExtArgs> | null
       sequence_step: Prisma.$OutreachSequenceStepPayload<ExtArgs> | null
       campaign_integration: Prisma.$CampaignIntegrationPayload<ExtArgs> | null
+      reminders: Prisma.$ReminderPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -33774,6 +33788,7 @@ export namespace Prisma {
       reply_html: string | null
       inbound_message_id: string | null
       in_reply_to_message_id: string | null
+      is_manual_reply: boolean
       email_provider: $Enums.ExternalIntegrationProvider | null
       email_account: string | null
       email_domain_uuid: string | null
@@ -34186,6 +34201,7 @@ export namespace Prisma {
     sequence_enrollment<T extends OutreachMessage$sequence_enrollmentArgs<ExtArgs> = {}>(args?: Subset<T, OutreachMessage$sequence_enrollmentArgs<ExtArgs>>): Prisma__SequenceEnrollmentClient<$Result.GetResult<Prisma.$SequenceEnrollmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     sequence_step<T extends OutreachMessage$sequence_stepArgs<ExtArgs> = {}>(args?: Subset<T, OutreachMessage$sequence_stepArgs<ExtArgs>>): Prisma__OutreachSequenceStepClient<$Result.GetResult<Prisma.$OutreachSequenceStepPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     campaign_integration<T extends OutreachMessage$campaign_integrationArgs<ExtArgs> = {}>(args?: Subset<T, OutreachMessage$campaign_integrationArgs<ExtArgs>>): Prisma__CampaignIntegrationClient<$Result.GetResult<Prisma.$CampaignIntegrationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    reminders<T extends OutreachMessage$remindersArgs<ExtArgs> = {}>(args?: Subset<T, OutreachMessage$remindersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReminderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -34241,6 +34257,7 @@ export namespace Prisma {
     readonly reply_html: FieldRef<"OutreachMessage", 'String'>
     readonly inbound_message_id: FieldRef<"OutreachMessage", 'String'>
     readonly in_reply_to_message_id: FieldRef<"OutreachMessage", 'String'>
+    readonly is_manual_reply: FieldRef<"OutreachMessage", 'Boolean'>
     readonly email_provider: FieldRef<"OutreachMessage", 'ExternalIntegrationProvider'>
     readonly email_account: FieldRef<"OutreachMessage", 'String'>
     readonly email_domain_uuid: FieldRef<"OutreachMessage", 'String'>
@@ -34763,6 +34780,30 @@ export namespace Prisma {
      */
     include?: CampaignIntegrationInclude<ExtArgs> | null
     where?: CampaignIntegrationWhereInput
+  }
+
+  /**
+   * OutreachMessage.reminders
+   */
+  export type OutreachMessage$remindersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Reminder
+     */
+    select?: ReminderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Reminder
+     */
+    omit?: ReminderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReminderInclude<ExtArgs> | null
+    where?: ReminderWhereInput
+    orderBy?: ReminderOrderByWithRelationInput | ReminderOrderByWithRelationInput[]
+    cursor?: ReminderWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ReminderScalarFieldEnum | ReminderScalarFieldEnum[]
   }
 
   /**
@@ -37584,7 +37625,6 @@ export namespace Prisma {
     contact?: boolean | ContactDefaultArgs<ExtArgs>
     campaign?: boolean | SequenceEnrollment$campaignArgs<ExtArgs>
     outreach_messages?: boolean | SequenceEnrollment$outreach_messagesArgs<ExtArgs>
-    reminders?: boolean | SequenceEnrollment$remindersArgs<ExtArgs>
     _count?: boolean | SequenceEnrollmentCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["sequenceEnrollment"]>
 
@@ -37648,7 +37688,6 @@ export namespace Prisma {
     contact?: boolean | ContactDefaultArgs<ExtArgs>
     campaign?: boolean | SequenceEnrollment$campaignArgs<ExtArgs>
     outreach_messages?: boolean | SequenceEnrollment$outreach_messagesArgs<ExtArgs>
-    reminders?: boolean | SequenceEnrollment$remindersArgs<ExtArgs>
     _count?: boolean | SequenceEnrollmentCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type SequenceEnrollmentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -37669,7 +37708,6 @@ export namespace Prisma {
       contact: Prisma.$ContactPayload<ExtArgs>
       campaign: Prisma.$MarketingCampaignPayload<ExtArgs> | null
       outreach_messages: Prisma.$OutreachMessagePayload<ExtArgs>[]
-      reminders: Prisma.$ReminderPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -38083,7 +38121,6 @@ export namespace Prisma {
     contact<T extends ContactDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ContactDefaultArgs<ExtArgs>>): Prisma__ContactClient<$Result.GetResult<Prisma.$ContactPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     campaign<T extends SequenceEnrollment$campaignArgs<ExtArgs> = {}>(args?: Subset<T, SequenceEnrollment$campaignArgs<ExtArgs>>): Prisma__MarketingCampaignClient<$Result.GetResult<Prisma.$MarketingCampaignPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     outreach_messages<T extends SequenceEnrollment$outreach_messagesArgs<ExtArgs> = {}>(args?: Subset<T, SequenceEnrollment$outreach_messagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OutreachMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    reminders<T extends SequenceEnrollment$remindersArgs<ExtArgs> = {}>(args?: Subset<T, SequenceEnrollment$remindersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReminderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -38562,30 +38599,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: OutreachMessageScalarFieldEnum | OutreachMessageScalarFieldEnum[]
-  }
-
-  /**
-   * SequenceEnrollment.reminders
-   */
-  export type SequenceEnrollment$remindersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Reminder
-     */
-    select?: ReminderSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Reminder
-     */
-    omit?: ReminderOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ReminderInclude<ExtArgs> | null
-    where?: ReminderWhereInput
-    orderBy?: ReminderOrderByWithRelationInput | ReminderOrderByWithRelationInput[]
-    cursor?: ReminderWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ReminderScalarFieldEnum | ReminderScalarFieldEnum[]
   }
 
   /**
@@ -56281,7 +56294,7 @@ export namespace Prisma {
     source: $Enums.ReminderSource | null
     type: $Enums.ReminderType | null
     job_id: string | null
-    sequence_enrollment_uuid: string | null
+    outreach_message_uuid: string | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -56298,7 +56311,7 @@ export namespace Prisma {
     source: $Enums.ReminderSource | null
     type: $Enums.ReminderType | null
     job_id: string | null
-    sequence_enrollment_uuid: string | null
+    outreach_message_uuid: string | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -56315,7 +56328,7 @@ export namespace Prisma {
     source: number
     type: number
     job_id: number
-    sequence_enrollment_uuid: number
+    outreach_message_uuid: number
     metadata: number
     created_at: number
     updated_at: number
@@ -56343,7 +56356,7 @@ export namespace Prisma {
     source?: true
     type?: true
     job_id?: true
-    sequence_enrollment_uuid?: true
+    outreach_message_uuid?: true
     created_at?: true
     updated_at?: true
   }
@@ -56360,7 +56373,7 @@ export namespace Prisma {
     source?: true
     type?: true
     job_id?: true
-    sequence_enrollment_uuid?: true
+    outreach_message_uuid?: true
     created_at?: true
     updated_at?: true
   }
@@ -56377,7 +56390,7 @@ export namespace Prisma {
     source?: true
     type?: true
     job_id?: true
-    sequence_enrollment_uuid?: true
+    outreach_message_uuid?: true
     metadata?: true
     created_at?: true
     updated_at?: true
@@ -56482,7 +56495,7 @@ export namespace Prisma {
     source: $Enums.ReminderSource
     type: $Enums.ReminderType
     job_id: string | null
-    sequence_enrollment_uuid: string | null
+    outreach_message_uuid: string | null
     metadata: JsonValue | null
     created_at: Date
     updated_at: Date
@@ -56519,13 +56532,13 @@ export namespace Prisma {
     source?: boolean
     type?: boolean
     job_id?: boolean
-    sequence_enrollment_uuid?: boolean
+    outreach_message_uuid?: boolean
     metadata?: boolean
     created_at?: boolean
     updated_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     contact?: boolean | ContactDefaultArgs<ExtArgs>
-    sequence_enrollment?: boolean | Reminder$sequence_enrollmentArgs<ExtArgs>
+    outreach_message?: boolean | Reminder$outreach_messageArgs<ExtArgs>
   }, ExtArgs["result"]["reminder"]>
 
   export type ReminderSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -56540,13 +56553,13 @@ export namespace Prisma {
     source?: boolean
     type?: boolean
     job_id?: boolean
-    sequence_enrollment_uuid?: boolean
+    outreach_message_uuid?: boolean
     metadata?: boolean
     created_at?: boolean
     updated_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     contact?: boolean | ContactDefaultArgs<ExtArgs>
-    sequence_enrollment?: boolean | Reminder$sequence_enrollmentArgs<ExtArgs>
+    outreach_message?: boolean | Reminder$outreach_messageArgs<ExtArgs>
   }, ExtArgs["result"]["reminder"]>
 
   export type ReminderSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -56561,13 +56574,13 @@ export namespace Prisma {
     source?: boolean
     type?: boolean
     job_id?: boolean
-    sequence_enrollment_uuid?: boolean
+    outreach_message_uuid?: boolean
     metadata?: boolean
     created_at?: boolean
     updated_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     contact?: boolean | ContactDefaultArgs<ExtArgs>
-    sequence_enrollment?: boolean | Reminder$sequence_enrollmentArgs<ExtArgs>
+    outreach_message?: boolean | Reminder$outreach_messageArgs<ExtArgs>
   }, ExtArgs["result"]["reminder"]>
 
   export type ReminderSelectScalar = {
@@ -56582,27 +56595,27 @@ export namespace Prisma {
     source?: boolean
     type?: boolean
     job_id?: boolean
-    sequence_enrollment_uuid?: boolean
+    outreach_message_uuid?: boolean
     metadata?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
-  export type ReminderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "contact_uuid" | "title" | "notes" | "remind_at" | "status" | "source" | "type" | "job_id" | "sequence_enrollment_uuid" | "metadata" | "created_at" | "updated_at", ExtArgs["result"]["reminder"]>
+  export type ReminderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "contact_uuid" | "title" | "notes" | "remind_at" | "status" | "source" | "type" | "job_id" | "outreach_message_uuid" | "metadata" | "created_at" | "updated_at", ExtArgs["result"]["reminder"]>
   export type ReminderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     contact?: boolean | ContactDefaultArgs<ExtArgs>
-    sequence_enrollment?: boolean | Reminder$sequence_enrollmentArgs<ExtArgs>
+    outreach_message?: boolean | Reminder$outreach_messageArgs<ExtArgs>
   }
   export type ReminderIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     contact?: boolean | ContactDefaultArgs<ExtArgs>
-    sequence_enrollment?: boolean | Reminder$sequence_enrollmentArgs<ExtArgs>
+    outreach_message?: boolean | Reminder$outreach_messageArgs<ExtArgs>
   }
   export type ReminderIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     contact?: boolean | ContactDefaultArgs<ExtArgs>
-    sequence_enrollment?: boolean | Reminder$sequence_enrollmentArgs<ExtArgs>
+    outreach_message?: boolean | Reminder$outreach_messageArgs<ExtArgs>
   }
 
   export type $ReminderPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -56610,7 +56623,7 @@ export namespace Prisma {
     objects: {
       organisation: Prisma.$OrganisationPayload<ExtArgs>
       contact: Prisma.$ContactPayload<ExtArgs>
-      sequence_enrollment: Prisma.$SequenceEnrollmentPayload<ExtArgs> | null
+      outreach_message: Prisma.$OutreachMessagePayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -56624,7 +56637,7 @@ export namespace Prisma {
       source: $Enums.ReminderSource
       type: $Enums.ReminderType
       job_id: string | null
-      sequence_enrollment_uuid: string | null
+      outreach_message_uuid: string | null
       metadata: Prisma.JsonValue | null
       created_at: Date
       updated_at: Date
@@ -57024,7 +57037,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     organisation<T extends OrganisationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganisationDefaultArgs<ExtArgs>>): Prisma__OrganisationClient<$Result.GetResult<Prisma.$OrganisationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     contact<T extends ContactDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ContactDefaultArgs<ExtArgs>>): Prisma__ContactClient<$Result.GetResult<Prisma.$ContactPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    sequence_enrollment<T extends Reminder$sequence_enrollmentArgs<ExtArgs> = {}>(args?: Subset<T, Reminder$sequence_enrollmentArgs<ExtArgs>>): Prisma__SequenceEnrollmentClient<$Result.GetResult<Prisma.$SequenceEnrollmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    outreach_message<T extends Reminder$outreach_messageArgs<ExtArgs> = {}>(args?: Subset<T, Reminder$outreach_messageArgs<ExtArgs>>): Prisma__OutreachMessageClient<$Result.GetResult<Prisma.$OutreachMessagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -57065,7 +57078,7 @@ export namespace Prisma {
     readonly source: FieldRef<"Reminder", 'ReminderSource'>
     readonly type: FieldRef<"Reminder", 'ReminderType'>
     readonly job_id: FieldRef<"Reminder", 'String'>
-    readonly sequence_enrollment_uuid: FieldRef<"Reminder", 'String'>
+    readonly outreach_message_uuid: FieldRef<"Reminder", 'String'>
     readonly metadata: FieldRef<"Reminder", 'Json'>
     readonly created_at: FieldRef<"Reminder", 'DateTime'>
     readonly updated_at: FieldRef<"Reminder", 'DateTime'>
@@ -57465,22 +57478,22 @@ export namespace Prisma {
   }
 
   /**
-   * Reminder.sequence_enrollment
+   * Reminder.outreach_message
    */
-  export type Reminder$sequence_enrollmentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Reminder$outreach_messageArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the SequenceEnrollment
+     * Select specific fields to fetch from the OutreachMessage
      */
-    select?: SequenceEnrollmentSelect<ExtArgs> | null
+    select?: OutreachMessageSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the SequenceEnrollment
+     * Omit specific fields from the OutreachMessage
      */
-    omit?: SequenceEnrollmentOmit<ExtArgs> | null
+    omit?: OutreachMessageOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: SequenceEnrollmentInclude<ExtArgs> | null
-    where?: SequenceEnrollmentWhereInput
+    include?: OutreachMessageInclude<ExtArgs> | null
+    where?: OutreachMessageWhereInput
   }
 
   /**
@@ -78227,6 +78240,7 @@ export namespace Prisma {
     reply_html: 'reply_html',
     inbound_message_id: 'inbound_message_id',
     in_reply_to_message_id: 'in_reply_to_message_id',
+    is_manual_reply: 'is_manual_reply',
     email_provider: 'email_provider',
     email_account: 'email_account',
     email_domain_uuid: 'email_domain_uuid',
@@ -78608,7 +78622,7 @@ export namespace Prisma {
     source: 'source',
     type: 'type',
     job_id: 'job_id',
-    sequence_enrollment_uuid: 'sequence_enrollment_uuid',
+    outreach_message_uuid: 'outreach_message_uuid',
     metadata: 'metadata',
     created_at: 'created_at',
     updated_at: 'updated_at'
@@ -81663,6 +81677,7 @@ export namespace Prisma {
     reply_html?: StringNullableFilter<"OutreachMessage"> | string | null
     inbound_message_id?: StringNullableFilter<"OutreachMessage"> | string | null
     in_reply_to_message_id?: StringNullableFilter<"OutreachMessage"> | string | null
+    is_manual_reply?: BoolFilter<"OutreachMessage"> | boolean
     email_provider?: EnumExternalIntegrationProviderNullableFilter<"OutreachMessage"> | $Enums.ExternalIntegrationProvider | null
     email_account?: StringNullableFilter<"OutreachMessage"> | string | null
     email_domain_uuid?: StringNullableFilter<"OutreachMessage"> | string | null
@@ -81681,6 +81696,7 @@ export namespace Prisma {
     sequence_enrollment?: XOR<SequenceEnrollmentNullableScalarRelationFilter, SequenceEnrollmentWhereInput> | null
     sequence_step?: XOR<OutreachSequenceStepNullableScalarRelationFilter, OutreachSequenceStepWhereInput> | null
     campaign_integration?: XOR<CampaignIntegrationNullableScalarRelationFilter, CampaignIntegrationWhereInput> | null
+    reminders?: ReminderListRelationFilter
   }
 
   export type OutreachMessageOrderByWithRelationInput = {
@@ -81710,6 +81726,7 @@ export namespace Prisma {
     reply_html?: SortOrderInput | SortOrder
     inbound_message_id?: SortOrderInput | SortOrder
     in_reply_to_message_id?: SortOrderInput | SortOrder
+    is_manual_reply?: SortOrder
     email_provider?: SortOrderInput | SortOrder
     email_account?: SortOrderInput | SortOrder
     email_domain_uuid?: SortOrderInput | SortOrder
@@ -81728,6 +81745,7 @@ export namespace Prisma {
     sequence_enrollment?: SequenceEnrollmentOrderByWithRelationInput
     sequence_step?: OutreachSequenceStepOrderByWithRelationInput
     campaign_integration?: CampaignIntegrationOrderByWithRelationInput
+    reminders?: ReminderOrderByRelationAggregateInput
   }
 
   export type OutreachMessageWhereUniqueInput = Prisma.AtLeast<{
@@ -81760,6 +81778,7 @@ export namespace Prisma {
     reply_html?: StringNullableFilter<"OutreachMessage"> | string | null
     inbound_message_id?: StringNullableFilter<"OutreachMessage"> | string | null
     in_reply_to_message_id?: StringNullableFilter<"OutreachMessage"> | string | null
+    is_manual_reply?: BoolFilter<"OutreachMessage"> | boolean
     email_provider?: EnumExternalIntegrationProviderNullableFilter<"OutreachMessage"> | $Enums.ExternalIntegrationProvider | null
     email_account?: StringNullableFilter<"OutreachMessage"> | string | null
     email_domain_uuid?: StringNullableFilter<"OutreachMessage"> | string | null
@@ -81778,6 +81797,7 @@ export namespace Prisma {
     sequence_enrollment?: XOR<SequenceEnrollmentNullableScalarRelationFilter, SequenceEnrollmentWhereInput> | null
     sequence_step?: XOR<OutreachSequenceStepNullableScalarRelationFilter, OutreachSequenceStepWhereInput> | null
     campaign_integration?: XOR<CampaignIntegrationNullableScalarRelationFilter, CampaignIntegrationWhereInput> | null
+    reminders?: ReminderListRelationFilter
   }, "id" | "uuid" | "idempotency_key">
 
   export type OutreachMessageOrderByWithAggregationInput = {
@@ -81807,6 +81827,7 @@ export namespace Prisma {
     reply_html?: SortOrderInput | SortOrder
     inbound_message_id?: SortOrderInput | SortOrder
     in_reply_to_message_id?: SortOrderInput | SortOrder
+    is_manual_reply?: SortOrder
     email_provider?: SortOrderInput | SortOrder
     email_account?: SortOrderInput | SortOrder
     email_domain_uuid?: SortOrderInput | SortOrder
@@ -81854,6 +81875,7 @@ export namespace Prisma {
     reply_html?: StringNullableWithAggregatesFilter<"OutreachMessage"> | string | null
     inbound_message_id?: StringNullableWithAggregatesFilter<"OutreachMessage"> | string | null
     in_reply_to_message_id?: StringNullableWithAggregatesFilter<"OutreachMessage"> | string | null
+    is_manual_reply?: BoolWithAggregatesFilter<"OutreachMessage"> | boolean
     email_provider?: EnumExternalIntegrationProviderNullableWithAggregatesFilter<"OutreachMessage"> | $Enums.ExternalIntegrationProvider | null
     email_account?: StringNullableWithAggregatesFilter<"OutreachMessage"> | string | null
     email_domain_uuid?: StringNullableWithAggregatesFilter<"OutreachMessage"> | string | null
@@ -82091,7 +82113,6 @@ export namespace Prisma {
     contact?: XOR<ContactScalarRelationFilter, ContactWhereInput>
     campaign?: XOR<MarketingCampaignNullableScalarRelationFilter, MarketingCampaignWhereInput> | null
     outreach_messages?: OutreachMessageListRelationFilter
-    reminders?: ReminderListRelationFilter
   }
 
   export type SequenceEnrollmentOrderByWithRelationInput = {
@@ -82112,7 +82133,6 @@ export namespace Prisma {
     contact?: ContactOrderByWithRelationInput
     campaign?: MarketingCampaignOrderByWithRelationInput
     outreach_messages?: OutreachMessageOrderByRelationAggregateInput
-    reminders?: ReminderOrderByRelationAggregateInput
   }
 
   export type SequenceEnrollmentWhereUniqueInput = Prisma.AtLeast<{
@@ -82137,7 +82157,6 @@ export namespace Prisma {
     contact?: XOR<ContactScalarRelationFilter, ContactWhereInput>
     campaign?: XOR<MarketingCampaignNullableScalarRelationFilter, MarketingCampaignWhereInput> | null
     outreach_messages?: OutreachMessageListRelationFilter
-    reminders?: ReminderListRelationFilter
   }, "id" | "uuid" | "sequence_uuid_contact_uuid_campaign_uuid">
 
   export type SequenceEnrollmentOrderByWithAggregationInput = {
@@ -83767,13 +83786,13 @@ export namespace Prisma {
     source?: EnumReminderSourceFilter<"Reminder"> | $Enums.ReminderSource
     type?: EnumReminderTypeFilter<"Reminder"> | $Enums.ReminderType
     job_id?: StringNullableFilter<"Reminder"> | string | null
-    sequence_enrollment_uuid?: StringNullableFilter<"Reminder"> | string | null
+    outreach_message_uuid?: StringNullableFilter<"Reminder"> | string | null
     metadata?: JsonNullableFilter<"Reminder">
     created_at?: DateTimeFilter<"Reminder"> | Date | string
     updated_at?: DateTimeFilter<"Reminder"> | Date | string
     organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
     contact?: XOR<ContactScalarRelationFilter, ContactWhereInput>
-    sequence_enrollment?: XOR<SequenceEnrollmentNullableScalarRelationFilter, SequenceEnrollmentWhereInput> | null
+    outreach_message?: XOR<OutreachMessageNullableScalarRelationFilter, OutreachMessageWhereInput> | null
   }
 
   export type ReminderOrderByWithRelationInput = {
@@ -83788,13 +83807,13 @@ export namespace Prisma {
     source?: SortOrder
     type?: SortOrder
     job_id?: SortOrderInput | SortOrder
-    sequence_enrollment_uuid?: SortOrderInput | SortOrder
+    outreach_message_uuid?: SortOrderInput | SortOrder
     metadata?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     organisation?: OrganisationOrderByWithRelationInput
     contact?: ContactOrderByWithRelationInput
-    sequence_enrollment?: SequenceEnrollmentOrderByWithRelationInput
+    outreach_message?: OutreachMessageOrderByWithRelationInput
   }
 
   export type ReminderWhereUniqueInput = Prisma.AtLeast<{
@@ -83812,13 +83831,13 @@ export namespace Prisma {
     status?: EnumReminderStatusFilter<"Reminder"> | $Enums.ReminderStatus
     source?: EnumReminderSourceFilter<"Reminder"> | $Enums.ReminderSource
     type?: EnumReminderTypeFilter<"Reminder"> | $Enums.ReminderType
-    sequence_enrollment_uuid?: StringNullableFilter<"Reminder"> | string | null
+    outreach_message_uuid?: StringNullableFilter<"Reminder"> | string | null
     metadata?: JsonNullableFilter<"Reminder">
     created_at?: DateTimeFilter<"Reminder"> | Date | string
     updated_at?: DateTimeFilter<"Reminder"> | Date | string
     organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
     contact?: XOR<ContactScalarRelationFilter, ContactWhereInput>
-    sequence_enrollment?: XOR<SequenceEnrollmentNullableScalarRelationFilter, SequenceEnrollmentWhereInput> | null
+    outreach_message?: XOR<OutreachMessageNullableScalarRelationFilter, OutreachMessageWhereInput> | null
   }, "id" | "uuid" | "job_id">
 
   export type ReminderOrderByWithAggregationInput = {
@@ -83833,7 +83852,7 @@ export namespace Prisma {
     source?: SortOrder
     type?: SortOrder
     job_id?: SortOrderInput | SortOrder
-    sequence_enrollment_uuid?: SortOrderInput | SortOrder
+    outreach_message_uuid?: SortOrderInput | SortOrder
     metadata?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -83859,7 +83878,7 @@ export namespace Prisma {
     source?: EnumReminderSourceWithAggregatesFilter<"Reminder"> | $Enums.ReminderSource
     type?: EnumReminderTypeWithAggregatesFilter<"Reminder"> | $Enums.ReminderType
     job_id?: StringNullableWithAggregatesFilter<"Reminder"> | string | null
-    sequence_enrollment_uuid?: StringNullableWithAggregatesFilter<"Reminder"> | string | null
+    outreach_message_uuid?: StringNullableWithAggregatesFilter<"Reminder"> | string | null
     metadata?: JsonNullableWithAggregatesFilter<"Reminder">
     created_at?: DateTimeWithAggregatesFilter<"Reminder"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"Reminder"> | Date | string
@@ -87442,6 +87461,7 @@ export namespace Prisma {
     reply_html?: string | null
     inbound_message_id?: string | null
     in_reply_to_message_id?: string | null
+    is_manual_reply?: boolean
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
@@ -87457,6 +87477,7 @@ export namespace Prisma {
     sequence_enrollment?: SequenceEnrollmentCreateNestedOneWithoutOutreach_messagesInput
     sequence_step?: OutreachSequenceStepCreateNestedOneWithoutOutreach_messagesInput
     campaign_integration?: CampaignIntegrationCreateNestedOneWithoutOutreach_messagesInput
+    reminders?: ReminderCreateNestedManyWithoutOutreach_messageInput
   }
 
   export type OutreachMessageUncheckedCreateInput = {
@@ -87486,6 +87507,7 @@ export namespace Prisma {
     reply_html?: string | null
     inbound_message_id?: string | null
     in_reply_to_message_id?: string | null
+    is_manual_reply?: boolean
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
@@ -87497,6 +87519,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     interactions?: InteractionUncheckedCreateNestedManyWithoutOutreach_messageInput
+    reminders?: ReminderUncheckedCreateNestedManyWithoutOutreach_messageInput
   }
 
   export type OutreachMessageUpdateInput = {
@@ -87521,6 +87544,7 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -87536,6 +87560,7 @@ export namespace Prisma {
     sequence_enrollment?: SequenceEnrollmentUpdateOneWithoutOutreach_messagesNestedInput
     sequence_step?: OutreachSequenceStepUpdateOneWithoutOutreach_messagesNestedInput
     campaign_integration?: CampaignIntegrationUpdateOneWithoutOutreach_messagesNestedInput
+    reminders?: ReminderUpdateManyWithoutOutreach_messageNestedInput
   }
 
   export type OutreachMessageUncheckedUpdateInput = {
@@ -87565,6 +87590,7 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -87576,6 +87602,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     interactions?: InteractionUncheckedUpdateManyWithoutOutreach_messageNestedInput
+    reminders?: ReminderUncheckedUpdateManyWithoutOutreach_messageNestedInput
   }
 
   export type OutreachMessageCreateManyInput = {
@@ -87605,6 +87632,7 @@ export namespace Prisma {
     reply_html?: string | null
     inbound_message_id?: string | null
     in_reply_to_message_id?: string | null
+    is_manual_reply?: boolean
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
@@ -87639,6 +87667,7 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -87675,6 +87704,7 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -87925,7 +87955,6 @@ export namespace Prisma {
     contact: ContactCreateNestedOneWithoutSequence_enrollmentsInput
     campaign?: MarketingCampaignCreateNestedOneWithoutSequence_enrollmentsInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutSequence_enrollmentInput
-    reminders?: ReminderCreateNestedManyWithoutSequence_enrollmentInput
   }
 
   export type SequenceEnrollmentUncheckedCreateInput = {
@@ -87943,7 +87972,6 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutSequence_enrollmentInput
-    reminders?: ReminderUncheckedCreateNestedManyWithoutSequence_enrollmentInput
   }
 
   export type SequenceEnrollmentUpdateInput = {
@@ -87960,7 +87988,6 @@ export namespace Prisma {
     contact?: ContactUpdateOneRequiredWithoutSequence_enrollmentsNestedInput
     campaign?: MarketingCampaignUpdateOneWithoutSequence_enrollmentsNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutSequence_enrollmentNestedInput
-    reminders?: ReminderUpdateManyWithoutSequence_enrollmentNestedInput
   }
 
   export type SequenceEnrollmentUncheckedUpdateInput = {
@@ -87978,7 +88005,6 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutSequence_enrollmentNestedInput
-    reminders?: ReminderUncheckedUpdateManyWithoutSequence_enrollmentNestedInput
   }
 
   export type SequenceEnrollmentCreateManyInput = {
@@ -89824,7 +89850,7 @@ export namespace Prisma {
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutRemindersInput
     contact: ContactCreateNestedOneWithoutRemindersInput
-    sequence_enrollment?: SequenceEnrollmentCreateNestedOneWithoutRemindersInput
+    outreach_message?: OutreachMessageCreateNestedOneWithoutRemindersInput
   }
 
   export type ReminderUncheckedCreateInput = {
@@ -89839,7 +89865,7 @@ export namespace Prisma {
     source?: $Enums.ReminderSource
     type?: $Enums.ReminderType
     job_id?: string | null
-    sequence_enrollment_uuid?: string | null
+    outreach_message_uuid?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
     updated_at?: Date | string
@@ -89859,7 +89885,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutRemindersNestedInput
     contact?: ContactUpdateOneRequiredWithoutRemindersNestedInput
-    sequence_enrollment?: SequenceEnrollmentUpdateOneWithoutRemindersNestedInput
+    outreach_message?: OutreachMessageUpdateOneWithoutRemindersNestedInput
   }
 
   export type ReminderUncheckedUpdateInput = {
@@ -89874,7 +89900,7 @@ export namespace Prisma {
     source?: EnumReminderSourceFieldUpdateOperationsInput | $Enums.ReminderSource
     type?: EnumReminderTypeFieldUpdateOperationsInput | $Enums.ReminderType
     job_id?: NullableStringFieldUpdateOperationsInput | string | null
-    sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    outreach_message_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -89892,7 +89918,7 @@ export namespace Prisma {
     source?: $Enums.ReminderSource
     type?: $Enums.ReminderType
     job_id?: string | null
-    sequence_enrollment_uuid?: string | null
+    outreach_message_uuid?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
     updated_at?: Date | string
@@ -89924,7 +89950,7 @@ export namespace Prisma {
     source?: EnumReminderSourceFieldUpdateOperationsInput | $Enums.ReminderSource
     type?: EnumReminderTypeFieldUpdateOperationsInput | $Enums.ReminderType
     job_id?: NullableStringFieldUpdateOperationsInput | string | null
-    sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    outreach_message_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -93581,6 +93607,7 @@ export namespace Prisma {
     reply_html?: SortOrder
     inbound_message_id?: SortOrder
     in_reply_to_message_id?: SortOrder
+    is_manual_reply?: SortOrder
     email_provider?: SortOrder
     email_account?: SortOrder
     email_domain_uuid?: SortOrder
@@ -93624,6 +93651,7 @@ export namespace Prisma {
     reply_html?: SortOrder
     inbound_message_id?: SortOrder
     in_reply_to_message_id?: SortOrder
+    is_manual_reply?: SortOrder
     email_provider?: SortOrder
     email_account?: SortOrder
     email_domain_uuid?: SortOrder
@@ -93662,6 +93690,7 @@ export namespace Prisma {
     reply_html?: SortOrder
     inbound_message_id?: SortOrder
     in_reply_to_message_id?: SortOrder
+    is_manual_reply?: SortOrder
     email_provider?: SortOrder
     email_account?: SortOrder
     email_domain_uuid?: SortOrder
@@ -95329,7 +95358,7 @@ export namespace Prisma {
     source?: SortOrder
     type?: SortOrder
     job_id?: SortOrder
-    sequence_enrollment_uuid?: SortOrder
+    outreach_message_uuid?: SortOrder
     metadata?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -95351,7 +95380,7 @@ export namespace Prisma {
     source?: SortOrder
     type?: SortOrder
     job_id?: SortOrder
-    sequence_enrollment_uuid?: SortOrder
+    outreach_message_uuid?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -95368,7 +95397,7 @@ export namespace Prisma {
     source?: SortOrder
     type?: SortOrder
     job_id?: SortOrder
-    sequence_enrollment_uuid?: SortOrder
+    outreach_message_uuid?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -100027,11 +100056,25 @@ export namespace Prisma {
     connect?: CampaignIntegrationWhereUniqueInput
   }
 
+  export type ReminderCreateNestedManyWithoutOutreach_messageInput = {
+    create?: XOR<ReminderCreateWithoutOutreach_messageInput, ReminderUncheckedCreateWithoutOutreach_messageInput> | ReminderCreateWithoutOutreach_messageInput[] | ReminderUncheckedCreateWithoutOutreach_messageInput[]
+    connectOrCreate?: ReminderCreateOrConnectWithoutOutreach_messageInput | ReminderCreateOrConnectWithoutOutreach_messageInput[]
+    createMany?: ReminderCreateManyOutreach_messageInputEnvelope
+    connect?: ReminderWhereUniqueInput | ReminderWhereUniqueInput[]
+  }
+
   export type InteractionUncheckedCreateNestedManyWithoutOutreach_messageInput = {
     create?: XOR<InteractionCreateWithoutOutreach_messageInput, InteractionUncheckedCreateWithoutOutreach_messageInput> | InteractionCreateWithoutOutreach_messageInput[] | InteractionUncheckedCreateWithoutOutreach_messageInput[]
     connectOrCreate?: InteractionCreateOrConnectWithoutOutreach_messageInput | InteractionCreateOrConnectWithoutOutreach_messageInput[]
     createMany?: InteractionCreateManyOutreach_messageInputEnvelope
     connect?: InteractionWhereUniqueInput | InteractionWhereUniqueInput[]
+  }
+
+  export type ReminderUncheckedCreateNestedManyWithoutOutreach_messageInput = {
+    create?: XOR<ReminderCreateWithoutOutreach_messageInput, ReminderUncheckedCreateWithoutOutreach_messageInput> | ReminderCreateWithoutOutreach_messageInput[] | ReminderUncheckedCreateWithoutOutreach_messageInput[]
+    connectOrCreate?: ReminderCreateOrConnectWithoutOutreach_messageInput | ReminderCreateOrConnectWithoutOutreach_messageInput[]
+    createMany?: ReminderCreateManyOutreach_messageInputEnvelope
+    connect?: ReminderWhereUniqueInput | ReminderWhereUniqueInput[]
   }
 
   export type EnumChannelFieldUpdateOperationsInput = {
@@ -100130,6 +100173,20 @@ export namespace Prisma {
     update?: XOR<XOR<CampaignIntegrationUpdateToOneWithWhereWithoutOutreach_messagesInput, CampaignIntegrationUpdateWithoutOutreach_messagesInput>, CampaignIntegrationUncheckedUpdateWithoutOutreach_messagesInput>
   }
 
+  export type ReminderUpdateManyWithoutOutreach_messageNestedInput = {
+    create?: XOR<ReminderCreateWithoutOutreach_messageInput, ReminderUncheckedCreateWithoutOutreach_messageInput> | ReminderCreateWithoutOutreach_messageInput[] | ReminderUncheckedCreateWithoutOutreach_messageInput[]
+    connectOrCreate?: ReminderCreateOrConnectWithoutOutreach_messageInput | ReminderCreateOrConnectWithoutOutreach_messageInput[]
+    upsert?: ReminderUpsertWithWhereUniqueWithoutOutreach_messageInput | ReminderUpsertWithWhereUniqueWithoutOutreach_messageInput[]
+    createMany?: ReminderCreateManyOutreach_messageInputEnvelope
+    set?: ReminderWhereUniqueInput | ReminderWhereUniqueInput[]
+    disconnect?: ReminderWhereUniqueInput | ReminderWhereUniqueInput[]
+    delete?: ReminderWhereUniqueInput | ReminderWhereUniqueInput[]
+    connect?: ReminderWhereUniqueInput | ReminderWhereUniqueInput[]
+    update?: ReminderUpdateWithWhereUniqueWithoutOutreach_messageInput | ReminderUpdateWithWhereUniqueWithoutOutreach_messageInput[]
+    updateMany?: ReminderUpdateManyWithWhereWithoutOutreach_messageInput | ReminderUpdateManyWithWhereWithoutOutreach_messageInput[]
+    deleteMany?: ReminderScalarWhereInput | ReminderScalarWhereInput[]
+  }
+
   export type InteractionUncheckedUpdateManyWithoutOutreach_messageNestedInput = {
     create?: XOR<InteractionCreateWithoutOutreach_messageInput, InteractionUncheckedCreateWithoutOutreach_messageInput> | InteractionCreateWithoutOutreach_messageInput[] | InteractionUncheckedCreateWithoutOutreach_messageInput[]
     connectOrCreate?: InteractionCreateOrConnectWithoutOutreach_messageInput | InteractionCreateOrConnectWithoutOutreach_messageInput[]
@@ -100142,6 +100199,20 @@ export namespace Prisma {
     update?: InteractionUpdateWithWhereUniqueWithoutOutreach_messageInput | InteractionUpdateWithWhereUniqueWithoutOutreach_messageInput[]
     updateMany?: InteractionUpdateManyWithWhereWithoutOutreach_messageInput | InteractionUpdateManyWithWhereWithoutOutreach_messageInput[]
     deleteMany?: InteractionScalarWhereInput | InteractionScalarWhereInput[]
+  }
+
+  export type ReminderUncheckedUpdateManyWithoutOutreach_messageNestedInput = {
+    create?: XOR<ReminderCreateWithoutOutreach_messageInput, ReminderUncheckedCreateWithoutOutreach_messageInput> | ReminderCreateWithoutOutreach_messageInput[] | ReminderUncheckedCreateWithoutOutreach_messageInput[]
+    connectOrCreate?: ReminderCreateOrConnectWithoutOutreach_messageInput | ReminderCreateOrConnectWithoutOutreach_messageInput[]
+    upsert?: ReminderUpsertWithWhereUniqueWithoutOutreach_messageInput | ReminderUpsertWithWhereUniqueWithoutOutreach_messageInput[]
+    createMany?: ReminderCreateManyOutreach_messageInputEnvelope
+    set?: ReminderWhereUniqueInput | ReminderWhereUniqueInput[]
+    disconnect?: ReminderWhereUniqueInput | ReminderWhereUniqueInput[]
+    delete?: ReminderWhereUniqueInput | ReminderWhereUniqueInput[]
+    connect?: ReminderWhereUniqueInput | ReminderWhereUniqueInput[]
+    update?: ReminderUpdateWithWhereUniqueWithoutOutreach_messageInput | ReminderUpdateWithWhereUniqueWithoutOutreach_messageInput[]
+    updateMany?: ReminderUpdateManyWithWhereWithoutOutreach_messageInput | ReminderUpdateManyWithWhereWithoutOutreach_messageInput[]
+    deleteMany?: ReminderScalarWhereInput | ReminderScalarWhereInput[]
   }
 
   export type OrganisationCreateNestedOneWithoutOutreach_sequencesInput = {
@@ -100393,25 +100464,11 @@ export namespace Prisma {
     connect?: OutreachMessageWhereUniqueInput | OutreachMessageWhereUniqueInput[]
   }
 
-  export type ReminderCreateNestedManyWithoutSequence_enrollmentInput = {
-    create?: XOR<ReminderCreateWithoutSequence_enrollmentInput, ReminderUncheckedCreateWithoutSequence_enrollmentInput> | ReminderCreateWithoutSequence_enrollmentInput[] | ReminderUncheckedCreateWithoutSequence_enrollmentInput[]
-    connectOrCreate?: ReminderCreateOrConnectWithoutSequence_enrollmentInput | ReminderCreateOrConnectWithoutSequence_enrollmentInput[]
-    createMany?: ReminderCreateManySequence_enrollmentInputEnvelope
-    connect?: ReminderWhereUniqueInput | ReminderWhereUniqueInput[]
-  }
-
   export type OutreachMessageUncheckedCreateNestedManyWithoutSequence_enrollmentInput = {
     create?: XOR<OutreachMessageCreateWithoutSequence_enrollmentInput, OutreachMessageUncheckedCreateWithoutSequence_enrollmentInput> | OutreachMessageCreateWithoutSequence_enrollmentInput[] | OutreachMessageUncheckedCreateWithoutSequence_enrollmentInput[]
     connectOrCreate?: OutreachMessageCreateOrConnectWithoutSequence_enrollmentInput | OutreachMessageCreateOrConnectWithoutSequence_enrollmentInput[]
     createMany?: OutreachMessageCreateManySequence_enrollmentInputEnvelope
     connect?: OutreachMessageWhereUniqueInput | OutreachMessageWhereUniqueInput[]
-  }
-
-  export type ReminderUncheckedCreateNestedManyWithoutSequence_enrollmentInput = {
-    create?: XOR<ReminderCreateWithoutSequence_enrollmentInput, ReminderUncheckedCreateWithoutSequence_enrollmentInput> | ReminderCreateWithoutSequence_enrollmentInput[] | ReminderUncheckedCreateWithoutSequence_enrollmentInput[]
-    connectOrCreate?: ReminderCreateOrConnectWithoutSequence_enrollmentInput | ReminderCreateOrConnectWithoutSequence_enrollmentInput[]
-    createMany?: ReminderCreateManySequence_enrollmentInputEnvelope
-    connect?: ReminderWhereUniqueInput | ReminderWhereUniqueInput[]
   }
 
   export type EnumSequenceEnrollmentStatusFieldUpdateOperationsInput = {
@@ -100458,20 +100515,6 @@ export namespace Prisma {
     deleteMany?: OutreachMessageScalarWhereInput | OutreachMessageScalarWhereInput[]
   }
 
-  export type ReminderUpdateManyWithoutSequence_enrollmentNestedInput = {
-    create?: XOR<ReminderCreateWithoutSequence_enrollmentInput, ReminderUncheckedCreateWithoutSequence_enrollmentInput> | ReminderCreateWithoutSequence_enrollmentInput[] | ReminderUncheckedCreateWithoutSequence_enrollmentInput[]
-    connectOrCreate?: ReminderCreateOrConnectWithoutSequence_enrollmentInput | ReminderCreateOrConnectWithoutSequence_enrollmentInput[]
-    upsert?: ReminderUpsertWithWhereUniqueWithoutSequence_enrollmentInput | ReminderUpsertWithWhereUniqueWithoutSequence_enrollmentInput[]
-    createMany?: ReminderCreateManySequence_enrollmentInputEnvelope
-    set?: ReminderWhereUniqueInput | ReminderWhereUniqueInput[]
-    disconnect?: ReminderWhereUniqueInput | ReminderWhereUniqueInput[]
-    delete?: ReminderWhereUniqueInput | ReminderWhereUniqueInput[]
-    connect?: ReminderWhereUniqueInput | ReminderWhereUniqueInput[]
-    update?: ReminderUpdateWithWhereUniqueWithoutSequence_enrollmentInput | ReminderUpdateWithWhereUniqueWithoutSequence_enrollmentInput[]
-    updateMany?: ReminderUpdateManyWithWhereWithoutSequence_enrollmentInput | ReminderUpdateManyWithWhereWithoutSequence_enrollmentInput[]
-    deleteMany?: ReminderScalarWhereInput | ReminderScalarWhereInput[]
-  }
-
   export type OutreachMessageUncheckedUpdateManyWithoutSequence_enrollmentNestedInput = {
     create?: XOR<OutreachMessageCreateWithoutSequence_enrollmentInput, OutreachMessageUncheckedCreateWithoutSequence_enrollmentInput> | OutreachMessageCreateWithoutSequence_enrollmentInput[] | OutreachMessageUncheckedCreateWithoutSequence_enrollmentInput[]
     connectOrCreate?: OutreachMessageCreateOrConnectWithoutSequence_enrollmentInput | OutreachMessageCreateOrConnectWithoutSequence_enrollmentInput[]
@@ -100484,20 +100527,6 @@ export namespace Prisma {
     update?: OutreachMessageUpdateWithWhereUniqueWithoutSequence_enrollmentInput | OutreachMessageUpdateWithWhereUniqueWithoutSequence_enrollmentInput[]
     updateMany?: OutreachMessageUpdateManyWithWhereWithoutSequence_enrollmentInput | OutreachMessageUpdateManyWithWhereWithoutSequence_enrollmentInput[]
     deleteMany?: OutreachMessageScalarWhereInput | OutreachMessageScalarWhereInput[]
-  }
-
-  export type ReminderUncheckedUpdateManyWithoutSequence_enrollmentNestedInput = {
-    create?: XOR<ReminderCreateWithoutSequence_enrollmentInput, ReminderUncheckedCreateWithoutSequence_enrollmentInput> | ReminderCreateWithoutSequence_enrollmentInput[] | ReminderUncheckedCreateWithoutSequence_enrollmentInput[]
-    connectOrCreate?: ReminderCreateOrConnectWithoutSequence_enrollmentInput | ReminderCreateOrConnectWithoutSequence_enrollmentInput[]
-    upsert?: ReminderUpsertWithWhereUniqueWithoutSequence_enrollmentInput | ReminderUpsertWithWhereUniqueWithoutSequence_enrollmentInput[]
-    createMany?: ReminderCreateManySequence_enrollmentInputEnvelope
-    set?: ReminderWhereUniqueInput | ReminderWhereUniqueInput[]
-    disconnect?: ReminderWhereUniqueInput | ReminderWhereUniqueInput[]
-    delete?: ReminderWhereUniqueInput | ReminderWhereUniqueInput[]
-    connect?: ReminderWhereUniqueInput | ReminderWhereUniqueInput[]
-    update?: ReminderUpdateWithWhereUniqueWithoutSequence_enrollmentInput | ReminderUpdateWithWhereUniqueWithoutSequence_enrollmentInput[]
-    updateMany?: ReminderUpdateManyWithWhereWithoutSequence_enrollmentInput | ReminderUpdateManyWithWhereWithoutSequence_enrollmentInput[]
-    deleteMany?: ReminderScalarWhereInput | ReminderScalarWhereInput[]
   }
 
   export type FilterCreateNestedOneWithoutJobsInput = {
@@ -101393,10 +101422,10 @@ export namespace Prisma {
     connect?: ContactWhereUniqueInput
   }
 
-  export type SequenceEnrollmentCreateNestedOneWithoutRemindersInput = {
-    create?: XOR<SequenceEnrollmentCreateWithoutRemindersInput, SequenceEnrollmentUncheckedCreateWithoutRemindersInput>
-    connectOrCreate?: SequenceEnrollmentCreateOrConnectWithoutRemindersInput
-    connect?: SequenceEnrollmentWhereUniqueInput
+  export type OutreachMessageCreateNestedOneWithoutRemindersInput = {
+    create?: XOR<OutreachMessageCreateWithoutRemindersInput, OutreachMessageUncheckedCreateWithoutRemindersInput>
+    connectOrCreate?: OutreachMessageCreateOrConnectWithoutRemindersInput
+    connect?: OutreachMessageWhereUniqueInput
   }
 
   export type EnumReminderStatusFieldUpdateOperationsInput = {
@@ -101427,14 +101456,14 @@ export namespace Prisma {
     update?: XOR<XOR<ContactUpdateToOneWithWhereWithoutRemindersInput, ContactUpdateWithoutRemindersInput>, ContactUncheckedUpdateWithoutRemindersInput>
   }
 
-  export type SequenceEnrollmentUpdateOneWithoutRemindersNestedInput = {
-    create?: XOR<SequenceEnrollmentCreateWithoutRemindersInput, SequenceEnrollmentUncheckedCreateWithoutRemindersInput>
-    connectOrCreate?: SequenceEnrollmentCreateOrConnectWithoutRemindersInput
-    upsert?: SequenceEnrollmentUpsertWithoutRemindersInput
-    disconnect?: SequenceEnrollmentWhereInput | boolean
-    delete?: SequenceEnrollmentWhereInput | boolean
-    connect?: SequenceEnrollmentWhereUniqueInput
-    update?: XOR<XOR<SequenceEnrollmentUpdateToOneWithWhereWithoutRemindersInput, SequenceEnrollmentUpdateWithoutRemindersInput>, SequenceEnrollmentUncheckedUpdateWithoutRemindersInput>
+  export type OutreachMessageUpdateOneWithoutRemindersNestedInput = {
+    create?: XOR<OutreachMessageCreateWithoutRemindersInput, OutreachMessageUncheckedCreateWithoutRemindersInput>
+    connectOrCreate?: OutreachMessageCreateOrConnectWithoutRemindersInput
+    upsert?: OutreachMessageUpsertWithoutRemindersInput
+    disconnect?: OutreachMessageWhereInput | boolean
+    delete?: OutreachMessageWhereInput | boolean
+    connect?: OutreachMessageWhereUniqueInput
+    update?: XOR<XOR<OutreachMessageUpdateToOneWithWhereWithoutRemindersInput, OutreachMessageUpdateWithoutRemindersInput>, OutreachMessageUncheckedUpdateWithoutRemindersInput>
   }
 
   export type OrganisationCreateNestedOneWithoutFormsInput = {
@@ -103618,6 +103647,7 @@ export namespace Prisma {
     reply_html?: string | null
     inbound_message_id?: string | null
     in_reply_to_message_id?: string | null
+    is_manual_reply?: boolean
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
@@ -103632,6 +103662,7 @@ export namespace Prisma {
     sequence_enrollment?: SequenceEnrollmentCreateNestedOneWithoutOutreach_messagesInput
     sequence_step?: OutreachSequenceStepCreateNestedOneWithoutOutreach_messagesInput
     campaign_integration?: CampaignIntegrationCreateNestedOneWithoutOutreach_messagesInput
+    reminders?: ReminderCreateNestedManyWithoutOutreach_messageInput
   }
 
   export type OutreachMessageUncheckedCreateWithoutSent_byInput = {
@@ -103660,6 +103691,7 @@ export namespace Prisma {
     reply_html?: string | null
     inbound_message_id?: string | null
     in_reply_to_message_id?: string | null
+    is_manual_reply?: boolean
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
@@ -103671,6 +103703,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     interactions?: InteractionUncheckedCreateNestedManyWithoutOutreach_messageInput
+    reminders?: ReminderUncheckedCreateNestedManyWithoutOutreach_messageInput
   }
 
   export type OutreachMessageCreateOrConnectWithoutSent_byInput = {
@@ -104056,6 +104089,7 @@ export namespace Prisma {
     reply_html?: StringNullableFilter<"OutreachMessage"> | string | null
     inbound_message_id?: StringNullableFilter<"OutreachMessage"> | string | null
     in_reply_to_message_id?: StringNullableFilter<"OutreachMessage"> | string | null
+    is_manual_reply?: BoolFilter<"OutreachMessage"> | boolean
     email_provider?: EnumExternalIntegrationProviderNullableFilter<"OutreachMessage"> | $Enums.ExternalIntegrationProvider | null
     email_account?: StringNullableFilter<"OutreachMessage"> | string | null
     email_domain_uuid?: StringNullableFilter<"OutreachMessage"> | string | null
@@ -104515,6 +104549,7 @@ export namespace Prisma {
     reply_html?: string | null
     inbound_message_id?: string | null
     in_reply_to_message_id?: string | null
+    is_manual_reply?: boolean
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
@@ -104529,6 +104564,7 @@ export namespace Prisma {
     sequence_enrollment?: SequenceEnrollmentCreateNestedOneWithoutOutreach_messagesInput
     sequence_step?: OutreachSequenceStepCreateNestedOneWithoutOutreach_messagesInput
     campaign_integration?: CampaignIntegrationCreateNestedOneWithoutOutreach_messagesInput
+    reminders?: ReminderCreateNestedManyWithoutOutreach_messageInput
   }
 
   export type OutreachMessageUncheckedCreateWithoutOrganisationInput = {
@@ -104557,6 +104593,7 @@ export namespace Prisma {
     reply_html?: string | null
     inbound_message_id?: string | null
     in_reply_to_message_id?: string | null
+    is_manual_reply?: boolean
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
@@ -104568,6 +104605,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     interactions?: InteractionUncheckedCreateNestedManyWithoutOutreach_messageInput
+    reminders?: ReminderUncheckedCreateNestedManyWithoutOutreach_messageInput
   }
 
   export type OutreachMessageCreateOrConnectWithoutOrganisationInput = {
@@ -104943,7 +104981,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     contact: ContactCreateNestedOneWithoutRemindersInput
-    sequence_enrollment?: SequenceEnrollmentCreateNestedOneWithoutRemindersInput
+    outreach_message?: OutreachMessageCreateNestedOneWithoutRemindersInput
   }
 
   export type ReminderUncheckedCreateWithoutOrganisationInput = {
@@ -104957,7 +104995,7 @@ export namespace Prisma {
     source?: $Enums.ReminderSource
     type?: $Enums.ReminderType
     job_id?: string | null
-    sequence_enrollment_uuid?: string | null
+    outreach_message_uuid?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
     updated_at?: Date | string
@@ -106062,7 +106100,7 @@ export namespace Prisma {
     source?: EnumReminderSourceFilter<"Reminder"> | $Enums.ReminderSource
     type?: EnumReminderTypeFilter<"Reminder"> | $Enums.ReminderType
     job_id?: StringNullableFilter<"Reminder"> | string | null
-    sequence_enrollment_uuid?: StringNullableFilter<"Reminder"> | string | null
+    outreach_message_uuid?: StringNullableFilter<"Reminder"> | string | null
     metadata?: JsonNullableFilter<"Reminder">
     created_at?: DateTimeFilter<"Reminder"> | Date | string
     updated_at?: DateTimeFilter<"Reminder"> | Date | string
@@ -109309,6 +109347,7 @@ export namespace Prisma {
     reply_html?: string | null
     inbound_message_id?: string | null
     in_reply_to_message_id?: string | null
+    is_manual_reply?: boolean
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
@@ -109323,6 +109362,7 @@ export namespace Prisma {
     sequence_enrollment?: SequenceEnrollmentCreateNestedOneWithoutOutreach_messagesInput
     sequence_step?: OutreachSequenceStepCreateNestedOneWithoutOutreach_messagesInput
     campaign_integration?: CampaignIntegrationCreateNestedOneWithoutOutreach_messagesInput
+    reminders?: ReminderCreateNestedManyWithoutOutreach_messageInput
   }
 
   export type OutreachMessageUncheckedCreateWithoutContactInput = {
@@ -109351,6 +109391,7 @@ export namespace Prisma {
     reply_html?: string | null
     inbound_message_id?: string | null
     in_reply_to_message_id?: string | null
+    is_manual_reply?: boolean
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
@@ -109362,6 +109403,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     interactions?: InteractionUncheckedCreateNestedManyWithoutOutreach_messageInput
+    reminders?: ReminderUncheckedCreateNestedManyWithoutOutreach_messageInput
   }
 
   export type OutreachMessageCreateOrConnectWithoutContactInput = {
@@ -109445,7 +109487,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutRemindersInput
-    sequence_enrollment?: SequenceEnrollmentCreateNestedOneWithoutRemindersInput
+    outreach_message?: OutreachMessageCreateNestedOneWithoutRemindersInput
   }
 
   export type ReminderUncheckedCreateWithoutContactInput = {
@@ -109459,7 +109501,7 @@ export namespace Prisma {
     source?: $Enums.ReminderSource
     type?: $Enums.ReminderType
     job_id?: string | null
-    sequence_enrollment_uuid?: string | null
+    outreach_message_uuid?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
     updated_at?: Date | string
@@ -109577,7 +109619,6 @@ export namespace Prisma {
     sequence: OutreachSequenceCreateNestedOneWithoutEnrollmentsInput
     campaign?: MarketingCampaignCreateNestedOneWithoutSequence_enrollmentsInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutSequence_enrollmentInput
-    reminders?: ReminderCreateNestedManyWithoutSequence_enrollmentInput
   }
 
   export type SequenceEnrollmentUncheckedCreateWithoutContactInput = {
@@ -109594,7 +109635,6 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutSequence_enrollmentInput
-    reminders?: ReminderUncheckedCreateNestedManyWithoutSequence_enrollmentInput
   }
 
   export type SequenceEnrollmentCreateOrConnectWithoutContactInput = {
@@ -112173,6 +112213,7 @@ export namespace Prisma {
     reply_html?: string | null
     inbound_message_id?: string | null
     in_reply_to_message_id?: string | null
+    is_manual_reply?: boolean
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
@@ -112187,6 +112228,7 @@ export namespace Prisma {
     sequence_enrollment?: SequenceEnrollmentCreateNestedOneWithoutOutreach_messagesInput
     sequence_step?: OutreachSequenceStepCreateNestedOneWithoutOutreach_messagesInput
     campaign_integration?: CampaignIntegrationCreateNestedOneWithoutOutreach_messagesInput
+    reminders?: ReminderCreateNestedManyWithoutOutreach_messageInput
   }
 
   export type OutreachMessageUncheckedCreateWithoutInteractionsInput = {
@@ -112216,6 +112258,7 @@ export namespace Prisma {
     reply_html?: string | null
     inbound_message_id?: string | null
     in_reply_to_message_id?: string | null
+    is_manual_reply?: boolean
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
@@ -112226,6 +112269,7 @@ export namespace Prisma {
     campaign_integration_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
+    reminders?: ReminderUncheckedCreateNestedManyWithoutOutreach_messageInput
   }
 
   export type OutreachMessageCreateOrConnectWithoutInteractionsInput = {
@@ -112554,6 +112598,7 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -112568,6 +112613,7 @@ export namespace Prisma {
     sequence_enrollment?: SequenceEnrollmentUpdateOneWithoutOutreach_messagesNestedInput
     sequence_step?: OutreachSequenceStepUpdateOneWithoutOutreach_messagesNestedInput
     campaign_integration?: CampaignIntegrationUpdateOneWithoutOutreach_messagesNestedInput
+    reminders?: ReminderUpdateManyWithoutOutreach_messageNestedInput
   }
 
   export type OutreachMessageUncheckedUpdateWithoutInteractionsInput = {
@@ -112597,6 +112643,7 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -112607,6 +112654,7 @@ export namespace Prisma {
     campaign_integration_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    reminders?: ReminderUncheckedUpdateManyWithoutOutreach_messageNestedInput
   }
 
   export type MarketingCampaignUpsertWithoutInteractionsInput = {
@@ -113083,7 +113131,6 @@ export namespace Prisma {
     sequence: OutreachSequenceCreateNestedOneWithoutEnrollmentsInput
     contact: ContactCreateNestedOneWithoutSequence_enrollmentsInput
     campaign?: MarketingCampaignCreateNestedOneWithoutSequence_enrollmentsInput
-    reminders?: ReminderCreateNestedManyWithoutSequence_enrollmentInput
   }
 
   export type SequenceEnrollmentUncheckedCreateWithoutOutreach_messagesInput = {
@@ -113100,7 +113147,6 @@ export namespace Prisma {
     completed_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
-    reminders?: ReminderUncheckedCreateNestedManyWithoutSequence_enrollmentInput
   }
 
   export type SequenceEnrollmentCreateOrConnectWithoutOutreach_messagesInput = {
@@ -113178,6 +113224,49 @@ export namespace Prisma {
   export type CampaignIntegrationCreateOrConnectWithoutOutreach_messagesInput = {
     where: CampaignIntegrationWhereUniqueInput
     create: XOR<CampaignIntegrationCreateWithoutOutreach_messagesInput, CampaignIntegrationUncheckedCreateWithoutOutreach_messagesInput>
+  }
+
+  export type ReminderCreateWithoutOutreach_messageInput = {
+    uuid?: string
+    title?: string | null
+    notes?: string | null
+    remind_at: Date | string
+    status?: $Enums.ReminderStatus
+    source?: $Enums.ReminderSource
+    type?: $Enums.ReminderType
+    job_id?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutRemindersInput
+    contact: ContactCreateNestedOneWithoutRemindersInput
+  }
+
+  export type ReminderUncheckedCreateWithoutOutreach_messageInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    contact_uuid: string
+    title?: string | null
+    notes?: string | null
+    remind_at: Date | string
+    status?: $Enums.ReminderStatus
+    source?: $Enums.ReminderSource
+    type?: $Enums.ReminderType
+    job_id?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type ReminderCreateOrConnectWithoutOutreach_messageInput = {
+    where: ReminderWhereUniqueInput
+    create: XOR<ReminderCreateWithoutOutreach_messageInput, ReminderUncheckedCreateWithoutOutreach_messageInput>
+  }
+
+  export type ReminderCreateManyOutreach_messageInputEnvelope = {
+    data: ReminderCreateManyOutreach_messageInput | ReminderCreateManyOutreach_messageInput[]
+    skipDuplicates?: boolean
   }
 
   export type OrganisationUpsertWithoutOutreach_messagesInput = {
@@ -113566,7 +113655,6 @@ export namespace Prisma {
     sequence?: OutreachSequenceUpdateOneRequiredWithoutEnrollmentsNestedInput
     contact?: ContactUpdateOneRequiredWithoutSequence_enrollmentsNestedInput
     campaign?: MarketingCampaignUpdateOneWithoutSequence_enrollmentsNestedInput
-    reminders?: ReminderUpdateManyWithoutSequence_enrollmentNestedInput
   }
 
   export type SequenceEnrollmentUncheckedUpdateWithoutOutreach_messagesInput = {
@@ -113583,7 +113671,6 @@ export namespace Prisma {
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    reminders?: ReminderUncheckedUpdateManyWithoutSequence_enrollmentNestedInput
   }
 
   export type OutreachSequenceStepUpsertWithoutOutreach_messagesInput = {
@@ -113668,6 +113755,22 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     state?: CampaignIntegrationStateUncheckedUpdateOneWithoutCampaign_integrationNestedInput
+  }
+
+  export type ReminderUpsertWithWhereUniqueWithoutOutreach_messageInput = {
+    where: ReminderWhereUniqueInput
+    update: XOR<ReminderUpdateWithoutOutreach_messageInput, ReminderUncheckedUpdateWithoutOutreach_messageInput>
+    create: XOR<ReminderCreateWithoutOutreach_messageInput, ReminderUncheckedCreateWithoutOutreach_messageInput>
+  }
+
+  export type ReminderUpdateWithWhereUniqueWithoutOutreach_messageInput = {
+    where: ReminderWhereUniqueInput
+    data: XOR<ReminderUpdateWithoutOutreach_messageInput, ReminderUncheckedUpdateWithoutOutreach_messageInput>
+  }
+
+  export type ReminderUpdateManyWithWhereWithoutOutreach_messageInput = {
+    where: ReminderScalarWhereInput
+    data: XOR<ReminderUpdateManyMutationInput, ReminderUncheckedUpdateManyWithoutOutreach_messageInput>
   }
 
   export type OrganisationCreateWithoutOutreach_sequencesInput = {
@@ -113816,7 +113919,6 @@ export namespace Prisma {
     contact: ContactCreateNestedOneWithoutSequence_enrollmentsInput
     campaign?: MarketingCampaignCreateNestedOneWithoutSequence_enrollmentsInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutSequence_enrollmentInput
-    reminders?: ReminderCreateNestedManyWithoutSequence_enrollmentInput
   }
 
   export type SequenceEnrollmentUncheckedCreateWithoutSequenceInput = {
@@ -113833,7 +113935,6 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutSequence_enrollmentInput
-    reminders?: ReminderUncheckedCreateNestedManyWithoutSequence_enrollmentInput
   }
 
   export type SequenceEnrollmentCreateOrConnectWithoutSequenceInput = {
@@ -114197,6 +114298,7 @@ export namespace Prisma {
     reply_html?: string | null
     inbound_message_id?: string | null
     in_reply_to_message_id?: string | null
+    is_manual_reply?: boolean
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
@@ -114211,6 +114313,7 @@ export namespace Prisma {
     interactions?: InteractionCreateNestedManyWithoutOutreach_messageInput
     sequence_enrollment?: SequenceEnrollmentCreateNestedOneWithoutOutreach_messagesInput
     campaign_integration?: CampaignIntegrationCreateNestedOneWithoutOutreach_messagesInput
+    reminders?: ReminderCreateNestedManyWithoutOutreach_messageInput
   }
 
   export type OutreachMessageUncheckedCreateWithoutSequence_stepInput = {
@@ -114240,6 +114343,7 @@ export namespace Prisma {
     reply_html?: string | null
     inbound_message_id?: string | null
     in_reply_to_message_id?: string | null
+    is_manual_reply?: boolean
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
@@ -114250,6 +114354,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     interactions?: InteractionUncheckedCreateNestedManyWithoutOutreach_messageInput
+    reminders?: ReminderUncheckedCreateNestedManyWithoutOutreach_messageInput
   }
 
   export type OutreachMessageCreateOrConnectWithoutSequence_stepInput = {
@@ -114600,6 +114705,7 @@ export namespace Prisma {
     reply_html?: string | null
     inbound_message_id?: string | null
     in_reply_to_message_id?: string | null
+    is_manual_reply?: boolean
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
@@ -114614,6 +114720,7 @@ export namespace Prisma {
     interactions?: InteractionCreateNestedManyWithoutOutreach_messageInput
     sequence_step?: OutreachSequenceStepCreateNestedOneWithoutOutreach_messagesInput
     campaign_integration?: CampaignIntegrationCreateNestedOneWithoutOutreach_messagesInput
+    reminders?: ReminderCreateNestedManyWithoutOutreach_messageInput
   }
 
   export type OutreachMessageUncheckedCreateWithoutSequence_enrollmentInput = {
@@ -114643,6 +114750,7 @@ export namespace Prisma {
     reply_html?: string | null
     inbound_message_id?: string | null
     in_reply_to_message_id?: string | null
+    is_manual_reply?: boolean
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
@@ -114653,6 +114761,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     interactions?: InteractionUncheckedCreateNestedManyWithoutOutreach_messageInput
+    reminders?: ReminderUncheckedCreateNestedManyWithoutOutreach_messageInput
   }
 
   export type OutreachMessageCreateOrConnectWithoutSequence_enrollmentInput = {
@@ -114662,49 +114771,6 @@ export namespace Prisma {
 
   export type OutreachMessageCreateManySequence_enrollmentInputEnvelope = {
     data: OutreachMessageCreateManySequence_enrollmentInput | OutreachMessageCreateManySequence_enrollmentInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type ReminderCreateWithoutSequence_enrollmentInput = {
-    uuid?: string
-    title?: string | null
-    notes?: string | null
-    remind_at: Date | string
-    status?: $Enums.ReminderStatus
-    source?: $Enums.ReminderSource
-    type?: $Enums.ReminderType
-    job_id?: string | null
-    metadata?: NullableJsonNullValueInput | InputJsonValue
-    created_at?: Date | string
-    updated_at?: Date | string
-    organisation: OrganisationCreateNestedOneWithoutRemindersInput
-    contact: ContactCreateNestedOneWithoutRemindersInput
-  }
-
-  export type ReminderUncheckedCreateWithoutSequence_enrollmentInput = {
-    id?: number
-    uuid?: string
-    organisation_uuid: string
-    contact_uuid: string
-    title?: string | null
-    notes?: string | null
-    remind_at: Date | string
-    status?: $Enums.ReminderStatus
-    source?: $Enums.ReminderSource
-    type?: $Enums.ReminderType
-    job_id?: string | null
-    metadata?: NullableJsonNullValueInput | InputJsonValue
-    created_at?: Date | string
-    updated_at?: Date | string
-  }
-
-  export type ReminderCreateOrConnectWithoutSequence_enrollmentInput = {
-    where: ReminderWhereUniqueInput
-    create: XOR<ReminderCreateWithoutSequence_enrollmentInput, ReminderUncheckedCreateWithoutSequence_enrollmentInput>
-  }
-
-  export type ReminderCreateManySequence_enrollmentInputEnvelope = {
-    data: ReminderCreateManySequence_enrollmentInput | ReminderCreateManySequence_enrollmentInput[]
     skipDuplicates?: boolean
   }
 
@@ -114962,22 +115028,6 @@ export namespace Prisma {
   export type OutreachMessageUpdateManyWithWhereWithoutSequence_enrollmentInput = {
     where: OutreachMessageScalarWhereInput
     data: XOR<OutreachMessageUpdateManyMutationInput, OutreachMessageUncheckedUpdateManyWithoutSequence_enrollmentInput>
-  }
-
-  export type ReminderUpsertWithWhereUniqueWithoutSequence_enrollmentInput = {
-    where: ReminderWhereUniqueInput
-    update: XOR<ReminderUpdateWithoutSequence_enrollmentInput, ReminderUncheckedUpdateWithoutSequence_enrollmentInput>
-    create: XOR<ReminderCreateWithoutSequence_enrollmentInput, ReminderUncheckedCreateWithoutSequence_enrollmentInput>
-  }
-
-  export type ReminderUpdateWithWhereUniqueWithoutSequence_enrollmentInput = {
-    where: ReminderWhereUniqueInput
-    data: XOR<ReminderUpdateWithoutSequence_enrollmentInput, ReminderUncheckedUpdateWithoutSequence_enrollmentInput>
-  }
-
-  export type ReminderUpdateManyWithWhereWithoutSequence_enrollmentInput = {
-    where: ReminderScalarWhereInput
-    data: XOR<ReminderUpdateManyMutationInput, ReminderUncheckedUpdateManyWithoutSequence_enrollmentInput>
   }
 
   export type FilterCreateWithoutJobsInput = {
@@ -116305,6 +116355,7 @@ export namespace Prisma {
     reply_html?: string | null
     inbound_message_id?: string | null
     in_reply_to_message_id?: string | null
+    is_manual_reply?: boolean
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
@@ -116319,6 +116370,7 @@ export namespace Prisma {
     sequence_enrollment?: SequenceEnrollmentCreateNestedOneWithoutOutreach_messagesInput
     sequence_step?: OutreachSequenceStepCreateNestedOneWithoutOutreach_messagesInput
     campaign_integration?: CampaignIntegrationCreateNestedOneWithoutOutreach_messagesInput
+    reminders?: ReminderCreateNestedManyWithoutOutreach_messageInput
   }
 
   export type OutreachMessageUncheckedCreateWithoutCampaignInput = {
@@ -116347,6 +116399,7 @@ export namespace Prisma {
     reply_html?: string | null
     inbound_message_id?: string | null
     in_reply_to_message_id?: string | null
+    is_manual_reply?: boolean
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
@@ -116358,6 +116411,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     interactions?: InteractionUncheckedCreateNestedManyWithoutOutreach_messageInput
+    reminders?: ReminderUncheckedCreateNestedManyWithoutOutreach_messageInput
   }
 
   export type OutreachMessageCreateOrConnectWithoutCampaignInput = {
@@ -116420,7 +116474,6 @@ export namespace Prisma {
     sequence: OutreachSequenceCreateNestedOneWithoutEnrollmentsInput
     contact: ContactCreateNestedOneWithoutSequence_enrollmentsInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutSequence_enrollmentInput
-    reminders?: ReminderCreateNestedManyWithoutSequence_enrollmentInput
   }
 
   export type SequenceEnrollmentUncheckedCreateWithoutCampaignInput = {
@@ -116437,7 +116490,6 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutSequence_enrollmentInput
-    reminders?: ReminderUncheckedCreateNestedManyWithoutSequence_enrollmentInput
   }
 
   export type SequenceEnrollmentCreateOrConnectWithoutCampaignInput = {
@@ -118637,42 +118689,90 @@ export namespace Prisma {
     create: XOR<ContactCreateWithoutRemindersInput, ContactUncheckedCreateWithoutRemindersInput>
   }
 
-  export type SequenceEnrollmentCreateWithoutRemindersInput = {
+  export type OutreachMessageCreateWithoutRemindersInput = {
     uuid?: string
-    status?: $Enums.SequenceEnrollmentStatus
-    enrolled_at?: Date | string
-    current_step_order_index?: number
-    first_step_sent_at?: Date | string | null
-    cancelled_at?: Date | string | null
-    completed_at?: Date | string | null
+    channel: $Enums.Channel
+    direction?: $Enums.MsgDirection
+    subject?: string | null
+    content: string
+    status?: $Enums.MsgStatus
+    provider_message_id?: string | null
+    idempotency_key?: string | null
+    scheduled_at?: Date | string | null
+    sent_at?: Date | string | null
+    delivered_at?: Date | string | null
+    opened_at?: Date | string | null
+    clicked_at?: Date | string | null
+    replied_at?: Date | string | null
+    bounced_at?: Date | string | null
+    failed_at?: Date | string | null
+    reply_subject?: string | null
+    reply_text?: string | null
+    reply_html?: string | null
+    inbound_message_id?: string | null
+    in_reply_to_message_id?: string | null
+    is_manual_reply?: boolean
+    email_provider?: $Enums.ExternalIntegrationProvider | null
+    email_account?: string | null
+    email_domain_uuid?: string | null
+    sms_provider?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
     updated_at?: Date | string
-    sequence: OutreachSequenceCreateNestedOneWithoutEnrollmentsInput
-    contact: ContactCreateNestedOneWithoutSequence_enrollmentsInput
-    campaign?: MarketingCampaignCreateNestedOneWithoutSequence_enrollmentsInput
-    outreach_messages?: OutreachMessageCreateNestedManyWithoutSequence_enrollmentInput
+    organisation: OrganisationCreateNestedOneWithoutOutreach_messagesInput
+    contact: ContactCreateNestedOneWithoutOutreach_messagesInput
+    campaign?: MarketingCampaignCreateNestedOneWithoutOutreach_messagesInput
+    sent_by?: UserCreateNestedOneWithoutOutreach_messages_sentInput
+    interactions?: InteractionCreateNestedManyWithoutOutreach_messageInput
+    sequence_enrollment?: SequenceEnrollmentCreateNestedOneWithoutOutreach_messagesInput
+    sequence_step?: OutreachSequenceStepCreateNestedOneWithoutOutreach_messagesInput
+    campaign_integration?: CampaignIntegrationCreateNestedOneWithoutOutreach_messagesInput
   }
 
-  export type SequenceEnrollmentUncheckedCreateWithoutRemindersInput = {
+  export type OutreachMessageUncheckedCreateWithoutRemindersInput = {
     id?: number
     uuid?: string
-    sequence_uuid: string
+    organisation_uuid: string
     contact_uuid: string
     campaign_uuid?: string | null
-    status?: $Enums.SequenceEnrollmentStatus
-    enrolled_at?: Date | string
-    current_step_order_index?: number
-    first_step_sent_at?: Date | string | null
-    cancelled_at?: Date | string | null
-    completed_at?: Date | string | null
+    sent_by_user_uuid?: string | null
+    channel: $Enums.Channel
+    direction?: $Enums.MsgDirection
+    subject?: string | null
+    content: string
+    status?: $Enums.MsgStatus
+    provider_message_id?: string | null
+    idempotency_key?: string | null
+    scheduled_at?: Date | string | null
+    sent_at?: Date | string | null
+    delivered_at?: Date | string | null
+    opened_at?: Date | string | null
+    clicked_at?: Date | string | null
+    replied_at?: Date | string | null
+    bounced_at?: Date | string | null
+    failed_at?: Date | string | null
+    reply_subject?: string | null
+    reply_text?: string | null
+    reply_html?: string | null
+    inbound_message_id?: string | null
+    in_reply_to_message_id?: string | null
+    is_manual_reply?: boolean
+    email_provider?: $Enums.ExternalIntegrationProvider | null
+    email_account?: string | null
+    email_domain_uuid?: string | null
+    sms_provider?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    sequence_enrollment_uuid?: string | null
+    sequence_step_uuid?: string | null
+    campaign_integration_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
-    outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutSequence_enrollmentInput
+    interactions?: InteractionUncheckedCreateNestedManyWithoutOutreach_messageInput
   }
 
-  export type SequenceEnrollmentCreateOrConnectWithoutRemindersInput = {
-    where: SequenceEnrollmentWhereUniqueInput
-    create: XOR<SequenceEnrollmentCreateWithoutRemindersInput, SequenceEnrollmentUncheckedCreateWithoutRemindersInput>
+  export type OutreachMessageCreateOrConnectWithoutRemindersInput = {
+    where: OutreachMessageWhereUniqueInput
+    create: XOR<OutreachMessageCreateWithoutRemindersInput, OutreachMessageUncheckedCreateWithoutRemindersInput>
   }
 
   export type OrganisationUpsertWithoutRemindersInput = {
@@ -118867,48 +118967,96 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutContactNestedInput
   }
 
-  export type SequenceEnrollmentUpsertWithoutRemindersInput = {
-    update: XOR<SequenceEnrollmentUpdateWithoutRemindersInput, SequenceEnrollmentUncheckedUpdateWithoutRemindersInput>
-    create: XOR<SequenceEnrollmentCreateWithoutRemindersInput, SequenceEnrollmentUncheckedCreateWithoutRemindersInput>
-    where?: SequenceEnrollmentWhereInput
+  export type OutreachMessageUpsertWithoutRemindersInput = {
+    update: XOR<OutreachMessageUpdateWithoutRemindersInput, OutreachMessageUncheckedUpdateWithoutRemindersInput>
+    create: XOR<OutreachMessageCreateWithoutRemindersInput, OutreachMessageUncheckedCreateWithoutRemindersInput>
+    where?: OutreachMessageWhereInput
   }
 
-  export type SequenceEnrollmentUpdateToOneWithWhereWithoutRemindersInput = {
-    where?: SequenceEnrollmentWhereInput
-    data: XOR<SequenceEnrollmentUpdateWithoutRemindersInput, SequenceEnrollmentUncheckedUpdateWithoutRemindersInput>
+  export type OutreachMessageUpdateToOneWithWhereWithoutRemindersInput = {
+    where?: OutreachMessageWhereInput
+    data: XOR<OutreachMessageUpdateWithoutRemindersInput, OutreachMessageUncheckedUpdateWithoutRemindersInput>
   }
 
-  export type SequenceEnrollmentUpdateWithoutRemindersInput = {
+  export type OutreachMessageUpdateWithoutRemindersInput = {
     uuid?: StringFieldUpdateOperationsInput | string
-    status?: EnumSequenceEnrollmentStatusFieldUpdateOperationsInput | $Enums.SequenceEnrollmentStatus
-    enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    current_step_order_index?: IntFieldUpdateOperationsInput | number
-    first_step_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    channel?: EnumChannelFieldUpdateOperationsInput | $Enums.Channel
+    direction?: EnumMsgDirectionFieldUpdateOperationsInput | $Enums.MsgDirection
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    content?: StringFieldUpdateOperationsInput | string
+    status?: EnumMsgStatusFieldUpdateOperationsInput | $Enums.MsgStatus
+    provider_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    idempotency_key?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    delivered_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    opened_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    clicked_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    replied_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reply_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_text?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_html?: NullableStringFieldUpdateOperationsInput | string | null
+    inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
+    email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
+    email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    sequence?: OutreachSequenceUpdateOneRequiredWithoutEnrollmentsNestedInput
-    contact?: ContactUpdateOneRequiredWithoutSequence_enrollmentsNestedInput
-    campaign?: MarketingCampaignUpdateOneWithoutSequence_enrollmentsNestedInput
-    outreach_messages?: OutreachMessageUpdateManyWithoutSequence_enrollmentNestedInput
+    organisation?: OrganisationUpdateOneRequiredWithoutOutreach_messagesNestedInput
+    contact?: ContactUpdateOneRequiredWithoutOutreach_messagesNestedInput
+    campaign?: MarketingCampaignUpdateOneWithoutOutreach_messagesNestedInput
+    sent_by?: UserUpdateOneWithoutOutreach_messages_sentNestedInput
+    interactions?: InteractionUpdateManyWithoutOutreach_messageNestedInput
+    sequence_enrollment?: SequenceEnrollmentUpdateOneWithoutOutreach_messagesNestedInput
+    sequence_step?: OutreachSequenceStepUpdateOneWithoutOutreach_messagesNestedInput
+    campaign_integration?: CampaignIntegrationUpdateOneWithoutOutreach_messagesNestedInput
   }
 
-  export type SequenceEnrollmentUncheckedUpdateWithoutRemindersInput = {
+  export type OutreachMessageUncheckedUpdateWithoutRemindersInput = {
     id?: IntFieldUpdateOperationsInput | number
     uuid?: StringFieldUpdateOperationsInput | string
-    sequence_uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
     contact_uuid?: StringFieldUpdateOperationsInput | string
     campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumSequenceEnrollmentStatusFieldUpdateOperationsInput | $Enums.SequenceEnrollmentStatus
-    enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    current_step_order_index?: IntFieldUpdateOperationsInput | number
-    first_step_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sent_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    channel?: EnumChannelFieldUpdateOperationsInput | $Enums.Channel
+    direction?: EnumMsgDirectionFieldUpdateOperationsInput | $Enums.MsgDirection
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    content?: StringFieldUpdateOperationsInput | string
+    status?: EnumMsgStatusFieldUpdateOperationsInput | $Enums.MsgStatus
+    provider_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    idempotency_key?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    delivered_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    opened_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    clicked_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    replied_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reply_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_text?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_html?: NullableStringFieldUpdateOperationsInput | string | null
+    inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
+    email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
+    email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    sequence_step_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    campaign_integration_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutSequence_enrollmentNestedInput
+    interactions?: InteractionUncheckedUpdateManyWithoutOutreach_messageNestedInput
   }
 
   export type OrganisationCreateWithoutFormsInput = {
@@ -121842,6 +121990,7 @@ export namespace Prisma {
     reply_html?: string | null
     inbound_message_id?: string | null
     in_reply_to_message_id?: string | null
+    is_manual_reply?: boolean
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
@@ -121856,6 +122005,7 @@ export namespace Prisma {
     interactions?: InteractionCreateNestedManyWithoutOutreach_messageInput
     sequence_enrollment?: SequenceEnrollmentCreateNestedOneWithoutOutreach_messagesInput
     sequence_step?: OutreachSequenceStepCreateNestedOneWithoutOutreach_messagesInput
+    reminders?: ReminderCreateNestedManyWithoutOutreach_messageInput
   }
 
   export type OutreachMessageUncheckedCreateWithoutCampaign_integrationInput = {
@@ -121885,6 +122035,7 @@ export namespace Prisma {
     reply_html?: string | null
     inbound_message_id?: string | null
     in_reply_to_message_id?: string | null
+    is_manual_reply?: boolean
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
@@ -121895,6 +122046,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     interactions?: InteractionUncheckedCreateNestedManyWithoutOutreach_messageInput
+    reminders?: ReminderUncheckedCreateNestedManyWithoutOutreach_messageInput
   }
 
   export type OutreachMessageCreateOrConnectWithoutCampaign_integrationInput = {
@@ -123185,6 +123337,7 @@ export namespace Prisma {
     reply_html?: string | null
     inbound_message_id?: string | null
     in_reply_to_message_id?: string | null
+    is_manual_reply?: boolean
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
@@ -123403,6 +123556,7 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -123417,6 +123571,7 @@ export namespace Prisma {
     sequence_enrollment?: SequenceEnrollmentUpdateOneWithoutOutreach_messagesNestedInput
     sequence_step?: OutreachSequenceStepUpdateOneWithoutOutreach_messagesNestedInput
     campaign_integration?: CampaignIntegrationUpdateOneWithoutOutreach_messagesNestedInput
+    reminders?: ReminderUpdateManyWithoutOutreach_messageNestedInput
   }
 
   export type OutreachMessageUncheckedUpdateWithoutSent_byInput = {
@@ -123445,6 +123600,7 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -123456,6 +123612,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     interactions?: InteractionUncheckedUpdateManyWithoutOutreach_messageNestedInput
+    reminders?: ReminderUncheckedUpdateManyWithoutOutreach_messageNestedInput
   }
 
   export type OutreachMessageUncheckedUpdateManyWithoutSent_byInput = {
@@ -123484,6 +123641,7 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -123858,6 +124016,7 @@ export namespace Prisma {
     reply_html?: string | null
     inbound_message_id?: string | null
     in_reply_to_message_id?: string | null
+    is_manual_reply?: boolean
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
@@ -124011,7 +124170,7 @@ export namespace Prisma {
     source?: $Enums.ReminderSource
     type?: $Enums.ReminderType
     job_id?: string | null
-    sequence_enrollment_uuid?: string | null
+    outreach_message_uuid?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
     updated_at?: Date | string
@@ -124535,6 +124694,7 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -124549,6 +124709,7 @@ export namespace Prisma {
     sequence_enrollment?: SequenceEnrollmentUpdateOneWithoutOutreach_messagesNestedInput
     sequence_step?: OutreachSequenceStepUpdateOneWithoutOutreach_messagesNestedInput
     campaign_integration?: CampaignIntegrationUpdateOneWithoutOutreach_messagesNestedInput
+    reminders?: ReminderUpdateManyWithoutOutreach_messageNestedInput
   }
 
   export type OutreachMessageUncheckedUpdateWithoutOrganisationInput = {
@@ -124577,6 +124738,7 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -124588,6 +124750,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     interactions?: InteractionUncheckedUpdateManyWithoutOutreach_messageNestedInput
+    reminders?: ReminderUncheckedUpdateManyWithoutOutreach_messageNestedInput
   }
 
   export type OutreachMessageUncheckedUpdateManyWithoutOrganisationInput = {
@@ -124616,6 +124779,7 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -125051,7 +125215,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     contact?: ContactUpdateOneRequiredWithoutRemindersNestedInput
-    sequence_enrollment?: SequenceEnrollmentUpdateOneWithoutRemindersNestedInput
+    outreach_message?: OutreachMessageUpdateOneWithoutRemindersNestedInput
   }
 
   export type ReminderUncheckedUpdateWithoutOrganisationInput = {
@@ -125065,7 +125229,7 @@ export namespace Prisma {
     source?: EnumReminderSourceFieldUpdateOperationsInput | $Enums.ReminderSource
     type?: EnumReminderTypeFieldUpdateOperationsInput | $Enums.ReminderType
     job_id?: NullableStringFieldUpdateOperationsInput | string | null
-    sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    outreach_message_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -125082,7 +125246,7 @@ export namespace Prisma {
     source?: EnumReminderSourceFieldUpdateOperationsInput | $Enums.ReminderSource
     type?: EnumReminderTypeFieldUpdateOperationsInput | $Enums.ReminderType
     job_id?: NullableStringFieldUpdateOperationsInput | string | null
-    sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    outreach_message_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -126527,6 +126691,7 @@ export namespace Prisma {
     reply_html?: string | null
     inbound_message_id?: string | null
     in_reply_to_message_id?: string | null
+    is_manual_reply?: boolean
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
@@ -126570,7 +126735,7 @@ export namespace Prisma {
     source?: $Enums.ReminderSource
     type?: $Enums.ReminderType
     job_id?: string | null
-    sequence_enrollment_uuid?: string | null
+    outreach_message_uuid?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
     updated_at?: Date | string
@@ -126742,6 +126907,7 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -126756,6 +126922,7 @@ export namespace Prisma {
     sequence_enrollment?: SequenceEnrollmentUpdateOneWithoutOutreach_messagesNestedInput
     sequence_step?: OutreachSequenceStepUpdateOneWithoutOutreach_messagesNestedInput
     campaign_integration?: CampaignIntegrationUpdateOneWithoutOutreach_messagesNestedInput
+    reminders?: ReminderUpdateManyWithoutOutreach_messageNestedInput
   }
 
   export type OutreachMessageUncheckedUpdateWithoutContactInput = {
@@ -126784,6 +126951,7 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -126795,6 +126963,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     interactions?: InteractionUncheckedUpdateManyWithoutOutreach_messageNestedInput
+    reminders?: ReminderUncheckedUpdateManyWithoutOutreach_messageNestedInput
   }
 
   export type OutreachMessageUncheckedUpdateManyWithoutContactInput = {
@@ -126823,6 +126992,7 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -126906,7 +127076,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutRemindersNestedInput
-    sequence_enrollment?: SequenceEnrollmentUpdateOneWithoutRemindersNestedInput
+    outreach_message?: OutreachMessageUpdateOneWithoutRemindersNestedInput
   }
 
   export type ReminderUncheckedUpdateWithoutContactInput = {
@@ -126920,7 +127090,7 @@ export namespace Prisma {
     source?: EnumReminderSourceFieldUpdateOperationsInput | $Enums.ReminderSource
     type?: EnumReminderTypeFieldUpdateOperationsInput | $Enums.ReminderType
     job_id?: NullableStringFieldUpdateOperationsInput | string | null
-    sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    outreach_message_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -126937,7 +127107,7 @@ export namespace Prisma {
     source?: EnumReminderSourceFieldUpdateOperationsInput | $Enums.ReminderSource
     type?: EnumReminderTypeFieldUpdateOperationsInput | $Enums.ReminderType
     job_id?: NullableStringFieldUpdateOperationsInput | string | null
-    sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    outreach_message_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -127045,7 +127215,6 @@ export namespace Prisma {
     sequence?: OutreachSequenceUpdateOneRequiredWithoutEnrollmentsNestedInput
     campaign?: MarketingCampaignUpdateOneWithoutSequence_enrollmentsNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutSequence_enrollmentNestedInput
-    reminders?: ReminderUpdateManyWithoutSequence_enrollmentNestedInput
   }
 
   export type SequenceEnrollmentUncheckedUpdateWithoutContactInput = {
@@ -127062,7 +127231,6 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutSequence_enrollmentNestedInput
-    reminders?: ReminderUncheckedUpdateManyWithoutSequence_enrollmentNestedInput
   }
 
   export type SequenceEnrollmentUncheckedUpdateManyWithoutContactInput = {
@@ -127322,6 +127490,23 @@ export namespace Prisma {
     updated_at?: Date | string
   }
 
+  export type ReminderCreateManyOutreach_messageInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    contact_uuid: string
+    title?: string | null
+    notes?: string | null
+    remind_at: Date | string
+    status?: $Enums.ReminderStatus
+    source?: $Enums.ReminderSource
+    type?: $Enums.ReminderType
+    job_id?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
   export type InteractionUpdateWithoutOutreach_messageInput = {
     uuid?: StringFieldUpdateOperationsInput | string
     type?: EnumInteractionTypeFieldUpdateOperationsInput | $Enums.InteractionType
@@ -127359,6 +127544,56 @@ export namespace Prisma {
     content?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status_change?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReminderUpdateWithoutOutreach_messageInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    remind_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumReminderStatusFieldUpdateOperationsInput | $Enums.ReminderStatus
+    source?: EnumReminderSourceFieldUpdateOperationsInput | $Enums.ReminderSource
+    type?: EnumReminderTypeFieldUpdateOperationsInput | $Enums.ReminderType
+    job_id?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutRemindersNestedInput
+    contact?: ContactUpdateOneRequiredWithoutRemindersNestedInput
+  }
+
+  export type ReminderUncheckedUpdateWithoutOutreach_messageInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    contact_uuid?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    remind_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumReminderStatusFieldUpdateOperationsInput | $Enums.ReminderStatus
+    source?: EnumReminderSourceFieldUpdateOperationsInput | $Enums.ReminderSource
+    type?: EnumReminderTypeFieldUpdateOperationsInput | $Enums.ReminderType
+    job_id?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReminderUncheckedUpdateManyWithoutOutreach_messageInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    contact_uuid?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    remind_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumReminderStatusFieldUpdateOperationsInput | $Enums.ReminderStatus
+    source?: EnumReminderSourceFieldUpdateOperationsInput | $Enums.ReminderSource
+    type?: EnumReminderTypeFieldUpdateOperationsInput | $Enums.ReminderType
+    job_id?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -127505,7 +127740,6 @@ export namespace Prisma {
     contact?: ContactUpdateOneRequiredWithoutSequence_enrollmentsNestedInput
     campaign?: MarketingCampaignUpdateOneWithoutSequence_enrollmentsNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutSequence_enrollmentNestedInput
-    reminders?: ReminderUpdateManyWithoutSequence_enrollmentNestedInput
   }
 
   export type SequenceEnrollmentUncheckedUpdateWithoutSequenceInput = {
@@ -127522,7 +127756,6 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutSequence_enrollmentNestedInput
-    reminders?: ReminderUncheckedUpdateManyWithoutSequence_enrollmentNestedInput
   }
 
   export type SequenceEnrollmentUncheckedUpdateManyWithoutSequenceInput = {
@@ -127699,6 +127932,7 @@ export namespace Prisma {
     reply_html?: string | null
     inbound_message_id?: string | null
     in_reply_to_message_id?: string | null
+    is_manual_reply?: boolean
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
@@ -127732,6 +127966,7 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -127746,6 +127981,7 @@ export namespace Prisma {
     interactions?: InteractionUpdateManyWithoutOutreach_messageNestedInput
     sequence_enrollment?: SequenceEnrollmentUpdateOneWithoutOutreach_messagesNestedInput
     campaign_integration?: CampaignIntegrationUpdateOneWithoutOutreach_messagesNestedInput
+    reminders?: ReminderUpdateManyWithoutOutreach_messageNestedInput
   }
 
   export type OutreachMessageUncheckedUpdateWithoutSequence_stepInput = {
@@ -127775,6 +128011,7 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -127785,6 +128022,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     interactions?: InteractionUncheckedUpdateManyWithoutOutreach_messageNestedInput
+    reminders?: ReminderUncheckedUpdateManyWithoutOutreach_messageNestedInput
   }
 
   export type OutreachMessageUncheckedUpdateManyWithoutSequence_stepInput = {
@@ -127814,6 +128052,7 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -127852,6 +128091,7 @@ export namespace Prisma {
     reply_html?: string | null
     inbound_message_id?: string | null
     in_reply_to_message_id?: string | null
+    is_manual_reply?: boolean
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
@@ -127859,23 +128099,6 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_step_uuid?: string | null
     campaign_integration_uuid?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-  }
-
-  export type ReminderCreateManySequence_enrollmentInput = {
-    id?: number
-    uuid?: string
-    organisation_uuid: string
-    contact_uuid: string
-    title?: string | null
-    notes?: string | null
-    remind_at: Date | string
-    status?: $Enums.ReminderStatus
-    source?: $Enums.ReminderSource
-    type?: $Enums.ReminderType
-    job_id?: string | null
-    metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -127902,6 +128125,7 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -127916,6 +128140,7 @@ export namespace Prisma {
     interactions?: InteractionUpdateManyWithoutOutreach_messageNestedInput
     sequence_step?: OutreachSequenceStepUpdateOneWithoutOutreach_messagesNestedInput
     campaign_integration?: CampaignIntegrationUpdateOneWithoutOutreach_messagesNestedInput
+    reminders?: ReminderUpdateManyWithoutOutreach_messageNestedInput
   }
 
   export type OutreachMessageUncheckedUpdateWithoutSequence_enrollmentInput = {
@@ -127945,6 +128170,7 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -127955,6 +128181,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     interactions?: InteractionUncheckedUpdateManyWithoutOutreach_messageNestedInput
+    reminders?: ReminderUncheckedUpdateManyWithoutOutreach_messageNestedInput
   }
 
   export type OutreachMessageUncheckedUpdateManyWithoutSequence_enrollmentInput = {
@@ -127984,6 +128211,7 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -127991,56 +128219,6 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_step_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     campaign_integration_uuid?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ReminderUpdateWithoutSequence_enrollmentInput = {
-    uuid?: StringFieldUpdateOperationsInput | string
-    title?: NullableStringFieldUpdateOperationsInput | string | null
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
-    remind_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumReminderStatusFieldUpdateOperationsInput | $Enums.ReminderStatus
-    source?: EnumReminderSourceFieldUpdateOperationsInput | $Enums.ReminderSource
-    type?: EnumReminderTypeFieldUpdateOperationsInput | $Enums.ReminderType
-    job_id?: NullableStringFieldUpdateOperationsInput | string | null
-    metadata?: NullableJsonNullValueInput | InputJsonValue
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    organisation?: OrganisationUpdateOneRequiredWithoutRemindersNestedInput
-    contact?: ContactUpdateOneRequiredWithoutRemindersNestedInput
-  }
-
-  export type ReminderUncheckedUpdateWithoutSequence_enrollmentInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    uuid?: StringFieldUpdateOperationsInput | string
-    organisation_uuid?: StringFieldUpdateOperationsInput | string
-    contact_uuid?: StringFieldUpdateOperationsInput | string
-    title?: NullableStringFieldUpdateOperationsInput | string | null
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
-    remind_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumReminderStatusFieldUpdateOperationsInput | $Enums.ReminderStatus
-    source?: EnumReminderSourceFieldUpdateOperationsInput | $Enums.ReminderSource
-    type?: EnumReminderTypeFieldUpdateOperationsInput | $Enums.ReminderType
-    job_id?: NullableStringFieldUpdateOperationsInput | string | null
-    metadata?: NullableJsonNullValueInput | InputJsonValue
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ReminderUncheckedUpdateManyWithoutSequence_enrollmentInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    uuid?: StringFieldUpdateOperationsInput | string
-    organisation_uuid?: StringFieldUpdateOperationsInput | string
-    contact_uuid?: StringFieldUpdateOperationsInput | string
-    title?: NullableStringFieldUpdateOperationsInput | string | null
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
-    remind_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumReminderStatusFieldUpdateOperationsInput | $Enums.ReminderStatus
-    source?: EnumReminderSourceFieldUpdateOperationsInput | $Enums.ReminderSource
-    type?: EnumReminderTypeFieldUpdateOperationsInput | $Enums.ReminderType
-    job_id?: NullableStringFieldUpdateOperationsInput | string | null
-    metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -128330,6 +128508,7 @@ export namespace Prisma {
     reply_html?: string | null
     inbound_message_id?: string | null
     in_reply_to_message_id?: string | null
+    is_manual_reply?: boolean
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
@@ -128442,6 +128621,7 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -128456,6 +128636,7 @@ export namespace Prisma {
     sequence_enrollment?: SequenceEnrollmentUpdateOneWithoutOutreach_messagesNestedInput
     sequence_step?: OutreachSequenceStepUpdateOneWithoutOutreach_messagesNestedInput
     campaign_integration?: CampaignIntegrationUpdateOneWithoutOutreach_messagesNestedInput
+    reminders?: ReminderUpdateManyWithoutOutreach_messageNestedInput
   }
 
   export type OutreachMessageUncheckedUpdateWithoutCampaignInput = {
@@ -128484,6 +128665,7 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -128495,6 +128677,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     interactions?: InteractionUncheckedUpdateManyWithoutOutreach_messageNestedInput
+    reminders?: ReminderUncheckedUpdateManyWithoutOutreach_messageNestedInput
   }
 
   export type OutreachMessageUncheckedUpdateManyWithoutCampaignInput = {
@@ -128523,6 +128706,7 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -128589,7 +128773,6 @@ export namespace Prisma {
     sequence?: OutreachSequenceUpdateOneRequiredWithoutEnrollmentsNestedInput
     contact?: ContactUpdateOneRequiredWithoutSequence_enrollmentsNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutSequence_enrollmentNestedInput
-    reminders?: ReminderUpdateManyWithoutSequence_enrollmentNestedInput
   }
 
   export type SequenceEnrollmentUncheckedUpdateWithoutCampaignInput = {
@@ -128606,7 +128789,6 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutSequence_enrollmentNestedInput
-    reminders?: ReminderUncheckedUpdateManyWithoutSequence_enrollmentNestedInput
   }
 
   export type SequenceEnrollmentUncheckedUpdateManyWithoutCampaignInput = {
@@ -129294,6 +129476,7 @@ export namespace Prisma {
     reply_html?: string | null
     inbound_message_id?: string | null
     in_reply_to_message_id?: string | null
+    is_manual_reply?: boolean
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
@@ -129327,6 +129510,7 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -129341,6 +129525,7 @@ export namespace Prisma {
     interactions?: InteractionUpdateManyWithoutOutreach_messageNestedInput
     sequence_enrollment?: SequenceEnrollmentUpdateOneWithoutOutreach_messagesNestedInput
     sequence_step?: OutreachSequenceStepUpdateOneWithoutOutreach_messagesNestedInput
+    reminders?: ReminderUpdateManyWithoutOutreach_messageNestedInput
   }
 
   export type OutreachMessageUncheckedUpdateWithoutCampaign_integrationInput = {
@@ -129370,6 +129555,7 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -129380,6 +129566,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     interactions?: InteractionUncheckedUpdateManyWithoutOutreach_messageNestedInput
+    reminders?: ReminderUncheckedUpdateManyWithoutOutreach_messageNestedInput
   }
 
   export type OutreachMessageUncheckedUpdateManyWithoutCampaign_integrationInput = {
@@ -129409,6 +129596,7 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null

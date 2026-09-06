@@ -34,7 +34,7 @@ export class RemindersService {
         opts?: {
             source?: ReminderSource;
             type?: ReminderType;
-            sequence_enrollment_uuid?: string;
+            outreach_message_uuid?: string;
         },
     ) {
         const contact = await this.prisma.contact.findFirst({
@@ -57,7 +57,7 @@ export class RemindersService {
                 status: dto.status ?? ReminderStatus.PENDING,
                 source: opts?.source ?? ReminderSource.MANUAL,
                 type: opts?.type ?? ReminderType.GENERAL,
-                sequence_enrollment_uuid: opts?.sequence_enrollment_uuid,
+                outreach_message_uuid: opts?.outreach_message_uuid,
             },
             include: { contact: { select: CONTACT_SELECT } },
         });
@@ -254,17 +254,15 @@ export class RemindersService {
     }
 
     /**
-     * Cancels the pending FOLLOW_UP reminder (if any) tracking "did they go quiet
-     * after we replied" for this thread. Called when a new reply arrives.
+     * Cancels the contact's pending FOLLOW_UP reminder (if any) - "did they go quiet
+     * after we last emailed them." Called whenever a reply arrives from that contact,
+     * regardless of which specific message/thread it landed on.
      */
-    async cancelPendingFollowUp(
-        organisation_uuid: string,
-        sequence_enrollment_uuid: string,
-    ): Promise<boolean> {
+    async cancelPendingFollowUp(organisation_uuid: string, contact_uuid: string): Promise<boolean> {
         const existing = await this.prisma.reminder.findFirst({
             where: {
                 organisation_uuid,
-                sequence_enrollment_uuid,
+                contact_uuid,
                 type: ReminderType.FOLLOW_UP,
                 status: ReminderStatus.PENDING,
             },
@@ -278,26 +276,31 @@ export class RemindersService {
     }
 
     /**
-     * Reschedules the thread's pending FOLLOW_UP reminder if one exists, otherwise
-     * creates one. Called after a manual reply is sent, so there's always exactly one
-     * "check back if they're still quiet" reminder per thread at a time.
+     * Reschedules the contact's pending FOLLOW_UP reminder if one exists, otherwise
+     * creates one - so there's always at most one "check back if they're still quiet"
+     * reminder per contact. Called after any manual/reply email we send them (not
+     * automated sequence steps, which own their own advancement logic).
      */
     async upsertFollowUp(
         organisation_uuid: string,
         contact_uuid: string,
-        sequence_enrollment_uuid: string,
+        outreach_message_uuid: string,
         remind_at: Date,
     ) {
         const existing = await this.prisma.reminder.findFirst({
             where: {
                 organisation_uuid,
-                sequence_enrollment_uuid,
+                contact_uuid,
                 type: ReminderType.FOLLOW_UP,
                 status: ReminderStatus.PENDING,
             },
         });
 
         if (existing) {
+            await this.prisma.reminder.update({
+                where: { uuid: existing.uuid },
+                data: { outreach_message_uuid },
+            });
             return this.update(organisation_uuid, existing.uuid, {
                 remind_at: remind_at.toISOString(),
             });
@@ -310,7 +313,7 @@ export class RemindersService {
                 title: 'Follow up: no reply yet',
                 remind_at: remind_at.toISOString(),
             },
-            { source: ReminderSource.SYSTEM, type: ReminderType.FOLLOW_UP, sequence_enrollment_uuid },
+            { source: ReminderSource.SYSTEM, type: ReminderType.FOLLOW_UP, outreach_message_uuid },
         );
     }
 

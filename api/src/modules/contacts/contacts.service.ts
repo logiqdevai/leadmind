@@ -1086,10 +1086,11 @@ export class ContactsService {
     }
 
     /**
-     * Sends a freeform reply inside an existing sequence conversation thread. Scoped to
-     * the enrollment behind `outreach_message_uuid` (not "any reply to this contact")
-     * so a contact with multiple concurrent enrollments doesn't have their threads mixed
-     * up — mirrors how reply-triggered sequence cancellation is scoped in webhook ingest.
+     * Sends a freeform reply to a contact who has already replied to `outreach_message_uuid`
+     * (threaded onto that conversation via In-Reply-To). Marked `is_manual_reply` so
+     * OutreachSendWorker starts the "are they still quiet" follow-up clock on send -
+     * deliberately narrower than "any manual email," which would also catch one-off
+     * cold sends that were never part of a back-and-forth.
      */
     async replyToContact(
         organisation_uuid: string,
@@ -1108,8 +1109,8 @@ export class ContactsService {
         if (!sourceMessage) {
             throw new NotFoundException(`Outreach message ${dto.outreach_message_uuid} not found`);
         }
-        if (!sourceMessage.sequence_enrollment_uuid) {
-            throw new BadRequestException('Can only reply within a sequence conversation thread');
+        if (!sourceMessage.replied_at) {
+            throw new BadRequestException('Can only reply to a message that has received a reply');
         }
 
         const sanitized = sanitizeEmailHtml(dto.content);
@@ -1133,6 +1134,7 @@ export class ContactsService {
                 status: MsgStatus.PENDING,
                 sequence_enrollment_uuid: sourceMessage.sequence_enrollment_uuid,
                 in_reply_to_message_id: sourceMessage.inbound_message_id,
+                is_manual_reply: true,
             },
         });
 

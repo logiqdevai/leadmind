@@ -509,6 +509,7 @@ model OutreachMessage {
   reply_html                String?
   inbound_message_id        String?
   in_reply_to_message_id    String?
+  is_manual_reply           Boolean                      @default(false)
   email_provider            ExternalIntegrationProvider?
   email_account             String?
   email_domain_uuid         String?
@@ -528,6 +529,7 @@ model OutreachMessage {
   sequence_enrollment  SequenceEnrollment?   @relation(fields: [sequence_enrollment_uuid], references: [uuid], onDelete: SetNull)
   sequence_step        OutreachSequenceStep? @relation(fields: [sequence_step_uuid], references: [uuid], onDelete: SetNull)
   campaign_integration CampaignIntegration?  @relation(fields: [campaign_integration_uuid], references: [uuid], onDelete: SetNull)
+  reminders            Reminder[]
 
   @@index([organisation_uuid])
   @@index([contact_uuid])
@@ -611,7 +613,6 @@ model SequenceEnrollment {
   contact           Contact            @relation(fields: [contact_uuid], references: [uuid], onDelete: Cascade)
   campaign          MarketingCampaign? @relation(fields: [campaign_uuid], references: [uuid], onDelete: SetNull)
   outreach_messages OutreachMessage[]
-  reminders         Reminder[]
 
   @@unique([sequence_uuid, contact_uuid, campaign_uuid], map: "sequence_enrollments_target_key")
   @@index([sequence_uuid])
@@ -1299,26 +1300,26 @@ enum ReminderType {
 }
 
 model Reminder {
-  id                       Int            @id @default(autoincrement())
-  uuid                     String         @unique @default(uuid())
-  organisation_uuid        String
-  contact_uuid             String
-  title                    String?
-  notes                    String?        @db.Text
-  remind_at                DateTime
-  status                   ReminderStatus @default(PENDING)
-  source                   ReminderSource @default(MANUAL)
-  type                     ReminderType   @default(GENERAL)
-  job_id                   String?        @unique
-  sequence_enrollment_uuid String?
-  metadata                 Json?
+  id                    Int            @id @default(autoincrement())
+  uuid                  String         @unique @default(uuid())
+  organisation_uuid     String
+  contact_uuid          String
+  title                 String?
+  notes                 String?        @db.Text
+  remind_at             DateTime
+  status                ReminderStatus @default(PENDING)
+  source                ReminderSource @default(MANUAL)
+  type                  ReminderType   @default(GENERAL)
+  job_id                String?        @unique
+  outreach_message_uuid String?
+  metadata              Json?
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  organisation        Organisation        @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
-  contact             Contact             @relation(fields: [contact_uuid], references: [uuid], onDelete: Cascade)
-  sequence_enrollment SequenceEnrollment? @relation(fields: [sequence_enrollment_uuid], references: [uuid], onDelete: SetNull)
+  organisation     Organisation     @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  contact          Contact          @relation(fields: [contact_uuid], references: [uuid], onDelete: Cascade)
+  outreach_message OutreachMessage? @relation(fields: [outreach_message_uuid], references: [uuid], onDelete: SetNull)
 
   @@index([organisation_uuid])
   @@index([contact_uuid])
@@ -1326,7 +1327,7 @@ model Reminder {
   @@index([status])
   @@index([organisation_uuid, status])
   @@index([organisation_uuid, remind_at])
-  @@index([sequence_enrollment_uuid])
+  @@index([outreach_message_uuid])
   @@map("reminders")
 }
 

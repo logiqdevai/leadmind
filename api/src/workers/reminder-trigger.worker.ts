@@ -52,12 +52,11 @@ export class ReminderTriggerWorker extends WorkerHost {
 
         if (
             reminder.type === ReminderType.FOLLOW_UP &&
-            reminder.sequence_enrollment_uuid &&
             !(reminder.metadata as { ai_draft?: unknown } | null)?.ai_draft
         ) {
             const draft = await this.followUpDraftService.draftFollowUp(
                 reminder.organisation_uuid,
-                reminder.sequence_enrollment_uuid,
+                reminder.contact_uuid,
             );
             if (draft) {
                 const ai_draft = {

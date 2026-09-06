@@ -483,19 +483,18 @@ export class WebhookEventService {
     }
 
     /**
-     * A reply also cancels any pending "did they go quiet after we replied" follow-up
-     * check scheduled for this thread, mirroring cancelEnrollmentOnReplyIfConfigured above.
+     * A reply from a contact also cancels their pending "did they go quiet after we
+     * last emailed them" follow-up check, regardless of which message/thread it landed
+     * on - covers sequence-thread replies and any manually-sent email alike.
      */
     private async cancelFollowUpReminderIfPending(message: OutreachMessage): Promise<void> {
-        if (!message.sequence_enrollment_uuid) return;
-
         const cancelled = await this.remindersService.cancelPendingFollowUp(
             message.organisation_uuid,
-            message.sequence_enrollment_uuid,
+            message.contact_uuid,
         );
         if (cancelled) {
             this.logger.log(
-                `[ingest] Reply cancelled pending follow-up reminder for enrollment=${message.sequence_enrollment_uuid}`,
+                `[ingest] Reply cancelled pending follow-up reminder for contact=${message.contact_uuid}`,
             );
         }
     }
