@@ -1,5 +1,5 @@
 import { type ComponentType, useState } from "react";
-import { Chip, Label, Modal, TextArea } from "@heroui/react";
+import { Chip, Modal } from "@heroui/react";
 import { formatDistanceToNow } from "date-fns";
 import {
     Mail,
@@ -16,9 +16,16 @@ import {
     MsgStatus,
     type Interaction,
 } from "@/features/contacts/interfaces/contact.interface";
-import { useReplyToContact } from "@/features/contacts/hooks/use-contacts";
+import { useAiDraftMessage, useReplyToContact } from "@/features/contacts/hooks/use-contacts";
 import { useOutreachMessageThread } from "@/features/outreach/hooks/use-outreach";
-import { sanitizeEmailHtml } from "@/lib/sanitize-html";
+import {
+    MessageComposer,
+    type AiGenerateArgs,
+    type MessageComposerValue,
+} from "@/features/messaging/components/message-composer";
+import { MessageTemplateSelect } from "@/features/messaging/components/message-template-select";
+import { mergeTemplateIntoComposer } from "@/features/message-templates/utils/message-template-composer.utils";
+import { isEmailHtmlEmpty, sanitizeEmailHtml } from "@/lib/sanitize-html";
 import { MessageBodyPreview } from "./message-body-preview";
 
 interface MessageThreadModalProps {
@@ -129,24 +136,43 @@ function ReplyBox({
     onSent: () => void;
 }) {
     const replyMut = useReplyToContact();
-    const [subject, setSubject] = useState(defaultSubject);
-    const [content, setContent] = useState("");
+    const aiDraft = useAiDraftMessage();
+    const [value, setValue] = useState<MessageComposerValue>({
+        emailSubject: defaultSubject,
+        emailContent: "",
+        smsContent: "",
+        callContent: "",
+        linkedinContent: "",
+    });
+
+    const handleAiGenerate = async (args: AiGenerateArgs) => {
+        const result = await aiDraft.mutateAsync({
+            contact_uuid: contactUuid,
+            channel: args.channel,
+            action: args.action,
+            prompt: args.prompt,
+            language: args.language,
+            current_subject: args.currentSubject,
+            current_content: args.currentContent,
+        });
+        return { subject: result.subject, content: result.content };
+    };
 
     const handleSend = () => {
-        const trimmedContent = content.trim();
-        if (!trimmedContent) return;
+        const trimmedContent = value.emailContent.trim();
+        if (isEmailHtmlEmpty(trimmedContent)) return;
         replyMut.mutate(
             {
                 uuid: contactUuid,
                 payload: {
                     outreach_message_uuid: outreachMessageUuid,
-                    subject: subject.trim() || undefined,
+                    subject: value.emailSubject.trim() || undefined,
                     content: trimmedContent,
                 },
             },
             {
                 onSuccess: () => {
-                    setContent("");
+                    setValue((prev) => ({ ...prev, emailContent: "" }));
                     onSent();
                 },
             },
@@ -159,33 +185,29 @@ function ReplyBox({
                 <MessageCircleReply className="size-3.5 text-muted" />
                 <span className="text-sm font-medium text-foreground">Reply</span>
             </div>
-            <div className="flex flex-col gap-2">
-                <Label htmlFor="thread-reply-subject" className="sr-only">
-                    Subject
-                </Label>
-                <input
-                    id="thread-reply-subject"
-                    type="text"
-                    placeholder="Subject"
-                    value={subject}
-                    onChange={(e) => setSubject(e.target.value)}
-                    className="w-full rounded-md border border-border bg-surface px-3 py-1.5 text-sm text-foreground outline-none focus:border-accent"
+            <div className="flex flex-col gap-3">
+                <MessageTemplateSelect
+                    allowedChannels={[Channel.EMAIL]}
+                    disabled={replyMut.isPending}
+                    onSelect={(template) =>
+                        setValue((prev) => mergeTemplateIntoComposer(prev, template))
+                    }
                 />
-                <Label htmlFor="thread-reply-content" className="sr-only">
-                    Message
-                </Label>
-                <TextArea
-                    id="thread-reply-content"
-                    rows={4}
-                    placeholder="Write a reply…"
-                    value={content}
-                    onChange={(e) => setContent(e.target.value)}
+                <MessageComposer
+                    channels={[Channel.EMAIL]}
+                    activeChannel={Channel.EMAIL}
+                    onActiveChannelChange={() => {}}
+                    value={value}
+                    onChange={(patch) => setValue((prev) => ({ ...prev, ...patch }))}
+                    onAiGenerate={handleAiGenerate}
+                    isAiPending={aiDraft.isPending}
+                    disabled={replyMut.isPending}
                 />
                 <div className="flex justify-end">
                     <ActionButtonWithPending
                         size="sm"
                         variant="secondary"
-                        isDisabled={replyMut.isPending || !content.trim()}
+                        isDisabled={replyMut.isPending || isEmailHtmlEmpty(value.emailContent)}
                         isPending={replyMut.isPending}
                         onPress={handleSend}
                     >

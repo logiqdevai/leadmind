@@ -38,6 +38,7 @@ import {
     parseEmailDraft,
     sanitizeAiDraftContent,
 } from '@/shared/utils/outreach-ai-generate.util';
+import { fetchRecentEmailTranscript } from '@/shared/utils/email-thread-transcript.util';
 import { CONTACT_AI_SCORE_SCHEMA, type ContactAiScoreResult } from '../schemas/contact-ai-score.schema';
 import { OutreachRenderService } from '@/modules/outreach/services/outreach-render.service';
 import { AiUsageService } from '@/modules/ai-usage/ai-usage.service';
@@ -802,6 +803,7 @@ export class ContactAiService {
             dto.language,
             sender.business_description,
             sender.has_sender_profile,
+            true, // single-contact ad-hoc draft: include recent email history for context
         );
         const content = sanitizeAiDraftContent(draft.content, dto.channel);
 
@@ -856,7 +858,13 @@ export class ContactAiService {
         language?: string,
         sender_business_description?: string,
         has_sender_profile = true,
+        include_thread_context = false,
     ): Promise<{ subject: string | null; content: string }> {
+        const thread_transcript =
+            include_thread_context && channel === Channel.EMAIL
+                ? await fetchRecentEmailTranscript(this.prisma, contact.organisation_uuid, contact.uuid)
+                : undefined;
+
         const prompt = this.promptForChannel(
             channel,
             contact,
@@ -865,6 +873,7 @@ export class ContactAiService {
             language,
             sender_business_description,
             has_sender_profile,
+            thread_transcript,
         );
 
         const { response } = await this.aiService.generateText({
@@ -894,6 +903,7 @@ export class ContactAiService {
         language?: string,
         sender_business_description?: string,
         has_sender_profile = true,
+        thread_transcript?: string,
     ): string {
         switch (channel) {
             case Channel.EMAIL:
@@ -904,6 +914,7 @@ export class ContactAiService {
                     language,
                     sender_business_description,
                     has_sender_profile,
+                    thread_transcript,
                 );
             case Channel.SMS:
                 return buildSmsPrompt(

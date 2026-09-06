@@ -567,12 +567,16 @@ export class WebhookEventService {
             }
 
             const headers = email.headers ?? {};
-            const rawMessageId = headers['message-id'] ?? headers['Message-Id'];
+            // Resend surfaces the inbound Message-ID as its own top-level field, not inside
+            // `headers` (that map holds other RFC headers like In-Reply-To/References, which
+            // is why a plain headers['message-id'] lookup here always came back empty).
+            const rawMessageId = email.message_id ?? headers['message-id'] ?? headers['Message-Id'];
             const content: ReceivedEmailContent = {
                 subject: email.subject,
                 text: email.text,
                 html: email.html ? sanitizeEmailHtml(email.html) : email.html,
-                message_id: typeof rawMessageId === 'string' ? rawMessageId.trim() : null,
+                message_id:
+                    typeof rawMessageId === 'string' && rawMessageId.trim() ? rawMessageId.trim() : null,
             };
 
             const headerValues: string[] = [];

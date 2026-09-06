@@ -16,6 +16,7 @@ import {
     Contact,
     DomainValidationStatus,
     EmailValidationStatus,
+    ExternalIntegrationProvider,
     Interaction,
     InteractionType,
     LeadStatus,
@@ -1123,6 +1124,21 @@ export class ContactsService {
             dto.subject?.trim() ||
             (baseSubject ? `Re: ${baseSubject.replace(/^re:\s*/i, '')}` : 'Re: your message');
 
+        // Send the reply from the same account the contact actually heard from - otherwise
+        // it falls back to the org's default provider, which can silently differ from
+        // whichever integration originally sent this thread (e.g. a specific SMTP mailbox).
+        const sourceProvider = sourceMessage.email_provider;
+        const providerMetadata =
+            (sourceProvider === ExternalIntegrationProvider.RESEND ||
+                sourceProvider === ExternalIntegrationProvider.SMTP) &&
+            sourceMessage.email_account
+                ? (buildEmailProviderMetadata({
+                      provider: sourceProvider,
+                      account: sourceMessage.email_account,
+                      domain_uuid: sourceMessage.email_domain_uuid ?? undefined,
+                  }) as Prisma.InputJsonValue)
+                : undefined;
+
         const message = await this.prisma.outreachMessage.create({
             data: {
                 organisation_uuid,
@@ -1135,6 +1151,7 @@ export class ContactsService {
                 sequence_enrollment_uuid: sourceMessage.sequence_enrollment_uuid,
                 in_reply_to_message_id: sourceMessage.inbound_message_id,
                 is_manual_reply: true,
+                ...(providerMetadata ? { metadata: providerMetadata } : {}),
             },
         });
 

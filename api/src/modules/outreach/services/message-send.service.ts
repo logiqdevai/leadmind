@@ -120,8 +120,10 @@ export class MessageSendService {
                 headers['X-Campaign-Uuid'] = message.campaign_uuid;
             }
             if (message.in_reply_to_message_id) {
-                headers['In-Reply-To'] = message.in_reply_to_message_id;
-                headers['References'] = message.in_reply_to_message_id;
+                const id = message.in_reply_to_message_id.trim();
+                const bracketed = id.startsWith('<') ? id : `<${id}>`;
+                headers['In-Reply-To'] = bracketed;
+                headers['References'] = bracketed;
             }
             const replyTo = await this.resolveReplyTo(message);
             const createEmail = {

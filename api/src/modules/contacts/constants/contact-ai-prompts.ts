@@ -167,13 +167,26 @@ export function buildEmailPrompt(
     language?: string,
     sender_business_description?: string,
     has_sender_profile = true,
+    thread_transcript?: string,
 ): string {
     const ctaLine = has_sender_profile
         ? '<HTML body, 80-150 words, formal-but-warm tone, ending with a clear soft CTA (prefer offering a call via the {{booking_url}} placeholder when relevant) followed by a sign-off / footer>'
         : '<HTML body, 80-150 words, formal-but-warm tone, ending with a clear soft CTA in words and a polite sign-off with no sender contact block>';
 
+    const isReply = Boolean(thread_transcript?.trim());
+    const threadBlock = isReply
+        ? `
+THREAD HISTORY SO FAR (oldest first, "US" = the sender, "THEM" = the lead):
+"""
+${thread_transcript}
+"""
+
+This is a REPLY continuing that conversation — reference what was actually said, don't restart with a generic cold-outreach opener.
+`.trim()
+        : '';
+
     return `
-You are drafting a cold outreach EMAIL for the lead below.
+You are drafting ${isReply ? 'a reply within an ongoing' : 'a cold outreach'} EMAIL conversation for the lead below.
 
 TARGET CHANNEL: EMAIL — produce a normal email with a subject line and an HTML body. Do not write SMS or LinkedIn DM style.
 
@@ -182,6 +195,8 @@ ${has_sender_profile ? '' : noSenderProfileRules()}
 ${languageDirective(language)}
 
 ${senderBusinessBlock(sender_business_description)}
+
+${threadBlock}
 
 USER OUTREACH INSTRUCTIONS:
 """

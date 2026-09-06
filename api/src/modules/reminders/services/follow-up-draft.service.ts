@@ -1,9 +1,12 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { Channel } from '@/generated/prisma';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { AiService } from '@/integrations/ai/services/ai.service';
 import { AiCredentialsService } from '@/integrations/ai/services/ai-credentials.service';
 import { AiModels, AiProviders } from '@/integrations/ai/interfaces/ai.interface';
+import {
+    buildEmailTranscript,
+    fetchRecentEmailMessages,
+} from '@/shared/utils/email-thread-transcript.util';
 import {
     FollowUpDraftSystemPrompt,
     buildFollowUpDraftPrompt,
@@ -39,21 +42,10 @@ export class FollowUpDraftService {
         });
         if (!contact) return null;
 
-        const recentMessages = await this.prisma.outreachMessage.findMany({
-            where: { contact_uuid, organisation_uuid, channel: Channel.EMAIL },
-            orderBy: { created_at: 'desc' },
-            take: 10,
-            select: {
-                subject: true,
-                content: true,
-                reply_subject: true,
-                reply_text: true,
-            },
-        });
-        if (recentMessages.length === 0) return null;
+        const messages = await fetchRecentEmailMessages(this.prisma, organisation_uuid, contact_uuid);
+        if (messages.length === 0) return null;
 
-        const messages = [...recentMessages].reverse();
-        const transcript = this.buildTranscript(messages);
+        const transcript = buildEmailTranscript(messages);
         const lastSubject =
             [...messages].reverse().map((m) => m.reply_subject ?? m.subject).find(Boolean) ?? null;
 
@@ -84,26 +76,5 @@ export class FollowUpDraftService {
             );
             return null;
         }
-    }
-
-    private buildTranscript(
-        messages: {
-            subject: string | null;
-            content: string;
-            reply_subject: string | null;
-            reply_text: string | null;
-        }[],
-    ): string {
-        const parts: string[] = [];
-        for (const m of messages) {
-            const plainOutbound = m.content.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
-            if (plainOutbound) {
-                parts.push(`US: ${plainOutbound.slice(0, 1500)}`);
-            }
-            if (m.reply_text?.trim()) {
-                parts.push(`THEM: ${m.reply_text.trim().slice(0, 1500)}`);
-            }
-        }
-        return parts.join('\n\n');
     }
 }
