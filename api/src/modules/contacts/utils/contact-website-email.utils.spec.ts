@@ -2,6 +2,7 @@ import {
     buildWebsiteEmailCrawlUrls,
     extractEmailsFromCrawledPage,
     extractEmailsFromCrawledPages,
+    filterJunkEmails,
     pickBestContactEmail,
 } from './contact-website-email.utils';
 
@@ -11,14 +12,7 @@ describe('buildWebsiteEmailCrawlUrls', () => {
             'https://acme.io/',
             'https://acme.io/contact',
             'https://acme.io/contact-us',
-            'https://acme.io/contactus',
-            'https://acme.io/get-in-touch',
             'https://acme.io/about',
-            'https://acme.io/about-us',
-            'https://acme.io/impressum',
-            'https://acme.io/kontakt',
-            'https://acme.io/terms-of-use',
-            'https://acme.io/privacy-policy',
         ]);
     });
 
@@ -67,6 +61,16 @@ describe('extractEmailsFromCrawledPages', () => {
                 { url: 'https://acme.io/contact', markdown: 'hello@acme.io sales@acme.io' },
             ]),
         ).toEqual(['hello@acme.io', 'sales@acme.io']);
+    });
+});
+
+describe('filterJunkEmails', () => {
+    it('drops retina image filenames that match provider regex extractors as "emails"', () => {
+        // Scrapio's built-in `email` regex preset has no notion of junk and matches filenames
+        // like "logo@2x.png" (from an <img srcset>) as if they were addresses.
+        expect(
+            filterJunkEmails(['logo@2x.png', 'logo-white@2x.png', 'info@cypruspropertyandhome.com']),
+        ).toEqual(['info@cypruspropertyandhome.com']);
     });
 });
 

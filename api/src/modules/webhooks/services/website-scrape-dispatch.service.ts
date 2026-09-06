@@ -5,7 +5,7 @@ import { ScrapioPlainScrapeConfigsService } from '@/integrations/scrapio/service
 import { mapCrawlRunPageToCrawledPage } from '@/integrations/scrapio/utils/scrapio-crawl-page.utils';
 import type { CrawlRunPage, WorkflowRunStatus } from '@/integrations/scrapio/interfaces/scrapio-crawl-runs.interface';
 import { ContactsService } from '@/modules/contacts/contacts.service';
-import { pickBestContactEmail } from '@/modules/contacts/utils/contact-website-email.utils';
+import { filterJunkEmails, pickBestContactEmail } from '@/modules/contacts/utils/contact-website-email.utils';
 import { EnrichmentOrchestrator } from '@/modules/enrichment/services/enrichment.orchestrator';
 import { EnrichmentTarget } from '@/modules/enrichment/interfaces/enrichment-target.interface';
 
@@ -118,10 +118,14 @@ export class WebsiteScrapeDispatchService {
         if (succeeded) {
           // Scrapio's regex-preset field returns EVERY matching email found across the combined
           // pages (e.g. { emails: ["a@x.com", "b@y.com"] }), not a single value — pick the best
-          // one the same way the Apify path does.
+          // one the same way the Apify path does. Scrapio's regex has no notion of junk (it
+          // matches retina image filenames like "logo@2x.png" as "emails"), so filter those out
+          // the same way the Apify crawl path does before picking a winner.
           const rawEmails = structuredData?.emails;
           const emails = Array.isArray(rawEmails)
-            ? rawEmails.filter((e): e is string => typeof e === 'string').map((e) => e.trim()).filter(Boolean)
+            ? filterJunkEmails(
+                rawEmails.filter((e): e is string => typeof e === 'string').map((e) => e.trim()).filter(Boolean),
+              )
             : [];
           const email = pickBestContactEmail(emails);
           await this.contactsService.finishContactEmailScrapeWithEmail(

@@ -11,14 +11,7 @@ const EMAIL_PAGE_PATHS = [
     '/',
     '/contact',
     '/contact-us',
-    '/contactus',
-    '/get-in-touch',
     '/about',
-    '/about-us',
-    '/impressum',
-    '/kontakt',
-    '/terms-of-use',
-    '/privacy-policy',
 ] as const;
 
 const JUNK_EMAIL_DOMAINS = new Set([
@@ -47,7 +40,7 @@ const GENERIC_LOCAL_PARTS = new Set([
     'inquiry',
 ]);
 
-function isJunkEmail(email: string): boolean {
+export function isJunkEmail(email: string): boolean {
     const lower = email.toLowerCase();
     if (/\.(png|jpe?g|gif|webp|svg)(\?|$)/i.test(lower)) {
         return true;
@@ -120,6 +113,15 @@ export function extractEmailsFromCrawledPages(pages: CrawledPage[]): string[] {
         }
     }
     return [...unique];
+}
+
+/**
+ * Drops obvious non-emails (asset filenames, placeholder domains) from a list of candidate
+ * addresses. Needed for providers like Scrapio whose built-in regex extractor has no notion of
+ * what counts as junk — e.g. it matches retina image filenames like `logo@2x.png` as "emails".
+ */
+export function filterJunkEmails(emails: string[]): string[] {
+    return emails.filter((email) => !isJunkEmail(email));
 }
 
 export function pickBestContactEmail(emails: string[]): string | null {
