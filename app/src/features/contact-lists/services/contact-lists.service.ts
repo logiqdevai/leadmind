@@ -2,6 +2,7 @@ import axiosInstance from "@/config/api/axios";
 import { ApiRoutes } from "@/config/api/routes";
 import { buildContactListApiParams } from "@/lib/contact-filter-params";
 import type {
+    AddListContactsBelowScoreResult,
     AddListContactsPayload,
     AddListContactsResult,
     BulkAddListContactsPayload,
@@ -158,6 +159,23 @@ export const moveListContactsBelowScore = async (
     } catch (error: any) {
         throw new Error(
             error?.response?.data?.message || "Failed to move low-score contacts to list.",
+        );
+    }
+};
+
+export const addListContactsBelowScore = async (
+    listUuid: string,
+    payload: FilterListContactsByScorePayload,
+): Promise<AddListContactsBelowScoreResult> => {
+    try {
+        const response = await axiosInstance.post(
+            ApiRoutes.contact_lists.add_below_score(listUuid),
+            payload,
+        );
+        return response.data;
+    } catch (error: any) {
+        throw new Error(
+            error?.response?.data?.message || "Failed to add low-score contacts to list.",
         );
     }
 };

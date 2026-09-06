@@ -7,6 +7,7 @@ import { Prisma } from '@/generated/prisma';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { ContactsService } from '@/modules/contacts/contacts.service';
 import { shapeContactFilterFields } from '@/modules/contacts/utils/contact-filter-link.utils';
+import { belowScoreContactFilter } from '@/modules/contacts/utils/contact-score-filter.utils';
 import { CampaignContactResolverService } from '@/modules/marketing-campaigns/services/campaign-contact-resolver.service';
 import { CampaignFiltersDto } from '@/modules/marketing-campaigns/dto/campaign-filters.dto';
 import { CreateContactListDto } from './dto/create-contact-list.dto';
@@ -310,15 +311,6 @@ export class ContactListsService {
         return { contact_uuid: contactUuid };
     }
 
-    private belowScoreContactFilter(minScore: number): Prisma.ContactWhereInput {
-        return {
-            AND: [
-                { contact_scores: { some: { score: { lt: minScore } } } },
-                { contact_scores: { none: { score: { gte: minScore } } } },
-            ],
-        };
-    }
-
     async removeContactsBelowScore(
         organisation_uuid: string,
         listUuid: string,
@@ -329,7 +321,7 @@ export class ContactListsService {
         const result = await this.prisma.contactListMember.deleteMany({
             where: {
                 list_uuid: listUuid,
-                contact: this.belowScoreContactFilter(minScore),
+                contact: belowScoreContactFilter(minScore),
             },
         });
 
@@ -361,7 +353,7 @@ export class ContactListsService {
         const members = await this.prisma.contactListMember.findMany({
             where: {
                 list_uuid: listUuid,
-                contact: this.belowScoreContactFilter(minScore),
+                contact: belowScoreContactFilter(minScore),
             },
             select: { contact_uuid: true },
         });
@@ -402,6 +394,43 @@ export class ContactListsService {
         });
 
         return { moved: contactUuids.length };
+    }
+
+    async addContactsBelowScoreToList(
+        organisation_uuid: string,
+        listUuid: string,
+        minScore = 6,
+    ) {
+        await this.ensureListOwned(organisation_uuid, listUuid);
+
+        const matching = await this.prisma.contact.findMany({
+            where: {
+                organisation_uuid,
+                ...belowScoreContactFilter(minScore),
+            },
+            select: { uuid: true },
+        });
+
+        if (matching.length === 0) {
+            return { added: 0 };
+        }
+
+        const result = await this.prisma.contactListMember.createMany({
+            data: matching.map((c) => ({
+                list_uuid: listUuid,
+                contact_uuid: c.uuid,
+            })),
+            skipDuplicates: true,
+        });
+
+        if (result.count > 0) {
+            await this.prisma.contactList.update({
+                where: { uuid: listUuid },
+                data: { updated_at: new Date() },
+            });
+        }
+
+        return { added: result.count };
     }
 
     async removeContacts(organisation_uuid: string, listUuid: string, contactUuids: string[]) {

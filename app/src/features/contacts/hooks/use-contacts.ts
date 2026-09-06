@@ -7,6 +7,7 @@ import {
     createContactInfo,
     deleteContact,
     deleteContactInfo,
+    deleteContactsBelowScore,
     deleteContactsBulk,
     enrichContact,
     getContact,
@@ -177,6 +178,38 @@ export function useDeleteContactsBulk() {
         onError: (error: Error) => {
             toast({
                 title: "Could not delete contacts",
+                description: error.message,
+                duration: 3000,
+                variant: "error",
+            });
+        },
+    });
+}
+
+export function useDeleteContactsBelowScore() {
+    const qc = useQueryClient();
+    return useMutation({
+        mutationFn: (min_score: number) => deleteContactsBelowScore(min_score),
+        onSuccess: (data, min_score) => {
+            qc.invalidateQueries({ queryKey: contactsQueryKeys.all });
+            qc.invalidateQueries({ queryKey: ["contact-lists"] });
+            toast({
+                title:
+                    data.deleted === 0
+                        ? "No low-score contacts"
+                        : data.deleted === 1
+                          ? "Contact deleted"
+                          : "Low-score contacts deleted",
+                description:
+                    data.deleted === 0
+                        ? `No contacts have a score under ${min_score}.`
+                        : `${data.deleted} contact${data.deleted === 1 ? "" : "s"} with a score under ${min_score} removed from your CRM.`,
+                duration: 2000,
+            });
+        },
+        onError: (error: Error) => {
+            toast({
+                title: "Could not delete low-score contacts",
                 description: error.message,
                 duration: 3000,
                 variant: "error",

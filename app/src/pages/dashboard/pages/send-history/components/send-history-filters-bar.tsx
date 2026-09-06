@@ -86,10 +86,10 @@ export function SendHistoryFiltersBar({
                     <TextField name="search" className="w-full">
                         <Input
                             className="h-8 pl-8 text-[13px]"
-                            placeholder="Search contacts…"
+                            placeholder="Search name, email, or phone…"
                             value={search}
                             onChange={(e) => onSearchChange(e.target.value)}
-                            aria-label="Search contacts"
+                            aria-label="Search by contact name, email, or phone"
                         />
                     </TextField>
                 </div>

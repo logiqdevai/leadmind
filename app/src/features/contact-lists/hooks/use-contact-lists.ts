@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "@/hooks/use-toast";
 import {
     addListContacts,
+    addListContactsBelowScore,
     bulkAddListContacts,
     createContactList,
     deleteContactList,
@@ -272,6 +273,40 @@ export function useMoveListContactsBelowScore() {
         onError: (error: Error) => {
             toast({
                 title: "Could not move low-score contacts",
+                description: error.message,
+                duration: 3000,
+                variant: "error",
+            });
+        },
+    });
+}
+
+export function useAddListContactsBelowScore() {
+    const qc = useQueryClient();
+    return useMutation({
+        mutationFn: (vars: { listUuid: string } & FilterListContactsByScorePayload) =>
+            addListContactsBelowScore(vars.listUuid, { min_score: vars.min_score }),
+        onSuccess: (data, vars) => {
+            qc.invalidateQueries({ queryKey: contactListQueryKeys.all });
+            qc.invalidateQueries({ queryKey: contactListQueryKeys.detail(vars.listUuid) });
+            qc.invalidateQueries({ queryKey: contactListQueryKeys.members(vars.listUuid, {}) });
+            toast({
+                title:
+                    data.added === 0
+                        ? "No low-score contacts"
+                        : data.added === 1
+                          ? "Contact added to list"
+                          : "Low-score contacts added",
+                description:
+                    data.added === 0
+                        ? `No contacts have a score under ${vars.min_score}.`
+                        : `${data.added} contact${data.added === 1 ? "" : "s"} with a score under ${vars.min_score} added to the list.`,
+                duration: 2000,
+            });
+        },
+        onError: (error: Error) => {
+            toast({
+                title: "Could not add low-score contacts",
                 description: error.message,
                 duration: 3000,
                 variant: "error",

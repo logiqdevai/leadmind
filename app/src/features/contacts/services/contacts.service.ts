@@ -79,6 +79,21 @@ export const deleteContactsBulk = async (
     }
 };
 
+export const deleteContactsBelowScore = async (
+    min_score: number,
+): Promise<{ deleted: number }> => {
+    try {
+        const response = await axiosInstance.post(ApiRoutes.contacts.bulk_delete_below_score, {
+            min_score,
+        });
+        return response.data;
+    } catch (error: any) {
+        throw new Error(
+            error?.response?.data?.message || "Failed to delete low-score contacts.",
+        );
+    }
+};
+
 export const createContactFromLead = async (lead_uuid: string): Promise<Contact> => {
     try {
         const response = await axiosInstance.post(ApiRoutes.contacts.from_lead(lead_uuid));

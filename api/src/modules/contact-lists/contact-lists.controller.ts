@@ -145,6 +145,21 @@ export class ContactListsController {
         );
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.CONTACT_LIST, action: ActivityAction.CONTACTS_ADDED, entityUuidFrom: 'params.uuid' })
+    @Post(':uuid/contacts/add-below-score')
+    @ApiOperation({ summary: 'Add all contacts (regardless of list) whose current score is below the given threshold to this list' })
+    addContactsBelowScore(
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
+        @Param('uuid') uuid: string,
+        @Body() dto: FilterListContactsByScoreDto,
+    ) {
+        return this.contactListsService.addContactsBelowScoreToList(
+            organisation_uuid,
+            uuid,
+            dto.min_score ?? 6,
+        );
+    }
+
     @ActivityLog({ entityType: ActivityEntityType.CONTACT_LIST, action: ActivityAction.CONTACTS_REMOVED, entityUuidFrom: 'params.uuid' })
     @Post(':uuid/contacts/bulk-remove')
     @ApiOperation({ summary: 'Remove multiple contacts from a list' })

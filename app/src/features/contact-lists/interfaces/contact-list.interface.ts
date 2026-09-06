@@ -83,3 +83,7 @@ export interface MoveListContactsBelowScorePayload {
     min_score: number;
     target_list_uuid: string;
 }
+
+export interface AddListContactsBelowScoreResult {
+    added: number;
+}

@@ -60,6 +60,7 @@ export const ApiRoutes = {
         bulk_scrape_emails: "/contacts/bulk-scrape-emails",
         bulk_ai_draft_messages: "/contacts/bulk-ai-draft-messages",
         bulk_delete: "/contacts/bulk-delete",
+        bulk_delete_below_score: "/contacts/bulk-delete-below-score",
         messages: (uuid: string) => `/contacts/${uuid}/messages`,
         from_lead: (lead_uuid: string) => `/contacts/from-lead/${lead_uuid}`,
     },
@@ -256,6 +257,7 @@ export const ApiRoutes = {
         bulk_remove_contacts: (uuid: string) => `/contact-lists/${uuid}/contacts/bulk-remove`,
         remove_below_score: (uuid: string) => `/contact-lists/${uuid}/contacts/remove-below-score`,
         move_below_score: (uuid: string) => `/contact-lists/${uuid}/contacts/move-below-score`,
+        add_below_score: (uuid: string) => `/contact-lists/${uuid}/contacts/add-below-score`,
         remove_contact: (listUuid: string, contactUuid: string) =>
             `/contact-lists/${listUuid}/contacts/${contactUuid}`,
         stats: (uuid: string) => `/contact-lists/${uuid}/stats`,

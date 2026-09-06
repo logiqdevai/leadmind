@@ -21,6 +21,7 @@ import { ContactsService } from './contacts.service';
 import { AddNoteDto } from './dto/add-note.dto';
 import { AiDraftMessageDto } from './dto/ai-draft-message.dto';
 import { BulkAiDraftMessagesDto } from './dto/bulk-ai-draft-messages.dto';
+import { BulkDeleteBelowScoreDto } from './dto/bulk-delete-below-score.dto';
 import { BulkDeleteContactsDto } from './dto/bulk-delete-contacts.dto';
 import { BulkEnrichContactsDto } from './dto/bulk-enrich-contacts.dto';
 import { BulkScrapeContactEmailsDto } from './dto/bulk-scrape-contact-emails.dto';
@@ -168,6 +169,17 @@ export class ContactsController {
         @Body() dto: BulkDeleteContactsDto,
     ) {
         return this.contactsService.removeMany(organisation_uuid, dto);
+    }
+
+    @ActivityLog({ entityType: ActivityEntityType.CONTACT, action: ActivityAction.BULK_DELETED, entityUuidFrom: 'none' })
+    @Post('bulk-delete-below-score')
+    @ApiOperation({ summary: 'Delete all contacts whose current score is below the given threshold' })
+    @ApiResponse({ status: 201 })
+    removeManyBelowScore(
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
+        @Body() dto: BulkDeleteBelowScoreDto,
+    ) {
+        return this.contactsService.removeManyBelowScore(organisation_uuid, dto);
     }
 
     @Get(':uuid')

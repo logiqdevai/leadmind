@@ -17,6 +17,7 @@ import {
 import { BulkEnrichmentRunModal } from "@/components/ui/bulk-enrichment-run-modal";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { ContactsActionsDropdown } from "./components/contacts-actions-dropdown";
+import { FilterContactsModal } from "./components/filter-contacts-modal";
 import { ContactsToolbar } from "./components/contacts-toolbar";
 import {
     DEFAULT_ENRICHMENT_SOURCES,
@@ -80,6 +81,7 @@ export default function ContactsPage() {
   const [enrollOpen, setEnrollOpen] = useState(false);
   const [enrichOpen, setEnrichOpen] = useState(false);
   const [scrapeConfirmOpen, setScrapeConfirmOpen] = useState(false);
+  const [filterContactsOpen, setFilterContactsOpen] = useState(false);
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
 
   const enrichBulk = useEnrichContactsBulk();
@@ -243,6 +245,8 @@ export default function ContactsPage() {
                   onScrapeEmailsSelected={view === "table" ? () => setScrapeConfirmOpen(true) : undefined}
                   scrapeEmailsPending={scrapeEmailsBulk.isPending}
                   scrapeEmailsDisabled={!canScrapeEmails}
+                  onFilterContacts={view === "table" ? () => setFilterContactsOpen(true) : undefined}
+                  filterContactsDisabled={total === 0}
                   onDeleteSelected={view === "table" ? () => setDeleteConfirmOpen(true) : undefined}
                   deleteDisabled={selectedKeys.size === 0}
                   deletePending={deleteContactsBulk.isPending}
@@ -377,6 +381,13 @@ export default function ContactsPage() {
               confirmLabel="Start lookup"
               isPending={scrapeEmailsBulk.isPending}
               onConfirm={handleScrapeEmails}
+            />
+          ) : null}
+          {view === "table" ? (
+            <FilterContactsModal
+              isOpen={filterContactsOpen}
+              onOpenChange={setFilterContactsOpen}
+              onComplete={() => setSelectedKeys(new Set())}
             />
           ) : null}
           {view === "table" ? (

@@ -1,6 +1,6 @@
 import type { FC } from "react";
 import { Button, Dropdown } from "@heroui/react";
-import { ChevronDown, ChevronsUpDown, Gauge, Globe, Plus, Send, Sparkles, Trash2 } from "lucide-react";
+import { ChevronDown, ChevronsUpDown, Filter, Gauge, Globe, Plus, Send, Sparkles, Trash2 } from "lucide-react";
 
 interface ContactsActionsDropdownProps {
     onAddContact: () => void;
@@ -15,6 +15,8 @@ interface ContactsActionsDropdownProps {
     onScrapeEmailsSelected?: () => void;
     scrapeEmailsDisabled?: boolean;
     scrapeEmailsPending?: boolean;
+    onFilterContacts?: () => void;
+    filterContactsDisabled?: boolean;
     onDeleteSelected?: () => void;
     deleteDisabled?: boolean;
     deletePending?: boolean;
@@ -33,6 +35,8 @@ export const ContactsActionsDropdown: FC<ContactsActionsDropdownProps> = ({
     onScrapeEmailsSelected,
     scrapeEmailsDisabled = false,
     scrapeEmailsPending = false,
+    onFilterContacts,
+    filterContactsDisabled = false,
     onDeleteSelected,
     deleteDisabled = false,
     deletePending = false,
@@ -56,6 +60,7 @@ export const ContactsActionsDropdown: FC<ContactsActionsDropdownProps> = ({
                     if (key === "send-to-selected") onSendToSelected?.();
                     if (key === "enrich-selected") onEnrichSelected?.();
                     if (key === "scrape-emails-selected") onScrapeEmailsSelected?.();
+                    if (key === "filter-contacts") onFilterContacts?.();
                     if (key === "delete-selected") onDeleteSelected?.();
                     if (key === "add-contact") onAddContact();
                 }}
@@ -117,6 +122,18 @@ export const ContactsActionsDropdown: FC<ContactsActionsDropdownProps> = ({
                         <span className="flex items-center gap-2.5 antialiased">
                             <Send className="size-4 shrink-0 text-muted" strokeWidth={2} />
                             <span className="font-medium text-foreground">Send to selected</span>
+                        </span>
+                    </Dropdown.Item>
+                ) : null}
+                {onFilterContacts ? (
+                    <Dropdown.Item
+                        id="filter-contacts"
+                        textValue="Filter Contacts"
+                        isDisabled={filterContactsDisabled}
+                    >
+                        <span className="flex items-center gap-2.5 antialiased">
+                            <Filter className="size-4 shrink-0 text-muted" strokeWidth={2} />
+                            <span className="font-medium text-foreground">Filter Contacts</span>
                         </span>
                     </Dropdown.Item>
                 ) : null}

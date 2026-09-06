@@ -38,11 +38,13 @@ import { AiDraftMessageDto } from './dto/ai-draft-message.dto';
 import { BulkTriggerScoreDto } from './dto/bulk-trigger-score.dto';
 import { CreateContactDto } from './dto/create-contact.dto';
 import { EnrichContactDto } from './dto/enrich-contact.dto';
+import { BulkDeleteBelowScoreDto } from './dto/bulk-delete-below-score.dto';
 import { BulkDeleteContactsDto } from './dto/bulk-delete-contacts.dto';
 import { BulkEnrichContactsDto } from './dto/bulk-enrich-contacts.dto';
 import { BulkScrapeContactEmailsDto } from './dto/bulk-scrape-contact-emails.dto';
 import { ListContactsDto } from './dto/list-contacts.dto';
 import { buildContactProfileFieldWhere } from './utils/contact-profile-field-filter.utils';
+import { belowScoreContactFilter } from './utils/contact-score-filter.utils';
 import { mergeContactWhereClauses } from './utils/contact-where-merge.utils';
 
 export type ContactListFilterParams = Pick<
@@ -750,6 +752,35 @@ export class ContactsService {
         );
 
         return { deleted: unique.length };
+    }
+
+    async removeManyBelowScore(
+        organisation_uuid: string,
+        dto: BulkDeleteBelowScoreDto,
+    ): Promise<{ deleted: number }> {
+        const minScore = dto.min_score ?? 6;
+
+        const rows = await this.prisma.contact.findMany({
+            where: {
+                organisation_uuid,
+                ...belowScoreContactFilter(minScore),
+            },
+            select: { uuid: true },
+        });
+
+        if (rows.length === 0) {
+            return { deleted: 0 };
+        }
+
+        const uuids = rows.map((r) => r.uuid);
+
+        await this.prisma.contact.deleteMany({
+            where: { organisation_uuid, uuid: { in: uuids } },
+        });
+
+        await Promise.all(uuids.map((uuid) => this.elasticsearchService.deleteContact(uuid)));
+
+        return { deleted: uuids.length };
     }
 
     async updateStatus(
