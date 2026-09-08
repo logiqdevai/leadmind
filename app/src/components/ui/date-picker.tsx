@@ -61,8 +61,8 @@ export function AppDatePicker({
                             <Calendar.YearPickerTriggerHeading />
                             <Calendar.YearPickerTriggerIndicator />
                         </Calendar.YearPickerTrigger>
-                        <Calendar.NavButton slot="previous" />
-                        <Calendar.NavButton slot="next" />
+                        <Calendar.NavButton slot="previous" aria-label="Previous month" />
+                        <Calendar.NavButton slot="next" aria-label="Next month" />
                     </Calendar.Header>
                     <Calendar.Grid>
                         <Calendar.GridHeader>
