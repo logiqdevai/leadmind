@@ -32,6 +32,8 @@ import { SenderProfilesService } from '@/modules/sender-profiles/sender-profiles
 import {
     mergeSenderProfileMetadata,
 } from './utils/sender-profile-metadata.util';
+import { generateMessageId } from '@/shared/utils/email-message-id.util';
+import { ThreadsService } from '@/modules/threads/threads.service';
 @Injectable()
 export class OutreachService {
     private readonly logger = new Logger(OutreachService.name);
@@ -40,6 +42,7 @@ export class OutreachService {
         private readonly prisma: PrismaService,
         private readonly emailCredentialsService: EmailCredentialsService,
         private readonly senderProfilesService: SenderProfilesService,
+        private readonly threadsService: ThreadsService,
         @InjectQueue(OUTREACH_SEND_QUEUE) private readonly outreachSendQueue: Queue,
     ) { }
 
@@ -53,6 +56,12 @@ export class OutreachService {
         this.assertContactCanReceiveChannel(contact, dto.channel);
         const scheduled_at = dto.scheduled_at ? new Date(dto.scheduled_at) : undefined;
         const metadata = await this.resolveMessageMetadata(organisation_uuid, dto);
+        const thread_uuid = await this.threadsService.resolveThreadForNewMessage({
+            organisation_uuid,
+            contact_uuid: contact.uuid,
+            channel: dto.channel,
+            subject: dto.subject,
+        });
         const message = await this.prisma.outreachMessage.create({
             data: {
                 organisation_uuid,
@@ -63,9 +72,12 @@ export class OutreachService {
                 content,
                 status: MsgStatus.PENDING,
                 scheduled_at,
+                message_id: dto.channel === Channel.EMAIL ? generateMessageId() : null,
+                thread_uuid,
                 ...(metadata ? { metadata: metadata as Prisma.InputJsonValue } : {}),
             },
         });
+        await this.threadsService.recordMessageOnThread(thread_uuid);
         await this.enqueueMessage(message.uuid, scheduled_at);
         return message;
     }
@@ -79,7 +91,13 @@ export class OutreachService {
         const contact = await this.requireOwnedContact(organisation_uuid, dto.contact_uuid);
         this.assertContactCanReceiveChannel(contact, dto.channel);
         const metadata = await this.resolveMessageMetadata(organisation_uuid, dto);
-        return this.prisma.outreachMessage.create({
+        const thread_uuid = await this.threadsService.resolveThreadForNewMessage({
+            organisation_uuid,
+            contact_uuid: contact.uuid,
+            channel: dto.channel,
+            subject: dto.subject,
+        });
+        const message = await this.prisma.outreachMessage.create({
             data: {
                 organisation_uuid,
                 contact_uuid: contact.uuid,
@@ -88,9 +106,13 @@ export class OutreachService {
                 subject: dto.subject,
                 content,
                 status: MsgStatus.PENDING,
+                message_id: dto.channel === Channel.EMAIL ? generateMessageId() : null,
+                thread_uuid,
                 ...(metadata ? { metadata: metadata as Prisma.InputJsonValue } : {}),
             },
         });
+        await this.threadsService.recordMessageOnThread(thread_uuid);
+        return message;
     }
 
     private async resolveMessageMetadata(organisation_uuid: string, dto: SendOutreachDto) {

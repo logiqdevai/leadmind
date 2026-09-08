@@ -8,6 +8,7 @@ import { TwillioModule } from '@/integrations/notifications/twillio/twillio.modu
 import { IntegrationsModule } from '@/modules/integrations/integrations.module';
 import { SenderProfilesModule } from '@/modules/sender-profiles/sender-profiles.module';
 import { EmailSendLimitsModule } from '@/modules/email-send-limits/email-send-limits.module';
+import { ThreadsModule } from '@/modules/threads/threads.module';
 import { OutreachController } from './outreach.controller';
 import { OutreachService } from './outreach.service';
 import { OutreachRenderService } from './services/outreach-render.service';
@@ -22,6 +23,7 @@ import { MessageSendService } from './services/message-send.service';
         IntegrationsModule,
         SenderProfilesModule,
         EmailSendLimitsModule,
+        ThreadsModule,
         BullModule.registerQueue({ name: OUTREACH_SEND_QUEUE }),
     ],
     controllers: [OutreachController],

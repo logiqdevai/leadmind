@@ -167,6 +167,7 @@ export interface OutreachMessage {
     user_uuid: string;
     contact_uuid: string;
     campaign_uuid?: string | null;
+    thread_uuid?: string | null;
     channel: Channel;
     subject: string | null;
     content: string;
@@ -182,6 +183,39 @@ export interface OutreachMessage {
     metadata: Record<string, unknown> | null;
     created_at: string;
     updated_at: string;
+}
+
+export const ThreadOrigin = {
+    MANUAL: "MANUAL",
+    SEQUENCE: "SEQUENCE",
+    CAMPAIGN: "CAMPAIGN",
+} as const;
+
+export type ThreadOrigin = (typeof ThreadOrigin)[keyof typeof ThreadOrigin];
+
+/** A persisted conversation grouping - one per sequence enrollment, one per campaign+contact, or one per standalone manual conversation. */
+export interface ConversationThread {
+    uuid: string;
+    organisation_uuid: string;
+    contact_uuid: string;
+    channel: Channel;
+    subject: string | null;
+    origin: ThreadOrigin;
+    sequence_enrollment_uuid: string | null;
+    campaign_uuid: string | null;
+    last_message_at: string | null;
+    message_count: number;
+    created_at: string;
+    updated_at: string;
+}
+
+export type ThreadTimelineEntry =
+    | { kind: "outbound"; at: string; message: OutreachMessage }
+    | { kind: "interaction"; at: string; interaction: Interaction };
+
+export interface ThreadDetail {
+    thread: ConversationThread;
+    timeline: ThreadTimelineEntry[];
 }
 
 export interface InteractionOutreachRef {
@@ -381,6 +415,8 @@ export interface AiDraftMessagePayload {
     language?: string;
     current_subject?: string;
     current_content?: string;
+    /** Message being replied to, if drafting inside an existing conversation - scopes AI context to that thread only. */
+    outreach_message_uuid?: string;
 }
 
 export interface AiDraftMessageResult {

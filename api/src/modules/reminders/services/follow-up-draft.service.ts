@@ -23,10 +23,15 @@ export class FollowUpDraftService {
         private readonly aiCredentials: AiCredentialsService,
     ) {}
 
-    /** Drafts a personalized follow-up from the contact's recent email history, or null if AI isn't configured/available. */
+    /**
+     * Drafts a personalized follow-up from the contact's recent email history, or null if AI
+     * isn't configured/available. Pass `thread_uuid` (the reminder's originating conversation)
+     * to scope context to that thread only, instead of every concurrent thread with the contact.
+     */
     async draftFollowUp(
         organisation_uuid: string,
         contact_uuid: string,
+        thread_uuid?: string | null,
     ): Promise<FollowUpDraftResult | null> {
         const hasKey = await this.aiCredentials.hasOpenAiApiKey(organisation_uuid);
         if (!hasKey) {
@@ -42,7 +47,7 @@ export class FollowUpDraftService {
         });
         if (!contact) return null;
 
-        const messages = await fetchRecentEmailMessages(this.prisma, organisation_uuid, contact_uuid);
+        const messages = await fetchRecentEmailMessages(this.prisma, organisation_uuid, contact_uuid, 10, thread_uuid);
         if (messages.length === 0) return null;
 
         const transcript = buildEmailTranscript(messages);

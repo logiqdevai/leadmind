@@ -63,6 +63,7 @@ export const ApiRoutes = {
         bulk_delete: "/contacts/bulk-delete",
         bulk_delete_below_score: "/contacts/bulk-delete-below-score",
         messages: (uuid: string) => `/contacts/${uuid}/messages`,
+        threads: (uuid: string) => `/contacts/${uuid}/threads`,
         from_lead: (lead_uuid: string) => `/contacts/from-lead/${lead_uuid}`,
     },
     outreach: {
@@ -73,6 +74,9 @@ export const ApiRoutes = {
         send_message: (uuid: string) => `/outreach/messages/${uuid}/send`,
         delete_message: (uuid: string) => `/outreach/messages/${uuid}`,
         thread: (uuid: string) => `/outreach/messages/${uuid}/thread`,
+    },
+    threads: {
+        detail: (uuid: string) => `/threads/${uuid}`,
     },
     dashboard: {
         prefix: "/dashboard",

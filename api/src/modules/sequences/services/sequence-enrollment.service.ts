@@ -22,6 +22,8 @@ import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { OUTREACH_SEND_QUEUE } from '@/core/queues/queues.constants';
 import { hasUsableContactEmail } from '@/shared/utils/contact-email.util';
 import { resolveStepScheduledAt } from '@/shared/utils/sequence-delay.util';
+import { generateMessageId } from '@/shared/utils/email-message-id.util';
+import { ThreadsService } from '@/modules/threads/threads.service';
 
 const BULK_ENROLL_CHUNK_SIZE = 200;
 
@@ -38,6 +40,7 @@ export class SequenceEnrollmentService {
 
   constructor(
     private readonly prisma: PrismaService,
+    private readonly threadsService: ThreadsService,
     @InjectQueue(OUTREACH_SEND_QUEUE)
     private readonly outreachSendQueue: Queue,
   ) {}
@@ -481,13 +484,25 @@ export class SequenceEnrollmentService {
             );
 
       if (this.contactCanReceiveChannel(contact, step.channel)) {
+        const subject = step.channel === Channel.EMAIL ? step.email_subject : null;
+        const thread_uuid = await this.threadsService.resolveThreadForNewMessage(
+          {
+            organisation_uuid: enrollment.organisation_uuid,
+            contact_uuid: enrollment.contact_uuid,
+            channel: step.channel,
+            subject,
+            sequence_enrollment_uuid: enrollment.uuid,
+            campaign_uuid: enrollment.campaign_uuid,
+          },
+          tx,
+        );
         await tx.outreachMessage.create({
           data: {
             organisation_uuid: enrollment.organisation_uuid,
             contact_uuid: enrollment.contact_uuid,
             campaign_uuid: enrollment.campaign_uuid,
             channel: step.channel,
-            subject: step.channel === Channel.EMAIL ? step.email_subject : null,
+            subject,
             content:
               step.channel === Channel.EMAIL
                 ? (step.email_content ?? '')
@@ -496,8 +511,11 @@ export class SequenceEnrollmentService {
             scheduled_at,
             sequence_enrollment_uuid: enrollment.uuid,
             sequence_step_uuid: step.uuid,
+            message_id: step.channel === Channel.EMAIL ? generateMessageId() : null,
+            thread_uuid,
           },
         });
+        await this.threadsService.recordMessageOnThread(thread_uuid, tx);
         await tx.sequenceEnrollment.update({
           where: { uuid: enrollment.uuid },
           data: { current_step_order_index: step.order_index },

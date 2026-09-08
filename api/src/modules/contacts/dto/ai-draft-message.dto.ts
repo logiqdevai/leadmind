@@ -39,4 +39,9 @@ export class AiDraftMessageDto {
     @IsOptional()
     @IsString()
     current_content?: string;
+
+    @ApiPropertyOptional({ description: 'Message being replied to, if drafting inside an existing conversation - scopes AI context to that thread only.' })
+    @IsOptional()
+    @IsUUID()
+    outreach_message_uuid?: string;
 }

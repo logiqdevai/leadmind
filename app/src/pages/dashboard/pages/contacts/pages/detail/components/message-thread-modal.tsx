@@ -13,11 +13,12 @@ import { ActionButtonWithPending } from "@/components/ui/action-button-with-pend
 import {
     Channel,
     InteractionType,
-    MsgStatus,
+    ThreadOrigin,
     type Interaction,
+    type OutreachMessage,
 } from "@/features/contacts/interfaces/contact.interface";
 import { useAiDraftMessage, useReplyToContact } from "@/features/contacts/hooks/use-contacts";
-import { useOutreachMessageThread } from "@/features/outreach/hooks/use-outreach";
+import { useThreadDetail } from "@/features/outreach/hooks/use-outreach";
 import {
     MessageComposer,
     type AiGenerateArgs,
@@ -29,10 +30,36 @@ import { isEmailHtmlEmpty, sanitizeEmailHtml } from "@/lib/sanitize-html";
 import { MessageBodyPreview } from "./message-body-preview";
 
 interface MessageThreadModalProps {
-    messageUuid: string | null;
+    threadUuid: string | null;
     contactUuid: string | null;
     isOpen: boolean;
     onOpenChange: (open: boolean) => void;
+}
+
+const ORIGIN_LABEL: Record<ThreadOrigin, string> = {
+    [ThreadOrigin.MANUAL]: "Manual",
+    [ThreadOrigin.SEQUENCE]: "Sequence",
+    [ThreadOrigin.CAMPAIGN]: "Campaign",
+};
+
+function ThreadMessage({ message }: { message: OutreachMessage }) {
+    return (
+        <div className="rounded-xl border border-border/80 bg-surface/80 p-3">
+            <div className="mb-1.5 flex items-center gap-2">
+                <Chip size="sm" variant="soft">
+                    <Chip.Label>{message.channel}</Chip.Label>
+                </Chip>
+                <span className="inline-flex items-center gap-1 text-xs text-muted">
+                    <Send className="size-3" />
+                    {message.sent_at ? new Date(message.sent_at).toLocaleString() : "Not sent"}
+                </span>
+            </div>
+            {message.subject ? (
+                <h4 className="mb-1 text-sm font-medium text-foreground">{message.subject}</h4>
+            ) : null}
+            <MessageBodyPreview channel={message.channel} content={message.content} />
+        </div>
+    );
 }
 
 const EVENT_ICON: Partial<Record<InteractionType, ComponentType<{ className?: string }>>> = {
@@ -154,6 +181,7 @@ function ReplyBox({
             language: args.language,
             current_subject: args.currentSubject,
             current_content: args.currentContent,
+            outreach_message_uuid: outreachMessageUuid,
         });
         return { subject: result.subject, content: result.content };
     };
@@ -220,14 +248,25 @@ function ReplyBox({
 }
 
 export function MessageThreadModal({
-    messageUuid,
+    threadUuid,
     contactUuid,
     isOpen,
     onOpenChange,
 }: MessageThreadModalProps) {
-    const { data, isLoading } = useOutreachMessageThread(isOpen ? messageUuid : null);
-    const hasReply = data?.interactions.some((i) => i.type === InteractionType.REPLY_RECEIVED) ?? false;
-    const canReply = Boolean(contactUuid && messageUuid && hasReply && data?.message.channel === Channel.EMAIL);
+    const { data, isLoading } = useThreadDetail(isOpen ? threadUuid : null);
+
+    // The most recent outbound email in the thread that has a reply on it - that's what a new
+    // reply threads onto (In-Reply-To). Earlier messages may also have replies, but replying
+    // continues the conversation from its latest point.
+    const replyTarget = [...(data?.timeline ?? [])]
+        .reverse()
+        .find(
+            (entry): entry is Extract<typeof entry, { kind: "outbound" }> =>
+                entry.kind === "outbound" &&
+                entry.message.channel === Channel.EMAIL &&
+                Boolean(entry.message.replied_at),
+        )?.message;
+    const canReply = Boolean(contactUuid && replyTarget);
 
     return (
         <Modal.Backdrop isOpen={isOpen} onOpenChange={onOpenChange}>
@@ -235,7 +274,7 @@ export function MessageThreadModal({
                 <Modal.Dialog className="sm:max-w-2xl">
                     <Modal.CloseTrigger />
                     <Modal.Header>
-                        <Modal.Heading>Conversation</Modal.Heading>
+                        <Modal.Heading>{data?.thread.subject || "Conversation"}</Modal.Heading>
                     </Modal.Header>
                     <Modal.Body>
                         {isLoading || !data ? (
@@ -246,49 +285,36 @@ export function MessageThreadModal({
                             </div>
                         ) : (
                             <div className="flex flex-col gap-4">
-                                <div className="rounded-xl border border-border/80 bg-surface/80 p-3">
-                                    <div className="mb-1.5 flex items-center gap-2">
-                                        <Chip size="sm" variant="soft">
-                                            <Chip.Label>{data.message.channel}</Chip.Label>
-                                        </Chip>
-                                        <span className="inline-flex items-center gap-1 text-xs text-muted">
-                                            <Send className="size-3" />
-                                            {data.message.sent_at
-                                                ? new Date(data.message.sent_at).toLocaleString()
-                                                : "Not sent"}
-                                        </span>
-                                    </div>
-                                    {data.message.subject ? (
-                                        <h4 className="mb-1 text-sm font-medium text-foreground">
-                                            {data.message.subject}
-                                        </h4>
-                                    ) : null}
-                                    <MessageBodyPreview
-                                        channel={data.message.channel}
-                                        content={data.message.content}
-                                    />
+                                <div>
+                                    <Chip size="sm" variant="soft">
+                                        <Chip.Label>{ORIGIN_LABEL[data.thread.origin]}</Chip.Label>
+                                    </Chip>
                                 </div>
 
-                                {data.interactions.length === 0 ? (
-                                    <p className="text-sm italic text-muted">
-                                        No delivery events yet
-                                        {data.message.status === MsgStatus.PENDING ? " — this message hasn't been sent." : "."}
-                                    </p>
+                                {data.timeline.length === 0 ? (
+                                    <p className="text-sm italic text-muted">No messages yet.</p>
                                 ) : (
                                     <div className="flex flex-col gap-3 pl-1">
-                                        {data.interactions.map((interaction) => (
-                                            <ThreadEvent key={interaction.uuid} interaction={interaction} />
-                                        ))}
+                                        {data.timeline.map((entry) =>
+                                            entry.kind === "outbound" ? (
+                                                <ThreadMessage key={entry.message.uuid} message={entry.message} />
+                                            ) : (
+                                                <ThreadEvent
+                                                    key={entry.interaction.uuid}
+                                                    interaction={entry.interaction}
+                                                />
+                                            ),
+                                        )}
                                     </div>
                                 )}
 
                                 {canReply ? (
                                     <ReplyBox
                                         contactUuid={contactUuid!}
-                                        outreachMessageUuid={messageUuid!}
+                                        outreachMessageUuid={replyTarget!.uuid}
                                         defaultSubject={
-                                            data.message.reply_subject || data.message.subject
-                                                ? `Re: ${(data.message.reply_subject ?? data.message.subject ?? "").replace(/^re:\s*/i, "")}`
+                                            replyTarget!.reply_subject || replyTarget!.subject
+                                                ? `Re: ${(replyTarget!.reply_subject ?? replyTarget!.subject ?? "").replace(/^re:\s*/i, "")}`
                                                 : ""
                                         }
                                         onSent={() => {}}

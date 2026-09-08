@@ -71,6 +71,7 @@ export async function syncCachesAfterOutreachSend(
         ...contactUuids.flatMap((uuid) => [
             qc.invalidateQueries({ queryKey: contactsQueryKeys.detail(uuid) }),
             qc.invalidateQueries({ queryKey: contactsQueryKeys.messages(uuid) }),
+            qc.invalidateQueries({ queryKey: contactsQueryKeys.threads(uuid) }),
             qc.invalidateQueries({ queryKey: contactsQueryKeys.interactions(uuid) }),
         ]),
         ...(vars.campaign_uuid

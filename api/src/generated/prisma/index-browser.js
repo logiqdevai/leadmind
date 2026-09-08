@@ -408,6 +408,9 @@ exports.Prisma.OutreachMessageScalarFieldEnum = {
   reply_html: 'reply_html',
   inbound_message_id: 'inbound_message_id',
   in_reply_to_message_id: 'in_reply_to_message_id',
+  message_id: 'message_id',
+  references: 'references',
+  thread_uuid: 'thread_uuid',
   is_manual_reply: 'is_manual_reply',
   email_provider: 'email_provider',
   email_account: 'email_account',
@@ -417,6 +420,23 @@ exports.Prisma.OutreachMessageScalarFieldEnum = {
   sequence_enrollment_uuid: 'sequence_enrollment_uuid',
   sequence_step_uuid: 'sequence_step_uuid',
   campaign_integration_uuid: 'campaign_integration_uuid',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.MessageThreadScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  organisation_uuid: 'organisation_uuid',
+  contact_uuid: 'contact_uuid',
+  channel: 'channel',
+  subject: 'subject',
+  origin: 'origin',
+  sequence_enrollment_uuid: 'sequence_enrollment_uuid',
+  campaign_uuid: 'campaign_uuid',
+  dedupe_key: 'dedupe_key',
+  last_message_at: 'last_message_at',
+  message_count: 'message_count',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };
@@ -1151,6 +1171,12 @@ exports.ExternalIntegrationProvider = exports.$Enums.ExternalIntegrationProvider
   MXTOOLBOX: 'MXTOOLBOX'
 };
 
+exports.ThreadOrigin = exports.$Enums.ThreadOrigin = {
+  MANUAL: 'MANUAL',
+  SEQUENCE: 'SEQUENCE',
+  CAMPAIGN: 'CAMPAIGN'
+};
+
 exports.SequenceStatus = exports.$Enums.SequenceStatus = {
   DRAFT: 'DRAFT',
   ACTIVE: 'ACTIVE',
@@ -1442,6 +1468,7 @@ exports.Prisma.ModelName = {
   ContactTag: 'ContactTag',
   Interaction: 'Interaction',
   OutreachMessage: 'OutreachMessage',
+  MessageThread: 'MessageThread',
   OutreachSequence: 'OutreachSequence',
   OutreachSequenceStep: 'OutreachSequenceStep',
   SequenceEnrollment: 'SequenceEnrollment',

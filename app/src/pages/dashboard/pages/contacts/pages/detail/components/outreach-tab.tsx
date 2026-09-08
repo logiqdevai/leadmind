@@ -2,9 +2,10 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Button, Chip } from "@heroui/react";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
 import { MessageCircleReply, Pencil, Plus, RefreshCcw, Send, Trash, Workflow } from "lucide-react";
-import { Channel, type Contact } from "@/features/contacts/interfaces/contact.interface";
+import { Channel, ThreadOrigin, type Contact } from "@/features/contacts/interfaces/contact.interface";
 import { MsgStatus, type OutreachMessage } from "@/features/contacts/interfaces/contact.interface";
 import { useDeleteOutreachMessage, useSendOutreachMessage } from "@/features/outreach/hooks/use-outreach";
+import { useContactThreads } from "@/features/contacts/hooks/use-contacts";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { EditMessageModal } from "@/pages/dashboard/pages/leads/components/edit-message-modal";
 import { cn } from "@/lib/utils";
@@ -32,6 +33,22 @@ const STATUS_COLOR: Record<MsgStatus, "default" | "success" | "warning" | "dange
   [MsgStatus.SKIPPED]: "warning",
 };
 
+const ORIGIN_LABEL: Record<ThreadOrigin, string> = {
+  [ThreadOrigin.MANUAL]: "Manual",
+  [ThreadOrigin.SEQUENCE]: "Sequence",
+  [ThreadOrigin.CAMPAIGN]: "Campaign",
+};
+
+interface SentGroup {
+  key: string;
+  thread_uuid: string | null;
+  subject: string | null;
+  origin: ThreadOrigin | null;
+  channel: Channel;
+  messages: OutreachMessage[];
+  lastActivityAt: string;
+}
+
 interface OutreachTabProps {
   contact: Contact;
   highlightUuid?: string | null;
@@ -42,6 +59,7 @@ interface OutreachTabProps {
 export function OutreachTab({ contact, highlightUuid, onHighlightConsumed, onNavigationLockChange }: OutreachTabProps) {
   const sendMessage = useSendOutreachMessage();
   const deleteMessage = useDeleteOutreachMessage();
+  const { data: threads = [] } = useContactThreads(contact.uuid);
   const { data: integrations = [] } = useIntegrations();
   const defaultEmailTarget = useMemo(
     () => resolveDefaultEmailTarget(integrations),
@@ -54,7 +72,7 @@ export function OutreachTab({ contact, highlightUuid, onHighlightConsumed, onNav
   const [draftPendingSend, setDraftPendingSend] = useState<OutreachMessage | null>(null);
   const [composeOpen, setComposeOpen] = useState(false);
   const [enrollOpen, setEnrollOpen] = useState(false);
-  const [threadUuid, setThreadUuid] = useState<string | null>(null);
+  const [openThreadUuid, setOpenThreadUuid] = useState<string | null>(null);
   const [ringedUuid, setRingedUuid] = useState<string | null>(null);
   const cardRefs = useRef(new Map<string, HTMLDivElement>());
 
@@ -87,18 +105,45 @@ export function OutreachTab({ contact, highlightUuid, onHighlightConsumed, onNav
     else cardRefs.current.delete(uuid);
   };
 
-  const { drafts, sentHistory } = useMemo(() => {
+  const { drafts, sentGroups } = useMemo(() => {
     const messages = contact.outreach_messages ?? [];
     const drafts = messages.filter((m) => m.status === MsgStatus.PENDING);
-    const sentHistory = messages
-      .filter((m) => m.status !== MsgStatus.PENDING && m.status !== MsgStatus.QUEUED)
-      .sort((a, b) => {
-        const at = a.sent_at ?? a.updated_at;
-        const bt = b.sent_at ?? b.updated_at;
-        return bt.localeCompare(at);
-      });
-    return { drafts, sentHistory };
-  }, [contact.outreach_messages]);
+    const sent = messages.filter(
+      (m) => m.status !== MsgStatus.PENDING && m.status !== MsgStatus.QUEUED,
+    );
+
+    const threadByUuid = new Map(threads.map((t) => [t.uuid, t]));
+    const groups = new Map<string, OutreachMessage[]>();
+    for (const m of sent) {
+      const key = m.thread_uuid ?? `unthreaded:${m.uuid}`;
+      const bucket = groups.get(key);
+      if (bucket) bucket.push(m);
+      else groups.set(key, [m]);
+    }
+
+    const sentGroups: SentGroup[] = [...groups.entries()].map(([key, msgs]) => {
+      const sorted = [...msgs].sort((a, b) => (a.sent_at ?? a.updated_at).localeCompare(b.sent_at ?? b.updated_at));
+      const thread_uuid = sorted[0].thread_uuid ?? null;
+      const thread = thread_uuid ? threadByUuid.get(thread_uuid) : undefined;
+      const lastActivityAt =
+        sorted.reduce<string>((latest, m) => {
+          const at = m.sent_at ?? m.updated_at;
+          return at > latest ? at : latest;
+        }, sorted[0].sent_at ?? sorted[0].updated_at);
+      return {
+        key,
+        thread_uuid,
+        subject: thread?.subject ?? sorted[0].subject,
+        origin: thread?.origin ?? null,
+        channel: sorted[0].channel,
+        messages: sorted,
+        lastActivityAt,
+      };
+    });
+    sentGroups.sort((a, b) => b.lastActivityAt.localeCompare(a.lastActivityAt));
+
+    return { drafts, sentGroups };
+  }, [contact.outreach_messages, threads]);
 
   return (
     <div className="flex flex-col gap-8">
@@ -186,74 +231,97 @@ export function OutreachTab({ contact, highlightUuid, onHighlightConsumed, onNav
         </div>
       </Section>
 
-      <Section title={`Sent history (${sentHistory.length})`} emptyText="No messages have been sent yet.">
-        <div className="flex flex-col gap-3">
-          {sentHistory.map((m) => (
+      <Section title={`Sent history (${sentGroups.length})`} emptyText="No messages have been sent yet.">
+        <div className="flex flex-col gap-4">
+          {sentGroups.map((group) => (
             <article
-              key={m.uuid}
-              ref={setCardRef(m.uuid)}
-              className={cn(
-                "flex flex-col gap-3 rounded-2xl border border-border/80 bg-surface/60 p-4 sm:p-5 transition-shadow",
-                ringedUuid === m.uuid && "ring-2 ring-accent ring-offset-1 ring-offset-background",
-              )}
+              key={group.key}
+              className="flex flex-col gap-3 rounded-2xl border border-border/80 bg-surface/60 p-4 sm:p-5"
             >
               <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
                 <div className="min-w-0 flex flex-col gap-1.5">
                   <div className="flex flex-wrap items-center gap-1.5">
-                    <Chip size="sm" color={STATUS_COLOR[m.status]} variant="soft">
-                      <Chip.Label>{m.status}</Chip.Label>
-                    </Chip>
+                    {group.origin ? (
+                      <Chip size="sm" variant="soft">
+                        <Chip.Label>{ORIGIN_LABEL[group.origin]}</Chip.Label>
+                      </Chip>
+                    ) : null}
                     <Chip size="sm" variant="soft">
-                      <Chip.Label>{m.channel}</Chip.Label>
+                      <Chip.Label>{group.channel}</Chip.Label>
                     </Chip>
+                    {group.messages.length > 1 ? (
+                      <span className="text-xs text-muted">{group.messages.length} messages</span>
+                    ) : null}
                   </div>
-                  {m.subject ? (
-                    <h4 className="text-sm font-medium leading-snug text-foreground">{m.subject}</h4>
+                  {group.subject ? (
+                    <h4 className="text-sm font-medium leading-snug text-foreground">{group.subject}</h4>
                   ) : null}
                 </div>
                 <div className="flex flex-wrap items-center gap-2 sm:shrink-0 sm:justify-end">
-                  {m.channel === Channel.EMAIL && m.status !== MsgStatus.PENDING && m.status !== MsgStatus.QUEUED ? (
+                  {group.channel === Channel.EMAIL && group.thread_uuid ? (
                     <Button
                       size="sm"
                       variant="tertiary"
                       className="w-full justify-center sm:w-auto"
-                      onPress={() => setThreadUuid(m.uuid)}
+                      onPress={() => setOpenThreadUuid(group.thread_uuid)}
                     >
                       <MessageCircleReply className="size-3.5" />
-                      {m.status === MsgStatus.REPLIED ? "View conversation" : "View activity"}
+                      {group.messages.some((m) => m.status === MsgStatus.REPLIED)
+                        ? "View conversation"
+                        : "View activity"}
                     </Button>
                   ) : null}
-                  {m.status === MsgStatus.FAILED ? (
-                    <Button
-                      size="sm"
-                      variant="secondary"
-                      className="w-full justify-center sm:w-auto"
-                      isDisabled={
-                        sendMessage.isPending ||
-                        (m.channel === Channel.EMAIL && emailLimitStatus.reached)
-                      }
-                      aria-label={
-                        m.channel === Channel.EMAIL && emailLimitStatus.reached
-                          ? emailLimitStatus.message ?? "Send limit reached"
-                          : "Resend"
-                      }
-                      onPress={() =>
-                        sendMessage.mutate({
-                          uuid: m.uuid,
-                          contact_uuid: contact.uuid,
-                        })
-                      }
-                    >
-                      <RefreshCcw className="size-3.5" />
-                      Resend
-                    </Button>
-                  ) : null}
-                  <time className="text-xs tabular-nums text-muted">
-                    {m.sent_at ? new Date(m.sent_at).toLocaleString() : "—"}
-                  </time>
                 </div>
               </div>
-              <MessageBodyPreview channel={m.channel} content={m.content} />
+
+              <div className="flex flex-col gap-3">
+                {group.messages.map((m) => (
+                  <div
+                    key={m.uuid}
+                    ref={setCardRef(m.uuid)}
+                    className={cn(
+                      "rounded-xl border border-border/60 bg-surface/80 p-3 transition-shadow",
+                      ringedUuid === m.uuid && "ring-2 ring-accent ring-offset-1 ring-offset-background",
+                    )}
+                  >
+                    <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+                      <Chip size="sm" color={STATUS_COLOR[m.status]} variant="soft">
+                        <Chip.Label>{m.status}</Chip.Label>
+                      </Chip>
+                      <div className="flex items-center gap-2">
+                        {m.status === MsgStatus.FAILED ? (
+                          <Button
+                            size="sm"
+                            variant="secondary"
+                            isDisabled={
+                              sendMessage.isPending ||
+                              (m.channel === Channel.EMAIL && emailLimitStatus.reached)
+                            }
+                            aria-label={
+                              m.channel === Channel.EMAIL && emailLimitStatus.reached
+                                ? emailLimitStatus.message ?? "Send limit reached"
+                                : "Resend"
+                            }
+                            onPress={() =>
+                              sendMessage.mutate({
+                                uuid: m.uuid,
+                                contact_uuid: contact.uuid,
+                              })
+                            }
+                          >
+                            <RefreshCcw className="size-3.5" />
+                            Resend
+                          </Button>
+                        ) : null}
+                        <time className="text-xs tabular-nums text-muted">
+                          {m.sent_at ? new Date(m.sent_at).toLocaleString() : "—"}
+                        </time>
+                      </div>
+                    </div>
+                    <MessageBodyPreview channel={m.channel} content={m.content} />
+                  </div>
+                ))}
+              </div>
             </article>
           ))}
         </div>
@@ -269,11 +337,11 @@ export function OutreachTab({ contact, highlightUuid, onHighlightConsumed, onNav
       />
 
       <MessageThreadModal
-        messageUuid={threadUuid}
+        threadUuid={openThreadUuid}
         contactUuid={contact.uuid}
-        isOpen={threadUuid !== null}
+        isOpen={openThreadUuid !== null}
         onOpenChange={(open) => {
-          if (!open) setThreadUuid(null);
+          if (!open) setOpenThreadUuid(null);
         }}
       />
 

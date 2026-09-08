@@ -37,6 +37,8 @@ import { BulkJobsService } from '@/modules/bulk-jobs/bulk-jobs.service';
 import { resolveContactEnrichmentSources } from '@/modules/leads/utils/enrichment-sources.utils';
 import { resolveEmailFieldsForWrite } from '@/shared/utils/email-domain-validation.util';
 import { resolveWebsiteFieldsForWrite } from '@/shared/utils/website-domain-validation.util';
+import { generateMessageId } from '@/shared/utils/email-message-id.util';
+import { ThreadsService } from '@/modules/threads/threads.service';
 import { AddNoteDto } from './dto/add-note.dto';
 import { AiDraftMessageDto } from './dto/ai-draft-message.dto';
 import { BulkTriggerScoreDto } from './dto/bulk-trigger-score.dto';
@@ -124,6 +126,7 @@ export class ContactsService {
         private readonly websiteCrawler: WebsiteScraperService,
         private readonly scrapioScrapeRequestService: ScrapioScrapeRequestService,
         private readonly bulkJobsService: BulkJobsService,
+        private readonly threadsService: ThreadsService,
         @InjectQueue(AI_PROCESS_QUEUE) private readonly aiProcessQueue: Queue,
     ) { }
 
@@ -1139,6 +1142,25 @@ export class ContactsService {
                   }) as Prisma.InputJsonValue)
                 : undefined;
 
+        const thread_uuid = await this.threadsService.resolveThreadForNewMessage({
+            organisation_uuid,
+            contact_uuid: uuid,
+            channel: Channel.EMAIL,
+            subject,
+            reply_to_thread_uuid: sourceMessage.thread_uuid,
+        });
+
+        // In-Reply-To below points at the contact's inbound reply (sourceMessage.inbound_message_id),
+        // so References is sourceMessage's own chain plus its Message-ID plus that inbound id -
+        // the full ancestor list, not just the immediate parent.
+        const references = [
+            sourceMessage.references,
+            sourceMessage.message_id,
+            sourceMessage.inbound_message_id,
+        ]
+            .filter((value): value is string => !!value?.trim())
+            .join(' ') || null;
+
         const message = await this.prisma.outreachMessage.create({
             data: {
                 organisation_uuid,
@@ -1150,13 +1172,22 @@ export class ContactsService {
                 status: MsgStatus.PENDING,
                 sequence_enrollment_uuid: sourceMessage.sequence_enrollment_uuid,
                 in_reply_to_message_id: sourceMessage.inbound_message_id,
+                message_id: generateMessageId(),
+                references,
+                thread_uuid,
                 is_manual_reply: true,
                 ...(providerMetadata ? { metadata: providerMetadata } : {}),
             },
         });
+        await this.threadsService.recordMessageOnThread(thread_uuid);
 
         await this.outreachService.enqueueMessage(message.uuid);
         return message;
+    }
+
+    async listThreads(organisation_uuid: string, uuid: string) {
+        await this.requireOwnedContact(organisation_uuid, uuid);
+        return this.threadsService.listThreadsForContact(organisation_uuid, uuid);
     }
 
     async getInteractions(organisation_uuid: string, uuid: string) {

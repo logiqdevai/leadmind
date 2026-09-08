@@ -38,7 +38,7 @@ export const STATUS_COLOR: Record<
 export function SendHistoryTable({ rows }: { rows: SendHistoryMessage[] }) {
     const { data: integrations } = useIntegrations();
     const [selected, setSelected] = useState<SendHistoryMessage | null>(null);
-    const [thread, setThread] = useState<{ messageUuid: string; contactUuid: string } | null>(null);
+    const [thread, setThread] = useState<{ threadUuid: string; contactUuid: string } | null>(null);
     const [cancelTarget, setCancelTarget] = useState<SendHistoryMessage | null>(null);
     const cancelEnrollmentMut = useCancelEnrollment();
 
@@ -59,7 +59,7 @@ export function SendHistoryTable({ rows }: { rows: SendHistoryMessage[] }) {
                 }}
             />
             <MessageThreadModal
-                messageUuid={thread?.messageUuid ?? null}
+                threadUuid={thread?.threadUuid ?? null}
                 contactUuid={thread?.contactUuid ?? null}
                 isOpen={thread !== null}
                 onOpenChange={(open) => {
@@ -151,12 +151,13 @@ export function SendHistoryTable({ rows }: { rows: SendHistoryMessage[] }) {
                                     </div>
                                     {row.channel === "EMAIL" &&
                                     row.status !== MsgStatus.PENDING &&
-                                    row.status !== MsgStatus.QUEUED ? (
+                                    row.status !== MsgStatus.QUEUED &&
+                                    row.thread_uuid ? (
                                         <Button
                                             size="sm"
                                             variant="ghost"
                                             className="shrink-0 min-w-7 h-7 px-1"
-                                            onPress={() => setThread({ messageUuid: row.uuid, contactUuid: row.contact.uuid })}
+                                            onPress={() => setThread({ threadUuid: row.thread_uuid!, contactUuid: row.contact.uuid })}
                                             aria-label={
                                                 row.status === MsgStatus.REPLIED
                                                     ? "View conversation"

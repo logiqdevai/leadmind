@@ -361,6 +361,15 @@ export class ContactsController {
         return this.contactsService.logSms(organisation_uuid, uuid, dto);
     }
 
+    @Get(':uuid/threads')
+    @ApiOperation({ summary: 'List message threads (conversations) for a contact, most recently active first' })
+    listThreads(
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
+        @Param('uuid') uuid: string,
+    ) {
+        return this.contactsService.listThreads(organisation_uuid, uuid);
+    }
+
     @Get(':uuid/interactions')
     @ApiOperation({ summary: 'List interactions for a contact (most recent first)' })
     getInteractions(

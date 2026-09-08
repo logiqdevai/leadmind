@@ -58,6 +58,7 @@ export interface SendHistoryMessage {
     campaign_uuid: string | null;
     sequence_enrollment_uuid: string | null;
     sequence_step_uuid: string | null;
+    thread_uuid: string | null;
     sent_by_user_uuid: string | null;
     channel: Channel;
     subject: string | null;

@@ -21,6 +21,8 @@ import { SendingCapacityService } from '@/modules/sending-capacity/services/send
 import { SendingCapacityDeniedError } from '@/modules/sending-capacity/interfaces/sending-capacity.interface';
 import { IntegrationSelectionService } from '@/modules/integration-selection/services/integration-selection.service';
 import { SelectableCampaignIntegration } from '@/modules/integration-selection/interfaces/integration-selection-strategy.interface';
+import { generateMessageId } from '@/shared/utils/email-message-id.util';
+import { ThreadsService } from '@/modules/threads/threads.service';
 
 interface ClaimedMcc {
   uuid: string;
@@ -43,6 +45,7 @@ export class SendingEngineService {
     private readonly prisma: PrismaService,
     private readonly sendingCapacityService: SendingCapacityService,
     private readonly integrationSelectionService: IntegrationSelectionService,
+    private readonly threadsService: ThreadsService,
     @InjectQueue(MARKETING_MESSAGE_SEND_QUEUE)
     private readonly messageSendQueue: Queue,
     @InjectQueue(OUTREACH_SEND_QUEUE)
@@ -261,8 +264,16 @@ export class SendingEngineService {
     });
     if (existing) return existing;
 
+    const thread_uuid = await this.threadsService.resolveThreadForNewMessage({
+      organisation_uuid: campaign.organisation_uuid,
+      contact_uuid,
+      channel: Channel.EMAIL,
+      subject: campaign.email_subject,
+      campaign_uuid: campaign.uuid,
+    });
+
     try {
-      return await this.prisma.outreachMessage.create({
+      const created = await this.prisma.outreachMessage.create({
         data: {
           organisation_uuid: campaign.organisation_uuid,
           contact_uuid,
@@ -272,9 +283,13 @@ export class SendingEngineService {
           content: sanitizeEmailHtml(campaign.email_content ?? ''),
           status: MsgStatus.QUEUED,
           idempotency_key,
+          message_id: generateMessageId(),
+          thread_uuid,
         },
         select: { uuid: true },
       });
+      await this.threadsService.recordMessageOnThread(thread_uuid);
+      return created;
     } catch (error) {
       if (
         error instanceof Prisma.PrismaClientKnownRequestError &&

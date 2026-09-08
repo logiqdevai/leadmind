@@ -10,6 +10,7 @@ import {
 } from '@/core/queues/queues.constants';
 import { SendingCapacityModule } from '@/modules/sending-capacity/sending-capacity.module';
 import { IntegrationSelectionModule } from '@/modules/integration-selection/integration-selection.module';
+import { ThreadsModule } from '@/modules/threads/threads.module';
 import { SendingEngineService } from './services/sending-engine.service';
 
 @Module({
@@ -17,6 +18,7 @@ import { SendingEngineService } from './services/sending-engine.service';
     PrismaModule,
     SendingCapacityModule,
     IntegrationSelectionModule,
+    ThreadsModule,
     BullModule.registerQueue({ name: SENDING_ENGINE_TICK_QUEUE }),
   ],
   providers: [SendingEngineService],

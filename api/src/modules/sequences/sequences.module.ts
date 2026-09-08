@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { BullModule } from '@nestjs/bullmq';
 import { PrismaModule } from '@/core/databases/prisma/prisma.module';
 import { OUTREACH_SEND_QUEUE } from '@/core/queues/queues.constants';
+import { ThreadsModule } from '@/modules/threads/threads.module';
 import { SequencesController } from './sequences.controller';
 import { SequencesService } from './services/sequences.service';
 import { SequenceEnrollmentService } from './services/sequence-enrollment.service';
@@ -9,6 +10,7 @@ import { SequenceEnrollmentService } from './services/sequence-enrollment.servic
 @Module({
     imports: [
         PrismaModule,
+        ThreadsModule,
         BullModule.registerQueue({ name: OUTREACH_SEND_QUEUE }),
     ],
     controllers: [SequencesController],

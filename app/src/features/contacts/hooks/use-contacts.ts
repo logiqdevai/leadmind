@@ -14,6 +14,7 @@ import {
     getContactTags,
     listContactInteractions,
     listContactMessages,
+    listContactThreads,
     listContacts,
     logCall,
     logEmail,
@@ -63,6 +64,7 @@ export const contactsQueryKeys = {
     list: (query: ListContactsQuery) => ["contacts", "list", query] as const,
     detail: (uuid: string) => ["contacts", "detail", uuid] as const,
     messages: (uuid: string) => ["outreach-messages", uuid] as const,
+    threads: (uuid: string) => ["contact-threads", uuid] as const,
     interactions: (uuid: string) => ["contact-interactions", uuid] as const,
     tags: ["contact-tags"] as const,
 };
@@ -109,6 +111,14 @@ export function useContactMessages(uuid: string | null | undefined) {
     return useQuery({
         queryKey: uuid ? contactsQueryKeys.messages(uuid) : ["outreach-messages", "none"],
         queryFn: () => listContactMessages(uuid as string),
+        enabled: !!uuid,
+    });
+}
+
+export function useContactThreads(uuid: string | null | undefined) {
+    return useQuery({
+        queryKey: uuid ? contactsQueryKeys.threads(uuid) : ["contact-threads", "none"],
+        queryFn: () => listContactThreads(uuid as string),
         enabled: !!uuid,
     });
 }
@@ -671,8 +681,10 @@ export function useReplyToContact() {
             replyToContact(vars.uuid, vars.payload),
         onSuccess: (_data, vars) => {
             qc.invalidateQueries({ queryKey: contactsQueryKeys.messages(vars.uuid) });
+            qc.invalidateQueries({ queryKey: contactsQueryKeys.threads(vars.uuid) });
             qc.invalidateQueries({ queryKey: contactsQueryKeys.interactions(vars.uuid) });
             qc.invalidateQueries({ queryKey: contactsQueryKeys.detail(vars.uuid) });
+            qc.invalidateQueries({ queryKey: ["thread-detail"] });
             toast({ title: "Reply sent", duration: 1500 });
         },
         onError: (error: Error) => {

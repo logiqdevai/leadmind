@@ -23,15 +23,23 @@ export function buildEmailTranscript(messages: TranscriptMessage[]): string {
     return parts.join('\n\n');
 }
 
-/** Fetches a contact's recent email history, oldest first. Empty array if there's none. */
+/**
+ * Fetches recent email history, oldest first. When `thread_uuid` is given, scopes strictly to
+ * that conversation (one sequence enrollment / one campaign / one manual thread) so drafts don't
+ * blend context from unrelated concurrent threads with the same contact; otherwise falls back to
+ * "recent history for this contact" for genuinely new ad-hoc drafts that don't have a thread yet.
+ */
 export async function fetchRecentEmailMessages(
     prisma: PrismaService,
     organisation_uuid: string,
     contact_uuid: string,
     limit = 10,
+    thread_uuid?: string | null,
 ): Promise<TranscriptMessage[]> {
     const recentMessages = await prisma.outreachMessage.findMany({
-        where: { contact_uuid, organisation_uuid, channel: Channel.EMAIL },
+        where: thread_uuid
+            ? { thread_uuid, channel: Channel.EMAIL }
+            : { contact_uuid, organisation_uuid, channel: Channel.EMAIL },
         orderBy: { created_at: 'desc' },
         take: limit,
         select: {
@@ -44,14 +52,15 @@ export async function fetchRecentEmailMessages(
     return [...recentMessages].reverse();
 }
 
-/** Convenience: fetches a contact's recent email history and builds a transcript, or '' if there's none. */
+/** Convenience: fetches recent email history and builds a transcript, or '' if there's none. */
 export async function fetchRecentEmailTranscript(
     prisma: PrismaService,
     organisation_uuid: string,
     contact_uuid: string,
     limit = 10,
+    thread_uuid?: string | null,
 ): Promise<string> {
-    const messages = await fetchRecentEmailMessages(prisma, organisation_uuid, contact_uuid, limit);
+    const messages = await fetchRecentEmailMessages(prisma, organisation_uuid, contact_uuid, limit, thread_uuid);
     if (messages.length === 0) return '';
     return buildEmailTranscript(messages);
 }

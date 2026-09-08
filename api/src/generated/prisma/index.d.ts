@@ -119,6 +119,11 @@ export type Interaction = $Result.DefaultSelection<Prisma.$InteractionPayload>
  */
 export type OutreachMessage = $Result.DefaultSelection<Prisma.$OutreachMessagePayload>
 /**
+ * Model MessageThread
+ * 
+ */
+export type MessageThread = $Result.DefaultSelection<Prisma.$MessageThreadPayload>
+/**
  * Model OutreachSequence
  * 
  */
@@ -308,7 +313,16 @@ export type ActivityLog = $Result.DefaultSelection<Prisma.$ActivityLogPayload>
  * Enums
  */
 export namespace $Enums {
-  export const WebsiteScrapeProvider: {
+  export const ThreadOrigin: {
+  MANUAL: 'MANUAL',
+  SEQUENCE: 'SEQUENCE',
+  CAMPAIGN: 'CAMPAIGN'
+};
+
+export type ThreadOrigin = (typeof ThreadOrigin)[keyof typeof ThreadOrigin]
+
+
+export const WebsiteScrapeProvider: {
   SCRAPIO: 'SCRAPIO'
 };
 
@@ -872,6 +886,10 @@ export type SendingUsageScopeType = (typeof SendingUsageScopeType)[keyof typeof 
 
 }
 
+export type ThreadOrigin = $Enums.ThreadOrigin
+
+export const ThreadOrigin: typeof $Enums.ThreadOrigin
+
 export type WebsiteScrapeProvider = $Enums.WebsiteScrapeProvider
 
 export const WebsiteScrapeProvider: typeof $Enums.WebsiteScrapeProvider
@@ -1398,6 +1416,16 @@ export class PrismaClient<
     * ```
     */
   get outreachMessage(): Prisma.OutreachMessageDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.messageThread`: Exposes CRUD operations for the **MessageThread** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more MessageThreads
+    * const messageThreads = await prisma.messageThread.findMany()
+    * ```
+    */
+  get messageThread(): Prisma.MessageThreadDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.outreachSequence`: Exposes CRUD operations for the **OutreachSequence** model.
@@ -2203,6 +2231,7 @@ export namespace Prisma {
     ContactTag: 'ContactTag',
     Interaction: 'Interaction',
     OutreachMessage: 'OutreachMessage',
+    MessageThread: 'MessageThread',
     OutreachSequence: 'OutreachSequence',
     OutreachSequenceStep: 'OutreachSequenceStep',
     SequenceEnrollment: 'SequenceEnrollment',
@@ -2253,7 +2282,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "organisation" | "organisationMember" | "organisationInvitation" | "filter" | "savedContactFilter" | "scoringInstruction" | "filterScoringInstruction" | "rawLead" | "lead" | "leadEnrichment" | "contact" | "contactInfo" | "contactFilter" | "contactEnrichment" | "contactScore" | "contactList" | "contactListMember" | "contactTag" | "interaction" | "outreachMessage" | "outreachSequence" | "outreachSequenceStep" | "sequenceEnrollment" | "filterJob" | "bulkJob" | "websiteScrapeRequest" | "senderProfile" | "messageTemplate" | "marketingCampaign" | "marketingCampaignContact" | "openAiBatchJob" | "integration" | "integrationAccount" | "integrationKey" | "integrationAccountDomain" | "mailTesterTest" | "mxToolboxCheck" | "reminder" | "form" | "formField" | "formCompletion" | "formCompletionValue" | "contactAudienceAnalysis" | "aiUsageLog" | "apifyUsageLog" | "messagingGoal" | "emailSendLimit" | "sendingPolicy" | "sendingPolicyStage" | "campaignIntegration" | "campaignIntegrationState" | "sendingUsageCounter" | "goalAchievement" | "goalPersonalBest" | "activityLog"
+      modelProps: "user" | "organisation" | "organisationMember" | "organisationInvitation" | "filter" | "savedContactFilter" | "scoringInstruction" | "filterScoringInstruction" | "rawLead" | "lead" | "leadEnrichment" | "contact" | "contactInfo" | "contactFilter" | "contactEnrichment" | "contactScore" | "contactList" | "contactListMember" | "contactTag" | "interaction" | "outreachMessage" | "messageThread" | "outreachSequence" | "outreachSequenceStep" | "sequenceEnrollment" | "filterJob" | "bulkJob" | "websiteScrapeRequest" | "senderProfile" | "messageTemplate" | "marketingCampaign" | "marketingCampaignContact" | "openAiBatchJob" | "integration" | "integrationAccount" | "integrationKey" | "integrationAccountDomain" | "mailTesterTest" | "mxToolboxCheck" | "reminder" | "form" | "formField" | "formCompletion" | "formCompletionValue" | "contactAudienceAnalysis" | "aiUsageLog" | "apifyUsageLog" | "messagingGoal" | "emailSendLimit" | "sendingPolicy" | "sendingPolicyStage" | "campaignIntegration" | "campaignIntegrationState" | "sendingUsageCounter" | "goalAchievement" | "goalPersonalBest" | "activityLog"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -3808,6 +3837,80 @@ export namespace Prisma {
           count: {
             args: Prisma.OutreachMessageCountArgs<ExtArgs>
             result: $Utils.Optional<OutreachMessageCountAggregateOutputType> | number
+          }
+        }
+      }
+      MessageThread: {
+        payload: Prisma.$MessageThreadPayload<ExtArgs>
+        fields: Prisma.MessageThreadFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.MessageThreadFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MessageThreadPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.MessageThreadFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MessageThreadPayload>
+          }
+          findFirst: {
+            args: Prisma.MessageThreadFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MessageThreadPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.MessageThreadFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MessageThreadPayload>
+          }
+          findMany: {
+            args: Prisma.MessageThreadFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MessageThreadPayload>[]
+          }
+          create: {
+            args: Prisma.MessageThreadCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MessageThreadPayload>
+          }
+          createMany: {
+            args: Prisma.MessageThreadCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.MessageThreadCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MessageThreadPayload>[]
+          }
+          delete: {
+            args: Prisma.MessageThreadDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MessageThreadPayload>
+          }
+          update: {
+            args: Prisma.MessageThreadUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MessageThreadPayload>
+          }
+          deleteMany: {
+            args: Prisma.MessageThreadDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.MessageThreadUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.MessageThreadUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MessageThreadPayload>[]
+          }
+          upsert: {
+            args: Prisma.MessageThreadUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MessageThreadPayload>
+          }
+          aggregate: {
+            args: Prisma.MessageThreadAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMessageThread>
+          }
+          groupBy: {
+            args: Prisma.MessageThreadGroupByArgs<ExtArgs>
+            result: $Utils.Optional<MessageThreadGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.MessageThreadCountArgs<ExtArgs>
+            result: $Utils.Optional<MessageThreadCountAggregateOutputType> | number
           }
         }
       }
@@ -6530,6 +6633,7 @@ export namespace Prisma {
     contactTag?: ContactTagOmit
     interaction?: InteractionOmit
     outreachMessage?: OutreachMessageOmit
+    messageThread?: MessageThreadOmit
     outreachSequence?: OutreachSequenceOmit
     outreachSequenceStep?: OutreachSequenceStepOmit
     sequenceEnrollment?: SequenceEnrollmentOmit
@@ -6762,6 +6866,7 @@ export namespace Prisma {
     filters: number
     contacts: number
     outreach_messages: number
+    message_threads: number
     outreach_sequences: number
     interactions: number
     sender_profiles: number
@@ -6795,6 +6900,7 @@ export namespace Prisma {
     filters?: boolean | OrganisationCountOutputTypeCountFiltersArgs
     contacts?: boolean | OrganisationCountOutputTypeCountContactsArgs
     outreach_messages?: boolean | OrganisationCountOutputTypeCountOutreach_messagesArgs
+    message_threads?: boolean | OrganisationCountOutputTypeCountMessage_threadsArgs
     outreach_sequences?: boolean | OrganisationCountOutputTypeCountOutreach_sequencesArgs
     interactions?: boolean | OrganisationCountOutputTypeCountInteractionsArgs
     sender_profiles?: boolean | OrganisationCountOutputTypeCountSender_profilesArgs
@@ -6866,6 +6972,13 @@ export namespace Prisma {
    */
   export type OrganisationCountOutputTypeCountOutreach_messagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: OutreachMessageWhereInput
+  }
+
+  /**
+   * OrganisationCountOutputType without action
+   */
+  export type OrganisationCountOutputTypeCountMessage_threadsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MessageThreadWhereInput
   }
 
   /**
@@ -7210,6 +7323,7 @@ export namespace Prisma {
     contact_infos: number
     interactions: number
     outreach_messages: number
+    message_threads: number
     campaign_contacts: number
     contact_scores: number
     reminders: number
@@ -7225,6 +7339,7 @@ export namespace Prisma {
     contact_infos?: boolean | ContactCountOutputTypeCountContact_infosArgs
     interactions?: boolean | ContactCountOutputTypeCountInteractionsArgs
     outreach_messages?: boolean | ContactCountOutputTypeCountOutreach_messagesArgs
+    message_threads?: boolean | ContactCountOutputTypeCountMessage_threadsArgs
     campaign_contacts?: boolean | ContactCountOutputTypeCountCampaign_contactsArgs
     contact_scores?: boolean | ContactCountOutputTypeCountContact_scoresArgs
     reminders?: boolean | ContactCountOutputTypeCountRemindersArgs
@@ -7278,6 +7393,13 @@ export namespace Prisma {
    */
   export type ContactCountOutputTypeCountOutreach_messagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: OutreachMessageWhereInput
+  }
+
+  /**
+   * ContactCountOutputType without action
+   */
+  export type ContactCountOutputTypeCountMessage_threadsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MessageThreadWhereInput
   }
 
   /**
@@ -7425,6 +7547,37 @@ export namespace Prisma {
    */
   export type OutreachMessageCountOutputTypeCountRemindersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ReminderWhereInput
+  }
+
+
+  /**
+   * Count Type MessageThreadCountOutputType
+   */
+
+  export type MessageThreadCountOutputType = {
+    messages: number
+  }
+
+  export type MessageThreadCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    messages?: boolean | MessageThreadCountOutputTypeCountMessagesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * MessageThreadCountOutputType without action
+   */
+  export type MessageThreadCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessageThreadCountOutputType
+     */
+    select?: MessageThreadCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * MessageThreadCountOutputType without action
+   */
+  export type MessageThreadCountOutputTypeCountMessagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OutreachMessageWhereInput
   }
 
 
@@ -9639,6 +9792,7 @@ export namespace Prisma {
     filters?: boolean | Organisation$filtersArgs<ExtArgs>
     contacts?: boolean | Organisation$contactsArgs<ExtArgs>
     outreach_messages?: boolean | Organisation$outreach_messagesArgs<ExtArgs>
+    message_threads?: boolean | Organisation$message_threadsArgs<ExtArgs>
     outreach_sequences?: boolean | Organisation$outreach_sequencesArgs<ExtArgs>
     interactions?: boolean | Organisation$interactionsArgs<ExtArgs>
     sender_profiles?: boolean | Organisation$sender_profilesArgs<ExtArgs>
@@ -9710,6 +9864,7 @@ export namespace Prisma {
     filters?: boolean | Organisation$filtersArgs<ExtArgs>
     contacts?: boolean | Organisation$contactsArgs<ExtArgs>
     outreach_messages?: boolean | Organisation$outreach_messagesArgs<ExtArgs>
+    message_threads?: boolean | Organisation$message_threadsArgs<ExtArgs>
     outreach_sequences?: boolean | Organisation$outreach_sequencesArgs<ExtArgs>
     interactions?: boolean | Organisation$interactionsArgs<ExtArgs>
     sender_profiles?: boolean | Organisation$sender_profilesArgs<ExtArgs>
@@ -9748,6 +9903,7 @@ export namespace Prisma {
       filters: Prisma.$FilterPayload<ExtArgs>[]
       contacts: Prisma.$ContactPayload<ExtArgs>[]
       outreach_messages: Prisma.$OutreachMessagePayload<ExtArgs>[]
+      message_threads: Prisma.$MessageThreadPayload<ExtArgs>[]
       outreach_sequences: Prisma.$OutreachSequencePayload<ExtArgs>[]
       interactions: Prisma.$InteractionPayload<ExtArgs>[]
       sender_profiles: Prisma.$SenderProfilePayload<ExtArgs>[]
@@ -10183,6 +10339,7 @@ export namespace Prisma {
     filters<T extends Organisation$filtersArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$filtersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FilterPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     contacts<T extends Organisation$contactsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$contactsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     outreach_messages<T extends Organisation$outreach_messagesArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$outreach_messagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OutreachMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    message_threads<T extends Organisation$message_threadsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$message_threadsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessageThreadPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     outreach_sequences<T extends Organisation$outreach_sequencesArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$outreach_sequencesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OutreachSequencePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     interactions<T extends Organisation$interactionsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$interactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InteractionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     sender_profiles<T extends Organisation$sender_profilesArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$sender_profilesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SenderProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -10751,6 +10908,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: OutreachMessageScalarFieldEnum | OutreachMessageScalarFieldEnum[]
+  }
+
+  /**
+   * Organisation.message_threads
+   */
+  export type Organisation$message_threadsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessageThread
+     */
+    select?: MessageThreadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MessageThread
+     */
+    omit?: MessageThreadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessageThreadInclude<ExtArgs> | null
+    where?: MessageThreadWhereInput
+    orderBy?: MessageThreadOrderByWithRelationInput | MessageThreadOrderByWithRelationInput[]
+    cursor?: MessageThreadWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MessageThreadScalarFieldEnum | MessageThreadScalarFieldEnum[]
   }
 
   /**
@@ -22594,6 +22775,7 @@ export namespace Prisma {
     contact_infos?: boolean | Contact$contact_infosArgs<ExtArgs>
     interactions?: boolean | Contact$interactionsArgs<ExtArgs>
     outreach_messages?: boolean | Contact$outreach_messagesArgs<ExtArgs>
+    message_threads?: boolean | Contact$message_threadsArgs<ExtArgs>
     campaign_contacts?: boolean | Contact$campaign_contactsArgs<ExtArgs>
     contact_scores?: boolean | Contact$contact_scoresArgs<ExtArgs>
     reminders?: boolean | Contact$remindersArgs<ExtArgs>
@@ -22722,6 +22904,7 @@ export namespace Prisma {
     contact_infos?: boolean | Contact$contact_infosArgs<ExtArgs>
     interactions?: boolean | Contact$interactionsArgs<ExtArgs>
     outreach_messages?: boolean | Contact$outreach_messagesArgs<ExtArgs>
+    message_threads?: boolean | Contact$message_threadsArgs<ExtArgs>
     campaign_contacts?: boolean | Contact$campaign_contactsArgs<ExtArgs>
     contact_scores?: boolean | Contact$contact_scoresArgs<ExtArgs>
     reminders?: boolean | Contact$remindersArgs<ExtArgs>
@@ -22753,6 +22936,7 @@ export namespace Prisma {
       contact_infos: Prisma.$ContactInfoPayload<ExtArgs>[]
       interactions: Prisma.$InteractionPayload<ExtArgs>[]
       outreach_messages: Prisma.$OutreachMessagePayload<ExtArgs>[]
+      message_threads: Prisma.$MessageThreadPayload<ExtArgs>[]
       campaign_contacts: Prisma.$MarketingCampaignContactPayload<ExtArgs>[]
       contact_scores: Prisma.$ContactScorePayload<ExtArgs>[]
       reminders: Prisma.$ReminderPayload<ExtArgs>[]
@@ -23195,6 +23379,7 @@ export namespace Prisma {
     contact_infos<T extends Contact$contact_infosArgs<ExtArgs> = {}>(args?: Subset<T, Contact$contact_infosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactInfoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     interactions<T extends Contact$interactionsArgs<ExtArgs> = {}>(args?: Subset<T, Contact$interactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InteractionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     outreach_messages<T extends Contact$outreach_messagesArgs<ExtArgs> = {}>(args?: Subset<T, Contact$outreach_messagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OutreachMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    message_threads<T extends Contact$message_threadsArgs<ExtArgs> = {}>(args?: Subset<T, Contact$message_threadsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessageThreadPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     campaign_contacts<T extends Contact$campaign_contactsArgs<ExtArgs> = {}>(args?: Subset<T, Contact$campaign_contactsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MarketingCampaignContactPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     contact_scores<T extends Contact$contact_scoresArgs<ExtArgs> = {}>(args?: Subset<T, Contact$contact_scoresArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactScorePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     reminders<T extends Contact$remindersArgs<ExtArgs> = {}>(args?: Subset<T, Contact$remindersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReminderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -23794,6 +23979,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: OutreachMessageScalarFieldEnum | OutreachMessageScalarFieldEnum[]
+  }
+
+  /**
+   * Contact.message_threads
+   */
+  export type Contact$message_threadsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessageThread
+     */
+    select?: MessageThreadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MessageThread
+     */
+    omit?: MessageThreadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessageThreadInclude<ExtArgs> | null
+    where?: MessageThreadWhereInput
+    orderBy?: MessageThreadOrderByWithRelationInput | MessageThreadOrderByWithRelationInput[]
+    cursor?: MessageThreadWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MessageThreadScalarFieldEnum | MessageThreadScalarFieldEnum[]
   }
 
   /**
@@ -33167,6 +33376,9 @@ export namespace Prisma {
     reply_html: string | null
     inbound_message_id: string | null
     in_reply_to_message_id: string | null
+    message_id: string | null
+    references: string | null
+    thread_uuid: string | null
     is_manual_reply: boolean | null
     email_provider: $Enums.ExternalIntegrationProvider | null
     email_account: string | null
@@ -33206,6 +33418,9 @@ export namespace Prisma {
     reply_html: string | null
     inbound_message_id: string | null
     in_reply_to_message_id: string | null
+    message_id: string | null
+    references: string | null
+    thread_uuid: string | null
     is_manual_reply: boolean | null
     email_provider: $Enums.ExternalIntegrationProvider | null
     email_account: string | null
@@ -33245,6 +33460,9 @@ export namespace Prisma {
     reply_html: number
     inbound_message_id: number
     in_reply_to_message_id: number
+    message_id: number
+    references: number
+    thread_uuid: number
     is_manual_reply: number
     email_provider: number
     email_account: number
@@ -33295,6 +33513,9 @@ export namespace Prisma {
     reply_html?: true
     inbound_message_id?: true
     in_reply_to_message_id?: true
+    message_id?: true
+    references?: true
+    thread_uuid?: true
     is_manual_reply?: true
     email_provider?: true
     email_account?: true
@@ -33334,6 +33555,9 @@ export namespace Prisma {
     reply_html?: true
     inbound_message_id?: true
     in_reply_to_message_id?: true
+    message_id?: true
+    references?: true
+    thread_uuid?: true
     is_manual_reply?: true
     email_provider?: true
     email_account?: true
@@ -33373,6 +33597,9 @@ export namespace Prisma {
     reply_html?: true
     inbound_message_id?: true
     in_reply_to_message_id?: true
+    message_id?: true
+    references?: true
+    thread_uuid?: true
     is_manual_reply?: true
     email_provider?: true
     email_account?: true
@@ -33500,6 +33727,9 @@ export namespace Prisma {
     reply_html: string | null
     inbound_message_id: string | null
     in_reply_to_message_id: string | null
+    message_id: string | null
+    references: string | null
+    thread_uuid: string | null
     is_manual_reply: boolean
     email_provider: $Enums.ExternalIntegrationProvider | null
     email_account: string | null
@@ -33559,6 +33789,9 @@ export namespace Prisma {
     reply_html?: boolean
     inbound_message_id?: boolean
     in_reply_to_message_id?: boolean
+    message_id?: boolean
+    references?: boolean
+    thread_uuid?: boolean
     is_manual_reply?: boolean
     email_provider?: boolean
     email_account?: boolean
@@ -33579,6 +33812,7 @@ export namespace Prisma {
     sequence_step?: boolean | OutreachMessage$sequence_stepArgs<ExtArgs>
     campaign_integration?: boolean | OutreachMessage$campaign_integrationArgs<ExtArgs>
     reminders?: boolean | OutreachMessage$remindersArgs<ExtArgs>
+    thread?: boolean | OutreachMessage$threadArgs<ExtArgs>
     _count?: boolean | OutreachMessageCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["outreachMessage"]>
 
@@ -33609,6 +33843,9 @@ export namespace Prisma {
     reply_html?: boolean
     inbound_message_id?: boolean
     in_reply_to_message_id?: boolean
+    message_id?: boolean
+    references?: boolean
+    thread_uuid?: boolean
     is_manual_reply?: boolean
     email_provider?: boolean
     email_account?: boolean
@@ -33627,6 +33864,7 @@ export namespace Prisma {
     sequence_enrollment?: boolean | OutreachMessage$sequence_enrollmentArgs<ExtArgs>
     sequence_step?: boolean | OutreachMessage$sequence_stepArgs<ExtArgs>
     campaign_integration?: boolean | OutreachMessage$campaign_integrationArgs<ExtArgs>
+    thread?: boolean | OutreachMessage$threadArgs<ExtArgs>
   }, ExtArgs["result"]["outreachMessage"]>
 
   export type OutreachMessageSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -33656,6 +33894,9 @@ export namespace Prisma {
     reply_html?: boolean
     inbound_message_id?: boolean
     in_reply_to_message_id?: boolean
+    message_id?: boolean
+    references?: boolean
+    thread_uuid?: boolean
     is_manual_reply?: boolean
     email_provider?: boolean
     email_account?: boolean
@@ -33674,6 +33915,7 @@ export namespace Prisma {
     sequence_enrollment?: boolean | OutreachMessage$sequence_enrollmentArgs<ExtArgs>
     sequence_step?: boolean | OutreachMessage$sequence_stepArgs<ExtArgs>
     campaign_integration?: boolean | OutreachMessage$campaign_integrationArgs<ExtArgs>
+    thread?: boolean | OutreachMessage$threadArgs<ExtArgs>
   }, ExtArgs["result"]["outreachMessage"]>
 
   export type OutreachMessageSelectScalar = {
@@ -33703,6 +33945,9 @@ export namespace Prisma {
     reply_html?: boolean
     inbound_message_id?: boolean
     in_reply_to_message_id?: boolean
+    message_id?: boolean
+    references?: boolean
+    thread_uuid?: boolean
     is_manual_reply?: boolean
     email_provider?: boolean
     email_account?: boolean
@@ -33716,7 +33961,7 @@ export namespace Prisma {
     updated_at?: boolean
   }
 
-  export type OutreachMessageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "contact_uuid" | "campaign_uuid" | "sent_by_user_uuid" | "channel" | "direction" | "subject" | "content" | "status" | "provider_message_id" | "idempotency_key" | "scheduled_at" | "sent_at" | "delivered_at" | "opened_at" | "clicked_at" | "replied_at" | "bounced_at" | "failed_at" | "reply_subject" | "reply_text" | "reply_html" | "inbound_message_id" | "in_reply_to_message_id" | "is_manual_reply" | "email_provider" | "email_account" | "email_domain_uuid" | "sms_provider" | "metadata" | "sequence_enrollment_uuid" | "sequence_step_uuid" | "campaign_integration_uuid" | "created_at" | "updated_at", ExtArgs["result"]["outreachMessage"]>
+  export type OutreachMessageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "contact_uuid" | "campaign_uuid" | "sent_by_user_uuid" | "channel" | "direction" | "subject" | "content" | "status" | "provider_message_id" | "idempotency_key" | "scheduled_at" | "sent_at" | "delivered_at" | "opened_at" | "clicked_at" | "replied_at" | "bounced_at" | "failed_at" | "reply_subject" | "reply_text" | "reply_html" | "inbound_message_id" | "in_reply_to_message_id" | "message_id" | "references" | "thread_uuid" | "is_manual_reply" | "email_provider" | "email_account" | "email_domain_uuid" | "sms_provider" | "metadata" | "sequence_enrollment_uuid" | "sequence_step_uuid" | "campaign_integration_uuid" | "created_at" | "updated_at", ExtArgs["result"]["outreachMessage"]>
   export type OutreachMessageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     contact?: boolean | ContactDefaultArgs<ExtArgs>
@@ -33727,6 +33972,7 @@ export namespace Prisma {
     sequence_step?: boolean | OutreachMessage$sequence_stepArgs<ExtArgs>
     campaign_integration?: boolean | OutreachMessage$campaign_integrationArgs<ExtArgs>
     reminders?: boolean | OutreachMessage$remindersArgs<ExtArgs>
+    thread?: boolean | OutreachMessage$threadArgs<ExtArgs>
     _count?: boolean | OutreachMessageCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type OutreachMessageIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -33737,6 +33983,7 @@ export namespace Prisma {
     sequence_enrollment?: boolean | OutreachMessage$sequence_enrollmentArgs<ExtArgs>
     sequence_step?: boolean | OutreachMessage$sequence_stepArgs<ExtArgs>
     campaign_integration?: boolean | OutreachMessage$campaign_integrationArgs<ExtArgs>
+    thread?: boolean | OutreachMessage$threadArgs<ExtArgs>
   }
   export type OutreachMessageIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
@@ -33746,6 +33993,7 @@ export namespace Prisma {
     sequence_enrollment?: boolean | OutreachMessage$sequence_enrollmentArgs<ExtArgs>
     sequence_step?: boolean | OutreachMessage$sequence_stepArgs<ExtArgs>
     campaign_integration?: boolean | OutreachMessage$campaign_integrationArgs<ExtArgs>
+    thread?: boolean | OutreachMessage$threadArgs<ExtArgs>
   }
 
   export type $OutreachMessagePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -33760,6 +34008,7 @@ export namespace Prisma {
       sequence_step: Prisma.$OutreachSequenceStepPayload<ExtArgs> | null
       campaign_integration: Prisma.$CampaignIntegrationPayload<ExtArgs> | null
       reminders: Prisma.$ReminderPayload<ExtArgs>[]
+      thread: Prisma.$MessageThreadPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -33788,6 +34037,9 @@ export namespace Prisma {
       reply_html: string | null
       inbound_message_id: string | null
       in_reply_to_message_id: string | null
+      message_id: string | null
+      references: string | null
+      thread_uuid: string | null
       is_manual_reply: boolean
       email_provider: $Enums.ExternalIntegrationProvider | null
       email_account: string | null
@@ -34202,6 +34454,7 @@ export namespace Prisma {
     sequence_step<T extends OutreachMessage$sequence_stepArgs<ExtArgs> = {}>(args?: Subset<T, OutreachMessage$sequence_stepArgs<ExtArgs>>): Prisma__OutreachSequenceStepClient<$Result.GetResult<Prisma.$OutreachSequenceStepPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     campaign_integration<T extends OutreachMessage$campaign_integrationArgs<ExtArgs> = {}>(args?: Subset<T, OutreachMessage$campaign_integrationArgs<ExtArgs>>): Prisma__CampaignIntegrationClient<$Result.GetResult<Prisma.$CampaignIntegrationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     reminders<T extends OutreachMessage$remindersArgs<ExtArgs> = {}>(args?: Subset<T, OutreachMessage$remindersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReminderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    thread<T extends OutreachMessage$threadArgs<ExtArgs> = {}>(args?: Subset<T, OutreachMessage$threadArgs<ExtArgs>>): Prisma__MessageThreadClient<$Result.GetResult<Prisma.$MessageThreadPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -34257,6 +34510,9 @@ export namespace Prisma {
     readonly reply_html: FieldRef<"OutreachMessage", 'String'>
     readonly inbound_message_id: FieldRef<"OutreachMessage", 'String'>
     readonly in_reply_to_message_id: FieldRef<"OutreachMessage", 'String'>
+    readonly message_id: FieldRef<"OutreachMessage", 'String'>
+    readonly references: FieldRef<"OutreachMessage", 'String'>
+    readonly thread_uuid: FieldRef<"OutreachMessage", 'String'>
     readonly is_manual_reply: FieldRef<"OutreachMessage", 'Boolean'>
     readonly email_provider: FieldRef<"OutreachMessage", 'ExternalIntegrationProvider'>
     readonly email_account: FieldRef<"OutreachMessage", 'String'>
@@ -34807,6 +35063,25 @@ export namespace Prisma {
   }
 
   /**
+   * OutreachMessage.thread
+   */
+  export type OutreachMessage$threadArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessageThread
+     */
+    select?: MessageThreadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MessageThread
+     */
+    omit?: MessageThreadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessageThreadInclude<ExtArgs> | null
+    where?: MessageThreadWhereInput
+  }
+
+  /**
    * OutreachMessage without action
    */
   export type OutreachMessageDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -34822,6 +35097,1257 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: OutreachMessageInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model MessageThread
+   */
+
+  export type AggregateMessageThread = {
+    _count: MessageThreadCountAggregateOutputType | null
+    _avg: MessageThreadAvgAggregateOutputType | null
+    _sum: MessageThreadSumAggregateOutputType | null
+    _min: MessageThreadMinAggregateOutputType | null
+    _max: MessageThreadMaxAggregateOutputType | null
+  }
+
+  export type MessageThreadAvgAggregateOutputType = {
+    id: number | null
+    message_count: number | null
+  }
+
+  export type MessageThreadSumAggregateOutputType = {
+    id: number | null
+    message_count: number | null
+  }
+
+  export type MessageThreadMinAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    organisation_uuid: string | null
+    contact_uuid: string | null
+    channel: $Enums.Channel | null
+    subject: string | null
+    origin: $Enums.ThreadOrigin | null
+    sequence_enrollment_uuid: string | null
+    campaign_uuid: string | null
+    dedupe_key: string | null
+    last_message_at: Date | null
+    message_count: number | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type MessageThreadMaxAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    organisation_uuid: string | null
+    contact_uuid: string | null
+    channel: $Enums.Channel | null
+    subject: string | null
+    origin: $Enums.ThreadOrigin | null
+    sequence_enrollment_uuid: string | null
+    campaign_uuid: string | null
+    dedupe_key: string | null
+    last_message_at: Date | null
+    message_count: number | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type MessageThreadCountAggregateOutputType = {
+    id: number
+    uuid: number
+    organisation_uuid: number
+    contact_uuid: number
+    channel: number
+    subject: number
+    origin: number
+    sequence_enrollment_uuid: number
+    campaign_uuid: number
+    dedupe_key: number
+    last_message_at: number
+    message_count: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type MessageThreadAvgAggregateInputType = {
+    id?: true
+    message_count?: true
+  }
+
+  export type MessageThreadSumAggregateInputType = {
+    id?: true
+    message_count?: true
+  }
+
+  export type MessageThreadMinAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    contact_uuid?: true
+    channel?: true
+    subject?: true
+    origin?: true
+    sequence_enrollment_uuid?: true
+    campaign_uuid?: true
+    dedupe_key?: true
+    last_message_at?: true
+    message_count?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type MessageThreadMaxAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    contact_uuid?: true
+    channel?: true
+    subject?: true
+    origin?: true
+    sequence_enrollment_uuid?: true
+    campaign_uuid?: true
+    dedupe_key?: true
+    last_message_at?: true
+    message_count?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type MessageThreadCountAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    contact_uuid?: true
+    channel?: true
+    subject?: true
+    origin?: true
+    sequence_enrollment_uuid?: true
+    campaign_uuid?: true
+    dedupe_key?: true
+    last_message_at?: true
+    message_count?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type MessageThreadAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MessageThread to aggregate.
+     */
+    where?: MessageThreadWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MessageThreads to fetch.
+     */
+    orderBy?: MessageThreadOrderByWithRelationInput | MessageThreadOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: MessageThreadWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MessageThreads from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MessageThreads.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned MessageThreads
+    **/
+    _count?: true | MessageThreadCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: MessageThreadAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: MessageThreadSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: MessageThreadMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: MessageThreadMaxAggregateInputType
+  }
+
+  export type GetMessageThreadAggregateType<T extends MessageThreadAggregateArgs> = {
+        [P in keyof T & keyof AggregateMessageThread]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMessageThread[P]>
+      : GetScalarType<T[P], AggregateMessageThread[P]>
+  }
+
+
+
+
+  export type MessageThreadGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MessageThreadWhereInput
+    orderBy?: MessageThreadOrderByWithAggregationInput | MessageThreadOrderByWithAggregationInput[]
+    by: MessageThreadScalarFieldEnum[] | MessageThreadScalarFieldEnum
+    having?: MessageThreadScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: MessageThreadCountAggregateInputType | true
+    _avg?: MessageThreadAvgAggregateInputType
+    _sum?: MessageThreadSumAggregateInputType
+    _min?: MessageThreadMinAggregateInputType
+    _max?: MessageThreadMaxAggregateInputType
+  }
+
+  export type MessageThreadGroupByOutputType = {
+    id: number
+    uuid: string
+    organisation_uuid: string
+    contact_uuid: string
+    channel: $Enums.Channel
+    subject: string | null
+    origin: $Enums.ThreadOrigin
+    sequence_enrollment_uuid: string | null
+    campaign_uuid: string | null
+    dedupe_key: string | null
+    last_message_at: Date | null
+    message_count: number
+    created_at: Date
+    updated_at: Date
+    _count: MessageThreadCountAggregateOutputType | null
+    _avg: MessageThreadAvgAggregateOutputType | null
+    _sum: MessageThreadSumAggregateOutputType | null
+    _min: MessageThreadMinAggregateOutputType | null
+    _max: MessageThreadMaxAggregateOutputType | null
+  }
+
+  type GetMessageThreadGroupByPayload<T extends MessageThreadGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<MessageThreadGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof MessageThreadGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], MessageThreadGroupByOutputType[P]>
+            : GetScalarType<T[P], MessageThreadGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type MessageThreadSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    contact_uuid?: boolean
+    channel?: boolean
+    subject?: boolean
+    origin?: boolean
+    sequence_enrollment_uuid?: boolean
+    campaign_uuid?: boolean
+    dedupe_key?: boolean
+    last_message_at?: boolean
+    message_count?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    contact?: boolean | ContactDefaultArgs<ExtArgs>
+    messages?: boolean | MessageThread$messagesArgs<ExtArgs>
+    _count?: boolean | MessageThreadCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["messageThread"]>
+
+  export type MessageThreadSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    contact_uuid?: boolean
+    channel?: boolean
+    subject?: boolean
+    origin?: boolean
+    sequence_enrollment_uuid?: boolean
+    campaign_uuid?: boolean
+    dedupe_key?: boolean
+    last_message_at?: boolean
+    message_count?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    contact?: boolean | ContactDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["messageThread"]>
+
+  export type MessageThreadSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    contact_uuid?: boolean
+    channel?: boolean
+    subject?: boolean
+    origin?: boolean
+    sequence_enrollment_uuid?: boolean
+    campaign_uuid?: boolean
+    dedupe_key?: boolean
+    last_message_at?: boolean
+    message_count?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    contact?: boolean | ContactDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["messageThread"]>
+
+  export type MessageThreadSelectScalar = {
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    contact_uuid?: boolean
+    channel?: boolean
+    subject?: boolean
+    origin?: boolean
+    sequence_enrollment_uuid?: boolean
+    campaign_uuid?: boolean
+    dedupe_key?: boolean
+    last_message_at?: boolean
+    message_count?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type MessageThreadOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "contact_uuid" | "channel" | "subject" | "origin" | "sequence_enrollment_uuid" | "campaign_uuid" | "dedupe_key" | "last_message_at" | "message_count" | "created_at" | "updated_at", ExtArgs["result"]["messageThread"]>
+  export type MessageThreadInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    contact?: boolean | ContactDefaultArgs<ExtArgs>
+    messages?: boolean | MessageThread$messagesArgs<ExtArgs>
+    _count?: boolean | MessageThreadCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type MessageThreadIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    contact?: boolean | ContactDefaultArgs<ExtArgs>
+  }
+  export type MessageThreadIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    contact?: boolean | ContactDefaultArgs<ExtArgs>
+  }
+
+  export type $MessageThreadPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "MessageThread"
+    objects: {
+      organisation: Prisma.$OrganisationPayload<ExtArgs>
+      contact: Prisma.$ContactPayload<ExtArgs>
+      messages: Prisma.$OutreachMessagePayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      uuid: string
+      organisation_uuid: string
+      contact_uuid: string
+      channel: $Enums.Channel
+      subject: string | null
+      origin: $Enums.ThreadOrigin
+      sequence_enrollment_uuid: string | null
+      campaign_uuid: string | null
+      dedupe_key: string | null
+      last_message_at: Date | null
+      message_count: number
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["messageThread"]>
+    composites: {}
+  }
+
+  type MessageThreadGetPayload<S extends boolean | null | undefined | MessageThreadDefaultArgs> = $Result.GetResult<Prisma.$MessageThreadPayload, S>
+
+  type MessageThreadCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<MessageThreadFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: MessageThreadCountAggregateInputType | true
+    }
+
+  export interface MessageThreadDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['MessageThread'], meta: { name: 'MessageThread' } }
+    /**
+     * Find zero or one MessageThread that matches the filter.
+     * @param {MessageThreadFindUniqueArgs} args - Arguments to find a MessageThread
+     * @example
+     * // Get one MessageThread
+     * const messageThread = await prisma.messageThread.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends MessageThreadFindUniqueArgs>(args: SelectSubset<T, MessageThreadFindUniqueArgs<ExtArgs>>): Prisma__MessageThreadClient<$Result.GetResult<Prisma.$MessageThreadPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one MessageThread that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {MessageThreadFindUniqueOrThrowArgs} args - Arguments to find a MessageThread
+     * @example
+     * // Get one MessageThread
+     * const messageThread = await prisma.messageThread.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends MessageThreadFindUniqueOrThrowArgs>(args: SelectSubset<T, MessageThreadFindUniqueOrThrowArgs<ExtArgs>>): Prisma__MessageThreadClient<$Result.GetResult<Prisma.$MessageThreadPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first MessageThread that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MessageThreadFindFirstArgs} args - Arguments to find a MessageThread
+     * @example
+     * // Get one MessageThread
+     * const messageThread = await prisma.messageThread.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends MessageThreadFindFirstArgs>(args?: SelectSubset<T, MessageThreadFindFirstArgs<ExtArgs>>): Prisma__MessageThreadClient<$Result.GetResult<Prisma.$MessageThreadPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first MessageThread that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MessageThreadFindFirstOrThrowArgs} args - Arguments to find a MessageThread
+     * @example
+     * // Get one MessageThread
+     * const messageThread = await prisma.messageThread.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends MessageThreadFindFirstOrThrowArgs>(args?: SelectSubset<T, MessageThreadFindFirstOrThrowArgs<ExtArgs>>): Prisma__MessageThreadClient<$Result.GetResult<Prisma.$MessageThreadPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more MessageThreads that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MessageThreadFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all MessageThreads
+     * const messageThreads = await prisma.messageThread.findMany()
+     * 
+     * // Get first 10 MessageThreads
+     * const messageThreads = await prisma.messageThread.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const messageThreadWithIdOnly = await prisma.messageThread.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends MessageThreadFindManyArgs>(args?: SelectSubset<T, MessageThreadFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessageThreadPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a MessageThread.
+     * @param {MessageThreadCreateArgs} args - Arguments to create a MessageThread.
+     * @example
+     * // Create one MessageThread
+     * const MessageThread = await prisma.messageThread.create({
+     *   data: {
+     *     // ... data to create a MessageThread
+     *   }
+     * })
+     * 
+     */
+    create<T extends MessageThreadCreateArgs>(args: SelectSubset<T, MessageThreadCreateArgs<ExtArgs>>): Prisma__MessageThreadClient<$Result.GetResult<Prisma.$MessageThreadPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many MessageThreads.
+     * @param {MessageThreadCreateManyArgs} args - Arguments to create many MessageThreads.
+     * @example
+     * // Create many MessageThreads
+     * const messageThread = await prisma.messageThread.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends MessageThreadCreateManyArgs>(args?: SelectSubset<T, MessageThreadCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many MessageThreads and returns the data saved in the database.
+     * @param {MessageThreadCreateManyAndReturnArgs} args - Arguments to create many MessageThreads.
+     * @example
+     * // Create many MessageThreads
+     * const messageThread = await prisma.messageThread.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many MessageThreads and only return the `id`
+     * const messageThreadWithIdOnly = await prisma.messageThread.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends MessageThreadCreateManyAndReturnArgs>(args?: SelectSubset<T, MessageThreadCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessageThreadPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a MessageThread.
+     * @param {MessageThreadDeleteArgs} args - Arguments to delete one MessageThread.
+     * @example
+     * // Delete one MessageThread
+     * const MessageThread = await prisma.messageThread.delete({
+     *   where: {
+     *     // ... filter to delete one MessageThread
+     *   }
+     * })
+     * 
+     */
+    delete<T extends MessageThreadDeleteArgs>(args: SelectSubset<T, MessageThreadDeleteArgs<ExtArgs>>): Prisma__MessageThreadClient<$Result.GetResult<Prisma.$MessageThreadPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one MessageThread.
+     * @param {MessageThreadUpdateArgs} args - Arguments to update one MessageThread.
+     * @example
+     * // Update one MessageThread
+     * const messageThread = await prisma.messageThread.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends MessageThreadUpdateArgs>(args: SelectSubset<T, MessageThreadUpdateArgs<ExtArgs>>): Prisma__MessageThreadClient<$Result.GetResult<Prisma.$MessageThreadPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more MessageThreads.
+     * @param {MessageThreadDeleteManyArgs} args - Arguments to filter MessageThreads to delete.
+     * @example
+     * // Delete a few MessageThreads
+     * const { count } = await prisma.messageThread.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends MessageThreadDeleteManyArgs>(args?: SelectSubset<T, MessageThreadDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MessageThreads.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MessageThreadUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many MessageThreads
+     * const messageThread = await prisma.messageThread.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends MessageThreadUpdateManyArgs>(args: SelectSubset<T, MessageThreadUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MessageThreads and returns the data updated in the database.
+     * @param {MessageThreadUpdateManyAndReturnArgs} args - Arguments to update many MessageThreads.
+     * @example
+     * // Update many MessageThreads
+     * const messageThread = await prisma.messageThread.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more MessageThreads and only return the `id`
+     * const messageThreadWithIdOnly = await prisma.messageThread.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends MessageThreadUpdateManyAndReturnArgs>(args: SelectSubset<T, MessageThreadUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessageThreadPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one MessageThread.
+     * @param {MessageThreadUpsertArgs} args - Arguments to update or create a MessageThread.
+     * @example
+     * // Update or create a MessageThread
+     * const messageThread = await prisma.messageThread.upsert({
+     *   create: {
+     *     // ... data to create a MessageThread
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the MessageThread we want to update
+     *   }
+     * })
+     */
+    upsert<T extends MessageThreadUpsertArgs>(args: SelectSubset<T, MessageThreadUpsertArgs<ExtArgs>>): Prisma__MessageThreadClient<$Result.GetResult<Prisma.$MessageThreadPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of MessageThreads.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MessageThreadCountArgs} args - Arguments to filter MessageThreads to count.
+     * @example
+     * // Count the number of MessageThreads
+     * const count = await prisma.messageThread.count({
+     *   where: {
+     *     // ... the filter for the MessageThreads we want to count
+     *   }
+     * })
+    **/
+    count<T extends MessageThreadCountArgs>(
+      args?: Subset<T, MessageThreadCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], MessageThreadCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a MessageThread.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MessageThreadAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends MessageThreadAggregateArgs>(args: Subset<T, MessageThreadAggregateArgs>): Prisma.PrismaPromise<GetMessageThreadAggregateType<T>>
+
+    /**
+     * Group by MessageThread.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MessageThreadGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends MessageThreadGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: MessageThreadGroupByArgs['orderBy'] }
+        : { orderBy?: MessageThreadGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, MessageThreadGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMessageThreadGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the MessageThread model
+   */
+  readonly fields: MessageThreadFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for MessageThread.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__MessageThreadClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    organisation<T extends OrganisationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganisationDefaultArgs<ExtArgs>>): Prisma__OrganisationClient<$Result.GetResult<Prisma.$OrganisationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    contact<T extends ContactDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ContactDefaultArgs<ExtArgs>>): Prisma__ContactClient<$Result.GetResult<Prisma.$ContactPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    messages<T extends MessageThread$messagesArgs<ExtArgs> = {}>(args?: Subset<T, MessageThread$messagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OutreachMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the MessageThread model
+   */
+  interface MessageThreadFieldRefs {
+    readonly id: FieldRef<"MessageThread", 'Int'>
+    readonly uuid: FieldRef<"MessageThread", 'String'>
+    readonly organisation_uuid: FieldRef<"MessageThread", 'String'>
+    readonly contact_uuid: FieldRef<"MessageThread", 'String'>
+    readonly channel: FieldRef<"MessageThread", 'Channel'>
+    readonly subject: FieldRef<"MessageThread", 'String'>
+    readonly origin: FieldRef<"MessageThread", 'ThreadOrigin'>
+    readonly sequence_enrollment_uuid: FieldRef<"MessageThread", 'String'>
+    readonly campaign_uuid: FieldRef<"MessageThread", 'String'>
+    readonly dedupe_key: FieldRef<"MessageThread", 'String'>
+    readonly last_message_at: FieldRef<"MessageThread", 'DateTime'>
+    readonly message_count: FieldRef<"MessageThread", 'Int'>
+    readonly created_at: FieldRef<"MessageThread", 'DateTime'>
+    readonly updated_at: FieldRef<"MessageThread", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * MessageThread findUnique
+   */
+  export type MessageThreadFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessageThread
+     */
+    select?: MessageThreadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MessageThread
+     */
+    omit?: MessageThreadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessageThreadInclude<ExtArgs> | null
+    /**
+     * Filter, which MessageThread to fetch.
+     */
+    where: MessageThreadWhereUniqueInput
+  }
+
+  /**
+   * MessageThread findUniqueOrThrow
+   */
+  export type MessageThreadFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessageThread
+     */
+    select?: MessageThreadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MessageThread
+     */
+    omit?: MessageThreadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessageThreadInclude<ExtArgs> | null
+    /**
+     * Filter, which MessageThread to fetch.
+     */
+    where: MessageThreadWhereUniqueInput
+  }
+
+  /**
+   * MessageThread findFirst
+   */
+  export type MessageThreadFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessageThread
+     */
+    select?: MessageThreadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MessageThread
+     */
+    omit?: MessageThreadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessageThreadInclude<ExtArgs> | null
+    /**
+     * Filter, which MessageThread to fetch.
+     */
+    where?: MessageThreadWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MessageThreads to fetch.
+     */
+    orderBy?: MessageThreadOrderByWithRelationInput | MessageThreadOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MessageThreads.
+     */
+    cursor?: MessageThreadWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MessageThreads from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MessageThreads.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MessageThreads.
+     */
+    distinct?: MessageThreadScalarFieldEnum | MessageThreadScalarFieldEnum[]
+  }
+
+  /**
+   * MessageThread findFirstOrThrow
+   */
+  export type MessageThreadFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessageThread
+     */
+    select?: MessageThreadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MessageThread
+     */
+    omit?: MessageThreadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessageThreadInclude<ExtArgs> | null
+    /**
+     * Filter, which MessageThread to fetch.
+     */
+    where?: MessageThreadWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MessageThreads to fetch.
+     */
+    orderBy?: MessageThreadOrderByWithRelationInput | MessageThreadOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MessageThreads.
+     */
+    cursor?: MessageThreadWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MessageThreads from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MessageThreads.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MessageThreads.
+     */
+    distinct?: MessageThreadScalarFieldEnum | MessageThreadScalarFieldEnum[]
+  }
+
+  /**
+   * MessageThread findMany
+   */
+  export type MessageThreadFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessageThread
+     */
+    select?: MessageThreadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MessageThread
+     */
+    omit?: MessageThreadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessageThreadInclude<ExtArgs> | null
+    /**
+     * Filter, which MessageThreads to fetch.
+     */
+    where?: MessageThreadWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MessageThreads to fetch.
+     */
+    orderBy?: MessageThreadOrderByWithRelationInput | MessageThreadOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing MessageThreads.
+     */
+    cursor?: MessageThreadWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MessageThreads from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MessageThreads.
+     */
+    skip?: number
+    distinct?: MessageThreadScalarFieldEnum | MessageThreadScalarFieldEnum[]
+  }
+
+  /**
+   * MessageThread create
+   */
+  export type MessageThreadCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessageThread
+     */
+    select?: MessageThreadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MessageThread
+     */
+    omit?: MessageThreadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessageThreadInclude<ExtArgs> | null
+    /**
+     * The data needed to create a MessageThread.
+     */
+    data: XOR<MessageThreadCreateInput, MessageThreadUncheckedCreateInput>
+  }
+
+  /**
+   * MessageThread createMany
+   */
+  export type MessageThreadCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many MessageThreads.
+     */
+    data: MessageThreadCreateManyInput | MessageThreadCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * MessageThread createManyAndReturn
+   */
+  export type MessageThreadCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessageThread
+     */
+    select?: MessageThreadSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the MessageThread
+     */
+    omit?: MessageThreadOmit<ExtArgs> | null
+    /**
+     * The data used to create many MessageThreads.
+     */
+    data: MessageThreadCreateManyInput | MessageThreadCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessageThreadIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * MessageThread update
+   */
+  export type MessageThreadUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessageThread
+     */
+    select?: MessageThreadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MessageThread
+     */
+    omit?: MessageThreadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessageThreadInclude<ExtArgs> | null
+    /**
+     * The data needed to update a MessageThread.
+     */
+    data: XOR<MessageThreadUpdateInput, MessageThreadUncheckedUpdateInput>
+    /**
+     * Choose, which MessageThread to update.
+     */
+    where: MessageThreadWhereUniqueInput
+  }
+
+  /**
+   * MessageThread updateMany
+   */
+  export type MessageThreadUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update MessageThreads.
+     */
+    data: XOR<MessageThreadUpdateManyMutationInput, MessageThreadUncheckedUpdateManyInput>
+    /**
+     * Filter which MessageThreads to update
+     */
+    where?: MessageThreadWhereInput
+    /**
+     * Limit how many MessageThreads to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * MessageThread updateManyAndReturn
+   */
+  export type MessageThreadUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessageThread
+     */
+    select?: MessageThreadSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the MessageThread
+     */
+    omit?: MessageThreadOmit<ExtArgs> | null
+    /**
+     * The data used to update MessageThreads.
+     */
+    data: XOR<MessageThreadUpdateManyMutationInput, MessageThreadUncheckedUpdateManyInput>
+    /**
+     * Filter which MessageThreads to update
+     */
+    where?: MessageThreadWhereInput
+    /**
+     * Limit how many MessageThreads to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessageThreadIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * MessageThread upsert
+   */
+  export type MessageThreadUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessageThread
+     */
+    select?: MessageThreadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MessageThread
+     */
+    omit?: MessageThreadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessageThreadInclude<ExtArgs> | null
+    /**
+     * The filter to search for the MessageThread to update in case it exists.
+     */
+    where: MessageThreadWhereUniqueInput
+    /**
+     * In case the MessageThread found by the `where` argument doesn't exist, create a new MessageThread with this data.
+     */
+    create: XOR<MessageThreadCreateInput, MessageThreadUncheckedCreateInput>
+    /**
+     * In case the MessageThread was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<MessageThreadUpdateInput, MessageThreadUncheckedUpdateInput>
+  }
+
+  /**
+   * MessageThread delete
+   */
+  export type MessageThreadDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessageThread
+     */
+    select?: MessageThreadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MessageThread
+     */
+    omit?: MessageThreadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessageThreadInclude<ExtArgs> | null
+    /**
+     * Filter which MessageThread to delete.
+     */
+    where: MessageThreadWhereUniqueInput
+  }
+
+  /**
+   * MessageThread deleteMany
+   */
+  export type MessageThreadDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MessageThreads to delete
+     */
+    where?: MessageThreadWhereInput
+    /**
+     * Limit how many MessageThreads to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * MessageThread.messages
+   */
+  export type MessageThread$messagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OutreachMessage
+     */
+    select?: OutreachMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OutreachMessage
+     */
+    omit?: OutreachMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OutreachMessageInclude<ExtArgs> | null
+    where?: OutreachMessageWhereInput
+    orderBy?: OutreachMessageOrderByWithRelationInput | OutreachMessageOrderByWithRelationInput[]
+    cursor?: OutreachMessageWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: OutreachMessageScalarFieldEnum | OutreachMessageScalarFieldEnum[]
+  }
+
+  /**
+   * MessageThread without action
+   */
+  export type MessageThreadDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessageThread
+     */
+    select?: MessageThreadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MessageThread
+     */
+    omit?: MessageThreadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessageThreadInclude<ExtArgs> | null
   }
 
 
@@ -78240,6 +79766,9 @@ export namespace Prisma {
     reply_html: 'reply_html',
     inbound_message_id: 'inbound_message_id',
     in_reply_to_message_id: 'in_reply_to_message_id',
+    message_id: 'message_id',
+    references: 'references',
+    thread_uuid: 'thread_uuid',
     is_manual_reply: 'is_manual_reply',
     email_provider: 'email_provider',
     email_account: 'email_account',
@@ -78254,6 +79783,26 @@ export namespace Prisma {
   };
 
   export type OutreachMessageScalarFieldEnum = (typeof OutreachMessageScalarFieldEnum)[keyof typeof OutreachMessageScalarFieldEnum]
+
+
+  export const MessageThreadScalarFieldEnum: {
+    id: 'id',
+    uuid: 'uuid',
+    organisation_uuid: 'organisation_uuid',
+    contact_uuid: 'contact_uuid',
+    channel: 'channel',
+    subject: 'subject',
+    origin: 'origin',
+    sequence_enrollment_uuid: 'sequence_enrollment_uuid',
+    campaign_uuid: 'campaign_uuid',
+    dedupe_key: 'dedupe_key',
+    last_message_at: 'last_message_at',
+    message_count: 'message_count',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type MessageThreadScalarFieldEnum = (typeof MessageThreadScalarFieldEnum)[keyof typeof MessageThreadScalarFieldEnum]
 
 
   export const OutreachSequenceScalarFieldEnum: {
@@ -79259,6 +80808,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'ThreadOrigin'
+   */
+  export type EnumThreadOriginFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ThreadOrigin'>
+    
+
+
+  /**
+   * Reference to a field of type 'ThreadOrigin[]'
+   */
+  export type ListEnumThreadOriginFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ThreadOrigin[]'>
+    
+
+
+  /**
    * Reference to a field of type 'SequenceStatus'
    */
   export type EnumSequenceStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SequenceStatus'>
@@ -79887,6 +81450,7 @@ export namespace Prisma {
     filters?: FilterListRelationFilter
     contacts?: ContactListRelationFilter
     outreach_messages?: OutreachMessageListRelationFilter
+    message_threads?: MessageThreadListRelationFilter
     outreach_sequences?: OutreachSequenceListRelationFilter
     interactions?: InteractionListRelationFilter
     sender_profiles?: SenderProfileListRelationFilter
@@ -79929,6 +81493,7 @@ export namespace Prisma {
     filters?: FilterOrderByRelationAggregateInput
     contacts?: ContactOrderByRelationAggregateInput
     outreach_messages?: OutreachMessageOrderByRelationAggregateInput
+    message_threads?: MessageThreadOrderByRelationAggregateInput
     outreach_sequences?: OutreachSequenceOrderByRelationAggregateInput
     interactions?: InteractionOrderByRelationAggregateInput
     sender_profiles?: SenderProfileOrderByRelationAggregateInput
@@ -79974,6 +81539,7 @@ export namespace Prisma {
     filters?: FilterListRelationFilter
     contacts?: ContactListRelationFilter
     outreach_messages?: OutreachMessageListRelationFilter
+    message_threads?: MessageThreadListRelationFilter
     outreach_sequences?: OutreachSequenceListRelationFilter
     interactions?: InteractionListRelationFilter
     sender_profiles?: SenderProfileListRelationFilter
@@ -80889,6 +82455,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoListRelationFilter
     interactions?: InteractionListRelationFilter
     outreach_messages?: OutreachMessageListRelationFilter
+    message_threads?: MessageThreadListRelationFilter
     campaign_contacts?: MarketingCampaignContactListRelationFilter
     contact_scores?: ContactScoreListRelationFilter
     reminders?: ReminderListRelationFilter
@@ -80938,6 +82505,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoOrderByRelationAggregateInput
     interactions?: InteractionOrderByRelationAggregateInput
     outreach_messages?: OutreachMessageOrderByRelationAggregateInput
+    message_threads?: MessageThreadOrderByRelationAggregateInput
     campaign_contacts?: MarketingCampaignContactOrderByRelationAggregateInput
     contact_scores?: ContactScoreOrderByRelationAggregateInput
     reminders?: ReminderOrderByRelationAggregateInput
@@ -80991,6 +82559,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoListRelationFilter
     interactions?: InteractionListRelationFilter
     outreach_messages?: OutreachMessageListRelationFilter
+    message_threads?: MessageThreadListRelationFilter
     campaign_contacts?: MarketingCampaignContactListRelationFilter
     contact_scores?: ContactScoreListRelationFilter
     reminders?: ReminderListRelationFilter
@@ -81677,6 +83246,9 @@ export namespace Prisma {
     reply_html?: StringNullableFilter<"OutreachMessage"> | string | null
     inbound_message_id?: StringNullableFilter<"OutreachMessage"> | string | null
     in_reply_to_message_id?: StringNullableFilter<"OutreachMessage"> | string | null
+    message_id?: StringNullableFilter<"OutreachMessage"> | string | null
+    references?: StringNullableFilter<"OutreachMessage"> | string | null
+    thread_uuid?: StringNullableFilter<"OutreachMessage"> | string | null
     is_manual_reply?: BoolFilter<"OutreachMessage"> | boolean
     email_provider?: EnumExternalIntegrationProviderNullableFilter<"OutreachMessage"> | $Enums.ExternalIntegrationProvider | null
     email_account?: StringNullableFilter<"OutreachMessage"> | string | null
@@ -81697,6 +83269,7 @@ export namespace Prisma {
     sequence_step?: XOR<OutreachSequenceStepNullableScalarRelationFilter, OutreachSequenceStepWhereInput> | null
     campaign_integration?: XOR<CampaignIntegrationNullableScalarRelationFilter, CampaignIntegrationWhereInput> | null
     reminders?: ReminderListRelationFilter
+    thread?: XOR<MessageThreadNullableScalarRelationFilter, MessageThreadWhereInput> | null
   }
 
   export type OutreachMessageOrderByWithRelationInput = {
@@ -81726,6 +83299,9 @@ export namespace Prisma {
     reply_html?: SortOrderInput | SortOrder
     inbound_message_id?: SortOrderInput | SortOrder
     in_reply_to_message_id?: SortOrderInput | SortOrder
+    message_id?: SortOrderInput | SortOrder
+    references?: SortOrderInput | SortOrder
+    thread_uuid?: SortOrderInput | SortOrder
     is_manual_reply?: SortOrder
     email_provider?: SortOrderInput | SortOrder
     email_account?: SortOrderInput | SortOrder
@@ -81746,6 +83322,7 @@ export namespace Prisma {
     sequence_step?: OutreachSequenceStepOrderByWithRelationInput
     campaign_integration?: CampaignIntegrationOrderByWithRelationInput
     reminders?: ReminderOrderByRelationAggregateInput
+    thread?: MessageThreadOrderByWithRelationInput
   }
 
   export type OutreachMessageWhereUniqueInput = Prisma.AtLeast<{
@@ -81778,6 +83355,9 @@ export namespace Prisma {
     reply_html?: StringNullableFilter<"OutreachMessage"> | string | null
     inbound_message_id?: StringNullableFilter<"OutreachMessage"> | string | null
     in_reply_to_message_id?: StringNullableFilter<"OutreachMessage"> | string | null
+    message_id?: StringNullableFilter<"OutreachMessage"> | string | null
+    references?: StringNullableFilter<"OutreachMessage"> | string | null
+    thread_uuid?: StringNullableFilter<"OutreachMessage"> | string | null
     is_manual_reply?: BoolFilter<"OutreachMessage"> | boolean
     email_provider?: EnumExternalIntegrationProviderNullableFilter<"OutreachMessage"> | $Enums.ExternalIntegrationProvider | null
     email_account?: StringNullableFilter<"OutreachMessage"> | string | null
@@ -81798,6 +83378,7 @@ export namespace Prisma {
     sequence_step?: XOR<OutreachSequenceStepNullableScalarRelationFilter, OutreachSequenceStepWhereInput> | null
     campaign_integration?: XOR<CampaignIntegrationNullableScalarRelationFilter, CampaignIntegrationWhereInput> | null
     reminders?: ReminderListRelationFilter
+    thread?: XOR<MessageThreadNullableScalarRelationFilter, MessageThreadWhereInput> | null
   }, "id" | "uuid" | "idempotency_key">
 
   export type OutreachMessageOrderByWithAggregationInput = {
@@ -81827,6 +83408,9 @@ export namespace Prisma {
     reply_html?: SortOrderInput | SortOrder
     inbound_message_id?: SortOrderInput | SortOrder
     in_reply_to_message_id?: SortOrderInput | SortOrder
+    message_id?: SortOrderInput | SortOrder
+    references?: SortOrderInput | SortOrder
+    thread_uuid?: SortOrderInput | SortOrder
     is_manual_reply?: SortOrder
     email_provider?: SortOrderInput | SortOrder
     email_account?: SortOrderInput | SortOrder
@@ -81875,6 +83459,9 @@ export namespace Prisma {
     reply_html?: StringNullableWithAggregatesFilter<"OutreachMessage"> | string | null
     inbound_message_id?: StringNullableWithAggregatesFilter<"OutreachMessage"> | string | null
     in_reply_to_message_id?: StringNullableWithAggregatesFilter<"OutreachMessage"> | string | null
+    message_id?: StringNullableWithAggregatesFilter<"OutreachMessage"> | string | null
+    references?: StringNullableWithAggregatesFilter<"OutreachMessage"> | string | null
+    thread_uuid?: StringNullableWithAggregatesFilter<"OutreachMessage"> | string | null
     is_manual_reply?: BoolWithAggregatesFilter<"OutreachMessage"> | boolean
     email_provider?: EnumExternalIntegrationProviderNullableWithAggregatesFilter<"OutreachMessage"> | $Enums.ExternalIntegrationProvider | null
     email_account?: StringNullableWithAggregatesFilter<"OutreachMessage"> | string | null
@@ -81886,6 +83473,114 @@ export namespace Prisma {
     campaign_integration_uuid?: StringNullableWithAggregatesFilter<"OutreachMessage"> | string | null
     created_at?: DateTimeWithAggregatesFilter<"OutreachMessage"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"OutreachMessage"> | Date | string
+  }
+
+  export type MessageThreadWhereInput = {
+    AND?: MessageThreadWhereInput | MessageThreadWhereInput[]
+    OR?: MessageThreadWhereInput[]
+    NOT?: MessageThreadWhereInput | MessageThreadWhereInput[]
+    id?: IntFilter<"MessageThread"> | number
+    uuid?: StringFilter<"MessageThread"> | string
+    organisation_uuid?: StringFilter<"MessageThread"> | string
+    contact_uuid?: StringFilter<"MessageThread"> | string
+    channel?: EnumChannelFilter<"MessageThread"> | $Enums.Channel
+    subject?: StringNullableFilter<"MessageThread"> | string | null
+    origin?: EnumThreadOriginFilter<"MessageThread"> | $Enums.ThreadOrigin
+    sequence_enrollment_uuid?: StringNullableFilter<"MessageThread"> | string | null
+    campaign_uuid?: StringNullableFilter<"MessageThread"> | string | null
+    dedupe_key?: StringNullableFilter<"MessageThread"> | string | null
+    last_message_at?: DateTimeNullableFilter<"MessageThread"> | Date | string | null
+    message_count?: IntFilter<"MessageThread"> | number
+    created_at?: DateTimeFilter<"MessageThread"> | Date | string
+    updated_at?: DateTimeFilter<"MessageThread"> | Date | string
+    organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+    contact?: XOR<ContactScalarRelationFilter, ContactWhereInput>
+    messages?: OutreachMessageListRelationFilter
+  }
+
+  export type MessageThreadOrderByWithRelationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    contact_uuid?: SortOrder
+    channel?: SortOrder
+    subject?: SortOrderInput | SortOrder
+    origin?: SortOrder
+    sequence_enrollment_uuid?: SortOrderInput | SortOrder
+    campaign_uuid?: SortOrderInput | SortOrder
+    dedupe_key?: SortOrderInput | SortOrder
+    last_message_at?: SortOrderInput | SortOrder
+    message_count?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    organisation?: OrganisationOrderByWithRelationInput
+    contact?: ContactOrderByWithRelationInput
+    messages?: OutreachMessageOrderByRelationAggregateInput
+  }
+
+  export type MessageThreadWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    uuid?: string
+    dedupe_key?: string
+    AND?: MessageThreadWhereInput | MessageThreadWhereInput[]
+    OR?: MessageThreadWhereInput[]
+    NOT?: MessageThreadWhereInput | MessageThreadWhereInput[]
+    organisation_uuid?: StringFilter<"MessageThread"> | string
+    contact_uuid?: StringFilter<"MessageThread"> | string
+    channel?: EnumChannelFilter<"MessageThread"> | $Enums.Channel
+    subject?: StringNullableFilter<"MessageThread"> | string | null
+    origin?: EnumThreadOriginFilter<"MessageThread"> | $Enums.ThreadOrigin
+    sequence_enrollment_uuid?: StringNullableFilter<"MessageThread"> | string | null
+    campaign_uuid?: StringNullableFilter<"MessageThread"> | string | null
+    last_message_at?: DateTimeNullableFilter<"MessageThread"> | Date | string | null
+    message_count?: IntFilter<"MessageThread"> | number
+    created_at?: DateTimeFilter<"MessageThread"> | Date | string
+    updated_at?: DateTimeFilter<"MessageThread"> | Date | string
+    organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+    contact?: XOR<ContactScalarRelationFilter, ContactWhereInput>
+    messages?: OutreachMessageListRelationFilter
+  }, "id" | "uuid" | "dedupe_key">
+
+  export type MessageThreadOrderByWithAggregationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    contact_uuid?: SortOrder
+    channel?: SortOrder
+    subject?: SortOrderInput | SortOrder
+    origin?: SortOrder
+    sequence_enrollment_uuid?: SortOrderInput | SortOrder
+    campaign_uuid?: SortOrderInput | SortOrder
+    dedupe_key?: SortOrderInput | SortOrder
+    last_message_at?: SortOrderInput | SortOrder
+    message_count?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: MessageThreadCountOrderByAggregateInput
+    _avg?: MessageThreadAvgOrderByAggregateInput
+    _max?: MessageThreadMaxOrderByAggregateInput
+    _min?: MessageThreadMinOrderByAggregateInput
+    _sum?: MessageThreadSumOrderByAggregateInput
+  }
+
+  export type MessageThreadScalarWhereWithAggregatesInput = {
+    AND?: MessageThreadScalarWhereWithAggregatesInput | MessageThreadScalarWhereWithAggregatesInput[]
+    OR?: MessageThreadScalarWhereWithAggregatesInput[]
+    NOT?: MessageThreadScalarWhereWithAggregatesInput | MessageThreadScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"MessageThread"> | number
+    uuid?: StringWithAggregatesFilter<"MessageThread"> | string
+    organisation_uuid?: StringWithAggregatesFilter<"MessageThread"> | string
+    contact_uuid?: StringWithAggregatesFilter<"MessageThread"> | string
+    channel?: EnumChannelWithAggregatesFilter<"MessageThread"> | $Enums.Channel
+    subject?: StringNullableWithAggregatesFilter<"MessageThread"> | string | null
+    origin?: EnumThreadOriginWithAggregatesFilter<"MessageThread"> | $Enums.ThreadOrigin
+    sequence_enrollment_uuid?: StringNullableWithAggregatesFilter<"MessageThread"> | string | null
+    campaign_uuid?: StringNullableWithAggregatesFilter<"MessageThread"> | string | null
+    dedupe_key?: StringNullableWithAggregatesFilter<"MessageThread"> | string | null
+    last_message_at?: DateTimeNullableWithAggregatesFilter<"MessageThread"> | Date | string | null
+    message_count?: IntWithAggregatesFilter<"MessageThread"> | number
+    created_at?: DateTimeWithAggregatesFilter<"MessageThread"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"MessageThread"> | Date | string
   }
 
   export type OutreachSequenceWhereInput = {
@@ -85564,6 +87259,7 @@ export namespace Prisma {
     filters?: FilterCreateNestedManyWithoutOrganisationInput
     contacts?: ContactCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileCreateNestedManyWithoutOrganisationInput
@@ -85606,6 +87302,7 @@ export namespace Prisma {
     filters?: FilterUncheckedCreateNestedManyWithoutOrganisationInput
     contacts?: ContactUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutOrganisationInput
@@ -85647,6 +87344,7 @@ export namespace Prisma {
     filters?: FilterUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUpdateManyWithoutOrganisationNestedInput
@@ -85689,6 +87387,7 @@ export namespace Prisma {
     filters?: FilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUncheckedUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -86655,6 +88354,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoCreateNestedManyWithoutContactInput
     interactions?: InteractionCreateNestedManyWithoutContactInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutContactInput
+    message_threads?: MessageThreadCreateNestedManyWithoutContactInput
     campaign_contacts?: MarketingCampaignContactCreateNestedManyWithoutContactInput
     contact_scores?: ContactScoreCreateNestedManyWithoutContactInput
     reminders?: ReminderCreateNestedManyWithoutContactInput
@@ -86701,6 +88401,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoUncheckedCreateNestedManyWithoutContactInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutContactInput
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutContactInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutContactInput
     campaign_contacts?: MarketingCampaignContactUncheckedCreateNestedManyWithoutContactInput
     contact_scores?: ContactScoreUncheckedCreateNestedManyWithoutContactInput
     reminders?: ReminderUncheckedCreateNestedManyWithoutContactInput
@@ -86746,6 +88447,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoUpdateManyWithoutContactNestedInput
     interactions?: InteractionUpdateManyWithoutContactNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutContactNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutContactNestedInput
     campaign_contacts?: MarketingCampaignContactUpdateManyWithoutContactNestedInput
     contact_scores?: ContactScoreUpdateManyWithoutContactNestedInput
     reminders?: ReminderUpdateManyWithoutContactNestedInput
@@ -86792,6 +88494,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoUncheckedUpdateManyWithoutContactNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutContactNestedInput
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutContactNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutContactNestedInput
     campaign_contacts?: MarketingCampaignContactUncheckedUpdateManyWithoutContactNestedInput
     contact_scores?: ContactScoreUncheckedUpdateManyWithoutContactNestedInput
     reminders?: ReminderUncheckedUpdateManyWithoutContactNestedInput
@@ -87461,6 +89164,8 @@ export namespace Prisma {
     reply_html?: string | null
     inbound_message_id?: string | null
     in_reply_to_message_id?: string | null
+    message_id?: string | null
+    references?: string | null
     is_manual_reply?: boolean
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
@@ -87478,6 +89183,7 @@ export namespace Prisma {
     sequence_step?: OutreachSequenceStepCreateNestedOneWithoutOutreach_messagesInput
     campaign_integration?: CampaignIntegrationCreateNestedOneWithoutOutreach_messagesInput
     reminders?: ReminderCreateNestedManyWithoutOutreach_messageInput
+    thread?: MessageThreadCreateNestedOneWithoutMessagesInput
   }
 
   export type OutreachMessageUncheckedCreateInput = {
@@ -87507,6 +89213,9 @@ export namespace Prisma {
     reply_html?: string | null
     inbound_message_id?: string | null
     in_reply_to_message_id?: string | null
+    message_id?: string | null
+    references?: string | null
+    thread_uuid?: string | null
     is_manual_reply?: boolean
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
@@ -87544,6 +89253,8 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    references?: NullableStringFieldUpdateOperationsInput | string | null
     is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
@@ -87561,6 +89272,7 @@ export namespace Prisma {
     sequence_step?: OutreachSequenceStepUpdateOneWithoutOutreach_messagesNestedInput
     campaign_integration?: CampaignIntegrationUpdateOneWithoutOutreach_messagesNestedInput
     reminders?: ReminderUpdateManyWithoutOutreach_messageNestedInput
+    thread?: MessageThreadUpdateOneWithoutMessagesNestedInput
   }
 
   export type OutreachMessageUncheckedUpdateInput = {
@@ -87590,6 +89302,9 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    references?: NullableStringFieldUpdateOperationsInput | string | null
+    thread_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
@@ -87632,6 +89347,9 @@ export namespace Prisma {
     reply_html?: string | null
     inbound_message_id?: string | null
     in_reply_to_message_id?: string | null
+    message_id?: string | null
+    references?: string | null
+    thread_uuid?: string | null
     is_manual_reply?: boolean
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
@@ -87667,6 +89385,8 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    references?: NullableStringFieldUpdateOperationsInput | string | null
     is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
@@ -87704,6 +89424,9 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    references?: NullableStringFieldUpdateOperationsInput | string | null
+    thread_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
@@ -87713,6 +89436,124 @@ export namespace Prisma {
     sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     sequence_step_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     campaign_integration_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MessageThreadCreateInput = {
+    uuid?: string
+    channel: $Enums.Channel
+    subject?: string | null
+    origin: $Enums.ThreadOrigin
+    sequence_enrollment_uuid?: string | null
+    campaign_uuid?: string | null
+    dedupe_key?: string | null
+    last_message_at?: Date | string | null
+    message_count?: number
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutMessage_threadsInput
+    contact: ContactCreateNestedOneWithoutMessage_threadsInput
+    messages?: OutreachMessageCreateNestedManyWithoutThreadInput
+  }
+
+  export type MessageThreadUncheckedCreateInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    contact_uuid: string
+    channel: $Enums.Channel
+    subject?: string | null
+    origin: $Enums.ThreadOrigin
+    sequence_enrollment_uuid?: string | null
+    campaign_uuid?: string | null
+    dedupe_key?: string | null
+    last_message_at?: Date | string | null
+    message_count?: number
+    created_at?: Date | string
+    updated_at?: Date | string
+    messages?: OutreachMessageUncheckedCreateNestedManyWithoutThreadInput
+  }
+
+  export type MessageThreadUpdateInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    channel?: EnumChannelFieldUpdateOperationsInput | $Enums.Channel
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    origin?: EnumThreadOriginFieldUpdateOperationsInput | $Enums.ThreadOrigin
+    sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    dedupe_key?: NullableStringFieldUpdateOperationsInput | string | null
+    last_message_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    message_count?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutMessage_threadsNestedInput
+    contact?: ContactUpdateOneRequiredWithoutMessage_threadsNestedInput
+    messages?: OutreachMessageUpdateManyWithoutThreadNestedInput
+  }
+
+  export type MessageThreadUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    contact_uuid?: StringFieldUpdateOperationsInput | string
+    channel?: EnumChannelFieldUpdateOperationsInput | $Enums.Channel
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    origin?: EnumThreadOriginFieldUpdateOperationsInput | $Enums.ThreadOrigin
+    sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    dedupe_key?: NullableStringFieldUpdateOperationsInput | string | null
+    last_message_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    message_count?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    messages?: OutreachMessageUncheckedUpdateManyWithoutThreadNestedInput
+  }
+
+  export type MessageThreadCreateManyInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    contact_uuid: string
+    channel: $Enums.Channel
+    subject?: string | null
+    origin: $Enums.ThreadOrigin
+    sequence_enrollment_uuid?: string | null
+    campaign_uuid?: string | null
+    dedupe_key?: string | null
+    last_message_at?: Date | string | null
+    message_count?: number
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type MessageThreadUpdateManyMutationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    channel?: EnumChannelFieldUpdateOperationsInput | $Enums.Channel
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    origin?: EnumThreadOriginFieldUpdateOperationsInput | $Enums.ThreadOrigin
+    sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    dedupe_key?: NullableStringFieldUpdateOperationsInput | string | null
+    last_message_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    message_count?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MessageThreadUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    contact_uuid?: StringFieldUpdateOperationsInput | string
+    channel?: EnumChannelFieldUpdateOperationsInput | $Enums.Channel
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    origin?: EnumThreadOriginFieldUpdateOperationsInput | $Enums.ThreadOrigin
+    sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    dedupe_key?: NullableStringFieldUpdateOperationsInput | string | null
+    last_message_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    message_count?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -91869,6 +93710,12 @@ export namespace Prisma {
     none?: ContactWhereInput
   }
 
+  export type MessageThreadListRelationFilter = {
+    every?: MessageThreadWhereInput
+    some?: MessageThreadWhereInput
+    none?: MessageThreadWhereInput
+  }
+
   export type OutreachSequenceListRelationFilter = {
     every?: OutreachSequenceWhereInput
     some?: OutreachSequenceWhereInput
@@ -91988,6 +93835,10 @@ export namespace Prisma {
   }
 
   export type ContactOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type MessageThreadOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -93580,6 +95431,11 @@ export namespace Prisma {
     isNot?: CampaignIntegrationWhereInput | null
   }
 
+  export type MessageThreadNullableScalarRelationFilter = {
+    is?: MessageThreadWhereInput | null
+    isNot?: MessageThreadWhereInput | null
+  }
+
   export type OutreachMessageCountOrderByAggregateInput = {
     id?: SortOrder
     uuid?: SortOrder
@@ -93607,6 +95463,9 @@ export namespace Prisma {
     reply_html?: SortOrder
     inbound_message_id?: SortOrder
     in_reply_to_message_id?: SortOrder
+    message_id?: SortOrder
+    references?: SortOrder
+    thread_uuid?: SortOrder
     is_manual_reply?: SortOrder
     email_provider?: SortOrder
     email_account?: SortOrder
@@ -93651,6 +95510,9 @@ export namespace Prisma {
     reply_html?: SortOrder
     inbound_message_id?: SortOrder
     in_reply_to_message_id?: SortOrder
+    message_id?: SortOrder
+    references?: SortOrder
+    thread_uuid?: SortOrder
     is_manual_reply?: SortOrder
     email_provider?: SortOrder
     email_account?: SortOrder
@@ -93690,6 +95552,9 @@ export namespace Prisma {
     reply_html?: SortOrder
     inbound_message_id?: SortOrder
     in_reply_to_message_id?: SortOrder
+    message_id?: SortOrder
+    references?: SortOrder
+    thread_uuid?: SortOrder
     is_manual_reply?: SortOrder
     email_provider?: SortOrder
     email_account?: SortOrder
@@ -93744,6 +95609,84 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedEnumExternalIntegrationProviderNullableFilter<$PrismaModel>
     _max?: NestedEnumExternalIntegrationProviderNullableFilter<$PrismaModel>
+  }
+
+  export type EnumThreadOriginFilter<$PrismaModel = never> = {
+    equals?: $Enums.ThreadOrigin | EnumThreadOriginFieldRefInput<$PrismaModel>
+    in?: $Enums.ThreadOrigin[] | ListEnumThreadOriginFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ThreadOrigin[] | ListEnumThreadOriginFieldRefInput<$PrismaModel>
+    not?: NestedEnumThreadOriginFilter<$PrismaModel> | $Enums.ThreadOrigin
+  }
+
+  export type MessageThreadCountOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    contact_uuid?: SortOrder
+    channel?: SortOrder
+    subject?: SortOrder
+    origin?: SortOrder
+    sequence_enrollment_uuid?: SortOrder
+    campaign_uuid?: SortOrder
+    dedupe_key?: SortOrder
+    last_message_at?: SortOrder
+    message_count?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type MessageThreadAvgOrderByAggregateInput = {
+    id?: SortOrder
+    message_count?: SortOrder
+  }
+
+  export type MessageThreadMaxOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    contact_uuid?: SortOrder
+    channel?: SortOrder
+    subject?: SortOrder
+    origin?: SortOrder
+    sequence_enrollment_uuid?: SortOrder
+    campaign_uuid?: SortOrder
+    dedupe_key?: SortOrder
+    last_message_at?: SortOrder
+    message_count?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type MessageThreadMinOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    contact_uuid?: SortOrder
+    channel?: SortOrder
+    subject?: SortOrder
+    origin?: SortOrder
+    sequence_enrollment_uuid?: SortOrder
+    campaign_uuid?: SortOrder
+    dedupe_key?: SortOrder
+    last_message_at?: SortOrder
+    message_count?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type MessageThreadSumOrderByAggregateInput = {
+    id?: SortOrder
+    message_count?: SortOrder
+  }
+
+  export type EnumThreadOriginWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ThreadOrigin | EnumThreadOriginFieldRefInput<$PrismaModel>
+    in?: $Enums.ThreadOrigin[] | ListEnumThreadOriginFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ThreadOrigin[] | ListEnumThreadOriginFieldRefInput<$PrismaModel>
+    not?: NestedEnumThreadOriginWithAggregatesFilter<$PrismaModel> | $Enums.ThreadOrigin
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumThreadOriginFilter<$PrismaModel>
+    _max?: NestedEnumThreadOriginFilter<$PrismaModel>
   }
 
   export type EnumSequenceStatusFilter<$PrismaModel = never> = {
@@ -97130,6 +99073,13 @@ export namespace Prisma {
     connect?: OutreachMessageWhereUniqueInput | OutreachMessageWhereUniqueInput[]
   }
 
+  export type MessageThreadCreateNestedManyWithoutOrganisationInput = {
+    create?: XOR<MessageThreadCreateWithoutOrganisationInput, MessageThreadUncheckedCreateWithoutOrganisationInput> | MessageThreadCreateWithoutOrganisationInput[] | MessageThreadUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: MessageThreadCreateOrConnectWithoutOrganisationInput | MessageThreadCreateOrConnectWithoutOrganisationInput[]
+    createMany?: MessageThreadCreateManyOrganisationInputEnvelope
+    connect?: MessageThreadWhereUniqueInput | MessageThreadWhereUniqueInput[]
+  }
+
   export type OutreachSequenceCreateNestedManyWithoutOrganisationInput = {
     create?: XOR<OutreachSequenceCreateWithoutOrganisationInput, OutreachSequenceUncheckedCreateWithoutOrganisationInput> | OutreachSequenceCreateWithoutOrganisationInput[] | OutreachSequenceUncheckedCreateWithoutOrganisationInput[]
     connectOrCreate?: OutreachSequenceCreateOrConnectWithoutOrganisationInput | OutreachSequenceCreateOrConnectWithoutOrganisationInput[]
@@ -97338,6 +99288,13 @@ export namespace Prisma {
     connectOrCreate?: OutreachMessageCreateOrConnectWithoutOrganisationInput | OutreachMessageCreateOrConnectWithoutOrganisationInput[]
     createMany?: OutreachMessageCreateManyOrganisationInputEnvelope
     connect?: OutreachMessageWhereUniqueInput | OutreachMessageWhereUniqueInput[]
+  }
+
+  export type MessageThreadUncheckedCreateNestedManyWithoutOrganisationInput = {
+    create?: XOR<MessageThreadCreateWithoutOrganisationInput, MessageThreadUncheckedCreateWithoutOrganisationInput> | MessageThreadCreateWithoutOrganisationInput[] | MessageThreadUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: MessageThreadCreateOrConnectWithoutOrganisationInput | MessageThreadCreateOrConnectWithoutOrganisationInput[]
+    createMany?: MessageThreadCreateManyOrganisationInputEnvelope
+    connect?: MessageThreadWhereUniqueInput | MessageThreadWhereUniqueInput[]
   }
 
   export type OutreachSequenceUncheckedCreateNestedManyWithoutOrganisationInput = {
@@ -97583,6 +99540,20 @@ export namespace Prisma {
     update?: OutreachMessageUpdateWithWhereUniqueWithoutOrganisationInput | OutreachMessageUpdateWithWhereUniqueWithoutOrganisationInput[]
     updateMany?: OutreachMessageUpdateManyWithWhereWithoutOrganisationInput | OutreachMessageUpdateManyWithWhereWithoutOrganisationInput[]
     deleteMany?: OutreachMessageScalarWhereInput | OutreachMessageScalarWhereInput[]
+  }
+
+  export type MessageThreadUpdateManyWithoutOrganisationNestedInput = {
+    create?: XOR<MessageThreadCreateWithoutOrganisationInput, MessageThreadUncheckedCreateWithoutOrganisationInput> | MessageThreadCreateWithoutOrganisationInput[] | MessageThreadUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: MessageThreadCreateOrConnectWithoutOrganisationInput | MessageThreadCreateOrConnectWithoutOrganisationInput[]
+    upsert?: MessageThreadUpsertWithWhereUniqueWithoutOrganisationInput | MessageThreadUpsertWithWhereUniqueWithoutOrganisationInput[]
+    createMany?: MessageThreadCreateManyOrganisationInputEnvelope
+    set?: MessageThreadWhereUniqueInput | MessageThreadWhereUniqueInput[]
+    disconnect?: MessageThreadWhereUniqueInput | MessageThreadWhereUniqueInput[]
+    delete?: MessageThreadWhereUniqueInput | MessageThreadWhereUniqueInput[]
+    connect?: MessageThreadWhereUniqueInput | MessageThreadWhereUniqueInput[]
+    update?: MessageThreadUpdateWithWhereUniqueWithoutOrganisationInput | MessageThreadUpdateWithWhereUniqueWithoutOrganisationInput[]
+    updateMany?: MessageThreadUpdateManyWithWhereWithoutOrganisationInput | MessageThreadUpdateManyWithWhereWithoutOrganisationInput[]
+    deleteMany?: MessageThreadScalarWhereInput | MessageThreadScalarWhereInput[]
   }
 
   export type OutreachSequenceUpdateManyWithoutOrganisationNestedInput = {
@@ -98003,6 +99974,20 @@ export namespace Prisma {
     update?: OutreachMessageUpdateWithWhereUniqueWithoutOrganisationInput | OutreachMessageUpdateWithWhereUniqueWithoutOrganisationInput[]
     updateMany?: OutreachMessageUpdateManyWithWhereWithoutOrganisationInput | OutreachMessageUpdateManyWithWhereWithoutOrganisationInput[]
     deleteMany?: OutreachMessageScalarWhereInput | OutreachMessageScalarWhereInput[]
+  }
+
+  export type MessageThreadUncheckedUpdateManyWithoutOrganisationNestedInput = {
+    create?: XOR<MessageThreadCreateWithoutOrganisationInput, MessageThreadUncheckedCreateWithoutOrganisationInput> | MessageThreadCreateWithoutOrganisationInput[] | MessageThreadUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: MessageThreadCreateOrConnectWithoutOrganisationInput | MessageThreadCreateOrConnectWithoutOrganisationInput[]
+    upsert?: MessageThreadUpsertWithWhereUniqueWithoutOrganisationInput | MessageThreadUpsertWithWhereUniqueWithoutOrganisationInput[]
+    createMany?: MessageThreadCreateManyOrganisationInputEnvelope
+    set?: MessageThreadWhereUniqueInput | MessageThreadWhereUniqueInput[]
+    disconnect?: MessageThreadWhereUniqueInput | MessageThreadWhereUniqueInput[]
+    delete?: MessageThreadWhereUniqueInput | MessageThreadWhereUniqueInput[]
+    connect?: MessageThreadWhereUniqueInput | MessageThreadWhereUniqueInput[]
+    update?: MessageThreadUpdateWithWhereUniqueWithoutOrganisationInput | MessageThreadUpdateWithWhereUniqueWithoutOrganisationInput[]
+    updateMany?: MessageThreadUpdateManyWithWhereWithoutOrganisationInput | MessageThreadUpdateManyWithWhereWithoutOrganisationInput[]
+    deleteMany?: MessageThreadScalarWhereInput | MessageThreadScalarWhereInput[]
   }
 
   export type OutreachSequenceUncheckedUpdateManyWithoutOrganisationNestedInput = {
@@ -99116,6 +101101,13 @@ export namespace Prisma {
     connect?: OutreachMessageWhereUniqueInput | OutreachMessageWhereUniqueInput[]
   }
 
+  export type MessageThreadCreateNestedManyWithoutContactInput = {
+    create?: XOR<MessageThreadCreateWithoutContactInput, MessageThreadUncheckedCreateWithoutContactInput> | MessageThreadCreateWithoutContactInput[] | MessageThreadUncheckedCreateWithoutContactInput[]
+    connectOrCreate?: MessageThreadCreateOrConnectWithoutContactInput | MessageThreadCreateOrConnectWithoutContactInput[]
+    createMany?: MessageThreadCreateManyContactInputEnvelope
+    connect?: MessageThreadWhereUniqueInput | MessageThreadWhereUniqueInput[]
+  }
+
   export type MarketingCampaignContactCreateNestedManyWithoutContactInput = {
     create?: XOR<MarketingCampaignContactCreateWithoutContactInput, MarketingCampaignContactUncheckedCreateWithoutContactInput> | MarketingCampaignContactCreateWithoutContactInput[] | MarketingCampaignContactUncheckedCreateWithoutContactInput[]
     connectOrCreate?: MarketingCampaignContactCreateOrConnectWithoutContactInput | MarketingCampaignContactCreateOrConnectWithoutContactInput[]
@@ -99198,6 +101190,13 @@ export namespace Prisma {
     connectOrCreate?: OutreachMessageCreateOrConnectWithoutContactInput | OutreachMessageCreateOrConnectWithoutContactInput[]
     createMany?: OutreachMessageCreateManyContactInputEnvelope
     connect?: OutreachMessageWhereUniqueInput | OutreachMessageWhereUniqueInput[]
+  }
+
+  export type MessageThreadUncheckedCreateNestedManyWithoutContactInput = {
+    create?: XOR<MessageThreadCreateWithoutContactInput, MessageThreadUncheckedCreateWithoutContactInput> | MessageThreadCreateWithoutContactInput[] | MessageThreadUncheckedCreateWithoutContactInput[]
+    connectOrCreate?: MessageThreadCreateOrConnectWithoutContactInput | MessageThreadCreateOrConnectWithoutContactInput[]
+    createMany?: MessageThreadCreateManyContactInputEnvelope
+    connect?: MessageThreadWhereUniqueInput | MessageThreadWhereUniqueInput[]
   }
 
   export type MarketingCampaignContactUncheckedCreateNestedManyWithoutContactInput = {
@@ -99347,6 +101346,20 @@ export namespace Prisma {
     update?: OutreachMessageUpdateWithWhereUniqueWithoutContactInput | OutreachMessageUpdateWithWhereUniqueWithoutContactInput[]
     updateMany?: OutreachMessageUpdateManyWithWhereWithoutContactInput | OutreachMessageUpdateManyWithWhereWithoutContactInput[]
     deleteMany?: OutreachMessageScalarWhereInput | OutreachMessageScalarWhereInput[]
+  }
+
+  export type MessageThreadUpdateManyWithoutContactNestedInput = {
+    create?: XOR<MessageThreadCreateWithoutContactInput, MessageThreadUncheckedCreateWithoutContactInput> | MessageThreadCreateWithoutContactInput[] | MessageThreadUncheckedCreateWithoutContactInput[]
+    connectOrCreate?: MessageThreadCreateOrConnectWithoutContactInput | MessageThreadCreateOrConnectWithoutContactInput[]
+    upsert?: MessageThreadUpsertWithWhereUniqueWithoutContactInput | MessageThreadUpsertWithWhereUniqueWithoutContactInput[]
+    createMany?: MessageThreadCreateManyContactInputEnvelope
+    set?: MessageThreadWhereUniqueInput | MessageThreadWhereUniqueInput[]
+    disconnect?: MessageThreadWhereUniqueInput | MessageThreadWhereUniqueInput[]
+    delete?: MessageThreadWhereUniqueInput | MessageThreadWhereUniqueInput[]
+    connect?: MessageThreadWhereUniqueInput | MessageThreadWhereUniqueInput[]
+    update?: MessageThreadUpdateWithWhereUniqueWithoutContactInput | MessageThreadUpdateWithWhereUniqueWithoutContactInput[]
+    updateMany?: MessageThreadUpdateManyWithWhereWithoutContactInput | MessageThreadUpdateManyWithWhereWithoutContactInput[]
+    deleteMany?: MessageThreadScalarWhereInput | MessageThreadScalarWhereInput[]
   }
 
   export type MarketingCampaignContactUpdateManyWithoutContactNestedInput = {
@@ -99515,6 +101528,20 @@ export namespace Prisma {
     update?: OutreachMessageUpdateWithWhereUniqueWithoutContactInput | OutreachMessageUpdateWithWhereUniqueWithoutContactInput[]
     updateMany?: OutreachMessageUpdateManyWithWhereWithoutContactInput | OutreachMessageUpdateManyWithWhereWithoutContactInput[]
     deleteMany?: OutreachMessageScalarWhereInput | OutreachMessageScalarWhereInput[]
+  }
+
+  export type MessageThreadUncheckedUpdateManyWithoutContactNestedInput = {
+    create?: XOR<MessageThreadCreateWithoutContactInput, MessageThreadUncheckedCreateWithoutContactInput> | MessageThreadCreateWithoutContactInput[] | MessageThreadUncheckedCreateWithoutContactInput[]
+    connectOrCreate?: MessageThreadCreateOrConnectWithoutContactInput | MessageThreadCreateOrConnectWithoutContactInput[]
+    upsert?: MessageThreadUpsertWithWhereUniqueWithoutContactInput | MessageThreadUpsertWithWhereUniqueWithoutContactInput[]
+    createMany?: MessageThreadCreateManyContactInputEnvelope
+    set?: MessageThreadWhereUniqueInput | MessageThreadWhereUniqueInput[]
+    disconnect?: MessageThreadWhereUniqueInput | MessageThreadWhereUniqueInput[]
+    delete?: MessageThreadWhereUniqueInput | MessageThreadWhereUniqueInput[]
+    connect?: MessageThreadWhereUniqueInput | MessageThreadWhereUniqueInput[]
+    update?: MessageThreadUpdateWithWhereUniqueWithoutContactInput | MessageThreadUpdateWithWhereUniqueWithoutContactInput[]
+    updateMany?: MessageThreadUpdateManyWithWhereWithoutContactInput | MessageThreadUpdateManyWithWhereWithoutContactInput[]
+    deleteMany?: MessageThreadScalarWhereInput | MessageThreadScalarWhereInput[]
   }
 
   export type MarketingCampaignContactUncheckedUpdateManyWithoutContactNestedInput = {
@@ -100063,6 +102090,12 @@ export namespace Prisma {
     connect?: ReminderWhereUniqueInput | ReminderWhereUniqueInput[]
   }
 
+  export type MessageThreadCreateNestedOneWithoutMessagesInput = {
+    create?: XOR<MessageThreadCreateWithoutMessagesInput, MessageThreadUncheckedCreateWithoutMessagesInput>
+    connectOrCreate?: MessageThreadCreateOrConnectWithoutMessagesInput
+    connect?: MessageThreadWhereUniqueInput
+  }
+
   export type InteractionUncheckedCreateNestedManyWithoutOutreach_messageInput = {
     create?: XOR<InteractionCreateWithoutOutreach_messageInput, InteractionUncheckedCreateWithoutOutreach_messageInput> | InteractionCreateWithoutOutreach_messageInput[] | InteractionUncheckedCreateWithoutOutreach_messageInput[]
     connectOrCreate?: InteractionCreateOrConnectWithoutOutreach_messageInput | InteractionCreateOrConnectWithoutOutreach_messageInput[]
@@ -100187,6 +102220,16 @@ export namespace Prisma {
     deleteMany?: ReminderScalarWhereInput | ReminderScalarWhereInput[]
   }
 
+  export type MessageThreadUpdateOneWithoutMessagesNestedInput = {
+    create?: XOR<MessageThreadCreateWithoutMessagesInput, MessageThreadUncheckedCreateWithoutMessagesInput>
+    connectOrCreate?: MessageThreadCreateOrConnectWithoutMessagesInput
+    upsert?: MessageThreadUpsertWithoutMessagesInput
+    disconnect?: MessageThreadWhereInput | boolean
+    delete?: MessageThreadWhereInput | boolean
+    connect?: MessageThreadWhereUniqueInput
+    update?: XOR<XOR<MessageThreadUpdateToOneWithWhereWithoutMessagesInput, MessageThreadUpdateWithoutMessagesInput>, MessageThreadUncheckedUpdateWithoutMessagesInput>
+  }
+
   export type InteractionUncheckedUpdateManyWithoutOutreach_messageNestedInput = {
     create?: XOR<InteractionCreateWithoutOutreach_messageInput, InteractionUncheckedCreateWithoutOutreach_messageInput> | InteractionCreateWithoutOutreach_messageInput[] | InteractionUncheckedCreateWithoutOutreach_messageInput[]
     connectOrCreate?: InteractionCreateOrConnectWithoutOutreach_messageInput | InteractionCreateOrConnectWithoutOutreach_messageInput[]
@@ -100213,6 +102256,80 @@ export namespace Prisma {
     update?: ReminderUpdateWithWhereUniqueWithoutOutreach_messageInput | ReminderUpdateWithWhereUniqueWithoutOutreach_messageInput[]
     updateMany?: ReminderUpdateManyWithWhereWithoutOutreach_messageInput | ReminderUpdateManyWithWhereWithoutOutreach_messageInput[]
     deleteMany?: ReminderScalarWhereInput | ReminderScalarWhereInput[]
+  }
+
+  export type OrganisationCreateNestedOneWithoutMessage_threadsInput = {
+    create?: XOR<OrganisationCreateWithoutMessage_threadsInput, OrganisationUncheckedCreateWithoutMessage_threadsInput>
+    connectOrCreate?: OrganisationCreateOrConnectWithoutMessage_threadsInput
+    connect?: OrganisationWhereUniqueInput
+  }
+
+  export type ContactCreateNestedOneWithoutMessage_threadsInput = {
+    create?: XOR<ContactCreateWithoutMessage_threadsInput, ContactUncheckedCreateWithoutMessage_threadsInput>
+    connectOrCreate?: ContactCreateOrConnectWithoutMessage_threadsInput
+    connect?: ContactWhereUniqueInput
+  }
+
+  export type OutreachMessageCreateNestedManyWithoutThreadInput = {
+    create?: XOR<OutreachMessageCreateWithoutThreadInput, OutreachMessageUncheckedCreateWithoutThreadInput> | OutreachMessageCreateWithoutThreadInput[] | OutreachMessageUncheckedCreateWithoutThreadInput[]
+    connectOrCreate?: OutreachMessageCreateOrConnectWithoutThreadInput | OutreachMessageCreateOrConnectWithoutThreadInput[]
+    createMany?: OutreachMessageCreateManyThreadInputEnvelope
+    connect?: OutreachMessageWhereUniqueInput | OutreachMessageWhereUniqueInput[]
+  }
+
+  export type OutreachMessageUncheckedCreateNestedManyWithoutThreadInput = {
+    create?: XOR<OutreachMessageCreateWithoutThreadInput, OutreachMessageUncheckedCreateWithoutThreadInput> | OutreachMessageCreateWithoutThreadInput[] | OutreachMessageUncheckedCreateWithoutThreadInput[]
+    connectOrCreate?: OutreachMessageCreateOrConnectWithoutThreadInput | OutreachMessageCreateOrConnectWithoutThreadInput[]
+    createMany?: OutreachMessageCreateManyThreadInputEnvelope
+    connect?: OutreachMessageWhereUniqueInput | OutreachMessageWhereUniqueInput[]
+  }
+
+  export type EnumThreadOriginFieldUpdateOperationsInput = {
+    set?: $Enums.ThreadOrigin
+  }
+
+  export type OrganisationUpdateOneRequiredWithoutMessage_threadsNestedInput = {
+    create?: XOR<OrganisationCreateWithoutMessage_threadsInput, OrganisationUncheckedCreateWithoutMessage_threadsInput>
+    connectOrCreate?: OrganisationCreateOrConnectWithoutMessage_threadsInput
+    upsert?: OrganisationUpsertWithoutMessage_threadsInput
+    connect?: OrganisationWhereUniqueInput
+    update?: XOR<XOR<OrganisationUpdateToOneWithWhereWithoutMessage_threadsInput, OrganisationUpdateWithoutMessage_threadsInput>, OrganisationUncheckedUpdateWithoutMessage_threadsInput>
+  }
+
+  export type ContactUpdateOneRequiredWithoutMessage_threadsNestedInput = {
+    create?: XOR<ContactCreateWithoutMessage_threadsInput, ContactUncheckedCreateWithoutMessage_threadsInput>
+    connectOrCreate?: ContactCreateOrConnectWithoutMessage_threadsInput
+    upsert?: ContactUpsertWithoutMessage_threadsInput
+    connect?: ContactWhereUniqueInput
+    update?: XOR<XOR<ContactUpdateToOneWithWhereWithoutMessage_threadsInput, ContactUpdateWithoutMessage_threadsInput>, ContactUncheckedUpdateWithoutMessage_threadsInput>
+  }
+
+  export type OutreachMessageUpdateManyWithoutThreadNestedInput = {
+    create?: XOR<OutreachMessageCreateWithoutThreadInput, OutreachMessageUncheckedCreateWithoutThreadInput> | OutreachMessageCreateWithoutThreadInput[] | OutreachMessageUncheckedCreateWithoutThreadInput[]
+    connectOrCreate?: OutreachMessageCreateOrConnectWithoutThreadInput | OutreachMessageCreateOrConnectWithoutThreadInput[]
+    upsert?: OutreachMessageUpsertWithWhereUniqueWithoutThreadInput | OutreachMessageUpsertWithWhereUniqueWithoutThreadInput[]
+    createMany?: OutreachMessageCreateManyThreadInputEnvelope
+    set?: OutreachMessageWhereUniqueInput | OutreachMessageWhereUniqueInput[]
+    disconnect?: OutreachMessageWhereUniqueInput | OutreachMessageWhereUniqueInput[]
+    delete?: OutreachMessageWhereUniqueInput | OutreachMessageWhereUniqueInput[]
+    connect?: OutreachMessageWhereUniqueInput | OutreachMessageWhereUniqueInput[]
+    update?: OutreachMessageUpdateWithWhereUniqueWithoutThreadInput | OutreachMessageUpdateWithWhereUniqueWithoutThreadInput[]
+    updateMany?: OutreachMessageUpdateManyWithWhereWithoutThreadInput | OutreachMessageUpdateManyWithWhereWithoutThreadInput[]
+    deleteMany?: OutreachMessageScalarWhereInput | OutreachMessageScalarWhereInput[]
+  }
+
+  export type OutreachMessageUncheckedUpdateManyWithoutThreadNestedInput = {
+    create?: XOR<OutreachMessageCreateWithoutThreadInput, OutreachMessageUncheckedCreateWithoutThreadInput> | OutreachMessageCreateWithoutThreadInput[] | OutreachMessageUncheckedCreateWithoutThreadInput[]
+    connectOrCreate?: OutreachMessageCreateOrConnectWithoutThreadInput | OutreachMessageCreateOrConnectWithoutThreadInput[]
+    upsert?: OutreachMessageUpsertWithWhereUniqueWithoutThreadInput | OutreachMessageUpsertWithWhereUniqueWithoutThreadInput[]
+    createMany?: OutreachMessageCreateManyThreadInputEnvelope
+    set?: OutreachMessageWhereUniqueInput | OutreachMessageWhereUniqueInput[]
+    disconnect?: OutreachMessageWhereUniqueInput | OutreachMessageWhereUniqueInput[]
+    delete?: OutreachMessageWhereUniqueInput | OutreachMessageWhereUniqueInput[]
+    connect?: OutreachMessageWhereUniqueInput | OutreachMessageWhereUniqueInput[]
+    update?: OutreachMessageUpdateWithWhereUniqueWithoutThreadInput | OutreachMessageUpdateWithWhereUniqueWithoutThreadInput[]
+    updateMany?: OutreachMessageUpdateManyWithWhereWithoutThreadInput | OutreachMessageUpdateManyWithWhereWithoutThreadInput[]
+    deleteMany?: OutreachMessageScalarWhereInput | OutreachMessageScalarWhereInput[]
   }
 
   export type OrganisationCreateNestedOneWithoutOutreach_sequencesInput = {
@@ -102887,6 +105004,23 @@ export namespace Prisma {
     _max?: NestedEnumExternalIntegrationProviderNullableFilter<$PrismaModel>
   }
 
+  export type NestedEnumThreadOriginFilter<$PrismaModel = never> = {
+    equals?: $Enums.ThreadOrigin | EnumThreadOriginFieldRefInput<$PrismaModel>
+    in?: $Enums.ThreadOrigin[] | ListEnumThreadOriginFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ThreadOrigin[] | ListEnumThreadOriginFieldRefInput<$PrismaModel>
+    not?: NestedEnumThreadOriginFilter<$PrismaModel> | $Enums.ThreadOrigin
+  }
+
+  export type NestedEnumThreadOriginWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ThreadOrigin | EnumThreadOriginFieldRefInput<$PrismaModel>
+    in?: $Enums.ThreadOrigin[] | ListEnumThreadOriginFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ThreadOrigin[] | ListEnumThreadOriginFieldRefInput<$PrismaModel>
+    not?: NestedEnumThreadOriginWithAggregatesFilter<$PrismaModel> | $Enums.ThreadOrigin
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumThreadOriginFilter<$PrismaModel>
+    _max?: NestedEnumThreadOriginFilter<$PrismaModel>
+  }
+
   export type NestedEnumSequenceStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.SequenceStatus | EnumSequenceStatusFieldRefInput<$PrismaModel>
     in?: $Enums.SequenceStatus[] | ListEnumSequenceStatusFieldRefInput<$PrismaModel>
@@ -103647,6 +105781,8 @@ export namespace Prisma {
     reply_html?: string | null
     inbound_message_id?: string | null
     in_reply_to_message_id?: string | null
+    message_id?: string | null
+    references?: string | null
     is_manual_reply?: boolean
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
@@ -103663,6 +105799,7 @@ export namespace Prisma {
     sequence_step?: OutreachSequenceStepCreateNestedOneWithoutOutreach_messagesInput
     campaign_integration?: CampaignIntegrationCreateNestedOneWithoutOutreach_messagesInput
     reminders?: ReminderCreateNestedManyWithoutOutreach_messageInput
+    thread?: MessageThreadCreateNestedOneWithoutMessagesInput
   }
 
   export type OutreachMessageUncheckedCreateWithoutSent_byInput = {
@@ -103691,6 +105828,9 @@ export namespace Prisma {
     reply_html?: string | null
     inbound_message_id?: string | null
     in_reply_to_message_id?: string | null
+    message_id?: string | null
+    references?: string | null
+    thread_uuid?: string | null
     is_manual_reply?: boolean
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
@@ -104089,6 +106229,9 @@ export namespace Prisma {
     reply_html?: StringNullableFilter<"OutreachMessage"> | string | null
     inbound_message_id?: StringNullableFilter<"OutreachMessage"> | string | null
     in_reply_to_message_id?: StringNullableFilter<"OutreachMessage"> | string | null
+    message_id?: StringNullableFilter<"OutreachMessage"> | string | null
+    references?: StringNullableFilter<"OutreachMessage"> | string | null
+    thread_uuid?: StringNullableFilter<"OutreachMessage"> | string | null
     is_manual_reply?: BoolFilter<"OutreachMessage"> | boolean
     email_provider?: EnumExternalIntegrationProviderNullableFilter<"OutreachMessage"> | $Enums.ExternalIntegrationProvider | null
     email_account?: StringNullableFilter<"OutreachMessage"> | string | null
@@ -104463,6 +106606,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoCreateNestedManyWithoutContactInput
     interactions?: InteractionCreateNestedManyWithoutContactInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutContactInput
+    message_threads?: MessageThreadCreateNestedManyWithoutContactInput
     campaign_contacts?: MarketingCampaignContactCreateNestedManyWithoutContactInput
     contact_scores?: ContactScoreCreateNestedManyWithoutContactInput
     reminders?: ReminderCreateNestedManyWithoutContactInput
@@ -104508,6 +106652,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoUncheckedCreateNestedManyWithoutContactInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutContactInput
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutContactInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutContactInput
     campaign_contacts?: MarketingCampaignContactUncheckedCreateNestedManyWithoutContactInput
     contact_scores?: ContactScoreUncheckedCreateNestedManyWithoutContactInput
     reminders?: ReminderUncheckedCreateNestedManyWithoutContactInput
@@ -104549,6 +106694,8 @@ export namespace Prisma {
     reply_html?: string | null
     inbound_message_id?: string | null
     in_reply_to_message_id?: string | null
+    message_id?: string | null
+    references?: string | null
     is_manual_reply?: boolean
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
@@ -104565,6 +106712,7 @@ export namespace Prisma {
     sequence_step?: OutreachSequenceStepCreateNestedOneWithoutOutreach_messagesInput
     campaign_integration?: CampaignIntegrationCreateNestedOneWithoutOutreach_messagesInput
     reminders?: ReminderCreateNestedManyWithoutOutreach_messageInput
+    thread?: MessageThreadCreateNestedOneWithoutMessagesInput
   }
 
   export type OutreachMessageUncheckedCreateWithoutOrganisationInput = {
@@ -104593,6 +106741,9 @@ export namespace Prisma {
     reply_html?: string | null
     inbound_message_id?: string | null
     in_reply_to_message_id?: string | null
+    message_id?: string | null
+    references?: string | null
+    thread_uuid?: string | null
     is_manual_reply?: boolean
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
@@ -104615,6 +106766,49 @@ export namespace Prisma {
 
   export type OutreachMessageCreateManyOrganisationInputEnvelope = {
     data: OutreachMessageCreateManyOrganisationInput | OutreachMessageCreateManyOrganisationInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type MessageThreadCreateWithoutOrganisationInput = {
+    uuid?: string
+    channel: $Enums.Channel
+    subject?: string | null
+    origin: $Enums.ThreadOrigin
+    sequence_enrollment_uuid?: string | null
+    campaign_uuid?: string | null
+    dedupe_key?: string | null
+    last_message_at?: Date | string | null
+    message_count?: number
+    created_at?: Date | string
+    updated_at?: Date | string
+    contact: ContactCreateNestedOneWithoutMessage_threadsInput
+    messages?: OutreachMessageCreateNestedManyWithoutThreadInput
+  }
+
+  export type MessageThreadUncheckedCreateWithoutOrganisationInput = {
+    id?: number
+    uuid?: string
+    contact_uuid: string
+    channel: $Enums.Channel
+    subject?: string | null
+    origin: $Enums.ThreadOrigin
+    sequence_enrollment_uuid?: string | null
+    campaign_uuid?: string | null
+    dedupe_key?: string | null
+    last_message_at?: Date | string | null
+    message_count?: number
+    created_at?: Date | string
+    updated_at?: Date | string
+    messages?: OutreachMessageUncheckedCreateNestedManyWithoutThreadInput
+  }
+
+  export type MessageThreadCreateOrConnectWithoutOrganisationInput = {
+    where: MessageThreadWhereUniqueInput
+    create: XOR<MessageThreadCreateWithoutOrganisationInput, MessageThreadUncheckedCreateWithoutOrganisationInput>
+  }
+
+  export type MessageThreadCreateManyOrganisationInputEnvelope = {
+    data: MessageThreadCreateManyOrganisationInput | MessageThreadCreateManyOrganisationInput[]
     skipDuplicates?: boolean
   }
 
@@ -105822,6 +108016,42 @@ export namespace Prisma {
     data: XOR<OutreachMessageUpdateManyMutationInput, OutreachMessageUncheckedUpdateManyWithoutOrganisationInput>
   }
 
+  export type MessageThreadUpsertWithWhereUniqueWithoutOrganisationInput = {
+    where: MessageThreadWhereUniqueInput
+    update: XOR<MessageThreadUpdateWithoutOrganisationInput, MessageThreadUncheckedUpdateWithoutOrganisationInput>
+    create: XOR<MessageThreadCreateWithoutOrganisationInput, MessageThreadUncheckedCreateWithoutOrganisationInput>
+  }
+
+  export type MessageThreadUpdateWithWhereUniqueWithoutOrganisationInput = {
+    where: MessageThreadWhereUniqueInput
+    data: XOR<MessageThreadUpdateWithoutOrganisationInput, MessageThreadUncheckedUpdateWithoutOrganisationInput>
+  }
+
+  export type MessageThreadUpdateManyWithWhereWithoutOrganisationInput = {
+    where: MessageThreadScalarWhereInput
+    data: XOR<MessageThreadUpdateManyMutationInput, MessageThreadUncheckedUpdateManyWithoutOrganisationInput>
+  }
+
+  export type MessageThreadScalarWhereInput = {
+    AND?: MessageThreadScalarWhereInput | MessageThreadScalarWhereInput[]
+    OR?: MessageThreadScalarWhereInput[]
+    NOT?: MessageThreadScalarWhereInput | MessageThreadScalarWhereInput[]
+    id?: IntFilter<"MessageThread"> | number
+    uuid?: StringFilter<"MessageThread"> | string
+    organisation_uuid?: StringFilter<"MessageThread"> | string
+    contact_uuid?: StringFilter<"MessageThread"> | string
+    channel?: EnumChannelFilter<"MessageThread"> | $Enums.Channel
+    subject?: StringNullableFilter<"MessageThread"> | string | null
+    origin?: EnumThreadOriginFilter<"MessageThread"> | $Enums.ThreadOrigin
+    sequence_enrollment_uuid?: StringNullableFilter<"MessageThread"> | string | null
+    campaign_uuid?: StringNullableFilter<"MessageThread"> | string | null
+    dedupe_key?: StringNullableFilter<"MessageThread"> | string | null
+    last_message_at?: DateTimeNullableFilter<"MessageThread"> | Date | string | null
+    message_count?: IntFilter<"MessageThread"> | number
+    created_at?: DateTimeFilter<"MessageThread"> | Date | string
+    updated_at?: DateTimeFilter<"MessageThread"> | Date | string
+  }
+
   export type OutreachSequenceUpsertWithWhereUniqueWithoutOrganisationInput = {
     where: OutreachSequenceWhereUniqueInput
     update: XOR<OutreachSequenceUpdateWithoutOrganisationInput, OutreachSequenceUncheckedUpdateWithoutOrganisationInput>
@@ -106617,6 +108847,7 @@ export namespace Prisma {
     filters?: FilterCreateNestedManyWithoutOrganisationInput
     contacts?: ContactCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileCreateNestedManyWithoutOrganisationInput
@@ -106658,6 +108889,7 @@ export namespace Prisma {
     filters?: FilterUncheckedCreateNestedManyWithoutOrganisationInput
     contacts?: ContactUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutOrganisationInput
@@ -106760,6 +108992,7 @@ export namespace Prisma {
     filters?: FilterUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUpdateManyWithoutOrganisationNestedInput
@@ -106801,6 +109034,7 @@ export namespace Prisma {
     filters?: FilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUncheckedUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -106893,6 +109127,7 @@ export namespace Prisma {
     filters?: FilterCreateNestedManyWithoutOrganisationInput
     contacts?: ContactCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileCreateNestedManyWithoutOrganisationInput
@@ -106934,6 +109169,7 @@ export namespace Prisma {
     filters?: FilterUncheckedCreateNestedManyWithoutOrganisationInput
     contacts?: ContactUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutOrganisationInput
@@ -107036,6 +109272,7 @@ export namespace Prisma {
     filters?: FilterUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUpdateManyWithoutOrganisationNestedInput
@@ -107077,6 +109314,7 @@ export namespace Prisma {
     filters?: FilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUncheckedUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -107169,6 +109407,7 @@ export namespace Prisma {
     invitations?: OrganisationInvitationCreateNestedManyWithoutOrganisationInput
     contacts?: ContactCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileCreateNestedManyWithoutOrganisationInput
@@ -107210,6 +109449,7 @@ export namespace Prisma {
     invitations?: OrganisationInvitationUncheckedCreateNestedManyWithoutOrganisationInput
     contacts?: ContactUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutOrganisationInput
@@ -107340,6 +109580,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoCreateNestedManyWithoutContactInput
     interactions?: InteractionCreateNestedManyWithoutContactInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutContactInput
+    message_threads?: MessageThreadCreateNestedManyWithoutContactInput
     campaign_contacts?: MarketingCampaignContactCreateNestedManyWithoutContactInput
     contact_scores?: ContactScoreCreateNestedManyWithoutContactInput
     reminders?: ReminderCreateNestedManyWithoutContactInput
@@ -107385,6 +109626,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoUncheckedCreateNestedManyWithoutContactInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutContactInput
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutContactInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutContactInput
     campaign_contacts?: MarketingCampaignContactUncheckedCreateNestedManyWithoutContactInput
     contact_scores?: ContactScoreUncheckedCreateNestedManyWithoutContactInput
     reminders?: ReminderUncheckedCreateNestedManyWithoutContactInput
@@ -107554,6 +109796,7 @@ export namespace Prisma {
     invitations?: OrganisationInvitationUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUpdateManyWithoutOrganisationNestedInput
@@ -107595,6 +109838,7 @@ export namespace Prisma {
     invitations?: OrganisationInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUncheckedUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -107820,6 +110064,7 @@ export namespace Prisma {
     filters?: FilterCreateNestedManyWithoutOrganisationInput
     contacts?: ContactCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileCreateNestedManyWithoutOrganisationInput
@@ -107861,6 +110106,7 @@ export namespace Prisma {
     filters?: FilterUncheckedCreateNestedManyWithoutOrganisationInput
     contacts?: ContactUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutOrganisationInput
@@ -107917,6 +110163,7 @@ export namespace Prisma {
     filters?: FilterUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUpdateManyWithoutOrganisationNestedInput
@@ -107958,6 +110205,7 @@ export namespace Prisma {
     filters?: FilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUncheckedUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -107998,6 +110246,7 @@ export namespace Prisma {
     filters?: FilterCreateNestedManyWithoutOrganisationInput
     contacts?: ContactCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileCreateNestedManyWithoutOrganisationInput
@@ -108039,6 +110288,7 @@ export namespace Prisma {
     filters?: FilterUncheckedCreateNestedManyWithoutOrganisationInput
     contacts?: ContactUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutOrganisationInput
@@ -108138,6 +110388,7 @@ export namespace Prisma {
     filters?: FilterUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUpdateManyWithoutOrganisationNestedInput
@@ -108179,6 +110430,7 @@ export namespace Prisma {
     filters?: FilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUncheckedUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -108705,6 +110957,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoCreateNestedManyWithoutContactInput
     interactions?: InteractionCreateNestedManyWithoutContactInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutContactInput
+    message_threads?: MessageThreadCreateNestedManyWithoutContactInput
     campaign_contacts?: MarketingCampaignContactCreateNestedManyWithoutContactInput
     contact_scores?: ContactScoreCreateNestedManyWithoutContactInput
     reminders?: ReminderCreateNestedManyWithoutContactInput
@@ -108750,6 +111003,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoUncheckedCreateNestedManyWithoutContactInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutContactInput
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutContactInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutContactInput
     campaign_contacts?: MarketingCampaignContactUncheckedCreateNestedManyWithoutContactInput
     contact_scores?: ContactScoreUncheckedCreateNestedManyWithoutContactInput
     reminders?: ReminderUncheckedCreateNestedManyWithoutContactInput
@@ -109035,6 +111289,7 @@ export namespace Prisma {
     invitations?: OrganisationInvitationCreateNestedManyWithoutOrganisationInput
     filters?: FilterCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileCreateNestedManyWithoutOrganisationInput
@@ -109076,6 +111331,7 @@ export namespace Prisma {
     invitations?: OrganisationInvitationUncheckedCreateNestedManyWithoutOrganisationInput
     filters?: FilterUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutOrganisationInput
@@ -109347,6 +111603,8 @@ export namespace Prisma {
     reply_html?: string | null
     inbound_message_id?: string | null
     in_reply_to_message_id?: string | null
+    message_id?: string | null
+    references?: string | null
     is_manual_reply?: boolean
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
@@ -109363,6 +111621,7 @@ export namespace Prisma {
     sequence_step?: OutreachSequenceStepCreateNestedOneWithoutOutreach_messagesInput
     campaign_integration?: CampaignIntegrationCreateNestedOneWithoutOutreach_messagesInput
     reminders?: ReminderCreateNestedManyWithoutOutreach_messageInput
+    thread?: MessageThreadCreateNestedOneWithoutMessagesInput
   }
 
   export type OutreachMessageUncheckedCreateWithoutContactInput = {
@@ -109391,6 +111650,9 @@ export namespace Prisma {
     reply_html?: string | null
     inbound_message_id?: string | null
     in_reply_to_message_id?: string | null
+    message_id?: string | null
+    references?: string | null
+    thread_uuid?: string | null
     is_manual_reply?: boolean
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
@@ -109413,6 +111675,49 @@ export namespace Prisma {
 
   export type OutreachMessageCreateManyContactInputEnvelope = {
     data: OutreachMessageCreateManyContactInput | OutreachMessageCreateManyContactInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type MessageThreadCreateWithoutContactInput = {
+    uuid?: string
+    channel: $Enums.Channel
+    subject?: string | null
+    origin: $Enums.ThreadOrigin
+    sequence_enrollment_uuid?: string | null
+    campaign_uuid?: string | null
+    dedupe_key?: string | null
+    last_message_at?: Date | string | null
+    message_count?: number
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutMessage_threadsInput
+    messages?: OutreachMessageCreateNestedManyWithoutThreadInput
+  }
+
+  export type MessageThreadUncheckedCreateWithoutContactInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    channel: $Enums.Channel
+    subject?: string | null
+    origin: $Enums.ThreadOrigin
+    sequence_enrollment_uuid?: string | null
+    campaign_uuid?: string | null
+    dedupe_key?: string | null
+    last_message_at?: Date | string | null
+    message_count?: number
+    created_at?: Date | string
+    updated_at?: Date | string
+    messages?: OutreachMessageUncheckedCreateNestedManyWithoutThreadInput
+  }
+
+  export type MessageThreadCreateOrConnectWithoutContactInput = {
+    where: MessageThreadWhereUniqueInput
+    create: XOR<MessageThreadCreateWithoutContactInput, MessageThreadUncheckedCreateWithoutContactInput>
+  }
+
+  export type MessageThreadCreateManyContactInputEnvelope = {
+    data: MessageThreadCreateManyContactInput | MessageThreadCreateManyContactInput[]
     skipDuplicates?: boolean
   }
 
@@ -109671,6 +111976,7 @@ export namespace Prisma {
     invitations?: OrganisationInvitationUpdateManyWithoutOrganisationNestedInput
     filters?: FilterUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUpdateManyWithoutOrganisationNestedInput
@@ -109712,6 +112018,7 @@ export namespace Prisma {
     invitations?: OrganisationInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
     filters?: FilterUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUncheckedUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -109966,6 +112273,22 @@ export namespace Prisma {
     data: XOR<OutreachMessageUpdateManyMutationInput, OutreachMessageUncheckedUpdateManyWithoutContactInput>
   }
 
+  export type MessageThreadUpsertWithWhereUniqueWithoutContactInput = {
+    where: MessageThreadWhereUniqueInput
+    update: XOR<MessageThreadUpdateWithoutContactInput, MessageThreadUncheckedUpdateWithoutContactInput>
+    create: XOR<MessageThreadCreateWithoutContactInput, MessageThreadUncheckedCreateWithoutContactInput>
+  }
+
+  export type MessageThreadUpdateWithWhereUniqueWithoutContactInput = {
+    where: MessageThreadWhereUniqueInput
+    data: XOR<MessageThreadUpdateWithoutContactInput, MessageThreadUncheckedUpdateWithoutContactInput>
+  }
+
+  export type MessageThreadUpdateManyWithWhereWithoutContactInput = {
+    where: MessageThreadScalarWhereInput
+    data: XOR<MessageThreadUpdateManyMutationInput, MessageThreadUncheckedUpdateManyWithoutContactInput>
+  }
+
   export type MarketingCampaignContactUpsertWithWhereUniqueWithoutContactInput = {
     where: MarketingCampaignContactWhereUniqueInput
     update: XOR<MarketingCampaignContactUpdateWithoutContactInput, MarketingCampaignContactUncheckedUpdateWithoutContactInput>
@@ -110178,6 +112501,7 @@ export namespace Prisma {
     tags?: ContactTagCreateNestedManyWithoutContactInput
     interactions?: InteractionCreateNestedManyWithoutContactInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutContactInput
+    message_threads?: MessageThreadCreateNestedManyWithoutContactInput
     campaign_contacts?: MarketingCampaignContactCreateNestedManyWithoutContactInput
     contact_scores?: ContactScoreCreateNestedManyWithoutContactInput
     reminders?: ReminderCreateNestedManyWithoutContactInput
@@ -110223,6 +112547,7 @@ export namespace Prisma {
     tags?: ContactTagUncheckedCreateNestedManyWithoutContactInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutContactInput
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutContactInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutContactInput
     campaign_contacts?: MarketingCampaignContactUncheckedCreateNestedManyWithoutContactInput
     contact_scores?: ContactScoreUncheckedCreateNestedManyWithoutContactInput
     reminders?: ReminderUncheckedCreateNestedManyWithoutContactInput
@@ -110283,6 +112608,7 @@ export namespace Prisma {
     tags?: ContactTagUpdateManyWithoutContactNestedInput
     interactions?: InteractionUpdateManyWithoutContactNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutContactNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutContactNestedInput
     campaign_contacts?: MarketingCampaignContactUpdateManyWithoutContactNestedInput
     contact_scores?: ContactScoreUpdateManyWithoutContactNestedInput
     reminders?: ReminderUpdateManyWithoutContactNestedInput
@@ -110328,6 +112654,7 @@ export namespace Prisma {
     tags?: ContactTagUncheckedUpdateManyWithoutContactNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutContactNestedInput
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutContactNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutContactNestedInput
     campaign_contacts?: MarketingCampaignContactUncheckedUpdateManyWithoutContactNestedInput
     contact_scores?: ContactScoreUncheckedUpdateManyWithoutContactNestedInput
     reminders?: ReminderUncheckedUpdateManyWithoutContactNestedInput
@@ -110372,6 +112699,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoCreateNestedManyWithoutContactInput
     interactions?: InteractionCreateNestedManyWithoutContactInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutContactInput
+    message_threads?: MessageThreadCreateNestedManyWithoutContactInput
     campaign_contacts?: MarketingCampaignContactCreateNestedManyWithoutContactInput
     contact_scores?: ContactScoreCreateNestedManyWithoutContactInput
     reminders?: ReminderCreateNestedManyWithoutContactInput
@@ -110417,6 +112745,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoUncheckedCreateNestedManyWithoutContactInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutContactInput
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutContactInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutContactInput
     campaign_contacts?: MarketingCampaignContactUncheckedCreateNestedManyWithoutContactInput
     contact_scores?: ContactScoreUncheckedCreateNestedManyWithoutContactInput
     reminders?: ReminderUncheckedCreateNestedManyWithoutContactInput
@@ -110525,6 +112854,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoUpdateManyWithoutContactNestedInput
     interactions?: InteractionUpdateManyWithoutContactNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutContactNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutContactNestedInput
     campaign_contacts?: MarketingCampaignContactUpdateManyWithoutContactNestedInput
     contact_scores?: ContactScoreUpdateManyWithoutContactNestedInput
     reminders?: ReminderUpdateManyWithoutContactNestedInput
@@ -110570,6 +112900,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoUncheckedUpdateManyWithoutContactNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutContactNestedInput
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutContactNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutContactNestedInput
     campaign_contacts?: MarketingCampaignContactUncheckedUpdateManyWithoutContactNestedInput
     contact_scores?: ContactScoreUncheckedUpdateManyWithoutContactNestedInput
     reminders?: ReminderUncheckedUpdateManyWithoutContactNestedInput
@@ -110669,6 +113000,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoCreateNestedManyWithoutContactInput
     interactions?: InteractionCreateNestedManyWithoutContactInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutContactInput
+    message_threads?: MessageThreadCreateNestedManyWithoutContactInput
     campaign_contacts?: MarketingCampaignContactCreateNestedManyWithoutContactInput
     contact_scores?: ContactScoreCreateNestedManyWithoutContactInput
     reminders?: ReminderCreateNestedManyWithoutContactInput
@@ -110714,6 +113046,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoUncheckedCreateNestedManyWithoutContactInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutContactInput
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutContactInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutContactInput
     campaign_contacts?: MarketingCampaignContactUncheckedCreateNestedManyWithoutContactInput
     contact_scores?: ContactScoreUncheckedCreateNestedManyWithoutContactInput
     reminders?: ReminderUncheckedCreateNestedManyWithoutContactInput
@@ -110774,6 +113107,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoUpdateManyWithoutContactNestedInput
     interactions?: InteractionUpdateManyWithoutContactNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutContactNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutContactNestedInput
     campaign_contacts?: MarketingCampaignContactUpdateManyWithoutContactNestedInput
     contact_scores?: ContactScoreUpdateManyWithoutContactNestedInput
     reminders?: ReminderUpdateManyWithoutContactNestedInput
@@ -110819,6 +113153,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoUncheckedUpdateManyWithoutContactNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutContactNestedInput
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutContactNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutContactNestedInput
     campaign_contacts?: MarketingCampaignContactUncheckedUpdateManyWithoutContactNestedInput
     contact_scores?: ContactScoreUncheckedUpdateManyWithoutContactNestedInput
     reminders?: ReminderUncheckedUpdateManyWithoutContactNestedInput
@@ -110863,6 +113198,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoCreateNestedManyWithoutContactInput
     interactions?: InteractionCreateNestedManyWithoutContactInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutContactInput
+    message_threads?: MessageThreadCreateNestedManyWithoutContactInput
     campaign_contacts?: MarketingCampaignContactCreateNestedManyWithoutContactInput
     reminders?: ReminderCreateNestedManyWithoutContactInput
     form_completions?: FormCompletionCreateNestedManyWithoutContactInput
@@ -110908,6 +113244,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoUncheckedCreateNestedManyWithoutContactInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutContactInput
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutContactInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutContactInput
     campaign_contacts?: MarketingCampaignContactUncheckedCreateNestedManyWithoutContactInput
     reminders?: ReminderUncheckedCreateNestedManyWithoutContactInput
     form_completions?: FormCompletionUncheckedCreateNestedManyWithoutContactInput
@@ -110994,6 +113331,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoUpdateManyWithoutContactNestedInput
     interactions?: InteractionUpdateManyWithoutContactNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutContactNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutContactNestedInput
     campaign_contacts?: MarketingCampaignContactUpdateManyWithoutContactNestedInput
     reminders?: ReminderUpdateManyWithoutContactNestedInput
     form_completions?: FormCompletionUpdateManyWithoutContactNestedInput
@@ -111039,6 +113377,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoUncheckedUpdateManyWithoutContactNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutContactNestedInput
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutContactNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutContactNestedInput
     campaign_contacts?: MarketingCampaignContactUncheckedUpdateManyWithoutContactNestedInput
     reminders?: ReminderUncheckedUpdateManyWithoutContactNestedInput
     form_completions?: FormCompletionUncheckedUpdateManyWithoutContactNestedInput
@@ -111093,6 +113432,7 @@ export namespace Prisma {
     filters?: FilterCreateNestedManyWithoutOrganisationInput
     contacts?: ContactCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileCreateNestedManyWithoutOrganisationInput
@@ -111134,6 +113474,7 @@ export namespace Prisma {
     filters?: FilterUncheckedCreateNestedManyWithoutOrganisationInput
     contacts?: ContactUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutOrganisationInput
@@ -111384,6 +113725,7 @@ export namespace Prisma {
     filters?: FilterUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUpdateManyWithoutOrganisationNestedInput
@@ -111425,6 +113767,7 @@ export namespace Prisma {
     filters?: FilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUncheckedUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -111621,6 +113964,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoCreateNestedManyWithoutContactInput
     interactions?: InteractionCreateNestedManyWithoutContactInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutContactInput
+    message_threads?: MessageThreadCreateNestedManyWithoutContactInput
     campaign_contacts?: MarketingCampaignContactCreateNestedManyWithoutContactInput
     contact_scores?: ContactScoreCreateNestedManyWithoutContactInput
     reminders?: ReminderCreateNestedManyWithoutContactInput
@@ -111666,6 +114010,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoUncheckedCreateNestedManyWithoutContactInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutContactInput
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutContactInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutContactInput
     campaign_contacts?: MarketingCampaignContactUncheckedCreateNestedManyWithoutContactInput
     contact_scores?: ContactScoreUncheckedCreateNestedManyWithoutContactInput
     reminders?: ReminderUncheckedCreateNestedManyWithoutContactInput
@@ -111764,6 +114109,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoUpdateManyWithoutContactNestedInput
     interactions?: InteractionUpdateManyWithoutContactNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutContactNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutContactNestedInput
     campaign_contacts?: MarketingCampaignContactUpdateManyWithoutContactNestedInput
     contact_scores?: ContactScoreUpdateManyWithoutContactNestedInput
     reminders?: ReminderUpdateManyWithoutContactNestedInput
@@ -111809,6 +114155,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoUncheckedUpdateManyWithoutContactNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutContactNestedInput
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutContactNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutContactNestedInput
     campaign_contacts?: MarketingCampaignContactUncheckedUpdateManyWithoutContactNestedInput
     contact_scores?: ContactScoreUncheckedUpdateManyWithoutContactNestedInput
     reminders?: ReminderUncheckedUpdateManyWithoutContactNestedInput
@@ -111852,6 +114199,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoCreateNestedManyWithoutContactInput
     interactions?: InteractionCreateNestedManyWithoutContactInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutContactInput
+    message_threads?: MessageThreadCreateNestedManyWithoutContactInput
     campaign_contacts?: MarketingCampaignContactCreateNestedManyWithoutContactInput
     contact_scores?: ContactScoreCreateNestedManyWithoutContactInput
     reminders?: ReminderCreateNestedManyWithoutContactInput
@@ -111897,6 +114245,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoUncheckedCreateNestedManyWithoutContactInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutContactInput
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutContactInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutContactInput
     campaign_contacts?: MarketingCampaignContactUncheckedCreateNestedManyWithoutContactInput
     contact_scores?: ContactScoreUncheckedCreateNestedManyWithoutContactInput
     reminders?: ReminderUncheckedCreateNestedManyWithoutContactInput
@@ -111957,6 +114306,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoUpdateManyWithoutContactNestedInput
     interactions?: InteractionUpdateManyWithoutContactNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutContactNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutContactNestedInput
     campaign_contacts?: MarketingCampaignContactUpdateManyWithoutContactNestedInput
     contact_scores?: ContactScoreUpdateManyWithoutContactNestedInput
     reminders?: ReminderUpdateManyWithoutContactNestedInput
@@ -112002,6 +114352,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoUncheckedUpdateManyWithoutContactNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutContactNestedInput
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutContactNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutContactNestedInput
     campaign_contacts?: MarketingCampaignContactUncheckedUpdateManyWithoutContactNestedInput
     contact_scores?: ContactScoreUncheckedUpdateManyWithoutContactNestedInput
     reminders?: ReminderUncheckedUpdateManyWithoutContactNestedInput
@@ -112046,6 +114397,7 @@ export namespace Prisma {
     tags?: ContactTagCreateNestedManyWithoutContactInput
     contact_infos?: ContactInfoCreateNestedManyWithoutContactInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutContactInput
+    message_threads?: MessageThreadCreateNestedManyWithoutContactInput
     campaign_contacts?: MarketingCampaignContactCreateNestedManyWithoutContactInput
     contact_scores?: ContactScoreCreateNestedManyWithoutContactInput
     reminders?: ReminderCreateNestedManyWithoutContactInput
@@ -112091,6 +114443,7 @@ export namespace Prisma {
     tags?: ContactTagUncheckedCreateNestedManyWithoutContactInput
     contact_infos?: ContactInfoUncheckedCreateNestedManyWithoutContactInput
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutContactInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutContactInput
     campaign_contacts?: MarketingCampaignContactUncheckedCreateNestedManyWithoutContactInput
     contact_scores?: ContactScoreUncheckedCreateNestedManyWithoutContactInput
     reminders?: ReminderUncheckedCreateNestedManyWithoutContactInput
@@ -112119,6 +114472,7 @@ export namespace Prisma {
     filters?: FilterCreateNestedManyWithoutOrganisationInput
     contacts?: ContactCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileCreateNestedManyWithoutOrganisationInput
     marketing_campaigns?: MarketingCampaignCreateNestedManyWithoutOrganisationInput
@@ -112160,6 +114514,7 @@ export namespace Prisma {
     filters?: FilterUncheckedCreateNestedManyWithoutOrganisationInput
     contacts?: ContactUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutOrganisationInput
     marketing_campaigns?: MarketingCampaignUncheckedCreateNestedManyWithoutOrganisationInput
@@ -112213,6 +114568,8 @@ export namespace Prisma {
     reply_html?: string | null
     inbound_message_id?: string | null
     in_reply_to_message_id?: string | null
+    message_id?: string | null
+    references?: string | null
     is_manual_reply?: boolean
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
@@ -112229,6 +114586,7 @@ export namespace Prisma {
     sequence_step?: OutreachSequenceStepCreateNestedOneWithoutOutreach_messagesInput
     campaign_integration?: CampaignIntegrationCreateNestedOneWithoutOutreach_messagesInput
     reminders?: ReminderCreateNestedManyWithoutOutreach_messageInput
+    thread?: MessageThreadCreateNestedOneWithoutMessagesInput
   }
 
   export type OutreachMessageUncheckedCreateWithoutInteractionsInput = {
@@ -112258,6 +114616,9 @@ export namespace Prisma {
     reply_html?: string | null
     inbound_message_id?: string | null
     in_reply_to_message_id?: string | null
+    message_id?: string | null
+    references?: string | null
+    thread_uuid?: string | null
     is_manual_reply?: boolean
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
@@ -112419,6 +114780,7 @@ export namespace Prisma {
     tags?: ContactTagUpdateManyWithoutContactNestedInput
     contact_infos?: ContactInfoUpdateManyWithoutContactNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutContactNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutContactNestedInput
     campaign_contacts?: MarketingCampaignContactUpdateManyWithoutContactNestedInput
     contact_scores?: ContactScoreUpdateManyWithoutContactNestedInput
     reminders?: ReminderUpdateManyWithoutContactNestedInput
@@ -112464,6 +114826,7 @@ export namespace Prisma {
     tags?: ContactTagUncheckedUpdateManyWithoutContactNestedInput
     contact_infos?: ContactInfoUncheckedUpdateManyWithoutContactNestedInput
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutContactNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutContactNestedInput
     campaign_contacts?: MarketingCampaignContactUncheckedUpdateManyWithoutContactNestedInput
     contact_scores?: ContactScoreUncheckedUpdateManyWithoutContactNestedInput
     reminders?: ReminderUncheckedUpdateManyWithoutContactNestedInput
@@ -112498,6 +114861,7 @@ export namespace Prisma {
     filters?: FilterUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUpdateManyWithoutOrganisationNestedInput
     marketing_campaigns?: MarketingCampaignUpdateManyWithoutOrganisationNestedInput
@@ -112539,6 +114903,7 @@ export namespace Prisma {
     filters?: FilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUncheckedUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUncheckedUpdateManyWithoutOrganisationNestedInput
     marketing_campaigns?: MarketingCampaignUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -112598,6 +114963,8 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    references?: NullableStringFieldUpdateOperationsInput | string | null
     is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
@@ -112614,6 +114981,7 @@ export namespace Prisma {
     sequence_step?: OutreachSequenceStepUpdateOneWithoutOutreach_messagesNestedInput
     campaign_integration?: CampaignIntegrationUpdateOneWithoutOutreach_messagesNestedInput
     reminders?: ReminderUpdateManyWithoutOutreach_messageNestedInput
+    thread?: MessageThreadUpdateOneWithoutMessagesNestedInput
   }
 
   export type OutreachMessageUncheckedUpdateWithoutInteractionsInput = {
@@ -112643,6 +115011,9 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    references?: NullableStringFieldUpdateOperationsInput | string | null
+    thread_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
@@ -112772,6 +115143,7 @@ export namespace Prisma {
     invitations?: OrganisationInvitationCreateNestedManyWithoutOrganisationInput
     filters?: FilterCreateNestedManyWithoutOrganisationInput
     contacts?: ContactCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileCreateNestedManyWithoutOrganisationInput
@@ -112813,6 +115185,7 @@ export namespace Prisma {
     invitations?: OrganisationInvitationUncheckedCreateNestedManyWithoutOrganisationInput
     filters?: FilterUncheckedCreateNestedManyWithoutOrganisationInput
     contacts?: ContactUncheckedCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutOrganisationInput
@@ -112880,6 +115253,7 @@ export namespace Prisma {
     tags?: ContactTagCreateNestedManyWithoutContactInput
     contact_infos?: ContactInfoCreateNestedManyWithoutContactInput
     interactions?: InteractionCreateNestedManyWithoutContactInput
+    message_threads?: MessageThreadCreateNestedManyWithoutContactInput
     campaign_contacts?: MarketingCampaignContactCreateNestedManyWithoutContactInput
     contact_scores?: ContactScoreCreateNestedManyWithoutContactInput
     reminders?: ReminderCreateNestedManyWithoutContactInput
@@ -112925,6 +115299,7 @@ export namespace Prisma {
     tags?: ContactTagUncheckedCreateNestedManyWithoutContactInput
     contact_infos?: ContactInfoUncheckedCreateNestedManyWithoutContactInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutContactInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutContactInput
     campaign_contacts?: MarketingCampaignContactUncheckedCreateNestedManyWithoutContactInput
     contact_scores?: ContactScoreUncheckedCreateNestedManyWithoutContactInput
     reminders?: ReminderUncheckedCreateNestedManyWithoutContactInput
@@ -113269,6 +115644,44 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type MessageThreadCreateWithoutMessagesInput = {
+    uuid?: string
+    channel: $Enums.Channel
+    subject?: string | null
+    origin: $Enums.ThreadOrigin
+    sequence_enrollment_uuid?: string | null
+    campaign_uuid?: string | null
+    dedupe_key?: string | null
+    last_message_at?: Date | string | null
+    message_count?: number
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutMessage_threadsInput
+    contact: ContactCreateNestedOneWithoutMessage_threadsInput
+  }
+
+  export type MessageThreadUncheckedCreateWithoutMessagesInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    contact_uuid: string
+    channel: $Enums.Channel
+    subject?: string | null
+    origin: $Enums.ThreadOrigin
+    sequence_enrollment_uuid?: string | null
+    campaign_uuid?: string | null
+    dedupe_key?: string | null
+    last_message_at?: Date | string | null
+    message_count?: number
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type MessageThreadCreateOrConnectWithoutMessagesInput = {
+    where: MessageThreadWhereUniqueInput
+    create: XOR<MessageThreadCreateWithoutMessagesInput, MessageThreadUncheckedCreateWithoutMessagesInput>
+  }
+
   export type OrganisationUpsertWithoutOutreach_messagesInput = {
     update: XOR<OrganisationUpdateWithoutOutreach_messagesInput, OrganisationUncheckedUpdateWithoutOutreach_messagesInput>
     create: XOR<OrganisationCreateWithoutOutreach_messagesInput, OrganisationUncheckedCreateWithoutOutreach_messagesInput>
@@ -113293,6 +115706,7 @@ export namespace Prisma {
     invitations?: OrganisationInvitationUpdateManyWithoutOrganisationNestedInput
     filters?: FilterUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUpdateManyWithoutOrganisationNestedInput
@@ -113334,6 +115748,7 @@ export namespace Prisma {
     invitations?: OrganisationInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
     filters?: FilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUncheckedUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -113407,6 +115822,7 @@ export namespace Prisma {
     tags?: ContactTagUpdateManyWithoutContactNestedInput
     contact_infos?: ContactInfoUpdateManyWithoutContactNestedInput
     interactions?: InteractionUpdateManyWithoutContactNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutContactNestedInput
     campaign_contacts?: MarketingCampaignContactUpdateManyWithoutContactNestedInput
     contact_scores?: ContactScoreUpdateManyWithoutContactNestedInput
     reminders?: ReminderUpdateManyWithoutContactNestedInput
@@ -113452,6 +115868,7 @@ export namespace Prisma {
     tags?: ContactTagUncheckedUpdateManyWithoutContactNestedInput
     contact_infos?: ContactInfoUncheckedUpdateManyWithoutContactNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutContactNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutContactNestedInput
     campaign_contacts?: MarketingCampaignContactUncheckedUpdateManyWithoutContactNestedInput
     contact_scores?: ContactScoreUncheckedUpdateManyWithoutContactNestedInput
     reminders?: ReminderUncheckedUpdateManyWithoutContactNestedInput
@@ -113773,6 +116190,543 @@ export namespace Prisma {
     data: XOR<ReminderUpdateManyMutationInput, ReminderUncheckedUpdateManyWithoutOutreach_messageInput>
   }
 
+  export type MessageThreadUpsertWithoutMessagesInput = {
+    update: XOR<MessageThreadUpdateWithoutMessagesInput, MessageThreadUncheckedUpdateWithoutMessagesInput>
+    create: XOR<MessageThreadCreateWithoutMessagesInput, MessageThreadUncheckedCreateWithoutMessagesInput>
+    where?: MessageThreadWhereInput
+  }
+
+  export type MessageThreadUpdateToOneWithWhereWithoutMessagesInput = {
+    where?: MessageThreadWhereInput
+    data: XOR<MessageThreadUpdateWithoutMessagesInput, MessageThreadUncheckedUpdateWithoutMessagesInput>
+  }
+
+  export type MessageThreadUpdateWithoutMessagesInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    channel?: EnumChannelFieldUpdateOperationsInput | $Enums.Channel
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    origin?: EnumThreadOriginFieldUpdateOperationsInput | $Enums.ThreadOrigin
+    sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    dedupe_key?: NullableStringFieldUpdateOperationsInput | string | null
+    last_message_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    message_count?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutMessage_threadsNestedInput
+    contact?: ContactUpdateOneRequiredWithoutMessage_threadsNestedInput
+  }
+
+  export type MessageThreadUncheckedUpdateWithoutMessagesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    contact_uuid?: StringFieldUpdateOperationsInput | string
+    channel?: EnumChannelFieldUpdateOperationsInput | $Enums.Channel
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    origin?: EnumThreadOriginFieldUpdateOperationsInput | $Enums.ThreadOrigin
+    sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    dedupe_key?: NullableStringFieldUpdateOperationsInput | string | null
+    last_message_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    message_count?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OrganisationCreateWithoutMessage_threadsInput = {
+    uuid?: string
+    name: string
+    slug: string
+    timezone?: string
+    reply_to_email?: string | null
+    reply_forward_email?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
+    invitations?: OrganisationInvitationCreateNestedManyWithoutOrganisationInput
+    filters?: FilterCreateNestedManyWithoutOrganisationInput
+    contacts?: ContactCreateNestedManyWithoutOrganisationInput
+    outreach_messages?: OutreachMessageCreateNestedManyWithoutOrganisationInput
+    outreach_sequences?: OutreachSequenceCreateNestedManyWithoutOrganisationInput
+    interactions?: InteractionCreateNestedManyWithoutOrganisationInput
+    sender_profiles?: SenderProfileCreateNestedManyWithoutOrganisationInput
+    marketing_campaigns?: MarketingCampaignCreateNestedManyWithoutOrganisationInput
+    scoring_instructions?: ScoringInstructionCreateNestedManyWithoutOrganisationInput
+    openai_batch_jobs?: OpenAiBatchJobCreateNestedManyWithoutOrganisationInput
+    integrations?: IntegrationCreateNestedManyWithoutOrganisationInput
+    reminders?: ReminderCreateNestedManyWithoutOrganisationInput
+    forms?: FormCreateNestedManyWithoutOrganisationInput
+    contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
+    contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
+    ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
+    apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
+    message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+  }
+
+  export type OrganisationUncheckedCreateWithoutMessage_threadsInput = {
+    id?: number
+    uuid?: string
+    name: string
+    slug: string
+    timezone?: string
+    reply_to_email?: string | null
+    reply_forward_email?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
+    invitations?: OrganisationInvitationUncheckedCreateNestedManyWithoutOrganisationInput
+    filters?: FilterUncheckedCreateNestedManyWithoutOrganisationInput
+    contacts?: ContactUncheckedCreateNestedManyWithoutOrganisationInput
+    outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutOrganisationInput
+    outreach_sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutOrganisationInput
+    interactions?: InteractionUncheckedCreateNestedManyWithoutOrganisationInput
+    sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutOrganisationInput
+    marketing_campaigns?: MarketingCampaignUncheckedCreateNestedManyWithoutOrganisationInput
+    scoring_instructions?: ScoringInstructionUncheckedCreateNestedManyWithoutOrganisationInput
+    openai_batch_jobs?: OpenAiBatchJobUncheckedCreateNestedManyWithoutOrganisationInput
+    integrations?: IntegrationUncheckedCreateNestedManyWithoutOrganisationInput
+    reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
+    forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
+    contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
+    contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
+    ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
+    apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
+    message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+  }
+
+  export type OrganisationCreateOrConnectWithoutMessage_threadsInput = {
+    where: OrganisationWhereUniqueInput
+    create: XOR<OrganisationCreateWithoutMessage_threadsInput, OrganisationUncheckedCreateWithoutMessage_threadsInput>
+  }
+
+  export type ContactCreateWithoutMessage_threadsInput = {
+    uuid?: string
+    status?: $Enums.LeadStatus
+    notes?: string | null
+    name?: string | null
+    email?: string | null
+    phone?: string | null
+    company?: string | null
+    website?: string | null
+    google_maps_url?: string | null
+    linkedin_url?: string | null
+    title?: string | null
+    location?: string | null
+    industry?: string | null
+    description?: string | null
+    enrichment_summary?: string | null
+    enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: $Enums.EmailValidationStatus
+    email_validation_reason?: string | null
+    email_validated_at?: Date | string | null
+    website_validation_status?: $Enums.DomainValidationStatus
+    website_validation_reason?: string | null
+    website_validated_at?: Date | string | null
+    unsubscribed_at?: Date | string | null
+    unsubscribe_token?: string | null
+    last_interaction_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutContactsInput
+    lead: LeadCreateNestedOneWithoutContactsInput
+    filter?: FilterCreateNestedOneWithoutContactsInput
+    contact_filters?: ContactFilterCreateNestedManyWithoutContactInput
+    tags?: ContactTagCreateNestedManyWithoutContactInput
+    contact_infos?: ContactInfoCreateNestedManyWithoutContactInput
+    interactions?: InteractionCreateNestedManyWithoutContactInput
+    outreach_messages?: OutreachMessageCreateNestedManyWithoutContactInput
+    campaign_contacts?: MarketingCampaignContactCreateNestedManyWithoutContactInput
+    contact_scores?: ContactScoreCreateNestedManyWithoutContactInput
+    reminders?: ReminderCreateNestedManyWithoutContactInput
+    form_completions?: FormCompletionCreateNestedManyWithoutContactInput
+    list_memberships?: ContactListMemberCreateNestedManyWithoutContactInput
+    enrichments?: ContactEnrichmentCreateNestedManyWithoutContactInput
+    sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutContactInput
+  }
+
+  export type ContactUncheckedCreateWithoutMessage_threadsInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    lead_uuid: string
+    filter_uuid?: string | null
+    status?: $Enums.LeadStatus
+    notes?: string | null
+    name?: string | null
+    email?: string | null
+    phone?: string | null
+    company?: string | null
+    website?: string | null
+    google_maps_url?: string | null
+    linkedin_url?: string | null
+    title?: string | null
+    location?: string | null
+    industry?: string | null
+    description?: string | null
+    enrichment_summary?: string | null
+    enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: $Enums.EmailValidationStatus
+    email_validation_reason?: string | null
+    email_validated_at?: Date | string | null
+    website_validation_status?: $Enums.DomainValidationStatus
+    website_validation_reason?: string | null
+    website_validated_at?: Date | string | null
+    unsubscribed_at?: Date | string | null
+    unsubscribe_token?: string | null
+    last_interaction_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    contact_filters?: ContactFilterUncheckedCreateNestedManyWithoutContactInput
+    tags?: ContactTagUncheckedCreateNestedManyWithoutContactInput
+    contact_infos?: ContactInfoUncheckedCreateNestedManyWithoutContactInput
+    interactions?: InteractionUncheckedCreateNestedManyWithoutContactInput
+    outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutContactInput
+    campaign_contacts?: MarketingCampaignContactUncheckedCreateNestedManyWithoutContactInput
+    contact_scores?: ContactScoreUncheckedCreateNestedManyWithoutContactInput
+    reminders?: ReminderUncheckedCreateNestedManyWithoutContactInput
+    form_completions?: FormCompletionUncheckedCreateNestedManyWithoutContactInput
+    list_memberships?: ContactListMemberUncheckedCreateNestedManyWithoutContactInput
+    enrichments?: ContactEnrichmentUncheckedCreateNestedManyWithoutContactInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutContactInput
+  }
+
+  export type ContactCreateOrConnectWithoutMessage_threadsInput = {
+    where: ContactWhereUniqueInput
+    create: XOR<ContactCreateWithoutMessage_threadsInput, ContactUncheckedCreateWithoutMessage_threadsInput>
+  }
+
+  export type OutreachMessageCreateWithoutThreadInput = {
+    uuid?: string
+    channel: $Enums.Channel
+    direction?: $Enums.MsgDirection
+    subject?: string | null
+    content: string
+    status?: $Enums.MsgStatus
+    provider_message_id?: string | null
+    idempotency_key?: string | null
+    scheduled_at?: Date | string | null
+    sent_at?: Date | string | null
+    delivered_at?: Date | string | null
+    opened_at?: Date | string | null
+    clicked_at?: Date | string | null
+    replied_at?: Date | string | null
+    bounced_at?: Date | string | null
+    failed_at?: Date | string | null
+    reply_subject?: string | null
+    reply_text?: string | null
+    reply_html?: string | null
+    inbound_message_id?: string | null
+    in_reply_to_message_id?: string | null
+    message_id?: string | null
+    references?: string | null
+    is_manual_reply?: boolean
+    email_provider?: $Enums.ExternalIntegrationProvider | null
+    email_account?: string | null
+    email_domain_uuid?: string | null
+    sms_provider?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutOutreach_messagesInput
+    contact: ContactCreateNestedOneWithoutOutreach_messagesInput
+    campaign?: MarketingCampaignCreateNestedOneWithoutOutreach_messagesInput
+    sent_by?: UserCreateNestedOneWithoutOutreach_messages_sentInput
+    interactions?: InteractionCreateNestedManyWithoutOutreach_messageInput
+    sequence_enrollment?: SequenceEnrollmentCreateNestedOneWithoutOutreach_messagesInput
+    sequence_step?: OutreachSequenceStepCreateNestedOneWithoutOutreach_messagesInput
+    campaign_integration?: CampaignIntegrationCreateNestedOneWithoutOutreach_messagesInput
+    reminders?: ReminderCreateNestedManyWithoutOutreach_messageInput
+  }
+
+  export type OutreachMessageUncheckedCreateWithoutThreadInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    contact_uuid: string
+    campaign_uuid?: string | null
+    sent_by_user_uuid?: string | null
+    channel: $Enums.Channel
+    direction?: $Enums.MsgDirection
+    subject?: string | null
+    content: string
+    status?: $Enums.MsgStatus
+    provider_message_id?: string | null
+    idempotency_key?: string | null
+    scheduled_at?: Date | string | null
+    sent_at?: Date | string | null
+    delivered_at?: Date | string | null
+    opened_at?: Date | string | null
+    clicked_at?: Date | string | null
+    replied_at?: Date | string | null
+    bounced_at?: Date | string | null
+    failed_at?: Date | string | null
+    reply_subject?: string | null
+    reply_text?: string | null
+    reply_html?: string | null
+    inbound_message_id?: string | null
+    in_reply_to_message_id?: string | null
+    message_id?: string | null
+    references?: string | null
+    is_manual_reply?: boolean
+    email_provider?: $Enums.ExternalIntegrationProvider | null
+    email_account?: string | null
+    email_domain_uuid?: string | null
+    sms_provider?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    sequence_enrollment_uuid?: string | null
+    sequence_step_uuid?: string | null
+    campaign_integration_uuid?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    interactions?: InteractionUncheckedCreateNestedManyWithoutOutreach_messageInput
+    reminders?: ReminderUncheckedCreateNestedManyWithoutOutreach_messageInput
+  }
+
+  export type OutreachMessageCreateOrConnectWithoutThreadInput = {
+    where: OutreachMessageWhereUniqueInput
+    create: XOR<OutreachMessageCreateWithoutThreadInput, OutreachMessageUncheckedCreateWithoutThreadInput>
+  }
+
+  export type OutreachMessageCreateManyThreadInputEnvelope = {
+    data: OutreachMessageCreateManyThreadInput | OutreachMessageCreateManyThreadInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type OrganisationUpsertWithoutMessage_threadsInput = {
+    update: XOR<OrganisationUpdateWithoutMessage_threadsInput, OrganisationUncheckedUpdateWithoutMessage_threadsInput>
+    create: XOR<OrganisationCreateWithoutMessage_threadsInput, OrganisationUncheckedCreateWithoutMessage_threadsInput>
+    where?: OrganisationWhereInput
+  }
+
+  export type OrganisationUpdateToOneWithWhereWithoutMessage_threadsInput = {
+    where?: OrganisationWhereInput
+    data: XOR<OrganisationUpdateWithoutMessage_threadsInput, OrganisationUncheckedUpdateWithoutMessage_threadsInput>
+  }
+
+  export type OrganisationUpdateWithoutMessage_threadsInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_forward_email?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
+    invitations?: OrganisationInvitationUpdateManyWithoutOrganisationNestedInput
+    filters?: FilterUpdateManyWithoutOrganisationNestedInput
+    contacts?: ContactUpdateManyWithoutOrganisationNestedInput
+    outreach_messages?: OutreachMessageUpdateManyWithoutOrganisationNestedInput
+    outreach_sequences?: OutreachSequenceUpdateManyWithoutOrganisationNestedInput
+    interactions?: InteractionUpdateManyWithoutOrganisationNestedInput
+    sender_profiles?: SenderProfileUpdateManyWithoutOrganisationNestedInput
+    marketing_campaigns?: MarketingCampaignUpdateManyWithoutOrganisationNestedInput
+    scoring_instructions?: ScoringInstructionUpdateManyWithoutOrganisationNestedInput
+    openai_batch_jobs?: OpenAiBatchJobUpdateManyWithoutOrganisationNestedInput
+    integrations?: IntegrationUpdateManyWithoutOrganisationNestedInput
+    reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
+    forms?: FormUpdateManyWithoutOrganisationNestedInput
+    contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
+    contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
+    ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
+    apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
+    message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+  }
+
+  export type OrganisationUncheckedUpdateWithoutMessage_threadsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_forward_email?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
+    invitations?: OrganisationInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
+    filters?: FilterUncheckedUpdateManyWithoutOrganisationNestedInput
+    contacts?: ContactUncheckedUpdateManyWithoutOrganisationNestedInput
+    outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutOrganisationNestedInput
+    outreach_sequences?: OutreachSequenceUncheckedUpdateManyWithoutOrganisationNestedInput
+    interactions?: InteractionUncheckedUpdateManyWithoutOrganisationNestedInput
+    sender_profiles?: SenderProfileUncheckedUpdateManyWithoutOrganisationNestedInput
+    marketing_campaigns?: MarketingCampaignUncheckedUpdateManyWithoutOrganisationNestedInput
+    scoring_instructions?: ScoringInstructionUncheckedUpdateManyWithoutOrganisationNestedInput
+    openai_batch_jobs?: OpenAiBatchJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    integrations?: IntegrationUncheckedUpdateManyWithoutOrganisationNestedInput
+    reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
+    forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
+    contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
+    contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
+    ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+  }
+
+  export type ContactUpsertWithoutMessage_threadsInput = {
+    update: XOR<ContactUpdateWithoutMessage_threadsInput, ContactUncheckedUpdateWithoutMessage_threadsInput>
+    create: XOR<ContactCreateWithoutMessage_threadsInput, ContactUncheckedCreateWithoutMessage_threadsInput>
+    where?: ContactWhereInput
+  }
+
+  export type ContactUpdateToOneWithWhereWithoutMessage_threadsInput = {
+    where?: ContactWhereInput
+    data: XOR<ContactUpdateWithoutMessage_threadsInput, ContactUncheckedUpdateWithoutMessage_threadsInput>
+  }
+
+  export type ContactUpdateWithoutMessage_threadsInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    company?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    google_maps_url?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedin_url?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    industry?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
+    enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
+    email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFieldUpdateOperationsInput | $Enums.DomainValidationStatus
+    website_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
+    last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutContactsNestedInput
+    lead?: LeadUpdateOneRequiredWithoutContactsNestedInput
+    filter?: FilterUpdateOneWithoutContactsNestedInput
+    contact_filters?: ContactFilterUpdateManyWithoutContactNestedInput
+    tags?: ContactTagUpdateManyWithoutContactNestedInput
+    contact_infos?: ContactInfoUpdateManyWithoutContactNestedInput
+    interactions?: InteractionUpdateManyWithoutContactNestedInput
+    outreach_messages?: OutreachMessageUpdateManyWithoutContactNestedInput
+    campaign_contacts?: MarketingCampaignContactUpdateManyWithoutContactNestedInput
+    contact_scores?: ContactScoreUpdateManyWithoutContactNestedInput
+    reminders?: ReminderUpdateManyWithoutContactNestedInput
+    form_completions?: FormCompletionUpdateManyWithoutContactNestedInput
+    list_memberships?: ContactListMemberUpdateManyWithoutContactNestedInput
+    enrichments?: ContactEnrichmentUpdateManyWithoutContactNestedInput
+    sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutContactNestedInput
+  }
+
+  export type ContactUncheckedUpdateWithoutMessage_threadsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    lead_uuid?: StringFieldUpdateOperationsInput | string
+    filter_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    company?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    google_maps_url?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedin_url?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    industry?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
+    enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
+    email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFieldUpdateOperationsInput | $Enums.DomainValidationStatus
+    website_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
+    last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    contact_filters?: ContactFilterUncheckedUpdateManyWithoutContactNestedInput
+    tags?: ContactTagUncheckedUpdateManyWithoutContactNestedInput
+    contact_infos?: ContactInfoUncheckedUpdateManyWithoutContactNestedInput
+    interactions?: InteractionUncheckedUpdateManyWithoutContactNestedInput
+    outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutContactNestedInput
+    campaign_contacts?: MarketingCampaignContactUncheckedUpdateManyWithoutContactNestedInput
+    contact_scores?: ContactScoreUncheckedUpdateManyWithoutContactNestedInput
+    reminders?: ReminderUncheckedUpdateManyWithoutContactNestedInput
+    form_completions?: FormCompletionUncheckedUpdateManyWithoutContactNestedInput
+    list_memberships?: ContactListMemberUncheckedUpdateManyWithoutContactNestedInput
+    enrichments?: ContactEnrichmentUncheckedUpdateManyWithoutContactNestedInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutContactNestedInput
+  }
+
+  export type OutreachMessageUpsertWithWhereUniqueWithoutThreadInput = {
+    where: OutreachMessageWhereUniqueInput
+    update: XOR<OutreachMessageUpdateWithoutThreadInput, OutreachMessageUncheckedUpdateWithoutThreadInput>
+    create: XOR<OutreachMessageCreateWithoutThreadInput, OutreachMessageUncheckedCreateWithoutThreadInput>
+  }
+
+  export type OutreachMessageUpdateWithWhereUniqueWithoutThreadInput = {
+    where: OutreachMessageWhereUniqueInput
+    data: XOR<OutreachMessageUpdateWithoutThreadInput, OutreachMessageUncheckedUpdateWithoutThreadInput>
+  }
+
+  export type OutreachMessageUpdateManyWithWhereWithoutThreadInput = {
+    where: OutreachMessageScalarWhereInput
+    data: XOR<OutreachMessageUpdateManyMutationInput, OutreachMessageUncheckedUpdateManyWithoutThreadInput>
+  }
+
   export type OrganisationCreateWithoutOutreach_sequencesInput = {
     uuid?: string
     name: string
@@ -113787,6 +116741,7 @@ export namespace Prisma {
     filters?: FilterCreateNestedManyWithoutOrganisationInput
     contacts?: ContactCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileCreateNestedManyWithoutOrganisationInput
     marketing_campaigns?: MarketingCampaignCreateNestedManyWithoutOrganisationInput
@@ -113828,6 +116783,7 @@ export namespace Prisma {
     filters?: FilterUncheckedCreateNestedManyWithoutOrganisationInput
     contacts?: ContactUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutOrganisationInput
     marketing_campaigns?: MarketingCampaignUncheckedCreateNestedManyWithoutOrganisationInput
@@ -114073,6 +117029,7 @@ export namespace Prisma {
     filters?: FilterUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUpdateManyWithoutOrganisationNestedInput
     marketing_campaigns?: MarketingCampaignUpdateManyWithoutOrganisationNestedInput
@@ -114114,6 +117071,7 @@ export namespace Prisma {
     filters?: FilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUncheckedUpdateManyWithoutOrganisationNestedInput
     marketing_campaigns?: MarketingCampaignUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -114298,6 +117256,8 @@ export namespace Prisma {
     reply_html?: string | null
     inbound_message_id?: string | null
     in_reply_to_message_id?: string | null
+    message_id?: string | null
+    references?: string | null
     is_manual_reply?: boolean
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
@@ -114314,6 +117274,7 @@ export namespace Prisma {
     sequence_enrollment?: SequenceEnrollmentCreateNestedOneWithoutOutreach_messagesInput
     campaign_integration?: CampaignIntegrationCreateNestedOneWithoutOutreach_messagesInput
     reminders?: ReminderCreateNestedManyWithoutOutreach_messageInput
+    thread?: MessageThreadCreateNestedOneWithoutMessagesInput
   }
 
   export type OutreachMessageUncheckedCreateWithoutSequence_stepInput = {
@@ -114343,6 +117304,9 @@ export namespace Prisma {
     reply_html?: string | null
     inbound_message_id?: string | null
     in_reply_to_message_id?: string | null
+    message_id?: string | null
+    references?: string | null
+    thread_uuid?: string | null
     is_manual_reply?: boolean
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
@@ -114529,6 +117493,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoCreateNestedManyWithoutContactInput
     interactions?: InteractionCreateNestedManyWithoutContactInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutContactInput
+    message_threads?: MessageThreadCreateNestedManyWithoutContactInput
     campaign_contacts?: MarketingCampaignContactCreateNestedManyWithoutContactInput
     contact_scores?: ContactScoreCreateNestedManyWithoutContactInput
     reminders?: ReminderCreateNestedManyWithoutContactInput
@@ -114574,6 +117539,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoUncheckedCreateNestedManyWithoutContactInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutContactInput
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutContactInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutContactInput
     campaign_contacts?: MarketingCampaignContactUncheckedCreateNestedManyWithoutContactInput
     contact_scores?: ContactScoreUncheckedCreateNestedManyWithoutContactInput
     reminders?: ReminderUncheckedCreateNestedManyWithoutContactInput
@@ -114705,6 +117671,8 @@ export namespace Prisma {
     reply_html?: string | null
     inbound_message_id?: string | null
     in_reply_to_message_id?: string | null
+    message_id?: string | null
+    references?: string | null
     is_manual_reply?: boolean
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
@@ -114721,6 +117689,7 @@ export namespace Prisma {
     sequence_step?: OutreachSequenceStepCreateNestedOneWithoutOutreach_messagesInput
     campaign_integration?: CampaignIntegrationCreateNestedOneWithoutOutreach_messagesInput
     reminders?: ReminderCreateNestedManyWithoutOutreach_messageInput
+    thread?: MessageThreadCreateNestedOneWithoutMessagesInput
   }
 
   export type OutreachMessageUncheckedCreateWithoutSequence_enrollmentInput = {
@@ -114750,6 +117719,9 @@ export namespace Prisma {
     reply_html?: string | null
     inbound_message_id?: string | null
     in_reply_to_message_id?: string | null
+    message_id?: string | null
+    references?: string | null
+    thread_uuid?: string | null
     is_manual_reply?: boolean
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
@@ -114859,6 +117831,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoUpdateManyWithoutContactNestedInput
     interactions?: InteractionUpdateManyWithoutContactNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutContactNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutContactNestedInput
     campaign_contacts?: MarketingCampaignContactUpdateManyWithoutContactNestedInput
     contact_scores?: ContactScoreUpdateManyWithoutContactNestedInput
     reminders?: ReminderUpdateManyWithoutContactNestedInput
@@ -114904,6 +117877,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoUncheckedUpdateManyWithoutContactNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutContactNestedInput
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutContactNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutContactNestedInput
     campaign_contacts?: MarketingCampaignContactUncheckedUpdateManyWithoutContactNestedInput
     contact_scores?: ContactScoreUncheckedUpdateManyWithoutContactNestedInput
     reminders?: ReminderUncheckedUpdateManyWithoutContactNestedInput
@@ -115146,6 +118120,7 @@ export namespace Prisma {
     filters?: FilterCreateNestedManyWithoutOrganisationInput
     contacts?: ContactCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileCreateNestedManyWithoutOrganisationInput
@@ -115187,6 +118162,7 @@ export namespace Prisma {
     filters?: FilterUncheckedCreateNestedManyWithoutOrganisationInput
     contacts?: ContactUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutOrganisationInput
@@ -115289,6 +118265,7 @@ export namespace Prisma {
     filters?: FilterUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUpdateManyWithoutOrganisationNestedInput
@@ -115330,6 +118307,7 @@ export namespace Prisma {
     filters?: FilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUncheckedUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -115422,6 +118400,7 @@ export namespace Prisma {
     filters?: FilterCreateNestedManyWithoutOrganisationInput
     contacts?: ContactCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileCreateNestedManyWithoutOrganisationInput
@@ -115463,6 +118442,7 @@ export namespace Prisma {
     filters?: FilterUncheckedCreateNestedManyWithoutOrganisationInput
     contacts?: ContactUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutOrganisationInput
@@ -115519,6 +118499,7 @@ export namespace Prisma {
     filters?: FilterUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUpdateManyWithoutOrganisationNestedInput
@@ -115560,6 +118541,7 @@ export namespace Prisma {
     filters?: FilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUncheckedUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -115600,6 +118582,7 @@ export namespace Prisma {
     filters?: FilterCreateNestedManyWithoutOrganisationInput
     contacts?: ContactCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionCreateNestedManyWithoutOrganisationInput
     marketing_campaigns?: MarketingCampaignCreateNestedManyWithoutOrganisationInput
@@ -115641,6 +118624,7 @@ export namespace Prisma {
     filters?: FilterUncheckedCreateNestedManyWithoutOrganisationInput
     contacts?: ContactUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutOrganisationInput
     marketing_campaigns?: MarketingCampaignUncheckedCreateNestedManyWithoutOrganisationInput
@@ -115798,6 +118782,7 @@ export namespace Prisma {
     filters?: FilterUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUpdateManyWithoutOrganisationNestedInput
     marketing_campaigns?: MarketingCampaignUpdateManyWithoutOrganisationNestedInput
@@ -115839,6 +118824,7 @@ export namespace Prisma {
     filters?: FilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUncheckedUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutOrganisationNestedInput
     marketing_campaigns?: MarketingCampaignUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -115895,6 +118881,7 @@ export namespace Prisma {
     filters?: FilterCreateNestedManyWithoutOrganisationInput
     contacts?: ContactCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileCreateNestedManyWithoutOrganisationInput
@@ -115936,6 +118923,7 @@ export namespace Prisma {
     filters?: FilterUncheckedCreateNestedManyWithoutOrganisationInput
     contacts?: ContactUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutOrganisationInput
@@ -116039,6 +119027,7 @@ export namespace Prisma {
     filters?: FilterUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUpdateManyWithoutOrganisationNestedInput
@@ -116080,6 +119069,7 @@ export namespace Prisma {
     filters?: FilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUncheckedUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -116136,6 +119126,7 @@ export namespace Prisma {
     filters?: FilterCreateNestedManyWithoutOrganisationInput
     contacts?: ContactCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileCreateNestedManyWithoutOrganisationInput
@@ -116177,6 +119168,7 @@ export namespace Prisma {
     filters?: FilterUncheckedCreateNestedManyWithoutOrganisationInput
     contacts?: ContactUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutOrganisationInput
@@ -116355,6 +119347,8 @@ export namespace Prisma {
     reply_html?: string | null
     inbound_message_id?: string | null
     in_reply_to_message_id?: string | null
+    message_id?: string | null
+    references?: string | null
     is_manual_reply?: boolean
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
@@ -116371,6 +119365,7 @@ export namespace Prisma {
     sequence_step?: OutreachSequenceStepCreateNestedOneWithoutOutreach_messagesInput
     campaign_integration?: CampaignIntegrationCreateNestedOneWithoutOutreach_messagesInput
     reminders?: ReminderCreateNestedManyWithoutOutreach_messageInput
+    thread?: MessageThreadCreateNestedOneWithoutMessagesInput
   }
 
   export type OutreachMessageUncheckedCreateWithoutCampaignInput = {
@@ -116399,6 +119394,9 @@ export namespace Prisma {
     reply_html?: string | null
     inbound_message_id?: string | null
     in_reply_to_message_id?: string | null
+    message_id?: string | null
+    references?: string | null
+    thread_uuid?: string | null
     is_manual_reply?: boolean
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
@@ -116562,6 +119560,7 @@ export namespace Prisma {
     filters?: FilterUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUpdateManyWithoutOrganisationNestedInput
@@ -116603,6 +119602,7 @@ export namespace Prisma {
     filters?: FilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUncheckedUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -116958,6 +119958,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoCreateNestedManyWithoutContactInput
     interactions?: InteractionCreateNestedManyWithoutContactInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutContactInput
+    message_threads?: MessageThreadCreateNestedManyWithoutContactInput
     contact_scores?: ContactScoreCreateNestedManyWithoutContactInput
     reminders?: ReminderCreateNestedManyWithoutContactInput
     form_completions?: FormCompletionCreateNestedManyWithoutContactInput
@@ -117003,6 +120004,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoUncheckedCreateNestedManyWithoutContactInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutContactInput
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutContactInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutContactInput
     contact_scores?: ContactScoreUncheckedCreateNestedManyWithoutContactInput
     reminders?: ReminderUncheckedCreateNestedManyWithoutContactInput
     form_completions?: FormCompletionUncheckedCreateNestedManyWithoutContactInput
@@ -117165,6 +120167,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoUpdateManyWithoutContactNestedInput
     interactions?: InteractionUpdateManyWithoutContactNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutContactNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutContactNestedInput
     contact_scores?: ContactScoreUpdateManyWithoutContactNestedInput
     reminders?: ReminderUpdateManyWithoutContactNestedInput
     form_completions?: FormCompletionUpdateManyWithoutContactNestedInput
@@ -117210,6 +120213,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoUncheckedUpdateManyWithoutContactNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutContactNestedInput
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutContactNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutContactNestedInput
     contact_scores?: ContactScoreUncheckedUpdateManyWithoutContactNestedInput
     reminders?: ReminderUncheckedUpdateManyWithoutContactNestedInput
     form_completions?: FormCompletionUncheckedUpdateManyWithoutContactNestedInput
@@ -117232,6 +120236,7 @@ export namespace Prisma {
     filters?: FilterCreateNestedManyWithoutOrganisationInput
     contacts?: ContactCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileCreateNestedManyWithoutOrganisationInput
@@ -117273,6 +120278,7 @@ export namespace Prisma {
     filters?: FilterUncheckedCreateNestedManyWithoutOrganisationInput
     contacts?: ContactUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutOrganisationInput
@@ -117375,6 +120381,7 @@ export namespace Prisma {
     filters?: FilterUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUpdateManyWithoutOrganisationNestedInput
@@ -117416,6 +120423,7 @@ export namespace Prisma {
     filters?: FilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUncheckedUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -117508,6 +120516,7 @@ export namespace Prisma {
     filters?: FilterCreateNestedManyWithoutOrganisationInput
     contacts?: ContactCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileCreateNestedManyWithoutOrganisationInput
@@ -117549,6 +120558,7 @@ export namespace Prisma {
     filters?: FilterUncheckedCreateNestedManyWithoutOrganisationInput
     contacts?: ContactUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutOrganisationInput
@@ -117671,6 +120681,7 @@ export namespace Prisma {
     filters?: FilterUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUpdateManyWithoutOrganisationNestedInput
@@ -117712,6 +120723,7 @@ export namespace Prisma {
     filters?: FilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUncheckedUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -118167,6 +121179,7 @@ export namespace Prisma {
     filters?: FilterCreateNestedManyWithoutOrganisationInput
     contacts?: ContactCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileCreateNestedManyWithoutOrganisationInput
@@ -118208,6 +121221,7 @@ export namespace Prisma {
     filters?: FilterUncheckedCreateNestedManyWithoutOrganisationInput
     contacts?: ContactUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutOrganisationInput
@@ -118264,6 +121278,7 @@ export namespace Prisma {
     filters?: FilterUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUpdateManyWithoutOrganisationNestedInput
@@ -118305,6 +121320,7 @@ export namespace Prisma {
     filters?: FilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUncheckedUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -118345,6 +121361,7 @@ export namespace Prisma {
     filters?: FilterCreateNestedManyWithoutOrganisationInput
     contacts?: ContactCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileCreateNestedManyWithoutOrganisationInput
@@ -118386,6 +121403,7 @@ export namespace Prisma {
     filters?: FilterUncheckedCreateNestedManyWithoutOrganisationInput
     contacts?: ContactUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutOrganisationInput
@@ -118442,6 +121460,7 @@ export namespace Prisma {
     filters?: FilterUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUpdateManyWithoutOrganisationNestedInput
@@ -118483,6 +121502,7 @@ export namespace Prisma {
     filters?: FilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUncheckedUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -118523,6 +121543,7 @@ export namespace Prisma {
     filters?: FilterCreateNestedManyWithoutOrganisationInput
     contacts?: ContactCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileCreateNestedManyWithoutOrganisationInput
@@ -118564,6 +121585,7 @@ export namespace Prisma {
     filters?: FilterUncheckedCreateNestedManyWithoutOrganisationInput
     contacts?: ContactUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutOrganisationInput
@@ -118631,6 +121653,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoCreateNestedManyWithoutContactInput
     interactions?: InteractionCreateNestedManyWithoutContactInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutContactInput
+    message_threads?: MessageThreadCreateNestedManyWithoutContactInput
     campaign_contacts?: MarketingCampaignContactCreateNestedManyWithoutContactInput
     contact_scores?: ContactScoreCreateNestedManyWithoutContactInput
     form_completions?: FormCompletionCreateNestedManyWithoutContactInput
@@ -118676,6 +121699,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoUncheckedCreateNestedManyWithoutContactInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutContactInput
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutContactInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutContactInput
     campaign_contacts?: MarketingCampaignContactUncheckedCreateNestedManyWithoutContactInput
     contact_scores?: ContactScoreUncheckedCreateNestedManyWithoutContactInput
     form_completions?: FormCompletionUncheckedCreateNestedManyWithoutContactInput
@@ -118711,6 +121735,8 @@ export namespace Prisma {
     reply_html?: string | null
     inbound_message_id?: string | null
     in_reply_to_message_id?: string | null
+    message_id?: string | null
+    references?: string | null
     is_manual_reply?: boolean
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
@@ -118727,6 +121753,7 @@ export namespace Prisma {
     sequence_enrollment?: SequenceEnrollmentCreateNestedOneWithoutOutreach_messagesInput
     sequence_step?: OutreachSequenceStepCreateNestedOneWithoutOutreach_messagesInput
     campaign_integration?: CampaignIntegrationCreateNestedOneWithoutOutreach_messagesInput
+    thread?: MessageThreadCreateNestedOneWithoutMessagesInput
   }
 
   export type OutreachMessageUncheckedCreateWithoutRemindersInput = {
@@ -118756,6 +121783,9 @@ export namespace Prisma {
     reply_html?: string | null
     inbound_message_id?: string | null
     in_reply_to_message_id?: string | null
+    message_id?: string | null
+    references?: string | null
+    thread_uuid?: string | null
     is_manual_reply?: boolean
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
@@ -118800,6 +121830,7 @@ export namespace Prisma {
     filters?: FilterUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUpdateManyWithoutOrganisationNestedInput
@@ -118841,6 +121872,7 @@ export namespace Prisma {
     filters?: FilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUncheckedUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -118914,6 +121946,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoUpdateManyWithoutContactNestedInput
     interactions?: InteractionUpdateManyWithoutContactNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutContactNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutContactNestedInput
     campaign_contacts?: MarketingCampaignContactUpdateManyWithoutContactNestedInput
     contact_scores?: ContactScoreUpdateManyWithoutContactNestedInput
     form_completions?: FormCompletionUpdateManyWithoutContactNestedInput
@@ -118959,6 +121992,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoUncheckedUpdateManyWithoutContactNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutContactNestedInput
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutContactNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutContactNestedInput
     campaign_contacts?: MarketingCampaignContactUncheckedUpdateManyWithoutContactNestedInput
     contact_scores?: ContactScoreUncheckedUpdateManyWithoutContactNestedInput
     form_completions?: FormCompletionUncheckedUpdateManyWithoutContactNestedInput
@@ -119000,6 +122034,8 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    references?: NullableStringFieldUpdateOperationsInput | string | null
     is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
@@ -119016,6 +122052,7 @@ export namespace Prisma {
     sequence_enrollment?: SequenceEnrollmentUpdateOneWithoutOutreach_messagesNestedInput
     sequence_step?: OutreachSequenceStepUpdateOneWithoutOutreach_messagesNestedInput
     campaign_integration?: CampaignIntegrationUpdateOneWithoutOutreach_messagesNestedInput
+    thread?: MessageThreadUpdateOneWithoutMessagesNestedInput
   }
 
   export type OutreachMessageUncheckedUpdateWithoutRemindersInput = {
@@ -119045,6 +122082,9 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    references?: NullableStringFieldUpdateOperationsInput | string | null
+    thread_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
@@ -119073,6 +122113,7 @@ export namespace Prisma {
     filters?: FilterCreateNestedManyWithoutOrganisationInput
     contacts?: ContactCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileCreateNestedManyWithoutOrganisationInput
@@ -119114,6 +122155,7 @@ export namespace Prisma {
     filters?: FilterUncheckedCreateNestedManyWithoutOrganisationInput
     contacts?: ContactUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutOrganisationInput
@@ -119242,6 +122284,7 @@ export namespace Prisma {
     filters?: FilterUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUpdateManyWithoutOrganisationNestedInput
@@ -119283,6 +122326,7 @@ export namespace Prisma {
     filters?: FilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUncheckedUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -119537,6 +122581,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoCreateNestedManyWithoutContactInput
     interactions?: InteractionCreateNestedManyWithoutContactInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutContactInput
+    message_threads?: MessageThreadCreateNestedManyWithoutContactInput
     campaign_contacts?: MarketingCampaignContactCreateNestedManyWithoutContactInput
     contact_scores?: ContactScoreCreateNestedManyWithoutContactInput
     reminders?: ReminderCreateNestedManyWithoutContactInput
@@ -119582,6 +122627,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoUncheckedCreateNestedManyWithoutContactInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutContactInput
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutContactInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutContactInput
     campaign_contacts?: MarketingCampaignContactUncheckedCreateNestedManyWithoutContactInput
     contact_scores?: ContactScoreUncheckedCreateNestedManyWithoutContactInput
     reminders?: ReminderUncheckedCreateNestedManyWithoutContactInput
@@ -119747,6 +122793,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoUpdateManyWithoutContactNestedInput
     interactions?: InteractionUpdateManyWithoutContactNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutContactNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutContactNestedInput
     campaign_contacts?: MarketingCampaignContactUpdateManyWithoutContactNestedInput
     contact_scores?: ContactScoreUpdateManyWithoutContactNestedInput
     reminders?: ReminderUpdateManyWithoutContactNestedInput
@@ -119792,6 +122839,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoUncheckedUpdateManyWithoutContactNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutContactNestedInput
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutContactNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutContactNestedInput
     campaign_contacts?: MarketingCampaignContactUncheckedUpdateManyWithoutContactNestedInput
     contact_scores?: ContactScoreUncheckedUpdateManyWithoutContactNestedInput
     reminders?: ReminderUncheckedUpdateManyWithoutContactNestedInput
@@ -120018,6 +123066,7 @@ export namespace Prisma {
     filters?: FilterCreateNestedManyWithoutOrganisationInput
     contacts?: ContactCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileCreateNestedManyWithoutOrganisationInput
@@ -120059,6 +123108,7 @@ export namespace Prisma {
     filters?: FilterUncheckedCreateNestedManyWithoutOrganisationInput
     contacts?: ContactUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutOrganisationInput
@@ -120195,6 +123245,7 @@ export namespace Prisma {
     filters?: FilterUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUpdateManyWithoutOrganisationNestedInput
@@ -120236,6 +123287,7 @@ export namespace Prisma {
     filters?: FilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUncheckedUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -120368,6 +123420,7 @@ export namespace Prisma {
     filters?: FilterCreateNestedManyWithoutOrganisationInput
     contacts?: ContactCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileCreateNestedManyWithoutOrganisationInput
@@ -120409,6 +123462,7 @@ export namespace Prisma {
     filters?: FilterUncheckedCreateNestedManyWithoutOrganisationInput
     contacts?: ContactUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutOrganisationInput
@@ -120465,6 +123519,7 @@ export namespace Prisma {
     filters?: FilterUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUpdateManyWithoutOrganisationNestedInput
@@ -120506,6 +123561,7 @@ export namespace Prisma {
     filters?: FilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUncheckedUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -120546,6 +123602,7 @@ export namespace Prisma {
     filters?: FilterCreateNestedManyWithoutOrganisationInput
     contacts?: ContactCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileCreateNestedManyWithoutOrganisationInput
@@ -120587,6 +123644,7 @@ export namespace Prisma {
     filters?: FilterUncheckedCreateNestedManyWithoutOrganisationInput
     contacts?: ContactUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutOrganisationInput
@@ -120643,6 +123701,7 @@ export namespace Prisma {
     filters?: FilterUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUpdateManyWithoutOrganisationNestedInput
@@ -120684,6 +123743,7 @@ export namespace Prisma {
     filters?: FilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUncheckedUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -120724,6 +123784,7 @@ export namespace Prisma {
     filters?: FilterCreateNestedManyWithoutOrganisationInput
     contacts?: ContactCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileCreateNestedManyWithoutOrganisationInput
@@ -120765,6 +123826,7 @@ export namespace Prisma {
     filters?: FilterUncheckedCreateNestedManyWithoutOrganisationInput
     contacts?: ContactUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutOrganisationInput
@@ -120900,6 +123962,7 @@ export namespace Prisma {
     filters?: FilterUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUpdateManyWithoutOrganisationNestedInput
@@ -120941,6 +124004,7 @@ export namespace Prisma {
     filters?: FilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUncheckedUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -121049,6 +124113,7 @@ export namespace Prisma {
     filters?: FilterCreateNestedManyWithoutOrganisationInput
     contacts?: ContactCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileCreateNestedManyWithoutOrganisationInput
@@ -121090,6 +124155,7 @@ export namespace Prisma {
     filters?: FilterUncheckedCreateNestedManyWithoutOrganisationInput
     contacts?: ContactUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutOrganisationInput
@@ -121146,6 +124212,7 @@ export namespace Prisma {
     filters?: FilterUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUpdateManyWithoutOrganisationNestedInput
@@ -121187,6 +124254,7 @@ export namespace Prisma {
     filters?: FilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUncheckedUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -121227,6 +124295,7 @@ export namespace Prisma {
     filters?: FilterCreateNestedManyWithoutOrganisationInput
     contacts?: ContactCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileCreateNestedManyWithoutOrganisationInput
@@ -121268,6 +124337,7 @@ export namespace Prisma {
     filters?: FilterUncheckedCreateNestedManyWithoutOrganisationInput
     contacts?: ContactUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutOrganisationInput
@@ -121481,6 +124551,7 @@ export namespace Prisma {
     filters?: FilterUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUpdateManyWithoutOrganisationNestedInput
@@ -121522,6 +124593,7 @@ export namespace Prisma {
     filters?: FilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUncheckedUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -121990,6 +125062,8 @@ export namespace Prisma {
     reply_html?: string | null
     inbound_message_id?: string | null
     in_reply_to_message_id?: string | null
+    message_id?: string | null
+    references?: string | null
     is_manual_reply?: boolean
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
@@ -122006,6 +125080,7 @@ export namespace Prisma {
     sequence_enrollment?: SequenceEnrollmentCreateNestedOneWithoutOutreach_messagesInput
     sequence_step?: OutreachSequenceStepCreateNestedOneWithoutOutreach_messagesInput
     reminders?: ReminderCreateNestedManyWithoutOutreach_messageInput
+    thread?: MessageThreadCreateNestedOneWithoutMessagesInput
   }
 
   export type OutreachMessageUncheckedCreateWithoutCampaign_integrationInput = {
@@ -122035,6 +125110,9 @@ export namespace Prisma {
     reply_html?: string | null
     inbound_message_id?: string | null
     in_reply_to_message_id?: string | null
+    message_id?: string | null
+    references?: string | null
+    thread_uuid?: string | null
     is_manual_reply?: boolean
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
@@ -122403,6 +125481,7 @@ export namespace Prisma {
     filters?: FilterCreateNestedManyWithoutOrganisationInput
     contacts?: ContactCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileCreateNestedManyWithoutOrganisationInput
@@ -122444,6 +125523,7 @@ export namespace Prisma {
     filters?: FilterUncheckedCreateNestedManyWithoutOrganisationInput
     contacts?: ContactUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutOrganisationInput
@@ -122574,6 +125654,7 @@ export namespace Prisma {
     filters?: FilterUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUpdateManyWithoutOrganisationNestedInput
@@ -122615,6 +125696,7 @@ export namespace Prisma {
     filters?: FilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUncheckedUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -122741,6 +125823,7 @@ export namespace Prisma {
     filters?: FilterCreateNestedManyWithoutOrganisationInput
     contacts?: ContactCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileCreateNestedManyWithoutOrganisationInput
@@ -122782,6 +125865,7 @@ export namespace Prisma {
     filters?: FilterUncheckedCreateNestedManyWithoutOrganisationInput
     contacts?: ContactUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutOrganisationInput
@@ -122884,6 +125968,7 @@ export namespace Prisma {
     filters?: FilterUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUpdateManyWithoutOrganisationNestedInput
@@ -122925,6 +126010,7 @@ export namespace Prisma {
     filters?: FilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUncheckedUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -123017,6 +126103,7 @@ export namespace Prisma {
     filters?: FilterCreateNestedManyWithoutOrganisationInput
     contacts?: ContactCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileCreateNestedManyWithoutOrganisationInput
@@ -123058,6 +126145,7 @@ export namespace Prisma {
     filters?: FilterUncheckedCreateNestedManyWithoutOrganisationInput
     contacts?: ContactUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutOrganisationInput
     outreach_sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutOrganisationInput
     interactions?: InteractionUncheckedCreateNestedManyWithoutOrganisationInput
     sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutOrganisationInput
@@ -123160,6 +126248,7 @@ export namespace Prisma {
     filters?: FilterUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUpdateManyWithoutOrganisationNestedInput
@@ -123201,6 +126290,7 @@ export namespace Prisma {
     filters?: FilterUncheckedUpdateManyWithoutOrganisationNestedInput
     contacts?: ContactUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutOrganisationNestedInput
     outreach_sequences?: OutreachSequenceUncheckedUpdateManyWithoutOrganisationNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutOrganisationNestedInput
     sender_profiles?: SenderProfileUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -123337,6 +126427,9 @@ export namespace Prisma {
     reply_html?: string | null
     inbound_message_id?: string | null
     in_reply_to_message_id?: string | null
+    message_id?: string | null
+    references?: string | null
+    thread_uuid?: string | null
     is_manual_reply?: boolean
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
@@ -123556,6 +126649,8 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    references?: NullableStringFieldUpdateOperationsInput | string | null
     is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
@@ -123572,6 +126667,7 @@ export namespace Prisma {
     sequence_step?: OutreachSequenceStepUpdateOneWithoutOutreach_messagesNestedInput
     campaign_integration?: CampaignIntegrationUpdateOneWithoutOutreach_messagesNestedInput
     reminders?: ReminderUpdateManyWithoutOutreach_messageNestedInput
+    thread?: MessageThreadUpdateOneWithoutMessagesNestedInput
   }
 
   export type OutreachMessageUncheckedUpdateWithoutSent_byInput = {
@@ -123600,6 +126696,9 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    references?: NullableStringFieldUpdateOperationsInput | string | null
+    thread_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
@@ -123641,6 +126740,9 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    references?: NullableStringFieldUpdateOperationsInput | string | null
+    thread_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
@@ -124016,6 +127118,9 @@ export namespace Prisma {
     reply_html?: string | null
     inbound_message_id?: string | null
     in_reply_to_message_id?: string | null
+    message_id?: string | null
+    references?: string | null
+    thread_uuid?: string | null
     is_manual_reply?: boolean
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
@@ -124025,6 +127130,22 @@ export namespace Prisma {
     sequence_enrollment_uuid?: string | null
     sequence_step_uuid?: string | null
     campaign_integration_uuid?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type MessageThreadCreateManyOrganisationInput = {
+    id?: number
+    uuid?: string
+    contact_uuid: string
+    channel: $Enums.Channel
+    subject?: string | null
+    origin: $Enums.ThreadOrigin
+    sequence_enrollment_uuid?: string | null
+    campaign_uuid?: string | null
+    dedupe_key?: string | null
+    last_message_at?: Date | string | null
+    message_count?: number
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -124585,6 +127706,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoUpdateManyWithoutContactNestedInput
     interactions?: InteractionUpdateManyWithoutContactNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutContactNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutContactNestedInput
     campaign_contacts?: MarketingCampaignContactUpdateManyWithoutContactNestedInput
     contact_scores?: ContactScoreUpdateManyWithoutContactNestedInput
     reminders?: ReminderUpdateManyWithoutContactNestedInput
@@ -124630,6 +127752,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoUncheckedUpdateManyWithoutContactNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutContactNestedInput
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutContactNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutContactNestedInput
     campaign_contacts?: MarketingCampaignContactUncheckedUpdateManyWithoutContactNestedInput
     contact_scores?: ContactScoreUncheckedUpdateManyWithoutContactNestedInput
     reminders?: ReminderUncheckedUpdateManyWithoutContactNestedInput
@@ -124694,6 +127817,8 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    references?: NullableStringFieldUpdateOperationsInput | string | null
     is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
@@ -124710,6 +127835,7 @@ export namespace Prisma {
     sequence_step?: OutreachSequenceStepUpdateOneWithoutOutreach_messagesNestedInput
     campaign_integration?: CampaignIntegrationUpdateOneWithoutOutreach_messagesNestedInput
     reminders?: ReminderUpdateManyWithoutOutreach_messageNestedInput
+    thread?: MessageThreadUpdateOneWithoutMessagesNestedInput
   }
 
   export type OutreachMessageUncheckedUpdateWithoutOrganisationInput = {
@@ -124738,6 +127864,9 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    references?: NullableStringFieldUpdateOperationsInput | string | null
+    thread_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
@@ -124779,6 +127908,9 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    references?: NullableStringFieldUpdateOperationsInput | string | null
+    thread_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
@@ -124788,6 +127920,55 @@ export namespace Prisma {
     sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     sequence_step_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     campaign_integration_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MessageThreadUpdateWithoutOrganisationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    channel?: EnumChannelFieldUpdateOperationsInput | $Enums.Channel
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    origin?: EnumThreadOriginFieldUpdateOperationsInput | $Enums.ThreadOrigin
+    sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    dedupe_key?: NullableStringFieldUpdateOperationsInput | string | null
+    last_message_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    message_count?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    contact?: ContactUpdateOneRequiredWithoutMessage_threadsNestedInput
+    messages?: OutreachMessageUpdateManyWithoutThreadNestedInput
+  }
+
+  export type MessageThreadUncheckedUpdateWithoutOrganisationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    contact_uuid?: StringFieldUpdateOperationsInput | string
+    channel?: EnumChannelFieldUpdateOperationsInput | $Enums.Channel
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    origin?: EnumThreadOriginFieldUpdateOperationsInput | $Enums.ThreadOrigin
+    sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    dedupe_key?: NullableStringFieldUpdateOperationsInput | string | null
+    last_message_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    message_count?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    messages?: OutreachMessageUncheckedUpdateManyWithoutThreadNestedInput
+  }
+
+  export type MessageThreadUncheckedUpdateManyWithoutOrganisationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    contact_uuid?: StringFieldUpdateOperationsInput | string
+    channel?: EnumChannelFieldUpdateOperationsInput | $Enums.Channel
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    origin?: EnumThreadOriginFieldUpdateOperationsInput | $Enums.ThreadOrigin
+    sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    dedupe_key?: NullableStringFieldUpdateOperationsInput | string | null
+    last_message_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    message_count?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -126157,6 +129338,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoUpdateManyWithoutContactNestedInput
     interactions?: InteractionUpdateManyWithoutContactNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutContactNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutContactNestedInput
     campaign_contacts?: MarketingCampaignContactUpdateManyWithoutContactNestedInput
     contact_scores?: ContactScoreUpdateManyWithoutContactNestedInput
     reminders?: ReminderUpdateManyWithoutContactNestedInput
@@ -126202,6 +129384,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoUncheckedUpdateManyWithoutContactNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutContactNestedInput
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutContactNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutContactNestedInput
     campaign_contacts?: MarketingCampaignContactUncheckedUpdateManyWithoutContactNestedInput
     contact_scores?: ContactScoreUncheckedUpdateManyWithoutContactNestedInput
     reminders?: ReminderUncheckedUpdateManyWithoutContactNestedInput
@@ -126503,6 +129686,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoUpdateManyWithoutContactNestedInput
     interactions?: InteractionUpdateManyWithoutContactNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutContactNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutContactNestedInput
     campaign_contacts?: MarketingCampaignContactUpdateManyWithoutContactNestedInput
     contact_scores?: ContactScoreUpdateManyWithoutContactNestedInput
     reminders?: ReminderUpdateManyWithoutContactNestedInput
@@ -126548,6 +129732,7 @@ export namespace Prisma {
     contact_infos?: ContactInfoUncheckedUpdateManyWithoutContactNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutContactNestedInput
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutContactNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutContactNestedInput
     campaign_contacts?: MarketingCampaignContactUncheckedUpdateManyWithoutContactNestedInput
     contact_scores?: ContactScoreUncheckedUpdateManyWithoutContactNestedInput
     reminders?: ReminderUncheckedUpdateManyWithoutContactNestedInput
@@ -126691,6 +129876,9 @@ export namespace Prisma {
     reply_html?: string | null
     inbound_message_id?: string | null
     in_reply_to_message_id?: string | null
+    message_id?: string | null
+    references?: string | null
+    thread_uuid?: string | null
     is_manual_reply?: boolean
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
@@ -126700,6 +129888,22 @@ export namespace Prisma {
     sequence_enrollment_uuid?: string | null
     sequence_step_uuid?: string | null
     campaign_integration_uuid?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type MessageThreadCreateManyContactInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    channel: $Enums.Channel
+    subject?: string | null
+    origin: $Enums.ThreadOrigin
+    sequence_enrollment_uuid?: string | null
+    campaign_uuid?: string | null
+    dedupe_key?: string | null
+    last_message_at?: Date | string | null
+    message_count?: number
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -126907,6 +130111,8 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    references?: NullableStringFieldUpdateOperationsInput | string | null
     is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
@@ -126923,6 +130129,7 @@ export namespace Prisma {
     sequence_step?: OutreachSequenceStepUpdateOneWithoutOutreach_messagesNestedInput
     campaign_integration?: CampaignIntegrationUpdateOneWithoutOutreach_messagesNestedInput
     reminders?: ReminderUpdateManyWithoutOutreach_messageNestedInput
+    thread?: MessageThreadUpdateOneWithoutMessagesNestedInput
   }
 
   export type OutreachMessageUncheckedUpdateWithoutContactInput = {
@@ -126951,6 +130158,9 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    references?: NullableStringFieldUpdateOperationsInput | string | null
+    thread_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
@@ -126992,6 +130202,9 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    references?: NullableStringFieldUpdateOperationsInput | string | null
+    thread_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
@@ -127001,6 +130214,55 @@ export namespace Prisma {
     sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     sequence_step_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     campaign_integration_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MessageThreadUpdateWithoutContactInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    channel?: EnumChannelFieldUpdateOperationsInput | $Enums.Channel
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    origin?: EnumThreadOriginFieldUpdateOperationsInput | $Enums.ThreadOrigin
+    sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    dedupe_key?: NullableStringFieldUpdateOperationsInput | string | null
+    last_message_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    message_count?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutMessage_threadsNestedInput
+    messages?: OutreachMessageUpdateManyWithoutThreadNestedInput
+  }
+
+  export type MessageThreadUncheckedUpdateWithoutContactInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    channel?: EnumChannelFieldUpdateOperationsInput | $Enums.Channel
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    origin?: EnumThreadOriginFieldUpdateOperationsInput | $Enums.ThreadOrigin
+    sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    dedupe_key?: NullableStringFieldUpdateOperationsInput | string | null
+    last_message_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    message_count?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    messages?: OutreachMessageUncheckedUpdateManyWithoutThreadNestedInput
+  }
+
+  export type MessageThreadUncheckedUpdateManyWithoutContactInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    channel?: EnumChannelFieldUpdateOperationsInput | $Enums.Channel
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    origin?: EnumThreadOriginFieldUpdateOperationsInput | $Enums.ThreadOrigin
+    sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    dedupe_key?: NullableStringFieldUpdateOperationsInput | string | null
+    last_message_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    message_count?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -127598,6 +130860,177 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type OutreachMessageCreateManyThreadInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    contact_uuid: string
+    campaign_uuid?: string | null
+    sent_by_user_uuid?: string | null
+    channel: $Enums.Channel
+    direction?: $Enums.MsgDirection
+    subject?: string | null
+    content: string
+    status?: $Enums.MsgStatus
+    provider_message_id?: string | null
+    idempotency_key?: string | null
+    scheduled_at?: Date | string | null
+    sent_at?: Date | string | null
+    delivered_at?: Date | string | null
+    opened_at?: Date | string | null
+    clicked_at?: Date | string | null
+    replied_at?: Date | string | null
+    bounced_at?: Date | string | null
+    failed_at?: Date | string | null
+    reply_subject?: string | null
+    reply_text?: string | null
+    reply_html?: string | null
+    inbound_message_id?: string | null
+    in_reply_to_message_id?: string | null
+    message_id?: string | null
+    references?: string | null
+    is_manual_reply?: boolean
+    email_provider?: $Enums.ExternalIntegrationProvider | null
+    email_account?: string | null
+    email_domain_uuid?: string | null
+    sms_provider?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    sequence_enrollment_uuid?: string | null
+    sequence_step_uuid?: string | null
+    campaign_integration_uuid?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type OutreachMessageUpdateWithoutThreadInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    channel?: EnumChannelFieldUpdateOperationsInput | $Enums.Channel
+    direction?: EnumMsgDirectionFieldUpdateOperationsInput | $Enums.MsgDirection
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    content?: StringFieldUpdateOperationsInput | string
+    status?: EnumMsgStatusFieldUpdateOperationsInput | $Enums.MsgStatus
+    provider_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    idempotency_key?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    delivered_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    opened_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    clicked_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    replied_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reply_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_text?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_html?: NullableStringFieldUpdateOperationsInput | string | null
+    inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    references?: NullableStringFieldUpdateOperationsInput | string | null
+    is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
+    email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
+    email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutOutreach_messagesNestedInput
+    contact?: ContactUpdateOneRequiredWithoutOutreach_messagesNestedInput
+    campaign?: MarketingCampaignUpdateOneWithoutOutreach_messagesNestedInput
+    sent_by?: UserUpdateOneWithoutOutreach_messages_sentNestedInput
+    interactions?: InteractionUpdateManyWithoutOutreach_messageNestedInput
+    sequence_enrollment?: SequenceEnrollmentUpdateOneWithoutOutreach_messagesNestedInput
+    sequence_step?: OutreachSequenceStepUpdateOneWithoutOutreach_messagesNestedInput
+    campaign_integration?: CampaignIntegrationUpdateOneWithoutOutreach_messagesNestedInput
+    reminders?: ReminderUpdateManyWithoutOutreach_messageNestedInput
+  }
+
+  export type OutreachMessageUncheckedUpdateWithoutThreadInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    contact_uuid?: StringFieldUpdateOperationsInput | string
+    campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    sent_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    channel?: EnumChannelFieldUpdateOperationsInput | $Enums.Channel
+    direction?: EnumMsgDirectionFieldUpdateOperationsInput | $Enums.MsgDirection
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    content?: StringFieldUpdateOperationsInput | string
+    status?: EnumMsgStatusFieldUpdateOperationsInput | $Enums.MsgStatus
+    provider_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    idempotency_key?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    delivered_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    opened_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    clicked_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    replied_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reply_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_text?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_html?: NullableStringFieldUpdateOperationsInput | string | null
+    inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    references?: NullableStringFieldUpdateOperationsInput | string | null
+    is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
+    email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
+    email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    sequence_step_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    campaign_integration_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    interactions?: InteractionUncheckedUpdateManyWithoutOutreach_messageNestedInput
+    reminders?: ReminderUncheckedUpdateManyWithoutOutreach_messageNestedInput
+  }
+
+  export type OutreachMessageUncheckedUpdateManyWithoutThreadInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    contact_uuid?: StringFieldUpdateOperationsInput | string
+    campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    sent_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    channel?: EnumChannelFieldUpdateOperationsInput | $Enums.Channel
+    direction?: EnumMsgDirectionFieldUpdateOperationsInput | $Enums.MsgDirection
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    content?: StringFieldUpdateOperationsInput | string
+    status?: EnumMsgStatusFieldUpdateOperationsInput | $Enums.MsgStatus
+    provider_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    idempotency_key?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    delivered_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    opened_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    clicked_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    replied_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    failed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reply_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_text?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_html?: NullableStringFieldUpdateOperationsInput | string | null
+    inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    references?: NullableStringFieldUpdateOperationsInput | string | null
+    is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
+    email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
+    email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    sequence_step_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    campaign_integration_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type OutreachSequenceStepCreateManySequenceInput = {
     id?: number
     uuid?: string
@@ -127932,6 +131365,9 @@ export namespace Prisma {
     reply_html?: string | null
     inbound_message_id?: string | null
     in_reply_to_message_id?: string | null
+    message_id?: string | null
+    references?: string | null
+    thread_uuid?: string | null
     is_manual_reply?: boolean
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
@@ -127966,6 +131402,8 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    references?: NullableStringFieldUpdateOperationsInput | string | null
     is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
@@ -127982,6 +131420,7 @@ export namespace Prisma {
     sequence_enrollment?: SequenceEnrollmentUpdateOneWithoutOutreach_messagesNestedInput
     campaign_integration?: CampaignIntegrationUpdateOneWithoutOutreach_messagesNestedInput
     reminders?: ReminderUpdateManyWithoutOutreach_messageNestedInput
+    thread?: MessageThreadUpdateOneWithoutMessagesNestedInput
   }
 
   export type OutreachMessageUncheckedUpdateWithoutSequence_stepInput = {
@@ -128011,6 +131450,9 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    references?: NullableStringFieldUpdateOperationsInput | string | null
+    thread_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
@@ -128052,6 +131494,9 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    references?: NullableStringFieldUpdateOperationsInput | string | null
+    thread_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
@@ -128091,6 +131536,9 @@ export namespace Prisma {
     reply_html?: string | null
     inbound_message_id?: string | null
     in_reply_to_message_id?: string | null
+    message_id?: string | null
+    references?: string | null
+    thread_uuid?: string | null
     is_manual_reply?: boolean
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
@@ -128125,6 +131573,8 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    references?: NullableStringFieldUpdateOperationsInput | string | null
     is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
@@ -128141,6 +131591,7 @@ export namespace Prisma {
     sequence_step?: OutreachSequenceStepUpdateOneWithoutOutreach_messagesNestedInput
     campaign_integration?: CampaignIntegrationUpdateOneWithoutOutreach_messagesNestedInput
     reminders?: ReminderUpdateManyWithoutOutreach_messageNestedInput
+    thread?: MessageThreadUpdateOneWithoutMessagesNestedInput
   }
 
   export type OutreachMessageUncheckedUpdateWithoutSequence_enrollmentInput = {
@@ -128170,6 +131621,9 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    references?: NullableStringFieldUpdateOperationsInput | string | null
+    thread_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
@@ -128211,6 +131665,9 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    references?: NullableStringFieldUpdateOperationsInput | string | null
+    thread_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
@@ -128508,6 +131965,9 @@ export namespace Prisma {
     reply_html?: string | null
     inbound_message_id?: string | null
     in_reply_to_message_id?: string | null
+    message_id?: string | null
+    references?: string | null
+    thread_uuid?: string | null
     is_manual_reply?: boolean
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
@@ -128621,6 +132081,8 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    references?: NullableStringFieldUpdateOperationsInput | string | null
     is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
@@ -128637,6 +132099,7 @@ export namespace Prisma {
     sequence_step?: OutreachSequenceStepUpdateOneWithoutOutreach_messagesNestedInput
     campaign_integration?: CampaignIntegrationUpdateOneWithoutOutreach_messagesNestedInput
     reminders?: ReminderUpdateManyWithoutOutreach_messageNestedInput
+    thread?: MessageThreadUpdateOneWithoutMessagesNestedInput
   }
 
   export type OutreachMessageUncheckedUpdateWithoutCampaignInput = {
@@ -128665,6 +132128,9 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    references?: NullableStringFieldUpdateOperationsInput | string | null
+    thread_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
@@ -128706,6 +132172,9 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    references?: NullableStringFieldUpdateOperationsInput | string | null
+    thread_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
@@ -129476,6 +132945,9 @@ export namespace Prisma {
     reply_html?: string | null
     inbound_message_id?: string | null
     in_reply_to_message_id?: string | null
+    message_id?: string | null
+    references?: string | null
+    thread_uuid?: string | null
     is_manual_reply?: boolean
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
@@ -129510,6 +132982,8 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    references?: NullableStringFieldUpdateOperationsInput | string | null
     is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
@@ -129526,6 +133000,7 @@ export namespace Prisma {
     sequence_enrollment?: SequenceEnrollmentUpdateOneWithoutOutreach_messagesNestedInput
     sequence_step?: OutreachSequenceStepUpdateOneWithoutOutreach_messagesNestedInput
     reminders?: ReminderUpdateManyWithoutOutreach_messageNestedInput
+    thread?: MessageThreadUpdateOneWithoutMessagesNestedInput
   }
 
   export type OutreachMessageUncheckedUpdateWithoutCampaign_integrationInput = {
@@ -129555,6 +133030,9 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    references?: NullableStringFieldUpdateOperationsInput | string | null
+    thread_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
@@ -129596,6 +133074,9 @@ export namespace Prisma {
     reply_html?: NullableStringFieldUpdateOperationsInput | string | null
     inbound_message_id?: NullableStringFieldUpdateOperationsInput | string | null
     in_reply_to_message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    message_id?: NullableStringFieldUpdateOperationsInput | string | null
+    references?: NullableStringFieldUpdateOperationsInput | string | null
+    thread_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     is_manual_reply?: BoolFieldUpdateOperationsInput | boolean
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null

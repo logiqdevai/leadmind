@@ -29,6 +29,7 @@ import {
 } from '@/modules/outreach/utils/email-provider-allocation.util';
 import { parseSenderProfileMetadata } from '@/modules/outreach/utils/sender-profile-metadata.util';
 import { formatSmtpFromAddress } from '@/integrations/notifications/smtp/utils/format-smtp-from-address.util';
+import { bracketMessageId } from '@/shared/utils/email-message-id.util';
 import { OutreachRenderService } from './outreach-render.service';
 export interface DeliveredMessage {
     provider_message_id: string | null;
@@ -119,11 +120,21 @@ export class MessageSendService {
             if (message.campaign_uuid) {
                 headers['X-Campaign-Uuid'] = message.campaign_uuid;
             }
+            if (message.message_id) {
+                headers['Message-ID'] = bracketMessageId(message.message_id);
+            }
             if (message.in_reply_to_message_id) {
-                const id = message.in_reply_to_message_id.trim();
-                const bracketed = id.startsWith('<') ? id : `<${id}>`;
-                headers['In-Reply-To'] = bracketed;
-                headers['References'] = bracketed;
+                headers['In-Reply-To'] = bracketMessageId(message.in_reply_to_message_id);
+            }
+            if (message.references) {
+                headers['References'] = message.references
+                    .split(/\s+/)
+                    .filter(Boolean)
+                    .map(bracketMessageId)
+                    .join(' ');
+            } else if (message.in_reply_to_message_id) {
+                // No accumulated chain (e.g. legacy row) - fall back to just the immediate parent.
+                headers['References'] = bracketMessageId(message.in_reply_to_message_id);
             }
             const replyTo = await this.resolveReplyTo(message);
             const createEmail = {

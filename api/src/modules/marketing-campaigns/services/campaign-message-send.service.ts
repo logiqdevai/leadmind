@@ -36,6 +36,8 @@ import {
 } from '@/modules/outreach/utils/email-provider-allocation.util';
 import { mergeSenderProfileMetadata } from '@/modules/outreach/utils/sender-profile-metadata.util';
 import { SenderProfilesService } from '@/modules/sender-profiles/sender-profiles.service';
+import { generateMessageId } from '@/shared/utils/email-message-id.util';
+import { ThreadsService } from '@/modules/threads/threads.service';
 interface SendResult {
   status: 'sent' | 'failed' | 'skipped' | 'noop';
   reason?: string;
@@ -52,6 +54,7 @@ export class CampaignMessageSendService {
     private readonly senderProfilesService: SenderProfilesService,
     private readonly contactsService: ContactsService,
     private readonly sendingCapacityService: SendingCapacityService,
+    private readonly threadsService: ThreadsService,
     @InjectQueue(MARKETING_MESSAGE_SEND_QUEUE)
     private readonly messageSendQueue: Queue,
   ) {}
@@ -146,6 +149,14 @@ export class CampaignMessageSendService {
           ? sanitizeEmailHtml(rawContent)
           : rawContent;
 
+      const thread_uuid = await this.threadsService.resolveThreadForNewMessage({
+        organisation_uuid: mcc.campaign.organisation_uuid,
+        contact_uuid: mcc.contact_uuid,
+        channel: mcc.channel,
+        subject,
+        campaign_uuid: mcc.campaign_uuid,
+      });
+
       try {
         message = await this.prisma.outreachMessage.create({
           data: {
@@ -157,6 +168,8 @@ export class CampaignMessageSendService {
             content,
             status: MsgStatus.QUEUED,
             idempotency_key,
+            message_id: mcc.channel === Channel.EMAIL ? generateMessageId() : null,
+            thread_uuid,
             ...(providerOverride && mcc.channel === Channel.EMAIL
               ? {
                   metadata: buildEmailProviderMetadata(
@@ -166,6 +179,7 @@ export class CampaignMessageSendService {
               : {}),
           },
         });
+        await this.threadsService.recordMessageOnThread(thread_uuid);
       } catch (error) {
         if (
           error instanceof Prisma.PrismaClientKnownRequestError &&

@@ -4,6 +4,7 @@ import {
     createDraftMessage,
     deleteOutreachMessage,
     getOutreachMessageThread,
+    getThreadDetail,
     sendOutreachMessage,
     updateOutreachMessage,
 } from "../services/outreach.service";
@@ -31,6 +32,7 @@ const invalidateAfterMessageChange = (
     if (vars.contact_uuid) {
         qc.invalidateQueries({ queryKey: contactsQueryKeys.detail(vars.contact_uuid) });
         qc.invalidateQueries({ queryKey: contactsQueryKeys.messages(vars.contact_uuid) });
+        qc.invalidateQueries({ queryKey: contactsQueryKeys.threads(vars.contact_uuid) });
     }
     if (vars.campaign_uuid) {
         qc.invalidateQueries({ queryKey: ["marketing-campaigns", "draft-messages", vars.campaign_uuid] });
@@ -129,6 +131,14 @@ export function useOutreachMessageThread(uuid: string | null | undefined) {
         queryKey: ["outreach-message-thread", uuid],
         queryFn: () => getOutreachMessageThread(uuid as string),
         enabled: !!uuid,
+    });
+}
+
+export function useThreadDetail(threadUuid: string | null | undefined) {
+    return useQuery({
+        queryKey: ["thread-detail", threadUuid],
+        queryFn: () => getThreadDetail(threadUuid as string),
+        enabled: !!threadUuid,
     });
 }
 

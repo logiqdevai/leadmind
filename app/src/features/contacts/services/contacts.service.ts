@@ -11,6 +11,7 @@ import type {
     BulkTriggerContactScoreResult,
     BulkScrapeContactEmailsPayload,
     BulkScrapeContactEmailsResult,
+    ConversationThread,
     Contact,
     CreateContactPayload,
     Interaction,
@@ -258,6 +259,15 @@ export const listContactMessages = async (uuid: string): Promise<OutreachMessage
         return response.data;
     } catch (error: any) {
         throw new Error(error?.response?.data?.message || "Failed to load messages.");
+    }
+};
+
+export const listContactThreads = async (uuid: string): Promise<ConversationThread[]> => {
+    try {
+        const response = await axiosInstance.get(ApiRoutes.contacts.threads(uuid));
+        return response.data;
+    } catch (error: any) {
+        throw new Error(error?.response?.data?.message || "Failed to load conversations.");
     }
 };
 

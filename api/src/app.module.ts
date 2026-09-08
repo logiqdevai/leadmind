@@ -51,6 +51,7 @@ import { CampaignIntegrationsModule } from './modules/campaign-integrations/camp
 import { MailTesterModule } from './modules/mail-tester/mail-tester.module';
 import { MxToolboxModule } from './modules/mxtoolbox/mxtoolbox.module';
 import { OpenAiBatchJobsModule } from './modules/openai-batch-jobs/openai-batch-jobs.module';
+import { ThreadsModule } from './modules/threads/threads.module';
 
 @Module({
   imports: [
@@ -80,6 +81,7 @@ import { OpenAiBatchJobsModule } from './modules/openai-batch-jobs/openai-batch-
     ContactsModule,
     SenderProfilesModule,
     OutreachModule,
+    ThreadsModule,
     SearchModule,
     DashboardModule,
     MarketingCampaignsModule,

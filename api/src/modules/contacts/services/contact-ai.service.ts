@@ -43,6 +43,8 @@ import { CONTACT_AI_SCORE_SCHEMA, type ContactAiScoreResult } from '../schemas/c
 import { OutreachRenderService } from '@/modules/outreach/services/outreach-render.service';
 import { AiUsageService } from '@/modules/ai-usage/ai-usage.service';
 import { BulkJobsService } from '@/modules/bulk-jobs/bulk-jobs.service';
+import { generateMessageId } from '@/shared/utils/email-message-id.util';
+import { ThreadsService } from '@/modules/threads/threads.service';
 import { calculateAiCost } from '@/integrations/ai/utils/ai-cost';
 
 const filterForScoreInclude = {
@@ -68,6 +70,7 @@ export class ContactAiService {
         private readonly outreachRenderService: OutreachRenderService,
         private readonly aiUsageService: AiUsageService,
         private readonly bulkJobsService: BulkJobsService,
+        private readonly threadsService: ThreadsService,
     ) { }
 
     async scoreContact(
@@ -405,6 +408,13 @@ export class ContactAiService {
                 const content =
                     sanitizeAiDraftContent(draft.content, channel);
 
+                const thread_uuid = await this.threadsService.resolveThreadForNewMessage({
+                    organisation_uuid: contact.organisation_uuid,
+                    contact_uuid: contact.uuid,
+                    channel,
+                    subject: draft.subject ?? null,
+                });
+
                 const message = await this.prisma.outreachMessage.create({
                     data: {
                         organisation_uuid: contact.organisation_uuid,
@@ -413,8 +423,11 @@ export class ContactAiService {
                         subject: draft.subject ?? null,
                         content,
                         status: MsgStatus.PENDING,
+                        message_id: channel === Channel.EMAIL ? generateMessageId() : null,
+                        thread_uuid,
                     },
                 });
+                await this.threadsService.recordMessageOnThread(thread_uuid);
 
                 created.push(message);
             } catch (error) {
@@ -481,6 +494,13 @@ export class ContactAiService {
                           draft,
                       )
                     : { subject: draft.subject ?? null, content: sanitizedContent };
+                const thread_uuid = await this.threadsService.resolveThreadForNewMessage({
+                    organisation_uuid,
+                    contact_uuid: item.uuid,
+                    channel,
+                    subject: resolved.subject ?? null,
+                    campaign_uuid,
+                });
                 const message = await this.prisma.outreachMessage.create({
                     data: {
                         organisation_uuid,
@@ -489,10 +509,13 @@ export class ContactAiService {
                         subject: resolved.subject ?? null,
                         content: resolved.content,
                         status: MsgStatus.PENDING,
+                        message_id: channel === Channel.EMAIL ? generateMessageId() : null,
+                        thread_uuid,
                         ...(sent_by_user_uuid ? { sent_by_user_uuid } : {}),
                         ...(campaign_uuid ? { campaign_uuid, idempotency_key: idempotencyKey } : {}),
                     },
                 });
+                await this.threadsService.recordMessageOnThread(thread_uuid);
                 generated++;
                 message_uuids.push(message.uuid);
             } catch (error) {
@@ -692,6 +715,13 @@ export class ContactAiService {
                     draft,
                 );
                 const idempotencyKey = `campaign:${campUuid}:${contact_uuid}:${channel}`;
+                const thread_uuid = await this.threadsService.resolveThreadForNewMessage({
+                    organisation_uuid: job.organisation_uuid,
+                    contact_uuid,
+                    channel,
+                    subject: resolved.subject ?? null,
+                    campaign_uuid: campUuid,
+                });
 
                 await this.prisma.outreachMessage.create({
                     data: {
@@ -703,8 +733,11 @@ export class ContactAiService {
                         status: MsgStatus.PENDING,
                         campaign_uuid: campUuid,
                         idempotency_key: idempotencyKey,
+                        message_id: channel === Channel.EMAIL ? generateMessageId() : null,
+                        thread_uuid,
                     },
                 });
+                await this.threadsService.recordMessageOnThread(thread_uuid);
                 generated++;
                 this.aiUsageService.logBatchResult({
                     organisation_uuid: job.organisation_uuid,
@@ -784,6 +817,17 @@ export class ContactAiService {
         const sender = await this.resolveSenderPromptContext(organisation_uuid);
         const action = dto.action ?? 'generate';
 
+        // Reply-box "Generate" passes the message being replied to, so context stays scoped to
+        // that one conversation instead of blending every concurrent thread with this contact.
+        const thread_uuid = dto.outreach_message_uuid
+            ? (
+                await this.prisma.outreachMessage.findFirst({
+                    where: { uuid: dto.outreach_message_uuid, organisation_uuid, contact_uuid: dto.contact_uuid },
+                    select: { thread_uuid: true },
+                })
+            )?.thread_uuid ?? null
+            : null;
+
         if (action !== 'generate') {
             return generateWithCampaignPrompt(this.aiService, organisation_uuid, dto.channel, action, {
                 sender_business_description: sender.business_description,
@@ -804,6 +848,7 @@ export class ContactAiService {
             sender.business_description,
             sender.has_sender_profile,
             true, // single-contact ad-hoc draft: include recent email history for context
+            thread_uuid,
         );
         const content = sanitizeAiDraftContent(draft.content, dto.channel);
 
@@ -859,10 +904,11 @@ export class ContactAiService {
         sender_business_description?: string,
         has_sender_profile = true,
         include_thread_context = false,
+        thread_uuid?: string | null,
     ): Promise<{ subject: string | null; content: string }> {
         const thread_transcript =
             include_thread_context && channel === Channel.EMAIL
-                ? await fetchRecentEmailTranscript(this.prisma, contact.organisation_uuid, contact.uuid)
+                ? await fetchRecentEmailTranscript(this.prisma, contact.organisation_uuid, contact.uuid, 10, thread_uuid)
                 : undefined;
 
         const prompt = this.promptForChannel(

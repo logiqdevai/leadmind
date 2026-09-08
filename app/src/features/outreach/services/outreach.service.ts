@@ -5,6 +5,7 @@ import type {
     MessageThread,
     OutreachMessage,
     SendMessagePayload,
+    ThreadDetail,
     UpdateMessagePayload,
 } from "@/features/contacts/interfaces/contact.interface";
 import type {
@@ -86,6 +87,15 @@ export const sendOutreachMessage = async (
 export const getOutreachMessageThread = async (uuid: string): Promise<MessageThread> => {
     try {
         const response = await axiosInstance.get(ApiRoutes.outreach.thread(uuid));
+        return response.data;
+    } catch (error: any) {
+        throw new Error(error?.response?.data?.message || "Failed to load conversation.");
+    }
+};
+
+export const getThreadDetail = async (uuid: string): Promise<ThreadDetail> => {
+    try {
+        const response = await axiosInstance.get(ApiRoutes.threads.detail(uuid));
         return response.data;
     } catch (error: any) {
         throw new Error(error?.response?.data?.message || "Failed to load conversation.");

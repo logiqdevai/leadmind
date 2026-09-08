@@ -37,6 +37,9 @@ export class ReminderTriggerWorker extends WorkerHost {
                         email: true,
                     },
                 },
+                outreach_message: {
+                    select: { thread_uuid: true },
+                },
             },
         });
 
@@ -57,6 +60,7 @@ export class ReminderTriggerWorker extends WorkerHost {
             const draft = await this.followUpDraftService.draftFollowUp(
                 reminder.organisation_uuid,
                 reminder.contact_uuid,
+                reminder.outreach_message?.thread_uuid,
             );
             if (draft) {
                 const ai_draft = {
