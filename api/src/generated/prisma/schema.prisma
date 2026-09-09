@@ -34,6 +34,7 @@ model User {
   goal_personal_bests       GoalPersonalBest[]
   bulk_jobs_created         BulkJob[]                @relation("BulkJobCreatedBy")
   openai_batch_jobs_created OpenAiBatchJob[]         @relation("OpenAiBatchJobCreatedBy")
+  sidebar_favorites         SidebarFavorite[]
 
   @@index([email])
   @@index([phone])
@@ -173,6 +174,21 @@ model SavedContactFilter {
 
   @@index([organisation_uuid])
   @@map("saved_contact_filters")
+}
+
+model SidebarFavorite {
+  id          Int      @id @default(autoincrement())
+  uuid        String   @unique @default(uuid())
+  user_uuid   String
+  nav_key     String
+  order_index Int      @default(0)
+  created_at  DateTime @default(now())
+
+  user User @relation(fields: [user_uuid], references: [uuid], onDelete: Cascade)
+
+  @@unique([user_uuid, nav_key])
+  @@index([user_uuid])
+  @@map("sidebar_favorites")
 }
 
 model ScoringInstruction {

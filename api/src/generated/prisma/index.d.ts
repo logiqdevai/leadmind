@@ -44,6 +44,11 @@ export type Filter = $Result.DefaultSelection<Prisma.$FilterPayload>
  */
 export type SavedContactFilter = $Result.DefaultSelection<Prisma.$SavedContactFilterPayload>
 /**
+ * Model SidebarFavorite
+ * 
+ */
+export type SidebarFavorite = $Result.DefaultSelection<Prisma.$SidebarFavoritePayload>
+/**
  * Model ScoringInstruction
  * 
  */
@@ -1268,6 +1273,16 @@ export class PrismaClient<
   get savedContactFilter(): Prisma.SavedContactFilterDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.sidebarFavorite`: Exposes CRUD operations for the **SidebarFavorite** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SidebarFavorites
+    * const sidebarFavorites = await prisma.sidebarFavorite.findMany()
+    * ```
+    */
+  get sidebarFavorite(): Prisma.SidebarFavoriteDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.scoringInstruction`: Exposes CRUD operations for the **ScoringInstruction** model.
     * Example usage:
     * ```ts
@@ -2216,6 +2231,7 @@ export namespace Prisma {
     OrganisationInvitation: 'OrganisationInvitation',
     Filter: 'Filter',
     SavedContactFilter: 'SavedContactFilter',
+    SidebarFavorite: 'SidebarFavorite',
     ScoringInstruction: 'ScoringInstruction',
     FilterScoringInstruction: 'FilterScoringInstruction',
     RawLead: 'RawLead',
@@ -2282,7 +2298,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "organisation" | "organisationMember" | "organisationInvitation" | "filter" | "savedContactFilter" | "scoringInstruction" | "filterScoringInstruction" | "rawLead" | "lead" | "leadEnrichment" | "contact" | "contactInfo" | "contactFilter" | "contactEnrichment" | "contactScore" | "contactList" | "contactListMember" | "contactTag" | "interaction" | "outreachMessage" | "messageThread" | "outreachSequence" | "outreachSequenceStep" | "sequenceEnrollment" | "filterJob" | "bulkJob" | "websiteScrapeRequest" | "senderProfile" | "messageTemplate" | "marketingCampaign" | "marketingCampaignContact" | "openAiBatchJob" | "integration" | "integrationAccount" | "integrationKey" | "integrationAccountDomain" | "mailTesterTest" | "mxToolboxCheck" | "reminder" | "form" | "formField" | "formCompletion" | "formCompletionValue" | "contactAudienceAnalysis" | "aiUsageLog" | "apifyUsageLog" | "messagingGoal" | "emailSendLimit" | "sendingPolicy" | "sendingPolicyStage" | "campaignIntegration" | "campaignIntegrationState" | "sendingUsageCounter" | "goalAchievement" | "goalPersonalBest" | "activityLog"
+      modelProps: "user" | "organisation" | "organisationMember" | "organisationInvitation" | "filter" | "savedContactFilter" | "sidebarFavorite" | "scoringInstruction" | "filterScoringInstruction" | "rawLead" | "lead" | "leadEnrichment" | "contact" | "contactInfo" | "contactFilter" | "contactEnrichment" | "contactScore" | "contactList" | "contactListMember" | "contactTag" | "interaction" | "outreachMessage" | "messageThread" | "outreachSequence" | "outreachSequenceStep" | "sequenceEnrollment" | "filterJob" | "bulkJob" | "websiteScrapeRequest" | "senderProfile" | "messageTemplate" | "marketingCampaign" | "marketingCampaignContact" | "openAiBatchJob" | "integration" | "integrationAccount" | "integrationKey" | "integrationAccountDomain" | "mailTesterTest" | "mxToolboxCheck" | "reminder" | "form" | "formField" | "formCompletion" | "formCompletionValue" | "contactAudienceAnalysis" | "aiUsageLog" | "apifyUsageLog" | "messagingGoal" | "emailSendLimit" | "sendingPolicy" | "sendingPolicyStage" | "campaignIntegration" | "campaignIntegrationState" | "sendingUsageCounter" | "goalAchievement" | "goalPersonalBest" | "activityLog"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2727,6 +2743,80 @@ export namespace Prisma {
           count: {
             args: Prisma.SavedContactFilterCountArgs<ExtArgs>
             result: $Utils.Optional<SavedContactFilterCountAggregateOutputType> | number
+          }
+        }
+      }
+      SidebarFavorite: {
+        payload: Prisma.$SidebarFavoritePayload<ExtArgs>
+        fields: Prisma.SidebarFavoriteFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SidebarFavoriteFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SidebarFavoritePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SidebarFavoriteFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SidebarFavoritePayload>
+          }
+          findFirst: {
+            args: Prisma.SidebarFavoriteFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SidebarFavoritePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SidebarFavoriteFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SidebarFavoritePayload>
+          }
+          findMany: {
+            args: Prisma.SidebarFavoriteFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SidebarFavoritePayload>[]
+          }
+          create: {
+            args: Prisma.SidebarFavoriteCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SidebarFavoritePayload>
+          }
+          createMany: {
+            args: Prisma.SidebarFavoriteCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SidebarFavoriteCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SidebarFavoritePayload>[]
+          }
+          delete: {
+            args: Prisma.SidebarFavoriteDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SidebarFavoritePayload>
+          }
+          update: {
+            args: Prisma.SidebarFavoriteUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SidebarFavoritePayload>
+          }
+          deleteMany: {
+            args: Prisma.SidebarFavoriteDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SidebarFavoriteUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.SidebarFavoriteUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SidebarFavoritePayload>[]
+          }
+          upsert: {
+            args: Prisma.SidebarFavoriteUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SidebarFavoritePayload>
+          }
+          aggregate: {
+            args: Prisma.SidebarFavoriteAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSidebarFavorite>
+          }
+          groupBy: {
+            args: Prisma.SidebarFavoriteGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SidebarFavoriteGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SidebarFavoriteCountArgs<ExtArgs>
+            result: $Utils.Optional<SidebarFavoriteCountAggregateOutputType> | number
           }
         }
       }
@@ -6618,6 +6708,7 @@ export namespace Prisma {
     organisationInvitation?: OrganisationInvitationOmit
     filter?: FilterOmit
     savedContactFilter?: SavedContactFilterOmit
+    sidebarFavorite?: SidebarFavoriteOmit
     scoringInstruction?: ScoringInstructionOmit
     filterScoringInstruction?: FilterScoringInstructionOmit
     rawLead?: RawLeadOmit
@@ -6759,6 +6850,7 @@ export namespace Prisma {
     goal_personal_bests: number
     bulk_jobs_created: number
     openai_batch_jobs_created: number
+    sidebar_favorites: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6772,6 +6864,7 @@ export namespace Prisma {
     goal_personal_bests?: boolean | UserCountOutputTypeCountGoal_personal_bestsArgs
     bulk_jobs_created?: boolean | UserCountOutputTypeCountBulk_jobs_createdArgs
     openai_batch_jobs_created?: boolean | UserCountOutputTypeCountOpenai_batch_jobs_createdArgs
+    sidebar_favorites?: boolean | UserCountOutputTypeCountSidebar_favoritesArgs
   }
 
   // Custom InputTypes
@@ -6853,6 +6946,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountOpenai_batch_jobs_createdArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: OpenAiBatchJobWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountSidebar_favoritesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SidebarFavoriteWhereInput
   }
 
 
@@ -8389,6 +8489,7 @@ export namespace Prisma {
     goal_personal_bests?: boolean | User$goal_personal_bestsArgs<ExtArgs>
     bulk_jobs_created?: boolean | User$bulk_jobs_createdArgs<ExtArgs>
     openai_batch_jobs_created?: boolean | User$openai_batch_jobs_createdArgs<ExtArgs>
+    sidebar_favorites?: boolean | User$sidebar_favoritesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -8440,6 +8541,7 @@ export namespace Prisma {
     goal_personal_bests?: boolean | User$goal_personal_bestsArgs<ExtArgs>
     bulk_jobs_created?: boolean | User$bulk_jobs_createdArgs<ExtArgs>
     openai_batch_jobs_created?: boolean | User$openai_batch_jobs_createdArgs<ExtArgs>
+    sidebar_favorites?: boolean | User$sidebar_favoritesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -8458,6 +8560,7 @@ export namespace Prisma {
       goal_personal_bests: Prisma.$GoalPersonalBestPayload<ExtArgs>[]
       bulk_jobs_created: Prisma.$BulkJobPayload<ExtArgs>[]
       openai_batch_jobs_created: Prisma.$OpenAiBatchJobPayload<ExtArgs>[]
+      sidebar_favorites: Prisma.$SidebarFavoritePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -8873,6 +8976,7 @@ export namespace Prisma {
     goal_personal_bests<T extends User$goal_personal_bestsArgs<ExtArgs> = {}>(args?: Subset<T, User$goal_personal_bestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GoalPersonalBestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     bulk_jobs_created<T extends User$bulk_jobs_createdArgs<ExtArgs> = {}>(args?: Subset<T, User$bulk_jobs_createdArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BulkJobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     openai_batch_jobs_created<T extends User$openai_batch_jobs_createdArgs<ExtArgs> = {}>(args?: Subset<T, User$openai_batch_jobs_createdArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OpenAiBatchJobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    sidebar_favorites<T extends User$sidebar_favoritesArgs<ExtArgs> = {}>(args?: Subset<T, User$sidebar_favoritesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SidebarFavoritePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9536,6 +9640,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: OpenAiBatchJobScalarFieldEnum | OpenAiBatchJobScalarFieldEnum[]
+  }
+
+  /**
+   * User.sidebar_favorites
+   */
+  export type User$sidebar_favoritesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SidebarFavorite
+     */
+    select?: SidebarFavoriteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SidebarFavorite
+     */
+    omit?: SidebarFavoriteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SidebarFavoriteInclude<ExtArgs> | null
+    where?: SidebarFavoriteWhereInput
+    orderBy?: SidebarFavoriteOrderByWithRelationInput | SidebarFavoriteOrderByWithRelationInput[]
+    cursor?: SidebarFavoriteWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SidebarFavoriteScalarFieldEnum | SidebarFavoriteScalarFieldEnum[]
   }
 
   /**
@@ -16375,6 +16503,1115 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: SavedContactFilterInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SidebarFavorite
+   */
+
+  export type AggregateSidebarFavorite = {
+    _count: SidebarFavoriteCountAggregateOutputType | null
+    _avg: SidebarFavoriteAvgAggregateOutputType | null
+    _sum: SidebarFavoriteSumAggregateOutputType | null
+    _min: SidebarFavoriteMinAggregateOutputType | null
+    _max: SidebarFavoriteMaxAggregateOutputType | null
+  }
+
+  export type SidebarFavoriteAvgAggregateOutputType = {
+    id: number | null
+    order_index: number | null
+  }
+
+  export type SidebarFavoriteSumAggregateOutputType = {
+    id: number | null
+    order_index: number | null
+  }
+
+  export type SidebarFavoriteMinAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    user_uuid: string | null
+    nav_key: string | null
+    order_index: number | null
+    created_at: Date | null
+  }
+
+  export type SidebarFavoriteMaxAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    user_uuid: string | null
+    nav_key: string | null
+    order_index: number | null
+    created_at: Date | null
+  }
+
+  export type SidebarFavoriteCountAggregateOutputType = {
+    id: number
+    uuid: number
+    user_uuid: number
+    nav_key: number
+    order_index: number
+    created_at: number
+    _all: number
+  }
+
+
+  export type SidebarFavoriteAvgAggregateInputType = {
+    id?: true
+    order_index?: true
+  }
+
+  export type SidebarFavoriteSumAggregateInputType = {
+    id?: true
+    order_index?: true
+  }
+
+  export type SidebarFavoriteMinAggregateInputType = {
+    id?: true
+    uuid?: true
+    user_uuid?: true
+    nav_key?: true
+    order_index?: true
+    created_at?: true
+  }
+
+  export type SidebarFavoriteMaxAggregateInputType = {
+    id?: true
+    uuid?: true
+    user_uuid?: true
+    nav_key?: true
+    order_index?: true
+    created_at?: true
+  }
+
+  export type SidebarFavoriteCountAggregateInputType = {
+    id?: true
+    uuid?: true
+    user_uuid?: true
+    nav_key?: true
+    order_index?: true
+    created_at?: true
+    _all?: true
+  }
+
+  export type SidebarFavoriteAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SidebarFavorite to aggregate.
+     */
+    where?: SidebarFavoriteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SidebarFavorites to fetch.
+     */
+    orderBy?: SidebarFavoriteOrderByWithRelationInput | SidebarFavoriteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SidebarFavoriteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SidebarFavorites from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SidebarFavorites.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SidebarFavorites
+    **/
+    _count?: true | SidebarFavoriteCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: SidebarFavoriteAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: SidebarFavoriteSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SidebarFavoriteMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SidebarFavoriteMaxAggregateInputType
+  }
+
+  export type GetSidebarFavoriteAggregateType<T extends SidebarFavoriteAggregateArgs> = {
+        [P in keyof T & keyof AggregateSidebarFavorite]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSidebarFavorite[P]>
+      : GetScalarType<T[P], AggregateSidebarFavorite[P]>
+  }
+
+
+
+
+  export type SidebarFavoriteGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SidebarFavoriteWhereInput
+    orderBy?: SidebarFavoriteOrderByWithAggregationInput | SidebarFavoriteOrderByWithAggregationInput[]
+    by: SidebarFavoriteScalarFieldEnum[] | SidebarFavoriteScalarFieldEnum
+    having?: SidebarFavoriteScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SidebarFavoriteCountAggregateInputType | true
+    _avg?: SidebarFavoriteAvgAggregateInputType
+    _sum?: SidebarFavoriteSumAggregateInputType
+    _min?: SidebarFavoriteMinAggregateInputType
+    _max?: SidebarFavoriteMaxAggregateInputType
+  }
+
+  export type SidebarFavoriteGroupByOutputType = {
+    id: number
+    uuid: string
+    user_uuid: string
+    nav_key: string
+    order_index: number
+    created_at: Date
+    _count: SidebarFavoriteCountAggregateOutputType | null
+    _avg: SidebarFavoriteAvgAggregateOutputType | null
+    _sum: SidebarFavoriteSumAggregateOutputType | null
+    _min: SidebarFavoriteMinAggregateOutputType | null
+    _max: SidebarFavoriteMaxAggregateOutputType | null
+  }
+
+  type GetSidebarFavoriteGroupByPayload<T extends SidebarFavoriteGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SidebarFavoriteGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SidebarFavoriteGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SidebarFavoriteGroupByOutputType[P]>
+            : GetScalarType<T[P], SidebarFavoriteGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SidebarFavoriteSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    user_uuid?: boolean
+    nav_key?: boolean
+    order_index?: boolean
+    created_at?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["sidebarFavorite"]>
+
+  export type SidebarFavoriteSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    user_uuid?: boolean
+    nav_key?: boolean
+    order_index?: boolean
+    created_at?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["sidebarFavorite"]>
+
+  export type SidebarFavoriteSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    user_uuid?: boolean
+    nav_key?: boolean
+    order_index?: boolean
+    created_at?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["sidebarFavorite"]>
+
+  export type SidebarFavoriteSelectScalar = {
+    id?: boolean
+    uuid?: boolean
+    user_uuid?: boolean
+    nav_key?: boolean
+    order_index?: boolean
+    created_at?: boolean
+  }
+
+  export type SidebarFavoriteOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "user_uuid" | "nav_key" | "order_index" | "created_at", ExtArgs["result"]["sidebarFavorite"]>
+  export type SidebarFavoriteInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type SidebarFavoriteIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type SidebarFavoriteIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $SidebarFavoritePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SidebarFavorite"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      uuid: string
+      user_uuid: string
+      nav_key: string
+      order_index: number
+      created_at: Date
+    }, ExtArgs["result"]["sidebarFavorite"]>
+    composites: {}
+  }
+
+  type SidebarFavoriteGetPayload<S extends boolean | null | undefined | SidebarFavoriteDefaultArgs> = $Result.GetResult<Prisma.$SidebarFavoritePayload, S>
+
+  type SidebarFavoriteCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SidebarFavoriteFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SidebarFavoriteCountAggregateInputType | true
+    }
+
+  export interface SidebarFavoriteDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SidebarFavorite'], meta: { name: 'SidebarFavorite' } }
+    /**
+     * Find zero or one SidebarFavorite that matches the filter.
+     * @param {SidebarFavoriteFindUniqueArgs} args - Arguments to find a SidebarFavorite
+     * @example
+     * // Get one SidebarFavorite
+     * const sidebarFavorite = await prisma.sidebarFavorite.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SidebarFavoriteFindUniqueArgs>(args: SelectSubset<T, SidebarFavoriteFindUniqueArgs<ExtArgs>>): Prisma__SidebarFavoriteClient<$Result.GetResult<Prisma.$SidebarFavoritePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one SidebarFavorite that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SidebarFavoriteFindUniqueOrThrowArgs} args - Arguments to find a SidebarFavorite
+     * @example
+     * // Get one SidebarFavorite
+     * const sidebarFavorite = await prisma.sidebarFavorite.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SidebarFavoriteFindUniqueOrThrowArgs>(args: SelectSubset<T, SidebarFavoriteFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SidebarFavoriteClient<$Result.GetResult<Prisma.$SidebarFavoritePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SidebarFavorite that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SidebarFavoriteFindFirstArgs} args - Arguments to find a SidebarFavorite
+     * @example
+     * // Get one SidebarFavorite
+     * const sidebarFavorite = await prisma.sidebarFavorite.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SidebarFavoriteFindFirstArgs>(args?: SelectSubset<T, SidebarFavoriteFindFirstArgs<ExtArgs>>): Prisma__SidebarFavoriteClient<$Result.GetResult<Prisma.$SidebarFavoritePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SidebarFavorite that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SidebarFavoriteFindFirstOrThrowArgs} args - Arguments to find a SidebarFavorite
+     * @example
+     * // Get one SidebarFavorite
+     * const sidebarFavorite = await prisma.sidebarFavorite.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SidebarFavoriteFindFirstOrThrowArgs>(args?: SelectSubset<T, SidebarFavoriteFindFirstOrThrowArgs<ExtArgs>>): Prisma__SidebarFavoriteClient<$Result.GetResult<Prisma.$SidebarFavoritePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more SidebarFavorites that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SidebarFavoriteFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SidebarFavorites
+     * const sidebarFavorites = await prisma.sidebarFavorite.findMany()
+     * 
+     * // Get first 10 SidebarFavorites
+     * const sidebarFavorites = await prisma.sidebarFavorite.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const sidebarFavoriteWithIdOnly = await prisma.sidebarFavorite.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SidebarFavoriteFindManyArgs>(args?: SelectSubset<T, SidebarFavoriteFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SidebarFavoritePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a SidebarFavorite.
+     * @param {SidebarFavoriteCreateArgs} args - Arguments to create a SidebarFavorite.
+     * @example
+     * // Create one SidebarFavorite
+     * const SidebarFavorite = await prisma.sidebarFavorite.create({
+     *   data: {
+     *     // ... data to create a SidebarFavorite
+     *   }
+     * })
+     * 
+     */
+    create<T extends SidebarFavoriteCreateArgs>(args: SelectSubset<T, SidebarFavoriteCreateArgs<ExtArgs>>): Prisma__SidebarFavoriteClient<$Result.GetResult<Prisma.$SidebarFavoritePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many SidebarFavorites.
+     * @param {SidebarFavoriteCreateManyArgs} args - Arguments to create many SidebarFavorites.
+     * @example
+     * // Create many SidebarFavorites
+     * const sidebarFavorite = await prisma.sidebarFavorite.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SidebarFavoriteCreateManyArgs>(args?: SelectSubset<T, SidebarFavoriteCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SidebarFavorites and returns the data saved in the database.
+     * @param {SidebarFavoriteCreateManyAndReturnArgs} args - Arguments to create many SidebarFavorites.
+     * @example
+     * // Create many SidebarFavorites
+     * const sidebarFavorite = await prisma.sidebarFavorite.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SidebarFavorites and only return the `id`
+     * const sidebarFavoriteWithIdOnly = await prisma.sidebarFavorite.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SidebarFavoriteCreateManyAndReturnArgs>(args?: SelectSubset<T, SidebarFavoriteCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SidebarFavoritePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a SidebarFavorite.
+     * @param {SidebarFavoriteDeleteArgs} args - Arguments to delete one SidebarFavorite.
+     * @example
+     * // Delete one SidebarFavorite
+     * const SidebarFavorite = await prisma.sidebarFavorite.delete({
+     *   where: {
+     *     // ... filter to delete one SidebarFavorite
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SidebarFavoriteDeleteArgs>(args: SelectSubset<T, SidebarFavoriteDeleteArgs<ExtArgs>>): Prisma__SidebarFavoriteClient<$Result.GetResult<Prisma.$SidebarFavoritePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one SidebarFavorite.
+     * @param {SidebarFavoriteUpdateArgs} args - Arguments to update one SidebarFavorite.
+     * @example
+     * // Update one SidebarFavorite
+     * const sidebarFavorite = await prisma.sidebarFavorite.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SidebarFavoriteUpdateArgs>(args: SelectSubset<T, SidebarFavoriteUpdateArgs<ExtArgs>>): Prisma__SidebarFavoriteClient<$Result.GetResult<Prisma.$SidebarFavoritePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more SidebarFavorites.
+     * @param {SidebarFavoriteDeleteManyArgs} args - Arguments to filter SidebarFavorites to delete.
+     * @example
+     * // Delete a few SidebarFavorites
+     * const { count } = await prisma.sidebarFavorite.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SidebarFavoriteDeleteManyArgs>(args?: SelectSubset<T, SidebarFavoriteDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SidebarFavorites.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SidebarFavoriteUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SidebarFavorites
+     * const sidebarFavorite = await prisma.sidebarFavorite.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SidebarFavoriteUpdateManyArgs>(args: SelectSubset<T, SidebarFavoriteUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SidebarFavorites and returns the data updated in the database.
+     * @param {SidebarFavoriteUpdateManyAndReturnArgs} args - Arguments to update many SidebarFavorites.
+     * @example
+     * // Update many SidebarFavorites
+     * const sidebarFavorite = await prisma.sidebarFavorite.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more SidebarFavorites and only return the `id`
+     * const sidebarFavoriteWithIdOnly = await prisma.sidebarFavorite.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SidebarFavoriteUpdateManyAndReturnArgs>(args: SelectSubset<T, SidebarFavoriteUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SidebarFavoritePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one SidebarFavorite.
+     * @param {SidebarFavoriteUpsertArgs} args - Arguments to update or create a SidebarFavorite.
+     * @example
+     * // Update or create a SidebarFavorite
+     * const sidebarFavorite = await prisma.sidebarFavorite.upsert({
+     *   create: {
+     *     // ... data to create a SidebarFavorite
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SidebarFavorite we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SidebarFavoriteUpsertArgs>(args: SelectSubset<T, SidebarFavoriteUpsertArgs<ExtArgs>>): Prisma__SidebarFavoriteClient<$Result.GetResult<Prisma.$SidebarFavoritePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of SidebarFavorites.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SidebarFavoriteCountArgs} args - Arguments to filter SidebarFavorites to count.
+     * @example
+     * // Count the number of SidebarFavorites
+     * const count = await prisma.sidebarFavorite.count({
+     *   where: {
+     *     // ... the filter for the SidebarFavorites we want to count
+     *   }
+     * })
+    **/
+    count<T extends SidebarFavoriteCountArgs>(
+      args?: Subset<T, SidebarFavoriteCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SidebarFavoriteCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SidebarFavorite.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SidebarFavoriteAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SidebarFavoriteAggregateArgs>(args: Subset<T, SidebarFavoriteAggregateArgs>): Prisma.PrismaPromise<GetSidebarFavoriteAggregateType<T>>
+
+    /**
+     * Group by SidebarFavorite.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SidebarFavoriteGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SidebarFavoriteGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SidebarFavoriteGroupByArgs['orderBy'] }
+        : { orderBy?: SidebarFavoriteGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SidebarFavoriteGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSidebarFavoriteGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SidebarFavorite model
+   */
+  readonly fields: SidebarFavoriteFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SidebarFavorite.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SidebarFavoriteClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SidebarFavorite model
+   */
+  interface SidebarFavoriteFieldRefs {
+    readonly id: FieldRef<"SidebarFavorite", 'Int'>
+    readonly uuid: FieldRef<"SidebarFavorite", 'String'>
+    readonly user_uuid: FieldRef<"SidebarFavorite", 'String'>
+    readonly nav_key: FieldRef<"SidebarFavorite", 'String'>
+    readonly order_index: FieldRef<"SidebarFavorite", 'Int'>
+    readonly created_at: FieldRef<"SidebarFavorite", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SidebarFavorite findUnique
+   */
+  export type SidebarFavoriteFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SidebarFavorite
+     */
+    select?: SidebarFavoriteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SidebarFavorite
+     */
+    omit?: SidebarFavoriteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SidebarFavoriteInclude<ExtArgs> | null
+    /**
+     * Filter, which SidebarFavorite to fetch.
+     */
+    where: SidebarFavoriteWhereUniqueInput
+  }
+
+  /**
+   * SidebarFavorite findUniqueOrThrow
+   */
+  export type SidebarFavoriteFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SidebarFavorite
+     */
+    select?: SidebarFavoriteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SidebarFavorite
+     */
+    omit?: SidebarFavoriteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SidebarFavoriteInclude<ExtArgs> | null
+    /**
+     * Filter, which SidebarFavorite to fetch.
+     */
+    where: SidebarFavoriteWhereUniqueInput
+  }
+
+  /**
+   * SidebarFavorite findFirst
+   */
+  export type SidebarFavoriteFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SidebarFavorite
+     */
+    select?: SidebarFavoriteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SidebarFavorite
+     */
+    omit?: SidebarFavoriteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SidebarFavoriteInclude<ExtArgs> | null
+    /**
+     * Filter, which SidebarFavorite to fetch.
+     */
+    where?: SidebarFavoriteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SidebarFavorites to fetch.
+     */
+    orderBy?: SidebarFavoriteOrderByWithRelationInput | SidebarFavoriteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SidebarFavorites.
+     */
+    cursor?: SidebarFavoriteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SidebarFavorites from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SidebarFavorites.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SidebarFavorites.
+     */
+    distinct?: SidebarFavoriteScalarFieldEnum | SidebarFavoriteScalarFieldEnum[]
+  }
+
+  /**
+   * SidebarFavorite findFirstOrThrow
+   */
+  export type SidebarFavoriteFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SidebarFavorite
+     */
+    select?: SidebarFavoriteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SidebarFavorite
+     */
+    omit?: SidebarFavoriteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SidebarFavoriteInclude<ExtArgs> | null
+    /**
+     * Filter, which SidebarFavorite to fetch.
+     */
+    where?: SidebarFavoriteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SidebarFavorites to fetch.
+     */
+    orderBy?: SidebarFavoriteOrderByWithRelationInput | SidebarFavoriteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SidebarFavorites.
+     */
+    cursor?: SidebarFavoriteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SidebarFavorites from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SidebarFavorites.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SidebarFavorites.
+     */
+    distinct?: SidebarFavoriteScalarFieldEnum | SidebarFavoriteScalarFieldEnum[]
+  }
+
+  /**
+   * SidebarFavorite findMany
+   */
+  export type SidebarFavoriteFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SidebarFavorite
+     */
+    select?: SidebarFavoriteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SidebarFavorite
+     */
+    omit?: SidebarFavoriteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SidebarFavoriteInclude<ExtArgs> | null
+    /**
+     * Filter, which SidebarFavorites to fetch.
+     */
+    where?: SidebarFavoriteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SidebarFavorites to fetch.
+     */
+    orderBy?: SidebarFavoriteOrderByWithRelationInput | SidebarFavoriteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SidebarFavorites.
+     */
+    cursor?: SidebarFavoriteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SidebarFavorites from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SidebarFavorites.
+     */
+    skip?: number
+    distinct?: SidebarFavoriteScalarFieldEnum | SidebarFavoriteScalarFieldEnum[]
+  }
+
+  /**
+   * SidebarFavorite create
+   */
+  export type SidebarFavoriteCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SidebarFavorite
+     */
+    select?: SidebarFavoriteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SidebarFavorite
+     */
+    omit?: SidebarFavoriteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SidebarFavoriteInclude<ExtArgs> | null
+    /**
+     * The data needed to create a SidebarFavorite.
+     */
+    data: XOR<SidebarFavoriteCreateInput, SidebarFavoriteUncheckedCreateInput>
+  }
+
+  /**
+   * SidebarFavorite createMany
+   */
+  export type SidebarFavoriteCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SidebarFavorites.
+     */
+    data: SidebarFavoriteCreateManyInput | SidebarFavoriteCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SidebarFavorite createManyAndReturn
+   */
+  export type SidebarFavoriteCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SidebarFavorite
+     */
+    select?: SidebarFavoriteSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SidebarFavorite
+     */
+    omit?: SidebarFavoriteOmit<ExtArgs> | null
+    /**
+     * The data used to create many SidebarFavorites.
+     */
+    data: SidebarFavoriteCreateManyInput | SidebarFavoriteCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SidebarFavoriteIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SidebarFavorite update
+   */
+  export type SidebarFavoriteUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SidebarFavorite
+     */
+    select?: SidebarFavoriteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SidebarFavorite
+     */
+    omit?: SidebarFavoriteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SidebarFavoriteInclude<ExtArgs> | null
+    /**
+     * The data needed to update a SidebarFavorite.
+     */
+    data: XOR<SidebarFavoriteUpdateInput, SidebarFavoriteUncheckedUpdateInput>
+    /**
+     * Choose, which SidebarFavorite to update.
+     */
+    where: SidebarFavoriteWhereUniqueInput
+  }
+
+  /**
+   * SidebarFavorite updateMany
+   */
+  export type SidebarFavoriteUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SidebarFavorites.
+     */
+    data: XOR<SidebarFavoriteUpdateManyMutationInput, SidebarFavoriteUncheckedUpdateManyInput>
+    /**
+     * Filter which SidebarFavorites to update
+     */
+    where?: SidebarFavoriteWhereInput
+    /**
+     * Limit how many SidebarFavorites to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SidebarFavorite updateManyAndReturn
+   */
+  export type SidebarFavoriteUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SidebarFavorite
+     */
+    select?: SidebarFavoriteSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SidebarFavorite
+     */
+    omit?: SidebarFavoriteOmit<ExtArgs> | null
+    /**
+     * The data used to update SidebarFavorites.
+     */
+    data: XOR<SidebarFavoriteUpdateManyMutationInput, SidebarFavoriteUncheckedUpdateManyInput>
+    /**
+     * Filter which SidebarFavorites to update
+     */
+    where?: SidebarFavoriteWhereInput
+    /**
+     * Limit how many SidebarFavorites to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SidebarFavoriteIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SidebarFavorite upsert
+   */
+  export type SidebarFavoriteUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SidebarFavorite
+     */
+    select?: SidebarFavoriteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SidebarFavorite
+     */
+    omit?: SidebarFavoriteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SidebarFavoriteInclude<ExtArgs> | null
+    /**
+     * The filter to search for the SidebarFavorite to update in case it exists.
+     */
+    where: SidebarFavoriteWhereUniqueInput
+    /**
+     * In case the SidebarFavorite found by the `where` argument doesn't exist, create a new SidebarFavorite with this data.
+     */
+    create: XOR<SidebarFavoriteCreateInput, SidebarFavoriteUncheckedCreateInput>
+    /**
+     * In case the SidebarFavorite was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SidebarFavoriteUpdateInput, SidebarFavoriteUncheckedUpdateInput>
+  }
+
+  /**
+   * SidebarFavorite delete
+   */
+  export type SidebarFavoriteDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SidebarFavorite
+     */
+    select?: SidebarFavoriteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SidebarFavorite
+     */
+    omit?: SidebarFavoriteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SidebarFavoriteInclude<ExtArgs> | null
+    /**
+     * Filter which SidebarFavorite to delete.
+     */
+    where: SidebarFavoriteWhereUniqueInput
+  }
+
+  /**
+   * SidebarFavorite deleteMany
+   */
+  export type SidebarFavoriteDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SidebarFavorites to delete
+     */
+    where?: SidebarFavoriteWhereInput
+    /**
+     * Limit how many SidebarFavorites to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * SidebarFavorite without action
+   */
+  export type SidebarFavoriteDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SidebarFavorite
+     */
+    select?: SidebarFavoriteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SidebarFavorite
+     */
+    omit?: SidebarFavoriteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SidebarFavoriteInclude<ExtArgs> | null
   }
 
 
@@ -79512,6 +80749,18 @@ export namespace Prisma {
   export type SavedContactFilterScalarFieldEnum = (typeof SavedContactFilterScalarFieldEnum)[keyof typeof SavedContactFilterScalarFieldEnum]
 
 
+  export const SidebarFavoriteScalarFieldEnum: {
+    id: 'id',
+    uuid: 'uuid',
+    user_uuid: 'user_uuid',
+    nav_key: 'nav_key',
+    order_index: 'order_index',
+    created_at: 'created_at'
+  };
+
+  export type SidebarFavoriteScalarFieldEnum = (typeof SidebarFavoriteScalarFieldEnum)[keyof typeof SidebarFavoriteScalarFieldEnum]
+
+
   export const ScoringInstructionScalarFieldEnum: {
     id: 'id',
     uuid: 'uuid',
@@ -81351,6 +82600,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestListRelationFilter
     bulk_jobs_created?: BulkJobListRelationFilter
     openai_batch_jobs_created?: OpenAiBatchJobListRelationFilter
+    sidebar_favorites?: SidebarFavoriteListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -81373,6 +82623,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestOrderByRelationAggregateInput
     bulk_jobs_created?: BulkJobOrderByRelationAggregateInput
     openai_batch_jobs_created?: OpenAiBatchJobOrderByRelationAggregateInput
+    sidebar_favorites?: SidebarFavoriteOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -81398,6 +82649,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestListRelationFilter
     bulk_jobs_created?: BulkJobListRelationFilter
     openai_batch_jobs_created?: OpenAiBatchJobListRelationFilter
+    sidebar_favorites?: SidebarFavoriteListRelationFilter
   }, "id" | "uuid" | "email" | "phone">
 
   export type UserOrderByWithAggregationInput = {
@@ -81953,6 +83205,69 @@ export namespace Prisma {
     filters?: JsonWithAggregatesFilter<"SavedContactFilter">
     created_at?: DateTimeWithAggregatesFilter<"SavedContactFilter"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"SavedContactFilter"> | Date | string
+  }
+
+  export type SidebarFavoriteWhereInput = {
+    AND?: SidebarFavoriteWhereInput | SidebarFavoriteWhereInput[]
+    OR?: SidebarFavoriteWhereInput[]
+    NOT?: SidebarFavoriteWhereInput | SidebarFavoriteWhereInput[]
+    id?: IntFilter<"SidebarFavorite"> | number
+    uuid?: StringFilter<"SidebarFavorite"> | string
+    user_uuid?: StringFilter<"SidebarFavorite"> | string
+    nav_key?: StringFilter<"SidebarFavorite"> | string
+    order_index?: IntFilter<"SidebarFavorite"> | number
+    created_at?: DateTimeFilter<"SidebarFavorite"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type SidebarFavoriteOrderByWithRelationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    user_uuid?: SortOrder
+    nav_key?: SortOrder
+    order_index?: SortOrder
+    created_at?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type SidebarFavoriteWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    uuid?: string
+    user_uuid_nav_key?: SidebarFavoriteUser_uuidNav_keyCompoundUniqueInput
+    AND?: SidebarFavoriteWhereInput | SidebarFavoriteWhereInput[]
+    OR?: SidebarFavoriteWhereInput[]
+    NOT?: SidebarFavoriteWhereInput | SidebarFavoriteWhereInput[]
+    user_uuid?: StringFilter<"SidebarFavorite"> | string
+    nav_key?: StringFilter<"SidebarFavorite"> | string
+    order_index?: IntFilter<"SidebarFavorite"> | number
+    created_at?: DateTimeFilter<"SidebarFavorite"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "uuid" | "user_uuid_nav_key">
+
+  export type SidebarFavoriteOrderByWithAggregationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    user_uuid?: SortOrder
+    nav_key?: SortOrder
+    order_index?: SortOrder
+    created_at?: SortOrder
+    _count?: SidebarFavoriteCountOrderByAggregateInput
+    _avg?: SidebarFavoriteAvgOrderByAggregateInput
+    _max?: SidebarFavoriteMaxOrderByAggregateInput
+    _min?: SidebarFavoriteMinOrderByAggregateInput
+    _sum?: SidebarFavoriteSumOrderByAggregateInput
+  }
+
+  export type SidebarFavoriteScalarWhereWithAggregatesInput = {
+    AND?: SidebarFavoriteScalarWhereWithAggregatesInput | SidebarFavoriteScalarWhereWithAggregatesInput[]
+    OR?: SidebarFavoriteScalarWhereWithAggregatesInput[]
+    NOT?: SidebarFavoriteScalarWhereWithAggregatesInput | SidebarFavoriteScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"SidebarFavorite"> | number
+    uuid?: StringWithAggregatesFilter<"SidebarFavorite"> | string
+    user_uuid?: StringWithAggregatesFilter<"SidebarFavorite"> | string
+    nav_key?: StringWithAggregatesFilter<"SidebarFavorite"> | string
+    order_index?: IntWithAggregatesFilter<"SidebarFavorite"> | number
+    created_at?: DateTimeWithAggregatesFilter<"SidebarFavorite"> | Date | string
   }
 
   export type ScoringInstructionWhereInput = {
@@ -87143,6 +88458,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
     bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
     openai_batch_jobs_created?: OpenAiBatchJobCreateNestedManyWithoutUserInput
+    sidebar_favorites?: SidebarFavoriteCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -87165,6 +88481,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
     bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedCreateNestedManyWithoutUserInput
+    sidebar_favorites?: SidebarFavoriteUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -87186,6 +88503,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
     bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
     openai_batch_jobs_created?: OpenAiBatchJobUpdateManyWithoutUserNestedInput
+    sidebar_favorites?: SidebarFavoriteUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -87208,6 +88526,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
     bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedUpdateManyWithoutUserNestedInput
+    sidebar_favorites?: SidebarFavoriteUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -87817,6 +89136,65 @@ export namespace Prisma {
     filters?: JsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SidebarFavoriteCreateInput = {
+    uuid?: string
+    nav_key: string
+    order_index?: number
+    created_at?: Date | string
+    user: UserCreateNestedOneWithoutSidebar_favoritesInput
+  }
+
+  export type SidebarFavoriteUncheckedCreateInput = {
+    id?: number
+    uuid?: string
+    user_uuid: string
+    nav_key: string
+    order_index?: number
+    created_at?: Date | string
+  }
+
+  export type SidebarFavoriteUpdateInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    nav_key?: StringFieldUpdateOperationsInput | string
+    order_index?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutSidebar_favoritesNestedInput
+  }
+
+  export type SidebarFavoriteUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    user_uuid?: StringFieldUpdateOperationsInput | string
+    nav_key?: StringFieldUpdateOperationsInput | string
+    order_index?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SidebarFavoriteCreateManyInput = {
+    id?: number
+    uuid?: string
+    user_uuid: string
+    nav_key: string
+    order_index?: number
+    created_at?: Date | string
+  }
+
+  export type SidebarFavoriteUpdateManyMutationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    nav_key?: StringFieldUpdateOperationsInput | string
+    order_index?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SidebarFavoriteUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    user_uuid?: StringFieldUpdateOperationsInput | string
+    nav_key?: StringFieldUpdateOperationsInput | string
+    order_index?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ScoringInstructionCreateInput = {
@@ -93533,6 +94911,12 @@ export namespace Prisma {
     none?: OpenAiBatchJobWhereInput
   }
 
+  export type SidebarFavoriteListRelationFilter = {
+    every?: SidebarFavoriteWhereInput
+    some?: SidebarFavoriteWhereInput
+    none?: SidebarFavoriteWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -93575,6 +94959,10 @@ export namespace Prisma {
   }
 
   export type OpenAiBatchJobOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type SidebarFavoriteOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -94371,6 +95759,48 @@ export namespace Prisma {
 
   export type SavedContactFilterSumOrderByAggregateInput = {
     id?: SortOrder
+  }
+
+  export type SidebarFavoriteUser_uuidNav_keyCompoundUniqueInput = {
+    user_uuid: string
+    nav_key: string
+  }
+
+  export type SidebarFavoriteCountOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    user_uuid?: SortOrder
+    nav_key?: SortOrder
+    order_index?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type SidebarFavoriteAvgOrderByAggregateInput = {
+    id?: SortOrder
+    order_index?: SortOrder
+  }
+
+  export type SidebarFavoriteMaxOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    user_uuid?: SortOrder
+    nav_key?: SortOrder
+    order_index?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type SidebarFavoriteMinOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    user_uuid?: SortOrder
+    nav_key?: SortOrder
+    order_index?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type SidebarFavoriteSumOrderByAggregateInput = {
+    id?: SortOrder
+    order_index?: SortOrder
   }
 
   export type ContactScoreListRelationFilter = {
@@ -98664,6 +100094,13 @@ export namespace Prisma {
     connect?: OpenAiBatchJobWhereUniqueInput | OpenAiBatchJobWhereUniqueInput[]
   }
 
+  export type SidebarFavoriteCreateNestedManyWithoutUserInput = {
+    create?: XOR<SidebarFavoriteCreateWithoutUserInput, SidebarFavoriteUncheckedCreateWithoutUserInput> | SidebarFavoriteCreateWithoutUserInput[] | SidebarFavoriteUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SidebarFavoriteCreateOrConnectWithoutUserInput | SidebarFavoriteCreateOrConnectWithoutUserInput[]
+    createMany?: SidebarFavoriteCreateManyUserInputEnvelope
+    connect?: SidebarFavoriteWhereUniqueInput | SidebarFavoriteWhereUniqueInput[]
+  }
+
   export type OrganisationMemberUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<OrganisationMemberCreateWithoutUserInput, OrganisationMemberUncheckedCreateWithoutUserInput> | OrganisationMemberCreateWithoutUserInput[] | OrganisationMemberUncheckedCreateWithoutUserInput[]
     connectOrCreate?: OrganisationMemberCreateOrConnectWithoutUserInput | OrganisationMemberCreateOrConnectWithoutUserInput[]
@@ -98732,6 +100169,13 @@ export namespace Prisma {
     connectOrCreate?: OpenAiBatchJobCreateOrConnectWithoutUserInput | OpenAiBatchJobCreateOrConnectWithoutUserInput[]
     createMany?: OpenAiBatchJobCreateManyUserInputEnvelope
     connect?: OpenAiBatchJobWhereUniqueInput | OpenAiBatchJobWhereUniqueInput[]
+  }
+
+  export type SidebarFavoriteUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<SidebarFavoriteCreateWithoutUserInput, SidebarFavoriteUncheckedCreateWithoutUserInput> | SidebarFavoriteCreateWithoutUserInput[] | SidebarFavoriteUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SidebarFavoriteCreateOrConnectWithoutUserInput | SidebarFavoriteCreateOrConnectWithoutUserInput[]
+    createMany?: SidebarFavoriteCreateManyUserInputEnvelope
+    connect?: SidebarFavoriteWhereUniqueInput | SidebarFavoriteWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -98890,6 +100334,20 @@ export namespace Prisma {
     deleteMany?: OpenAiBatchJobScalarWhereInput | OpenAiBatchJobScalarWhereInput[]
   }
 
+  export type SidebarFavoriteUpdateManyWithoutUserNestedInput = {
+    create?: XOR<SidebarFavoriteCreateWithoutUserInput, SidebarFavoriteUncheckedCreateWithoutUserInput> | SidebarFavoriteCreateWithoutUserInput[] | SidebarFavoriteUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SidebarFavoriteCreateOrConnectWithoutUserInput | SidebarFavoriteCreateOrConnectWithoutUserInput[]
+    upsert?: SidebarFavoriteUpsertWithWhereUniqueWithoutUserInput | SidebarFavoriteUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: SidebarFavoriteCreateManyUserInputEnvelope
+    set?: SidebarFavoriteWhereUniqueInput | SidebarFavoriteWhereUniqueInput[]
+    disconnect?: SidebarFavoriteWhereUniqueInput | SidebarFavoriteWhereUniqueInput[]
+    delete?: SidebarFavoriteWhereUniqueInput | SidebarFavoriteWhereUniqueInput[]
+    connect?: SidebarFavoriteWhereUniqueInput | SidebarFavoriteWhereUniqueInput[]
+    update?: SidebarFavoriteUpdateWithWhereUniqueWithoutUserInput | SidebarFavoriteUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: SidebarFavoriteUpdateManyWithWhereWithoutUserInput | SidebarFavoriteUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: SidebarFavoriteScalarWhereInput | SidebarFavoriteScalarWhereInput[]
+  }
+
   export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
@@ -99036,6 +100494,20 @@ export namespace Prisma {
     update?: OpenAiBatchJobUpdateWithWhereUniqueWithoutUserInput | OpenAiBatchJobUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: OpenAiBatchJobUpdateManyWithWhereWithoutUserInput | OpenAiBatchJobUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: OpenAiBatchJobScalarWhereInput | OpenAiBatchJobScalarWhereInput[]
+  }
+
+  export type SidebarFavoriteUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<SidebarFavoriteCreateWithoutUserInput, SidebarFavoriteUncheckedCreateWithoutUserInput> | SidebarFavoriteCreateWithoutUserInput[] | SidebarFavoriteUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SidebarFavoriteCreateOrConnectWithoutUserInput | SidebarFavoriteCreateOrConnectWithoutUserInput[]
+    upsert?: SidebarFavoriteUpsertWithWhereUniqueWithoutUserInput | SidebarFavoriteUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: SidebarFavoriteCreateManyUserInputEnvelope
+    set?: SidebarFavoriteWhereUniqueInput | SidebarFavoriteWhereUniqueInput[]
+    disconnect?: SidebarFavoriteWhereUniqueInput | SidebarFavoriteWhereUniqueInput[]
+    delete?: SidebarFavoriteWhereUniqueInput | SidebarFavoriteWhereUniqueInput[]
+    connect?: SidebarFavoriteWhereUniqueInput | SidebarFavoriteWhereUniqueInput[]
+    update?: SidebarFavoriteUpdateWithWhereUniqueWithoutUserInput | SidebarFavoriteUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: SidebarFavoriteUpdateManyWithWhereWithoutUserInput | SidebarFavoriteUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: SidebarFavoriteScalarWhereInput | SidebarFavoriteScalarWhereInput[]
   }
 
   export type OrganisationMemberCreateNestedManyWithoutOrganisationInput = {
@@ -100732,6 +102204,20 @@ export namespace Prisma {
     upsert?: OrganisationUpsertWithoutSaved_contact_filtersInput
     connect?: OrganisationWhereUniqueInput
     update?: XOR<XOR<OrganisationUpdateToOneWithWhereWithoutSaved_contact_filtersInput, OrganisationUpdateWithoutSaved_contact_filtersInput>, OrganisationUncheckedUpdateWithoutSaved_contact_filtersInput>
+  }
+
+  export type UserCreateNestedOneWithoutSidebar_favoritesInput = {
+    create?: XOR<UserCreateWithoutSidebar_favoritesInput, UserUncheckedCreateWithoutSidebar_favoritesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutSidebar_favoritesInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutSidebar_favoritesNestedInput = {
+    create?: XOR<UserCreateWithoutSidebar_favoritesInput, UserUncheckedCreateWithoutSidebar_favoritesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutSidebar_favoritesInput
+    upsert?: UserUpsertWithoutSidebar_favoritesInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutSidebar_favoritesInput, UserUpdateWithoutSidebar_favoritesInput>, UserUncheckedUpdateWithoutSidebar_favoritesInput>
   }
 
   export type OrganisationCreateNestedOneWithoutScoring_instructionsInput = {
@@ -106091,6 +107577,31 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type SidebarFavoriteCreateWithoutUserInput = {
+    uuid?: string
+    nav_key: string
+    order_index?: number
+    created_at?: Date | string
+  }
+
+  export type SidebarFavoriteUncheckedCreateWithoutUserInput = {
+    id?: number
+    uuid?: string
+    nav_key: string
+    order_index?: number
+    created_at?: Date | string
+  }
+
+  export type SidebarFavoriteCreateOrConnectWithoutUserInput = {
+    where: SidebarFavoriteWhereUniqueInput
+    create: XOR<SidebarFavoriteCreateWithoutUserInput, SidebarFavoriteUncheckedCreateWithoutUserInput>
+  }
+
+  export type SidebarFavoriteCreateManyUserInputEnvelope = {
+    data: SidebarFavoriteCreateManyUserInput | SidebarFavoriteCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type OrganisationMemberUpsertWithWhereUniqueWithoutUserInput = {
     where: OrganisationMemberWhereUniqueInput
     update: XOR<OrganisationMemberUpdateWithoutUserInput, OrganisationMemberUncheckedUpdateWithoutUserInput>
@@ -106452,6 +107963,34 @@ export namespace Prisma {
     context?: JsonNullableFilter<"OpenAiBatchJob">
     created_at?: DateTimeFilter<"OpenAiBatchJob"> | Date | string
     updated_at?: DateTimeFilter<"OpenAiBatchJob"> | Date | string
+  }
+
+  export type SidebarFavoriteUpsertWithWhereUniqueWithoutUserInput = {
+    where: SidebarFavoriteWhereUniqueInput
+    update: XOR<SidebarFavoriteUpdateWithoutUserInput, SidebarFavoriteUncheckedUpdateWithoutUserInput>
+    create: XOR<SidebarFavoriteCreateWithoutUserInput, SidebarFavoriteUncheckedCreateWithoutUserInput>
+  }
+
+  export type SidebarFavoriteUpdateWithWhereUniqueWithoutUserInput = {
+    where: SidebarFavoriteWhereUniqueInput
+    data: XOR<SidebarFavoriteUpdateWithoutUserInput, SidebarFavoriteUncheckedUpdateWithoutUserInput>
+  }
+
+  export type SidebarFavoriteUpdateManyWithWhereWithoutUserInput = {
+    where: SidebarFavoriteScalarWhereInput
+    data: XOR<SidebarFavoriteUpdateManyMutationInput, SidebarFavoriteUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type SidebarFavoriteScalarWhereInput = {
+    AND?: SidebarFavoriteScalarWhereInput | SidebarFavoriteScalarWhereInput[]
+    OR?: SidebarFavoriteScalarWhereInput[]
+    NOT?: SidebarFavoriteScalarWhereInput | SidebarFavoriteScalarWhereInput[]
+    id?: IntFilter<"SidebarFavorite"> | number
+    uuid?: StringFilter<"SidebarFavorite"> | string
+    user_uuid?: StringFilter<"SidebarFavorite"> | string
+    nav_key?: StringFilter<"SidebarFavorite"> | string
+    order_index?: IntFilter<"SidebarFavorite"> | number
+    created_at?: DateTimeFilter<"SidebarFavorite"> | Date | string
   }
 
   export type OrganisationMemberCreateWithoutOrganisationInput = {
@@ -108940,6 +110479,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
     bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
     openai_batch_jobs_created?: OpenAiBatchJobCreateNestedManyWithoutUserInput
+    sidebar_favorites?: SidebarFavoriteCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutMembershipsInput = {
@@ -108961,6 +110501,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
     bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedCreateNestedManyWithoutUserInput
+    sidebar_favorites?: SidebarFavoriteUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutMembershipsInput = {
@@ -109091,6 +110632,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
     bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
     openai_batch_jobs_created?: OpenAiBatchJobUpdateManyWithoutUserNestedInput
+    sidebar_favorites?: SidebarFavoriteUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMembershipsInput = {
@@ -109112,6 +110654,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
     bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedUpdateManyWithoutUserNestedInput
+    sidebar_favorites?: SidebarFavoriteUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganisationCreateWithoutInvitationsInput = {
@@ -109220,6 +110763,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
     bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
     openai_batch_jobs_created?: OpenAiBatchJobCreateNestedManyWithoutUserInput
+    sidebar_favorites?: SidebarFavoriteCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutInvitations_sentInput = {
@@ -109241,6 +110785,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
     bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedCreateNestedManyWithoutUserInput
+    sidebar_favorites?: SidebarFavoriteUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutInvitations_sentInput = {
@@ -109371,6 +110916,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
     bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
     openai_batch_jobs_created?: OpenAiBatchJobUpdateManyWithoutUserNestedInput
+    sidebar_favorites?: SidebarFavoriteUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInvitations_sentInput = {
@@ -109392,6 +110938,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
     bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedUpdateManyWithoutUserNestedInput
+    sidebar_favorites?: SidebarFavoriteUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganisationCreateWithoutFiltersInput = {
@@ -110230,6 +111777,108 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+  }
+
+  export type UserCreateWithoutSidebar_favoritesInput = {
+    uuid?: string
+    email: string
+    phone?: string | null
+    full_name?: string | null
+    password: string
+    role?: $Enums.AuthRole
+    created_at?: Date | string
+    updated_at?: Date | string
+    memberships?: OrganisationMemberCreateNestedManyWithoutUserInput
+    invitations_sent?: OrganisationInvitationCreateNestedManyWithoutInvited_byInput
+    form_completions?: FormCompletionCreateNestedManyWithoutCompleted_byInput
+    outreach_messages_sent?: OutreachMessageCreateNestedManyWithoutSent_byInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutActorInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutUserInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutUserInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
+    bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
+    openai_batch_jobs_created?: OpenAiBatchJobCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutSidebar_favoritesInput = {
+    id?: number
+    uuid?: string
+    email: string
+    phone?: string | null
+    full_name?: string | null
+    password: string
+    role?: $Enums.AuthRole
+    created_at?: Date | string
+    updated_at?: Date | string
+    memberships?: OrganisationMemberUncheckedCreateNestedManyWithoutUserInput
+    invitations_sent?: OrganisationInvitationUncheckedCreateNestedManyWithoutInvited_byInput
+    form_completions?: FormCompletionUncheckedCreateNestedManyWithoutCompleted_byInput
+    outreach_messages_sent?: OutreachMessageUncheckedCreateNestedManyWithoutSent_byInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutActorInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutUserInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutUserInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
+    bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
+    openai_batch_jobs_created?: OpenAiBatchJobUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutSidebar_favoritesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutSidebar_favoritesInput, UserUncheckedCreateWithoutSidebar_favoritesInput>
+  }
+
+  export type UserUpsertWithoutSidebar_favoritesInput = {
+    update: XOR<UserUpdateWithoutSidebar_favoritesInput, UserUncheckedUpdateWithoutSidebar_favoritesInput>
+    create: XOR<UserCreateWithoutSidebar_favoritesInput, UserUncheckedCreateWithoutSidebar_favoritesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutSidebar_favoritesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutSidebar_favoritesInput, UserUncheckedUpdateWithoutSidebar_favoritesInput>
+  }
+
+  export type UserUpdateWithoutSidebar_favoritesInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    full_name?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumAuthRoleFieldUpdateOperationsInput | $Enums.AuthRole
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: OrganisationMemberUpdateManyWithoutUserNestedInput
+    invitations_sent?: OrganisationInvitationUpdateManyWithoutInvited_byNestedInput
+    form_completions?: FormCompletionUpdateManyWithoutCompleted_byNestedInput
+    outreach_messages_sent?: OutreachMessageUpdateManyWithoutSent_byNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutActorNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutUserNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutUserNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
+    bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
+    openai_batch_jobs_created?: OpenAiBatchJobUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutSidebar_favoritesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    full_name?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumAuthRoleFieldUpdateOperationsInput | $Enums.AuthRole
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: OrganisationMemberUncheckedUpdateManyWithoutUserNestedInput
+    invitations_sent?: OrganisationInvitationUncheckedUpdateManyWithoutInvited_byNestedInput
+    form_completions?: FormCompletionUncheckedUpdateManyWithoutCompleted_byNestedInput
+    outreach_messages_sent?: OutreachMessageUncheckedUpdateManyWithoutSent_byNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutActorNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutUserNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutUserNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
+    bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
+    openai_batch_jobs_created?: OpenAiBatchJobUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganisationCreateWithoutScoring_instructionsInput = {
@@ -115428,6 +117077,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
     bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
     openai_batch_jobs_created?: OpenAiBatchJobCreateNestedManyWithoutUserInput
+    sidebar_favorites?: SidebarFavoriteCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutOutreach_messages_sentInput = {
@@ -115449,6 +117099,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
     bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedCreateNestedManyWithoutUserInput
+    sidebar_favorites?: SidebarFavoriteUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutOutreach_messages_sentInput = {
@@ -116009,6 +117660,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
     bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
     openai_batch_jobs_created?: OpenAiBatchJobUpdateManyWithoutUserNestedInput
+    sidebar_favorites?: SidebarFavoriteUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOutreach_messages_sentInput = {
@@ -116030,6 +117682,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
     bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedUpdateManyWithoutUserNestedInput
+    sidebar_favorites?: SidebarFavoriteUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type InteractionUpsertWithWhereUniqueWithoutOutreach_messageInput = {
@@ -118212,6 +119865,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementCreateNestedManyWithoutUserInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
     openai_batch_jobs_created?: OpenAiBatchJobCreateNestedManyWithoutUserInput
+    sidebar_favorites?: SidebarFavoriteCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBulk_jobs_createdInput = {
@@ -118233,6 +119887,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutUserInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedCreateNestedManyWithoutUserInput
+    sidebar_favorites?: SidebarFavoriteUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBulk_jobs_createdInput = {
@@ -118363,6 +120018,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementUpdateManyWithoutUserNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
     openai_batch_jobs_created?: OpenAiBatchJobUpdateManyWithoutUserNestedInput
+    sidebar_favorites?: SidebarFavoriteUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBulk_jobs_createdInput = {
@@ -118384,6 +120040,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutUserNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedUpdateManyWithoutUserNestedInput
+    sidebar_favorites?: SidebarFavoriteUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganisationCreateWithoutWebsite_scrape_requestsInput = {
@@ -120328,6 +121985,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementCreateNestedManyWithoutUserInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
     bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
+    sidebar_favorites?: SidebarFavoriteCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutOpenai_batch_jobs_createdInput = {
@@ -120349,6 +122007,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutUserInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
     bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
+    sidebar_favorites?: SidebarFavoriteUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutOpenai_batch_jobs_createdInput = {
@@ -120479,6 +122138,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementUpdateManyWithoutUserNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
     bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
+    sidebar_favorites?: SidebarFavoriteUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOpenai_batch_jobs_createdInput = {
@@ -120500,6 +122160,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutUserNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
     bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
+    sidebar_favorites?: SidebarFavoriteUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganisationCreateWithoutIntegrationsInput = {
@@ -122659,6 +124320,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
     bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
     openai_batch_jobs_created?: OpenAiBatchJobCreateNestedManyWithoutUserInput
+    sidebar_favorites?: SidebarFavoriteCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutForm_completionsInput = {
@@ -122680,6 +124342,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
     bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedCreateNestedManyWithoutUserInput
+    sidebar_favorites?: SidebarFavoriteUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutForm_completionsInput = {
@@ -122877,6 +124540,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
     bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
     openai_batch_jobs_created?: OpenAiBatchJobUpdateManyWithoutUserNestedInput
+    sidebar_favorites?: SidebarFavoriteUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutForm_completionsInput = {
@@ -122898,6 +124562,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
     bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedUpdateManyWithoutUserNestedInput
+    sidebar_favorites?: SidebarFavoriteUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type FormCompletionValueUpsertWithWhereUniqueWithoutCompletionInput = {
@@ -123876,6 +125541,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
     bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
     openai_batch_jobs_created?: OpenAiBatchJobCreateNestedManyWithoutUserInput
+    sidebar_favorites?: SidebarFavoriteCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutMessaging_goalsInput = {
@@ -123897,6 +125563,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
     bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedCreateNestedManyWithoutUserInput
+    sidebar_favorites?: SidebarFavoriteUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutMessaging_goalsInput = {
@@ -124060,6 +125727,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
     bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
     openai_batch_jobs_created?: OpenAiBatchJobUpdateManyWithoutUserNestedInput
+    sidebar_favorites?: SidebarFavoriteUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMessaging_goalsInput = {
@@ -124081,6 +125749,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
     bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedUpdateManyWithoutUserNestedInput
+    sidebar_favorites?: SidebarFavoriteUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type GoalAchievementUpsertWithWhereUniqueWithoutGoalInput = {
@@ -125573,6 +127242,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
     bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
     openai_batch_jobs_created?: OpenAiBatchJobCreateNestedManyWithoutUserInput
+    sidebar_favorites?: SidebarFavoriteCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutGoal_achievementsInput = {
@@ -125594,6 +127264,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
     bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedCreateNestedManyWithoutUserInput
+    sidebar_favorites?: SidebarFavoriteUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutGoal_achievementsInput = {
@@ -125752,6 +127423,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
     bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
     openai_batch_jobs_created?: OpenAiBatchJobUpdateManyWithoutUserNestedInput
+    sidebar_favorites?: SidebarFavoriteUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutGoal_achievementsInput = {
@@ -125773,6 +127445,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
     bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedUpdateManyWithoutUserNestedInput
+    sidebar_favorites?: SidebarFavoriteUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type MessagingGoalUpsertWithoutAchievementsInput = {
@@ -125915,6 +127588,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementCreateNestedManyWithoutUserInput
     bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
     openai_batch_jobs_created?: OpenAiBatchJobCreateNestedManyWithoutUserInput
+    sidebar_favorites?: SidebarFavoriteCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutGoal_personal_bestsInput = {
@@ -125936,6 +127610,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutUserInput
     bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedCreateNestedManyWithoutUserInput
+    sidebar_favorites?: SidebarFavoriteUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutGoal_personal_bestsInput = {
@@ -126066,6 +127741,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementUpdateManyWithoutUserNestedInput
     bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
     openai_batch_jobs_created?: OpenAiBatchJobUpdateManyWithoutUserNestedInput
+    sidebar_favorites?: SidebarFavoriteUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutGoal_personal_bestsInput = {
@@ -126087,6 +127763,7 @@ export namespace Prisma {
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutUserNestedInput
     bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedUpdateManyWithoutUserNestedInput
+    sidebar_favorites?: SidebarFavoriteUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganisationCreateWithoutActivity_logsInput = {
@@ -126195,6 +127872,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
     bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
     openai_batch_jobs_created?: OpenAiBatchJobCreateNestedManyWithoutUserInput
+    sidebar_favorites?: SidebarFavoriteCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutActivity_logsInput = {
@@ -126216,6 +127894,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
     bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedCreateNestedManyWithoutUserInput
+    sidebar_favorites?: SidebarFavoriteUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutActivity_logsInput = {
@@ -126346,6 +128025,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
     bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
     openai_batch_jobs_created?: OpenAiBatchJobUpdateManyWithoutUserNestedInput
+    sidebar_favorites?: SidebarFavoriteUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutActivity_logsInput = {
@@ -126367,6 +128047,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
     bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedUpdateManyWithoutUserNestedInput
+    sidebar_favorites?: SidebarFavoriteUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganisationMemberCreateManyUserInput = {
@@ -126530,6 +128211,14 @@ export namespace Prisma {
     context?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
     updated_at?: Date | string
+  }
+
+  export type SidebarFavoriteCreateManyUserInput = {
+    id?: number
+    uuid?: string
+    nav_key: string
+    order_index?: number
+    created_at?: Date | string
   }
 
   export type OrganisationMemberUpdateWithoutUserInput = {
@@ -127018,6 +128707,29 @@ export namespace Prisma {
     context?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SidebarFavoriteUpdateWithoutUserInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    nav_key?: StringFieldUpdateOperationsInput | string
+    order_index?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SidebarFavoriteUncheckedUpdateWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    nav_key?: StringFieldUpdateOperationsInput | string
+    order_index?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SidebarFavoriteUncheckedUpdateManyWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    nav_key?: StringFieldUpdateOperationsInput | string
+    order_index?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type OrganisationMemberCreateManyOrganisationInput = {

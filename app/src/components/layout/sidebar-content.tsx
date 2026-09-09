@@ -1,6 +1,14 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { Disclosure } from "@heroui/react";
+import {
+  DragDropContext,
+  Draggable,
+  Droppable,
+  type DraggableProvidedDragHandleProps,
+  type DraggableProvidedDraggableProps,
+  type DropResult,
+} from "@hello-pangea/dnd";
 import { cn } from "@/lib/utils";
 import {
   LayoutDashboard,
@@ -30,9 +38,17 @@ import {
   ListTodo,
   Wrench,
   Workflow,
+  Star,
+  GripVertical,
 } from "lucide-react";
 import { Routes } from "@/routes/routes";
 import { usePermission } from "@/hooks/use-permission";
+import {
+  useAddSidebarFavorite,
+  useRemoveSidebarFavorite,
+  useReorderSidebarFavorites,
+  useSidebarFavorites,
+} from "@/features/sidebar-favorites/hooks/use-sidebar-favorites";
 
 interface SidebarContentProps {
   collapsed: boolean;
@@ -113,6 +129,14 @@ const settingsSubItems: NavItemConfig[] = [
   { label: "Usage", icon: BarChart2, href: Routes.dashboard.settings_usage, end: false },
 ];
 
+const allNavItemsByHref = new Map<string, NavItemConfig>(
+  [...navGroups.flatMap((group) => group.items), ...adminSubItems, ...settingsSubItems].map(
+    (item) => [item.href, item],
+  ),
+);
+
+const adminHrefs = new Set(adminSubItems.map((item) => item.href));
+
 function pathMatchesAnyAdminRoute(pathname: string) {
   return adminSubItems.some(({ href }) => pathname === href || pathname.startsWith(`${href}/`));
 }
@@ -132,6 +156,12 @@ function NavItem({
   collapsed,
   onNavigate,
   indent = false,
+  favorited,
+  onToggleFavorite,
+  innerRef,
+  draggableProps,
+  dragHandleProps,
+  isDragging,
 }: {
   label: string;
   icon: React.ElementType;
@@ -140,9 +170,31 @@ function NavItem({
   collapsed: boolean;
   onNavigate?: () => void;
   indent?: boolean;
+  favorited?: boolean;
+  onToggleFavorite?: () => void;
+  innerRef?: (element: HTMLElement | null) => void;
+  draggableProps?: DraggableProvidedDraggableProps;
+  dragHandleProps?: DraggableProvidedDragHandleProps | null;
+  isDragging?: boolean;
 }) {
   return (
-    <li>
+    <li
+      ref={innerRef}
+      {...draggableProps}
+      className={cn(
+        "group/item flex items-center gap-0.5 rounded-xl",
+        indent && !collapsed && "ml-3 w-[calc(100%-12px)]",
+        isDragging && "bg-surface shadow-md",
+      )}
+    >
+      {dragHandleProps && !collapsed && (
+        <span
+          {...dragHandleProps}
+          className="shrink-0 cursor-grab text-muted/40 hover:text-muted transition-colors pl-1"
+        >
+          <GripVertical className="size-3.5" />
+        </span>
+      )}
       <NavLink
         to={href}
         end={end}
@@ -150,10 +202,9 @@ function NavItem({
         onClick={onNavigate}
         className={({ isActive }) =>
           cn(
-            "group flex items-center w-full rounded-xl transition-all duration-200 outline-none",
+            "group flex items-center flex-1 min-w-0 rounded-xl transition-all duration-200 outline-none",
             "focus-visible:ring-1 focus-visible:ring-accent/50",
             collapsed ? "justify-center py-2.5 px-0" : "gap-2.5 px-2.5 py-[8px]",
-            indent && !collapsed && "ml-3 w-[calc(100%-12px)]",
             isActive
               ? "text-foreground"
               : "text-muted hover:text-foreground hover:bg-surface-secondary",
@@ -185,6 +236,24 @@ function NavItem({
           </>
         )}
       </NavLink>
+      {!collapsed && onToggleFavorite && (
+        <button
+          type="button"
+          title={favorited ? "Remove from favorites" : "Add to favorites"}
+          aria-label={favorited ? "Remove from favorites" : "Add to favorites"}
+          onClick={() => onToggleFavorite()}
+          className={cn(
+            "shrink-0 mr-1 p-1 rounded-md transition-all duration-150",
+            "text-muted hover:text-foreground hover:bg-surface-secondary",
+            favorited ? "opacity-100" : "opacity-0 group-hover/item:opacity-100 focus-visible:opacity-100",
+          )}
+        >
+          <Star
+            className={cn("size-3.5", favorited && "fill-current")}
+            style={favorited ? { color: "var(--accent)" } : undefined}
+          />
+        </button>
+      )}
     </li>
   );
 }
@@ -195,12 +264,16 @@ function NavGroupSection({
   collapsed,
   onNavigate,
   showDivider,
+  favoritedHrefs,
+  onToggleFavorite,
 }: {
   label?: string;
   items: NavItemConfig[];
   collapsed: boolean;
   onNavigate?: () => void;
   showDivider: boolean;
+  favoritedHrefs: Set<string>;
+  onToggleFavorite: (href: string) => void;
 }) {
   return (
     <li className={cn(showDivider && "pt-2.5 mt-2.5 border-t border-border")}>
@@ -219,9 +292,93 @@ function NavGroupSection({
             end={item.end}
             collapsed={collapsed}
             onNavigate={onNavigate}
+            favorited={favoritedHrefs.has(item.href)}
+            onToggleFavorite={() => onToggleFavorite(item.href)}
           />
         ))}
       </ul>
+    </li>
+  );
+}
+
+function FavoritesSection({
+  items,
+  collapsed,
+  onNavigate,
+  onToggleFavorite,
+  onReorder,
+}: {
+  items: NavItemConfig[];
+  collapsed: boolean;
+  onNavigate?: () => void;
+  onToggleFavorite: (href: string) => void;
+  onReorder: (hrefs: string[]) => void;
+}) {
+  const handleDragEnd = (result: DropResult) => {
+    if (!result.destination) return;
+    const from = result.source.index;
+    const to = result.destination.index;
+    if (from === to) return;
+
+    const reordered = [...items];
+    const [moved] = reordered.splice(from, 1);
+    reordered.splice(to, 0, moved);
+    onReorder(reordered.map((item) => item.href));
+  };
+
+  return (
+    <li className="pb-2.5 mb-2.5 border-b border-border">
+      {!collapsed && (
+        <p className="px-2.5 pb-1.5 !text-[12px] font-semibold uppercase tracking-[0.12em] text-muted flex items-center gap-1">
+          <Star className="size-3" />
+          Favorites
+        </p>
+      )}
+      {collapsed ? (
+        <ul className="space-y-0.5">
+          {items.map((item) => (
+            <NavItem
+              key={item.href}
+              label={item.label}
+              icon={item.icon}
+              href={item.href}
+              end={item.end}
+              collapsed={collapsed}
+              onNavigate={onNavigate}
+            />
+          ))}
+        </ul>
+      ) : (
+        <DragDropContext onDragEnd={handleDragEnd}>
+          <Droppable droppableId="sidebar-favorites">
+            {(provided) => (
+              <ul className="space-y-0.5" ref={provided.innerRef} {...provided.droppableProps}>
+                {items.map((item, index) => (
+                  <Draggable key={item.href} draggableId={item.href} index={index}>
+                    {(provided, snapshot) => (
+                      <NavItem
+                        label={item.label}
+                        icon={item.icon}
+                        href={item.href}
+                        end={item.end}
+                        collapsed={collapsed}
+                        onNavigate={onNavigate}
+                        favorited
+                        onToggleFavorite={() => onToggleFavorite(item.href)}
+                        innerRef={provided.innerRef}
+                        draggableProps={provided.draggableProps}
+                        dragHandleProps={provided.dragHandleProps}
+                        isDragging={snapshot.isDragging}
+                      />
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </ul>
+            )}
+          </Droppable>
+        </DragDropContext>
+      )}
     </li>
   );
 }
@@ -232,6 +389,37 @@ export default function SidebarContent({ collapsed, onNavigate }: SidebarContent
   const prevPathname = useRef(pathname);
   const [adminOpen, setAdminOpen] = useState(() => pathMatchesAnyAdminRoute(pathname));
   const [settingsOpen, setSettingsOpen] = useState(() => pathMatchesAnySettingsRoute(pathname));
+
+  const { data: favorites } = useSidebarFavorites();
+  const addFavorite = useAddSidebarFavorite();
+  const removeFavorite = useRemoveSidebarFavorite();
+  const reorderFavorites = useReorderSidebarFavorites();
+
+  const favoritedHrefs = useMemo(
+    () => new Set((favorites ?? []).map((fav) => fav.nav_key)),
+    [favorites],
+  );
+
+  const favoriteItems = useMemo(
+    () =>
+      (favorites ?? [])
+        .map((fav) => allNavItemsByHref.get(fav.nav_key))
+        .filter((item): item is NavItemConfig => Boolean(item))
+        .filter((item) => canViewAdminNav || !adminHrefs.has(item.href)),
+    [favorites, canViewAdminNav],
+  );
+
+  const handleToggleFavorite = (href: string) => {
+    if (favoritedHrefs.has(href)) {
+      removeFavorite.mutate(href);
+    } else {
+      addFavorite.mutate(href);
+    }
+  };
+
+  const handleReorderFavorites = (hrefs: string[]) => {
+    reorderFavorites.mutate(hrefs);
+  };
 
   useEffect(() => {
     if (collapsed) {
@@ -264,6 +452,16 @@ export default function SidebarContent({ collapsed, onNavigate }: SidebarContent
 
   return (
     <ul className="space-y-0">
+      {favoriteItems.length > 0 && (
+        <FavoritesSection
+          items={favoriteItems}
+          collapsed={collapsed}
+          onNavigate={onNavigate}
+          onToggleFavorite={handleToggleFavorite}
+          onReorder={handleReorderFavorites}
+        />
+      )}
+
       {canViewAdminNav && (
         <li className="pb-2.5 mb-2.5 border-b border-border">
           <Disclosure
@@ -315,6 +513,8 @@ export default function SidebarContent({ collapsed, onNavigate }: SidebarContent
                       collapsed={collapsed}
                       onNavigate={onNavigate}
                       indent={true}
+                      favorited={favoritedHrefs.has(href)}
+                      onToggleFavorite={() => handleToggleFavorite(href)}
                     />
                   ))}
                 </ul>
@@ -332,6 +532,8 @@ export default function SidebarContent({ collapsed, onNavigate }: SidebarContent
           collapsed={collapsed}
           onNavigate={onNavigate}
           showDivider={index > 0}
+          favoritedHrefs={favoritedHrefs}
+          onToggleFavorite={handleToggleFavorite}
         />
       ))}
 
@@ -385,6 +587,8 @@ export default function SidebarContent({ collapsed, onNavigate }: SidebarContent
                     collapsed={collapsed}
                     onNavigate={onNavigate}
                     indent={true}
+                    favorited={favoritedHrefs.has(href)}
+                    onToggleFavorite={() => handleToggleFavorite(href)}
                   />
                 ))}
               </ul>

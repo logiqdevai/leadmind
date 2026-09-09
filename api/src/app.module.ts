@@ -52,6 +52,7 @@ import { MailTesterModule } from './modules/mail-tester/mail-tester.module';
 import { MxToolboxModule } from './modules/mxtoolbox/mxtoolbox.module';
 import { OpenAiBatchJobsModule } from './modules/openai-batch-jobs/openai-batch-jobs.module';
 import { ThreadsModule } from './modules/threads/threads.module';
+import { SidebarFavoritesModule } from './modules/sidebar-favorites/sidebar-favorites.module';
 
 @Module({
   imports: [
@@ -95,6 +96,7 @@ import { ThreadsModule } from './modules/threads/threads.module';
     FormsModule,
     ContactListsModule,
     SavedContactFiltersModule,
+    SidebarFavoritesModule,
     ContactAudienceStatsModule,
     GatewaysModule,
     AiUsageModule,

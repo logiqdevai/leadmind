@@ -128,6 +128,13 @@ export const ApiRoutes = {
         update: (uuid: string) => `/saved-contact-filters/${uuid}`,
         remove: (uuid: string) => `/saved-contact-filters/${uuid}`,
     },
+    sidebar_favorites: {
+        prefix: "/sidebar-favorites",
+        list: "/sidebar-favorites",
+        create: "/sidebar-favorites",
+        reorder: "/sidebar-favorites/reorder",
+        remove: (nav_key: string) => `/sidebar-favorites/${encodeURIComponent(nav_key)}`,
+    },
     integrations: {
         prefix: "/integrations",
         list: "/integrations",
