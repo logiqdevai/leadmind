@@ -182,7 +182,7 @@ function NavItem({
       ref={innerRef}
       {...draggableProps}
       className={cn(
-        "group/item flex items-center gap-0.5 rounded-xl",
+        "flex items-center gap-0.5 rounded-xl",
         indent && !collapsed && "ml-3 w-[calc(100%-12px)]",
         isDragging && "bg-surface shadow-md",
       )}
@@ -245,7 +245,7 @@ function NavItem({
           className={cn(
             "shrink-0 mr-1 p-1 rounded-md transition-all duration-150",
             "text-muted hover:text-foreground hover:bg-surface-secondary",
-            favorited ? "opacity-100" : "opacity-0 group-hover/item:opacity-100 focus-visible:opacity-100",
+            favorited ? "opacity-100" : "opacity-40 hover:opacity-100 focus-visible:opacity-100",
           )}
         >
           <Star

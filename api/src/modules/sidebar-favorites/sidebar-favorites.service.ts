@@ -11,7 +11,7 @@ export class SidebarFavoritesService {
     async findAll(user_uuid: string): Promise<SidebarFavorite[]> {
         return this.prisma.sidebarFavorite.findMany({
             where: { user_uuid },
-            orderBy: { order_index: 'asc' },
+            orderBy: [{ order_index: 'asc' }, { id: 'asc' }],
         });
     }
 
@@ -26,17 +26,15 @@ export class SidebarFavoritesService {
             return existing;
         }
 
-        const last = await this.prisma.sidebarFavorite.findFirst({
-            where: { user_uuid },
-            orderBy: { order_index: 'desc' },
-        });
-
+        // New favorites default to order_index 0 and sort after existing ones via
+        // the `id` tiebreak in findAll - avoids a read-then-write race on "last
+        // order_index" when two adds happen concurrently. reorder() below assigns
+        // explicit sequential values once the user actually drags to reorder.
         try {
             return await this.prisma.sidebarFavorite.create({
                 data: {
                     user_uuid,
                     nav_key: dto.nav_key,
-                    order_index: (last?.order_index ?? -1) + 1,
                 },
             });
         } catch (error) {

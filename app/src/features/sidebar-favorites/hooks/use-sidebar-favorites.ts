@@ -41,13 +41,21 @@ export function useAddSidebarFavorite() {
             ]);
             return { previous };
         },
+        // Merge the server-confirmed row in place of the optimistic one instead of
+        // invalidating: an invalidate-triggered refetch can land mid-flight of a
+        // second concurrent add/remove and briefly wipe it back out of the cache.
+        onSuccess: (saved, nav_key) => {
+            qc.setQueryData<SidebarFavorite[]>(sidebarFavoritesQueryKeys.list(), (old) => {
+                const withoutOptimistic = (old ?? []).filter(
+                    (fav) => fav.uuid !== `optimistic-${nav_key}`,
+                );
+                return [...withoutOptimistic, saved];
+            });
+        },
         onError: (_error, _nav_key, ctx) => {
             if (ctx?.previous) {
                 qc.setQueryData(sidebarFavoritesQueryKeys.list(), ctx.previous);
             }
-        },
-        onSettled: () => {
-            qc.invalidateQueries({ queryKey: sidebarFavoritesQueryKeys.all });
         },
     });
 }
@@ -70,9 +78,6 @@ export function useRemoveSidebarFavorite() {
             if (ctx?.previous) {
                 qc.setQueryData(sidebarFavoritesQueryKeys.list(), ctx.previous);
             }
-        },
-        onSettled: () => {
-            qc.invalidateQueries({ queryKey: sidebarFavoritesQueryKeys.all });
         },
     });
 }
@@ -98,13 +103,13 @@ export function useReorderSidebarFavorites() {
             }
             return { previous };
         },
+        onSuccess: (saved) => {
+            qc.setQueryData<SidebarFavorite[]>(sidebarFavoritesQueryKeys.list(), saved);
+        },
         onError: (_error, _nav_keys, ctx) => {
             if (ctx?.previous) {
                 qc.setQueryData(sidebarFavoritesQueryKeys.list(), ctx.previous);
             }
-        },
-        onSettled: () => {
-            qc.invalidateQueries({ queryKey: sidebarFavoritesQueryKeys.all });
         },
     });
 }
