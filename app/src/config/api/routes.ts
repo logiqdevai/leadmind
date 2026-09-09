@@ -76,6 +76,7 @@ export const ApiRoutes = {
         thread: (uuid: string) => `/outreach/messages/${uuid}/thread`,
     },
     threads: {
+        list: "/threads",
         detail: (uuid: string) => `/threads/${uuid}`,
     },
     dashboard: {

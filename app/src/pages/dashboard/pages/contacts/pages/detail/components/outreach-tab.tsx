@@ -10,6 +10,7 @@ import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { EditMessageModal } from "@/pages/dashboard/pages/leads/components/edit-message-modal";
 import { cn } from "@/lib/utils";
 import { ComposeMessageModal } from "@/features/messaging/components/compose-message-modal";
+import { ORIGIN_COLOR, ORIGIN_LABEL } from "@/features/messaging/components/thread-conversation";
 import { EnrollInSequenceModal } from "@/features/sequences/components/enroll-in-sequence-modal";
 import { useIntegrations } from "@/features/integrations/hooks/use-integrations";
 import { resolveDefaultEmailTarget } from "@/features/integrations/utils/email-provider-utils";
@@ -31,12 +32,6 @@ const STATUS_COLOR: Record<MsgStatus, "default" | "success" | "warning" | "dange
   [MsgStatus.BOUNCED]: "danger",
   [MsgStatus.UNSUBSCRIBED]: "warning",
   [MsgStatus.SKIPPED]: "warning",
-};
-
-const ORIGIN_LABEL: Record<ThreadOrigin, string> = {
-  [ThreadOrigin.MANUAL]: "Manual",
-  [ThreadOrigin.SEQUENCE]: "Sequence",
-  [ThreadOrigin.CAMPAIGN]: "Campaign",
 };
 
 interface SentGroup {
@@ -242,7 +237,7 @@ export function OutreachTab({ contact, highlightUuid, onHighlightConsumed, onNav
                 <div className="min-w-0 flex flex-col gap-1.5">
                   <div className="flex flex-wrap items-center gap-1.5">
                     {group.origin ? (
-                      <Chip size="sm" variant="soft">
+                      <Chip size="sm" variant="soft" color={ORIGIN_COLOR[group.origin]}>
                         <Chip.Label>{ORIGIN_LABEL[group.origin]}</Chip.Label>
                       </Chip>
                     ) : null}

@@ -1,4 +1,8 @@
-import type { Channel, MsgStatus } from "@/features/contacts/interfaces/contact.interface";
+import type {
+    Channel,
+    MsgStatus,
+    ThreadOrigin,
+} from "@/features/contacts/interfaces/contact.interface";
 import type { SequenceEnrollmentStatus } from "@/features/sequences/interfaces/sequence.interface";
 
 export const SendSource = {
@@ -100,6 +104,40 @@ export interface ListSendHistoryQuery {
 
 export interface SendHistoryListResponse {
     data: SendHistoryMessage[];
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+}
+
+export interface InboxContactSummary {
+    contact: SendHistoryContact;
+    last_message_at: string | null;
+    last_channel: Channel | null;
+    thread_count: number;
+    origins: ThreadOrigin[];
+    last_thread_uuid: string | null;
+    needs_reply: boolean;
+}
+
+export interface ListInboxContactsQuery {
+    page?: number;
+    limit?: number;
+    search?: string;
+    channel?: Channel;
+    source?: ThreadOrigin;
+    status?: MsgStatus;
+    email_provider?: EmailIntegrationProvider;
+    email_account?: string;
+    sent_by_user_uuid?: string;
+    campaign_uuid?: string;
+    sequence_uuid?: string;
+    date_from?: string;
+    date_to?: string;
+}
+
+export interface InboxContactsListResponse {
+    data: InboxContactSummary[];
     total: number;
     page: number;
     limit: number;

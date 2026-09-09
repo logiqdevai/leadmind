@@ -9,6 +9,8 @@ import type {
     UpdateMessagePayload,
 } from "@/features/contacts/interfaces/contact.interface";
 import type {
+    InboxContactsListResponse,
+    ListInboxContactsQuery,
     ListSendHistoryQuery,
     SendHistoryListResponse,
 } from "@/features/outreach/interfaces/send-history.interface";
@@ -90,6 +92,19 @@ export const getOutreachMessageThread = async (uuid: string): Promise<MessageThr
         return response.data;
     } catch (error: any) {
         throw new Error(error?.response?.data?.message || "Failed to load conversation.");
+    }
+};
+
+export const listInboxContacts = async (
+    query?: ListInboxContactsQuery,
+): Promise<InboxContactsListResponse> => {
+    try {
+        const response = await axiosInstance.get(ApiRoutes.threads.list, {
+            params: query,
+        });
+        return response.data;
+    } catch (error: any) {
+        throw new Error(error?.response?.data?.message || "Failed to load conversations.");
     }
 };
 

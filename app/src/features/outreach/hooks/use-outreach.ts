@@ -5,6 +5,7 @@ import {
     deleteOutreachMessage,
     getOutreachMessageThread,
     getThreadDetail,
+    listInboxContacts,
     sendOutreachMessage,
     updateOutreachMessage,
 } from "../services/outreach.service";
@@ -13,6 +14,7 @@ import type {
     SendMessagePayload,
     UpdateMessagePayload,
 } from "@/features/contacts/interfaces/contact.interface";
+import type { ListInboxContactsQuery } from "@/features/outreach/interfaces/send-history.interface";
 import { contactsQueryKeys } from "@/features/contacts/hooks/use-contacts";
 import { sendHistoryQueryKeys } from "@/features/outreach/hooks/use-send-history";
 import { syncCachesAfterOutreachSend } from "@/features/outreach/utils/sync-contact-caches-after-send";
@@ -139,6 +141,19 @@ export function useThreadDetail(threadUuid: string | null | undefined) {
         queryKey: ["thread-detail", threadUuid],
         queryFn: () => getThreadDetail(threadUuid as string),
         enabled: !!threadUuid,
+    });
+}
+
+export const inboxContactsQueryKeys = {
+    all: ["inbox-contacts"] as const,
+    list: (query: ListInboxContactsQuery) => ["inbox-contacts", "list", query] as const,
+};
+
+export function useInboxContacts(query: ListInboxContactsQuery) {
+    return useQuery({
+        queryKey: inboxContactsQueryKeys.list(query),
+        queryFn: () => listInboxContacts(query),
+        placeholderData: (prev) => prev,
     });
 }
 

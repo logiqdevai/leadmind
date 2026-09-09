@@ -1,6 +1,14 @@
 import type { SendHistoryMessage } from "@/features/outreach/interfaces/send-history.interface";
 import type { IntegrationProviderView } from "@/features/integrations/interfaces/integrations.interface";
 
+export function dateToStartIso(date: string): string {
+    return new Date(`${date}T00:00:00`).toISOString();
+}
+
+export function dateToEndIso(date: string): string {
+    return new Date(`${date}T23:59:59.999`).toISOString();
+}
+
 export function getSendHistorySortTime(message: SendHistoryMessage): number {
     const iso = message.sent_at ?? message.created_at;
     if (!iso) return 0;

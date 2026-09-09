@@ -1,75 +1,51 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { Button } from "@heroui/react";
+import { Button, Tabs } from "@heroui/react";
+import { Inbox, LayoutList } from "lucide-react";
+import { ScrollableTabs, ScrollableTabsList, tabTriggerClassName } from "@/components/ui/scrollable-tabs";
 import { Channel, MsgStatus } from "@/features/contacts/interfaces/contact.interface";
-import { useIntegrations } from "@/features/integrations/hooks/use-integrations";
 import {
     allocationKey,
-    listSendableEmailAccounts,
 } from "@/features/integrations/utils/email-provider-utils";
 import { useSendHistory } from "@/features/outreach/hooks/use-send-history";
-import {
-    EmailIntegrationProvider,
-    SendSource,
-} from "@/features/outreach/interfaces/send-history.interface";
+import { EmailIntegrationProvider, SendSource } from "@/features/outreach/interfaces/send-history.interface";
 import { useDebouncedValue } from "@/hooks/use-debounced-value";
-import { useCampaigns } from "@/features/marketing-campaigns/hooks/use-marketing-campaigns";
-import { useSequences } from "@/features/sequences/hooks/use-sequences";
-import {
-    useCurrentOrganisation,
-    useOrganisationMembers,
-} from "@/features/organisations/hooks/use-organisations";
 import { useDashboardNavbarTitle } from "@/components/providers/dashboard-navbar-provider";
 import { ContactsToolbar } from "@/pages/dashboard/pages/contacts/components/contacts-toolbar";
 import { SendHistoryTable } from "./components/send-history-table";
 import { SendHistoryTableSkeleton } from "./components/send-history-table-skeleton";
 import { SendHistoryFiltersBar } from "./components/send-history-filters-bar";
-import { sortSendHistoryByDateDesc } from "./utils/send-history.utils";
+import { SendHistoryInboxView } from "./components/inbox/send-history-inbox-view";
+import { dateToEndIso, dateToStartIso, sortSendHistoryByDateDesc } from "./utils/send-history.utils";
+import {
+    CHANNEL_OPTIONS,
+    PROVIDER_OPTIONS,
+    SOURCE_OPTIONS,
+    STATUS_OPTIONS,
+    useSendHistoryFilterOptions,
+} from "./utils/send-history-filter-options";
 
 const PAGE_SIZE = 25;
 
-function dateToStartIso(date: string): string {
-    return new Date(`${date}T00:00:00`).toISOString();
-}
+const VIEW_STORAGE_KEY = "send-history.view";
 
-function dateToEndIso(date: string): string {
-    return new Date(`${date}T23:59:59.999`).toISOString();
-}
+type View = "table" | "inbox";
 
-const CHANNEL_OPTIONS = [
-    { id: "", label: "All channels" },
-    { id: Channel.EMAIL, label: "Email" },
-    { id: Channel.SMS, label: "SMS" },
-];
-
-const SOURCE_OPTIONS = [
-    { id: "", label: "All sources" },
-    { id: SendSource.DIRECT, label: "Direct contact" },
-    { id: SendSource.CAMPAIGN, label: "Campaign" },
-    { id: SendSource.SEQUENCE, label: "Sequence" },
-];
-
-const STATUS_OPTIONS = [
-    { id: "", label: "All statuses" },
-    { id: MsgStatus.SENT, label: "Sent" },
-    { id: MsgStatus.DELIVERED, label: "Delivered" },
-    { id: MsgStatus.OPENED, label: "Opened" },
-    { id: MsgStatus.CLICKED, label: "Clicked" },
-    { id: MsgStatus.REPLIED, label: "Replied" },
-    { id: MsgStatus.FAILED, label: "Failed" },
-    { id: MsgStatus.BOUNCED, label: "Bounced" },
-    { id: MsgStatus.UNSUBSCRIBED, label: "Unsubscribed" },
-    { id: MsgStatus.SKIPPED, label: "Skipped" },
-];
-
-const PROVIDER_OPTIONS = [
-    { id: "", label: "All integrations" },
-    { id: EmailIntegrationProvider.RESEND, label: "Resend" },
-    { id: EmailIntegrationProvider.SMTP, label: "SMTP" },
-];
+const isView = (value: string | null): value is View => value === "table" || value === "inbox";
 
 export default function SendHistoryPage() {
     const [searchParams, setSearchParams] = useSearchParams();
+
+    const [view, setView] = useState<View>(() => {
+        if (typeof window === "undefined") return "table";
+        const stored = window.localStorage.getItem(VIEW_STORAGE_KEY);
+        return isView(stored) ? stored : "table";
+    });
+
+    useEffect(() => {
+        if (typeof window === "undefined") return;
+        window.localStorage.setItem(VIEW_STORAGE_KEY, view);
+    }, [view]);
 
     const page = Math.max(1, Number(searchParams.get("page") ?? 1));
     const search = searchParams.get("search") ?? "";
@@ -88,9 +64,8 @@ export default function SendHistoryPage() {
 
     useDashboardNavbarTitle("Send history");
 
-    const { data: currentOrg } = useCurrentOrganisation();
-    const { data: members } = useOrganisationMembers(currentOrg?.uuid ?? "");
-    const { data: integrations } = useIntegrations();
+    const { emailAccounts, campaignOptions, sequenceOptions, userOptions } =
+        useSendHistoryFilterOptions();
 
     const updateParams = (next: Record<string, string | undefined | null>) => {
         const params = new URLSearchParams(searchParams);
@@ -154,8 +129,6 @@ export default function SendHistoryPage() {
     );
 
     const { data, isLoading, isFetching } = useSendHistory(query);
-    const { data: campaignsData } = useCampaigns({ limit: 100 });
-    const { data: sequencesData } = useSequences();
 
     const rows = useMemo(
         () => sortSendHistoryByDateDesc(data?.data ?? []),
@@ -163,11 +136,6 @@ export default function SendHistoryPage() {
     );
     const total = data?.total ?? 0;
     const totalPages = data?.totalPages ?? 1;
-
-    const emailAccounts = useMemo(
-        () => listSendableEmailAccounts(integrations),
-        [integrations],
-    );
 
     const emailAccountOptions = useMemo(() => {
         const filtered = emailProvider
@@ -191,47 +159,39 @@ export default function SendHistoryPage() {
         return emailAccountOptions.some((option) => option.id === key) ? key : "";
     }, [emailProvider, emailAccount, emailAccountOptions]);
 
-    const campaignOptions = useMemo(
-        () => [
-            { id: "", label: "All campaigns" },
-            ...(campaignsData?.data ?? []).map((campaign) => ({
-                id: campaign.uuid,
-                label: campaign.name,
-            })),
-        ],
-        [campaignsData?.data],
-    );
-
-    const sequenceOptions = useMemo(
-        () => [
-            { id: "", label: "All sequences" },
-            ...(sequencesData ?? []).map((sequence) => ({
-                id: sequence.uuid,
-                label: sequence.name,
-            })),
-        ],
-        [sequencesData],
-    );
-
-    const userOptions = useMemo(
-        () => [
-            { id: "", label: "All users" },
-            ...(members ?? []).map((member) => ({
-                id: member.user_uuid,
-                label: member.full_name?.trim() || member.email,
-            })),
-        ],
-        [members],
-    );
-
     const meta = isLoading
         ? undefined
         : `${total} send${total === 1 ? "" : "s"}${isFetching ? " · Updating…" : ""}`;
 
     return (
-        <div className="space-y-4">
-            <ContactsToolbar title="Send history" meta={meta} />
+        <div className="flex h-full min-h-0 flex-col gap-2">
+            <ContactsToolbar
+                title="Send history"
+                meta={view === "table" ? meta : undefined}
+                actions={
+                    <ScrollableTabs selectedKey={view} onSelectionChange={(key) => setView(String(key) as View)}>
+                        <ScrollableTabsList>
+                            <Tabs.Tab id="table" className={`${tabTriggerClassName} inline-flex items-center gap-1.5`}>
+                                <LayoutList className="size-3.5" />
+                                <span className="hidden sm:inline">Table</span>
+                            </Tabs.Tab>
+                            <Tabs.Tab id="inbox" className={`${tabTriggerClassName} inline-flex items-center gap-1.5`}>
+                                <Inbox className="size-3.5" />
+                                <span className="hidden sm:inline">Inbox</span>
+                            </Tabs.Tab>
+                        </ScrollableTabsList>
+                    </ScrollableTabs>
+                }
+            />
 
+            {view === "inbox" ? (
+                <div className="-mt-4 min-h-0 flex-1 lg:-mt-6">
+                    <SendHistoryInboxView />
+                </div>
+            ) : null}
+
+            {view === "table" ? (
+                <>
             <SendHistoryFiltersBar
                 search={search}
                 channel={channel}
@@ -333,6 +293,8 @@ export default function SendHistoryPage() {
                     <SendHistoryTable rows={rows} />
                 </div>
             )}
+                </>
+            ) : null}
         </div>
     );
 }

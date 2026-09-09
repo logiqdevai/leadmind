@@ -3,6 +3,7 @@ import type { ContactInfoType } from "../constants/contact-info-types.constants"
 import type { Lead, SourceType } from "@/features/leads/interfaces/lead.interface";
 import type { EnrichmentSource } from "@/features/lead-enrichment/constants/enrichment-sources";
 import type { EmailProviderAllocation } from "@/features/integrations/interfaces/integrations.interface";
+import type { SequenceEnrollmentStatus } from "@/features/sequences/interfaces/sequence.interface";
 
 export const LeadStatus = {
     NEW: "NEW",
@@ -205,6 +206,13 @@ export interface ConversationThread {
     campaign_uuid: string | null;
     last_message_at: string | null;
     message_count: number;
+    needs_reply: boolean;
+    last_message: { uuid: string; status: MsgStatus } | null;
+    sequence_enrollment: {
+        uuid: string;
+        status: SequenceEnrollmentStatus;
+        sequence: { uuid: string; name: string };
+    } | null;
     created_at: string;
     updated_at: string;
 }
