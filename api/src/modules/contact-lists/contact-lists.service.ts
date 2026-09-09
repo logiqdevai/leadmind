@@ -456,6 +456,75 @@ export class ContactListsService {
         return { removed: result.count };
     }
 
+    async findDuplicateListContacts(organisation_uuid: string, listUuid: string) {
+        await this.ensureListOwned(organisation_uuid, listUuid);
+
+        const duplicateWhere: Prisma.ContactListMemberWhereInput = {
+            list_uuid: listUuid,
+            contact: {
+                list_memberships: {
+                    some: { list_uuid: { not: listUuid } },
+                },
+            },
+        };
+
+        const [members, total] = await Promise.all([
+            this.prisma.contactListMember.findMany({
+                where: duplicateWhere,
+                select: {
+                    contact: {
+                        select: {
+                            uuid: true,
+                            name: true,
+                            email: true,
+                            list_memberships: {
+                                where: { list_uuid: { not: listUuid } },
+                                select: { list: { select: { uuid: true, title: true } } },
+                            },
+                        },
+                    },
+                },
+                orderBy: { created_at: 'desc' },
+                take: 100,
+            }),
+            this.prisma.contactListMember.count({ where: duplicateWhere }),
+        ]);
+
+        return {
+            total,
+            contacts: members.map((m) => ({
+                uuid: m.contact.uuid,
+                name: m.contact.name,
+                email: m.contact.email,
+                lists: m.contact.list_memberships.map((lm) => lm.list),
+            })),
+        };
+    }
+
+    async removeDuplicateListContacts(organisation_uuid: string, listUuid: string) {
+        await this.ensureListOwned(organisation_uuid, listUuid);
+
+        const result = await this.prisma.contactListMember.deleteMany({
+            where: {
+                list_uuid: listUuid,
+                contact: {
+                    list_memberships: {
+                        some: { list_uuid: { not: listUuid } },
+                    },
+                },
+            },
+        });
+
+        if (result.count > 0) {
+            await this.prisma.contactList.update({
+                where: { uuid: listUuid },
+                data: { updated_at: new Date() },
+            });
+        }
+
+        return { removed: result.count };
+    }
+
     async getMemberContactUuids(listUuid: string): Promise<string[]> {
         const rows = await this.prisma.contactListMember.findMany({
             where: { list_uuid: listUuid },

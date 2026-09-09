@@ -160,6 +160,25 @@ export class ContactListsController {
         );
     }
 
+    @Get(':uuid/contacts/duplicates')
+    @ApiOperation({ summary: 'Preview contacts in this list that also belong to another list' })
+    findDuplicateContacts(
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
+        @Param('uuid') uuid: string,
+    ) {
+        return this.contactListsService.findDuplicateListContacts(organisation_uuid, uuid);
+    }
+
+    @ActivityLog({ entityType: ActivityEntityType.CONTACT_LIST, action: ActivityAction.CONTACTS_REMOVED, entityUuidFrom: 'params.uuid' })
+    @Post(':uuid/contacts/remove-duplicates')
+    @ApiOperation({ summary: 'Remove contacts from this list that also belong to another list' })
+    removeDuplicateContacts(
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
+        @Param('uuid') uuid: string,
+    ) {
+        return this.contactListsService.removeDuplicateListContacts(organisation_uuid, uuid);
+    }
+
     @ActivityLog({ entityType: ActivityEntityType.CONTACT_LIST, action: ActivityAction.CONTACTS_REMOVED, entityUuidFrom: 'params.uuid' })
     @Post(':uuid/contacts/bulk-remove')
     @ApiOperation({ summary: 'Remove multiple contacts from a list' })

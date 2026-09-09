@@ -1,6 +1,6 @@
 import type { FC } from "react";
 import { Button, Dropdown } from "@heroui/react";
-import { ChevronDown, ChevronsUpDown, Filter, FolderInput, Gauge, Globe, Pencil, Send, Sparkles, Trash2, UserPlus } from "lucide-react";
+import { ChevronDown, ChevronsUpDown, Copy, Filter, FolderInput, Gauge, Globe, Pencil, Send, Sparkles, Trash2, UserPlus } from "lucide-react";
 
 interface ListActionsDropdownProps {
     showContactsActions?: boolean;
@@ -20,6 +20,8 @@ interface ListActionsDropdownProps {
     filterContactsDisabled?: boolean;
     onSendToSelected?: () => void;
     sendToSelectedDisabled?: boolean;
+    onRemoveDuplicates?: () => void;
+    removeDuplicatesDisabled?: boolean;
     onDeleteSelected?: () => void;
     deleteDisabled?: boolean;
     deletePending?: boolean;
@@ -43,6 +45,8 @@ export const ListActionsDropdown: FC<ListActionsDropdownProps> = ({
     filterContactsDisabled = false,
     onSendToSelected,
     sendToSelectedDisabled = false,
+    onRemoveDuplicates,
+    removeDuplicatesDisabled = false,
     onDeleteSelected,
     deleteDisabled = false,
     deletePending = false,
@@ -70,6 +74,7 @@ export const ListActionsDropdown: FC<ListActionsDropdownProps> = ({
                     if (key === "scrape-emails") onScrapeEmails?.();
                     if (key === "filter-contacts") onFilterContacts?.();
                     if (key === "send-to-selected") onSendToSelected?.();
+                    if (key === "remove-duplicates-in-other-lists") onRemoveDuplicates?.();
                     if (key === "delete-selected") onDeleteSelected?.();
                 }}
             >
@@ -150,6 +155,20 @@ export const ListActionsDropdown: FC<ListActionsDropdownProps> = ({
                         <span className="flex items-center gap-2.5 antialiased">
                             <Filter className="size-4 shrink-0 text-muted" strokeWidth={2} />
                             <span className="font-medium text-foreground">Filter Contacts</span>
+                        </span>
+                    </Dropdown.Item>
+                ) : null}
+                {showContactsActions && onRemoveDuplicates ? (
+                    <Dropdown.Item
+                        id="remove-duplicates-in-other-lists"
+                        textValue="Remove contacts in other lists"
+                        isDisabled={removeDuplicatesDisabled}
+                    >
+                        <span className="flex items-center gap-2.5 antialiased">
+                            <Copy className="size-4 shrink-0 text-muted" strokeWidth={2} />
+                            <span className="font-medium text-foreground">
+                                Remove contacts in other lists
+                            </span>
                         </span>
                     </Dropdown.Item>
                 ) : null}

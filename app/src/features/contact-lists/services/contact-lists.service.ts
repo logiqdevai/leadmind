@@ -8,6 +8,7 @@ import type {
     BulkAddListContactsPayload,
     ContactList,
     CreateContactListPayload,
+    DuplicateListContactsPreview,
     ListContactListMembersQuery,
     ListContactListsQuery,
     PaginatedContactLists,
@@ -176,6 +177,32 @@ export const addListContactsBelowScore = async (
     } catch (error: any) {
         throw new Error(
             error?.response?.data?.message || "Failed to add low-score contacts to list.",
+        );
+    }
+};
+
+export const getDuplicateListContacts = async (
+    listUuid: string,
+): Promise<DuplicateListContactsPreview> => {
+    try {
+        const response = await axiosInstance.get(ApiRoutes.contact_lists.duplicates(listUuid));
+        return response.data;
+    } catch (error: any) {
+        throw new Error(error?.response?.data?.message || "Failed to load duplicate contacts.");
+    }
+};
+
+export const removeDuplicateListContacts = async (
+    listUuid: string,
+): Promise<RemoveListContactsResult> => {
+    try {
+        const response = await axiosInstance.post(
+            ApiRoutes.contact_lists.remove_duplicates(listUuid),
+        );
+        return response.data;
+    } catch (error: any) {
+        throw new Error(
+            error?.response?.data?.message || "Failed to remove duplicate contacts from list.",
         );
     }
 };

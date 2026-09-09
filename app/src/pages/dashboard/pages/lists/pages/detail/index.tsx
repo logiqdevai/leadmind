@@ -21,6 +21,7 @@ import { ContactListsTable } from "../../components/contact-lists-table";
 import { ListMembersTable } from "./components/list-members-table";
 import { AddContactsModal } from "./components/add-contacts-modal";
 import { ListActionsDropdown } from "./components/list-actions-dropdown";
+import { RemoveDuplicateContactsModal } from "./components/remove-duplicate-contacts-modal";
 import { FilterContactsModal } from "./components/filter-contacts-modal";
 import { ListDetailToolbar } from "./components/list-detail-toolbar";
 import {
@@ -76,6 +77,7 @@ export default function ListDetailPage() {
     const [enrichOpen, setEnrichOpen] = useState(false);
     const [scrapeConfirmOpen, setScrapeConfirmOpen] = useState(false);
     const [filterContactsOpen, setFilterContactsOpen] = useState(false);
+    const [removeDuplicatesOpen, setRemoveDuplicatesOpen] = useState(false);
     const [outreachChooserOpen, setOutreachChooserOpen] = useState(false);
     const [composeOpen, setComposeOpen] = useState(false);
     const [enrollOpen, setEnrollOpen] = useState(false);
@@ -359,6 +361,12 @@ export default function ListDetailPage() {
                                         : undefined
                                 }
                                 sendToSelectedDisabled={selectedKeys.size === 0}
+                                onRemoveDuplicates={
+                                    currentTab === ListDetailTabIds.CONTACTS
+                                        ? () => setRemoveDuplicatesOpen(true)
+                                        : undefined
+                                }
+                                removeDuplicatesDisabled={total === 0}
                                 onDeleteSelected={
                                     currentTab === ListDetailTabIds.CONTACTS
                                         ? () => openDeleteDialog([...selectedKeys])
@@ -507,6 +515,12 @@ export default function ListDetailPage() {
                         isOpen={filterContactsOpen}
                         onOpenChange={setFilterContactsOpen}
                         onComplete={() => setSelectedKeys(new Set())}
+                    />
+                    <RemoveDuplicateContactsModal
+                        listUuid={uuid}
+                        isOpen={removeDuplicatesOpen}
+                        onOpenChange={setRemoveDuplicatesOpen}
+                        onRemoved={() => setSelectedKeys(new Set())}
                     />
                     <ListMembersDeleteDialog
                         isOpen={deleteConfirmOpen}

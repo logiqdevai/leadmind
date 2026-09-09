@@ -87,3 +87,20 @@ export interface MoveListContactsBelowScorePayload {
 export interface AddListContactsBelowScoreResult {
     added: number;
 }
+
+export interface DuplicateListContactRef {
+    uuid: string;
+    title: string;
+}
+
+export interface DuplicateListContact {
+    uuid: string;
+    name: string | null;
+    email: string | null;
+    lists: DuplicateListContactRef[];
+}
+
+export interface DuplicateListContactsPreview {
+    total: number;
+    contacts: DuplicateListContact[];
+}

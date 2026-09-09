@@ -7,8 +7,10 @@ import {
     createContactList,
     deleteContactList,
     getContactList,
+    getDuplicateListContacts,
     listContactListMembers,
     listContactLists,
+    removeDuplicateListContacts,
     removeListContact,
     removeListContactsBelowScore,
     moveListContactsBelowScore,
@@ -307,6 +309,48 @@ export function useAddListContactsBelowScore() {
         onError: (error: Error) => {
             toast({
                 title: "Could not add low-score contacts",
+                description: error.message,
+                duration: 3000,
+                variant: "error",
+            });
+        },
+    });
+}
+
+export function useDuplicateListContacts(listUuid: string, enabled: boolean) {
+    return useQuery({
+        queryKey: [...contactListQueryKeys.detail(listUuid), "duplicates"],
+        queryFn: () => getDuplicateListContacts(listUuid),
+        enabled: enabled && !!listUuid,
+        staleTime: 0,
+    });
+}
+
+export function useRemoveDuplicateListContacts() {
+    const qc = useQueryClient();
+    return useMutation({
+        mutationFn: (vars: { listUuid: string }) => removeDuplicateListContacts(vars.listUuid),
+        onSuccess: (data, vars) => {
+            qc.invalidateQueries({ queryKey: contactListQueryKeys.all });
+            qc.invalidateQueries({ queryKey: contactListQueryKeys.detail(vars.listUuid) });
+            qc.invalidateQueries({ queryKey: contactListQueryKeys.members(vars.listUuid, {}) });
+            toast({
+                title:
+                    data.removed === 0
+                        ? "No duplicate contacts"
+                        : data.removed === 1
+                          ? "Contact removed from list"
+                          : "Duplicate contacts removed",
+                description:
+                    data.removed === 0
+                        ? "No contacts in this list also belong to another list."
+                        : `${data.removed} contact${data.removed === 1 ? "" : "s"} that also belong to another list removed from this list.`,
+                duration: 2000,
+            });
+        },
+        onError: (error: Error) => {
+            toast({
+                title: "Could not remove duplicate contacts",
                 description: error.message,
                 duration: 3000,
                 variant: "error",
