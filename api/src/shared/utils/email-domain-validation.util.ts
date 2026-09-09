@@ -56,6 +56,17 @@ async function validateDomain(domain: string): Promise<EmailValidationResult> {
     }
 }
 
+const EMAIL_VALIDATION_REASON_MESSAGES: Record<string, string> = {
+    invalid_syntax: 'That email address is not formatted correctly.',
+    disposable_domain: 'That email address uses a disposable email provider and cannot be saved.',
+    no_mx_record: "That email address's domain doesn't accept mail (no MX record found).",
+};
+
+/** Human-readable message for an INVALID validation reason, for surfacing to the user. */
+export function describeEmailValidationReason(reason: string | null): string {
+    return (reason && EMAIL_VALIDATION_REASON_MESSAGES[reason]) || 'That email address could not be verified.';
+}
+
 /**
  * Runs the email checks (syntax, disposable-domain blocklist, MX record lookup)
  * against a single address. No caching — every call does a fresh lookup.

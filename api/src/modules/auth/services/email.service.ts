@@ -1,4 +1,10 @@
-import { Injectable, UnauthorizedException, ConflictException, BadRequestException } from '@nestjs/common';
+import {
+    Injectable,
+    Logger,
+    UnauthorizedException,
+    ConflictException,
+    BadRequestException,
+} from '@nestjs/common';
 import { RegisterEmailDto } from '../dto/register-email.dto';
 import { LoginEmailDto } from '../dto/login-email.dto';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
@@ -12,6 +18,8 @@ import { OrganisationsService } from '@/modules/organisations/organisations.serv
 
 @Injectable()
 export class EmailAuthService {
+    private readonly logger = new Logger(EmailAuthService.name);
+
     constructor(
         private readonly prisma: PrismaService,
         private readonly jwtService: CreateJwtService,
@@ -41,6 +49,24 @@ export class EmailAuthService {
                     role: AuthRoles.USER,
                 },
             });
+
+            // Joining via an invite link must land the account in the inviter's organisation,
+            // not a brand-new empty one - fall back to a personal org only if there's no invite
+            // token, or it turns out invalid/expired/for a different email.
+            if (dto.invite_token) {
+                try {
+                    return await this.organisationsService.acceptInvitation(
+                        dto.invite_token,
+                        user.uuid,
+                    );
+                } catch (error) {
+                    this.logger.warn(
+                        `Registration invite_token could not be accepted for user=${user.uuid}: ${
+                            error instanceof Error ? error.message : String(error)
+                        }`,
+                    );
+                }
+            }
 
             const organisation = await this.organisationsService.createForUser(
                 user.uuid,

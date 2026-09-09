@@ -28,14 +28,18 @@ import {
 } from '@/generated/prisma';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { ElasticsearchService } from '@/integrations/elasticsearch/elasticsearch.service';
-import { hasUsableContactEmail } from '@/shared/utils/contact-email.util';
+import { hasUsableContactEmail, normalizeContactEmail } from '@/shared/utils/contact-email.util';
 import { isEmailHtmlEmpty, sanitizeEmailHtml } from '@/shared/utils/sanitize-html.util';
 import { ScrapioScrapeRequestService } from '@/integrations/scrapio/services/scrapio-scrape-request.service';
 import { SCRAPIO_EMAIL_REGEX_FIELD } from '@/integrations/scrapio/scrapio.constants';
 import { AI_PROCESS_QUEUE } from '@/core/queues/queues.constants';
 import { BulkJobsService } from '@/modules/bulk-jobs/bulk-jobs.service';
 import { resolveContactEnrichmentSources } from '@/modules/leads/utils/enrichment-sources.utils';
-import { resolveEmailFieldsForWrite } from '@/shared/utils/email-domain-validation.util';
+import {
+    describeEmailValidationReason,
+    resolveEmailFieldsForWrite,
+    validateEmailAddress,
+} from '@/shared/utils/email-domain-validation.util';
 import { resolveWebsiteFieldsForWrite } from '@/shared/utils/website-domain-validation.util';
 import { generateMessageId } from '@/shared/utils/email-message-id.util';
 import { ThreadsService } from '@/modules/threads/threads.service';
@@ -544,10 +548,16 @@ export class ContactsService {
                     email_validated_at: null,
                 };
             } else {
-                const fields = await resolveEmailFieldsForWrite(trimmed);
-                if (fields) {
-                    emailPatch = fields;
+                const validation = await validateEmailAddress(trimmed);
+                if (validation.status === EmailValidationStatus.INVALID) {
+                    throw new BadRequestException(describeEmailValidationReason(validation.reason));
                 }
+                emailPatch = {
+                    email: normalizeContactEmail(trimmed) as string,
+                    email_validation_status: validation.status,
+                    email_validation_reason: validation.reason,
+                    email_validated_at: new Date(),
+                };
             }
         }
 
