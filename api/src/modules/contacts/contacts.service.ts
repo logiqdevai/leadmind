@@ -1891,7 +1891,7 @@ export class ContactsService {
             return 'completed';
         }
 
-        const startUrls = buildWebsiteEmailCrawlUrls(website);
+        const startUrls = await buildWebsiteEmailCrawlUrls(website);
 
         if (this.websiteCrawler.getActiveProvider() === 'scrapio') {
             // Ask Scrapio to extract the email itself via its built-in regex preset

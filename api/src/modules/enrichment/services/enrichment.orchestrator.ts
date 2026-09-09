@@ -7,6 +7,7 @@ import { plainTextFromCrawledPage } from '@/integrations/apify/website-content-c
 import type { CrawledPage } from '@/integrations/apify/website-content-crawler/website-content-crawler.interfaces';
 import { WebsiteScraperService } from '@/integrations/website-scraper/website-scraper.service';
 import { ScrapioScrapeRequestService } from '@/integrations/scrapio/services/scrapio-scrape-request.service';
+import { resolveReachableWebsiteUrl } from '@/shared/utils/website-reachability.util';
 import { DeferredEnrichmentError } from '../utils/deferred-enrichment.error';
 import { GoogleSearchAdapter } from '@/integrations/apify/google-search/google-search.adapter';
 import { GemiService } from '@/integrations/gemi/gemi.service';
@@ -428,7 +429,7 @@ export class EnrichmentOrchestrator {
         if (!w) {
             throw new Error('Entity has no website for crawl');
         }
-        const url = normalizeWebsiteUrl(w);
+        const url = await resolveReachableWebsiteUrl(normalizeWebsiteUrl(w));
         const organisation_uuid = await this.resolveOrganisationUuidForTarget(target);
         if (!organisation_uuid) {
             throw new Error('Entity has no organisation context for Apify');

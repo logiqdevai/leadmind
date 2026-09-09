@@ -6,6 +6,7 @@ import { LinkedInProfileAdapter } from '@/integrations/apify/linkedin-profile/li
 import { plainTextFromCrawledPage } from '@/integrations/apify/website-content-crawler/crawl-page-text.utils';
 import { WebsiteScraperService } from '@/integrations/website-scraper/website-scraper.service';
 import { ScrapioScrapeRequestService } from '@/integrations/scrapio/services/scrapio-scrape-request.service';
+import { resolveReachableWebsiteUrl } from '@/shared/utils/website-reachability.util';
 import { GoogleSearchAdapter } from '@/integrations/apify/google-search/google-search.adapter';
 import { GemiService } from '@/integrations/gemi/gemi.service';
 import { LeadAiService } from '../utils/lead-ai.service';
@@ -168,7 +169,7 @@ export class LeadEnrichmentOrchestrator extends EnrichmentOrchestrator {
         if (!w) {
             throw new Error('Lead has no website for crawl');
         }
-        const url = normalizeWebsiteUrl(w);
+        const url = await resolveReachableWebsiteUrl(normalizeWebsiteUrl(w));
         const organisation_uuid = await this.resolveOrganisationUuidForTarget({ kind: 'lead', uuid: lead.uuid });
         if (!organisation_uuid) {
             throw new Error('Lead has no organisation context for Apify');

@@ -1,6 +1,7 @@
 import type { CrawledPage } from '@/integrations/apify/website-content-crawler/website-content-crawler.interfaces';
 import { plainTextFromCrawledPage } from '@/integrations/apify/website-content-crawler/crawl-page-text.utils';
 import { normalizeWebsiteUrl } from '@/modules/leads/utils/enrichment-data.utils';
+import { resolveReachableWebsiteUrl } from '@/shared/utils/website-reachability.util';
 
 const EMAIL_REGEX = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
 const MAILTO_REGEX = /mailto:([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/gi;
@@ -79,7 +80,7 @@ function extractEmailsFromHaystack(haystack: string): string[] {
     return [...unique];
 }
 
-export function buildWebsiteEmailCrawlUrls(website: string): string[] {
+export async function buildWebsiteEmailCrawlUrls(website: string): Promise<string[]> {
     const normalized = normalizeWebsiteUrl(website.trim());
     let origin: string;
     try {
@@ -89,12 +90,31 @@ export function buildWebsiteEmailCrawlUrls(website: string): string[] {
         return [normalized];
     }
 
-    const urls = EMAIL_PAGE_PATHS.map((path) => `${origin}${path === '/' ? '/' : path}`);
-    const withoutTrailingSlash = normalized.replace(/\/$/, '');
-    if (withoutTrailingSlash !== origin && !urls.includes(normalized) && !urls.includes(withoutTrailingSlash)) {
-        urls.unshift(normalized);
+    // Some sites only serve content on one of example.com / www.example.com and don't redirect
+    // the other form, so resolve which host actually answers before building the candidate list.
+    const resolvedOrigin = await resolveOrigin(origin);
+    const resolvedNormalized = resolvedOrigin === origin ? normalized : normalized.replace(origin, resolvedOrigin);
+
+    const urls = EMAIL_PAGE_PATHS.map((path) => `${resolvedOrigin}${path === '/' ? '/' : path}`);
+    const withoutTrailingSlash = resolvedNormalized.replace(/\/$/, '');
+    if (
+        withoutTrailingSlash !== resolvedOrigin &&
+        !urls.includes(resolvedNormalized) &&
+        !urls.includes(withoutTrailingSlash)
+    ) {
+        urls.unshift(resolvedNormalized);
     }
     return [...new Set(urls)];
+}
+
+async function resolveOrigin(origin: string): Promise<string> {
+    const resolvedUrl = await resolveReachableWebsiteUrl(origin);
+    try {
+        const parsed = new URL(resolvedUrl);
+        return `${parsed.protocol}//${parsed.host}`;
+    } catch {
+        return origin;
+    }
 }
 
 export function extractEmailsFromCrawledPage(page: CrawledPage | null): string[] {

@@ -6,21 +6,51 @@ import {
     pickBestContactEmail,
 } from './contact-website-email.utils';
 
+// `buildWebsiteEmailCrawlUrls` probes the given host (and its www-toggled counterpart) with a
+// real HEAD request before building the candidate list. Stub `fetch` so these tests stay
+// hermetic and exercise both the "given host answers" and "falls back to www" branches.
+const originalFetch = global.fetch;
+
 describe('buildWebsiteEmailCrawlUrls', () => {
-    it('includes homepage and contact paths for a bare domain', () => {
-        expect(buildWebsiteEmailCrawlUrls('acme.io')).toEqual([
-            'https://acme.io/',
-            'https://acme.io/contact',
-            'https://acme.io/contact-us',
-            'https://acme.io/about',
-        ]);
+    afterEach(() => {
+        global.fetch = originalFetch;
     });
 
-    it('keeps a deep original URL in addition to contact paths', () => {
-        const urls = buildWebsiteEmailCrawlUrls('https://acme.io/services/web');
+    it('includes homepage and contact paths for a bare domain that answers directly', () => {
+        global.fetch = jest.fn().mockResolvedValue({ url: 'https://acme.io/' }) as unknown as typeof fetch;
+
+        return buildWebsiteEmailCrawlUrls('acme.io').then((urls) => {
+            expect(urls).toEqual([
+                'https://acme.io/',
+                'https://acme.io/contact',
+                'https://acme.io/contact-us',
+                'https://acme.io/about',
+            ]);
+        });
+    });
+
+    it('keeps a deep original URL in addition to contact paths', async () => {
+        global.fetch = jest.fn().mockResolvedValue({ url: 'https://acme.io/' }) as unknown as typeof fetch;
+
+        const urls = await buildWebsiteEmailCrawlUrls('https://acme.io/services/web');
         expect(urls[0]).toBe('https://acme.io/services/web');
         expect(urls).toContain('https://acme.io/contact');
         expect(urls).toContain('https://acme.io/');
+    });
+
+    it('falls back to the www host when the bare domain does not answer', async () => {
+        global.fetch = jest
+            .fn()
+            .mockRejectedValueOnce(new Error('ENOTFOUND acme.io'))
+            .mockResolvedValueOnce({ url: 'https://www.acme.io/' }) as unknown as typeof fetch;
+
+        const urls = await buildWebsiteEmailCrawlUrls('acme.io');
+        expect(urls).toEqual([
+            'https://www.acme.io/',
+            'https://www.acme.io/contact',
+            'https://www.acme.io/contact-us',
+            'https://www.acme.io/about',
+        ]);
     });
 });
 
