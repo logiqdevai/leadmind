@@ -11,6 +11,7 @@ import type { SavedContactFilter } from "@/features/saved-contact-filters/interf
 import {
     hasActiveContactFilters,
     serializeContactFiltersToSearchParams,
+    toFullContactFiltersPatch,
 } from "@/lib/contact-filter-params";
 import type { ContactFilters } from "@/interfaces/contact-filters.interface";
 import {
@@ -18,34 +19,8 @@ import {
     type SaveContactFilterModalMode,
 } from "@/pages/dashboard/pages/contacts/components/save-contact-filter-modal";
 
-const FILTER_KEYS: (keyof ContactFilters)[] = [
-    "search",
-    "filter_uuid",
-    "contact_list_uuid",
-    "source_type",
-    "status",
-    "tags",
-    "score_rules",
-    "profile_field",
-    "has_profile_field",
-    "last_interaction_after",
-    "last_interaction_before",
-    "never_contacted",
-    "include_unsubscribed",
-    "has_email",
-    "has_phone",
-];
-
 function serialize(filters: ContactFilters): string {
     return JSON.stringify(serializeContactFiltersToSearchParams(filters));
-}
-
-function toFullPatch(filters: ContactFilters): Partial<ContactFilters> {
-    const patch: Partial<ContactFilters> = {};
-    for (const key of FILTER_KEYS) {
-        (patch as Record<string, unknown>)[key] = filters[key] ?? undefined;
-    }
-    return patch;
 }
 
 interface SavedContactFiltersBarProps {
@@ -92,7 +67,7 @@ export function SavedContactFiltersBar({
 
     const handleSelect = (uuid: string) => {
         if (!uuid) {
-            const patch = toFullPatch({});
+            const patch = toFullContactFiltersPatch();
             if (onApply) {
                 onApply(patch, null);
             } else {
@@ -103,7 +78,7 @@ export function SavedContactFiltersBar({
         }
         const target = filters.find((f) => f.uuid === uuid);
         if (!target) return;
-        const patch = toFullPatch(target.filters);
+        const patch = toFullContactFiltersPatch(target.filters);
         if (onApply) {
             onApply(patch, uuid);
         } else {

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Button, Input, Label, ListBox, Select, Switch, TextField } from "@heroui/react";
-import { ChevronDown, Filter } from "lucide-react";
+import { ChevronDown, Filter, X } from "lucide-react";
 import type {
     ContactFilters,
     ContactFiltersFormSections,
@@ -17,6 +17,7 @@ import { MultiSelect } from "@/components/ui/multi-select";
 import { ScoreRulesFilter } from "@/pages/dashboard/components/score-rules-filter";
 import { SOURCE_OPTIONS } from "@/features/filters/constants/source-options";
 import type { SourceType } from "@/features/leads/interfaces/lead.interface";
+import { hasActiveContactFilters, toFullContactFiltersPatch } from "@/lib/contact-filter-params";
 import { cn } from "@/lib/utils";
 
 interface ContactFiltersFormProps {
@@ -81,6 +82,30 @@ export function ContactFiltersForm({
         if (!isControlled) setUncontrolledOpen(next);
         onOpenChange?.(next);
     };
+
+    const hasActiveFilters = hasActiveContactFilters(value);
+    const handleClearAll = () => {
+        const patch = toFullContactFiltersPatch();
+        if (onApplySavedFilter) {
+            onApplySavedFilter(patch, null);
+        } else {
+            onChange(patch);
+            onSavedFilterUuidChange?.(null);
+        }
+    };
+
+    const clearAllButton = hasActiveFilters ? (
+        <Button
+            size="sm"
+            variant="tertiary"
+            className="shrink-0"
+            onPress={handleClearAll}
+            isDisabled={disabled}
+        >
+            <X className="size-4" />
+            Clear all
+        </Button>
+    ) : null;
 
     const form = (
         <div className="flex flex-col gap-4">
@@ -368,22 +393,33 @@ export function ContactFiltersForm({
         </div>
     );
 
-    if (!collapsible) return form;
+    if (!collapsible) {
+        if (!clearAllButton) return form;
+        return (
+            <div className="flex flex-col gap-4">
+                <div className="flex justify-end">{clearAllButton}</div>
+                {form}
+            </div>
+        );
+    }
 
     return (
         <div className="flex flex-col gap-4">
-            <Button
-                size="sm"
-                variant="tertiary"
-                className="self-start"
-                onPress={() => setPanelOpen(!panelOpen)}
-            >
-                <Filter className="size-4" />
-                {collapsibleLabel}
-                <ChevronDown
-                    className={cn("size-4 transition-transform", panelOpen && "rotate-180")}
-                />
-            </Button>
+            <div className="flex items-center gap-2">
+                <Button
+                    size="sm"
+                    variant="tertiary"
+                    className="self-start"
+                    onPress={() => setPanelOpen(!panelOpen)}
+                >
+                    <Filter className="size-4" />
+                    {collapsibleLabel}
+                    <ChevronDown
+                        className={cn("size-4 transition-transform", panelOpen && "rotate-180")}
+                    />
+                </Button>
+                {clearAllButton}
+            </div>
             {panelOpen ? (
                 <div className="rounded-xl border border-border bg-surface p-4">{form}</div>
             ) : null}

@@ -113,6 +113,34 @@ export function hasActiveContactFilters(filters: ContactFilters): boolean {
     return Object.values(serialized).some((value) => value != null && value !== "");
 }
 
+export const CONTACT_FILTER_KEYS: (keyof ContactFilters)[] = [
+    "search",
+    "filter_uuid",
+    "contact_list_uuid",
+    "source_type",
+    "status",
+    "tags",
+    "score_rules",
+    "profile_field",
+    "has_profile_field",
+    "last_interaction_after",
+    "last_interaction_before",
+    "never_contacted",
+    "include_unsubscribed",
+    "has_email",
+    "has_phone",
+];
+
+export function toFullContactFiltersPatch(
+    filters: Partial<ContactFilters> = {},
+): Partial<ContactFilters> {
+    const patch: Partial<ContactFilters> = {};
+    for (const key of CONTACT_FILTER_KEYS) {
+        (patch as Record<string, unknown>)[key] = filters[key] ?? undefined;
+    }
+    return patch;
+}
+
 export function contactFiltersToBulkScrapePayload(
     filters: ContactFilters,
 ): Omit<ListContactsQuery, "page" | "limit"> {
