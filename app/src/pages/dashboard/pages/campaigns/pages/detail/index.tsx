@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Button, Label, ListBox, Select } from "@heroui/react";
-import { ChevronLeft, FileText, ListOrdered, Send } from "lucide-react";
+import { ChevronLeft, FileText, ListOrdered, RefreshCcw, Send } from "lucide-react";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
 import {
+    useBulkResendCampaignRecipients,
     useCampaign,
     useCampaignContacts,
     useSendPersonalizedDrafts,
@@ -55,11 +56,14 @@ export default function CampaignDetailPage() {
     const [templateDefaultName, setTemplateDefaultName] = useState("");
     const [saveTemplateLoading, setSaveTemplateLoading] = useState(false);
     const [senderProfileUuid, setSenderProfileUuid] = useState<string | null>(null);
+    const [selectedRecipients, setSelectedRecipients] = useState<Set<string>>(new Set());
+    const [resendConfirmOpen, setResendConfirmOpen] = useState(false);
     const { data: campaign, isLoading } = useCampaign(uuid);
     const { data: contactsPage } = useCampaignContacts(uuid, {
         limit: 100,
         status: recipientStatus === "ALL" ? undefined : recipientStatus,
     });
+    const bulkResendMut = useBulkResendCampaignRecipients();
     const { data: pendingEmailContacts } = useCampaignContacts(uuid, {
         status: CampaignContactStatuses.PENDING,
         channel: Channel.EMAIL,
@@ -72,6 +76,38 @@ export default function CampaignDetailPage() {
         if (!campaign?.sender_profile_uuid || senderProfileUuid) return;
         setSenderProfileUuid(campaign.sender_profile_uuid);
     }, [campaign?.sender_profile_uuid, senderProfileUuid]);
+
+    const handleRecipientStatusChange = (value: CampaignContactStatus | "ALL") => {
+        setRecipientStatus(value);
+        setSelectedRecipients((prev) => (prev.size === 0 ? prev : new Set()));
+    };
+
+    const toggleRecipientSelect = (uuid: string) => {
+        setSelectedRecipients((prev) => {
+            const next = new Set(prev);
+            if (next.has(uuid)) next.delete(uuid);
+            else next.add(uuid);
+            return next;
+        });
+    };
+
+    const toggleRecipientSelectAll = (uuids: string[], select: boolean) => {
+        setSelectedRecipients((prev) => {
+            const next = new Set(prev);
+            for (const u of uuids) {
+                if (select) next.add(u);
+                else next.delete(u);
+            }
+            return next;
+        });
+    };
+
+    const handleConfirmResendRecipients = async () => {
+        if (!uuid) return;
+        await bulkResendMut.mutateAsync({ campaignUuid: uuid, uuids: [...selectedRecipients] });
+        setSelectedRecipients(new Set());
+        setResendConfirmOpen(false);
+    };
 
     if (isLoading || !campaign) {
         return <CampaignDetailSkeleton />;
@@ -215,33 +251,49 @@ export default function CampaignDetailPage() {
                 <section className="space-y-3">
                     <div className="flex flex-wrap items-end justify-between gap-3">
                         <h2 className="text-sm font-semibold text-foreground">Recipients</h2>
-                        <div className="w-52">
-                            <Label className="text-xs text-muted mb-1 block">Filter by status</Label>
-                            <Select
-                                aria-label="Filter recipients by status"
-                                selectedKey={recipientStatus}
-                                onSelectionChange={(key) =>
-                                    setRecipientStatus((key as CampaignContactStatus | "ALL") ?? "ALL")
-                                }
+                        <div className="flex items-end gap-2">
+                            <Button
+                                size="sm"
+                                variant="secondary"
+                                isDisabled={selectedRecipients.size === 0}
+                                onPress={() => setResendConfirmOpen(true)}
                             >
-                                <Select.Trigger>
-                                    <Select.Value />
-                                    <Select.Indicator />
-                                </Select.Trigger>
-                                <Select.Popover>
-                                    <ListBox>
-                                        {RECIPIENT_STATUS_OPTIONS.map((option) => (
-                                            <ListBox.Item key={option.id} id={option.id} textValue={option.label}>
-                                                {option.label}
-                                                <ListBox.ItemIndicator />
-                                            </ListBox.Item>
-                                        ))}
-                                    </ListBox>
-                                </Select.Popover>
-                            </Select>
+                                <RefreshCcw className="size-3.5" />
+                                Resend selected{selectedRecipients.size > 0 ? ` (${selectedRecipients.size})` : ""}
+                            </Button>
+                            <div className="w-52">
+                                <Label className="text-xs text-muted mb-1 block">Filter by status</Label>
+                                <Select
+                                    aria-label="Filter recipients by status"
+                                    selectedKey={recipientStatus}
+                                    onSelectionChange={(key) =>
+                                        handleRecipientStatusChange((key as CampaignContactStatus | "ALL") ?? "ALL")
+                                    }
+                                >
+                                    <Select.Trigger>
+                                        <Select.Value />
+                                        <Select.Indicator />
+                                    </Select.Trigger>
+                                    <Select.Popover>
+                                        <ListBox>
+                                            {RECIPIENT_STATUS_OPTIONS.map((option) => (
+                                                <ListBox.Item key={option.id} id={option.id} textValue={option.label}>
+                                                    {option.label}
+                                                    <ListBox.ItemIndicator />
+                                                </ListBox.Item>
+                                            ))}
+                                        </ListBox>
+                                    </Select.Popover>
+                                </Select>
+                            </div>
                         </div>
                     </div>
-                    <RecipientsTable rows={contactsPage?.data ?? []} />
+                    <RecipientsTable
+                        rows={contactsPage?.data ?? []}
+                        selected={selectedRecipients}
+                        onToggleSelect={toggleRecipientSelect}
+                        onToggleAll={toggleRecipientSelectAll}
+                    />
                     {contactsPage && contactsPage.total > (contactsPage.data?.length ?? 0) && (
                         <p className="text-xs text-muted text-center">
                             Showing first {contactsPage.data.length} of {contactsPage.total}.
@@ -272,6 +324,16 @@ export default function CampaignDetailPage() {
                 isPending={sendDraftsMutation.isPending}
                 isConfirmDisabled={integrationMissing || !senderProfileUuid}
                 onConfirm={handleSendCampaign}
+            />
+
+            <ConfirmDialog
+                isOpen={resendConfirmOpen}
+                onOpenChange={setResendConfirmOpen}
+                title={`Resend ${selectedRecipients.size} recipient${selectedRecipients.size === 1 ? "" : "s"}?`}
+                description="This retries delivery for the selected failed recipient(s)."
+                confirmLabel="Resend"
+                isPending={bulkResendMut.isPending}
+                onConfirm={handleConfirmResendRecipients}
             />
 
             <MessageTemplateModal

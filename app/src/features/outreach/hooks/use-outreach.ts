@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
+    bulkResendOutreachMessages,
     createAndSendMessage,
     createDraftMessage,
     deleteOutreachMessage,
@@ -78,6 +79,33 @@ export function useSendOutreachMessage() {
         onError: (error: Error) => {
             toast({
                 title: "Could not send message",
+                description: error.message,
+                duration: 3000,
+                variant: "error",
+            });
+        },
+    });
+}
+
+export function useBulkResendOutreachMessages() {
+    const qc = useQueryClient();
+    return useMutation({
+        mutationFn: (vars: { uuids: string[]; contact_uuids?: string[] }) =>
+            bulkResendOutreachMessages(vars.uuids),
+        onSuccess: async (data, vars) => {
+            await syncCachesAfterOutreachSend(qc, { contact_uuids: vars.contact_uuids });
+            toast({
+                title:
+                    data.failed === 0
+                        ? `${data.succeeded} message${data.succeeded === 1 ? "" : "s"} queued for resend`
+                        : `${data.succeeded} queued, ${data.failed} failed`,
+                duration: 3000,
+                variant: data.failed > 0 ? "error" : undefined,
+            });
+        },
+        onError: (error: Error) => {
+            toast({
+                title: "Could not resend messages",
                 description: error.message,
                 duration: 3000,
                 variant: "error",

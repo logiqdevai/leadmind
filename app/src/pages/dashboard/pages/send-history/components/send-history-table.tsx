@@ -35,9 +35,16 @@ export const STATUS_COLOR: Record<
     SKIPPED: "default",
 };
 
-export function SendHistoryTable({ rows }: { rows: SendHistoryMessage[] }) {
+interface SendHistoryTableProps {
+    rows: SendHistoryMessage[];
+    selected: Set<string>;
+    onToggleSelect: (uuid: string) => void;
+    onToggleAll: (uuids: string[], select: boolean) => void;
+}
+
+export function SendHistoryTable({ rows, selected, onToggleSelect, onToggleAll }: SendHistoryTableProps) {
     const { data: integrations } = useIntegrations();
-    const [selected, setSelected] = useState<SendHistoryMessage | null>(null);
+    const [viewMessage, setViewMessage] = useState<SendHistoryMessage | null>(null);
     const [thread, setThread] = useState<{ threadUuid: string; contactUuid: string } | null>(null);
     const [cancelTarget, setCancelTarget] = useState<SendHistoryMessage | null>(null);
     const cancelEnrollmentMut = useCancelEnrollment();
@@ -50,12 +57,16 @@ export function SendHistoryTable({ rows }: { rows: SendHistoryMessage[] }) {
         );
     }
 
+    const eligibleUuids = rows.filter((r) => r.status === MsgStatus.FAILED).map((r) => r.uuid);
+    const allSelected = eligibleUuids.length > 0 && eligibleUuids.every((u) => selected.has(u));
+    const someSelected = eligibleUuids.some((u) => selected.has(u));
+
     return (
         <div className="overflow-x-hidden rounded-xl">
             <SendHistoryMessageModal
-                message={selected}
+                message={viewMessage}
                 onOpenChange={(open) => {
-                    if (!open) setSelected(null);
+                    if (!open) setViewMessage(null);
                 }}
             />
             <MessageThreadModal
@@ -90,6 +101,18 @@ export function SendHistoryTable({ rows }: { rows: SendHistoryMessage[] }) {
             <table className="w-full table-fixed text-sm">
                 <thead className="bg-surface-secondary/40 text-muted">
                     <tr>
+                        <th className="w-8 px-3 py-2">
+                            <input
+                                type="checkbox"
+                                checked={allSelected}
+                                disabled={eligibleUuids.length === 0}
+                                ref={(el) => {
+                                    if (el) el.indeterminate = someSelected && !allSelected;
+                                }}
+                                onChange={() => onToggleAll(eligibleUuids, !allSelected)}
+                                aria-label="Select all failed messages"
+                            />
+                        </th>
                         <th className="min-w-0 max-w-0 overflow-hidden px-3 py-2 text-left font-medium">Contact</th>
                         <th className="hidden lg:table-cell px-3 py-2 text-left font-medium">Channel</th>
                         <th className="hidden lg:table-cell px-3 py-2 text-left font-medium">Integration</th>
@@ -103,6 +126,16 @@ export function SendHistoryTable({ rows }: { rows: SendHistoryMessage[] }) {
                 <tbody>
                     {rows.map((row) => (
                         <tr key={row.uuid} className="border-t border-border">
+                            <td className="px-3 py-2 align-top">
+                                <input
+                                    type="checkbox"
+                                    checked={selected.has(row.uuid)}
+                                    disabled={row.status !== MsgStatus.FAILED}
+                                    onChange={() => onToggleSelect(row.uuid)}
+                                    className={row.status !== MsgStatus.FAILED ? "opacity-30" : undefined}
+                                    aria-label={`Select message to ${row.contact.name ?? "contact"}`}
+                                />
+                            </td>
                             <td className="min-w-0 max-w-0 overflow-hidden px-3 py-2 align-top">
                                 <Link
                                     to={Routes.dashboard.contacts_detail.replace(
@@ -177,7 +210,7 @@ export function SendHistoryTable({ rows }: { rows: SendHistoryMessage[] }) {
                                         size="sm"
                                         variant="ghost"
                                         className="shrink-0 min-w-7 h-7 px-1"
-                                        onPress={() => setSelected(row)}
+                                        onPress={() => setViewMessage(row)}
                                         aria-label="View full message"
                                     >
                                         <Eye className="size-3.5 text-muted" />

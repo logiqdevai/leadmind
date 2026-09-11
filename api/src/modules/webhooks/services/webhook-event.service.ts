@@ -447,6 +447,35 @@ export class WebhookEventService {
                 );
             }
         }
+
+        if (event.kind === 'bounced') {
+            await this.cancelEnrollmentOnBounce(message);
+        }
+    }
+
+    /**
+     * A bounce always cancels the enrollment tied to the bounced message - unlike a
+     * reply there's no per-sequence opt-out for this (a bounce means the address is
+     * undeliverable, so continuing to send further steps is never useful).
+     */
+    private async cancelEnrollmentOnBounce(message: OutreachMessage): Promise<void> {
+        if (!message.sequence_enrollment_uuid) return;
+
+        const enrollment = await this.prisma.sequenceEnrollment.findUnique({
+            where: { uuid: message.sequence_enrollment_uuid },
+            select: { status: true },
+        });
+        if (!enrollment || enrollment.status !== SequenceEnrollmentStatus.ACTIVE) {
+            return;
+        }
+
+        await this.sequenceEnrollmentService.cancelEnrollment(
+            message.organisation_uuid,
+            message.sequence_enrollment_uuid,
+        );
+        this.logger.log(
+            `[ingest] Bounce cancelled sequence enrollment=${message.sequence_enrollment_uuid}`,
+        );
     }
 
     /**

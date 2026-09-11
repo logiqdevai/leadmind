@@ -475,6 +475,66 @@ describe('WebhookEventService', () => {
         );
     });
 
+    it('cancels the linked sequence enrollment on bounce', async () => {
+        const { service, prisma, sequenceEnrollmentService } = createService({
+            message: {
+                status: MsgStatus.SENT,
+                sequence_enrollment_uuid: 'enr-uuid',
+            } as any,
+            mcc: { uuid: 'mcc-uuid', status: CampaignContactStatus.SENT },
+        });
+        prisma.sequenceEnrollment.findUnique.mockResolvedValue({
+            status: 'ACTIVE',
+        });
+
+        await service.ingest({
+            kind: 'bounced',
+            provider_message_id,
+            metadata: { reason: 'Hard bounce' },
+        });
+
+        expect(sequenceEnrollmentService.cancelEnrollment).toHaveBeenCalledWith(
+            organisation_uuid,
+            'enr-uuid',
+        );
+    });
+
+    it('does not cancel a sequence enrollment on bounce when none is linked', async () => {
+        const { service, sequenceEnrollmentService } = createService({
+            message: { status: MsgStatus.SENT },
+            mcc: { uuid: 'mcc-uuid', status: CampaignContactStatus.SENT },
+        });
+
+        await service.ingest({
+            kind: 'bounced',
+            provider_message_id,
+            metadata: { reason: 'Hard bounce' },
+        });
+
+        expect(sequenceEnrollmentService.cancelEnrollment).not.toHaveBeenCalled();
+    });
+
+    it('does not cancel a sequence enrollment on bounce when it is no longer active', async () => {
+        const { service, prisma, sequenceEnrollmentService } = createService({
+            message: {
+                status: MsgStatus.SENT,
+                sequence_enrollment_uuid: 'enr-uuid',
+            } as any,
+            mcc: { uuid: 'mcc-uuid', status: CampaignContactStatus.SENT },
+        });
+        prisma.sequenceEnrollment.findUnique.mockResolvedValue({
+            status: 'CANCELLED',
+        });
+
+        await service.ingest({
+            kind: 'bounced',
+            provider_message_id,
+            metadata: { reason: 'Hard bounce' },
+        });
+
+        expect(sequenceEnrollmentService.cancelEnrollment).not.toHaveBeenCalled();
+    });
+
     it('records email failure with timestamp', async () => {
         const { service, prisma } = createService({
             message: { status: MsgStatus.SENT },

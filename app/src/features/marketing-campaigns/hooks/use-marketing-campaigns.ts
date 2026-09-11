@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
+    bulkResendCampaignRecipients,
     cancelCampaign,
     createCampaign,
     deleteCampaign,
@@ -95,6 +96,35 @@ export function useCampaignContacts(
         queryFn: () => listCampaignContacts(uuid as string, query),
         enabled: !!uuid,
         placeholderData: (prev) => prev,
+    });
+}
+
+export function useBulkResendCampaignRecipients() {
+    const qc = useQueryClient();
+    return useMutation({
+        mutationFn: (vars: { campaignUuid: string; uuids: string[] }) =>
+            bulkResendCampaignRecipients(vars.campaignUuid, vars.uuids),
+        onSuccess: (data, vars) => {
+            qc.invalidateQueries({ queryKey: ["marketing-campaigns", "contacts", vars.campaignUuid] });
+            qc.invalidateQueries({ queryKey: campaignsQueryKeys.detail(vars.campaignUuid) });
+            qc.invalidateQueries({ queryKey: sendHistoryQueryKeys.all });
+            toast({
+                title:
+                    data.failed === 0
+                        ? `${data.succeeded} recipient${data.succeeded === 1 ? "" : "s"} queued for resend`
+                        : `${data.succeeded} queued, ${data.failed} failed`,
+                duration: 3000,
+                variant: data.failed > 0 ? "error" : undefined,
+            });
+        },
+        onError: (error: Error) => {
+            toast({
+                title: "Could not resend recipients",
+                description: error.message,
+                duration: 3000,
+                variant: "error",
+            });
+        },
     });
 }
 

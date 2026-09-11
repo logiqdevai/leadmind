@@ -34,6 +34,10 @@ import {
 } from './utils/sender-profile-metadata.util';
 import { generateMessageId } from '@/shared/utils/email-message-id.util';
 import { ThreadsService } from '@/modules/threads/threads.service';
+import {
+    BulkSendItemResult,
+    BulkSendResult,
+} from './interfaces/bulk-send-result.interface';
 @Injectable()
 export class OutreachService {
     private readonly logger = new Logger(OutreachService.name);
@@ -283,6 +287,36 @@ export class OutreachService {
         }
 
         throw new ConflictException('Only pending, queued, or failed messages can be sent');
+    }
+
+    async bulkResendFailedMessages(
+        organisation_uuid: string,
+        uuids: string[],
+        sent_by_user_uuid?: string,
+    ): Promise<BulkSendResult> {
+        const unique = [...new Set(uuids)];
+        const results: BulkSendItemResult[] = [];
+        for (const uuid of unique) {
+            try {
+                const message = await this.requireOwnedMessage(organisation_uuid, uuid);
+                if (message.status !== MsgStatus.FAILED) {
+                    throw new ConflictException('Only failed messages can be resent');
+                }
+                const { jobId } = await this.sendMessage(organisation_uuid, uuid, {}, sent_by_user_uuid);
+                results.push({ uuid, ok: true, jobId });
+            } catch (error) {
+                results.push({
+                    uuid,
+                    ok: false,
+                    error: error instanceof Error ? error.message : 'Unknown error',
+                });
+            }
+        }
+        return {
+            results,
+            succeeded: results.filter((r) => r.ok).length,
+            failed: results.filter((r) => !r.ok).length,
+        };
     }
 
     async deleteMessage(organisation_uuid: string, message_uuid: string): Promise<void> {

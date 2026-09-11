@@ -1,5 +1,6 @@
 import { Chip } from "@heroui/react";
-import type { MarketingCampaignContact, CampaignContactStatuses } from "@/features/marketing-campaigns/interfaces/campaign.interface";
+import { CampaignContactStatuses } from "@/features/marketing-campaigns/interfaces/campaign.interface";
+import type { MarketingCampaignContact } from "@/features/marketing-campaigns/interfaces/campaign.interface";
 import { Channel } from "@/features/contacts/interfaces/contact.interface";
 
 const STATUS_COLOR: Record<CampaignContactStatuses, "default" | "accent" | "success" | "warning" | "danger"> = {
@@ -16,16 +17,38 @@ const STATUS_COLOR: Record<CampaignContactStatuses, "default" | "accent" | "succ
   UNSUBSCRIBED: "warning",
 };
 
-export function RecipientsTable({ rows }: { rows: MarketingCampaignContact[] }) {
+interface RecipientsTableProps {
+  rows: MarketingCampaignContact[];
+  selected: Set<string>;
+  onToggleSelect: (uuid: string) => void;
+  onToggleAll: (uuids: string[], select: boolean) => void;
+}
+
+export function RecipientsTable({ rows, selected, onToggleSelect, onToggleAll }: RecipientsTableProps) {
   if (rows.length === 0) {
     return <div className="rounded-xl border border-dashed border-border bg-surface-secondary/30 p-8 text-center text-sm text-muted">No recipients yet.</div>;
   }
   const isSequence = rows.some((row) => row.step_order_index != null || row.scheduled_at !== undefined);
+  const eligibleUuids = rows.filter((r) => r.status === CampaignContactStatuses.FAILED).map((r) => r.uuid);
+  const allSelected = eligibleUuids.length > 0 && eligibleUuids.every((u) => selected.has(u));
+  const someSelected = eligibleUuids.some((u) => selected.has(u));
   return (
             <div className="overflow-x-hidden rounded-xl">
       <table className="w-full table-fixed text-sm">
         <thead className="bg-surface-secondary/40 text-muted">
           <tr>
+            <th className="w-8 px-3 py-2">
+              <input
+                type="checkbox"
+                checked={allSelected}
+                disabled={eligibleUuids.length === 0}
+                ref={(el) => {
+                  if (el) el.indeterminate = someSelected && !allSelected;
+                }}
+                onChange={() => onToggleAll(eligibleUuids, !allSelected)}
+                aria-label="Select all failed recipients"
+              />
+            </th>
             <th className="min-w-0 max-w-0 overflow-hidden px-3 py-2 text-left font-medium">Contact</th>
             <th className="hidden lg:table-cell px-3 py-2 text-left font-medium">Channel</th>
             {isSequence && <th className="hidden lg:table-cell px-3 py-2 text-left font-medium w-20">Step</th>}
@@ -39,6 +62,16 @@ export function RecipientsTable({ rows }: { rows: MarketingCampaignContact[] }) 
         <tbody>
           {rows.map((row) => (
             <tr key={row.uuid} className="border-t border-border">
+              <td className="px-3 py-2 align-top">
+                <input
+                  type="checkbox"
+                  checked={selected.has(row.uuid)}
+                  disabled={row.status !== CampaignContactStatuses.FAILED}
+                  onChange={() => onToggleSelect(row.uuid)}
+                  className={row.status !== CampaignContactStatuses.FAILED ? "opacity-30" : undefined}
+                  aria-label={`Select recipient ${row.contact.name ?? ""}`}
+                />
+              </td>
               <td className="min-w-0 max-w-0 overflow-hidden px-3 py-2 align-top">
                 <div className="truncate font-medium text-foreground">{row.contact.name ?? "—"}</div>
                 <div className="truncate text-xs text-muted">{row.channel === Channel.EMAIL ? row.contact.email : row.contact.phone}</div>

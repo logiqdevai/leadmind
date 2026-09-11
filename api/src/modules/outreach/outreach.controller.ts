@@ -23,6 +23,7 @@ import { ListMessagesDto } from './dto/list-messages.dto';
 import { SendOutreachDto } from './dto/send-outreach.dto';
 import { SendExistingMessageDto } from './dto/email-provider.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
+import { BulkSendExistingMessagesDto } from './dto/bulk-send-existing-messages.dto';
 import { OutreachService } from './outreach.service';
 import { ActivityLog } from '@/modules/activity-logs/decorators/activity-log.decorator';
 import {
@@ -81,6 +82,18 @@ export class OutreachController {
         @Body() dto: SendExistingMessageDto = {},
     ) {
         return this.outreachService.sendMessage(organisation_uuid, message_uuid, dto, user_uuid);
+    }
+
+    @ActivityLog({ entityType: ActivityEntityType.OUTREACH_MESSAGE, action: ActivityAction.MESSAGES_BULK_RESENT, entityUuidFrom: 'none' })
+    @Post('messages/bulk-send')
+    @ApiOperation({ summary: 'Retry sending a batch of failed outreach messages' })
+    @ApiResponse({ status: 201 })
+    bulkSendMessages(
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
+        @CurrentUser('uuid') user_uuid: string,
+        @Body() dto: BulkSendExistingMessagesDto,
+    ) {
+        return this.outreachService.bulkResendFailedMessages(organisation_uuid, dto.uuids, user_uuid);
     }
 
     @ActivityLog({ entityType: ActivityEntityType.OUTREACH_MESSAGE, action: ActivityAction.MESSAGE_DELETED, entityUuidFrom: 'params.uuid' })

@@ -63,6 +63,7 @@ export const ActivityAction = {
   MESSAGE_DRAFTED: 'message_drafted',
   MESSAGE_UPDATED: 'message_updated',
   MESSAGE_SENT: 'message_sent',
+  MESSAGES_BULK_RESENT: 'messages_bulk_resent',
   MESSAGE_DELETED: 'message_deleted',
   SEQUENCE_CREATED: 'sequence_created',
   SEQUENCE_ASSIGNED: 'sequence_assigned',

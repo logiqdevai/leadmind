@@ -9,6 +9,7 @@ import type {
     UpdateMessagePayload,
 } from "@/features/contacts/interfaces/contact.interface";
 import type {
+    BulkSendResult,
     InboxContactsListResponse,
     ListInboxContactsQuery,
     ListSendHistoryQuery,
@@ -83,6 +84,15 @@ export const sendOutreachMessage = async (
             throw new Error("Only pending or failed messages can be sent.");
         }
         throw new Error(error?.response?.data?.message || "Failed to send message.");
+    }
+};
+
+export const bulkResendOutreachMessages = async (uuids: string[]): Promise<BulkSendResult> => {
+    try {
+        const response = await axiosInstance.post(ApiRoutes.outreach.bulk_send_messages, { uuids });
+        return response.data;
+    } catch (error: any) {
+        throw new Error(error?.response?.data?.message || "Failed to resend messages.");
     }
 };
 

@@ -30,6 +30,15 @@ main {
   scrollbar-gutter: auto;
 }
 
+a[href],
+button:not(:disabled),
+[type="button"]:not(:disabled),
+[type="submit"]:not(:disabled),
+[type="reset"]:not(:disabled),
+[role="button"]:not([aria-disabled="true"]):not([data-disabled="true"]) {
+  cursor: pointer;
+}
+
 [data-testid="underlay"] {
   background: transparent !important;
   -webkit-backdrop-filter: none !important;
