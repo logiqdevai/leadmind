@@ -72,7 +72,7 @@ export const ContactDetailView: FC<ContactDetailViewProps> = ({
     }, [navigationLocked, onNavigationLockChange]);
 
     return (
-        <div className="mx-auto w-full min-w-0 max-w-5xl space-y-5">
+        <div className="w-full min-w-0 space-y-5">
             <div className="flex items-start gap-2 min-w-0">
                 <div className="min-w-0 flex-1">
                     <ContactDetailHeader

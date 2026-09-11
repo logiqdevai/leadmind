@@ -86,7 +86,7 @@ export const ParentListSelect: FC<ParentListSelectProps> = ({
           </Select.Value>
           <Select.Indicator className="shrink-0" />
         </Select.Trigger>
-        <Select.Popover className="overflow-hidden p-0">
+        <Select.Popover className="w-[var(--trigger-width)] overflow-hidden p-0">
           <div className="relative shrink-0 border-b border-border px-1 pt-1">
             <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted" />
             <Input

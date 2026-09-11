@@ -60,7 +60,7 @@ export function ContactListFormModal({
         {
           title: title.trim(),
           description: description.trim() || undefined,
-          ...(parentListUuid ? { parent_list_uuid: parentListUuid } : {}),
+          ...(selectedParentUuid ? { parent_list_uuid: selectedParentUuid } : {}),
         },
         {
           onSuccess: (list) => {
