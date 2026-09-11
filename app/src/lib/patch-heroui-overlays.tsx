@@ -5,6 +5,7 @@ import {
     DatePicker,
     DateRangePicker,
     Dropdown,
+    Modal,
     Popover,
     Select,
 } from "@heroui/react";
@@ -22,6 +23,19 @@ function withNonModal<T>(Component: T): T {
     return Wrapped as T;
 }
 
+function withDefaultProps<T>(Component: T, defaults: Record<string, unknown>): T {
+    const Comp = Component as ComponentType<Record<string, unknown>>;
+    function Wrapped(props: Record<string, unknown>) {
+        return <Comp {...defaults} {...props} />;
+    }
+    Object.assign(Wrapped, {
+        displayName:
+            (Component as { displayName?: string }).displayName ??
+            (Component as { name?: string }).name,
+    });
+    return Wrapped as T;
+}
+
 Select.Popover = withNonModal(Select.Popover);
 Dropdown.Popover = withNonModal(Dropdown.Popover);
 ComboBox.Popover = withNonModal(ComboBox.Popover);
@@ -29,6 +43,11 @@ Autocomplete.Popover = withNonModal(Autocomplete.Popover);
 DatePicker.Popover = withNonModal(DatePicker.Popover);
 DateRangePicker.Popover = withNonModal(DateRangePicker.Popover);
 Popover.Content = withNonModal(Popover.Content);
+
+// Prevent accidental data loss: clicking outside a modal no longer closes it
+// and discards unsaved input. Individual modals can still opt back in by
+// passing isDismissable explicitly (e.g. read-only viewers).
+Modal.Backdrop = withDefaultProps(Modal.Backdrop, { isDismissable: false });
 
 const OPEN_POPOVER_SELECTOR = [
     ".select__popover",
