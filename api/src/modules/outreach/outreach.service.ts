@@ -34,6 +34,7 @@ import {
 } from './utils/sender-profile-metadata.util';
 import { generateMessageId } from '@/shared/utils/email-message-id.util';
 import { ThreadsService } from '@/modules/threads/threads.service';
+import { SequenceEnrollmentService } from '@/modules/sequences/services/sequence-enrollment.service';
 import {
     BulkSendItemResult,
     BulkSendResult,
@@ -47,6 +48,7 @@ export class OutreachService {
         private readonly emailCredentialsService: EmailCredentialsService,
         private readonly senderProfilesService: SenderProfilesService,
         private readonly threadsService: ThreadsService,
+        private readonly sequenceEnrollmentService: SequenceEnrollmentService,
         @InjectQueue(OUTREACH_SEND_QUEUE) private readonly outreachSendQueue: Queue,
     ) { }
 
@@ -151,6 +153,10 @@ export class OutreachService {
         const senderUuid = await this.resolveSenderProfileUuid(organisation_uuid, dto.sender_profile_uuid);
         if (senderUuid) {
             metadata = mergeSenderProfileMetadata(metadata, senderUuid);
+        }
+
+        if (dto.list_uuid) {
+            metadata = { ...metadata, list_uuid: dto.list_uuid };
         }
 
         return Object.keys(metadata).length > 0 ? metadata : null;
@@ -269,6 +275,12 @@ export class OutreachService {
         }
 
         if (message.status === MsgStatus.FAILED) {
+            if (dto.restart_sequence && message.sequence_enrollment_uuid) {
+                await this.sequenceEnrollmentService.reactivateEnrollment(
+                    organisation_uuid,
+                    message.sequence_enrollment_uuid,
+                );
+            }
             const preservedMetadata = message.metadata;
             await this.prisma.outreachMessage.update({
                 where: { uuid: message_uuid },
@@ -293,6 +305,7 @@ export class OutreachService {
         organisation_uuid: string,
         uuids: string[],
         sent_by_user_uuid?: string,
+        restart_sequence?: boolean,
     ): Promise<BulkSendResult> {
         const unique = [...new Set(uuids)];
         const results: BulkSendItemResult[] = [];
@@ -302,7 +315,12 @@ export class OutreachService {
                 if (message.status !== MsgStatus.FAILED) {
                     throw new ConflictException('Only failed messages can be resent');
                 }
-                const { jobId } = await this.sendMessage(organisation_uuid, uuid, {}, sent_by_user_uuid);
+                const { jobId } = await this.sendMessage(
+                    organisation_uuid,
+                    uuid,
+                    { restart_sequence },
+                    sent_by_user_uuid,
+                );
                 results.push({ uuid, ok: true, jobId });
             } catch (error) {
                 results.push({

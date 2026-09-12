@@ -8,6 +8,7 @@ import { initialsFromName } from "@/lib/profile";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { ComposeMessageModal } from "@/features/messaging/components/compose-message-modal";
 import { EnrollInSequenceModal } from "@/features/sequences/components/enroll-in-sequence-modal";
+import { ResendSequenceDialog } from "@/features/outreach/components/resend-sequence-dialog";
 import { useContact, useContactThreads } from "@/features/contacts/hooks/use-contacts";
 import { useSendOutreachMessage } from "@/features/outreach/hooks/use-outreach";
 import { useCancelEnrollment } from "@/features/sequences/hooks/use-sequences";
@@ -38,6 +39,16 @@ export function InboxThreadList({
     const [composeOpen, setComposeOpen] = useState(false);
     const [enrollOpen, setEnrollOpen] = useState(false);
     const [cancelTarget, setCancelTarget] = useState<ConversationThread | null>(null);
+    const [resendTarget, setResendTarget] = useState<ConversationThread | null>(null);
+
+    const handleResend = (thread: ConversationThread) => {
+        if (!thread.last_message) return;
+        if (thread.sequence_enrollment?.status === SequenceEnrollmentStatus.CANCELLED) {
+            setResendTarget(thread);
+            return;
+        }
+        sendMessage.mutate({ uuid: thread.last_message.uuid, contact_uuid: contactUuid });
+    };
 
     return (
         <div className="flex h-full flex-col">
@@ -130,10 +141,7 @@ export function InboxThreadList({
                                                 tabIndex={0}
                                                 onClick={(e) => {
                                                     e.stopPropagation();
-                                                    sendMessage.mutate({
-                                                        uuid: thread.last_message!.uuid,
-                                                        contact_uuid: contactUuid,
-                                                    });
+                                                    handleResend(thread);
                                                 }}
                                                 className="inline-flex items-center gap-1 text-accent hover:underline"
                                             >
@@ -193,6 +201,23 @@ export function InboxThreadList({
                     });
                     qc.invalidateQueries({ queryKey: ["contact-threads", contactUuid] });
                     setCancelTarget(null);
+                }}
+            />
+
+            <ResendSequenceDialog
+                isOpen={!!resendTarget}
+                onOpenChange={(open) => !open && setResendTarget(null)}
+                contactName={contact?.name}
+                sequenceName={resendTarget?.sequence_enrollment?.sequence.name}
+                isPending={sendMessage.isPending}
+                onResend={async (restartSequence) => {
+                    if (!resendTarget?.last_message) return;
+                    await sendMessage.mutateAsync({
+                        uuid: resendTarget.last_message.uuid,
+                        contact_uuid: contactUuid,
+                        payload: { restart_sequence: restartSequence },
+                    });
+                    setResendTarget(null);
                 }}
             />
         </div>

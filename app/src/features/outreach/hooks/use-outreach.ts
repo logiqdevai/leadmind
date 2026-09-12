@@ -90,8 +90,8 @@ export function useSendOutreachMessage() {
 export function useBulkResendOutreachMessages() {
     const qc = useQueryClient();
     return useMutation({
-        mutationFn: (vars: { uuids: string[]; contact_uuids?: string[] }) =>
-            bulkResendOutreachMessages(vars.uuids),
+        mutationFn: (vars: { uuids: string[]; contact_uuids?: string[]; restart_sequence?: boolean }) =>
+            bulkResendOutreachMessages(vars.uuids, vars.restart_sequence),
         onSuccess: async (data, vars) => {
             await syncCachesAfterOutreachSend(qc, { contact_uuids: vars.contact_uuids });
             toast({

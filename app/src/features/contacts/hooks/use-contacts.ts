@@ -54,7 +54,10 @@ import type {
 } from "../interfaces/contact.interface";
 import { enrichmentQueryKeys } from "@/features/enrichment/hooks/use-enrichment";
 import { contactListQueryKeys } from "@/features/contact-lists/hooks/use-contact-lists";
-import type { PaginatedListMembers } from "@/features/contact-lists/interfaces/contact-list.interface";
+import type {
+    ListMember,
+    PaginatedListMembers,
+} from "@/features/contact-lists/interfaces/contact-list.interface";
 import type { EnrichmentSource } from "@/features/enrichment/constants/enrichment-sources";
 import { toast } from "@/hooks/use-toast";
 import { contactAwaitingScore, markContactsPendingScore } from "@/lib/pending-contact-scores";
@@ -403,7 +406,7 @@ export function useUpdateContact() {
                 qc.setQueryData<PaginatedListMembers>(key, {
                     ...value,
                     data: value.data.map((c) =>
-                        c.uuid === vars.uuid ? ({ ...c, ...vars.payload } as Contact) : c,
+                        c.uuid === vars.uuid ? ({ ...c, ...vars.payload } as ListMember) : c,
                     ),
                 });
             }

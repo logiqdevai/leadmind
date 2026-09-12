@@ -10,6 +10,7 @@ import {
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { OUTREACH_SEND_QUEUE } from '@/core/queues/queues.constants';
 import { ContactsService } from '@/modules/contacts/contacts.service';
+import { ContactListsService } from '@/modules/contact-lists/contact-lists.service';
 import { MessageSendService } from '@/modules/outreach/services/message-send.service';
 import { MessagingGoalsService } from '@/modules/messaging-goals/messaging-goals.service';
 import { CampaignMessageSendService } from '@/modules/marketing-campaigns/services/campaign-message-send.service';
@@ -31,6 +32,7 @@ export class OutreachSendWorker extends WorkerHost implements OnModuleInit {
     private readonly prisma: PrismaService,
     private readonly messageSendService: MessageSendService,
     private readonly contactsService: ContactsService,
+    private readonly contactListsService: ContactListsService,
     private readonly messagingGoalsService: MessagingGoalsService,
     private readonly campaignMessageSendService: CampaignMessageSendService,
     private readonly sequenceEnrollmentService: SequenceEnrollmentService,
@@ -69,7 +71,7 @@ export class OutreachSendWorker extends WorkerHost implements OnModuleInit {
     if (message.campaign_uuid && !message.sequence_step_uuid) {
       await this.failSkippedMessage(message, {
         error_message: `Campaign message must be sent via the campaign worker (campaign ${message.campaign_uuid})`,
-        triggerAdvance: false,
+        cancelSequence: false,
       });
       return;
     }
@@ -79,7 +81,7 @@ export class OutreachSendWorker extends WorkerHost implements OnModuleInit {
     ) {
       await this.failSkippedMessage(message, {
         error_message: `Message is ${message.status} and cannot be sent`,
-        triggerAdvance: false,
+        cancelSequence: false,
       });
       return;
     }
@@ -90,14 +92,14 @@ export class OutreachSendWorker extends WorkerHost implements OnModuleInit {
     ) {
       await this.failSkippedMessage(message, {
         error_message: 'Contact has no email',
-        triggerAdvance: true,
+        cancelSequence: true,
       });
       return;
     }
     if (message.channel === Channel.SMS && !message.contact.phone?.trim()) {
       await this.failSkippedMessage(message, {
         error_message: 'Contact has no phone',
-        triggerAdvance: true,
+        cancelSequence: true,
       });
       return;
     }
@@ -141,6 +143,25 @@ export class OutreachSendWorker extends WorkerHost implements OnModuleInit {
         message.channel === Channel.EMAIL &&
         message.contact.status === LeadStatus.NEW;
 
+      const attributedListUuid =
+        message.channel === Channel.EMAIL
+          ? await this.contactListsService.resolveAttributedListUuid({
+              list_uuid: (message.metadata as { list_uuid?: string } | null)
+                ?.list_uuid,
+              campaign_uuid: message.campaign_uuid,
+              sequence_enrollment_uuid: message.sequence_enrollment_uuid,
+            })
+          : null;
+      const attributedListMember = attributedListUuid
+        ? await this.prisma.contactListMember.findFirst({
+            where: {
+              list_uuid: attributedListUuid,
+              contact_uuid: message.contact_uuid,
+            },
+            select: { status: true },
+          })
+        : null;
+
       await this.prisma.$transaction([
         this.messageSendService.messageSentOperation(
           message.uuid,
@@ -163,6 +184,13 @@ export class OutreachSendWorker extends WorkerHost implements OnModuleInit {
               message.organisation_uuid,
               'email_sent',
               message.contact.status,
+            )
+          : []),
+        ...(attributedListUuid
+          ? this.contactListsService.buildPromoteListStatusToContactedIfNewOps(
+              attributedListUuid,
+              message.contact_uuid,
+              attributedListMember?.status ?? null,
             )
           : []),
       ]);
@@ -239,14 +267,13 @@ export class OutreachSendWorker extends WorkerHost implements OnModuleInit {
         );
       }
       if (message.sequence_enrollment_uuid && message.sequence_step_uuid) {
-        await this.sequenceEnrollmentService.advanceEnrollment(
+        await this.sequenceEnrollmentService.cancelEnrollment(
+          message.organisation_uuid,
           message.sequence_enrollment_uuid,
-          message.sequence_step_uuid,
-          new Date(),
         );
       }
       this.logger.error(
-        `Failed sending outreach message ${message.uuid}: ${error_message} (status set to FAILED)`,
+        `Failed sending outreach message ${message.uuid}: ${error_message} (status set to FAILED, sequence enrollment cancelled)`,
         error instanceof Error ? error.stack : undefined,
       );
     }
@@ -256,12 +283,13 @@ export class OutreachSendWorker extends WorkerHost implements OnModuleInit {
     message: {
       uuid: string;
       metadata: unknown;
+      organisation_uuid: string;
       campaign_uuid: string | null;
       campaign_integration_uuid: string | null;
       sequence_enrollment_uuid: string | null;
       sequence_step_uuid: string | null;
     },
-    options: { error_message: string; triggerAdvance: boolean },
+    options: { error_message: string; cancelSequence: boolean },
   ): Promise<void> {
     await this.messageSendService.messageFailedOperationPreservingProvider(
       message.uuid,
@@ -281,14 +309,13 @@ export class OutreachSendWorker extends WorkerHost implements OnModuleInit {
       );
     }
     if (
-      options.triggerAdvance &&
+      options.cancelSequence &&
       message.sequence_enrollment_uuid &&
       message.sequence_step_uuid
     ) {
-      await this.sequenceEnrollmentService.advanceEnrollment(
+      await this.sequenceEnrollmentService.cancelEnrollment(
+        message.organisation_uuid,
         message.sequence_enrollment_uuid,
-        message.sequence_step_uuid,
-        new Date(),
       );
     }
     this.logger.warn(

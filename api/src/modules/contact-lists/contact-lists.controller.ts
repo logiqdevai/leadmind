@@ -24,6 +24,7 @@ import {
     MoveListContactsBelowScoreDto,
 } from './dto/filter-list-contacts-by-score.dto';
 import { ListContactListMembersDto } from './dto/list-contact-list-members.dto';
+import { UpdateListMemberStatusDto } from './dto/update-list-member-status.dto';
 import { ContactAudienceStatsService } from '@/modules/contact-audience-stats/contact-audience-stats.service';
 import { ContactAudienceAnalysisService } from '@/modules/contact-audience-stats/contact-audience-analysis.service';
 import { ContactAudienceStatsQueryDto } from '@/modules/contact-audience-stats/dto/contact-audience-stats-query.dto';
@@ -199,6 +200,23 @@ export class ContactListsController {
         @Param('contactUuid') contactUuid: string,
     ) {
         return this.contactListsService.removeContact(organisation_uuid, uuid, contactUuid);
+    }
+
+    @ActivityLog({ entityType: ActivityEntityType.CONTACT_LIST, action: ActivityAction.UPDATED, entityUuidFrom: 'params.uuid' })
+    @Patch(':uuid/contacts/:contactUuid/status')
+    @ApiOperation({ summary: "Update a contact's status scoped to this list" })
+    updateMemberStatus(
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
+        @Param('uuid') uuid: string,
+        @Param('contactUuid') contactUuid: string,
+        @Body() dto: UpdateListMemberStatusDto,
+    ) {
+        return this.contactListsService.updateMemberStatus(
+            organisation_uuid,
+            uuid,
+            contactUuid,
+            dto.status,
+        );
     }
 
     @Get(':uuid/stats')

@@ -433,12 +433,13 @@ model ContactList {
   created_at        DateTime @default(now())
   updated_at        DateTime @updatedAt
 
-  organisation      Organisation              @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
-  parent            ContactList?              @relation("ContactListHierarchy", fields: [parent_list_uuid], references: [uuid], onDelete: Cascade)
-  children          ContactList[]             @relation("ContactListHierarchy")
-  members           ContactListMember[]
-  audience_analyses ContactAudienceAnalysis[]
-  filters           Filter[]
+  organisation         Organisation              @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  parent               ContactList?              @relation("ContactListHierarchy", fields: [parent_list_uuid], references: [uuid], onDelete: Cascade)
+  children             ContactList[]             @relation("ContactListHierarchy")
+  members              ContactListMember[]
+  audience_analyses    ContactAudienceAnalysis[]
+  filters              Filter[]
+  sequence_enrollments SequenceEnrollment[]
 
   @@index([organisation_uuid])
   @@index([parent_list_uuid])
@@ -446,11 +447,12 @@ model ContactList {
 }
 
 model ContactListMember {
-  id           Int      @id @default(autoincrement())
-  uuid         String   @unique @default(uuid())
+  id           Int        @id @default(autoincrement())
+  uuid         String     @unique @default(uuid())
   list_uuid    String
   contact_uuid String
-  created_at   DateTime @default(now())
+  status       LeadStatus @default(NEW)
+  created_at   DateTime   @default(now())
 
   list    ContactList @relation(fields: [list_uuid], references: [uuid], onDelete: Cascade)
   contact Contact     @relation(fields: [contact_uuid], references: [uuid], onDelete: Cascade)
@@ -655,6 +657,7 @@ model SequenceEnrollment {
   sequence_uuid            String
   contact_uuid             String
   campaign_uuid            String?
+  list_uuid                String?
   status                   SequenceEnrollmentStatus @default(ACTIVE)
   enrolled_at              DateTime                 @default(now())
   current_step_order_index Int                      @default(0)
@@ -667,12 +670,14 @@ model SequenceEnrollment {
   sequence          OutreachSequence   @relation(fields: [sequence_uuid], references: [uuid], onDelete: Cascade)
   contact           Contact            @relation(fields: [contact_uuid], references: [uuid], onDelete: Cascade)
   campaign          MarketingCampaign? @relation(fields: [campaign_uuid], references: [uuid], onDelete: SetNull)
+  list              ContactList?       @relation(fields: [list_uuid], references: [uuid], onDelete: SetNull)
   outreach_messages OutreachMessage[]
 
   @@unique([sequence_uuid, contact_uuid, campaign_uuid], map: "sequence_enrollments_target_key")
   @@index([sequence_uuid])
   @@index([contact_uuid])
   @@index([campaign_uuid])
+  @@index([list_uuid])
   @@index([sequence_uuid, contact_uuid, status])
   @@index([status])
   @@map("sequence_enrollments")

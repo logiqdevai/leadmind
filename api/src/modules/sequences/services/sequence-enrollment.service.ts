@@ -59,6 +59,7 @@ export class SequenceEnrollmentService {
     contact_uuid: string,
     sent_by_user_uuid?: string,
     campaign_uuid?: string,
+    list_uuid?: string,
   ): Promise<SequenceEnrollment> {
     const sequence = await this.requireActiveSequence(
       organisation_uuid,
@@ -109,6 +110,7 @@ export class SequenceEnrollmentService {
             sequence_uuid,
             contact_uuid,
             campaign_uuid: campaign_uuid ?? null,
+            list_uuid: list_uuid ?? null,
             status: SequenceEnrollmentStatus.ACTIVE,
             enrolled_at,
             first_step_sent_at: firstStepAt,
@@ -240,6 +242,7 @@ export class SequenceEnrollmentService {
     contact_uuids: string[],
     campaign_uuid?: string,
     sent_by_user_uuid?: string,
+    list_uuid?: string,
   ): Promise<{
     enrolled: number;
     skipped: number;
@@ -265,6 +268,7 @@ export class SequenceEnrollmentService {
             // Campaign-driven bulk enrollments have no acting user; direct bulk enrolls attribute to the caller.
             sent_by_user_uuid,
             campaign_uuid,
+            list_uuid,
           );
           enrolled += 1;
         } catch (error) {
@@ -357,6 +361,66 @@ export class SequenceEnrollmentService {
                   increment: totalSkipped,
                 },
               },
+            }),
+          ]
+        : []),
+    ]);
+
+    return this.prisma.sequenceEnrollment.findUniqueOrThrow({
+      where: { uuid: enrollment.uuid },
+    });
+  }
+
+  /**
+   * Reverses a cancellation caused by a step failure/bounce so the enrollment resumes
+   * advancing once the just-resent step succeeds. Only reverses the never-materialized-
+   * step accounting cancelEnrollment adds for campaign-linked enrollments - it assumes
+   * no steps were actually materialized/skipped in between, which holds for the
+   * fail-then-resend flow this is built for.
+   */
+  async reactivateEnrollment(
+    organisation_uuid: string,
+    enrollment_uuid: string,
+  ): Promise<SequenceEnrollment> {
+    const enrollment = await this.prisma.sequenceEnrollment.findFirst({
+      where: { uuid: enrollment_uuid, sequence: { organisation_uuid } },
+    });
+    if (!enrollment) {
+      throw new NotFoundException(
+        `Sequence enrollment ${enrollment_uuid} not found`,
+      );
+    }
+    if (enrollment.status !== SequenceEnrollmentStatus.CANCELLED) {
+      return enrollment;
+    }
+
+    let neverMaterializedCount = 0;
+    if (enrollment.campaign_uuid) {
+      const sequence = await this.prisma.outreachSequence.findUnique({
+        where: { uuid: enrollment.sequence_uuid },
+        include: { steps: true },
+      });
+      if (sequence) {
+        const enabledSteps = this.sortEnabledSteps(sequence.steps);
+        const position = enabledSteps.findIndex(
+          (step) => step.order_index === enrollment.current_step_order_index,
+        );
+        if (position >= 0) {
+          neverMaterializedCount = enabledSteps.length - (position + 1);
+        }
+      }
+    }
+
+    await this.prisma.$transaction([
+      this.prisma.sequenceEnrollment.update({
+        where: { uuid: enrollment.uuid },
+        data: { status: SequenceEnrollmentStatus.ACTIVE, cancelled_at: null },
+      }),
+      ...(enrollment.campaign_uuid && neverMaterializedCount > 0
+        ? [
+            this.prisma.marketingCampaign.update({
+              where: { uuid: enrollment.campaign_uuid },
+              data: { skipped_count: { decrement: neverMaterializedCount } },
             }),
           ]
         : []),

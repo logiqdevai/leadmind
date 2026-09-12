@@ -1,14 +1,16 @@
-import { type ReactNode, useMemo } from "react";
+import { type ReactNode, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button, Chip, Drawer } from "@heroui/react";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
 import { ExternalLink, Mail, MessageCircle, RefreshCcw } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { normalizeUrl } from "@/lib/profile";
-import { Channel, MsgStatus } from "@/features/contacts/interfaces/contact.interface";
+import { Channel, MsgStatus, type OutreachMessage } from "@/features/contacts/interfaces/contact.interface";
 import { SourceBadge } from "@/components/ui/source-badge";
-import { useContact } from "@/features/contacts/hooks/use-contacts";
+import { useContact, useContactThreads } from "@/features/contacts/hooks/use-contacts";
 import { useSendOutreachMessage } from "@/features/outreach/hooks/use-outreach";
+import { ResendSequenceDialog } from "@/features/outreach/components/resend-sequence-dialog";
+import { SequenceEnrollmentStatus } from "@/features/sequences/interfaces/sequence.interface";
 import { useIntegrations } from "@/features/integrations/hooks/use-integrations";
 import { resolveDefaultEmailTarget } from "@/features/integrations/utils/email-provider-utils";
 import { useEmailProviderSendLimitStatus } from "@/features/email-send-limits/hooks/use-email-provider-send-limit-status";
@@ -30,12 +32,28 @@ interface LeadDrawerProps {
 export function LeadDrawer({ contactUuid, isOpen, onOpenChange }: LeadDrawerProps) {
   const { data: contact, isLoading } = useContact(contactUuid);
   const sendMessage = useSendOutreachMessage();
+  const { data: threads = [] } = useContactThreads(contactUuid);
   const { data: integrations = [] } = useIntegrations();
   const defaultEmailTarget = useMemo(
     () => resolveDefaultEmailTarget(integrations),
     [integrations],
   );
   const emailLimitStatus = useEmailProviderSendLimitStatus(defaultEmailTarget?.provider ?? null);
+  const [resendTarget, setResendTarget] = useState<{
+    message: OutreachMessage;
+    sequenceName?: string | null;
+  } | null>(null);
+
+  const threadByUuid = useMemo(() => new Map(threads.map((t) => [t.uuid, t])), [threads]);
+
+  const handleResend = (message: OutreachMessage) => {
+    const thread = message.thread_uuid ? threadByUuid.get(message.thread_uuid) : undefined;
+    if (thread?.sequence_enrollment?.status === SequenceEnrollmentStatus.CANCELLED) {
+      setResendTarget({ message, sequenceName: thread.sequence_enrollment.sequence.name });
+      return;
+    }
+    sendMessage.mutate({ uuid: message.uuid, contact_uuid: contact!.uuid });
+  };
 
   const { drafts, sentHistory } = useMemo(() => {
     const messages = contact?.outreach_messages ?? [];
@@ -148,12 +166,7 @@ export function LeadDrawer({ contactUuid, isOpen, onOpenChange }: LeadDrawerProp
                                   (m.channel === Channel.EMAIL && emailLimitStatus.reached)
                                 }
                                 isPending={sendMessage.isPending}
-                                onPress={() =>
-                                  sendMessage.mutate({
-                                    uuid: m.uuid,
-                                    contact_uuid: contact.uuid,
-                                  })
-                                }
+                                onPress={() => handleResend(m)}
                                 idleLeading={<RefreshCcw className="size-3.5" />}
                               >
                                 Resend
@@ -187,6 +200,25 @@ export function LeadDrawer({ contactUuid, isOpen, onOpenChange }: LeadDrawerProp
           </Drawer.Footer>
         </Drawer.Dialog>
       </Drawer.Content>
+
+      <ResendSequenceDialog
+        isOpen={resendTarget !== null}
+        onOpenChange={(open) => {
+          if (!open) setResendTarget(null);
+        }}
+        contactName={contact?.name}
+        sequenceName={resendTarget?.sequenceName}
+        isPending={sendMessage.isPending}
+        onResend={async (restartSequence) => {
+          if (!resendTarget || !contact) return;
+          await sendMessage.mutateAsync({
+            uuid: resendTarget.message.uuid,
+            contact_uuid: contact.uuid,
+            payload: { restart_sequence: restartSequence },
+          });
+          setResendTarget(null);
+        }}
+      />
     </Drawer.Backdrop>
   );
 }

@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { Button, Tabs } from "@heroui/react";
+import { Button, Checkbox, Tabs } from "@heroui/react";
 import { Inbox, LayoutList, RefreshCcw } from "lucide-react";
 import { ScrollableTabs, ScrollableTabsList, tabTriggerClassName } from "@/components/ui/scrollable-tabs";
 import { Channel, MsgStatus } from "@/features/contacts/interfaces/contact.interface";
+import { SequenceEnrollmentStatus } from "@/features/sequences/interfaces/sequence.interface";
 import {
     allocationKey,
 } from "@/features/integrations/utils/email-provider-utils";
@@ -144,7 +145,18 @@ export default function SendHistoryPage() {
     const totalPages = data?.totalPages ?? 1;
 
     const [resendConfirmOpen, setResendConfirmOpen] = useState(false);
+    const [restartSequences, setRestartSequences] = useState(false);
     const bulkResendMut = useBulkResendOutreachMessages();
+
+    const selectedCancelledSequenceCount = useMemo(
+        () =>
+            rows.filter(
+                (r) =>
+                    selected.has(r.uuid) &&
+                    r.sequence_enrollment?.status === SequenceEnrollmentStatus.CANCELLED,
+            ).length,
+        [rows, selected],
+    );
 
     const toggleSelect = (uuid: string) => {
         setSelected((prev) => {
@@ -168,9 +180,14 @@ export default function SendHistoryPage() {
 
     const handleConfirmResend = async () => {
         const contactUuids = rows.filter((r) => selected.has(r.uuid)).map((r) => r.contact.uuid);
-        await bulkResendMut.mutateAsync({ uuids: [...selected], contact_uuids: contactUuids });
+        await bulkResendMut.mutateAsync({
+            uuids: [...selected],
+            contact_uuids: contactUuids,
+            restart_sequence: restartSequences,
+        });
         setSelected(new Set());
         setResendConfirmOpen(false);
+        setRestartSequences(false);
     };
 
     const emailAccountOptions = useMemo(() => {
@@ -349,9 +366,28 @@ export default function SendHistoryPage() {
 
             <ConfirmDialog
                 isOpen={resendConfirmOpen}
-                onOpenChange={setResendConfirmOpen}
+                onOpenChange={(open) => {
+                    setResendConfirmOpen(open);
+                    if (!open) setRestartSequences(false);
+                }}
                 title={`Resend ${selected.size} message${selected.size === 1 ? "" : "s"}?`}
-                description="This retries delivery for the selected failed message(s)."
+                description={
+                    <div className="flex flex-col gap-3">
+                        <p>This retries delivery for the selected failed message(s).</p>
+                        {selectedCancelledSequenceCount > 0 ? (
+                            <Checkbox isSelected={restartSequences} onChange={setRestartSequences}>
+                                <Checkbox.Control>
+                                    <Checkbox.Indicator />
+                                </Checkbox.Control>
+                                <span className="text-sm text-foreground">
+                                    Also restart the sequence for {selectedCancelledSequenceCount}{" "}
+                                    contact{selectedCancelledSequenceCount === 1 ? "" : "s"} whose
+                                    sequence was stopped by this failure
+                                </span>
+                            </Checkbox>
+                        ) : null}
+                    </div>
+                }
                 confirmLabel="Resend"
                 isPending={bulkResendMut.isPending}
                 onConfirm={handleConfirmResend}

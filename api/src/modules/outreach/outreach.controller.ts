@@ -93,7 +93,12 @@ export class OutreachController {
         @CurrentUser('uuid') user_uuid: string,
         @Body() dto: BulkSendExistingMessagesDto,
     ) {
-        return this.outreachService.bulkResendFailedMessages(organisation_uuid, dto.uuids, user_uuid);
+        return this.outreachService.bulkResendFailedMessages(
+            organisation_uuid,
+            dto.uuids,
+            user_uuid,
+            dto.restart_sequence,
+        );
     }
 
     @ActivityLog({ entityType: ActivityEntityType.OUTREACH_MESSAGE, action: ActivityAction.MESSAGE_DELETED, entityUuidFrom: 'params.uuid' })

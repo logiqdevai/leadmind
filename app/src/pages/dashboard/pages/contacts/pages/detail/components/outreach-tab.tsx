@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Button, Chip } from "@heroui/react";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
 import { MessageCircleReply, Pencil, Plus, RefreshCcw, Send, Trash, Workflow } from "lucide-react";
-import { Channel, ThreadOrigin, type Contact } from "@/features/contacts/interfaces/contact.interface";
+import { Channel, ThreadOrigin, type Contact, type ConversationThread } from "@/features/contacts/interfaces/contact.interface";
 import { MsgStatus, type OutreachMessage } from "@/features/contacts/interfaces/contact.interface";
 import { useDeleteOutreachMessage, useSendOutreachMessage } from "@/features/outreach/hooks/use-outreach";
 import { useContactThreads } from "@/features/contacts/hooks/use-contacts";
@@ -12,6 +12,8 @@ import { cn } from "@/lib/utils";
 import { ComposeMessageModal } from "@/features/messaging/components/compose-message-modal";
 import { ORIGIN_COLOR, ORIGIN_LABEL } from "@/features/messaging/components/thread-conversation";
 import { EnrollInSequenceModal } from "@/features/sequences/components/enroll-in-sequence-modal";
+import { ResendSequenceDialog } from "@/features/outreach/components/resend-sequence-dialog";
+import { SequenceEnrollmentStatus } from "@/features/sequences/interfaces/sequence.interface";
 import { useIntegrations } from "@/features/integrations/hooks/use-integrations";
 import { resolveDefaultEmailTarget } from "@/features/integrations/utils/email-provider-utils";
 import { useEmailProviderSendLimitStatus } from "@/features/email-send-limits/hooks/use-email-provider-send-limit-status";
@@ -42,16 +44,18 @@ interface SentGroup {
   channel: Channel;
   messages: OutreachMessage[];
   lastActivityAt: string;
+  sequence_enrollment: ConversationThread["sequence_enrollment"];
 }
 
 interface OutreachTabProps {
   contact: Contact;
+  listUuid?: string;
   highlightUuid?: string | null;
   onHighlightConsumed?: () => void;
   onNavigationLockChange?: (locked: boolean) => void;
 }
 
-export function OutreachTab({ contact, highlightUuid, onHighlightConsumed, onNavigationLockChange }: OutreachTabProps) {
+export function OutreachTab({ contact, listUuid, highlightUuid, onHighlightConsumed, onNavigationLockChange }: OutreachTabProps) {
   const sendMessage = useSendOutreachMessage();
   const deleteMessage = useDeleteOutreachMessage();
   const { data: threads = [] } = useContactThreads(contact.uuid);
@@ -69,7 +73,16 @@ export function OutreachTab({ contact, highlightUuid, onHighlightConsumed, onNav
   const [enrollOpen, setEnrollOpen] = useState(false);
   const [openThreadUuid, setOpenThreadUuid] = useState<string | null>(null);
   const [ringedUuid, setRingedUuid] = useState<string | null>(null);
+  const [resendTarget, setResendTarget] = useState<{ message: OutreachMessage; group: SentGroup } | null>(null);
   const cardRefs = useRef(new Map<string, HTMLDivElement>());
+
+  const handleResend = (message: OutreachMessage, group: SentGroup) => {
+    if (group.sequence_enrollment?.status === SequenceEnrollmentStatus.CANCELLED) {
+      setResendTarget({ message, group });
+      return;
+    }
+    sendMessage.mutate({ uuid: message.uuid, contact_uuid: contact.uuid });
+  };
 
   useEffect(() => {
     if (!highlightUuid) return;
@@ -133,6 +146,7 @@ export function OutreachTab({ contact, highlightUuid, onHighlightConsumed, onNav
         channel: sorted[0].channel,
         messages: sorted,
         lastActivityAt,
+        sequence_enrollment: thread?.sequence_enrollment ?? null,
       };
     });
     sentGroups.sort((a, b) => b.lastActivityAt.localeCompare(a.lastActivityAt));
@@ -297,12 +311,7 @@ export function OutreachTab({ contact, highlightUuid, onHighlightConsumed, onNav
                                 ? emailLimitStatus.message ?? "Send limit reached"
                                 : "Resend"
                             }
-                            onPress={() =>
-                              sendMessage.mutate({
-                                uuid: m.uuid,
-                                contact_uuid: contact.uuid,
-                              })
-                            }
+                            onPress={() => handleResend(m, group)}
                           >
                             <RefreshCcw className="size-3.5" />
                             Resend
@@ -344,6 +353,7 @@ export function OutreachTab({ contact, highlightUuid, onHighlightConsumed, onNav
         isOpen={composeOpen}
         onOpenChange={setComposeOpen}
         contactUuid={contact.uuid}
+        listUuid={listUuid}
         recipientEmail={contact.email}
         recipientEmailValidationStatus={contact.email_validation_status}
         recipientEmailValidationReason={contact.email_validation_reason}
@@ -406,6 +416,25 @@ export function OutreachTab({ contact, highlightUuid, onHighlightConsumed, onNav
           } catch {
             return;
           }
+        }}
+      />
+
+      <ResendSequenceDialog
+        isOpen={resendTarget !== null}
+        onOpenChange={(open) => {
+          if (!open) setResendTarget(null);
+        }}
+        contactName={contact.name}
+        sequenceName={resendTarget?.group.sequence_enrollment?.sequence.name}
+        isPending={sendMessage.isPending}
+        onResend={async (restartSequence) => {
+          if (!resendTarget) return;
+          await sendMessage.mutateAsync({
+            uuid: resendTarget.message.uuid,
+            contact_uuid: contact.uuid,
+            payload: { restart_sequence: restartSequence },
+          });
+          setResendTarget(null);
         }}
       />
     </div>

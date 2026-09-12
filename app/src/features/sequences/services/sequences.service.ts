@@ -147,11 +147,12 @@ export const enrollContactInSequence = async (
 export const bulkEnrollContactsInSequence = async (
     uuid: string,
     contact_uuids: string[],
+    list_uuid?: string,
 ): Promise<{ enrolled: number; skipped: number; totalMessages: number }> => {
     try {
         const response = await axiosInstance.post<{ enrolled: number; skipped: number; totalMessages: number }>(
             ApiRoutes.sequences.enroll_bulk(uuid),
-            { contact_uuids },
+            { contact_uuids, list_uuid },
         );
         return response.data;
     } catch (error: any) {

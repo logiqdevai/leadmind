@@ -277,6 +277,8 @@ export const ApiRoutes = {
         add_below_score: (uuid: string) => `/contact-lists/${uuid}/contacts/add-below-score`,
         remove_contact: (listUuid: string, contactUuid: string) =>
             `/contact-lists/${listUuid}/contacts/${contactUuid}`,
+        update_member_status: (listUuid: string, contactUuid: string) =>
+            `/contact-lists/${listUuid}/contacts/${contactUuid}/status`,
         stats: (uuid: string) => `/contact-lists/${uuid}/stats`,
         analyses: (uuid: string) => `/contact-lists/${uuid}/analyses`,
         analysis: (listUuid: string, analysisUuid: string) =>

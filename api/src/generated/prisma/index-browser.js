@@ -365,6 +365,7 @@ exports.Prisma.ContactListMemberScalarFieldEnum = {
   uuid: 'uuid',
   list_uuid: 'list_uuid',
   contact_uuid: 'contact_uuid',
+  status: 'status',
   created_at: 'created_at'
 };
 
@@ -487,6 +488,7 @@ exports.Prisma.SequenceEnrollmentScalarFieldEnum = {
   sequence_uuid: 'sequence_uuid',
   contact_uuid: 'contact_uuid',
   campaign_uuid: 'campaign_uuid',
+  list_uuid: 'list_uuid',
   status: 'status',
   enrolled_at: 'enrolled_at',
   current_step_order_index: 'current_step_order_index',

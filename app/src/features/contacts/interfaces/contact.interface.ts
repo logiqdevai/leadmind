@@ -380,6 +380,7 @@ export interface SendMessagePayload {
     email_account?: string;
     email_domain_uuid?: string;
     sender_profile_uuid?: string;
+    restart_sequence?: boolean;
 }
 
 export interface UpdateMessagePayload {
@@ -396,6 +397,7 @@ export interface CreateMessagePayload {
     email_account?: string;
     email_domain_uuid?: string;
     sender_profile_uuid?: string;
+    list_uuid?: string;
 }
 
 export interface BulkCreateMessageResult {

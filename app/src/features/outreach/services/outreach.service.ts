@@ -87,9 +87,15 @@ export const sendOutreachMessage = async (
     }
 };
 
-export const bulkResendOutreachMessages = async (uuids: string[]): Promise<BulkSendResult> => {
+export const bulkResendOutreachMessages = async (
+    uuids: string[],
+    restart_sequence?: boolean,
+): Promise<BulkSendResult> => {
     try {
-        const response = await axiosInstance.post(ApiRoutes.outreach.bulk_send_messages, { uuids });
+        const response = await axiosInstance.post(ApiRoutes.outreach.bulk_send_messages, {
+            uuids,
+            restart_sequence,
+        });
         return response.data;
     } catch (error: any) {
         throw new Error(error?.response?.data?.message || "Failed to resend messages.");

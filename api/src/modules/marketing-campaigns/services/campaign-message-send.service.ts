@@ -25,6 +25,7 @@ import {
 } from '@/shared/utils/contact-email.util';
 import { sanitizeEmailHtml } from '@/shared/utils/sanitize-html.util';
 import { ContactsService } from '@/modules/contacts/contacts.service';
+import { ContactListsService } from '@/modules/contact-lists/contact-lists.service';
 import { MessageSendService } from '@/modules/outreach/services/message-send.service';
 import { EmailProviderTarget } from '@/modules/integrations/interfaces/email-credentials.interface';
 import { EmailCredentialsService } from '@/modules/integrations/services/email-credentials.service';
@@ -57,6 +58,7 @@ export class CampaignMessageSendService {
     private readonly emailCredentialsService: EmailCredentialsService,
     private readonly senderProfilesService: SenderProfilesService,
     private readonly contactsService: ContactsService,
+    private readonly contactListsService: ContactListsService,
     private readonly sendingCapacityService: SendingCapacityService,
     private readonly threadsService: ThreadsService,
     @InjectQueue(MARKETING_MESSAGE_SEND_QUEUE)
@@ -252,6 +254,19 @@ export class CampaignMessageSendService {
       const shouldPromoteOnSend =
         mcc.channel === Channel.EMAIL && mcc.contact.status === LeadStatus.NEW;
 
+      const attributedListUuid =
+        mcc.channel === Channel.EMAIL
+          ? await this.contactListsService.resolveAttributedListUuid({
+              campaign_uuid: mcc.campaign_uuid,
+            })
+          : null;
+      const attributedListMember = attributedListUuid
+        ? await this.prisma.contactListMember.findFirst({
+            where: { list_uuid: attributedListUuid, contact_uuid: mcc.contact_uuid },
+            select: { status: true },
+          })
+        : null;
+
       await this.prisma.$transaction([
         this.messageSendService.messageSentOperation(
           message.uuid,
@@ -291,6 +306,13 @@ export class CampaignMessageSendService {
               mcc.campaign.organisation_uuid,
               'email_sent',
               mcc.contact.status,
+            )
+          : []),
+        ...(attributedListUuid
+          ? this.contactListsService.buildPromoteListStatusToContactedIfNewOps(
+              attributedListUuid,
+              mcc.contact_uuid,
+              attributedListMember?.status ?? null,
             )
           : []),
       ]);

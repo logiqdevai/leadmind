@@ -262,8 +262,8 @@ export function useEnrollContact() {
 export function useBulkEnrollContacts() {
     const qc = useQueryClient();
     return useMutation({
-        mutationFn: (vars: { uuid: string; contact_uuids: string[] }) =>
-            bulkEnrollContactsInSequence(vars.uuid, vars.contact_uuids),
+        mutationFn: (vars: { uuid: string; contact_uuids: string[]; list_uuid?: string }) =>
+            bulkEnrollContactsInSequence(vars.uuid, vars.contact_uuids, vars.list_uuid),
         onSuccess: (data, vars) => {
             qc.invalidateQueries({ queryKey: sequencesQueryKeys.enrollments(vars.uuid) });
             qc.invalidateQueries({ queryKey: contactsQueryKeys.all });

@@ -233,6 +233,8 @@ export class SequencesController {
             uuid,
             dto.contact_uuid,
             user_uuid,
+            undefined,
+            dto.list_uuid,
         );
     }
 
@@ -259,6 +261,7 @@ export class SequencesController {
             dto.contact_uuids,
             undefined,
             user_uuid,
+            dto.list_uuid,
         );
     }
 

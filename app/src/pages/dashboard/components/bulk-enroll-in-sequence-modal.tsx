@@ -15,6 +15,7 @@ interface BulkEnrollInSequenceModalProps {
     onOpenChange: (open: boolean) => void;
     contacts: Contact[];
     onComplete?: () => void;
+    listUuid?: string;
 }
 
 export const BulkEnrollInSequenceModal: FC<BulkEnrollInSequenceModalProps> = ({
@@ -22,6 +23,7 @@ export const BulkEnrollInSequenceModal: FC<BulkEnrollInSequenceModalProps> = ({
     onOpenChange,
     contacts,
     onComplete,
+    listUuid,
 }) => {
     const { data: sequences = [], isLoading } = useSequences({ status: SequenceStatus.ACTIVE });
     const enrollMutation = useBulkEnrollContacts();
@@ -73,7 +75,11 @@ export const BulkEnrollInSequenceModal: FC<BulkEnrollInSequenceModalProps> = ({
 
     const handleEnroll = async () => {
         if (!selectedUuid || count === 0) return;
-        await enrollMutation.mutateAsync({ uuid: selectedUuid, contact_uuids: selectedUuids });
+        await enrollMutation.mutateAsync({
+            uuid: selectedUuid,
+            contact_uuids: selectedUuids,
+            list_uuid: listUuid,
+        });
         setSelectedUuid(null);
         handleOpenChange(false);
         onComplete?.();

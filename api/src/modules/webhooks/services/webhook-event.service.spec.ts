@@ -138,6 +138,11 @@ describe('WebhookEventService', () => {
             ),
             syncContactSearchIndex: jest.fn().mockResolvedValue(undefined),
         };
+        const contactListsService = {
+            resolveAttributedListUuid: jest.fn().mockResolvedValue(null),
+            buildPromoteListStatusToContactedIfNewOps: jest.fn(() => []),
+            buildPromoteListStatusToEngagedOnReplyOps: jest.fn(() => []),
+        };
         const mailService = {
             create: jest.fn().mockResolvedValue(undefined),
         };
@@ -158,6 +163,7 @@ describe('WebhookEventService', () => {
                 resendAdapter as any,
                 campaignSendService as any,
                 contactsService as any,
+                contactListsService as any,
                 mailService as any,
                 sequenceEnrollmentService as any,
                 remindersService as any,

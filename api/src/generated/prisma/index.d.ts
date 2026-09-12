@@ -7561,6 +7561,7 @@ export namespace Prisma {
     members: number
     audience_analyses: number
     filters: number
+    sequence_enrollments: number
   }
 
   export type ContactListCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7568,6 +7569,7 @@ export namespace Prisma {
     members?: boolean | ContactListCountOutputTypeCountMembersArgs
     audience_analyses?: boolean | ContactListCountOutputTypeCountAudience_analysesArgs
     filters?: boolean | ContactListCountOutputTypeCountFiltersArgs
+    sequence_enrollments?: boolean | ContactListCountOutputTypeCountSequence_enrollmentsArgs
   }
 
   // Custom InputTypes
@@ -7607,6 +7609,13 @@ export namespace Prisma {
    */
   export type ContactListCountOutputTypeCountFiltersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: FilterWhereInput
+  }
+
+  /**
+   * ContactListCountOutputType without action
+   */
+  export type ContactListCountOutputTypeCountSequence_enrollmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SequenceEnrollmentWhereInput
   }
 
 
@@ -30106,6 +30115,7 @@ export namespace Prisma {
     members?: boolean | ContactList$membersArgs<ExtArgs>
     audience_analyses?: boolean | ContactList$audience_analysesArgs<ExtArgs>
     filters?: boolean | ContactList$filtersArgs<ExtArgs>
+    sequence_enrollments?: boolean | ContactList$sequence_enrollmentsArgs<ExtArgs>
     _count?: boolean | ContactListCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["contactList"]>
 
@@ -30154,6 +30164,7 @@ export namespace Prisma {
     members?: boolean | ContactList$membersArgs<ExtArgs>
     audience_analyses?: boolean | ContactList$audience_analysesArgs<ExtArgs>
     filters?: boolean | ContactList$filtersArgs<ExtArgs>
+    sequence_enrollments?: boolean | ContactList$sequence_enrollmentsArgs<ExtArgs>
     _count?: boolean | ContactListCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ContactListIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -30174,6 +30185,7 @@ export namespace Prisma {
       members: Prisma.$ContactListMemberPayload<ExtArgs>[]
       audience_analyses: Prisma.$ContactAudienceAnalysisPayload<ExtArgs>[]
       filters: Prisma.$FilterPayload<ExtArgs>[]
+      sequence_enrollments: Prisma.$SequenceEnrollmentPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -30584,6 +30596,7 @@ export namespace Prisma {
     members<T extends ContactList$membersArgs<ExtArgs> = {}>(args?: Subset<T, ContactList$membersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactListMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     audience_analyses<T extends ContactList$audience_analysesArgs<ExtArgs> = {}>(args?: Subset<T, ContactList$audience_analysesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactAudienceAnalysisPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     filters<T extends ContactList$filtersArgs<ExtArgs> = {}>(args?: Subset<T, ContactList$filtersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FilterPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    sequence_enrollments<T extends ContactList$sequence_enrollmentsArgs<ExtArgs> = {}>(args?: Subset<T, ContactList$sequence_enrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SequenceEnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -31132,6 +31145,30 @@ export namespace Prisma {
   }
 
   /**
+   * ContactList.sequence_enrollments
+   */
+  export type ContactList$sequence_enrollmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SequenceEnrollment
+     */
+    select?: SequenceEnrollmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SequenceEnrollment
+     */
+    omit?: SequenceEnrollmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SequenceEnrollmentInclude<ExtArgs> | null
+    where?: SequenceEnrollmentWhereInput
+    orderBy?: SequenceEnrollmentOrderByWithRelationInput | SequenceEnrollmentOrderByWithRelationInput[]
+    cursor?: SequenceEnrollmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SequenceEnrollmentScalarFieldEnum | SequenceEnrollmentScalarFieldEnum[]
+  }
+
+  /**
    * ContactList without action
    */
   export type ContactListDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -31175,6 +31212,7 @@ export namespace Prisma {
     uuid: string | null
     list_uuid: string | null
     contact_uuid: string | null
+    status: $Enums.LeadStatus | null
     created_at: Date | null
   }
 
@@ -31183,6 +31221,7 @@ export namespace Prisma {
     uuid: string | null
     list_uuid: string | null
     contact_uuid: string | null
+    status: $Enums.LeadStatus | null
     created_at: Date | null
   }
 
@@ -31191,6 +31230,7 @@ export namespace Prisma {
     uuid: number
     list_uuid: number
     contact_uuid: number
+    status: number
     created_at: number
     _all: number
   }
@@ -31209,6 +31249,7 @@ export namespace Prisma {
     uuid?: true
     list_uuid?: true
     contact_uuid?: true
+    status?: true
     created_at?: true
   }
 
@@ -31217,6 +31258,7 @@ export namespace Prisma {
     uuid?: true
     list_uuid?: true
     contact_uuid?: true
+    status?: true
     created_at?: true
   }
 
@@ -31225,6 +31267,7 @@ export namespace Prisma {
     uuid?: true
     list_uuid?: true
     contact_uuid?: true
+    status?: true
     created_at?: true
     _all?: true
   }
@@ -31320,6 +31363,7 @@ export namespace Prisma {
     uuid: string
     list_uuid: string
     contact_uuid: string
+    status: $Enums.LeadStatus
     created_at: Date
     _count: ContactListMemberCountAggregateOutputType | null
     _avg: ContactListMemberAvgAggregateOutputType | null
@@ -31347,6 +31391,7 @@ export namespace Prisma {
     uuid?: boolean
     list_uuid?: boolean
     contact_uuid?: boolean
+    status?: boolean
     created_at?: boolean
     list?: boolean | ContactListDefaultArgs<ExtArgs>
     contact?: boolean | ContactDefaultArgs<ExtArgs>
@@ -31357,6 +31402,7 @@ export namespace Prisma {
     uuid?: boolean
     list_uuid?: boolean
     contact_uuid?: boolean
+    status?: boolean
     created_at?: boolean
     list?: boolean | ContactListDefaultArgs<ExtArgs>
     contact?: boolean | ContactDefaultArgs<ExtArgs>
@@ -31367,6 +31413,7 @@ export namespace Prisma {
     uuid?: boolean
     list_uuid?: boolean
     contact_uuid?: boolean
+    status?: boolean
     created_at?: boolean
     list?: boolean | ContactListDefaultArgs<ExtArgs>
     contact?: boolean | ContactDefaultArgs<ExtArgs>
@@ -31377,10 +31424,11 @@ export namespace Prisma {
     uuid?: boolean
     list_uuid?: boolean
     contact_uuid?: boolean
+    status?: boolean
     created_at?: boolean
   }
 
-  export type ContactListMemberOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "list_uuid" | "contact_uuid" | "created_at", ExtArgs["result"]["contactListMember"]>
+  export type ContactListMemberOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "list_uuid" | "contact_uuid" | "status" | "created_at", ExtArgs["result"]["contactListMember"]>
   export type ContactListMemberInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     list?: boolean | ContactListDefaultArgs<ExtArgs>
     contact?: boolean | ContactDefaultArgs<ExtArgs>
@@ -31405,6 +31453,7 @@ export namespace Prisma {
       uuid: string
       list_uuid: string
       contact_uuid: string
+      status: $Enums.LeadStatus
       created_at: Date
     }, ExtArgs["result"]["contactListMember"]>
     composites: {}
@@ -31835,6 +31884,7 @@ export namespace Prisma {
     readonly uuid: FieldRef<"ContactListMember", 'String'>
     readonly list_uuid: FieldRef<"ContactListMember", 'String'>
     readonly contact_uuid: FieldRef<"ContactListMember", 'String'>
+    readonly status: FieldRef<"ContactListMember", 'LeadStatus'>
     readonly created_at: FieldRef<"ContactListMember", 'DateTime'>
   }
     
@@ -40146,6 +40196,7 @@ export namespace Prisma {
     sequence_uuid: string | null
     contact_uuid: string | null
     campaign_uuid: string | null
+    list_uuid: string | null
     status: $Enums.SequenceEnrollmentStatus | null
     enrolled_at: Date | null
     current_step_order_index: number | null
@@ -40162,6 +40213,7 @@ export namespace Prisma {
     sequence_uuid: string | null
     contact_uuid: string | null
     campaign_uuid: string | null
+    list_uuid: string | null
     status: $Enums.SequenceEnrollmentStatus | null
     enrolled_at: Date | null
     current_step_order_index: number | null
@@ -40178,6 +40230,7 @@ export namespace Prisma {
     sequence_uuid: number
     contact_uuid: number
     campaign_uuid: number
+    list_uuid: number
     status: number
     enrolled_at: number
     current_step_order_index: number
@@ -40206,6 +40259,7 @@ export namespace Prisma {
     sequence_uuid?: true
     contact_uuid?: true
     campaign_uuid?: true
+    list_uuid?: true
     status?: true
     enrolled_at?: true
     current_step_order_index?: true
@@ -40222,6 +40276,7 @@ export namespace Prisma {
     sequence_uuid?: true
     contact_uuid?: true
     campaign_uuid?: true
+    list_uuid?: true
     status?: true
     enrolled_at?: true
     current_step_order_index?: true
@@ -40238,6 +40293,7 @@ export namespace Prisma {
     sequence_uuid?: true
     contact_uuid?: true
     campaign_uuid?: true
+    list_uuid?: true
     status?: true
     enrolled_at?: true
     current_step_order_index?: true
@@ -40341,6 +40397,7 @@ export namespace Prisma {
     sequence_uuid: string
     contact_uuid: string
     campaign_uuid: string | null
+    list_uuid: string | null
     status: $Enums.SequenceEnrollmentStatus
     enrolled_at: Date
     current_step_order_index: number
@@ -40376,6 +40433,7 @@ export namespace Prisma {
     sequence_uuid?: boolean
     contact_uuid?: boolean
     campaign_uuid?: boolean
+    list_uuid?: boolean
     status?: boolean
     enrolled_at?: boolean
     current_step_order_index?: boolean
@@ -40387,6 +40445,7 @@ export namespace Prisma {
     sequence?: boolean | OutreachSequenceDefaultArgs<ExtArgs>
     contact?: boolean | ContactDefaultArgs<ExtArgs>
     campaign?: boolean | SequenceEnrollment$campaignArgs<ExtArgs>
+    list?: boolean | SequenceEnrollment$listArgs<ExtArgs>
     outreach_messages?: boolean | SequenceEnrollment$outreach_messagesArgs<ExtArgs>
     _count?: boolean | SequenceEnrollmentCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["sequenceEnrollment"]>
@@ -40397,6 +40456,7 @@ export namespace Prisma {
     sequence_uuid?: boolean
     contact_uuid?: boolean
     campaign_uuid?: boolean
+    list_uuid?: boolean
     status?: boolean
     enrolled_at?: boolean
     current_step_order_index?: boolean
@@ -40408,6 +40468,7 @@ export namespace Prisma {
     sequence?: boolean | OutreachSequenceDefaultArgs<ExtArgs>
     contact?: boolean | ContactDefaultArgs<ExtArgs>
     campaign?: boolean | SequenceEnrollment$campaignArgs<ExtArgs>
+    list?: boolean | SequenceEnrollment$listArgs<ExtArgs>
   }, ExtArgs["result"]["sequenceEnrollment"]>
 
   export type SequenceEnrollmentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -40416,6 +40477,7 @@ export namespace Prisma {
     sequence_uuid?: boolean
     contact_uuid?: boolean
     campaign_uuid?: boolean
+    list_uuid?: boolean
     status?: boolean
     enrolled_at?: boolean
     current_step_order_index?: boolean
@@ -40427,6 +40489,7 @@ export namespace Prisma {
     sequence?: boolean | OutreachSequenceDefaultArgs<ExtArgs>
     contact?: boolean | ContactDefaultArgs<ExtArgs>
     campaign?: boolean | SequenceEnrollment$campaignArgs<ExtArgs>
+    list?: boolean | SequenceEnrollment$listArgs<ExtArgs>
   }, ExtArgs["result"]["sequenceEnrollment"]>
 
   export type SequenceEnrollmentSelectScalar = {
@@ -40435,6 +40498,7 @@ export namespace Prisma {
     sequence_uuid?: boolean
     contact_uuid?: boolean
     campaign_uuid?: boolean
+    list_uuid?: boolean
     status?: boolean
     enrolled_at?: boolean
     current_step_order_index?: boolean
@@ -40445,11 +40509,12 @@ export namespace Prisma {
     updated_at?: boolean
   }
 
-  export type SequenceEnrollmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "sequence_uuid" | "contact_uuid" | "campaign_uuid" | "status" | "enrolled_at" | "current_step_order_index" | "first_step_sent_at" | "cancelled_at" | "completed_at" | "created_at" | "updated_at", ExtArgs["result"]["sequenceEnrollment"]>
+  export type SequenceEnrollmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "sequence_uuid" | "contact_uuid" | "campaign_uuid" | "list_uuid" | "status" | "enrolled_at" | "current_step_order_index" | "first_step_sent_at" | "cancelled_at" | "completed_at" | "created_at" | "updated_at", ExtArgs["result"]["sequenceEnrollment"]>
   export type SequenceEnrollmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     sequence?: boolean | OutreachSequenceDefaultArgs<ExtArgs>
     contact?: boolean | ContactDefaultArgs<ExtArgs>
     campaign?: boolean | SequenceEnrollment$campaignArgs<ExtArgs>
+    list?: boolean | SequenceEnrollment$listArgs<ExtArgs>
     outreach_messages?: boolean | SequenceEnrollment$outreach_messagesArgs<ExtArgs>
     _count?: boolean | SequenceEnrollmentCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -40457,11 +40522,13 @@ export namespace Prisma {
     sequence?: boolean | OutreachSequenceDefaultArgs<ExtArgs>
     contact?: boolean | ContactDefaultArgs<ExtArgs>
     campaign?: boolean | SequenceEnrollment$campaignArgs<ExtArgs>
+    list?: boolean | SequenceEnrollment$listArgs<ExtArgs>
   }
   export type SequenceEnrollmentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     sequence?: boolean | OutreachSequenceDefaultArgs<ExtArgs>
     contact?: boolean | ContactDefaultArgs<ExtArgs>
     campaign?: boolean | SequenceEnrollment$campaignArgs<ExtArgs>
+    list?: boolean | SequenceEnrollment$listArgs<ExtArgs>
   }
 
   export type $SequenceEnrollmentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -40470,6 +40537,7 @@ export namespace Prisma {
       sequence: Prisma.$OutreachSequencePayload<ExtArgs>
       contact: Prisma.$ContactPayload<ExtArgs>
       campaign: Prisma.$MarketingCampaignPayload<ExtArgs> | null
+      list: Prisma.$ContactListPayload<ExtArgs> | null
       outreach_messages: Prisma.$OutreachMessagePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -40478,6 +40546,7 @@ export namespace Prisma {
       sequence_uuid: string
       contact_uuid: string
       campaign_uuid: string | null
+      list_uuid: string | null
       status: $Enums.SequenceEnrollmentStatus
       enrolled_at: Date
       current_step_order_index: number
@@ -40883,6 +40952,7 @@ export namespace Prisma {
     sequence<T extends OutreachSequenceDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OutreachSequenceDefaultArgs<ExtArgs>>): Prisma__OutreachSequenceClient<$Result.GetResult<Prisma.$OutreachSequencePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     contact<T extends ContactDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ContactDefaultArgs<ExtArgs>>): Prisma__ContactClient<$Result.GetResult<Prisma.$ContactPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     campaign<T extends SequenceEnrollment$campaignArgs<ExtArgs> = {}>(args?: Subset<T, SequenceEnrollment$campaignArgs<ExtArgs>>): Prisma__MarketingCampaignClient<$Result.GetResult<Prisma.$MarketingCampaignPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    list<T extends SequenceEnrollment$listArgs<ExtArgs> = {}>(args?: Subset<T, SequenceEnrollment$listArgs<ExtArgs>>): Prisma__ContactListClient<$Result.GetResult<Prisma.$ContactListPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     outreach_messages<T extends SequenceEnrollment$outreach_messagesArgs<ExtArgs> = {}>(args?: Subset<T, SequenceEnrollment$outreach_messagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OutreachMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -40918,6 +40988,7 @@ export namespace Prisma {
     readonly sequence_uuid: FieldRef<"SequenceEnrollment", 'String'>
     readonly contact_uuid: FieldRef<"SequenceEnrollment", 'String'>
     readonly campaign_uuid: FieldRef<"SequenceEnrollment", 'String'>
+    readonly list_uuid: FieldRef<"SequenceEnrollment", 'String'>
     readonly status: FieldRef<"SequenceEnrollment", 'SequenceEnrollmentStatus'>
     readonly enrolled_at: FieldRef<"SequenceEnrollment", 'DateTime'>
     readonly current_step_order_index: FieldRef<"SequenceEnrollment", 'Int'>
@@ -41338,6 +41409,25 @@ export namespace Prisma {
      */
     include?: MarketingCampaignInclude<ExtArgs> | null
     where?: MarketingCampaignWhereInput
+  }
+
+  /**
+   * SequenceEnrollment.list
+   */
+  export type SequenceEnrollment$listArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactList
+     */
+    select?: ContactListSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactList
+     */
+    omit?: ContactListOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactListInclude<ExtArgs> | null
+    where?: ContactListWhereInput
   }
 
   /**
@@ -80954,6 +81044,7 @@ export namespace Prisma {
     uuid: 'uuid',
     list_uuid: 'list_uuid',
     contact_uuid: 'contact_uuid',
+    status: 'status',
     created_at: 'created_at'
   };
 
@@ -81097,6 +81188,7 @@ export namespace Prisma {
     sequence_uuid: 'sequence_uuid',
     contact_uuid: 'contact_uuid',
     campaign_uuid: 'campaign_uuid',
+    list_uuid: 'list_uuid',
     status: 'status',
     enrolled_at: 'enrolled_at',
     current_step_order_index: 'current_step_order_index',
@@ -84247,6 +84339,7 @@ export namespace Prisma {
     members?: ContactListMemberListRelationFilter
     audience_analyses?: ContactAudienceAnalysisListRelationFilter
     filters?: FilterListRelationFilter
+    sequence_enrollments?: SequenceEnrollmentListRelationFilter
   }
 
   export type ContactListOrderByWithRelationInput = {
@@ -84264,6 +84357,7 @@ export namespace Prisma {
     members?: ContactListMemberOrderByRelationAggregateInput
     audience_analyses?: ContactAudienceAnalysisOrderByRelationAggregateInput
     filters?: FilterOrderByRelationAggregateInput
+    sequence_enrollments?: SequenceEnrollmentOrderByRelationAggregateInput
   }
 
   export type ContactListWhereUniqueInput = Prisma.AtLeast<{
@@ -84284,6 +84378,7 @@ export namespace Prisma {
     members?: ContactListMemberListRelationFilter
     audience_analyses?: ContactAudienceAnalysisListRelationFilter
     filters?: FilterListRelationFilter
+    sequence_enrollments?: SequenceEnrollmentListRelationFilter
   }, "id" | "uuid">
 
   export type ContactListOrderByWithAggregationInput = {
@@ -84324,6 +84419,7 @@ export namespace Prisma {
     uuid?: StringFilter<"ContactListMember"> | string
     list_uuid?: StringFilter<"ContactListMember"> | string
     contact_uuid?: StringFilter<"ContactListMember"> | string
+    status?: EnumLeadStatusFilter<"ContactListMember"> | $Enums.LeadStatus
     created_at?: DateTimeFilter<"ContactListMember"> | Date | string
     list?: XOR<ContactListScalarRelationFilter, ContactListWhereInput>
     contact?: XOR<ContactScalarRelationFilter, ContactWhereInput>
@@ -84334,6 +84430,7 @@ export namespace Prisma {
     uuid?: SortOrder
     list_uuid?: SortOrder
     contact_uuid?: SortOrder
+    status?: SortOrder
     created_at?: SortOrder
     list?: ContactListOrderByWithRelationInput
     contact?: ContactOrderByWithRelationInput
@@ -84348,6 +84445,7 @@ export namespace Prisma {
     NOT?: ContactListMemberWhereInput | ContactListMemberWhereInput[]
     list_uuid?: StringFilter<"ContactListMember"> | string
     contact_uuid?: StringFilter<"ContactListMember"> | string
+    status?: EnumLeadStatusFilter<"ContactListMember"> | $Enums.LeadStatus
     created_at?: DateTimeFilter<"ContactListMember"> | Date | string
     list?: XOR<ContactListScalarRelationFilter, ContactListWhereInput>
     contact?: XOR<ContactScalarRelationFilter, ContactWhereInput>
@@ -84358,6 +84456,7 @@ export namespace Prisma {
     uuid?: SortOrder
     list_uuid?: SortOrder
     contact_uuid?: SortOrder
+    status?: SortOrder
     created_at?: SortOrder
     _count?: ContactListMemberCountOrderByAggregateInput
     _avg?: ContactListMemberAvgOrderByAggregateInput
@@ -84374,6 +84473,7 @@ export namespace Prisma {
     uuid?: StringWithAggregatesFilter<"ContactListMember"> | string
     list_uuid?: StringWithAggregatesFilter<"ContactListMember"> | string
     contact_uuid?: StringWithAggregatesFilter<"ContactListMember"> | string
+    status?: EnumLeadStatusWithAggregatesFilter<"ContactListMember"> | $Enums.LeadStatus
     created_at?: DateTimeWithAggregatesFilter<"ContactListMember"> | Date | string
   }
 
@@ -85111,6 +85211,7 @@ export namespace Prisma {
     sequence_uuid?: StringFilter<"SequenceEnrollment"> | string
     contact_uuid?: StringFilter<"SequenceEnrollment"> | string
     campaign_uuid?: StringNullableFilter<"SequenceEnrollment"> | string | null
+    list_uuid?: StringNullableFilter<"SequenceEnrollment"> | string | null
     status?: EnumSequenceEnrollmentStatusFilter<"SequenceEnrollment"> | $Enums.SequenceEnrollmentStatus
     enrolled_at?: DateTimeFilter<"SequenceEnrollment"> | Date | string
     current_step_order_index?: IntFilter<"SequenceEnrollment"> | number
@@ -85122,6 +85223,7 @@ export namespace Prisma {
     sequence?: XOR<OutreachSequenceScalarRelationFilter, OutreachSequenceWhereInput>
     contact?: XOR<ContactScalarRelationFilter, ContactWhereInput>
     campaign?: XOR<MarketingCampaignNullableScalarRelationFilter, MarketingCampaignWhereInput> | null
+    list?: XOR<ContactListNullableScalarRelationFilter, ContactListWhereInput> | null
     outreach_messages?: OutreachMessageListRelationFilter
   }
 
@@ -85131,6 +85233,7 @@ export namespace Prisma {
     sequence_uuid?: SortOrder
     contact_uuid?: SortOrder
     campaign_uuid?: SortOrderInput | SortOrder
+    list_uuid?: SortOrderInput | SortOrder
     status?: SortOrder
     enrolled_at?: SortOrder
     current_step_order_index?: SortOrder
@@ -85142,6 +85245,7 @@ export namespace Prisma {
     sequence?: OutreachSequenceOrderByWithRelationInput
     contact?: ContactOrderByWithRelationInput
     campaign?: MarketingCampaignOrderByWithRelationInput
+    list?: ContactListOrderByWithRelationInput
     outreach_messages?: OutreachMessageOrderByRelationAggregateInput
   }
 
@@ -85155,6 +85259,7 @@ export namespace Prisma {
     sequence_uuid?: StringFilter<"SequenceEnrollment"> | string
     contact_uuid?: StringFilter<"SequenceEnrollment"> | string
     campaign_uuid?: StringNullableFilter<"SequenceEnrollment"> | string | null
+    list_uuid?: StringNullableFilter<"SequenceEnrollment"> | string | null
     status?: EnumSequenceEnrollmentStatusFilter<"SequenceEnrollment"> | $Enums.SequenceEnrollmentStatus
     enrolled_at?: DateTimeFilter<"SequenceEnrollment"> | Date | string
     current_step_order_index?: IntFilter<"SequenceEnrollment"> | number
@@ -85166,6 +85271,7 @@ export namespace Prisma {
     sequence?: XOR<OutreachSequenceScalarRelationFilter, OutreachSequenceWhereInput>
     contact?: XOR<ContactScalarRelationFilter, ContactWhereInput>
     campaign?: XOR<MarketingCampaignNullableScalarRelationFilter, MarketingCampaignWhereInput> | null
+    list?: XOR<ContactListNullableScalarRelationFilter, ContactListWhereInput> | null
     outreach_messages?: OutreachMessageListRelationFilter
   }, "id" | "uuid" | "sequence_uuid_contact_uuid_campaign_uuid">
 
@@ -85175,6 +85281,7 @@ export namespace Prisma {
     sequence_uuid?: SortOrder
     contact_uuid?: SortOrder
     campaign_uuid?: SortOrderInput | SortOrder
+    list_uuid?: SortOrderInput | SortOrder
     status?: SortOrder
     enrolled_at?: SortOrder
     current_step_order_index?: SortOrder
@@ -85199,6 +85306,7 @@ export namespace Prisma {
     sequence_uuid?: StringWithAggregatesFilter<"SequenceEnrollment"> | string
     contact_uuid?: StringWithAggregatesFilter<"SequenceEnrollment"> | string
     campaign_uuid?: StringNullableWithAggregatesFilter<"SequenceEnrollment"> | string | null
+    list_uuid?: StringNullableWithAggregatesFilter<"SequenceEnrollment"> | string | null
     status?: EnumSequenceEnrollmentStatusWithAggregatesFilter<"SequenceEnrollment"> | $Enums.SequenceEnrollmentStatus
     enrolled_at?: DateTimeWithAggregatesFilter<"SequenceEnrollment"> | Date | string
     current_step_order_index?: IntWithAggregatesFilter<"SequenceEnrollment"> | number
@@ -90250,6 +90358,7 @@ export namespace Prisma {
     members?: ContactListMemberCreateNestedManyWithoutListInput
     audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutContactListInput
     filters?: FilterCreateNestedManyWithoutContactListInput
+    sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutListInput
   }
 
   export type ContactListUncheckedCreateInput = {
@@ -90265,6 +90374,7 @@ export namespace Prisma {
     members?: ContactListMemberUncheckedCreateNestedManyWithoutListInput
     audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutContactListInput
     filters?: FilterUncheckedCreateNestedManyWithoutContactListInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutListInput
   }
 
   export type ContactListUpdateInput = {
@@ -90279,6 +90389,7 @@ export namespace Prisma {
     members?: ContactListMemberUpdateManyWithoutListNestedInput
     audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutContactListNestedInput
     filters?: FilterUpdateManyWithoutContactListNestedInput
+    sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutListNestedInput
   }
 
   export type ContactListUncheckedUpdateInput = {
@@ -90294,6 +90405,7 @@ export namespace Prisma {
     members?: ContactListMemberUncheckedUpdateManyWithoutListNestedInput
     audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutContactListNestedInput
     filters?: FilterUncheckedUpdateManyWithoutContactListNestedInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutListNestedInput
   }
 
   export type ContactListCreateManyInput = {
@@ -90328,6 +90440,7 @@ export namespace Prisma {
 
   export type ContactListMemberCreateInput = {
     uuid?: string
+    status?: $Enums.LeadStatus
     created_at?: Date | string
     list: ContactListCreateNestedOneWithoutMembersInput
     contact: ContactCreateNestedOneWithoutList_membershipsInput
@@ -90338,11 +90451,13 @@ export namespace Prisma {
     uuid?: string
     list_uuid: string
     contact_uuid: string
+    status?: $Enums.LeadStatus
     created_at?: Date | string
   }
 
   export type ContactListMemberUpdateInput = {
     uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     list?: ContactListUpdateOneRequiredWithoutMembersNestedInput
     contact?: ContactUpdateOneRequiredWithoutList_membershipsNestedInput
@@ -90353,6 +90468,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     list_uuid?: StringFieldUpdateOperationsInput | string
     contact_uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -90361,11 +90477,13 @@ export namespace Prisma {
     uuid?: string
     list_uuid: string
     contact_uuid: string
+    status?: $Enums.LeadStatus
     created_at?: Date | string
   }
 
   export type ContactListMemberUpdateManyMutationInput = {
     uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -90374,6 +90492,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     list_uuid?: StringFieldUpdateOperationsInput | string
     contact_uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -91173,6 +91292,7 @@ export namespace Prisma {
     sequence: OutreachSequenceCreateNestedOneWithoutEnrollmentsInput
     contact: ContactCreateNestedOneWithoutSequence_enrollmentsInput
     campaign?: MarketingCampaignCreateNestedOneWithoutSequence_enrollmentsInput
+    list?: ContactListCreateNestedOneWithoutSequence_enrollmentsInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutSequence_enrollmentInput
   }
 
@@ -91182,6 +91302,7 @@ export namespace Prisma {
     sequence_uuid: string
     contact_uuid: string
     campaign_uuid?: string | null
+    list_uuid?: string | null
     status?: $Enums.SequenceEnrollmentStatus
     enrolled_at?: Date | string
     current_step_order_index?: number
@@ -91206,6 +91327,7 @@ export namespace Prisma {
     sequence?: OutreachSequenceUpdateOneRequiredWithoutEnrollmentsNestedInput
     contact?: ContactUpdateOneRequiredWithoutSequence_enrollmentsNestedInput
     campaign?: MarketingCampaignUpdateOneWithoutSequence_enrollmentsNestedInput
+    list?: ContactListUpdateOneWithoutSequence_enrollmentsNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutSequence_enrollmentNestedInput
   }
 
@@ -91215,6 +91337,7 @@ export namespace Prisma {
     sequence_uuid?: StringFieldUpdateOperationsInput | string
     contact_uuid?: StringFieldUpdateOperationsInput | string
     campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    list_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSequenceEnrollmentStatusFieldUpdateOperationsInput | $Enums.SequenceEnrollmentStatus
     enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
     current_step_order_index?: IntFieldUpdateOperationsInput | number
@@ -91232,6 +91355,7 @@ export namespace Prisma {
     sequence_uuid: string
     contact_uuid: string
     campaign_uuid?: string | null
+    list_uuid?: string | null
     status?: $Enums.SequenceEnrollmentStatus
     enrolled_at?: Date | string
     current_step_order_index?: number
@@ -91260,6 +91384,7 @@ export namespace Prisma {
     sequence_uuid?: StringFieldUpdateOperationsInput | string
     contact_uuid?: StringFieldUpdateOperationsInput | string
     campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    list_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSequenceEnrollmentStatusFieldUpdateOperationsInput | $Enums.SequenceEnrollmentStatus
     enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
     current_step_order_index?: IntFieldUpdateOperationsInput | number
@@ -96676,6 +96801,7 @@ export namespace Prisma {
     uuid?: SortOrder
     list_uuid?: SortOrder
     contact_uuid?: SortOrder
+    status?: SortOrder
     created_at?: SortOrder
   }
 
@@ -96688,6 +96814,7 @@ export namespace Prisma {
     uuid?: SortOrder
     list_uuid?: SortOrder
     contact_uuid?: SortOrder
+    status?: SortOrder
     created_at?: SortOrder
   }
 
@@ -96696,6 +96823,7 @@ export namespace Prisma {
     uuid?: SortOrder
     list_uuid?: SortOrder
     contact_uuid?: SortOrder
+    status?: SortOrder
     created_at?: SortOrder
   }
 
@@ -97322,6 +97450,7 @@ export namespace Prisma {
     sequence_uuid?: SortOrder
     contact_uuid?: SortOrder
     campaign_uuid?: SortOrder
+    list_uuid?: SortOrder
     status?: SortOrder
     enrolled_at?: SortOrder
     current_step_order_index?: SortOrder
@@ -97343,6 +97472,7 @@ export namespace Prisma {
     sequence_uuid?: SortOrder
     contact_uuid?: SortOrder
     campaign_uuid?: SortOrder
+    list_uuid?: SortOrder
     status?: SortOrder
     enrolled_at?: SortOrder
     current_step_order_index?: SortOrder
@@ -97359,6 +97489,7 @@ export namespace Prisma {
     sequence_uuid?: SortOrder
     contact_uuid?: SortOrder
     campaign_uuid?: SortOrder
+    list_uuid?: SortOrder
     status?: SortOrder
     enrolled_at?: SortOrder
     current_step_order_index?: SortOrder
@@ -103256,6 +103387,13 @@ export namespace Prisma {
     connect?: FilterWhereUniqueInput | FilterWhereUniqueInput[]
   }
 
+  export type SequenceEnrollmentCreateNestedManyWithoutListInput = {
+    create?: XOR<SequenceEnrollmentCreateWithoutListInput, SequenceEnrollmentUncheckedCreateWithoutListInput> | SequenceEnrollmentCreateWithoutListInput[] | SequenceEnrollmentUncheckedCreateWithoutListInput[]
+    connectOrCreate?: SequenceEnrollmentCreateOrConnectWithoutListInput | SequenceEnrollmentCreateOrConnectWithoutListInput[]
+    createMany?: SequenceEnrollmentCreateManyListInputEnvelope
+    connect?: SequenceEnrollmentWhereUniqueInput | SequenceEnrollmentWhereUniqueInput[]
+  }
+
   export type ContactListUncheckedCreateNestedManyWithoutParentInput = {
     create?: XOR<ContactListCreateWithoutParentInput, ContactListUncheckedCreateWithoutParentInput> | ContactListCreateWithoutParentInput[] | ContactListUncheckedCreateWithoutParentInput[]
     connectOrCreate?: ContactListCreateOrConnectWithoutParentInput | ContactListCreateOrConnectWithoutParentInput[]
@@ -103282,6 +103420,13 @@ export namespace Prisma {
     connectOrCreate?: FilterCreateOrConnectWithoutContactListInput | FilterCreateOrConnectWithoutContactListInput[]
     createMany?: FilterCreateManyContactListInputEnvelope
     connect?: FilterWhereUniqueInput | FilterWhereUniqueInput[]
+  }
+
+  export type SequenceEnrollmentUncheckedCreateNestedManyWithoutListInput = {
+    create?: XOR<SequenceEnrollmentCreateWithoutListInput, SequenceEnrollmentUncheckedCreateWithoutListInput> | SequenceEnrollmentCreateWithoutListInput[] | SequenceEnrollmentUncheckedCreateWithoutListInput[]
+    connectOrCreate?: SequenceEnrollmentCreateOrConnectWithoutListInput | SequenceEnrollmentCreateOrConnectWithoutListInput[]
+    createMany?: SequenceEnrollmentCreateManyListInputEnvelope
+    connect?: SequenceEnrollmentWhereUniqueInput | SequenceEnrollmentWhereUniqueInput[]
   }
 
   export type OrganisationUpdateOneRequiredWithoutContact_listsNestedInput = {
@@ -103358,6 +103503,20 @@ export namespace Prisma {
     deleteMany?: FilterScalarWhereInput | FilterScalarWhereInput[]
   }
 
+  export type SequenceEnrollmentUpdateManyWithoutListNestedInput = {
+    create?: XOR<SequenceEnrollmentCreateWithoutListInput, SequenceEnrollmentUncheckedCreateWithoutListInput> | SequenceEnrollmentCreateWithoutListInput[] | SequenceEnrollmentUncheckedCreateWithoutListInput[]
+    connectOrCreate?: SequenceEnrollmentCreateOrConnectWithoutListInput | SequenceEnrollmentCreateOrConnectWithoutListInput[]
+    upsert?: SequenceEnrollmentUpsertWithWhereUniqueWithoutListInput | SequenceEnrollmentUpsertWithWhereUniqueWithoutListInput[]
+    createMany?: SequenceEnrollmentCreateManyListInputEnvelope
+    set?: SequenceEnrollmentWhereUniqueInput | SequenceEnrollmentWhereUniqueInput[]
+    disconnect?: SequenceEnrollmentWhereUniqueInput | SequenceEnrollmentWhereUniqueInput[]
+    delete?: SequenceEnrollmentWhereUniqueInput | SequenceEnrollmentWhereUniqueInput[]
+    connect?: SequenceEnrollmentWhereUniqueInput | SequenceEnrollmentWhereUniqueInput[]
+    update?: SequenceEnrollmentUpdateWithWhereUniqueWithoutListInput | SequenceEnrollmentUpdateWithWhereUniqueWithoutListInput[]
+    updateMany?: SequenceEnrollmentUpdateManyWithWhereWithoutListInput | SequenceEnrollmentUpdateManyWithWhereWithoutListInput[]
+    deleteMany?: SequenceEnrollmentScalarWhereInput | SequenceEnrollmentScalarWhereInput[]
+  }
+
   export type ContactListUncheckedUpdateManyWithoutParentNestedInput = {
     create?: XOR<ContactListCreateWithoutParentInput, ContactListUncheckedCreateWithoutParentInput> | ContactListCreateWithoutParentInput[] | ContactListUncheckedCreateWithoutParentInput[]
     connectOrCreate?: ContactListCreateOrConnectWithoutParentInput | ContactListCreateOrConnectWithoutParentInput[]
@@ -103412,6 +103571,20 @@ export namespace Prisma {
     update?: FilterUpdateWithWhereUniqueWithoutContactListInput | FilterUpdateWithWhereUniqueWithoutContactListInput[]
     updateMany?: FilterUpdateManyWithWhereWithoutContactListInput | FilterUpdateManyWithWhereWithoutContactListInput[]
     deleteMany?: FilterScalarWhereInput | FilterScalarWhereInput[]
+  }
+
+  export type SequenceEnrollmentUncheckedUpdateManyWithoutListNestedInput = {
+    create?: XOR<SequenceEnrollmentCreateWithoutListInput, SequenceEnrollmentUncheckedCreateWithoutListInput> | SequenceEnrollmentCreateWithoutListInput[] | SequenceEnrollmentUncheckedCreateWithoutListInput[]
+    connectOrCreate?: SequenceEnrollmentCreateOrConnectWithoutListInput | SequenceEnrollmentCreateOrConnectWithoutListInput[]
+    upsert?: SequenceEnrollmentUpsertWithWhereUniqueWithoutListInput | SequenceEnrollmentUpsertWithWhereUniqueWithoutListInput[]
+    createMany?: SequenceEnrollmentCreateManyListInputEnvelope
+    set?: SequenceEnrollmentWhereUniqueInput | SequenceEnrollmentWhereUniqueInput[]
+    disconnect?: SequenceEnrollmentWhereUniqueInput | SequenceEnrollmentWhereUniqueInput[]
+    delete?: SequenceEnrollmentWhereUniqueInput | SequenceEnrollmentWhereUniqueInput[]
+    connect?: SequenceEnrollmentWhereUniqueInput | SequenceEnrollmentWhereUniqueInput[]
+    update?: SequenceEnrollmentUpdateWithWhereUniqueWithoutListInput | SequenceEnrollmentUpdateWithWhereUniqueWithoutListInput[]
+    updateMany?: SequenceEnrollmentUpdateManyWithWhereWithoutListInput | SequenceEnrollmentUpdateManyWithWhereWithoutListInput[]
+    deleteMany?: SequenceEnrollmentScalarWhereInput | SequenceEnrollmentScalarWhereInput[]
   }
 
   export type ContactListCreateNestedOneWithoutMembersInput = {
@@ -104060,6 +104233,12 @@ export namespace Prisma {
     connect?: MarketingCampaignWhereUniqueInput
   }
 
+  export type ContactListCreateNestedOneWithoutSequence_enrollmentsInput = {
+    create?: XOR<ContactListCreateWithoutSequence_enrollmentsInput, ContactListUncheckedCreateWithoutSequence_enrollmentsInput>
+    connectOrCreate?: ContactListCreateOrConnectWithoutSequence_enrollmentsInput
+    connect?: ContactListWhereUniqueInput
+  }
+
   export type OutreachMessageCreateNestedManyWithoutSequence_enrollmentInput = {
     create?: XOR<OutreachMessageCreateWithoutSequence_enrollmentInput, OutreachMessageUncheckedCreateWithoutSequence_enrollmentInput> | OutreachMessageCreateWithoutSequence_enrollmentInput[] | OutreachMessageUncheckedCreateWithoutSequence_enrollmentInput[]
     connectOrCreate?: OutreachMessageCreateOrConnectWithoutSequence_enrollmentInput | OutreachMessageCreateOrConnectWithoutSequence_enrollmentInput[]
@@ -104102,6 +104281,16 @@ export namespace Prisma {
     delete?: MarketingCampaignWhereInput | boolean
     connect?: MarketingCampaignWhereUniqueInput
     update?: XOR<XOR<MarketingCampaignUpdateToOneWithWhereWithoutSequence_enrollmentsInput, MarketingCampaignUpdateWithoutSequence_enrollmentsInput>, MarketingCampaignUncheckedUpdateWithoutSequence_enrollmentsInput>
+  }
+
+  export type ContactListUpdateOneWithoutSequence_enrollmentsNestedInput = {
+    create?: XOR<ContactListCreateWithoutSequence_enrollmentsInput, ContactListUncheckedCreateWithoutSequence_enrollmentsInput>
+    connectOrCreate?: ContactListCreateOrConnectWithoutSequence_enrollmentsInput
+    upsert?: ContactListUpsertWithoutSequence_enrollmentsInput
+    disconnect?: ContactListWhereInput | boolean
+    delete?: ContactListWhereInput | boolean
+    connect?: ContactListWhereUniqueInput
+    update?: XOR<XOR<ContactListUpdateToOneWithWhereWithoutSequence_enrollmentsInput, ContactListUpdateWithoutSequence_enrollmentsInput>, ContactListUncheckedUpdateWithoutSequence_enrollmentsInput>
   }
 
   export type OutreachMessageUpdateManyWithoutSequence_enrollmentNestedInput = {
@@ -108786,6 +108975,7 @@ export namespace Prisma {
     members?: ContactListMemberCreateNestedManyWithoutListInput
     audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutContactListInput
     filters?: FilterCreateNestedManyWithoutContactListInput
+    sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutListInput
   }
 
   export type ContactListUncheckedCreateWithoutOrganisationInput = {
@@ -108800,6 +108990,7 @@ export namespace Prisma {
     members?: ContactListMemberUncheckedCreateNestedManyWithoutListInput
     audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutContactListInput
     filters?: FilterUncheckedCreateNestedManyWithoutContactListInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutListInput
   }
 
   export type ContactListCreateOrConnectWithoutOrganisationInput = {
@@ -111040,6 +111231,7 @@ export namespace Prisma {
     children?: ContactListCreateNestedManyWithoutParentInput
     members?: ContactListMemberCreateNestedManyWithoutListInput
     audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutContactListInput
+    sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutListInput
   }
 
   export type ContactListUncheckedCreateWithoutFiltersInput = {
@@ -111054,6 +111246,7 @@ export namespace Prisma {
     children?: ContactListUncheckedCreateNestedManyWithoutParentInput
     members?: ContactListMemberUncheckedCreateNestedManyWithoutListInput
     audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutContactListInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutListInput
   }
 
   export type ContactListCreateOrConnectWithoutFiltersInput = {
@@ -111435,6 +111628,7 @@ export namespace Prisma {
     children?: ContactListUpdateManyWithoutParentNestedInput
     members?: ContactListMemberUpdateManyWithoutListNestedInput
     audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutContactListNestedInput
+    sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutListNestedInput
   }
 
   export type ContactListUncheckedUpdateWithoutFiltersInput = {
@@ -111449,6 +111643,7 @@ export namespace Prisma {
     children?: ContactListUncheckedUpdateManyWithoutParentNestedInput
     members?: ContactListMemberUncheckedUpdateManyWithoutListNestedInput
     audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutContactListNestedInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutListNestedInput
   }
 
   export type RawLeadUpsertWithWhereUniqueWithoutFilterInput = {
@@ -113502,6 +113697,7 @@ export namespace Prisma {
 
   export type ContactListMemberCreateWithoutContactInput = {
     uuid?: string
+    status?: $Enums.LeadStatus
     created_at?: Date | string
     list: ContactListCreateNestedOneWithoutMembersInput
   }
@@ -113510,6 +113706,7 @@ export namespace Prisma {
     id?: number
     uuid?: string
     list_uuid: string
+    status?: $Enums.LeadStatus
     created_at?: Date | string
   }
 
@@ -113572,6 +113769,7 @@ export namespace Prisma {
     updated_at?: Date | string
     sequence: OutreachSequenceCreateNestedOneWithoutEnrollmentsInput
     campaign?: MarketingCampaignCreateNestedOneWithoutSequence_enrollmentsInput
+    list?: ContactListCreateNestedOneWithoutSequence_enrollmentsInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutSequence_enrollmentInput
   }
 
@@ -113580,6 +113778,7 @@ export namespace Prisma {
     uuid?: string
     sequence_uuid: string
     campaign_uuid?: string | null
+    list_uuid?: string | null
     status?: $Enums.SequenceEnrollmentStatus
     enrolled_at?: Date | string
     current_step_order_index?: number
@@ -114043,6 +114242,7 @@ export namespace Prisma {
     uuid?: StringFilter<"ContactListMember"> | string
     list_uuid?: StringFilter<"ContactListMember"> | string
     contact_uuid?: StringFilter<"ContactListMember"> | string
+    status?: EnumLeadStatusFilter<"ContactListMember"> | $Enums.LeadStatus
     created_at?: DateTimeFilter<"ContactListMember"> | Date | string
   }
 
@@ -114105,6 +114305,7 @@ export namespace Prisma {
     sequence_uuid?: StringFilter<"SequenceEnrollment"> | string
     contact_uuid?: StringFilter<"SequenceEnrollment"> | string
     campaign_uuid?: StringNullableFilter<"SequenceEnrollment"> | string | null
+    list_uuid?: StringNullableFilter<"SequenceEnrollment"> | string | null
     status?: EnumSequenceEnrollmentStatusFilter<"SequenceEnrollment"> | $Enums.SequenceEnrollmentStatus
     enrolled_at?: DateTimeFilter<"SequenceEnrollment"> | Date | string
     current_step_order_index?: IntFilter<"SequenceEnrollment"> | number
@@ -115166,6 +115367,7 @@ export namespace Prisma {
     members?: ContactListMemberCreateNestedManyWithoutListInput
     audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutContactListInput
     filters?: FilterCreateNestedManyWithoutContactListInput
+    sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutListInput
   }
 
   export type ContactListUncheckedCreateWithoutChildrenInput = {
@@ -115180,6 +115382,7 @@ export namespace Prisma {
     members?: ContactListMemberUncheckedCreateNestedManyWithoutListInput
     audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutContactListInput
     filters?: FilterUncheckedCreateNestedManyWithoutContactListInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutListInput
   }
 
   export type ContactListCreateOrConnectWithoutChildrenInput = {
@@ -115198,6 +115401,7 @@ export namespace Prisma {
     members?: ContactListMemberCreateNestedManyWithoutListInput
     audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutContactListInput
     filters?: FilterCreateNestedManyWithoutContactListInput
+    sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutListInput
   }
 
   export type ContactListUncheckedCreateWithoutParentInput = {
@@ -115212,6 +115416,7 @@ export namespace Prisma {
     members?: ContactListMemberUncheckedCreateNestedManyWithoutListInput
     audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutContactListInput
     filters?: FilterUncheckedCreateNestedManyWithoutContactListInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutListInput
   }
 
   export type ContactListCreateOrConnectWithoutParentInput = {
@@ -115226,6 +115431,7 @@ export namespace Prisma {
 
   export type ContactListMemberCreateWithoutListInput = {
     uuid?: string
+    status?: $Enums.LeadStatus
     created_at?: Date | string
     contact: ContactCreateNestedOneWithoutList_membershipsInput
   }
@@ -115234,6 +115440,7 @@ export namespace Prisma {
     id?: number
     uuid?: string
     contact_uuid: string
+    status?: $Enums.LeadStatus
     created_at?: Date | string
   }
 
@@ -115346,6 +115553,49 @@ export namespace Prisma {
 
   export type FilterCreateManyContactListInputEnvelope = {
     data: FilterCreateManyContactListInput | FilterCreateManyContactListInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SequenceEnrollmentCreateWithoutListInput = {
+    uuid?: string
+    status?: $Enums.SequenceEnrollmentStatus
+    enrolled_at?: Date | string
+    current_step_order_index?: number
+    first_step_sent_at?: Date | string | null
+    cancelled_at?: Date | string | null
+    completed_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    sequence: OutreachSequenceCreateNestedOneWithoutEnrollmentsInput
+    contact: ContactCreateNestedOneWithoutSequence_enrollmentsInput
+    campaign?: MarketingCampaignCreateNestedOneWithoutSequence_enrollmentsInput
+    outreach_messages?: OutreachMessageCreateNestedManyWithoutSequence_enrollmentInput
+  }
+
+  export type SequenceEnrollmentUncheckedCreateWithoutListInput = {
+    id?: number
+    uuid?: string
+    sequence_uuid: string
+    contact_uuid: string
+    campaign_uuid?: string | null
+    status?: $Enums.SequenceEnrollmentStatus
+    enrolled_at?: Date | string
+    current_step_order_index?: number
+    first_step_sent_at?: Date | string | null
+    cancelled_at?: Date | string | null
+    completed_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutSequence_enrollmentInput
+  }
+
+  export type SequenceEnrollmentCreateOrConnectWithoutListInput = {
+    where: SequenceEnrollmentWhereUniqueInput
+    create: XOR<SequenceEnrollmentCreateWithoutListInput, SequenceEnrollmentUncheckedCreateWithoutListInput>
+  }
+
+  export type SequenceEnrollmentCreateManyListInputEnvelope = {
+    data: SequenceEnrollmentCreateManyListInput | SequenceEnrollmentCreateManyListInput[]
     skipDuplicates?: boolean
   }
 
@@ -115465,6 +115715,7 @@ export namespace Prisma {
     members?: ContactListMemberUpdateManyWithoutListNestedInput
     audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutContactListNestedInput
     filters?: FilterUpdateManyWithoutContactListNestedInput
+    sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutListNestedInput
   }
 
   export type ContactListUncheckedUpdateWithoutChildrenInput = {
@@ -115479,6 +115730,7 @@ export namespace Prisma {
     members?: ContactListMemberUncheckedUpdateManyWithoutListNestedInput
     audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutContactListNestedInput
     filters?: FilterUncheckedUpdateManyWithoutContactListNestedInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutListNestedInput
   }
 
   export type ContactListUpsertWithWhereUniqueWithoutParentInput = {
@@ -115545,6 +115797,22 @@ export namespace Prisma {
     data: XOR<FilterUpdateManyMutationInput, FilterUncheckedUpdateManyWithoutContactListInput>
   }
 
+  export type SequenceEnrollmentUpsertWithWhereUniqueWithoutListInput = {
+    where: SequenceEnrollmentWhereUniqueInput
+    update: XOR<SequenceEnrollmentUpdateWithoutListInput, SequenceEnrollmentUncheckedUpdateWithoutListInput>
+    create: XOR<SequenceEnrollmentCreateWithoutListInput, SequenceEnrollmentUncheckedCreateWithoutListInput>
+  }
+
+  export type SequenceEnrollmentUpdateWithWhereUniqueWithoutListInput = {
+    where: SequenceEnrollmentWhereUniqueInput
+    data: XOR<SequenceEnrollmentUpdateWithoutListInput, SequenceEnrollmentUncheckedUpdateWithoutListInput>
+  }
+
+  export type SequenceEnrollmentUpdateManyWithWhereWithoutListInput = {
+    where: SequenceEnrollmentScalarWhereInput
+    data: XOR<SequenceEnrollmentUpdateManyMutationInput, SequenceEnrollmentUncheckedUpdateManyWithoutListInput>
+  }
+
   export type ContactListCreateWithoutMembersInput = {
     uuid?: string
     title: string
@@ -115556,6 +115824,7 @@ export namespace Prisma {
     children?: ContactListCreateNestedManyWithoutParentInput
     audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutContactListInput
     filters?: FilterCreateNestedManyWithoutContactListInput
+    sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutListInput
   }
 
   export type ContactListUncheckedCreateWithoutMembersInput = {
@@ -115570,6 +115839,7 @@ export namespace Prisma {
     children?: ContactListUncheckedCreateNestedManyWithoutParentInput
     audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutContactListInput
     filters?: FilterUncheckedCreateNestedManyWithoutContactListInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutListInput
   }
 
   export type ContactListCreateOrConnectWithoutMembersInput = {
@@ -115695,6 +115965,7 @@ export namespace Prisma {
     children?: ContactListUpdateManyWithoutParentNestedInput
     audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutContactListNestedInput
     filters?: FilterUpdateManyWithoutContactListNestedInput
+    sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutListNestedInput
   }
 
   export type ContactListUncheckedUpdateWithoutMembersInput = {
@@ -115709,6 +115980,7 @@ export namespace Prisma {
     children?: ContactListUncheckedUpdateManyWithoutParentNestedInput
     audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutContactListNestedInput
     filters?: FilterUncheckedUpdateManyWithoutContactListNestedInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutListNestedInput
   }
 
   export type ContactUpsertWithoutList_membershipsInput = {
@@ -117157,6 +117429,7 @@ export namespace Prisma {
     sequence: OutreachSequenceCreateNestedOneWithoutEnrollmentsInput
     contact: ContactCreateNestedOneWithoutSequence_enrollmentsInput
     campaign?: MarketingCampaignCreateNestedOneWithoutSequence_enrollmentsInput
+    list?: ContactListCreateNestedOneWithoutSequence_enrollmentsInput
   }
 
   export type SequenceEnrollmentUncheckedCreateWithoutOutreach_messagesInput = {
@@ -117165,6 +117438,7 @@ export namespace Prisma {
     sequence_uuid: string
     contact_uuid: string
     campaign_uuid?: string | null
+    list_uuid?: string | null
     status?: $Enums.SequenceEnrollmentStatus
     enrolled_at?: Date | string
     current_step_order_index?: number
@@ -117725,6 +117999,7 @@ export namespace Prisma {
     sequence?: OutreachSequenceUpdateOneRequiredWithoutEnrollmentsNestedInput
     contact?: ContactUpdateOneRequiredWithoutSequence_enrollmentsNestedInput
     campaign?: MarketingCampaignUpdateOneWithoutSequence_enrollmentsNestedInput
+    list?: ContactListUpdateOneWithoutSequence_enrollmentsNestedInput
   }
 
   export type SequenceEnrollmentUncheckedUpdateWithoutOutreach_messagesInput = {
@@ -117733,6 +118008,7 @@ export namespace Prisma {
     sequence_uuid?: StringFieldUpdateOperationsInput | string
     contact_uuid?: StringFieldUpdateOperationsInput | string
     campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    list_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSequenceEnrollmentStatusFieldUpdateOperationsInput | $Enums.SequenceEnrollmentStatus
     enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
     current_step_order_index?: IntFieldUpdateOperationsInput | number
@@ -118527,6 +118803,7 @@ export namespace Prisma {
     updated_at?: Date | string
     contact: ContactCreateNestedOneWithoutSequence_enrollmentsInput
     campaign?: MarketingCampaignCreateNestedOneWithoutSequence_enrollmentsInput
+    list?: ContactListCreateNestedOneWithoutSequence_enrollmentsInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutSequence_enrollmentInput
   }
 
@@ -118535,6 +118812,7 @@ export namespace Prisma {
     uuid?: string
     contact_uuid: string
     campaign_uuid?: string | null
+    list_uuid?: string | null
     status?: $Enums.SequenceEnrollmentStatus
     enrolled_at?: Date | string
     current_step_order_index?: number
@@ -119302,6 +119580,40 @@ export namespace Prisma {
     create: XOR<MarketingCampaignCreateWithoutSequence_enrollmentsInput, MarketingCampaignUncheckedCreateWithoutSequence_enrollmentsInput>
   }
 
+  export type ContactListCreateWithoutSequence_enrollmentsInput = {
+    uuid?: string
+    title: string
+    description?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutContact_listsInput
+    parent?: ContactListCreateNestedOneWithoutChildrenInput
+    children?: ContactListCreateNestedManyWithoutParentInput
+    members?: ContactListMemberCreateNestedManyWithoutListInput
+    audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutContactListInput
+    filters?: FilterCreateNestedManyWithoutContactListInput
+  }
+
+  export type ContactListUncheckedCreateWithoutSequence_enrollmentsInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    parent_list_uuid?: string | null
+    title: string
+    description?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    children?: ContactListUncheckedCreateNestedManyWithoutParentInput
+    members?: ContactListMemberUncheckedCreateNestedManyWithoutListInput
+    audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutContactListInput
+    filters?: FilterUncheckedCreateNestedManyWithoutContactListInput
+  }
+
+  export type ContactListCreateOrConnectWithoutSequence_enrollmentsInput = {
+    where: ContactListWhereUniqueInput
+    create: XOR<ContactListCreateWithoutSequence_enrollmentsInput, ContactListUncheckedCreateWithoutSequence_enrollmentsInput>
+  }
+
   export type OutreachMessageCreateWithoutSequence_enrollmentInput = {
     uuid?: string
     channel: $Enums.Channel
@@ -119639,6 +119951,46 @@ export namespace Prisma {
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutCampaignNestedInput
     interactions?: InteractionUncheckedUpdateManyWithoutCampaignNestedInput
     campaign_integrations?: CampaignIntegrationUncheckedUpdateManyWithoutCampaignNestedInput
+  }
+
+  export type ContactListUpsertWithoutSequence_enrollmentsInput = {
+    update: XOR<ContactListUpdateWithoutSequence_enrollmentsInput, ContactListUncheckedUpdateWithoutSequence_enrollmentsInput>
+    create: XOR<ContactListCreateWithoutSequence_enrollmentsInput, ContactListUncheckedCreateWithoutSequence_enrollmentsInput>
+    where?: ContactListWhereInput
+  }
+
+  export type ContactListUpdateToOneWithWhereWithoutSequence_enrollmentsInput = {
+    where?: ContactListWhereInput
+    data: XOR<ContactListUpdateWithoutSequence_enrollmentsInput, ContactListUncheckedUpdateWithoutSequence_enrollmentsInput>
+  }
+
+  export type ContactListUpdateWithoutSequence_enrollmentsInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutContact_listsNestedInput
+    parent?: ContactListUpdateOneWithoutChildrenNestedInput
+    children?: ContactListUpdateManyWithoutParentNestedInput
+    members?: ContactListMemberUpdateManyWithoutListNestedInput
+    audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutContactListNestedInput
+    filters?: FilterUpdateManyWithoutContactListNestedInput
+  }
+
+  export type ContactListUncheckedUpdateWithoutSequence_enrollmentsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    parent_list_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    children?: ContactListUncheckedUpdateManyWithoutParentNestedInput
+    members?: ContactListMemberUncheckedUpdateManyWithoutListNestedInput
+    audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutContactListNestedInput
+    filters?: FilterUncheckedUpdateManyWithoutContactListNestedInput
   }
 
   export type OutreachMessageUpsertWithWhereUniqueWithoutSequence_enrollmentInput = {
@@ -121128,6 +121480,7 @@ export namespace Prisma {
     updated_at?: Date | string
     sequence: OutreachSequenceCreateNestedOneWithoutEnrollmentsInput
     contact: ContactCreateNestedOneWithoutSequence_enrollmentsInput
+    list?: ContactListCreateNestedOneWithoutSequence_enrollmentsInput
     outreach_messages?: OutreachMessageCreateNestedManyWithoutSequence_enrollmentInput
   }
 
@@ -121136,6 +121489,7 @@ export namespace Prisma {
     uuid?: string
     sequence_uuid: string
     contact_uuid: string
+    list_uuid?: string | null
     status?: $Enums.SequenceEnrollmentStatus
     enrolled_at?: Date | string
     current_step_order_index?: number
@@ -124864,6 +125218,7 @@ export namespace Prisma {
     children?: ContactListCreateNestedManyWithoutParentInput
     members?: ContactListMemberCreateNestedManyWithoutListInput
     filters?: FilterCreateNestedManyWithoutContactListInput
+    sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutListInput
   }
 
   export type ContactListUncheckedCreateWithoutAudience_analysesInput = {
@@ -124878,6 +125233,7 @@ export namespace Prisma {
     children?: ContactListUncheckedCreateNestedManyWithoutParentInput
     members?: ContactListMemberUncheckedCreateNestedManyWithoutListInput
     filters?: FilterUncheckedCreateNestedManyWithoutContactListInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutListInput
   }
 
   export type ContactListCreateOrConnectWithoutAudience_analysesInput = {
@@ -125055,6 +125411,7 @@ export namespace Prisma {
     children?: ContactListUpdateManyWithoutParentNestedInput
     members?: ContactListMemberUpdateManyWithoutListNestedInput
     filters?: FilterUpdateManyWithoutContactListNestedInput
+    sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutListNestedInput
   }
 
   export type ContactListUncheckedUpdateWithoutAudience_analysesInput = {
@@ -125069,6 +125426,7 @@ export namespace Prisma {
     children?: ContactListUncheckedUpdateManyWithoutParentNestedInput
     members?: ContactListMemberUncheckedUpdateManyWithoutListNestedInput
     filters?: FilterUncheckedUpdateManyWithoutContactListNestedInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutListNestedInput
   }
 
   export type OrganisationCreateWithoutAi_usage_logsInput = {
@@ -130186,6 +130544,7 @@ export namespace Prisma {
     members?: ContactListMemberUpdateManyWithoutListNestedInput
     audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutContactListNestedInput
     filters?: FilterUpdateManyWithoutContactListNestedInput
+    sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutListNestedInput
   }
 
   export type ContactListUncheckedUpdateWithoutOrganisationInput = {
@@ -130200,6 +130559,7 @@ export namespace Prisma {
     members?: ContactListMemberUncheckedUpdateManyWithoutListNestedInput
     audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutContactListNestedInput
     filters?: FilterUncheckedUpdateManyWithoutContactListNestedInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutListNestedInput
   }
 
   export type ContactListUncheckedUpdateManyWithoutOrganisationInput = {
@@ -131670,6 +132030,7 @@ export namespace Prisma {
     id?: number
     uuid?: string
     list_uuid: string
+    status?: $Enums.LeadStatus
     created_at?: Date | string
   }
 
@@ -131692,6 +132053,7 @@ export namespace Prisma {
     uuid?: string
     sequence_uuid: string
     campaign_uuid?: string | null
+    list_uuid?: string | null
     status?: $Enums.SequenceEnrollmentStatus
     enrolled_at?: Date | string
     current_step_order_index?: number
@@ -132117,6 +132479,7 @@ export namespace Prisma {
 
   export type ContactListMemberUpdateWithoutContactInput = {
     uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     list?: ContactListUpdateOneRequiredWithoutMembersNestedInput
   }
@@ -132125,6 +132488,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     uuid?: StringFieldUpdateOperationsInput | string
     list_uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -132132,6 +132496,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     uuid?: StringFieldUpdateOperationsInput | string
     list_uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -132188,6 +132553,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     sequence?: OutreachSequenceUpdateOneRequiredWithoutEnrollmentsNestedInput
     campaign?: MarketingCampaignUpdateOneWithoutSequence_enrollmentsNestedInput
+    list?: ContactListUpdateOneWithoutSequence_enrollmentsNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutSequence_enrollmentNestedInput
   }
 
@@ -132196,6 +132562,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     sequence_uuid?: StringFieldUpdateOperationsInput | string
     campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    list_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSequenceEnrollmentStatusFieldUpdateOperationsInput | $Enums.SequenceEnrollmentStatus
     enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
     current_step_order_index?: IntFieldUpdateOperationsInput | number
@@ -132212,6 +132579,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     sequence_uuid?: StringFieldUpdateOperationsInput | string
     campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    list_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSequenceEnrollmentStatusFieldUpdateOperationsInput | $Enums.SequenceEnrollmentStatus
     enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
     current_step_order_index?: IntFieldUpdateOperationsInput | number
@@ -132236,6 +132604,7 @@ export namespace Prisma {
     id?: number
     uuid?: string
     contact_uuid: string
+    status?: $Enums.LeadStatus
     created_at?: Date | string
   }
 
@@ -132275,6 +132644,22 @@ export namespace Prisma {
     updated_at?: Date | string
   }
 
+  export type SequenceEnrollmentCreateManyListInput = {
+    id?: number
+    uuid?: string
+    sequence_uuid: string
+    contact_uuid: string
+    campaign_uuid?: string | null
+    status?: $Enums.SequenceEnrollmentStatus
+    enrolled_at?: Date | string
+    current_step_order_index?: number
+    first_step_sent_at?: Date | string | null
+    cancelled_at?: Date | string | null
+    completed_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
   export type ContactListUpdateWithoutParentInput = {
     uuid?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
@@ -132286,6 +132671,7 @@ export namespace Prisma {
     members?: ContactListMemberUpdateManyWithoutListNestedInput
     audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutContactListNestedInput
     filters?: FilterUpdateManyWithoutContactListNestedInput
+    sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutListNestedInput
   }
 
   export type ContactListUncheckedUpdateWithoutParentInput = {
@@ -132300,6 +132686,7 @@ export namespace Prisma {
     members?: ContactListMemberUncheckedUpdateManyWithoutListNestedInput
     audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutContactListNestedInput
     filters?: FilterUncheckedUpdateManyWithoutContactListNestedInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutListNestedInput
   }
 
   export type ContactListUncheckedUpdateManyWithoutParentInput = {
@@ -132314,6 +132701,7 @@ export namespace Prisma {
 
   export type ContactListMemberUpdateWithoutListInput = {
     uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     contact?: ContactUpdateOneRequiredWithoutList_membershipsNestedInput
   }
@@ -132322,6 +132710,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     uuid?: StringFieldUpdateOperationsInput | string
     contact_uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -132329,6 +132718,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     uuid?: StringFieldUpdateOperationsInput | string
     contact_uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -132446,6 +132836,55 @@ export namespace Prisma {
     cron_schedule?: NullableStringFieldUpdateOperationsInput | string | null
     channels?: FilterUpdatechannelsInput | $Enums.Channel[]
     outreach_instructions?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SequenceEnrollmentUpdateWithoutListInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumSequenceEnrollmentStatusFieldUpdateOperationsInput | $Enums.SequenceEnrollmentStatus
+    enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    current_step_order_index?: IntFieldUpdateOperationsInput | number
+    first_step_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    sequence?: OutreachSequenceUpdateOneRequiredWithoutEnrollmentsNestedInput
+    contact?: ContactUpdateOneRequiredWithoutSequence_enrollmentsNestedInput
+    campaign?: MarketingCampaignUpdateOneWithoutSequence_enrollmentsNestedInput
+    outreach_messages?: OutreachMessageUpdateManyWithoutSequence_enrollmentNestedInput
+  }
+
+  export type SequenceEnrollmentUncheckedUpdateWithoutListInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    sequence_uuid?: StringFieldUpdateOperationsInput | string
+    contact_uuid?: StringFieldUpdateOperationsInput | string
+    campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSequenceEnrollmentStatusFieldUpdateOperationsInput | $Enums.SequenceEnrollmentStatus
+    enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    current_step_order_index?: IntFieldUpdateOperationsInput | number
+    first_step_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutSequence_enrollmentNestedInput
+  }
+
+  export type SequenceEnrollmentUncheckedUpdateManyWithoutListInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    sequence_uuid?: StringFieldUpdateOperationsInput | string
+    contact_uuid?: StringFieldUpdateOperationsInput | string
+    campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSequenceEnrollmentStatusFieldUpdateOperationsInput | $Enums.SequenceEnrollmentStatus
+    enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    current_step_order_index?: IntFieldUpdateOperationsInput | number
+    first_step_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -132766,6 +133205,7 @@ export namespace Prisma {
     uuid?: string
     contact_uuid: string
     campaign_uuid?: string | null
+    list_uuid?: string | null
     status?: $Enums.SequenceEnrollmentStatus
     enrolled_at?: Date | string
     current_step_order_index?: number
@@ -132884,6 +133324,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     contact?: ContactUpdateOneRequiredWithoutSequence_enrollmentsNestedInput
     campaign?: MarketingCampaignUpdateOneWithoutSequence_enrollmentsNestedInput
+    list?: ContactListUpdateOneWithoutSequence_enrollmentsNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutSequence_enrollmentNestedInput
   }
 
@@ -132892,6 +133333,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     contact_uuid?: StringFieldUpdateOperationsInput | string
     campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    list_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSequenceEnrollmentStatusFieldUpdateOperationsInput | $Enums.SequenceEnrollmentStatus
     enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
     current_step_order_index?: IntFieldUpdateOperationsInput | number
@@ -132908,6 +133350,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     contact_uuid?: StringFieldUpdateOperationsInput | string
     campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    list_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSequenceEnrollmentStatusFieldUpdateOperationsInput | $Enums.SequenceEnrollmentStatus
     enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
     current_step_order_index?: IntFieldUpdateOperationsInput | number
@@ -133712,6 +134155,7 @@ export namespace Prisma {
     uuid?: string
     sequence_uuid: string
     contact_uuid: string
+    list_uuid?: string | null
     status?: $Enums.SequenceEnrollmentStatus
     enrolled_at?: Date | string
     current_step_order_index?: number
@@ -133953,6 +134397,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     sequence?: OutreachSequenceUpdateOneRequiredWithoutEnrollmentsNestedInput
     contact?: ContactUpdateOneRequiredWithoutSequence_enrollmentsNestedInput
+    list?: ContactListUpdateOneWithoutSequence_enrollmentsNestedInput
     outreach_messages?: OutreachMessageUpdateManyWithoutSequence_enrollmentNestedInput
   }
 
@@ -133961,6 +134406,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     sequence_uuid?: StringFieldUpdateOperationsInput | string
     contact_uuid?: StringFieldUpdateOperationsInput | string
+    list_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSequenceEnrollmentStatusFieldUpdateOperationsInput | $Enums.SequenceEnrollmentStatus
     enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
     current_step_order_index?: IntFieldUpdateOperationsInput | number
@@ -133977,6 +134423,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     sequence_uuid?: StringFieldUpdateOperationsInput | string
     contact_uuid?: StringFieldUpdateOperationsInput | string
+    list_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSequenceEnrollmentStatusFieldUpdateOperationsInput | $Enums.SequenceEnrollmentStatus
     enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
     current_step_order_index?: IntFieldUpdateOperationsInput | number

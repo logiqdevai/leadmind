@@ -16,6 +16,7 @@ import { ContactDetailHeader, ContactEnrichmentTab, CrmTab, FormsTab, OverviewTa
 
 interface ContactDetailViewProps {
     contactUuid: string;
+    listUuid?: string;
     onBack?: () => void;
     onDeleted?: () => void;
     showDelete?: boolean;
@@ -25,6 +26,7 @@ interface ContactDetailViewProps {
 
 export const ContactDetailView: FC<ContactDetailViewProps> = ({
     contactUuid,
+    listUuid,
     onBack,
     onDeleted,
     showDelete = true,
@@ -174,6 +176,7 @@ export const ContactDetailView: FC<ContactDetailViewProps> = ({
                 ) : activeTab === "outreach" ? (
                     <OutreachTab
                         contact={contact}
+                        listUuid={listUuid}
                         highlightUuid={highlightOutreachUuid}
                         onHighlightConsumed={() => setHighlightOutreachUuid(null)}
                         onNavigationLockChange={setChildNavLocked}

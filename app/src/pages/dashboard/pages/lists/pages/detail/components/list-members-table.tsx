@@ -6,10 +6,11 @@ import { Trash2 } from "lucide-react";
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { TablePagination } from "@/components/ui/table-pagination";
 import { isTableNavInteractiveCell, tableNavInteractiveCellClassName, tableNavRowClassName } from "@/components/ui/table-row-link";
-import type { Contact } from "@/features/contacts/interfaces/contact.interface";
 import { LeadStatus } from "@/features/contacts/interfaces/contact.interface";
+import type { ListMember } from "@/features/contact-lists/interfaces/contact-list.interface";
 import { STATUS_OPTIONS } from "@/features/contacts/constants/contacts.constants";
 import { useUpdateContactStatus } from "@/features/contacts/hooks/use-contacts";
+import { useUpdateListMemberStatus } from "@/features/contact-lists/hooks/use-contact-lists";
 import { normalizeUrl } from "@/lib/profile";
 import {
     ContactTableDetailLink,
@@ -21,10 +22,11 @@ import { ContactScoresCompact } from "@/pages/dashboard/pages/leads/components/b
 import { contactTableColumnClass } from "@/pages/dashboard/components/contact-table-column-classes";
 import { cn } from "@/lib/utils";
 
-const columnHelper = createColumnHelper<Contact>();
+const columnHelper = createColumnHelper<ListMember>();
 
 interface ListMembersTableProps {
-    contacts: Contact[];
+    listUuid: string;
+    contacts: ListMember[];
     isLoading: boolean;
     isFetching: boolean;
     page: number;
@@ -42,6 +44,7 @@ interface ListMembersTableProps {
 }
 
 export function ListMembersTable({
+    listUuid,
     contacts,
     isLoading,
     isFetching,
@@ -59,6 +62,7 @@ export function ListMembersTable({
     deletePending = false,
 }: ListMembersTableProps) {
     const updateStatus = useUpdateContactStatus();
+    const updateListStatus = useUpdateListMemberStatus();
 
     const columns = useMemo(
         () => [
@@ -169,6 +173,44 @@ export function ListMembersTable({
                     );
                 },
             }),
+            columnHelper.accessor("list_status", {
+                id: "list_status",
+                header: "List status",
+                cell: (info) => {
+                    const member = info.row.original;
+                    return (
+                        <div onClick={(e) => e.stopPropagation()} className="min-w-0">
+                            <Select
+                                aria-label="List status"
+                                placeholder="Not set"
+                                value={member.list_status || null}
+                                onChange={(v) =>
+                                    updateListStatus.mutate({
+                                        listUuid,
+                                        contactUuid: member.uuid,
+                                        status: v as LeadStatus,
+                                    })
+                                }
+                            >
+                                <Select.Trigger className="w-full min-w-0 max-w-36">
+                                    <Select.Value />
+                                    <Select.Indicator />
+                                </Select.Trigger>
+                                <Select.Popover>
+                                    <ListBox>
+                                        {STATUS_OPTIONS.map((opt) => (
+                                            <ListBox.Item key={opt.id} id={opt.id} textValue={opt.label}>
+                                                {opt.label}
+                                                <ListBox.ItemIndicator />
+                                            </ListBox.Item>
+                                        ))}
+                                    </ListBox>
+                                </Select.Popover>
+                            </Select>
+                        </div>
+                    );
+                },
+            }),
             columnHelper.display({
                 id: "filters",
                 header: "Filters",
@@ -194,7 +236,11 @@ export function ListMembersTable({
                                 contactName={contact.name}
                                 onOpen={onContactOpen}
                             />
-                            <ContactTableDetailLink contactUuid={contact.uuid} contactName={contact.name} />
+                            <ContactTableDetailLink
+                                contactUuid={contact.uuid}
+                                contactName={contact.name}
+                                listUuid={listUuid}
+                            />
                             {onDeleteContact ? (
                                 <Button
                                     size="sm"
@@ -212,7 +258,7 @@ export function ListMembersTable({
                 },
             }),
         ],
-        [deletePending, onContactOpen, onDeleteContact, updateStatus],
+        [deletePending, onContactOpen, onDeleteContact, updateStatus, updateListStatus, listUuid],
     );
 
     const table = useReactTable({
@@ -308,6 +354,7 @@ export function ListMembersTable({
                                               const isInteractive = isTableNavInteractiveCell(cell.column.id, [
                                                   "website",
                                                   "status",
+                                                  "list_status",
                                                   "actions",
                                               ]);
 

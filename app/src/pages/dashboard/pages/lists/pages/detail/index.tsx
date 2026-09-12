@@ -301,6 +301,7 @@ export default function ListDetailPage() {
     return (
         <ContactStackViewerScope
             contactUuids={memberUuids}
+            listUuid={uuid}
             page={membersPage}
             totalPages={totalPages}
             pageSize={membersPageSize.limit}
@@ -445,6 +446,7 @@ export default function ListDetailPage() {
                                 Click a name or use the up/down icon to open quick browse. Use arrow keys to move between contacts.
                             </p>
                             <ListMembersTable
+                                listUuid={uuid}
                                 contacts={members}
                                 isLoading={membersLoading}
                                 isFetching={membersFetching}
@@ -545,6 +547,7 @@ export default function ListDetailPage() {
                         isOpen={composeOpen}
                         onOpenChange={setComposeOpen}
                         contacts={selectedMembers}
+                        listUuid={uuid}
                         onComplete={() => setSelectedKeys(new Set())}
                     />
                     <BulkEnrollInSequenceModal
@@ -552,6 +555,7 @@ export default function ListDetailPage() {
                         onOpenChange={setEnrollOpen}
                         contacts={selectedMembers}
                         onComplete={() => setSelectedKeys(new Set())}
+                        listUuid={uuid}
                     />
                 </div>
             )}
