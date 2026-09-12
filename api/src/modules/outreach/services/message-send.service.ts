@@ -146,12 +146,18 @@ export class MessageSendService {
             };
 
             const metadataProvider = parseEmailProviderMetadata(message.metadata);
+            const campaignIntegrationTarget =
+                !providerOverride && !metadataProvider && message.campaign_integration_uuid
+                    ? await this.emailCredentialsService.resolveTargetByCampaignIntegrationUuid(
+                          message.campaign_integration_uuid,
+                      )
+                    : null;
             const defaultTarget =
-                providerOverride || metadataProvider
+                providerOverride || metadataProvider || campaignIntegrationTarget
                     ? null
                     : await this.emailCredentialsService.resolveDefaultTarget(message.organisation_uuid);
 
-            const target = providerOverride ?? metadataProvider ?? defaultTarget;
+            const target = providerOverride ?? metadataProvider ?? campaignIntegrationTarget ?? defaultTarget;
 
             if (!message.campaign_uuid && target?.provider) {
                 await this.emailSendLimitsService.assertWithinLimit(

@@ -909,21 +909,8 @@ export class CampaignMessageSendService {
   private async resolveCampaignIntegrationTarget(
     campaign_integration_uuid: string,
   ): Promise<EmailProviderTarget> {
-    const ci = await this.prisma.campaignIntegration.findUnique({
-      where: { uuid: campaign_integration_uuid },
-      select: {
-        integration_account_uuid: true,
-        integration_account_domain_uuid: true,
-      },
-    });
-    if (!ci) {
-      throw new NotFoundException(
-        `Campaign integration ${campaign_integration_uuid} not found`,
-      );
-    }
-    return this.emailCredentialsService.resolveTargetByAccountUuid(
-      ci.integration_account_uuid,
-      ci.integration_account_domain_uuid ?? undefined,
+    return this.emailCredentialsService.resolveTargetByCampaignIntegrationUuid(
+      campaign_integration_uuid,
     );
   }
 

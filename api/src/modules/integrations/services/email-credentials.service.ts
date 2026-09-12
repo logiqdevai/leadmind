@@ -343,6 +343,33 @@ export class EmailCredentialsService {
     return { provider, account: account.account, domain_uuid };
   }
 
+  /**
+   * Resolves the send target for a campaign's assigned CampaignIntegration, given only its
+   * uuid. Shared by every send path that carries a CampaignIntegration reference (paced
+   * campaign-contact sends and sequence-step sends alike), so none of them can silently
+   * skip the campaign's chosen integration and fall back to the org default.
+   */
+  async resolveTargetByCampaignIntegrationUuid(
+    campaign_integration_uuid: string,
+  ): Promise<EmailProviderTarget> {
+    const ci = await this.prisma.campaignIntegration.findUnique({
+      where: { uuid: campaign_integration_uuid },
+      select: {
+        integration_account_uuid: true,
+        integration_account_domain_uuid: true,
+      },
+    });
+    if (!ci) {
+      throw new NotFoundException(
+        `Campaign integration ${campaign_integration_uuid} not found`,
+      );
+    }
+    return this.resolveTargetByAccountUuid(
+      ci.integration_account_uuid,
+      ci.integration_account_domain_uuid ?? undefined,
+    );
+  }
+
   async resolveDefaultTarget(
     organisation_uuid: string,
   ): Promise<EmailProviderTarget | null> {
