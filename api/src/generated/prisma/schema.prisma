@@ -652,20 +652,23 @@ model OutreachSequenceStep {
 }
 
 model SequenceEnrollment {
-  id                       Int                      @id @default(autoincrement())
-  uuid                     String                   @unique @default(uuid())
+  id                       Int                          @id @default(autoincrement())
+  uuid                     String                       @unique @default(uuid())
   sequence_uuid            String
   contact_uuid             String
   campaign_uuid            String?
   list_uuid                String?
-  status                   SequenceEnrollmentStatus @default(ACTIVE)
-  enrolled_at              DateTime                 @default(now())
-  current_step_order_index Int                      @default(0)
+  status                   SequenceEnrollmentStatus     @default(ACTIVE)
+  enrolled_at              DateTime                     @default(now())
+  current_step_order_index Int                          @default(0)
   first_step_sent_at       DateTime?
   cancelled_at             DateTime?
   completed_at             DateTime?
-  created_at               DateTime                 @default(now())
-  updated_at               DateTime                 @updatedAt
+  email_provider           ExternalIntegrationProvider?
+  email_account            String?
+  email_domain_uuid        String?
+  created_at               DateTime                     @default(now())
+  updated_at               DateTime                     @updatedAt
 
   sequence          OutreachSequence   @relation(fields: [sequence_uuid], references: [uuid], onDelete: Cascade)
   contact           Contact            @relation(fields: [contact_uuid], references: [uuid], onDelete: Cascade)

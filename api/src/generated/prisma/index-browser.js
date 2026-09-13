@@ -495,6 +495,9 @@ exports.Prisma.SequenceEnrollmentScalarFieldEnum = {
   first_step_sent_at: 'first_step_sent_at',
   cancelled_at: 'cancelled_at',
   completed_at: 'completed_at',
+  email_provider: 'email_provider',
+  email_account: 'email_account',
+  email_domain_uuid: 'email_domain_uuid',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };

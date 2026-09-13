@@ -664,6 +664,9 @@ model SequenceEnrollment {
   first_step_sent_at       DateTime?
   cancelled_at             DateTime?
   completed_at             DateTime?
+  email_provider           ExternalIntegrationProvider?
+  email_account            String?
+  email_domain_uuid        String?
   created_at               DateTime                 @default(now())
   updated_at               DateTime                 @updatedAt
 

@@ -25,6 +25,7 @@ import type {
 } from "../interfaces/sequence.interface";
 import { toast } from "@/hooks/use-toast";
 import { contactsQueryKeys } from "@/features/contacts/hooks/use-contacts";
+import type { EmailProviderTarget } from "@/features/integrations/interfaces/integrations.interface";
 
 export const sequencesQueryKeys = {
     all: ["sequences"] as const,
@@ -241,8 +242,8 @@ export function useReorderSequenceSteps() {
 export function useEnrollContact() {
     const qc = useQueryClient();
     return useMutation({
-        mutationFn: (vars: { uuid: string; contact_uuid: string }) =>
-            enrollContactInSequence(vars.uuid, vars.contact_uuid),
+        mutationFn: (vars: { uuid: string; contact_uuid: string; emailProvider?: EmailProviderTarget }) =>
+            enrollContactInSequence(vars.uuid, vars.contact_uuid, vars.emailProvider),
         onSuccess: (_data, vars) => {
             qc.invalidateQueries({ queryKey: sequencesQueryKeys.enrollments(vars.uuid) });
             qc.invalidateQueries({ queryKey: contactsQueryKeys.detail(vars.contact_uuid) });
@@ -262,8 +263,12 @@ export function useEnrollContact() {
 export function useBulkEnrollContacts() {
     const qc = useQueryClient();
     return useMutation({
-        mutationFn: (vars: { uuid: string; contact_uuids: string[]; list_uuid?: string }) =>
-            bulkEnrollContactsInSequence(vars.uuid, vars.contact_uuids, vars.list_uuid),
+        mutationFn: (vars: {
+            uuid: string;
+            contact_uuids: string[];
+            list_uuid?: string;
+            emailProvider?: EmailProviderTarget;
+        }) => bulkEnrollContactsInSequence(vars.uuid, vars.contact_uuids, vars.list_uuid, vars.emailProvider),
         onSuccess: (data, vars) => {
             qc.invalidateQueries({ queryKey: sequencesQueryKeys.enrollments(vars.uuid) });
             qc.invalidateQueries({ queryKey: contactsQueryKeys.all });

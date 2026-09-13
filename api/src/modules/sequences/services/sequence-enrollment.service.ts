@@ -24,6 +24,9 @@ import { hasUsableContactEmail } from '@/shared/utils/contact-email.util';
 import { resolveStepScheduledAt } from '@/shared/utils/sequence-delay.util';
 import { generateMessageId } from '@/shared/utils/email-message-id.util';
 import { ThreadsService } from '@/modules/threads/threads.service';
+import { EmailCredentialsService } from '@/modules/integrations/services/email-credentials.service';
+import { EmailProviderTarget } from '@/modules/integrations/interfaces/email-credentials.interface';
+import { buildEmailProviderMetadata } from '@/modules/outreach/utils/email-provider-allocation.util';
 
 const BULK_ENROLL_CHUNK_SIZE = 200;
 
@@ -41,6 +44,7 @@ export class SequenceEnrollmentService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly threadsService: ThreadsService,
+    private readonly emailCredentialsService: EmailCredentialsService,
     @InjectQueue(OUTREACH_SEND_QUEUE)
     private readonly outreachSendQueue: Queue,
   ) {}
@@ -60,6 +64,7 @@ export class SequenceEnrollmentService {
     sent_by_user_uuid?: string,
     campaign_uuid?: string,
     list_uuid?: string,
+    emailProviderTarget?: EmailProviderTarget,
   ): Promise<SequenceEnrollment> {
     const sequence = await this.requireActiveSequence(
       organisation_uuid,
@@ -69,6 +74,14 @@ export class SequenceEnrollmentService {
       organisation_uuid,
       contact_uuid,
     );
+
+    if (emailProviderTarget) {
+      await this.emailCredentialsService.assertSendableAccount(
+        organisation_uuid,
+        emailProviderTarget.provider,
+        emailProviderTarget.account,
+      );
+    }
 
     if (!campaign_uuid) {
       const duplicate = await this.prisma.sequenceEnrollment.findFirst({
@@ -114,6 +127,9 @@ export class SequenceEnrollmentService {
             status: SequenceEnrollmentStatus.ACTIVE,
             enrolled_at,
             first_step_sent_at: firstStepAt,
+            email_provider: emailProviderTarget?.provider,
+            email_account: emailProviderTarget?.account,
+            email_domain_uuid: emailProviderTarget?.domain_uuid,
           },
         });
 
@@ -131,6 +147,7 @@ export class SequenceEnrollmentService {
           0,
           enrolled_at,
           firstStepAt,
+          emailProviderTarget,
         );
 
         if (materializedIndex === -1) {
@@ -204,6 +221,16 @@ export class SequenceEnrollmentService {
       campaign_uuid: enrollment.campaign_uuid,
       organisation_uuid: contact.organisation_uuid,
     };
+    const emailProviderTarget: EmailProviderTarget | undefined =
+      enrollment.email_provider && enrollment.email_account
+        ? {
+            provider: enrollment.email_provider as EmailProviderTarget['provider'],
+            account: enrollment.email_account,
+            ...(enrollment.email_domain_uuid
+              ? { domain_uuid: enrollment.email_domain_uuid }
+              : {}),
+          }
+        : undefined;
 
     const materializedIndex = await this.prisma.$transaction((tx) =>
       this.materializeFromIndex(
@@ -214,6 +241,7 @@ export class SequenceEnrollmentService {
         completedIndex + 1,
         completed_at,
         firstStepAt,
+        emailProviderTarget,
       ),
     );
 
@@ -243,6 +271,7 @@ export class SequenceEnrollmentService {
     campaign_uuid?: string,
     sent_by_user_uuid?: string,
     list_uuid?: string,
+    emailProviderTarget?: EmailProviderTarget,
   ): Promise<{
     enrolled: number;
     skipped: number;
@@ -253,6 +282,14 @@ export class SequenceEnrollmentService {
       sequence_uuid,
     );
     const enabled_step_count = this.sortEnabledSteps(sequence.steps).length;
+
+    if (emailProviderTarget) {
+      await this.emailCredentialsService.assertSendableAccount(
+        organisation_uuid,
+        emailProviderTarget.provider,
+        emailProviderTarget.account,
+      );
+    }
 
     let enrolled = 0;
     let skipped = 0;
@@ -269,6 +306,7 @@ export class SequenceEnrollmentService {
             sent_by_user_uuid,
             campaign_uuid,
             list_uuid,
+            emailProviderTarget,
           );
           enrolled += 1;
         } catch (error) {
@@ -525,6 +563,7 @@ export class SequenceEnrollmentService {
     startIndex: number,
     previousStepAt: Date,
     firstStepAt: Date,
+    emailProviderTarget?: EmailProviderTarget,
   ): Promise<number> {
     let prevAt = previousStepAt;
 
@@ -577,6 +616,13 @@ export class SequenceEnrollmentService {
             sequence_step_uuid: step.uuid,
             message_id: step.channel === Channel.EMAIL ? generateMessageId() : null,
             thread_uuid,
+            ...(step.channel === Channel.EMAIL && emailProviderTarget
+              ? {
+                  metadata: buildEmailProviderMetadata(
+                    emailProviderTarget,
+                  ) as Prisma.InputJsonValue,
+                }
+              : {}),
           },
         });
         await this.threadsService.recordMessageOnThread(thread_uuid, tx);

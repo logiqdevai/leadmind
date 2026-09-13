@@ -40203,6 +40203,9 @@ export namespace Prisma {
     first_step_sent_at: Date | null
     cancelled_at: Date | null
     completed_at: Date | null
+    email_provider: $Enums.ExternalIntegrationProvider | null
+    email_account: string | null
+    email_domain_uuid: string | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -40220,6 +40223,9 @@ export namespace Prisma {
     first_step_sent_at: Date | null
     cancelled_at: Date | null
     completed_at: Date | null
+    email_provider: $Enums.ExternalIntegrationProvider | null
+    email_account: string | null
+    email_domain_uuid: string | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -40237,6 +40243,9 @@ export namespace Prisma {
     first_step_sent_at: number
     cancelled_at: number
     completed_at: number
+    email_provider: number
+    email_account: number
+    email_domain_uuid: number
     created_at: number
     updated_at: number
     _all: number
@@ -40266,6 +40275,9 @@ export namespace Prisma {
     first_step_sent_at?: true
     cancelled_at?: true
     completed_at?: true
+    email_provider?: true
+    email_account?: true
+    email_domain_uuid?: true
     created_at?: true
     updated_at?: true
   }
@@ -40283,6 +40295,9 @@ export namespace Prisma {
     first_step_sent_at?: true
     cancelled_at?: true
     completed_at?: true
+    email_provider?: true
+    email_account?: true
+    email_domain_uuid?: true
     created_at?: true
     updated_at?: true
   }
@@ -40300,6 +40315,9 @@ export namespace Prisma {
     first_step_sent_at?: true
     cancelled_at?: true
     completed_at?: true
+    email_provider?: true
+    email_account?: true
+    email_domain_uuid?: true
     created_at?: true
     updated_at?: true
     _all?: true
@@ -40404,6 +40422,9 @@ export namespace Prisma {
     first_step_sent_at: Date | null
     cancelled_at: Date | null
     completed_at: Date | null
+    email_provider: $Enums.ExternalIntegrationProvider | null
+    email_account: string | null
+    email_domain_uuid: string | null
     created_at: Date
     updated_at: Date
     _count: SequenceEnrollmentCountAggregateOutputType | null
@@ -40440,6 +40461,9 @@ export namespace Prisma {
     first_step_sent_at?: boolean
     cancelled_at?: boolean
     completed_at?: boolean
+    email_provider?: boolean
+    email_account?: boolean
+    email_domain_uuid?: boolean
     created_at?: boolean
     updated_at?: boolean
     sequence?: boolean | OutreachSequenceDefaultArgs<ExtArgs>
@@ -40463,6 +40487,9 @@ export namespace Prisma {
     first_step_sent_at?: boolean
     cancelled_at?: boolean
     completed_at?: boolean
+    email_provider?: boolean
+    email_account?: boolean
+    email_domain_uuid?: boolean
     created_at?: boolean
     updated_at?: boolean
     sequence?: boolean | OutreachSequenceDefaultArgs<ExtArgs>
@@ -40484,6 +40511,9 @@ export namespace Prisma {
     first_step_sent_at?: boolean
     cancelled_at?: boolean
     completed_at?: boolean
+    email_provider?: boolean
+    email_account?: boolean
+    email_domain_uuid?: boolean
     created_at?: boolean
     updated_at?: boolean
     sequence?: boolean | OutreachSequenceDefaultArgs<ExtArgs>
@@ -40505,11 +40535,14 @@ export namespace Prisma {
     first_step_sent_at?: boolean
     cancelled_at?: boolean
     completed_at?: boolean
+    email_provider?: boolean
+    email_account?: boolean
+    email_domain_uuid?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
-  export type SequenceEnrollmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "sequence_uuid" | "contact_uuid" | "campaign_uuid" | "list_uuid" | "status" | "enrolled_at" | "current_step_order_index" | "first_step_sent_at" | "cancelled_at" | "completed_at" | "created_at" | "updated_at", ExtArgs["result"]["sequenceEnrollment"]>
+  export type SequenceEnrollmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "sequence_uuid" | "contact_uuid" | "campaign_uuid" | "list_uuid" | "status" | "enrolled_at" | "current_step_order_index" | "first_step_sent_at" | "cancelled_at" | "completed_at" | "email_provider" | "email_account" | "email_domain_uuid" | "created_at" | "updated_at", ExtArgs["result"]["sequenceEnrollment"]>
   export type SequenceEnrollmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     sequence?: boolean | OutreachSequenceDefaultArgs<ExtArgs>
     contact?: boolean | ContactDefaultArgs<ExtArgs>
@@ -40553,6 +40586,9 @@ export namespace Prisma {
       first_step_sent_at: Date | null
       cancelled_at: Date | null
       completed_at: Date | null
+      email_provider: $Enums.ExternalIntegrationProvider | null
+      email_account: string | null
+      email_domain_uuid: string | null
       created_at: Date
       updated_at: Date
     }, ExtArgs["result"]["sequenceEnrollment"]>
@@ -40995,6 +41031,9 @@ export namespace Prisma {
     readonly first_step_sent_at: FieldRef<"SequenceEnrollment", 'DateTime'>
     readonly cancelled_at: FieldRef<"SequenceEnrollment", 'DateTime'>
     readonly completed_at: FieldRef<"SequenceEnrollment", 'DateTime'>
+    readonly email_provider: FieldRef<"SequenceEnrollment", 'ExternalIntegrationProvider'>
+    readonly email_account: FieldRef<"SequenceEnrollment", 'String'>
+    readonly email_domain_uuid: FieldRef<"SequenceEnrollment", 'String'>
     readonly created_at: FieldRef<"SequenceEnrollment", 'DateTime'>
     readonly updated_at: FieldRef<"SequenceEnrollment", 'DateTime'>
   }
@@ -81195,6 +81234,9 @@ export namespace Prisma {
     first_step_sent_at: 'first_step_sent_at',
     cancelled_at: 'cancelled_at',
     completed_at: 'completed_at',
+    email_provider: 'email_provider',
+    email_account: 'email_account',
+    email_domain_uuid: 'email_domain_uuid',
     created_at: 'created_at',
     updated_at: 'updated_at'
   };
@@ -85218,6 +85260,9 @@ export namespace Prisma {
     first_step_sent_at?: DateTimeNullableFilter<"SequenceEnrollment"> | Date | string | null
     cancelled_at?: DateTimeNullableFilter<"SequenceEnrollment"> | Date | string | null
     completed_at?: DateTimeNullableFilter<"SequenceEnrollment"> | Date | string | null
+    email_provider?: EnumExternalIntegrationProviderNullableFilter<"SequenceEnrollment"> | $Enums.ExternalIntegrationProvider | null
+    email_account?: StringNullableFilter<"SequenceEnrollment"> | string | null
+    email_domain_uuid?: StringNullableFilter<"SequenceEnrollment"> | string | null
     created_at?: DateTimeFilter<"SequenceEnrollment"> | Date | string
     updated_at?: DateTimeFilter<"SequenceEnrollment"> | Date | string
     sequence?: XOR<OutreachSequenceScalarRelationFilter, OutreachSequenceWhereInput>
@@ -85240,6 +85285,9 @@ export namespace Prisma {
     first_step_sent_at?: SortOrderInput | SortOrder
     cancelled_at?: SortOrderInput | SortOrder
     completed_at?: SortOrderInput | SortOrder
+    email_provider?: SortOrderInput | SortOrder
+    email_account?: SortOrderInput | SortOrder
+    email_domain_uuid?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     sequence?: OutreachSequenceOrderByWithRelationInput
@@ -85266,6 +85314,9 @@ export namespace Prisma {
     first_step_sent_at?: DateTimeNullableFilter<"SequenceEnrollment"> | Date | string | null
     cancelled_at?: DateTimeNullableFilter<"SequenceEnrollment"> | Date | string | null
     completed_at?: DateTimeNullableFilter<"SequenceEnrollment"> | Date | string | null
+    email_provider?: EnumExternalIntegrationProviderNullableFilter<"SequenceEnrollment"> | $Enums.ExternalIntegrationProvider | null
+    email_account?: StringNullableFilter<"SequenceEnrollment"> | string | null
+    email_domain_uuid?: StringNullableFilter<"SequenceEnrollment"> | string | null
     created_at?: DateTimeFilter<"SequenceEnrollment"> | Date | string
     updated_at?: DateTimeFilter<"SequenceEnrollment"> | Date | string
     sequence?: XOR<OutreachSequenceScalarRelationFilter, OutreachSequenceWhereInput>
@@ -85288,6 +85339,9 @@ export namespace Prisma {
     first_step_sent_at?: SortOrderInput | SortOrder
     cancelled_at?: SortOrderInput | SortOrder
     completed_at?: SortOrderInput | SortOrder
+    email_provider?: SortOrderInput | SortOrder
+    email_account?: SortOrderInput | SortOrder
+    email_domain_uuid?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     _count?: SequenceEnrollmentCountOrderByAggregateInput
@@ -85313,6 +85367,9 @@ export namespace Prisma {
     first_step_sent_at?: DateTimeNullableWithAggregatesFilter<"SequenceEnrollment"> | Date | string | null
     cancelled_at?: DateTimeNullableWithAggregatesFilter<"SequenceEnrollment"> | Date | string | null
     completed_at?: DateTimeNullableWithAggregatesFilter<"SequenceEnrollment"> | Date | string | null
+    email_provider?: EnumExternalIntegrationProviderNullableWithAggregatesFilter<"SequenceEnrollment"> | $Enums.ExternalIntegrationProvider | null
+    email_account?: StringNullableWithAggregatesFilter<"SequenceEnrollment"> | string | null
+    email_domain_uuid?: StringNullableWithAggregatesFilter<"SequenceEnrollment"> | string | null
     created_at?: DateTimeWithAggregatesFilter<"SequenceEnrollment"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"SequenceEnrollment"> | Date | string
   }
@@ -91287,6 +91344,9 @@ export namespace Prisma {
     first_step_sent_at?: Date | string | null
     cancelled_at?: Date | string | null
     completed_at?: Date | string | null
+    email_provider?: $Enums.ExternalIntegrationProvider | null
+    email_account?: string | null
+    email_domain_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     sequence: OutreachSequenceCreateNestedOneWithoutEnrollmentsInput
@@ -91309,6 +91369,9 @@ export namespace Prisma {
     first_step_sent_at?: Date | string | null
     cancelled_at?: Date | string | null
     completed_at?: Date | string | null
+    email_provider?: $Enums.ExternalIntegrationProvider | null
+    email_account?: string | null
+    email_domain_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutSequence_enrollmentInput
@@ -91322,6 +91385,9 @@ export namespace Prisma {
     first_step_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
+    email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     sequence?: OutreachSequenceUpdateOneRequiredWithoutEnrollmentsNestedInput
@@ -91344,6 +91410,9 @@ export namespace Prisma {
     first_step_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
+    email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutSequence_enrollmentNestedInput
@@ -91362,6 +91431,9 @@ export namespace Prisma {
     first_step_sent_at?: Date | string | null
     cancelled_at?: Date | string | null
     completed_at?: Date | string | null
+    email_provider?: $Enums.ExternalIntegrationProvider | null
+    email_account?: string | null
+    email_domain_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -91374,6 +91446,9 @@ export namespace Prisma {
     first_step_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
+    email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -91391,6 +91466,9 @@ export namespace Prisma {
     first_step_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
+    email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -97457,6 +97535,9 @@ export namespace Prisma {
     first_step_sent_at?: SortOrder
     cancelled_at?: SortOrder
     completed_at?: SortOrder
+    email_provider?: SortOrder
+    email_account?: SortOrder
+    email_domain_uuid?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -97479,6 +97560,9 @@ export namespace Prisma {
     first_step_sent_at?: SortOrder
     cancelled_at?: SortOrder
     completed_at?: SortOrder
+    email_provider?: SortOrder
+    email_account?: SortOrder
+    email_domain_uuid?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -97496,6 +97580,9 @@ export namespace Prisma {
     first_step_sent_at?: SortOrder
     cancelled_at?: SortOrder
     completed_at?: SortOrder
+    email_provider?: SortOrder
+    email_account?: SortOrder
+    email_domain_uuid?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -113765,6 +113852,9 @@ export namespace Prisma {
     first_step_sent_at?: Date | string | null
     cancelled_at?: Date | string | null
     completed_at?: Date | string | null
+    email_provider?: $Enums.ExternalIntegrationProvider | null
+    email_account?: string | null
+    email_domain_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     sequence: OutreachSequenceCreateNestedOneWithoutEnrollmentsInput
@@ -113785,6 +113875,9 @@ export namespace Prisma {
     first_step_sent_at?: Date | string | null
     cancelled_at?: Date | string | null
     completed_at?: Date | string | null
+    email_provider?: $Enums.ExternalIntegrationProvider | null
+    email_account?: string | null
+    email_domain_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutSequence_enrollmentInput
@@ -114312,6 +114405,9 @@ export namespace Prisma {
     first_step_sent_at?: DateTimeNullableFilter<"SequenceEnrollment"> | Date | string | null
     cancelled_at?: DateTimeNullableFilter<"SequenceEnrollment"> | Date | string | null
     completed_at?: DateTimeNullableFilter<"SequenceEnrollment"> | Date | string | null
+    email_provider?: EnumExternalIntegrationProviderNullableFilter<"SequenceEnrollment"> | $Enums.ExternalIntegrationProvider | null
+    email_account?: StringNullableFilter<"SequenceEnrollment"> | string | null
+    email_domain_uuid?: StringNullableFilter<"SequenceEnrollment"> | string | null
     created_at?: DateTimeFilter<"SequenceEnrollment"> | Date | string
     updated_at?: DateTimeFilter<"SequenceEnrollment"> | Date | string
   }
@@ -115564,6 +115660,9 @@ export namespace Prisma {
     first_step_sent_at?: Date | string | null
     cancelled_at?: Date | string | null
     completed_at?: Date | string | null
+    email_provider?: $Enums.ExternalIntegrationProvider | null
+    email_account?: string | null
+    email_domain_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     sequence: OutreachSequenceCreateNestedOneWithoutEnrollmentsInput
@@ -115584,6 +115683,9 @@ export namespace Prisma {
     first_step_sent_at?: Date | string | null
     cancelled_at?: Date | string | null
     completed_at?: Date | string | null
+    email_provider?: $Enums.ExternalIntegrationProvider | null
+    email_account?: string | null
+    email_domain_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutSequence_enrollmentInput
@@ -117424,6 +117526,9 @@ export namespace Prisma {
     first_step_sent_at?: Date | string | null
     cancelled_at?: Date | string | null
     completed_at?: Date | string | null
+    email_provider?: $Enums.ExternalIntegrationProvider | null
+    email_account?: string | null
+    email_domain_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     sequence: OutreachSequenceCreateNestedOneWithoutEnrollmentsInput
@@ -117445,6 +117550,9 @@ export namespace Prisma {
     first_step_sent_at?: Date | string | null
     cancelled_at?: Date | string | null
     completed_at?: Date | string | null
+    email_provider?: $Enums.ExternalIntegrationProvider | null
+    email_account?: string | null
+    email_domain_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -117994,6 +118102,9 @@ export namespace Prisma {
     first_step_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
+    email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     sequence?: OutreachSequenceUpdateOneRequiredWithoutEnrollmentsNestedInput
@@ -118015,6 +118126,9 @@ export namespace Prisma {
     first_step_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
+    email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -118799,6 +118913,9 @@ export namespace Prisma {
     first_step_sent_at?: Date | string | null
     cancelled_at?: Date | string | null
     completed_at?: Date | string | null
+    email_provider?: $Enums.ExternalIntegrationProvider | null
+    email_account?: string | null
+    email_domain_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     contact: ContactCreateNestedOneWithoutSequence_enrollmentsInput
@@ -118819,6 +118936,9 @@ export namespace Prisma {
     first_step_sent_at?: Date | string | null
     cancelled_at?: Date | string | null
     completed_at?: Date | string | null
+    email_provider?: $Enums.ExternalIntegrationProvider | null
+    email_account?: string | null
+    email_domain_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutSequence_enrollmentInput
@@ -121476,6 +121596,9 @@ export namespace Prisma {
     first_step_sent_at?: Date | string | null
     cancelled_at?: Date | string | null
     completed_at?: Date | string | null
+    email_provider?: $Enums.ExternalIntegrationProvider | null
+    email_account?: string | null
+    email_domain_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     sequence: OutreachSequenceCreateNestedOneWithoutEnrollmentsInput
@@ -121496,6 +121619,9 @@ export namespace Prisma {
     first_step_sent_at?: Date | string | null
     cancelled_at?: Date | string | null
     completed_at?: Date | string | null
+    email_provider?: $Enums.ExternalIntegrationProvider | null
+    email_account?: string | null
+    email_domain_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutSequence_enrollmentInput
@@ -132060,6 +132186,9 @@ export namespace Prisma {
     first_step_sent_at?: Date | string | null
     cancelled_at?: Date | string | null
     completed_at?: Date | string | null
+    email_provider?: $Enums.ExternalIntegrationProvider | null
+    email_account?: string | null
+    email_domain_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -132549,6 +132678,9 @@ export namespace Prisma {
     first_step_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
+    email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     sequence?: OutreachSequenceUpdateOneRequiredWithoutEnrollmentsNestedInput
@@ -132569,6 +132701,9 @@ export namespace Prisma {
     first_step_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
+    email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutSequence_enrollmentNestedInput
@@ -132586,6 +132721,9 @@ export namespace Prisma {
     first_step_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
+    email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -132656,6 +132794,9 @@ export namespace Prisma {
     first_step_sent_at?: Date | string | null
     cancelled_at?: Date | string | null
     completed_at?: Date | string | null
+    email_provider?: $Enums.ExternalIntegrationProvider | null
+    email_account?: string | null
+    email_domain_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -132848,6 +132989,9 @@ export namespace Prisma {
     first_step_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
+    email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     sequence?: OutreachSequenceUpdateOneRequiredWithoutEnrollmentsNestedInput
@@ -132868,6 +133012,9 @@ export namespace Prisma {
     first_step_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
+    email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutSequence_enrollmentNestedInput
@@ -132885,6 +133032,9 @@ export namespace Prisma {
     first_step_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
+    email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -133212,6 +133362,9 @@ export namespace Prisma {
     first_step_sent_at?: Date | string | null
     cancelled_at?: Date | string | null
     completed_at?: Date | string | null
+    email_provider?: $Enums.ExternalIntegrationProvider | null
+    email_account?: string | null
+    email_domain_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -133320,6 +133473,9 @@ export namespace Prisma {
     first_step_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
+    email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     contact?: ContactUpdateOneRequiredWithoutSequence_enrollmentsNestedInput
@@ -133340,6 +133496,9 @@ export namespace Prisma {
     first_step_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
+    email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutSequence_enrollmentNestedInput
@@ -133357,6 +133516,9 @@ export namespace Prisma {
     first_step_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
+    email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -134162,6 +134324,9 @@ export namespace Prisma {
     first_step_sent_at?: Date | string | null
     cancelled_at?: Date | string | null
     completed_at?: Date | string | null
+    email_provider?: $Enums.ExternalIntegrationProvider | null
+    email_account?: string | null
+    email_domain_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -134393,6 +134558,9 @@ export namespace Prisma {
     first_step_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
+    email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     sequence?: OutreachSequenceUpdateOneRequiredWithoutEnrollmentsNestedInput
@@ -134413,6 +134581,9 @@ export namespace Prisma {
     first_step_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
+    email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutSequence_enrollmentNestedInput
@@ -134430,6 +134601,9 @@ export namespace Prisma {
     first_step_sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
+    email_account?: NullableStringFieldUpdateOperationsInput | string | null
+    email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
