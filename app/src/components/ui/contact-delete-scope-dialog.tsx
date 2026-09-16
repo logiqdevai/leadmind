@@ -4,38 +4,37 @@ import { AlertTriangle, ListMinus, Trash2 } from "lucide-react";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
 import { cn } from "@/lib/utils";
 
-export const ListMemberDeleteModes = {
+export const ContactDeleteScopeModes = {
     FROM_LIST: "FROM_LIST",
     ABSOLUTE: "ABSOLUTE",
 } as const;
 
-export type ListMemberDeleteMode =
-    (typeof ListMemberDeleteModes)[keyof typeof ListMemberDeleteModes];
+export type ContactDeleteScopeMode =
+    (typeof ContactDeleteScopeModes)[keyof typeof ContactDeleteScopeModes];
 
-interface ListMembersDeleteDialogProps {
+interface ContactDeleteScopeDialogProps {
     isOpen: boolean;
     onOpenChange: (open: boolean) => void;
     count: number;
     isPending?: boolean;
-    onConfirm: (mode: ListMemberDeleteMode) => void | Promise<void>;
+    onConfirm: (mode: ContactDeleteScopeMode) => void | Promise<void>;
 }
 
-export const ListMembersDeleteDialog: FC<ListMembersDeleteDialogProps> = ({
+export const ContactDeleteScopeDialog: FC<ContactDeleteScopeDialogProps> = ({
     isOpen,
     onOpenChange,
     count,
     isPending = false,
     onConfirm,
 }) => {
-    const [mode, setMode] = useState<ListMemberDeleteMode>(ListMemberDeleteModes.FROM_LIST);
+    const [mode, setMode] = useState<ContactDeleteScopeMode>(ContactDeleteScopeModes.FROM_LIST);
 
     useEffect(() => {
-        if (isOpen) setMode(ListMemberDeleteModes.FROM_LIST);
+        if (isOpen) setMode(ContactDeleteScopeModes.FROM_LIST);
     }, [isOpen]);
 
     const plural = count === 1 ? "contact" : "contacts";
-    const title =
-        count === 1 ? "Delete contact?" : `Delete ${count} selected contacts?`;
+    const title = count === 1 ? "Delete contact?" : `Delete ${count} selected contacts?`;
 
     const handleConfirm = async () => {
         await onConfirm(mode);
@@ -47,7 +46,7 @@ export const ListMembersDeleteDialog: FC<ListMembersDeleteDialogProps> = ({
                 <AlertDialog.Dialog className="sm:max-w-md">
                     <AlertDialog.Header>
                         <AlertDialog.Icon
-                            status={mode === ListMemberDeleteModes.ABSOLUTE ? "danger" : "warning"}
+                            status={mode === ContactDeleteScopeModes.ABSOLUTE ? "danger" : "warning"}
                         >
                             <AlertTriangle className="size-5" />
                         </AlertDialog.Icon>
@@ -64,12 +63,12 @@ export const ListMembersDeleteDialog: FC<ListMembersDeleteDialogProps> = ({
                                 <button
                                     type="button"
                                     role="radio"
-                                    aria-checked={mode === ListMemberDeleteModes.FROM_LIST}
+                                    aria-checked={mode === ContactDeleteScopeModes.FROM_LIST}
                                     disabled={isPending}
-                                    onClick={() => setMode(ListMemberDeleteModes.FROM_LIST)}
+                                    onClick={() => setMode(ContactDeleteScopeModes.FROM_LIST)}
                                     className={cn(
                                         "flex items-start gap-3 rounded-lg border p-3 text-left transition-colors",
-                                        mode === ListMemberDeleteModes.FROM_LIST
+                                        mode === ContactDeleteScopeModes.FROM_LIST
                                             ? "border-accent bg-accent/5"
                                             : "border-border hover:border-muted",
                                     )}
@@ -88,12 +87,12 @@ export const ListMembersDeleteDialog: FC<ListMembersDeleteDialogProps> = ({
                                 <button
                                     type="button"
                                     role="radio"
-                                    aria-checked={mode === ListMemberDeleteModes.ABSOLUTE}
+                                    aria-checked={mode === ContactDeleteScopeModes.ABSOLUTE}
                                     disabled={isPending}
-                                    onClick={() => setMode(ListMemberDeleteModes.ABSOLUTE)}
+                                    onClick={() => setMode(ContactDeleteScopeModes.ABSOLUTE)}
                                     className={cn(
                                         "flex items-start gap-3 rounded-lg border p-3 text-left transition-colors",
-                                        mode === ListMemberDeleteModes.ABSOLUTE
+                                        mode === ContactDeleteScopeModes.ABSOLUTE
                                             ? "border-danger bg-danger/5"
                                             : "border-border hover:border-muted",
                                     )}
@@ -117,12 +116,12 @@ export const ListMembersDeleteDialog: FC<ListMembersDeleteDialogProps> = ({
                             Cancel
                         </Button>
                         <ActionButtonWithPending
-                            variant={mode === ListMemberDeleteModes.ABSOLUTE ? "danger" : "primary"}
+                            variant={mode === ContactDeleteScopeModes.ABSOLUTE ? "danger" : "primary"}
                             isDisabled={isPending}
                             isPending={isPending}
                             onPress={handleConfirm}
                         >
-                            {mode === ListMemberDeleteModes.ABSOLUTE
+                            {mode === ContactDeleteScopeModes.ABSOLUTE
                                 ? "Delete from CRM"
                                 : "Remove from list"}
                         </ActionButtonWithPending>

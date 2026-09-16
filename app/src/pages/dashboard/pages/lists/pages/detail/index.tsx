@@ -25,10 +25,10 @@ import { RemoveDuplicateContactsModal } from "./components/remove-duplicate-cont
 import { FilterContactsModal } from "./components/filter-contacts-modal";
 import { ListDetailToolbar } from "./components/list-detail-toolbar";
 import {
-    ListMemberDeleteModes,
-    ListMembersDeleteDialog,
-    type ListMemberDeleteMode,
-} from "./components/list-members-delete-dialog";
+    ContactDeleteScopeModes as ListMemberDeleteModes,
+    ContactDeleteScopeDialog as ListMembersDeleteDialog,
+    type ContactDeleteScopeMode as ListMemberDeleteMode,
+} from "@/components/ui/contact-delete-scope-dialog";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { BulkScoreContactsPopover } from "@/pages/dashboard/pages/contacts/components/bulk-score-contacts-popover";
 import { BulkEnrichmentRunModal } from "@/components/ui/bulk-enrichment-run-modal";

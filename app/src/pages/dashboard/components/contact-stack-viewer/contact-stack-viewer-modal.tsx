@@ -97,7 +97,7 @@ export const ContactStackViewerModal: FC<ContactStackViewerProps> = ({
                                 key={activeUuid}
                                 contactUuid={activeUuid}
                                 listUuid={listUuid}
-                                showDelete={false}
+                                onDeleted={handleClose}
                                 onNavigationLockChange={setNavigationLocked}
                             />
                         ) : (

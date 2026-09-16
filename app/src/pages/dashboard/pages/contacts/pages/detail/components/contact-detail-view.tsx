@@ -8,8 +8,14 @@ import {
     enrichmentSourceOptionsForLead,
 } from "@/features/enrichment/constants/enrichment-sources";
 import { useContact, useDeleteContact, useEnrichContact } from "@/features/contacts/hooks/use-contacts";
+import { useRemoveListContact } from "@/features/contact-lists/hooks/use-contact-lists";
 import { SourceType } from "@/features/leads/interfaces/lead.interface";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
+import {
+    ContactDeleteScopeDialog,
+    ContactDeleteScopeModes,
+    type ContactDeleteScopeMode,
+} from "@/components/ui/contact-delete-scope-dialog";
 import { EnrichmentRunModal } from "@/components/ui/enrichment-action-popover";
 import { CONTACT_DETAIL_TABS } from "../constants/detail-tabs";
 import { ContactDetailHeader, ContactEnrichmentTab, CrmTab, FormsTab, OverviewTab, OutreachTab, RemindersTab } from "./index";
@@ -35,6 +41,7 @@ export const ContactDetailView: FC<ContactDetailViewProps> = ({
 }) => {
     const { data: contact, isLoading } = useContact(contactUuid);
     const deleteContact = useDeleteContact();
+    const removeListContact = useRemoveListContact();
     const enrichContact = useEnrichContact();
 
     const [activeTab, setActiveTab] = useState("overview");
@@ -58,6 +65,17 @@ export const ContactDetailView: FC<ContactDetailViewProps> = ({
     const handleConfirmDelete = async () => {
         if (!contact) return;
         await deleteContact.mutateAsync(contact.uuid);
+        setConfirmDeleteOpen(false);
+        onDeleted?.();
+    };
+
+    const handleConfirmDeleteScoped = async (mode: ContactDeleteScopeMode) => {
+        if (!contact) return;
+        if (mode === ContactDeleteScopeModes.FROM_LIST && listUuid) {
+            await removeListContact.mutateAsync({ listUuid, contactUuid: contact.uuid });
+        } else {
+            await deleteContact.mutateAsync(contact.uuid);
+        }
         setConfirmDeleteOpen(false);
         onDeleted?.();
     };
@@ -112,7 +130,12 @@ export const ContactDetailView: FC<ContactDetailViewProps> = ({
                                         </span>
                                     </Dropdown.Item>
                                     {showDelete ? (
-                                        <Dropdown.Item id="delete" variant="danger" textValue="Delete contact" isDisabled={deleteContact.isPending}>
+                                        <Dropdown.Item
+                                            id="delete"
+                                            variant="danger"
+                                            textValue="Delete contact"
+                                            isDisabled={deleteContact.isPending || removeListContact.isPending}
+                                        >
                                             <span className="flex items-center gap-2.5 antialiased">
                                                 <Trash2 className="size-4 shrink-0 text-red-500" strokeWidth={2} />
                                                 <span className="font-medium text-red-400">Delete contact</span>
@@ -190,7 +213,15 @@ export const ContactDetailView: FC<ContactDetailViewProps> = ({
                 )}
             </div>
 
-            {contact ? (
+            {contact && listUuid ? (
+                <ContactDeleteScopeDialog
+                    isOpen={confirmDeleteOpen}
+                    onOpenChange={setConfirmDeleteOpen}
+                    count={1}
+                    isPending={deleteContact.isPending || removeListContact.isPending}
+                    onConfirm={handleConfirmDeleteScoped}
+                />
+            ) : contact ? (
                 <ConfirmDialog
                     isOpen={confirmDeleteOpen}
                     onOpenChange={setConfirmDeleteOpen}
