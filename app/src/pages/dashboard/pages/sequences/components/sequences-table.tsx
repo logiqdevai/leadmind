@@ -1,7 +1,7 @@
 import { Button } from "@heroui/react";
 import { Pencil, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import type { OutreachSequence } from "@/features/sequences/interfaces/sequence.interface";
+import { SequenceStatus, type OutreachSequence } from "@/features/sequences/interfaces/sequence.interface";
 import { Routes } from "@/routes/routes";
 import { SequenceStatusBadge } from "./sequence-status-badge";
 
@@ -42,7 +42,9 @@ export function SequencesTable({ sequences, onDelete }: SequencesTableProps) {
                     </tr>
                 </thead>
                 <tbody>
-                    {sequences.map((sequence) => (
+                    {sequences.map((sequence) => {
+                        const isActive = sequence.status === SequenceStatus.ACTIVE;
+                        return (
                         <tr
                             key={sequence.uuid}
                             className="border-t border-border hover:bg-surface-secondary/30 cursor-pointer"
@@ -79,14 +81,17 @@ export function SequencesTable({ sequences, onDelete }: SequencesTableProps) {
                                         size="sm"
                                         variant="tertiary"
                                         onPress={() => onDelete(sequence)}
+                                        isDisabled={isActive}
                                         aria-label="Delete sequence"
+                                        title={isActive ? "Archive this sequence before deleting it" : undefined}
                                     >
                                         <Trash2 className="size-4 text-danger" />
                                     </Button>
                                 </div>
                             </td>
                         </tr>
-                    ))}
+                        );
+                    })}
                 </tbody>
             </table>
         </div>
