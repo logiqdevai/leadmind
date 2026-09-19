@@ -13,6 +13,7 @@ export const ContactStackViewerModal: FC<ContactStackViewerProps> = ({
     isOpen,
     onOpenChange,
     contactUuids,
+    listUuid,
     activeUuid,
     currentIndex,
     onIndexChange,
@@ -95,7 +96,8 @@ export const ContactStackViewerModal: FC<ContactStackViewerProps> = ({
                             <ContactDetailView
                                 key={activeUuid}
                                 contactUuid={activeUuid}
-                                showDelete={false}
+                                listUuid={listUuid}
+                                onDeleted={handleClose}
                                 onNavigationLockChange={setNavigationLocked}
                             />
                         ) : (

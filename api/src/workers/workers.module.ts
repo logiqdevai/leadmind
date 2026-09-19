@@ -18,6 +18,7 @@ import { SendingEngineModule } from '@/modules/sending-engine/sending-engine.mod
 import { SendingCapacityModule } from '@/modules/sending-capacity/sending-capacity.module';
 import { OrganisationsModule } from '@/modules/organisations/organisations.module';
 import { RemindersModule } from '@/modules/reminders/reminders.module';
+import { ContactListsModule } from '@/modules/contact-lists/contact-lists.module';
 import {
   AI_PROCESS_QUEUE,
   FILTER_SCRAPE_QUEUE,
@@ -58,6 +59,7 @@ import { BulkJobWatchdogService } from './bulk-job-watchdog.service';
     SendingCapacityModule,
     OrganisationsModule,
     RemindersModule,
+    ContactListsModule,
     BullModule.registerQueue(
       { name: FILTER_SCRAPE_QUEUE },
       { name: AI_PROCESS_QUEUE },

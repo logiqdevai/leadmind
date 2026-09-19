@@ -69,15 +69,19 @@ export const ContactTableQuickViewButton: FC<ContactTableQuickViewButtonProps> =
 interface ContactTableDetailLinkProps {
     contactUuid: string;
     contactName: string | null | undefined;
+    listUuid?: string;
     children?: ReactNode;
 }
 
 export const ContactTableDetailLink: FC<ContactTableDetailLinkProps> = ({
     contactUuid,
     contactName,
+    listUuid,
     children,
 }) => {
-    const detailHref = Routes.dashboard.contacts_detail.replace(":uuid", contactUuid);
+    const detailHref =
+        Routes.dashboard.contacts_detail.replace(":uuid", contactUuid) +
+        (listUuid ? `?list_uuid=${listUuid}` : "");
 
     return (
         <Link

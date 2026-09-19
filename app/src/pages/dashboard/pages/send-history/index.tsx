@@ -1,17 +1,20 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { Button, Tabs } from "@heroui/react";
-import { Inbox, LayoutList } from "lucide-react";
+import { Button, Checkbox, Tabs } from "@heroui/react";
+import { Inbox, LayoutList, RefreshCcw } from "lucide-react";
 import { ScrollableTabs, ScrollableTabsList, tabTriggerClassName } from "@/components/ui/scrollable-tabs";
 import { Channel, MsgStatus } from "@/features/contacts/interfaces/contact.interface";
+import { SequenceEnrollmentStatus } from "@/features/sequences/interfaces/sequence.interface";
 import {
     allocationKey,
 } from "@/features/integrations/utils/email-provider-utils";
 import { useSendHistory } from "@/features/outreach/hooks/use-send-history";
+import { useBulkResendOutreachMessages } from "@/features/outreach/hooks/use-outreach";
 import { EmailIntegrationProvider, SendSource } from "@/features/outreach/interfaces/send-history.interface";
 import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import { useDashboardNavbarTitle } from "@/components/providers/dashboard-navbar-provider";
 import { ContactsToolbar } from "@/pages/dashboard/pages/contacts/components/contacts-toolbar";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { SendHistoryTable } from "./components/send-history-table";
 import { SendHistoryTableSkeleton } from "./components/send-history-table-skeleton";
 import { SendHistoryFiltersBar } from "./components/send-history-filters-bar";
@@ -68,6 +71,8 @@ export default function SendHistoryPage() {
     const { emailAccounts, campaignOptions, sequenceOptions, userOptions } =
         useSendHistoryFilterOptions();
 
+    const [selected, setSelected] = useState<Set<string>>(new Set());
+
     const updateParams = (next: Record<string, string | undefined | null>) => {
         const params = new URLSearchParams(searchParams);
         for (const [k, v] of Object.entries(next)) {
@@ -75,10 +80,12 @@ export default function SendHistoryPage() {
             else params.set(k, v);
         }
         setSearchParams(params, { replace: true });
+        setSelected((prev) => (prev.size === 0 ? prev : new Set()));
     };
 
     const clearFilters = () => {
         setSearchParams(new URLSearchParams({ page: "1" }), { replace: true });
+        setSelected((prev) => (prev.size === 0 ? prev : new Set()));
     };
 
     const hasActiveFilters = Boolean(
@@ -140,6 +147,52 @@ export default function SendHistoryPage() {
     );
     const total = data?.total ?? 0;
     const totalPages = data?.totalPages ?? 1;
+
+    const [resendConfirmOpen, setResendConfirmOpen] = useState(false);
+    const [restartSequences, setRestartSequences] = useState(false);
+    const bulkResendMut = useBulkResendOutreachMessages();
+
+    const selectedCancelledSequenceCount = useMemo(
+        () =>
+            rows.filter(
+                (r) =>
+                    selected.has(r.uuid) &&
+                    r.sequence_enrollment?.status === SequenceEnrollmentStatus.CANCELLED,
+            ).length,
+        [rows, selected],
+    );
+
+    const toggleSelect = (uuid: string) => {
+        setSelected((prev) => {
+            const next = new Set(prev);
+            if (next.has(uuid)) next.delete(uuid);
+            else next.add(uuid);
+            return next;
+        });
+    };
+
+    const toggleAll = (uuids: string[], select: boolean) => {
+        setSelected((prev) => {
+            const next = new Set(prev);
+            for (const uuid of uuids) {
+                if (select) next.add(uuid);
+                else next.delete(uuid);
+            }
+            return next;
+        });
+    };
+
+    const handleConfirmResend = async () => {
+        const contactUuids = rows.filter((r) => selected.has(r.uuid)).map((r) => r.contact.uuid);
+        await bulkResendMut.mutateAsync({
+            uuids: [...selected],
+            contact_uuids: contactUuids,
+            restart_sequence: restartSequences,
+        });
+        setSelected(new Set());
+        setResendConfirmOpen(false);
+        setRestartSequences(false);
+    };
 
     const emailAccountOptions = useMemo(() => {
         const filtered = emailProvider
@@ -278,6 +331,16 @@ export default function SendHistoryPage() {
                                 size="sm"
                                 variant="secondary"
                                 className="h-7 px-2.5 text-[12px]"
+                                isDisabled={selected.size === 0}
+                                onPress={() => setResendConfirmOpen(true)}
+                            >
+                                <RefreshCcw className="size-3.5" />
+                                Resend selected{selected.size > 0 ? ` (${selected.size})` : ""}
+                            </Button>
+                            <Button
+                                size="sm"
+                                variant="secondary"
+                                className="h-7 px-2.5 text-[12px]"
                                 isDisabled={page <= 1}
                                 onPress={() => updateParams({ page: String(page - 1) })}
                             >
@@ -298,11 +361,45 @@ export default function SendHistoryPage() {
                         </div>
                     </div>
 
-                    <SendHistoryTable rows={rows} />
+                    <SendHistoryTable
+                        rows={rows}
+                        selected={selected}
+                        onToggleSelect={toggleSelect}
+                        onToggleAll={toggleAll}
+                    />
                 </div>
             )}
                 </>
             ) : null}
+
+            <ConfirmDialog
+                isOpen={resendConfirmOpen}
+                onOpenChange={(open) => {
+                    setResendConfirmOpen(open);
+                    if (!open) setRestartSequences(false);
+                }}
+                title={`Resend ${selected.size} message${selected.size === 1 ? "" : "s"}?`}
+                description={
+                    <div className="flex flex-col gap-3">
+                        <p>This retries delivery for the selected failed message(s).</p>
+                        {selectedCancelledSequenceCount > 0 ? (
+                            <Checkbox isSelected={restartSequences} onChange={setRestartSequences}>
+                                <Checkbox.Control>
+                                    <Checkbox.Indicator />
+                                </Checkbox.Control>
+                                <span className="text-sm text-foreground">
+                                    Also restart the sequence for {selectedCancelledSequenceCount}{" "}
+                                    contact{selectedCancelledSequenceCount === 1 ? "" : "s"} whose
+                                    sequence was stopped by this failure
+                                </span>
+                            </Checkbox>
+                        ) : null}
+                    </div>
+                }
+                confirmLabel="Resend"
+                isPending={bulkResendMut.isPending}
+                onConfirm={handleConfirmResend}
+            />
         </div>
     );
 }

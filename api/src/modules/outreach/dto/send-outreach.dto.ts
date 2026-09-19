@@ -50,4 +50,11 @@ export class SendOutreachDto {
     @IsOptional()
     @IsUUID()
     sender_profile_uuid?: string;
+
+    @ApiPropertyOptional({
+        description: 'List this send should be attributed to for list-scoped status tracking',
+    })
+    @IsOptional()
+    @IsUUID()
+    list_uuid?: string;
 }

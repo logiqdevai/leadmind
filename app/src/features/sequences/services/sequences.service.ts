@@ -11,6 +11,7 @@ import type {
     UpdateSequencePayload,
     UpdateSequenceStepPayload,
 } from "../interfaces/sequence.interface";
+import type { EmailProviderTarget } from "@/features/integrations/interfaces/integrations.interface";
 
 export const listSequences = async (query: ListSequencesQuery = {}): Promise<OutreachSequence[]> => {
     try {
@@ -133,10 +134,14 @@ export const reorderSequenceSteps = async (uuid: string, step_uuids: string[]): 
 export const enrollContactInSequence = async (
     uuid: string,
     contact_uuid: string,
+    emailProvider?: EmailProviderTarget,
 ): Promise<SequenceEnrollment> => {
     try {
         const response = await axiosInstance.post<SequenceEnrollment>(ApiRoutes.sequences.enroll(uuid), {
             contact_uuid,
+            email_provider: emailProvider?.provider,
+            email_account: emailProvider?.account,
+            email_domain_uuid: emailProvider?.domain_uuid,
         });
         return response.data;
     } catch (error: any) {
@@ -147,11 +152,19 @@ export const enrollContactInSequence = async (
 export const bulkEnrollContactsInSequence = async (
     uuid: string,
     contact_uuids: string[],
+    list_uuid?: string,
+    emailProvider?: EmailProviderTarget,
 ): Promise<{ enrolled: number; skipped: number; totalMessages: number }> => {
     try {
         const response = await axiosInstance.post<{ enrolled: number; skipped: number; totalMessages: number }>(
             ApiRoutes.sequences.enroll_bulk(uuid),
-            { contact_uuids },
+            {
+                contact_uuids,
+                list_uuid,
+                email_provider: emailProvider?.provider,
+                email_account: emailProvider?.account,
+                email_domain_uuid: emailProvider?.domain_uuid,
+            },
         );
         return response.data;
     } catch (error: any) {

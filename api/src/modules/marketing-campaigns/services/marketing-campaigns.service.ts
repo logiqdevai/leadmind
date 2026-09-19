@@ -45,6 +45,11 @@ import { SendExistingMessageDto } from '@/modules/outreach/dto/email-provider.dt
 import { SequencesService } from '@/modules/sequences/services/sequences.service';
 import { SequenceEnrollmentService } from '@/modules/sequences/services/sequence-enrollment.service';
 import { SequenceStatus } from '@/generated/prisma';
+import { OutreachService } from '@/modules/outreach/outreach.service';
+import {
+  BulkSendItemResult,
+  BulkSendResult,
+} from '@/modules/outreach/interfaces/bulk-send-result.interface';
 
 @Injectable()
 export class MarketingCampaignsService {
@@ -58,6 +63,7 @@ export class MarketingCampaignsService {
     private readonly contactAiService: ContactAiService,
     private readonly sequencesService: SequencesService,
     private readonly sequenceEnrollmentService: SequenceEnrollmentService,
+    private readonly outreachService: OutreachService,
     @InjectQueue(MARKETING_CAMPAIGN_DISPATCH_QUEUE)
     private readonly dispatchQueue: Queue,
     @InjectQueue(MARKETING_MESSAGE_SEND_QUEUE)
@@ -405,6 +411,63 @@ export class MarketingCampaignsService {
       page,
       limit,
       totalPages: Math.ceil(total / limit),
+    };
+  }
+
+  async bulkResendRecipients(
+    organisation_uuid: string,
+    uuid: string,
+    uuids: string[],
+  ): Promise<BulkSendResult> {
+    const campaign = await this.requireOwned(organisation_uuid, uuid);
+
+    if (campaign.campaign_type === CampaignType.SEQUENCE) {
+      return this.bulkResendSequenceRecipients(organisation_uuid, uuid, uuids);
+    }
+
+    return this.campaignMessageSend.bulkResendMcc(organisation_uuid, uuid, uuids);
+  }
+
+  private async bulkResendSequenceRecipients(
+    organisation_uuid: string,
+    campaign_uuid: string,
+    uuids: string[],
+  ): Promise<BulkSendResult> {
+    const unique = [...new Set(uuids)];
+    const results: BulkSendItemResult[] = [];
+    for (const message_uuid of unique) {
+      try {
+        const message = await this.prisma.outreachMessage.findFirst({
+          where: {
+            uuid: message_uuid,
+            campaign_uuid,
+            organisation_uuid,
+            sequence_step_uuid: { not: null },
+          },
+        });
+        if (!message) {
+          throw new NotFoundException('Recipient not found on this campaign');
+        }
+        if (message.status !== MsgStatus.FAILED) {
+          throw new ConflictException('Only failed messages can be resent');
+        }
+        const { jobId } = await this.outreachService.sendMessage(
+          organisation_uuid,
+          message_uuid,
+        );
+        results.push({ uuid: message_uuid, ok: true, jobId });
+      } catch (error) {
+        results.push({
+          uuid: message_uuid,
+          ok: false,
+          error: error instanceof Error ? error.message : 'Unknown error',
+        });
+      }
+    }
+    return {
+      results,
+      succeeded: results.filter((r) => r.ok).length,
+      failed: results.filter((r) => !r.ok).length,
     };
   }
 

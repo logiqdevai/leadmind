@@ -115,6 +115,7 @@ pages/<section>/
 - Default export for pages and layouts; named exports for reusable components
 - shadcn/ui components live in `components/ui/` and must not be modified directly — extend via wrappers
 - Use `variant` prop pattern from `class-variance-authority` (cva) in base UI components
+- Modals (`Modal.Backdrop`) never close from an outside click by default — this is patched globally in `src/lib/patch-heroui-overlays.tsx` (`isDismissable: false`) so unsaved form input isn't lost on a misclick. Close only via explicit controls (Save, Cancel, the `X` button). Only pass `isDismissable` explicitly to opt a specific modal back into outside-click-to-close, and only for modals with no editable/unsaved state (e.g. read-only viewers) — never for forms.
 
 ---
 
@@ -198,6 +199,7 @@ Use Zustand for global client state.
 | `invalidateQueries` with the base key after mutations | Target parameterized query keys in mutations |
 | Access env vars through a typed `environments` object | Access `import.meta.env.VITE_*` directly |
 | Extend shadcn/ui components via wrappers | Modify files inside `components/ui/` directly |
+| Let modals close only via explicit Save/Cancel/X controls | Let a modal close on outside click and silently discard unsaved input |
 
 ---
 

@@ -7,6 +7,8 @@ import type { Contact } from "@/features/contacts/interfaces/contact.interface";
 import { useSequences, useBulkEnrollContacts } from "@/features/sequences/hooks/use-sequences";
 import { SequenceStatus } from "@/features/sequences/interfaces/sequence.interface";
 import { ContactSelectionTable } from "@/pages/dashboard/components/contact-selection-table";
+import { EmailProviderSelect } from "@/features/messaging/components/email-provider-select";
+import type { EmailProviderTarget } from "@/features/integrations/interfaces/integrations.interface";
 
 type BulkEnrollStep = "recipients" | "sequence";
 
@@ -15,6 +17,7 @@ interface BulkEnrollInSequenceModalProps {
     onOpenChange: (open: boolean) => void;
     contacts: Contact[];
     onComplete?: () => void;
+    listUuid?: string;
 }
 
 export const BulkEnrollInSequenceModal: FC<BulkEnrollInSequenceModalProps> = ({
@@ -22,24 +25,28 @@ export const BulkEnrollInSequenceModal: FC<BulkEnrollInSequenceModalProps> = ({
     onOpenChange,
     contacts,
     onComplete,
+    listUuid,
 }) => {
     const { data: sequences = [], isLoading } = useSequences({ status: SequenceStatus.ACTIVE });
     const enrollMutation = useBulkEnrollContacts();
     const [step, setStep] = useState<BulkEnrollStep>("recipients");
     const [selected, setSelected] = useState<Set<string>>(new Set());
     const [selectedUuid, setSelectedUuid] = useState<string | null>(null);
+    const [emailProvider, setEmailProvider] = useState<EmailProviderTarget | null>(null);
 
     useEffect(() => {
         if (!isOpen) return;
         setStep("recipients");
         setSelected(new Set(contacts.map((c) => c.uuid)));
         setSelectedUuid(null);
+        setEmailProvider(null);
     }, [isOpen, contacts]);
 
     const handleOpenChange = (open: boolean) => {
         if (!open) {
             setStep("recipients");
             setSelectedUuid(null);
+            setEmailProvider(null);
         }
         onOpenChange(open);
     };
@@ -72,9 +79,15 @@ export const BulkEnrollInSequenceModal: FC<BulkEnrollInSequenceModalProps> = ({
     const count = selectedUuids.length;
 
     const handleEnroll = async () => {
-        if (!selectedUuid || count === 0) return;
-        await enrollMutation.mutateAsync({ uuid: selectedUuid, contact_uuids: selectedUuids });
+        if (!selectedUuid || count === 0 || !emailProvider) return;
+        await enrollMutation.mutateAsync({
+            uuid: selectedUuid,
+            contact_uuids: selectedUuids,
+            list_uuid: listUuid,
+            emailProvider,
+        });
         setSelectedUuid(null);
+        setEmailProvider(null);
         handleOpenChange(false);
         onComplete?.();
     };
@@ -172,6 +185,7 @@ export const BulkEnrollInSequenceModal: FC<BulkEnrollInSequenceModalProps> = ({
                                         </Select.Popover>
                                     </Select>
                                 </div>
+                                <EmailProviderSelect value={emailProvider} onChange={setEmailProvider} />
                                 <p className="text-xs text-muted">
                                     Each contact will be scheduled to receive the sequence's enabled
                                     steps at their configured delays and times of day, based on their
@@ -198,7 +212,9 @@ export const BulkEnrollInSequenceModal: FC<BulkEnrollInSequenceModalProps> = ({
                                 </Button>
                                 <ActionButtonWithPending
                                     size="sm"
-                                    isDisabled={!selectedUuid || count === 0 || enrollMutation.isPending}
+                                    isDisabled={
+                                        !selectedUuid || count === 0 || !emailProvider || enrollMutation.isPending
+                                    }
                                     isPending={enrollMutation.isPending}
                                     onPress={() => void handleEnroll()}
                                 >

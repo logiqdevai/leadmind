@@ -517,6 +517,7 @@ export class OrganisationDataCopyService {
                 uuid: randomUUID(),
                 list_uuid: idMaps.lists.get(m.list_uuid)!,
                 contact_uuid: idMaps.contacts.get(m.contact_uuid)!,
+                status: m.status,
             }));
         if (memberData.length) {
             await this.prisma.contactListMember.createMany({ data: memberData, skipDuplicates: true });

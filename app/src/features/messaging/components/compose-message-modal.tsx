@@ -12,6 +12,7 @@ export interface ComposeMessageModalProps {
     mode?: ComposeMessageMode;
     contactUuid?: string;
     contactUuids?: string[];
+    listUuid?: string;
     recipientEmail?: string | null;
     recipientEmailValidationStatus?: EmailValidationStatus;
     recipientEmailValidationReason?: string | null;
@@ -24,6 +25,7 @@ export function ComposeMessageModal({
     mode = "single",
     contactUuid,
     contactUuids,
+    listUuid,
     recipientEmail,
     recipientEmailValidationStatus,
     recipientEmailValidationReason,
@@ -51,6 +53,7 @@ export function ComposeMessageModal({
                             mode={mode}
                             contactUuid={contactUuid}
                             contactUuids={contactUuids}
+                            listUuid={listUuid}
                             recipientEmail={recipientEmail}
                             recipientEmailValidationStatus={recipientEmailValidationStatus}
                             recipientEmailValidationReason={recipientEmailValidationReason}

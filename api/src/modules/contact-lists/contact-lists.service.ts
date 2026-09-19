@@ -3,7 +3,7 @@ import {
     Injectable,
     NotFoundException,
 } from '@nestjs/common';
-import { Prisma } from '@/generated/prisma';
+import { LeadStatus, Prisma } from '@/generated/prisma';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { ContactsService } from '@/modules/contacts/contacts.service';
 import { shapeContactFilterFields } from '@/modules/contacts/utils/contact-filter-link.utils';
@@ -203,6 +203,7 @@ export class ContactListsService {
                     tags: tags.map((t) => t.tag),
                     member_uuid: m.uuid,
                     added_at: m.created_at,
+                    list_status: m.status,
                 };
             }),
             total,
@@ -210,6 +211,25 @@ export class ContactListsService {
             limit,
             totalPages: Math.ceil(total / limit),
         };
+    }
+
+    async updateMemberStatus(
+        organisation_uuid: string,
+        listUuid: string,
+        contactUuid: string,
+        status: LeadStatus,
+    ) {
+        await this.ensureListOwned(organisation_uuid, listUuid);
+
+        const member = await this.prisma.contactListMember.findFirst({
+            where: { list_uuid: listUuid, contact_uuid: contactUuid },
+        });
+        if (!member) throw new NotFoundException('Contact is not in this list');
+
+        return this.prisma.contactListMember.update({
+            where: { uuid: member.uuid },
+            data: { status },
+        });
     }
 
     async addContacts(organisation_uuid: string, listUuid: string, dto: AddListContactsDto) {
@@ -523,6 +543,98 @@ export class ContactListsService {
         }
 
         return { removed: result.count };
+    }
+
+    /**
+     * Resolves which list a send should be attributed to for per-list status
+     * promotion, if any: a manual send composed from a list's contacts tab
+     * (`list_uuid` on the message), campaigns launched with a
+     * `contact_list_uuid` filter, or sequence enrollments started from a
+     * list-scoped bulk-enroll action.
+     */
+    async resolveAttributedListUuid(message: {
+        list_uuid?: string | null;
+        campaign_uuid?: string | null;
+        sequence_enrollment_uuid?: string | null;
+    }): Promise<string | null> {
+        if (message.list_uuid) {
+            return message.list_uuid;
+        }
+
+        if (message.campaign_uuid) {
+            const campaign = await this.prisma.marketingCampaign.findUnique({
+                where: { uuid: message.campaign_uuid },
+                select: { filters_snapshot: true },
+            });
+            const filters = campaign?.filters_snapshot as
+                | { contact_list_uuid?: string }
+                | null
+                | undefined;
+            if (filters?.contact_list_uuid) {
+                return filters.contact_list_uuid;
+            }
+        }
+
+        if (message.sequence_enrollment_uuid) {
+            const enrollment = await this.prisma.sequenceEnrollment.findUnique({
+                where: { uuid: message.sequence_enrollment_uuid },
+                select: { list_uuid: true },
+            });
+            if (enrollment?.list_uuid) {
+                return enrollment.list_uuid;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Promotes a list-scoped status (`ContactListMember.status`) from unset/NEW to
+     * CONTACTED on first send, mirroring ContactsService.buildPromoteToContactedIfNewOps
+     * but scoped to the list a send was attributed to. A missing membership row is a
+     * safe no-op (updateMany matches zero rows).
+     */
+    buildPromoteListStatusToContactedIfNewOps(
+        list_uuid: string,
+        contact_uuid: string,
+        currentListStatus: LeadStatus | null,
+    ): Prisma.PrismaPromise<unknown>[] {
+        if (currentListStatus !== null && currentListStatus !== LeadStatus.NEW) {
+            return [];
+        }
+
+        return [
+            this.prisma.contactListMember.updateMany({
+                where: { list_uuid, contact_uuid, status: currentListStatus },
+                data: { status: LeadStatus.CONTACTED },
+            }),
+        ];
+    }
+
+    /**
+     * Promotes a list-scoped status to ENGAGED on reply, mirroring
+     * ContactsService.buildPromoteToEngagedOnReplyOps - only fires if the list
+     * status hasn't already moved past CONTACTED, so a reply never downgrades it.
+     */
+    buildPromoteListStatusToEngagedOnReplyOps(
+        list_uuid: string,
+        contact_uuid: string,
+        currentListStatus: LeadStatus | null,
+    ): Prisma.PrismaPromise<unknown>[] {
+        if (
+            currentListStatus !== null &&
+            currentListStatus !== LeadStatus.NEW &&
+            currentListStatus !== LeadStatus.CONTACTED
+        ) {
+            return [];
+        }
+
+        return [
+            this.prisma.contactListMember.updateMany({
+                where: { list_uuid, contact_uuid, status: currentListStatus },
+                data: { status: LeadStatus.ENGAGED },
+            }),
+        ];
     }
 
     async getMemberContactUuids(listUuid: string): Promise<string[]> {

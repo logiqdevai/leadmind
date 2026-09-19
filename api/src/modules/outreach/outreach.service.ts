@@ -35,6 +35,11 @@ import {
 } from './utils/sender-profile-metadata.util';
 import { generateMessageId } from '@/shared/utils/email-message-id.util';
 import { ThreadsService } from '@/modules/threads/threads.service';
+import { SequenceEnrollmentService } from '@/modules/sequences/services/sequence-enrollment.service';
+import {
+    BulkSendItemResult,
+    BulkSendResult,
+} from './interfaces/bulk-send-result.interface';
 import {
     followUpCutoff,
     messageThreadFlags,
@@ -59,6 +64,7 @@ export class OutreachService {
         private readonly emailCredentialsService: EmailCredentialsService,
         private readonly senderProfilesService: SenderProfilesService,
         private readonly threadsService: ThreadsService,
+        private readonly sequenceEnrollmentService: SequenceEnrollmentService,
         @InjectQueue(OUTREACH_SEND_QUEUE) private readonly outreachSendQueue: Queue,
     ) { }
 
@@ -163,6 +169,10 @@ export class OutreachService {
         const senderUuid = await this.resolveSenderProfileUuid(organisation_uuid, dto.sender_profile_uuid);
         if (senderUuid) {
             metadata = mergeSenderProfileMetadata(metadata, senderUuid);
+        }
+
+        if (dto.list_uuid) {
+            metadata = { ...metadata, list_uuid: dto.list_uuid };
         }
 
         return Object.keys(metadata).length > 0 ? metadata : null;
@@ -281,6 +291,12 @@ export class OutreachService {
         }
 
         if (message.status === MsgStatus.FAILED) {
+            if (dto.restart_sequence && message.sequence_enrollment_uuid) {
+                await this.sequenceEnrollmentService.reactivateEnrollment(
+                    organisation_uuid,
+                    message.sequence_enrollment_uuid,
+                );
+            }
             const preservedMetadata = message.metadata;
             await this.prisma.outreachMessage.update({
                 where: { uuid: message_uuid },
@@ -299,6 +315,42 @@ export class OutreachService {
         }
 
         throw new ConflictException('Only pending, queued, or failed messages can be sent');
+    }
+
+    async bulkResendFailedMessages(
+        organisation_uuid: string,
+        uuids: string[],
+        sent_by_user_uuid?: string,
+        restart_sequence?: boolean,
+    ): Promise<BulkSendResult> {
+        const unique = [...new Set(uuids)];
+        const results: BulkSendItemResult[] = [];
+        for (const uuid of unique) {
+            try {
+                const message = await this.requireOwnedMessage(organisation_uuid, uuid);
+                if (message.status !== MsgStatus.FAILED) {
+                    throw new ConflictException('Only failed messages can be resent');
+                }
+                const { jobId } = await this.sendMessage(
+                    organisation_uuid,
+                    uuid,
+                    { restart_sequence },
+                    sent_by_user_uuid,
+                );
+                results.push({ uuid, ok: true, jobId });
+            } catch (error) {
+                results.push({
+                    uuid,
+                    ok: false,
+                    error: error instanceof Error ? error.message : 'Unknown error',
+                });
+            }
+        }
+        return {
+            results,
+            succeeded: results.filter((r) => r.ok).length,
+            failed: results.filter((r) => !r.ok).length,
+        };
     }
 
     async deleteMessage(organisation_uuid: string, message_uuid: string): Promise<void> {

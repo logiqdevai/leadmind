@@ -72,6 +72,7 @@ export const ApiRoutes = {
         create_and_send: "/outreach/messages",
         update_message: (uuid: string) => `/outreach/messages/${uuid}`,
         send_message: (uuid: string) => `/outreach/messages/${uuid}/send`,
+        bulk_send_messages: "/outreach/messages/bulk-send",
         delete_message: (uuid: string) => `/outreach/messages/${uuid}`,
         thread: (uuid: string) => `/outreach/messages/${uuid}/thread`,
     },
@@ -225,6 +226,7 @@ export const ApiRoutes = {
         update: (uuid: string) => `/marketing-campaigns/${uuid}`,
         remove: (uuid: string) => `/marketing-campaigns/${uuid}`,
         contacts: (uuid: string) => `/marketing-campaigns/${uuid}/contacts`,
+        bulk_resend_recipients: (uuid: string) => `/marketing-campaigns/${uuid}/recipients/bulk-resend`,
         preview_contacts: (uuid: string) => `/marketing-campaigns/${uuid}/preview-contacts`,
         start: (uuid: string) => `/marketing-campaigns/${uuid}/start`,
         schedule: (uuid: string) => `/marketing-campaigns/${uuid}/schedule`,
@@ -277,6 +279,8 @@ export const ApiRoutes = {
         add_below_score: (uuid: string) => `/contact-lists/${uuid}/contacts/add-below-score`,
         remove_contact: (listUuid: string, contactUuid: string) =>
             `/contact-lists/${listUuid}/contacts/${contactUuid}`,
+        update_member_status: (listUuid: string, contactUuid: string) =>
+            `/contact-lists/${listUuid}/contacts/${contactUuid}/status`,
         stats: (uuid: string) => `/contact-lists/${uuid}/stats`,
         analyses: (uuid: string) => `/contact-lists/${uuid}/analyses`,
         analysis: (listUuid: string, analysisUuid: string) =>

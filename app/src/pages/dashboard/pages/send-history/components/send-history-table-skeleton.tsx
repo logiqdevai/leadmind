@@ -11,7 +11,7 @@ export function SendHistoryTableSkeleton() {
             </div>
             <div className="overflow-hidden rounded-xl">
                 <div className="bg-surface-secondary/40 px-3 py-2 flex gap-4">
-                    {[72, 56, 72, 56, 120, 64, 48].map((w, i) => (
+                    {[16, 72, 56, 72, 56, 120, 64, 48].map((w, i) => (
                         <div
                             key={i}
                             className="h-3 rounded bg-surface-secondary"
@@ -24,6 +24,7 @@ export function SendHistoryTableSkeleton() {
                         key={i}
                         className="border-t border-border px-3 py-3 flex gap-4 items-center"
                     >
+                        <div className="h-4 w-4 rounded bg-surface-secondary shrink-0" />
                         <div className="space-y-1.5 min-w-0 flex-1">
                             <div className="h-3.5 w-28 rounded bg-surface-secondary" />
                             <div className="h-3 w-36 rounded bg-surface-secondary" />

@@ -50,6 +50,7 @@ export interface ComposeMessageFormProps {
     mode: ComposeMessageMode;
     contactUuid?: string;
     contactUuids?: string[];
+    listUuid?: string;
     recipientEmail?: string | null;
     recipientEmailValidationStatus?: EmailValidationStatus;
     recipientEmailValidationReason?: string | null;
@@ -69,6 +70,7 @@ export function ComposeMessageForm({
     mode,
     contactUuid,
     contactUuids = [],
+    listUuid,
     recipientEmail,
     recipientEmailValidationStatus,
     recipientEmailValidationReason,
@@ -183,6 +185,7 @@ export function ComposeMessageForm({
                         uuid,
                         providerAssignments?.get(uuid) ?? emailProvider,
                         senderProfileUuid,
+                        listUuid,
                     );
                     if (send) {
                         await createAndSendMessage(payload);
@@ -236,6 +239,7 @@ export function ComposeMessageForm({
                     contactUuid,
                     emailProvider,
                     senderProfileUuid,
+                    listUuid,
                 ),
             );
             invalidateContacts([contactUuid]);
@@ -275,6 +279,7 @@ export function ComposeMessageForm({
                     contactUuid,
                     emailProvider,
                     senderProfileUuid,
+                    listUuid,
                 ),
             );
             await syncAfterSend([contactUuid]);

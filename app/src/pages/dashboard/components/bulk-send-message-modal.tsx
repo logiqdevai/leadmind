@@ -11,6 +11,7 @@ export interface BulkSendMessageModalProps {
     onOpenChange: (open: boolean) => void;
     contacts: Contact[];
     onComplete?: () => void;
+    listUuid?: string;
 }
 
 export function BulkSendMessageModal({
@@ -18,6 +19,7 @@ export function BulkSendMessageModal({
     onOpenChange,
     contacts,
     onComplete,
+    listUuid,
 }: BulkSendMessageModalProps) {
     const [step, setStep] = useState<BulkSendMessageStep>("recipients");
     const [selected, setSelected] = useState<Set<string>>(new Set());
@@ -112,6 +114,7 @@ export function BulkSendMessageModal({
                             key={composeMountKey}
                             mode="bulk"
                             contactUuids={selectedUuids}
+                            listUuid={listUuid}
                             onClose={() => handleOpenChange(false)}
                             onBulkComplete={onComplete}
                             onBack={() => setStep("recipients")}

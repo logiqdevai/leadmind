@@ -1,6 +1,7 @@
 import { useMemo, useState, type FC } from "react";
 import { Controller, type Control, type FieldErrors } from "react-hook-form";
-import { FieldError, Label, ListBox, Select } from "@heroui/react";
+import { FieldError, Input, Label, ListBox, Select } from "@heroui/react";
+import { Search } from "lucide-react";
 import { useContactLists } from "@/features/contact-lists/hooks/use-contact-lists";
 import type { ContactList } from "@/features/contact-lists/interfaces/contact-list.interface";
 import { ContactListFormModal } from "@/pages/dashboard/pages/lists/components/contact-list-form-modal";
@@ -45,6 +46,14 @@ export const FilterContactListFields: FC<FilterContactListFieldsProps> = ({
     const [createListOpen, setCreateListOpen] = useState(false);
     const [createSublistOpen, setCreateSublistOpen] = useState(false);
 
+    const [listQuery, setListQuery] = useState("");
+    const [sublistQuery, setSublistQuery] = useState("");
+
+    const filteredRootLists = useMemo(() => {
+        const q = listQuery.trim().toLowerCase();
+        return q ? rootLists.filter((list) => list.title.toLowerCase().includes(q)) : rootLists;
+    }, [rootLists, listQuery]);
+
     return (
         <Controller
             control={control}
@@ -56,6 +65,12 @@ export const FilterContactListFields: FC<FilterContactListFieldsProps> = ({
                           .filter((list) => list.parent_list_uuid === parentUuid)
                           .toSorted((a, b) => a.title.localeCompare(b.title))
                     : [];
+                const sublistQ = sublistQuery.trim().toLowerCase();
+                const filteredSublists = sublistQ
+                    ? sublists.filter((list) => list.title.toLowerCase().includes(sublistQ))
+                    : sublists;
+                const showUseParentOption =
+                    !sublistQ || "use parent list".includes(sublistQ);
 
                 const setParent = (nextParentUuid: string) => {
                     if (!nextParentUuid) {
@@ -83,24 +98,44 @@ export const FilterContactListFields: FC<FilterContactListFieldsProps> = ({
                                     placeholder="Select a list"
                                     value={parentUuid || undefined}
                                     onChange={(v) => setParent(String(v))}
+                                    onOpenChange={(open) => {
+                                        if (!open) setListQuery("");
+                                    }}
                                     isDisabled={isPending || isLoading}
                                 >
                                     <Select.Trigger>
                                         <Select.Value />
                                         <Select.Indicator />
                                     </Select.Trigger>
-                                    <Select.Popover>
-                                        <ListBox>
-                                            {rootLists.map((list) => (
-                                                <ListBox.Item
-                                                    key={list.uuid}
-                                                    id={list.uuid}
-                                                    textValue={list.title}
-                                                >
-                                                    {list.title}
-                                                    <ListBox.ItemIndicator />
+                                    <Select.Popover className="w-[var(--trigger-width)] overflow-hidden p-0">
+                                        <div className="relative shrink-0 border-b border-border px-1 pt-1">
+                                            <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted" />
+                                            <Input
+                                                aria-label="Search lists"
+                                                placeholder="Search lists…"
+                                                value={listQuery}
+                                                onChange={(e) => setListQuery(e.target.value)}
+                                                onKeyDown={(e) => e.stopPropagation()}
+                                                className="rounded-md border-0 bg-transparent pl-9 shadow-none focus-visible:ring-0"
+                                            />
+                                        </div>
+                                        <ListBox className="max-h-52 overflow-y-auto overscroll-contain p-1">
+                                            {filteredRootLists.length === 0 ? (
+                                                <ListBox.Item id="__empty" textValue="No matches" isDisabled>
+                                                    <span className="text-sm text-muted">No matching lists.</span>
                                                 </ListBox.Item>
-                                            ))}
+                                            ) : (
+                                                filteredRootLists.map((list) => (
+                                                    <ListBox.Item
+                                                        key={list.uuid}
+                                                        id={list.uuid}
+                                                        textValue={list.title}
+                                                    >
+                                                        {list.title}
+                                                        <ListBox.ItemIndicator />
+                                                    </ListBox.Item>
+                                                ))
+                                            )}
                                         </ListBox>
                                     </Select.Popover>
                                 </Select>
@@ -116,6 +151,9 @@ export const FilterContactListFields: FC<FilterContactListFieldsProps> = ({
                                     }
                                     value={sublistUuid}
                                     onChange={(v) => setSublist(String(v))}
+                                    onOpenChange={(open) => {
+                                        if (!open) setSublistQuery("");
+                                    }}
                                     isDisabled={
                                         isPending || isLoading || !parentUuid || sublists.length === 0
                                     }
@@ -124,16 +162,34 @@ export const FilterContactListFields: FC<FilterContactListFieldsProps> = ({
                                         <Select.Value />
                                         <Select.Indicator />
                                     </Select.Trigger>
-                                    <Select.Popover>
-                                        <ListBox>
-                                            <ListBox.Item
-                                                id={NO_SUBLIST}
-                                                textValue="Use parent list"
-                                            >
-                                                Use parent list
-                                                <ListBox.ItemIndicator />
-                                            </ListBox.Item>
-                                            {sublists.map((list) => (
+                                    <Select.Popover className="w-[var(--trigger-width)] overflow-hidden p-0">
+                                        <div className="relative shrink-0 border-b border-border px-1 pt-1">
+                                            <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted" />
+                                            <Input
+                                                aria-label="Search sublists"
+                                                placeholder="Search sublists…"
+                                                value={sublistQuery}
+                                                onChange={(e) => setSublistQuery(e.target.value)}
+                                                onKeyDown={(e) => e.stopPropagation()}
+                                                className="rounded-md border-0 bg-transparent pl-9 shadow-none focus-visible:ring-0"
+                                            />
+                                        </div>
+                                        <ListBox className="max-h-52 overflow-y-auto overscroll-contain p-1">
+                                            {showUseParentOption ? (
+                                                <ListBox.Item
+                                                    id={NO_SUBLIST}
+                                                    textValue="Use parent list"
+                                                >
+                                                    Use parent list
+                                                    <ListBox.ItemIndicator />
+                                                </ListBox.Item>
+                                            ) : null}
+                                            {filteredSublists.length === 0 && !showUseParentOption ? (
+                                                <ListBox.Item id="__empty" textValue="No matches" isDisabled>
+                                                    <span className="text-sm text-muted">No matching sublists.</span>
+                                                </ListBox.Item>
+                                            ) : null}
+                                            {filteredSublists.map((list) => (
                                                 <ListBox.Item
                                                     key={list.uuid}
                                                     id={list.uuid}

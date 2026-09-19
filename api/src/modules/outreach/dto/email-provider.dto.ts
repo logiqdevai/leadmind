@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { ExternalIntegrationProvider } from '@/generated/prisma';
-import { IsIn, IsInt, IsOptional, IsString, IsUUID, Min, MinLength } from 'class-validator';
+import { IsBoolean, IsIn, IsInt, IsOptional, IsString, IsUUID, Min, MinLength } from 'class-validator';
 
 export const EMAIL_DELIVERY_PROVIDERS = [
     ExternalIntegrationProvider.RESEND,
@@ -59,4 +59,13 @@ export class SendExistingMessageDto {
     @IsOptional()
     @IsUUID()
     sender_profile_uuid?: string;
+
+    @ApiProperty({
+        required: false,
+        description:
+            'When resending a FAILED message whose sequence enrollment was cancelled (by this same failure or a bounce), also reactivate the enrollment so later steps resume.',
+    })
+    @IsOptional()
+    @IsBoolean()
+    restart_sequence?: boolean;
 }

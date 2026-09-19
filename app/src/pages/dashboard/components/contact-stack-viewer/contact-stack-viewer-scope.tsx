@@ -10,6 +10,7 @@ export interface ContactStackViewerControls {
 
 interface ContactStackViewerScopeProps {
     contactUuids: string[];
+    listUuid?: string;
     page: number;
     totalPages: number;
     pageSize: number;
@@ -20,6 +21,7 @@ interface ContactStackViewerScopeProps {
 
 export const ContactStackViewerScope: FC<ContactStackViewerScopeProps> = ({
     contactUuids,
+    listUuid,
     page,
     totalPages,
     pageSize,
@@ -51,6 +53,7 @@ export const ContactStackViewerScope: FC<ContactStackViewerScopeProps> = ({
                 isOpen={stackViewer.isOpen}
                 onOpenChange={stackViewer.setIsOpen}
                 contactUuids={contactUuids}
+                listUuid={listUuid}
                 activeUuid={stackViewer.activeUuid}
                 currentIndex={stackViewer.currentIndex}
                 onIndexChange={stackViewer.setCurrentIndex}

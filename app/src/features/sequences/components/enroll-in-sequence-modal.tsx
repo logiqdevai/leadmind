@@ -5,6 +5,8 @@ import { Button } from "@heroui/react";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
 import { useSequences, useEnrollContact } from "@/features/sequences/hooks/use-sequences";
 import { SequenceStatus } from "@/features/sequences/interfaces/sequence.interface";
+import { EmailProviderSelect } from "@/features/messaging/components/email-provider-select";
+import type { EmailProviderTarget } from "@/features/integrations/interfaces/integrations.interface";
 
 interface EnrollInSequenceModalProps {
     isOpen: boolean;
@@ -20,15 +22,17 @@ export const EnrollInSequenceModal: FC<EnrollInSequenceModalProps> = ({
     const { data: sequences = [], isLoading } = useSequences({ status: SequenceStatus.ACTIVE });
     const enrollMutation = useEnrollContact();
     const [selectedUuid, setSelectedUuid] = useState<string | null>(null);
+    const [emailProvider, setEmailProvider] = useState<EmailProviderTarget | null>(null);
 
     const handleChange = (value: Key | null) => {
         if (typeof value === "string") setSelectedUuid(value);
     };
 
     const handleEnroll = async () => {
-        if (!selectedUuid) return;
-        await enrollMutation.mutateAsync({ uuid: selectedUuid, contact_uuid: contactUuid });
+        if (!selectedUuid || !emailProvider) return;
+        await enrollMutation.mutateAsync({ uuid: selectedUuid, contact_uuid: contactUuid, emailProvider });
         setSelectedUuid(null);
+        setEmailProvider(null);
         onOpenChange(false);
     };
 
@@ -73,6 +77,7 @@ export const EnrollInSequenceModal: FC<EnrollInSequenceModalProps> = ({
                                 </Select.Popover>
                             </Select>
                         </div>
+                        <EmailProviderSelect value={emailProvider} onChange={setEmailProvider} />
                         <p className="text-xs text-muted">
                             The contact will be scheduled to receive each enabled step at its configured
                             delay (and time of day, if set).
@@ -84,7 +89,7 @@ export const EnrollInSequenceModal: FC<EnrollInSequenceModalProps> = ({
                         </Button>
                         <ActionButtonWithPending
                             size="sm"
-                            isDisabled={!selectedUuid || enrollMutation.isPending}
+                            isDisabled={!selectedUuid || !emailProvider || enrollMutation.isPending}
                             isPending={enrollMutation.isPending}
                             onPress={() => void handleEnroll()}
                         >

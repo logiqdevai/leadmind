@@ -16,6 +16,7 @@ import {
     moveListContactsBelowScore,
     removeListContactsBulk,
     updateContactList,
+    updateListMemberStatus,
 } from "../services/contact-lists.service";
 import type {
     AddListContactsPayload,
@@ -28,6 +29,7 @@ import type {
     PaginatedListMembers,
     UpdateContactListPayload,
 } from "../interfaces/contact-list.interface";
+import type { LeadStatus } from "@/features/contacts/interfaces/contact.interface";
 import { contactAwaitingScore } from "@/lib/pending-contact-scores";
 
 export const contactListQueryKeys = {
@@ -182,6 +184,44 @@ export function useBulkAddListContacts() {
                 duration: 3000,
                 variant: "error",
             });
+        },
+    });
+}
+
+export function useUpdateListMemberStatus() {
+    const qc = useQueryClient();
+    return useMutation({
+        mutationFn: (vars: { listUuid: string; contactUuid: string; status: LeadStatus }) =>
+            updateListMemberStatus(vars.listUuid, vars.contactUuid, { status: vars.status }),
+        onMutate: async (vars) => {
+            await qc.cancelQueries({ queryKey: contactListQueryKeys.all });
+            const listMembers = qc.getQueriesData<PaginatedListMembers>({
+                queryKey: ["contact-lists", "members", vars.listUuid],
+            });
+            for (const [key, value] of listMembers) {
+                if (!value) continue;
+                qc.setQueryData<PaginatedListMembers>(key, {
+                    ...value,
+                    data: value.data.map((m) =>
+                        m.uuid === vars.contactUuid ? { ...m, list_status: vars.status } : m,
+                    ),
+                });
+            }
+            return { listMembers };
+        },
+        onError: (error: Error, _vars, ctx) => {
+            for (const [key, value] of ctx?.listMembers ?? []) {
+                qc.setQueryData(key, value);
+            }
+            toast({
+                title: "Could not update list status",
+                description: error.message,
+                duration: 3000,
+                variant: "error",
+            });
+        },
+        onSettled: (_data, _error, vars) => {
+            qc.invalidateQueries({ queryKey: contactListQueryKeys.members(vars.listUuid, {}) });
         },
     });
 }

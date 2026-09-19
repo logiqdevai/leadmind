@@ -17,6 +17,7 @@ import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { REPLY_ANALYSIS_QUEUE } from '@/core/queues/queues.constants';
 import { ResendAdapter } from '@/integrations/notifications/resend/resend/resend.adapter';
 import { ContactsService } from '@/modules/contacts/contacts.service';
+import { ContactListsService } from '@/modules/contact-lists/contact-lists.service';
 import { MailService } from '@/modules/internal/mail/mail.service';
 import { CampaignMessageSendService } from '@/modules/marketing-campaigns/services/campaign-message-send.service';
 import { RemindersService } from '@/modules/reminders/reminders.service';
@@ -72,6 +73,7 @@ export class WebhookEventService {
         private readonly resendAdapter: ResendAdapter,
         private readonly campaignSendService: CampaignMessageSendService,
         private readonly contactsService: ContactsService,
+        private readonly contactListsService: ContactListsService,
         private readonly mailService: MailService,
         private readonly sequenceEnrollmentService: SequenceEnrollmentService,
         private readonly remindersService: RemindersService,
@@ -458,6 +460,25 @@ export class WebhookEventService {
                     shouldSyncContactSearchIndex = true;
                 }
             }
+
+            const attributedListUuid = await this.contactListsService.resolveAttributedListUuid({
+                list_uuid: (message.metadata as { list_uuid?: string } | null)?.list_uuid,
+                campaign_uuid: message.campaign_uuid,
+                sequence_enrollment_uuid: message.sequence_enrollment_uuid,
+            });
+            if (attributedListUuid) {
+                const listMember = await this.prisma.contactListMember.findFirst({
+                    where: { list_uuid: attributedListUuid, contact_uuid: message.contact_uuid },
+                    select: { status: true },
+                });
+                ops.push(
+                    ...this.contactListsService.buildPromoteListStatusToEngagedOnReplyOps(
+                        attributedListUuid,
+                        message.contact_uuid,
+                        listMember?.status ?? null,
+                    ),
+                );
+            }
         } else if (event.kind === 'delivered' && event.channel === 'email') {
             const contact = await this.prisma.contact.findUnique({
                 where: { uuid: message.contact_uuid },
@@ -474,6 +495,25 @@ export class WebhookEventService {
                     ),
                 );
                 shouldSyncContactSearchIndex = true;
+            }
+
+            const attributedListUuid = await this.contactListsService.resolveAttributedListUuid({
+                list_uuid: (message.metadata as { list_uuid?: string } | null)?.list_uuid,
+                campaign_uuid: message.campaign_uuid,
+                sequence_enrollment_uuid: message.sequence_enrollment_uuid,
+            });
+            if (attributedListUuid) {
+                const listMember = await this.prisma.contactListMember.findFirst({
+                    where: { list_uuid: attributedListUuid, contact_uuid: message.contact_uuid },
+                    select: { status: true },
+                });
+                ops.push(
+                    ...this.contactListsService.buildPromoteListStatusToContactedIfNewOps(
+                        attributedListUuid,
+                        message.contact_uuid,
+                        listMember?.status ?? null,
+                    ),
+                );
             }
         }
 
@@ -512,6 +552,35 @@ export class WebhookEventService {
                 );
             }
         }
+
+        if (event.kind === 'bounced') {
+            await this.cancelEnrollmentOnBounce(message);
+        }
+    }
+
+    /**
+     * A bounce always cancels the enrollment tied to the bounced message - unlike a
+     * reply there's no per-sequence opt-out for this (a bounce means the address is
+     * undeliverable, so continuing to send further steps is never useful).
+     */
+    private async cancelEnrollmentOnBounce(message: OutreachMessage): Promise<void> {
+        if (!message.sequence_enrollment_uuid) return;
+
+        const enrollment = await this.prisma.sequenceEnrollment.findUnique({
+            where: { uuid: message.sequence_enrollment_uuid },
+            select: { status: true },
+        });
+        if (!enrollment || enrollment.status !== SequenceEnrollmentStatus.ACTIVE) {
+            return;
+        }
+
+        await this.sequenceEnrollmentService.cancelEnrollment(
+            message.organisation_uuid,
+            message.sequence_enrollment_uuid,
+        );
+        this.logger.log(
+            `[ingest] Bounce cancelled sequence enrollment=${message.sequence_enrollment_uuid}`,
+        );
     }
 
     /**

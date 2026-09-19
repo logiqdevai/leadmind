@@ -26,6 +26,7 @@ import { ScheduleCampaignDto } from './dto/schedule-campaign.dto';
 import { GenerateCampaignMessageDto } from './dto/generate-campaign-message.dto';
 import { PreviewContactsDto } from './dto/preview-contacts.dto';
 import { ListDraftMessagesDto } from './dto/list-draft-messages.dto';
+import { BulkResendRecipientsDto } from './dto/bulk-resend-recipients.dto';
 import { StartCampaignDto, SendCampaignDraftsDto } from './dto/email-provider-campaign.dto';
 import { SendExistingMessageDto } from '@/modules/outreach/dto/email-provider.dto';
 import { MarketingCampaignsService } from './services/marketing-campaigns.service';
@@ -94,6 +95,18 @@ export class MarketingCampaignsController {
         @Query() query: ListCampaignContactsDto,
     ) {
         return this.service.listContacts(organisation_uuid, uuid, query);
+    }
+
+    @ActivityLog({ entityType: ActivityEntityType.MARKETING_CAMPAIGN, action: ActivityAction.MESSAGES_BULK_RESENT, entityUuidFrom: 'params.uuid' })
+    @Post(':uuid/recipients/bulk-resend')
+    @ApiOperation({ summary: 'Retry sending a batch of failed campaign recipients' })
+    @ApiResponse({ status: 201 })
+    bulkResendRecipients(
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
+        @Param('uuid', ParseUUIDPipe) uuid: string,
+        @Body() dto: BulkResendRecipientsDto,
+    ) {
+        return this.service.bulkResendRecipients(organisation_uuid, uuid, dto.uuids);
     }
 
     @Post(':uuid/preview-contacts')

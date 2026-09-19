@@ -18,6 +18,8 @@ import type {
     FilterListContactsByScorePayload,
     MoveListContactsBelowScorePayload,
     UpdateContactListPayload,
+    UpdateListMemberStatusPayload,
+    ListMember,
 } from "../interfaces/contact-list.interface";
 
 export const listContactLists = async (
@@ -113,6 +115,22 @@ export const bulkAddListContacts = async (
         return response.data;
     } catch (error: any) {
         throw new Error(error?.response?.data?.message || "Failed to bulk add contacts to list.");
+    }
+};
+
+export const updateListMemberStatus = async (
+    listUuid: string,
+    contactUuid: string,
+    payload: UpdateListMemberStatusPayload,
+): Promise<ListMember> => {
+    try {
+        const response = await axiosInstance.patch(
+            ApiRoutes.contact_lists.update_member_status(listUuid, contactUuid),
+            payload,
+        );
+        return response.data;
+    } catch (error: any) {
+        throw new Error(error?.response?.data?.message || "Failed to update list status.");
     }
 };
 

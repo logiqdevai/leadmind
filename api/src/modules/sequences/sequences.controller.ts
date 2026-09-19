@@ -33,6 +33,20 @@ import { ReorderSequenceStepsDto } from './dto/reorder-sequence-steps.dto';
 import { EnrollContactDto } from './dto/enroll-contact.dto';
 import { BulkEnrollContactsDto } from './dto/bulk-enroll-contacts.dto';
 import { ListSequencesDto } from './dto/list-sequences.dto';
+import { EmailProviderTarget } from '@/modules/integrations/interfaces/email-credentials.interface';
+
+function toEmailProviderTarget(dto: {
+    email_provider?: string;
+    email_account?: string;
+    email_domain_uuid?: string;
+}): EmailProviderTarget | undefined {
+    if (!dto.email_provider || !dto.email_account) return undefined;
+    return {
+        provider: dto.email_provider as EmailProviderTarget['provider'],
+        account: dto.email_account.trim(),
+        ...(dto.email_domain_uuid ? { domain_uuid: dto.email_domain_uuid } : {}),
+    };
+}
 
 @ApiTags('sequences')
 @ApiBearerAuth()
@@ -233,6 +247,9 @@ export class SequencesController {
             uuid,
             dto.contact_uuid,
             user_uuid,
+            undefined,
+            dto.list_uuid,
+            toEmailProviderTarget(dto),
         );
     }
 
@@ -259,6 +276,8 @@ export class SequencesController {
             dto.contact_uuids,
             undefined,
             user_uuid,
+            dto.list_uuid,
+            toEmailProviderTarget(dto),
         );
     }
 

@@ -25,6 +25,7 @@ import {
 } from '@/shared/utils/contact-email.util';
 import { sanitizeEmailHtml } from '@/shared/utils/sanitize-html.util';
 import { ContactsService } from '@/modules/contacts/contacts.service';
+import { ContactListsService } from '@/modules/contact-lists/contact-lists.service';
 import { MessageSendService } from '@/modules/outreach/services/message-send.service';
 import { EmailProviderTarget } from '@/modules/integrations/interfaces/email-credentials.interface';
 import { EmailCredentialsService } from '@/modules/integrations/services/email-credentials.service';
@@ -38,6 +39,10 @@ import { mergeSenderProfileMetadata } from '@/modules/outreach/utils/sender-prof
 import { SenderProfilesService } from '@/modules/sender-profiles/sender-profiles.service';
 import { generateMessageId } from '@/shared/utils/email-message-id.util';
 import { ThreadsService } from '@/modules/threads/threads.service';
+import {
+  BulkSendItemResult,
+  BulkSendResult,
+} from '@/modules/outreach/interfaces/bulk-send-result.interface';
 interface SendResult {
   status: 'sent' | 'failed' | 'skipped' | 'noop';
   reason?: string;
@@ -53,6 +58,7 @@ export class CampaignMessageSendService {
     private readonly emailCredentialsService: EmailCredentialsService,
     private readonly senderProfilesService: SenderProfilesService,
     private readonly contactsService: ContactsService,
+    private readonly contactListsService: ContactListsService,
     private readonly sendingCapacityService: SendingCapacityService,
     private readonly threadsService: ThreadsService,
     @InjectQueue(MARKETING_MESSAGE_SEND_QUEUE)
@@ -249,6 +255,18 @@ export class CampaignMessageSendService {
         mcc.channel === Channel.EMAIL && mcc.contact.status === LeadStatus.NEW;
 
       const sent_at = new Date();
+      const attributedListUuid =
+        mcc.channel === Channel.EMAIL
+          ? await this.contactListsService.resolveAttributedListUuid({
+              campaign_uuid: mcc.campaign_uuid,
+            })
+          : null;
+      const attributedListMember = attributedListUuid
+        ? await this.prisma.contactListMember.findFirst({
+            where: { list_uuid: attributedListUuid, contact_uuid: mcc.contact_uuid },
+            select: { status: true },
+          })
+        : null;
 
       await this.prisma.$transaction([
         this.messageSendService.messageSentOperation(
@@ -291,6 +309,13 @@ export class CampaignMessageSendService {
               mcc.campaign.organisation_uuid,
               'email_sent',
               mcc.contact.status,
+            )
+          : []),
+        ...(attributedListUuid
+          ? this.contactListsService.buildPromoteListStatusToContactedIfNewOps(
+              attributedListUuid,
+              mcc.contact_uuid,
+              attributedListMember?.status ?? null,
             )
           : []),
       ]);
@@ -586,6 +611,66 @@ export class CampaignMessageSendService {
     return { jobId: String(job.id) };
   }
 
+  async queueMccSend(
+    organisation_uuid: string,
+    campaign_uuid: string,
+    mcc_uuid: string,
+  ): Promise<{ jobId: string }> {
+    const mcc = await this.prisma.marketingCampaignContact.findFirst({
+      where: { uuid: mcc_uuid, campaign_uuid },
+    });
+    if (!mcc) {
+      throw new NotFoundException('Campaign recipient not found');
+    }
+    if (mcc.status !== CampaignContactStatus.FAILED) {
+      throw new ConflictException('Only failed recipients can be resent');
+    }
+
+    const message = await this.prisma.outreachMessage.findFirst({
+      where: {
+        campaign_uuid,
+        organisation_uuid,
+        contact_uuid: mcc.contact_uuid,
+        channel: mcc.channel,
+      },
+    });
+    if (!message) {
+      throw new NotFoundException('Outreach message not found for this recipient');
+    }
+
+    return this.queueDraftMessageSend(organisation_uuid, campaign_uuid, message.uuid);
+  }
+
+  async bulkResendMcc(
+    organisation_uuid: string,
+    campaign_uuid: string,
+    mcc_uuids: string[],
+  ): Promise<BulkSendResult> {
+    const unique = [...new Set(mcc_uuids)];
+    const results: BulkSendItemResult[] = [];
+    for (const mcc_uuid of unique) {
+      try {
+        const { jobId } = await this.queueMccSend(
+          organisation_uuid,
+          campaign_uuid,
+          mcc_uuid,
+        );
+        results.push({ uuid: mcc_uuid, ok: true, jobId });
+      } catch (error) {
+        results.push({
+          uuid: mcc_uuid,
+          ok: false,
+          error: error instanceof Error ? error.message : 'Unknown error',
+        });
+      }
+    }
+    return {
+      results,
+      succeeded: results.filter((r) => r.ok).length,
+      failed: results.filter((r) => !r.ok).length,
+    };
+  }
+
   async removeCampaignOutreachMessage(
     organisation_uuid: string,
     campaign_uuid: string,
@@ -827,21 +912,8 @@ export class CampaignMessageSendService {
   private async resolveCampaignIntegrationTarget(
     campaign_integration_uuid: string,
   ): Promise<EmailProviderTarget> {
-    const ci = await this.prisma.campaignIntegration.findUnique({
-      where: { uuid: campaign_integration_uuid },
-      select: {
-        integration_account_uuid: true,
-        integration_account_domain_uuid: true,
-      },
-    });
-    if (!ci) {
-      throw new NotFoundException(
-        `Campaign integration ${campaign_integration_uuid} not found`,
-      );
-    }
-    return this.emailCredentialsService.resolveTargetByAccountUuid(
-      ci.integration_account_uuid,
-      ci.integration_account_domain_uuid ?? undefined,
+    return this.emailCredentialsService.resolveTargetByCampaignIntegrationUuid(
+      campaign_integration_uuid,
     );
   }
 

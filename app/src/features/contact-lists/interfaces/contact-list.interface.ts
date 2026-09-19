@@ -1,4 +1,8 @@
-import type { Contact, ListContactsQuery } from "@/features/contacts/interfaces/contact.interface";
+import type {
+    Contact,
+    LeadStatus,
+    ListContactsQuery,
+} from "@/features/contacts/interfaces/contact.interface";
 import type { CampaignFilters } from "@/features/marketing-campaigns/interfaces/campaign.interface";
 
 export interface ContactList {
@@ -47,12 +51,22 @@ export type ListContactListMembersQuery = Omit<
     "contact_list_uuid" | "exclude_list_uuid"
 >;
 
+export interface ListMember extends Contact {
+    member_uuid: string;
+    added_at: string;
+    list_status: LeadStatus | null;
+}
+
 export interface PaginatedListMembers {
-    data: Contact[];
+    data: ListMember[];
     total: number;
     page: number;
     limit: number;
     totalPages: number;
+}
+
+export interface UpdateListMemberStatusPayload {
+    status: LeadStatus;
 }
 
 export interface AddListContactsPayload {

@@ -17,6 +17,7 @@ import type {
     UpdateCampaignPayload,
 } from "../interfaces/campaign.interface";
 import type { CampaignFilters } from "../interfaces/campaign.interface";
+import type { BulkSendResult } from "@/features/outreach/interfaces/send-history.interface";
 
 function unwrap(error: any, fallback: string): never {
     throw new Error(error?.response?.data?.message || fallback);
@@ -58,6 +59,21 @@ export async function listCampaignContacts(
         return response.data;
     } catch (error: any) {
         unwrap(error, "Failed to load campaign recipients.");
+    }
+}
+
+export async function bulkResendCampaignRecipients(
+    uuid: string,
+    uuids: string[],
+): Promise<BulkSendResult> {
+    try {
+        const response = await axiosInstance.post(
+            ApiRoutes.marketing_campaigns.bulk_resend_recipients(uuid),
+            { uuids },
+        );
+        return response.data;
+    } catch (error: any) {
+        unwrap(error, "Failed to resend recipients.");
     }
 }
 
