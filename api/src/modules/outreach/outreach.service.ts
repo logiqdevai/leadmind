@@ -11,6 +11,7 @@ import { Queue } from 'bullmq';
 import {
     Channel,
     Contact,
+    MsgDirection,
     MsgStatus,
     OutreachMessage,
     Prisma,
@@ -34,6 +35,21 @@ import {
 } from './utils/sender-profile-metadata.util';
 import { generateMessageId } from '@/shared/utils/email-message-id.util';
 import { ThreadsService } from '@/modules/threads/threads.service';
+import {
+    followUpCutoff,
+    messageThreadFlags,
+    needsFollowUpThreadWhere,
+} from '@/modules/threads/thread-follow-up.util';
+
+/** Statuses of an email that actually left our system - the only ones a follow-up can hang off. */
+const SENT_EMAIL_STATUSES: MsgStatus[] = [
+    MsgStatus.SENT,
+    MsgStatus.DELIVERED,
+    MsgStatus.OPENED,
+    MsgStatus.CLICKED,
+    MsgStatus.REPLIED,
+];
+
 @Injectable()
 export class OutreachService {
     private readonly logger = new Logger(OutreachService.name);
@@ -309,8 +325,21 @@ export class OutreachService {
         const limit = filters.limit ?? 20;
         const skip = (page - 1) * limit;
 
+        const cutoff = followUpCutoff();
+
         const where: Prisma.OutreachMessageWhereInput = {
             organisation_uuid,
+            // Narrowed to the latest send per thread below - a thread that needs a follow-up
+            // should surface once, not once per message it has ever carried.
+            ...(filters.needs_follow_up && {
+                AND: [
+                    {
+                        direction: MsgDirection.OUTBOUND,
+                        status: { in: SENT_EMAIL_STATUSES },
+                        thread: { is: needsFollowUpThreadWhere(cutoff) },
+                    },
+                ],
+            }),
             ...(filters.contact_uuid && { contact_uuid: filters.contact_uuid }),
             ...(filters.campaign_uuid && { campaign_uuid: filters.campaign_uuid }),
             ...(filters.status
@@ -365,6 +394,17 @@ export class OutreachService {
                     name: true,
                     email: true,
                     phone: true,
+                    unsubscribed_at: true,
+                },
+            },
+            thread: {
+                select: {
+                    channel: true,
+                    origin: true,
+                    reply_state: true,
+                    has_unread_reply: true,
+                    last_inbound_at: true,
+                    last_outbound_at: true,
                 },
             },
             campaign: {
@@ -400,21 +440,61 @@ export class OutreachService {
             },
         } satisfies Prisma.OutreachMessageInclude;
 
-        const [orderedCandidates, total] = await Promise.all([
+        const [candidates, dbTotal] = await Promise.all([
             this.prisma.outreachMessage.findMany({
                 where,
-                select: { uuid: true, sent_at: true, created_at: true },
+                select: {
+                    uuid: true,
+                    direction: true,
+                    sent_at: true,
+                    replied_at: true,
+                    created_at: true,
+                    contact: { select: { unsubscribed_at: true } },
+                    thread: {
+                        select: {
+                            channel: true,
+                            origin: true,
+                            reply_state: true,
+                            has_unread_reply: true,
+                            last_inbound_at: true,
+                            last_outbound_at: true,
+                        },
+                    },
+                },
             }),
             this.prisma.outreachMessage.count({ where }),
         ]);
 
-        const pageUuids = [...orderedCandidates]
+        // `sent_at` and the thread's `last_outbound_at` are stamped with the same instant when a
+        // message is sent (see MessageSendService.threadOutboundSentOperations), so equality
+        // identifies a thread's most recent send.
+        const orderedCandidates = filters.needs_follow_up
+            ? candidates.filter((candidate) =>
+                  isLatestSendOfThread(candidate.sent_at, candidate.thread?.last_outbound_at),
+              )
+            : candidates;
+        const total = filters.needs_follow_up ? orderedCandidates.length : dbTotal;
+
+        // Replies and pending follow-ups pin to the top (unread reply, then a reply we owe an
+        // answer to, then a due follow-up); everything else - and each tier internally - is newest first.
+        const pageUuids = orderedCandidates
+            .map((candidate) => ({
+                candidate,
+                priority: messageThreadFlags(
+                    candidate,
+                    candidate.thread,
+                    candidate.contact.unsubscribed_at,
+                    cutoff,
+                ).priority,
+            }))
             .sort(
                 (a, b) =>
-                    (b.sent_at ?? b.created_at).getTime() - (a.sent_at ?? a.created_at).getTime(),
+                    a.priority - b.priority ||
+                    (b.candidate.sent_at ?? b.candidate.created_at).getTime() -
+                        (a.candidate.sent_at ?? a.candidate.created_at).getTime(),
             )
             .slice(skip, skip + limit)
-            .map((row) => row.uuid);
+            .map(({ candidate }) => candidate.uuid);
 
         const rows =
             pageUuids.length === 0
@@ -425,9 +505,19 @@ export class OutreachService {
                   });
 
         const order = new Map(pageUuids.map((uuid, index) => [uuid, index]));
-        const data = [...rows].sort(
-            (a, b) => (order.get(a.uuid) ?? 0) - (order.get(b.uuid) ?? 0),
-        );
+        const data = [...rows]
+            .sort((a, b) => (order.get(a.uuid) ?? 0) - (order.get(b.uuid) ?? 0))
+            .map(({ thread, contact: { unsubscribed_at, ...contact }, ...row }) => {
+                const flags = messageThreadFlags(row, thread, unsubscribed_at, cutoff);
+                return {
+                    ...row,
+                    contact,
+                    needs_follow_up: flags.needs_follow_up,
+                    follow_up_since: flags.needs_follow_up ? thread!.last_outbound_at : null,
+                    needs_reply: flags.needs_reply,
+                    has_unread_reply: flags.has_unread_reply,
+                };
+            });
 
         return {
             data,
@@ -522,4 +612,8 @@ export class OutreachService {
         }
         this.ensurePending(message);
     }
+}
+
+function isLatestSendOfThread(sent_at: Date | null, last_outbound_at: Date | null | undefined): boolean {
+    return !!sent_at && !!last_outbound_at && sent_at.getTime() === last_outbound_at.getTime();
 }

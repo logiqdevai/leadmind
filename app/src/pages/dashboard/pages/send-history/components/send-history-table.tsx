@@ -7,8 +7,10 @@ import { useIntegrations } from "@/features/integrations/hooks/use-integrations"
 import type { SendHistoryMessage } from "@/features/outreach/interfaces/send-history.interface";
 import { SequenceEnrollmentStatus } from "@/features/sequences/interfaces/sequence.interface";
 import { useCancelEnrollment } from "@/features/sequences/hooks/use-sequences";
+import { useDismissFollowUp } from "@/features/outreach/hooks/use-outreach";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { MessageThreadModal } from "@/pages/dashboard/pages/contacts/pages/detail/components/message-thread-modal";
+import { cn } from "@/lib/utils";
 import { Routes } from "@/routes/routes";
 import {
     formatSendHistoryDate,
@@ -16,6 +18,7 @@ import {
     getSendIntegrationLabel,
     getSendSourceLabel,
 } from "../utils/send-history.utils";
+import { FollowUpBadge, FollowUpQuietFor, ReplyBadge } from "./follow-up-marker";
 import { SendHistoryMessageModal } from "./send-history-message-modal";
 
 export const STATUS_COLOR: Record<
@@ -41,6 +44,7 @@ export function SendHistoryTable({ rows }: { rows: SendHistoryMessage[] }) {
     const [thread, setThread] = useState<{ threadUuid: string; contactUuid: string } | null>(null);
     const [cancelTarget, setCancelTarget] = useState<SendHistoryMessage | null>(null);
     const cancelEnrollmentMut = useCancelEnrollment();
+    const dismissFollowUp = useDismissFollowUp();
 
     if (rows.length === 0) {
         return (
@@ -94,7 +98,7 @@ export function SendHistoryTable({ rows }: { rows: SendHistoryMessage[] }) {
                         <th className="hidden lg:table-cell px-3 py-2 text-left font-medium">Channel</th>
                         <th className="hidden lg:table-cell px-3 py-2 text-left font-medium">Integration</th>
                         <th className="hidden lg:table-cell px-3 py-2 text-left font-medium">Source</th>
-                        <th className="px-3 py-2 text-left font-medium w-28">Status</th>
+                        <th className="px-3 py-2 text-left font-medium w-36">Status</th>
                         <th className="hidden lg:table-cell px-3 py-2 text-left font-medium">Subject / preview</th>
                         <th className="hidden lg:table-cell px-3 py-2 text-left font-medium">Sent by</th>
                         <th className="hidden lg:table-cell px-3 py-2 text-left font-medium">Date</th>
@@ -102,14 +106,20 @@ export function SendHistoryTable({ rows }: { rows: SendHistoryMessage[] }) {
                 </thead>
                 <tbody>
                     {rows.map((row) => (
-                        <tr key={row.uuid} className="border-t border-border">
+                        <tr
+                            key={row.uuid}
+                            className={cn("border-t border-border", row.has_unread_reply && "bg-accent/5")}
+                        >
                             <td className="min-w-0 max-w-0 overflow-hidden px-3 py-2 align-top">
                                 <Link
                                     to={Routes.dashboard.contacts_detail.replace(
                                         ":uuid",
                                         row.contact.uuid,
                                     )}
-                                    className="block truncate font-medium text-foreground hover:text-accent"
+                                    className={cn(
+                                        "block truncate text-foreground hover:text-accent",
+                                        row.has_unread_reply ? "font-bold" : "font-medium",
+                                    )}
                                 >
                                     {row.contact.name ?? "Unnamed contact"}
                                 </Link>
@@ -136,12 +146,43 @@ export function SendHistoryTable({ rows }: { rows: SendHistoryMessage[] }) {
                                 <Chip size="sm" variant="soft" color={STATUS_COLOR[row.status]}>
                                     <Chip.Label>{row.status}</Chip.Label>
                                 </Chip>
+                                {row.has_unread_reply || row.needs_reply ? (
+                                    <div className="mt-1.5">
+                                        <ReplyBadge isUnread={row.has_unread_reply} />
+                                    </div>
+                                ) : null}
+                                {row.needs_follow_up ? (
+                                    <div className="mt-1.5 flex flex-col items-start gap-0.5">
+                                        <FollowUpBadge since={row.follow_up_since} />
+                                        <FollowUpQuietFor since={row.follow_up_since} />
+                                        {row.thread_uuid ? (
+                                            <button
+                                                type="button"
+                                                disabled={dismissFollowUp.isPending}
+                                                onClick={() =>
+                                                    dismissFollowUp.mutate({
+                                                        threadUuid: row.thread_uuid!,
+                                                        contactUuid: row.contact.uuid,
+                                                    })
+                                                }
+                                                className="text-[11px] text-muted hover:text-foreground hover:underline disabled:opacity-50"
+                                            >
+                                                No follow-up needed
+                                            </button>
+                                        ) : null}
+                                    </div>
+                                ) : null}
                             </td>
                             <td className="hidden lg:table-cell px-3 py-2 align-top max-w-xs">
                                 <div className="flex items-start gap-1.5">
                                     <div className="min-w-0 flex-1">
                                         {row.channel === "EMAIL" && row.subject ? (
-                                            <div className="font-medium text-foreground truncate">
+                                            <div
+                                                className={cn(
+                                                    "text-foreground truncate",
+                                                    row.has_unread_reply ? "font-bold" : "font-medium",
+                                                )}
+                                            >
                                                 {row.subject}
                                             </div>
                                         ) : null}

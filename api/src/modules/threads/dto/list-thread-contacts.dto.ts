@@ -1,7 +1,8 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Channel, ExternalIntegrationProvider, MsgStatus, ThreadOrigin } from '@/generated/prisma';
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import {
+    IsBoolean,
     IsDateString,
     IsEnum,
     IsIn,
@@ -68,6 +69,15 @@ export class ListThreadContactsDto {
     @IsOptional()
     @IsDateString()
     date_to?: string;
+
+    @ApiPropertyOptional({
+        description:
+            'Only contacts with a conversation where we sent the last email and they have not answered within the follow-up window',
+    })
+    @IsOptional()
+    @Transform(({ value }) => value === 'true' || value === true)
+    @IsBoolean()
+    needs_follow_up?: boolean;
 
     @ApiPropertyOptional({ default: 1, minimum: 1 })
     @IsOptional()

@@ -78,6 +78,8 @@ export const ApiRoutes = {
     threads: {
         list: "/threads",
         detail: (uuid: string) => `/threads/${uuid}`,
+        dismiss_follow_up: (uuid: string) => `/threads/${uuid}/dismiss-follow-up`,
+        mark_read: (uuid: string) => `/threads/${uuid}/mark-read`,
     },
     dashboard: {
         prefix: "/dashboard",

@@ -117,6 +117,26 @@ export const getThreadDetail = async (uuid: string): Promise<ThreadDetail> => {
     }
 };
 
+export const markThreadRead = async (uuid: string): Promise<{ uuid: string; read: true }> => {
+    try {
+        const response = await axiosInstance.post(ApiRoutes.threads.mark_read(uuid));
+        return response.data;
+    } catch (error: any) {
+        throw new Error(error?.response?.data?.message || "Failed to mark conversation as read.");
+    }
+};
+
+export const dismissThreadFollowUp = async (
+    uuid: string,
+): Promise<{ uuid: string; dismissed: true }> => {
+    try {
+        const response = await axiosInstance.post(ApiRoutes.threads.dismiss_follow_up(uuid));
+        return response.data;
+    } catch (error: any) {
+        throw new Error(error?.response?.data?.message || "Failed to update follow-up.");
+    }
+};
+
 export const deleteOutreachMessage = async (uuid: string): Promise<{ deleted: true }> => {
     try {
         const response = await axiosInstance.delete(ApiRoutes.outreach.delete_message(uuid));

@@ -1,4 +1,13 @@
-import { Controller, Get, NotFoundException, Param, Query, UseGuards } from '@nestjs/common';
+import {
+    Controller,
+    Get,
+    HttpCode,
+    NotFoundException,
+    Param,
+    Post,
+    Query,
+    UseGuards,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from '@/shared/decorators/current-user.decorator';
 import { JwtGuard } from '@/shared/guards/jwt.guard';
@@ -34,5 +43,35 @@ export class ThreadsController {
             throw new NotFoundException(`Thread ${uuid} not found`);
         }
         return detail;
+    }
+
+    @Post(':uuid/mark-read')
+    @HttpCode(200)
+    @ApiOperation({ summary: 'Mark a thread\'s replies as read (clears the unread-reply flag)' })
+    async markRead(
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
+        @Param('uuid') uuid: string,
+    ) {
+        const found = await this.threadsService.markRead(organisation_uuid, uuid);
+        if (!found) {
+            throw new NotFoundException(`Thread ${uuid} not found`);
+        }
+        return { uuid, read: true };
+    }
+
+    @Post(':uuid/dismiss-follow-up')
+    @HttpCode(200)
+    @ApiOperation({
+        summary: 'Mark a thread as not needing a follow-up (it reopens on the next send or reply)',
+    })
+    async dismissFollowUp(
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
+        @Param('uuid') uuid: string,
+    ) {
+        const found = await this.threadsService.dismissFollowUp(organisation_uuid, uuid);
+        if (!found) {
+            throw new NotFoundException(`Thread ${uuid} not found`);
+        }
+        return { uuid, dismissed: true };
     }
 }

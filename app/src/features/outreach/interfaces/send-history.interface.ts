@@ -64,6 +64,14 @@ export interface SendHistoryMessage {
     sequence_step_uuid: string | null;
     thread_uuid: string | null;
     sent_by_user_uuid: string | null;
+    /** True on the email that received the contact's latest reply, until someone opens the conversation. */
+    has_unread_reply: boolean;
+    /** True on the email that received the contact's latest reply while we still owe them an answer. */
+    needs_reply: boolean;
+    /** True on the latest sent email of a conversation we're now waiting on the contact to answer. */
+    needs_follow_up: boolean;
+    /** When that email went out - i.e. how long they've been quiet. Null unless `needs_follow_up`. */
+    follow_up_since: string | null;
     channel: Channel;
     subject: string | null;
     content: string;
@@ -100,6 +108,7 @@ export interface ListSendHistoryQuery {
     date_from?: string;
     date_to?: string;
     history_only?: boolean;
+    needs_follow_up?: boolean;
 }
 
 export interface SendHistoryListResponse {
@@ -118,6 +127,9 @@ export interface InboxContactSummary {
     origins: ThreadOrigin[];
     last_thread_uuid: string | null;
     needs_reply: boolean;
+    needs_follow_up: boolean;
+    /** Any of the contact's conversations has a reply nobody has opened yet. */
+    has_unread_reply: boolean;
 }
 
 export interface ListInboxContactsQuery {
@@ -134,6 +146,7 @@ export interface ListInboxContactsQuery {
     sequence_uuid?: string;
     date_from?: string;
     date_to?: string;
+    needs_follow_up?: boolean;
 }
 
 export interface InboxContactsListResponse {

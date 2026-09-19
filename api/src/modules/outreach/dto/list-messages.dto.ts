@@ -94,6 +94,16 @@ export class ListMessagesDto {
     @IsBoolean()
     history_only?: boolean;
 
+    @ApiPropertyOptional({
+        default: false,
+        description:
+            'Only the latest sent email of each conversation that needs a follow-up (we sent last, no reply within the follow-up window)',
+    })
+    @IsOptional()
+    @Transform(({ value }) => value === 'true' || value === true)
+    @IsBoolean()
+    needs_follow_up?: boolean;
+
     @ApiPropertyOptional({ default: 1, minimum: 1 })
     @IsOptional()
     @Type(() => Number)

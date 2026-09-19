@@ -1,7 +1,7 @@
 import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { Logger } from '@nestjs/common';
 import { Job } from 'bullmq';
-import { ReminderStatus, ReminderType } from '@/generated/prisma';
+import { ReminderStatus, ReminderType, ThreadReplyState } from '@/generated/prisma';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { NotificationsGateway } from '@/gateways/notifications.gateway';
 import { REMINDER_TRIGGER_QUEUE } from '@/core/queues/queues.constants';
@@ -51,6 +51,24 @@ export class ReminderTriggerWorker extends WorkerHost {
         if (reminder.status !== ReminderStatus.PENDING) {
             this.logger.warn(`Reminder ${reminder.uuid} is ${reminder.status} — skipping`);
             return;
+        }
+
+        if (reminder.type === ReminderType.FOLLOW_UP && reminder.outreach_message?.thread_uuid) {
+            // The follow-up is only worth surfacing while we're still the ones waiting: a reply,
+            // a dismissal from send history, or a bounce moves the thread off AWAITING_THEM.
+            const thread = await this.prisma.messageThread.findUnique({
+                where: { uuid: reminder.outreach_message.thread_uuid },
+                select: { reply_state: true },
+            });
+            if (thread && thread.reply_state !== ThreadReplyState.AWAITING_THEM) {
+                await this.remindersService.update(reminder.organisation_uuid, reminder.uuid, {
+                    status: ReminderStatus.CANCELLED,
+                });
+                this.logger.log(
+                    `Follow-up reminder ${reminder.uuid} cancelled - thread is ${thread.reply_state}`,
+                );
+                return;
+            }
         }
 
         if (

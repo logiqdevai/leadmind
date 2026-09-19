@@ -3,9 +3,11 @@ import {
     createAndSendMessage,
     createDraftMessage,
     deleteOutreachMessage,
+    dismissThreadFollowUp,
     getOutreachMessageThread,
     getThreadDetail,
     listInboxContacts,
+    markThreadRead,
     sendOutreachMessage,
     updateOutreachMessage,
 } from "../services/outreach.service";
@@ -154,6 +156,55 @@ export function useInboxContacts(query: ListInboxContactsQuery) {
         queryKey: inboxContactsQueryKeys.list(query),
         queryFn: () => listInboxContacts(query),
         placeholderData: (prev) => prev,
+    });
+}
+
+/**
+ * Clears the unread-reply styling when a conversation is opened. Silent - no toast - since it
+ * happens as a side effect of viewing, like opening an email.
+ */
+export function useMarkThreadRead() {
+    const qc = useQueryClient();
+    return useMutation({
+        mutationFn: (vars: { threadUuid: string; contactUuid?: string | null }) =>
+            markThreadRead(vars.threadUuid),
+        onSuccess: (_data, vars) => {
+            qc.invalidateQueries({ queryKey: sendHistoryQueryKeys.all });
+            qc.invalidateQueries({ queryKey: inboxContactsQueryKeys.all });
+            qc.invalidateQueries({ queryKey: ["thread-detail", vars.threadUuid] });
+            if (vars.contactUuid) {
+                qc.invalidateQueries({ queryKey: contactsQueryKeys.threads(vars.contactUuid) });
+            }
+        },
+    });
+}
+
+/**
+ * "No follow-up needed" - closes a conversation out of the needs-follow-up list. Refreshes every
+ * surface that shows the marker (send-history table, inbox contact list, the contact's threads).
+ */
+export function useDismissFollowUp() {
+    const qc = useQueryClient();
+    return useMutation({
+        mutationFn: (vars: { threadUuid: string; contactUuid?: string }) =>
+            dismissThreadFollowUp(vars.threadUuid),
+        onSuccess: (_data, vars) => {
+            qc.invalidateQueries({ queryKey: sendHistoryQueryKeys.all });
+            qc.invalidateQueries({ queryKey: inboxContactsQueryKeys.all });
+            qc.invalidateQueries({ queryKey: ["thread-detail", vars.threadUuid] });
+            if (vars.contactUuid) {
+                qc.invalidateQueries({ queryKey: contactsQueryKeys.threads(vars.contactUuid) });
+            }
+            toast({ title: "Marked as no follow-up needed", duration: 2000 });
+        },
+        onError: (error: Error) => {
+            toast({
+                title: "Could not update follow-up",
+                description: error.message,
+                duration: 3000,
+                variant: "error",
+            });
+        },
     });
 }
 

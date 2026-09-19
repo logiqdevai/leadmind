@@ -9,11 +9,12 @@ import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { ComposeMessageModal } from "@/features/messaging/components/compose-message-modal";
 import { EnrollInSequenceModal } from "@/features/sequences/components/enroll-in-sequence-modal";
 import { useContact, useContactThreads } from "@/features/contacts/hooks/use-contacts";
-import { useSendOutreachMessage } from "@/features/outreach/hooks/use-outreach";
+import { useDismissFollowUp, useSendOutreachMessage } from "@/features/outreach/hooks/use-outreach";
 import { useCancelEnrollment } from "@/features/sequences/hooks/use-sequences";
 import { SequenceEnrollmentStatus } from "@/features/sequences/interfaces/sequence.interface";
 import { MsgStatus, type ConversationThread } from "@/features/contacts/interfaces/contact.interface";
 import { ORIGIN_COLOR, ORIGIN_LABEL } from "@/features/messaging/components/thread-conversation";
+import { FollowUpBadge, ReplyBadge } from "../follow-up-marker";
 
 interface InboxThreadListProps {
     contactUuid: string;
@@ -34,6 +35,7 @@ export function InboxThreadList({
     const { data: contact } = useContact(contactUuid);
     const { data: threads = [], isLoading } = useContactThreads(contactUuid);
     const sendMessage = useSendOutreachMessage();
+    const dismissFollowUp = useDismissFollowUp();
     const cancelEnrollmentMut = useCancelEnrollment();
     const [composeOpen, setComposeOpen] = useState(false);
     const [enrollOpen, setEnrollOpen] = useState(false);
@@ -98,7 +100,8 @@ export function InboxThreadList({
                                     type="button"
                                     onClick={() => onSelectThread(thread.uuid)}
                                     className={cn(
-                                        "flex w-full flex-col gap-1 px-3 py-2.5 text-left transition-colors hover:bg-surface-secondary/60",
+                                        "flex w-full flex-col gap-1 border-l-2 border-transparent px-3 py-2.5 text-left transition-colors hover:bg-surface-secondary/60",
+                                        thread.has_unread_reply && "border-accent bg-accent/5",
                                         selectedThreadUuid === thread.uuid && "bg-accent/10",
                                     )}
                                 >
@@ -106,8 +109,11 @@ export function InboxThreadList({
                                         <Chip size="sm" variant="soft" color={ORIGIN_COLOR[thread.origin]}>
                                             <Chip.Label>{ORIGIN_LABEL[thread.origin]}</Chip.Label>
                                         </Chip>
-                                        {thread.needs_reply ? (
-                                            <span className="size-2 rounded-full bg-accent" aria-label="Needs reply" />
+                                        {thread.has_unread_reply || thread.needs_reply ? (
+                                            <ReplyBadge isUnread={thread.has_unread_reply} />
+                                        ) : null}
+                                        {thread.needs_follow_up ? (
+                                            <FollowUpBadge since={thread.last_outbound_at} />
                                         ) : null}
                                         {thread.last_message_at ? (
                                             <span className="ml-auto shrink-0 text-[11px] text-muted">
@@ -117,7 +123,12 @@ export function InboxThreadList({
                                             </span>
                                         ) : null}
                                     </span>
-                                    <span className="truncate text-sm text-foreground">
+                                    <span
+                                        className={cn(
+                                            "truncate text-sm text-foreground",
+                                            thread.has_unread_reply && "font-bold",
+                                        )}
+                                    >
                                         {thread.subject || "(no subject)"}
                                     </span>
                                     <span className="flex items-center gap-2 text-[11px] text-muted">
@@ -139,6 +150,23 @@ export function InboxThreadList({
                                             >
                                                 <RefreshCcw className="size-3" />
                                                 Resend
+                                            </span>
+                                        ) : null}
+                                        {thread.needs_follow_up ? (
+                                            <span
+                                                role="button"
+                                                tabIndex={0}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    if (dismissFollowUp.isPending) return;
+                                                    dismissFollowUp.mutate({
+                                                        threadUuid: thread.uuid,
+                                                        contactUuid,
+                                                    });
+                                                }}
+                                                className="hover:text-foreground hover:underline"
+                                            >
+                                                No follow-up needed
                                             </span>
                                         ) : null}
                                         {thread.sequence_enrollment?.status === SequenceEnrollmentStatus.ACTIVE ? (

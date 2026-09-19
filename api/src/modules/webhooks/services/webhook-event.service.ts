@@ -11,6 +11,7 @@ import {
     OutreachMessage,
     Prisma,
     SequenceEnrollmentStatus,
+    ThreadReplyState,
 } from '@/generated/prisma';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { REPLY_ANALYSIS_QUEUE } from '@/core/queues/queues.constants';
@@ -81,18 +82,35 @@ export class WebhookEventService {
         provider_received_id: string,
         from: string,
         organisation_uuid: string,
-    ): Promise<{ provider_message_id: string; email: ReceivedEmailContent | null } | null> {
+    ): Promise<{
+        provider_message_id: string;
+        outreach_message_uuid: string;
+        email: ReceivedEmailContent | null;
+    } | null> {
         const { ids: headerIds, email } = await this.fetchReceivedEmail(
             provider_received_id,
             organisation_uuid,
         );
-        for (const provider_message_id of headerIds) {
+        // Header tokens arrive most-specific first (In-Reply-To, then References oldest to newest),
+        // so the first hit is the message the contact actually replied to. Match on either the
+        // provider's id or the Message-ID we generated and set on the outbound email - Resend
+        // may not echo our Message-ID back as its own email id, so relying on
+        // provider_message_id alone silently pushed those replies into the fallback below.
+        for (const token of headerIds) {
             const message = await this.prisma.outreachMessage.findFirst({
-                where: { provider_message_id, organisation_uuid },
-                select: { provider_message_id: true },
+                where: {
+                    organisation_uuid,
+                    provider_message_id: { not: null },
+                    OR: [{ provider_message_id: token }, { message_id: token }],
+                },
+                select: { uuid: true, provider_message_id: true },
             });
             if (message?.provider_message_id) {
-                return { provider_message_id: message.provider_message_id, email };
+                return {
+                    provider_message_id: message.provider_message_id,
+                    outreach_message_uuid: message.uuid,
+                    email,
+                };
             }
         }
 
@@ -123,12 +141,20 @@ export class WebhookEventService {
                 },
             },
             orderBy: { sent_at: 'desc' },
-            select: { provider_message_id: true },
+            select: { uuid: true, provider_message_id: true },
         });
 
-        return message?.provider_message_id
-            ? { provider_message_id: message.provider_message_id, email }
-            : null;
+        if (!message?.provider_message_id) {
+            return null;
+        }
+        this.logger.warn(
+            `[resolve] Reply ${provider_received_id} from ${from} matched no Message-ID header - fell back to the contact's latest sent email message=${message.uuid}`,
+        );
+        return {
+            provider_message_id: message.provider_message_id,
+            outreach_message_uuid: message.uuid,
+            email,
+        };
     }
 
     async ingest(event: WebhookEvent): Promise<void> {
@@ -137,9 +163,20 @@ export class WebhookEventService {
             `[ingest] kind=${event.kind} provider_message_id=${event.provider_message_id} outreach_message_uuid=${outreach_message_uuid ?? 'none'}`,
         );
 
-        let message = await this.prisma.outreachMessage.findFirst({
-            where: { provider_message_id: event.provider_message_id },
-        });
+        // A resolved reply already knows exactly which message it answers (possibly matched by our
+        // own Message-ID rather than the provider's id), so trust that uuid over the provider-id lookup.
+        let message =
+            event.kind === 'replied' && outreach_message_uuid
+                ? await this.prisma.outreachMessage.findUnique({
+                      where: { uuid: outreach_message_uuid },
+                  })
+                : null;
+
+        if (!message) {
+            message = await this.prisma.outreachMessage.findFirst({
+                where: { provider_message_id: event.provider_message_id },
+            });
+        }
 
         if (!message && outreach_message_uuid) {
             this.logger.warn(
@@ -343,6 +380,34 @@ export class WebhookEventService {
             }
         }
 
+        // Conversation turn tracking: a reply hands the ball to us; a bounce / failure / spam
+        // complaint means nobody is waiting on anybody, so close it out of "needs follow-up".
+        if (message.thread_uuid && message.channel === Channel.EMAIL) {
+            if (event.kind === 'replied') {
+                ops.push(
+                    this.prisma.messageThread.update({
+                        where: { uuid: message.thread_uuid },
+                        data: {
+                            last_inbound_at: now,
+                            reply_state: ThreadReplyState.AWAITING_US,
+                            has_unread_reply: true,
+                        },
+                    }),
+                );
+            } else if (
+                event.kind === 'bounced' ||
+                event.kind === 'failed' ||
+                event.kind === 'complained'
+            ) {
+                ops.push(
+                    this.prisma.messageThread.update({
+                        where: { uuid: message.thread_uuid },
+                        data: { reply_state: ThreadReplyState.NONE },
+                    }),
+                );
+            }
+        }
+
         let noteOpIndex: number | null = null;
 
         if (event.kind === 'replied') {
@@ -483,14 +548,16 @@ export class WebhookEventService {
     }
 
     /**
-     * A reply from a contact also cancels their pending "did they go quiet after we
-     * last emailed them" follow-up check, regardless of which message/thread it landed
-     * on - covers sequence-thread replies and any manually-sent email alike.
+     * A reply cancels the pending "did they go quiet after we last emailed them" follow-up
+     * check for the conversation it landed on - covers sequence-thread replies and any
+     * manually-sent email alike. Other conversations with the same contact keep their own
+     * follow-up; a message with no thread (legacy rows) falls back to the whole contact.
      */
     private async cancelFollowUpReminderIfPending(message: OutreachMessage): Promise<void> {
         const cancelled = await this.remindersService.cancelPendingFollowUp(
             message.organisation_uuid,
             message.contact_uuid,
+            message.thread_uuid,
         );
         if (cancelled) {
             this.logger.log(

@@ -186,6 +186,15 @@ export interface OutreachMessage {
     updated_at: string;
 }
 
+/** Whose turn it is in a conversation: theirs (we sent last), ours (they replied last), or neither. */
+export const ThreadReplyState = {
+    NONE: "NONE",
+    AWAITING_US: "AWAITING_US",
+    AWAITING_THEM: "AWAITING_THEM",
+} as const;
+
+export type ThreadReplyState = (typeof ThreadReplyState)[keyof typeof ThreadReplyState];
+
 export const ThreadOrigin = {
     MANUAL: "MANUAL",
     SEQUENCE: "SEQUENCE",
@@ -206,7 +215,14 @@ export interface ConversationThread {
     campaign_uuid: string | null;
     last_message_at: string | null;
     message_count: number;
+    last_inbound_at: string | null;
+    last_outbound_at: string | null;
+    reply_state: ThreadReplyState;
+    /** The contact's latest reply hasn't been opened yet. */
+    has_unread_reply: boolean;
     needs_reply: boolean;
+    /** We sent last and the contact hasn't answered within the follow-up window. */
+    needs_follow_up: boolean;
     last_message: { uuid: string; status: MsgStatus } | null;
     sequence_enrollment: {
         uuid: string;

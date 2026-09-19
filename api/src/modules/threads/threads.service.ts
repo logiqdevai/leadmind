@@ -1,13 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import {
     Channel,
-    InteractionType,
     MsgStatus,
     Prisma,
     ThreadOrigin,
+    ThreadReplyState,
 } from '@/generated/prisma';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { ListThreadContactsDto } from './dto/list-thread-contacts.dto';
+import {
+    followUpCutoff,
+    isThreadNeedingFollowUp,
+    needsFollowUpThreadWhere,
+    ThreadPriority,
+    threadPriority,
+} from './thread-follow-up.util';
 
 export type ThreadClient = PrismaService | Prisma.TransactionClient;
 
@@ -101,11 +108,18 @@ export class ThreadsService {
     }
 
     async listThreadsForContact(organisation_uuid: string, contact_uuid: string) {
-        const threads = await this.prisma.messageThread.findMany({
-            where: { organisation_uuid, contact_uuid },
-            orderBy: { last_message_at: 'desc' },
-        });
-        const activityByThread = await this.getThreadActivity(threads.map((thread) => thread.uuid));
+        const [threads, contact] = await Promise.all([
+            this.prisma.messageThread.findMany({
+                where: { organisation_uuid, contact_uuid },
+                orderBy: { last_message_at: 'desc' },
+            }),
+            this.prisma.contact.findUnique({
+                where: { uuid: contact_uuid },
+                select: { unsubscribed_at: true },
+            }),
+        ]);
+        const activityByThread = await this.getThreadActivity(threads);
+        const cutoff = followUpCutoff();
 
         // MessageThread only stores the raw sequence_enrollment_uuid (no Prisma relation), so
         // enrollment status/sequence name for the "cancel sequence" quick action needs a join here.
@@ -124,11 +138,25 @@ export class ThreadsService {
             : [];
         const enrollmentByUuid = new Map(enrollments.map((enrollment) => [enrollment.uuid, enrollment]));
 
-        return threads.map((thread) => {
+        const unsubscribed_at = contact?.unsubscribed_at ?? null;
+
+        // Unread replies, then replies we owe an answer to, then quiet conversations, then the
+        // rest - each tier keeps the recency order `threads` already arrived in (stable sort).
+        const prioritised = [...threads].sort(
+            (a, b) =>
+                threadPriority(a, unsubscribed_at, cutoff) - threadPriority(b, unsubscribed_at, cutoff),
+        );
+
+        return prioritised.map((thread) => {
             const activity = activityByThread.get(thread.uuid);
             return {
                 ...thread,
                 needs_reply: activity?.needsReply ?? false,
+                needs_follow_up: isThreadNeedingFollowUp(
+                    thread,
+                    contact?.unsubscribed_at ?? null,
+                    cutoff,
+                ),
                 last_message: activity?.lastMessage ?? null,
                 sequence_enrollment: thread.sequence_enrollment_uuid
                     ? (enrollmentByUuid.get(thread.sequence_enrollment_uuid) ?? null)
@@ -159,8 +187,13 @@ export class ThreadsService {
               ).map((enrollment) => enrollment.uuid)
             : null;
 
+        const cutoff = followUpCutoff();
+
         const where: Prisma.MessageThreadWhereInput = {
             organisation_uuid,
+            // AND (not a spread of the same keys) so it composes with the channel/contact-search
+            // filters below instead of clobbering them.
+            ...(filters.needs_follow_up && { AND: [needsFollowUpThreadWhere(cutoff)] }),
             ...(filters.channel && { channel: filters.channel }),
             ...(filters.source && { origin: filters.source }),
             ...(filters.campaign_uuid && { campaign_uuid: filters.campaign_uuid }),
@@ -203,12 +236,43 @@ export class ThreadsService {
             }),
         };
 
-        const grouped = await this.prisma.messageThread.groupBy({
-            by: ['contact_uuid'],
-            where,
-            _max: { last_message_at: true },
-            orderBy: { _max: { last_message_at: 'desc' } },
-        });
+        const distinctContactsWhere = (extra: Prisma.MessageThreadWhereInput) =>
+            this.prisma.messageThread.findMany({
+                where: { AND: [where, extra] },
+                select: { contact_uuid: true },
+                distinct: ['contact_uuid'],
+            });
+
+        const [groupedByRecency, unreadContacts, awaitingUsContacts, followUpContacts] =
+            await Promise.all([
+                this.prisma.messageThread.groupBy({
+                    by: ['contact_uuid'],
+                    where,
+                    _max: { last_message_at: true },
+                    orderBy: { _max: { last_message_at: 'desc' } },
+                }),
+                distinctContactsWhere({ has_unread_reply: true }),
+                distinctContactsWhere({ reply_state: ThreadReplyState.AWAITING_US }),
+                distinctContactsWhere(needsFollowUpThreadWhere(cutoff)),
+            ]);
+
+        // Contacts we need to act on float to the top: unread reply, then a reply we haven't
+        // answered, then a follow-up that's due. Array#sort is stable, so within a tier the
+        // most-recently-active contact still comes first.
+        const tierByContact = new Map<string, number>();
+        for (const [tier, rows] of [
+            [ThreadPriority.NEEDS_FOLLOW_UP, followUpContacts],
+            [ThreadPriority.AWAITING_OUR_REPLY, awaitingUsContacts],
+            [ThreadPriority.UNREAD_REPLY, unreadContacts],
+        ] as const) {
+            // Written lowest-priority first so a higher tier overwrites it.
+            for (const row of rows) tierByContact.set(row.contact_uuid, tier);
+        }
+        const grouped = [...groupedByRecency].sort(
+            (a, b) =>
+                (tierByContact.get(a.contact_uuid) ?? ThreadPriority.NONE) -
+                (tierByContact.get(b.contact_uuid) ?? ThreadPriority.NONE),
+        );
 
         const total = grouped.length;
         const totalPages = Math.max(1, Math.ceil(total / limit));
@@ -222,7 +286,7 @@ export class ThreadsService {
         const [contacts, threads] = await Promise.all([
             this.prisma.contact.findMany({
                 where: { uuid: { in: contactUuids } },
-                select: { uuid: true, name: true, email: true, phone: true },
+                select: { uuid: true, name: true, email: true, phone: true, unsubscribed_at: true },
             }),
             this.prisma.messageThread.findMany({
                 where: { ...where, contact_uuid: { in: contactUuids } },
@@ -230,7 +294,7 @@ export class ThreadsService {
             }),
         ]);
 
-        const activityByThread = await this.getThreadActivity(threads.map((thread) => thread.uuid));
+        const activityByThread = await this.getThreadActivity(threads);
 
         const threadsByContact = new Map<string, typeof threads>();
         for (const thread of threads) {
@@ -247,8 +311,9 @@ export class ThreadsService {
                 if (!contact) return null;
                 const contactThreads = threadsByContact.get(group.contact_uuid) ?? [];
                 const latestThread = contactThreads[0];
+                const { unsubscribed_at, ...publicContact } = contact;
                 return {
-                    contact,
+                    contact: publicContact,
                     last_message_at: group._max.last_message_at,
                     last_channel: latestThread?.channel ?? null,
                     thread_count: contactThreads.length,
@@ -257,6 +322,10 @@ export class ThreadsService {
                     needs_reply: contactThreads.some(
                         (thread) => activityByThread.get(thread.uuid)?.needsReply,
                     ),
+                    needs_follow_up: contactThreads.some((thread) =>
+                        isThreadNeedingFollowUp(thread, unsubscribed_at, cutoff),
+                    ),
+                    has_unread_reply: contactThreads.some((thread) => thread.has_unread_reply),
                 };
             })
             .filter((row): row is NonNullable<typeof row> => row !== null);
@@ -267,75 +336,83 @@ export class ThreadsService {
     /**
      * Per-thread activity summary: the latest outbound message (uuid + status, so callers can
      * offer "resend" without a second round trip) and whether the thread "needs reply" - i.e.
-     * its most recent activity is an inbound reply that hasn't been followed by a new outbound
-     * message yet.
+     * the contact's reply is the latest thing that happened (persisted `reply_state`, which only
+     * moves off AWAITING_US once one of our replies actually sends - a draft or failed reply
+     * doesn't clear it).
      */
     private async getThreadActivity(
-        thread_uuids: string[],
+        threads: { uuid: string; reply_state: ThreadReplyState }[],
     ): Promise<Map<string, { needsReply: boolean; lastMessage: { uuid: string; status: MsgStatus } | null }>> {
         const result = new Map<
             string,
             { needsReply: boolean; lastMessage: { uuid: string; status: MsgStatus } | null }
         >();
-        if (thread_uuids.length === 0) {
+        if (threads.length === 0) {
             return result;
         }
 
         const messages = await this.prisma.outreachMessage.findMany({
-            where: { thread_uuid: { in: thread_uuids } },
-            select: { uuid: true, thread_uuid: true, status: true, created_at: true },
+            where: { thread_uuid: { in: threads.map((thread) => thread.uuid) } },
+            select: { uuid: true, thread_uuid: true, status: true },
             orderBy: { created_at: 'asc' },
         });
 
-        const messageUuidToThread = new Map(
-            messages.map((message) => [message.uuid, message.thread_uuid as string]),
-        );
-        const latestMessageByThread = new Map<
-            string,
-            { uuid: string; status: MsgStatus; at: number }
-        >();
+        const latestMessageByThread = new Map<string, { uuid: string; status: MsgStatus }>();
         for (const message of messages) {
             if (!message.thread_uuid) continue;
             latestMessageByThread.set(message.thread_uuid, {
                 uuid: message.uuid,
                 status: message.status,
-                at: message.created_at.getTime(),
             });
         }
 
-        const messageUuids = messages.map((message) => message.uuid);
-        const replies = messageUuids.length
-            ? await this.prisma.interaction.findMany({
-                  where: {
-                      type: InteractionType.REPLY_RECEIVED,
-                      outreach_message_uuid: { in: messageUuids },
-                  },
-                  select: { outreach_message_uuid: true, created_at: true },
-              })
-            : [];
-
-        const latestReplyAtByThread = new Map<string, number>();
-        for (const reply of replies) {
-            const thread_uuid = reply.outreach_message_uuid
-                ? messageUuidToThread.get(reply.outreach_message_uuid)
-                : undefined;
-            if (!thread_uuid) continue;
-            const at = reply.created_at.getTime();
-            const current = latestReplyAtByThread.get(thread_uuid) ?? 0;
-            if (at > current) {
-                latestReplyAtByThread.set(thread_uuid, at);
-            }
-        }
-
-        for (const thread_uuid of thread_uuids) {
-            const lastMessage = latestMessageByThread.get(thread_uuid) ?? null;
-            const latestReplyAt = latestReplyAtByThread.get(thread_uuid) ?? 0;
-            result.set(thread_uuid, {
-                needsReply: latestReplyAt > (lastMessage?.at ?? 0),
-                lastMessage: lastMessage ? { uuid: lastMessage.uuid, status: lastMessage.status } : null,
+        for (const thread of threads) {
+            result.set(thread.uuid, {
+                needsReply: thread.reply_state === ThreadReplyState.AWAITING_US,
+                lastMessage: latestMessageByThread.get(thread.uuid) ?? null,
             });
         }
         return result;
+    }
+
+    /**
+     * Clears the unread-reply flag - called when someone opens the conversation. Shared across
+     * the organisation, so one member reading it clears it for everyone. Returns false when the
+     * thread doesn't exist in this organisation.
+     */
+    async markRead(organisation_uuid: string, thread_uuid: string): Promise<boolean> {
+        const { count } = await this.prisma.messageThread.updateMany({
+            where: { uuid: thread_uuid, organisation_uuid, has_unread_reply: true },
+            data: { has_unread_reply: false },
+        });
+        if (count > 0) return true;
+
+        const exists = await this.prisma.messageThread.count({
+            where: { uuid: thread_uuid, organisation_uuid },
+        });
+        return exists > 0;
+    }
+
+    /**
+     * Closes out a thread's "waiting on them" state without sending anything - the "no follow-up
+     * needed" action. The next email sent on the thread (or reply received) reopens it.
+     * Returns false when the thread doesn't exist in this organisation.
+     */
+    async dismissFollowUp(organisation_uuid: string, thread_uuid: string): Promise<boolean> {
+        const { count } = await this.prisma.messageThread.updateMany({
+            where: {
+                uuid: thread_uuid,
+                organisation_uuid,
+                reply_state: ThreadReplyState.AWAITING_THEM,
+            },
+            data: { reply_state: ThreadReplyState.NONE },
+        });
+        if (count > 0) return true;
+
+        const exists = await this.prisma.messageThread.count({
+            where: { uuid: thread_uuid, organisation_uuid },
+        });
+        return exists > 0;
     }
 
     /**

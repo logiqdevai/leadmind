@@ -1,4 +1,4 @@
-import { type ComponentType, useState } from "react";
+import { type ComponentType, useEffect, useState } from "react";
 import { Chip } from "@heroui/react";
 import { formatDistanceToNow } from "date-fns";
 import {
@@ -18,7 +18,7 @@ import {
     type OutreachMessage,
 } from "@/features/contacts/interfaces/contact.interface";
 import { useAiDraftMessage, useReplyToContact } from "@/features/contacts/hooks/use-contacts";
-import { useThreadDetail } from "@/features/outreach/hooks/use-outreach";
+import { useMarkThreadRead, useThreadDetail } from "@/features/outreach/hooks/use-outreach";
 import {
     MessageComposer,
     type AiGenerateArgs,
@@ -266,6 +266,17 @@ function ReplyBox({
  */
 export function ThreadConversation({ threadUuid, contactUuid, onReplySent }: ThreadConversationProps) {
     const { data, isLoading } = useThreadDetail(threadUuid);
+    const markRead = useMarkThreadRead();
+    const hasUnreadReply = data?.thread.has_unread_reply ?? false;
+
+    // Opening a conversation reads it: clears the bold "unread reply" styling on the lists.
+    useEffect(() => {
+        if (threadUuid && hasUnreadReply) {
+            markRead.mutate({ threadUuid, contactUuid });
+        }
+        // markRead is a fresh object each render; the flag flipping back to false ends this.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [threadUuid, hasUnreadReply]);
 
     // The most recent outbound email in the thread that has a reply on it - that's what a new
     // reply threads onto (In-Reply-To). Earlier messages may also have replies, but replying

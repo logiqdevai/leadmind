@@ -16,6 +16,7 @@ import {
     STATUS_OPTIONS,
     useSendHistoryFilterOptions,
 } from "../../utils/send-history-filter-options";
+import { FollowUpFilterToggle } from "../follow-up-marker";
 import { SendHistoryFiltersModal } from "../send-history-filters-modal";
 import { InboxContactList } from "./inbox-contact-list";
 import { InboxThreadList } from "./inbox-thread-list";
@@ -43,6 +44,7 @@ export function SendHistoryInboxView() {
     const sentByUserUuid = searchParams.get("inbox_sent_by_user_uuid") ?? "";
     const dateFrom = searchParams.get("inbox_date_from") ?? "";
     const dateTo = searchParams.get("inbox_date_to") ?? "";
+    const needsFollowUp = searchParams.get("inbox_needs_follow_up") === "true";
 
     const debouncedSearch = useDebouncedValue(search, 300);
     const { emailAccounts, campaignOptions, sequenceOptions, userOptions } =
@@ -71,6 +73,7 @@ export function SendHistoryInboxView() {
             "inbox_sent_by_user_uuid",
             "inbox_date_from",
             "inbox_date_to",
+            "inbox_needs_follow_up",
             "inbox_page",
         ]) {
             params.delete(key);
@@ -106,6 +109,7 @@ export function SendHistoryInboxView() {
             sent_by_user_uuid: sentByUserUuid || undefined,
             date_from: dateFrom ? dateToStartIso(dateFrom) : undefined,
             date_to: dateTo ? dateToEndIso(dateTo) : undefined,
+            needs_follow_up: needsFollowUp || undefined,
         }),
         [
             page,
@@ -120,6 +124,7 @@ export function SendHistoryInboxView() {
             sentByUserUuid,
             dateFrom,
             dateTo,
+            needsFollowUp,
         ],
     );
 
@@ -179,6 +184,15 @@ export function SendHistoryInboxView() {
                         />
                     </TextField>
                 </div>
+                <FollowUpFilterToggle
+                    isActive={needsFollowUp}
+                    onToggle={() =>
+                        updateParams({
+                            inbox_needs_follow_up: needsFollowUp ? null : "true",
+                            inbox_page: null,
+                        })
+                    }
+                />
                 <Button
                     size="sm"
                     variant={hasActiveFilters ? "primary" : "secondary"}

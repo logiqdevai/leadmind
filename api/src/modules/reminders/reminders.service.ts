@@ -254,17 +254,24 @@ export class RemindersService {
     }
 
     /**
-     * Cancels the contact's pending FOLLOW_UP reminder (if any) - "did they go quiet
-     * after we last emailed them." Called whenever a reply arrives from that contact,
-     * regardless of which specific message/thread it landed on.
+     * Cancels the pending FOLLOW_UP reminder (if any) - "did they go quiet after we last
+     * emailed them." Called when a reply arrives. Scoped to the conversation the reply landed
+     * on when `thread_uuid` is known, so a reply on one thread doesn't silence the follow-up
+     * for a different, still-quiet thread with the same contact; without it, falls back to the
+     * contact's pending follow-up.
      */
-    async cancelPendingFollowUp(organisation_uuid: string, contact_uuid: string): Promise<boolean> {
+    async cancelPendingFollowUp(
+        organisation_uuid: string,
+        contact_uuid: string,
+        thread_uuid?: string | null,
+    ): Promise<boolean> {
         const existing = await this.prisma.reminder.findFirst({
             where: {
                 organisation_uuid,
                 contact_uuid,
                 type: ReminderType.FOLLOW_UP,
                 status: ReminderStatus.PENDING,
+                ...(thread_uuid && { outreach_message: { thread_uuid } }),
             },
         });
         if (!existing) return false;
@@ -276,16 +283,17 @@ export class RemindersService {
     }
 
     /**
-     * Reschedules the contact's pending FOLLOW_UP reminder if one exists, otherwise
-     * creates one - so there's always at most one "check back if they're still quiet"
-     * reminder per contact. Called after any manual/reply email we send them (not
-     * automated sequence steps, which own their own advancement logic).
+     * Reschedules the conversation's pending FOLLOW_UP reminder if one exists, otherwise
+     * creates one - so there's at most one "check back if they're still quiet" reminder per
+     * thread (per contact when the message has no thread). Called after a manual reply we send
+     * (not automated sequence steps, which own their own advancement logic).
      */
     async upsertFollowUp(
         organisation_uuid: string,
         contact_uuid: string,
         outreach_message_uuid: string,
         remind_at: Date,
+        thread_uuid?: string | null,
     ) {
         const existing = await this.prisma.reminder.findFirst({
             where: {
@@ -293,13 +301,16 @@ export class RemindersService {
                 contact_uuid,
                 type: ReminderType.FOLLOW_UP,
                 status: ReminderStatus.PENDING,
+                ...(thread_uuid && { outreach_message: { thread_uuid } }),
             },
         });
 
         if (existing) {
+            // Clearing metadata drops the AI draft written for the previous send - the new
+            // trigger drafts a fresh follow-up against the updated conversation.
             await this.prisma.reminder.update({
                 where: { uuid: existing.uuid },
-                data: { outreach_message_uuid },
+                data: { outreach_message_uuid, metadata: Prisma.DbNull },
             });
             return this.update(organisation_uuid, existing.uuid, {
                 remind_at: remind_at.toISOString(),

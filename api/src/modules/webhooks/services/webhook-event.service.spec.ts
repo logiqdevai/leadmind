@@ -6,6 +6,7 @@ import {
     LeadStatus,
     MsgDirection,
     MsgStatus,
+    ThreadReplyState,
 } from '@/generated/prisma';
 import { WebhookEventService } from './webhook-event.service';
 
@@ -24,7 +25,12 @@ describe('WebhookEventService', () => {
     };
 
     function createService(overrides?: {
-        message?: { status?: MsgStatus; provider_message_id?: string } | null;
+        message?: {
+            status?: MsgStatus;
+            provider_message_id?: string;
+            message_id?: string | null;
+            thread_uuid?: string | null;
+        } | null;
         mcc?: { uuid: string; status: CampaignContactStatus } | null;
         receivedEmail?: { headers?: Record<string, string> } | null;
         contactStatus?: LeadStatus;
@@ -50,9 +56,21 @@ describe('WebhookEventService', () => {
                             return Promise.resolve(null);
                         }
                     }
+                    // OR: the message must satisfy at least one alternative (each alternative is a
+                    // set of field = value pairs).
+                    if (Array.isArray(where.OR)) {
+                        const matchesAny = where.OR.some((clause: Record<string, unknown>) =>
+                            Object.entries(clause).every(
+                                ([key, value]) => (message as any)[key] === value,
+                            ),
+                        );
+                        if (!matchesAny) return Promise.resolve(null);
+                    }
                     return Promise.resolve(message);
                 }),
-                findUnique: jest.fn().mockResolvedValue(null),
+                findUnique: jest.fn((args: any) =>
+                    Promise.resolve(message && args?.where?.uuid === message.uuid ? message : null),
+                ),
                 update: jest.fn().mockResolvedValue({}),
             },
             marketingCampaignContact: {
@@ -60,6 +78,9 @@ describe('WebhookEventService', () => {
                 update: jest.fn().mockResolvedValue({}),
             },
             marketingCampaign: {
+                update: jest.fn().mockResolvedValue({}),
+            },
+            messageThread: {
                 update: jest.fn().mockResolvedValue({}),
             },
             interaction: {
@@ -304,6 +325,112 @@ describe('WebhookEventService', () => {
         );
     });
 
+    it('hands the conversation to us (AWAITING_US) when a reply lands on a threaded message', async () => {
+        const { service, prisma } = createService({
+            message: { status: MsgStatus.OPENED, thread_uuid: 'thread-uuid' },
+            mcc: { uuid: 'mcc-uuid', status: CampaignContactStatus.OPENED },
+        });
+
+        await service.ingest({
+            kind: 'replied',
+            provider_message_id,
+            reply: { subject: 'Re: hello', text: 'Sounds good' },
+        });
+
+        expect(prisma.messageThread.update).toHaveBeenCalledWith({
+            where: { uuid: 'thread-uuid' },
+            data: {
+                last_inbound_at: expect.any(Date),
+                reply_state: ThreadReplyState.AWAITING_US,
+                has_unread_reply: true,
+            },
+        });
+    });
+
+    it('persists the inbound Message-ID so our reply can thread onto it', async () => {
+        const { service, prisma } = createService({
+            message: { status: MsgStatus.OPENED },
+            mcc: { uuid: 'mcc-uuid', status: CampaignContactStatus.OPENED },
+        });
+
+        await service.ingest({
+            kind: 'replied',
+            provider_message_id,
+            reply: { subject: 'Re: hello', text: 'Sounds good', message_id: '<inbound-1@mail.example.com>' },
+        });
+
+        expect(prisma.outreachMessage.update).toHaveBeenCalledWith(
+            expect.objectContaining({
+                data: expect.objectContaining({ inbound_message_id: '<inbound-1@mail.example.com>' }),
+            }),
+        );
+    });
+
+    it('attributes a reply to the exact message the resolver identified, not just by provider id', async () => {
+        const { service, prisma } = createService({
+            message: { status: MsgStatus.OPENED },
+            mcc: { uuid: 'mcc-uuid', status: CampaignContactStatus.OPENED },
+        });
+
+        await service.ingest({
+            kind: 'replied',
+            provider_message_id: 'some-other-provider-id',
+            metadata: { outreach_message_uuid: 'msg-uuid' },
+            reply: { subject: 'Re: hello', text: 'Sounds good' },
+        });
+
+        expect(prisma.outreachMessage.findUnique).toHaveBeenCalledWith({ where: { uuid: 'msg-uuid' } });
+        expect(prisma.outreachMessage.update).toHaveBeenCalledWith(
+            expect.objectContaining({
+                where: { uuid: 'msg-uuid' },
+                data: expect.objectContaining({ status: MsgStatus.REPLIED }),
+            }),
+        );
+    });
+
+    it('closes the thread out of follow-up tracking when a message bounces', async () => {
+        const { service, prisma } = createService({
+            message: { status: MsgStatus.SENT, thread_uuid: 'thread-uuid' },
+            mcc: { uuid: 'mcc-uuid', status: CampaignContactStatus.SENT },
+        });
+
+        await service.ingest({ kind: 'bounced', provider_message_id });
+
+        expect(prisma.messageThread.update).toHaveBeenCalledWith({
+            where: { uuid: 'thread-uuid' },
+            data: { reply_state: ThreadReplyState.NONE },
+        });
+    });
+
+    it('does not touch thread state for a delivery/open event', async () => {
+        const { service, prisma } = createService({
+            message: { thread_uuid: 'thread-uuid' },
+        });
+
+        await service.ingest({ kind: 'opened', provider_message_id });
+
+        expect(prisma.messageThread.update).not.toHaveBeenCalled();
+    });
+
+    it('scopes the reply\'s follow-up cancellation to the conversation it landed on', async () => {
+        const { service, remindersService } = createService({
+            message: { status: MsgStatus.OPENED, thread_uuid: 'thread-uuid' },
+            mcc: { uuid: 'mcc-uuid', status: CampaignContactStatus.OPENED },
+        });
+
+        await service.ingest({
+            kind: 'replied',
+            provider_message_id,
+            reply: { subject: 'Re: hello', text: 'Sounds good' },
+        });
+
+        expect(remindersService.cancelPendingFollowUp).toHaveBeenCalledWith(
+            organisation_uuid,
+            'contact-uuid',
+            'thread-uuid',
+        );
+    });
+
     it('enqueues a reply-analysis job for the placeholder note after a reply is ingested', async () => {
         const { service, replyAnalysisQueue } = createService({
             message: { status: MsgStatus.OPENED },
@@ -542,6 +669,29 @@ describe('WebhookEventService', () => {
         expect(resolved?.provider_message_id).toBe(smtpMessageId);
     });
 
+    it('resolves a reply by the Message-ID we generated when it differs from the provider id', async () => {
+        const ourMessageId = '11111111-2222-3333-4444-555555555555@leadmind.app';
+        const { service, prisma } = createService({
+            message: { provider_message_id: 'resend-assigned-id', message_id: ourMessageId },
+            receivedEmail: { headers: { 'in-reply-to': `<${ourMessageId}>` } },
+        });
+
+        const resolved = await service.resolveOutboundMessageIdFromReceived(
+            'received-id',
+            'lead@example.com',
+            organisation_uuid,
+        );
+
+        expect(resolved).toEqual(
+            expect.objectContaining({
+                provider_message_id: 'resend-assigned-id',
+                outreach_message_uuid: 'msg-uuid',
+            }),
+        );
+        // Matched from the headers - the "latest message to that contact" guess was never needed.
+        expect(prisma.contact.findFirst).not.toHaveBeenCalled();
+    });
+
     it('does not cross-match an outbound message belonging to a different organisation', async () => {
         const { service, prisma } = createService({
             receivedEmail: {
@@ -578,5 +728,6 @@ describe('WebhookEventService', () => {
         );
 
         expect(resolved?.provider_message_id).toBe(provider_message_id);
+        expect(resolved?.outreach_message_uuid).toBe('msg-uuid');
     });
 });

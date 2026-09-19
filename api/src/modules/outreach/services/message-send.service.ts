@@ -9,6 +9,7 @@ import {
     MsgStatus,
     OutreachMessage,
     Prisma,
+    ThreadReplyState,
 } from '@/generated/prisma';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { ResendMailService } from '@/integrations/notifications/resend/services/mail.service';
@@ -318,23 +319,54 @@ export class MessageSendService {
         return Object.keys(base).length > 0 ? (base as Prisma.InputJsonValue) : Prisma.DbNull;
     }
 
+    /**
+     * `sent_at` is injectable so the caller can stamp the message and its thread's
+     * `last_outbound_at` (see `threadOutboundSentOperations`) with the exact same instant -
+     * that equality is how send history tells which message is a thread's latest send.
+     */
     messageSentOperation(
         message_uuid: string,
         provider_message_id: string | null,
         existingMetadata: unknown,
         integration_metadata?: Record<string, string>,
+        sent_at: Date = new Date(),
     ) {
         const metadata = this.buildSentMetadata(existingMetadata, integration_metadata);
         return this.prisma.outreachMessage.update({
             where: { uuid: message_uuid },
             data: {
                 status: MsgStatus.SENT,
-                sent_at: new Date(),
+                sent_at,
                 provider_message_id,
                 metadata,
                 ...this.integrationColumnsFromMetadata(integration_metadata),
             },
         });
+    }
+
+    /**
+     * Ops (spread into the same $transaction as `messageSentOperation`) that flip the message's
+     * thread to "waiting on them". Email only - SMS replies aren't ingested, so an SMS thread
+     * could never leave that state. Threadless legacy messages produce no ops.
+     */
+    threadOutboundSentOperations(
+        message: { thread_uuid: string | null; channel: Channel },
+        sent_at: Date,
+    ): Prisma.PrismaPromise<unknown>[] {
+        if (!message.thread_uuid || message.channel !== Channel.EMAIL) {
+            return [];
+        }
+        return [
+            this.prisma.messageThread.update({
+                where: { uuid: message.thread_uuid },
+                data: {
+                    last_outbound_at: sent_at,
+                    reply_state: ThreadReplyState.AWAITING_THEM,
+                    // Answering a reply counts as having read it.
+                    has_unread_reply: false,
+                },
+            }),
+        ];
     }
 
     messageFailedOperation(message_uuid: string, error_message: string) {

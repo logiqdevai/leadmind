@@ -248,13 +248,17 @@ export class CampaignMessageSendService {
       const shouldPromoteOnSend =
         mcc.channel === Channel.EMAIL && mcc.contact.status === LeadStatus.NEW;
 
+      const sent_at = new Date();
+
       await this.prisma.$transaction([
         this.messageSendService.messageSentOperation(
           message.uuid,
           provider_message_id,
           message.metadata,
           integration_metadata,
+          sent_at,
         ),
+        ...this.messageSendService.threadOutboundSentOperations(message, sent_at),
         this.prisma.marketingCampaignContact.update({
           where: { uuid: mcc.uuid },
           data: {

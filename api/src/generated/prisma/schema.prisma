@@ -433,12 +433,13 @@ model ContactList {
   created_at        DateTime @default(now())
   updated_at        DateTime @updatedAt
 
-  organisation      Organisation              @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
-  parent            ContactList?              @relation("ContactListHierarchy", fields: [parent_list_uuid], references: [uuid], onDelete: Cascade)
-  children          ContactList[]             @relation("ContactListHierarchy")
-  members           ContactListMember[]
-  audience_analyses ContactAudienceAnalysis[]
-  filters           Filter[]
+  organisation         Organisation              @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  parent               ContactList?              @relation("ContactListHierarchy", fields: [parent_list_uuid], references: [uuid], onDelete: Cascade)
+  children             ContactList[]             @relation("ContactListHierarchy")
+  members              ContactListMember[]
+  audience_analyses    ContactAudienceAnalysis[]
+  filters              Filter[]
+  sequence_enrollments SequenceEnrollment[]
 
   @@index([organisation_uuid])
   @@index([parent_list_uuid])
@@ -446,11 +447,12 @@ model ContactList {
 }
 
 model ContactListMember {
-  id           Int      @id @default(autoincrement())
-  uuid         String   @unique @default(uuid())
+  id           Int        @id @default(autoincrement())
+  uuid         String     @unique @default(uuid())
   list_uuid    String
   contact_uuid String
-  created_at   DateTime @default(now())
+  status       LeadStatus @default(NEW)
+  created_at   DateTime   @default(now())
 
   list    ContactList @relation(fields: [list_uuid], references: [uuid], onDelete: Cascade)
   contact Contact     @relation(fields: [contact_uuid], references: [uuid], onDelete: Cascade)
@@ -576,9 +578,19 @@ enum ThreadOrigin {
   CAMPAIGN
 }
 
+/// Whose turn it is in a conversation, based on the last email that actually went out or came in.
+enum ThreadReplyState {
+  /// No delivered outbound yet, or the thread is closed (dismissed / bounced / complaint).
+  NONE
+  /// Their reply is the latest activity - we owe them a response.
+  AWAITING_US
+  /// Our sent email is the latest activity - we're waiting on them (follow up if this goes stale).
+  AWAITING_THEM
+}
+
 model MessageThread {
-  id                       Int          @id @default(autoincrement())
-  uuid                     String       @unique @default(uuid())
+  id                       Int              @id @default(autoincrement())
+  uuid                     String           @unique @default(uuid())
   organisation_uuid        String
   contact_uuid             String
   channel                  Channel
@@ -586,11 +598,15 @@ model MessageThread {
   origin                   ThreadOrigin
   sequence_enrollment_uuid String?
   campaign_uuid            String?
-  dedupe_key               String?      @unique
+  dedupe_key               String?          @unique
   last_message_at          DateTime?
-  message_count            Int          @default(0)
-  created_at               DateTime     @default(now())
-  updated_at               DateTime     @updatedAt
+  message_count            Int              @default(0)
+  last_inbound_at          DateTime?
+  last_outbound_at         DateTime?
+  reply_state              ThreadReplyState @default(NONE)
+  has_unread_reply         Boolean          @default(false)
+  created_at               DateTime         @default(now())
+  updated_at               DateTime         @updatedAt
 
   organisation Organisation      @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
   contact      Contact           @relation(fields: [contact_uuid], references: [uuid], onDelete: Cascade)
@@ -598,6 +614,7 @@ model MessageThread {
 
   @@index([organisation_uuid, contact_uuid])
   @@index([contact_uuid, channel, last_message_at])
+  @@index([organisation_uuid, reply_state, last_outbound_at], map: "message_threads_org_reply_state_last_outbound_idx")
   @@map("message_threads")
 }
 
@@ -650,29 +667,35 @@ model OutreachSequenceStep {
 }
 
 model SequenceEnrollment {
-  id                       Int                      @id @default(autoincrement())
-  uuid                     String                   @unique @default(uuid())
+  id                       Int                          @id @default(autoincrement())
+  uuid                     String                       @unique @default(uuid())
   sequence_uuid            String
   contact_uuid             String
   campaign_uuid            String?
-  status                   SequenceEnrollmentStatus @default(ACTIVE)
-  enrolled_at              DateTime                 @default(now())
-  current_step_order_index Int                      @default(0)
+  list_uuid                String?
+  status                   SequenceEnrollmentStatus     @default(ACTIVE)
+  enrolled_at              DateTime                     @default(now())
+  current_step_order_index Int                          @default(0)
   first_step_sent_at       DateTime?
   cancelled_at             DateTime?
   completed_at             DateTime?
-  created_at               DateTime                 @default(now())
-  updated_at               DateTime                 @updatedAt
+  email_provider           ExternalIntegrationProvider?
+  email_account            String?
+  email_domain_uuid        String?
+  created_at               DateTime                     @default(now())
+  updated_at               DateTime                     @updatedAt
 
   sequence          OutreachSequence   @relation(fields: [sequence_uuid], references: [uuid], onDelete: Cascade)
   contact           Contact            @relation(fields: [contact_uuid], references: [uuid], onDelete: Cascade)
   campaign          MarketingCampaign? @relation(fields: [campaign_uuid], references: [uuid], onDelete: SetNull)
+  list              ContactList?       @relation(fields: [list_uuid], references: [uuid], onDelete: SetNull)
   outreach_messages OutreachMessage[]
 
   @@unique([sequence_uuid, contact_uuid, campaign_uuid], map: "sequence_enrollments_target_key")
   @@index([sequence_uuid])
   @@index([contact_uuid])
   @@index([campaign_uuid])
+  @@index([list_uuid])
   @@index([sequence_uuid, contact_uuid, status])
   @@index([status])
   @@map("sequence_enrollments")

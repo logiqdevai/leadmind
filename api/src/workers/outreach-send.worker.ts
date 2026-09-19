@@ -140,6 +140,7 @@ export class OutreachSendWorker extends WorkerHost implements OnModuleInit {
       const shouldPromoteOnSend =
         message.channel === Channel.EMAIL &&
         message.contact.status === LeadStatus.NEW;
+      const sent_at = new Date();
 
       await this.prisma.$transaction([
         this.messageSendService.messageSentOperation(
@@ -147,7 +148,9 @@ export class OutreachSendWorker extends WorkerHost implements OnModuleInit {
           provider_message_id,
           message.metadata,
           integration_metadata,
+          sent_at,
         ),
+        ...this.messageSendService.threadOutboundSentOperations(message, sent_at),
         this.messageSendService.interactionCreateOperation({
           contact_uuid: message.contact_uuid,
           organisation_uuid: message.organisation_uuid,
@@ -202,6 +205,7 @@ export class OutreachSendWorker extends WorkerHost implements OnModuleInit {
           message.contact_uuid,
           message.uuid,
           remindAt,
+          message.thread_uuid,
         );
       }
 

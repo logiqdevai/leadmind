@@ -365,6 +365,7 @@ exports.Prisma.ContactListMemberScalarFieldEnum = {
   uuid: 'uuid',
   list_uuid: 'list_uuid',
   contact_uuid: 'contact_uuid',
+  status: 'status',
   created_at: 'created_at'
 };
 
@@ -446,6 +447,10 @@ exports.Prisma.MessageThreadScalarFieldEnum = {
   dedupe_key: 'dedupe_key',
   last_message_at: 'last_message_at',
   message_count: 'message_count',
+  last_inbound_at: 'last_inbound_at',
+  last_outbound_at: 'last_outbound_at',
+  reply_state: 'reply_state',
+  has_unread_reply: 'has_unread_reply',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };
@@ -487,12 +492,16 @@ exports.Prisma.SequenceEnrollmentScalarFieldEnum = {
   sequence_uuid: 'sequence_uuid',
   contact_uuid: 'contact_uuid',
   campaign_uuid: 'campaign_uuid',
+  list_uuid: 'list_uuid',
   status: 'status',
   enrolled_at: 'enrolled_at',
   current_step_order_index: 'current_step_order_index',
   first_step_sent_at: 'first_step_sent_at',
   cancelled_at: 'cancelled_at',
   completed_at: 'completed_at',
+  email_provider: 'email_provider',
+  email_account: 'email_account',
+  email_domain_uuid: 'email_domain_uuid',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };
@@ -1184,6 +1193,12 @@ exports.ThreadOrigin = exports.$Enums.ThreadOrigin = {
   MANUAL: 'MANUAL',
   SEQUENCE: 'SEQUENCE',
   CAMPAIGN: 'CAMPAIGN'
+};
+
+exports.ThreadReplyState = exports.$Enums.ThreadReplyState = {
+  NONE: 'NONE',
+  AWAITING_US: 'AWAITING_US',
+  AWAITING_THEM: 'AWAITING_THEM'
 };
 
 exports.SequenceStatus = exports.$Enums.SequenceStatus = {

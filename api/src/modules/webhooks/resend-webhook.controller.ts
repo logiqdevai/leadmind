@@ -201,11 +201,15 @@ export class ResendWebhookController {
                 provider_received_id,
                 from,
                 subject: body.data?.subject,
+                outreach_message_uuid: resolved.outreach_message_uuid,
             },
             reply: {
                 subject: resolved.email?.subject ?? body.data?.subject ?? null,
                 text: resolved.email?.text ?? null,
                 html: resolved.email?.html ?? null,
+                // Persisted as the source message's inbound_message_id so our reply's
+                // In-Reply-To/References point at what the contact actually sent.
+                message_id: resolved.email?.message_id ?? null,
             },
         });
     }

@@ -59,6 +59,7 @@ export default function SendHistoryPage() {
     const sentByUserUuid = searchParams.get("sent_by_user_uuid") ?? "";
     const dateFrom = searchParams.get("date_from") ?? "";
     const dateTo = searchParams.get("date_to") ?? "";
+    const needsFollowUp = searchParams.get("needs_follow_up") === "true";
 
     const debouncedSearch = useDebouncedValue(search, 300);
 
@@ -91,7 +92,8 @@ export default function SendHistoryPage() {
             sequenceUuid ||
             sentByUserUuid ||
             dateFrom ||
-            dateTo,
+            dateTo ||
+            needsFollowUp,
     );
 
     const query = useMemo(
@@ -111,6 +113,7 @@ export default function SendHistoryPage() {
             sent_by_user_uuid: sentByUserUuid || undefined,
             date_from: dateFrom ? dateToStartIso(dateFrom) : undefined,
             date_to: dateTo ? dateToEndIso(dateTo) : undefined,
+            needs_follow_up: needsFollowUp || undefined,
         }),
         [
             page,
@@ -125,6 +128,7 @@ export default function SendHistoryPage() {
             sentByUserUuid,
             dateFrom,
             dateTo,
+            needsFollowUp,
         ],
     );
 
@@ -204,6 +208,10 @@ export default function SendHistoryPage() {
                 sentByUserUuid={sentByUserUuid}
                 dateFrom={dateFrom}
                 dateTo={dateTo}
+                needsFollowUp={needsFollowUp}
+                onNeedsFollowUpChange={(value) =>
+                    updateParams({ needs_follow_up: value ? "true" : null, page: "1" })
+                }
                 channelOptions={CHANNEL_OPTIONS}
                 sourceOptions={SOURCE_OPTIONS}
                 statusOptions={STATUS_OPTIONS}
