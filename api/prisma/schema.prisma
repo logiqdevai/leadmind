@@ -536,6 +536,7 @@ model OutreachMessage {
   email_provider            ExternalIntegrationProvider?
   email_account             String?
   email_domain_uuid         String?
+  from_email                String?
   sms_provider              String?
   metadata                  Json?
   sequence_enrollment_uuid  String?
@@ -605,6 +606,7 @@ model MessageThread {
   last_outbound_at         DateTime?
   reply_state              ThreadReplyState @default(NONE)
   has_unread_reply         Boolean          @default(false)
+  manual_follow_up_at      DateTime?
   created_at               DateTime         @default(now())
   updated_at               DateTime         @updatedAt
 

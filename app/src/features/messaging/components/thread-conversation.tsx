@@ -13,7 +13,6 @@ import { ActionButtonWithPending } from "@/components/ui/action-button-with-pend
 import {
     Channel,
     InteractionType,
-    ThreadOrigin,
     type Interaction,
     type OutreachMessage,
 } from "@/features/contacts/interfaces/contact.interface";
@@ -27,6 +26,7 @@ import {
 import { MessageTemplateSelect } from "@/features/messaging/components/message-template-select";
 import { mergeTemplateIntoComposer } from "@/features/message-templates/utils/message-template-composer.utils";
 import { isEmailHtmlEmpty, sanitizeEmailHtml } from "@/lib/sanitize-html";
+import { OriginIcon } from "@/features/messaging/components/thread-origin";
 import { MessageBodyPreview } from "@/pages/dashboard/pages/contacts/pages/detail/components/message-body-preview";
 
 interface ThreadConversationProps {
@@ -34,25 +34,6 @@ interface ThreadConversationProps {
     contactUuid: string | null;
     onReplySent?: () => void;
 }
-
-export const ORIGIN_LABEL: Record<ThreadOrigin, string> = {
-    [ThreadOrigin.MANUAL]: "Manual",
-    [ThreadOrigin.SEQUENCE]: "Sequence",
-    [ThreadOrigin.CAMPAIGN]: "Campaign",
-};
-
-export const ORIGIN_COLOR: Record<ThreadOrigin, "default" | "accent" | "success" | "warning" | "danger"> = {
-    [ThreadOrigin.MANUAL]: "default",
-    [ThreadOrigin.SEQUENCE]: "accent",
-    [ThreadOrigin.CAMPAIGN]: "warning",
-};
-
-/** Compact colored-pill classes for origin badges rendered outside the Chip component (e.g. dense list rows). */
-export const ORIGIN_PILL_CLASS: Record<ThreadOrigin, string> = {
-    [ThreadOrigin.MANUAL]: "bg-surface-secondary text-muted",
-    [ThreadOrigin.SEQUENCE]: "bg-accent/10 text-accent",
-    [ThreadOrigin.CAMPAIGN]: "bg-warning/10 text-warning",
-};
 
 function ThreadMessage({ message }: { message: OutreachMessage }) {
     return (
@@ -65,6 +46,15 @@ function ThreadMessage({ message }: { message: OutreachMessage }) {
                     <Send className="size-3" />
                     {message.sent_at ? new Date(message.sent_at).toLocaleString() : "Not sent"}
                 </span>
+                {message.from_email ? (
+                    <span
+                        className="inline-flex min-w-0 items-center gap-1 text-xs text-muted"
+                        title={`Sent from ${message.from_email}`}
+                    >
+                        <Mail className="size-3 shrink-0" />
+                        <span className="truncate">{message.from_email}</span>
+                    </span>
+                ) : null}
             </div>
             {message.subject ? (
                 <h4 className="mb-1 text-sm font-medium text-foreground">{message.subject}</h4>
@@ -230,7 +220,12 @@ function ReplyBox({
                     allowedChannels={[Channel.EMAIL]}
                     disabled={replyMut.isPending}
                     onSelect={(template) =>
-                        setValue((prev) => mergeTemplateIntoComposer(prev, template))
+                        // A reply keeps its "Re: <their subject>" so mail clients (Gmail especially)
+                        // keep it in the same conversation - only the template body is applied.
+                        setValue((prev) => ({
+                            ...mergeTemplateIntoComposer(prev, template),
+                            emailSubject: prev.emailSubject,
+                        }))
                     }
                 />
                 <MessageComposer
@@ -303,10 +298,8 @@ export function ThreadConversation({ threadUuid, contactUuid, onReplySent }: Thr
 
     return (
         <div className="flex flex-col gap-4">
-            <div>
-                <Chip size="sm" variant="soft" color={ORIGIN_COLOR[data.thread.origin]}>
-                    <Chip.Label>{ORIGIN_LABEL[data.thread.origin]}</Chip.Label>
-                </Chip>
+            <div className="text-xs text-muted">
+                <OriginIcon origin={data.thread.origin} withLabel />
             </div>
 
             {data.timeline.length === 0 ? (

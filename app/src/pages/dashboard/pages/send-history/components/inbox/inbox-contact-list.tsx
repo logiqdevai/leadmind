@@ -3,7 +3,7 @@ import { formatDistanceToNow } from "date-fns";
 import { BellRing } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { initialsFromName } from "@/lib/profile";
-import { ORIGIN_LABEL, ORIGIN_PILL_CLASS } from "@/features/messaging/components/thread-conversation";
+import { OriginIcon } from "@/features/messaging/components/thread-origin";
 import type { InboxContactSummary } from "@/features/outreach/interfaces/send-history.interface";
 
 interface InboxContactListProps {
@@ -99,17 +99,9 @@ export function InboxContactList({
                                                 </span>
                                             ) : null}
                                         </span>
-                                        <span className="mt-1 flex flex-wrap gap-1">
+                                        <span className="mt-1.5 flex items-center gap-1">
                                             {row.origins.map((origin) => (
-                                                <span
-                                                    key={origin}
-                                                    className={cn(
-                                                        "rounded-full px-1.5 py-0.5 text-[10px] font-medium",
-                                                        ORIGIN_PILL_CLASS[origin],
-                                                    )}
-                                                >
-                                                    {ORIGIN_LABEL[origin]}
-                                                </span>
+                                                <OriginIcon key={origin} origin={origin} />
                                             ))}
                                         </span>
                                     </span>

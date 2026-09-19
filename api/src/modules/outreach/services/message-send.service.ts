@@ -175,7 +175,7 @@ export class MessageSendService {
                 `Email send message=${message.uuid} to=${toEmail} subject="${rendered.subject ?? 'Outreach message'}" provider=${target?.provider ?? 'none'} account=${target?.account ?? 'none'} replyTo=${replyTo}`,
             );
 
-            const { result, deliveryTarget } = await this.sendEmailWithProvider(
+            const { result, deliveryTarget, fromEmail } = await this.sendEmailWithProvider(
                 message.organisation_uuid,
                 createEmail,
                 target,
@@ -193,7 +193,11 @@ export class MessageSendService {
             );
             return {
                 provider_message_id,
-                integration_metadata: buildEmailProviderMetadata(deliveryTarget),
+                integration_metadata: {
+                    ...buildEmailProviderMetadata(deliveryTarget),
+                    // The address the contact actually saw - only known here, at send time.
+                    ...(fromEmail ? { from_email: fromEmail } : {}),
+                },
             };
         }
 
@@ -225,7 +229,7 @@ export class MessageSendService {
             replyTo: string;
         },
         target: EmailProviderTarget | null,
-    ): Promise<{ result: any; deliveryTarget: EmailProviderTarget }> {
+    ): Promise<{ result: any; deliveryTarget: EmailProviderTarget; fromEmail: string | null }> {
         if (target?.provider === ExternalIntegrationProvider.SMTP) {
             const smtpConfig = await this.emailCredentialsService.getSmtpConfig(
                 organisation_uuid,
@@ -239,7 +243,7 @@ export class MessageSendService {
                 { ...createEmail, from },
                 smtpConfig,
             );
-            return { result, deliveryTarget: target };
+            return { result, deliveryTarget: target, fromEmail: smtpConfig.fromEmail };
         }
 
         if (target?.provider === ExternalIntegrationProvider.RESEND) {
@@ -254,7 +258,7 @@ export class MessageSendService {
                 { ...createEmail, from: fromEmail },
                 apiKey,
             );
-            return { result, deliveryTarget: target };
+            return { result, deliveryTarget: target, fromEmail };
         }
 
         const envKey = this.configService.get<string>('RESEND_API_KEY');
@@ -269,6 +273,8 @@ export class MessageSendService {
                     provider: ExternalIntegrationProvider.RESEND,
                     account: 'env',
                 },
+                // No integration account - the provider's own default sender applies.
+                fromEmail: null,
             };
         }
 
@@ -282,13 +288,14 @@ export class MessageSendService {
         integration_metadata?: Record<string, string>,
     ): Pick<
         Prisma.OutreachMessageUpdateInput,
-        'email_provider' | 'email_account' | 'email_domain_uuid' | 'sms_provider'
+        'email_provider' | 'email_account' | 'email_domain_uuid' | 'from_email' | 'sms_provider'
     > {
         if (!integration_metadata) {
             return {
                 email_provider: null,
                 email_account: null,
                 email_domain_uuid: null,
+                from_email: null,
                 sms_provider: null,
             };
         }
@@ -306,6 +313,7 @@ export class MessageSendService {
                     : null,
             email_account: emailAccount ?? null,
             email_domain_uuid: emailDomainUuid ?? null,
+            from_email: integration_metadata.from_email ?? null,
             sms_provider: smsProvider ?? null,
         };
     }
@@ -370,6 +378,8 @@ export class MessageSendService {
                     reply_state: ThreadReplyState.AWAITING_THEM,
                     // Answering a reply counts as having read it.
                     has_unread_reply: false,
+                    // Sending on the thread is the follow-up a manual flag asked for.
+                    manual_follow_up_at: null,
                 },
             }),
         ];

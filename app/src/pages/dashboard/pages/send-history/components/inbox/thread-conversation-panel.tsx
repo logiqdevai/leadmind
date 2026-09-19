@@ -1,6 +1,6 @@
-import { Button, Chip } from "@heroui/react";
+import { Button } from "@heroui/react";
 import { ArrowLeft, UserRound } from "lucide-react";
-import { ThreadConversation, ORIGIN_COLOR, ORIGIN_LABEL } from "@/features/messaging/components/thread-conversation";
+import { ThreadConversation } from "@/features/messaging/components/thread-conversation";
 import { useThreadDetail } from "@/features/outreach/hooks/use-outreach";
 
 interface ThreadConversationPanelProps {
@@ -34,11 +34,6 @@ export function ThreadConversationPanel({
                     <h2 className="truncate text-sm font-medium text-foreground">
                         {data?.thread.subject || "Conversation"}
                     </h2>
-                    {data ? (
-                        <Chip size="sm" variant="soft" color={ORIGIN_COLOR[data.thread.origin]} className="mt-1">
-                            <Chip.Label>{ORIGIN_LABEL[data.thread.origin]}</Chip.Label>
-                        </Chip>
-                    ) : null}
                 </div>
                 <Button
                     size="sm"

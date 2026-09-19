@@ -393,6 +393,8 @@ export class WebhookEventService {
                             last_inbound_at: now,
                             reply_state: ThreadReplyState.AWAITING_US,
                             has_unread_reply: true,
+                            // They answered - a hand-set follow-up flag has done its job.
+                            manual_follow_up_at: null,
                         },
                     }),
                 );
@@ -404,7 +406,7 @@ export class WebhookEventService {
                 ops.push(
                     this.prisma.messageThread.update({
                         where: { uuid: message.thread_uuid },
-                        data: { reply_state: ThreadReplyState.NONE },
+                        data: { reply_state: ThreadReplyState.NONE, manual_follow_up_at: null },
                     }),
                 );
             }

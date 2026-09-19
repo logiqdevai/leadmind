@@ -349,6 +349,7 @@ describe('WebhookEventService', () => {
                 last_inbound_at: expect.any(Date),
                 reply_state: ThreadReplyState.AWAITING_US,
                 has_unread_reply: true,
+                manual_follow_up_at: null,
             },
         });
     });
@@ -404,7 +405,7 @@ describe('WebhookEventService', () => {
 
         expect(prisma.messageThread.update).toHaveBeenCalledWith({
             where: { uuid: 'thread-uuid' },
-            data: { reply_state: ThreadReplyState.NONE },
+            data: { reply_state: ThreadReplyState.NONE, manual_follow_up_at: null },
         });
     });
 

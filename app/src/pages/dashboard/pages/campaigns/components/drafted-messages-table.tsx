@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button, Chip } from "@heroui/react";
-import { Check, ChevronDown, ChevronUp, Copy, FileText, Pencil, Send, Trash2 } from "lucide-react";
-import { toast } from "@/hooks/use-toast";
-import { cn } from "@/lib/utils";
+import { ChevronDown, ChevronUp, FileText, Pencil, Send, Trash2 } from "lucide-react";
+import { CopyButton } from "@/components/ui/copy-button";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
 import { useCampaignDraftMessages, useDeleteCampaignDraftMessage, useSendCampaignDraftMessage } from "@/features/marketing-campaigns/hooks/use-marketing-campaigns";
 import type { DraftMessage } from "@/features/marketing-campaigns/interfaces/campaign.interface";
@@ -413,44 +412,4 @@ function canEditDraft(msg: DraftMessage): boolean {
 
 function stripHtml(html: string): string {
     return html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
-}
-
-function CopyButton({ value, label }: { value: string; label: string }) {
-    const [copied, setCopied] = useState(false);
-
-    const handleCopy = async () => {
-        if (!value) return;
-        try {
-            await navigator.clipboard.writeText(value);
-            setCopied(true);
-            toast({ title: `Copied ${label}`, variant: "success", duration: 1500 });
-            window.setTimeout(() => setCopied(false), 1200);
-        } catch {
-            toast({ title: "Couldn't copy to clipboard", variant: "error" });
-        }
-    };
-
-    return (
-        <span
-            className="inline-flex shrink-0"
-            onClick={(e) => e.stopPropagation()}
-            onKeyDown={(e) => e.stopPropagation()}
-            role="presentation"
-        >
-            <Button
-                size="sm"
-                variant="ghost"
-                isDisabled={!value}
-                onPress={handleCopy}
-                aria-label={`Copy ${label}`}
-                className="shrink-0 min-w-7 h-7 px-1"
-            >
-                {copied ? (
-                    <Check className={cn("size-3.5 text-accent")} />
-                ) : (
-                    <Copy className="size-3.5 text-muted" />
-                )}
-            </Button>
-        </span>
-    );
 }

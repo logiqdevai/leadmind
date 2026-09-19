@@ -5,6 +5,7 @@ import {
     createDraftMessage,
     deleteOutreachMessage,
     dismissThreadFollowUp,
+    flagThreadFollowUp,
     getOutreachMessageThread,
     getThreadDetail,
     listInboxContacts,
@@ -207,22 +208,51 @@ export function useMarkThreadRead() {
     });
 }
 
-/**
- * "No follow-up needed" - closes a conversation out of the needs-follow-up list. Refreshes every
- * surface that shows the marker (send-history table, inbox contact list, the contact's threads).
- */
+interface FollowUpMutationVars {
+    threadUuid: string;
+    contactUuid?: string;
+}
+
+/** Refreshes every surface that shows the follow-up marker (send-history table, inbox contact list, the contact's threads). */
+const invalidateAfterFollowUpChange = (
+    qc: ReturnType<typeof useQueryClient>,
+    vars: FollowUpMutationVars,
+) => {
+    qc.invalidateQueries({ queryKey: sendHistoryQueryKeys.all });
+    qc.invalidateQueries({ queryKey: inboxContactsQueryKeys.all });
+    qc.invalidateQueries({ queryKey: ["thread-detail", vars.threadUuid] });
+    if (vars.contactUuid) {
+        qc.invalidateQueries({ queryKey: contactsQueryKeys.threads(vars.contactUuid) });
+    }
+};
+
+/** Manually flags a conversation as needing a follow-up - it joins the "Needs follow-up" list right away. */
+export function useFlagFollowUp() {
+    const qc = useQueryClient();
+    return useMutation({
+        mutationFn: (vars: FollowUpMutationVars) => flagThreadFollowUp(vars.threadUuid),
+        onSuccess: (_data, vars) => {
+            invalidateAfterFollowUpChange(qc, vars);
+            toast({ title: "Marked for follow-up", duration: 2000 });
+        },
+        onError: (error: Error) => {
+            toast({
+                title: "Could not mark for follow-up",
+                description: error.message,
+                duration: 3000,
+                variant: "error",
+            });
+        },
+    });
+}
+
+/** "No follow-up needed" - clears a manual flag and closes the conversation out of the needs-follow-up list. */
 export function useDismissFollowUp() {
     const qc = useQueryClient();
     return useMutation({
-        mutationFn: (vars: { threadUuid: string; contactUuid?: string }) =>
-            dismissThreadFollowUp(vars.threadUuid),
+        mutationFn: (vars: FollowUpMutationVars) => dismissThreadFollowUp(vars.threadUuid),
         onSuccess: (_data, vars) => {
-            qc.invalidateQueries({ queryKey: sendHistoryQueryKeys.all });
-            qc.invalidateQueries({ queryKey: inboxContactsQueryKeys.all });
-            qc.invalidateQueries({ queryKey: ["thread-detail", vars.threadUuid] });
-            if (vars.contactUuid) {
-                qc.invalidateQueries({ queryKey: contactsQueryKeys.threads(vars.contactUuid) });
-            }
+            invalidateAfterFollowUpChange(qc, vars);
             toast({ title: "Marked as no follow-up needed", duration: 2000 });
         },
         onError: (error: Error) => {

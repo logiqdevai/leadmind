@@ -59,6 +59,22 @@ export class ThreadsController {
         return { uuid, read: true };
     }
 
+    @Post(':uuid/flag-follow-up')
+    @HttpCode(200)
+    @ApiOperation({
+        summary: 'Manually flag a thread as needing a follow-up (clears on dismiss, our next send, or their reply)',
+    })
+    async flagFollowUp(
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
+        @Param('uuid') uuid: string,
+    ) {
+        const found = await this.threadsService.flagFollowUp(organisation_uuid, uuid);
+        if (!found) {
+            throw new NotFoundException(`Thread ${uuid} not found`);
+        }
+        return { uuid, flagged: true };
+    }
+
     @Post(':uuid/dismiss-follow-up')
     @HttpCode(200)
     @ApiOperation({

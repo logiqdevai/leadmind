@@ -28,13 +28,15 @@ function quietFor(since: string | null): string | null {
     return since ? formatDistanceToNowStrict(new Date(since)) : null;
 }
 
-/** Marks a conversation as waiting on the contact past the follow-up window. */
-export function FollowUpBadge({ since }: { since: string | null }) {
+/** Marks a conversation as waiting on the contact past the follow-up window, or flagged for follow-up by hand. */
+export function FollowUpBadge({ since, manual = false }: { since: string | null; manual?: boolean }) {
+    const title = manual
+        ? "Flagged for follow-up"
+        : since
+          ? `No reply since ${new Date(since).toLocaleString()}`
+          : "No reply yet";
     return (
-        <span
-            className="inline-flex"
-            title={since ? `No reply since ${new Date(since).toLocaleString()}` : "No reply yet"}
-        >
+        <span className="inline-flex" title={title}>
             <Chip size="sm" variant="soft" color="warning">
                 <BellRing className="size-3" />
                 <Chip.Label>Follow up</Chip.Label>

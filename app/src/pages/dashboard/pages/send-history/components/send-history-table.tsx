@@ -1,22 +1,25 @@
 import { useState } from "react";
 import { Button, Chip } from "@heroui/react";
-import { Eye, MessageCircleReply, XCircle } from "lucide-react";
+import { BellPlus, Eye, MessageCircleReply, XCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { MsgStatus } from "@/features/contacts/interfaces/contact.interface";
 import { useIntegrations } from "@/features/integrations/hooks/use-integrations";
 import type { SendHistoryMessage } from "@/features/outreach/interfaces/send-history.interface";
 import { SequenceEnrollmentStatus } from "@/features/sequences/interfaces/sequence.interface";
 import { useCancelEnrollment } from "@/features/sequences/hooks/use-sequences";
-import { useDismissFollowUp } from "@/features/outreach/hooks/use-outreach";
+import { useDismissFollowUp, useFlagFollowUp } from "@/features/outreach/hooks/use-outreach";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { MessageThreadModal } from "@/pages/dashboard/pages/contacts/pages/detail/components/message-thread-modal";
+import { OriginIcon } from "@/features/messaging/components/thread-origin";
 import { cn } from "@/lib/utils";
 import { Routes } from "@/routes/routes";
 import {
     formatSendHistoryDate,
     getContactDestination,
     getSendIntegrationLabel,
+    getSendOrigin,
     getSendSourceLabel,
+    getSendSourceName,
 } from "../utils/send-history.utils";
 import { FollowUpBadge, FollowUpQuietFor, ReplyBadge } from "./follow-up-marker";
 import { SendHistoryMessageModal } from "./send-history-message-modal";
@@ -52,6 +55,7 @@ export function SendHistoryTable({ rows, selected, onToggleSelect, onToggleAll }
     const [cancelTarget, setCancelTarget] = useState<SendHistoryMessage | null>(null);
     const cancelEnrollmentMut = useCancelEnrollment();
     const dismissFollowUp = useDismissFollowUp();
+    const flagFollowUp = useFlagFollowUp();
 
     if (rows.length === 0) {
         return (
@@ -119,7 +123,7 @@ export function SendHistoryTable({ rows, selected, onToggleSelect, onToggleAll }
                         </th>
                         <th className="min-w-0 max-w-0 overflow-hidden px-3 py-2 text-left font-medium">Contact</th>
                         <th className="hidden lg:table-cell px-3 py-2 text-left font-medium">Channel</th>
-                        <th className="hidden lg:table-cell px-3 py-2 text-left font-medium">Integration</th>
+                        <th className="hidden lg:table-cell px-3 py-2 text-left font-medium">Sent from</th>
                         <th className="hidden lg:table-cell px-3 py-2 text-left font-medium">Source</th>
                         <th className="px-3 py-2 text-left font-medium w-36">Status</th>
                         <th className="hidden lg:table-cell px-3 py-2 text-left font-medium">Subject / preview</th>
@@ -157,13 +161,30 @@ export function SendHistoryTable({ rows, selected, onToggleSelect, onToggleAll }
                                     {row.contact.name ?? "Unnamed contact"}
                                 </Link>
                                 <div className="text-xs text-muted truncate">{getContactDestination(row)}</div>
+                                {row.from_email ? (
+                                    <div className="text-xs text-muted truncate lg:hidden" title="Sent from">
+                                        via {row.from_email}
+                                    </div>
+                                ) : null}
                             </td>
                             <td className="hidden lg:table-cell px-3 py-2 align-top text-foreground/90">{row.channel}</td>
-                            <td className="hidden lg:table-cell px-3 py-2 align-top text-foreground/90">
-                                {getSendIntegrationLabel(row, integrations)}
+                            <td className="hidden lg:table-cell min-w-0 max-w-[14rem] px-3 py-2 align-top">
+                                <div className="truncate text-foreground/90" title={row.from_email ?? undefined}>
+                                    {row.from_email ?? getSendIntegrationLabel(row, integrations)}
+                                </div>
+                                {row.from_email ? (
+                                    <div className="truncate text-xs text-muted">
+                                        {getSendIntegrationLabel(row, integrations)}
+                                    </div>
+                                ) : null}
                             </td>
                             <td className="hidden lg:table-cell px-3 py-2 align-top text-xs text-foreground/90 max-w-[10rem]">
-                                <div className="truncate">{getSendSourceLabel(row)}</div>
+                                <div className="flex min-w-0 items-center gap-1.5">
+                                    <OriginIcon origin={getSendOrigin(row)} title={getSendSourceLabel(row)} />
+                                    {getSendSourceName(row) ? (
+                                        <span className="truncate">{getSendSourceName(row)}</span>
+                                    ) : null}
+                                </div>
                                 {row.sequence_enrollment?.status === SequenceEnrollmentStatus.ACTIVE ? (
                                     <button
                                         type="button"
@@ -186,7 +207,7 @@ export function SendHistoryTable({ rows, selected, onToggleSelect, onToggleAll }
                                 ) : null}
                                 {row.needs_follow_up ? (
                                     <div className="mt-1.5 flex flex-col items-start gap-0.5">
-                                        <FollowUpBadge since={row.follow_up_since} />
+                                        <FollowUpBadge since={row.follow_up_since} manual={row.follow_up_manual} />
                                         <FollowUpQuietFor since={row.follow_up_since} />
                                         {row.thread_uuid ? (
                                             <button
@@ -245,6 +266,27 @@ export function SendHistoryTable({ rows, selected, onToggleSelect, onToggleAll }
                                                         : "size-3.5 text-muted"
                                                 }
                                             />
+                                        </Button>
+                                    ) : null}
+                                    {row.channel === "EMAIL" &&
+                                    row.status !== MsgStatus.PENDING &&
+                                    row.status !== MsgStatus.QUEUED &&
+                                    row.thread_uuid &&
+                                    !row.needs_follow_up ? (
+                                        <Button
+                                            size="sm"
+                                            variant="ghost"
+                                            className="shrink-0 min-w-7 h-7 px-1"
+                                            isDisabled={flagFollowUp.isPending}
+                                            onPress={() =>
+                                                flagFollowUp.mutate({
+                                                    threadUuid: row.thread_uuid!,
+                                                    contactUuid: row.contact.uuid,
+                                                })
+                                            }
+                                            aria-label="Mark conversation for follow-up"
+                                        >
+                                            <BellPlus className="size-3.5 text-muted" />
                                         </Button>
                                     ) : null}
                                     <Button

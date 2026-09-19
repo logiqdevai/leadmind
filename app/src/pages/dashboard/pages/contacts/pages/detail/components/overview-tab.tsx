@@ -22,6 +22,7 @@ import type { UpdateContactPayload } from "@/features/contacts/interfaces/contac
 import { useFilters } from "@/features/filters/hooks/use-filters";
 import { useContactLists } from "@/features/contact-lists/hooks/use-contact-lists";
 import type { ContactList } from "@/features/contact-lists/interfaces/contact-list.interface";
+import { CopyButton } from "@/components/ui/copy-button";
 import { SourceBadge } from "@/components/ui/source-badge";
 import { OverviewUrlField } from "@/components/ui/overview-url-field";
 import { EnrichmentSnapshotPanel } from "@/components/ui/enrichment-snapshot-panel";
@@ -220,10 +221,13 @@ function DetailPanel({ contact, onEdit }: { contact: Contact; onEdit: () => void
                                 href={contact.email?.trim() ? `mailto:${contact.email.trim()}` : undefined}
                             />
                             {contact.email?.trim() ? (
-                                <EmailValidationChip
-                                    status={contact.email_validation_status}
-                                    reason={contact.email_validation_reason}
-                                />
+                                <>
+                                    <CopyButton value={contact.email.trim()} label="email" />
+                                    <EmailValidationChip
+                                        status={contact.email_validation_status}
+                                        reason={contact.email_validation_reason}
+                                    />
+                                </>
                             ) : null}
                         </div>
                         <MarketingPreferenceNotice
@@ -233,9 +237,10 @@ function DetailPanel({ contact, onEdit }: { contact: Contact; onEdit: () => void
                     </div>
                 </Row>
                 <Row label="Phone">
-                    <ProfileValue
+                    <CopyableValue
                         value={contact.phone}
                         href={contact.phone?.trim() ? `tel:${contact.phone.trim()}` : undefined}
+                        label="phone"
                     />
                 </Row>
             </SectionCard>
@@ -257,13 +262,13 @@ function DetailPanel({ contact, onEdit }: { contact: Contact; onEdit: () => void
 
             <SectionCard title="Links & Presence" icon={Globe}>
                 <Row label="Website">
-                    <ProfileValue value={contact.website} href={websiteHref} />
+                    <CopyableValue value={contact.website} href={websiteHref} label="website" />
                 </Row>
                 <Row label="Google Maps">
-                    <ProfileValue value={contact.google_maps_url} href={googleMapsHref} />
+                    <CopyableValue value={contact.google_maps_url} href={googleMapsHref} label="Google Maps link" />
                 </Row>
                 <Row label="LinkedIn">
-                    <ProfileValue value={contact.linkedin_url} href={linkedinHref} />
+                    <CopyableValue value={contact.linkedin_url} href={linkedinHref} label="LinkedIn URL" />
                 </Row>
             </SectionCard>
 
@@ -306,6 +311,24 @@ function DetailPanel({ contact, onEdit }: { contact: Contact; onEdit: () => void
             </SectionCard>
 
             <GemiLeadSourcePanel lead={contact.lead} />
+        </div>
+    );
+}
+
+function CopyableValue({
+    value,
+    href,
+    label,
+}: {
+    value: string | null | undefined;
+    href?: string;
+    label: string;
+}) {
+    const text = value?.trim();
+    return (
+        <div className="flex items-center gap-2">
+            <ProfileValue value={value} href={href} />
+            {text ? <CopyButton value={text} label={label} /> : null}
         </div>
     );
 }

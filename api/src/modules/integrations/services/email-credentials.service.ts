@@ -72,6 +72,99 @@ export class EmailCredentialsService {
     return domain.from_email.trim();
   }
 
+  /**
+   * The From address an email would go out as for this account, for showing on messages that
+   * predate `OutreachMessage.from_email`. Reads the account's *current* configuration, so it can
+   * differ from what an old message really used if the account was edited since. Never throws -
+   * a missing/removed account or an undecryptable secret just yields null.
+   */
+  async resolveFromEmailForDisplay(
+    organisation_uuid: string,
+    provider: ExternalIntegrationProvider,
+    account: string,
+    domain_uuid?: string | null,
+  ): Promise<string | null> {
+    const trimmed = account.trim();
+    if (!trimmed || trimmed === 'env') return null;
+
+    try {
+      if (provider === ExternalIntegrationProvider.RESEND) {
+        const integrationAccount = await this.prisma.integrationAccount.findFirst({
+          where: {
+            account: trimmed,
+            integration: { organisation_uuid, provider },
+          },
+          include: { domains: true },
+        });
+        const domain = domain_uuid
+          ? integrationAccount?.domains.find((row) => row.uuid === domain_uuid)
+          : (integrationAccount?.domains.find((row) => row.is_default) ??
+            integrationAccount?.domains[0]);
+        return domain?.from_email.trim() || null;
+      }
+
+      if (provider === ExternalIntegrationProvider.SMTP) {
+        const fromEmail = await this.integrationsService.getDecryptedSecret(
+          organisation_uuid,
+          ExternalIntegrationProvider.SMTP,
+          IntegrationKeyType.FROM_EMAIL,
+          trimmed,
+        );
+        return fromEmail?.trim() || null;
+      }
+    } catch (error) {
+      this.logger.warn(
+        `Could not resolve From address for ${provider} account="${trimmed}": ${error instanceof Error ? error.message : error}`,
+      );
+    }
+    return null;
+  }
+
+  /**
+   * Fills `from_email` on messages that predate it (resolving once per distinct
+   * provider/account/domain rather than once per row). Rows that already carry a recorded
+   * address, or whose account can't be resolved, are returned untouched.
+   */
+  async withResolvedFromEmail<
+    T extends {
+      from_email: string | null;
+      email_provider: ExternalIntegrationProvider | null;
+      email_account: string | null;
+      email_domain_uuid: string | null;
+    },
+  >(organisation_uuid: string, rows: T[]): Promise<T[]> {
+    const keyOf = (row: T) =>
+      `${row.email_provider}|${row.email_account}|${row.email_domain_uuid ?? ''}`;
+
+    const needsResolving = new Map<string, T>();
+    for (const row of rows) {
+      if (!row.from_email && row.email_provider && row.email_account) {
+        needsResolving.set(keyOf(row), row);
+      }
+    }
+    if (needsResolving.size === 0) return rows;
+
+    const resolved = new Map<string, string | null>();
+    await Promise.all(
+      [...needsResolving].map(async ([key, row]) => {
+        resolved.set(
+          key,
+          await this.resolveFromEmailForDisplay(
+            organisation_uuid,
+            row.email_provider!,
+            row.email_account!,
+            row.email_domain_uuid,
+          ),
+        );
+      }),
+    );
+
+    return rows.map((row) => {
+      const from_email = row.from_email ? null : (resolved.get(keyOf(row)) ?? null);
+      return from_email ? { ...row, from_email } : row;
+    });
+  }
+
   async getResendApiKey(
     organisation_uuid: string,
     account: string,

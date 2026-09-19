@@ -21,6 +21,7 @@ describe('thread follow-up rule', () => {
         reply_state: ThreadReplyState.AWAITING_THEM,
         last_inbound_at: null,
         last_outbound_at: daysAgo(FOLLOW_UP_DEFAULT_DELAY_DAYS + 1),
+        manual_follow_up_at: null,
     };
 
     it('puts the cutoff FOLLOW_UP_DEFAULT_DELAY_DAYS before now', () => {
@@ -94,11 +95,115 @@ describe('thread follow-up rule', () => {
 
     it('keeps the Prisma filter aligned with the in-memory rule', () => {
         expect(needsFollowUpThreadWhere(cutoff)).toEqual({
-            channel: Channel.EMAIL,
-            reply_state: ThreadReplyState.AWAITING_THEM,
-            last_outbound_at: { lte: cutoff },
-            contact: { unsubscribed_at: null },
-            OR: [{ origin: ThreadOrigin.MANUAL }, { last_inbound_at: { not: null } }],
+            OR: [
+                {
+                    channel: Channel.EMAIL,
+                    reply_state: ThreadReplyState.AWAITING_THEM,
+                    last_outbound_at: { lte: cutoff },
+                    contact: { unsubscribed_at: null },
+                    OR: [{ origin: ThreadOrigin.MANUAL }, { last_inbound_at: { not: null } }],
+                },
+                { manual_follow_up_at: { not: null }, contact: { unsubscribed_at: null } },
+            ],
+        });
+    });
+
+    describe('manual follow-up flag', () => {
+        const flaggedAt = daysAgo(0);
+
+        it('counts a freshly flagged conversation even though the automatic rule would not', () => {
+            const fresh = { ...staleManualThread, last_outbound_at: daysAgo(0), manual_follow_up_at: flaggedAt };
+            expect(isThreadNeedingFollowUp({ ...fresh, manual_follow_up_at: null }, null, cutoff)).toBe(false);
+            expect(isThreadNeedingFollowUp(fresh, null, cutoff)).toBe(true);
+        });
+
+        it('counts a flagged cold campaign / sequence thread that never got a reply', () => {
+            for (const origin of [ThreadOrigin.CAMPAIGN, ThreadOrigin.SEQUENCE]) {
+                expect(
+                    isThreadNeedingFollowUp(
+                        { ...staleManualThread, origin, manual_follow_up_at: flaggedAt },
+                        null,
+                        cutoff,
+                    ),
+                ).toBe(true);
+            }
+        });
+
+        it('counts a flagged thread whatever the reply state or channel', () => {
+            expect(
+                isThreadNeedingFollowUp(
+                    {
+                        ...staleManualThread,
+                        channel: Channel.SMS,
+                        reply_state: ThreadReplyState.NONE,
+                        manual_follow_up_at: flaggedAt,
+                    },
+                    null,
+                    cutoff,
+                ),
+            ).toBe(true);
+        });
+
+        it('still never chases an unsubscribed contact, flagged or not', () => {
+            expect(
+                isThreadNeedingFollowUp(
+                    { ...staleManualThread, manual_follow_up_at: flaggedAt },
+                    daysAgo(1),
+                    cutoff,
+                ),
+            ).toBe(false);
+        });
+
+        it('ranks a flagged thread in the follow-up tier, below unread / unanswered replies', () => {
+            const flagged = {
+                ...staleManualThread,
+                has_unread_reply: false,
+                reply_state: ThreadReplyState.NONE,
+                manual_follow_up_at: flaggedAt,
+            };
+            expect(threadPriority(flagged, null, cutoff)).toBe(ThreadPriority.NEEDS_FOLLOW_UP);
+            expect(threadPriority({ ...flagged, has_unread_reply: true }, null, cutoff)).toBe(
+                ThreadPriority.UNREAD_REPLY,
+            );
+        });
+
+        it('marks only the latest sent email as needing follow-up and reports it as manual', () => {
+            const sentAt = daysAgo(0);
+            const flagged = {
+                ...staleManualThread,
+                has_unread_reply: false,
+                last_outbound_at: sentAt,
+                manual_follow_up_at: flaggedAt,
+            };
+            const latest = messageThreadFlags(
+                { direction: 'OUTBOUND', sent_at: sentAt, replied_at: null },
+                flagged,
+                null,
+                cutoff,
+            );
+            const older = messageThreadFlags(
+                { direction: 'OUTBOUND', sent_at: daysAgo(9), replied_at: null },
+                flagged,
+                null,
+                cutoff,
+            );
+            expect(latest).toEqual(
+                expect.objectContaining({ needs_follow_up: true, follow_up_manual: true }),
+            );
+            expect(older.needs_follow_up).toBe(false);
+            expect(older.follow_up_manual).toBe(false);
+        });
+
+        it('does not report an automatic follow-up as manual', () => {
+            const sentAt = staleManualThread.last_outbound_at;
+            const flags = messageThreadFlags(
+                { direction: 'OUTBOUND', sent_at: sentAt, replied_at: null },
+                { ...staleManualThread, has_unread_reply: false },
+                null,
+                cutoff,
+            );
+            expect(flags.needs_follow_up).toBe(true);
+            expect(flags.follow_up_manual).toBe(false);
         });
     });
 
@@ -205,6 +310,7 @@ describe('thread follow-up rule', () => {
                 has_unread_reply: false,
                 needs_reply: false,
                 needs_follow_up: false,
+                follow_up_manual: false,
                 priority: ThreadPriority.NONE,
             });
         });

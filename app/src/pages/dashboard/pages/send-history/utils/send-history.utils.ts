@@ -1,3 +1,4 @@
+import { ThreadOrigin } from "@/features/contacts/interfaces/contact.interface";
 import type { SendHistoryMessage } from "@/features/outreach/interfaces/send-history.interface";
 import type { IntegrationProviderView } from "@/features/integrations/interfaces/integrations.interface";
 
@@ -73,6 +74,21 @@ export function getSendIntegrationLabel(
     }
 
     return "—";
+}
+
+export function getSendOrigin(message: SendHistoryMessage): ThreadOrigin {
+    if (message.sequence_enrollment) return ThreadOrigin.SEQUENCE;
+    if (message.campaign) return ThreadOrigin.CAMPAIGN;
+    return ThreadOrigin.MANUAL;
+}
+
+/** The sequence / campaign a send belongs to, without the "Sequence ·" / "Campaign ·" prefix the icon now conveys. Null for manual sends. */
+export function getSendSourceName(message: SendHistoryMessage): string | null {
+    if (message.sequence_enrollment) {
+        const step = message.sequence_step ? ` #${message.sequence_step.order_index + 1}` : "";
+        return `${message.sequence_enrollment.sequence.name}${step}`;
+    }
+    return message.campaign?.name ?? null;
 }
 
 export function getSendSourceLabel(message: SendHistoryMessage): string {

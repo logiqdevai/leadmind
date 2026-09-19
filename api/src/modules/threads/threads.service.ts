@@ -7,6 +7,7 @@ import {
     ThreadReplyState,
 } from '@/generated/prisma';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
+import { EmailCredentialsService } from '@/modules/integrations/services/email-credentials.service';
 import { ListThreadContactsDto } from './dto/list-thread-contacts.dto';
 import {
     followUpCutoff,
@@ -37,7 +38,10 @@ export interface ResolveThreadInput {
  */
 @Injectable()
 export class ThreadsService {
-    constructor(private readonly prisma: PrismaService) { }
+    constructor(
+        private readonly prisma: PrismaService,
+        private readonly emailCredentialsService: EmailCredentialsService,
+    ) { }
 
     async resolveThreadForNewMessage(
         input: ResolveThreadInput,
@@ -394,12 +398,33 @@ export class ThreadsService {
     }
 
     /**
-     * Closes out a thread's "waiting on them" state without sending anything - the "no follow-up
-     * needed" action. The next email sent on the thread (or reply received) reopens it.
-     * Returns false when the thread doesn't exist in this organisation.
+     * Flags a conversation for follow-up by hand - it joins the "needs follow-up" list
+     * immediately, whatever its timing or origin. Cleared by dismissing it, by us sending on
+     * the thread, or by the contact replying. Returns false when the thread doesn't exist in
+     * this organisation.
+     */
+    async flagFollowUp(organisation_uuid: string, thread_uuid: string): Promise<boolean> {
+        const { count } = await this.prisma.messageThread.updateMany({
+            where: { uuid: thread_uuid, organisation_uuid },
+            data: { manual_follow_up_at: new Date() },
+        });
+        return count > 0;
+    }
+
+    /**
+     * Closes out a thread's follow-up state without sending anything - the "no follow-up
+     * needed" action. Clears a manual flag and stops waiting on the contact; the next email
+     * sent on the thread (or reply received) reopens it. Returns false when the thread doesn't
+     * exist in this organisation.
      */
     async dismissFollowUp(organisation_uuid: string, thread_uuid: string): Promise<boolean> {
         const { count } = await this.prisma.messageThread.updateMany({
+            where: { uuid: thread_uuid, organisation_uuid },
+            data: { manual_follow_up_at: null },
+        });
+        if (count === 0) return false;
+
+        await this.prisma.messageThread.updateMany({
             where: {
                 uuid: thread_uuid,
                 organisation_uuid,
@@ -407,12 +432,7 @@ export class ThreadsService {
             },
             data: { reply_state: ThreadReplyState.NONE },
         });
-        if (count > 0) return true;
-
-        const exists = await this.prisma.messageThread.count({
-            where: { uuid: thread_uuid, organisation_uuid },
-        });
-        return exists > 0;
+        return true;
     }
 
     /**
@@ -428,10 +448,13 @@ export class ThreadsService {
             return null;
         }
 
-        const messages = await this.prisma.outreachMessage.findMany({
-            where: { thread_uuid },
-            orderBy: { created_at: 'asc' },
-        });
+        const messages = await this.emailCredentialsService.withResolvedFromEmail(
+            organisation_uuid,
+            await this.prisma.outreachMessage.findMany({
+                where: { thread_uuid },
+                orderBy: { created_at: 'asc' },
+            }),
+        );
 
         const messageUuids = messages.map((message) => message.uuid);
         const interactions = messageUuids.length

@@ -15,14 +15,24 @@ export function followUpCutoff(now: Date = new Date()): Date {
     return new Date(now.getTime() - FOLLOW_UP_DEFAULT_DELAY_DAYS * DAY_MS);
 }
 
-/** Prisma filter for MessageThread rows that currently need a follow-up. Keep in sync with `isThreadNeedingFollowUp`. */
+/**
+ * Prisma filter for MessageThread rows that currently need a follow-up: either the automatic
+ * "we sent last and they went quiet" rule, or a conversation someone flagged by hand
+ * (`manual_follow_up_at`) - which counts regardless of timing, origin or reply state. Keep in
+ * sync with `isThreadNeedingFollowUp`.
+ */
 export function needsFollowUpThreadWhere(cutoff: Date): Prisma.MessageThreadWhereInput {
     return {
-        channel: Channel.EMAIL,
-        reply_state: ThreadReplyState.AWAITING_THEM,
-        last_outbound_at: { lte: cutoff },
-        contact: { unsubscribed_at: null },
-        OR: [{ origin: ThreadOrigin.MANUAL }, { last_inbound_at: { not: null } }],
+        OR: [
+            {
+                channel: Channel.EMAIL,
+                reply_state: ThreadReplyState.AWAITING_THEM,
+                last_outbound_at: { lte: cutoff },
+                contact: { unsubscribed_at: null },
+                OR: [{ origin: ThreadOrigin.MANUAL }, { last_inbound_at: { not: null } }],
+            },
+            { manual_follow_up_at: { not: null }, contact: { unsubscribed_at: null } },
+        ],
     };
 }
 
@@ -32,6 +42,8 @@ export interface FollowUpThreadFields {
     reply_state: ThreadReplyState;
     last_inbound_at: Date | null;
     last_outbound_at: Date | null;
+    /** Set when someone flagged the conversation for follow-up by hand. */
+    manual_follow_up_at: Date | null;
 }
 
 /** In-memory twin of `needsFollowUpThreadWhere`, for annotating rows already loaded. */
@@ -40,12 +52,14 @@ export function isThreadNeedingFollowUp(
     contact_unsubscribed_at: Date | null,
     cutoff: Date,
 ): boolean {
+    if (contact_unsubscribed_at) return false;
+    if (thread.manual_follow_up_at) return true;
+
     return (
         thread.channel === Channel.EMAIL &&
         thread.reply_state === ThreadReplyState.AWAITING_THEM &&
         !!thread.last_outbound_at &&
         thread.last_outbound_at.getTime() <= cutoff.getTime() &&
-        !contact_unsubscribed_at &&
         (thread.origin === ThreadOrigin.MANUAL || thread.last_inbound_at !== null)
     );
 }
@@ -115,5 +129,7 @@ export function messageThreadFlags(
             ? ThreadPriority.NEEDS_FOLLOW_UP
             : ThreadPriority.NONE;
 
-    return { has_unread_reply, needs_reply, needs_follow_up, priority };
+    const follow_up_manual = needs_follow_up && !!thread!.manual_follow_up_at;
+
+    return { has_unread_reply, needs_reply, needs_follow_up, follow_up_manual, priority };
 }

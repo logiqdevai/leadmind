@@ -142,6 +142,17 @@ export const markThreadRead = async (uuid: string): Promise<{ uuid: string; read
     }
 };
 
+export const flagThreadFollowUp = async (
+    uuid: string,
+): Promise<{ uuid: string; flagged: true }> => {
+    try {
+        const response = await axiosInstance.post(ApiRoutes.threads.flag_follow_up(uuid));
+        return response.data;
+    } catch (error: any) {
+        throw new Error(error?.response?.data?.message || "Failed to flag follow-up.");
+    }
+};
+
 export const dismissThreadFollowUp = async (
     uuid: string,
 ): Promise<{ uuid: string; dismissed: true }> => {

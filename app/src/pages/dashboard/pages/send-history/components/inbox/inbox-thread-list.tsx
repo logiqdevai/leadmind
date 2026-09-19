@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { Button, Chip } from "@heroui/react";
-import { ArrowLeft, Plus, RefreshCcw, Workflow, XCircle } from "lucide-react";
+import { Button } from "@heroui/react";
+import { ArrowLeft, BellPlus, Plus, RefreshCcw, Workflow, XCircle } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { cn } from "@/lib/utils";
 import { initialsFromName } from "@/lib/profile";
@@ -10,11 +10,15 @@ import { ComposeMessageModal } from "@/features/messaging/components/compose-mes
 import { EnrollInSequenceModal } from "@/features/sequences/components/enroll-in-sequence-modal";
 import { ResendSequenceDialog } from "@/features/outreach/components/resend-sequence-dialog";
 import { useContact, useContactThreads } from "@/features/contacts/hooks/use-contacts";
-import { useDismissFollowUp, useSendOutreachMessage } from "@/features/outreach/hooks/use-outreach";
+import {
+    useDismissFollowUp,
+    useFlagFollowUp,
+    useSendOutreachMessage,
+} from "@/features/outreach/hooks/use-outreach";
 import { useCancelEnrollment } from "@/features/sequences/hooks/use-sequences";
 import { SequenceEnrollmentStatus } from "@/features/sequences/interfaces/sequence.interface";
-import { MsgStatus, type ConversationThread } from "@/features/contacts/interfaces/contact.interface";
-import { ORIGIN_COLOR, ORIGIN_LABEL } from "@/features/messaging/components/thread-conversation";
+import { Channel, MsgStatus, type ConversationThread } from "@/features/contacts/interfaces/contact.interface";
+import { OriginIcon } from "@/features/messaging/components/thread-origin";
 import { FollowUpBadge, ReplyBadge } from "../follow-up-marker";
 
 interface InboxThreadListProps {
@@ -37,6 +41,7 @@ export function InboxThreadList({
     const { data: threads = [], isLoading } = useContactThreads(contactUuid);
     const sendMessage = useSendOutreachMessage();
     const dismissFollowUp = useDismissFollowUp();
+    const flagFollowUp = useFlagFollowUp();
     const cancelEnrollmentMut = useCancelEnrollment();
     const [composeOpen, setComposeOpen] = useState(false);
     const [enrollOpen, setEnrollOpen] = useState(false);
@@ -117,14 +122,12 @@ export function InboxThreadList({
                                     )}
                                 >
                                     <span className="flex items-center gap-1.5">
-                                        <Chip size="sm" variant="soft" color={ORIGIN_COLOR[thread.origin]}>
-                                            <Chip.Label>{ORIGIN_LABEL[thread.origin]}</Chip.Label>
-                                        </Chip>
+                                        <OriginIcon origin={thread.origin} />
                                         {thread.has_unread_reply || thread.needs_reply ? (
                                             <ReplyBadge isUnread={thread.has_unread_reply} />
                                         ) : null}
                                         {thread.needs_follow_up ? (
-                                            <FollowUpBadge since={thread.last_outbound_at} />
+                                            <FollowUpBadge since={thread.last_outbound_at} manual={!!thread.manual_follow_up_at} />
                                         ) : null}
                                         {thread.last_message_at ? (
                                             <span className="ml-auto shrink-0 text-[11px] text-muted">
@@ -158,6 +161,24 @@ export function InboxThreadList({
                                             >
                                                 <RefreshCcw className="size-3" />
                                                 Resend
+                                            </span>
+                                        ) : null}
+                                        {!thread.needs_follow_up && thread.channel === Channel.EMAIL ? (
+                                            <span
+                                                role="button"
+                                                tabIndex={0}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    if (flagFollowUp.isPending) return;
+                                                    flagFollowUp.mutate({
+                                                        threadUuid: thread.uuid,
+                                                        contactUuid,
+                                                    });
+                                                }}
+                                                className="inline-flex items-center gap-1 hover:text-foreground hover:underline"
+                                            >
+                                                <BellPlus className="size-3" />
+                                                Mark for follow-up
                                             </span>
                                         ) : null}
                                         {thread.needs_follow_up ? (

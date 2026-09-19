@@ -1,3 +1,4 @@
+import { OriginIcon } from "@/features/messaging/components/thread-origin";
 import { Chip, Modal } from "@heroui/react";
 import { useIntegrations } from "@/features/integrations/hooks/use-integrations";
 import type { SendHistoryMessage } from "@/features/outreach/interfaces/send-history.interface";
@@ -6,6 +7,7 @@ import {
     formatSendHistoryDate,
     getContactDestination,
     getSendIntegrationLabel,
+    getSendOrigin,
     getSendSourceLabel,
 } from "../utils/send-history.utils";
 import { STATUS_COLOR } from "./send-history-table";
@@ -39,17 +41,23 @@ export function SendHistoryMessageModal({ message, onOpenChange }: SendHistoryMe
                                     <Chip size="sm" variant="soft" color="default">
                                         <Chip.Label>{message.channel}</Chip.Label>
                                     </Chip>
-                                    <Chip size="sm" variant="soft" color="default">
-                                        <Chip.Label>{getSendSourceLabel(message)}</Chip.Label>
-                                    </Chip>
+                                    <span className="inline-flex items-center gap-1.5 text-xs text-foreground/90">
+                                        <OriginIcon origin={getSendOrigin(message)} />
+                                        {getSendSourceLabel(message)}
+                                    </span>
                                 </div>
 
                                 <dl className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
                                     <div>
-                                        <dt className="text-muted">Integration</dt>
-                                        <dd className="text-foreground/90">
-                                            {getSendIntegrationLabel(message, integrations)}
+                                        <dt className="text-muted">Sent from</dt>
+                                        <dd className="text-foreground/90 break-all">
+                                            {message.from_email ?? getSendIntegrationLabel(message, integrations)}
                                         </dd>
+                                        {message.from_email ? (
+                                            <dd className="text-muted">
+                                                {getSendIntegrationLabel(message, integrations)}
+                                            </dd>
+                                        ) : null}
                                     </div>
                                     <div>
                                         <dt className="text-muted">Sent by</dt>

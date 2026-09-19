@@ -10,7 +10,7 @@ import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { EditMessageModal } from "@/pages/dashboard/pages/leads/components/edit-message-modal";
 import { cn } from "@/lib/utils";
 import { ComposeMessageModal } from "@/features/messaging/components/compose-message-modal";
-import { ORIGIN_COLOR, ORIGIN_LABEL } from "@/features/messaging/components/thread-conversation";
+import { OriginIcon } from "@/features/messaging/components/thread-origin";
 import { EnrollInSequenceModal } from "@/features/sequences/components/enroll-in-sequence-modal";
 import { ResendSequenceDialog } from "@/features/outreach/components/resend-sequence-dialog";
 import { SequenceEnrollmentStatus } from "@/features/sequences/interfaces/sequence.interface";
@@ -250,11 +250,7 @@ export function OutreachTab({ contact, listUuid, highlightUuid, onHighlightConsu
               <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
                 <div className="min-w-0 flex flex-col gap-1.5">
                   <div className="flex flex-wrap items-center gap-1.5">
-                    {group.origin ? (
-                      <Chip size="sm" variant="soft" color={ORIGIN_COLOR[group.origin]}>
-                        <Chip.Label>{ORIGIN_LABEL[group.origin]}</Chip.Label>
-                      </Chip>
-                    ) : null}
+                    {group.origin ? <OriginIcon origin={group.origin} /> : null}
                     <Chip size="sm" variant="soft">
                       <Chip.Label>{group.channel}</Chip.Label>
                     </Chip>

@@ -70,6 +70,8 @@ export interface SendHistoryMessage {
     needs_reply: boolean;
     /** True on the latest sent email of a conversation we're now waiting on the contact to answer. */
     needs_follow_up: boolean;
+    /** The follow-up was flagged by hand rather than by the automatic no-reply timer. */
+    follow_up_manual: boolean;
     /** When that email went out - i.e. how long they've been quiet. Null unless `needs_follow_up`. */
     follow_up_since: string | null;
     channel: Channel;
@@ -81,6 +83,8 @@ export interface SendHistoryMessage {
     delivered_at: string | null;
     email_provider: EmailIntegrationProvider | null;
     email_account: string | null;
+    /** The address the email actually went out from (recorded at send time, or resolved from the account for older sends). */
+    from_email: string | null;
     sms_provider: string | null;
     metadata: Record<string, unknown> | null;
     created_at: string;

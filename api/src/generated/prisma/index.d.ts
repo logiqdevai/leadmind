@@ -34683,6 +34683,7 @@ export namespace Prisma {
     email_provider: $Enums.ExternalIntegrationProvider | null
     email_account: string | null
     email_domain_uuid: string | null
+    from_email: string | null
     sms_provider: string | null
     sequence_enrollment_uuid: string | null
     sequence_step_uuid: string | null
@@ -34725,6 +34726,7 @@ export namespace Prisma {
     email_provider: $Enums.ExternalIntegrationProvider | null
     email_account: string | null
     email_domain_uuid: string | null
+    from_email: string | null
     sms_provider: string | null
     sequence_enrollment_uuid: string | null
     sequence_step_uuid: string | null
@@ -34767,6 +34769,7 @@ export namespace Prisma {
     email_provider: number
     email_account: number
     email_domain_uuid: number
+    from_email: number
     sms_provider: number
     metadata: number
     sequence_enrollment_uuid: number
@@ -34820,6 +34823,7 @@ export namespace Prisma {
     email_provider?: true
     email_account?: true
     email_domain_uuid?: true
+    from_email?: true
     sms_provider?: true
     sequence_enrollment_uuid?: true
     sequence_step_uuid?: true
@@ -34862,6 +34866,7 @@ export namespace Prisma {
     email_provider?: true
     email_account?: true
     email_domain_uuid?: true
+    from_email?: true
     sms_provider?: true
     sequence_enrollment_uuid?: true
     sequence_step_uuid?: true
@@ -34904,6 +34909,7 @@ export namespace Prisma {
     email_provider?: true
     email_account?: true
     email_domain_uuid?: true
+    from_email?: true
     sms_provider?: true
     metadata?: true
     sequence_enrollment_uuid?: true
@@ -35034,6 +35040,7 @@ export namespace Prisma {
     email_provider: $Enums.ExternalIntegrationProvider | null
     email_account: string | null
     email_domain_uuid: string | null
+    from_email: string | null
     sms_provider: string | null
     metadata: JsonValue | null
     sequence_enrollment_uuid: string | null
@@ -35096,6 +35103,7 @@ export namespace Prisma {
     email_provider?: boolean
     email_account?: boolean
     email_domain_uuid?: boolean
+    from_email?: boolean
     sms_provider?: boolean
     metadata?: boolean
     sequence_enrollment_uuid?: boolean
@@ -35150,6 +35158,7 @@ export namespace Prisma {
     email_provider?: boolean
     email_account?: boolean
     email_domain_uuid?: boolean
+    from_email?: boolean
     sms_provider?: boolean
     metadata?: boolean
     sequence_enrollment_uuid?: boolean
@@ -35201,6 +35210,7 @@ export namespace Prisma {
     email_provider?: boolean
     email_account?: boolean
     email_domain_uuid?: boolean
+    from_email?: boolean
     sms_provider?: boolean
     metadata?: boolean
     sequence_enrollment_uuid?: boolean
@@ -35252,6 +35262,7 @@ export namespace Prisma {
     email_provider?: boolean
     email_account?: boolean
     email_domain_uuid?: boolean
+    from_email?: boolean
     sms_provider?: boolean
     metadata?: boolean
     sequence_enrollment_uuid?: boolean
@@ -35261,7 +35272,7 @@ export namespace Prisma {
     updated_at?: boolean
   }
 
-  export type OutreachMessageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "contact_uuid" | "campaign_uuid" | "sent_by_user_uuid" | "channel" | "direction" | "subject" | "content" | "status" | "provider_message_id" | "idempotency_key" | "scheduled_at" | "sent_at" | "delivered_at" | "opened_at" | "clicked_at" | "replied_at" | "bounced_at" | "failed_at" | "reply_subject" | "reply_text" | "reply_html" | "inbound_message_id" | "in_reply_to_message_id" | "message_id" | "references" | "thread_uuid" | "is_manual_reply" | "email_provider" | "email_account" | "email_domain_uuid" | "sms_provider" | "metadata" | "sequence_enrollment_uuid" | "sequence_step_uuid" | "campaign_integration_uuid" | "created_at" | "updated_at", ExtArgs["result"]["outreachMessage"]>
+  export type OutreachMessageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "contact_uuid" | "campaign_uuid" | "sent_by_user_uuid" | "channel" | "direction" | "subject" | "content" | "status" | "provider_message_id" | "idempotency_key" | "scheduled_at" | "sent_at" | "delivered_at" | "opened_at" | "clicked_at" | "replied_at" | "bounced_at" | "failed_at" | "reply_subject" | "reply_text" | "reply_html" | "inbound_message_id" | "in_reply_to_message_id" | "message_id" | "references" | "thread_uuid" | "is_manual_reply" | "email_provider" | "email_account" | "email_domain_uuid" | "from_email" | "sms_provider" | "metadata" | "sequence_enrollment_uuid" | "sequence_step_uuid" | "campaign_integration_uuid" | "created_at" | "updated_at", ExtArgs["result"]["outreachMessage"]>
   export type OutreachMessageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     contact?: boolean | ContactDefaultArgs<ExtArgs>
@@ -35344,6 +35355,7 @@ export namespace Prisma {
       email_provider: $Enums.ExternalIntegrationProvider | null
       email_account: string | null
       email_domain_uuid: string | null
+      from_email: string | null
       sms_provider: string | null
       metadata: Prisma.JsonValue | null
       sequence_enrollment_uuid: string | null
@@ -35817,6 +35829,7 @@ export namespace Prisma {
     readonly email_provider: FieldRef<"OutreachMessage", 'ExternalIntegrationProvider'>
     readonly email_account: FieldRef<"OutreachMessage", 'String'>
     readonly email_domain_uuid: FieldRef<"OutreachMessage", 'String'>
+    readonly from_email: FieldRef<"OutreachMessage", 'String'>
     readonly sms_provider: FieldRef<"OutreachMessage", 'String'>
     readonly metadata: FieldRef<"OutreachMessage", 'Json'>
     readonly sequence_enrollment_uuid: FieldRef<"OutreachMessage", 'String'>
@@ -36439,6 +36452,7 @@ export namespace Prisma {
     last_outbound_at: Date | null
     reply_state: $Enums.ThreadReplyState | null
     has_unread_reply: boolean | null
+    manual_follow_up_at: Date | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -36460,6 +36474,7 @@ export namespace Prisma {
     last_outbound_at: Date | null
     reply_state: $Enums.ThreadReplyState | null
     has_unread_reply: boolean | null
+    manual_follow_up_at: Date | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -36481,6 +36496,7 @@ export namespace Prisma {
     last_outbound_at: number
     reply_state: number
     has_unread_reply: number
+    manual_follow_up_at: number
     created_at: number
     updated_at: number
     _all: number
@@ -36514,6 +36530,7 @@ export namespace Prisma {
     last_outbound_at?: true
     reply_state?: true
     has_unread_reply?: true
+    manual_follow_up_at?: true
     created_at?: true
     updated_at?: true
   }
@@ -36535,6 +36552,7 @@ export namespace Prisma {
     last_outbound_at?: true
     reply_state?: true
     has_unread_reply?: true
+    manual_follow_up_at?: true
     created_at?: true
     updated_at?: true
   }
@@ -36556,6 +36574,7 @@ export namespace Prisma {
     last_outbound_at?: true
     reply_state?: true
     has_unread_reply?: true
+    manual_follow_up_at?: true
     created_at?: true
     updated_at?: true
     _all?: true
@@ -36664,6 +36683,7 @@ export namespace Prisma {
     last_outbound_at: Date | null
     reply_state: $Enums.ThreadReplyState
     has_unread_reply: boolean
+    manual_follow_up_at: Date | null
     created_at: Date
     updated_at: Date
     _count: MessageThreadCountAggregateOutputType | null
@@ -36704,6 +36724,7 @@ export namespace Prisma {
     last_outbound_at?: boolean
     reply_state?: boolean
     has_unread_reply?: boolean
+    manual_follow_up_at?: boolean
     created_at?: boolean
     updated_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
@@ -36729,6 +36750,7 @@ export namespace Prisma {
     last_outbound_at?: boolean
     reply_state?: boolean
     has_unread_reply?: boolean
+    manual_follow_up_at?: boolean
     created_at?: boolean
     updated_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
@@ -36752,6 +36774,7 @@ export namespace Prisma {
     last_outbound_at?: boolean
     reply_state?: boolean
     has_unread_reply?: boolean
+    manual_follow_up_at?: boolean
     created_at?: boolean
     updated_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
@@ -36775,11 +36798,12 @@ export namespace Prisma {
     last_outbound_at?: boolean
     reply_state?: boolean
     has_unread_reply?: boolean
+    manual_follow_up_at?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
-  export type MessageThreadOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "contact_uuid" | "channel" | "subject" | "origin" | "sequence_enrollment_uuid" | "campaign_uuid" | "dedupe_key" | "last_message_at" | "message_count" | "last_inbound_at" | "last_outbound_at" | "reply_state" | "has_unread_reply" | "created_at" | "updated_at", ExtArgs["result"]["messageThread"]>
+  export type MessageThreadOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "contact_uuid" | "channel" | "subject" | "origin" | "sequence_enrollment_uuid" | "campaign_uuid" | "dedupe_key" | "last_message_at" | "message_count" | "last_inbound_at" | "last_outbound_at" | "reply_state" | "has_unread_reply" | "manual_follow_up_at" | "created_at" | "updated_at", ExtArgs["result"]["messageThread"]>
   export type MessageThreadInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     contact?: boolean | ContactDefaultArgs<ExtArgs>
@@ -36819,6 +36843,7 @@ export namespace Prisma {
       last_outbound_at: Date | null
       reply_state: $Enums.ThreadReplyState
       has_unread_reply: boolean
+      manual_follow_up_at: Date | null
       created_at: Date
       updated_at: Date
     }, ExtArgs["result"]["messageThread"]>
@@ -37263,6 +37288,7 @@ export namespace Prisma {
     readonly last_outbound_at: FieldRef<"MessageThread", 'DateTime'>
     readonly reply_state: FieldRef<"MessageThread", 'ThreadReplyState'>
     readonly has_unread_reply: FieldRef<"MessageThread", 'Boolean'>
+    readonly manual_follow_up_at: FieldRef<"MessageThread", 'DateTime'>
     readonly created_at: FieldRef<"MessageThread", 'DateTime'>
     readonly updated_at: FieldRef<"MessageThread", 'DateTime'>
   }
@@ -81217,6 +81243,7 @@ export namespace Prisma {
     email_provider: 'email_provider',
     email_account: 'email_account',
     email_domain_uuid: 'email_domain_uuid',
+    from_email: 'from_email',
     sms_provider: 'sms_provider',
     metadata: 'metadata',
     sequence_enrollment_uuid: 'sequence_enrollment_uuid',
@@ -81246,6 +81273,7 @@ export namespace Prisma {
     last_outbound_at: 'last_outbound_at',
     reply_state: 'reply_state',
     has_unread_reply: 'has_unread_reply',
+    manual_follow_up_at: 'manual_follow_up_at',
     created_at: 'created_at',
     updated_at: 'updated_at'
   };
@@ -84793,6 +84821,7 @@ export namespace Prisma {
     email_provider?: EnumExternalIntegrationProviderNullableFilter<"OutreachMessage"> | $Enums.ExternalIntegrationProvider | null
     email_account?: StringNullableFilter<"OutreachMessage"> | string | null
     email_domain_uuid?: StringNullableFilter<"OutreachMessage"> | string | null
+    from_email?: StringNullableFilter<"OutreachMessage"> | string | null
     sms_provider?: StringNullableFilter<"OutreachMessage"> | string | null
     metadata?: JsonNullableFilter<"OutreachMessage">
     sequence_enrollment_uuid?: StringNullableFilter<"OutreachMessage"> | string | null
@@ -84846,6 +84875,7 @@ export namespace Prisma {
     email_provider?: SortOrderInput | SortOrder
     email_account?: SortOrderInput | SortOrder
     email_domain_uuid?: SortOrderInput | SortOrder
+    from_email?: SortOrderInput | SortOrder
     sms_provider?: SortOrderInput | SortOrder
     metadata?: SortOrderInput | SortOrder
     sequence_enrollment_uuid?: SortOrderInput | SortOrder
@@ -84902,6 +84932,7 @@ export namespace Prisma {
     email_provider?: EnumExternalIntegrationProviderNullableFilter<"OutreachMessage"> | $Enums.ExternalIntegrationProvider | null
     email_account?: StringNullableFilter<"OutreachMessage"> | string | null
     email_domain_uuid?: StringNullableFilter<"OutreachMessage"> | string | null
+    from_email?: StringNullableFilter<"OutreachMessage"> | string | null
     sms_provider?: StringNullableFilter<"OutreachMessage"> | string | null
     metadata?: JsonNullableFilter<"OutreachMessage">
     sequence_enrollment_uuid?: StringNullableFilter<"OutreachMessage"> | string | null
@@ -84955,6 +84986,7 @@ export namespace Prisma {
     email_provider?: SortOrderInput | SortOrder
     email_account?: SortOrderInput | SortOrder
     email_domain_uuid?: SortOrderInput | SortOrder
+    from_email?: SortOrderInput | SortOrder
     sms_provider?: SortOrderInput | SortOrder
     metadata?: SortOrderInput | SortOrder
     sequence_enrollment_uuid?: SortOrderInput | SortOrder
@@ -85006,6 +85038,7 @@ export namespace Prisma {
     email_provider?: EnumExternalIntegrationProviderNullableWithAggregatesFilter<"OutreachMessage"> | $Enums.ExternalIntegrationProvider | null
     email_account?: StringNullableWithAggregatesFilter<"OutreachMessage"> | string | null
     email_domain_uuid?: StringNullableWithAggregatesFilter<"OutreachMessage"> | string | null
+    from_email?: StringNullableWithAggregatesFilter<"OutreachMessage"> | string | null
     sms_provider?: StringNullableWithAggregatesFilter<"OutreachMessage"> | string | null
     metadata?: JsonNullableWithAggregatesFilter<"OutreachMessage">
     sequence_enrollment_uuid?: StringNullableWithAggregatesFilter<"OutreachMessage"> | string | null
@@ -85035,6 +85068,7 @@ export namespace Prisma {
     last_outbound_at?: DateTimeNullableFilter<"MessageThread"> | Date | string | null
     reply_state?: EnumThreadReplyStateFilter<"MessageThread"> | $Enums.ThreadReplyState
     has_unread_reply?: BoolFilter<"MessageThread"> | boolean
+    manual_follow_up_at?: DateTimeNullableFilter<"MessageThread"> | Date | string | null
     created_at?: DateTimeFilter<"MessageThread"> | Date | string
     updated_at?: DateTimeFilter<"MessageThread"> | Date | string
     organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
@@ -85059,6 +85093,7 @@ export namespace Prisma {
     last_outbound_at?: SortOrderInput | SortOrder
     reply_state?: SortOrder
     has_unread_reply?: SortOrder
+    manual_follow_up_at?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     organisation?: OrganisationOrderByWithRelationInput
@@ -85086,6 +85121,7 @@ export namespace Prisma {
     last_outbound_at?: DateTimeNullableFilter<"MessageThread"> | Date | string | null
     reply_state?: EnumThreadReplyStateFilter<"MessageThread"> | $Enums.ThreadReplyState
     has_unread_reply?: BoolFilter<"MessageThread"> | boolean
+    manual_follow_up_at?: DateTimeNullableFilter<"MessageThread"> | Date | string | null
     created_at?: DateTimeFilter<"MessageThread"> | Date | string
     updated_at?: DateTimeFilter<"MessageThread"> | Date | string
     organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
@@ -85110,6 +85146,7 @@ export namespace Prisma {
     last_outbound_at?: SortOrderInput | SortOrder
     reply_state?: SortOrder
     has_unread_reply?: SortOrder
+    manual_follow_up_at?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     _count?: MessageThreadCountOrderByAggregateInput
@@ -85139,6 +85176,7 @@ export namespace Prisma {
     last_outbound_at?: DateTimeNullableWithAggregatesFilter<"MessageThread"> | Date | string | null
     reply_state?: EnumThreadReplyStateWithAggregatesFilter<"MessageThread"> | $Enums.ThreadReplyState
     has_unread_reply?: BoolWithAggregatesFilter<"MessageThread"> | boolean
+    manual_follow_up_at?: DateTimeNullableWithAggregatesFilter<"MessageThread"> | Date | string | null
     created_at?: DateTimeWithAggregatesFilter<"MessageThread"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"MessageThread"> | Date | string
   }
@@ -90827,6 +90865,7 @@ export namespace Prisma {
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
+    from_email?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
@@ -90877,6 +90916,7 @@ export namespace Prisma {
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
+    from_email?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: string | null
@@ -90916,6 +90956,7 @@ export namespace Prisma {
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    from_email?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -90966,6 +91007,7 @@ export namespace Prisma {
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    from_email?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -91011,6 +91053,7 @@ export namespace Prisma {
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
+    from_email?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: string | null
@@ -91048,6 +91091,7 @@ export namespace Prisma {
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    from_email?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -91088,6 +91132,7 @@ export namespace Prisma {
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    from_email?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -91111,6 +91156,7 @@ export namespace Prisma {
     last_outbound_at?: Date | string | null
     reply_state?: $Enums.ThreadReplyState
     has_unread_reply?: boolean
+    manual_follow_up_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutMessage_threadsInput
@@ -91135,6 +91181,7 @@ export namespace Prisma {
     last_outbound_at?: Date | string | null
     reply_state?: $Enums.ThreadReplyState
     has_unread_reply?: boolean
+    manual_follow_up_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     messages?: OutreachMessageUncheckedCreateNestedManyWithoutThreadInput
@@ -91154,6 +91201,7 @@ export namespace Prisma {
     last_outbound_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reply_state?: EnumThreadReplyStateFieldUpdateOperationsInput | $Enums.ThreadReplyState
     has_unread_reply?: BoolFieldUpdateOperationsInput | boolean
+    manual_follow_up_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutMessage_threadsNestedInput
@@ -91178,6 +91226,7 @@ export namespace Prisma {
     last_outbound_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reply_state?: EnumThreadReplyStateFieldUpdateOperationsInput | $Enums.ThreadReplyState
     has_unread_reply?: BoolFieldUpdateOperationsInput | boolean
+    manual_follow_up_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     messages?: OutreachMessageUncheckedUpdateManyWithoutThreadNestedInput
@@ -91200,6 +91249,7 @@ export namespace Prisma {
     last_outbound_at?: Date | string | null
     reply_state?: $Enums.ThreadReplyState
     has_unread_reply?: boolean
+    manual_follow_up_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -91218,6 +91268,7 @@ export namespace Prisma {
     last_outbound_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reply_state?: EnumThreadReplyStateFieldUpdateOperationsInput | $Enums.ThreadReplyState
     has_unread_reply?: BoolFieldUpdateOperationsInput | boolean
+    manual_follow_up_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -91239,6 +91290,7 @@ export namespace Prisma {
     last_outbound_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reply_state?: EnumThreadReplyStateFieldUpdateOperationsInput | $Enums.ThreadReplyState
     has_unread_reply?: BoolFieldUpdateOperationsInput | boolean
+    manual_follow_up_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -97237,6 +97289,7 @@ export namespace Prisma {
     email_provider?: SortOrder
     email_account?: SortOrder
     email_domain_uuid?: SortOrder
+    from_email?: SortOrder
     sms_provider?: SortOrder
     metadata?: SortOrder
     sequence_enrollment_uuid?: SortOrder
@@ -97284,6 +97337,7 @@ export namespace Prisma {
     email_provider?: SortOrder
     email_account?: SortOrder
     email_domain_uuid?: SortOrder
+    from_email?: SortOrder
     sms_provider?: SortOrder
     sequence_enrollment_uuid?: SortOrder
     sequence_step_uuid?: SortOrder
@@ -97326,6 +97380,7 @@ export namespace Prisma {
     email_provider?: SortOrder
     email_account?: SortOrder
     email_domain_uuid?: SortOrder
+    from_email?: SortOrder
     sms_provider?: SortOrder
     sequence_enrollment_uuid?: SortOrder
     sequence_step_uuid?: SortOrder
@@ -97409,6 +97464,7 @@ export namespace Prisma {
     last_outbound_at?: SortOrder
     reply_state?: SortOrder
     has_unread_reply?: SortOrder
+    manual_follow_up_at?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -97435,6 +97491,7 @@ export namespace Prisma {
     last_outbound_at?: SortOrder
     reply_state?: SortOrder
     has_unread_reply?: SortOrder
+    manual_follow_up_at?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -97456,6 +97513,7 @@ export namespace Prisma {
     last_outbound_at?: SortOrder
     reply_state?: SortOrder
     has_unread_reply?: SortOrder
+    manual_follow_up_at?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -107730,6 +107788,7 @@ export namespace Prisma {
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
+    from_email?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
@@ -107778,6 +107837,7 @@ export namespace Prisma {
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
+    from_email?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: string | null
@@ -108204,6 +108264,7 @@ export namespace Prisma {
     email_provider?: EnumExternalIntegrationProviderNullableFilter<"OutreachMessage"> | $Enums.ExternalIntegrationProvider | null
     email_account?: StringNullableFilter<"OutreachMessage"> | string | null
     email_domain_uuid?: StringNullableFilter<"OutreachMessage"> | string | null
+    from_email?: StringNullableFilter<"OutreachMessage"> | string | null
     sms_provider?: StringNullableFilter<"OutreachMessage"> | string | null
     metadata?: JsonNullableFilter<"OutreachMessage">
     sequence_enrollment_uuid?: StringNullableFilter<"OutreachMessage"> | string | null
@@ -108696,6 +108757,7 @@ export namespace Prisma {
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
+    from_email?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
@@ -108744,6 +108806,7 @@ export namespace Prisma {
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
+    from_email?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: string | null
@@ -108779,6 +108842,7 @@ export namespace Prisma {
     last_outbound_at?: Date | string | null
     reply_state?: $Enums.ThreadReplyState
     has_unread_reply?: boolean
+    manual_follow_up_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     contact: ContactCreateNestedOneWithoutMessage_threadsInput
@@ -108801,6 +108865,7 @@ export namespace Prisma {
     last_outbound_at?: Date | string | null
     reply_state?: $Enums.ThreadReplyState
     has_unread_reply?: boolean
+    manual_follow_up_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     messages?: OutreachMessageUncheckedCreateNestedManyWithoutThreadInput
@@ -110058,6 +110123,7 @@ export namespace Prisma {
     last_outbound_at?: DateTimeNullableFilter<"MessageThread"> | Date | string | null
     reply_state?: EnumThreadReplyStateFilter<"MessageThread"> | $Enums.ThreadReplyState
     has_unread_reply?: BoolFilter<"MessageThread"> | boolean
+    manual_follow_up_at?: DateTimeNullableFilter<"MessageThread"> | Date | string | null
     created_at?: DateTimeFilter<"MessageThread"> | Date | string
     updated_at?: DateTimeFilter<"MessageThread"> | Date | string
   }
@@ -113733,6 +113799,7 @@ export namespace Prisma {
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
+    from_email?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
@@ -113781,6 +113848,7 @@ export namespace Prisma {
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
+    from_email?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: string | null
@@ -113816,6 +113884,7 @@ export namespace Prisma {
     last_outbound_at?: Date | string | null
     reply_state?: $Enums.ThreadReplyState
     has_unread_reply?: boolean
+    manual_follow_up_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutMessage_threadsInput
@@ -113838,6 +113907,7 @@ export namespace Prisma {
     last_outbound_at?: Date | string | null
     reply_state?: $Enums.ThreadReplyState
     has_unread_reply?: boolean
+    manual_follow_up_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     messages?: OutreachMessageUncheckedCreateNestedManyWithoutThreadInput
@@ -116798,6 +116868,7 @@ export namespace Prisma {
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
+    from_email?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
@@ -116847,6 +116918,7 @@ export namespace Prisma {
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
+    from_email?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: string | null
@@ -117193,6 +117265,7 @@ export namespace Prisma {
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    from_email?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -117242,6 +117315,7 @@ export namespace Prisma {
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    from_email?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -117892,6 +117966,7 @@ export namespace Prisma {
     last_outbound_at?: Date | string | null
     reply_state?: $Enums.ThreadReplyState
     has_unread_reply?: boolean
+    manual_follow_up_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutMessage_threadsInput
@@ -117915,6 +117990,7 @@ export namespace Prisma {
     last_outbound_at?: Date | string | null
     reply_state?: $Enums.ThreadReplyState
     has_unread_reply?: boolean
+    manual_follow_up_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -118467,6 +118543,7 @@ export namespace Prisma {
     last_outbound_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reply_state?: EnumThreadReplyStateFieldUpdateOperationsInput | $Enums.ThreadReplyState
     has_unread_reply?: BoolFieldUpdateOperationsInput | boolean
+    manual_follow_up_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutMessage_threadsNestedInput
@@ -118490,6 +118567,7 @@ export namespace Prisma {
     last_outbound_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reply_state?: EnumThreadReplyStateFieldUpdateOperationsInput | $Enums.ThreadReplyState
     has_unread_reply?: BoolFieldUpdateOperationsInput | boolean
+    manual_follow_up_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -118706,6 +118784,7 @@ export namespace Prisma {
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
+    from_email?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
@@ -118754,6 +118833,7 @@ export namespace Prisma {
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
+    from_email?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: string | null
@@ -119530,6 +119610,7 @@ export namespace Prisma {
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
+    from_email?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
@@ -119579,6 +119660,7 @@ export namespace Prisma {
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
+    from_email?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: string | null
@@ -119979,6 +120061,7 @@ export namespace Prisma {
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
+    from_email?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
@@ -120028,6 +120111,7 @@ export namespace Prisma {
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
+    from_email?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_step_uuid?: string | null
@@ -121699,6 +121783,7 @@ export namespace Prisma {
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
+    from_email?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
@@ -121747,6 +121832,7 @@ export namespace Prisma {
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
+    from_email?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: string | null
@@ -124099,6 +124185,7 @@ export namespace Prisma {
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
+    from_email?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
@@ -124148,6 +124235,7 @@ export namespace Prisma {
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
+    from_email?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: string | null
@@ -124398,6 +124486,7 @@ export namespace Prisma {
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    from_email?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -124447,6 +124536,7 @@ export namespace Prisma {
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    from_email?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -127438,6 +127528,7 @@ export namespace Prisma {
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
+    from_email?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
@@ -127487,6 +127578,7 @@ export namespace Prisma {
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
+    from_email?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: string | null
@@ -128816,6 +128908,7 @@ export namespace Prisma {
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
+    from_email?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: string | null
@@ -129045,6 +129138,7 @@ export namespace Prisma {
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    from_email?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -129093,6 +129187,7 @@ export namespace Prisma {
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    from_email?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -129137,6 +129232,7 @@ export namespace Prisma {
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    from_email?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -129538,6 +129634,7 @@ export namespace Prisma {
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
+    from_email?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: string | null
@@ -129563,6 +129660,7 @@ export namespace Prisma {
     last_outbound_at?: Date | string | null
     reply_state?: $Enums.ThreadReplyState
     has_unread_reply?: boolean
+    manual_follow_up_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -130240,6 +130338,7 @@ export namespace Prisma {
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    from_email?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -130288,6 +130387,7 @@ export namespace Prisma {
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    from_email?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -130332,6 +130432,7 @@ export namespace Prisma {
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    from_email?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -130355,6 +130456,7 @@ export namespace Prisma {
     last_outbound_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reply_state?: EnumThreadReplyStateFieldUpdateOperationsInput | $Enums.ThreadReplyState
     has_unread_reply?: BoolFieldUpdateOperationsInput | boolean
+    manual_follow_up_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     contact?: ContactUpdateOneRequiredWithoutMessage_threadsNestedInput
@@ -130377,6 +130479,7 @@ export namespace Prisma {
     last_outbound_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reply_state?: EnumThreadReplyStateFieldUpdateOperationsInput | $Enums.ThreadReplyState
     has_unread_reply?: BoolFieldUpdateOperationsInput | boolean
+    manual_follow_up_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     messages?: OutreachMessageUncheckedUpdateManyWithoutThreadNestedInput
@@ -130398,6 +130501,7 @@ export namespace Prisma {
     last_outbound_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reply_state?: EnumThreadReplyStateFieldUpdateOperationsInput | $Enums.ThreadReplyState
     has_unread_reply?: BoolFieldUpdateOperationsInput | boolean
+    manual_follow_up_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -132314,6 +132418,7 @@ export namespace Prisma {
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
+    from_email?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: string | null
@@ -132339,6 +132444,7 @@ export namespace Prisma {
     last_outbound_at?: Date | string | null
     reply_state?: $Enums.ThreadReplyState
     has_unread_reply?: boolean
+    manual_follow_up_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -132557,6 +132663,7 @@ export namespace Prisma {
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    from_email?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -132605,6 +132712,7 @@ export namespace Prisma {
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    from_email?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -132649,6 +132757,7 @@ export namespace Prisma {
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    from_email?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -132672,6 +132781,7 @@ export namespace Prisma {
     last_outbound_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reply_state?: EnumThreadReplyStateFieldUpdateOperationsInput | $Enums.ThreadReplyState
     has_unread_reply?: BoolFieldUpdateOperationsInput | boolean
+    manual_follow_up_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutMessage_threadsNestedInput
@@ -132694,6 +132804,7 @@ export namespace Prisma {
     last_outbound_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reply_state?: EnumThreadReplyStateFieldUpdateOperationsInput | $Enums.ThreadReplyState
     has_unread_reply?: BoolFieldUpdateOperationsInput | boolean
+    manual_follow_up_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     messages?: OutreachMessageUncheckedUpdateManyWithoutThreadNestedInput
@@ -132715,6 +132826,7 @@ export namespace Prisma {
     last_outbound_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reply_state?: EnumThreadReplyStateFieldUpdateOperationsInput | $Enums.ThreadReplyState
     has_unread_reply?: BoolFieldUpdateOperationsInput | boolean
+    manual_follow_up_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -133443,6 +133555,7 @@ export namespace Prisma {
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
+    from_email?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: string | null
@@ -133480,6 +133593,7 @@ export namespace Prisma {
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    from_email?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -133528,6 +133642,7 @@ export namespace Prisma {
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    from_email?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -133572,6 +133687,7 @@ export namespace Prisma {
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    from_email?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -133938,6 +134054,7 @@ export namespace Prisma {
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
+    from_email?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: string | null
@@ -133974,6 +134091,7 @@ export namespace Prisma {
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    from_email?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -134023,6 +134141,7 @@ export namespace Prisma {
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    from_email?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -134067,6 +134186,7 @@ export namespace Prisma {
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    from_email?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -134109,6 +134229,7 @@ export namespace Prisma {
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
+    from_email?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_step_uuid?: string | null
@@ -134145,6 +134266,7 @@ export namespace Prisma {
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    from_email?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -134194,6 +134316,7 @@ export namespace Prisma {
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    from_email?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_step_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -134238,6 +134361,7 @@ export namespace Prisma {
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    from_email?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_step_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -134538,6 +134662,7 @@ export namespace Prisma {
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
+    from_email?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: string | null
@@ -134657,6 +134782,7 @@ export namespace Prisma {
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    from_email?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -134705,6 +134831,7 @@ export namespace Prisma {
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    from_email?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -134749,6 +134876,7 @@ export namespace Prisma {
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    from_email?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -135534,6 +135662,7 @@ export namespace Prisma {
     email_provider?: $Enums.ExternalIntegrationProvider | null
     email_account?: string | null
     email_domain_uuid?: string | null
+    from_email?: string | null
     sms_provider?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: string | null
@@ -135570,6 +135699,7 @@ export namespace Prisma {
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    from_email?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -135619,6 +135749,7 @@ export namespace Prisma {
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    from_email?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -135663,6 +135794,7 @@ export namespace Prisma {
     email_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
     email_account?: NullableStringFieldUpdateOperationsInput | string | null
     email_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    from_email?: NullableStringFieldUpdateOperationsInput | string | null
     sms_provider?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     sequence_enrollment_uuid?: NullableStringFieldUpdateOperationsInput | string | null

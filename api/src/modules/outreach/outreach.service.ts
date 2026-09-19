@@ -455,6 +455,7 @@ export class OutreachService {
                     origin: true,
                     reply_state: true,
                     has_unread_reply: true,
+                    manual_follow_up_at: true,
                     last_inbound_at: true,
                     last_outbound_at: true,
                 },
@@ -508,6 +509,7 @@ export class OutreachService {
                             origin: true,
                             reply_state: true,
                             has_unread_reply: true,
+                            manual_follow_up_at: true,
                             last_inbound_at: true,
                             last_outbound_at: true,
                         },
@@ -548,13 +550,16 @@ export class OutreachService {
             .slice(skip, skip + limit)
             .map(({ candidate }) => candidate.uuid);
 
-        const rows =
+        const rawRows =
             pageUuids.length === 0
                 ? []
                 : await this.prisma.outreachMessage.findMany({
                       where: { uuid: { in: pageUuids } },
                       include: messageInclude,
                   });
+
+        // Messages sent before `from_email` was recorded fall back to the account's configured From address.
+        const rows = await this.emailCredentialsService.withResolvedFromEmail(organisation_uuid, rawRows);
 
         const order = new Map(pageUuids.map((uuid, index) => [uuid, index]));
         const data = [...rows]
@@ -565,6 +570,7 @@ export class OutreachService {
                     ...row,
                     contact,
                     needs_follow_up: flags.needs_follow_up,
+                    follow_up_manual: flags.follow_up_manual,
                     follow_up_since: flags.needs_follow_up ? thread!.last_outbound_at : null,
                     needs_reply: flags.needs_reply,
                     has_unread_reply: flags.has_unread_reply,

@@ -181,6 +181,8 @@ export interface OutreachMessage {
     reply_subject?: string | null;
     reply_text?: string | null;
     reply_html?: string | null;
+    /** The address the email went out from; null for SMS/calls and sends whose account can no longer be resolved. */
+    from_email?: string | null;
     metadata: Record<string, unknown> | null;
     created_at: string;
     updated_at: string;
@@ -221,8 +223,10 @@ export interface ConversationThread {
     /** The contact's latest reply hasn't been opened yet. */
     has_unread_reply: boolean;
     needs_reply: boolean;
-    /** We sent last and the contact hasn't answered within the follow-up window. */
+    /** We sent last and the contact hasn't answered within the follow-up window - or someone flagged it by hand. */
     needs_follow_up: boolean;
+    /** When someone manually flagged this conversation for follow-up; null if not flagged. */
+    manual_follow_up_at: string | null;
     last_message: { uuid: string; status: MsgStatus } | null;
     sequence_enrollment: {
         uuid: string;

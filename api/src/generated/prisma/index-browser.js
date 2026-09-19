@@ -425,6 +425,7 @@ exports.Prisma.OutreachMessageScalarFieldEnum = {
   email_provider: 'email_provider',
   email_account: 'email_account',
   email_domain_uuid: 'email_domain_uuid',
+  from_email: 'from_email',
   sms_provider: 'sms_provider',
   metadata: 'metadata',
   sequence_enrollment_uuid: 'sequence_enrollment_uuid',
@@ -451,6 +452,7 @@ exports.Prisma.MessageThreadScalarFieldEnum = {
   last_outbound_at: 'last_outbound_at',
   reply_state: 'reply_state',
   has_unread_reply: 'has_unread_reply',
+  manual_follow_up_at: 'manual_follow_up_at',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };
