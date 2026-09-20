@@ -10,6 +10,7 @@ export interface ContactAudienceAnalysisRecord {
     scope: ContactAudienceAnalysisScope;
     filter_uuid: string | null;
     contact_list_uuid: string | null;
+    campaign_uuid: string | null;
     audience_name: string;
     stats_snapshot: ContactAudienceStats;
     analysis: ContactAudienceAnalysisContent | Record<string, never>;

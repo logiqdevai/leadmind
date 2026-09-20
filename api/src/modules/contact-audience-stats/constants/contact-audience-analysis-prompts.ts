@@ -8,8 +8,10 @@ Do not invent metrics not present in the data.
 Focus on pipeline health, engagement gaps, meeting/call performance, and next steps.
 When a previous analysis is provided, add a short comparison of the new run vs the previous run only.`;
 
+export type AudienceAnalysisScopeLabel = 'filter' | 'list' | 'campaign' | 'CRM';
+
 export function buildAudienceAnalysisPrompt(
-    scopeLabel: 'filter' | 'list',
+    scopeLabel: AudienceAnalysisScopeLabel,
     audienceName: string,
     stats: ContactAudienceStats,
     previous?: {

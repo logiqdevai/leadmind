@@ -3,7 +3,7 @@ import { Sparkles, Trash2 } from "lucide-react";
 import { Button } from "@heroui/react";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
-import type { AudienceAnalysisScope } from "@/features/contact-audience-stats/interfaces/contact-audience-stats.interface";
+import type { ContactAudienceScope } from "@/features/contact-audience-stats/interfaces/contact-audience-stats.interface";
 import type {
     ContactAudienceAnalysis,
     ContactAudienceAnalysisContent,
@@ -17,7 +17,7 @@ import {
 import { cn } from "@/lib/utils";
 
 interface AudienceAiAnalysisSectionProps {
-    scope: AudienceAnalysisScope;
+    scope: ContactAudienceScope;
 }
 
 function formatAnalysisDate(value: string): string {

@@ -12,6 +12,7 @@ import { ListContactAudienceAnalysesDto } from './dto/list-contact-audience-anal
 import {
     AUDIENCE_ANALYSIS_SYSTEM_PROMPT,
     buildAudienceAnalysisPrompt,
+    type AudienceAnalysisScopeLabel,
 } from './constants/contact-audience-analysis-prompts';
 import {
     CONTACT_AUDIENCE_ANALYSIS_SCHEMA,
@@ -28,6 +29,7 @@ const analysisSelect = {
     scope: true,
     filter_uuid: true,
     contact_list_uuid: true,
+    campaign_uuid: true,
     audience_name: true,
     stats_snapshot: true,
     analysis: true,
@@ -68,6 +70,7 @@ export class ContactAudienceAnalysisService {
             scope: ContactAudienceAnalysisScope.FILTER,
             filter_uuid: filter.uuid,
             contact_list_uuid: null,
+            campaign_uuid: null,
             audience_name: filter.name,
             stats,
             scopeLabel: 'filter',
@@ -90,9 +93,53 @@ export class ContactAudienceAnalysisService {
             scope: ContactAudienceAnalysisScope.LIST,
             filter_uuid: null,
             contact_list_uuid: list.uuid,
+            campaign_uuid: null,
             audience_name: list.title,
             stats,
             scopeLabel: 'list',
+        });
+    }
+
+    async createCampaignAnalysis(
+        organisation_uuid: string,
+        campaignUuid: string,
+    ): Promise<ContactAudienceAnalysisRecord> {
+        const campaign = await this.prisma.marketingCampaign.findFirst({
+            where: { uuid: campaignUuid, organisation_uuid },
+            select: { uuid: true, name: true },
+        });
+        if (!campaign) throw new NotFoundException('Campaign not found');
+
+        const stats = await this.contactAudienceStatsService.getCampaignStats(
+            organisation_uuid,
+            campaignUuid,
+            {},
+        );
+        return this.runAnalysis({
+            organisation_uuid,
+            scope: ContactAudienceAnalysisScope.CAMPAIGN,
+            filter_uuid: null,
+            contact_list_uuid: null,
+            campaign_uuid: campaign.uuid,
+            audience_name: campaign.name,
+            stats,
+            scopeLabel: 'campaign',
+        });
+    }
+
+    async createOrganisationAnalysis(
+        organisation_uuid: string,
+    ): Promise<ContactAudienceAnalysisRecord> {
+        const stats = await this.contactAudienceStatsService.getOrganisationStats(organisation_uuid, {});
+        return this.runAnalysis({
+            organisation_uuid,
+            scope: ContactAudienceAnalysisScope.ORGANISATION,
+            filter_uuid: null,
+            contact_list_uuid: null,
+            campaign_uuid: null,
+            audience_name: 'All contacts',
+            stats,
+            scopeLabel: 'CRM',
         });
     }
 
@@ -120,6 +167,27 @@ export class ContactAudienceAnalysisService {
         }, query);
     }
 
+    async listCampaignAnalyses(
+        organisation_uuid: string,
+        campaignUuid: string,
+        query: ListContactAudienceAnalysesDto,
+    ): Promise<PaginatedContactAudienceAnalyses> {
+        await this.assertCampaignOwnership(organisation_uuid, campaignUuid);
+        return this.listAnalyses(organisation_uuid, {
+            scope: ContactAudienceAnalysisScope.CAMPAIGN,
+            campaign_uuid: campaignUuid,
+        }, query);
+    }
+
+    async listOrganisationAnalyses(
+        organisation_uuid: string,
+        query: ListContactAudienceAnalysesDto,
+    ): Promise<PaginatedContactAudienceAnalyses> {
+        return this.listAnalyses(organisation_uuid, {
+            scope: ContactAudienceAnalysisScope.ORGANISATION,
+        }, query);
+    }
+
     async deleteFilterAnalysis(
         organisation_uuid: string,
         filterUuid: string,
@@ -144,20 +212,43 @@ export class ContactAudienceAnalysisService {
         });
     }
 
+    async deleteCampaignAnalysis(
+        organisation_uuid: string,
+        campaignUuid: string,
+        analysisUuid: string,
+    ): Promise<{ uuid: string }> {
+        await this.assertCampaignOwnership(organisation_uuid, campaignUuid);
+        return this.deleteAnalysis(organisation_uuid, analysisUuid, {
+            scope: ContactAudienceAnalysisScope.CAMPAIGN,
+            campaign_uuid: campaignUuid,
+        });
+    }
+
+    async deleteOrganisationAnalysis(
+        organisation_uuid: string,
+        analysisUuid: string,
+    ): Promise<{ uuid: string }> {
+        return this.deleteAnalysis(organisation_uuid, analysisUuid, {
+            scope: ContactAudienceAnalysisScope.ORGANISATION,
+        });
+    }
+
     private async runAnalysis(input: {
         organisation_uuid: string;
         scope: ContactAudienceAnalysisScope;
         filter_uuid: string | null;
         contact_list_uuid: string | null;
+        campaign_uuid: string | null;
         audience_name: string;
         stats: ContactAudienceStats;
-        scopeLabel: 'filter' | 'list';
+        scopeLabel: AudienceAnalysisScopeLabel;
     }): Promise<ContactAudienceAnalysisRecord> {
         const previous = await this.findPreviousCompletedAnalysis(
             input.organisation_uuid,
             input.scope,
             input.filter_uuid,
             input.contact_list_uuid,
+            input.campaign_uuid,
         );
 
         const previousForPrompt = previous
@@ -174,6 +265,7 @@ export class ContactAudienceAnalysisService {
                 scope: input.scope,
                 filter_uuid: input.filter_uuid,
                 contact_list_uuid: input.contact_list_uuid,
+                campaign_uuid: input.campaign_uuid,
                 audience_name: input.audience_name,
                 stats_snapshot: input.stats as unknown as Prisma.InputJsonValue,
                 status: ContactAudienceAnalysisStatus.PENDING,
@@ -266,6 +358,7 @@ export class ContactAudienceAnalysisService {
         scope: ContactAudienceAnalysisScope,
         filter_uuid: string | null,
         contact_list_uuid: string | null,
+        campaign_uuid: string | null,
     ): Promise<AnalysisRow | null> {
         return this.prisma.contactAudienceAnalysis.findFirst({
             where: {
@@ -274,6 +367,7 @@ export class ContactAudienceAnalysisService {
                 status: ContactAudienceAnalysisStatus.COMPLETED,
                 ...(filter_uuid ? { filter_uuid } : {}),
                 ...(contact_list_uuid ? { contact_list_uuid } : {}),
+                ...(campaign_uuid ? { campaign_uuid } : {}),
             },
             orderBy: { created_at: 'desc' },
             select: analysisSelect,
@@ -294,6 +388,14 @@ export class ContactAudienceAnalysisService {
             select: { uuid: true },
         });
         if (!list) throw new NotFoundException('Contact list not found');
+    }
+
+    private async assertCampaignOwnership(organisation_uuid: string, campaignUuid: string): Promise<void> {
+        const campaign = await this.prisma.marketingCampaign.findFirst({
+            where: { uuid: campaignUuid, organisation_uuid },
+            select: { uuid: true },
+        });
+        if (!campaign) throw new NotFoundException('Campaign not found');
     }
 
     private async deleteAnalysis(
@@ -320,6 +422,7 @@ export class ContactAudienceAnalysisService {
             scope: row.scope,
             filter_uuid: row.filter_uuid,
             contact_list_uuid: row.contact_list_uuid,
+            campaign_uuid: row.campaign_uuid,
             audience_name: row.audience_name,
             stats_snapshot: row.stats_snapshot as unknown as ContactAudienceStats,
             analysis: row.analysis as ContactAudienceAnalysisRecord['analysis'],

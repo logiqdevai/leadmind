@@ -1,26 +1,40 @@
 import axiosInstance from "@/config/api/axios";
 import { ApiRoutes } from "@/config/api/routes";
-import type { AudienceAnalysisScope } from "../interfaces/contact-audience-stats.interface";
+import type { ContactAudienceScope } from "../interfaces/contact-audience-stats.interface";
 import type {
     ContactAudienceAnalysis,
     ListContactAudienceAnalysesQuery,
     PaginatedContactAudienceAnalyses,
 } from "../interfaces/contact-audience-analysis.interface";
 
-function analysesRoute(scope: AudienceAnalysisScope): string {
-    return scope.type === "filter"
-        ? ApiRoutes.filters.analyses(scope.uuid)
-        : ApiRoutes.contact_lists.analyses(scope.uuid);
+function analysesRoute(scope: ContactAudienceScope): string {
+    switch (scope.type) {
+        case "filter":
+            return ApiRoutes.filters.analyses(scope.uuid);
+        case "list":
+            return ApiRoutes.contact_lists.analyses(scope.uuid);
+        case "campaign":
+            return ApiRoutes.marketing_campaigns.analyses(scope.uuid);
+        default:
+            return ApiRoutes.audience_stats.analyses;
+    }
 }
 
-function analysisRoute(scope: AudienceAnalysisScope, analysisUuid: string): string {
-    return scope.type === "filter"
-        ? ApiRoutes.filters.analysis(scope.uuid, analysisUuid)
-        : ApiRoutes.contact_lists.analysis(scope.uuid, analysisUuid);
+function analysisRoute(scope: ContactAudienceScope, analysisUuid: string): string {
+    switch (scope.type) {
+        case "filter":
+            return ApiRoutes.filters.analysis(scope.uuid, analysisUuid);
+        case "list":
+            return ApiRoutes.contact_lists.analysis(scope.uuid, analysisUuid);
+        case "campaign":
+            return ApiRoutes.marketing_campaigns.analysis(scope.uuid, analysisUuid);
+        default:
+            return ApiRoutes.audience_stats.analysis(analysisUuid);
+    }
 }
 
 export const listAudienceAnalyses = async (
-    scope: AudienceAnalysisScope,
+    scope: ContactAudienceScope,
     query?: ListContactAudienceAnalysesQuery,
 ): Promise<PaginatedContactAudienceAnalyses> => {
     try {
@@ -34,7 +48,7 @@ export const listAudienceAnalyses = async (
 };
 
 export const createAudienceAnalysis = async (
-    scope: AudienceAnalysisScope,
+    scope: ContactAudienceScope,
 ): Promise<ContactAudienceAnalysis> => {
     try {
         const response = await axiosInstance.post(analysesRoute(scope));
@@ -47,7 +61,7 @@ export const createAudienceAnalysis = async (
 };
 
 export const deleteAudienceAnalysis = async (
-    scope: AudienceAnalysisScope,
+    scope: ContactAudienceScope,
     analysisUuid: string,
 ): Promise<{ uuid: string }> => {
     try {

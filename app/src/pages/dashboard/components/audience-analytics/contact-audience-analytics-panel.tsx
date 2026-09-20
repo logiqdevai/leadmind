@@ -88,9 +88,7 @@ export function ContactAudienceAnalyticsPanel({
 
     return (
         <div className="flex flex-col gap-6">
-            {scope.type === "filter" || scope.type === "list" ? (
-                <AudienceAiAnalysisSection scope={scope} />
-            ) : null}
+            <AudienceAiAnalysisSection scope={scope} />
 
             {scope.type === "campaign" && campaign ? (
                 <section className="flex flex-col gap-4">

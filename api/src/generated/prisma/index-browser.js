@@ -836,6 +836,7 @@ exports.Prisma.ContactAudienceAnalysisScalarFieldEnum = {
   scope: 'scope',
   filter_uuid: 'filter_uuid',
   contact_list_uuid: 'contact_list_uuid',
+  campaign_uuid: 'campaign_uuid',
   audience_name: 'audience_name',
   stats_snapshot: 'stats_snapshot',
   analysis: 'analysis',
@@ -1393,7 +1394,9 @@ exports.FieldType = exports.$Enums.FieldType = {
 
 exports.ContactAudienceAnalysisScope = exports.$Enums.ContactAudienceAnalysisScope = {
   FILTER: 'FILTER',
-  LIST: 'LIST'
+  LIST: 'LIST',
+  CAMPAIGN: 'CAMPAIGN',
+  ORGANISATION: 'ORGANISATION'
 };
 
 exports.ContactAudienceAnalysisStatus = exports.$Enums.ContactAudienceAnalysisStatus = {

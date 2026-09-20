@@ -56,13 +56,9 @@ export interface ContactAudienceStats {
     activity: ContactAudienceActivityStats;
 }
 
-/** Scopes that support saved AI audience analyses. */
-export type AudienceAnalysisScope =
-    | { type: "filter"; uuid: string }
-    | { type: "list"; uuid: string };
-
 export type ContactAudienceScope =
-    | AudienceAnalysisScope
+    | { type: "filter"; uuid: string }
+    | { type: "list"; uuid: string }
     | { type: "campaign"; uuid: string }
     /** Every contact in the organisation. */
     | { type: "organisation"; uuid?: undefined };

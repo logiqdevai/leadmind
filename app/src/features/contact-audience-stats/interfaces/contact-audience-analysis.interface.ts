@@ -1,6 +1,6 @@
 import type { ContactAudienceStats } from "./contact-audience-stats.interface";
 
-export type ContactAudienceAnalysisScope = "FILTER" | "LIST";
+export type ContactAudienceAnalysisScope = "FILTER" | "LIST" | "CAMPAIGN" | "ORGANISATION";
 
 export type ContactAudienceAnalysisStatus = "PENDING" | "COMPLETED" | "FAILED";
 
@@ -24,6 +24,7 @@ export interface ContactAudienceAnalysis {
     scope: ContactAudienceAnalysisScope;
     filter_uuid: string | null;
     contact_list_uuid: string | null;
+    campaign_uuid: string | null;
     audience_name: string;
     stats_snapshot: ContactAudienceStats;
     analysis: ContactAudienceAnalysisContent | Record<string, never>;

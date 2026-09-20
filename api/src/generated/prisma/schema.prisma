@@ -905,6 +905,7 @@ model MarketingCampaign {
   interactions          Interaction[]
   sequence_enrollments  SequenceEnrollment[]
   campaign_integrations CampaignIntegration[]
+  audience_analyses     ContactAudienceAnalysis[]
 
   @@index([organisation_uuid])
   @@index([status])
@@ -1510,6 +1511,8 @@ model FormCompletionValue {
 enum ContactAudienceAnalysisScope {
   FILTER
   LIST
+  CAMPAIGN
+  ORGANISATION
 }
 
 enum ContactAudienceAnalysisStatus {
@@ -1525,6 +1528,7 @@ model ContactAudienceAnalysis {
   scope             ContactAudienceAnalysisScope
   filter_uuid       String?
   contact_list_uuid String?
+  campaign_uuid     String?
   audience_name     String
   stats_snapshot    Json
   analysis          Json                          @default("{}")
@@ -1538,13 +1542,15 @@ model ContactAudienceAnalysis {
   created_at        DateTime                      @default(now())
   updated_at        DateTime                      @updatedAt
 
-  organisation Organisation @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
-  filter       Filter?      @relation(fields: [filter_uuid], references: [uuid], onDelete: Cascade)
-  contactList  ContactList? @relation(fields: [contact_list_uuid], references: [uuid], onDelete: Cascade)
+  organisation Organisation       @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  filter       Filter?            @relation(fields: [filter_uuid], references: [uuid], onDelete: Cascade)
+  contactList  ContactList?       @relation(fields: [contact_list_uuid], references: [uuid], onDelete: Cascade)
+  campaign     MarketingCampaign? @relation(fields: [campaign_uuid], references: [uuid], onDelete: Cascade)
 
   @@index([organisation_uuid])
   @@index([filter_uuid])
   @@index([contact_list_uuid])
+  @@index([campaign_uuid])
   @@index([scope])
   @@map("contact_audience_analyses")
 }

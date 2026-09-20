@@ -32,6 +32,8 @@ import { SendExistingMessageDto } from '@/modules/outreach/dto/email-provider.dt
 import { MarketingCampaignsService } from './services/marketing-campaigns.service';
 import { ContactAudienceStatsService } from '@/modules/contact-audience-stats/contact-audience-stats.service';
 import { ContactAudienceStatsQueryDto } from '@/modules/contact-audience-stats/dto/contact-audience-stats-query.dto';
+import { ContactAudienceAnalysisService } from '@/modules/contact-audience-stats/contact-audience-analysis.service';
+import { ListContactAudienceAnalysesDto } from '@/modules/contact-audience-stats/dto/list-contact-audience-analyses.dto';
 import { ActivityLog } from '@/modules/activity-logs/decorators/activity-log.decorator';
 import {
     ActivityAction,
@@ -46,6 +48,7 @@ export class MarketingCampaignsController {
     constructor(
         private readonly service: MarketingCampaignsService,
         private readonly contactAudienceStatsService: ContactAudienceStatsService,
+        private readonly contactAudienceAnalysisService: ContactAudienceAnalysisService,
     ) { }
 
     @ActivityLog({ entityType: ActivityEntityType.MARKETING_CAMPAIGN, action: ActivityAction.CREATED, includeBodyKeys: ['name'] })
@@ -100,6 +103,37 @@ export class MarketingCampaignsController {
         @Query() query: ContactAudienceStatsQueryDto,
     ) {
         return this.contactAudienceStatsService.getCampaignStats(organisation_uuid, uuid, query);
+    }
+
+    @Get(':uuid/analyses')
+    @ApiOperation({ summary: 'List AI audience analyses for a campaign' })
+    listAnalyses(
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
+        @Param('uuid', ParseUUIDPipe) uuid: string,
+        @Query() query: ListContactAudienceAnalysesDto,
+    ) {
+        return this.contactAudienceAnalysisService.listCampaignAnalyses(organisation_uuid, uuid, query);
+    }
+
+    @ActivityLog({ entityType: ActivityEntityType.AUDIENCE_ANALYSIS, action: ActivityAction.ANALYSIS_CREATED })
+    @Post(':uuid/analyses')
+    @ApiOperation({ summary: 'Run a new AI audience analysis for a campaign' })
+    createAnalysis(
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
+        @Param('uuid', ParseUUIDPipe) uuid: string,
+    ) {
+        return this.contactAudienceAnalysisService.createCampaignAnalysis(organisation_uuid, uuid);
+    }
+
+    @ActivityLog({ entityType: ActivityEntityType.AUDIENCE_ANALYSIS, action: ActivityAction.ANALYSIS_DELETED, entityUuidFrom: 'params.analysisUuid' })
+    @Delete(':uuid/analyses/:analysisUuid')
+    @ApiOperation({ summary: 'Delete an AI audience analysis for a campaign' })
+    deleteAnalysis(
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
+        @Param('uuid', ParseUUIDPipe) uuid: string,
+        @Param('analysisUuid') analysisUuid: string,
+    ) {
+        return this.contactAudienceAnalysisService.deleteCampaignAnalysis(organisation_uuid, uuid, analysisUuid);
     }
 
     @Get(':uuid/contacts')

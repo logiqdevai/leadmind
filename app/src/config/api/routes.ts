@@ -31,6 +31,8 @@ export const ApiRoutes = {
     },
     audience_stats: {
         get: "/audience-stats",
+        analyses: "/audience-stats/analyses",
+        analysis: (analysisUuid: string) => `/audience-stats/analyses/${analysisUuid}`,
     },
     contacts: {
         prefix: "/contacts",
@@ -231,6 +233,9 @@ export const ApiRoutes = {
         remove: (uuid: string) => `/marketing-campaigns/${uuid}`,
         contacts: (uuid: string) => `/marketing-campaigns/${uuid}/contacts`,
         stats: (uuid: string) => `/marketing-campaigns/${uuid}/stats`,
+        analyses: (uuid: string) => `/marketing-campaigns/${uuid}/analyses`,
+        analysis: (campaignUuid: string, analysisUuid: string) =>
+            `/marketing-campaigns/${campaignUuid}/analyses/${analysisUuid}`,
         bulk_resend_recipients: (uuid: string) => `/marketing-campaigns/${uuid}/recipients/bulk-resend`,
         preview_contacts: (uuid: string) => `/marketing-campaigns/${uuid}/preview-contacts`,
         start: (uuid: string) => `/marketing-campaigns/${uuid}/start`,
