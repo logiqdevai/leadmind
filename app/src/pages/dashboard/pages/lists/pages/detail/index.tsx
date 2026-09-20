@@ -466,7 +466,7 @@ export default function ListDetailPage() {
                         </section>
                     )}
                     {currentTab === ListDetailTabIds.ANALYTICS && (
-                        <ContactAudienceAnalyticsPanel scope={{ type: "list", uuid }} />
+                        <ContactAudienceAnalyticsPanel scope={{ type: "list", uuid }} audienceName={list?.title} />
                     )}
 
                     <ContactListFormModal isOpen={editOpen} onOpenChange={setEditOpen} editing={list} />

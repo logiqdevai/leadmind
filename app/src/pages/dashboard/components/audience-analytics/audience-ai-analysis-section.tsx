@@ -14,6 +14,7 @@ import {
     useCreateContactAudienceAnalysis,
     useDeleteContactAudienceAnalysis,
 } from "@/features/contact-audience-stats/hooks/use-contact-audience-analysis";
+import { isAudienceAnalysisContent } from "@/features/contact-audience-stats/utils/audience-analysis.utils";
 import { cn } from "@/lib/utils";
 
 interface AudienceAiAnalysisSectionProps {
@@ -25,12 +26,6 @@ function formatAnalysisDate(value: string): string {
         dateStyle: "medium",
         timeStyle: "short",
     }).format(new Date(value));
-}
-
-function isAnalysisContent(
-    value: ContactAudienceAnalysisContent | Record<string, never>,
-): value is ContactAudienceAnalysisContent {
-    return typeof value === "object" && value !== null && "summary" in value && typeof value.summary === "string";
 }
 
 function AnalysisBulletList({
@@ -151,7 +146,7 @@ export function AudienceAiAnalysisSection({ scope }: AudienceAiAnalysisSectionPr
 
     const latest = data?.items[0];
     const history = useMemo(() => data?.items.slice(1) ?? [], [data?.items]);
-    const latestContent = latest && isAnalysisContent(latest.analysis) ? latest.analysis : null;
+    const latestContent = latest && isAudienceAnalysisContent(latest.analysis) ? latest.analysis : null;
 
     const handleConfirmDelete = async () => {
         if (!deleteTarget) return;
@@ -214,7 +209,7 @@ export function AudienceAiAnalysisSection({ scope }: AudienceAiAnalysisSectionPr
                                 Previous reports ({history.length})
                             </p>
                             {history.map((item) => {
-                                const content = isAnalysisContent(item.analysis) ? item.analysis : null;
+                                const content = isAudienceAnalysisContent(item.analysis) ? item.analysis : null;
                                 return (
                                     <details
                                         key={item.uuid}

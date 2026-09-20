@@ -246,7 +246,11 @@ export default function FilterDetailPage() {
         )}
         {currentTab === FilterDetailTabIds.CONTACTS && uuid && <FilterContactsPage />}
         {currentTab === FilterDetailTabIds.ANALYTICS && uuid && (
-          <ContactAudienceAnalyticsPanel scope={{ type: "filter", uuid }} showSourceFilter={false} />
+          <ContactAudienceAnalyticsPanel
+            scope={{ type: "filter", uuid }}
+            showSourceFilter={false}
+            audienceName={filter?.name}
+          />
         )}
         {currentTab === FilterDetailTabIds.JOBS && uuid && <FilterJobsPage />}
       </div>

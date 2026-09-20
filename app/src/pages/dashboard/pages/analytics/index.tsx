@@ -190,7 +190,16 @@ export default function AnalyticsPage() {
                 )}
             </div>
 
-            <ContactAudienceAnalyticsPanel scope={scope} />
+            <ContactAudienceAnalyticsPanel
+                scope={scope}
+                audienceName={
+                    scope.type === "campaign"
+                        ? campaign?.name
+                        : scope.type === "list"
+                          ? (selectedSublist?.title ?? selectedList?.title)
+                          : "All contacts"
+                }
+            />
         </div>
     );
 }

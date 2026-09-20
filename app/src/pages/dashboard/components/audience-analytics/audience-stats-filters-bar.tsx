@@ -1,27 +1,11 @@
 import { Button, ListBox, Select } from "@heroui/react";
 import { X } from "lucide-react";
 import type { ContactFilters } from "@/interfaces/contact-filters.interface";
+import {
+    DATE_RANGE_PRESET_OPTIONS,
+    type DateRangePreset,
+} from "@/features/contact-audience-stats/utils/audience-date-presets";
 import { ContactFiltersForm } from "../contact-filters-form";
-
-export type DateRangePreset = "7d" | "30d" | "90d" | "all";
-
-const PRESET_OPTIONS: { id: DateRangePreset; label: string }[] = [
-    { id: "7d", label: "Last 7 days" },
-    { id: "30d", label: "Last 30 days" },
-    { id: "90d", label: "Last 90 days" },
-    { id: "all", label: "All time" },
-];
-
-export function dateRangeFromPreset(preset: DateRangePreset): { from?: string; to?: string } {
-    if (preset === "all") return {};
-    const days = preset === "7d" ? 7 : preset === "30d" ? 30 : 90;
-    const to = new Date();
-    to.setHours(23, 59, 59, 999);
-    const from = new Date();
-    from.setDate(from.getDate() - days);
-    from.setHours(0, 0, 0, 0);
-    return { from: from.toISOString(), to: to.toISOString() };
-}
 
 interface AudienceStatsFiltersBarProps {
     preset: DateRangePreset;
@@ -64,7 +48,7 @@ export function AudienceStatsFiltersBar({
                         </Select.Trigger>
                         <Select.Popover>
                             <ListBox>
-                                {PRESET_OPTIONS.map((opt) => (
+                                {DATE_RANGE_PRESET_OPTIONS.map((opt) => (
                                     <ListBox.Item key={opt.id} id={opt.id} textValue={opt.label}>
                                         {opt.label}
                                         <ListBox.ItemIndicator />

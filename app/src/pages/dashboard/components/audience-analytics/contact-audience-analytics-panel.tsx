@@ -1,17 +1,23 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { Button } from "@heroui/react";
+import { FileDown } from "lucide-react";
 import type { ContactAudienceScope } from "@/features/contact-audience-stats/interfaces/contact-audience-stats.interface";
 import { useContactAudienceStats } from "@/features/contact-audience-stats/hooks/use-contact-audience-stats";
+import { useContactAudienceAnalyses } from "@/features/contact-audience-stats/hooks/use-contact-audience-analysis";
+import { downloadAudienceReportPdf } from "@/features/contact-audience-stats/utils/audience-report-pdf";
+import { isAudienceAnalysisContent } from "@/features/contact-audience-stats/utils/audience-analysis.utils";
 import { useCampaign } from "@/features/marketing-campaigns/hooks/use-marketing-campaigns";
 import type { ListContactsQuery } from "@/features/contacts/interfaces/contact.interface";
 import type { ContactFilters } from "@/interfaces/contact-filters.interface";
-import { hasActiveContactFilters } from "@/lib/contact-filter-params";
+import { describeContactFilters, hasActiveContactFilters } from "@/lib/contact-filter-params";
 import { StatsCards } from "@/pages/dashboard/pages/campaigns/components/stats-cards";
 import { CampaignAnalytics } from "@/pages/dashboard/pages/campaigns/components/campaign-analytics";
 import {
-    AudienceStatsFiltersBar,
     dateRangeFromPreset,
+    dateRangePresetLabel,
     type DateRangePreset,
-} from "./audience-stats-filters-bar";
+} from "@/features/contact-audience-stats/utils/audience-date-presets";
+import { AudienceStatsFiltersBar } from "./audience-stats-filters-bar";
 import { AudienceStatsSections } from "./audience-stats-sections";
 import { AudiencePipelineDistribution } from "./audience-pipeline-distribution";
 import { AudienceAiAnalysisSection } from "./audience-ai-analysis-section";
@@ -36,14 +42,24 @@ function contactsQueryForScope(scope: ContactAudienceScope): AudienceContactsQue
     }
 }
 
+const AUDIENCE_TYPE_LABEL: Record<ContactAudienceScope["type"], string> = {
+    list: "List",
+    filter: "Filter",
+    campaign: "Campaign",
+    organisation: "Whole CRM",
+};
+
 interface ContactAudienceAnalyticsPanelProps {
     scope: ContactAudienceScope;
     showSourceFilter?: boolean;
+    /** Name of the audience, used in the PDF report header. */
+    audienceName?: string;
 }
 
 export function ContactAudienceAnalyticsPanel({
     scope,
     showSourceFilter = true,
+    audienceName,
 }: ContactAudienceAnalyticsPanelProps) {
     const [preset, setPreset] = useState<DateRangePreset>("30d");
     const [contactFilters, setContactFilters] = useState<ContactFilters>({});
@@ -86,8 +102,48 @@ export function ContactAudienceAnalyticsPanel({
     // Campaigns lead with their send funnel; the CRM stats below describe the same recipients.
     const { data: campaign } = useCampaign(scope.type === "campaign" ? scope.uuid : null);
 
+    // Same query key as the AI section below, so this reuses its cached result.
+    const { data: analyses } = useContactAudienceAnalyses(scope);
+    const latestAnalysis = analyses?.items.find(
+        (item) => item.status === "COMPLETED" && isAudienceAnalysisContent(item.analysis),
+    );
+
+    const reportName =
+        audienceName ??
+        campaign?.name ??
+        latestAnalysis?.audience_name ??
+        (scope.type === "organisation" ? "All contacts" : "Audience");
+
+    const downloadReport = () => {
+        if (!stats) return;
+        downloadAudienceReportPdf({
+            audienceName: reportName,
+            audienceType: AUDIENCE_TYPE_LABEL[scope.type],
+            periodLabel: dateRangePresetLabel(preset),
+            filterSummary: describeContactFilters(debouncedFilters),
+            stats,
+            analysis:
+                latestAnalysis && isAudienceAnalysisContent(latestAnalysis.analysis)
+                    ? { content: latestAnalysis.analysis, createdAt: latestAnalysis.created_at }
+                    : null,
+        });
+    };
+
     return (
         <div className="flex flex-col gap-6">
+            <div className="flex items-center justify-between gap-3">
+                <h2 className="text-sm font-semibold text-foreground">{reportName}</h2>
+                <Button
+                    size="sm"
+                    variant="secondary"
+                    onPress={downloadReport}
+                    isDisabled={!stats || loading}
+                >
+                    <FileDown className="size-4" />
+                    Download PDF
+                </Button>
+            </div>
+
             <AudienceAiAnalysisSection scope={scope} />
 
             {scope.type === "campaign" && campaign ? (

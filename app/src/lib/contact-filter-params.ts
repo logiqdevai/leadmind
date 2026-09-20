@@ -108,6 +108,34 @@ export function contactFiltersToListQuery(
     };
 }
 
+/** Human-readable summary of the active filters, for report headers. */
+export function describeContactFilters(filters: ContactFilters): string[] {
+    const parts: string[] = [];
+
+    if (filters.search) parts.push(`search "${filters.search}"`);
+    if (filters.status) parts.push(`status ${filters.status.toLowerCase()}`);
+    if (filters.source_type) parts.push(`source ${filters.source_type.toLowerCase()}`);
+    if (filters.tags?.length) parts.push(`tags ${filters.tags.join(" / ")}`);
+    if (filters.score_rules?.length) parts.push(`${filters.score_rules.length} score rule(s)`);
+    if (filters.profile_field) {
+        parts.push(
+            `${filters.has_profile_field === false ? "missing" : "has"} ${filters.profile_field.toLowerCase()}`,
+        );
+    }
+    if (filters.has_email !== undefined) parts.push(filters.has_email ? "has email" : "no email");
+    if (filters.has_phone !== undefined) parts.push(filters.has_phone ? "has phone" : "no phone");
+    if (filters.never_contacted) parts.push("never contacted");
+    if (filters.include_unsubscribed) parts.push("including unsubscribed");
+    if (filters.last_interaction_after) {
+        parts.push(`last interaction after ${filters.last_interaction_after.slice(0, 10)}`);
+    }
+    if (filters.last_interaction_before) {
+        parts.push(`last interaction before ${filters.last_interaction_before.slice(0, 10)}`);
+    }
+
+    return parts;
+}
+
 export function hasActiveContactFilters(filters: ContactFilters): boolean {
     const serialized = serializeContactFiltersToSearchParams(filters);
     return Object.values(serialized).some((value) => value != null && value !== "");
