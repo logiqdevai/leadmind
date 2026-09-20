@@ -44,6 +44,10 @@ const SENT_CAMPAIGN_STATUSES: CampaignContactStatus[] = [
     CampaignContactStatus.UNSUBSCRIBED,
 ];
 
+type AudienceScope =
+    | { type: 'filter' | 'list' | 'campaign'; uuid: string }
+    | { type: 'organisation'; uuid?: undefined };
+
 @Injectable()
 export class ContactAudienceStatsService {
     constructor(
@@ -77,9 +81,29 @@ export class ContactAudienceStatsService {
         return this.aggregateStats(organisation_uuid, { type: 'list', uuid: listUuid }, query);
     }
 
+    async getCampaignStats(
+        organisation_uuid: string,
+        campaignUuid: string,
+        query: ContactAudienceStatsQueryDto,
+    ): Promise<ContactAudienceStats> {
+        const campaign = await this.prisma.marketingCampaign.findFirst({
+            where: { uuid: campaignUuid, organisation_uuid },
+            select: { uuid: true },
+        });
+        if (!campaign) throw new NotFoundException('Campaign not found');
+        return this.aggregateStats(organisation_uuid, { type: 'campaign', uuid: campaignUuid }, query);
+    }
+
+    async getOrganisationStats(
+        organisation_uuid: string,
+        query: ContactAudienceStatsQueryDto,
+    ): Promise<ContactAudienceStats> {
+        return this.aggregateStats(organisation_uuid, { type: 'organisation' }, query);
+    }
+
     private async buildContactWhere(
         organisation_uuid: string,
-        scope: { type: 'filter' | 'list'; uuid: string },
+        scope: AudienceScope,
         query: ContactAudienceStatsQueryDto,
     ): Promise<Prisma.ContactWhereInput> {
         const where = this.contactsService.buildWhereInput(organisation_uuid, {
@@ -94,8 +118,12 @@ export class ContactAudienceStatsService {
         });
 
         const scopeAnd: Prisma.ContactWhereInput[] = [];
+        if (scope.type === 'campaign') {
+            scopeAnd.push({ campaign_contacts: { some: { campaign_uuid: scope.uuid } } });
+        }
         if (scope.type === 'list') {
-            scopeAnd.push({ list_memberships: { some: { list_uuid: scope.uuid } } });
+            const listUuids = await this.contactsService.collectListTreeUuids(organisation_uuid, scope.uuid);
+            scopeAnd.push({ list_memberships: { some: { list_uuid: { in: listUuids } } } });
         }
 
         if (query.has_email) {
@@ -132,7 +160,7 @@ export class ContactAudienceStatsService {
 
     private async aggregateStats(
         organisation_uuid: string,
-        scope: { type: 'filter' | 'list'; uuid: string },
+        scope: AudienceScope,
         query: ContactAudienceStatsQueryDto,
     ): Promise<ContactAudienceStats> {
         const contactWhere = await this.buildContactWhere(organisation_uuid, scope, query);
@@ -141,6 +169,9 @@ export class ContactAudienceStatsService {
             contact: contactWhere,
             ...(interactionDate && { created_at: interactionDate }),
         };
+        // Tracked engagement is attributed to the campaign; manual activity (meetings, calls, notes) is not.
+        const engagementWhere: Prisma.InteractionWhereInput =
+            scope.type === 'campaign' ? { ...interactionWhere, campaign_uuid: scope.uuid } : interactionWhere;
 
         const [
             statusGroups,
@@ -219,19 +250,19 @@ export class ContactAudienceStatsService {
             }),
             this.prisma.interaction.count({ where: interactionWhere }),
             this.prisma.interaction.count({
-                where: { ...interactionWhere, type: InteractionType.EMAIL_OPENED },
+                where: { ...engagementWhere, type: InteractionType.EMAIL_OPENED },
             }),
             this.prisma.interaction.count({
-                where: { ...interactionWhere, type: InteractionType.LINK_CLICKED },
+                where: { ...engagementWhere, type: InteractionType.LINK_CLICKED },
             }),
             this.prisma.interaction.count({
-                where: { ...interactionWhere, type: InteractionType.REPLY_RECEIVED },
+                where: { ...engagementWhere, type: InteractionType.REPLY_RECEIVED },
             }),
             this.prisma.interaction.count({
-                where: { ...interactionWhere, type: InteractionType.WEBSITE_VISIT },
+                where: { ...engagementWhere, type: InteractionType.WEBSITE_VISIT },
             }),
             this.prisma.interaction.count({
-                where: { ...interactionWhere, type: InteractionType.BOOKING_VISIT },
+                where: { ...engagementWhere, type: InteractionType.BOOKING_VISIT },
             }),
         ]);
 

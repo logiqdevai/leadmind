@@ -338,10 +338,29 @@ export class ContactsService {
         Object.assign(where, merged);
     }
 
+    /** The list itself plus all nested sublists, so parent lists roll up their children. */
+    async collectListTreeUuids(
+        organisation_uuid: string,
+        rootUuid: string,
+    ): Promise<string[]> {
+        const seen = new Set<string>([rootUuid]);
+        let frontier = [rootUuid];
+        while (frontier.length > 0) {
+            const children = await this.prisma.contactList.findMany({
+                where: { organisation_uuid, parent_list_uuid: { in: frontier } },
+                select: { uuid: true },
+            });
+            frontier = children.map((c) => c.uuid).filter((uuid) => !seen.has(uuid));
+            frontier.forEach((uuid) => seen.add(uuid));
+        }
+        return [...seen];
+    }
+
     async applyContactListIncludeFilter(
         where: Prisma.ContactWhereInput,
         organisation_uuid: string,
         contact_list_uuid: string,
+        include_sublists = false,
     ): Promise<void> {
         const list = await this.prisma.contactList.findFirst({
             where: { uuid: contact_list_uuid, organisation_uuid },
@@ -351,9 +370,13 @@ export class ContactsService {
             throw new NotFoundException('Contact list not found');
         }
 
+        const listUuids = include_sublists
+            ? await this.collectListTreeUuids(organisation_uuid, contact_list_uuid)
+            : [contact_list_uuid];
         const members = await this.prisma.contactListMember.findMany({
-            where: { list_uuid: contact_list_uuid },
+            where: { list_uuid: { in: listUuids } },
             select: { contact_uuid: true },
+            distinct: ['contact_uuid'],
         });
 
         const memberUuids = members.map((member) => member.contact_uuid);
@@ -375,7 +398,19 @@ export class ContactsService {
         this.applyAudienceFilters(where, query);
 
         if (query.contact_list_uuid) {
-            await this.applyContactListIncludeFilter(where, organisation_uuid, query.contact_list_uuid);
+            await this.applyContactListIncludeFilter(
+                where,
+                organisation_uuid,
+                query.contact_list_uuid,
+                query.include_sublists,
+            );
+        }
+
+        if (query.campaign_uuid) {
+            const merged = mergeContactWhereClauses(where, [
+                { campaign_contacts: { some: { campaign_uuid: query.campaign_uuid } } },
+            ]);
+            Object.assign(where, merged);
         }
 
         if (query.exclude_list_uuid) {

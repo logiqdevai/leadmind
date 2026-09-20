@@ -71,6 +71,7 @@ const navGroups: NavGroup[] = [
   {
     items: [
       { label: "Dashboard", icon: LayoutDashboard, href: Routes.dashboard.root, end: true },
+      { label: "Analytics", icon: BarChart2, href: Routes.dashboard.analytics, end: false },
     ],
   },
   {

@@ -30,6 +30,8 @@ import { BulkResendRecipientsDto } from './dto/bulk-resend-recipients.dto';
 import { StartCampaignDto, SendCampaignDraftsDto } from './dto/email-provider-campaign.dto';
 import { SendExistingMessageDto } from '@/modules/outreach/dto/email-provider.dto';
 import { MarketingCampaignsService } from './services/marketing-campaigns.service';
+import { ContactAudienceStatsService } from '@/modules/contact-audience-stats/contact-audience-stats.service';
+import { ContactAudienceStatsQueryDto } from '@/modules/contact-audience-stats/dto/contact-audience-stats-query.dto';
 import { ActivityLog } from '@/modules/activity-logs/decorators/activity-log.decorator';
 import {
     ActivityAction,
@@ -41,7 +43,10 @@ import {
 @UseGuards(JwtGuard)
 @Controller('marketing-campaigns')
 export class MarketingCampaignsController {
-    constructor(private readonly service: MarketingCampaignsService) { }
+    constructor(
+        private readonly service: MarketingCampaignsService,
+        private readonly contactAudienceStatsService: ContactAudienceStatsService,
+    ) { }
 
     @ActivityLog({ entityType: ActivityEntityType.MARKETING_CAMPAIGN, action: ActivityAction.CREATED, includeBodyKeys: ['name'] })
     @Post()
@@ -85,6 +90,16 @@ export class MarketingCampaignsController {
         @Param('uuid', ParseUUIDPipe) uuid: string,
     ) {
         return this.service.remove(organisation_uuid, uuid);
+    }
+
+    @Get(':uuid/stats')
+    @ApiOperation({ summary: 'CRM audience analytics for campaign recipients' })
+    getStats(
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
+        @Param('uuid', ParseUUIDPipe) uuid: string,
+        @Query() query: ContactAudienceStatsQueryDto,
+    ) {
+        return this.contactAudienceStatsService.getCampaignStats(organisation_uuid, uuid, query);
     }
 
     @Get(':uuid/contacts')

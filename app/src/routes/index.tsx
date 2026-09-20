@@ -28,6 +28,7 @@ const FormsPage = lazy(() => import("@/pages/dashboard/pages/forms"));
 const FormDetailPage = lazy(() => import("@/pages/dashboard/pages/forms/pages/detail"));
 const SenderProfilesPage = lazy(() => import("@/pages/dashboard/pages/sender-profiles"));
 const IntegrationsPage = lazy(() => import("@/pages/dashboard/pages/integrations"));
+const AnalyticsPage = lazy(() => import("@/pages/dashboard/pages/analytics"));
 const CampaignsPage = lazy(() => import("@/pages/dashboard/pages/campaigns"));
 const NewCampaignPage = lazy(() => import("@/pages/dashboard/pages/campaigns/pages/new"));
 const EditCampaignPage = lazy(() => import("@/pages/dashboard/pages/campaigns/pages/edit"));
@@ -307,6 +308,14 @@ export default function AppRoutes() {
           element={
             <Lazy>
               <SettingsUsagePage />
+            </Lazy>
+          }
+        />
+        <Route
+          path="analytics"
+          element={
+            <Lazy>
+              <AnalyticsPage />
             </Lazy>
           }
         />

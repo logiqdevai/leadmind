@@ -27,6 +27,37 @@ export const getFilterAudienceStats = async (
     }
 };
 
+export const getOrganisationAudienceStats = async (
+    query?: ContactAudienceStatsQuery,
+): Promise<ContactAudienceStats> => {
+    try {
+        const response = await axiosInstance.get(ApiRoutes.audience_stats.get, {
+            params: buildStatsParams(query),
+        });
+        return response.data;
+    } catch (error: unknown) {
+        const message =
+            (error as { response?: { data?: { message?: string } } })?.response?.data?.message;
+        throw new Error(message || "Failed to fetch analytics.");
+    }
+};
+
+export const getCampaignAudienceStats = async (
+    uuid: string,
+    query?: ContactAudienceStatsQuery,
+): Promise<ContactAudienceStats> => {
+    try {
+        const response = await axiosInstance.get(ApiRoutes.marketing_campaigns.stats(uuid), {
+            params: buildStatsParams(query),
+        });
+        return response.data;
+    } catch (error: unknown) {
+        const message =
+            (error as { response?: { data?: { message?: string } } })?.response?.data?.message;
+        throw new Error(message || "Failed to fetch campaign analytics.");
+    }
+};
+
 export const getListAudienceStats = async (
     uuid: string,
     query?: ContactAudienceStatsQuery,

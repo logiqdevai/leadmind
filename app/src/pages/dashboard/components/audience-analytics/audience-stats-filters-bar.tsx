@@ -1,4 +1,5 @@
-import { ListBox, Select } from "@heroui/react";
+import { Button, ListBox, Select } from "@heroui/react";
+import { X } from "lucide-react";
 import type { ContactFilters } from "@/interfaces/contact-filters.interface";
 import { ContactFiltersForm } from "../contact-filters-form";
 
@@ -30,6 +31,8 @@ interface AudienceStatsFiltersBarProps {
     showSourceFilter?: boolean;
     filtersOpen?: boolean;
     onFiltersOpenChange?: (open: boolean) => void;
+    /** Shown as a "Clear filters" button when provided. */
+    onClearFilters?: () => void;
 }
 
 export function AudienceStatsFiltersBar({
@@ -40,6 +43,7 @@ export function AudienceStatsFiltersBar({
     showSourceFilter = true,
     filtersOpen,
     onFiltersOpenChange,
+    onClearFilters,
 }: AudienceStatsFiltersBarProps) {
     return (
         <div className="flex flex-col gap-4">
@@ -70,6 +74,12 @@ export function AudienceStatsFiltersBar({
                         </Select.Popover>
                     </Select>
                 </div>
+                {onClearFilters ? (
+                    <Button size="sm" variant="tertiary" className="self-end h-9" onPress={onClearFilters}>
+                        <X className="size-4" />
+                        Clear filters
+                    </Button>
+                ) : null}
             </div>
             <ContactFiltersForm
                 value={contactFilters}

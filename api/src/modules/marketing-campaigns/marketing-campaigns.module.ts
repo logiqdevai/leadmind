@@ -14,6 +14,7 @@ import { SequencesModule } from '@/modules/sequences/sequences.module';
 import { SendingCapacityModule } from '@/modules/sending-capacity/sending-capacity.module';
 import { ThreadsModule } from '@/modules/threads/threads.module';
 import { ContactListsModule } from '@/modules/contact-lists/contact-lists.module';
+import { ContactAudienceStatsModule } from '@/modules/contact-audience-stats/contact-audience-stats.module';
 import { MarketingCampaignsController } from './marketing-campaigns.controller';
 import { MarketingCampaignsService } from './services/marketing-campaigns.service';
 import { CampaignContactResolverService } from './services/campaign-contact-resolver.service';
@@ -32,6 +33,7 @@ import { CampaignAiService } from './services/campaign-ai.service';
     SendingCapacityModule,
     ThreadsModule,
     forwardRef(() => ContactListsModule),
+    ContactAudienceStatsModule,
     BullModule.registerQueue({ name: MARKETING_CAMPAIGN_DISPATCH_QUEUE }),
     BullModule.registerQueue({ name: MARKETING_MESSAGE_SEND_QUEUE }),
   ],

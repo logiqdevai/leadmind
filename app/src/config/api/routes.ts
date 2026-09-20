@@ -29,6 +29,9 @@ export const ApiRoutes = {
         enrich: (uuid: string) => `/leads/${uuid}/enrich`,
         bulk_enrich: "/leads/bulk-enrich",
     },
+    audience_stats: {
+        get: "/audience-stats",
+    },
     contacts: {
         prefix: "/contacts",
         list: "/contacts",
@@ -227,6 +230,7 @@ export const ApiRoutes = {
         update: (uuid: string) => `/marketing-campaigns/${uuid}`,
         remove: (uuid: string) => `/marketing-campaigns/${uuid}`,
         contacts: (uuid: string) => `/marketing-campaigns/${uuid}/contacts`,
+        stats: (uuid: string) => `/marketing-campaigns/${uuid}/stats`,
         bulk_resend_recipients: (uuid: string) => `/marketing-campaigns/${uuid}/recipients/bulk-resend`,
         preview_contacts: (uuid: string) => `/marketing-campaigns/${uuid}/preview-contacts`,
         start: (uuid: string) => `/marketing-campaigns/${uuid}/start`,

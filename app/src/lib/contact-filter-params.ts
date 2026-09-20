@@ -162,6 +162,8 @@ export function buildContactListApiParams(
     if (query.lead_uuid) params.lead_uuid = query.lead_uuid;
     if (query.exclude_list_uuid) params.exclude_list_uuid = query.exclude_list_uuid;
     if (query.contact_list_uuid) params.contact_list_uuid = query.contact_list_uuid;
+    if (query.include_sublists !== undefined) params.include_sublists = String(query.include_sublists);
+    if (query.campaign_uuid) params.campaign_uuid = query.campaign_uuid;
     if (query.profile_field) params.profile_field = query.profile_field;
     if (query.last_interaction_after) params.last_interaction_after = query.last_interaction_after;
     if (query.last_interaction_before) params.last_interaction_before = query.last_interaction_before;

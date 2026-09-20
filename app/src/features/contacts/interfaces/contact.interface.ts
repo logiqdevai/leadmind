@@ -381,6 +381,9 @@ export interface ListContactsQuery {
     has_profile_field?: boolean;
     exclude_list_uuid?: string;
     contact_list_uuid?: string;
+    /** With contact_list_uuid: also include members of nested sublists. */
+    include_sublists?: boolean;
+    campaign_uuid?: string;
     last_interaction_after?: string;
     last_interaction_before?: string;
     never_contacted?: boolean;

@@ -106,6 +106,17 @@ export class ListContactsDto {
     @IsUUID()
     contact_list_uuid?: string;
 
+    @ApiPropertyOptional({ description: 'With contact_list_uuid: also include members of nested sublists' })
+    @IsOptional()
+    @QueryBooleanTransform
+    @IsBoolean()
+    include_sublists?: boolean;
+
+    @ApiPropertyOptional({ description: 'Only contacts that are recipients of this campaign' })
+    @IsOptional()
+    @IsUUID()
+    campaign_uuid?: string;
+
     @ApiPropertyOptional({ description: 'ISO date — last_interaction_at after this' })
     @IsOptional()
     @IsDateString()
