@@ -77,16 +77,17 @@ export function SequencesTable({ sequences, onDelete }: SequencesTableProps) {
                                     >
                                         <Pencil className="size-4" />
                                     </Button>
-                                    <Button
-                                        size="sm"
-                                        variant="tertiary"
-                                        onPress={() => onDelete(sequence)}
-                                        isDisabled={isActive}
-                                        aria-label="Delete sequence"
-                                        title={isActive ? "Archive this sequence before deleting it" : undefined}
-                                    >
-                                        <Trash2 className="size-4 text-danger" />
-                                    </Button>
+                                    <span title={isActive ? "Archive this sequence before deleting it" : undefined}>
+                                        <Button
+                                            size="sm"
+                                            variant="tertiary"
+                                            onPress={() => onDelete(sequence)}
+                                            isDisabled={isActive}
+                                            aria-label="Delete sequence"
+                                        >
+                                            <Trash2 className="size-4 text-danger" />
+                                        </Button>
+                                    </span>
                                 </div>
                             </td>
                         </tr>
