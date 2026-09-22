@@ -10,8 +10,11 @@ import {
     UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { OrganisationRole } from '@/generated/prisma';
 import { CurrentUser } from '@/shared/decorators/current-user.decorator';
 import { JwtGuard } from '@/shared/guards/jwt.guard';
+import { OrganisationRoles } from '@/shared/decorators/organisation-roles.decorator';
+import { OrganisationRolesGuard } from '@/shared/guards/organisation-roles.guard';
 import { ContactListsService } from './contact-lists.service';
 import { CreateContactListDto } from './dto/create-contact-list.dto';
 import { UpdateContactListDto } from './dto/update-contact-list.dto';
@@ -84,8 +87,11 @@ export class ContactListsController {
 
     @ActivityLog({ entityType: ActivityEntityType.CONTACT_LIST, action: ActivityAction.DELETED, entityUuidFrom: 'params.uuid' })
     @Delete(':uuid')
+    @UseGuards(OrganisationRolesGuard)
+    @OrganisationRoles(OrganisationRole.ADMIN)
     @ApiOperation({ summary: 'Delete a contact list' })
     @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 403, description: 'Forbidden — organisation admin role required' })
     @ApiResponse({ status: 404, description: 'Contact list not found' })
     remove(@CurrentUser('organisation_uuid') organisation_uuid: string, @Param('uuid') uuid: string) {
         return this.contactListsService.remove(organisation_uuid, uuid);
@@ -220,8 +226,11 @@ export class ContactListsController {
 
     @ActivityLog({ entityType: ActivityEntityType.CONTACT_LIST, action: ActivityAction.CONTACTS_REMOVED, entityUuidFrom: 'params.uuid' })
     @Delete(':uuid/contacts/:contactUuid')
+    @UseGuards(OrganisationRolesGuard)
+    @OrganisationRoles(OrganisationRole.ADMIN)
     @ApiOperation({ summary: 'Remove a contact from a list' })
     @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 403, description: 'Forbidden — organisation admin role required' })
     @ApiResponse({ status: 404, description: 'Contact list not found, or contact is not in this list' })
     removeContact(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
@@ -288,8 +297,11 @@ export class ContactListsController {
 
     @ActivityLog({ entityType: ActivityEntityType.AUDIENCE_ANALYSIS, action: ActivityAction.ANALYSIS_DELETED, entityUuidFrom: 'params.analysisUuid' })
     @Delete(':uuid/analyses/:analysisUuid')
+    @UseGuards(OrganisationRolesGuard)
+    @OrganisationRoles(OrganisationRole.ADMIN)
     @ApiOperation({ summary: 'Delete an AI audience analysis for a contact list' })
     @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 403, description: 'Forbidden — organisation admin role required' })
     @ApiResponse({ status: 404, description: 'Contact list or analysis not found' })
     deleteAnalysis(
         @CurrentUser('organisation_uuid') organisation_uuid: string,

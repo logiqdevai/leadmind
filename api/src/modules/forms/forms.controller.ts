@@ -1,7 +1,10 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { OrganisationRole } from '@/generated/prisma';
 import { CurrentUser } from '@/shared/decorators/current-user.decorator';
 import { JwtGuard } from '@/shared/guards/jwt.guard';
+import { OrganisationRoles } from '@/shared/decorators/organisation-roles.decorator';
+import { OrganisationRolesGuard } from '@/shared/guards/organisation-roles.guard';
 import { FormsService } from './forms.service';
 import { CreateFormDto } from './dto/create-form.dto';
 import { UpdateFormDto } from './dto/update-form.dto';
@@ -66,9 +69,12 @@ export class FormsController {
 
     @ActivityLog({ entityType: ActivityEntityType.FORM, action: ActivityAction.DELETED, entityUuidFrom: 'params.uuid' })
     @Delete(':uuid')
+    @UseGuards(OrganisationRolesGuard)
+    @OrganisationRoles(OrganisationRole.ADMIN)
     @ApiOperation({ summary: 'Delete a form' })
     @ApiResponse({ status: 200 })
     @ApiResponse({ status: 401, description: 'Unauthorized' })
+    @ApiResponse({ status: 403, description: 'Forbidden — organisation admin role required' })
     @ApiResponse({ status: 404, description: 'Form not found' })
     remove(
         @CurrentUser('organisation_uuid') organisation_uuid: string,

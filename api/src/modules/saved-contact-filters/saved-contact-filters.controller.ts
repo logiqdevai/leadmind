@@ -14,8 +14,11 @@ import {
     ApiResponse,
     ApiTags,
 } from '@nestjs/swagger';
+import { OrganisationRole } from '@/generated/prisma';
 import { CurrentUser } from '@/shared/decorators/current-user.decorator';
 import { JwtGuard } from '@/shared/guards/jwt.guard';
+import { OrganisationRoles } from '@/shared/decorators/organisation-roles.decorator';
+import { OrganisationRolesGuard } from '@/shared/guards/organisation-roles.guard';
 import { SavedContactFiltersService } from './saved-contact-filters.service';
 import { CreateSavedContactFilterDto } from './dto/create-saved-contact-filter.dto';
 import { UpdateSavedContactFilterDto } from './dto/update-saved-contact-filter.dto';
@@ -65,7 +68,10 @@ export class SavedContactFiltersController {
     }
 
     @Delete(':uuid')
+    @UseGuards(OrganisationRolesGuard)
+    @OrganisationRoles(OrganisationRole.ADMIN)
     @ApiOperation({ summary: 'Delete a saved contact filter' })
+    @ApiResponse({ status: 403, description: 'Forbidden — organisation admin role required' })
     @ApiResponse({ status: 404, description: 'Saved contact filter not found' })
     remove(
         @CurrentUser('organisation_uuid') organisation_uuid: string,

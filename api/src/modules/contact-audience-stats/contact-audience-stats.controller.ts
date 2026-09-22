@@ -1,7 +1,10 @@
 import { Controller, Delete, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { OrganisationRole } from '@/generated/prisma';
 import { CurrentUser } from '@/shared/decorators/current-user.decorator';
 import { JwtGuard } from '@/shared/guards/jwt.guard';
+import { OrganisationRoles } from '@/shared/decorators/organisation-roles.decorator';
+import { OrganisationRolesGuard } from '@/shared/guards/organisation-roles.guard';
 import { ContactAudienceStatsService } from './contact-audience-stats.service';
 import { ContactAudienceStatsQueryDto } from './dto/contact-audience-stats-query.dto';
 import { ContactAudienceAnalysisService } from './contact-audience-analysis.service';
@@ -55,10 +58,13 @@ export class ContactAudienceStatsController {
 
     @ActivityLog({ entityType: ActivityEntityType.AUDIENCE_ANALYSIS, action: ActivityAction.ANALYSIS_DELETED, entityUuidFrom: 'params.analysisUuid' })
     @Delete('analyses/:analysisUuid')
+    @UseGuards(OrganisationRolesGuard)
+    @OrganisationRoles(OrganisationRole.ADMIN)
     @ApiOperation({ summary: 'Delete an AI audience analysis for the whole CRM' })
     @ApiParam({ name: 'analysisUuid', description: 'Audience analysis uuid' })
     @ApiResponse({ status: 200 })
     @ApiResponse({ status: 401, description: 'Unauthorized' })
+    @ApiResponse({ status: 403, description: 'Forbidden — organisation admin role required' })
     @ApiResponse({ status: 404, description: 'Analysis not found' })
     deleteAnalysis(
         @CurrentUser('organisation_uuid') organisation_uuid: string,

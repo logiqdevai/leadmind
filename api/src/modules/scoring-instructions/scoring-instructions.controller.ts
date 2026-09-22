@@ -9,8 +9,11 @@ import {
     UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { OrganisationRole } from '@/generated/prisma';
 import { JwtGuard } from '@/shared/guards/jwt.guard';
 import { CurrentUser } from '@/shared/decorators/current-user.decorator';
+import { OrganisationRoles } from '@/shared/decorators/organisation-roles.decorator';
+import { OrganisationRolesGuard } from '@/shared/guards/organisation-roles.guard';
 import { ScoringInstructionsService } from './scoring-instructions.service';
 import { CreateScoringInstructionDto } from './dto/create-scoring-instruction.dto';
 import { UpdateScoringInstructionDto } from './dto/update-scoring-instruction.dto';
@@ -69,9 +72,12 @@ export class ScoringInstructionsController {
 
     @ActivityLog({ entityType: ActivityEntityType.SCORING_INSTRUCTION, action: ActivityAction.DELETED, entityUuidFrom: 'params.uuid' })
     @Delete(':uuid')
+    @UseGuards(OrganisationRolesGuard)
+    @OrganisationRoles(OrganisationRole.ADMIN)
     @ApiOperation({ summary: 'Delete a scoring instruction' })
     @ApiResponse({ status: 200 })
     @ApiResponse({ status: 401, description: 'Unauthorized' })
+    @ApiResponse({ status: 403, description: 'Forbidden — organisation admin role required' })
     @ApiResponse({ status: 404, description: 'Scoring instruction not found' })
     remove(@CurrentUser('organisation_uuid') organisation_uuid: string, @Param('uuid') uuid: string) {
         return this.scoringInstructionsService.remove(organisation_uuid, uuid);

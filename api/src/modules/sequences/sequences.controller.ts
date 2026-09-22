@@ -17,8 +17,11 @@ import {
     ApiResponse,
     ApiTags,
 } from '@nestjs/swagger';
+import { OrganisationRole } from '@/generated/prisma';
 import { JwtGuard } from '@/shared/guards/jwt.guard';
 import { CurrentUser } from '@/shared/decorators/current-user.decorator';
+import { OrganisationRoles } from '@/shared/decorators/organisation-roles.decorator';
+import { OrganisationRolesGuard } from '@/shared/guards/organisation-roles.guard';
 import { ActivityLog } from '@/modules/activity-logs/decorators/activity-log.decorator';
 import {
     ActivityAction,
@@ -118,10 +121,13 @@ export class SequencesController {
         entityUuidFrom: 'params.uuid',
     })
     @Delete(':uuid')
+    @UseGuards(OrganisationRolesGuard)
+    @OrganisationRoles(OrganisationRole.ADMIN)
     @ApiOperation({
         summary: 'Delete a draft/archived sequence with no active enrollments',
     })
     @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 403, description: 'Forbidden — organisation admin role required' })
     @ApiResponse({ status: 404, description: 'Sequence not found' })
     remove(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
@@ -212,10 +218,13 @@ export class SequencesController {
         entityUuidFrom: 'params.uuid',
     })
     @Delete(':uuid/steps/:step_uuid')
+    @UseGuards(OrganisationRolesGuard)
+    @OrganisationRoles(OrganisationRole.ADMIN)
     @ApiOperation({
         summary: 'Delete a step (draft sequences only; disable it otherwise)',
     })
     @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 403, description: 'Forbidden — organisation admin role required' })
     @ApiResponse({ status: 404, description: 'Sequence or step not found' })
     removeStep(
         @CurrentUser('organisation_uuid') organisation_uuid: string,

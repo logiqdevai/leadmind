@@ -35,6 +35,7 @@ model User {
   bulk_jobs_created         BulkJob[]                @relation("BulkJobCreatedBy")
   openai_batch_jobs_created OpenAiBatchJob[]         @relation("OpenAiBatchJobCreatedBy")
   sidebar_favorites         SidebarFavorite[]
+  api_keys_created          ApiKey[]                 @relation("ApiKeyCreatedBy")
 
   @@index([email])
   @@index([phone])
@@ -84,6 +85,7 @@ model Organisation {
   sending_policies          SendingPolicy[]
   mail_tester_tests         MailTesterTest[]
   mxtoolbox_checks          MxToolboxCheck[]
+  api_keys                  ApiKey[]
 
   @@index([uuid])
   @@index([slug])
@@ -130,6 +132,30 @@ model OrganisationInvitation {
   @@index([token])
   @@index([status])
   @@map("organisation_invitations")
+}
+
+model ApiKey {
+  id                   Int              @id @default(autoincrement())
+  uuid                 String           @unique @default(uuid())
+  organisation_uuid    String
+  created_by_user_uuid String
+  name                 String
+  key_prefix           String
+  last4                String
+  key_hash             String           @unique
+  organisation_role    OrganisationRole @default(MEMBER)
+  last_used_at         DateTime?
+  expires_at           DateTime?
+  revoked_at           DateTime?
+  created_at           DateTime         @default(now())
+  updated_at           DateTime         @updatedAt
+
+  organisation Organisation @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  created_by   User         @relation("ApiKeyCreatedBy", fields: [created_by_user_uuid], references: [uuid], onDelete: Cascade)
+
+  @@index([organisation_uuid])
+  @@index([key_hash])
+  @@map("api_keys")
 }
 
 model Filter {

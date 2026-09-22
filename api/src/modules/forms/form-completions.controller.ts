@@ -1,7 +1,10 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { OrganisationRole } from '@/generated/prisma';
 import { CurrentUser } from '@/shared/decorators/current-user.decorator';
 import { JwtGuard } from '@/shared/guards/jwt.guard';
+import { OrganisationRoles } from '@/shared/decorators/organisation-roles.decorator';
+import { OrganisationRolesGuard } from '@/shared/guards/organisation-roles.guard';
 import { FormCompletionsService } from './form-completions.service';
 import { CreateFormCompletionDto } from './dto/create-form-completion.dto';
 import { UpdateFormCompletionDto } from './dto/update-form-completion.dto';
@@ -83,9 +86,12 @@ export class FormCompletionsController {
 
     @ActivityLog({ entityType: ActivityEntityType.FORM_COMPLETION, action: ActivityAction.DELETED, entityUuidFrom: 'params.completionUuid' })
     @Delete(':completionUuid')
+    @UseGuards(OrganisationRolesGuard)
+    @OrganisationRoles(OrganisationRole.ADMIN)
     @ApiOperation({ summary: 'Delete a form completion' })
     @ApiResponse({ status: 200 })
     @ApiResponse({ status: 401, description: 'Unauthorized' })
+    @ApiResponse({ status: 403, description: 'Forbidden — organisation admin role required' })
     @ApiResponse({ status: 404, description: 'Completion not found' })
     remove(
         @CurrentUser('organisation_uuid') organisation_uuid: string,

@@ -16,9 +16,11 @@ import {
     ApiResponse,
     ApiTags,
 } from '@nestjs/swagger';
-import { MsgStatus } from '@/generated/prisma';
+import { MsgStatus, OrganisationRole } from '@/generated/prisma';
 import { CurrentUser } from '@/shared/decorators/current-user.decorator';
 import { JwtGuard } from '@/shared/guards/jwt.guard';
+import { OrganisationRoles } from '@/shared/decorators/organisation-roles.decorator';
+import { OrganisationRolesGuard } from '@/shared/guards/organisation-roles.guard';
 import { ListMessagesDto } from './dto/list-messages.dto';
 import { SendOutreachDto } from './dto/send-outreach.dto';
 import { SendExistingMessageDto } from './dto/email-provider.dto';
@@ -103,8 +105,11 @@ export class OutreachController {
 
     @ActivityLog({ entityType: ActivityEntityType.OUTREACH_MESSAGE, action: ActivityAction.MESSAGE_DELETED, entityUuidFrom: 'params.uuid' })
     @Delete('messages/:uuid')
+    @UseGuards(OrganisationRolesGuard)
+    @OrganisationRoles(OrganisationRole.ADMIN)
     @ApiOperation({ summary: 'Delete pending outreach message' })
     @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 403, description: 'Forbidden — organisation admin role required' })
     @ApiResponse({ status: 409, description: 'Only pending messages can be deleted' })
     async deleteMessage(@CurrentUser('organisation_uuid') organisation_uuid: string, @Param('uuid') message_uuid: string) {
         await this.outreachService.deleteMessage(organisation_uuid, message_uuid);

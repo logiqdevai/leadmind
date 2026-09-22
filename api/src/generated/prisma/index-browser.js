@@ -169,6 +169,23 @@ exports.Prisma.OrganisationInvitationScalarFieldEnum = {
   updated_at: 'updated_at'
 };
 
+exports.Prisma.ApiKeyScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  organisation_uuid: 'organisation_uuid',
+  created_by_user_uuid: 'created_by_user_uuid',
+  name: 'name',
+  key_prefix: 'key_prefix',
+  last4: 'last4',
+  key_hash: 'key_hash',
+  organisation_role: 'organisation_role',
+  last_used_at: 'last_used_at',
+  expires_at: 'expires_at',
+  revoked_at: 'revoked_at',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
 exports.Prisma.FilterScalarFieldEnum = {
   id: 'id',
   uuid: 'uuid',
@@ -1480,6 +1497,7 @@ exports.Prisma.ModelName = {
   Organisation: 'Organisation',
   OrganisationMember: 'OrganisationMember',
   OrganisationInvitation: 'OrganisationInvitation',
+  ApiKey: 'ApiKey',
   Filter: 'Filter',
   SavedContactFilter: 'SavedContactFilter',
   SidebarFavorite: 'SidebarFavorite',

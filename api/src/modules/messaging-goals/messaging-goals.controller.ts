@@ -10,9 +10,11 @@ import {
     UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { GoalPeriod } from '@/generated/prisma';
+import { GoalPeriod, OrganisationRole } from '@/generated/prisma';
 import { CurrentUser } from '@/shared/decorators/current-user.decorator';
 import { JwtGuard } from '@/shared/guards/jwt.guard';
+import { OrganisationRoles } from '@/shared/decorators/organisation-roles.decorator';
+import { OrganisationRolesGuard } from '@/shared/guards/organisation-roles.guard';
 import { ZodValidationPipe } from '@/shared/pipes/zod.validation.pipe';
 import { MessagingGoalsService } from './messaging-goals.service';
 import { CreateMessagingGoalDto } from './dto/create-messaging-goal.dto';
@@ -144,9 +146,12 @@ export class MessagingGoalsController {
     }
 
     @Delete(':uuid')
+    @UseGuards(OrganisationRolesGuard)
+    @OrganisationRoles(OrganisationRole.ADMIN)
     @ApiOperation({ summary: 'Deactivate a messaging goal' })
     @ApiResponse({ status: 200 })
     @ApiResponse({ status: 401, description: 'Unauthorized' })
+    @ApiResponse({ status: 403, description: 'Forbidden — organisation admin role required' })
     @ApiResponse({ status: 404, description: 'Messaging goal not found' })
     deactivate(
         @CurrentUser('organisation_uuid') organisationUuid: string,

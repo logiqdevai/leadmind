@@ -34,6 +34,11 @@ export type OrganisationMember = $Result.DefaultSelection<Prisma.$OrganisationMe
  */
 export type OrganisationInvitation = $Result.DefaultSelection<Prisma.$OrganisationInvitationPayload>
 /**
+ * Model ApiKey
+ * 
+ */
+export type ApiKey = $Result.DefaultSelection<Prisma.$ApiKeyPayload>
+/**
  * Model Filter
  * 
  */
@@ -1268,6 +1273,16 @@ export class PrismaClient<
   get organisationInvitation(): Prisma.OrganisationInvitationDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.apiKey`: Exposes CRUD operations for the **ApiKey** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ApiKeys
+    * const apiKeys = await prisma.apiKey.findMany()
+    * ```
+    */
+  get apiKey(): Prisma.ApiKeyDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.filter`: Exposes CRUD operations for the **Filter** model.
     * Example usage:
     * ```ts
@@ -2244,6 +2259,7 @@ export namespace Prisma {
     Organisation: 'Organisation',
     OrganisationMember: 'OrganisationMember',
     OrganisationInvitation: 'OrganisationInvitation',
+    ApiKey: 'ApiKey',
     Filter: 'Filter',
     SavedContactFilter: 'SavedContactFilter',
     SidebarFavorite: 'SidebarFavorite',
@@ -2313,7 +2329,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "organisation" | "organisationMember" | "organisationInvitation" | "filter" | "savedContactFilter" | "sidebarFavorite" | "scoringInstruction" | "filterScoringInstruction" | "rawLead" | "lead" | "leadEnrichment" | "contact" | "contactInfo" | "contactFilter" | "contactEnrichment" | "contactScore" | "contactList" | "contactListMember" | "contactTag" | "interaction" | "outreachMessage" | "messageThread" | "outreachSequence" | "outreachSequenceStep" | "sequenceEnrollment" | "filterJob" | "bulkJob" | "websiteScrapeRequest" | "senderProfile" | "messageTemplate" | "marketingCampaign" | "marketingCampaignContact" | "openAiBatchJob" | "integration" | "integrationAccount" | "integrationKey" | "integrationAccountDomain" | "mailTesterTest" | "mxToolboxCheck" | "reminder" | "form" | "formField" | "formCompletion" | "formCompletionValue" | "contactAudienceAnalysis" | "aiUsageLog" | "apifyUsageLog" | "messagingGoal" | "emailSendLimit" | "sendingPolicy" | "sendingPolicyStage" | "campaignIntegration" | "campaignIntegrationState" | "sendingUsageCounter" | "goalAchievement" | "goalPersonalBest" | "activityLog"
+      modelProps: "user" | "organisation" | "organisationMember" | "organisationInvitation" | "apiKey" | "filter" | "savedContactFilter" | "sidebarFavorite" | "scoringInstruction" | "filterScoringInstruction" | "rawLead" | "lead" | "leadEnrichment" | "contact" | "contactInfo" | "contactFilter" | "contactEnrichment" | "contactScore" | "contactList" | "contactListMember" | "contactTag" | "interaction" | "outreachMessage" | "messageThread" | "outreachSequence" | "outreachSequenceStep" | "sequenceEnrollment" | "filterJob" | "bulkJob" | "websiteScrapeRequest" | "senderProfile" | "messageTemplate" | "marketingCampaign" | "marketingCampaignContact" | "openAiBatchJob" | "integration" | "integrationAccount" | "integrationKey" | "integrationAccountDomain" | "mailTesterTest" | "mxToolboxCheck" | "reminder" | "form" | "formField" | "formCompletion" | "formCompletionValue" | "contactAudienceAnalysis" | "aiUsageLog" | "apifyUsageLog" | "messagingGoal" | "emailSendLimit" | "sendingPolicy" | "sendingPolicyStage" | "campaignIntegration" | "campaignIntegrationState" | "sendingUsageCounter" | "goalAchievement" | "goalPersonalBest" | "activityLog"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2610,6 +2626,80 @@ export namespace Prisma {
           count: {
             args: Prisma.OrganisationInvitationCountArgs<ExtArgs>
             result: $Utils.Optional<OrganisationInvitationCountAggregateOutputType> | number
+          }
+        }
+      }
+      ApiKey: {
+        payload: Prisma.$ApiKeyPayload<ExtArgs>
+        fields: Prisma.ApiKeyFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ApiKeyFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ApiKeyPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ApiKeyFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ApiKeyPayload>
+          }
+          findFirst: {
+            args: Prisma.ApiKeyFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ApiKeyPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ApiKeyFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ApiKeyPayload>
+          }
+          findMany: {
+            args: Prisma.ApiKeyFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ApiKeyPayload>[]
+          }
+          create: {
+            args: Prisma.ApiKeyCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ApiKeyPayload>
+          }
+          createMany: {
+            args: Prisma.ApiKeyCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ApiKeyCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ApiKeyPayload>[]
+          }
+          delete: {
+            args: Prisma.ApiKeyDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ApiKeyPayload>
+          }
+          update: {
+            args: Prisma.ApiKeyUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ApiKeyPayload>
+          }
+          deleteMany: {
+            args: Prisma.ApiKeyDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ApiKeyUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ApiKeyUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ApiKeyPayload>[]
+          }
+          upsert: {
+            args: Prisma.ApiKeyUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ApiKeyPayload>
+          }
+          aggregate: {
+            args: Prisma.ApiKeyAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateApiKey>
+          }
+          groupBy: {
+            args: Prisma.ApiKeyGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ApiKeyGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ApiKeyCountArgs<ExtArgs>
+            result: $Utils.Optional<ApiKeyCountAggregateOutputType> | number
           }
         }
       }
@@ -6721,6 +6811,7 @@ export namespace Prisma {
     organisation?: OrganisationOmit
     organisationMember?: OrganisationMemberOmit
     organisationInvitation?: OrganisationInvitationOmit
+    apiKey?: ApiKeyOmit
     filter?: FilterOmit
     savedContactFilter?: SavedContactFilterOmit
     sidebarFavorite?: SidebarFavoriteOmit
@@ -6866,6 +6957,7 @@ export namespace Prisma {
     bulk_jobs_created: number
     openai_batch_jobs_created: number
     sidebar_favorites: number
+    api_keys_created: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6880,6 +6972,7 @@ export namespace Prisma {
     bulk_jobs_created?: boolean | UserCountOutputTypeCountBulk_jobs_createdArgs
     openai_batch_jobs_created?: boolean | UserCountOutputTypeCountOpenai_batch_jobs_createdArgs
     sidebar_favorites?: boolean | UserCountOutputTypeCountSidebar_favoritesArgs
+    api_keys_created?: boolean | UserCountOutputTypeCountApi_keys_createdArgs
   }
 
   // Custom InputTypes
@@ -6970,6 +7063,13 @@ export namespace Prisma {
     where?: SidebarFavoriteWhereInput
   }
 
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountApi_keys_createdArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ApiKeyWhereInput
+  }
+
 
   /**
    * Count Type OrganisationCountOutputType
@@ -7007,6 +7107,7 @@ export namespace Prisma {
     sending_policies: number
     mail_tester_tests: number
     mxtoolbox_checks: number
+    api_keys: number
   }
 
   export type OrganisationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7041,6 +7142,7 @@ export namespace Prisma {
     sending_policies?: boolean | OrganisationCountOutputTypeCountSending_policiesArgs
     mail_tester_tests?: boolean | OrganisationCountOutputTypeCountMail_tester_testsArgs
     mxtoolbox_checks?: boolean | OrganisationCountOutputTypeCountMxtoolbox_checksArgs
+    api_keys?: boolean | OrganisationCountOutputTypeCountApi_keysArgs
   }
 
   // Custom InputTypes
@@ -7269,6 +7371,13 @@ export namespace Prisma {
    */
   export type OrganisationCountOutputTypeCountMxtoolbox_checksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: MxToolboxCheckWhereInput
+  }
+
+  /**
+   * OrganisationCountOutputType without action
+   */
+  export type OrganisationCountOutputTypeCountApi_keysArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ApiKeyWhereInput
   }
 
 
@@ -8523,6 +8632,7 @@ export namespace Prisma {
     bulk_jobs_created?: boolean | User$bulk_jobs_createdArgs<ExtArgs>
     openai_batch_jobs_created?: boolean | User$openai_batch_jobs_createdArgs<ExtArgs>
     sidebar_favorites?: boolean | User$sidebar_favoritesArgs<ExtArgs>
+    api_keys_created?: boolean | User$api_keys_createdArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -8575,6 +8685,7 @@ export namespace Prisma {
     bulk_jobs_created?: boolean | User$bulk_jobs_createdArgs<ExtArgs>
     openai_batch_jobs_created?: boolean | User$openai_batch_jobs_createdArgs<ExtArgs>
     sidebar_favorites?: boolean | User$sidebar_favoritesArgs<ExtArgs>
+    api_keys_created?: boolean | User$api_keys_createdArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -8594,6 +8705,7 @@ export namespace Prisma {
       bulk_jobs_created: Prisma.$BulkJobPayload<ExtArgs>[]
       openai_batch_jobs_created: Prisma.$OpenAiBatchJobPayload<ExtArgs>[]
       sidebar_favorites: Prisma.$SidebarFavoritePayload<ExtArgs>[]
+      api_keys_created: Prisma.$ApiKeyPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -9010,6 +9122,7 @@ export namespace Prisma {
     bulk_jobs_created<T extends User$bulk_jobs_createdArgs<ExtArgs> = {}>(args?: Subset<T, User$bulk_jobs_createdArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BulkJobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     openai_batch_jobs_created<T extends User$openai_batch_jobs_createdArgs<ExtArgs> = {}>(args?: Subset<T, User$openai_batch_jobs_createdArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OpenAiBatchJobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     sidebar_favorites<T extends User$sidebar_favoritesArgs<ExtArgs> = {}>(args?: Subset<T, User$sidebar_favoritesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SidebarFavoritePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    api_keys_created<T extends User$api_keys_createdArgs<ExtArgs> = {}>(args?: Subset<T, User$api_keys_createdArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApiKeyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9700,6 +9813,30 @@ export namespace Prisma {
   }
 
   /**
+   * User.api_keys_created
+   */
+  export type User$api_keys_createdArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ApiKey
+     */
+    select?: ApiKeySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ApiKey
+     */
+    omit?: ApiKeyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ApiKeyInclude<ExtArgs> | null
+    where?: ApiKeyWhereInput
+    orderBy?: ApiKeyOrderByWithRelationInput | ApiKeyOrderByWithRelationInput[]
+    cursor?: ApiKeyWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ApiKeyScalarFieldEnum | ApiKeyScalarFieldEnum[]
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -9979,6 +10116,7 @@ export namespace Prisma {
     sending_policies?: boolean | Organisation$sending_policiesArgs<ExtArgs>
     mail_tester_tests?: boolean | Organisation$mail_tester_testsArgs<ExtArgs>
     mxtoolbox_checks?: boolean | Organisation$mxtoolbox_checksArgs<ExtArgs>
+    api_keys?: boolean | Organisation$api_keysArgs<ExtArgs>
     _count?: boolean | OrganisationCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["organisation"]>
 
@@ -10051,6 +10189,7 @@ export namespace Prisma {
     sending_policies?: boolean | Organisation$sending_policiesArgs<ExtArgs>
     mail_tester_tests?: boolean | Organisation$mail_tester_testsArgs<ExtArgs>
     mxtoolbox_checks?: boolean | Organisation$mxtoolbox_checksArgs<ExtArgs>
+    api_keys?: boolean | Organisation$api_keysArgs<ExtArgs>
     _count?: boolean | OrganisationCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type OrganisationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -10090,6 +10229,7 @@ export namespace Prisma {
       sending_policies: Prisma.$SendingPolicyPayload<ExtArgs>[]
       mail_tester_tests: Prisma.$MailTesterTestPayload<ExtArgs>[]
       mxtoolbox_checks: Prisma.$MxToolboxCheckPayload<ExtArgs>[]
+      api_keys: Prisma.$ApiKeyPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -10526,6 +10666,7 @@ export namespace Prisma {
     sending_policies<T extends Organisation$sending_policiesArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$sending_policiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SendingPolicyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     mail_tester_tests<T extends Organisation$mail_tester_testsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$mail_tester_testsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MailTesterTestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     mxtoolbox_checks<T extends Organisation$mxtoolbox_checksArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$mxtoolbox_checksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MxToolboxCheckPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    api_keys<T extends Organisation$api_keysArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$api_keysArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApiKeyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -11693,6 +11834,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: MxToolboxCheckScalarFieldEnum | MxToolboxCheckScalarFieldEnum[]
+  }
+
+  /**
+   * Organisation.api_keys
+   */
+  export type Organisation$api_keysArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ApiKey
+     */
+    select?: ApiKeySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ApiKey
+     */
+    omit?: ApiKeyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ApiKeyInclude<ExtArgs> | null
+    where?: ApiKeyWhereInput
+    orderBy?: ApiKeyOrderByWithRelationInput | ApiKeyOrderByWithRelationInput[]
+    cursor?: ApiKeyWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ApiKeyScalarFieldEnum | ApiKeyScalarFieldEnum[]
   }
 
   /**
@@ -14028,6 +14193,1223 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: OrganisationInvitationInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ApiKey
+   */
+
+  export type AggregateApiKey = {
+    _count: ApiKeyCountAggregateOutputType | null
+    _avg: ApiKeyAvgAggregateOutputType | null
+    _sum: ApiKeySumAggregateOutputType | null
+    _min: ApiKeyMinAggregateOutputType | null
+    _max: ApiKeyMaxAggregateOutputType | null
+  }
+
+  export type ApiKeyAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type ApiKeySumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type ApiKeyMinAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    organisation_uuid: string | null
+    created_by_user_uuid: string | null
+    name: string | null
+    key_prefix: string | null
+    last4: string | null
+    key_hash: string | null
+    organisation_role: $Enums.OrganisationRole | null
+    last_used_at: Date | null
+    expires_at: Date | null
+    revoked_at: Date | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type ApiKeyMaxAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    organisation_uuid: string | null
+    created_by_user_uuid: string | null
+    name: string | null
+    key_prefix: string | null
+    last4: string | null
+    key_hash: string | null
+    organisation_role: $Enums.OrganisationRole | null
+    last_used_at: Date | null
+    expires_at: Date | null
+    revoked_at: Date | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type ApiKeyCountAggregateOutputType = {
+    id: number
+    uuid: number
+    organisation_uuid: number
+    created_by_user_uuid: number
+    name: number
+    key_prefix: number
+    last4: number
+    key_hash: number
+    organisation_role: number
+    last_used_at: number
+    expires_at: number
+    revoked_at: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type ApiKeyAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type ApiKeySumAggregateInputType = {
+    id?: true
+  }
+
+  export type ApiKeyMinAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    created_by_user_uuid?: true
+    name?: true
+    key_prefix?: true
+    last4?: true
+    key_hash?: true
+    organisation_role?: true
+    last_used_at?: true
+    expires_at?: true
+    revoked_at?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type ApiKeyMaxAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    created_by_user_uuid?: true
+    name?: true
+    key_prefix?: true
+    last4?: true
+    key_hash?: true
+    organisation_role?: true
+    last_used_at?: true
+    expires_at?: true
+    revoked_at?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type ApiKeyCountAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    created_by_user_uuid?: true
+    name?: true
+    key_prefix?: true
+    last4?: true
+    key_hash?: true
+    organisation_role?: true
+    last_used_at?: true
+    expires_at?: true
+    revoked_at?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type ApiKeyAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ApiKey to aggregate.
+     */
+    where?: ApiKeyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ApiKeys to fetch.
+     */
+    orderBy?: ApiKeyOrderByWithRelationInput | ApiKeyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ApiKeyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ApiKeys from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ApiKeys.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ApiKeys
+    **/
+    _count?: true | ApiKeyCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ApiKeyAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ApiKeySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ApiKeyMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ApiKeyMaxAggregateInputType
+  }
+
+  export type GetApiKeyAggregateType<T extends ApiKeyAggregateArgs> = {
+        [P in keyof T & keyof AggregateApiKey]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateApiKey[P]>
+      : GetScalarType<T[P], AggregateApiKey[P]>
+  }
+
+
+
+
+  export type ApiKeyGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ApiKeyWhereInput
+    orderBy?: ApiKeyOrderByWithAggregationInput | ApiKeyOrderByWithAggregationInput[]
+    by: ApiKeyScalarFieldEnum[] | ApiKeyScalarFieldEnum
+    having?: ApiKeyScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ApiKeyCountAggregateInputType | true
+    _avg?: ApiKeyAvgAggregateInputType
+    _sum?: ApiKeySumAggregateInputType
+    _min?: ApiKeyMinAggregateInputType
+    _max?: ApiKeyMaxAggregateInputType
+  }
+
+  export type ApiKeyGroupByOutputType = {
+    id: number
+    uuid: string
+    organisation_uuid: string
+    created_by_user_uuid: string
+    name: string
+    key_prefix: string
+    last4: string
+    key_hash: string
+    organisation_role: $Enums.OrganisationRole
+    last_used_at: Date | null
+    expires_at: Date | null
+    revoked_at: Date | null
+    created_at: Date
+    updated_at: Date
+    _count: ApiKeyCountAggregateOutputType | null
+    _avg: ApiKeyAvgAggregateOutputType | null
+    _sum: ApiKeySumAggregateOutputType | null
+    _min: ApiKeyMinAggregateOutputType | null
+    _max: ApiKeyMaxAggregateOutputType | null
+  }
+
+  type GetApiKeyGroupByPayload<T extends ApiKeyGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ApiKeyGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ApiKeyGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ApiKeyGroupByOutputType[P]>
+            : GetScalarType<T[P], ApiKeyGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ApiKeySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    created_by_user_uuid?: boolean
+    name?: boolean
+    key_prefix?: boolean
+    last4?: boolean
+    key_hash?: boolean
+    organisation_role?: boolean
+    last_used_at?: boolean
+    expires_at?: boolean
+    revoked_at?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    created_by?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["apiKey"]>
+
+  export type ApiKeySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    created_by_user_uuid?: boolean
+    name?: boolean
+    key_prefix?: boolean
+    last4?: boolean
+    key_hash?: boolean
+    organisation_role?: boolean
+    last_used_at?: boolean
+    expires_at?: boolean
+    revoked_at?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    created_by?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["apiKey"]>
+
+  export type ApiKeySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    created_by_user_uuid?: boolean
+    name?: boolean
+    key_prefix?: boolean
+    last4?: boolean
+    key_hash?: boolean
+    organisation_role?: boolean
+    last_used_at?: boolean
+    expires_at?: boolean
+    revoked_at?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    created_by?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["apiKey"]>
+
+  export type ApiKeySelectScalar = {
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    created_by_user_uuid?: boolean
+    name?: boolean
+    key_prefix?: boolean
+    last4?: boolean
+    key_hash?: boolean
+    organisation_role?: boolean
+    last_used_at?: boolean
+    expires_at?: boolean
+    revoked_at?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type ApiKeyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "created_by_user_uuid" | "name" | "key_prefix" | "last4" | "key_hash" | "organisation_role" | "last_used_at" | "expires_at" | "revoked_at" | "created_at" | "updated_at", ExtArgs["result"]["apiKey"]>
+  export type ApiKeyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    created_by?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type ApiKeyIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    created_by?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type ApiKeyIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    created_by?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $ApiKeyPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ApiKey"
+    objects: {
+      organisation: Prisma.$OrganisationPayload<ExtArgs>
+      created_by: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      uuid: string
+      organisation_uuid: string
+      created_by_user_uuid: string
+      name: string
+      key_prefix: string
+      last4: string
+      key_hash: string
+      organisation_role: $Enums.OrganisationRole
+      last_used_at: Date | null
+      expires_at: Date | null
+      revoked_at: Date | null
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["apiKey"]>
+    composites: {}
+  }
+
+  type ApiKeyGetPayload<S extends boolean | null | undefined | ApiKeyDefaultArgs> = $Result.GetResult<Prisma.$ApiKeyPayload, S>
+
+  type ApiKeyCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ApiKeyFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ApiKeyCountAggregateInputType | true
+    }
+
+  export interface ApiKeyDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ApiKey'], meta: { name: 'ApiKey' } }
+    /**
+     * Find zero or one ApiKey that matches the filter.
+     * @param {ApiKeyFindUniqueArgs} args - Arguments to find a ApiKey
+     * @example
+     * // Get one ApiKey
+     * const apiKey = await prisma.apiKey.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ApiKeyFindUniqueArgs>(args: SelectSubset<T, ApiKeyFindUniqueArgs<ExtArgs>>): Prisma__ApiKeyClient<$Result.GetResult<Prisma.$ApiKeyPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ApiKey that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ApiKeyFindUniqueOrThrowArgs} args - Arguments to find a ApiKey
+     * @example
+     * // Get one ApiKey
+     * const apiKey = await prisma.apiKey.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ApiKeyFindUniqueOrThrowArgs>(args: SelectSubset<T, ApiKeyFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ApiKeyClient<$Result.GetResult<Prisma.$ApiKeyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ApiKey that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ApiKeyFindFirstArgs} args - Arguments to find a ApiKey
+     * @example
+     * // Get one ApiKey
+     * const apiKey = await prisma.apiKey.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ApiKeyFindFirstArgs>(args?: SelectSubset<T, ApiKeyFindFirstArgs<ExtArgs>>): Prisma__ApiKeyClient<$Result.GetResult<Prisma.$ApiKeyPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ApiKey that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ApiKeyFindFirstOrThrowArgs} args - Arguments to find a ApiKey
+     * @example
+     * // Get one ApiKey
+     * const apiKey = await prisma.apiKey.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ApiKeyFindFirstOrThrowArgs>(args?: SelectSubset<T, ApiKeyFindFirstOrThrowArgs<ExtArgs>>): Prisma__ApiKeyClient<$Result.GetResult<Prisma.$ApiKeyPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ApiKeys that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ApiKeyFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ApiKeys
+     * const apiKeys = await prisma.apiKey.findMany()
+     * 
+     * // Get first 10 ApiKeys
+     * const apiKeys = await prisma.apiKey.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const apiKeyWithIdOnly = await prisma.apiKey.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ApiKeyFindManyArgs>(args?: SelectSubset<T, ApiKeyFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApiKeyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ApiKey.
+     * @param {ApiKeyCreateArgs} args - Arguments to create a ApiKey.
+     * @example
+     * // Create one ApiKey
+     * const ApiKey = await prisma.apiKey.create({
+     *   data: {
+     *     // ... data to create a ApiKey
+     *   }
+     * })
+     * 
+     */
+    create<T extends ApiKeyCreateArgs>(args: SelectSubset<T, ApiKeyCreateArgs<ExtArgs>>): Prisma__ApiKeyClient<$Result.GetResult<Prisma.$ApiKeyPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ApiKeys.
+     * @param {ApiKeyCreateManyArgs} args - Arguments to create many ApiKeys.
+     * @example
+     * // Create many ApiKeys
+     * const apiKey = await prisma.apiKey.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ApiKeyCreateManyArgs>(args?: SelectSubset<T, ApiKeyCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ApiKeys and returns the data saved in the database.
+     * @param {ApiKeyCreateManyAndReturnArgs} args - Arguments to create many ApiKeys.
+     * @example
+     * // Create many ApiKeys
+     * const apiKey = await prisma.apiKey.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ApiKeys and only return the `id`
+     * const apiKeyWithIdOnly = await prisma.apiKey.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ApiKeyCreateManyAndReturnArgs>(args?: SelectSubset<T, ApiKeyCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApiKeyPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ApiKey.
+     * @param {ApiKeyDeleteArgs} args - Arguments to delete one ApiKey.
+     * @example
+     * // Delete one ApiKey
+     * const ApiKey = await prisma.apiKey.delete({
+     *   where: {
+     *     // ... filter to delete one ApiKey
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ApiKeyDeleteArgs>(args: SelectSubset<T, ApiKeyDeleteArgs<ExtArgs>>): Prisma__ApiKeyClient<$Result.GetResult<Prisma.$ApiKeyPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ApiKey.
+     * @param {ApiKeyUpdateArgs} args - Arguments to update one ApiKey.
+     * @example
+     * // Update one ApiKey
+     * const apiKey = await prisma.apiKey.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ApiKeyUpdateArgs>(args: SelectSubset<T, ApiKeyUpdateArgs<ExtArgs>>): Prisma__ApiKeyClient<$Result.GetResult<Prisma.$ApiKeyPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ApiKeys.
+     * @param {ApiKeyDeleteManyArgs} args - Arguments to filter ApiKeys to delete.
+     * @example
+     * // Delete a few ApiKeys
+     * const { count } = await prisma.apiKey.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ApiKeyDeleteManyArgs>(args?: SelectSubset<T, ApiKeyDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ApiKeys.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ApiKeyUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ApiKeys
+     * const apiKey = await prisma.apiKey.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ApiKeyUpdateManyArgs>(args: SelectSubset<T, ApiKeyUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ApiKeys and returns the data updated in the database.
+     * @param {ApiKeyUpdateManyAndReturnArgs} args - Arguments to update many ApiKeys.
+     * @example
+     * // Update many ApiKeys
+     * const apiKey = await prisma.apiKey.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ApiKeys and only return the `id`
+     * const apiKeyWithIdOnly = await prisma.apiKey.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ApiKeyUpdateManyAndReturnArgs>(args: SelectSubset<T, ApiKeyUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApiKeyPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ApiKey.
+     * @param {ApiKeyUpsertArgs} args - Arguments to update or create a ApiKey.
+     * @example
+     * // Update or create a ApiKey
+     * const apiKey = await prisma.apiKey.upsert({
+     *   create: {
+     *     // ... data to create a ApiKey
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ApiKey we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ApiKeyUpsertArgs>(args: SelectSubset<T, ApiKeyUpsertArgs<ExtArgs>>): Prisma__ApiKeyClient<$Result.GetResult<Prisma.$ApiKeyPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ApiKeys.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ApiKeyCountArgs} args - Arguments to filter ApiKeys to count.
+     * @example
+     * // Count the number of ApiKeys
+     * const count = await prisma.apiKey.count({
+     *   where: {
+     *     // ... the filter for the ApiKeys we want to count
+     *   }
+     * })
+    **/
+    count<T extends ApiKeyCountArgs>(
+      args?: Subset<T, ApiKeyCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ApiKeyCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ApiKey.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ApiKeyAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ApiKeyAggregateArgs>(args: Subset<T, ApiKeyAggregateArgs>): Prisma.PrismaPromise<GetApiKeyAggregateType<T>>
+
+    /**
+     * Group by ApiKey.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ApiKeyGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ApiKeyGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ApiKeyGroupByArgs['orderBy'] }
+        : { orderBy?: ApiKeyGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ApiKeyGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetApiKeyGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ApiKey model
+   */
+  readonly fields: ApiKeyFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ApiKey.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ApiKeyClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    organisation<T extends OrganisationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganisationDefaultArgs<ExtArgs>>): Prisma__OrganisationClient<$Result.GetResult<Prisma.$OrganisationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    created_by<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ApiKey model
+   */
+  interface ApiKeyFieldRefs {
+    readonly id: FieldRef<"ApiKey", 'Int'>
+    readonly uuid: FieldRef<"ApiKey", 'String'>
+    readonly organisation_uuid: FieldRef<"ApiKey", 'String'>
+    readonly created_by_user_uuid: FieldRef<"ApiKey", 'String'>
+    readonly name: FieldRef<"ApiKey", 'String'>
+    readonly key_prefix: FieldRef<"ApiKey", 'String'>
+    readonly last4: FieldRef<"ApiKey", 'String'>
+    readonly key_hash: FieldRef<"ApiKey", 'String'>
+    readonly organisation_role: FieldRef<"ApiKey", 'OrganisationRole'>
+    readonly last_used_at: FieldRef<"ApiKey", 'DateTime'>
+    readonly expires_at: FieldRef<"ApiKey", 'DateTime'>
+    readonly revoked_at: FieldRef<"ApiKey", 'DateTime'>
+    readonly created_at: FieldRef<"ApiKey", 'DateTime'>
+    readonly updated_at: FieldRef<"ApiKey", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ApiKey findUnique
+   */
+  export type ApiKeyFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ApiKey
+     */
+    select?: ApiKeySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ApiKey
+     */
+    omit?: ApiKeyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ApiKeyInclude<ExtArgs> | null
+    /**
+     * Filter, which ApiKey to fetch.
+     */
+    where: ApiKeyWhereUniqueInput
+  }
+
+  /**
+   * ApiKey findUniqueOrThrow
+   */
+  export type ApiKeyFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ApiKey
+     */
+    select?: ApiKeySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ApiKey
+     */
+    omit?: ApiKeyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ApiKeyInclude<ExtArgs> | null
+    /**
+     * Filter, which ApiKey to fetch.
+     */
+    where: ApiKeyWhereUniqueInput
+  }
+
+  /**
+   * ApiKey findFirst
+   */
+  export type ApiKeyFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ApiKey
+     */
+    select?: ApiKeySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ApiKey
+     */
+    omit?: ApiKeyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ApiKeyInclude<ExtArgs> | null
+    /**
+     * Filter, which ApiKey to fetch.
+     */
+    where?: ApiKeyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ApiKeys to fetch.
+     */
+    orderBy?: ApiKeyOrderByWithRelationInput | ApiKeyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ApiKeys.
+     */
+    cursor?: ApiKeyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ApiKeys from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ApiKeys.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ApiKeys.
+     */
+    distinct?: ApiKeyScalarFieldEnum | ApiKeyScalarFieldEnum[]
+  }
+
+  /**
+   * ApiKey findFirstOrThrow
+   */
+  export type ApiKeyFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ApiKey
+     */
+    select?: ApiKeySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ApiKey
+     */
+    omit?: ApiKeyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ApiKeyInclude<ExtArgs> | null
+    /**
+     * Filter, which ApiKey to fetch.
+     */
+    where?: ApiKeyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ApiKeys to fetch.
+     */
+    orderBy?: ApiKeyOrderByWithRelationInput | ApiKeyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ApiKeys.
+     */
+    cursor?: ApiKeyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ApiKeys from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ApiKeys.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ApiKeys.
+     */
+    distinct?: ApiKeyScalarFieldEnum | ApiKeyScalarFieldEnum[]
+  }
+
+  /**
+   * ApiKey findMany
+   */
+  export type ApiKeyFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ApiKey
+     */
+    select?: ApiKeySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ApiKey
+     */
+    omit?: ApiKeyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ApiKeyInclude<ExtArgs> | null
+    /**
+     * Filter, which ApiKeys to fetch.
+     */
+    where?: ApiKeyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ApiKeys to fetch.
+     */
+    orderBy?: ApiKeyOrderByWithRelationInput | ApiKeyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ApiKeys.
+     */
+    cursor?: ApiKeyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ApiKeys from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ApiKeys.
+     */
+    skip?: number
+    distinct?: ApiKeyScalarFieldEnum | ApiKeyScalarFieldEnum[]
+  }
+
+  /**
+   * ApiKey create
+   */
+  export type ApiKeyCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ApiKey
+     */
+    select?: ApiKeySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ApiKey
+     */
+    omit?: ApiKeyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ApiKeyInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ApiKey.
+     */
+    data: XOR<ApiKeyCreateInput, ApiKeyUncheckedCreateInput>
+  }
+
+  /**
+   * ApiKey createMany
+   */
+  export type ApiKeyCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ApiKeys.
+     */
+    data: ApiKeyCreateManyInput | ApiKeyCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ApiKey createManyAndReturn
+   */
+  export type ApiKeyCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ApiKey
+     */
+    select?: ApiKeySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ApiKey
+     */
+    omit?: ApiKeyOmit<ExtArgs> | null
+    /**
+     * The data used to create many ApiKeys.
+     */
+    data: ApiKeyCreateManyInput | ApiKeyCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ApiKeyIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ApiKey update
+   */
+  export type ApiKeyUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ApiKey
+     */
+    select?: ApiKeySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ApiKey
+     */
+    omit?: ApiKeyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ApiKeyInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ApiKey.
+     */
+    data: XOR<ApiKeyUpdateInput, ApiKeyUncheckedUpdateInput>
+    /**
+     * Choose, which ApiKey to update.
+     */
+    where: ApiKeyWhereUniqueInput
+  }
+
+  /**
+   * ApiKey updateMany
+   */
+  export type ApiKeyUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ApiKeys.
+     */
+    data: XOR<ApiKeyUpdateManyMutationInput, ApiKeyUncheckedUpdateManyInput>
+    /**
+     * Filter which ApiKeys to update
+     */
+    where?: ApiKeyWhereInput
+    /**
+     * Limit how many ApiKeys to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ApiKey updateManyAndReturn
+   */
+  export type ApiKeyUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ApiKey
+     */
+    select?: ApiKeySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ApiKey
+     */
+    omit?: ApiKeyOmit<ExtArgs> | null
+    /**
+     * The data used to update ApiKeys.
+     */
+    data: XOR<ApiKeyUpdateManyMutationInput, ApiKeyUncheckedUpdateManyInput>
+    /**
+     * Filter which ApiKeys to update
+     */
+    where?: ApiKeyWhereInput
+    /**
+     * Limit how many ApiKeys to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ApiKeyIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ApiKey upsert
+   */
+  export type ApiKeyUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ApiKey
+     */
+    select?: ApiKeySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ApiKey
+     */
+    omit?: ApiKeyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ApiKeyInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ApiKey to update in case it exists.
+     */
+    where: ApiKeyWhereUniqueInput
+    /**
+     * In case the ApiKey found by the `where` argument doesn't exist, create a new ApiKey with this data.
+     */
+    create: XOR<ApiKeyCreateInput, ApiKeyUncheckedCreateInput>
+    /**
+     * In case the ApiKey was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ApiKeyUpdateInput, ApiKeyUncheckedUpdateInput>
+  }
+
+  /**
+   * ApiKey delete
+   */
+  export type ApiKeyDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ApiKey
+     */
+    select?: ApiKeySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ApiKey
+     */
+    omit?: ApiKeyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ApiKeyInclude<ExtArgs> | null
+    /**
+     * Filter which ApiKey to delete.
+     */
+    where: ApiKeyWhereUniqueInput
+  }
+
+  /**
+   * ApiKey deleteMany
+   */
+  export type ApiKeyDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ApiKeys to delete
+     */
+    where?: ApiKeyWhereInput
+    /**
+     * Limit how many ApiKeys to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ApiKey without action
+   */
+  export type ApiKeyDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ApiKey
+     */
+    select?: ApiKeySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ApiKey
+     */
+    omit?: ApiKeyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ApiKeyInclude<ExtArgs> | null
   }
 
 
@@ -81015,6 +82397,26 @@ export namespace Prisma {
   export type OrganisationInvitationScalarFieldEnum = (typeof OrganisationInvitationScalarFieldEnum)[keyof typeof OrganisationInvitationScalarFieldEnum]
 
 
+  export const ApiKeyScalarFieldEnum: {
+    id: 'id',
+    uuid: 'uuid',
+    organisation_uuid: 'organisation_uuid',
+    created_by_user_uuid: 'created_by_user_uuid',
+    name: 'name',
+    key_prefix: 'key_prefix',
+    last4: 'last4',
+    key_hash: 'key_hash',
+    organisation_role: 'organisation_role',
+    last_used_at: 'last_used_at',
+    expires_at: 'expires_at',
+    revoked_at: 'revoked_at',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type ApiKeyScalarFieldEnum = (typeof ApiKeyScalarFieldEnum)[keyof typeof ApiKeyScalarFieldEnum]
+
+
   export const FilterScalarFieldEnum: {
     id: 'id',
     uuid: 'uuid',
@@ -82926,6 +84328,7 @@ export namespace Prisma {
     bulk_jobs_created?: BulkJobListRelationFilter
     openai_batch_jobs_created?: OpenAiBatchJobListRelationFilter
     sidebar_favorites?: SidebarFavoriteListRelationFilter
+    api_keys_created?: ApiKeyListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -82949,6 +84352,7 @@ export namespace Prisma {
     bulk_jobs_created?: BulkJobOrderByRelationAggregateInput
     openai_batch_jobs_created?: OpenAiBatchJobOrderByRelationAggregateInput
     sidebar_favorites?: SidebarFavoriteOrderByRelationAggregateInput
+    api_keys_created?: ApiKeyOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -82975,6 +84379,7 @@ export namespace Prisma {
     bulk_jobs_created?: BulkJobListRelationFilter
     openai_batch_jobs_created?: OpenAiBatchJobListRelationFilter
     sidebar_favorites?: SidebarFavoriteListRelationFilter
+    api_keys_created?: ApiKeyListRelationFilter
   }, "id" | "uuid" | "email" | "phone">
 
   export type UserOrderByWithAggregationInput = {
@@ -83053,6 +84458,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyListRelationFilter
     mail_tester_tests?: MailTesterTestListRelationFilter
     mxtoolbox_checks?: MxToolboxCheckListRelationFilter
+    api_keys?: ApiKeyListRelationFilter
   }
 
   export type OrganisationOrderByWithRelationInput = {
@@ -83096,6 +84502,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyOrderByRelationAggregateInput
     mail_tester_tests?: MailTesterTestOrderByRelationAggregateInput
     mxtoolbox_checks?: MxToolboxCheckOrderByRelationAggregateInput
+    api_keys?: ApiKeyOrderByRelationAggregateInput
   }
 
   export type OrganisationWhereUniqueInput = Prisma.AtLeast<{
@@ -83142,6 +84549,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyListRelationFilter
     mail_tester_tests?: MailTesterTestListRelationFilter
     mxtoolbox_checks?: MxToolboxCheckListRelationFilter
+    api_keys?: ApiKeyListRelationFilter
   }, "id" | "uuid" | "slug" | "reply_to_email">
 
   export type OrganisationOrderByWithAggregationInput = {
@@ -83340,6 +84748,111 @@ export namespace Prisma {
     accepted_at?: DateTimeNullableWithAggregatesFilter<"OrganisationInvitation"> | Date | string | null
     created_at?: DateTimeWithAggregatesFilter<"OrganisationInvitation"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"OrganisationInvitation"> | Date | string
+  }
+
+  export type ApiKeyWhereInput = {
+    AND?: ApiKeyWhereInput | ApiKeyWhereInput[]
+    OR?: ApiKeyWhereInput[]
+    NOT?: ApiKeyWhereInput | ApiKeyWhereInput[]
+    id?: IntFilter<"ApiKey"> | number
+    uuid?: StringFilter<"ApiKey"> | string
+    organisation_uuid?: StringFilter<"ApiKey"> | string
+    created_by_user_uuid?: StringFilter<"ApiKey"> | string
+    name?: StringFilter<"ApiKey"> | string
+    key_prefix?: StringFilter<"ApiKey"> | string
+    last4?: StringFilter<"ApiKey"> | string
+    key_hash?: StringFilter<"ApiKey"> | string
+    organisation_role?: EnumOrganisationRoleFilter<"ApiKey"> | $Enums.OrganisationRole
+    last_used_at?: DateTimeNullableFilter<"ApiKey"> | Date | string | null
+    expires_at?: DateTimeNullableFilter<"ApiKey"> | Date | string | null
+    revoked_at?: DateTimeNullableFilter<"ApiKey"> | Date | string | null
+    created_at?: DateTimeFilter<"ApiKey"> | Date | string
+    updated_at?: DateTimeFilter<"ApiKey"> | Date | string
+    organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+    created_by?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type ApiKeyOrderByWithRelationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    created_by_user_uuid?: SortOrder
+    name?: SortOrder
+    key_prefix?: SortOrder
+    last4?: SortOrder
+    key_hash?: SortOrder
+    organisation_role?: SortOrder
+    last_used_at?: SortOrderInput | SortOrder
+    expires_at?: SortOrderInput | SortOrder
+    revoked_at?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    organisation?: OrganisationOrderByWithRelationInput
+    created_by?: UserOrderByWithRelationInput
+  }
+
+  export type ApiKeyWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    uuid?: string
+    key_hash?: string
+    AND?: ApiKeyWhereInput | ApiKeyWhereInput[]
+    OR?: ApiKeyWhereInput[]
+    NOT?: ApiKeyWhereInput | ApiKeyWhereInput[]
+    organisation_uuid?: StringFilter<"ApiKey"> | string
+    created_by_user_uuid?: StringFilter<"ApiKey"> | string
+    name?: StringFilter<"ApiKey"> | string
+    key_prefix?: StringFilter<"ApiKey"> | string
+    last4?: StringFilter<"ApiKey"> | string
+    organisation_role?: EnumOrganisationRoleFilter<"ApiKey"> | $Enums.OrganisationRole
+    last_used_at?: DateTimeNullableFilter<"ApiKey"> | Date | string | null
+    expires_at?: DateTimeNullableFilter<"ApiKey"> | Date | string | null
+    revoked_at?: DateTimeNullableFilter<"ApiKey"> | Date | string | null
+    created_at?: DateTimeFilter<"ApiKey"> | Date | string
+    updated_at?: DateTimeFilter<"ApiKey"> | Date | string
+    organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+    created_by?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "uuid" | "key_hash">
+
+  export type ApiKeyOrderByWithAggregationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    created_by_user_uuid?: SortOrder
+    name?: SortOrder
+    key_prefix?: SortOrder
+    last4?: SortOrder
+    key_hash?: SortOrder
+    organisation_role?: SortOrder
+    last_used_at?: SortOrderInput | SortOrder
+    expires_at?: SortOrderInput | SortOrder
+    revoked_at?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: ApiKeyCountOrderByAggregateInput
+    _avg?: ApiKeyAvgOrderByAggregateInput
+    _max?: ApiKeyMaxOrderByAggregateInput
+    _min?: ApiKeyMinOrderByAggregateInput
+    _sum?: ApiKeySumOrderByAggregateInput
+  }
+
+  export type ApiKeyScalarWhereWithAggregatesInput = {
+    AND?: ApiKeyScalarWhereWithAggregatesInput | ApiKeyScalarWhereWithAggregatesInput[]
+    OR?: ApiKeyScalarWhereWithAggregatesInput[]
+    NOT?: ApiKeyScalarWhereWithAggregatesInput | ApiKeyScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"ApiKey"> | number
+    uuid?: StringWithAggregatesFilter<"ApiKey"> | string
+    organisation_uuid?: StringWithAggregatesFilter<"ApiKey"> | string
+    created_by_user_uuid?: StringWithAggregatesFilter<"ApiKey"> | string
+    name?: StringWithAggregatesFilter<"ApiKey"> | string
+    key_prefix?: StringWithAggregatesFilter<"ApiKey"> | string
+    last4?: StringWithAggregatesFilter<"ApiKey"> | string
+    key_hash?: StringWithAggregatesFilter<"ApiKey"> | string
+    organisation_role?: EnumOrganisationRoleWithAggregatesFilter<"ApiKey"> | $Enums.OrganisationRole
+    last_used_at?: DateTimeNullableWithAggregatesFilter<"ApiKey"> | Date | string | null
+    expires_at?: DateTimeNullableWithAggregatesFilter<"ApiKey"> | Date | string | null
+    revoked_at?: DateTimeNullableWithAggregatesFilter<"ApiKey"> | Date | string | null
+    created_at?: DateTimeWithAggregatesFilter<"ApiKey"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"ApiKey"> | Date | string
   }
 
   export type FilterWhereInput = {
@@ -88856,6 +90369,7 @@ export namespace Prisma {
     bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
     openai_batch_jobs_created?: OpenAiBatchJobCreateNestedManyWithoutUserInput
     sidebar_favorites?: SidebarFavoriteCreateNestedManyWithoutUserInput
+    api_keys_created?: ApiKeyCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -88879,6 +90393,7 @@ export namespace Prisma {
     bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedCreateNestedManyWithoutUserInput
     sidebar_favorites?: SidebarFavoriteUncheckedCreateNestedManyWithoutUserInput
+    api_keys_created?: ApiKeyUncheckedCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserUpdateInput = {
@@ -88901,6 +90416,7 @@ export namespace Prisma {
     bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
     openai_batch_jobs_created?: OpenAiBatchJobUpdateManyWithoutUserNestedInput
     sidebar_favorites?: SidebarFavoriteUpdateManyWithoutUserNestedInput
+    api_keys_created?: ApiKeyUpdateManyWithoutCreated_byNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -88924,6 +90440,7 @@ export namespace Prisma {
     bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedUpdateManyWithoutUserNestedInput
     sidebar_favorites?: SidebarFavoriteUncheckedUpdateManyWithoutUserNestedInput
+    api_keys_created?: ApiKeyUncheckedUpdateManyWithoutCreated_byNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -89001,6 +90518,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateInput = {
@@ -89044,6 +90562,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUpdateInput = {
@@ -89086,6 +90605,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateInput = {
@@ -89129,6 +90649,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateManyInput = {
@@ -89327,6 +90848,120 @@ export namespace Prisma {
     invited_by_user_uuid?: StringFieldUpdateOperationsInput | string
     expires_at?: DateTimeFieldUpdateOperationsInput | Date | string
     accepted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ApiKeyCreateInput = {
+    uuid?: string
+    name: string
+    key_prefix: string
+    last4: string
+    key_hash: string
+    organisation_role?: $Enums.OrganisationRole
+    last_used_at?: Date | string | null
+    expires_at?: Date | string | null
+    revoked_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutApi_keysInput
+    created_by: UserCreateNestedOneWithoutApi_keys_createdInput
+  }
+
+  export type ApiKeyUncheckedCreateInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    created_by_user_uuid: string
+    name: string
+    key_prefix: string
+    last4: string
+    key_hash: string
+    organisation_role?: $Enums.OrganisationRole
+    last_used_at?: Date | string | null
+    expires_at?: Date | string | null
+    revoked_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type ApiKeyUpdateInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    key_prefix?: StringFieldUpdateOperationsInput | string
+    last4?: StringFieldUpdateOperationsInput | string
+    key_hash?: StringFieldUpdateOperationsInput | string
+    organisation_role?: EnumOrganisationRoleFieldUpdateOperationsInput | $Enums.OrganisationRole
+    last_used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revoked_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutApi_keysNestedInput
+    created_by?: UserUpdateOneRequiredWithoutApi_keys_createdNestedInput
+  }
+
+  export type ApiKeyUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    created_by_user_uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    key_prefix?: StringFieldUpdateOperationsInput | string
+    last4?: StringFieldUpdateOperationsInput | string
+    key_hash?: StringFieldUpdateOperationsInput | string
+    organisation_role?: EnumOrganisationRoleFieldUpdateOperationsInput | $Enums.OrganisationRole
+    last_used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revoked_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ApiKeyCreateManyInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    created_by_user_uuid: string
+    name: string
+    key_prefix: string
+    last4: string
+    key_hash: string
+    organisation_role?: $Enums.OrganisationRole
+    last_used_at?: Date | string | null
+    expires_at?: Date | string | null
+    revoked_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type ApiKeyUpdateManyMutationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    key_prefix?: StringFieldUpdateOperationsInput | string
+    last4?: StringFieldUpdateOperationsInput | string
+    key_hash?: StringFieldUpdateOperationsInput | string
+    organisation_role?: EnumOrganisationRoleFieldUpdateOperationsInput | $Enums.OrganisationRole
+    last_used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revoked_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ApiKeyUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    created_by_user_uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    key_prefix?: StringFieldUpdateOperationsInput | string
+    last4?: StringFieldUpdateOperationsInput | string
+    key_hash?: StringFieldUpdateOperationsInput | string
+    organisation_role?: EnumOrganisationRoleFieldUpdateOperationsInput | $Enums.OrganisationRole
+    last_used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revoked_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -95404,6 +97039,12 @@ export namespace Prisma {
     none?: SidebarFavoriteWhereInput
   }
 
+  export type ApiKeyListRelationFilter = {
+    every?: ApiKeyWhereInput
+    some?: ApiKeyWhereInput
+    none?: ApiKeyWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -95450,6 +97091,10 @@ export namespace Prisma {
   }
 
   export type SidebarFavoriteOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ApiKeyOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -96017,6 +97662,65 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type ApiKeyCountOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    created_by_user_uuid?: SortOrder
+    name?: SortOrder
+    key_prefix?: SortOrder
+    last4?: SortOrder
+    key_hash?: SortOrder
+    organisation_role?: SortOrder
+    last_used_at?: SortOrder
+    expires_at?: SortOrder
+    revoked_at?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type ApiKeyAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type ApiKeyMaxOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    created_by_user_uuid?: SortOrder
+    name?: SortOrder
+    key_prefix?: SortOrder
+    last4?: SortOrder
+    key_hash?: SortOrder
+    organisation_role?: SortOrder
+    last_used_at?: SortOrder
+    expires_at?: SortOrder
+    revoked_at?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type ApiKeyMinOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    created_by_user_uuid?: SortOrder
+    name?: SortOrder
+    key_prefix?: SortOrder
+    last4?: SortOrder
+    key_hash?: SortOrder
+    organisation_role?: SortOrder
+    last_used_at?: SortOrder
+    expires_at?: SortOrder
+    revoked_at?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type ApiKeySumOrderByAggregateInput = {
+    id?: SortOrder
   }
 
   export type EnumSourceTypeFilter<$PrismaModel = never> = {
@@ -100641,6 +102345,13 @@ export namespace Prisma {
     connect?: SidebarFavoriteWhereUniqueInput | SidebarFavoriteWhereUniqueInput[]
   }
 
+  export type ApiKeyCreateNestedManyWithoutCreated_byInput = {
+    create?: XOR<ApiKeyCreateWithoutCreated_byInput, ApiKeyUncheckedCreateWithoutCreated_byInput> | ApiKeyCreateWithoutCreated_byInput[] | ApiKeyUncheckedCreateWithoutCreated_byInput[]
+    connectOrCreate?: ApiKeyCreateOrConnectWithoutCreated_byInput | ApiKeyCreateOrConnectWithoutCreated_byInput[]
+    createMany?: ApiKeyCreateManyCreated_byInputEnvelope
+    connect?: ApiKeyWhereUniqueInput | ApiKeyWhereUniqueInput[]
+  }
+
   export type OrganisationMemberUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<OrganisationMemberCreateWithoutUserInput, OrganisationMemberUncheckedCreateWithoutUserInput> | OrganisationMemberCreateWithoutUserInput[] | OrganisationMemberUncheckedCreateWithoutUserInput[]
     connectOrCreate?: OrganisationMemberCreateOrConnectWithoutUserInput | OrganisationMemberCreateOrConnectWithoutUserInput[]
@@ -100716,6 +102427,13 @@ export namespace Prisma {
     connectOrCreate?: SidebarFavoriteCreateOrConnectWithoutUserInput | SidebarFavoriteCreateOrConnectWithoutUserInput[]
     createMany?: SidebarFavoriteCreateManyUserInputEnvelope
     connect?: SidebarFavoriteWhereUniqueInput | SidebarFavoriteWhereUniqueInput[]
+  }
+
+  export type ApiKeyUncheckedCreateNestedManyWithoutCreated_byInput = {
+    create?: XOR<ApiKeyCreateWithoutCreated_byInput, ApiKeyUncheckedCreateWithoutCreated_byInput> | ApiKeyCreateWithoutCreated_byInput[] | ApiKeyUncheckedCreateWithoutCreated_byInput[]
+    connectOrCreate?: ApiKeyCreateOrConnectWithoutCreated_byInput | ApiKeyCreateOrConnectWithoutCreated_byInput[]
+    createMany?: ApiKeyCreateManyCreated_byInputEnvelope
+    connect?: ApiKeyWhereUniqueInput | ApiKeyWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -100888,6 +102606,20 @@ export namespace Prisma {
     deleteMany?: SidebarFavoriteScalarWhereInput | SidebarFavoriteScalarWhereInput[]
   }
 
+  export type ApiKeyUpdateManyWithoutCreated_byNestedInput = {
+    create?: XOR<ApiKeyCreateWithoutCreated_byInput, ApiKeyUncheckedCreateWithoutCreated_byInput> | ApiKeyCreateWithoutCreated_byInput[] | ApiKeyUncheckedCreateWithoutCreated_byInput[]
+    connectOrCreate?: ApiKeyCreateOrConnectWithoutCreated_byInput | ApiKeyCreateOrConnectWithoutCreated_byInput[]
+    upsert?: ApiKeyUpsertWithWhereUniqueWithoutCreated_byInput | ApiKeyUpsertWithWhereUniqueWithoutCreated_byInput[]
+    createMany?: ApiKeyCreateManyCreated_byInputEnvelope
+    set?: ApiKeyWhereUniqueInput | ApiKeyWhereUniqueInput[]
+    disconnect?: ApiKeyWhereUniqueInput | ApiKeyWhereUniqueInput[]
+    delete?: ApiKeyWhereUniqueInput | ApiKeyWhereUniqueInput[]
+    connect?: ApiKeyWhereUniqueInput | ApiKeyWhereUniqueInput[]
+    update?: ApiKeyUpdateWithWhereUniqueWithoutCreated_byInput | ApiKeyUpdateWithWhereUniqueWithoutCreated_byInput[]
+    updateMany?: ApiKeyUpdateManyWithWhereWithoutCreated_byInput | ApiKeyUpdateManyWithWhereWithoutCreated_byInput[]
+    deleteMany?: ApiKeyScalarWhereInput | ApiKeyScalarWhereInput[]
+  }
+
   export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
@@ -101048,6 +102780,20 @@ export namespace Prisma {
     update?: SidebarFavoriteUpdateWithWhereUniqueWithoutUserInput | SidebarFavoriteUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: SidebarFavoriteUpdateManyWithWhereWithoutUserInput | SidebarFavoriteUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: SidebarFavoriteScalarWhereInput | SidebarFavoriteScalarWhereInput[]
+  }
+
+  export type ApiKeyUncheckedUpdateManyWithoutCreated_byNestedInput = {
+    create?: XOR<ApiKeyCreateWithoutCreated_byInput, ApiKeyUncheckedCreateWithoutCreated_byInput> | ApiKeyCreateWithoutCreated_byInput[] | ApiKeyUncheckedCreateWithoutCreated_byInput[]
+    connectOrCreate?: ApiKeyCreateOrConnectWithoutCreated_byInput | ApiKeyCreateOrConnectWithoutCreated_byInput[]
+    upsert?: ApiKeyUpsertWithWhereUniqueWithoutCreated_byInput | ApiKeyUpsertWithWhereUniqueWithoutCreated_byInput[]
+    createMany?: ApiKeyCreateManyCreated_byInputEnvelope
+    set?: ApiKeyWhereUniqueInput | ApiKeyWhereUniqueInput[]
+    disconnect?: ApiKeyWhereUniqueInput | ApiKeyWhereUniqueInput[]
+    delete?: ApiKeyWhereUniqueInput | ApiKeyWhereUniqueInput[]
+    connect?: ApiKeyWhereUniqueInput | ApiKeyWhereUniqueInput[]
+    update?: ApiKeyUpdateWithWhereUniqueWithoutCreated_byInput | ApiKeyUpdateWithWhereUniqueWithoutCreated_byInput[]
+    updateMany?: ApiKeyUpdateManyWithWhereWithoutCreated_byInput | ApiKeyUpdateManyWithWhereWithoutCreated_byInput[]
+    deleteMany?: ApiKeyScalarWhereInput | ApiKeyScalarWhereInput[]
   }
 
   export type OrganisationMemberCreateNestedManyWithoutOrganisationInput = {
@@ -101267,6 +103013,13 @@ export namespace Prisma {
     connect?: MxToolboxCheckWhereUniqueInput | MxToolboxCheckWhereUniqueInput[]
   }
 
+  export type ApiKeyCreateNestedManyWithoutOrganisationInput = {
+    create?: XOR<ApiKeyCreateWithoutOrganisationInput, ApiKeyUncheckedCreateWithoutOrganisationInput> | ApiKeyCreateWithoutOrganisationInput[] | ApiKeyUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: ApiKeyCreateOrConnectWithoutOrganisationInput | ApiKeyCreateOrConnectWithoutOrganisationInput[]
+    createMany?: ApiKeyCreateManyOrganisationInputEnvelope
+    connect?: ApiKeyWhereUniqueInput | ApiKeyWhereUniqueInput[]
+  }
+
   export type OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput = {
     create?: XOR<OrganisationMemberCreateWithoutOrganisationInput, OrganisationMemberUncheckedCreateWithoutOrganisationInput> | OrganisationMemberCreateWithoutOrganisationInput[] | OrganisationMemberUncheckedCreateWithoutOrganisationInput[]
     connectOrCreate?: OrganisationMemberCreateOrConnectWithoutOrganisationInput | OrganisationMemberCreateOrConnectWithoutOrganisationInput[]
@@ -101482,6 +103235,13 @@ export namespace Prisma {
     connectOrCreate?: MxToolboxCheckCreateOrConnectWithoutOrganisationInput | MxToolboxCheckCreateOrConnectWithoutOrganisationInput[]
     createMany?: MxToolboxCheckCreateManyOrganisationInputEnvelope
     connect?: MxToolboxCheckWhereUniqueInput | MxToolboxCheckWhereUniqueInput[]
+  }
+
+  export type ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput = {
+    create?: XOR<ApiKeyCreateWithoutOrganisationInput, ApiKeyUncheckedCreateWithoutOrganisationInput> | ApiKeyCreateWithoutOrganisationInput[] | ApiKeyUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: ApiKeyCreateOrConnectWithoutOrganisationInput | ApiKeyCreateOrConnectWithoutOrganisationInput[]
+    createMany?: ApiKeyCreateManyOrganisationInputEnvelope
+    connect?: ApiKeyWhereUniqueInput | ApiKeyWhereUniqueInput[]
   }
 
   export type OrganisationMemberUpdateManyWithoutOrganisationNestedInput = {
@@ -101918,6 +103678,20 @@ export namespace Prisma {
     deleteMany?: MxToolboxCheckScalarWhereInput | MxToolboxCheckScalarWhereInput[]
   }
 
+  export type ApiKeyUpdateManyWithoutOrganisationNestedInput = {
+    create?: XOR<ApiKeyCreateWithoutOrganisationInput, ApiKeyUncheckedCreateWithoutOrganisationInput> | ApiKeyCreateWithoutOrganisationInput[] | ApiKeyUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: ApiKeyCreateOrConnectWithoutOrganisationInput | ApiKeyCreateOrConnectWithoutOrganisationInput[]
+    upsert?: ApiKeyUpsertWithWhereUniqueWithoutOrganisationInput | ApiKeyUpsertWithWhereUniqueWithoutOrganisationInput[]
+    createMany?: ApiKeyCreateManyOrganisationInputEnvelope
+    set?: ApiKeyWhereUniqueInput | ApiKeyWhereUniqueInput[]
+    disconnect?: ApiKeyWhereUniqueInput | ApiKeyWhereUniqueInput[]
+    delete?: ApiKeyWhereUniqueInput | ApiKeyWhereUniqueInput[]
+    connect?: ApiKeyWhereUniqueInput | ApiKeyWhereUniqueInput[]
+    update?: ApiKeyUpdateWithWhereUniqueWithoutOrganisationInput | ApiKeyUpdateWithWhereUniqueWithoutOrganisationInput[]
+    updateMany?: ApiKeyUpdateManyWithWhereWithoutOrganisationInput | ApiKeyUpdateManyWithWhereWithoutOrganisationInput[]
+    deleteMany?: ApiKeyScalarWhereInput | ApiKeyScalarWhereInput[]
+  }
+
   export type OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput = {
     create?: XOR<OrganisationMemberCreateWithoutOrganisationInput, OrganisationMemberUncheckedCreateWithoutOrganisationInput> | OrganisationMemberCreateWithoutOrganisationInput[] | OrganisationMemberUncheckedCreateWithoutOrganisationInput[]
     connectOrCreate?: OrganisationMemberCreateOrConnectWithoutOrganisationInput | OrganisationMemberCreateOrConnectWithoutOrganisationInput[]
@@ -102352,6 +104126,20 @@ export namespace Prisma {
     deleteMany?: MxToolboxCheckScalarWhereInput | MxToolboxCheckScalarWhereInput[]
   }
 
+  export type ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput = {
+    create?: XOR<ApiKeyCreateWithoutOrganisationInput, ApiKeyUncheckedCreateWithoutOrganisationInput> | ApiKeyCreateWithoutOrganisationInput[] | ApiKeyUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: ApiKeyCreateOrConnectWithoutOrganisationInput | ApiKeyCreateOrConnectWithoutOrganisationInput[]
+    upsert?: ApiKeyUpsertWithWhereUniqueWithoutOrganisationInput | ApiKeyUpsertWithWhereUniqueWithoutOrganisationInput[]
+    createMany?: ApiKeyCreateManyOrganisationInputEnvelope
+    set?: ApiKeyWhereUniqueInput | ApiKeyWhereUniqueInput[]
+    disconnect?: ApiKeyWhereUniqueInput | ApiKeyWhereUniqueInput[]
+    delete?: ApiKeyWhereUniqueInput | ApiKeyWhereUniqueInput[]
+    connect?: ApiKeyWhereUniqueInput | ApiKeyWhereUniqueInput[]
+    update?: ApiKeyUpdateWithWhereUniqueWithoutOrganisationInput | ApiKeyUpdateWithWhereUniqueWithoutOrganisationInput[]
+    updateMany?: ApiKeyUpdateManyWithWhereWithoutOrganisationInput | ApiKeyUpdateManyWithWhereWithoutOrganisationInput[]
+    deleteMany?: ApiKeyScalarWhereInput | ApiKeyScalarWhereInput[]
+  }
+
   export type OrganisationCreateNestedOneWithoutMembersInput = {
     create?: XOR<OrganisationCreateWithoutMembersInput, OrganisationUncheckedCreateWithoutMembersInput>
     connectOrCreate?: OrganisationCreateOrConnectWithoutMembersInput
@@ -102422,6 +104210,34 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutInvitations_sentInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutInvitations_sentInput, UserUpdateWithoutInvitations_sentInput>, UserUncheckedUpdateWithoutInvitations_sentInput>
+  }
+
+  export type OrganisationCreateNestedOneWithoutApi_keysInput = {
+    create?: XOR<OrganisationCreateWithoutApi_keysInput, OrganisationUncheckedCreateWithoutApi_keysInput>
+    connectOrCreate?: OrganisationCreateOrConnectWithoutApi_keysInput
+    connect?: OrganisationWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutApi_keys_createdInput = {
+    create?: XOR<UserCreateWithoutApi_keys_createdInput, UserUncheckedCreateWithoutApi_keys_createdInput>
+    connectOrCreate?: UserCreateOrConnectWithoutApi_keys_createdInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type OrganisationUpdateOneRequiredWithoutApi_keysNestedInput = {
+    create?: XOR<OrganisationCreateWithoutApi_keysInput, OrganisationUncheckedCreateWithoutApi_keysInput>
+    connectOrCreate?: OrganisationCreateOrConnectWithoutApi_keysInput
+    upsert?: OrganisationUpsertWithoutApi_keysInput
+    connect?: OrganisationWhereUniqueInput
+    update?: XOR<XOR<OrganisationUpdateToOneWithWhereWithoutApi_keysInput, OrganisationUpdateWithoutApi_keysInput>, OrganisationUncheckedUpdateWithoutApi_keysInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutApi_keys_createdNestedInput = {
+    create?: XOR<UserCreateWithoutApi_keys_createdInput, UserUncheckedCreateWithoutApi_keys_createdInput>
+    connectOrCreate?: UserCreateOrConnectWithoutApi_keys_createdInput
+    upsert?: UserUpsertWithoutApi_keys_createdInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutApi_keys_createdInput, UserUpdateWithoutApi_keys_createdInput>, UserUncheckedUpdateWithoutApi_keys_createdInput>
   }
 
   export type FilterCreateenrichment_sourcesInput = {
@@ -108281,6 +110097,47 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ApiKeyCreateWithoutCreated_byInput = {
+    uuid?: string
+    name: string
+    key_prefix: string
+    last4: string
+    key_hash: string
+    organisation_role?: $Enums.OrganisationRole
+    last_used_at?: Date | string | null
+    expires_at?: Date | string | null
+    revoked_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutApi_keysInput
+  }
+
+  export type ApiKeyUncheckedCreateWithoutCreated_byInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    name: string
+    key_prefix: string
+    last4: string
+    key_hash: string
+    organisation_role?: $Enums.OrganisationRole
+    last_used_at?: Date | string | null
+    expires_at?: Date | string | null
+    revoked_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type ApiKeyCreateOrConnectWithoutCreated_byInput = {
+    where: ApiKeyWhereUniqueInput
+    create: XOR<ApiKeyCreateWithoutCreated_byInput, ApiKeyUncheckedCreateWithoutCreated_byInput>
+  }
+
+  export type ApiKeyCreateManyCreated_byInputEnvelope = {
+    data: ApiKeyCreateManyCreated_byInput | ApiKeyCreateManyCreated_byInput[]
+    skipDuplicates?: boolean
+  }
+
   export type OrganisationMemberUpsertWithWhereUniqueWithoutUserInput = {
     where: OrganisationMemberWhereUniqueInput
     update: XOR<OrganisationMemberUpdateWithoutUserInput, OrganisationMemberUncheckedUpdateWithoutUserInput>
@@ -108671,6 +110528,42 @@ export namespace Prisma {
     nav_key?: StringFilter<"SidebarFavorite"> | string
     order_index?: IntFilter<"SidebarFavorite"> | number
     created_at?: DateTimeFilter<"SidebarFavorite"> | Date | string
+  }
+
+  export type ApiKeyUpsertWithWhereUniqueWithoutCreated_byInput = {
+    where: ApiKeyWhereUniqueInput
+    update: XOR<ApiKeyUpdateWithoutCreated_byInput, ApiKeyUncheckedUpdateWithoutCreated_byInput>
+    create: XOR<ApiKeyCreateWithoutCreated_byInput, ApiKeyUncheckedCreateWithoutCreated_byInput>
+  }
+
+  export type ApiKeyUpdateWithWhereUniqueWithoutCreated_byInput = {
+    where: ApiKeyWhereUniqueInput
+    data: XOR<ApiKeyUpdateWithoutCreated_byInput, ApiKeyUncheckedUpdateWithoutCreated_byInput>
+  }
+
+  export type ApiKeyUpdateManyWithWhereWithoutCreated_byInput = {
+    where: ApiKeyScalarWhereInput
+    data: XOR<ApiKeyUpdateManyMutationInput, ApiKeyUncheckedUpdateManyWithoutCreated_byInput>
+  }
+
+  export type ApiKeyScalarWhereInput = {
+    AND?: ApiKeyScalarWhereInput | ApiKeyScalarWhereInput[]
+    OR?: ApiKeyScalarWhereInput[]
+    NOT?: ApiKeyScalarWhereInput | ApiKeyScalarWhereInput[]
+    id?: IntFilter<"ApiKey"> | number
+    uuid?: StringFilter<"ApiKey"> | string
+    organisation_uuid?: StringFilter<"ApiKey"> | string
+    created_by_user_uuid?: StringFilter<"ApiKey"> | string
+    name?: StringFilter<"ApiKey"> | string
+    key_prefix?: StringFilter<"ApiKey"> | string
+    last4?: StringFilter<"ApiKey"> | string
+    key_hash?: StringFilter<"ApiKey"> | string
+    organisation_role?: EnumOrganisationRoleFilter<"ApiKey"> | $Enums.OrganisationRole
+    last_used_at?: DateTimeNullableFilter<"ApiKey"> | Date | string | null
+    expires_at?: DateTimeNullableFilter<"ApiKey"> | Date | string | null
+    revoked_at?: DateTimeNullableFilter<"ApiKey"> | Date | string | null
+    created_at?: DateTimeFilter<"ApiKey"> | Date | string
+    updated_at?: DateTimeFilter<"ApiKey"> | Date | string
   }
 
   export type OrganisationMemberCreateWithoutOrganisationInput = {
@@ -110116,6 +112009,47 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ApiKeyCreateWithoutOrganisationInput = {
+    uuid?: string
+    name: string
+    key_prefix: string
+    last4: string
+    key_hash: string
+    organisation_role?: $Enums.OrganisationRole
+    last_used_at?: Date | string | null
+    expires_at?: Date | string | null
+    revoked_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    created_by: UserCreateNestedOneWithoutApi_keys_createdInput
+  }
+
+  export type ApiKeyUncheckedCreateWithoutOrganisationInput = {
+    id?: number
+    uuid?: string
+    created_by_user_uuid: string
+    name: string
+    key_prefix: string
+    last4: string
+    key_hash: string
+    organisation_role?: $Enums.OrganisationRole
+    last_used_at?: Date | string | null
+    expires_at?: Date | string | null
+    revoked_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type ApiKeyCreateOrConnectWithoutOrganisationInput = {
+    where: ApiKeyWhereUniqueInput
+    create: XOR<ApiKeyCreateWithoutOrganisationInput, ApiKeyUncheckedCreateWithoutOrganisationInput>
+  }
+
+  export type ApiKeyCreateManyOrganisationInputEnvelope = {
+    data: ApiKeyCreateManyOrganisationInput | ApiKeyCreateManyOrganisationInput[]
+    skipDuplicates?: boolean
+  }
+
   export type OrganisationMemberUpsertWithWhereUniqueWithoutOrganisationInput = {
     where: OrganisationMemberWhereUniqueInput
     update: XOR<OrganisationMemberUpdateWithoutOrganisationInput, OrganisationMemberUncheckedUpdateWithoutOrganisationInput>
@@ -111077,6 +113011,22 @@ export namespace Prisma {
     updated_at?: DateTimeFilter<"MxToolboxCheck"> | Date | string
   }
 
+  export type ApiKeyUpsertWithWhereUniqueWithoutOrganisationInput = {
+    where: ApiKeyWhereUniqueInput
+    update: XOR<ApiKeyUpdateWithoutOrganisationInput, ApiKeyUncheckedUpdateWithoutOrganisationInput>
+    create: XOR<ApiKeyCreateWithoutOrganisationInput, ApiKeyUncheckedCreateWithoutOrganisationInput>
+  }
+
+  export type ApiKeyUpdateWithWhereUniqueWithoutOrganisationInput = {
+    where: ApiKeyWhereUniqueInput
+    data: XOR<ApiKeyUpdateWithoutOrganisationInput, ApiKeyUncheckedUpdateWithoutOrganisationInput>
+  }
+
+  export type ApiKeyUpdateManyWithWhereWithoutOrganisationInput = {
+    where: ApiKeyScalarWhereInput
+    data: XOR<ApiKeyUpdateManyMutationInput, ApiKeyUncheckedUpdateManyWithoutOrganisationInput>
+  }
+
   export type OrganisationCreateWithoutMembersInput = {
     uuid?: string
     name: string
@@ -111116,6 +113066,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutMembersInput = {
@@ -111158,6 +113109,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutMembersInput = {
@@ -111184,6 +113136,7 @@ export namespace Prisma {
     bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
     openai_batch_jobs_created?: OpenAiBatchJobCreateNestedManyWithoutUserInput
     sidebar_favorites?: SidebarFavoriteCreateNestedManyWithoutUserInput
+    api_keys_created?: ApiKeyCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserUncheckedCreateWithoutMembershipsInput = {
@@ -111206,6 +113159,7 @@ export namespace Prisma {
     bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedCreateNestedManyWithoutUserInput
     sidebar_favorites?: SidebarFavoriteUncheckedCreateNestedManyWithoutUserInput
+    api_keys_created?: ApiKeyUncheckedCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserCreateOrConnectWithoutMembershipsInput = {
@@ -111263,6 +113217,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutMembersInput = {
@@ -111305,6 +113260,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutMembershipsInput = {
@@ -111337,6 +113293,7 @@ export namespace Prisma {
     bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
     openai_batch_jobs_created?: OpenAiBatchJobUpdateManyWithoutUserNestedInput
     sidebar_favorites?: SidebarFavoriteUpdateManyWithoutUserNestedInput
+    api_keys_created?: ApiKeyUpdateManyWithoutCreated_byNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMembershipsInput = {
@@ -111359,6 +113316,7 @@ export namespace Prisma {
     bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedUpdateManyWithoutUserNestedInput
     sidebar_favorites?: SidebarFavoriteUncheckedUpdateManyWithoutUserNestedInput
+    api_keys_created?: ApiKeyUncheckedUpdateManyWithoutCreated_byNestedInput
   }
 
   export type OrganisationCreateWithoutInvitationsInput = {
@@ -111400,6 +113358,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutInvitationsInput = {
@@ -111442,6 +113401,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutInvitationsInput = {
@@ -111468,6 +113428,7 @@ export namespace Prisma {
     bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
     openai_batch_jobs_created?: OpenAiBatchJobCreateNestedManyWithoutUserInput
     sidebar_favorites?: SidebarFavoriteCreateNestedManyWithoutUserInput
+    api_keys_created?: ApiKeyCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserUncheckedCreateWithoutInvitations_sentInput = {
@@ -111490,6 +113451,7 @@ export namespace Prisma {
     bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedCreateNestedManyWithoutUserInput
     sidebar_favorites?: SidebarFavoriteUncheckedCreateNestedManyWithoutUserInput
+    api_keys_created?: ApiKeyUncheckedCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserCreateOrConnectWithoutInvitations_sentInput = {
@@ -111547,6 +113509,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutInvitationsInput = {
@@ -111589,6 +113552,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutInvitations_sentInput = {
@@ -111621,6 +113585,7 @@ export namespace Prisma {
     bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
     openai_batch_jobs_created?: OpenAiBatchJobUpdateManyWithoutUserNestedInput
     sidebar_favorites?: SidebarFavoriteUpdateManyWithoutUserNestedInput
+    api_keys_created?: ApiKeyUpdateManyWithoutCreated_byNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInvitations_sentInput = {
@@ -111634,6 +113599,299 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     memberships?: OrganisationMemberUncheckedUpdateManyWithoutUserNestedInput
+    form_completions?: FormCompletionUncheckedUpdateManyWithoutCompleted_byNestedInput
+    outreach_messages_sent?: OutreachMessageUncheckedUpdateManyWithoutSent_byNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutActorNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutUserNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutUserNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
+    bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
+    openai_batch_jobs_created?: OpenAiBatchJobUncheckedUpdateManyWithoutUserNestedInput
+    sidebar_favorites?: SidebarFavoriteUncheckedUpdateManyWithoutUserNestedInput
+    api_keys_created?: ApiKeyUncheckedUpdateManyWithoutCreated_byNestedInput
+  }
+
+  export type OrganisationCreateWithoutApi_keysInput = {
+    uuid?: string
+    name: string
+    slug: string
+    timezone?: string
+    reply_to_email?: string | null
+    reply_forward_email?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
+    invitations?: OrganisationInvitationCreateNestedManyWithoutOrganisationInput
+    filters?: FilterCreateNestedManyWithoutOrganisationInput
+    contacts?: ContactCreateNestedManyWithoutOrganisationInput
+    outreach_messages?: OutreachMessageCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadCreateNestedManyWithoutOrganisationInput
+    outreach_sequences?: OutreachSequenceCreateNestedManyWithoutOrganisationInput
+    interactions?: InteractionCreateNestedManyWithoutOrganisationInput
+    sender_profiles?: SenderProfileCreateNestedManyWithoutOrganisationInput
+    marketing_campaigns?: MarketingCampaignCreateNestedManyWithoutOrganisationInput
+    scoring_instructions?: ScoringInstructionCreateNestedManyWithoutOrganisationInput
+    openai_batch_jobs?: OpenAiBatchJobCreateNestedManyWithoutOrganisationInput
+    integrations?: IntegrationCreateNestedManyWithoutOrganisationInput
+    reminders?: ReminderCreateNestedManyWithoutOrganisationInput
+    forms?: FormCreateNestedManyWithoutOrganisationInput
+    contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
+    contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
+    ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
+    apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
+    message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+  }
+
+  export type OrganisationUncheckedCreateWithoutApi_keysInput = {
+    id?: number
+    uuid?: string
+    name: string
+    slug: string
+    timezone?: string
+    reply_to_email?: string | null
+    reply_forward_email?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
+    invitations?: OrganisationInvitationUncheckedCreateNestedManyWithoutOrganisationInput
+    filters?: FilterUncheckedCreateNestedManyWithoutOrganisationInput
+    contacts?: ContactUncheckedCreateNestedManyWithoutOrganisationInput
+    outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutOrganisationInput
+    outreach_sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutOrganisationInput
+    interactions?: InteractionUncheckedCreateNestedManyWithoutOrganisationInput
+    sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutOrganisationInput
+    marketing_campaigns?: MarketingCampaignUncheckedCreateNestedManyWithoutOrganisationInput
+    scoring_instructions?: ScoringInstructionUncheckedCreateNestedManyWithoutOrganisationInput
+    openai_batch_jobs?: OpenAiBatchJobUncheckedCreateNestedManyWithoutOrganisationInput
+    integrations?: IntegrationUncheckedCreateNestedManyWithoutOrganisationInput
+    reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
+    forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
+    contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
+    contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
+    ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
+    apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
+    message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+  }
+
+  export type OrganisationCreateOrConnectWithoutApi_keysInput = {
+    where: OrganisationWhereUniqueInput
+    create: XOR<OrganisationCreateWithoutApi_keysInput, OrganisationUncheckedCreateWithoutApi_keysInput>
+  }
+
+  export type UserCreateWithoutApi_keys_createdInput = {
+    uuid?: string
+    email: string
+    phone?: string | null
+    full_name?: string | null
+    password: string
+    role?: $Enums.AuthRole
+    created_at?: Date | string
+    updated_at?: Date | string
+    memberships?: OrganisationMemberCreateNestedManyWithoutUserInput
+    invitations_sent?: OrganisationInvitationCreateNestedManyWithoutInvited_byInput
+    form_completions?: FormCompletionCreateNestedManyWithoutCompleted_byInput
+    outreach_messages_sent?: OutreachMessageCreateNestedManyWithoutSent_byInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutActorInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutUserInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutUserInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
+    bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
+    openai_batch_jobs_created?: OpenAiBatchJobCreateNestedManyWithoutUserInput
+    sidebar_favorites?: SidebarFavoriteCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutApi_keys_createdInput = {
+    id?: number
+    uuid?: string
+    email: string
+    phone?: string | null
+    full_name?: string | null
+    password: string
+    role?: $Enums.AuthRole
+    created_at?: Date | string
+    updated_at?: Date | string
+    memberships?: OrganisationMemberUncheckedCreateNestedManyWithoutUserInput
+    invitations_sent?: OrganisationInvitationUncheckedCreateNestedManyWithoutInvited_byInput
+    form_completions?: FormCompletionUncheckedCreateNestedManyWithoutCompleted_byInput
+    outreach_messages_sent?: OutreachMessageUncheckedCreateNestedManyWithoutSent_byInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutActorInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutUserInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutUserInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
+    bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
+    openai_batch_jobs_created?: OpenAiBatchJobUncheckedCreateNestedManyWithoutUserInput
+    sidebar_favorites?: SidebarFavoriteUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutApi_keys_createdInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutApi_keys_createdInput, UserUncheckedCreateWithoutApi_keys_createdInput>
+  }
+
+  export type OrganisationUpsertWithoutApi_keysInput = {
+    update: XOR<OrganisationUpdateWithoutApi_keysInput, OrganisationUncheckedUpdateWithoutApi_keysInput>
+    create: XOR<OrganisationCreateWithoutApi_keysInput, OrganisationUncheckedCreateWithoutApi_keysInput>
+    where?: OrganisationWhereInput
+  }
+
+  export type OrganisationUpdateToOneWithWhereWithoutApi_keysInput = {
+    where?: OrganisationWhereInput
+    data: XOR<OrganisationUpdateWithoutApi_keysInput, OrganisationUncheckedUpdateWithoutApi_keysInput>
+  }
+
+  export type OrganisationUpdateWithoutApi_keysInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_forward_email?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
+    invitations?: OrganisationInvitationUpdateManyWithoutOrganisationNestedInput
+    filters?: FilterUpdateManyWithoutOrganisationNestedInput
+    contacts?: ContactUpdateManyWithoutOrganisationNestedInput
+    outreach_messages?: OutreachMessageUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutOrganisationNestedInput
+    outreach_sequences?: OutreachSequenceUpdateManyWithoutOrganisationNestedInput
+    interactions?: InteractionUpdateManyWithoutOrganisationNestedInput
+    sender_profiles?: SenderProfileUpdateManyWithoutOrganisationNestedInput
+    marketing_campaigns?: MarketingCampaignUpdateManyWithoutOrganisationNestedInput
+    scoring_instructions?: ScoringInstructionUpdateManyWithoutOrganisationNestedInput
+    openai_batch_jobs?: OpenAiBatchJobUpdateManyWithoutOrganisationNestedInput
+    integrations?: IntegrationUpdateManyWithoutOrganisationNestedInput
+    reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
+    forms?: FormUpdateManyWithoutOrganisationNestedInput
+    contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
+    contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
+    ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
+    apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
+    message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+  }
+
+  export type OrganisationUncheckedUpdateWithoutApi_keysInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_forward_email?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
+    invitations?: OrganisationInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
+    filters?: FilterUncheckedUpdateManyWithoutOrganisationNestedInput
+    contacts?: ContactUncheckedUpdateManyWithoutOrganisationNestedInput
+    outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutOrganisationNestedInput
+    outreach_sequences?: OutreachSequenceUncheckedUpdateManyWithoutOrganisationNestedInput
+    interactions?: InteractionUncheckedUpdateManyWithoutOrganisationNestedInput
+    sender_profiles?: SenderProfileUncheckedUpdateManyWithoutOrganisationNestedInput
+    marketing_campaigns?: MarketingCampaignUncheckedUpdateManyWithoutOrganisationNestedInput
+    scoring_instructions?: ScoringInstructionUncheckedUpdateManyWithoutOrganisationNestedInput
+    openai_batch_jobs?: OpenAiBatchJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    integrations?: IntegrationUncheckedUpdateManyWithoutOrganisationNestedInput
+    reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
+    forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
+    contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
+    contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
+    ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+  }
+
+  export type UserUpsertWithoutApi_keys_createdInput = {
+    update: XOR<UserUpdateWithoutApi_keys_createdInput, UserUncheckedUpdateWithoutApi_keys_createdInput>
+    create: XOR<UserCreateWithoutApi_keys_createdInput, UserUncheckedCreateWithoutApi_keys_createdInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutApi_keys_createdInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutApi_keys_createdInput, UserUncheckedUpdateWithoutApi_keys_createdInput>
+  }
+
+  export type UserUpdateWithoutApi_keys_createdInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    full_name?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumAuthRoleFieldUpdateOperationsInput | $Enums.AuthRole
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: OrganisationMemberUpdateManyWithoutUserNestedInput
+    invitations_sent?: OrganisationInvitationUpdateManyWithoutInvited_byNestedInput
+    form_completions?: FormCompletionUpdateManyWithoutCompleted_byNestedInput
+    outreach_messages_sent?: OutreachMessageUpdateManyWithoutSent_byNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutActorNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutUserNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutUserNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
+    bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
+    openai_batch_jobs_created?: OpenAiBatchJobUpdateManyWithoutUserNestedInput
+    sidebar_favorites?: SidebarFavoriteUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutApi_keys_createdInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    full_name?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumAuthRoleFieldUpdateOperationsInput | $Enums.AuthRole
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: OrganisationMemberUncheckedUpdateManyWithoutUserNestedInput
+    invitations_sent?: OrganisationInvitationUncheckedUpdateManyWithoutInvited_byNestedInput
     form_completions?: FormCompletionUncheckedUpdateManyWithoutCompleted_byNestedInput
     outreach_messages_sent?: OutreachMessageUncheckedUpdateManyWithoutSent_byNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutActorNestedInput
@@ -111684,6 +113942,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutFiltersInput = {
@@ -111726,6 +113985,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutFiltersInput = {
@@ -112077,6 +114337,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutFiltersInput = {
@@ -112119,6 +114380,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type ContactListUpsertWithoutFiltersInput = {
@@ -112346,6 +114608,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutSaved_contact_filtersInput = {
@@ -112388,6 +114651,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutSaved_contact_filtersInput = {
@@ -112445,6 +114709,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutSaved_contact_filtersInput = {
@@ -112487,6 +114752,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserCreateWithoutSidebar_favoritesInput = {
@@ -112508,6 +114774,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
     bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
     openai_batch_jobs_created?: OpenAiBatchJobCreateNestedManyWithoutUserInput
+    api_keys_created?: ApiKeyCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserUncheckedCreateWithoutSidebar_favoritesInput = {
@@ -112530,6 +114797,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
     bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedCreateNestedManyWithoutUserInput
+    api_keys_created?: ApiKeyUncheckedCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserCreateOrConnectWithoutSidebar_favoritesInput = {
@@ -112567,6 +114835,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
     bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
     openai_batch_jobs_created?: OpenAiBatchJobUpdateManyWithoutUserNestedInput
+    api_keys_created?: ApiKeyUpdateManyWithoutCreated_byNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSidebar_favoritesInput = {
@@ -112589,6 +114858,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
     bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedUpdateManyWithoutUserNestedInput
+    api_keys_created?: ApiKeyUncheckedUpdateManyWithoutCreated_byNestedInput
   }
 
   export type OrganisationCreateWithoutScoring_instructionsInput = {
@@ -112630,6 +114900,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutScoring_instructionsInput = {
@@ -112672,6 +114943,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutScoring_instructionsInput = {
@@ -112772,6 +115044,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutScoring_instructionsInput = {
@@ -112814,6 +115087,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type FilterScoringInstructionUpsertWithWhereUniqueWithoutScoring_instructionInput = {
@@ -113674,6 +115948,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutContactsInput = {
@@ -113716,6 +115991,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutContactsInput = {
@@ -114383,6 +116659,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutContactsInput = {
@@ -114425,6 +116702,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type LeadUpsertWithoutContactsInput = {
@@ -115843,6 +118121,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutContact_listsInput = {
@@ -115885,6 +118164,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutContact_listsInput = {
@@ -116193,6 +118473,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutContact_listsInput = {
@@ -116235,6 +118516,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type ContactListUpsertWithoutChildrenInput = {
@@ -116962,6 +119244,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutInteractionsInput = {
@@ -117004,6 +119287,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutInteractionsInput = {
@@ -117355,6 +119639,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutInteractionsInput = {
@@ -117397,6 +119682,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OutreachMessageUpsertWithoutInteractionsInput = {
@@ -117642,6 +119928,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutOutreach_messagesInput = {
@@ -117684,6 +119971,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutOutreach_messagesInput = {
@@ -117904,6 +120192,7 @@ export namespace Prisma {
     bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
     openai_batch_jobs_created?: OpenAiBatchJobCreateNestedManyWithoutUserInput
     sidebar_favorites?: SidebarFavoriteCreateNestedManyWithoutUserInput
+    api_keys_created?: ApiKeyCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserUncheckedCreateWithoutOutreach_messages_sentInput = {
@@ -117926,6 +120215,7 @@ export namespace Prisma {
     bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedCreateNestedManyWithoutUserInput
     sidebar_favorites?: SidebarFavoriteUncheckedCreateNestedManyWithoutUserInput
+    api_keys_created?: ApiKeyUncheckedCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserCreateOrConnectWithoutOutreach_messages_sentInput = {
@@ -118227,6 +120517,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutOutreach_messagesInput = {
@@ -118269,6 +120560,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type ContactUpsertWithoutOutreach_messagesInput = {
@@ -118507,6 +120799,7 @@ export namespace Prisma {
     bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
     openai_batch_jobs_created?: OpenAiBatchJobUpdateManyWithoutUserNestedInput
     sidebar_favorites?: SidebarFavoriteUpdateManyWithoutUserNestedInput
+    api_keys_created?: ApiKeyUpdateManyWithoutCreated_byNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOutreach_messages_sentInput = {
@@ -118529,6 +120822,7 @@ export namespace Prisma {
     bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedUpdateManyWithoutUserNestedInput
     sidebar_favorites?: SidebarFavoriteUncheckedUpdateManyWithoutUserNestedInput
+    api_keys_created?: ApiKeyUncheckedUpdateManyWithoutCreated_byNestedInput
   }
 
   export type InteractionUpsertWithWhereUniqueWithoutOutreach_messageInput = {
@@ -118790,6 +121084,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutMessage_threadsInput = {
@@ -118832,6 +121127,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutMessage_threadsInput = {
@@ -119084,6 +121380,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutMessage_threadsInput = {
@@ -119126,6 +121423,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type ContactUpsertWithoutMessage_threadsInput = {
@@ -119285,6 +121583,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutOutreach_sequencesInput = {
@@ -119327,6 +121626,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutOutreach_sequencesInput = {
@@ -119583,6 +121883,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutOutreach_sequencesInput = {
@@ -119625,6 +121926,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OutreachSequenceStepUpsertWithWhereUniqueWithoutSequenceInput = {
@@ -120756,6 +123058,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutBulk_jobsInput = {
@@ -120798,6 +123101,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutBulk_jobsInput = {
@@ -120824,6 +123128,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
     openai_batch_jobs_created?: OpenAiBatchJobCreateNestedManyWithoutUserInput
     sidebar_favorites?: SidebarFavoriteCreateNestedManyWithoutUserInput
+    api_keys_created?: ApiKeyCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserUncheckedCreateWithoutBulk_jobs_createdInput = {
@@ -120846,6 +123151,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedCreateNestedManyWithoutUserInput
     sidebar_favorites?: SidebarFavoriteUncheckedCreateNestedManyWithoutUserInput
+    api_keys_created?: ApiKeyUncheckedCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserCreateOrConnectWithoutBulk_jobs_createdInput = {
@@ -120903,6 +123209,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutBulk_jobsInput = {
@@ -120945,6 +123252,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutBulk_jobs_createdInput = {
@@ -120977,6 +123285,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
     openai_batch_jobs_created?: OpenAiBatchJobUpdateManyWithoutUserNestedInput
     sidebar_favorites?: SidebarFavoriteUpdateManyWithoutUserNestedInput
+    api_keys_created?: ApiKeyUpdateManyWithoutCreated_byNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBulk_jobs_createdInput = {
@@ -120999,6 +123308,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedUpdateManyWithoutUserNestedInput
     sidebar_favorites?: SidebarFavoriteUncheckedUpdateManyWithoutUserNestedInput
+    api_keys_created?: ApiKeyUncheckedUpdateManyWithoutCreated_byNestedInput
   }
 
   export type OrganisationCreateWithoutWebsite_scrape_requestsInput = {
@@ -121040,6 +123350,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutWebsite_scrape_requestsInput = {
@@ -121082,6 +123393,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutWebsite_scrape_requestsInput = {
@@ -121139,6 +123451,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutWebsite_scrape_requestsInput = {
@@ -121181,6 +123494,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutSender_profilesInput = {
@@ -121222,6 +123536,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutSender_profilesInput = {
@@ -121264,6 +123579,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutSender_profilesInput = {
@@ -121424,6 +123740,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutSender_profilesInput = {
@@ -121466,6 +123783,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type MarketingCampaignUpsertWithWhereUniqueWithoutSender_profileInput = {
@@ -121523,6 +123841,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutMessage_templatesInput = {
@@ -121565,6 +123884,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutMessage_templatesInput = {
@@ -121669,6 +123989,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutMessage_templatesInput = {
@@ -121711,6 +124032,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OutreachSequenceStepUpsertWithWhereUniqueWithoutMessage_templateInput = {
@@ -121768,6 +124090,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutMarketing_campaignsInput = {
@@ -121810,6 +124133,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutMarketing_campaignsInput = {
@@ -122263,6 +124587,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutMarketing_campaignsInput = {
@@ -122305,6 +124630,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type SenderProfileUpsertWithoutMarketing_campaignsInput = {
@@ -122959,6 +125285,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutOpenai_batch_jobsInput = {
@@ -123001,6 +125328,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutOpenai_batch_jobsInput = {
@@ -123027,6 +125355,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
     bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
     sidebar_favorites?: SidebarFavoriteCreateNestedManyWithoutUserInput
+    api_keys_created?: ApiKeyCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserUncheckedCreateWithoutOpenai_batch_jobs_createdInput = {
@@ -123049,6 +125378,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
     bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
     sidebar_favorites?: SidebarFavoriteUncheckedCreateNestedManyWithoutUserInput
+    api_keys_created?: ApiKeyUncheckedCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserCreateOrConnectWithoutOpenai_batch_jobs_createdInput = {
@@ -123106,6 +125436,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutOpenai_batch_jobsInput = {
@@ -123148,6 +125479,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutOpenai_batch_jobs_createdInput = {
@@ -123180,6 +125512,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
     bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
     sidebar_favorites?: SidebarFavoriteUpdateManyWithoutUserNestedInput
+    api_keys_created?: ApiKeyUpdateManyWithoutCreated_byNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOpenai_batch_jobs_createdInput = {
@@ -123202,6 +125535,7 @@ export namespace Prisma {
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
     bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
     sidebar_favorites?: SidebarFavoriteUncheckedUpdateManyWithoutUserNestedInput
+    api_keys_created?: ApiKeyUncheckedUpdateManyWithoutCreated_byNestedInput
   }
 
   export type OrganisationCreateWithoutIntegrationsInput = {
@@ -123243,6 +125577,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutIntegrationsInput = {
@@ -123285,6 +125620,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutIntegrationsInput = {
@@ -123408,6 +125744,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutIntegrationsInput = {
@@ -123450,6 +125787,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type IntegrationKeyUpsertWithWhereUniqueWithoutIntegrationInput = {
@@ -123906,6 +126244,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutMail_tester_testsInput = {
@@ -123948,6 +126287,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutMail_tester_testsInput = {
@@ -124005,6 +126345,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutMail_tester_testsInput = {
@@ -124047,6 +126388,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutMxtoolbox_checksInput = {
@@ -124088,6 +126430,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutMxtoolbox_checksInput = {
@@ -124130,6 +126473,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutMxtoolbox_checksInput = {
@@ -124187,6 +126531,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutMxtoolbox_checksInput = {
@@ -124229,6 +126574,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutRemindersInput = {
@@ -124270,6 +126616,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutRemindersInput = {
@@ -124312,6 +126659,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutRemindersInput = {
@@ -124559,6 +126907,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutRemindersInput = {
@@ -124601,6 +126950,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type ContactUpsertWithoutRemindersInput = {
@@ -124844,6 +127194,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutFormsInput = {
@@ -124886,6 +127237,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutFormsInput = {
@@ -125015,6 +127367,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutFormsInput = {
@@ -125057,6 +127410,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type FormFieldUpsertWithWhereUniqueWithoutFormInput = {
@@ -125366,6 +127720,7 @@ export namespace Prisma {
     bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
     openai_batch_jobs_created?: OpenAiBatchJobCreateNestedManyWithoutUserInput
     sidebar_favorites?: SidebarFavoriteCreateNestedManyWithoutUserInput
+    api_keys_created?: ApiKeyCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserUncheckedCreateWithoutForm_completionsInput = {
@@ -125388,6 +127743,7 @@ export namespace Prisma {
     bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedCreateNestedManyWithoutUserInput
     sidebar_favorites?: SidebarFavoriteUncheckedCreateNestedManyWithoutUserInput
+    api_keys_created?: ApiKeyUncheckedCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserCreateOrConnectWithoutForm_completionsInput = {
@@ -125586,6 +127942,7 @@ export namespace Prisma {
     bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
     openai_batch_jobs_created?: OpenAiBatchJobUpdateManyWithoutUserNestedInput
     sidebar_favorites?: SidebarFavoriteUpdateManyWithoutUserNestedInput
+    api_keys_created?: ApiKeyUpdateManyWithoutCreated_byNestedInput
   }
 
   export type UserUncheckedUpdateWithoutForm_completionsInput = {
@@ -125608,6 +127965,7 @@ export namespace Prisma {
     bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedUpdateManyWithoutUserNestedInput
     sidebar_favorites?: SidebarFavoriteUncheckedUpdateManyWithoutUserNestedInput
+    api_keys_created?: ApiKeyUncheckedUpdateManyWithoutCreated_byNestedInput
   }
 
   export type FormCompletionValueUpsertWithWhereUniqueWithoutCompletionInput = {
@@ -125801,6 +128159,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutContact_audience_analysesInput = {
@@ -125843,6 +128202,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutContact_audience_analysesInput = {
@@ -126080,6 +128440,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutContact_audience_analysesInput = {
@@ -126122,6 +128483,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type FilterUpsertWithoutAudience_analysesInput = {
@@ -126361,6 +128723,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutAi_usage_logsInput = {
@@ -126403,6 +128766,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutAi_usage_logsInput = {
@@ -126460,6 +128824,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutAi_usage_logsInput = {
@@ -126502,6 +128867,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutApify_usage_logsInput = {
@@ -126543,6 +128909,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutApify_usage_logsInput = {
@@ -126585,6 +128952,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutApify_usage_logsInput = {
@@ -126642,6 +129010,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutApify_usage_logsInput = {
@@ -126684,6 +129053,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutMessaging_goalsInput = {
@@ -126725,6 +129095,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutMessaging_goalsInput = {
@@ -126767,6 +129138,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutMessaging_goalsInput = {
@@ -126793,6 +129165,7 @@ export namespace Prisma {
     bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
     openai_batch_jobs_created?: OpenAiBatchJobCreateNestedManyWithoutUserInput
     sidebar_favorites?: SidebarFavoriteCreateNestedManyWithoutUserInput
+    api_keys_created?: ApiKeyCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserUncheckedCreateWithoutMessaging_goalsInput = {
@@ -126815,6 +129188,7 @@ export namespace Prisma {
     bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedCreateNestedManyWithoutUserInput
     sidebar_favorites?: SidebarFavoriteUncheckedCreateNestedManyWithoutUserInput
+    api_keys_created?: ApiKeyUncheckedCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserCreateOrConnectWithoutMessaging_goalsInput = {
@@ -126905,6 +129279,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutMessaging_goalsInput = {
@@ -126947,6 +129322,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutMessaging_goalsInput = {
@@ -126979,6 +129355,7 @@ export namespace Prisma {
     bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
     openai_batch_jobs_created?: OpenAiBatchJobUpdateManyWithoutUserNestedInput
     sidebar_favorites?: SidebarFavoriteUpdateManyWithoutUserNestedInput
+    api_keys_created?: ApiKeyUpdateManyWithoutCreated_byNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMessaging_goalsInput = {
@@ -127001,6 +129378,7 @@ export namespace Prisma {
     bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedUpdateManyWithoutUserNestedInput
     sidebar_favorites?: SidebarFavoriteUncheckedUpdateManyWithoutUserNestedInput
+    api_keys_created?: ApiKeyUncheckedUpdateManyWithoutCreated_byNestedInput
   }
 
   export type GoalAchievementUpsertWithWhereUniqueWithoutGoalInput = {
@@ -127058,6 +129436,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutEmail_send_limitsInput = {
@@ -127100,6 +129479,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutEmail_send_limitsInput = {
@@ -127157,6 +129537,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutEmail_send_limitsInput = {
@@ -127199,6 +129580,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutSending_policiesInput = {
@@ -127240,6 +129622,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutSending_policiesInput = {
@@ -127282,6 +129665,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutSending_policiesInput = {
@@ -127496,6 +129880,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutSending_policiesInput = {
@@ -127538,6 +129923,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type SendingPolicyUpsertWithoutCloned_instancesInput = {
@@ -128432,6 +130818,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutGoal_achievementsInput = {
@@ -128474,6 +130861,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutGoal_achievementsInput = {
@@ -128500,6 +130888,7 @@ export namespace Prisma {
     bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
     openai_batch_jobs_created?: OpenAiBatchJobCreateNestedManyWithoutUserInput
     sidebar_favorites?: SidebarFavoriteCreateNestedManyWithoutUserInput
+    api_keys_created?: ApiKeyCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserUncheckedCreateWithoutGoal_achievementsInput = {
@@ -128522,6 +130911,7 @@ export namespace Prisma {
     bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedCreateNestedManyWithoutUserInput
     sidebar_favorites?: SidebarFavoriteUncheckedCreateNestedManyWithoutUserInput
+    api_keys_created?: ApiKeyUncheckedCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserCreateOrConnectWithoutGoal_achievementsInput = {
@@ -128607,6 +130997,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutGoal_achievementsInput = {
@@ -128649,6 +131040,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutGoal_achievementsInput = {
@@ -128681,6 +131073,7 @@ export namespace Prisma {
     bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
     openai_batch_jobs_created?: OpenAiBatchJobUpdateManyWithoutUserNestedInput
     sidebar_favorites?: SidebarFavoriteUpdateManyWithoutUserNestedInput
+    api_keys_created?: ApiKeyUpdateManyWithoutCreated_byNestedInput
   }
 
   export type UserUncheckedUpdateWithoutGoal_achievementsInput = {
@@ -128703,6 +131096,7 @@ export namespace Prisma {
     bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedUpdateManyWithoutUserNestedInput
     sidebar_favorites?: SidebarFavoriteUncheckedUpdateManyWithoutUserNestedInput
+    api_keys_created?: ApiKeyUncheckedUpdateManyWithoutCreated_byNestedInput
   }
 
   export type MessagingGoalUpsertWithoutAchievementsInput = {
@@ -128778,6 +131172,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutGoal_personal_bestsInput = {
@@ -128820,6 +131215,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutGoal_personal_bestsInput = {
@@ -128846,6 +131242,7 @@ export namespace Prisma {
     bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
     openai_batch_jobs_created?: OpenAiBatchJobCreateNestedManyWithoutUserInput
     sidebar_favorites?: SidebarFavoriteCreateNestedManyWithoutUserInput
+    api_keys_created?: ApiKeyCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserUncheckedCreateWithoutGoal_personal_bestsInput = {
@@ -128868,6 +131265,7 @@ export namespace Prisma {
     bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedCreateNestedManyWithoutUserInput
     sidebar_favorites?: SidebarFavoriteUncheckedCreateNestedManyWithoutUserInput
+    api_keys_created?: ApiKeyUncheckedCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserCreateOrConnectWithoutGoal_personal_bestsInput = {
@@ -128925,6 +131323,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutGoal_personal_bestsInput = {
@@ -128967,6 +131366,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutGoal_personal_bestsInput = {
@@ -128999,6 +131399,7 @@ export namespace Prisma {
     bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
     openai_batch_jobs_created?: OpenAiBatchJobUpdateManyWithoutUserNestedInput
     sidebar_favorites?: SidebarFavoriteUpdateManyWithoutUserNestedInput
+    api_keys_created?: ApiKeyUpdateManyWithoutCreated_byNestedInput
   }
 
   export type UserUncheckedUpdateWithoutGoal_personal_bestsInput = {
@@ -129021,6 +131422,7 @@ export namespace Prisma {
     bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedUpdateManyWithoutUserNestedInput
     sidebar_favorites?: SidebarFavoriteUncheckedUpdateManyWithoutUserNestedInput
+    api_keys_created?: ApiKeyUncheckedUpdateManyWithoutCreated_byNestedInput
   }
 
   export type OrganisationCreateWithoutActivity_logsInput = {
@@ -129062,6 +131464,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutActivity_logsInput = {
@@ -129104,6 +131507,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutActivity_logsInput = {
@@ -129130,6 +131534,7 @@ export namespace Prisma {
     bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
     openai_batch_jobs_created?: OpenAiBatchJobCreateNestedManyWithoutUserInput
     sidebar_favorites?: SidebarFavoriteCreateNestedManyWithoutUserInput
+    api_keys_created?: ApiKeyCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserUncheckedCreateWithoutActivity_logsInput = {
@@ -129152,6 +131557,7 @@ export namespace Prisma {
     bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedCreateNestedManyWithoutUserInput
     sidebar_favorites?: SidebarFavoriteUncheckedCreateNestedManyWithoutUserInput
+    api_keys_created?: ApiKeyUncheckedCreateNestedManyWithoutCreated_byInput
   }
 
   export type UserCreateOrConnectWithoutActivity_logsInput = {
@@ -129209,6 +131615,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutActivity_logsInput = {
@@ -129251,6 +131658,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutActivity_logsInput = {
@@ -129283,6 +131691,7 @@ export namespace Prisma {
     bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
     openai_batch_jobs_created?: OpenAiBatchJobUpdateManyWithoutUserNestedInput
     sidebar_favorites?: SidebarFavoriteUpdateManyWithoutUserNestedInput
+    api_keys_created?: ApiKeyUpdateManyWithoutCreated_byNestedInput
   }
 
   export type UserUncheckedUpdateWithoutActivity_logsInput = {
@@ -129305,6 +131714,7 @@ export namespace Prisma {
     bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedUpdateManyWithoutUserNestedInput
     sidebar_favorites?: SidebarFavoriteUncheckedUpdateManyWithoutUserNestedInput
+    api_keys_created?: ApiKeyUncheckedUpdateManyWithoutCreated_byNestedInput
   }
 
   export type OrganisationMemberCreateManyUserInput = {
@@ -129477,6 +131887,22 @@ export namespace Prisma {
     nav_key: string
     order_index?: number
     created_at?: Date | string
+  }
+
+  export type ApiKeyCreateManyCreated_byInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    name: string
+    key_prefix: string
+    last4: string
+    key_hash: string
+    organisation_role?: $Enums.OrganisationRole
+    last_used_at?: Date | string | null
+    expires_at?: Date | string | null
+    revoked_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
   }
 
   export type OrganisationMemberUpdateWithoutUserInput = {
@@ -129991,6 +132417,53 @@ export namespace Prisma {
     nav_key?: StringFieldUpdateOperationsInput | string
     order_index?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ApiKeyUpdateWithoutCreated_byInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    key_prefix?: StringFieldUpdateOperationsInput | string
+    last4?: StringFieldUpdateOperationsInput | string
+    key_hash?: StringFieldUpdateOperationsInput | string
+    organisation_role?: EnumOrganisationRoleFieldUpdateOperationsInput | $Enums.OrganisationRole
+    last_used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revoked_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutApi_keysNestedInput
+  }
+
+  export type ApiKeyUncheckedUpdateWithoutCreated_byInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    key_prefix?: StringFieldUpdateOperationsInput | string
+    last4?: StringFieldUpdateOperationsInput | string
+    key_hash?: StringFieldUpdateOperationsInput | string
+    organisation_role?: EnumOrganisationRoleFieldUpdateOperationsInput | $Enums.OrganisationRole
+    last_used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revoked_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ApiKeyUncheckedUpdateManyWithoutCreated_byInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    key_prefix?: StringFieldUpdateOperationsInput | string
+    last4?: StringFieldUpdateOperationsInput | string
+    key_hash?: StringFieldUpdateOperationsInput | string
+    organisation_role?: EnumOrganisationRoleFieldUpdateOperationsInput | $Enums.OrganisationRole
+    last_used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revoked_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type OrganisationMemberCreateManyOrganisationInput = {
@@ -130521,6 +132994,22 @@ export namespace Prisma {
     results: JsonNullValueInput | InputJsonValue
     ai_audit?: NullableJsonNullValueInput | InputJsonValue
     ai_audit_generated_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type ApiKeyCreateManyOrganisationInput = {
+    id?: number
+    uuid?: string
+    created_by_user_uuid: string
+    name: string
+    key_prefix: string
+    last4: string
+    key_hash: string
+    organisation_role?: $Enums.OrganisationRole
+    last_used_at?: Date | string | null
+    expires_at?: Date | string | null
+    revoked_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -132186,6 +134675,53 @@ export namespace Prisma {
     results?: JsonNullValueInput | InputJsonValue
     ai_audit?: NullableJsonNullValueInput | InputJsonValue
     ai_audit_generated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ApiKeyUpdateWithoutOrganisationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    key_prefix?: StringFieldUpdateOperationsInput | string
+    last4?: StringFieldUpdateOperationsInput | string
+    key_hash?: StringFieldUpdateOperationsInput | string
+    organisation_role?: EnumOrganisationRoleFieldUpdateOperationsInput | $Enums.OrganisationRole
+    last_used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revoked_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: UserUpdateOneRequiredWithoutApi_keys_createdNestedInput
+  }
+
+  export type ApiKeyUncheckedUpdateWithoutOrganisationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    created_by_user_uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    key_prefix?: StringFieldUpdateOperationsInput | string
+    last4?: StringFieldUpdateOperationsInput | string
+    key_hash?: StringFieldUpdateOperationsInput | string
+    organisation_role?: EnumOrganisationRoleFieldUpdateOperationsInput | $Enums.OrganisationRole
+    last_used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revoked_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ApiKeyUncheckedUpdateManyWithoutOrganisationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    created_by_user_uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    key_prefix?: StringFieldUpdateOperationsInput | string
+    last4?: StringFieldUpdateOperationsInput | string
+    key_hash?: StringFieldUpdateOperationsInput | string
+    organisation_role?: EnumOrganisationRoleFieldUpdateOperationsInput | $Enums.OrganisationRole
+    last_used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revoked_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }

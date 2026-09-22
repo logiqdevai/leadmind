@@ -14,8 +14,11 @@ import {
     ApiResponse,
     ApiTags,
 } from '@nestjs/swagger';
+import { OrganisationRole } from '@/generated/prisma';
 import { CurrentUser } from '@/shared/decorators/current-user.decorator';
 import { JwtGuard } from '@/shared/guards/jwt.guard';
+import { OrganisationRoles } from '@/shared/decorators/organisation-roles.decorator';
+import { OrganisationRolesGuard } from '@/shared/guards/organisation-roles.guard';
 import { SenderProfilesService } from './sender-profiles.service';
 import { CreateSenderProfileDto } from './dto/create-sender-profile.dto';
 import { UpdateSenderProfileDto } from './dto/update-sender-profile.dto';
@@ -73,7 +76,10 @@ export class SenderProfilesController {
 
     @ActivityLog({ entityType: ActivityEntityType.SENDER_PROFILE, action: ActivityAction.DELETED, entityUuidFrom: 'params.uuid' })
     @Delete(':uuid')
+    @UseGuards(OrganisationRolesGuard)
+    @OrganisationRoles(OrganisationRole.ADMIN)
     @ApiOperation({ summary: 'Delete a sender profile' })
+    @ApiResponse({ status: 403, description: 'Forbidden — organisation admin role required' })
     @ApiResponse({ status: 404, description: 'Sender profile not found' })
     remove(
         @CurrentUser('organisation_uuid') organisation_uuid: string,

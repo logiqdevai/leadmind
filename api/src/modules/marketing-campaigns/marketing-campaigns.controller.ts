@@ -16,8 +16,11 @@ import {
     ApiResponse,
     ApiTags,
 } from '@nestjs/swagger';
+import { OrganisationRole } from '@/generated/prisma';
 import { CurrentUser } from '@/shared/decorators/current-user.decorator';
 import { JwtGuard } from '@/shared/guards/jwt.guard';
+import { OrganisationRoles } from '@/shared/decorators/organisation-roles.decorator';
+import { OrganisationRolesGuard } from '@/shared/guards/organisation-roles.guard';
 import { CreateCampaignDto } from './dto/create-campaign.dto';
 import { UpdateCampaignDto } from './dto/update-campaign.dto';
 import { ListCampaignsDto } from './dto/list-campaigns.dto';
@@ -92,8 +95,11 @@ export class MarketingCampaignsController {
 
     @ActivityLog({ entityType: ActivityEntityType.MARKETING_CAMPAIGN, action: ActivityAction.DELETED, entityUuidFrom: 'params.uuid' })
     @Delete(':uuid')
+    @UseGuards(OrganisationRolesGuard)
+    @OrganisationRoles(OrganisationRole.ADMIN)
     @ApiOperation({ summary: 'Delete a draft / cancelled / completed / failed campaign' })
     @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 403, description: 'Forbidden — organisation admin role required' })
     @ApiResponse({ status: 404, description: 'Campaign not found' })
     remove(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
@@ -140,8 +146,11 @@ export class MarketingCampaignsController {
 
     @ActivityLog({ entityType: ActivityEntityType.AUDIENCE_ANALYSIS, action: ActivityAction.ANALYSIS_DELETED, entityUuidFrom: 'params.analysisUuid' })
     @Delete(':uuid/analyses/:analysisUuid')
+    @UseGuards(OrganisationRolesGuard)
+    @OrganisationRoles(OrganisationRole.ADMIN)
     @ApiOperation({ summary: 'Delete an AI audience analysis for a campaign' })
     @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 403, description: 'Forbidden — organisation admin role required' })
     @ApiResponse({ status: 404, description: 'Campaign or analysis not found' })
     deleteAnalysis(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
@@ -290,8 +299,11 @@ export class MarketingCampaignsController {
 
     @ActivityLog({ entityType: ActivityEntityType.OUTREACH_MESSAGE, action: ActivityAction.DRAFT_MESSAGE_DELETED, entityUuidFrom: 'params.message_uuid' })
     @Delete(':uuid/draft-messages/:message_uuid')
+    @UseGuards(OrganisationRolesGuard)
+    @OrganisationRoles(OrganisationRole.ADMIN)
     @ApiOperation({ summary: 'Delete a campaign outreach row (any status, e.g. remove bad or sent rows from the list)' })
     @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 403, description: 'Forbidden — organisation admin role required' })
     @ApiResponse({ status: 404 })
     deleteDraftMessage(
         @CurrentUser('organisation_uuid') organisation_uuid: string,

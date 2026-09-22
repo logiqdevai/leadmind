@@ -15,8 +15,11 @@ import {
     ApiResponse,
     ApiTags,
 } from '@nestjs/swagger';
+import { OrganisationRole } from '@/generated/prisma';
 import { CurrentUser } from '@/shared/decorators/current-user.decorator';
 import { JwtGuard } from '@/shared/guards/jwt.guard';
+import { OrganisationRoles } from '@/shared/decorators/organisation-roles.decorator';
+import { OrganisationRolesGuard } from '@/shared/guards/organisation-roles.guard';
 import { ContactsService } from './contacts.service';
 import { AddNoteDto } from './dto/add-note.dto';
 import { AiDraftMessageDto } from './dto/ai-draft-message.dto';
@@ -162,8 +165,11 @@ export class ContactsController {
 
     @ActivityLog({ entityType: ActivityEntityType.CONTACT, action: ActivityAction.BULK_DELETED, entityUuidFrom: 'none' })
     @Post('bulk-delete')
+    @UseGuards(OrganisationRolesGuard)
+    @OrganisationRoles(OrganisationRole.ADMIN)
     @ApiOperation({ summary: 'Delete multiple contacts' })
     @ApiResponse({ status: 201 })
+    @ApiResponse({ status: 403, description: 'Forbidden — organisation admin role required' })
     @ApiResponse({ status: 404 })
     removeMany(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
@@ -174,8 +180,11 @@ export class ContactsController {
 
     @ActivityLog({ entityType: ActivityEntityType.CONTACT, action: ActivityAction.BULK_DELETED, entityUuidFrom: 'none' })
     @Post('bulk-delete-below-score')
+    @UseGuards(OrganisationRolesGuard)
+    @OrganisationRoles(OrganisationRole.ADMIN)
     @ApiOperation({ summary: 'Delete all contacts whose current score is below the given threshold' })
     @ApiResponse({ status: 201 })
+    @ApiResponse({ status: 403, description: 'Forbidden — organisation admin role required' })
     removeManyBelowScore(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Body() dto: BulkDeleteBelowScoreDto,
@@ -218,7 +227,10 @@ export class ContactsController {
 
     @ActivityLog({ entityType: ActivityEntityType.CONTACT, action: ActivityAction.DELETED, entityUuidFrom: 'params.uuid' })
     @Delete(':uuid')
+    @UseGuards(OrganisationRolesGuard)
+    @OrganisationRoles(OrganisationRole.ADMIN)
     @ApiOperation({ summary: 'Delete a contact' })
+    @ApiResponse({ status: 403, description: 'Forbidden — organisation admin role required' })
     @ApiResponse({ status: 404, description: 'Contact not found' })
     remove(@CurrentUser('organisation_uuid') organisation_uuid: string, @Param('uuid') uuid: string) {
         return this.contactsService.remove(organisation_uuid, uuid);
@@ -285,7 +297,10 @@ export class ContactsController {
 
     @ActivityLog({ entityType: ActivityEntityType.CONTACT_INFO, action: ActivityAction.DELETED, entityUuidFrom: 'params.infoUuid' })
     @Delete(':uuid/info/:infoUuid')
+    @UseGuards(OrganisationRolesGuard)
+    @OrganisationRoles(OrganisationRole.ADMIN)
     @ApiOperation({ summary: 'Delete a contact info entry' })
+    @ApiResponse({ status: 403, description: 'Forbidden — organisation admin role required' })
     @ApiResponse({ status: 404, description: 'Contact info not found' })
     removeContactInfo(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
