@@ -40,6 +40,7 @@ import {
   Workflow,
   Star,
   GripVertical,
+  KeyRound,
 } from "lucide-react";
 import { Routes } from "@/routes/routes";
 import { usePermission } from "@/hooks/use-permission";
@@ -126,6 +127,7 @@ const adminSubItems: NavItemConfig[] = [
 const settingsSubItems: NavItemConfig[] = [
   { label: "Account", icon: User, href: Routes.dashboard.settings_account, end: false },
   { label: "Organisation", icon: Building2, href: Routes.dashboard.settings_organisation, end: false },
+  { label: "API Keys", icon: KeyRound, href: Routes.dashboard.settings_api_keys, end: false },
   { label: "Activity", icon: History, href: Routes.dashboard.settings_activity, end: false },
   { label: "Usage", icon: BarChart2, href: Routes.dashboard.settings_usage, end: false },
 ];

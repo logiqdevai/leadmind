@@ -43,6 +43,7 @@ const EditSequencePage = lazy(() => import("@/pages/dashboard/pages/sequences/pa
 const SettingsUsagePage = lazy(() => import("@/pages/dashboard/pages/settings/usage"));
 const SettingsOrganisationPage = lazy(() => import("@/pages/dashboard/pages/settings/organisation"));
 const SettingsActivityPage = lazy(() => import("@/pages/dashboard/pages/settings/activity"));
+const SettingsApiKeysPage = lazy(() => import("@/pages/dashboard/pages/settings/api-keys"));
 const SettingsAccountPage = lazy(() => import("@/pages/dashboard/pages/settings/account"));
 const InviteAcceptPage = lazy(() => import("@/pages/auth/pages/invite"));
 const UnsubscribePage = lazy(() => import("@/pages/unsubscribe"));
@@ -296,6 +297,14 @@ export default function AppRoutes() {
           element={
             <Lazy>
               <SettingsActivityPage />
+            </Lazy>
+          }
+        />
+        <Route
+          path="settings/api-keys"
+          element={
+            <Lazy>
+              <SettingsApiKeysPage />
             </Lazy>
           }
         />

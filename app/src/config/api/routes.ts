@@ -374,6 +374,15 @@ export const ApiRoutes = {
         rerun: (uuid: string) => `/mxtoolbox/checks/${uuid}/rerun`,
         ai_audit: (uuid: string) => `/mxtoolbox/checks/${uuid}/ai-audit`,
     },
+    api_keys: {
+        prefix: "/api-keys",
+        list: "/api-keys",
+        create: "/api-keys",
+        get: (uuid: string) => `/api-keys/${uuid}`,
+        update: (uuid: string) => `/api-keys/${uuid}`,
+        revoke: (uuid: string) => `/api-keys/${uuid}/revoke`,
+        remove: (uuid: string) => `/api-keys/${uuid}`,
+    },
     campaign_integrations: {
         list: (campaignUuid: string) => `/marketing-campaigns/${campaignUuid}/integrations`,
         assign: (campaignUuid: string) => `/marketing-campaigns/${campaignUuid}/integrations`,
