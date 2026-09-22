@@ -30,6 +30,7 @@ async function bootstrap() {
     .setDescription('The Appointly API documentation')
     .setVersion('1.0')
     .addBearerAuth()
+    .addApiKey({ type: 'apiKey', name: 'X-API-Key', in: 'header' }, 'api-key')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

@@ -20,6 +20,6 @@ import { FormCompletionsService } from './form-completions.service';
         FormCompletionsByContactController,
     ],
     providers: [FormsService, FormFieldsService, FormCompletionsService],
-    exports: [FormsService],
+    exports: [FormsService, FormFieldsService, FormCompletionsService],
 })
 export class FormsModule {}

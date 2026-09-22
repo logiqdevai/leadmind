@@ -41,6 +41,8 @@ import { MessageTemplatesModule } from './modules/message-templates/message-temp
 import { SequencesModule } from './modules/sequences/sequences.module';
 import { OrganisationsModule } from './modules/organisations/organisations.module';
 import { UsersModule } from './modules/users/users.module';
+import { ApiKeysModule } from './modules/api-keys/api-keys.module';
+import { PublicApiModule } from './modules/public-api/public-api.module';
 import { ActivityLogsModule } from './modules/activity-logs/activity-logs.module';
 import { MessagingGoalsModule } from './modules/messaging-goals/messaging-goals.module';
 import { EmailSendLimitsModule } from './modules/email-send-limits/email-send-limits.module';
@@ -60,6 +62,8 @@ import { SidebarFavoritesModule } from './modules/sidebar-favorites/sidebar-favo
     MailModule,
     OrganisationsModule,
     UsersModule,
+    ApiKeysModule,
+    PublicApiModule,
     ActivityLogsModule,
     MessagingGoalsModule,
     EmailSendLimitsModule,

@@ -25,6 +25,7 @@ export const ActivityEntityType = {
   SENDING_POLICY: 'sending_policy',
   SENDING_POLICY_STAGE: 'sending_policy_stage',
   CAMPAIGN_INTEGRATION: 'campaign_integration',
+  API_KEY: 'api_key',
 } as const;
 
 export type ActivityEntityType =
@@ -84,6 +85,7 @@ export const ActivityAction = {
   KEY_CREATED: 'key_created',
   KEY_UPDATED: 'key_updated',
   KEY_DELETED: 'key_deleted',
+  KEY_REVOKED: 'key_revoked',
   SMTP_ACCOUNT_CREATED: 'smtp_account_created',
   RESEND_ACCOUNT_CREATED: 'resend_account_created',
   DOMAIN_ADDED: 'domain_added',
