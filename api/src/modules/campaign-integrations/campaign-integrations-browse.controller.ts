@@ -3,6 +3,7 @@ import {
   ApiBearerAuth,
   ApiOperation,
   ApiQuery,
+  ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { CurrentUser } from '@/shared/decorators/current-user.decorator';
@@ -19,11 +20,13 @@ export class CampaignIntegrationsBrowseController {
   ) {}
 
   @Get()
-  @ApiQuery({ name: 'exclude_campaign_uuid', required: false })
+  @ApiQuery({ name: 'exclude_campaign_uuid', required: false, description: 'Campaign uuid to omit from the results' })
   @ApiOperation({
     summary:
       "List sending integrations assigned across the organisation's campaigns - used to copy another campaign's sending policy",
   })
+  @ApiResponse({ status: 200 })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   listForOrganisation(
     @CurrentUser('organisation_uuid') organisation_uuid: string,
     @Query('exclude_campaign_uuid') exclude_campaign_uuid?: string,

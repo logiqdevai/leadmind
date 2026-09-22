@@ -8,7 +8,7 @@ import {
     Put,
     UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtGuard } from '@/shared/guards/jwt.guard';
 import { CurrentUser } from '@/shared/decorators/current-user.decorator';
 import { MessageTemplatesService } from './message-templates.service';
@@ -31,6 +31,8 @@ export class MessageTemplatesController {
 
     @Post('ai/generate')
     @ApiOperation({ summary: 'Generate or refine template content with AI' })
+    @ApiResponse({ status: 201 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
     generateAi(@CurrentUser('organisation_uuid') organisation_uuid: string, @Body() dto: GenerateTemplateMessageDto) {
         return this.messageTemplatesService.generateAi(organisation_uuid, dto);
     }
@@ -38,6 +40,9 @@ export class MessageTemplatesController {
     @ActivityLog({ entityType: ActivityEntityType.MESSAGE_TEMPLATE, action: ActivityAction.CREATED_FROM_CAMPAIGN })
     @Post('from-campaign/:campaign_uuid')
     @ApiOperation({ summary: 'Create a template from an existing campaign message' })
+    @ApiResponse({ status: 201 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
+    @ApiResponse({ status: 404, description: 'Campaign not found' })
     createFromCampaign(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('campaign_uuid') campaign_uuid: string,
@@ -49,6 +54,9 @@ export class MessageTemplatesController {
     @ActivityLog({ entityType: ActivityEntityType.MESSAGE_TEMPLATE, action: ActivityAction.CREATED_FROM_MESSAGE })
     @Post('from-message/:message_uuid')
     @ApiOperation({ summary: 'Create a template from an existing outreach message' })
+    @ApiResponse({ status: 201 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
+    @ApiResponse({ status: 404, description: 'Message not found' })
     createFromMessage(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('message_uuid') message_uuid: string,
@@ -60,18 +68,25 @@ export class MessageTemplatesController {
     @ActivityLog({ entityType: ActivityEntityType.MESSAGE_TEMPLATE, action: ActivityAction.CREATED, includeBodyKeys: ['name'] })
     @Post()
     @ApiOperation({ summary: 'Create a message template' })
+    @ApiResponse({ status: 201 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
     create(@CurrentUser('organisation_uuid') organisation_uuid: string, @Body() dto: CreateMessageTemplateDto) {
         return this.messageTemplatesService.create(organisation_uuid, dto);
     }
 
     @Get()
     @ApiOperation({ summary: 'List message templates for the current user' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
     findAll(@CurrentUser('organisation_uuid') organisation_uuid: string) {
         return this.messageTemplatesService.findAll(organisation_uuid);
     }
 
     @Get(':uuid')
     @ApiOperation({ summary: 'Get a message template by uuid' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
+    @ApiResponse({ status: 404, description: 'Message template not found' })
     findOne(@CurrentUser('organisation_uuid') organisation_uuid: string, @Param('uuid') uuid: string) {
         return this.messageTemplatesService.findOne(organisation_uuid, uuid);
     }
@@ -79,6 +94,9 @@ export class MessageTemplatesController {
     @ActivityLog({ entityType: ActivityEntityType.MESSAGE_TEMPLATE, action: ActivityAction.UPDATED, entityUuidFrom: 'params.uuid' })
     @Put(':uuid')
     @ApiOperation({ summary: 'Update a message template' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
+    @ApiResponse({ status: 404, description: 'Message template not found' })
     update(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') uuid: string,
@@ -90,6 +108,9 @@ export class MessageTemplatesController {
     @ActivityLog({ entityType: ActivityEntityType.MESSAGE_TEMPLATE, action: ActivityAction.DELETED, entityUuidFrom: 'params.uuid' })
     @Delete(':uuid')
     @ApiOperation({ summary: 'Delete a message template' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
+    @ApiResponse({ status: 404, description: 'Message template not found' })
     remove(@CurrentUser('organisation_uuid') organisation_uuid: string, @Param('uuid') uuid: string) {
         return this.messageTemplatesService.remove(organisation_uuid, uuid);
     }

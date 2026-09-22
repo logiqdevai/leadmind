@@ -8,7 +8,7 @@ import {
     Post,
     UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtGuard } from '@/shared/guards/jwt.guard';
 import { CurrentUser } from '@/shared/decorators/current-user.decorator';
 import { OrganisationsService } from './organisations.service';
@@ -29,6 +29,8 @@ export class OrganisationsController {
 
     @Get('invitations/:token')
     @ApiOperation({ summary: 'Preview an organisation invitation' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 404, description: 'Invitation not found or expired' })
     previewInvitation(@Param('token') token: string) {
         return this.organisationsService.previewInvitation(token);
     }
@@ -38,6 +40,9 @@ export class OrganisationsController {
     @ApiBearerAuth()
     @UseGuards(JwtGuard)
     @ApiOperation({ summary: 'Accept an organisation invitation' })
+    @ApiResponse({ status: 201 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
+    @ApiResponse({ status: 404, description: 'Invitation not found or expired' })
     acceptInvitation(
         @Param('token') token: string,
         @CurrentUser('uuid') userUuid: string,
@@ -49,6 +54,8 @@ export class OrganisationsController {
     @ApiBearerAuth()
     @UseGuards(JwtGuard)
     @ApiOperation({ summary: 'List organisations for the current user' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
     list(@CurrentUser('uuid') userUuid: string) {
         return this.organisationsService.listForUser(userUuid);
     }
@@ -58,6 +65,8 @@ export class OrganisationsController {
     @ApiBearerAuth()
     @UseGuards(JwtGuard)
     @ApiOperation({ summary: 'Create a new organisation' })
+    @ApiResponse({ status: 201 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
     create(
         @CurrentUser('uuid') userUuid: string,
         @Body() dto: CreateOrganisationDto,
@@ -69,6 +78,8 @@ export class OrganisationsController {
     @ApiBearerAuth()
     @UseGuards(JwtGuard)
     @ApiOperation({ summary: 'Get the active organisation' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
     getCurrent(
         @CurrentUser('organisation_uuid') organisationUuid: string,
         @CurrentUser('uuid') userUuid: string,
@@ -81,6 +92,9 @@ export class OrganisationsController {
     @ApiBearerAuth()
     @UseGuards(JwtGuard)
     @ApiOperation({ summary: 'Update organisation' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
+    @ApiResponse({ status: 404, description: 'Organisation not found' })
     update(
         @Param('uuid') uuid: string,
         @CurrentUser('uuid') userUuid: string,
@@ -94,6 +108,9 @@ export class OrganisationsController {
     @ApiBearerAuth()
     @UseGuards(JwtGuard)
     @ApiOperation({ summary: 'Delete organisation' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
+    @ApiResponse({ status: 404, description: 'Organisation not found' })
     remove(
         @Param('uuid') uuid: string,
         @CurrentUser('uuid') userUuid: string,
@@ -106,6 +123,9 @@ export class OrganisationsController {
     @ApiBearerAuth()
     @UseGuards(JwtGuard)
     @ApiOperation({ summary: 'Switch active organisation' })
+    @ApiResponse({ status: 201 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
+    @ApiResponse({ status: 404, description: 'Organisation not found' })
     switchOrganisation(
         @Param('uuid') uuid: string,
         @CurrentUser('uuid') userUuid: string,
@@ -117,6 +137,8 @@ export class OrganisationsController {
     @ApiBearerAuth()
     @UseGuards(JwtGuard)
     @ApiOperation({ summary: 'List organisation members' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
     listMembers(
         @Param('uuid') uuid: string,
         @CurrentUser('uuid') userUuid: string,
@@ -129,6 +151,9 @@ export class OrganisationsController {
     @ApiBearerAuth()
     @UseGuards(JwtGuard)
     @ApiOperation({ summary: 'Update member role' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
+    @ApiResponse({ status: 404, description: 'User not found' })
     updateMemberRole(
         @Param('uuid') uuid: string,
         @Param('userUuid') targetUserUuid: string,
@@ -148,6 +173,9 @@ export class OrganisationsController {
     @ApiBearerAuth()
     @UseGuards(JwtGuard)
     @ApiOperation({ summary: 'Remove member' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
+    @ApiResponse({ status: 404, description: 'User not found' })
     removeMember(
         @Param('uuid') uuid: string,
         @Param('userUuid') targetUserUuid: string,
@@ -161,6 +189,9 @@ export class OrganisationsController {
     @ApiBearerAuth()
     @UseGuards(JwtGuard)
     @ApiOperation({ summary: 'Invite a user by email' })
+    @ApiResponse({ status: 201 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
+    @ApiResponse({ status: 404, description: 'Organisation not found' })
     createInvitation(
         @Param('uuid') uuid: string,
         @CurrentUser('uuid') actorUuid: string,
@@ -173,6 +204,8 @@ export class OrganisationsController {
     @ApiBearerAuth()
     @UseGuards(JwtGuard)
     @ApiOperation({ summary: 'List pending invitations' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
     listInvitations(
         @Param('uuid') uuid: string,
         @CurrentUser('uuid') actorUuid: string,
@@ -185,6 +218,9 @@ export class OrganisationsController {
     @ApiBearerAuth()
     @UseGuards(JwtGuard)
     @ApiOperation({ summary: 'Resend invitation email' })
+    @ApiResponse({ status: 201 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
+    @ApiResponse({ status: 404, description: 'Invitation not found' })
     resendInvitation(
         @Param('uuid') uuid: string,
         @Param('invitationUuid') invitationUuid: string,
@@ -202,6 +238,9 @@ export class OrganisationsController {
     @ApiBearerAuth()
     @UseGuards(JwtGuard)
     @ApiOperation({ summary: 'Revoke invitation' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
+    @ApiResponse({ status: 404, description: 'Invitation not found' })
     revokeInvitation(
         @Param('uuid') uuid: string,
         @Param('invitationUuid') invitationUuid: string,

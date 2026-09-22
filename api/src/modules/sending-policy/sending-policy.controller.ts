@@ -9,7 +9,7 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { OrganisationRole } from '@/generated/prisma';
 import { CurrentUser } from '@/shared/decorators/current-user.decorator';
 import { OrganisationRoles } from '@/shared/decorators/organisation-roles.decorator';
@@ -38,6 +38,8 @@ export class SendingPolicyController {
   @ApiOperation({
     summary: "List the organisation's reusable sending policy templates",
   })
+  @ApiResponse({ status: 200 })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   list(@CurrentUser('organisation_uuid') organisation_uuid: string) {
     return this.sendingPolicyService.list(organisation_uuid);
   }
@@ -46,6 +48,9 @@ export class SendingPolicyController {
   @ApiOperation({
     summary: 'Get a sending policy (template or campaign-assigned clone)',
   })
+  @ApiResponse({ status: 200 })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 404, description: 'Sending policy not found' })
   findOne(
     @CurrentUser('organisation_uuid') organisation_uuid: string,
     @Param('uuid') uuid: string,
@@ -61,6 +66,8 @@ export class SendingPolicyController {
   @Post()
   @OrganisationRoles(OrganisationRole.ADMIN)
   @ApiOperation({ summary: 'Create a reusable sending policy template' })
+  @ApiResponse({ status: 201 })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   create(
     @CurrentUser('organisation_uuid') organisation_uuid: string,
     @Body() dto: CreateSendingPolicyDto,
@@ -76,6 +83,9 @@ export class SendingPolicyController {
   @Patch(':uuid')
   @OrganisationRoles(OrganisationRole.ADMIN)
   @ApiOperation({ summary: 'Update a sending policy template' })
+  @ApiResponse({ status: 200 })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 404, description: 'Sending policy not found' })
   update(
     @CurrentUser('organisation_uuid') organisation_uuid: string,
     @Param('uuid') uuid: string,
@@ -95,6 +105,9 @@ export class SendingPolicyController {
     summary:
       'Delete a sending policy template (does not affect existing clones)',
   })
+  @ApiResponse({ status: 200 })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 404, description: 'Sending policy not found' })
   remove(
     @CurrentUser('organisation_uuid') organisation_uuid: string,
     @Param('uuid') uuid: string,
@@ -110,6 +123,9 @@ export class SendingPolicyController {
   @Post(':uuid/stages')
   @OrganisationRoles(OrganisationRole.ADMIN)
   @ApiOperation({ summary: 'Add a stage to a sending policy template' })
+  @ApiResponse({ status: 201 })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 404, description: 'Sending policy not found' })
   addStage(
     @CurrentUser('organisation_uuid') organisation_uuid: string,
     @Param('uuid') uuid: string,
@@ -126,6 +142,9 @@ export class SendingPolicyController {
   @Patch(':uuid/stages/:stage_uuid')
   @OrganisationRoles(OrganisationRole.ADMIN)
   @ApiOperation({ summary: 'Edit a sending policy stage' })
+  @ApiResponse({ status: 200 })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 404, description: 'Sending policy or stage not found' })
   updateStage(
     @CurrentUser('organisation_uuid') organisation_uuid: string,
     @Param('uuid') uuid: string,
@@ -148,6 +167,9 @@ export class SendingPolicyController {
   @Delete(':uuid/stages/:stage_uuid')
   @OrganisationRoles(OrganisationRole.ADMIN)
   @ApiOperation({ summary: 'Delete a sending policy stage' })
+  @ApiResponse({ status: 200 })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 404, description: 'Sending policy or stage not found' })
   removeStage(
     @CurrentUser('organisation_uuid') organisation_uuid: string,
     @Param('uuid') uuid: string,
@@ -168,6 +190,9 @@ export class SendingPolicyController {
   @Put(':uuid/stages/reorder')
   @OrganisationRoles(OrganisationRole.ADMIN)
   @ApiOperation({ summary: "Reorder a sending policy's stages" })
+  @ApiResponse({ status: 200 })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 404, description: 'Sending policy not found' })
   reorderStages(
     @CurrentUser('organisation_uuid') organisation_uuid: string,
     @Param('uuid') uuid: string,
@@ -185,6 +210,9 @@ export class SendingPolicyController {
     summary:
       'Preview the estimated send schedule for a policy against a contact count',
   })
+  @ApiResponse({ status: 201 })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 404, description: 'Sending policy not found' })
   preview(
     @CurrentUser('organisation_uuid') organisation_uuid: string,
     @Param('uuid') uuid: string,

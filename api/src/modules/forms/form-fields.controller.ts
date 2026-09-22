@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Param, Post, Put, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from '@/shared/decorators/current-user.decorator';
 import { JwtGuard } from '@/shared/guards/jwt.guard';
 import { FormFieldsService } from './form-fields.service';
@@ -22,6 +22,9 @@ export class FormFieldsController {
     @ActivityLog({ entityType: ActivityEntityType.FORM_FIELD, action: ActivityAction.CREATED })
     @Post()
     @ApiOperation({ summary: 'Add a field to a form' })
+    @ApiResponse({ status: 201 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
+    @ApiResponse({ status: 404, description: 'Form not found' })
     create(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') form_uuid: string,
@@ -34,6 +37,9 @@ export class FormFieldsController {
     @ActivityLog({ entityType: ActivityEntityType.FORM_FIELD, action: ActivityAction.REORDERED, entityUuidFrom: 'none' })
     @Put('reorder')
     @ApiOperation({ summary: 'Reorder fields in a form' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
+    @ApiResponse({ status: 404, description: 'Form not found' })
     reorder(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') form_uuid: string,
@@ -45,6 +51,9 @@ export class FormFieldsController {
     @ActivityLog({ entityType: ActivityEntityType.FORM_FIELD, action: ActivityAction.UPDATED, entityUuidFrom: 'params.fieldUuid' })
     @Put(':fieldUuid')
     @ApiOperation({ summary: 'Update a form field' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
+    @ApiResponse({ status: 404, description: 'Field not found' })
     update(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') form_uuid: string,
@@ -57,6 +66,9 @@ export class FormFieldsController {
     @ActivityLog({ entityType: ActivityEntityType.FORM_FIELD, action: ActivityAction.DELETED, entityUuidFrom: 'params.fieldUuid' })
     @Delete(':fieldUuid')
     @ApiOperation({ summary: 'Delete a form field' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
+    @ApiResponse({ status: 404, description: 'Field not found' })
     remove(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') form_uuid: string,

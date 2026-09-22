@@ -1,4 +1,5 @@
 import { Body, Controller, Headers, HttpCode, Logger, Post, Req } from '@nestjs/common';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { OpenAiBatchService } from '@/integrations/ai/services/openai-batch.service';
@@ -18,6 +19,7 @@ export class OpenAiWebhookController {
 
     @Post()
     @HttpCode(200)
+    @ApiOperation({ summary: 'OpenAI batch job status events' })
     async handleEvent(
         @Req() req: Request & { rawBody?: Buffer },
         @Headers() headers: Record<string, string>,

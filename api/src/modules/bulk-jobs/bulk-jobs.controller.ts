@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from '@/shared/decorators/current-user.decorator';
 import { JwtGuard } from '@/shared/guards/jwt.guard';
 import { BulkJobsService } from './bulk-jobs.service';
@@ -15,6 +15,8 @@ export class BulkJobsController {
 
     @Get()
     @ApiOperation({ summary: 'List bulk/queue jobs for the current organisation' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
     findAll(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Query() query: ListBulkJobsDto,
@@ -24,6 +26,8 @@ export class BulkJobsController {
 
     @Post('cancel')
     @ApiOperation({ summary: 'Cancel selected bulk jobs and stop their queue work' })
+    @ApiResponse({ status: 201 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
     cancel(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Body() dto: BulkJobUuidsDto,
@@ -35,6 +39,8 @@ export class BulkJobsController {
     @ApiOperation({
         summary: 'Retry selected cancelled/failed bulk jobs from the latest successful progress',
     })
+    @ApiResponse({ status: 201 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
     retry(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Body() dto: BulkJobUuidsDto,
@@ -44,6 +50,9 @@ export class BulkJobsController {
 
     @Get(':uuid')
     @ApiOperation({ summary: 'Get a single bulk job' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
+    @ApiResponse({ status: 404, description: 'Bulk job not found' })
     findOne(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') uuid: string,

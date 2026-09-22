@@ -56,6 +56,7 @@ export class IntegrationsController {
     @UseGuards(OrganisationRolesGuard)
     @OrganisationRoles(OrganisationRole.ADMIN)
     @ApiOperation({ summary: 'Store a key for an integration provider' })
+    @ApiResponse({ status: 201 })
     createKey(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('provider', new ParseEnumPipe(ExternalIntegrationProvider))
@@ -70,6 +71,7 @@ export class IntegrationsController {
     @UseGuards(OrganisationRolesGuard)
     @OrganisationRoles(OrganisationRole.ADMIN)
     @ApiOperation({ summary: 'Create a complete SMTP account in one request' })
+    @ApiResponse({ status: 201 })
     createSmtpAccount(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Body() dto: CreateSmtpAccountDto,
@@ -82,6 +84,7 @@ export class IntegrationsController {
     @UseGuards(OrganisationRolesGuard)
     @OrganisationRoles(OrganisationRole.ADMIN)
     @ApiOperation({ summary: 'Create a complete Resend account (API key + first domain) in one request' })
+    @ApiResponse({ status: 201 })
     createResendAccount(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Body() dto: CreateResendAccountDto,

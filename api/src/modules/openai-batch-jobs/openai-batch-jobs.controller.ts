@@ -1,5 +1,5 @@
 import { Controller, Get, Query, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from '@/shared/decorators/current-user.decorator';
 import { JwtGuard } from '@/shared/guards/jwt.guard';
 import { OpenAiBatchJobsService } from './openai-batch-jobs.service';
@@ -18,6 +18,8 @@ export class OpenAiBatchJobsController {
   @ApiOperation({
     summary: 'List OpenAI batch jobs for the current organisation',
   })
+  @ApiResponse({ status: 200 })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   findAll(
     @CurrentUser('organisation_uuid') organisation_uuid: string,
     @Query() query: ListBatchJobsDto,

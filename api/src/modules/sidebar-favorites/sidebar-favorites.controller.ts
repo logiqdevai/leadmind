@@ -11,6 +11,7 @@ import {
 import {
     ApiBearerAuth,
     ApiOperation,
+    ApiResponse,
     ApiTags,
 } from '@nestjs/swagger';
 import { CurrentUser } from '@/shared/decorators/current-user.decorator';
@@ -28,12 +29,16 @@ export class SidebarFavoritesController {
 
     @Get()
     @ApiOperation({ summary: "List the current user's favorited sidebar links" })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
     findAll(@CurrentUser('uuid') user_uuid: string) {
         return this.sidebarFavoritesService.findAll(user_uuid);
     }
 
     @Post()
     @ApiOperation({ summary: 'Favorite a sidebar link' })
+    @ApiResponse({ status: 201 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
     create(
         @CurrentUser('uuid') user_uuid: string,
         @Body() dto: CreateSidebarFavoriteDto,
@@ -43,6 +48,8 @@ export class SidebarFavoritesController {
 
     @Patch('reorder')
     @ApiOperation({ summary: 'Reorder favorited sidebar links' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
     reorder(
         @CurrentUser('uuid') user_uuid: string,
         @Body() dto: ReorderSidebarFavoritesDto,
@@ -52,6 +59,8 @@ export class SidebarFavoritesController {
 
     @Delete(':nav_key')
     @ApiOperation({ summary: 'Unfavorite a sidebar link' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
     remove(
         @CurrentUser('uuid') user_uuid: string,
         @Param('nav_key') nav_key: string,

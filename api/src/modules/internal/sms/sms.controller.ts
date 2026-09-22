@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiBody, ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiExcludeController, ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 import { SmsService } from './sms.service';
 import { CreateSmDto } from './dto/create-sm.dto';
 import { UpdateSmDto } from './dto/update-sm.dto';
@@ -8,6 +8,7 @@ import { Roles } from 'src/shared/decorators/roles.decorator';
 import { RolesGuard } from 'src/shared/guards/roles.guard';
 import { AuthRoles } from 'src/modules/auth/interfaces/auth.interface';
 
+@ApiExcludeController()
 @ApiBearerAuth()
 @UseGuards(JwtGuard, RolesGuard)
 @Roles(AuthRoles.ADMIN)

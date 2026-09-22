@@ -8,7 +8,7 @@ import {
     Query,
     UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from '@/shared/decorators/current-user.decorator';
 import { JwtGuard } from '@/shared/guards/jwt.guard';
 import { ListThreadContactsDto } from './dto/list-thread-contacts.dto';
@@ -25,6 +25,8 @@ export class ThreadsController {
     @ApiOperation({
         summary: 'List contacts who have send history, most recently active first (inbox view left pane)',
     })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
     async listInboxContacts(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Query() dto: ListThreadContactsDto,
@@ -34,6 +36,9 @@ export class ThreadsController {
 
     @Get(':uuid')
     @ApiOperation({ summary: 'Get a thread and its full message timeline (outbound sends + inbound replies)' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
+    @ApiResponse({ status: 404, description: 'Thread not found' })
     async getThread(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') uuid: string,
@@ -48,6 +53,9 @@ export class ThreadsController {
     @Post(':uuid/mark-read')
     @HttpCode(200)
     @ApiOperation({ summary: 'Mark a thread\'s replies as read (clears the unread-reply flag)' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
+    @ApiResponse({ status: 404, description: 'Thread not found' })
     async markRead(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') uuid: string,
@@ -64,6 +72,9 @@ export class ThreadsController {
     @ApiOperation({
         summary: 'Manually flag a thread as needing a follow-up (clears on dismiss, our next send, or their reply)',
     })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
+    @ApiResponse({ status: 404, description: 'Thread not found' })
     async flagFollowUp(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') uuid: string,
@@ -80,6 +91,9 @@ export class ThreadsController {
     @ApiOperation({
         summary: 'Mark a thread as not needing a follow-up (it reopens on the next send or reply)',
     })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
+    @ApiResponse({ status: 404, description: 'Thread not found' })
     async dismissFollowUp(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') uuid: string,

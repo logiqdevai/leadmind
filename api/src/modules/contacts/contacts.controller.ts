@@ -196,6 +196,7 @@ export class ContactsController {
         summary:
             'Update contact profile fields and notes. If email already belongs to another contact, merges into that contact and returns it (keeps the higher status).',
     })
+    @ApiResponse({ status: 404, description: 'Contact not found' })
     update(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') uuid: string,
@@ -218,6 +219,7 @@ export class ContactsController {
     @ActivityLog({ entityType: ActivityEntityType.CONTACT, action: ActivityAction.DELETED, entityUuidFrom: 'params.uuid' })
     @Delete(':uuid')
     @ApiOperation({ summary: 'Delete a contact' })
+    @ApiResponse({ status: 404, description: 'Contact not found' })
     remove(@CurrentUser('organisation_uuid') organisation_uuid: string, @Param('uuid') uuid: string) {
         return this.contactsService.remove(organisation_uuid, uuid);
     }
@@ -225,6 +227,7 @@ export class ContactsController {
     @ActivityLog({ entityType: ActivityEntityType.CONTACT, action: ActivityAction.STATUS_UPDATED, entityUuidFrom: 'params.uuid', includeBodyKeys: ['status'] })
     @Put(':uuid/status')
     @ApiOperation({ summary: 'Update contact status (records an Interaction)' })
+    @ApiResponse({ status: 404, description: 'Contact not found' })
     updateStatus(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') uuid: string,
@@ -236,6 +239,7 @@ export class ContactsController {
     @ActivityLog({ entityType: ActivityEntityType.CONTACT, action: ActivityAction.TAGS_UPDATED, entityUuidFrom: 'params.uuid' })
     @Put(':uuid/tags')
     @ApiOperation({ summary: 'Replace the contact tag set' })
+    @ApiResponse({ status: 404, description: 'Contact not found' })
     updateTags(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') uuid: string,
@@ -246,6 +250,7 @@ export class ContactsController {
 
     @Get(':uuid/info')
     @ApiOperation({ summary: 'List contact info entries (email, phone, social links, etc.)' })
+    @ApiResponse({ status: 404, description: 'Contact not found' })
     listContactInfos(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') uuid: string,
@@ -268,6 +273,7 @@ export class ContactsController {
     @ActivityLog({ entityType: ActivityEntityType.CONTACT_INFO, action: ActivityAction.UPDATED, entityUuidFrom: 'params.infoUuid' })
     @Put(':uuid/info/:infoUuid')
     @ApiOperation({ summary: 'Update a contact info entry' })
+    @ApiResponse({ status: 404, description: 'Contact info not found' })
     updateContactInfo(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') uuid: string,
@@ -280,6 +286,7 @@ export class ContactsController {
     @ActivityLog({ entityType: ActivityEntityType.CONTACT_INFO, action: ActivityAction.DELETED, entityUuidFrom: 'params.infoUuid' })
     @Delete(':uuid/info/:infoUuid')
     @ApiOperation({ summary: 'Delete a contact info entry' })
+    @ApiResponse({ status: 404, description: 'Contact info not found' })
     removeContactInfo(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') uuid: string,
@@ -363,6 +370,7 @@ export class ContactsController {
 
     @Get(':uuid/threads')
     @ApiOperation({ summary: 'List message threads (conversations) for a contact, most recently active first' })
+    @ApiResponse({ status: 404, description: 'Contact not found' })
     listThreads(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') uuid: string,
@@ -372,6 +380,7 @@ export class ContactsController {
 
     @Get(':uuid/interactions')
     @ApiOperation({ summary: 'List interactions for a contact (most recent first)' })
+    @ApiResponse({ status: 404, description: 'Contact not found' })
     getInteractions(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') uuid: string,
@@ -429,6 +438,7 @@ export class ContactsController {
 
     @Get(':uuid/enrichments')
     @ApiOperation({ summary: 'List enrichment history for a contact' })
+    @ApiResponse({ status: 404, description: 'Contact not found' })
     findEnrichments(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') uuid: string,
@@ -439,6 +449,7 @@ export class ContactsController {
 
     @Get(':uuid/messages')
     @ApiOperation({ summary: "List the contact's outreach messages (drafts + sent)" })
+    @ApiResponse({ status: 404, description: 'Contact not found' })
     listMessages(@CurrentUser('organisation_uuid') organisation_uuid: string, @Param('uuid') uuid: string) {
         return this.contactsService.listMessages(organisation_uuid, uuid);
     }

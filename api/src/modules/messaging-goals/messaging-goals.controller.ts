@@ -9,7 +9,7 @@ import {
     Query,
     UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { GoalPeriod } from '@/generated/prisma';
 import { CurrentUser } from '@/shared/decorators/current-user.decorator';
 import { JwtGuard } from '@/shared/guards/jwt.guard';
@@ -34,6 +34,8 @@ export class MessagingGoalsController {
 
     @Post()
     @ApiOperation({ summary: 'Create or upsert a messaging goal for a member' })
+    @ApiResponse({ status: 201 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
     upsert(
         @CurrentUser('organisation_uuid') organisationUuid: string,
         @CurrentUser('uuid') userUuid: string,
@@ -44,6 +46,8 @@ export class MessagingGoalsController {
 
     @Post('bulk')
     @ApiOperation({ summary: 'Bulk upsert messaging goals for members' })
+    @ApiResponse({ status: 201 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
     bulkUpsert(
         @CurrentUser('organisation_uuid') organisationUuid: string,
         @CurrentUser('uuid') userUuid: string,
@@ -54,6 +58,8 @@ export class MessagingGoalsController {
 
     @Get('me')
     @ApiOperation({ summary: 'Get my active messaging goals with progress' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
     listMine(
         @CurrentUser('organisation_uuid') organisationUuid: string,
         @CurrentUser('uuid') userUuid: string,
@@ -63,6 +69,8 @@ export class MessagingGoalsController {
 
     @Get()
     @ApiOperation({ summary: 'List all active org messaging goals with progress' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
     listAll(
         @CurrentUser('organisation_uuid') organisationUuid: string,
         @CurrentUser('uuid') userUuid: string,
@@ -72,6 +80,9 @@ export class MessagingGoalsController {
 
     @Get('leaderboard')
     @ApiOperation({ summary: 'Messaging goals leaderboard for a period' })
+    @ApiQuery({ name: 'period', enum: GoalPeriod, required: false, description: 'Defaults to DAY' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
     leaderboard(
         @CurrentUser('organisation_uuid') organisationUuid: string,
         @CurrentUser('uuid') userUuid: string,
@@ -86,6 +97,9 @@ export class MessagingGoalsController {
 
     @Get('achievements')
     @ApiOperation({ summary: 'List my goal achievements' })
+    @ApiQuery({ name: 'unseen', type: String, required: false, description: '"true" or "1" to filter to unseen achievements only' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
     listAchievements(
         @CurrentUser('organisation_uuid') organisationUuid: string,
         @CurrentUser('uuid') userUuid: string,
@@ -100,6 +114,9 @@ export class MessagingGoalsController {
 
     @Post('achievements/:uuid/seen')
     @ApiOperation({ summary: 'Mark an achievement as seen' })
+    @ApiResponse({ status: 201 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
+    @ApiResponse({ status: 404, description: 'Achievement not found' })
     markSeen(
         @CurrentUser('organisation_uuid') organisationUuid: string,
         @CurrentUser('uuid') userUuid: string,
@@ -114,6 +131,9 @@ export class MessagingGoalsController {
 
     @Patch(':uuid')
     @ApiOperation({ summary: 'Update a messaging goal' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
+    @ApiResponse({ status: 404, description: 'Messaging goal not found' })
     update(
         @CurrentUser('organisation_uuid') organisationUuid: string,
         @CurrentUser('uuid') userUuid: string,
@@ -125,6 +145,9 @@ export class MessagingGoalsController {
 
     @Delete(':uuid')
     @ApiOperation({ summary: 'Deactivate a messaging goal' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
+    @ApiResponse({ status: 404, description: 'Messaging goal not found' })
     deactivate(
         @CurrentUser('organisation_uuid') organisationUuid: string,
         @CurrentUser('uuid') userUuid: string,

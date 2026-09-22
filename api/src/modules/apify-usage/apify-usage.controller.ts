@@ -1,5 +1,5 @@
 import { Controller, Get, Query, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtGuard } from '@/shared/guards/jwt.guard';
 import { CurrentUser } from '@/shared/decorators/current-user.decorator';
 import { ApifyUsageService } from './apify-usage.service';
@@ -14,12 +14,16 @@ export class ApifyUsageController {
 
     @Get()
     @ApiOperation({ summary: 'List Apify usage logs for the current user' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
     findAll(@CurrentUser('organisation_uuid') organisation_uuid: string, @Query() query: ListApifyUsageDto) {
         return this.apifyUsageService.findAll(organisation_uuid, query);
     }
 
     @Get('summary')
     @ApiOperation({ summary: 'Get Apify usage summary for the current user' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
     getSummary(@CurrentUser('organisation_uuid') organisation_uuid: string, @Query() query: ApifyUsageSummaryDto) {
         return this.apifyUsageService.getSummary(organisation_uuid, query);
     }

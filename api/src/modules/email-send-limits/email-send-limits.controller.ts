@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Put, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { OrganisationRole } from '@/generated/prisma';
 import { CurrentUser } from '@/shared/decorators/current-user.decorator';
 import { OrganisationRoles } from '@/shared/decorators/organisation-roles.decorator';
@@ -22,6 +22,8 @@ export class EmailSendLimitsController {
 
     @Get()
     @ApiOperation({ summary: 'List email send limits and current usage for configured integrations' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
     list(@CurrentUser('organisation_uuid') organisation_uuid: string) {
         return this.emailSendLimitsService.list(organisation_uuid);
     }
@@ -35,6 +37,9 @@ export class EmailSendLimitsController {
     @UseGuards(OrganisationRolesGuard)
     @OrganisationRoles(OrganisationRole.ADMIN)
     @ApiOperation({ summary: 'Create or update a send limit for an email provider and period' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
+    @ApiResponse({ status: 403, description: 'Forbidden — organisation admin role required' })
     upsert(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Body() dto: UpsertEmailSendLimitDto,
@@ -51,6 +56,9 @@ export class EmailSendLimitsController {
     @UseGuards(OrganisationRolesGuard)
     @OrganisationRoles(OrganisationRole.ADMIN)
     @ApiOperation({ summary: 'Remove an email send limit' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
+    @ApiResponse({ status: 403, description: 'Forbidden — organisation admin role required' })
     remove(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') uuid: string,

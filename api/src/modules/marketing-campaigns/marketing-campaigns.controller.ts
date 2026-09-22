@@ -61,12 +61,15 @@ export class MarketingCampaignsController {
 
     @Get()
     @ApiOperation({ summary: 'List marketing campaigns' })
+    @ApiResponse({ status: 200 })
     list(@CurrentUser('organisation_uuid') organisation_uuid: string, @Query() query: ListCampaignsDto) {
         return this.service.list(organisation_uuid, query);
     }
 
     @Get(':uuid')
     @ApiOperation({ summary: 'Get campaign detail with full stats' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 404, description: 'Campaign not found' })
     findOne(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid', ParseUUIDPipe) uuid: string,
@@ -77,6 +80,8 @@ export class MarketingCampaignsController {
     @ActivityLog({ entityType: ActivityEntityType.MARKETING_CAMPAIGN, action: ActivityAction.UPDATED, entityUuidFrom: 'params.uuid' })
     @Patch(':uuid')
     @ApiOperation({ summary: 'Update DRAFT campaign' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 404, description: 'Campaign not found' })
     update(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid', ParseUUIDPipe) uuid: string,
@@ -88,6 +93,8 @@ export class MarketingCampaignsController {
     @ActivityLog({ entityType: ActivityEntityType.MARKETING_CAMPAIGN, action: ActivityAction.DELETED, entityUuidFrom: 'params.uuid' })
     @Delete(':uuid')
     @ApiOperation({ summary: 'Delete a draft / cancelled / completed / failed campaign' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 404, description: 'Campaign not found' })
     remove(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid', ParseUUIDPipe) uuid: string,
@@ -97,6 +104,8 @@ export class MarketingCampaignsController {
 
     @Get(':uuid/stats')
     @ApiOperation({ summary: 'CRM audience analytics for campaign recipients' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 404, description: 'Campaign not found' })
     getStats(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid', ParseUUIDPipe) uuid: string,
@@ -107,6 +116,8 @@ export class MarketingCampaignsController {
 
     @Get(':uuid/analyses')
     @ApiOperation({ summary: 'List AI audience analyses for a campaign' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 404, description: 'Campaign not found' })
     listAnalyses(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid', ParseUUIDPipe) uuid: string,
@@ -118,6 +129,8 @@ export class MarketingCampaignsController {
     @ActivityLog({ entityType: ActivityEntityType.AUDIENCE_ANALYSIS, action: ActivityAction.ANALYSIS_CREATED })
     @Post(':uuid/analyses')
     @ApiOperation({ summary: 'Run a new AI audience analysis for a campaign' })
+    @ApiResponse({ status: 201 })
+    @ApiResponse({ status: 404, description: 'Campaign not found' })
     createAnalysis(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid', ParseUUIDPipe) uuid: string,
@@ -128,6 +141,8 @@ export class MarketingCampaignsController {
     @ActivityLog({ entityType: ActivityEntityType.AUDIENCE_ANALYSIS, action: ActivityAction.ANALYSIS_DELETED, entityUuidFrom: 'params.analysisUuid' })
     @Delete(':uuid/analyses/:analysisUuid')
     @ApiOperation({ summary: 'Delete an AI audience analysis for a campaign' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 404, description: 'Campaign or analysis not found' })
     deleteAnalysis(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid', ParseUUIDPipe) uuid: string,
@@ -138,6 +153,8 @@ export class MarketingCampaignsController {
 
     @Get(':uuid/contacts')
     @ApiOperation({ summary: 'List campaign recipients with statuses' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 404, description: 'Campaign not found' })
     listContacts(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid', ParseUUIDPipe) uuid: string,
@@ -150,6 +167,7 @@ export class MarketingCampaignsController {
     @Post(':uuid/recipients/bulk-resend')
     @ApiOperation({ summary: 'Retry sending a batch of failed campaign recipients' })
     @ApiResponse({ status: 201 })
+    @ApiResponse({ status: 404, description: 'Campaign or recipient not found' })
     bulkResendRecipients(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid', ParseUUIDPipe) uuid: string,
@@ -160,6 +178,8 @@ export class MarketingCampaignsController {
 
     @Post(':uuid/preview-contacts')
     @ApiOperation({ summary: 'Preview the matched contact set for a filter (no persistence)' })
+    @ApiResponse({ status: 201 })
+    @ApiResponse({ status: 404, description: 'Campaign not found' })
     previewContacts(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid', ParseUUIDPipe) uuid: string,
@@ -171,6 +191,8 @@ export class MarketingCampaignsController {
     @ActivityLog({ entityType: ActivityEntityType.MARKETING_CAMPAIGN, action: ActivityAction.STARTED, entityUuidFrom: 'params.uuid' })
     @Post(':uuid/start')
     @ApiOperation({ summary: 'Start a draft campaign (immediate or at scheduled_at)' })
+    @ApiResponse({ status: 201 })
+    @ApiResponse({ status: 404, description: 'Campaign not found' })
     start(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid', ParseUUIDPipe) uuid: string,
@@ -182,6 +204,8 @@ export class MarketingCampaignsController {
     @ActivityLog({ entityType: ActivityEntityType.MARKETING_CAMPAIGN, action: ActivityAction.SCHEDULED, entityUuidFrom: 'params.uuid' })
     @Post(':uuid/schedule')
     @ApiOperation({ summary: 'Set scheduled_at and queue dispatch' })
+    @ApiResponse({ status: 201 })
+    @ApiResponse({ status: 404, description: 'Campaign not found' })
     schedule(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid', ParseUUIDPipe) uuid: string,
@@ -193,6 +217,8 @@ export class MarketingCampaignsController {
     @ActivityLog({ entityType: ActivityEntityType.MARKETING_CAMPAIGN, action: ActivityAction.DUPLICATED })
     @Post(':uuid/duplicate')
     @ApiOperation({ summary: 'Duplicate a campaign as a new DRAFT' })
+    @ApiResponse({ status: 201 })
+    @ApiResponse({ status: 404, description: 'Campaign not found' })
     duplicate(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid', ParseUUIDPipe) uuid: string,
@@ -203,6 +229,8 @@ export class MarketingCampaignsController {
     @ActivityLog({ entityType: ActivityEntityType.MARKETING_CAMPAIGN, action: ActivityAction.RERUN, entityUuidFrom: 'params.uuid' })
     @Post(':uuid/rerun')
     @ApiOperation({ summary: 'Re-run a completed, cancelled, or failed campaign from scratch' })
+    @ApiResponse({ status: 201 })
+    @ApiResponse({ status: 404, description: 'Campaign not found' })
     rerun(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid', ParseUUIDPipe) uuid: string,
@@ -213,6 +241,8 @@ export class MarketingCampaignsController {
     @ActivityLog({ entityType: ActivityEntityType.MARKETING_CAMPAIGN, action: ActivityAction.CANCELLED, entityUuidFrom: 'params.uuid' })
     @Post(':uuid/cancel')
     @ApiOperation({ summary: 'Cancel a sending or scheduled campaign' })
+    @ApiResponse({ status: 201 })
+    @ApiResponse({ status: 404, description: 'Campaign not found' })
     cancel(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid', ParseUUIDPipe) uuid: string,
@@ -223,6 +253,8 @@ export class MarketingCampaignsController {
     @ActivityLog({ entityType: ActivityEntityType.MARKETING_CAMPAIGN, action: ActivityAction.AI_GENERATED, entityUuidFrom: 'params.uuid' })
     @Post(':uuid/ai/generate')
     @ApiOperation({ summary: 'AI generate / improve / shorten / re-tone a campaign message' })
+    @ApiResponse({ status: 201 })
+    @ApiResponse({ status: 404, description: 'Campaign not found' })
     generate(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid', ParseUUIDPipe) uuid: string,
@@ -234,6 +266,8 @@ export class MarketingCampaignsController {
     @ActivityLog({ entityType: ActivityEntityType.MARKETING_CAMPAIGN, action: ActivityAction.DRAFTS_SENT, entityUuidFrom: 'params.uuid' })
     @Post(':uuid/send-drafts')
     @ApiOperation({ summary: 'Send pre-generated personalized drafts for a DRAFTS_READY campaign' })
+    @ApiResponse({ status: 201 })
+    @ApiResponse({ status: 404, description: 'Campaign not found' })
     sendPersonalizedDrafts(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid', ParseUUIDPipe) uuid: string,
@@ -244,6 +278,8 @@ export class MarketingCampaignsController {
 
     @Get(':uuid/draft-messages')
     @ApiOperation({ summary: 'List per-contact draft messages for a PERSONALIZED campaign' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 404, description: 'Campaign not found' })
     listDraftMessages(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid', ParseUUIDPipe) uuid: string,

@@ -1,5 +1,5 @@
 import { Controller, Get, Query, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtGuard } from '@/shared/guards/jwt.guard';
 import { CurrentUser } from '@/shared/decorators/current-user.decorator';
 import { AiUsageService } from './ai-usage.service';
@@ -14,12 +14,16 @@ export class AiUsageController {
 
     @Get()
     @ApiOperation({ summary: 'List AI usage logs for the current user' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
     findAll(@CurrentUser('organisation_uuid') organisation_uuid: string, @Query() query: ListAiUsageDto) {
         return this.aiUsageService.findAll(organisation_uuid, query);
     }
 
     @Get('summary')
     @ApiOperation({ summary: 'Get AI usage summary for the current user' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
     getSummary(@CurrentUser('organisation_uuid') organisation_uuid: string, @Query() query: AiUsageSummaryDto) {
         return this.aiUsageService.getSummary(organisation_uuid, query);
     }

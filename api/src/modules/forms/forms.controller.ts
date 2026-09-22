@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from '@/shared/decorators/current-user.decorator';
 import { JwtGuard } from '@/shared/guards/jwt.guard';
 import { FormsService } from './forms.service';
@@ -22,6 +22,8 @@ export class FormsController {
     @ActivityLog({ entityType: ActivityEntityType.FORM, action: ActivityAction.CREATED, includeBodyKeys: ['name'] })
     @Post()
     @ApiOperation({ summary: 'Create a form' })
+    @ApiResponse({ status: 201 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
     create(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @CurrentUser('uuid') user_uuid: string,
@@ -32,12 +34,17 @@ export class FormsController {
 
     @Get()
     @ApiOperation({ summary: 'List forms' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
     findAll(@CurrentUser('organisation_uuid') organisation_uuid: string, @Query() query: ListFormsDto) {
         return this.formsService.findAll(organisation_uuid, query);
     }
 
     @Get(':uuid')
     @ApiOperation({ summary: 'Get a form with its fields' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
+    @ApiResponse({ status: 404, description: 'Form not found' })
     findOne(@CurrentUser('organisation_uuid') organisation_uuid: string, @Param('uuid') uuid: string) {
         return this.formsService.findOne(organisation_uuid, uuid);
     }
@@ -45,6 +52,9 @@ export class FormsController {
     @ActivityLog({ entityType: ActivityEntityType.FORM, action: ActivityAction.UPDATED, entityUuidFrom: 'params.uuid' })
     @Put(':uuid')
     @ApiOperation({ summary: 'Update a form' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
+    @ApiResponse({ status: 404, description: 'Form not found' })
     update(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @CurrentUser('uuid') user_uuid: string,
@@ -57,6 +67,9 @@ export class FormsController {
     @ActivityLog({ entityType: ActivityEntityType.FORM, action: ActivityAction.DELETED, entityUuidFrom: 'params.uuid' })
     @Delete(':uuid')
     @ApiOperation({ summary: 'Delete a form' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
+    @ApiResponse({ status: 404, description: 'Form not found' })
     remove(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @CurrentUser('uuid') user_uuid: string,
@@ -68,6 +81,9 @@ export class FormsController {
     @ActivityLog({ entityType: ActivityEntityType.FORM, action: ActivityAction.DUPLICATED })
     @Post(':uuid/duplicate')
     @ApiOperation({ summary: 'Duplicate a form with all its fields' })
+    @ApiResponse({ status: 201 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
+    @ApiResponse({ status: 404, description: 'Form not found' })
     duplicate(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @CurrentUser('uuid') user_uuid: string,

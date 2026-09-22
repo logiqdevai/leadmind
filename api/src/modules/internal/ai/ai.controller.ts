@@ -1,5 +1,5 @@
 import { Controller, Post, Body, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiExcludeController, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { InternalAiService } from './ai.service';
 import { CreateAiDto } from './dto/create-ai.dto';
 import { Roles } from '@/shared/decorators/roles.decorator';
@@ -8,6 +8,7 @@ import { JwtGuard } from '@/shared/guards/jwt.guard';
 import { RolesGuard } from '@/shared/guards/roles.guard';
 import { AuthRoles } from 'src/modules/auth/interfaces/auth.interface';
 
+@ApiExcludeController()
 @ApiBearerAuth()
 @UseGuards(JwtGuard, RolesGuard)
 @Roles(AuthRoles.ADMIN)

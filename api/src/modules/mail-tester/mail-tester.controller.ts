@@ -37,6 +37,7 @@ export class MailTesterController {
   @ApiOperation({
     summary: 'Send a deliverability test email and start tracking the result',
   })
+  @ApiResponse({ status: 201 })
   startTest(
     @CurrentUser('organisation_uuid') organisation_uuid: string,
     @Body() dto: CreateMailTesterTestDto,

@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body, Delete, Param, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiBody, ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiExcludeController, ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 import { RedisCacheService } from './redis-cache.service';
 import { CreateRedisCacheDto } from './dto/create-redis-cache.dto';
 import { Roles } from '@/shared/decorators/roles.decorator';
@@ -7,6 +7,7 @@ import { JwtGuard } from '@/shared/guards/jwt.guard';
 import { RolesGuard } from '@/shared/guards/roles.guard';
 import { AuthRoles } from 'src/modules/auth/interfaces/auth.interface';
 
+@ApiExcludeController()
 @ApiBearerAuth()
 @UseGuards(JwtGuard, RolesGuard)
 @Roles(AuthRoles.ADMIN)

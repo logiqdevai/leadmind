@@ -13,6 +13,7 @@ import {
 import {
     ApiBearerAuth,
     ApiOperation,
+    ApiQuery,
     ApiResponse,
     ApiTags,
 } from '@nestjs/swagger';
@@ -65,6 +66,7 @@ export class SequencesController {
     })
     @Post()
     @ApiOperation({ summary: 'Create a draft outreach sequence' })
+    @ApiResponse({ status: 201 })
     create(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Body() dto: CreateSequenceDto,
@@ -74,6 +76,7 @@ export class SequencesController {
 
     @Get()
     @ApiOperation({ summary: 'List outreach sequences' })
+    @ApiResponse({ status: 200 })
     findAll(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Query() query: ListSequencesDto,
@@ -83,6 +86,8 @@ export class SequencesController {
 
     @Get(':uuid')
     @ApiOperation({ summary: 'Get a sequence with its steps' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 404, description: 'Sequence not found' })
     findOne(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid', ParseUUIDPipe) uuid: string,
@@ -97,6 +102,8 @@ export class SequencesController {
     })
     @Put(':uuid')
     @ApiOperation({ summary: 'Update sequence name/description' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 404, description: 'Sequence not found' })
     update(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid', ParseUUIDPipe) uuid: string,
@@ -114,6 +121,8 @@ export class SequencesController {
     @ApiOperation({
         summary: 'Delete a draft/archived sequence with no active enrollments',
     })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 404, description: 'Sequence not found' })
     remove(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid', ParseUUIDPipe) uuid: string,
@@ -130,6 +139,8 @@ export class SequencesController {
     @ApiOperation({
         summary: 'Activate a draft sequence so it can accept enrollments',
     })
+    @ApiResponse({ status: 201 })
+    @ApiResponse({ status: 404, description: 'Sequence not found' })
     activate(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid', ParseUUIDPipe) uuid: string,
@@ -146,6 +157,8 @@ export class SequencesController {
     @ApiOperation({
         summary: 'Archive a sequence so it can no longer accept enrollments',
     })
+    @ApiResponse({ status: 201 })
+    @ApiResponse({ status: 404, description: 'Sequence not found' })
     archive(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid', ParseUUIDPipe) uuid: string,
@@ -160,6 +173,8 @@ export class SequencesController {
     })
     @Post(':uuid/steps')
     @ApiOperation({ summary: 'Add a step to a sequence' })
+    @ApiResponse({ status: 201 })
+    @ApiResponse({ status: 404, description: 'Sequence not found' })
     addStep(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid', ParseUUIDPipe) uuid: string,
@@ -175,6 +190,8 @@ export class SequencesController {
     })
     @Put(':uuid/steps/:step_uuid')
     @ApiOperation({ summary: 'Update a sequence step' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 404, description: 'Sequence or step not found' })
     updateStep(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid', ParseUUIDPipe) uuid: string,
@@ -198,6 +215,8 @@ export class SequencesController {
     @ApiOperation({
         summary: 'Delete a step (draft sequences only; disable it otherwise)',
     })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 404, description: 'Sequence or step not found' })
     removeStep(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid', ParseUUIDPipe) uuid: string,
@@ -217,6 +236,8 @@ export class SequencesController {
     })
     @Post(':uuid/steps/reorder')
     @ApiOperation({ summary: 'Reorder sequence steps' })
+    @ApiResponse({ status: 201 })
+    @ApiResponse({ status: 404, description: 'Sequence not found' })
     reorderSteps(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid', ParseUUIDPipe) uuid: string,
@@ -236,6 +257,7 @@ export class SequencesController {
             'Enroll a contact in a sequence and schedule its step messages',
     })
     @ApiResponse({ status: 201 })
+    @ApiResponse({ status: 404, description: 'Sequence or contact not found' })
     enroll(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @CurrentUser('uuid') user_uuid: string,
@@ -264,6 +286,7 @@ export class SequencesController {
             'Enroll multiple contacts in a sequence and schedule their step messages',
     })
     @ApiResponse({ status: 201 })
+    @ApiResponse({ status: 404, description: 'Sequence not found' })
     enrollBulk(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @CurrentUser('uuid') user_uuid: string,
@@ -283,6 +306,10 @@ export class SequencesController {
 
     @Get(':uuid/enrollments')
     @ApiOperation({ summary: "List a sequence's contact enrollments" })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 404, description: 'Sequence not found' })
+    @ApiQuery({ name: 'page', type: Number, required: false })
+    @ApiQuery({ name: 'limit', type: Number, required: false })
     listEnrollments(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid', ParseUUIDPipe) uuid: string,
@@ -307,6 +334,8 @@ export class SequencesController {
         summary:
             "Cancel a contact's active enrollment and its unsent step messages",
     })
+    @ApiResponse({ status: 201 })
+    @ApiResponse({ status: 404, description: 'Enrollment not found' })
     cancelEnrollment(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('enrollment_uuid', ParseUUIDPipe) enrollment_uuid: string,

@@ -35,6 +35,7 @@ export class MxToolboxController {
   })
   @Post('checks')
   @ApiOperation({ summary: 'Run a domain health check against MxToolbox' })
+  @ApiResponse({ status: 201 })
   startCheck(
     @CurrentUser('organisation_uuid') organisation_uuid: string,
     @Body() dto: CreateMxToolboxCheckDto,

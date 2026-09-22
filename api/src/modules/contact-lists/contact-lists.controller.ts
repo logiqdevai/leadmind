@@ -9,7 +9,7 @@ import {
     Query,
     UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from '@/shared/decorators/current-user.decorator';
 import { JwtGuard } from '@/shared/guards/jwt.guard';
 import { ContactListsService } from './contact-lists.service';
@@ -49,18 +49,22 @@ export class ContactListsController {
     @ActivityLog({ entityType: ActivityEntityType.CONTACT_LIST, action: ActivityAction.CREATED, includeBodyKeys: ['name'] })
     @Post()
     @ApiOperation({ summary: 'Create a contact list' })
+    @ApiResponse({ status: 201 })
     create(@CurrentUser('organisation_uuid') organisation_uuid: string, @Body() dto: CreateContactListDto) {
         return this.contactListsService.create(organisation_uuid, dto);
     }
 
     @Get()
     @ApiOperation({ summary: 'List contact lists' })
+    @ApiResponse({ status: 200 })
     findAll(@CurrentUser('organisation_uuid') organisation_uuid: string, @Query() query: ListContactListsDto) {
         return this.contactListsService.findAll(organisation_uuid, query);
     }
 
     @Get(':uuid')
     @ApiOperation({ summary: 'Get a contact list' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 404, description: 'Contact list not found' })
     findOne(@CurrentUser('organisation_uuid') organisation_uuid: string, @Param('uuid') uuid: string) {
         return this.contactListsService.findOne(organisation_uuid, uuid);
     }
@@ -68,6 +72,8 @@ export class ContactListsController {
     @ActivityLog({ entityType: ActivityEntityType.CONTACT_LIST, action: ActivityAction.UPDATED, entityUuidFrom: 'params.uuid' })
     @Patch(':uuid')
     @ApiOperation({ summary: 'Update a contact list' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 404, description: 'Contact list not found' })
     update(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') uuid: string,
@@ -79,12 +85,16 @@ export class ContactListsController {
     @ActivityLog({ entityType: ActivityEntityType.CONTACT_LIST, action: ActivityAction.DELETED, entityUuidFrom: 'params.uuid' })
     @Delete(':uuid')
     @ApiOperation({ summary: 'Delete a contact list' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 404, description: 'Contact list not found' })
     remove(@CurrentUser('organisation_uuid') organisation_uuid: string, @Param('uuid') uuid: string) {
         return this.contactListsService.remove(organisation_uuid, uuid);
     }
 
     @Get(':uuid/contacts')
     @ApiOperation({ summary: 'List contacts in a contact list' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 404, description: 'Contact list not found' })
     findMembers(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') uuid: string,
@@ -96,6 +106,9 @@ export class ContactListsController {
     @ActivityLog({ entityType: ActivityEntityType.CONTACT_LIST, action: ActivityAction.CONTACTS_ADDED, entityUuidFrom: 'params.uuid' })
     @Post(':uuid/contacts')
     @ApiOperation({ summary: 'Add contacts to a list' })
+    @ApiResponse({ status: 201 })
+    @ApiResponse({ status: 404, description: 'Contact list not found' })
+    @ApiResponse({ status: 400, description: 'One or more contacts were not found' })
     addContacts(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') uuid: string,
@@ -107,6 +120,8 @@ export class ContactListsController {
     @ActivityLog({ entityType: ActivityEntityType.CONTACT_LIST, action: ActivityAction.CONTACTS_BULK_ADDED, entityUuidFrom: 'params.uuid' })
     @Post(':uuid/contacts/bulk')
     @ApiOperation({ summary: 'Add all contacts matching filters to a list' })
+    @ApiResponse({ status: 201 })
+    @ApiResponse({ status: 404, description: 'Contact list not found' })
     bulkAddContacts(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') uuid: string,
@@ -118,6 +133,8 @@ export class ContactListsController {
     @ActivityLog({ entityType: ActivityEntityType.CONTACT_LIST, action: ActivityAction.CONTACTS_REMOVED, entityUuidFrom: 'params.uuid' })
     @Post(':uuid/contacts/remove-below-score')
     @ApiOperation({ summary: 'Remove contacts from a list whose current score is below the given threshold' })
+    @ApiResponse({ status: 201 })
+    @ApiResponse({ status: 404, description: 'Contact list not found' })
     removeContactsBelowScore(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') uuid: string,
@@ -133,6 +150,8 @@ export class ContactListsController {
     @ActivityLog({ entityType: ActivityEntityType.CONTACT_LIST, action: ActivityAction.CONTACTS_REMOVED, entityUuidFrom: 'params.uuid' })
     @Post(':uuid/contacts/move-below-score')
     @ApiOperation({ summary: 'Move contacts whose current score is below the given threshold to another list' })
+    @ApiResponse({ status: 201 })
+    @ApiResponse({ status: 404, description: 'Contact list not found' })
     moveContactsBelowScore(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') uuid: string,
@@ -149,6 +168,8 @@ export class ContactListsController {
     @ActivityLog({ entityType: ActivityEntityType.CONTACT_LIST, action: ActivityAction.CONTACTS_ADDED, entityUuidFrom: 'params.uuid' })
     @Post(':uuid/contacts/add-below-score')
     @ApiOperation({ summary: 'Add all contacts (regardless of list) whose current score is below the given threshold to this list' })
+    @ApiResponse({ status: 201 })
+    @ApiResponse({ status: 404, description: 'Contact list not found' })
     addContactsBelowScore(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') uuid: string,
@@ -163,6 +184,8 @@ export class ContactListsController {
 
     @Get(':uuid/contacts/duplicates')
     @ApiOperation({ summary: 'Preview contacts in this list that also belong to another list' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 404, description: 'Contact list not found' })
     findDuplicateContacts(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') uuid: string,
@@ -173,6 +196,8 @@ export class ContactListsController {
     @ActivityLog({ entityType: ActivityEntityType.CONTACT_LIST, action: ActivityAction.CONTACTS_REMOVED, entityUuidFrom: 'params.uuid' })
     @Post(':uuid/contacts/remove-duplicates')
     @ApiOperation({ summary: 'Remove contacts from this list that also belong to another list' })
+    @ApiResponse({ status: 201 })
+    @ApiResponse({ status: 404, description: 'Contact list not found' })
     removeDuplicateContacts(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') uuid: string,
@@ -183,6 +208,8 @@ export class ContactListsController {
     @ActivityLog({ entityType: ActivityEntityType.CONTACT_LIST, action: ActivityAction.CONTACTS_REMOVED, entityUuidFrom: 'params.uuid' })
     @Post(':uuid/contacts/bulk-remove')
     @ApiOperation({ summary: 'Remove multiple contacts from a list' })
+    @ApiResponse({ status: 201 })
+    @ApiResponse({ status: 404, description: 'Contact list not found, or none of the contacts are in this list' })
     removeContacts(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') uuid: string,
@@ -194,6 +221,8 @@ export class ContactListsController {
     @ActivityLog({ entityType: ActivityEntityType.CONTACT_LIST, action: ActivityAction.CONTACTS_REMOVED, entityUuidFrom: 'params.uuid' })
     @Delete(':uuid/contacts/:contactUuid')
     @ApiOperation({ summary: 'Remove a contact from a list' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 404, description: 'Contact list not found, or contact is not in this list' })
     removeContact(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') uuid: string,
@@ -205,6 +234,8 @@ export class ContactListsController {
     @ActivityLog({ entityType: ActivityEntityType.CONTACT_LIST, action: ActivityAction.UPDATED, entityUuidFrom: 'params.uuid' })
     @Patch(':uuid/contacts/:contactUuid/status')
     @ApiOperation({ summary: "Update a contact's status scoped to this list" })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 404, description: 'Contact list not found, or contact is not in this list' })
     updateMemberStatus(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') uuid: string,
@@ -221,6 +252,8 @@ export class ContactListsController {
 
     @Get(':uuid/stats')
     @ApiOperation({ summary: 'CRM and activity analytics for contacts in a list' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 404, description: 'Contact list not found' })
     getStats(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') uuid: string,
@@ -231,6 +264,8 @@ export class ContactListsController {
 
     @Get(':uuid/analyses')
     @ApiOperation({ summary: 'List AI audience analyses for a contact list' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 404, description: 'Contact list not found' })
     listAnalyses(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') uuid: string,
@@ -242,6 +277,8 @@ export class ContactListsController {
     @ActivityLog({ entityType: ActivityEntityType.AUDIENCE_ANALYSIS, action: ActivityAction.ANALYSIS_CREATED })
     @Post(':uuid/analyses')
     @ApiOperation({ summary: 'Run a new AI audience analysis for a contact list (full history stats)' })
+    @ApiResponse({ status: 201 })
+    @ApiResponse({ status: 404, description: 'Contact list not found' })
     createAnalysis(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') uuid: string,
@@ -252,6 +289,8 @@ export class ContactListsController {
     @ActivityLog({ entityType: ActivityEntityType.AUDIENCE_ANALYSIS, action: ActivityAction.ANALYSIS_DELETED, entityUuidFrom: 'params.analysisUuid' })
     @Delete(':uuid/analyses/:analysisUuid')
     @ApiOperation({ summary: 'Delete an AI audience analysis for a contact list' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 404, description: 'Contact list or analysis not found' })
     deleteAnalysis(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') uuid: string,

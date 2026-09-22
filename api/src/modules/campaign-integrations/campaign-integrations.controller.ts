@@ -8,7 +8,7 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { OrganisationRole } from '@/generated/prisma';
 import { CurrentUser } from '@/shared/decorators/current-user.decorator';
 import { OrganisationRoles } from '@/shared/decorators/organisation-roles.decorator';
@@ -25,6 +25,7 @@ import { UpdateCampaignIntegrationStatusDto } from './dto/update-campaign-integr
 
 @ApiTags('campaign-integrations')
 @ApiBearerAuth()
+@ApiParam({ name: 'campaign_uuid', description: 'Marketing campaign uuid' })
 @UseGuards(JwtGuard, OrganisationRolesGuard)
 @Controller('marketing-campaigns/:campaign_uuid/integrations')
 export class CampaignIntegrationsController {
@@ -36,6 +37,9 @@ export class CampaignIntegrationsController {
   @ApiOperation({
     summary: 'List the sending integrations assigned to a campaign',
   })
+  @ApiResponse({ status: 200 })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 404, description: 'Campaign not found' })
   list(
     @CurrentUser('organisation_uuid') organisation_uuid: string,
     @Param('campaign_uuid') campaign_uuid: string,
@@ -56,6 +60,10 @@ export class CampaignIntegrationsController {
   @ApiOperation({
     summary: 'Assign an email account + sending policy to a campaign',
   })
+  @ApiResponse({ status: 201 })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden — organisation admin role required' })
+  @ApiResponse({ status: 404, description: 'Campaign not found' })
   assign(
     @CurrentUser('organisation_uuid') organisation_uuid: string,
     @Param('campaign_uuid') campaign_uuid: string,
@@ -76,6 +84,10 @@ export class CampaignIntegrationsController {
   @Patch(':ci_uuid')
   @OrganisationRoles(OrganisationRole.ADMIN)
   @ApiOperation({ summary: 'Pause or resume a campaign integration' })
+  @ApiResponse({ status: 200 })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden — organisation admin role required' })
+  @ApiResponse({ status: 404, description: 'Campaign or campaign integration not found' })
   updateStatus(
     @CurrentUser('organisation_uuid') organisation_uuid: string,
     @Param('campaign_uuid') campaign_uuid: string,
@@ -101,6 +113,10 @@ export class CampaignIntegrationsController {
     summary:
       'Remove a campaign integration (soft - keeps history for observability)',
   })
+  @ApiResponse({ status: 200 })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden — organisation admin role required' })
+  @ApiResponse({ status: 404, description: 'Campaign or campaign integration not found' })
   remove(
     @CurrentUser('organisation_uuid') organisation_uuid: string,
     @Param('campaign_uuid') campaign_uuid: string,
@@ -118,6 +134,9 @@ export class CampaignIntegrationsController {
     summary:
       'Real per-day send counts per campaign integration, for the sending-schedule calendar view',
   })
+  @ApiResponse({ status: 200 })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 404, description: 'Campaign not found' })
   getSendingActivity(
     @CurrentUser('organisation_uuid') organisation_uuid: string,
     @Param('campaign_uuid') campaign_uuid: string,
@@ -133,6 +152,9 @@ export class CampaignIntegrationsController {
     summary:
       'Observability: effective capacity, usage, and next eligible send time',
   })
+  @ApiResponse({ status: 200 })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 404, description: 'Campaign or campaign integration not found' })
   getCapacity(
     @CurrentUser('organisation_uuid') organisation_uuid: string,
     @Param('campaign_uuid') campaign_uuid: string,

@@ -1,5 +1,5 @@
 import { Controller, Delete, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from '@/shared/decorators/current-user.decorator';
 import { JwtGuard } from '@/shared/guards/jwt.guard';
 import { ContactAudienceStatsService } from './contact-audience-stats.service';
@@ -24,6 +24,8 @@ export class ContactAudienceStatsController {
 
     @Get()
     @ApiOperation({ summary: 'CRM audience analytics across every contact in the organisation' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
     getStats(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Query() query: ContactAudienceStatsQueryDto,
@@ -33,6 +35,8 @@ export class ContactAudienceStatsController {
 
     @Get('analyses')
     @ApiOperation({ summary: 'List AI audience analyses for the whole CRM' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
     listAnalyses(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Query() query: ListContactAudienceAnalysesDto,
@@ -43,6 +47,8 @@ export class ContactAudienceStatsController {
     @ActivityLog({ entityType: ActivityEntityType.AUDIENCE_ANALYSIS, action: ActivityAction.ANALYSIS_CREATED })
     @Post('analyses')
     @ApiOperation({ summary: 'Run a new AI audience analysis across the whole CRM' })
+    @ApiResponse({ status: 201 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
     createAnalysis(@CurrentUser('organisation_uuid') organisation_uuid: string) {
         return this.contactAudienceAnalysisService.createOrganisationAnalysis(organisation_uuid);
     }
@@ -50,6 +56,10 @@ export class ContactAudienceStatsController {
     @ActivityLog({ entityType: ActivityEntityType.AUDIENCE_ANALYSIS, action: ActivityAction.ANALYSIS_DELETED, entityUuidFrom: 'params.analysisUuid' })
     @Delete('analyses/:analysisUuid')
     @ApiOperation({ summary: 'Delete an AI audience analysis for the whole CRM' })
+    @ApiParam({ name: 'analysisUuid', description: 'Audience analysis uuid' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
+    @ApiResponse({ status: 404, description: 'Analysis not found' })
     deleteAnalysis(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('analysisUuid') analysisUuid: string,

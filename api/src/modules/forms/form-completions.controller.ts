@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from '@/shared/decorators/current-user.decorator';
 import { JwtGuard } from '@/shared/guards/jwt.guard';
 import { FormCompletionsService } from './form-completions.service';
@@ -22,6 +22,9 @@ export class FormCompletionsController {
     @ActivityLog({ entityType: ActivityEntityType.FORM_COMPLETION, action: ActivityAction.CREATED })
     @Post()
     @ApiOperation({ summary: 'Create a form completion' })
+    @ApiResponse({ status: 201 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
+    @ApiResponse({ status: 404, description: 'Form not found' })
     create(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @CurrentUser('uuid') user_uuid: string,
@@ -33,6 +36,8 @@ export class FormCompletionsController {
 
     @Get()
     @ApiOperation({ summary: 'List completions for a form' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
     findAll(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') form_uuid: string,
@@ -43,6 +48,9 @@ export class FormCompletionsController {
 
     @Get(':completionUuid')
     @ApiOperation({ summary: 'Get a single completion with all values' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
+    @ApiResponse({ status: 404, description: 'Completion not found' })
     findOne(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid') form_uuid: string,
@@ -54,6 +62,9 @@ export class FormCompletionsController {
     @ActivityLog({ entityType: ActivityEntityType.FORM_COMPLETION, action: ActivityAction.UPDATED, entityUuidFrom: 'params.completionUuid' })
     @Put(':completionUuid')
     @ApiOperation({ summary: 'Update completion values' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
+    @ApiResponse({ status: 404, description: 'Completion not found' })
     update(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @CurrentUser('uuid') user_uuid: string,
@@ -73,6 +84,9 @@ export class FormCompletionsController {
     @ActivityLog({ entityType: ActivityEntityType.FORM_COMPLETION, action: ActivityAction.DELETED, entityUuidFrom: 'params.completionUuid' })
     @Delete(':completionUuid')
     @ApiOperation({ summary: 'Delete a form completion' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
+    @ApiResponse({ status: 404, description: 'Completion not found' })
     remove(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @CurrentUser('uuid') user_uuid: string,
@@ -97,6 +111,8 @@ export class FormCompletionsByContactController {
 
     @Get('contact/:contactUuid')
     @ApiOperation({ summary: 'Get all form completions for a contact (across all forms)' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
     findByContact(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('contactUuid') contact_uuid: string,

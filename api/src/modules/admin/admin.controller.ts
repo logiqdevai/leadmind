@@ -1,5 +1,5 @@
 import { Controller, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiExcludeController, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthRole } from '@/generated/prisma';
 import { JwtGuard } from '@/shared/guards/jwt.guard';
 import { RolesGuard } from '@/shared/guards/roles.guard';
@@ -9,6 +9,7 @@ import { ListBatchJobsDto } from './dto/list-batch-jobs.dto';
 import { ListBulkJobsDto } from '@/modules/bulk-jobs/dto/list-bulk-jobs.dto';
 
 @ApiTags('admin')
+@ApiExcludeController()
 @ApiBearerAuth()
 @UseGuards(JwtGuard, RolesGuard)
 @Roles(AuthRole.ADMIN)
