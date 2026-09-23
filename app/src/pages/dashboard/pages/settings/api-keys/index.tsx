@@ -5,6 +5,7 @@ import { KeyRound, Plus } from "lucide-react";
 import { Button, Chip, Input, Label, ListBox, Modal, Select } from "@heroui/react";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { CopyButton } from "@/components/ui/copy-button";
+import { ApiKeysTableSkeleton } from "./components/api-keys-table-skeleton";
 import { useOrganisationPermission } from "@/hooks/use-organisation-permission";
 import {
     useApiKeys,
@@ -124,7 +125,7 @@ const SettingsApiKeysPage: FC = () => {
                     Only owners and admins can manage API keys.
                 </p>
             ) : isLoading ? (
-                <p className="text-xs text-muted">Loading…</p>
+                <ApiKeysTableSkeleton />
             ) : apiKeys.length === 0 ? (
                 <div className="rounded-xl border border-dashed border-border bg-surface-secondary/30 p-8 text-center text-sm text-muted">
                     No API keys yet. Create one to get started.
