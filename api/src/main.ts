@@ -55,6 +55,47 @@ async function bootstrap() {
     bullBoardAdapter.getRouter(),
   );
 
+  // The OAuth authorization server and the MCP endpoint are public, spec-mandated
+  // surfaces: any third-party client (Claude, ChatGPT, ...) must be able to reach
+  // them cross-origin - that's the entire point of Dynamic Client Registration and
+  // Bearer-token auth. They're protected by tokens/PKCE, not by an origin allowlist,
+  // so they're deliberately exempted from the app-wide CORS restriction below
+  // (registered first so its OPTIONS preflight handling always wins for these paths).
+  const OAUTH_MCP_CORS_PATHS = [
+    '/oauth',
+    '/mcp',
+    '/auth',
+    '/token',
+    '/reg',
+    '/jwks',
+    '/revocation',
+    '/introspection',
+    '/device',
+    '/request',
+    '/me',
+    '/.well-known',
+  ];
+  app.use(OAUTH_MCP_CORS_PATHS, (req, res, next) => {
+    const origin = req.headers.origin;
+    if (origin) res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Vary', 'Origin');
+    res.setHeader(
+      'Access-Control-Allow-Methods',
+      'GET,POST,PUT,DELETE,PATCH,OPTIONS',
+    );
+    res.setHeader(
+      'Access-Control-Allow-Headers',
+      'Authorization, Content-Type, Mcp-Session-Id, Mcp-Protocol-Version',
+    );
+    res.setHeader('Access-Control-Expose-Headers', 'Mcp-Session-Id');
+    if (req.method === 'OPTIONS') {
+      res.statusCode = 204;
+      res.end();
+      return;
+    }
+    next();
+  });
+
   const enabledCors = process.env.NODE_ENV !== 'local' ? [process.env.APP_URL, process.env.LANDING_URL] : ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:3001'];
 
   app.enableCors({

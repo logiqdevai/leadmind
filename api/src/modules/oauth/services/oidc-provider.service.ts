@@ -109,6 +109,12 @@ export class OidcProviderService implements OnModuleInit {
         // first connect, with no manual client provisioning on our side.
         registration: { enabled: true, initialAccessToken: false },
         registrationManagement: { enabled: true },
+        // Claude's "Add custom connector" UI defaults to "Use Claude's
+        // published identity" (OAuth Client ID Metadata Document, CIMD) over
+        // DCR - client_id is an HTTPS URL Claude hosts, fetched instead of a
+        // prior registration call. 'draft-02' is oidc-provider's required
+        // acknowledgment for this still-experimental IETF draft.
+        clientIdMetadataDocument: { enabled: true, ack: 'draft-02' },
         revocation: { enabled: true },
         userinfo: { enabled: true },
         // Optional (not required) - lets clients that support PAR use it.
