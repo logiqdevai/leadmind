@@ -2,6 +2,7 @@ import {
   CanActivate,
   ExecutionContext,
   Injectable,
+  Logger,
   UnauthorizedException,
 } from '@nestjs/common';
 import { createLocalJWKSet, jwtVerify, type JWTPayload } from 'jose';
@@ -32,6 +33,8 @@ export interface McpAuth {
  */
 @Injectable()
 export class McpAuthGuard implements CanActivate {
+  private readonly logger = new Logger(McpAuthGuard.name);
+
   constructor(
     private readonly oidc: OidcProviderService,
     private readonly prisma: PrismaService,
@@ -43,6 +46,7 @@ export class McpAuthGuard implements CanActivate {
     const resourceMetadataUrl = `${this.oidc.issuer}/.well-known/oauth-protected-resource/mcp`;
 
     const fail = (description: string): never => {
+      this.logger.warn(`${req.method} ${req.originalUrl ?? req.url} rejected: ${description}`);
       res.setHeader(
         'WWW-Authenticate',
         `Bearer error="invalid_token", error_description="${description}", resource_metadata="${resourceMetadataUrl}"`,

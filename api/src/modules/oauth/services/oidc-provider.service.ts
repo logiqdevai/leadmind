@@ -8,6 +8,7 @@ import { ConfigService } from '@nestjs/config';
 import Provider, { Configuration, JWK, errors } from 'oidc-provider';
 import { generateKeyPair, exportJWK } from 'jose';
 import { randomBytes, randomUUID } from 'crypto';
+import type { IncomingMessage, ServerResponse } from 'http';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { PrismaOidcAdapter } from '../adapters/prisma-oidc.adapter';
 import {
@@ -199,6 +200,31 @@ export class OidcProviderService implements OnModuleInit {
     // Trust X-Forwarded-* from the platform's reverse proxy (Render/Vercel/etc.)
     // so issuer/redirect URLs resolve to https in staging/production.
     this._provider.proxy = true;
+    this.attachErrorLogging(this._provider);
+  }
+
+  /**
+   * oidc-provider does not log anything to the console by default - a
+   * rejected DCR/CIMD/authorize request just becomes an HTTP error response,
+   * invisible in platform logs unless something explicitly listens for it.
+   * These are exactly the failures a client integration (Claude, ChatGPT)
+   * surfaces as an opaque "couldn't connect" on their side.
+   */
+  private attachErrorLogging(provider: Provider) {
+    provider.on('server_error', (ctx, err) => {
+      this.logger.error(`server_error on ${ctx?.method} ${ctx?.path}: ${err.message}`, err.stack);
+    });
+    provider.on('authorization.error', (ctx, err) => {
+      this.logger.warn(
+        `authorization.error client_id=${ctx?.oidc?.params?.client_id} error=${err.error} detail=${err.error_description ?? err.message}`,
+      );
+    });
+    provider.on('registration_create.error', (ctx, err) => {
+      this.logger.warn(`registration_create.error: ${err.error} detail=${err.error_description ?? err.message}`);
+    });
+    provider.on('grant.error', (ctx, err) => {
+      this.logger.warn(`grant.error: ${err.error} detail=${err.error_description ?? err.message}`);
+    });
   }
 
   get provider(): Provider {
@@ -229,7 +255,20 @@ export class OidcProviderService implements OnModuleInit {
         res.end(JSON.stringify({ error: 'oauth_unavailable', message }));
       };
     }
-    return this._provider.callback();
+
+    const handler = this._provider.callback();
+    // Unconditional per-request log line for the whole OAuth surface -
+    // independent of oidc-provider's own event emitters (which never fire
+    // for e.g. a request to a path no route recognizes), this is the one
+    // thing guaranteed to show up in platform logs for every attempt.
+    return (req: IncomingMessage, res: ServerResponse) => {
+      const started = Date.now();
+      const { method, url } = req;
+      res.once('finish', () => {
+        this.logger.log(`${method} ${url} -> ${res.statusCode} (${Date.now() - started}ms)`);
+      });
+      return handler(req, res);
+    };
   }
 
   private unavailableMessage(): string {
