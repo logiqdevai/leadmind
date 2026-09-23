@@ -53,9 +53,13 @@ export class McpAuthGuard implements CanActivate {
     const authHeader = req.headers['authorization'] as string | undefined;
     if (!authHeader?.startsWith('Bearer ')) return fail('Missing bearer token');
 
+    // Not inside the try/catch below: a misconfigured OAuth server
+    // (ServiceUnavailableException) must surface as 503, not get swallowed
+    // into a misleading "invalid token" 401.
+    const jwks = createLocalJWKSet(this.oidc.publicJwks as any);
+
     let payload: JWTPayload;
     try {
-      const jwks = createLocalJWKSet(this.oidc.publicJwks as any);
       const result = await jwtVerify(authHeader.slice(7), jwks, {
         issuer: this.oidc.issuer,
         audience: this.oidc.mcpResourceUrl,

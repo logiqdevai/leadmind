@@ -1,4 +1,9 @@
-import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  OnModuleInit,
+  ServiceUnavailableException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import Provider, { Configuration, JWK, errors } from 'oidc-provider';
 import { generateKeyPair, exportJWK } from 'jose';
@@ -39,8 +44,9 @@ const SESSION_TTL_SECONDS = 180 * 24 * 60 * 60;
 @Injectable()
 export class OidcProviderService implements OnModuleInit {
   private readonly logger = new Logger(OidcProviderService.name);
-  private _provider: Provider;
-  private _publicJwks: { keys: JWK[] };
+  private _provider?: Provider;
+  private _publicJwks?: { keys: JWK[] };
+  private _initError?: Error;
   readonly issuer: string;
   readonly mcpResourceUrl: string;
 
@@ -59,6 +65,23 @@ export class OidcProviderService implements OnModuleInit {
   }
 
   async onModuleInit() {
+    try {
+      await this.buildProvider();
+    } catch (error) {
+      // A misconfigured OAuth server (e.g. missing OAUTH_JWKS in production)
+      // must not take the whole API down - onModuleInit errors are fatal to
+      // Nest's bootstrap (see main.ts). Everything else in the app keeps
+      // working; only OAuth/MCP routes degrade, via the provider/publicJwks
+      // getters and callback() below throwing/responding 503 on demand.
+      this._initError =
+        error instanceof Error ? error : new Error(String(error));
+      this.logger.error(
+        `OAuth authorization server failed to start - /oauth and /mcp will return 503 until this is fixed: ${this._initError.message}`,
+      );
+    }
+  }
+
+  private async buildProvider() {
     const jwks = await this.loadJwks();
     this._publicJwks = { keys: jwks.keys.map(stripPrivateMaterial) };
     const cookieKeys = this.loadCookieKeys();
@@ -173,15 +196,40 @@ export class OidcProviderService implements OnModuleInit {
   }
 
   get provider(): Provider {
+    if (!this._provider)
+      throw new ServiceUnavailableException(this.unavailableMessage());
     return this._provider;
   }
 
   get publicJwks(): { keys: JWK[] } {
+    if (!this._publicJwks)
+      throw new ServiceUnavailableException(this.unavailableMessage());
     return this._publicJwks;
   }
 
   callback() {
+    if (!this._provider) {
+      const message = this.unavailableMessage();
+      return (
+        _req: unknown,
+        res: {
+          statusCode: number;
+          setHeader: (k: string, v: string) => void;
+          end: (b: string) => void;
+        },
+      ) => {
+        res.statusCode = 503;
+        res.setHeader('Content-Type', 'application/json');
+        res.end(JSON.stringify({ error: 'oauth_unavailable', message }));
+      };
+    }
     return this._provider.callback();
+  }
+
+  private unavailableMessage(): string {
+    return this._initError
+      ? `OAuth authorization server is not configured: ${this._initError.message}`
+      : 'OAuth authorization server is still starting up';
   }
 
   private requireUrl(key: string): string {
