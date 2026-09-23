@@ -110,6 +110,7 @@ export class MarketingCampaignDispatchWorker extends WorkerHost {
         campaign_uuid,
         campaign.sequence_uuid,
         contact_uuids,
+        channels,
       );
       return;
     }
@@ -189,7 +190,27 @@ export class MarketingCampaignDispatchWorker extends WorkerHost {
     campaign_uuid: string,
     sequence_uuid: string,
     contact_uuids: string[],
+    channels: Channel[],
   ): Promise<void> {
+    // Sequence-driven sends never touch MarketingCampaignContact directly (they progress
+    // via SequenceEnrollment/OutreachMessage instead), but webhook-driven engagement
+    // counters (delivered/opened/clicked/replied/bounced/unsubscribed) key off an MCC row
+    // per (campaign, contact, channel) - without it WebhookEventService silently finds no
+    // row and skips the counter increment. Create the same rows the direct-send path
+    // creates below so engagement tracking works for sequence campaigns too.
+    const mccRows = contact_uuids.flatMap((contact_uuid) =>
+      channels.map((channel) => ({
+        campaign_uuid,
+        contact_uuid,
+        channel,
+        status: CampaignContactStatus.PENDING,
+      })),
+    );
+    await this.prisma.marketingCampaignContact.createMany({
+      data: mccRows,
+      skipDuplicates: true,
+    });
+
     const { enrolled, skipped, enabled_step_count } =
       await this.sequenceEnrollmentService.bulkEnroll(
         organisation_uuid,

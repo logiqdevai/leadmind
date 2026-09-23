@@ -33,6 +33,30 @@ export class UnsubscribeService {
         }
 
         const now = new Date();
+
+        // Any status the contact could realistically be in when they click unsubscribe -
+        // everything except the already-terminal ones (FAILED/SKIPPED/BOUNCED/UNSUBSCRIBED),
+        // which a later status shouldn't overwrite.
+        const overridableStatuses: CampaignContactStatus[] = [
+            CampaignContactStatus.PENDING,
+            CampaignContactStatus.QUEUED,
+            CampaignContactStatus.SENT,
+            CampaignContactStatus.DELIVERED,
+            CampaignContactStatus.OPENED,
+            CampaignContactStatus.CLICKED,
+        ];
+        const affectedMccs = await this.prisma.marketingCampaignContact.findMany({
+            where: { contact_uuid: contact.uuid, status: { in: overridableStatuses } },
+            select: { uuid: true, campaign_uuid: true },
+        });
+        const unsubscribedCountByCampaign = new Map<string, number>();
+        for (const mcc of affectedMccs) {
+            unsubscribedCountByCampaign.set(
+                mcc.campaign_uuid,
+                (unsubscribedCountByCampaign.get(mcc.campaign_uuid) ?? 0) + 1,
+            );
+        }
+
         await this.prisma.$transaction([
             this.prisma.contact.update({
                 where: { uuid: contact.uuid },
@@ -46,15 +70,20 @@ export class UnsubscribeService {
                     content: 'Contact clicked the unsubscribe link',
                 },
             }),
-            this.prisma.marketingCampaignContact.updateMany({
-                where: {
-                    contact_uuid: contact.uuid,
-                    status: {
-                        in: [CampaignContactStatus.PENDING, CampaignContactStatus.QUEUED],
-                    },
-                },
-                data: { status: CampaignContactStatus.UNSUBSCRIBED },
-            }),
+            ...(affectedMccs.length > 0
+                ? [
+                      this.prisma.marketingCampaignContact.updateMany({
+                          where: { uuid: { in: affectedMccs.map((mcc) => mcc.uuid) } },
+                          data: { status: CampaignContactStatus.UNSUBSCRIBED },
+                      }),
+                  ]
+                : []),
+            ...[...unsubscribedCountByCampaign.entries()].map(([campaign_uuid, count]) =>
+                this.prisma.marketingCampaign.update({
+                    where: { uuid: campaign_uuid },
+                    data: { unsubscribed_count: { increment: count } },
+                }),
+            ),
         ]);
         const { cancelled } = await this.sequenceEnrollmentService.cancelAllForContact(
             contact.organisation_uuid,

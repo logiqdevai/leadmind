@@ -1,9 +1,11 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { JwtService } from '@nestjs/jwt';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import type { Request, Response } from 'express';
 import type Provider from 'oidc-provider';
-import * as bcrypt from 'bcrypt';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { OidcProviderService } from '../services/oidc-provider.service';
 import { OAuthConnectionsService } from '../services/oauth-connections.service';
@@ -15,177 +17,103 @@ import {
   OAuthScope,
 } from '../oauth.constants';
 import { InteractionLoginDto } from './dto/interaction-login.dto';
-import { InteractionSelectOrganisationDto } from './dto/interaction-select-organisation.dto';
-import {
-  consentPage,
-  errorPage,
-  loginPage,
-  organisationPickerPage,
-} from './interaction.templates';
-
-const LOGIN_TOKEN_PURPOSE = 'oauth_interaction_login';
-const LOGIN_TOKEN_TTL = '5m';
 
 type InteractionDetails = Awaited<ReturnType<Provider['interactionDetails']>>;
 
+export interface InteractionDetailsResponse {
+  uid: string;
+  prompt: 'login' | 'consent';
+  client?: { name: string; uri?: string };
+  organisationName?: string;
+  scopeDescriptions?: string[];
+}
+
+export interface InteractionResultResponse {
+  redirect_to: string;
+}
+
+/**
+ * Backs the frontend's `/oauth/authorize/:uid` page (see
+ * OidcProviderService's `interactions.url`) with a plain JSON API instead of
+ * server-rendered HTML - the frontend already has the design system and,
+ * more importantly, the user's existing session (its own JWT via
+ * JwtGuard/CurrentUser), so a logged-in user never has to re-enter
+ * credentials just to approve an MCP connection.
+ */
 @Injectable()
 export class OAuthInteractionService {
-  private readonly logger = new Logger(OAuthInteractionService.name);
-
   constructor(
     private readonly oidc: OidcProviderService,
     private readonly prisma: PrismaService,
-    private readonly jwtService: JwtService,
-    private readonly config: ConfigService,
     private readonly connections: OAuthConnectionsService,
   ) {}
 
-  async render(req: Request, res: Response): Promise<void> {
-    const interaction = await this.oidc.provider.interactionDetails(req, res);
+  async getDetails(
+    req: Request,
+    res: Response,
+    uid: string,
+  ): Promise<InteractionDetailsResponse> {
+    const interaction = await this.loadInteraction(req, res, uid);
 
     if (interaction.prompt.name === 'login') {
-      this.sendHtml(res, loginPage({ uid: interaction.uid }));
-      return;
+      return { uid, prompt: 'login' };
     }
 
     if (interaction.prompt.name === 'consent') {
-      await this.renderConsent(interaction, res);
-      return;
+      return {
+        uid,
+        prompt: 'consent',
+        ...(await this.describeConsent(interaction)),
+      };
     }
 
-    this.sendHtml(
-      res,
-      errorPage(`Unsupported interaction step: ${interaction.prompt.name}`),
-      400,
+    throw new BadRequestException(
+      `Unsupported interaction step: ${interaction.prompt.name}`,
     );
   }
 
-  async submitLogin(
+  async login(
     req: Request,
     res: Response,
     uid: string,
     dto: InteractionLoginDto,
-  ): Promise<void> {
-    const user = await this.prisma.user.findUnique({
-      where: { email: dto.email },
-    });
-    const passwordValid = user?.password
-      ? await bcrypt.compare(dto.password, user.password)
-      : false;
-
-    if (!user || !passwordValid) {
-      this.sendHtml(
-        res,
-        loginPage({
-          uid,
-          email: dto.email,
-          error: 'Invalid email or password',
-        }),
-      );
-      return;
-    }
-
-    const memberships = await this.prisma.organisationMember.findMany({
-      where: { user_uuid: user.uuid },
-      include: { organisation: true },
-      orderBy: { updated_at: 'desc' },
-    });
-
-    if (memberships.length === 0) {
-      this.sendHtml(
-        res,
-        errorPage('Your account is not a member of any workspace yet.'),
-        400,
-      );
-      return;
-    }
-
-    if (memberships.length === 1) {
-      await this.finishLogin(
-        req,
-        res,
-        user.uuid,
-        memberships[0].organisation_uuid,
-      );
-      return;
-    }
-
-    const loginToken = await this.jwtService.signAsync(
-      { purpose: LOGIN_TOKEN_PURPOSE, uid, user_uuid: user.uuid },
-      { secret: this.config.get('JWT_SECRET'), expiresIn: LOGIN_TOKEN_TTL },
-    );
-
-    this.sendHtml(
-      res,
-      organisationPickerPage({
-        uid,
-        loginToken,
-        organisations: memberships.map((m) => ({
-          uuid: m.organisation_uuid,
-          name: m.organisation.name,
-        })),
-      }),
-    );
-  }
-
-  async submitOrganisationSelection(
-    req: Request,
-    res: Response,
-    uid: string,
-    dto: InteractionSelectOrganisationDto,
-  ): Promise<void> {
-    let payload: { purpose: string; uid: string; user_uuid: string };
-    try {
-      payload = await this.jwtService.verifyAsync(dto.login_token, {
-        secret: this.config.get('JWT_SECRET'),
-      });
-    } catch {
-      this.sendHtml(
-        res,
-        errorPage('Your sign-in session expired. Please start again.'),
-        400,
-      );
-      return;
-    }
-
-    if (payload.purpose !== LOGIN_TOKEN_PURPOSE || payload.uid !== uid) {
-      this.sendHtml(res, errorPage('Invalid sign-in session.'), 400);
-      return;
-    }
+    userUuid: string,
+  ): Promise<InteractionResultResponse> {
+    await this.loadInteraction(req, res, uid);
 
     const membership = await this.prisma.organisationMember.findUnique({
       where: {
         organisation_uuid_user_uuid: {
           organisation_uuid: dto.organisation_uuid,
-          user_uuid: payload.user_uuid,
+          user_uuid: userUuid,
         },
       },
     });
+    if (!membership)
+      throw new ForbiddenException('You are not a member of that workspace.');
 
-    if (!membership) {
-      this.sendHtml(
-        res,
-        errorPage('You are not a member of that workspace.'),
-        400,
-      );
-      return;
-    }
-
-    await this.finishLogin(req, res, payload.user_uuid, dto.organisation_uuid);
+    const accountId = buildAccountId(userUuid, dto.organisation_uuid);
+    const redirect_to = await this.oidc.provider.interactionResult(
+      req,
+      res,
+      { login: { accountId } },
+      { mergeWithLastSubmission: false },
+    );
+    return { redirect_to };
   }
 
-  async confirmConsent(req: Request, res: Response): Promise<void> {
-    const interaction = await this.oidc.provider.interactionDetails(req, res);
+  async confirm(
+    req: Request,
+    res: Response,
+    uid: string,
+  ): Promise<InteractionResultResponse> {
+    const interaction = await this.loadInteraction(req, res, uid);
     const { session, params, grantId, prompt } = interaction;
 
-    if (!session?.accountId) {
-      this.sendHtml(
-        res,
-        errorPage('Your session expired. Please start again.'),
-        400,
+    if (!session?.accountId)
+      throw new BadRequestException(
+        'Your session expired. Please start again.',
       );
-      return;
-    }
 
     const grant = grantId
       ? await this.oidc.provider.Grant.find(grantId)
@@ -193,22 +121,16 @@ export class OAuthInteractionService {
           accountId: session.accountId,
           clientId: params.client_id as string,
         });
-
-    if (!grant) {
-      this.sendHtml(
-        res,
-        errorPage('Your session expired. Please start again.'),
-        400,
+    if (!grant)
+      throw new BadRequestException(
+        'Your session expired. Please start again.',
       );
-      return;
-    }
 
     const missingOIDCScope = prompt.details.missingOIDCScope as
       | string[]
       | undefined;
-    if (missingOIDCScope?.length) {
+    if (missingOIDCScope?.length)
       grant.addOIDCScope(missingOIDCScope.join(' '));
-    }
 
     const missingResourceScopes = prompt.details.missingResourceScopes as
       | Record<string, string[]>
@@ -237,16 +159,22 @@ export class OAuthInteractionService {
       });
     }
 
-    await this.oidc.provider.interactionFinished(
+    const redirect_to = await this.oidc.provider.interactionResult(
       req,
       res,
       { consent: grantId ? {} : { grantId: newGrantId } },
       { mergeWithLastSubmission: true },
     );
+    return { redirect_to };
   }
 
-  async abortConsent(req: Request, res: Response): Promise<void> {
-    await this.oidc.provider.interactionFinished(
+  async abort(
+    req: Request,
+    res: Response,
+    uid: string,
+  ): Promise<InteractionResultResponse> {
+    await this.loadInteraction(req, res, uid);
+    const redirect_to = await this.oidc.provider.interactionResult(
       req,
       res,
       {
@@ -256,43 +184,40 @@ export class OAuthInteractionService {
       },
       { mergeWithLastSubmission: false },
     );
+    return { redirect_to };
   }
 
-  private async finishLogin(
+  private async loadInteraction(
     req: Request,
     res: Response,
-    userUuid: string,
-    organisationUuid: string,
-  ): Promise<void> {
-    const accountId = buildAccountId(userUuid, organisationUuid);
-    await this.oidc.provider.interactionFinished(
-      req,
-      res,
-      { login: { accountId } },
-      { mergeWithLastSubmission: false },
-    );
+    uid: string,
+  ): Promise<InteractionDetails> {
+    const interaction = await this.oidc.provider.interactionDetails(req, res);
+    if (interaction.uid !== uid) {
+      throw new NotFoundException('Interaction not found or expired');
+    }
+    return interaction;
   }
 
-  private async renderConsent(interaction: InteractionDetails, res: Response) {
-    const { params, session, uid } = interaction;
-    const parsed = session?.accountId
+  private async describeConsent(interaction: InteractionDetails) {
+    const { params, session } = interaction;
+
+    // The organisation bound to this authorization is whichever one was
+    // chosen at the login step (session.accountId), which is not
+    // necessarily the org the frontend currently has active - a user can
+    // pick a different workspace to authorize than the one they're
+    // browsing the app in.
+    const parsedAccount = session?.accountId
       ? parseAccountId(session.accountId)
       : undefined;
 
-    if (!parsed) {
-      this.sendHtml(
-        res,
-        errorPage('Your session expired. Please start again.'),
-        400,
-      );
-      return;
-    }
-
     const [client, organisation] = await Promise.all([
       this.oidc.provider.Client.find(params.client_id as string),
-      this.prisma.organisation.findUnique({
-        where: { uuid: parsed.organisationUuid },
-      }),
+      parsedAccount
+        ? this.prisma.organisation.findUnique({
+            where: { uuid: parsedAccount.organisationUuid },
+          })
+        : Promise.resolve(null),
     ]);
 
     const requestedScopes = String(params.scope ?? '')
@@ -301,25 +226,15 @@ export class OAuthInteractionService {
         (ALL_SCOPES as readonly string[]).includes(scope),
       );
 
-    this.sendHtml(
-      res,
-      consentPage({
-        uid,
-        clientName:
-          client?.clientName || client?.clientId || 'This application',
-        clientUri: client?.clientUri,
-        organisationName: organisation?.name ?? 'your workspace',
-        scopeDescriptions: requestedScopes.map(
-          (scope) => SCOPE_DESCRIPTIONS[scope],
-        ),
-      }),
-    );
-  }
-
-  private sendHtml(res: Response, html: string, status = 200) {
-    res
-      .status(status)
-      .set('Content-Type', 'text/html; charset=utf-8')
-      .send(html);
+    return {
+      client: {
+        name: client?.clientName || client?.clientId || 'This application',
+        uri: client?.clientUri,
+      },
+      organisationName: organisation?.name,
+      scopeDescriptions: requestedScopes.map(
+        (scope) => SCOPE_DESCRIPTIONS[scope],
+      ),
+    };
   }
 }

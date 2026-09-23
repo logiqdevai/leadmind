@@ -35,10 +35,11 @@ export const organisationQueryKeys = {
     preview: (token: string) => ["organisations", "preview", token] as const,
 };
 
-export function useOrganisations() {
+export function useOrganisations(enabled = true) {
     return useQuery({
         queryKey: organisationQueryKeys.list,
         queryFn: listOrganisations,
+        enabled,
     });
 }
 

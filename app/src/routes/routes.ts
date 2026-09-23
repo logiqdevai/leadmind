@@ -6,6 +6,9 @@ export const Routes = {
         sign_up: "/auth/sign-up",
         invite: "/auth/invite/:token",
     },
+    oauth: {
+        authorize: "/oauth/authorize/:uid",
+    },
     admin: {
         users: "/admin/users",
         alerts: "/admin/alerts",

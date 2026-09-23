@@ -50,6 +50,7 @@ export class OidcProviderService implements OnModuleInit {
   private _initError?: Error;
   readonly issuer: string;
   readonly mcpResourceUrl: string;
+  readonly appUrl: string;
 
   constructor(
     private readonly config: ConfigService,
@@ -63,6 +64,18 @@ export class OidcProviderService implements OnModuleInit {
     this.mcpResourceUrl = (
       this.config.get<string>('MCP_RESOURCE_URL') || `${apiUrl}/mcp`
     ).replace(/\/$/, '');
+    // Not required to throw: APP_URL missing shouldn't be able to crash the
+    // whole app any more than a missing OAUTH_JWKS can (see onModuleInit) -
+    // falling back to the API's own origin just means login/consent renders
+    // nowhere useful (interactions.url below would 404) rather than the
+    // entire process refusing to boot over a config value only this feature needs.
+    const configuredAppUrl = this.config.get<string>('APP_URL');
+    if (!configuredAppUrl) {
+      this.logger.warn(
+        'APP_URL is not set - OAuth login/consent pages have nowhere to redirect to.',
+      );
+    }
+    this.appUrl = (configuredAppUrl || apiUrl).replace(/\/$/, '');
   }
 
   async onModuleInit() {
@@ -88,10 +101,29 @@ export class OidcProviderService implements OnModuleInit {
     const cookieKeys = this.loadCookieKeys();
     const adapter = (name: string) => new PrismaOidcAdapter(name, this.prisma);
 
+    // Login/consent now happens on the frontend app's own origin (see
+    // `interactions.url` below), which calls back to these cookie-bearing
+    // endpoints via fetch/XHR - that's a genuinely cross-origin request
+    // (different host, or on `localhost` a different port, which browsers
+    // do NOT treat as cross-site there, so `lax` already works for local dev
+    // without this). Everywhere else, SameSite=None is required for the
+    // browser to attach the cookie cross-origin at all.
+    //
+    // Deliberately NOT also forcing `secure: true` here: SameSite=None does
+    // require Secure, but oidc-provider/the underlying `cookies` package
+    // already sets that correctly on its own by checking whether the
+    // current request is actually over TLS (respecting X-Forwarded-Proto
+    // because `provider.proxy = true` below) - hardcoding `secure: true`
+    // broke every request when tested directly against a non-TLS origin
+    // (e.g. this app running locally without Railway's proxy in front of
+    // it) with "Cannot send secure cookie over unencrypted connection".
+    const nodeEnv = this.config.get<string>('NODE_ENV');
+    const cookieOptions = nodeEnv === 'local' ? { sameSite: 'lax' as const } : { sameSite: 'none' as const };
+
     const configuration: Configuration = {
       adapter,
       jwks,
-      cookies: { keys: cookieKeys },
+      cookies: { keys: cookieKeys, long: cookieOptions, short: cookieOptions },
       scopes: [...ALL_SCOPES],
       claims: { openid: ['sub'] },
       clientDefaults: {
@@ -150,7 +182,13 @@ export class OidcProviderService implements OnModuleInit {
         Session: SESSION_TTL_SECONDS,
       },
       interactions: {
-        url: (_ctx, interaction) => `/oauth/interaction/${interaction.uid}`,
+        // Login/consent is a real page in the frontend app, not a
+        // server-rendered one here - it already has the design system, and
+        // more importantly the user's existing session, so a user who's
+        // already logged in never has to log in twice. See
+        // OAuthInteractionController for the JSON API it calls back into.
+        url: (_ctx, interaction) =>
+          `${this.appUrl}/oauth/authorize/${interaction.uid}`,
       },
       findAccount: async (_ctx, sub) => {
         const parsed = parseAccountId(sub);
@@ -212,7 +250,10 @@ export class OidcProviderService implements OnModuleInit {
    */
   private attachErrorLogging(provider: Provider) {
     provider.on('server_error', (ctx, err) => {
-      this.logger.error(`server_error on ${ctx?.method} ${ctx?.path}: ${err.message}`, err.stack);
+      this.logger.error(
+        `server_error on ${ctx?.method} ${ctx?.path}: ${err.message}`,
+        err.stack,
+      );
     });
     provider.on('authorization.error', (ctx, err) => {
       this.logger.warn(
@@ -220,10 +261,14 @@ export class OidcProviderService implements OnModuleInit {
       );
     });
     provider.on('registration_create.error', (ctx, err) => {
-      this.logger.warn(`registration_create.error: ${err.error} detail=${err.error_description ?? err.message}`);
+      this.logger.warn(
+        `registration_create.error: ${err.error} detail=${err.error_description ?? err.message}`,
+      );
     });
     provider.on('grant.error', (ctx, err) => {
-      this.logger.warn(`grant.error: ${err.error} detail=${err.error_description ?? err.message}`);
+      this.logger.warn(
+        `grant.error: ${err.error} detail=${err.error_description ?? err.message}`,
+      );
     });
   }
 
@@ -265,7 +310,9 @@ export class OidcProviderService implements OnModuleInit {
       const started = Date.now();
       const { method, url } = req;
       res.once('finish', () => {
-        this.logger.log(`${method} ${url} -> ${res.statusCode} (${Date.now() - started}ms)`);
+        this.logger.log(
+          `${method} ${url} -> ${res.statusCode} (${Date.now() - started}ms)`,
+        );
       });
       return handler(req, res);
     };

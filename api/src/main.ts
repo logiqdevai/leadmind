@@ -52,6 +52,14 @@ async function bootstrap() {
   // Bearer-token auth. They're protected by tokens/PKCE, not by an origin allowlist,
   // so they're deliberately exempted from the app-wide CORS restriction below
   // (registered first so its OPTIONS preflight handling always wins for these paths).
+  //
+  // /oauth/interaction/* is different: the frontend app (a specific, known
+  // origin) calls it with oidc-provider's own interaction/session cookies
+  // attached (see OidcProviderService's cross-origin cookie settings), and a
+  // cookie is an ambient credential - reflecting *any* origin the way the
+  // rest of this surface does would let any website ride a signed-in user's
+  // cookies to approve an OAuth grant on their behalf. It gets a strict,
+  // single-origin-with-credentials policy instead of the permissive one.
   const OAUTH_MCP_CORS_PATHS = [
     '/oauth',
     '/mcp',
@@ -66,19 +74,32 @@ async function bootstrap() {
     '/me',
     '/.well-known',
   ];
+  const interactionOrigin = process.env.APP_URL;
   app.use(OAUTH_MCP_CORS_PATHS, (req, res, next) => {
     const origin = req.headers.origin;
-    if (origin) res.setHeader('Access-Control-Allow-Origin', origin);
-    res.setHeader('Vary', 'Origin');
-    res.setHeader(
-      'Access-Control-Allow-Methods',
-      'GET,POST,PUT,DELETE,PATCH,OPTIONS',
-    );
-    res.setHeader(
-      'Access-Control-Allow-Headers',
-      'Authorization, Content-Type, Mcp-Session-Id, Mcp-Protocol-Version',
-    );
-    res.setHeader('Access-Control-Expose-Headers', 'Mcp-Session-Id');
+
+    if (req.path.startsWith('/oauth/interaction')) {
+      if (interactionOrigin && origin === interactionOrigin) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
+        res.setHeader('Access-Control-Allow-Credentials', 'true');
+        res.setHeader('Vary', 'Origin');
+        res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
+        res.setHeader('Access-Control-Allow-Headers', 'Authorization, Content-Type');
+      }
+    } else {
+      if (origin) res.setHeader('Access-Control-Allow-Origin', origin);
+      res.setHeader('Vary', 'Origin');
+      res.setHeader(
+        'Access-Control-Allow-Methods',
+        'GET,POST,PUT,DELETE,PATCH,OPTIONS',
+      );
+      res.setHeader(
+        'Access-Control-Allow-Headers',
+        'Authorization, Content-Type, Mcp-Session-Id, Mcp-Protocol-Version',
+      );
+      res.setHeader('Access-Control-Expose-Headers', 'Mcp-Session-Id');
+    }
+
     if (req.method === 'OPTIONS') {
       res.statusCode = 204;
       res.end();

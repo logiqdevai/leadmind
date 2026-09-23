@@ -388,6 +388,12 @@ export const ApiRoutes = {
         list: "/oauth/connections",
         revoke: (uuid: string) => `/oauth/connections/${uuid}`,
     },
+    oauth_interaction: {
+        get: (uid: string) => `/oauth/interaction/${uid}`,
+        login: (uid: string) => `/oauth/interaction/${uid}/login`,
+        confirm: (uid: string) => `/oauth/interaction/${uid}/confirm`,
+        abort: (uid: string) => `/oauth/interaction/${uid}/abort`,
+    },
     campaign_integrations: {
         list: (campaignUuid: string) => `/marketing-campaigns/${campaignUuid}/integrations`,
         assign: (campaignUuid: string) => `/marketing-campaigns/${campaignUuid}/integrations`,

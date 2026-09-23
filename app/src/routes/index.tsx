@@ -47,6 +47,7 @@ const SettingsApiKeysPage = lazy(() => import("@/pages/dashboard/pages/settings/
 const SettingsConnectedAppsPage = lazy(() => import("@/pages/dashboard/pages/settings/connected-apps"));
 const SettingsAccountPage = lazy(() => import("@/pages/dashboard/pages/settings/account"));
 const InviteAcceptPage = lazy(() => import("@/pages/auth/pages/invite"));
+const OAuthAuthorizePage = lazy(() => import("@/pages/oauth/authorize"));
 const UnsubscribePage = lazy(() => import("@/pages/unsubscribe"));
 const UnsubscribeLayout = lazy(() => import("@/pages/unsubscribe/layout"));
 
@@ -129,6 +130,26 @@ export default function AppRoutes() {
           element={
             <Lazy>
               <InviteAcceptPage />
+            </Lazy>
+          }
+        />
+      </Route>
+
+      {/* OAuth connector login/consent - reachable whether or not the user is
+          already logged in (see AuthLayout), unlike ProtectedRoute-gated /auth/*. */}
+      <Route
+        path="/oauth/authorize/:uid"
+        element={
+          <Lazy>
+            <AuthLayout />
+          </Lazy>
+        }
+      >
+        <Route
+          index
+          element={
+            <Lazy>
+              <OAuthAuthorizePage />
             </Lazy>
           }
         />

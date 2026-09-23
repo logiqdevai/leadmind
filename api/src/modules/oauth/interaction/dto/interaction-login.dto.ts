@@ -1,10 +1,6 @@
-import { IsEmail, IsString, MinLength } from 'class-validator';
+import { IsUUID } from 'class-validator';
 
 export class InteractionLoginDto {
-  @IsEmail()
-  email: string;
-
-  @IsString()
-  @MinLength(1)
-  password: string;
+  @IsUUID()
+  organisation_uuid: string;
 }
