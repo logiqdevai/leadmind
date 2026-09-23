@@ -78,13 +78,20 @@ async function bootstrap() {
   app.use(OAUTH_MCP_CORS_PATHS, (req, res, next) => {
     const origin = req.headers.origin;
 
-    if (req.path.startsWith('/oauth/interaction')) {
+    // req.path (not req.originalUrl) gets rewritten by Express when a path
+    // array is passed to app.use() - it's relative to whichever entry in
+    // OAUTH_MCP_CORS_PATHS matched, so checking it here would never see the
+    // '/oauth/interaction' prefix at all once '/oauth' had already matched.
+    if (req.originalUrl.startsWith('/oauth/interaction')) {
       if (interactionOrigin && origin === interactionOrigin) {
         res.setHeader('Access-Control-Allow-Origin', origin);
         res.setHeader('Access-Control-Allow-Credentials', 'true');
         res.setHeader('Vary', 'Origin');
         res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
-        res.setHeader('Access-Control-Allow-Headers', 'Authorization, Content-Type');
+        res.setHeader(
+          'Access-Control-Allow-Headers',
+          'Authorization, Content-Type',
+        );
       }
     } else {
       if (origin) res.setHeader('Access-Control-Allow-Origin', origin);

@@ -118,7 +118,17 @@ export class OidcProviderService implements OnModuleInit {
     // (e.g. this app running locally without Railway's proxy in front of
     // it) with "Cannot send secure cookie over unencrypted connection".
     const nodeEnv = this.config.get<string>('NODE_ENV');
-    const cookieOptions = nodeEnv === 'local' ? { sameSite: 'lax' as const } : { sameSite: 'none' as const };
+    const cookieOptions = {
+      // oidc-provider defaults a cookie's Path to the interaction URL's own
+      // path, on the assumption the interaction page and the calls that
+      // resume it live at the same path on the same origin. That's no
+      // longer true here - the interaction *page* is a frontend route
+      // (`${appUrl}/oauth/authorize/:uid`) but the calls that resume it hit
+      // the API's own `/oauth/interaction/:uid/*` (see OAuthInteractionController) -
+      // so the path has to be pinned to cover the latter, not derived from the former.
+      path: '/',
+      sameSite: nodeEnv === 'local' ? ('lax' as const) : ('none' as const),
+    };
 
     const configuration: Configuration = {
       adapter,
