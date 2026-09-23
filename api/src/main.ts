@@ -9,7 +9,6 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { BULL_BOARD_ADAPTER } from './core/queues/queues.constants';
 import { bullBoardAuthMiddleware } from './core/queues/bull-board.middleware';
 import { OpenApiDocumentRegistry } from './core/openapi/openapi-document.registry';
-import { OidcProviderService } from './modules/oauth/services/oidc-provider.service';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, { rawBody: true });
@@ -26,14 +25,6 @@ async function bootstrap() {
       whitelist: true,
     }),
   );
-
-  // NestFactory.create() only resolves the DI graph (constructors) - it does NOT
-  // run onModuleInit/onApplicationBootstrap hooks. Those normally fire inside
-  // app.listen() -> app.init(), but OidcProviderService.onModuleInit() (below)
-  // must have already built its Provider instance before we can mount its
-  // callback, so init() is called explicitly here. app.listen() detects the app
-  // is already initialized and won't run this twice.
-  await app.init();
 
   const config = new DocumentBuilder()
     .setTitle('Appointly API')
@@ -105,15 +96,13 @@ async function bootstrap() {
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Access-Control-Allow-Origin'],
   });
 
-  // Mounted last and unprefixed so it only ever handles requests none of the
-  // Nest controllers above matched (auth/token/jwks/registration/revocation/
-  // .well-known/*, etc. - see OidcProviderService for why the issuer has no
-  // path prefix). Nest's router is already fully bound by this point (every
-  // controller route was registered during the DI graph construction inside
-  // NestFactory.create()), so there's no route-order race with the
-  // oidc-provider Koa app taking over paths it shouldn't.
-  const oidcProvider = app.get(OidcProviderService);
-  app.use(oidcProvider.callback());
+  // The oidc-provider handoff (/auth, /token, /reg, /jwks, /.well-known/*,
+  // etc.) is a real Nest route now (OidcFallbackController, a wildcard
+  // catch-all imported last in AppModule) rather than raw Express
+  // middleware mounted here - see that controller for why: this app briefly
+  // shipped two different attempts at ordering a raw app.use() call around
+  // Nest's own (undocumented-timing) route mounting, and each one broke a
+  // different half of the app.
 
   await app.listen(configService.get<number>('PORT') || 3000);
 }

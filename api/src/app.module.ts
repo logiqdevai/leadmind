@@ -58,6 +58,7 @@ import { SidebarFavoritesModule } from './modules/sidebar-favorites/sidebar-favo
 import { OpenApiDocumentModule } from './core/openapi/openapi-document.module';
 import { OAuthModule } from './modules/oauth/oauth.module';
 import { McpModule } from './modules/mcp/mcp.module';
+import { OidcFallbackModule } from './modules/oauth/oidc-fallback.module';
 
 @Module({
   imports: [
@@ -119,6 +120,10 @@ import { McpModule } from './modules/mcp/mcp.module';
     CampaignIntegrationsModule,
     MailTesterModule,
     MxToolboxModule,
+    // Must stay last: its wildcard fallback route (OidcFallbackController)
+    // should only ever be tried after every other controller above has had
+    // a chance to match a more specific path.
+    OidcFallbackModule,
   ],
   controllers: [AppController],
   providers: [AppService],
