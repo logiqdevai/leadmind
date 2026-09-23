@@ -8,6 +8,8 @@ import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { BULL_BOARD_ADAPTER } from './core/queues/queues.constants';
 import { bullBoardAuthMiddleware } from './core/queues/bull-board.middleware';
+import { OpenApiDocumentRegistry } from './core/openapi/openapi-document.registry';
+import { OidcProviderService } from './modules/oauth/services/oidc-provider.service';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, { rawBody: true });
@@ -25,6 +27,14 @@ async function bootstrap() {
     }),
   );
 
+  // NestFactory.create() only resolves the DI graph (constructors) - it does NOT
+  // run onModuleInit/onApplicationBootstrap hooks. Those normally fire inside
+  // app.listen() -> app.init(), but OidcProviderService.onModuleInit() (below)
+  // must have already built its Provider instance before we can mount its
+  // callback, so init() is called explicitly here. app.listen() detects the app
+  // is already initialized and won't run this twice.
+  await app.init();
+
   const config = new DocumentBuilder()
     .setTitle('Appointly API')
     .setDescription('The Appointly API documentation')
@@ -35,6 +45,7 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
+  app.get(OpenApiDocumentRegistry).set(document);
 
   const bullBoardAdapter = app.get<ExpressAdapter>(BULL_BOARD_ADAPTER);
   const configService = app.get(ConfigService);
@@ -52,6 +63,16 @@ async function bootstrap() {
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Access-Control-Allow-Origin'],
   });
+
+  // Mounted last and unprefixed so it only ever handles requests none of the
+  // Nest controllers above matched (auth/token/jwks/registration/revocation/
+  // .well-known/*, etc. - see OidcProviderService for why the issuer has no
+  // path prefix). Nest's router is already fully bound by this point (every
+  // controller route was registered during the DI graph construction inside
+  // NestFactory.create()), so there's no route-order race with the
+  // oidc-provider Koa app taking over paths it shouldn't.
+  const oidcProvider = app.get(OidcProviderService);
+  app.use(oidcProvider.callback());
 
   await app.listen(configService.get<number>('PORT') || 3000);
 }

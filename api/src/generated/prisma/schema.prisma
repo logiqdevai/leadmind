@@ -36,6 +36,7 @@ model User {
   openai_batch_jobs_created OpenAiBatchJob[]         @relation("OpenAiBatchJobCreatedBy")
   sidebar_favorites         SidebarFavorite[]
   api_keys_created          ApiKey[]                 @relation("ApiKeyCreatedBy")
+  oauth_connections_granted OAuthConnection[]        @relation("OAuthConnectionGrantedBy")
 
   @@index([email])
   @@index([phone])
@@ -86,6 +87,8 @@ model Organisation {
   mail_tester_tests         MailTesterTest[]
   mxtoolbox_checks          MxToolboxCheck[]
   api_keys                  ApiKey[]
+  oauth_connections         OAuthConnection[]
+  mcp_tool_invocation_logs  McpToolInvocationLog[]
 
   @@index([uuid])
   @@index([slug])
@@ -1928,4 +1931,91 @@ model ActivityLog {
   @@index([organisation_uuid, actor_user_uuid])
   @@index([entity_uuid])
   @@map("activity_logs")
+}
+
+// Generic key/value store backing the oidc-provider adapter (one row per
+// OAuth/OIDC model instance: Client, Grant, AccessToken, RefreshToken,
+// AuthorizationCode, Interaction, Session, DeviceCode, ReplayDetection,
+// PushedAuthorizationRequest, ...). oidc-provider only ever needs
+// upsert/find/findByUid/findByUserCode/consume/destroy/revokeByGrantId, so a
+// single generic table avoids a bespoke Prisma model per oidc-provider
+// concept (see MIGRATIONS.md-style rationale in src/modules/oauth).
+model OAuthModel {
+  id          Int       @id @default(autoincrement())
+  model_name  String
+  key         String
+  grant_id    String?
+  user_code   String?
+  uid         String?
+  payload     Json
+  expires_at  DateTime?
+  consumed_at DateTime?
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+
+  @@unique([model_name, key])
+  @@index([model_name, grant_id])
+  @@index([model_name, user_code])
+  @@index([model_name, uid])
+  @@index([expires_at])
+  @@map("oauth_models")
+}
+
+// Org-facing record of a third-party app (Claude, ChatGPT, ...) that has
+// been granted access via OAuth. Separate from OAuthModel so organisations
+// can list/revoke connected apps without reaching into oidc-provider's
+// internal storage format.
+model OAuthConnection {
+  id                   Int                   @id @default(autoincrement())
+  uuid                 String                @unique @default(uuid())
+  organisation_uuid    String
+  granted_by_user_uuid String
+  oauth_client_id      String
+  grant_id             String
+  client_name          String?
+  client_uri           String?
+  scope                String
+  status               OAuthConnectionStatus @default(ACTIVE)
+  last_used_at         DateTime?
+  revoked_at           DateTime?
+  created_at           DateTime              @default(now())
+  updated_at           DateTime              @updatedAt
+
+  organisation Organisation @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  granted_by   User         @relation("OAuthConnectionGrantedBy", fields: [granted_by_user_uuid], references: [uuid], onDelete: Cascade)
+
+  @@unique([grant_id])
+  @@index([organisation_uuid])
+  @@index([oauth_client_id])
+  @@map("oauth_connections")
+}
+
+// Audit trail of MCP tool invocations, for the org-facing activity view and
+// for marketplace/security review requirements (traceable, revocable agent
+// access to organisation data).
+model McpToolInvocationLog {
+  id                Int      @id @default(autoincrement())
+  uuid              String   @unique @default(uuid())
+  organisation_uuid String
+  user_uuid         String?
+  oauth_client_id   String?
+  tool_name         String
+  http_method       String
+  path              String
+  status_code       Int?
+  duration_ms       Int?
+  error_message     String?
+  created_at        DateTime @default(now())
+
+  organisation Organisation @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+
+  @@index([organisation_uuid, created_at])
+  @@index([oauth_client_id])
+  @@index([tool_name])
+  @@map("mcp_tool_invocation_logs")
+}
+
+enum OAuthConnectionStatus {
+  ACTIVE
+  REVOKED
 }

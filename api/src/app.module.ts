@@ -55,10 +55,16 @@ import { MxToolboxModule } from './modules/mxtoolbox/mxtoolbox.module';
 import { OpenAiBatchJobsModule } from './modules/openai-batch-jobs/openai-batch-jobs.module';
 import { ThreadsModule } from './modules/threads/threads.module';
 import { SidebarFavoritesModule } from './modules/sidebar-favorites/sidebar-favorites.module';
+import { OpenApiDocumentModule } from './core/openapi/openapi-document.module';
+import { OAuthModule } from './modules/oauth/oauth.module';
+import { McpModule } from './modules/mcp/mcp.module';
 
 @Module({
   imports: [
     ConfigModule,
+    OpenApiDocumentModule,
+    OAuthModule,
+    McpModule,
     MailModule,
     OrganisationsModule,
     UsersModule,

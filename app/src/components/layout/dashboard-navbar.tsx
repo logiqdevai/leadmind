@@ -21,6 +21,7 @@ const pageTitles: Record<string, string> = {
   [Routes.dashboard.settings_usage]: "Usage",
   [Routes.dashboard.settings_organisation]: "Organisation",
   [Routes.dashboard.settings_api_keys]: "API Keys",
+  [Routes.dashboard.settings_connected_apps]: "Connected Apps",
   [Routes.dashboard.settings_activity]: "Activity",
   [Routes.dashboard.lists]: "Lists",
   [Routes.dashboard.send_history]: "Send history",

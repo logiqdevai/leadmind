@@ -30,6 +30,7 @@ export const Routes = {
         settings_organisation: "/dashboard/settings/organisation",
         settings_activity: "/dashboard/settings/activity",
         settings_api_keys: "/dashboard/settings/api-keys",
+        settings_connected_apps: "/dashboard/settings/connected-apps",
         sender_profiles: "/dashboard/sender-profiles",
         integrations: "/dashboard/integrations",
         campaigns: "/dashboard/campaigns",

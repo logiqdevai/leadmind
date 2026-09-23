@@ -44,6 +44,7 @@ const SettingsUsagePage = lazy(() => import("@/pages/dashboard/pages/settings/us
 const SettingsOrganisationPage = lazy(() => import("@/pages/dashboard/pages/settings/organisation"));
 const SettingsActivityPage = lazy(() => import("@/pages/dashboard/pages/settings/activity"));
 const SettingsApiKeysPage = lazy(() => import("@/pages/dashboard/pages/settings/api-keys"));
+const SettingsConnectedAppsPage = lazy(() => import("@/pages/dashboard/pages/settings/connected-apps"));
 const SettingsAccountPage = lazy(() => import("@/pages/dashboard/pages/settings/account"));
 const InviteAcceptPage = lazy(() => import("@/pages/auth/pages/invite"));
 const UnsubscribePage = lazy(() => import("@/pages/unsubscribe"));
@@ -305,6 +306,14 @@ export default function AppRoutes() {
           element={
             <Lazy>
               <SettingsApiKeysPage />
+            </Lazy>
+          }
+        />
+        <Route
+          path="settings/connected-apps"
+          element={
+            <Lazy>
+              <SettingsConnectedAppsPage />
             </Lazy>
           }
         />

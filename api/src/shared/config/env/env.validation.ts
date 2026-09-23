@@ -36,6 +36,10 @@ const EnvSchema = z.object({
     ELASTICSEARCH_API_KEY: z.string().optional(),
     ELASTICSEARCH_USERNAME: z.string().optional(),
     ELASTICSEARCH_PASSWORD: z.string().optional(),
+    OAUTH_ISSUER: z.string().url().optional(),
+    OAUTH_COOKIE_KEYS: z.string().optional(),
+    OAUTH_JWKS: z.string().optional(),
+    MCP_RESOURCE_URL: z.string().url().optional(),
 });
 
 export function validateEnv(config: Record<string, unknown>) {

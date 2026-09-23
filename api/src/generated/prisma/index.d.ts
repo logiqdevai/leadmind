@@ -318,6 +318,21 @@ export type GoalPersonalBest = $Result.DefaultSelection<Prisma.$GoalPersonalBest
  * 
  */
 export type ActivityLog = $Result.DefaultSelection<Prisma.$ActivityLogPayload>
+/**
+ * Model OAuthModel
+ * 
+ */
+export type OAuthModel = $Result.DefaultSelection<Prisma.$OAuthModelPayload>
+/**
+ * Model OAuthConnection
+ * 
+ */
+export type OAuthConnection = $Result.DefaultSelection<Prisma.$OAuthConnectionPayload>
+/**
+ * Model McpToolInvocationLog
+ * 
+ */
+export type McpToolInvocationLog = $Result.DefaultSelection<Prisma.$McpToolInvocationLogPayload>
 
 /**
  * Enums
@@ -905,6 +920,14 @@ export const SendingUsageScopeType: {
 
 export type SendingUsageScopeType = (typeof SendingUsageScopeType)[keyof typeof SendingUsageScopeType]
 
+
+export const OAuthConnectionStatus: {
+  ACTIVE: 'ACTIVE',
+  REVOKED: 'REVOKED'
+};
+
+export type OAuthConnectionStatus = (typeof OAuthConnectionStatus)[keyof typeof OAuthConnectionStatus]
+
 }
 
 export type ThreadOrigin = $Enums.ThreadOrigin
@@ -1114,6 +1137,10 @@ export const CampaignIntegrationStatus: typeof $Enums.CampaignIntegrationStatus
 export type SendingUsageScopeType = $Enums.SendingUsageScopeType
 
 export const SendingUsageScopeType: typeof $Enums.SendingUsageScopeType
+
+export type OAuthConnectionStatus = $Enums.OAuthConnectionStatus
+
+export const OAuthConnectionStatus: typeof $Enums.OAuthConnectionStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -1821,6 +1848,36 @@ export class PrismaClient<
     * ```
     */
   get activityLog(): Prisma.ActivityLogDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.oAuthModel`: Exposes CRUD operations for the **OAuthModel** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more OAuthModels
+    * const oAuthModels = await prisma.oAuthModel.findMany()
+    * ```
+    */
+  get oAuthModel(): Prisma.OAuthModelDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.oAuthConnection`: Exposes CRUD operations for the **OAuthConnection** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more OAuthConnections
+    * const oAuthConnections = await prisma.oAuthConnection.findMany()
+    * ```
+    */
+  get oAuthConnection(): Prisma.OAuthConnectionDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.mcpToolInvocationLog`: Exposes CRUD operations for the **McpToolInvocationLog** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more McpToolInvocationLogs
+    * const mcpToolInvocationLogs = await prisma.mcpToolInvocationLog.findMany()
+    * ```
+    */
+  get mcpToolInvocationLog(): Prisma.McpToolInvocationLogDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -2313,7 +2370,10 @@ export namespace Prisma {
     SendingUsageCounter: 'SendingUsageCounter',
     GoalAchievement: 'GoalAchievement',
     GoalPersonalBest: 'GoalPersonalBest',
-    ActivityLog: 'ActivityLog'
+    ActivityLog: 'ActivityLog',
+    OAuthModel: 'OAuthModel',
+    OAuthConnection: 'OAuthConnection',
+    McpToolInvocationLog: 'McpToolInvocationLog'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -2329,7 +2389,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "organisation" | "organisationMember" | "organisationInvitation" | "apiKey" | "filter" | "savedContactFilter" | "sidebarFavorite" | "scoringInstruction" | "filterScoringInstruction" | "rawLead" | "lead" | "leadEnrichment" | "contact" | "contactInfo" | "contactFilter" | "contactEnrichment" | "contactScore" | "contactList" | "contactListMember" | "contactTag" | "interaction" | "outreachMessage" | "messageThread" | "outreachSequence" | "outreachSequenceStep" | "sequenceEnrollment" | "filterJob" | "bulkJob" | "websiteScrapeRequest" | "senderProfile" | "messageTemplate" | "marketingCampaign" | "marketingCampaignContact" | "openAiBatchJob" | "integration" | "integrationAccount" | "integrationKey" | "integrationAccountDomain" | "mailTesterTest" | "mxToolboxCheck" | "reminder" | "form" | "formField" | "formCompletion" | "formCompletionValue" | "contactAudienceAnalysis" | "aiUsageLog" | "apifyUsageLog" | "messagingGoal" | "emailSendLimit" | "sendingPolicy" | "sendingPolicyStage" | "campaignIntegration" | "campaignIntegrationState" | "sendingUsageCounter" | "goalAchievement" | "goalPersonalBest" | "activityLog"
+      modelProps: "user" | "organisation" | "organisationMember" | "organisationInvitation" | "apiKey" | "filter" | "savedContactFilter" | "sidebarFavorite" | "scoringInstruction" | "filterScoringInstruction" | "rawLead" | "lead" | "leadEnrichment" | "contact" | "contactInfo" | "contactFilter" | "contactEnrichment" | "contactScore" | "contactList" | "contactListMember" | "contactTag" | "interaction" | "outreachMessage" | "messageThread" | "outreachSequence" | "outreachSequenceStep" | "sequenceEnrollment" | "filterJob" | "bulkJob" | "websiteScrapeRequest" | "senderProfile" | "messageTemplate" | "marketingCampaign" | "marketingCampaignContact" | "openAiBatchJob" | "integration" | "integrationAccount" | "integrationKey" | "integrationAccountDomain" | "mailTesterTest" | "mxToolboxCheck" | "reminder" | "form" | "formField" | "formCompletion" | "formCompletionValue" | "contactAudienceAnalysis" | "aiUsageLog" | "apifyUsageLog" | "messagingGoal" | "emailSendLimit" | "sendingPolicy" | "sendingPolicyStage" | "campaignIntegration" | "campaignIntegrationState" | "sendingUsageCounter" | "goalAchievement" | "goalPersonalBest" | "activityLog" | "oAuthModel" | "oAuthConnection" | "mcpToolInvocationLog"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -6699,6 +6759,228 @@ export namespace Prisma {
           }
         }
       }
+      OAuthModel: {
+        payload: Prisma.$OAuthModelPayload<ExtArgs>
+        fields: Prisma.OAuthModelFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.OAuthModelFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OAuthModelPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.OAuthModelFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OAuthModelPayload>
+          }
+          findFirst: {
+            args: Prisma.OAuthModelFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OAuthModelPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.OAuthModelFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OAuthModelPayload>
+          }
+          findMany: {
+            args: Prisma.OAuthModelFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OAuthModelPayload>[]
+          }
+          create: {
+            args: Prisma.OAuthModelCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OAuthModelPayload>
+          }
+          createMany: {
+            args: Prisma.OAuthModelCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.OAuthModelCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OAuthModelPayload>[]
+          }
+          delete: {
+            args: Prisma.OAuthModelDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OAuthModelPayload>
+          }
+          update: {
+            args: Prisma.OAuthModelUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OAuthModelPayload>
+          }
+          deleteMany: {
+            args: Prisma.OAuthModelDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.OAuthModelUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.OAuthModelUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OAuthModelPayload>[]
+          }
+          upsert: {
+            args: Prisma.OAuthModelUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OAuthModelPayload>
+          }
+          aggregate: {
+            args: Prisma.OAuthModelAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateOAuthModel>
+          }
+          groupBy: {
+            args: Prisma.OAuthModelGroupByArgs<ExtArgs>
+            result: $Utils.Optional<OAuthModelGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.OAuthModelCountArgs<ExtArgs>
+            result: $Utils.Optional<OAuthModelCountAggregateOutputType> | number
+          }
+        }
+      }
+      OAuthConnection: {
+        payload: Prisma.$OAuthConnectionPayload<ExtArgs>
+        fields: Prisma.OAuthConnectionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.OAuthConnectionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OAuthConnectionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.OAuthConnectionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OAuthConnectionPayload>
+          }
+          findFirst: {
+            args: Prisma.OAuthConnectionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OAuthConnectionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.OAuthConnectionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OAuthConnectionPayload>
+          }
+          findMany: {
+            args: Prisma.OAuthConnectionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OAuthConnectionPayload>[]
+          }
+          create: {
+            args: Prisma.OAuthConnectionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OAuthConnectionPayload>
+          }
+          createMany: {
+            args: Prisma.OAuthConnectionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.OAuthConnectionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OAuthConnectionPayload>[]
+          }
+          delete: {
+            args: Prisma.OAuthConnectionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OAuthConnectionPayload>
+          }
+          update: {
+            args: Prisma.OAuthConnectionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OAuthConnectionPayload>
+          }
+          deleteMany: {
+            args: Prisma.OAuthConnectionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.OAuthConnectionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.OAuthConnectionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OAuthConnectionPayload>[]
+          }
+          upsert: {
+            args: Prisma.OAuthConnectionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OAuthConnectionPayload>
+          }
+          aggregate: {
+            args: Prisma.OAuthConnectionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateOAuthConnection>
+          }
+          groupBy: {
+            args: Prisma.OAuthConnectionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<OAuthConnectionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.OAuthConnectionCountArgs<ExtArgs>
+            result: $Utils.Optional<OAuthConnectionCountAggregateOutputType> | number
+          }
+        }
+      }
+      McpToolInvocationLog: {
+        payload: Prisma.$McpToolInvocationLogPayload<ExtArgs>
+        fields: Prisma.McpToolInvocationLogFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.McpToolInvocationLogFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$McpToolInvocationLogPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.McpToolInvocationLogFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$McpToolInvocationLogPayload>
+          }
+          findFirst: {
+            args: Prisma.McpToolInvocationLogFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$McpToolInvocationLogPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.McpToolInvocationLogFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$McpToolInvocationLogPayload>
+          }
+          findMany: {
+            args: Prisma.McpToolInvocationLogFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$McpToolInvocationLogPayload>[]
+          }
+          create: {
+            args: Prisma.McpToolInvocationLogCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$McpToolInvocationLogPayload>
+          }
+          createMany: {
+            args: Prisma.McpToolInvocationLogCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.McpToolInvocationLogCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$McpToolInvocationLogPayload>[]
+          }
+          delete: {
+            args: Prisma.McpToolInvocationLogDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$McpToolInvocationLogPayload>
+          }
+          update: {
+            args: Prisma.McpToolInvocationLogUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$McpToolInvocationLogPayload>
+          }
+          deleteMany: {
+            args: Prisma.McpToolInvocationLogDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.McpToolInvocationLogUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.McpToolInvocationLogUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$McpToolInvocationLogPayload>[]
+          }
+          upsert: {
+            args: Prisma.McpToolInvocationLogUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$McpToolInvocationLogPayload>
+          }
+          aggregate: {
+            args: Prisma.McpToolInvocationLogAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMcpToolInvocationLog>
+          }
+          groupBy: {
+            args: Prisma.McpToolInvocationLogGroupByArgs<ExtArgs>
+            result: $Utils.Optional<McpToolInvocationLogGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.McpToolInvocationLogCountArgs<ExtArgs>
+            result: $Utils.Optional<McpToolInvocationLogCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -6866,6 +7148,9 @@ export namespace Prisma {
     goalAchievement?: GoalAchievementOmit
     goalPersonalBest?: GoalPersonalBestOmit
     activityLog?: ActivityLogOmit
+    oAuthModel?: OAuthModelOmit
+    oAuthConnection?: OAuthConnectionOmit
+    mcpToolInvocationLog?: McpToolInvocationLogOmit
   }
 
   /* Types for Logging */
@@ -6958,6 +7243,7 @@ export namespace Prisma {
     openai_batch_jobs_created: number
     sidebar_favorites: number
     api_keys_created: number
+    oauth_connections_granted: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6973,6 +7259,7 @@ export namespace Prisma {
     openai_batch_jobs_created?: boolean | UserCountOutputTypeCountOpenai_batch_jobs_createdArgs
     sidebar_favorites?: boolean | UserCountOutputTypeCountSidebar_favoritesArgs
     api_keys_created?: boolean | UserCountOutputTypeCountApi_keys_createdArgs
+    oauth_connections_granted?: boolean | UserCountOutputTypeCountOauth_connections_grantedArgs
   }
 
   // Custom InputTypes
@@ -7070,6 +7357,13 @@ export namespace Prisma {
     where?: ApiKeyWhereInput
   }
 
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountOauth_connections_grantedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OAuthConnectionWhereInput
+  }
+
 
   /**
    * Count Type OrganisationCountOutputType
@@ -7108,6 +7402,8 @@ export namespace Prisma {
     mail_tester_tests: number
     mxtoolbox_checks: number
     api_keys: number
+    oauth_connections: number
+    mcp_tool_invocation_logs: number
   }
 
   export type OrganisationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7143,6 +7439,8 @@ export namespace Prisma {
     mail_tester_tests?: boolean | OrganisationCountOutputTypeCountMail_tester_testsArgs
     mxtoolbox_checks?: boolean | OrganisationCountOutputTypeCountMxtoolbox_checksArgs
     api_keys?: boolean | OrganisationCountOutputTypeCountApi_keysArgs
+    oauth_connections?: boolean | OrganisationCountOutputTypeCountOauth_connectionsArgs
+    mcp_tool_invocation_logs?: boolean | OrganisationCountOutputTypeCountMcp_tool_invocation_logsArgs
   }
 
   // Custom InputTypes
@@ -7378,6 +7676,20 @@ export namespace Prisma {
    */
   export type OrganisationCountOutputTypeCountApi_keysArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ApiKeyWhereInput
+  }
+
+  /**
+   * OrganisationCountOutputType without action
+   */
+  export type OrganisationCountOutputTypeCountOauth_connectionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OAuthConnectionWhereInput
+  }
+
+  /**
+   * OrganisationCountOutputType without action
+   */
+  export type OrganisationCountOutputTypeCountMcp_tool_invocation_logsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: McpToolInvocationLogWhereInput
   }
 
 
@@ -8633,6 +8945,7 @@ export namespace Prisma {
     openai_batch_jobs_created?: boolean | User$openai_batch_jobs_createdArgs<ExtArgs>
     sidebar_favorites?: boolean | User$sidebar_favoritesArgs<ExtArgs>
     api_keys_created?: boolean | User$api_keys_createdArgs<ExtArgs>
+    oauth_connections_granted?: boolean | User$oauth_connections_grantedArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -8686,6 +8999,7 @@ export namespace Prisma {
     openai_batch_jobs_created?: boolean | User$openai_batch_jobs_createdArgs<ExtArgs>
     sidebar_favorites?: boolean | User$sidebar_favoritesArgs<ExtArgs>
     api_keys_created?: boolean | User$api_keys_createdArgs<ExtArgs>
+    oauth_connections_granted?: boolean | User$oauth_connections_grantedArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -8706,6 +9020,7 @@ export namespace Prisma {
       openai_batch_jobs_created: Prisma.$OpenAiBatchJobPayload<ExtArgs>[]
       sidebar_favorites: Prisma.$SidebarFavoritePayload<ExtArgs>[]
       api_keys_created: Prisma.$ApiKeyPayload<ExtArgs>[]
+      oauth_connections_granted: Prisma.$OAuthConnectionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -9123,6 +9438,7 @@ export namespace Prisma {
     openai_batch_jobs_created<T extends User$openai_batch_jobs_createdArgs<ExtArgs> = {}>(args?: Subset<T, User$openai_batch_jobs_createdArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OpenAiBatchJobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     sidebar_favorites<T extends User$sidebar_favoritesArgs<ExtArgs> = {}>(args?: Subset<T, User$sidebar_favoritesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SidebarFavoritePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     api_keys_created<T extends User$api_keys_createdArgs<ExtArgs> = {}>(args?: Subset<T, User$api_keys_createdArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApiKeyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    oauth_connections_granted<T extends User$oauth_connections_grantedArgs<ExtArgs> = {}>(args?: Subset<T, User$oauth_connections_grantedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OAuthConnectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9837,6 +10153,30 @@ export namespace Prisma {
   }
 
   /**
+   * User.oauth_connections_granted
+   */
+  export type User$oauth_connections_grantedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OAuthConnection
+     */
+    select?: OAuthConnectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OAuthConnection
+     */
+    omit?: OAuthConnectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OAuthConnectionInclude<ExtArgs> | null
+    where?: OAuthConnectionWhereInput
+    orderBy?: OAuthConnectionOrderByWithRelationInput | OAuthConnectionOrderByWithRelationInput[]
+    cursor?: OAuthConnectionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: OAuthConnectionScalarFieldEnum | OAuthConnectionScalarFieldEnum[]
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -10117,6 +10457,8 @@ export namespace Prisma {
     mail_tester_tests?: boolean | Organisation$mail_tester_testsArgs<ExtArgs>
     mxtoolbox_checks?: boolean | Organisation$mxtoolbox_checksArgs<ExtArgs>
     api_keys?: boolean | Organisation$api_keysArgs<ExtArgs>
+    oauth_connections?: boolean | Organisation$oauth_connectionsArgs<ExtArgs>
+    mcp_tool_invocation_logs?: boolean | Organisation$mcp_tool_invocation_logsArgs<ExtArgs>
     _count?: boolean | OrganisationCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["organisation"]>
 
@@ -10190,6 +10532,8 @@ export namespace Prisma {
     mail_tester_tests?: boolean | Organisation$mail_tester_testsArgs<ExtArgs>
     mxtoolbox_checks?: boolean | Organisation$mxtoolbox_checksArgs<ExtArgs>
     api_keys?: boolean | Organisation$api_keysArgs<ExtArgs>
+    oauth_connections?: boolean | Organisation$oauth_connectionsArgs<ExtArgs>
+    mcp_tool_invocation_logs?: boolean | Organisation$mcp_tool_invocation_logsArgs<ExtArgs>
     _count?: boolean | OrganisationCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type OrganisationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -10230,6 +10574,8 @@ export namespace Prisma {
       mail_tester_tests: Prisma.$MailTesterTestPayload<ExtArgs>[]
       mxtoolbox_checks: Prisma.$MxToolboxCheckPayload<ExtArgs>[]
       api_keys: Prisma.$ApiKeyPayload<ExtArgs>[]
+      oauth_connections: Prisma.$OAuthConnectionPayload<ExtArgs>[]
+      mcp_tool_invocation_logs: Prisma.$McpToolInvocationLogPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -10667,6 +11013,8 @@ export namespace Prisma {
     mail_tester_tests<T extends Organisation$mail_tester_testsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$mail_tester_testsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MailTesterTestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     mxtoolbox_checks<T extends Organisation$mxtoolbox_checksArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$mxtoolbox_checksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MxToolboxCheckPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     api_keys<T extends Organisation$api_keysArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$api_keysArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApiKeyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    oauth_connections<T extends Organisation$oauth_connectionsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$oauth_connectionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OAuthConnectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    mcp_tool_invocation_logs<T extends Organisation$mcp_tool_invocation_logsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$mcp_tool_invocation_logsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$McpToolInvocationLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -11858,6 +12206,54 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ApiKeyScalarFieldEnum | ApiKeyScalarFieldEnum[]
+  }
+
+  /**
+   * Organisation.oauth_connections
+   */
+  export type Organisation$oauth_connectionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OAuthConnection
+     */
+    select?: OAuthConnectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OAuthConnection
+     */
+    omit?: OAuthConnectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OAuthConnectionInclude<ExtArgs> | null
+    where?: OAuthConnectionWhereInput
+    orderBy?: OAuthConnectionOrderByWithRelationInput | OAuthConnectionOrderByWithRelationInput[]
+    cursor?: OAuthConnectionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: OAuthConnectionScalarFieldEnum | OAuthConnectionScalarFieldEnum[]
+  }
+
+  /**
+   * Organisation.mcp_tool_invocation_logs
+   */
+  export type Organisation$mcp_tool_invocation_logsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the McpToolInvocationLog
+     */
+    select?: McpToolInvocationLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the McpToolInvocationLog
+     */
+    omit?: McpToolInvocationLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: McpToolInvocationLogInclude<ExtArgs> | null
+    where?: McpToolInvocationLogWhereInput
+    orderBy?: McpToolInvocationLogOrderByWithRelationInput | McpToolInvocationLogOrderByWithRelationInput[]
+    cursor?: McpToolInvocationLogWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: McpToolInvocationLogScalarFieldEnum | McpToolInvocationLogScalarFieldEnum[]
   }
 
   /**
@@ -82323,6 +82719,3517 @@ export namespace Prisma {
 
 
   /**
+   * Model OAuthModel
+   */
+
+  export type AggregateOAuthModel = {
+    _count: OAuthModelCountAggregateOutputType | null
+    _avg: OAuthModelAvgAggregateOutputType | null
+    _sum: OAuthModelSumAggregateOutputType | null
+    _min: OAuthModelMinAggregateOutputType | null
+    _max: OAuthModelMaxAggregateOutputType | null
+  }
+
+  export type OAuthModelAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type OAuthModelSumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type OAuthModelMinAggregateOutputType = {
+    id: number | null
+    model_name: string | null
+    key: string | null
+    grant_id: string | null
+    user_code: string | null
+    uid: string | null
+    expires_at: Date | null
+    consumed_at: Date | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type OAuthModelMaxAggregateOutputType = {
+    id: number | null
+    model_name: string | null
+    key: string | null
+    grant_id: string | null
+    user_code: string | null
+    uid: string | null
+    expires_at: Date | null
+    consumed_at: Date | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type OAuthModelCountAggregateOutputType = {
+    id: number
+    model_name: number
+    key: number
+    grant_id: number
+    user_code: number
+    uid: number
+    payload: number
+    expires_at: number
+    consumed_at: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type OAuthModelAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type OAuthModelSumAggregateInputType = {
+    id?: true
+  }
+
+  export type OAuthModelMinAggregateInputType = {
+    id?: true
+    model_name?: true
+    key?: true
+    grant_id?: true
+    user_code?: true
+    uid?: true
+    expires_at?: true
+    consumed_at?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type OAuthModelMaxAggregateInputType = {
+    id?: true
+    model_name?: true
+    key?: true
+    grant_id?: true
+    user_code?: true
+    uid?: true
+    expires_at?: true
+    consumed_at?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type OAuthModelCountAggregateInputType = {
+    id?: true
+    model_name?: true
+    key?: true
+    grant_id?: true
+    user_code?: true
+    uid?: true
+    payload?: true
+    expires_at?: true
+    consumed_at?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type OAuthModelAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which OAuthModel to aggregate.
+     */
+    where?: OAuthModelWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OAuthModels to fetch.
+     */
+    orderBy?: OAuthModelOrderByWithRelationInput | OAuthModelOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: OAuthModelWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OAuthModels from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OAuthModels.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned OAuthModels
+    **/
+    _count?: true | OAuthModelCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: OAuthModelAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: OAuthModelSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: OAuthModelMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: OAuthModelMaxAggregateInputType
+  }
+
+  export type GetOAuthModelAggregateType<T extends OAuthModelAggregateArgs> = {
+        [P in keyof T & keyof AggregateOAuthModel]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateOAuthModel[P]>
+      : GetScalarType<T[P], AggregateOAuthModel[P]>
+  }
+
+
+
+
+  export type OAuthModelGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OAuthModelWhereInput
+    orderBy?: OAuthModelOrderByWithAggregationInput | OAuthModelOrderByWithAggregationInput[]
+    by: OAuthModelScalarFieldEnum[] | OAuthModelScalarFieldEnum
+    having?: OAuthModelScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: OAuthModelCountAggregateInputType | true
+    _avg?: OAuthModelAvgAggregateInputType
+    _sum?: OAuthModelSumAggregateInputType
+    _min?: OAuthModelMinAggregateInputType
+    _max?: OAuthModelMaxAggregateInputType
+  }
+
+  export type OAuthModelGroupByOutputType = {
+    id: number
+    model_name: string
+    key: string
+    grant_id: string | null
+    user_code: string | null
+    uid: string | null
+    payload: JsonValue
+    expires_at: Date | null
+    consumed_at: Date | null
+    created_at: Date
+    updated_at: Date
+    _count: OAuthModelCountAggregateOutputType | null
+    _avg: OAuthModelAvgAggregateOutputType | null
+    _sum: OAuthModelSumAggregateOutputType | null
+    _min: OAuthModelMinAggregateOutputType | null
+    _max: OAuthModelMaxAggregateOutputType | null
+  }
+
+  type GetOAuthModelGroupByPayload<T extends OAuthModelGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<OAuthModelGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof OAuthModelGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], OAuthModelGroupByOutputType[P]>
+            : GetScalarType<T[P], OAuthModelGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type OAuthModelSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    model_name?: boolean
+    key?: boolean
+    grant_id?: boolean
+    user_code?: boolean
+    uid?: boolean
+    payload?: boolean
+    expires_at?: boolean
+    consumed_at?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }, ExtArgs["result"]["oAuthModel"]>
+
+  export type OAuthModelSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    model_name?: boolean
+    key?: boolean
+    grant_id?: boolean
+    user_code?: boolean
+    uid?: boolean
+    payload?: boolean
+    expires_at?: boolean
+    consumed_at?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }, ExtArgs["result"]["oAuthModel"]>
+
+  export type OAuthModelSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    model_name?: boolean
+    key?: boolean
+    grant_id?: boolean
+    user_code?: boolean
+    uid?: boolean
+    payload?: boolean
+    expires_at?: boolean
+    consumed_at?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }, ExtArgs["result"]["oAuthModel"]>
+
+  export type OAuthModelSelectScalar = {
+    id?: boolean
+    model_name?: boolean
+    key?: boolean
+    grant_id?: boolean
+    user_code?: boolean
+    uid?: boolean
+    payload?: boolean
+    expires_at?: boolean
+    consumed_at?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type OAuthModelOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "model_name" | "key" | "grant_id" | "user_code" | "uid" | "payload" | "expires_at" | "consumed_at" | "created_at" | "updated_at", ExtArgs["result"]["oAuthModel"]>
+
+  export type $OAuthModelPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "OAuthModel"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      model_name: string
+      key: string
+      grant_id: string | null
+      user_code: string | null
+      uid: string | null
+      payload: Prisma.JsonValue
+      expires_at: Date | null
+      consumed_at: Date | null
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["oAuthModel"]>
+    composites: {}
+  }
+
+  type OAuthModelGetPayload<S extends boolean | null | undefined | OAuthModelDefaultArgs> = $Result.GetResult<Prisma.$OAuthModelPayload, S>
+
+  type OAuthModelCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<OAuthModelFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: OAuthModelCountAggregateInputType | true
+    }
+
+  export interface OAuthModelDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['OAuthModel'], meta: { name: 'OAuthModel' } }
+    /**
+     * Find zero or one OAuthModel that matches the filter.
+     * @param {OAuthModelFindUniqueArgs} args - Arguments to find a OAuthModel
+     * @example
+     * // Get one OAuthModel
+     * const oAuthModel = await prisma.oAuthModel.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends OAuthModelFindUniqueArgs>(args: SelectSubset<T, OAuthModelFindUniqueArgs<ExtArgs>>): Prisma__OAuthModelClient<$Result.GetResult<Prisma.$OAuthModelPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one OAuthModel that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {OAuthModelFindUniqueOrThrowArgs} args - Arguments to find a OAuthModel
+     * @example
+     * // Get one OAuthModel
+     * const oAuthModel = await prisma.oAuthModel.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends OAuthModelFindUniqueOrThrowArgs>(args: SelectSubset<T, OAuthModelFindUniqueOrThrowArgs<ExtArgs>>): Prisma__OAuthModelClient<$Result.GetResult<Prisma.$OAuthModelPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first OAuthModel that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OAuthModelFindFirstArgs} args - Arguments to find a OAuthModel
+     * @example
+     * // Get one OAuthModel
+     * const oAuthModel = await prisma.oAuthModel.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends OAuthModelFindFirstArgs>(args?: SelectSubset<T, OAuthModelFindFirstArgs<ExtArgs>>): Prisma__OAuthModelClient<$Result.GetResult<Prisma.$OAuthModelPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first OAuthModel that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OAuthModelFindFirstOrThrowArgs} args - Arguments to find a OAuthModel
+     * @example
+     * // Get one OAuthModel
+     * const oAuthModel = await prisma.oAuthModel.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends OAuthModelFindFirstOrThrowArgs>(args?: SelectSubset<T, OAuthModelFindFirstOrThrowArgs<ExtArgs>>): Prisma__OAuthModelClient<$Result.GetResult<Prisma.$OAuthModelPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more OAuthModels that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OAuthModelFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all OAuthModels
+     * const oAuthModels = await prisma.oAuthModel.findMany()
+     * 
+     * // Get first 10 OAuthModels
+     * const oAuthModels = await prisma.oAuthModel.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const oAuthModelWithIdOnly = await prisma.oAuthModel.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends OAuthModelFindManyArgs>(args?: SelectSubset<T, OAuthModelFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OAuthModelPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a OAuthModel.
+     * @param {OAuthModelCreateArgs} args - Arguments to create a OAuthModel.
+     * @example
+     * // Create one OAuthModel
+     * const OAuthModel = await prisma.oAuthModel.create({
+     *   data: {
+     *     // ... data to create a OAuthModel
+     *   }
+     * })
+     * 
+     */
+    create<T extends OAuthModelCreateArgs>(args: SelectSubset<T, OAuthModelCreateArgs<ExtArgs>>): Prisma__OAuthModelClient<$Result.GetResult<Prisma.$OAuthModelPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many OAuthModels.
+     * @param {OAuthModelCreateManyArgs} args - Arguments to create many OAuthModels.
+     * @example
+     * // Create many OAuthModels
+     * const oAuthModel = await prisma.oAuthModel.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends OAuthModelCreateManyArgs>(args?: SelectSubset<T, OAuthModelCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many OAuthModels and returns the data saved in the database.
+     * @param {OAuthModelCreateManyAndReturnArgs} args - Arguments to create many OAuthModels.
+     * @example
+     * // Create many OAuthModels
+     * const oAuthModel = await prisma.oAuthModel.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many OAuthModels and only return the `id`
+     * const oAuthModelWithIdOnly = await prisma.oAuthModel.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends OAuthModelCreateManyAndReturnArgs>(args?: SelectSubset<T, OAuthModelCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OAuthModelPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a OAuthModel.
+     * @param {OAuthModelDeleteArgs} args - Arguments to delete one OAuthModel.
+     * @example
+     * // Delete one OAuthModel
+     * const OAuthModel = await prisma.oAuthModel.delete({
+     *   where: {
+     *     // ... filter to delete one OAuthModel
+     *   }
+     * })
+     * 
+     */
+    delete<T extends OAuthModelDeleteArgs>(args: SelectSubset<T, OAuthModelDeleteArgs<ExtArgs>>): Prisma__OAuthModelClient<$Result.GetResult<Prisma.$OAuthModelPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one OAuthModel.
+     * @param {OAuthModelUpdateArgs} args - Arguments to update one OAuthModel.
+     * @example
+     * // Update one OAuthModel
+     * const oAuthModel = await prisma.oAuthModel.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends OAuthModelUpdateArgs>(args: SelectSubset<T, OAuthModelUpdateArgs<ExtArgs>>): Prisma__OAuthModelClient<$Result.GetResult<Prisma.$OAuthModelPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more OAuthModels.
+     * @param {OAuthModelDeleteManyArgs} args - Arguments to filter OAuthModels to delete.
+     * @example
+     * // Delete a few OAuthModels
+     * const { count } = await prisma.oAuthModel.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends OAuthModelDeleteManyArgs>(args?: SelectSubset<T, OAuthModelDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more OAuthModels.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OAuthModelUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many OAuthModels
+     * const oAuthModel = await prisma.oAuthModel.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends OAuthModelUpdateManyArgs>(args: SelectSubset<T, OAuthModelUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more OAuthModels and returns the data updated in the database.
+     * @param {OAuthModelUpdateManyAndReturnArgs} args - Arguments to update many OAuthModels.
+     * @example
+     * // Update many OAuthModels
+     * const oAuthModel = await prisma.oAuthModel.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more OAuthModels and only return the `id`
+     * const oAuthModelWithIdOnly = await prisma.oAuthModel.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends OAuthModelUpdateManyAndReturnArgs>(args: SelectSubset<T, OAuthModelUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OAuthModelPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one OAuthModel.
+     * @param {OAuthModelUpsertArgs} args - Arguments to update or create a OAuthModel.
+     * @example
+     * // Update or create a OAuthModel
+     * const oAuthModel = await prisma.oAuthModel.upsert({
+     *   create: {
+     *     // ... data to create a OAuthModel
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the OAuthModel we want to update
+     *   }
+     * })
+     */
+    upsert<T extends OAuthModelUpsertArgs>(args: SelectSubset<T, OAuthModelUpsertArgs<ExtArgs>>): Prisma__OAuthModelClient<$Result.GetResult<Prisma.$OAuthModelPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of OAuthModels.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OAuthModelCountArgs} args - Arguments to filter OAuthModels to count.
+     * @example
+     * // Count the number of OAuthModels
+     * const count = await prisma.oAuthModel.count({
+     *   where: {
+     *     // ... the filter for the OAuthModels we want to count
+     *   }
+     * })
+    **/
+    count<T extends OAuthModelCountArgs>(
+      args?: Subset<T, OAuthModelCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], OAuthModelCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a OAuthModel.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OAuthModelAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends OAuthModelAggregateArgs>(args: Subset<T, OAuthModelAggregateArgs>): Prisma.PrismaPromise<GetOAuthModelAggregateType<T>>
+
+    /**
+     * Group by OAuthModel.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OAuthModelGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends OAuthModelGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: OAuthModelGroupByArgs['orderBy'] }
+        : { orderBy?: OAuthModelGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, OAuthModelGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetOAuthModelGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the OAuthModel model
+   */
+  readonly fields: OAuthModelFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for OAuthModel.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__OAuthModelClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the OAuthModel model
+   */
+  interface OAuthModelFieldRefs {
+    readonly id: FieldRef<"OAuthModel", 'Int'>
+    readonly model_name: FieldRef<"OAuthModel", 'String'>
+    readonly key: FieldRef<"OAuthModel", 'String'>
+    readonly grant_id: FieldRef<"OAuthModel", 'String'>
+    readonly user_code: FieldRef<"OAuthModel", 'String'>
+    readonly uid: FieldRef<"OAuthModel", 'String'>
+    readonly payload: FieldRef<"OAuthModel", 'Json'>
+    readonly expires_at: FieldRef<"OAuthModel", 'DateTime'>
+    readonly consumed_at: FieldRef<"OAuthModel", 'DateTime'>
+    readonly created_at: FieldRef<"OAuthModel", 'DateTime'>
+    readonly updated_at: FieldRef<"OAuthModel", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * OAuthModel findUnique
+   */
+  export type OAuthModelFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OAuthModel
+     */
+    select?: OAuthModelSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OAuthModel
+     */
+    omit?: OAuthModelOmit<ExtArgs> | null
+    /**
+     * Filter, which OAuthModel to fetch.
+     */
+    where: OAuthModelWhereUniqueInput
+  }
+
+  /**
+   * OAuthModel findUniqueOrThrow
+   */
+  export type OAuthModelFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OAuthModel
+     */
+    select?: OAuthModelSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OAuthModel
+     */
+    omit?: OAuthModelOmit<ExtArgs> | null
+    /**
+     * Filter, which OAuthModel to fetch.
+     */
+    where: OAuthModelWhereUniqueInput
+  }
+
+  /**
+   * OAuthModel findFirst
+   */
+  export type OAuthModelFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OAuthModel
+     */
+    select?: OAuthModelSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OAuthModel
+     */
+    omit?: OAuthModelOmit<ExtArgs> | null
+    /**
+     * Filter, which OAuthModel to fetch.
+     */
+    where?: OAuthModelWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OAuthModels to fetch.
+     */
+    orderBy?: OAuthModelOrderByWithRelationInput | OAuthModelOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for OAuthModels.
+     */
+    cursor?: OAuthModelWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OAuthModels from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OAuthModels.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of OAuthModels.
+     */
+    distinct?: OAuthModelScalarFieldEnum | OAuthModelScalarFieldEnum[]
+  }
+
+  /**
+   * OAuthModel findFirstOrThrow
+   */
+  export type OAuthModelFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OAuthModel
+     */
+    select?: OAuthModelSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OAuthModel
+     */
+    omit?: OAuthModelOmit<ExtArgs> | null
+    /**
+     * Filter, which OAuthModel to fetch.
+     */
+    where?: OAuthModelWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OAuthModels to fetch.
+     */
+    orderBy?: OAuthModelOrderByWithRelationInput | OAuthModelOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for OAuthModels.
+     */
+    cursor?: OAuthModelWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OAuthModels from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OAuthModels.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of OAuthModels.
+     */
+    distinct?: OAuthModelScalarFieldEnum | OAuthModelScalarFieldEnum[]
+  }
+
+  /**
+   * OAuthModel findMany
+   */
+  export type OAuthModelFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OAuthModel
+     */
+    select?: OAuthModelSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OAuthModel
+     */
+    omit?: OAuthModelOmit<ExtArgs> | null
+    /**
+     * Filter, which OAuthModels to fetch.
+     */
+    where?: OAuthModelWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OAuthModels to fetch.
+     */
+    orderBy?: OAuthModelOrderByWithRelationInput | OAuthModelOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing OAuthModels.
+     */
+    cursor?: OAuthModelWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OAuthModels from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OAuthModels.
+     */
+    skip?: number
+    distinct?: OAuthModelScalarFieldEnum | OAuthModelScalarFieldEnum[]
+  }
+
+  /**
+   * OAuthModel create
+   */
+  export type OAuthModelCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OAuthModel
+     */
+    select?: OAuthModelSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OAuthModel
+     */
+    omit?: OAuthModelOmit<ExtArgs> | null
+    /**
+     * The data needed to create a OAuthModel.
+     */
+    data: XOR<OAuthModelCreateInput, OAuthModelUncheckedCreateInput>
+  }
+
+  /**
+   * OAuthModel createMany
+   */
+  export type OAuthModelCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many OAuthModels.
+     */
+    data: OAuthModelCreateManyInput | OAuthModelCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * OAuthModel createManyAndReturn
+   */
+  export type OAuthModelCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OAuthModel
+     */
+    select?: OAuthModelSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the OAuthModel
+     */
+    omit?: OAuthModelOmit<ExtArgs> | null
+    /**
+     * The data used to create many OAuthModels.
+     */
+    data: OAuthModelCreateManyInput | OAuthModelCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * OAuthModel update
+   */
+  export type OAuthModelUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OAuthModel
+     */
+    select?: OAuthModelSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OAuthModel
+     */
+    omit?: OAuthModelOmit<ExtArgs> | null
+    /**
+     * The data needed to update a OAuthModel.
+     */
+    data: XOR<OAuthModelUpdateInput, OAuthModelUncheckedUpdateInput>
+    /**
+     * Choose, which OAuthModel to update.
+     */
+    where: OAuthModelWhereUniqueInput
+  }
+
+  /**
+   * OAuthModel updateMany
+   */
+  export type OAuthModelUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update OAuthModels.
+     */
+    data: XOR<OAuthModelUpdateManyMutationInput, OAuthModelUncheckedUpdateManyInput>
+    /**
+     * Filter which OAuthModels to update
+     */
+    where?: OAuthModelWhereInput
+    /**
+     * Limit how many OAuthModels to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * OAuthModel updateManyAndReturn
+   */
+  export type OAuthModelUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OAuthModel
+     */
+    select?: OAuthModelSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the OAuthModel
+     */
+    omit?: OAuthModelOmit<ExtArgs> | null
+    /**
+     * The data used to update OAuthModels.
+     */
+    data: XOR<OAuthModelUpdateManyMutationInput, OAuthModelUncheckedUpdateManyInput>
+    /**
+     * Filter which OAuthModels to update
+     */
+    where?: OAuthModelWhereInput
+    /**
+     * Limit how many OAuthModels to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * OAuthModel upsert
+   */
+  export type OAuthModelUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OAuthModel
+     */
+    select?: OAuthModelSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OAuthModel
+     */
+    omit?: OAuthModelOmit<ExtArgs> | null
+    /**
+     * The filter to search for the OAuthModel to update in case it exists.
+     */
+    where: OAuthModelWhereUniqueInput
+    /**
+     * In case the OAuthModel found by the `where` argument doesn't exist, create a new OAuthModel with this data.
+     */
+    create: XOR<OAuthModelCreateInput, OAuthModelUncheckedCreateInput>
+    /**
+     * In case the OAuthModel was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<OAuthModelUpdateInput, OAuthModelUncheckedUpdateInput>
+  }
+
+  /**
+   * OAuthModel delete
+   */
+  export type OAuthModelDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OAuthModel
+     */
+    select?: OAuthModelSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OAuthModel
+     */
+    omit?: OAuthModelOmit<ExtArgs> | null
+    /**
+     * Filter which OAuthModel to delete.
+     */
+    where: OAuthModelWhereUniqueInput
+  }
+
+  /**
+   * OAuthModel deleteMany
+   */
+  export type OAuthModelDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which OAuthModels to delete
+     */
+    where?: OAuthModelWhereInput
+    /**
+     * Limit how many OAuthModels to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * OAuthModel without action
+   */
+  export type OAuthModelDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OAuthModel
+     */
+    select?: OAuthModelSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OAuthModel
+     */
+    omit?: OAuthModelOmit<ExtArgs> | null
+  }
+
+
+  /**
+   * Model OAuthConnection
+   */
+
+  export type AggregateOAuthConnection = {
+    _count: OAuthConnectionCountAggregateOutputType | null
+    _avg: OAuthConnectionAvgAggregateOutputType | null
+    _sum: OAuthConnectionSumAggregateOutputType | null
+    _min: OAuthConnectionMinAggregateOutputType | null
+    _max: OAuthConnectionMaxAggregateOutputType | null
+  }
+
+  export type OAuthConnectionAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type OAuthConnectionSumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type OAuthConnectionMinAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    organisation_uuid: string | null
+    granted_by_user_uuid: string | null
+    oauth_client_id: string | null
+    grant_id: string | null
+    client_name: string | null
+    client_uri: string | null
+    scope: string | null
+    status: $Enums.OAuthConnectionStatus | null
+    last_used_at: Date | null
+    revoked_at: Date | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type OAuthConnectionMaxAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    organisation_uuid: string | null
+    granted_by_user_uuid: string | null
+    oauth_client_id: string | null
+    grant_id: string | null
+    client_name: string | null
+    client_uri: string | null
+    scope: string | null
+    status: $Enums.OAuthConnectionStatus | null
+    last_used_at: Date | null
+    revoked_at: Date | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type OAuthConnectionCountAggregateOutputType = {
+    id: number
+    uuid: number
+    organisation_uuid: number
+    granted_by_user_uuid: number
+    oauth_client_id: number
+    grant_id: number
+    client_name: number
+    client_uri: number
+    scope: number
+    status: number
+    last_used_at: number
+    revoked_at: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type OAuthConnectionAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type OAuthConnectionSumAggregateInputType = {
+    id?: true
+  }
+
+  export type OAuthConnectionMinAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    granted_by_user_uuid?: true
+    oauth_client_id?: true
+    grant_id?: true
+    client_name?: true
+    client_uri?: true
+    scope?: true
+    status?: true
+    last_used_at?: true
+    revoked_at?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type OAuthConnectionMaxAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    granted_by_user_uuid?: true
+    oauth_client_id?: true
+    grant_id?: true
+    client_name?: true
+    client_uri?: true
+    scope?: true
+    status?: true
+    last_used_at?: true
+    revoked_at?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type OAuthConnectionCountAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    granted_by_user_uuid?: true
+    oauth_client_id?: true
+    grant_id?: true
+    client_name?: true
+    client_uri?: true
+    scope?: true
+    status?: true
+    last_used_at?: true
+    revoked_at?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type OAuthConnectionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which OAuthConnection to aggregate.
+     */
+    where?: OAuthConnectionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OAuthConnections to fetch.
+     */
+    orderBy?: OAuthConnectionOrderByWithRelationInput | OAuthConnectionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: OAuthConnectionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OAuthConnections from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OAuthConnections.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned OAuthConnections
+    **/
+    _count?: true | OAuthConnectionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: OAuthConnectionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: OAuthConnectionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: OAuthConnectionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: OAuthConnectionMaxAggregateInputType
+  }
+
+  export type GetOAuthConnectionAggregateType<T extends OAuthConnectionAggregateArgs> = {
+        [P in keyof T & keyof AggregateOAuthConnection]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateOAuthConnection[P]>
+      : GetScalarType<T[P], AggregateOAuthConnection[P]>
+  }
+
+
+
+
+  export type OAuthConnectionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OAuthConnectionWhereInput
+    orderBy?: OAuthConnectionOrderByWithAggregationInput | OAuthConnectionOrderByWithAggregationInput[]
+    by: OAuthConnectionScalarFieldEnum[] | OAuthConnectionScalarFieldEnum
+    having?: OAuthConnectionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: OAuthConnectionCountAggregateInputType | true
+    _avg?: OAuthConnectionAvgAggregateInputType
+    _sum?: OAuthConnectionSumAggregateInputType
+    _min?: OAuthConnectionMinAggregateInputType
+    _max?: OAuthConnectionMaxAggregateInputType
+  }
+
+  export type OAuthConnectionGroupByOutputType = {
+    id: number
+    uuid: string
+    organisation_uuid: string
+    granted_by_user_uuid: string
+    oauth_client_id: string
+    grant_id: string
+    client_name: string | null
+    client_uri: string | null
+    scope: string
+    status: $Enums.OAuthConnectionStatus
+    last_used_at: Date | null
+    revoked_at: Date | null
+    created_at: Date
+    updated_at: Date
+    _count: OAuthConnectionCountAggregateOutputType | null
+    _avg: OAuthConnectionAvgAggregateOutputType | null
+    _sum: OAuthConnectionSumAggregateOutputType | null
+    _min: OAuthConnectionMinAggregateOutputType | null
+    _max: OAuthConnectionMaxAggregateOutputType | null
+  }
+
+  type GetOAuthConnectionGroupByPayload<T extends OAuthConnectionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<OAuthConnectionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof OAuthConnectionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], OAuthConnectionGroupByOutputType[P]>
+            : GetScalarType<T[P], OAuthConnectionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type OAuthConnectionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    granted_by_user_uuid?: boolean
+    oauth_client_id?: boolean
+    grant_id?: boolean
+    client_name?: boolean
+    client_uri?: boolean
+    scope?: boolean
+    status?: boolean
+    last_used_at?: boolean
+    revoked_at?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    granted_by?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["oAuthConnection"]>
+
+  export type OAuthConnectionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    granted_by_user_uuid?: boolean
+    oauth_client_id?: boolean
+    grant_id?: boolean
+    client_name?: boolean
+    client_uri?: boolean
+    scope?: boolean
+    status?: boolean
+    last_used_at?: boolean
+    revoked_at?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    granted_by?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["oAuthConnection"]>
+
+  export type OAuthConnectionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    granted_by_user_uuid?: boolean
+    oauth_client_id?: boolean
+    grant_id?: boolean
+    client_name?: boolean
+    client_uri?: boolean
+    scope?: boolean
+    status?: boolean
+    last_used_at?: boolean
+    revoked_at?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    granted_by?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["oAuthConnection"]>
+
+  export type OAuthConnectionSelectScalar = {
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    granted_by_user_uuid?: boolean
+    oauth_client_id?: boolean
+    grant_id?: boolean
+    client_name?: boolean
+    client_uri?: boolean
+    scope?: boolean
+    status?: boolean
+    last_used_at?: boolean
+    revoked_at?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type OAuthConnectionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "granted_by_user_uuid" | "oauth_client_id" | "grant_id" | "client_name" | "client_uri" | "scope" | "status" | "last_used_at" | "revoked_at" | "created_at" | "updated_at", ExtArgs["result"]["oAuthConnection"]>
+  export type OAuthConnectionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    granted_by?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type OAuthConnectionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    granted_by?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type OAuthConnectionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    granted_by?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $OAuthConnectionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "OAuthConnection"
+    objects: {
+      organisation: Prisma.$OrganisationPayload<ExtArgs>
+      granted_by: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      uuid: string
+      organisation_uuid: string
+      granted_by_user_uuid: string
+      oauth_client_id: string
+      grant_id: string
+      client_name: string | null
+      client_uri: string | null
+      scope: string
+      status: $Enums.OAuthConnectionStatus
+      last_used_at: Date | null
+      revoked_at: Date | null
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["oAuthConnection"]>
+    composites: {}
+  }
+
+  type OAuthConnectionGetPayload<S extends boolean | null | undefined | OAuthConnectionDefaultArgs> = $Result.GetResult<Prisma.$OAuthConnectionPayload, S>
+
+  type OAuthConnectionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<OAuthConnectionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: OAuthConnectionCountAggregateInputType | true
+    }
+
+  export interface OAuthConnectionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['OAuthConnection'], meta: { name: 'OAuthConnection' } }
+    /**
+     * Find zero or one OAuthConnection that matches the filter.
+     * @param {OAuthConnectionFindUniqueArgs} args - Arguments to find a OAuthConnection
+     * @example
+     * // Get one OAuthConnection
+     * const oAuthConnection = await prisma.oAuthConnection.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends OAuthConnectionFindUniqueArgs>(args: SelectSubset<T, OAuthConnectionFindUniqueArgs<ExtArgs>>): Prisma__OAuthConnectionClient<$Result.GetResult<Prisma.$OAuthConnectionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one OAuthConnection that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {OAuthConnectionFindUniqueOrThrowArgs} args - Arguments to find a OAuthConnection
+     * @example
+     * // Get one OAuthConnection
+     * const oAuthConnection = await prisma.oAuthConnection.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends OAuthConnectionFindUniqueOrThrowArgs>(args: SelectSubset<T, OAuthConnectionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__OAuthConnectionClient<$Result.GetResult<Prisma.$OAuthConnectionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first OAuthConnection that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OAuthConnectionFindFirstArgs} args - Arguments to find a OAuthConnection
+     * @example
+     * // Get one OAuthConnection
+     * const oAuthConnection = await prisma.oAuthConnection.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends OAuthConnectionFindFirstArgs>(args?: SelectSubset<T, OAuthConnectionFindFirstArgs<ExtArgs>>): Prisma__OAuthConnectionClient<$Result.GetResult<Prisma.$OAuthConnectionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first OAuthConnection that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OAuthConnectionFindFirstOrThrowArgs} args - Arguments to find a OAuthConnection
+     * @example
+     * // Get one OAuthConnection
+     * const oAuthConnection = await prisma.oAuthConnection.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends OAuthConnectionFindFirstOrThrowArgs>(args?: SelectSubset<T, OAuthConnectionFindFirstOrThrowArgs<ExtArgs>>): Prisma__OAuthConnectionClient<$Result.GetResult<Prisma.$OAuthConnectionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more OAuthConnections that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OAuthConnectionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all OAuthConnections
+     * const oAuthConnections = await prisma.oAuthConnection.findMany()
+     * 
+     * // Get first 10 OAuthConnections
+     * const oAuthConnections = await prisma.oAuthConnection.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const oAuthConnectionWithIdOnly = await prisma.oAuthConnection.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends OAuthConnectionFindManyArgs>(args?: SelectSubset<T, OAuthConnectionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OAuthConnectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a OAuthConnection.
+     * @param {OAuthConnectionCreateArgs} args - Arguments to create a OAuthConnection.
+     * @example
+     * // Create one OAuthConnection
+     * const OAuthConnection = await prisma.oAuthConnection.create({
+     *   data: {
+     *     // ... data to create a OAuthConnection
+     *   }
+     * })
+     * 
+     */
+    create<T extends OAuthConnectionCreateArgs>(args: SelectSubset<T, OAuthConnectionCreateArgs<ExtArgs>>): Prisma__OAuthConnectionClient<$Result.GetResult<Prisma.$OAuthConnectionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many OAuthConnections.
+     * @param {OAuthConnectionCreateManyArgs} args - Arguments to create many OAuthConnections.
+     * @example
+     * // Create many OAuthConnections
+     * const oAuthConnection = await prisma.oAuthConnection.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends OAuthConnectionCreateManyArgs>(args?: SelectSubset<T, OAuthConnectionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many OAuthConnections and returns the data saved in the database.
+     * @param {OAuthConnectionCreateManyAndReturnArgs} args - Arguments to create many OAuthConnections.
+     * @example
+     * // Create many OAuthConnections
+     * const oAuthConnection = await prisma.oAuthConnection.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many OAuthConnections and only return the `id`
+     * const oAuthConnectionWithIdOnly = await prisma.oAuthConnection.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends OAuthConnectionCreateManyAndReturnArgs>(args?: SelectSubset<T, OAuthConnectionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OAuthConnectionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a OAuthConnection.
+     * @param {OAuthConnectionDeleteArgs} args - Arguments to delete one OAuthConnection.
+     * @example
+     * // Delete one OAuthConnection
+     * const OAuthConnection = await prisma.oAuthConnection.delete({
+     *   where: {
+     *     // ... filter to delete one OAuthConnection
+     *   }
+     * })
+     * 
+     */
+    delete<T extends OAuthConnectionDeleteArgs>(args: SelectSubset<T, OAuthConnectionDeleteArgs<ExtArgs>>): Prisma__OAuthConnectionClient<$Result.GetResult<Prisma.$OAuthConnectionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one OAuthConnection.
+     * @param {OAuthConnectionUpdateArgs} args - Arguments to update one OAuthConnection.
+     * @example
+     * // Update one OAuthConnection
+     * const oAuthConnection = await prisma.oAuthConnection.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends OAuthConnectionUpdateArgs>(args: SelectSubset<T, OAuthConnectionUpdateArgs<ExtArgs>>): Prisma__OAuthConnectionClient<$Result.GetResult<Prisma.$OAuthConnectionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more OAuthConnections.
+     * @param {OAuthConnectionDeleteManyArgs} args - Arguments to filter OAuthConnections to delete.
+     * @example
+     * // Delete a few OAuthConnections
+     * const { count } = await prisma.oAuthConnection.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends OAuthConnectionDeleteManyArgs>(args?: SelectSubset<T, OAuthConnectionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more OAuthConnections.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OAuthConnectionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many OAuthConnections
+     * const oAuthConnection = await prisma.oAuthConnection.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends OAuthConnectionUpdateManyArgs>(args: SelectSubset<T, OAuthConnectionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more OAuthConnections and returns the data updated in the database.
+     * @param {OAuthConnectionUpdateManyAndReturnArgs} args - Arguments to update many OAuthConnections.
+     * @example
+     * // Update many OAuthConnections
+     * const oAuthConnection = await prisma.oAuthConnection.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more OAuthConnections and only return the `id`
+     * const oAuthConnectionWithIdOnly = await prisma.oAuthConnection.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends OAuthConnectionUpdateManyAndReturnArgs>(args: SelectSubset<T, OAuthConnectionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OAuthConnectionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one OAuthConnection.
+     * @param {OAuthConnectionUpsertArgs} args - Arguments to update or create a OAuthConnection.
+     * @example
+     * // Update or create a OAuthConnection
+     * const oAuthConnection = await prisma.oAuthConnection.upsert({
+     *   create: {
+     *     // ... data to create a OAuthConnection
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the OAuthConnection we want to update
+     *   }
+     * })
+     */
+    upsert<T extends OAuthConnectionUpsertArgs>(args: SelectSubset<T, OAuthConnectionUpsertArgs<ExtArgs>>): Prisma__OAuthConnectionClient<$Result.GetResult<Prisma.$OAuthConnectionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of OAuthConnections.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OAuthConnectionCountArgs} args - Arguments to filter OAuthConnections to count.
+     * @example
+     * // Count the number of OAuthConnections
+     * const count = await prisma.oAuthConnection.count({
+     *   where: {
+     *     // ... the filter for the OAuthConnections we want to count
+     *   }
+     * })
+    **/
+    count<T extends OAuthConnectionCountArgs>(
+      args?: Subset<T, OAuthConnectionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], OAuthConnectionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a OAuthConnection.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OAuthConnectionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends OAuthConnectionAggregateArgs>(args: Subset<T, OAuthConnectionAggregateArgs>): Prisma.PrismaPromise<GetOAuthConnectionAggregateType<T>>
+
+    /**
+     * Group by OAuthConnection.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OAuthConnectionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends OAuthConnectionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: OAuthConnectionGroupByArgs['orderBy'] }
+        : { orderBy?: OAuthConnectionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, OAuthConnectionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetOAuthConnectionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the OAuthConnection model
+   */
+  readonly fields: OAuthConnectionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for OAuthConnection.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__OAuthConnectionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    organisation<T extends OrganisationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganisationDefaultArgs<ExtArgs>>): Prisma__OrganisationClient<$Result.GetResult<Prisma.$OrganisationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    granted_by<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the OAuthConnection model
+   */
+  interface OAuthConnectionFieldRefs {
+    readonly id: FieldRef<"OAuthConnection", 'Int'>
+    readonly uuid: FieldRef<"OAuthConnection", 'String'>
+    readonly organisation_uuid: FieldRef<"OAuthConnection", 'String'>
+    readonly granted_by_user_uuid: FieldRef<"OAuthConnection", 'String'>
+    readonly oauth_client_id: FieldRef<"OAuthConnection", 'String'>
+    readonly grant_id: FieldRef<"OAuthConnection", 'String'>
+    readonly client_name: FieldRef<"OAuthConnection", 'String'>
+    readonly client_uri: FieldRef<"OAuthConnection", 'String'>
+    readonly scope: FieldRef<"OAuthConnection", 'String'>
+    readonly status: FieldRef<"OAuthConnection", 'OAuthConnectionStatus'>
+    readonly last_used_at: FieldRef<"OAuthConnection", 'DateTime'>
+    readonly revoked_at: FieldRef<"OAuthConnection", 'DateTime'>
+    readonly created_at: FieldRef<"OAuthConnection", 'DateTime'>
+    readonly updated_at: FieldRef<"OAuthConnection", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * OAuthConnection findUnique
+   */
+  export type OAuthConnectionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OAuthConnection
+     */
+    select?: OAuthConnectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OAuthConnection
+     */
+    omit?: OAuthConnectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OAuthConnectionInclude<ExtArgs> | null
+    /**
+     * Filter, which OAuthConnection to fetch.
+     */
+    where: OAuthConnectionWhereUniqueInput
+  }
+
+  /**
+   * OAuthConnection findUniqueOrThrow
+   */
+  export type OAuthConnectionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OAuthConnection
+     */
+    select?: OAuthConnectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OAuthConnection
+     */
+    omit?: OAuthConnectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OAuthConnectionInclude<ExtArgs> | null
+    /**
+     * Filter, which OAuthConnection to fetch.
+     */
+    where: OAuthConnectionWhereUniqueInput
+  }
+
+  /**
+   * OAuthConnection findFirst
+   */
+  export type OAuthConnectionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OAuthConnection
+     */
+    select?: OAuthConnectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OAuthConnection
+     */
+    omit?: OAuthConnectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OAuthConnectionInclude<ExtArgs> | null
+    /**
+     * Filter, which OAuthConnection to fetch.
+     */
+    where?: OAuthConnectionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OAuthConnections to fetch.
+     */
+    orderBy?: OAuthConnectionOrderByWithRelationInput | OAuthConnectionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for OAuthConnections.
+     */
+    cursor?: OAuthConnectionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OAuthConnections from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OAuthConnections.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of OAuthConnections.
+     */
+    distinct?: OAuthConnectionScalarFieldEnum | OAuthConnectionScalarFieldEnum[]
+  }
+
+  /**
+   * OAuthConnection findFirstOrThrow
+   */
+  export type OAuthConnectionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OAuthConnection
+     */
+    select?: OAuthConnectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OAuthConnection
+     */
+    omit?: OAuthConnectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OAuthConnectionInclude<ExtArgs> | null
+    /**
+     * Filter, which OAuthConnection to fetch.
+     */
+    where?: OAuthConnectionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OAuthConnections to fetch.
+     */
+    orderBy?: OAuthConnectionOrderByWithRelationInput | OAuthConnectionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for OAuthConnections.
+     */
+    cursor?: OAuthConnectionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OAuthConnections from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OAuthConnections.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of OAuthConnections.
+     */
+    distinct?: OAuthConnectionScalarFieldEnum | OAuthConnectionScalarFieldEnum[]
+  }
+
+  /**
+   * OAuthConnection findMany
+   */
+  export type OAuthConnectionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OAuthConnection
+     */
+    select?: OAuthConnectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OAuthConnection
+     */
+    omit?: OAuthConnectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OAuthConnectionInclude<ExtArgs> | null
+    /**
+     * Filter, which OAuthConnections to fetch.
+     */
+    where?: OAuthConnectionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OAuthConnections to fetch.
+     */
+    orderBy?: OAuthConnectionOrderByWithRelationInput | OAuthConnectionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing OAuthConnections.
+     */
+    cursor?: OAuthConnectionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OAuthConnections from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OAuthConnections.
+     */
+    skip?: number
+    distinct?: OAuthConnectionScalarFieldEnum | OAuthConnectionScalarFieldEnum[]
+  }
+
+  /**
+   * OAuthConnection create
+   */
+  export type OAuthConnectionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OAuthConnection
+     */
+    select?: OAuthConnectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OAuthConnection
+     */
+    omit?: OAuthConnectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OAuthConnectionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a OAuthConnection.
+     */
+    data: XOR<OAuthConnectionCreateInput, OAuthConnectionUncheckedCreateInput>
+  }
+
+  /**
+   * OAuthConnection createMany
+   */
+  export type OAuthConnectionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many OAuthConnections.
+     */
+    data: OAuthConnectionCreateManyInput | OAuthConnectionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * OAuthConnection createManyAndReturn
+   */
+  export type OAuthConnectionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OAuthConnection
+     */
+    select?: OAuthConnectionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the OAuthConnection
+     */
+    omit?: OAuthConnectionOmit<ExtArgs> | null
+    /**
+     * The data used to create many OAuthConnections.
+     */
+    data: OAuthConnectionCreateManyInput | OAuthConnectionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OAuthConnectionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * OAuthConnection update
+   */
+  export type OAuthConnectionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OAuthConnection
+     */
+    select?: OAuthConnectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OAuthConnection
+     */
+    omit?: OAuthConnectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OAuthConnectionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a OAuthConnection.
+     */
+    data: XOR<OAuthConnectionUpdateInput, OAuthConnectionUncheckedUpdateInput>
+    /**
+     * Choose, which OAuthConnection to update.
+     */
+    where: OAuthConnectionWhereUniqueInput
+  }
+
+  /**
+   * OAuthConnection updateMany
+   */
+  export type OAuthConnectionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update OAuthConnections.
+     */
+    data: XOR<OAuthConnectionUpdateManyMutationInput, OAuthConnectionUncheckedUpdateManyInput>
+    /**
+     * Filter which OAuthConnections to update
+     */
+    where?: OAuthConnectionWhereInput
+    /**
+     * Limit how many OAuthConnections to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * OAuthConnection updateManyAndReturn
+   */
+  export type OAuthConnectionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OAuthConnection
+     */
+    select?: OAuthConnectionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the OAuthConnection
+     */
+    omit?: OAuthConnectionOmit<ExtArgs> | null
+    /**
+     * The data used to update OAuthConnections.
+     */
+    data: XOR<OAuthConnectionUpdateManyMutationInput, OAuthConnectionUncheckedUpdateManyInput>
+    /**
+     * Filter which OAuthConnections to update
+     */
+    where?: OAuthConnectionWhereInput
+    /**
+     * Limit how many OAuthConnections to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OAuthConnectionIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * OAuthConnection upsert
+   */
+  export type OAuthConnectionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OAuthConnection
+     */
+    select?: OAuthConnectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OAuthConnection
+     */
+    omit?: OAuthConnectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OAuthConnectionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the OAuthConnection to update in case it exists.
+     */
+    where: OAuthConnectionWhereUniqueInput
+    /**
+     * In case the OAuthConnection found by the `where` argument doesn't exist, create a new OAuthConnection with this data.
+     */
+    create: XOR<OAuthConnectionCreateInput, OAuthConnectionUncheckedCreateInput>
+    /**
+     * In case the OAuthConnection was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<OAuthConnectionUpdateInput, OAuthConnectionUncheckedUpdateInput>
+  }
+
+  /**
+   * OAuthConnection delete
+   */
+  export type OAuthConnectionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OAuthConnection
+     */
+    select?: OAuthConnectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OAuthConnection
+     */
+    omit?: OAuthConnectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OAuthConnectionInclude<ExtArgs> | null
+    /**
+     * Filter which OAuthConnection to delete.
+     */
+    where: OAuthConnectionWhereUniqueInput
+  }
+
+  /**
+   * OAuthConnection deleteMany
+   */
+  export type OAuthConnectionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which OAuthConnections to delete
+     */
+    where?: OAuthConnectionWhereInput
+    /**
+     * Limit how many OAuthConnections to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * OAuthConnection without action
+   */
+  export type OAuthConnectionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OAuthConnection
+     */
+    select?: OAuthConnectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OAuthConnection
+     */
+    omit?: OAuthConnectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OAuthConnectionInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model McpToolInvocationLog
+   */
+
+  export type AggregateMcpToolInvocationLog = {
+    _count: McpToolInvocationLogCountAggregateOutputType | null
+    _avg: McpToolInvocationLogAvgAggregateOutputType | null
+    _sum: McpToolInvocationLogSumAggregateOutputType | null
+    _min: McpToolInvocationLogMinAggregateOutputType | null
+    _max: McpToolInvocationLogMaxAggregateOutputType | null
+  }
+
+  export type McpToolInvocationLogAvgAggregateOutputType = {
+    id: number | null
+    status_code: number | null
+    duration_ms: number | null
+  }
+
+  export type McpToolInvocationLogSumAggregateOutputType = {
+    id: number | null
+    status_code: number | null
+    duration_ms: number | null
+  }
+
+  export type McpToolInvocationLogMinAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    organisation_uuid: string | null
+    user_uuid: string | null
+    oauth_client_id: string | null
+    tool_name: string | null
+    http_method: string | null
+    path: string | null
+    status_code: number | null
+    duration_ms: number | null
+    error_message: string | null
+    created_at: Date | null
+  }
+
+  export type McpToolInvocationLogMaxAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    organisation_uuid: string | null
+    user_uuid: string | null
+    oauth_client_id: string | null
+    tool_name: string | null
+    http_method: string | null
+    path: string | null
+    status_code: number | null
+    duration_ms: number | null
+    error_message: string | null
+    created_at: Date | null
+  }
+
+  export type McpToolInvocationLogCountAggregateOutputType = {
+    id: number
+    uuid: number
+    organisation_uuid: number
+    user_uuid: number
+    oauth_client_id: number
+    tool_name: number
+    http_method: number
+    path: number
+    status_code: number
+    duration_ms: number
+    error_message: number
+    created_at: number
+    _all: number
+  }
+
+
+  export type McpToolInvocationLogAvgAggregateInputType = {
+    id?: true
+    status_code?: true
+    duration_ms?: true
+  }
+
+  export type McpToolInvocationLogSumAggregateInputType = {
+    id?: true
+    status_code?: true
+    duration_ms?: true
+  }
+
+  export type McpToolInvocationLogMinAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    user_uuid?: true
+    oauth_client_id?: true
+    tool_name?: true
+    http_method?: true
+    path?: true
+    status_code?: true
+    duration_ms?: true
+    error_message?: true
+    created_at?: true
+  }
+
+  export type McpToolInvocationLogMaxAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    user_uuid?: true
+    oauth_client_id?: true
+    tool_name?: true
+    http_method?: true
+    path?: true
+    status_code?: true
+    duration_ms?: true
+    error_message?: true
+    created_at?: true
+  }
+
+  export type McpToolInvocationLogCountAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    user_uuid?: true
+    oauth_client_id?: true
+    tool_name?: true
+    http_method?: true
+    path?: true
+    status_code?: true
+    duration_ms?: true
+    error_message?: true
+    created_at?: true
+    _all?: true
+  }
+
+  export type McpToolInvocationLogAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which McpToolInvocationLog to aggregate.
+     */
+    where?: McpToolInvocationLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of McpToolInvocationLogs to fetch.
+     */
+    orderBy?: McpToolInvocationLogOrderByWithRelationInput | McpToolInvocationLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: McpToolInvocationLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` McpToolInvocationLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` McpToolInvocationLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned McpToolInvocationLogs
+    **/
+    _count?: true | McpToolInvocationLogCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: McpToolInvocationLogAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: McpToolInvocationLogSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: McpToolInvocationLogMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: McpToolInvocationLogMaxAggregateInputType
+  }
+
+  export type GetMcpToolInvocationLogAggregateType<T extends McpToolInvocationLogAggregateArgs> = {
+        [P in keyof T & keyof AggregateMcpToolInvocationLog]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMcpToolInvocationLog[P]>
+      : GetScalarType<T[P], AggregateMcpToolInvocationLog[P]>
+  }
+
+
+
+
+  export type McpToolInvocationLogGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: McpToolInvocationLogWhereInput
+    orderBy?: McpToolInvocationLogOrderByWithAggregationInput | McpToolInvocationLogOrderByWithAggregationInput[]
+    by: McpToolInvocationLogScalarFieldEnum[] | McpToolInvocationLogScalarFieldEnum
+    having?: McpToolInvocationLogScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: McpToolInvocationLogCountAggregateInputType | true
+    _avg?: McpToolInvocationLogAvgAggregateInputType
+    _sum?: McpToolInvocationLogSumAggregateInputType
+    _min?: McpToolInvocationLogMinAggregateInputType
+    _max?: McpToolInvocationLogMaxAggregateInputType
+  }
+
+  export type McpToolInvocationLogGroupByOutputType = {
+    id: number
+    uuid: string
+    organisation_uuid: string
+    user_uuid: string | null
+    oauth_client_id: string | null
+    tool_name: string
+    http_method: string
+    path: string
+    status_code: number | null
+    duration_ms: number | null
+    error_message: string | null
+    created_at: Date
+    _count: McpToolInvocationLogCountAggregateOutputType | null
+    _avg: McpToolInvocationLogAvgAggregateOutputType | null
+    _sum: McpToolInvocationLogSumAggregateOutputType | null
+    _min: McpToolInvocationLogMinAggregateOutputType | null
+    _max: McpToolInvocationLogMaxAggregateOutputType | null
+  }
+
+  type GetMcpToolInvocationLogGroupByPayload<T extends McpToolInvocationLogGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<McpToolInvocationLogGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof McpToolInvocationLogGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], McpToolInvocationLogGroupByOutputType[P]>
+            : GetScalarType<T[P], McpToolInvocationLogGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type McpToolInvocationLogSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    user_uuid?: boolean
+    oauth_client_id?: boolean
+    tool_name?: boolean
+    http_method?: boolean
+    path?: boolean
+    status_code?: boolean
+    duration_ms?: boolean
+    error_message?: boolean
+    created_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["mcpToolInvocationLog"]>
+
+  export type McpToolInvocationLogSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    user_uuid?: boolean
+    oauth_client_id?: boolean
+    tool_name?: boolean
+    http_method?: boolean
+    path?: boolean
+    status_code?: boolean
+    duration_ms?: boolean
+    error_message?: boolean
+    created_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["mcpToolInvocationLog"]>
+
+  export type McpToolInvocationLogSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    user_uuid?: boolean
+    oauth_client_id?: boolean
+    tool_name?: boolean
+    http_method?: boolean
+    path?: boolean
+    status_code?: boolean
+    duration_ms?: boolean
+    error_message?: boolean
+    created_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["mcpToolInvocationLog"]>
+
+  export type McpToolInvocationLogSelectScalar = {
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    user_uuid?: boolean
+    oauth_client_id?: boolean
+    tool_name?: boolean
+    http_method?: boolean
+    path?: boolean
+    status_code?: boolean
+    duration_ms?: boolean
+    error_message?: boolean
+    created_at?: boolean
+  }
+
+  export type McpToolInvocationLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "user_uuid" | "oauth_client_id" | "tool_name" | "http_method" | "path" | "status_code" | "duration_ms" | "error_message" | "created_at", ExtArgs["result"]["mcpToolInvocationLog"]>
+  export type McpToolInvocationLogInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }
+  export type McpToolInvocationLogIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }
+  export type McpToolInvocationLogIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }
+
+  export type $McpToolInvocationLogPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "McpToolInvocationLog"
+    objects: {
+      organisation: Prisma.$OrganisationPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      uuid: string
+      organisation_uuid: string
+      user_uuid: string | null
+      oauth_client_id: string | null
+      tool_name: string
+      http_method: string
+      path: string
+      status_code: number | null
+      duration_ms: number | null
+      error_message: string | null
+      created_at: Date
+    }, ExtArgs["result"]["mcpToolInvocationLog"]>
+    composites: {}
+  }
+
+  type McpToolInvocationLogGetPayload<S extends boolean | null | undefined | McpToolInvocationLogDefaultArgs> = $Result.GetResult<Prisma.$McpToolInvocationLogPayload, S>
+
+  type McpToolInvocationLogCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<McpToolInvocationLogFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: McpToolInvocationLogCountAggregateInputType | true
+    }
+
+  export interface McpToolInvocationLogDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['McpToolInvocationLog'], meta: { name: 'McpToolInvocationLog' } }
+    /**
+     * Find zero or one McpToolInvocationLog that matches the filter.
+     * @param {McpToolInvocationLogFindUniqueArgs} args - Arguments to find a McpToolInvocationLog
+     * @example
+     * // Get one McpToolInvocationLog
+     * const mcpToolInvocationLog = await prisma.mcpToolInvocationLog.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends McpToolInvocationLogFindUniqueArgs>(args: SelectSubset<T, McpToolInvocationLogFindUniqueArgs<ExtArgs>>): Prisma__McpToolInvocationLogClient<$Result.GetResult<Prisma.$McpToolInvocationLogPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one McpToolInvocationLog that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {McpToolInvocationLogFindUniqueOrThrowArgs} args - Arguments to find a McpToolInvocationLog
+     * @example
+     * // Get one McpToolInvocationLog
+     * const mcpToolInvocationLog = await prisma.mcpToolInvocationLog.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends McpToolInvocationLogFindUniqueOrThrowArgs>(args: SelectSubset<T, McpToolInvocationLogFindUniqueOrThrowArgs<ExtArgs>>): Prisma__McpToolInvocationLogClient<$Result.GetResult<Prisma.$McpToolInvocationLogPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first McpToolInvocationLog that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {McpToolInvocationLogFindFirstArgs} args - Arguments to find a McpToolInvocationLog
+     * @example
+     * // Get one McpToolInvocationLog
+     * const mcpToolInvocationLog = await prisma.mcpToolInvocationLog.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends McpToolInvocationLogFindFirstArgs>(args?: SelectSubset<T, McpToolInvocationLogFindFirstArgs<ExtArgs>>): Prisma__McpToolInvocationLogClient<$Result.GetResult<Prisma.$McpToolInvocationLogPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first McpToolInvocationLog that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {McpToolInvocationLogFindFirstOrThrowArgs} args - Arguments to find a McpToolInvocationLog
+     * @example
+     * // Get one McpToolInvocationLog
+     * const mcpToolInvocationLog = await prisma.mcpToolInvocationLog.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends McpToolInvocationLogFindFirstOrThrowArgs>(args?: SelectSubset<T, McpToolInvocationLogFindFirstOrThrowArgs<ExtArgs>>): Prisma__McpToolInvocationLogClient<$Result.GetResult<Prisma.$McpToolInvocationLogPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more McpToolInvocationLogs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {McpToolInvocationLogFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all McpToolInvocationLogs
+     * const mcpToolInvocationLogs = await prisma.mcpToolInvocationLog.findMany()
+     * 
+     * // Get first 10 McpToolInvocationLogs
+     * const mcpToolInvocationLogs = await prisma.mcpToolInvocationLog.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const mcpToolInvocationLogWithIdOnly = await prisma.mcpToolInvocationLog.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends McpToolInvocationLogFindManyArgs>(args?: SelectSubset<T, McpToolInvocationLogFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$McpToolInvocationLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a McpToolInvocationLog.
+     * @param {McpToolInvocationLogCreateArgs} args - Arguments to create a McpToolInvocationLog.
+     * @example
+     * // Create one McpToolInvocationLog
+     * const McpToolInvocationLog = await prisma.mcpToolInvocationLog.create({
+     *   data: {
+     *     // ... data to create a McpToolInvocationLog
+     *   }
+     * })
+     * 
+     */
+    create<T extends McpToolInvocationLogCreateArgs>(args: SelectSubset<T, McpToolInvocationLogCreateArgs<ExtArgs>>): Prisma__McpToolInvocationLogClient<$Result.GetResult<Prisma.$McpToolInvocationLogPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many McpToolInvocationLogs.
+     * @param {McpToolInvocationLogCreateManyArgs} args - Arguments to create many McpToolInvocationLogs.
+     * @example
+     * // Create many McpToolInvocationLogs
+     * const mcpToolInvocationLog = await prisma.mcpToolInvocationLog.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends McpToolInvocationLogCreateManyArgs>(args?: SelectSubset<T, McpToolInvocationLogCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many McpToolInvocationLogs and returns the data saved in the database.
+     * @param {McpToolInvocationLogCreateManyAndReturnArgs} args - Arguments to create many McpToolInvocationLogs.
+     * @example
+     * // Create many McpToolInvocationLogs
+     * const mcpToolInvocationLog = await prisma.mcpToolInvocationLog.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many McpToolInvocationLogs and only return the `id`
+     * const mcpToolInvocationLogWithIdOnly = await prisma.mcpToolInvocationLog.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends McpToolInvocationLogCreateManyAndReturnArgs>(args?: SelectSubset<T, McpToolInvocationLogCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$McpToolInvocationLogPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a McpToolInvocationLog.
+     * @param {McpToolInvocationLogDeleteArgs} args - Arguments to delete one McpToolInvocationLog.
+     * @example
+     * // Delete one McpToolInvocationLog
+     * const McpToolInvocationLog = await prisma.mcpToolInvocationLog.delete({
+     *   where: {
+     *     // ... filter to delete one McpToolInvocationLog
+     *   }
+     * })
+     * 
+     */
+    delete<T extends McpToolInvocationLogDeleteArgs>(args: SelectSubset<T, McpToolInvocationLogDeleteArgs<ExtArgs>>): Prisma__McpToolInvocationLogClient<$Result.GetResult<Prisma.$McpToolInvocationLogPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one McpToolInvocationLog.
+     * @param {McpToolInvocationLogUpdateArgs} args - Arguments to update one McpToolInvocationLog.
+     * @example
+     * // Update one McpToolInvocationLog
+     * const mcpToolInvocationLog = await prisma.mcpToolInvocationLog.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends McpToolInvocationLogUpdateArgs>(args: SelectSubset<T, McpToolInvocationLogUpdateArgs<ExtArgs>>): Prisma__McpToolInvocationLogClient<$Result.GetResult<Prisma.$McpToolInvocationLogPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more McpToolInvocationLogs.
+     * @param {McpToolInvocationLogDeleteManyArgs} args - Arguments to filter McpToolInvocationLogs to delete.
+     * @example
+     * // Delete a few McpToolInvocationLogs
+     * const { count } = await prisma.mcpToolInvocationLog.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends McpToolInvocationLogDeleteManyArgs>(args?: SelectSubset<T, McpToolInvocationLogDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more McpToolInvocationLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {McpToolInvocationLogUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many McpToolInvocationLogs
+     * const mcpToolInvocationLog = await prisma.mcpToolInvocationLog.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends McpToolInvocationLogUpdateManyArgs>(args: SelectSubset<T, McpToolInvocationLogUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more McpToolInvocationLogs and returns the data updated in the database.
+     * @param {McpToolInvocationLogUpdateManyAndReturnArgs} args - Arguments to update many McpToolInvocationLogs.
+     * @example
+     * // Update many McpToolInvocationLogs
+     * const mcpToolInvocationLog = await prisma.mcpToolInvocationLog.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more McpToolInvocationLogs and only return the `id`
+     * const mcpToolInvocationLogWithIdOnly = await prisma.mcpToolInvocationLog.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends McpToolInvocationLogUpdateManyAndReturnArgs>(args: SelectSubset<T, McpToolInvocationLogUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$McpToolInvocationLogPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one McpToolInvocationLog.
+     * @param {McpToolInvocationLogUpsertArgs} args - Arguments to update or create a McpToolInvocationLog.
+     * @example
+     * // Update or create a McpToolInvocationLog
+     * const mcpToolInvocationLog = await prisma.mcpToolInvocationLog.upsert({
+     *   create: {
+     *     // ... data to create a McpToolInvocationLog
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the McpToolInvocationLog we want to update
+     *   }
+     * })
+     */
+    upsert<T extends McpToolInvocationLogUpsertArgs>(args: SelectSubset<T, McpToolInvocationLogUpsertArgs<ExtArgs>>): Prisma__McpToolInvocationLogClient<$Result.GetResult<Prisma.$McpToolInvocationLogPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of McpToolInvocationLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {McpToolInvocationLogCountArgs} args - Arguments to filter McpToolInvocationLogs to count.
+     * @example
+     * // Count the number of McpToolInvocationLogs
+     * const count = await prisma.mcpToolInvocationLog.count({
+     *   where: {
+     *     // ... the filter for the McpToolInvocationLogs we want to count
+     *   }
+     * })
+    **/
+    count<T extends McpToolInvocationLogCountArgs>(
+      args?: Subset<T, McpToolInvocationLogCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], McpToolInvocationLogCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a McpToolInvocationLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {McpToolInvocationLogAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends McpToolInvocationLogAggregateArgs>(args: Subset<T, McpToolInvocationLogAggregateArgs>): Prisma.PrismaPromise<GetMcpToolInvocationLogAggregateType<T>>
+
+    /**
+     * Group by McpToolInvocationLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {McpToolInvocationLogGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends McpToolInvocationLogGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: McpToolInvocationLogGroupByArgs['orderBy'] }
+        : { orderBy?: McpToolInvocationLogGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, McpToolInvocationLogGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMcpToolInvocationLogGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the McpToolInvocationLog model
+   */
+  readonly fields: McpToolInvocationLogFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for McpToolInvocationLog.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__McpToolInvocationLogClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    organisation<T extends OrganisationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganisationDefaultArgs<ExtArgs>>): Prisma__OrganisationClient<$Result.GetResult<Prisma.$OrganisationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the McpToolInvocationLog model
+   */
+  interface McpToolInvocationLogFieldRefs {
+    readonly id: FieldRef<"McpToolInvocationLog", 'Int'>
+    readonly uuid: FieldRef<"McpToolInvocationLog", 'String'>
+    readonly organisation_uuid: FieldRef<"McpToolInvocationLog", 'String'>
+    readonly user_uuid: FieldRef<"McpToolInvocationLog", 'String'>
+    readonly oauth_client_id: FieldRef<"McpToolInvocationLog", 'String'>
+    readonly tool_name: FieldRef<"McpToolInvocationLog", 'String'>
+    readonly http_method: FieldRef<"McpToolInvocationLog", 'String'>
+    readonly path: FieldRef<"McpToolInvocationLog", 'String'>
+    readonly status_code: FieldRef<"McpToolInvocationLog", 'Int'>
+    readonly duration_ms: FieldRef<"McpToolInvocationLog", 'Int'>
+    readonly error_message: FieldRef<"McpToolInvocationLog", 'String'>
+    readonly created_at: FieldRef<"McpToolInvocationLog", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * McpToolInvocationLog findUnique
+   */
+  export type McpToolInvocationLogFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the McpToolInvocationLog
+     */
+    select?: McpToolInvocationLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the McpToolInvocationLog
+     */
+    omit?: McpToolInvocationLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: McpToolInvocationLogInclude<ExtArgs> | null
+    /**
+     * Filter, which McpToolInvocationLog to fetch.
+     */
+    where: McpToolInvocationLogWhereUniqueInput
+  }
+
+  /**
+   * McpToolInvocationLog findUniqueOrThrow
+   */
+  export type McpToolInvocationLogFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the McpToolInvocationLog
+     */
+    select?: McpToolInvocationLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the McpToolInvocationLog
+     */
+    omit?: McpToolInvocationLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: McpToolInvocationLogInclude<ExtArgs> | null
+    /**
+     * Filter, which McpToolInvocationLog to fetch.
+     */
+    where: McpToolInvocationLogWhereUniqueInput
+  }
+
+  /**
+   * McpToolInvocationLog findFirst
+   */
+  export type McpToolInvocationLogFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the McpToolInvocationLog
+     */
+    select?: McpToolInvocationLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the McpToolInvocationLog
+     */
+    omit?: McpToolInvocationLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: McpToolInvocationLogInclude<ExtArgs> | null
+    /**
+     * Filter, which McpToolInvocationLog to fetch.
+     */
+    where?: McpToolInvocationLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of McpToolInvocationLogs to fetch.
+     */
+    orderBy?: McpToolInvocationLogOrderByWithRelationInput | McpToolInvocationLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for McpToolInvocationLogs.
+     */
+    cursor?: McpToolInvocationLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` McpToolInvocationLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` McpToolInvocationLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of McpToolInvocationLogs.
+     */
+    distinct?: McpToolInvocationLogScalarFieldEnum | McpToolInvocationLogScalarFieldEnum[]
+  }
+
+  /**
+   * McpToolInvocationLog findFirstOrThrow
+   */
+  export type McpToolInvocationLogFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the McpToolInvocationLog
+     */
+    select?: McpToolInvocationLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the McpToolInvocationLog
+     */
+    omit?: McpToolInvocationLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: McpToolInvocationLogInclude<ExtArgs> | null
+    /**
+     * Filter, which McpToolInvocationLog to fetch.
+     */
+    where?: McpToolInvocationLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of McpToolInvocationLogs to fetch.
+     */
+    orderBy?: McpToolInvocationLogOrderByWithRelationInput | McpToolInvocationLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for McpToolInvocationLogs.
+     */
+    cursor?: McpToolInvocationLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` McpToolInvocationLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` McpToolInvocationLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of McpToolInvocationLogs.
+     */
+    distinct?: McpToolInvocationLogScalarFieldEnum | McpToolInvocationLogScalarFieldEnum[]
+  }
+
+  /**
+   * McpToolInvocationLog findMany
+   */
+  export type McpToolInvocationLogFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the McpToolInvocationLog
+     */
+    select?: McpToolInvocationLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the McpToolInvocationLog
+     */
+    omit?: McpToolInvocationLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: McpToolInvocationLogInclude<ExtArgs> | null
+    /**
+     * Filter, which McpToolInvocationLogs to fetch.
+     */
+    where?: McpToolInvocationLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of McpToolInvocationLogs to fetch.
+     */
+    orderBy?: McpToolInvocationLogOrderByWithRelationInput | McpToolInvocationLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing McpToolInvocationLogs.
+     */
+    cursor?: McpToolInvocationLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` McpToolInvocationLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` McpToolInvocationLogs.
+     */
+    skip?: number
+    distinct?: McpToolInvocationLogScalarFieldEnum | McpToolInvocationLogScalarFieldEnum[]
+  }
+
+  /**
+   * McpToolInvocationLog create
+   */
+  export type McpToolInvocationLogCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the McpToolInvocationLog
+     */
+    select?: McpToolInvocationLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the McpToolInvocationLog
+     */
+    omit?: McpToolInvocationLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: McpToolInvocationLogInclude<ExtArgs> | null
+    /**
+     * The data needed to create a McpToolInvocationLog.
+     */
+    data: XOR<McpToolInvocationLogCreateInput, McpToolInvocationLogUncheckedCreateInput>
+  }
+
+  /**
+   * McpToolInvocationLog createMany
+   */
+  export type McpToolInvocationLogCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many McpToolInvocationLogs.
+     */
+    data: McpToolInvocationLogCreateManyInput | McpToolInvocationLogCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * McpToolInvocationLog createManyAndReturn
+   */
+  export type McpToolInvocationLogCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the McpToolInvocationLog
+     */
+    select?: McpToolInvocationLogSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the McpToolInvocationLog
+     */
+    omit?: McpToolInvocationLogOmit<ExtArgs> | null
+    /**
+     * The data used to create many McpToolInvocationLogs.
+     */
+    data: McpToolInvocationLogCreateManyInput | McpToolInvocationLogCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: McpToolInvocationLogIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * McpToolInvocationLog update
+   */
+  export type McpToolInvocationLogUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the McpToolInvocationLog
+     */
+    select?: McpToolInvocationLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the McpToolInvocationLog
+     */
+    omit?: McpToolInvocationLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: McpToolInvocationLogInclude<ExtArgs> | null
+    /**
+     * The data needed to update a McpToolInvocationLog.
+     */
+    data: XOR<McpToolInvocationLogUpdateInput, McpToolInvocationLogUncheckedUpdateInput>
+    /**
+     * Choose, which McpToolInvocationLog to update.
+     */
+    where: McpToolInvocationLogWhereUniqueInput
+  }
+
+  /**
+   * McpToolInvocationLog updateMany
+   */
+  export type McpToolInvocationLogUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update McpToolInvocationLogs.
+     */
+    data: XOR<McpToolInvocationLogUpdateManyMutationInput, McpToolInvocationLogUncheckedUpdateManyInput>
+    /**
+     * Filter which McpToolInvocationLogs to update
+     */
+    where?: McpToolInvocationLogWhereInput
+    /**
+     * Limit how many McpToolInvocationLogs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * McpToolInvocationLog updateManyAndReturn
+   */
+  export type McpToolInvocationLogUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the McpToolInvocationLog
+     */
+    select?: McpToolInvocationLogSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the McpToolInvocationLog
+     */
+    omit?: McpToolInvocationLogOmit<ExtArgs> | null
+    /**
+     * The data used to update McpToolInvocationLogs.
+     */
+    data: XOR<McpToolInvocationLogUpdateManyMutationInput, McpToolInvocationLogUncheckedUpdateManyInput>
+    /**
+     * Filter which McpToolInvocationLogs to update
+     */
+    where?: McpToolInvocationLogWhereInput
+    /**
+     * Limit how many McpToolInvocationLogs to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: McpToolInvocationLogIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * McpToolInvocationLog upsert
+   */
+  export type McpToolInvocationLogUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the McpToolInvocationLog
+     */
+    select?: McpToolInvocationLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the McpToolInvocationLog
+     */
+    omit?: McpToolInvocationLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: McpToolInvocationLogInclude<ExtArgs> | null
+    /**
+     * The filter to search for the McpToolInvocationLog to update in case it exists.
+     */
+    where: McpToolInvocationLogWhereUniqueInput
+    /**
+     * In case the McpToolInvocationLog found by the `where` argument doesn't exist, create a new McpToolInvocationLog with this data.
+     */
+    create: XOR<McpToolInvocationLogCreateInput, McpToolInvocationLogUncheckedCreateInput>
+    /**
+     * In case the McpToolInvocationLog was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<McpToolInvocationLogUpdateInput, McpToolInvocationLogUncheckedUpdateInput>
+  }
+
+  /**
+   * McpToolInvocationLog delete
+   */
+  export type McpToolInvocationLogDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the McpToolInvocationLog
+     */
+    select?: McpToolInvocationLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the McpToolInvocationLog
+     */
+    omit?: McpToolInvocationLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: McpToolInvocationLogInclude<ExtArgs> | null
+    /**
+     * Filter which McpToolInvocationLog to delete.
+     */
+    where: McpToolInvocationLogWhereUniqueInput
+  }
+
+  /**
+   * McpToolInvocationLog deleteMany
+   */
+  export type McpToolInvocationLogDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which McpToolInvocationLogs to delete
+     */
+    where?: McpToolInvocationLogWhereInput
+    /**
+     * Limit how many McpToolInvocationLogs to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * McpToolInvocationLog without action
+   */
+  export type McpToolInvocationLogDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the McpToolInvocationLog
+     */
+    select?: McpToolInvocationLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the McpToolInvocationLog
+     */
+    omit?: McpToolInvocationLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: McpToolInvocationLogInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -83429,6 +87336,61 @@ export namespace Prisma {
   export type ActivityLogScalarFieldEnum = (typeof ActivityLogScalarFieldEnum)[keyof typeof ActivityLogScalarFieldEnum]
 
 
+  export const OAuthModelScalarFieldEnum: {
+    id: 'id',
+    model_name: 'model_name',
+    key: 'key',
+    grant_id: 'grant_id',
+    user_code: 'user_code',
+    uid: 'uid',
+    payload: 'payload',
+    expires_at: 'expires_at',
+    consumed_at: 'consumed_at',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type OAuthModelScalarFieldEnum = (typeof OAuthModelScalarFieldEnum)[keyof typeof OAuthModelScalarFieldEnum]
+
+
+  export const OAuthConnectionScalarFieldEnum: {
+    id: 'id',
+    uuid: 'uuid',
+    organisation_uuid: 'organisation_uuid',
+    granted_by_user_uuid: 'granted_by_user_uuid',
+    oauth_client_id: 'oauth_client_id',
+    grant_id: 'grant_id',
+    client_name: 'client_name',
+    client_uri: 'client_uri',
+    scope: 'scope',
+    status: 'status',
+    last_used_at: 'last_used_at',
+    revoked_at: 'revoked_at',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type OAuthConnectionScalarFieldEnum = (typeof OAuthConnectionScalarFieldEnum)[keyof typeof OAuthConnectionScalarFieldEnum]
+
+
+  export const McpToolInvocationLogScalarFieldEnum: {
+    id: 'id',
+    uuid: 'uuid',
+    organisation_uuid: 'organisation_uuid',
+    user_uuid: 'user_uuid',
+    oauth_client_id: 'oauth_client_id',
+    tool_name: 'tool_name',
+    http_method: 'http_method',
+    path: 'path',
+    status_code: 'status_code',
+    duration_ms: 'duration_ms',
+    error_message: 'error_message',
+    created_at: 'created_at'
+  };
+
+  export type McpToolInvocationLogScalarFieldEnum = (typeof McpToolInvocationLogScalarFieldEnum)[keyof typeof McpToolInvocationLogScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -84299,6 +88261,20 @@ export namespace Prisma {
    */
   export type ListEnumGoalAchievementTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GoalAchievementType[]'>
     
+
+
+  /**
+   * Reference to a field of type 'OAuthConnectionStatus'
+   */
+  export type EnumOAuthConnectionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OAuthConnectionStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'OAuthConnectionStatus[]'
+   */
+  export type ListEnumOAuthConnectionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OAuthConnectionStatus[]'>
+    
   /**
    * Deep Input Types
    */
@@ -84329,6 +88305,7 @@ export namespace Prisma {
     openai_batch_jobs_created?: OpenAiBatchJobListRelationFilter
     sidebar_favorites?: SidebarFavoriteListRelationFilter
     api_keys_created?: ApiKeyListRelationFilter
+    oauth_connections_granted?: OAuthConnectionListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -84353,6 +88330,7 @@ export namespace Prisma {
     openai_batch_jobs_created?: OpenAiBatchJobOrderByRelationAggregateInput
     sidebar_favorites?: SidebarFavoriteOrderByRelationAggregateInput
     api_keys_created?: ApiKeyOrderByRelationAggregateInput
+    oauth_connections_granted?: OAuthConnectionOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -84380,6 +88358,7 @@ export namespace Prisma {
     openai_batch_jobs_created?: OpenAiBatchJobListRelationFilter
     sidebar_favorites?: SidebarFavoriteListRelationFilter
     api_keys_created?: ApiKeyListRelationFilter
+    oauth_connections_granted?: OAuthConnectionListRelationFilter
   }, "id" | "uuid" | "email" | "phone">
 
   export type UserOrderByWithAggregationInput = {
@@ -84459,6 +88438,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestListRelationFilter
     mxtoolbox_checks?: MxToolboxCheckListRelationFilter
     api_keys?: ApiKeyListRelationFilter
+    oauth_connections?: OAuthConnectionListRelationFilter
+    mcp_tool_invocation_logs?: McpToolInvocationLogListRelationFilter
   }
 
   export type OrganisationOrderByWithRelationInput = {
@@ -84503,6 +88484,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestOrderByRelationAggregateInput
     mxtoolbox_checks?: MxToolboxCheckOrderByRelationAggregateInput
     api_keys?: ApiKeyOrderByRelationAggregateInput
+    oauth_connections?: OAuthConnectionOrderByRelationAggregateInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogOrderByRelationAggregateInput
   }
 
   export type OrganisationWhereUniqueInput = Prisma.AtLeast<{
@@ -84550,6 +88533,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestListRelationFilter
     mxtoolbox_checks?: MxToolboxCheckListRelationFilter
     api_keys?: ApiKeyListRelationFilter
+    oauth_connections?: OAuthConnectionListRelationFilter
+    mcp_tool_invocation_logs?: McpToolInvocationLogListRelationFilter
   }, "id" | "uuid" | "slug" | "reply_to_email">
 
   export type OrganisationOrderByWithAggregationInput = {
@@ -90349,6 +94334,288 @@ export namespace Prisma {
     created_at?: DateTimeWithAggregatesFilter<"ActivityLog"> | Date | string
   }
 
+  export type OAuthModelWhereInput = {
+    AND?: OAuthModelWhereInput | OAuthModelWhereInput[]
+    OR?: OAuthModelWhereInput[]
+    NOT?: OAuthModelWhereInput | OAuthModelWhereInput[]
+    id?: IntFilter<"OAuthModel"> | number
+    model_name?: StringFilter<"OAuthModel"> | string
+    key?: StringFilter<"OAuthModel"> | string
+    grant_id?: StringNullableFilter<"OAuthModel"> | string | null
+    user_code?: StringNullableFilter<"OAuthModel"> | string | null
+    uid?: StringNullableFilter<"OAuthModel"> | string | null
+    payload?: JsonFilter<"OAuthModel">
+    expires_at?: DateTimeNullableFilter<"OAuthModel"> | Date | string | null
+    consumed_at?: DateTimeNullableFilter<"OAuthModel"> | Date | string | null
+    created_at?: DateTimeFilter<"OAuthModel"> | Date | string
+    updated_at?: DateTimeFilter<"OAuthModel"> | Date | string
+  }
+
+  export type OAuthModelOrderByWithRelationInput = {
+    id?: SortOrder
+    model_name?: SortOrder
+    key?: SortOrder
+    grant_id?: SortOrderInput | SortOrder
+    user_code?: SortOrderInput | SortOrder
+    uid?: SortOrderInput | SortOrder
+    payload?: SortOrder
+    expires_at?: SortOrderInput | SortOrder
+    consumed_at?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type OAuthModelWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    model_name_key?: OAuthModelModel_nameKeyCompoundUniqueInput
+    AND?: OAuthModelWhereInput | OAuthModelWhereInput[]
+    OR?: OAuthModelWhereInput[]
+    NOT?: OAuthModelWhereInput | OAuthModelWhereInput[]
+    model_name?: StringFilter<"OAuthModel"> | string
+    key?: StringFilter<"OAuthModel"> | string
+    grant_id?: StringNullableFilter<"OAuthModel"> | string | null
+    user_code?: StringNullableFilter<"OAuthModel"> | string | null
+    uid?: StringNullableFilter<"OAuthModel"> | string | null
+    payload?: JsonFilter<"OAuthModel">
+    expires_at?: DateTimeNullableFilter<"OAuthModel"> | Date | string | null
+    consumed_at?: DateTimeNullableFilter<"OAuthModel"> | Date | string | null
+    created_at?: DateTimeFilter<"OAuthModel"> | Date | string
+    updated_at?: DateTimeFilter<"OAuthModel"> | Date | string
+  }, "id" | "model_name_key">
+
+  export type OAuthModelOrderByWithAggregationInput = {
+    id?: SortOrder
+    model_name?: SortOrder
+    key?: SortOrder
+    grant_id?: SortOrderInput | SortOrder
+    user_code?: SortOrderInput | SortOrder
+    uid?: SortOrderInput | SortOrder
+    payload?: SortOrder
+    expires_at?: SortOrderInput | SortOrder
+    consumed_at?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: OAuthModelCountOrderByAggregateInput
+    _avg?: OAuthModelAvgOrderByAggregateInput
+    _max?: OAuthModelMaxOrderByAggregateInput
+    _min?: OAuthModelMinOrderByAggregateInput
+    _sum?: OAuthModelSumOrderByAggregateInput
+  }
+
+  export type OAuthModelScalarWhereWithAggregatesInput = {
+    AND?: OAuthModelScalarWhereWithAggregatesInput | OAuthModelScalarWhereWithAggregatesInput[]
+    OR?: OAuthModelScalarWhereWithAggregatesInput[]
+    NOT?: OAuthModelScalarWhereWithAggregatesInput | OAuthModelScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"OAuthModel"> | number
+    model_name?: StringWithAggregatesFilter<"OAuthModel"> | string
+    key?: StringWithAggregatesFilter<"OAuthModel"> | string
+    grant_id?: StringNullableWithAggregatesFilter<"OAuthModel"> | string | null
+    user_code?: StringNullableWithAggregatesFilter<"OAuthModel"> | string | null
+    uid?: StringNullableWithAggregatesFilter<"OAuthModel"> | string | null
+    payload?: JsonWithAggregatesFilter<"OAuthModel">
+    expires_at?: DateTimeNullableWithAggregatesFilter<"OAuthModel"> | Date | string | null
+    consumed_at?: DateTimeNullableWithAggregatesFilter<"OAuthModel"> | Date | string | null
+    created_at?: DateTimeWithAggregatesFilter<"OAuthModel"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"OAuthModel"> | Date | string
+  }
+
+  export type OAuthConnectionWhereInput = {
+    AND?: OAuthConnectionWhereInput | OAuthConnectionWhereInput[]
+    OR?: OAuthConnectionWhereInput[]
+    NOT?: OAuthConnectionWhereInput | OAuthConnectionWhereInput[]
+    id?: IntFilter<"OAuthConnection"> | number
+    uuid?: StringFilter<"OAuthConnection"> | string
+    organisation_uuid?: StringFilter<"OAuthConnection"> | string
+    granted_by_user_uuid?: StringFilter<"OAuthConnection"> | string
+    oauth_client_id?: StringFilter<"OAuthConnection"> | string
+    grant_id?: StringFilter<"OAuthConnection"> | string
+    client_name?: StringNullableFilter<"OAuthConnection"> | string | null
+    client_uri?: StringNullableFilter<"OAuthConnection"> | string | null
+    scope?: StringFilter<"OAuthConnection"> | string
+    status?: EnumOAuthConnectionStatusFilter<"OAuthConnection"> | $Enums.OAuthConnectionStatus
+    last_used_at?: DateTimeNullableFilter<"OAuthConnection"> | Date | string | null
+    revoked_at?: DateTimeNullableFilter<"OAuthConnection"> | Date | string | null
+    created_at?: DateTimeFilter<"OAuthConnection"> | Date | string
+    updated_at?: DateTimeFilter<"OAuthConnection"> | Date | string
+    organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+    granted_by?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type OAuthConnectionOrderByWithRelationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    granted_by_user_uuid?: SortOrder
+    oauth_client_id?: SortOrder
+    grant_id?: SortOrder
+    client_name?: SortOrderInput | SortOrder
+    client_uri?: SortOrderInput | SortOrder
+    scope?: SortOrder
+    status?: SortOrder
+    last_used_at?: SortOrderInput | SortOrder
+    revoked_at?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    organisation?: OrganisationOrderByWithRelationInput
+    granted_by?: UserOrderByWithRelationInput
+  }
+
+  export type OAuthConnectionWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    uuid?: string
+    grant_id?: string
+    AND?: OAuthConnectionWhereInput | OAuthConnectionWhereInput[]
+    OR?: OAuthConnectionWhereInput[]
+    NOT?: OAuthConnectionWhereInput | OAuthConnectionWhereInput[]
+    organisation_uuid?: StringFilter<"OAuthConnection"> | string
+    granted_by_user_uuid?: StringFilter<"OAuthConnection"> | string
+    oauth_client_id?: StringFilter<"OAuthConnection"> | string
+    client_name?: StringNullableFilter<"OAuthConnection"> | string | null
+    client_uri?: StringNullableFilter<"OAuthConnection"> | string | null
+    scope?: StringFilter<"OAuthConnection"> | string
+    status?: EnumOAuthConnectionStatusFilter<"OAuthConnection"> | $Enums.OAuthConnectionStatus
+    last_used_at?: DateTimeNullableFilter<"OAuthConnection"> | Date | string | null
+    revoked_at?: DateTimeNullableFilter<"OAuthConnection"> | Date | string | null
+    created_at?: DateTimeFilter<"OAuthConnection"> | Date | string
+    updated_at?: DateTimeFilter<"OAuthConnection"> | Date | string
+    organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+    granted_by?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "uuid" | "grant_id">
+
+  export type OAuthConnectionOrderByWithAggregationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    granted_by_user_uuid?: SortOrder
+    oauth_client_id?: SortOrder
+    grant_id?: SortOrder
+    client_name?: SortOrderInput | SortOrder
+    client_uri?: SortOrderInput | SortOrder
+    scope?: SortOrder
+    status?: SortOrder
+    last_used_at?: SortOrderInput | SortOrder
+    revoked_at?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: OAuthConnectionCountOrderByAggregateInput
+    _avg?: OAuthConnectionAvgOrderByAggregateInput
+    _max?: OAuthConnectionMaxOrderByAggregateInput
+    _min?: OAuthConnectionMinOrderByAggregateInput
+    _sum?: OAuthConnectionSumOrderByAggregateInput
+  }
+
+  export type OAuthConnectionScalarWhereWithAggregatesInput = {
+    AND?: OAuthConnectionScalarWhereWithAggregatesInput | OAuthConnectionScalarWhereWithAggregatesInput[]
+    OR?: OAuthConnectionScalarWhereWithAggregatesInput[]
+    NOT?: OAuthConnectionScalarWhereWithAggregatesInput | OAuthConnectionScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"OAuthConnection"> | number
+    uuid?: StringWithAggregatesFilter<"OAuthConnection"> | string
+    organisation_uuid?: StringWithAggregatesFilter<"OAuthConnection"> | string
+    granted_by_user_uuid?: StringWithAggregatesFilter<"OAuthConnection"> | string
+    oauth_client_id?: StringWithAggregatesFilter<"OAuthConnection"> | string
+    grant_id?: StringWithAggregatesFilter<"OAuthConnection"> | string
+    client_name?: StringNullableWithAggregatesFilter<"OAuthConnection"> | string | null
+    client_uri?: StringNullableWithAggregatesFilter<"OAuthConnection"> | string | null
+    scope?: StringWithAggregatesFilter<"OAuthConnection"> | string
+    status?: EnumOAuthConnectionStatusWithAggregatesFilter<"OAuthConnection"> | $Enums.OAuthConnectionStatus
+    last_used_at?: DateTimeNullableWithAggregatesFilter<"OAuthConnection"> | Date | string | null
+    revoked_at?: DateTimeNullableWithAggregatesFilter<"OAuthConnection"> | Date | string | null
+    created_at?: DateTimeWithAggregatesFilter<"OAuthConnection"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"OAuthConnection"> | Date | string
+  }
+
+  export type McpToolInvocationLogWhereInput = {
+    AND?: McpToolInvocationLogWhereInput | McpToolInvocationLogWhereInput[]
+    OR?: McpToolInvocationLogWhereInput[]
+    NOT?: McpToolInvocationLogWhereInput | McpToolInvocationLogWhereInput[]
+    id?: IntFilter<"McpToolInvocationLog"> | number
+    uuid?: StringFilter<"McpToolInvocationLog"> | string
+    organisation_uuid?: StringFilter<"McpToolInvocationLog"> | string
+    user_uuid?: StringNullableFilter<"McpToolInvocationLog"> | string | null
+    oauth_client_id?: StringNullableFilter<"McpToolInvocationLog"> | string | null
+    tool_name?: StringFilter<"McpToolInvocationLog"> | string
+    http_method?: StringFilter<"McpToolInvocationLog"> | string
+    path?: StringFilter<"McpToolInvocationLog"> | string
+    status_code?: IntNullableFilter<"McpToolInvocationLog"> | number | null
+    duration_ms?: IntNullableFilter<"McpToolInvocationLog"> | number | null
+    error_message?: StringNullableFilter<"McpToolInvocationLog"> | string | null
+    created_at?: DateTimeFilter<"McpToolInvocationLog"> | Date | string
+    organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+  }
+
+  export type McpToolInvocationLogOrderByWithRelationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    user_uuid?: SortOrderInput | SortOrder
+    oauth_client_id?: SortOrderInput | SortOrder
+    tool_name?: SortOrder
+    http_method?: SortOrder
+    path?: SortOrder
+    status_code?: SortOrderInput | SortOrder
+    duration_ms?: SortOrderInput | SortOrder
+    error_message?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    organisation?: OrganisationOrderByWithRelationInput
+  }
+
+  export type McpToolInvocationLogWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    uuid?: string
+    AND?: McpToolInvocationLogWhereInput | McpToolInvocationLogWhereInput[]
+    OR?: McpToolInvocationLogWhereInput[]
+    NOT?: McpToolInvocationLogWhereInput | McpToolInvocationLogWhereInput[]
+    organisation_uuid?: StringFilter<"McpToolInvocationLog"> | string
+    user_uuid?: StringNullableFilter<"McpToolInvocationLog"> | string | null
+    oauth_client_id?: StringNullableFilter<"McpToolInvocationLog"> | string | null
+    tool_name?: StringFilter<"McpToolInvocationLog"> | string
+    http_method?: StringFilter<"McpToolInvocationLog"> | string
+    path?: StringFilter<"McpToolInvocationLog"> | string
+    status_code?: IntNullableFilter<"McpToolInvocationLog"> | number | null
+    duration_ms?: IntNullableFilter<"McpToolInvocationLog"> | number | null
+    error_message?: StringNullableFilter<"McpToolInvocationLog"> | string | null
+    created_at?: DateTimeFilter<"McpToolInvocationLog"> | Date | string
+    organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+  }, "id" | "uuid">
+
+  export type McpToolInvocationLogOrderByWithAggregationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    user_uuid?: SortOrderInput | SortOrder
+    oauth_client_id?: SortOrderInput | SortOrder
+    tool_name?: SortOrder
+    http_method?: SortOrder
+    path?: SortOrder
+    status_code?: SortOrderInput | SortOrder
+    duration_ms?: SortOrderInput | SortOrder
+    error_message?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    _count?: McpToolInvocationLogCountOrderByAggregateInput
+    _avg?: McpToolInvocationLogAvgOrderByAggregateInput
+    _max?: McpToolInvocationLogMaxOrderByAggregateInput
+    _min?: McpToolInvocationLogMinOrderByAggregateInput
+    _sum?: McpToolInvocationLogSumOrderByAggregateInput
+  }
+
+  export type McpToolInvocationLogScalarWhereWithAggregatesInput = {
+    AND?: McpToolInvocationLogScalarWhereWithAggregatesInput | McpToolInvocationLogScalarWhereWithAggregatesInput[]
+    OR?: McpToolInvocationLogScalarWhereWithAggregatesInput[]
+    NOT?: McpToolInvocationLogScalarWhereWithAggregatesInput | McpToolInvocationLogScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"McpToolInvocationLog"> | number
+    uuid?: StringWithAggregatesFilter<"McpToolInvocationLog"> | string
+    organisation_uuid?: StringWithAggregatesFilter<"McpToolInvocationLog"> | string
+    user_uuid?: StringNullableWithAggregatesFilter<"McpToolInvocationLog"> | string | null
+    oauth_client_id?: StringNullableWithAggregatesFilter<"McpToolInvocationLog"> | string | null
+    tool_name?: StringWithAggregatesFilter<"McpToolInvocationLog"> | string
+    http_method?: StringWithAggregatesFilter<"McpToolInvocationLog"> | string
+    path?: StringWithAggregatesFilter<"McpToolInvocationLog"> | string
+    status_code?: IntNullableWithAggregatesFilter<"McpToolInvocationLog"> | number | null
+    duration_ms?: IntNullableWithAggregatesFilter<"McpToolInvocationLog"> | number | null
+    error_message?: StringNullableWithAggregatesFilter<"McpToolInvocationLog"> | string | null
+    created_at?: DateTimeWithAggregatesFilter<"McpToolInvocationLog"> | Date | string
+  }
+
   export type UserCreateInput = {
     uuid?: string
     email: string
@@ -90370,6 +94637,7 @@ export namespace Prisma {
     openai_batch_jobs_created?: OpenAiBatchJobCreateNestedManyWithoutUserInput
     sidebar_favorites?: SidebarFavoriteCreateNestedManyWithoutUserInput
     api_keys_created?: ApiKeyCreateNestedManyWithoutCreated_byInput
+    oauth_connections_granted?: OAuthConnectionCreateNestedManyWithoutGranted_byInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -90394,6 +94662,7 @@ export namespace Prisma {
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedCreateNestedManyWithoutUserInput
     sidebar_favorites?: SidebarFavoriteUncheckedCreateNestedManyWithoutUserInput
     api_keys_created?: ApiKeyUncheckedCreateNestedManyWithoutCreated_byInput
+    oauth_connections_granted?: OAuthConnectionUncheckedCreateNestedManyWithoutGranted_byInput
   }
 
   export type UserUpdateInput = {
@@ -90417,6 +94686,7 @@ export namespace Prisma {
     openai_batch_jobs_created?: OpenAiBatchJobUpdateManyWithoutUserNestedInput
     sidebar_favorites?: SidebarFavoriteUpdateManyWithoutUserNestedInput
     api_keys_created?: ApiKeyUpdateManyWithoutCreated_byNestedInput
+    oauth_connections_granted?: OAuthConnectionUpdateManyWithoutGranted_byNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -90441,6 +94711,7 @@ export namespace Prisma {
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedUpdateManyWithoutUserNestedInput
     sidebar_favorites?: SidebarFavoriteUncheckedUpdateManyWithoutUserNestedInput
     api_keys_created?: ApiKeyUncheckedUpdateManyWithoutCreated_byNestedInput
+    oauth_connections_granted?: OAuthConnectionUncheckedUpdateManyWithoutGranted_byNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -90519,6 +94790,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateInput = {
@@ -90563,6 +94836,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUpdateInput = {
@@ -90606,6 +94881,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateInput = {
@@ -90650,6 +94927,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateManyInput = {
@@ -96914,6 +101193,316 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type OAuthModelCreateInput = {
+    model_name: string
+    key: string
+    grant_id?: string | null
+    user_code?: string | null
+    uid?: string | null
+    payload: JsonNullValueInput | InputJsonValue
+    expires_at?: Date | string | null
+    consumed_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type OAuthModelUncheckedCreateInput = {
+    id?: number
+    model_name: string
+    key: string
+    grant_id?: string | null
+    user_code?: string | null
+    uid?: string | null
+    payload: JsonNullValueInput | InputJsonValue
+    expires_at?: Date | string | null
+    consumed_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type OAuthModelUpdateInput = {
+    model_name?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    grant_id?: NullableStringFieldUpdateOperationsInput | string | null
+    user_code?: NullableStringFieldUpdateOperationsInput | string | null
+    uid?: NullableStringFieldUpdateOperationsInput | string | null
+    payload?: JsonNullValueInput | InputJsonValue
+    expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    consumed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OAuthModelUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    model_name?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    grant_id?: NullableStringFieldUpdateOperationsInput | string | null
+    user_code?: NullableStringFieldUpdateOperationsInput | string | null
+    uid?: NullableStringFieldUpdateOperationsInput | string | null
+    payload?: JsonNullValueInput | InputJsonValue
+    expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    consumed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OAuthModelCreateManyInput = {
+    id?: number
+    model_name: string
+    key: string
+    grant_id?: string | null
+    user_code?: string | null
+    uid?: string | null
+    payload: JsonNullValueInput | InputJsonValue
+    expires_at?: Date | string | null
+    consumed_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type OAuthModelUpdateManyMutationInput = {
+    model_name?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    grant_id?: NullableStringFieldUpdateOperationsInput | string | null
+    user_code?: NullableStringFieldUpdateOperationsInput | string | null
+    uid?: NullableStringFieldUpdateOperationsInput | string | null
+    payload?: JsonNullValueInput | InputJsonValue
+    expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    consumed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OAuthModelUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    model_name?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    grant_id?: NullableStringFieldUpdateOperationsInput | string | null
+    user_code?: NullableStringFieldUpdateOperationsInput | string | null
+    uid?: NullableStringFieldUpdateOperationsInput | string | null
+    payload?: JsonNullValueInput | InputJsonValue
+    expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    consumed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OAuthConnectionCreateInput = {
+    uuid?: string
+    oauth_client_id: string
+    grant_id: string
+    client_name?: string | null
+    client_uri?: string | null
+    scope: string
+    status?: $Enums.OAuthConnectionStatus
+    last_used_at?: Date | string | null
+    revoked_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutOauth_connectionsInput
+    granted_by: UserCreateNestedOneWithoutOauth_connections_grantedInput
+  }
+
+  export type OAuthConnectionUncheckedCreateInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    granted_by_user_uuid: string
+    oauth_client_id: string
+    grant_id: string
+    client_name?: string | null
+    client_uri?: string | null
+    scope: string
+    status?: $Enums.OAuthConnectionStatus
+    last_used_at?: Date | string | null
+    revoked_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type OAuthConnectionUpdateInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    oauth_client_id?: StringFieldUpdateOperationsInput | string
+    grant_id?: StringFieldUpdateOperationsInput | string
+    client_name?: NullableStringFieldUpdateOperationsInput | string | null
+    client_uri?: NullableStringFieldUpdateOperationsInput | string | null
+    scope?: StringFieldUpdateOperationsInput | string
+    status?: EnumOAuthConnectionStatusFieldUpdateOperationsInput | $Enums.OAuthConnectionStatus
+    last_used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revoked_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutOauth_connectionsNestedInput
+    granted_by?: UserUpdateOneRequiredWithoutOauth_connections_grantedNestedInput
+  }
+
+  export type OAuthConnectionUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    granted_by_user_uuid?: StringFieldUpdateOperationsInput | string
+    oauth_client_id?: StringFieldUpdateOperationsInput | string
+    grant_id?: StringFieldUpdateOperationsInput | string
+    client_name?: NullableStringFieldUpdateOperationsInput | string | null
+    client_uri?: NullableStringFieldUpdateOperationsInput | string | null
+    scope?: StringFieldUpdateOperationsInput | string
+    status?: EnumOAuthConnectionStatusFieldUpdateOperationsInput | $Enums.OAuthConnectionStatus
+    last_used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revoked_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OAuthConnectionCreateManyInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    granted_by_user_uuid: string
+    oauth_client_id: string
+    grant_id: string
+    client_name?: string | null
+    client_uri?: string | null
+    scope: string
+    status?: $Enums.OAuthConnectionStatus
+    last_used_at?: Date | string | null
+    revoked_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type OAuthConnectionUpdateManyMutationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    oauth_client_id?: StringFieldUpdateOperationsInput | string
+    grant_id?: StringFieldUpdateOperationsInput | string
+    client_name?: NullableStringFieldUpdateOperationsInput | string | null
+    client_uri?: NullableStringFieldUpdateOperationsInput | string | null
+    scope?: StringFieldUpdateOperationsInput | string
+    status?: EnumOAuthConnectionStatusFieldUpdateOperationsInput | $Enums.OAuthConnectionStatus
+    last_used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revoked_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OAuthConnectionUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    granted_by_user_uuid?: StringFieldUpdateOperationsInput | string
+    oauth_client_id?: StringFieldUpdateOperationsInput | string
+    grant_id?: StringFieldUpdateOperationsInput | string
+    client_name?: NullableStringFieldUpdateOperationsInput | string | null
+    client_uri?: NullableStringFieldUpdateOperationsInput | string | null
+    scope?: StringFieldUpdateOperationsInput | string
+    status?: EnumOAuthConnectionStatusFieldUpdateOperationsInput | $Enums.OAuthConnectionStatus
+    last_used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revoked_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type McpToolInvocationLogCreateInput = {
+    uuid?: string
+    user_uuid?: string | null
+    oauth_client_id?: string | null
+    tool_name: string
+    http_method: string
+    path: string
+    status_code?: number | null
+    duration_ms?: number | null
+    error_message?: string | null
+    created_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutMcp_tool_invocation_logsInput
+  }
+
+  export type McpToolInvocationLogUncheckedCreateInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    user_uuid?: string | null
+    oauth_client_id?: string | null
+    tool_name: string
+    http_method: string
+    path: string
+    status_code?: number | null
+    duration_ms?: number | null
+    error_message?: string | null
+    created_at?: Date | string
+  }
+
+  export type McpToolInvocationLogUpdateInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    oauth_client_id?: NullableStringFieldUpdateOperationsInput | string | null
+    tool_name?: StringFieldUpdateOperationsInput | string
+    http_method?: StringFieldUpdateOperationsInput | string
+    path?: StringFieldUpdateOperationsInput | string
+    status_code?: NullableIntFieldUpdateOperationsInput | number | null
+    duration_ms?: NullableIntFieldUpdateOperationsInput | number | null
+    error_message?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutMcp_tool_invocation_logsNestedInput
+  }
+
+  export type McpToolInvocationLogUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    oauth_client_id?: NullableStringFieldUpdateOperationsInput | string | null
+    tool_name?: StringFieldUpdateOperationsInput | string
+    http_method?: StringFieldUpdateOperationsInput | string
+    path?: StringFieldUpdateOperationsInput | string
+    status_code?: NullableIntFieldUpdateOperationsInput | number | null
+    duration_ms?: NullableIntFieldUpdateOperationsInput | number | null
+    error_message?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type McpToolInvocationLogCreateManyInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    user_uuid?: string | null
+    oauth_client_id?: string | null
+    tool_name: string
+    http_method: string
+    path: string
+    status_code?: number | null
+    duration_ms?: number | null
+    error_message?: string | null
+    created_at?: Date | string
+  }
+
+  export type McpToolInvocationLogUpdateManyMutationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    oauth_client_id?: NullableStringFieldUpdateOperationsInput | string | null
+    tool_name?: StringFieldUpdateOperationsInput | string
+    http_method?: StringFieldUpdateOperationsInput | string
+    path?: StringFieldUpdateOperationsInput | string
+    status_code?: NullableIntFieldUpdateOperationsInput | number | null
+    duration_ms?: NullableIntFieldUpdateOperationsInput | number | null
+    error_message?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type McpToolInvocationLogUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    oauth_client_id?: NullableStringFieldUpdateOperationsInput | string | null
+    tool_name?: StringFieldUpdateOperationsInput | string
+    http_method?: StringFieldUpdateOperationsInput | string
+    path?: StringFieldUpdateOperationsInput | string
+    status_code?: NullableIntFieldUpdateOperationsInput | number | null
+    duration_ms?: NullableIntFieldUpdateOperationsInput | number | null
+    error_message?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type IntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -97045,6 +101634,12 @@ export namespace Prisma {
     none?: ApiKeyWhereInput
   }
 
+  export type OAuthConnectionListRelationFilter = {
+    every?: OAuthConnectionWhereInput
+    some?: OAuthConnectionWhereInput
+    none?: OAuthConnectionWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -97095,6 +101690,10 @@ export namespace Prisma {
   }
 
   export type ApiKeyOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type OAuthConnectionOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -97350,6 +101949,12 @@ export namespace Prisma {
     none?: MxToolboxCheckWhereInput
   }
 
+  export type McpToolInvocationLogListRelationFilter = {
+    every?: McpToolInvocationLogWhereInput
+    some?: McpToolInvocationLogWhereInput
+    none?: McpToolInvocationLogWhereInput
+  }
+
   export type FilterOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -97435,6 +102040,10 @@ export namespace Prisma {
   }
 
   export type MxToolboxCheckOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type McpToolInvocationLogOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -102268,6 +106877,192 @@ export namespace Prisma {
     id?: SortOrder
   }
 
+  export type OAuthModelModel_nameKeyCompoundUniqueInput = {
+    model_name: string
+    key: string
+  }
+
+  export type OAuthModelCountOrderByAggregateInput = {
+    id?: SortOrder
+    model_name?: SortOrder
+    key?: SortOrder
+    grant_id?: SortOrder
+    user_code?: SortOrder
+    uid?: SortOrder
+    payload?: SortOrder
+    expires_at?: SortOrder
+    consumed_at?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type OAuthModelAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type OAuthModelMaxOrderByAggregateInput = {
+    id?: SortOrder
+    model_name?: SortOrder
+    key?: SortOrder
+    grant_id?: SortOrder
+    user_code?: SortOrder
+    uid?: SortOrder
+    expires_at?: SortOrder
+    consumed_at?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type OAuthModelMinOrderByAggregateInput = {
+    id?: SortOrder
+    model_name?: SortOrder
+    key?: SortOrder
+    grant_id?: SortOrder
+    user_code?: SortOrder
+    uid?: SortOrder
+    expires_at?: SortOrder
+    consumed_at?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type OAuthModelSumOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type EnumOAuthConnectionStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.OAuthConnectionStatus | EnumOAuthConnectionStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.OAuthConnectionStatus[] | ListEnumOAuthConnectionStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.OAuthConnectionStatus[] | ListEnumOAuthConnectionStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumOAuthConnectionStatusFilter<$PrismaModel> | $Enums.OAuthConnectionStatus
+  }
+
+  export type OAuthConnectionCountOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    granted_by_user_uuid?: SortOrder
+    oauth_client_id?: SortOrder
+    grant_id?: SortOrder
+    client_name?: SortOrder
+    client_uri?: SortOrder
+    scope?: SortOrder
+    status?: SortOrder
+    last_used_at?: SortOrder
+    revoked_at?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type OAuthConnectionAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type OAuthConnectionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    granted_by_user_uuid?: SortOrder
+    oauth_client_id?: SortOrder
+    grant_id?: SortOrder
+    client_name?: SortOrder
+    client_uri?: SortOrder
+    scope?: SortOrder
+    status?: SortOrder
+    last_used_at?: SortOrder
+    revoked_at?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type OAuthConnectionMinOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    granted_by_user_uuid?: SortOrder
+    oauth_client_id?: SortOrder
+    grant_id?: SortOrder
+    client_name?: SortOrder
+    client_uri?: SortOrder
+    scope?: SortOrder
+    status?: SortOrder
+    last_used_at?: SortOrder
+    revoked_at?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type OAuthConnectionSumOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type EnumOAuthConnectionStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.OAuthConnectionStatus | EnumOAuthConnectionStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.OAuthConnectionStatus[] | ListEnumOAuthConnectionStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.OAuthConnectionStatus[] | ListEnumOAuthConnectionStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumOAuthConnectionStatusWithAggregatesFilter<$PrismaModel> | $Enums.OAuthConnectionStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumOAuthConnectionStatusFilter<$PrismaModel>
+    _max?: NestedEnumOAuthConnectionStatusFilter<$PrismaModel>
+  }
+
+  export type McpToolInvocationLogCountOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    user_uuid?: SortOrder
+    oauth_client_id?: SortOrder
+    tool_name?: SortOrder
+    http_method?: SortOrder
+    path?: SortOrder
+    status_code?: SortOrder
+    duration_ms?: SortOrder
+    error_message?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type McpToolInvocationLogAvgOrderByAggregateInput = {
+    id?: SortOrder
+    status_code?: SortOrder
+    duration_ms?: SortOrder
+  }
+
+  export type McpToolInvocationLogMaxOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    user_uuid?: SortOrder
+    oauth_client_id?: SortOrder
+    tool_name?: SortOrder
+    http_method?: SortOrder
+    path?: SortOrder
+    status_code?: SortOrder
+    duration_ms?: SortOrder
+    error_message?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type McpToolInvocationLogMinOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    user_uuid?: SortOrder
+    oauth_client_id?: SortOrder
+    tool_name?: SortOrder
+    http_method?: SortOrder
+    path?: SortOrder
+    status_code?: SortOrder
+    duration_ms?: SortOrder
+    error_message?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type McpToolInvocationLogSumOrderByAggregateInput = {
+    id?: SortOrder
+    status_code?: SortOrder
+    duration_ms?: SortOrder
+  }
+
   export type OrganisationMemberCreateNestedManyWithoutUserInput = {
     create?: XOR<OrganisationMemberCreateWithoutUserInput, OrganisationMemberUncheckedCreateWithoutUserInput> | OrganisationMemberCreateWithoutUserInput[] | OrganisationMemberUncheckedCreateWithoutUserInput[]
     connectOrCreate?: OrganisationMemberCreateOrConnectWithoutUserInput | OrganisationMemberCreateOrConnectWithoutUserInput[]
@@ -102352,6 +107147,13 @@ export namespace Prisma {
     connect?: ApiKeyWhereUniqueInput | ApiKeyWhereUniqueInput[]
   }
 
+  export type OAuthConnectionCreateNestedManyWithoutGranted_byInput = {
+    create?: XOR<OAuthConnectionCreateWithoutGranted_byInput, OAuthConnectionUncheckedCreateWithoutGranted_byInput> | OAuthConnectionCreateWithoutGranted_byInput[] | OAuthConnectionUncheckedCreateWithoutGranted_byInput[]
+    connectOrCreate?: OAuthConnectionCreateOrConnectWithoutGranted_byInput | OAuthConnectionCreateOrConnectWithoutGranted_byInput[]
+    createMany?: OAuthConnectionCreateManyGranted_byInputEnvelope
+    connect?: OAuthConnectionWhereUniqueInput | OAuthConnectionWhereUniqueInput[]
+  }
+
   export type OrganisationMemberUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<OrganisationMemberCreateWithoutUserInput, OrganisationMemberUncheckedCreateWithoutUserInput> | OrganisationMemberCreateWithoutUserInput[] | OrganisationMemberUncheckedCreateWithoutUserInput[]
     connectOrCreate?: OrganisationMemberCreateOrConnectWithoutUserInput | OrganisationMemberCreateOrConnectWithoutUserInput[]
@@ -102434,6 +107236,13 @@ export namespace Prisma {
     connectOrCreate?: ApiKeyCreateOrConnectWithoutCreated_byInput | ApiKeyCreateOrConnectWithoutCreated_byInput[]
     createMany?: ApiKeyCreateManyCreated_byInputEnvelope
     connect?: ApiKeyWhereUniqueInput | ApiKeyWhereUniqueInput[]
+  }
+
+  export type OAuthConnectionUncheckedCreateNestedManyWithoutGranted_byInput = {
+    create?: XOR<OAuthConnectionCreateWithoutGranted_byInput, OAuthConnectionUncheckedCreateWithoutGranted_byInput> | OAuthConnectionCreateWithoutGranted_byInput[] | OAuthConnectionUncheckedCreateWithoutGranted_byInput[]
+    connectOrCreate?: OAuthConnectionCreateOrConnectWithoutGranted_byInput | OAuthConnectionCreateOrConnectWithoutGranted_byInput[]
+    createMany?: OAuthConnectionCreateManyGranted_byInputEnvelope
+    connect?: OAuthConnectionWhereUniqueInput | OAuthConnectionWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -102620,6 +107429,20 @@ export namespace Prisma {
     deleteMany?: ApiKeyScalarWhereInput | ApiKeyScalarWhereInput[]
   }
 
+  export type OAuthConnectionUpdateManyWithoutGranted_byNestedInput = {
+    create?: XOR<OAuthConnectionCreateWithoutGranted_byInput, OAuthConnectionUncheckedCreateWithoutGranted_byInput> | OAuthConnectionCreateWithoutGranted_byInput[] | OAuthConnectionUncheckedCreateWithoutGranted_byInput[]
+    connectOrCreate?: OAuthConnectionCreateOrConnectWithoutGranted_byInput | OAuthConnectionCreateOrConnectWithoutGranted_byInput[]
+    upsert?: OAuthConnectionUpsertWithWhereUniqueWithoutGranted_byInput | OAuthConnectionUpsertWithWhereUniqueWithoutGranted_byInput[]
+    createMany?: OAuthConnectionCreateManyGranted_byInputEnvelope
+    set?: OAuthConnectionWhereUniqueInput | OAuthConnectionWhereUniqueInput[]
+    disconnect?: OAuthConnectionWhereUniqueInput | OAuthConnectionWhereUniqueInput[]
+    delete?: OAuthConnectionWhereUniqueInput | OAuthConnectionWhereUniqueInput[]
+    connect?: OAuthConnectionWhereUniqueInput | OAuthConnectionWhereUniqueInput[]
+    update?: OAuthConnectionUpdateWithWhereUniqueWithoutGranted_byInput | OAuthConnectionUpdateWithWhereUniqueWithoutGranted_byInput[]
+    updateMany?: OAuthConnectionUpdateManyWithWhereWithoutGranted_byInput | OAuthConnectionUpdateManyWithWhereWithoutGranted_byInput[]
+    deleteMany?: OAuthConnectionScalarWhereInput | OAuthConnectionScalarWhereInput[]
+  }
+
   export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
@@ -102794,6 +107617,20 @@ export namespace Prisma {
     update?: ApiKeyUpdateWithWhereUniqueWithoutCreated_byInput | ApiKeyUpdateWithWhereUniqueWithoutCreated_byInput[]
     updateMany?: ApiKeyUpdateManyWithWhereWithoutCreated_byInput | ApiKeyUpdateManyWithWhereWithoutCreated_byInput[]
     deleteMany?: ApiKeyScalarWhereInput | ApiKeyScalarWhereInput[]
+  }
+
+  export type OAuthConnectionUncheckedUpdateManyWithoutGranted_byNestedInput = {
+    create?: XOR<OAuthConnectionCreateWithoutGranted_byInput, OAuthConnectionUncheckedCreateWithoutGranted_byInput> | OAuthConnectionCreateWithoutGranted_byInput[] | OAuthConnectionUncheckedCreateWithoutGranted_byInput[]
+    connectOrCreate?: OAuthConnectionCreateOrConnectWithoutGranted_byInput | OAuthConnectionCreateOrConnectWithoutGranted_byInput[]
+    upsert?: OAuthConnectionUpsertWithWhereUniqueWithoutGranted_byInput | OAuthConnectionUpsertWithWhereUniqueWithoutGranted_byInput[]
+    createMany?: OAuthConnectionCreateManyGranted_byInputEnvelope
+    set?: OAuthConnectionWhereUniqueInput | OAuthConnectionWhereUniqueInput[]
+    disconnect?: OAuthConnectionWhereUniqueInput | OAuthConnectionWhereUniqueInput[]
+    delete?: OAuthConnectionWhereUniqueInput | OAuthConnectionWhereUniqueInput[]
+    connect?: OAuthConnectionWhereUniqueInput | OAuthConnectionWhereUniqueInput[]
+    update?: OAuthConnectionUpdateWithWhereUniqueWithoutGranted_byInput | OAuthConnectionUpdateWithWhereUniqueWithoutGranted_byInput[]
+    updateMany?: OAuthConnectionUpdateManyWithWhereWithoutGranted_byInput | OAuthConnectionUpdateManyWithWhereWithoutGranted_byInput[]
+    deleteMany?: OAuthConnectionScalarWhereInput | OAuthConnectionScalarWhereInput[]
   }
 
   export type OrganisationMemberCreateNestedManyWithoutOrganisationInput = {
@@ -103020,6 +107857,20 @@ export namespace Prisma {
     connect?: ApiKeyWhereUniqueInput | ApiKeyWhereUniqueInput[]
   }
 
+  export type OAuthConnectionCreateNestedManyWithoutOrganisationInput = {
+    create?: XOR<OAuthConnectionCreateWithoutOrganisationInput, OAuthConnectionUncheckedCreateWithoutOrganisationInput> | OAuthConnectionCreateWithoutOrganisationInput[] | OAuthConnectionUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: OAuthConnectionCreateOrConnectWithoutOrganisationInput | OAuthConnectionCreateOrConnectWithoutOrganisationInput[]
+    createMany?: OAuthConnectionCreateManyOrganisationInputEnvelope
+    connect?: OAuthConnectionWhereUniqueInput | OAuthConnectionWhereUniqueInput[]
+  }
+
+  export type McpToolInvocationLogCreateNestedManyWithoutOrganisationInput = {
+    create?: XOR<McpToolInvocationLogCreateWithoutOrganisationInput, McpToolInvocationLogUncheckedCreateWithoutOrganisationInput> | McpToolInvocationLogCreateWithoutOrganisationInput[] | McpToolInvocationLogUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: McpToolInvocationLogCreateOrConnectWithoutOrganisationInput | McpToolInvocationLogCreateOrConnectWithoutOrganisationInput[]
+    createMany?: McpToolInvocationLogCreateManyOrganisationInputEnvelope
+    connect?: McpToolInvocationLogWhereUniqueInput | McpToolInvocationLogWhereUniqueInput[]
+  }
+
   export type OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput = {
     create?: XOR<OrganisationMemberCreateWithoutOrganisationInput, OrganisationMemberUncheckedCreateWithoutOrganisationInput> | OrganisationMemberCreateWithoutOrganisationInput[] | OrganisationMemberUncheckedCreateWithoutOrganisationInput[]
     connectOrCreate?: OrganisationMemberCreateOrConnectWithoutOrganisationInput | OrganisationMemberCreateOrConnectWithoutOrganisationInput[]
@@ -103242,6 +108093,20 @@ export namespace Prisma {
     connectOrCreate?: ApiKeyCreateOrConnectWithoutOrganisationInput | ApiKeyCreateOrConnectWithoutOrganisationInput[]
     createMany?: ApiKeyCreateManyOrganisationInputEnvelope
     connect?: ApiKeyWhereUniqueInput | ApiKeyWhereUniqueInput[]
+  }
+
+  export type OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput = {
+    create?: XOR<OAuthConnectionCreateWithoutOrganisationInput, OAuthConnectionUncheckedCreateWithoutOrganisationInput> | OAuthConnectionCreateWithoutOrganisationInput[] | OAuthConnectionUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: OAuthConnectionCreateOrConnectWithoutOrganisationInput | OAuthConnectionCreateOrConnectWithoutOrganisationInput[]
+    createMany?: OAuthConnectionCreateManyOrganisationInputEnvelope
+    connect?: OAuthConnectionWhereUniqueInput | OAuthConnectionWhereUniqueInput[]
+  }
+
+  export type McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput = {
+    create?: XOR<McpToolInvocationLogCreateWithoutOrganisationInput, McpToolInvocationLogUncheckedCreateWithoutOrganisationInput> | McpToolInvocationLogCreateWithoutOrganisationInput[] | McpToolInvocationLogUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: McpToolInvocationLogCreateOrConnectWithoutOrganisationInput | McpToolInvocationLogCreateOrConnectWithoutOrganisationInput[]
+    createMany?: McpToolInvocationLogCreateManyOrganisationInputEnvelope
+    connect?: McpToolInvocationLogWhereUniqueInput | McpToolInvocationLogWhereUniqueInput[]
   }
 
   export type OrganisationMemberUpdateManyWithoutOrganisationNestedInput = {
@@ -103692,6 +108557,34 @@ export namespace Prisma {
     deleteMany?: ApiKeyScalarWhereInput | ApiKeyScalarWhereInput[]
   }
 
+  export type OAuthConnectionUpdateManyWithoutOrganisationNestedInput = {
+    create?: XOR<OAuthConnectionCreateWithoutOrganisationInput, OAuthConnectionUncheckedCreateWithoutOrganisationInput> | OAuthConnectionCreateWithoutOrganisationInput[] | OAuthConnectionUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: OAuthConnectionCreateOrConnectWithoutOrganisationInput | OAuthConnectionCreateOrConnectWithoutOrganisationInput[]
+    upsert?: OAuthConnectionUpsertWithWhereUniqueWithoutOrganisationInput | OAuthConnectionUpsertWithWhereUniqueWithoutOrganisationInput[]
+    createMany?: OAuthConnectionCreateManyOrganisationInputEnvelope
+    set?: OAuthConnectionWhereUniqueInput | OAuthConnectionWhereUniqueInput[]
+    disconnect?: OAuthConnectionWhereUniqueInput | OAuthConnectionWhereUniqueInput[]
+    delete?: OAuthConnectionWhereUniqueInput | OAuthConnectionWhereUniqueInput[]
+    connect?: OAuthConnectionWhereUniqueInput | OAuthConnectionWhereUniqueInput[]
+    update?: OAuthConnectionUpdateWithWhereUniqueWithoutOrganisationInput | OAuthConnectionUpdateWithWhereUniqueWithoutOrganisationInput[]
+    updateMany?: OAuthConnectionUpdateManyWithWhereWithoutOrganisationInput | OAuthConnectionUpdateManyWithWhereWithoutOrganisationInput[]
+    deleteMany?: OAuthConnectionScalarWhereInput | OAuthConnectionScalarWhereInput[]
+  }
+
+  export type McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput = {
+    create?: XOR<McpToolInvocationLogCreateWithoutOrganisationInput, McpToolInvocationLogUncheckedCreateWithoutOrganisationInput> | McpToolInvocationLogCreateWithoutOrganisationInput[] | McpToolInvocationLogUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: McpToolInvocationLogCreateOrConnectWithoutOrganisationInput | McpToolInvocationLogCreateOrConnectWithoutOrganisationInput[]
+    upsert?: McpToolInvocationLogUpsertWithWhereUniqueWithoutOrganisationInput | McpToolInvocationLogUpsertWithWhereUniqueWithoutOrganisationInput[]
+    createMany?: McpToolInvocationLogCreateManyOrganisationInputEnvelope
+    set?: McpToolInvocationLogWhereUniqueInput | McpToolInvocationLogWhereUniqueInput[]
+    disconnect?: McpToolInvocationLogWhereUniqueInput | McpToolInvocationLogWhereUniqueInput[]
+    delete?: McpToolInvocationLogWhereUniqueInput | McpToolInvocationLogWhereUniqueInput[]
+    connect?: McpToolInvocationLogWhereUniqueInput | McpToolInvocationLogWhereUniqueInput[]
+    update?: McpToolInvocationLogUpdateWithWhereUniqueWithoutOrganisationInput | McpToolInvocationLogUpdateWithWhereUniqueWithoutOrganisationInput[]
+    updateMany?: McpToolInvocationLogUpdateManyWithWhereWithoutOrganisationInput | McpToolInvocationLogUpdateManyWithWhereWithoutOrganisationInput[]
+    deleteMany?: McpToolInvocationLogScalarWhereInput | McpToolInvocationLogScalarWhereInput[]
+  }
+
   export type OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput = {
     create?: XOR<OrganisationMemberCreateWithoutOrganisationInput, OrganisationMemberUncheckedCreateWithoutOrganisationInput> | OrganisationMemberCreateWithoutOrganisationInput[] | OrganisationMemberUncheckedCreateWithoutOrganisationInput[]
     connectOrCreate?: OrganisationMemberCreateOrConnectWithoutOrganisationInput | OrganisationMemberCreateOrConnectWithoutOrganisationInput[]
@@ -104138,6 +109031,34 @@ export namespace Prisma {
     update?: ApiKeyUpdateWithWhereUniqueWithoutOrganisationInput | ApiKeyUpdateWithWhereUniqueWithoutOrganisationInput[]
     updateMany?: ApiKeyUpdateManyWithWhereWithoutOrganisationInput | ApiKeyUpdateManyWithWhereWithoutOrganisationInput[]
     deleteMany?: ApiKeyScalarWhereInput | ApiKeyScalarWhereInput[]
+  }
+
+  export type OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput = {
+    create?: XOR<OAuthConnectionCreateWithoutOrganisationInput, OAuthConnectionUncheckedCreateWithoutOrganisationInput> | OAuthConnectionCreateWithoutOrganisationInput[] | OAuthConnectionUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: OAuthConnectionCreateOrConnectWithoutOrganisationInput | OAuthConnectionCreateOrConnectWithoutOrganisationInput[]
+    upsert?: OAuthConnectionUpsertWithWhereUniqueWithoutOrganisationInput | OAuthConnectionUpsertWithWhereUniqueWithoutOrganisationInput[]
+    createMany?: OAuthConnectionCreateManyOrganisationInputEnvelope
+    set?: OAuthConnectionWhereUniqueInput | OAuthConnectionWhereUniqueInput[]
+    disconnect?: OAuthConnectionWhereUniqueInput | OAuthConnectionWhereUniqueInput[]
+    delete?: OAuthConnectionWhereUniqueInput | OAuthConnectionWhereUniqueInput[]
+    connect?: OAuthConnectionWhereUniqueInput | OAuthConnectionWhereUniqueInput[]
+    update?: OAuthConnectionUpdateWithWhereUniqueWithoutOrganisationInput | OAuthConnectionUpdateWithWhereUniqueWithoutOrganisationInput[]
+    updateMany?: OAuthConnectionUpdateManyWithWhereWithoutOrganisationInput | OAuthConnectionUpdateManyWithWhereWithoutOrganisationInput[]
+    deleteMany?: OAuthConnectionScalarWhereInput | OAuthConnectionScalarWhereInput[]
+  }
+
+  export type McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput = {
+    create?: XOR<McpToolInvocationLogCreateWithoutOrganisationInput, McpToolInvocationLogUncheckedCreateWithoutOrganisationInput> | McpToolInvocationLogCreateWithoutOrganisationInput[] | McpToolInvocationLogUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: McpToolInvocationLogCreateOrConnectWithoutOrganisationInput | McpToolInvocationLogCreateOrConnectWithoutOrganisationInput[]
+    upsert?: McpToolInvocationLogUpsertWithWhereUniqueWithoutOrganisationInput | McpToolInvocationLogUpsertWithWhereUniqueWithoutOrganisationInput[]
+    createMany?: McpToolInvocationLogCreateManyOrganisationInputEnvelope
+    set?: McpToolInvocationLogWhereUniqueInput | McpToolInvocationLogWhereUniqueInput[]
+    disconnect?: McpToolInvocationLogWhereUniqueInput | McpToolInvocationLogWhereUniqueInput[]
+    delete?: McpToolInvocationLogWhereUniqueInput | McpToolInvocationLogWhereUniqueInput[]
+    connect?: McpToolInvocationLogWhereUniqueInput | McpToolInvocationLogWhereUniqueInput[]
+    update?: McpToolInvocationLogUpdateWithWhereUniqueWithoutOrganisationInput | McpToolInvocationLogUpdateWithWhereUniqueWithoutOrganisationInput[]
+    updateMany?: McpToolInvocationLogUpdateManyWithWhereWithoutOrganisationInput | McpToolInvocationLogUpdateManyWithWhereWithoutOrganisationInput[]
+    deleteMany?: McpToolInvocationLogScalarWhereInput | McpToolInvocationLogScalarWhereInput[]
   }
 
   export type OrganisationCreateNestedOneWithoutMembersInput = {
@@ -108437,6 +113358,52 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutActivity_logsInput, UserUpdateWithoutActivity_logsInput>, UserUncheckedUpdateWithoutActivity_logsInput>
   }
 
+  export type OrganisationCreateNestedOneWithoutOauth_connectionsInput = {
+    create?: XOR<OrganisationCreateWithoutOauth_connectionsInput, OrganisationUncheckedCreateWithoutOauth_connectionsInput>
+    connectOrCreate?: OrganisationCreateOrConnectWithoutOauth_connectionsInput
+    connect?: OrganisationWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutOauth_connections_grantedInput = {
+    create?: XOR<UserCreateWithoutOauth_connections_grantedInput, UserUncheckedCreateWithoutOauth_connections_grantedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutOauth_connections_grantedInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type EnumOAuthConnectionStatusFieldUpdateOperationsInput = {
+    set?: $Enums.OAuthConnectionStatus
+  }
+
+  export type OrganisationUpdateOneRequiredWithoutOauth_connectionsNestedInput = {
+    create?: XOR<OrganisationCreateWithoutOauth_connectionsInput, OrganisationUncheckedCreateWithoutOauth_connectionsInput>
+    connectOrCreate?: OrganisationCreateOrConnectWithoutOauth_connectionsInput
+    upsert?: OrganisationUpsertWithoutOauth_connectionsInput
+    connect?: OrganisationWhereUniqueInput
+    update?: XOR<XOR<OrganisationUpdateToOneWithWhereWithoutOauth_connectionsInput, OrganisationUpdateWithoutOauth_connectionsInput>, OrganisationUncheckedUpdateWithoutOauth_connectionsInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutOauth_connections_grantedNestedInput = {
+    create?: XOR<UserCreateWithoutOauth_connections_grantedInput, UserUncheckedCreateWithoutOauth_connections_grantedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutOauth_connections_grantedInput
+    upsert?: UserUpsertWithoutOauth_connections_grantedInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutOauth_connections_grantedInput, UserUpdateWithoutOauth_connections_grantedInput>, UserUncheckedUpdateWithoutOauth_connections_grantedInput>
+  }
+
+  export type OrganisationCreateNestedOneWithoutMcp_tool_invocation_logsInput = {
+    create?: XOR<OrganisationCreateWithoutMcp_tool_invocation_logsInput, OrganisationUncheckedCreateWithoutMcp_tool_invocation_logsInput>
+    connectOrCreate?: OrganisationCreateOrConnectWithoutMcp_tool_invocation_logsInput
+    connect?: OrganisationWhereUniqueInput
+  }
+
+  export type OrganisationUpdateOneRequiredWithoutMcp_tool_invocation_logsNestedInput = {
+    create?: XOR<OrganisationCreateWithoutMcp_tool_invocation_logsInput, OrganisationUncheckedCreateWithoutMcp_tool_invocation_logsInput>
+    connectOrCreate?: OrganisationCreateOrConnectWithoutMcp_tool_invocation_logsInput
+    upsert?: OrganisationUpsertWithoutMcp_tool_invocation_logsInput
+    connect?: OrganisationWhereUniqueInput
+    update?: XOR<XOR<OrganisationUpdateToOneWithWhereWithoutMcp_tool_invocation_logsInput, OrganisationUpdateWithoutMcp_tool_invocation_logsInput>, OrganisationUncheckedUpdateWithoutMcp_tool_invocation_logsInput>
+  }
+
   export type NestedIntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -109645,6 +114612,23 @@ export namespace Prisma {
     _max?: NestedEnumGoalAchievementTypeFilter<$PrismaModel>
   }
 
+  export type NestedEnumOAuthConnectionStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.OAuthConnectionStatus | EnumOAuthConnectionStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.OAuthConnectionStatus[] | ListEnumOAuthConnectionStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.OAuthConnectionStatus[] | ListEnumOAuthConnectionStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumOAuthConnectionStatusFilter<$PrismaModel> | $Enums.OAuthConnectionStatus
+  }
+
+  export type NestedEnumOAuthConnectionStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.OAuthConnectionStatus | EnumOAuthConnectionStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.OAuthConnectionStatus[] | ListEnumOAuthConnectionStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.OAuthConnectionStatus[] | ListEnumOAuthConnectionStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumOAuthConnectionStatusWithAggregatesFilter<$PrismaModel> | $Enums.OAuthConnectionStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumOAuthConnectionStatusFilter<$PrismaModel>
+    _max?: NestedEnumOAuthConnectionStatusFilter<$PrismaModel>
+  }
+
   export type OrganisationMemberCreateWithoutUserInput = {
     uuid?: string
     role?: $Enums.OrganisationRole
@@ -110138,6 +115122,47 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type OAuthConnectionCreateWithoutGranted_byInput = {
+    uuid?: string
+    oauth_client_id: string
+    grant_id: string
+    client_name?: string | null
+    client_uri?: string | null
+    scope: string
+    status?: $Enums.OAuthConnectionStatus
+    last_used_at?: Date | string | null
+    revoked_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutOauth_connectionsInput
+  }
+
+  export type OAuthConnectionUncheckedCreateWithoutGranted_byInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    oauth_client_id: string
+    grant_id: string
+    client_name?: string | null
+    client_uri?: string | null
+    scope: string
+    status?: $Enums.OAuthConnectionStatus
+    last_used_at?: Date | string | null
+    revoked_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type OAuthConnectionCreateOrConnectWithoutGranted_byInput = {
+    where: OAuthConnectionWhereUniqueInput
+    create: XOR<OAuthConnectionCreateWithoutGranted_byInput, OAuthConnectionUncheckedCreateWithoutGranted_byInput>
+  }
+
+  export type OAuthConnectionCreateManyGranted_byInputEnvelope = {
+    data: OAuthConnectionCreateManyGranted_byInput | OAuthConnectionCreateManyGranted_byInput[]
+    skipDuplicates?: boolean
+  }
+
   export type OrganisationMemberUpsertWithWhereUniqueWithoutUserInput = {
     where: OrganisationMemberWhereUniqueInput
     update: XOR<OrganisationMemberUpdateWithoutUserInput, OrganisationMemberUncheckedUpdateWithoutUserInput>
@@ -110564,6 +115589,42 @@ export namespace Prisma {
     revoked_at?: DateTimeNullableFilter<"ApiKey"> | Date | string | null
     created_at?: DateTimeFilter<"ApiKey"> | Date | string
     updated_at?: DateTimeFilter<"ApiKey"> | Date | string
+  }
+
+  export type OAuthConnectionUpsertWithWhereUniqueWithoutGranted_byInput = {
+    where: OAuthConnectionWhereUniqueInput
+    update: XOR<OAuthConnectionUpdateWithoutGranted_byInput, OAuthConnectionUncheckedUpdateWithoutGranted_byInput>
+    create: XOR<OAuthConnectionCreateWithoutGranted_byInput, OAuthConnectionUncheckedCreateWithoutGranted_byInput>
+  }
+
+  export type OAuthConnectionUpdateWithWhereUniqueWithoutGranted_byInput = {
+    where: OAuthConnectionWhereUniqueInput
+    data: XOR<OAuthConnectionUpdateWithoutGranted_byInput, OAuthConnectionUncheckedUpdateWithoutGranted_byInput>
+  }
+
+  export type OAuthConnectionUpdateManyWithWhereWithoutGranted_byInput = {
+    where: OAuthConnectionScalarWhereInput
+    data: XOR<OAuthConnectionUpdateManyMutationInput, OAuthConnectionUncheckedUpdateManyWithoutGranted_byInput>
+  }
+
+  export type OAuthConnectionScalarWhereInput = {
+    AND?: OAuthConnectionScalarWhereInput | OAuthConnectionScalarWhereInput[]
+    OR?: OAuthConnectionScalarWhereInput[]
+    NOT?: OAuthConnectionScalarWhereInput | OAuthConnectionScalarWhereInput[]
+    id?: IntFilter<"OAuthConnection"> | number
+    uuid?: StringFilter<"OAuthConnection"> | string
+    organisation_uuid?: StringFilter<"OAuthConnection"> | string
+    granted_by_user_uuid?: StringFilter<"OAuthConnection"> | string
+    oauth_client_id?: StringFilter<"OAuthConnection"> | string
+    grant_id?: StringFilter<"OAuthConnection"> | string
+    client_name?: StringNullableFilter<"OAuthConnection"> | string | null
+    client_uri?: StringNullableFilter<"OAuthConnection"> | string | null
+    scope?: StringFilter<"OAuthConnection"> | string
+    status?: EnumOAuthConnectionStatusFilter<"OAuthConnection"> | $Enums.OAuthConnectionStatus
+    last_used_at?: DateTimeNullableFilter<"OAuthConnection"> | Date | string | null
+    revoked_at?: DateTimeNullableFilter<"OAuthConnection"> | Date | string | null
+    created_at?: DateTimeFilter<"OAuthConnection"> | Date | string
+    updated_at?: DateTimeFilter<"OAuthConnection"> | Date | string
   }
 
   export type OrganisationMemberCreateWithoutOrganisationInput = {
@@ -112050,6 +117111,84 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type OAuthConnectionCreateWithoutOrganisationInput = {
+    uuid?: string
+    oauth_client_id: string
+    grant_id: string
+    client_name?: string | null
+    client_uri?: string | null
+    scope: string
+    status?: $Enums.OAuthConnectionStatus
+    last_used_at?: Date | string | null
+    revoked_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    granted_by: UserCreateNestedOneWithoutOauth_connections_grantedInput
+  }
+
+  export type OAuthConnectionUncheckedCreateWithoutOrganisationInput = {
+    id?: number
+    uuid?: string
+    granted_by_user_uuid: string
+    oauth_client_id: string
+    grant_id: string
+    client_name?: string | null
+    client_uri?: string | null
+    scope: string
+    status?: $Enums.OAuthConnectionStatus
+    last_used_at?: Date | string | null
+    revoked_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type OAuthConnectionCreateOrConnectWithoutOrganisationInput = {
+    where: OAuthConnectionWhereUniqueInput
+    create: XOR<OAuthConnectionCreateWithoutOrganisationInput, OAuthConnectionUncheckedCreateWithoutOrganisationInput>
+  }
+
+  export type OAuthConnectionCreateManyOrganisationInputEnvelope = {
+    data: OAuthConnectionCreateManyOrganisationInput | OAuthConnectionCreateManyOrganisationInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type McpToolInvocationLogCreateWithoutOrganisationInput = {
+    uuid?: string
+    user_uuid?: string | null
+    oauth_client_id?: string | null
+    tool_name: string
+    http_method: string
+    path: string
+    status_code?: number | null
+    duration_ms?: number | null
+    error_message?: string | null
+    created_at?: Date | string
+  }
+
+  export type McpToolInvocationLogUncheckedCreateWithoutOrganisationInput = {
+    id?: number
+    uuid?: string
+    user_uuid?: string | null
+    oauth_client_id?: string | null
+    tool_name: string
+    http_method: string
+    path: string
+    status_code?: number | null
+    duration_ms?: number | null
+    error_message?: string | null
+    created_at?: Date | string
+  }
+
+  export type McpToolInvocationLogCreateOrConnectWithoutOrganisationInput = {
+    where: McpToolInvocationLogWhereUniqueInput
+    create: XOR<McpToolInvocationLogCreateWithoutOrganisationInput, McpToolInvocationLogUncheckedCreateWithoutOrganisationInput>
+  }
+
+  export type McpToolInvocationLogCreateManyOrganisationInputEnvelope = {
+    data: McpToolInvocationLogCreateManyOrganisationInput | McpToolInvocationLogCreateManyOrganisationInput[]
+    skipDuplicates?: boolean
+  }
+
   export type OrganisationMemberUpsertWithWhereUniqueWithoutOrganisationInput = {
     where: OrganisationMemberWhereUniqueInput
     update: XOR<OrganisationMemberUpdateWithoutOrganisationInput, OrganisationMemberUncheckedUpdateWithoutOrganisationInput>
@@ -113027,6 +118166,56 @@ export namespace Prisma {
     data: XOR<ApiKeyUpdateManyMutationInput, ApiKeyUncheckedUpdateManyWithoutOrganisationInput>
   }
 
+  export type OAuthConnectionUpsertWithWhereUniqueWithoutOrganisationInput = {
+    where: OAuthConnectionWhereUniqueInput
+    update: XOR<OAuthConnectionUpdateWithoutOrganisationInput, OAuthConnectionUncheckedUpdateWithoutOrganisationInput>
+    create: XOR<OAuthConnectionCreateWithoutOrganisationInput, OAuthConnectionUncheckedCreateWithoutOrganisationInput>
+  }
+
+  export type OAuthConnectionUpdateWithWhereUniqueWithoutOrganisationInput = {
+    where: OAuthConnectionWhereUniqueInput
+    data: XOR<OAuthConnectionUpdateWithoutOrganisationInput, OAuthConnectionUncheckedUpdateWithoutOrganisationInput>
+  }
+
+  export type OAuthConnectionUpdateManyWithWhereWithoutOrganisationInput = {
+    where: OAuthConnectionScalarWhereInput
+    data: XOR<OAuthConnectionUpdateManyMutationInput, OAuthConnectionUncheckedUpdateManyWithoutOrganisationInput>
+  }
+
+  export type McpToolInvocationLogUpsertWithWhereUniqueWithoutOrganisationInput = {
+    where: McpToolInvocationLogWhereUniqueInput
+    update: XOR<McpToolInvocationLogUpdateWithoutOrganisationInput, McpToolInvocationLogUncheckedUpdateWithoutOrganisationInput>
+    create: XOR<McpToolInvocationLogCreateWithoutOrganisationInput, McpToolInvocationLogUncheckedCreateWithoutOrganisationInput>
+  }
+
+  export type McpToolInvocationLogUpdateWithWhereUniqueWithoutOrganisationInput = {
+    where: McpToolInvocationLogWhereUniqueInput
+    data: XOR<McpToolInvocationLogUpdateWithoutOrganisationInput, McpToolInvocationLogUncheckedUpdateWithoutOrganisationInput>
+  }
+
+  export type McpToolInvocationLogUpdateManyWithWhereWithoutOrganisationInput = {
+    where: McpToolInvocationLogScalarWhereInput
+    data: XOR<McpToolInvocationLogUpdateManyMutationInput, McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationInput>
+  }
+
+  export type McpToolInvocationLogScalarWhereInput = {
+    AND?: McpToolInvocationLogScalarWhereInput | McpToolInvocationLogScalarWhereInput[]
+    OR?: McpToolInvocationLogScalarWhereInput[]
+    NOT?: McpToolInvocationLogScalarWhereInput | McpToolInvocationLogScalarWhereInput[]
+    id?: IntFilter<"McpToolInvocationLog"> | number
+    uuid?: StringFilter<"McpToolInvocationLog"> | string
+    organisation_uuid?: StringFilter<"McpToolInvocationLog"> | string
+    user_uuid?: StringNullableFilter<"McpToolInvocationLog"> | string | null
+    oauth_client_id?: StringNullableFilter<"McpToolInvocationLog"> | string | null
+    tool_name?: StringFilter<"McpToolInvocationLog"> | string
+    http_method?: StringFilter<"McpToolInvocationLog"> | string
+    path?: StringFilter<"McpToolInvocationLog"> | string
+    status_code?: IntNullableFilter<"McpToolInvocationLog"> | number | null
+    duration_ms?: IntNullableFilter<"McpToolInvocationLog"> | number | null
+    error_message?: StringNullableFilter<"McpToolInvocationLog"> | string | null
+    created_at?: DateTimeFilter<"McpToolInvocationLog"> | Date | string
+  }
+
   export type OrganisationCreateWithoutMembersInput = {
     uuid?: string
     name: string
@@ -113067,6 +118256,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutMembersInput = {
@@ -113110,6 +118301,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutMembersInput = {
@@ -113137,6 +118330,7 @@ export namespace Prisma {
     openai_batch_jobs_created?: OpenAiBatchJobCreateNestedManyWithoutUserInput
     sidebar_favorites?: SidebarFavoriteCreateNestedManyWithoutUserInput
     api_keys_created?: ApiKeyCreateNestedManyWithoutCreated_byInput
+    oauth_connections_granted?: OAuthConnectionCreateNestedManyWithoutGranted_byInput
   }
 
   export type UserUncheckedCreateWithoutMembershipsInput = {
@@ -113160,6 +118354,7 @@ export namespace Prisma {
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedCreateNestedManyWithoutUserInput
     sidebar_favorites?: SidebarFavoriteUncheckedCreateNestedManyWithoutUserInput
     api_keys_created?: ApiKeyUncheckedCreateNestedManyWithoutCreated_byInput
+    oauth_connections_granted?: OAuthConnectionUncheckedCreateNestedManyWithoutGranted_byInput
   }
 
   export type UserCreateOrConnectWithoutMembershipsInput = {
@@ -113218,6 +118413,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutMembersInput = {
@@ -113261,6 +118458,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutMembershipsInput = {
@@ -113294,6 +118493,7 @@ export namespace Prisma {
     openai_batch_jobs_created?: OpenAiBatchJobUpdateManyWithoutUserNestedInput
     sidebar_favorites?: SidebarFavoriteUpdateManyWithoutUserNestedInput
     api_keys_created?: ApiKeyUpdateManyWithoutCreated_byNestedInput
+    oauth_connections_granted?: OAuthConnectionUpdateManyWithoutGranted_byNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMembershipsInput = {
@@ -113317,6 +118517,7 @@ export namespace Prisma {
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedUpdateManyWithoutUserNestedInput
     sidebar_favorites?: SidebarFavoriteUncheckedUpdateManyWithoutUserNestedInput
     api_keys_created?: ApiKeyUncheckedUpdateManyWithoutCreated_byNestedInput
+    oauth_connections_granted?: OAuthConnectionUncheckedUpdateManyWithoutGranted_byNestedInput
   }
 
   export type OrganisationCreateWithoutInvitationsInput = {
@@ -113359,6 +118560,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutInvitationsInput = {
@@ -113402,6 +118605,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutInvitationsInput = {
@@ -113429,6 +118634,7 @@ export namespace Prisma {
     openai_batch_jobs_created?: OpenAiBatchJobCreateNestedManyWithoutUserInput
     sidebar_favorites?: SidebarFavoriteCreateNestedManyWithoutUserInput
     api_keys_created?: ApiKeyCreateNestedManyWithoutCreated_byInput
+    oauth_connections_granted?: OAuthConnectionCreateNestedManyWithoutGranted_byInput
   }
 
   export type UserUncheckedCreateWithoutInvitations_sentInput = {
@@ -113452,6 +118658,7 @@ export namespace Prisma {
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedCreateNestedManyWithoutUserInput
     sidebar_favorites?: SidebarFavoriteUncheckedCreateNestedManyWithoutUserInput
     api_keys_created?: ApiKeyUncheckedCreateNestedManyWithoutCreated_byInput
+    oauth_connections_granted?: OAuthConnectionUncheckedCreateNestedManyWithoutGranted_byInput
   }
 
   export type UserCreateOrConnectWithoutInvitations_sentInput = {
@@ -113510,6 +118717,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutInvitationsInput = {
@@ -113553,6 +118762,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutInvitations_sentInput = {
@@ -113586,6 +118797,7 @@ export namespace Prisma {
     openai_batch_jobs_created?: OpenAiBatchJobUpdateManyWithoutUserNestedInput
     sidebar_favorites?: SidebarFavoriteUpdateManyWithoutUserNestedInput
     api_keys_created?: ApiKeyUpdateManyWithoutCreated_byNestedInput
+    oauth_connections_granted?: OAuthConnectionUpdateManyWithoutGranted_byNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInvitations_sentInput = {
@@ -113609,6 +118821,7 @@ export namespace Prisma {
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedUpdateManyWithoutUserNestedInput
     sidebar_favorites?: SidebarFavoriteUncheckedUpdateManyWithoutUserNestedInput
     api_keys_created?: ApiKeyUncheckedUpdateManyWithoutCreated_byNestedInput
+    oauth_connections_granted?: OAuthConnectionUncheckedUpdateManyWithoutGranted_byNestedInput
   }
 
   export type OrganisationCreateWithoutApi_keysInput = {
@@ -113651,6 +118864,8 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutApi_keysInput = {
@@ -113694,6 +118909,8 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutApi_keysInput = {
@@ -113721,6 +118938,7 @@ export namespace Prisma {
     bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
     openai_batch_jobs_created?: OpenAiBatchJobCreateNestedManyWithoutUserInput
     sidebar_favorites?: SidebarFavoriteCreateNestedManyWithoutUserInput
+    oauth_connections_granted?: OAuthConnectionCreateNestedManyWithoutGranted_byInput
   }
 
   export type UserUncheckedCreateWithoutApi_keys_createdInput = {
@@ -113744,6 +118962,7 @@ export namespace Prisma {
     bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedCreateNestedManyWithoutUserInput
     sidebar_favorites?: SidebarFavoriteUncheckedCreateNestedManyWithoutUserInput
+    oauth_connections_granted?: OAuthConnectionUncheckedCreateNestedManyWithoutGranted_byInput
   }
 
   export type UserCreateOrConnectWithoutApi_keys_createdInput = {
@@ -113802,6 +119021,8 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutApi_keysInput = {
@@ -113845,6 +119066,8 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutApi_keys_createdInput = {
@@ -113878,6 +119101,7 @@ export namespace Prisma {
     bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
     openai_batch_jobs_created?: OpenAiBatchJobUpdateManyWithoutUserNestedInput
     sidebar_favorites?: SidebarFavoriteUpdateManyWithoutUserNestedInput
+    oauth_connections_granted?: OAuthConnectionUpdateManyWithoutGranted_byNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApi_keys_createdInput = {
@@ -113901,6 +119125,7 @@ export namespace Prisma {
     bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedUpdateManyWithoutUserNestedInput
     sidebar_favorites?: SidebarFavoriteUncheckedUpdateManyWithoutUserNestedInput
+    oauth_connections_granted?: OAuthConnectionUncheckedUpdateManyWithoutGranted_byNestedInput
   }
 
   export type OrganisationCreateWithoutFiltersInput = {
@@ -113943,6 +119168,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutFiltersInput = {
@@ -113986,6 +119213,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutFiltersInput = {
@@ -114338,6 +119567,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutFiltersInput = {
@@ -114381,6 +119612,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type ContactListUpsertWithoutFiltersInput = {
@@ -114609,6 +119842,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutSaved_contact_filtersInput = {
@@ -114652,6 +119887,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutSaved_contact_filtersInput = {
@@ -114710,6 +119947,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutSaved_contact_filtersInput = {
@@ -114753,6 +119992,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserCreateWithoutSidebar_favoritesInput = {
@@ -114775,6 +120016,7 @@ export namespace Prisma {
     bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
     openai_batch_jobs_created?: OpenAiBatchJobCreateNestedManyWithoutUserInput
     api_keys_created?: ApiKeyCreateNestedManyWithoutCreated_byInput
+    oauth_connections_granted?: OAuthConnectionCreateNestedManyWithoutGranted_byInput
   }
 
   export type UserUncheckedCreateWithoutSidebar_favoritesInput = {
@@ -114798,6 +120040,7 @@ export namespace Prisma {
     bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedCreateNestedManyWithoutUserInput
     api_keys_created?: ApiKeyUncheckedCreateNestedManyWithoutCreated_byInput
+    oauth_connections_granted?: OAuthConnectionUncheckedCreateNestedManyWithoutGranted_byInput
   }
 
   export type UserCreateOrConnectWithoutSidebar_favoritesInput = {
@@ -114836,6 +120079,7 @@ export namespace Prisma {
     bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
     openai_batch_jobs_created?: OpenAiBatchJobUpdateManyWithoutUserNestedInput
     api_keys_created?: ApiKeyUpdateManyWithoutCreated_byNestedInput
+    oauth_connections_granted?: OAuthConnectionUpdateManyWithoutGranted_byNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSidebar_favoritesInput = {
@@ -114859,6 +120103,7 @@ export namespace Prisma {
     bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedUpdateManyWithoutUserNestedInput
     api_keys_created?: ApiKeyUncheckedUpdateManyWithoutCreated_byNestedInput
+    oauth_connections_granted?: OAuthConnectionUncheckedUpdateManyWithoutGranted_byNestedInput
   }
 
   export type OrganisationCreateWithoutScoring_instructionsInput = {
@@ -114901,6 +120146,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutScoring_instructionsInput = {
@@ -114944,6 +120191,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutScoring_instructionsInput = {
@@ -115045,6 +120294,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutScoring_instructionsInput = {
@@ -115088,6 +120339,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type FilterScoringInstructionUpsertWithWhereUniqueWithoutScoring_instructionInput = {
@@ -115949,6 +121202,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutContactsInput = {
@@ -115992,6 +121247,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutContactsInput = {
@@ -116660,6 +121917,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutContactsInput = {
@@ -116703,6 +121962,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type LeadUpsertWithoutContactsInput = {
@@ -118122,6 +123383,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutContact_listsInput = {
@@ -118165,6 +123428,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutContact_listsInput = {
@@ -118474,6 +123739,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutContact_listsInput = {
@@ -118517,6 +123784,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type ContactListUpsertWithoutChildrenInput = {
@@ -119245,6 +124514,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutInteractionsInput = {
@@ -119288,6 +124559,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutInteractionsInput = {
@@ -119640,6 +124913,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutInteractionsInput = {
@@ -119683,6 +124958,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OutreachMessageUpsertWithoutInteractionsInput = {
@@ -119929,6 +125206,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutOutreach_messagesInput = {
@@ -119972,6 +125251,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutOutreach_messagesInput = {
@@ -120193,6 +125474,7 @@ export namespace Prisma {
     openai_batch_jobs_created?: OpenAiBatchJobCreateNestedManyWithoutUserInput
     sidebar_favorites?: SidebarFavoriteCreateNestedManyWithoutUserInput
     api_keys_created?: ApiKeyCreateNestedManyWithoutCreated_byInput
+    oauth_connections_granted?: OAuthConnectionCreateNestedManyWithoutGranted_byInput
   }
 
   export type UserUncheckedCreateWithoutOutreach_messages_sentInput = {
@@ -120216,6 +125498,7 @@ export namespace Prisma {
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedCreateNestedManyWithoutUserInput
     sidebar_favorites?: SidebarFavoriteUncheckedCreateNestedManyWithoutUserInput
     api_keys_created?: ApiKeyUncheckedCreateNestedManyWithoutCreated_byInput
+    oauth_connections_granted?: OAuthConnectionUncheckedCreateNestedManyWithoutGranted_byInput
   }
 
   export type UserCreateOrConnectWithoutOutreach_messages_sentInput = {
@@ -120518,6 +125801,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutOutreach_messagesInput = {
@@ -120561,6 +125846,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type ContactUpsertWithoutOutreach_messagesInput = {
@@ -120800,6 +126087,7 @@ export namespace Prisma {
     openai_batch_jobs_created?: OpenAiBatchJobUpdateManyWithoutUserNestedInput
     sidebar_favorites?: SidebarFavoriteUpdateManyWithoutUserNestedInput
     api_keys_created?: ApiKeyUpdateManyWithoutCreated_byNestedInput
+    oauth_connections_granted?: OAuthConnectionUpdateManyWithoutGranted_byNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOutreach_messages_sentInput = {
@@ -120823,6 +126111,7 @@ export namespace Prisma {
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedUpdateManyWithoutUserNestedInput
     sidebar_favorites?: SidebarFavoriteUncheckedUpdateManyWithoutUserNestedInput
     api_keys_created?: ApiKeyUncheckedUpdateManyWithoutCreated_byNestedInput
+    oauth_connections_granted?: OAuthConnectionUncheckedUpdateManyWithoutGranted_byNestedInput
   }
 
   export type InteractionUpsertWithWhereUniqueWithoutOutreach_messageInput = {
@@ -121085,6 +126374,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutMessage_threadsInput = {
@@ -121128,6 +126419,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutMessage_threadsInput = {
@@ -121381,6 +126674,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutMessage_threadsInput = {
@@ -121424,6 +126719,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type ContactUpsertWithoutMessage_threadsInput = {
@@ -121584,6 +126881,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutOutreach_sequencesInput = {
@@ -121627,6 +126926,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutOutreach_sequencesInput = {
@@ -121884,6 +127185,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutOutreach_sequencesInput = {
@@ -121927,6 +127230,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OutreachSequenceStepUpsertWithWhereUniqueWithoutSequenceInput = {
@@ -123059,6 +128364,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutBulk_jobsInput = {
@@ -123102,6 +128409,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutBulk_jobsInput = {
@@ -123129,6 +128438,7 @@ export namespace Prisma {
     openai_batch_jobs_created?: OpenAiBatchJobCreateNestedManyWithoutUserInput
     sidebar_favorites?: SidebarFavoriteCreateNestedManyWithoutUserInput
     api_keys_created?: ApiKeyCreateNestedManyWithoutCreated_byInput
+    oauth_connections_granted?: OAuthConnectionCreateNestedManyWithoutGranted_byInput
   }
 
   export type UserUncheckedCreateWithoutBulk_jobs_createdInput = {
@@ -123152,6 +128462,7 @@ export namespace Prisma {
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedCreateNestedManyWithoutUserInput
     sidebar_favorites?: SidebarFavoriteUncheckedCreateNestedManyWithoutUserInput
     api_keys_created?: ApiKeyUncheckedCreateNestedManyWithoutCreated_byInput
+    oauth_connections_granted?: OAuthConnectionUncheckedCreateNestedManyWithoutGranted_byInput
   }
 
   export type UserCreateOrConnectWithoutBulk_jobs_createdInput = {
@@ -123210,6 +128521,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutBulk_jobsInput = {
@@ -123253,6 +128566,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutBulk_jobs_createdInput = {
@@ -123286,6 +128601,7 @@ export namespace Prisma {
     openai_batch_jobs_created?: OpenAiBatchJobUpdateManyWithoutUserNestedInput
     sidebar_favorites?: SidebarFavoriteUpdateManyWithoutUserNestedInput
     api_keys_created?: ApiKeyUpdateManyWithoutCreated_byNestedInput
+    oauth_connections_granted?: OAuthConnectionUpdateManyWithoutGranted_byNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBulk_jobs_createdInput = {
@@ -123309,6 +128625,7 @@ export namespace Prisma {
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedUpdateManyWithoutUserNestedInput
     sidebar_favorites?: SidebarFavoriteUncheckedUpdateManyWithoutUserNestedInput
     api_keys_created?: ApiKeyUncheckedUpdateManyWithoutCreated_byNestedInput
+    oauth_connections_granted?: OAuthConnectionUncheckedUpdateManyWithoutGranted_byNestedInput
   }
 
   export type OrganisationCreateWithoutWebsite_scrape_requestsInput = {
@@ -123351,6 +128668,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutWebsite_scrape_requestsInput = {
@@ -123394,6 +128713,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutWebsite_scrape_requestsInput = {
@@ -123452,6 +128773,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutWebsite_scrape_requestsInput = {
@@ -123495,6 +128818,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutSender_profilesInput = {
@@ -123537,6 +128862,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutSender_profilesInput = {
@@ -123580,6 +128907,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutSender_profilesInput = {
@@ -123741,6 +129070,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutSender_profilesInput = {
@@ -123784,6 +129115,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type MarketingCampaignUpsertWithWhereUniqueWithoutSender_profileInput = {
@@ -123842,6 +129175,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutMessage_templatesInput = {
@@ -123885,6 +129220,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutMessage_templatesInput = {
@@ -123990,6 +129327,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutMessage_templatesInput = {
@@ -124033,6 +129372,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OutreachSequenceStepUpsertWithWhereUniqueWithoutMessage_templateInput = {
@@ -124091,6 +129432,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutMarketing_campaignsInput = {
@@ -124134,6 +129477,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutMarketing_campaignsInput = {
@@ -124588,6 +129933,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutMarketing_campaignsInput = {
@@ -124631,6 +129978,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type SenderProfileUpsertWithoutMarketing_campaignsInput = {
@@ -125286,6 +130635,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutOpenai_batch_jobsInput = {
@@ -125329,6 +130680,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutOpenai_batch_jobsInput = {
@@ -125356,6 +130709,7 @@ export namespace Prisma {
     bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
     sidebar_favorites?: SidebarFavoriteCreateNestedManyWithoutUserInput
     api_keys_created?: ApiKeyCreateNestedManyWithoutCreated_byInput
+    oauth_connections_granted?: OAuthConnectionCreateNestedManyWithoutGranted_byInput
   }
 
   export type UserUncheckedCreateWithoutOpenai_batch_jobs_createdInput = {
@@ -125379,6 +130733,7 @@ export namespace Prisma {
     bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
     sidebar_favorites?: SidebarFavoriteUncheckedCreateNestedManyWithoutUserInput
     api_keys_created?: ApiKeyUncheckedCreateNestedManyWithoutCreated_byInput
+    oauth_connections_granted?: OAuthConnectionUncheckedCreateNestedManyWithoutGranted_byInput
   }
 
   export type UserCreateOrConnectWithoutOpenai_batch_jobs_createdInput = {
@@ -125437,6 +130792,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutOpenai_batch_jobsInput = {
@@ -125480,6 +130837,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutOpenai_batch_jobs_createdInput = {
@@ -125513,6 +130872,7 @@ export namespace Prisma {
     bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
     sidebar_favorites?: SidebarFavoriteUpdateManyWithoutUserNestedInput
     api_keys_created?: ApiKeyUpdateManyWithoutCreated_byNestedInput
+    oauth_connections_granted?: OAuthConnectionUpdateManyWithoutGranted_byNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOpenai_batch_jobs_createdInput = {
@@ -125536,6 +130896,7 @@ export namespace Prisma {
     bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
     sidebar_favorites?: SidebarFavoriteUncheckedUpdateManyWithoutUserNestedInput
     api_keys_created?: ApiKeyUncheckedUpdateManyWithoutCreated_byNestedInput
+    oauth_connections_granted?: OAuthConnectionUncheckedUpdateManyWithoutGranted_byNestedInput
   }
 
   export type OrganisationCreateWithoutIntegrationsInput = {
@@ -125578,6 +130939,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutIntegrationsInput = {
@@ -125621,6 +130984,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutIntegrationsInput = {
@@ -125745,6 +131110,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutIntegrationsInput = {
@@ -125788,6 +131155,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type IntegrationKeyUpsertWithWhereUniqueWithoutIntegrationInput = {
@@ -126245,6 +131614,8 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutMail_tester_testsInput = {
@@ -126288,6 +131659,8 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutMail_tester_testsInput = {
@@ -126346,6 +131719,8 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutMail_tester_testsInput = {
@@ -126389,6 +131764,8 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutMxtoolbox_checksInput = {
@@ -126431,6 +131808,8 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutMxtoolbox_checksInput = {
@@ -126474,6 +131853,8 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutMxtoolbox_checksInput = {
@@ -126532,6 +131913,8 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutMxtoolbox_checksInput = {
@@ -126575,6 +131958,8 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutRemindersInput = {
@@ -126617,6 +132002,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutRemindersInput = {
@@ -126660,6 +132047,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutRemindersInput = {
@@ -126908,6 +132297,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutRemindersInput = {
@@ -126951,6 +132342,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type ContactUpsertWithoutRemindersInput = {
@@ -127195,6 +132588,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutFormsInput = {
@@ -127238,6 +132633,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutFormsInput = {
@@ -127368,6 +132765,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutFormsInput = {
@@ -127411,6 +132810,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type FormFieldUpsertWithWhereUniqueWithoutFormInput = {
@@ -127721,6 +133122,7 @@ export namespace Prisma {
     openai_batch_jobs_created?: OpenAiBatchJobCreateNestedManyWithoutUserInput
     sidebar_favorites?: SidebarFavoriteCreateNestedManyWithoutUserInput
     api_keys_created?: ApiKeyCreateNestedManyWithoutCreated_byInput
+    oauth_connections_granted?: OAuthConnectionCreateNestedManyWithoutGranted_byInput
   }
 
   export type UserUncheckedCreateWithoutForm_completionsInput = {
@@ -127744,6 +133146,7 @@ export namespace Prisma {
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedCreateNestedManyWithoutUserInput
     sidebar_favorites?: SidebarFavoriteUncheckedCreateNestedManyWithoutUserInput
     api_keys_created?: ApiKeyUncheckedCreateNestedManyWithoutCreated_byInput
+    oauth_connections_granted?: OAuthConnectionUncheckedCreateNestedManyWithoutGranted_byInput
   }
 
   export type UserCreateOrConnectWithoutForm_completionsInput = {
@@ -127943,6 +133346,7 @@ export namespace Prisma {
     openai_batch_jobs_created?: OpenAiBatchJobUpdateManyWithoutUserNestedInput
     sidebar_favorites?: SidebarFavoriteUpdateManyWithoutUserNestedInput
     api_keys_created?: ApiKeyUpdateManyWithoutCreated_byNestedInput
+    oauth_connections_granted?: OAuthConnectionUpdateManyWithoutGranted_byNestedInput
   }
 
   export type UserUncheckedUpdateWithoutForm_completionsInput = {
@@ -127966,6 +133370,7 @@ export namespace Prisma {
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedUpdateManyWithoutUserNestedInput
     sidebar_favorites?: SidebarFavoriteUncheckedUpdateManyWithoutUserNestedInput
     api_keys_created?: ApiKeyUncheckedUpdateManyWithoutCreated_byNestedInput
+    oauth_connections_granted?: OAuthConnectionUncheckedUpdateManyWithoutGranted_byNestedInput
   }
 
   export type FormCompletionValueUpsertWithWhereUniqueWithoutCompletionInput = {
@@ -128160,6 +133565,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutContact_audience_analysesInput = {
@@ -128203,6 +133610,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutContact_audience_analysesInput = {
@@ -128441,6 +133850,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutContact_audience_analysesInput = {
@@ -128484,6 +133895,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type FilterUpsertWithoutAudience_analysesInput = {
@@ -128724,6 +134137,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutAi_usage_logsInput = {
@@ -128767,6 +134182,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutAi_usage_logsInput = {
@@ -128825,6 +134242,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutAi_usage_logsInput = {
@@ -128868,6 +134287,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutApify_usage_logsInput = {
@@ -128910,6 +134331,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutApify_usage_logsInput = {
@@ -128953,6 +134376,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutApify_usage_logsInput = {
@@ -129011,6 +134436,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutApify_usage_logsInput = {
@@ -129054,6 +134481,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutMessaging_goalsInput = {
@@ -129096,6 +134525,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutMessaging_goalsInput = {
@@ -129139,6 +134570,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutMessaging_goalsInput = {
@@ -129166,6 +134599,7 @@ export namespace Prisma {
     openai_batch_jobs_created?: OpenAiBatchJobCreateNestedManyWithoutUserInput
     sidebar_favorites?: SidebarFavoriteCreateNestedManyWithoutUserInput
     api_keys_created?: ApiKeyCreateNestedManyWithoutCreated_byInput
+    oauth_connections_granted?: OAuthConnectionCreateNestedManyWithoutGranted_byInput
   }
 
   export type UserUncheckedCreateWithoutMessaging_goalsInput = {
@@ -129189,6 +134623,7 @@ export namespace Prisma {
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedCreateNestedManyWithoutUserInput
     sidebar_favorites?: SidebarFavoriteUncheckedCreateNestedManyWithoutUserInput
     api_keys_created?: ApiKeyUncheckedCreateNestedManyWithoutCreated_byInput
+    oauth_connections_granted?: OAuthConnectionUncheckedCreateNestedManyWithoutGranted_byInput
   }
 
   export type UserCreateOrConnectWithoutMessaging_goalsInput = {
@@ -129280,6 +134715,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutMessaging_goalsInput = {
@@ -129323,6 +134760,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutMessaging_goalsInput = {
@@ -129356,6 +134795,7 @@ export namespace Prisma {
     openai_batch_jobs_created?: OpenAiBatchJobUpdateManyWithoutUserNestedInput
     sidebar_favorites?: SidebarFavoriteUpdateManyWithoutUserNestedInput
     api_keys_created?: ApiKeyUpdateManyWithoutCreated_byNestedInput
+    oauth_connections_granted?: OAuthConnectionUpdateManyWithoutGranted_byNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMessaging_goalsInput = {
@@ -129379,6 +134819,7 @@ export namespace Prisma {
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedUpdateManyWithoutUserNestedInput
     sidebar_favorites?: SidebarFavoriteUncheckedUpdateManyWithoutUserNestedInput
     api_keys_created?: ApiKeyUncheckedUpdateManyWithoutCreated_byNestedInput
+    oauth_connections_granted?: OAuthConnectionUncheckedUpdateManyWithoutGranted_byNestedInput
   }
 
   export type GoalAchievementUpsertWithWhereUniqueWithoutGoalInput = {
@@ -129437,6 +134878,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutEmail_send_limitsInput = {
@@ -129480,6 +134923,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutEmail_send_limitsInput = {
@@ -129538,6 +134983,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutEmail_send_limitsInput = {
@@ -129581,6 +135028,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutSending_policiesInput = {
@@ -129623,6 +135072,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutSending_policiesInput = {
@@ -129666,6 +135117,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutSending_policiesInput = {
@@ -129881,6 +135334,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutSending_policiesInput = {
@@ -129924,6 +135379,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type SendingPolicyUpsertWithoutCloned_instancesInput = {
@@ -130819,6 +136276,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutGoal_achievementsInput = {
@@ -130862,6 +136321,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutGoal_achievementsInput = {
@@ -130889,6 +136350,7 @@ export namespace Prisma {
     openai_batch_jobs_created?: OpenAiBatchJobCreateNestedManyWithoutUserInput
     sidebar_favorites?: SidebarFavoriteCreateNestedManyWithoutUserInput
     api_keys_created?: ApiKeyCreateNestedManyWithoutCreated_byInput
+    oauth_connections_granted?: OAuthConnectionCreateNestedManyWithoutGranted_byInput
   }
 
   export type UserUncheckedCreateWithoutGoal_achievementsInput = {
@@ -130912,6 +136374,7 @@ export namespace Prisma {
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedCreateNestedManyWithoutUserInput
     sidebar_favorites?: SidebarFavoriteUncheckedCreateNestedManyWithoutUserInput
     api_keys_created?: ApiKeyUncheckedCreateNestedManyWithoutCreated_byInput
+    oauth_connections_granted?: OAuthConnectionUncheckedCreateNestedManyWithoutGranted_byInput
   }
 
   export type UserCreateOrConnectWithoutGoal_achievementsInput = {
@@ -130998,6 +136461,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutGoal_achievementsInput = {
@@ -131041,6 +136506,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutGoal_achievementsInput = {
@@ -131074,6 +136541,7 @@ export namespace Prisma {
     openai_batch_jobs_created?: OpenAiBatchJobUpdateManyWithoutUserNestedInput
     sidebar_favorites?: SidebarFavoriteUpdateManyWithoutUserNestedInput
     api_keys_created?: ApiKeyUpdateManyWithoutCreated_byNestedInput
+    oauth_connections_granted?: OAuthConnectionUpdateManyWithoutGranted_byNestedInput
   }
 
   export type UserUncheckedUpdateWithoutGoal_achievementsInput = {
@@ -131097,6 +136565,7 @@ export namespace Prisma {
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedUpdateManyWithoutUserNestedInput
     sidebar_favorites?: SidebarFavoriteUncheckedUpdateManyWithoutUserNestedInput
     api_keys_created?: ApiKeyUncheckedUpdateManyWithoutCreated_byNestedInput
+    oauth_connections_granted?: OAuthConnectionUncheckedUpdateManyWithoutGranted_byNestedInput
   }
 
   export type MessagingGoalUpsertWithoutAchievementsInput = {
@@ -131173,6 +136642,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutGoal_personal_bestsInput = {
@@ -131216,6 +136687,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutGoal_personal_bestsInput = {
@@ -131243,6 +136716,7 @@ export namespace Prisma {
     openai_batch_jobs_created?: OpenAiBatchJobCreateNestedManyWithoutUserInput
     sidebar_favorites?: SidebarFavoriteCreateNestedManyWithoutUserInput
     api_keys_created?: ApiKeyCreateNestedManyWithoutCreated_byInput
+    oauth_connections_granted?: OAuthConnectionCreateNestedManyWithoutGranted_byInput
   }
 
   export type UserUncheckedCreateWithoutGoal_personal_bestsInput = {
@@ -131266,6 +136740,7 @@ export namespace Prisma {
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedCreateNestedManyWithoutUserInput
     sidebar_favorites?: SidebarFavoriteUncheckedCreateNestedManyWithoutUserInput
     api_keys_created?: ApiKeyUncheckedCreateNestedManyWithoutCreated_byInput
+    oauth_connections_granted?: OAuthConnectionUncheckedCreateNestedManyWithoutGranted_byInput
   }
 
   export type UserCreateOrConnectWithoutGoal_personal_bestsInput = {
@@ -131324,6 +136799,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutGoal_personal_bestsInput = {
@@ -131367,6 +136844,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutGoal_personal_bestsInput = {
@@ -131400,6 +136879,7 @@ export namespace Prisma {
     openai_batch_jobs_created?: OpenAiBatchJobUpdateManyWithoutUserNestedInput
     sidebar_favorites?: SidebarFavoriteUpdateManyWithoutUserNestedInput
     api_keys_created?: ApiKeyUpdateManyWithoutCreated_byNestedInput
+    oauth_connections_granted?: OAuthConnectionUpdateManyWithoutGranted_byNestedInput
   }
 
   export type UserUncheckedUpdateWithoutGoal_personal_bestsInput = {
@@ -131423,6 +136903,7 @@ export namespace Prisma {
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedUpdateManyWithoutUserNestedInput
     sidebar_favorites?: SidebarFavoriteUncheckedUpdateManyWithoutUserNestedInput
     api_keys_created?: ApiKeyUncheckedUpdateManyWithoutCreated_byNestedInput
+    oauth_connections_granted?: OAuthConnectionUncheckedUpdateManyWithoutGranted_byNestedInput
   }
 
   export type OrganisationCreateWithoutActivity_logsInput = {
@@ -131465,6 +136946,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutActivity_logsInput = {
@@ -131508,6 +136991,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutActivity_logsInput = {
@@ -131535,6 +137020,7 @@ export namespace Prisma {
     openai_batch_jobs_created?: OpenAiBatchJobCreateNestedManyWithoutUserInput
     sidebar_favorites?: SidebarFavoriteCreateNestedManyWithoutUserInput
     api_keys_created?: ApiKeyCreateNestedManyWithoutCreated_byInput
+    oauth_connections_granted?: OAuthConnectionCreateNestedManyWithoutGranted_byInput
   }
 
   export type UserUncheckedCreateWithoutActivity_logsInput = {
@@ -131558,6 +137044,7 @@ export namespace Prisma {
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedCreateNestedManyWithoutUserInput
     sidebar_favorites?: SidebarFavoriteUncheckedCreateNestedManyWithoutUserInput
     api_keys_created?: ApiKeyUncheckedCreateNestedManyWithoutCreated_byInput
+    oauth_connections_granted?: OAuthConnectionUncheckedCreateNestedManyWithoutGranted_byInput
   }
 
   export type UserCreateOrConnectWithoutActivity_logsInput = {
@@ -131616,6 +137103,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutActivity_logsInput = {
@@ -131659,6 +137148,8 @@ export namespace Prisma {
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutActivity_logsInput = {
@@ -131692,6 +137183,7 @@ export namespace Prisma {
     openai_batch_jobs_created?: OpenAiBatchJobUpdateManyWithoutUserNestedInput
     sidebar_favorites?: SidebarFavoriteUpdateManyWithoutUserNestedInput
     api_keys_created?: ApiKeyUpdateManyWithoutCreated_byNestedInput
+    oauth_connections_granted?: OAuthConnectionUpdateManyWithoutGranted_byNestedInput
   }
 
   export type UserUncheckedUpdateWithoutActivity_logsInput = {
@@ -131715,6 +137207,505 @@ export namespace Prisma {
     openai_batch_jobs_created?: OpenAiBatchJobUncheckedUpdateManyWithoutUserNestedInput
     sidebar_favorites?: SidebarFavoriteUncheckedUpdateManyWithoutUserNestedInput
     api_keys_created?: ApiKeyUncheckedUpdateManyWithoutCreated_byNestedInput
+    oauth_connections_granted?: OAuthConnectionUncheckedUpdateManyWithoutGranted_byNestedInput
+  }
+
+  export type OrganisationCreateWithoutOauth_connectionsInput = {
+    uuid?: string
+    name: string
+    slug: string
+    timezone?: string
+    reply_to_email?: string | null
+    reply_forward_email?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
+    invitations?: OrganisationInvitationCreateNestedManyWithoutOrganisationInput
+    filters?: FilterCreateNestedManyWithoutOrganisationInput
+    contacts?: ContactCreateNestedManyWithoutOrganisationInput
+    outreach_messages?: OutreachMessageCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadCreateNestedManyWithoutOrganisationInput
+    outreach_sequences?: OutreachSequenceCreateNestedManyWithoutOrganisationInput
+    interactions?: InteractionCreateNestedManyWithoutOrganisationInput
+    sender_profiles?: SenderProfileCreateNestedManyWithoutOrganisationInput
+    marketing_campaigns?: MarketingCampaignCreateNestedManyWithoutOrganisationInput
+    scoring_instructions?: ScoringInstructionCreateNestedManyWithoutOrganisationInput
+    openai_batch_jobs?: OpenAiBatchJobCreateNestedManyWithoutOrganisationInput
+    integrations?: IntegrationCreateNestedManyWithoutOrganisationInput
+    reminders?: ReminderCreateNestedManyWithoutOrganisationInput
+    forms?: FormCreateNestedManyWithoutOrganisationInput
+    contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
+    contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
+    ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
+    apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
+    message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
+  }
+
+  export type OrganisationUncheckedCreateWithoutOauth_connectionsInput = {
+    id?: number
+    uuid?: string
+    name: string
+    slug: string
+    timezone?: string
+    reply_to_email?: string | null
+    reply_forward_email?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
+    invitations?: OrganisationInvitationUncheckedCreateNestedManyWithoutOrganisationInput
+    filters?: FilterUncheckedCreateNestedManyWithoutOrganisationInput
+    contacts?: ContactUncheckedCreateNestedManyWithoutOrganisationInput
+    outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutOrganisationInput
+    outreach_sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutOrganisationInput
+    interactions?: InteractionUncheckedCreateNestedManyWithoutOrganisationInput
+    sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutOrganisationInput
+    marketing_campaigns?: MarketingCampaignUncheckedCreateNestedManyWithoutOrganisationInput
+    scoring_instructions?: ScoringInstructionUncheckedCreateNestedManyWithoutOrganisationInput
+    openai_batch_jobs?: OpenAiBatchJobUncheckedCreateNestedManyWithoutOrganisationInput
+    integrations?: IntegrationUncheckedCreateNestedManyWithoutOrganisationInput
+    reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
+    forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
+    contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
+    contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
+    ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
+    apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
+    message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
+  }
+
+  export type OrganisationCreateOrConnectWithoutOauth_connectionsInput = {
+    where: OrganisationWhereUniqueInput
+    create: XOR<OrganisationCreateWithoutOauth_connectionsInput, OrganisationUncheckedCreateWithoutOauth_connectionsInput>
+  }
+
+  export type UserCreateWithoutOauth_connections_grantedInput = {
+    uuid?: string
+    email: string
+    phone?: string | null
+    full_name?: string | null
+    password: string
+    role?: $Enums.AuthRole
+    created_at?: Date | string
+    updated_at?: Date | string
+    memberships?: OrganisationMemberCreateNestedManyWithoutUserInput
+    invitations_sent?: OrganisationInvitationCreateNestedManyWithoutInvited_byInput
+    form_completions?: FormCompletionCreateNestedManyWithoutCompleted_byInput
+    outreach_messages_sent?: OutreachMessageCreateNestedManyWithoutSent_byInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutActorInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutUserInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutUserInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
+    bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
+    openai_batch_jobs_created?: OpenAiBatchJobCreateNestedManyWithoutUserInput
+    sidebar_favorites?: SidebarFavoriteCreateNestedManyWithoutUserInput
+    api_keys_created?: ApiKeyCreateNestedManyWithoutCreated_byInput
+  }
+
+  export type UserUncheckedCreateWithoutOauth_connections_grantedInput = {
+    id?: number
+    uuid?: string
+    email: string
+    phone?: string | null
+    full_name?: string | null
+    password: string
+    role?: $Enums.AuthRole
+    created_at?: Date | string
+    updated_at?: Date | string
+    memberships?: OrganisationMemberUncheckedCreateNestedManyWithoutUserInput
+    invitations_sent?: OrganisationInvitationUncheckedCreateNestedManyWithoutInvited_byInput
+    form_completions?: FormCompletionUncheckedCreateNestedManyWithoutCompleted_byInput
+    outreach_messages_sent?: OutreachMessageUncheckedCreateNestedManyWithoutSent_byInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutActorInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutUserInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutUserInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
+    bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
+    openai_batch_jobs_created?: OpenAiBatchJobUncheckedCreateNestedManyWithoutUserInput
+    sidebar_favorites?: SidebarFavoriteUncheckedCreateNestedManyWithoutUserInput
+    api_keys_created?: ApiKeyUncheckedCreateNestedManyWithoutCreated_byInput
+  }
+
+  export type UserCreateOrConnectWithoutOauth_connections_grantedInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutOauth_connections_grantedInput, UserUncheckedCreateWithoutOauth_connections_grantedInput>
+  }
+
+  export type OrganisationUpsertWithoutOauth_connectionsInput = {
+    update: XOR<OrganisationUpdateWithoutOauth_connectionsInput, OrganisationUncheckedUpdateWithoutOauth_connectionsInput>
+    create: XOR<OrganisationCreateWithoutOauth_connectionsInput, OrganisationUncheckedCreateWithoutOauth_connectionsInput>
+    where?: OrganisationWhereInput
+  }
+
+  export type OrganisationUpdateToOneWithWhereWithoutOauth_connectionsInput = {
+    where?: OrganisationWhereInput
+    data: XOR<OrganisationUpdateWithoutOauth_connectionsInput, OrganisationUncheckedUpdateWithoutOauth_connectionsInput>
+  }
+
+  export type OrganisationUpdateWithoutOauth_connectionsInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_forward_email?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
+    invitations?: OrganisationInvitationUpdateManyWithoutOrganisationNestedInput
+    filters?: FilterUpdateManyWithoutOrganisationNestedInput
+    contacts?: ContactUpdateManyWithoutOrganisationNestedInput
+    outreach_messages?: OutreachMessageUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutOrganisationNestedInput
+    outreach_sequences?: OutreachSequenceUpdateManyWithoutOrganisationNestedInput
+    interactions?: InteractionUpdateManyWithoutOrganisationNestedInput
+    sender_profiles?: SenderProfileUpdateManyWithoutOrganisationNestedInput
+    marketing_campaigns?: MarketingCampaignUpdateManyWithoutOrganisationNestedInput
+    scoring_instructions?: ScoringInstructionUpdateManyWithoutOrganisationNestedInput
+    openai_batch_jobs?: OpenAiBatchJobUpdateManyWithoutOrganisationNestedInput
+    integrations?: IntegrationUpdateManyWithoutOrganisationNestedInput
+    reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
+    forms?: FormUpdateManyWithoutOrganisationNestedInput
+    contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
+    contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
+    ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
+    apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
+    message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
+  }
+
+  export type OrganisationUncheckedUpdateWithoutOauth_connectionsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_forward_email?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
+    invitations?: OrganisationInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
+    filters?: FilterUncheckedUpdateManyWithoutOrganisationNestedInput
+    contacts?: ContactUncheckedUpdateManyWithoutOrganisationNestedInput
+    outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutOrganisationNestedInput
+    outreach_sequences?: OutreachSequenceUncheckedUpdateManyWithoutOrganisationNestedInput
+    interactions?: InteractionUncheckedUpdateManyWithoutOrganisationNestedInput
+    sender_profiles?: SenderProfileUncheckedUpdateManyWithoutOrganisationNestedInput
+    marketing_campaigns?: MarketingCampaignUncheckedUpdateManyWithoutOrganisationNestedInput
+    scoring_instructions?: ScoringInstructionUncheckedUpdateManyWithoutOrganisationNestedInput
+    openai_batch_jobs?: OpenAiBatchJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    integrations?: IntegrationUncheckedUpdateManyWithoutOrganisationNestedInput
+    reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
+    forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
+    contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
+    contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
+    ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
+  }
+
+  export type UserUpsertWithoutOauth_connections_grantedInput = {
+    update: XOR<UserUpdateWithoutOauth_connections_grantedInput, UserUncheckedUpdateWithoutOauth_connections_grantedInput>
+    create: XOR<UserCreateWithoutOauth_connections_grantedInput, UserUncheckedCreateWithoutOauth_connections_grantedInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutOauth_connections_grantedInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutOauth_connections_grantedInput, UserUncheckedUpdateWithoutOauth_connections_grantedInput>
+  }
+
+  export type UserUpdateWithoutOauth_connections_grantedInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    full_name?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumAuthRoleFieldUpdateOperationsInput | $Enums.AuthRole
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: OrganisationMemberUpdateManyWithoutUserNestedInput
+    invitations_sent?: OrganisationInvitationUpdateManyWithoutInvited_byNestedInput
+    form_completions?: FormCompletionUpdateManyWithoutCompleted_byNestedInput
+    outreach_messages_sent?: OutreachMessageUpdateManyWithoutSent_byNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutActorNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutUserNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutUserNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
+    bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
+    openai_batch_jobs_created?: OpenAiBatchJobUpdateManyWithoutUserNestedInput
+    sidebar_favorites?: SidebarFavoriteUpdateManyWithoutUserNestedInput
+    api_keys_created?: ApiKeyUpdateManyWithoutCreated_byNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutOauth_connections_grantedInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    full_name?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumAuthRoleFieldUpdateOperationsInput | $Enums.AuthRole
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: OrganisationMemberUncheckedUpdateManyWithoutUserNestedInput
+    invitations_sent?: OrganisationInvitationUncheckedUpdateManyWithoutInvited_byNestedInput
+    form_completions?: FormCompletionUncheckedUpdateManyWithoutCompleted_byNestedInput
+    outreach_messages_sent?: OutreachMessageUncheckedUpdateManyWithoutSent_byNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutActorNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutUserNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutUserNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
+    bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
+    openai_batch_jobs_created?: OpenAiBatchJobUncheckedUpdateManyWithoutUserNestedInput
+    sidebar_favorites?: SidebarFavoriteUncheckedUpdateManyWithoutUserNestedInput
+    api_keys_created?: ApiKeyUncheckedUpdateManyWithoutCreated_byNestedInput
+  }
+
+  export type OrganisationCreateWithoutMcp_tool_invocation_logsInput = {
+    uuid?: string
+    name: string
+    slug: string
+    timezone?: string
+    reply_to_email?: string | null
+    reply_forward_email?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
+    invitations?: OrganisationInvitationCreateNestedManyWithoutOrganisationInput
+    filters?: FilterCreateNestedManyWithoutOrganisationInput
+    contacts?: ContactCreateNestedManyWithoutOrganisationInput
+    outreach_messages?: OutreachMessageCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadCreateNestedManyWithoutOrganisationInput
+    outreach_sequences?: OutreachSequenceCreateNestedManyWithoutOrganisationInput
+    interactions?: InteractionCreateNestedManyWithoutOrganisationInput
+    sender_profiles?: SenderProfileCreateNestedManyWithoutOrganisationInput
+    marketing_campaigns?: MarketingCampaignCreateNestedManyWithoutOrganisationInput
+    scoring_instructions?: ScoringInstructionCreateNestedManyWithoutOrganisationInput
+    openai_batch_jobs?: OpenAiBatchJobCreateNestedManyWithoutOrganisationInput
+    integrations?: IntegrationCreateNestedManyWithoutOrganisationInput
+    reminders?: ReminderCreateNestedManyWithoutOrganisationInput
+    forms?: FormCreateNestedManyWithoutOrganisationInput
+    contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
+    contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
+    ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
+    apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
+    message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
+  }
+
+  export type OrganisationUncheckedCreateWithoutMcp_tool_invocation_logsInput = {
+    id?: number
+    uuid?: string
+    name: string
+    slug: string
+    timezone?: string
+    reply_to_email?: string | null
+    reply_forward_email?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
+    invitations?: OrganisationInvitationUncheckedCreateNestedManyWithoutOrganisationInput
+    filters?: FilterUncheckedCreateNestedManyWithoutOrganisationInput
+    contacts?: ContactUncheckedCreateNestedManyWithoutOrganisationInput
+    outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutOrganisationInput
+    outreach_sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutOrganisationInput
+    interactions?: InteractionUncheckedCreateNestedManyWithoutOrganisationInput
+    sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutOrganisationInput
+    marketing_campaigns?: MarketingCampaignUncheckedCreateNestedManyWithoutOrganisationInput
+    scoring_instructions?: ScoringInstructionUncheckedCreateNestedManyWithoutOrganisationInput
+    openai_batch_jobs?: OpenAiBatchJobUncheckedCreateNestedManyWithoutOrganisationInput
+    integrations?: IntegrationUncheckedCreateNestedManyWithoutOrganisationInput
+    reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
+    forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
+    contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
+    contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
+    ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
+    apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
+    message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+  }
+
+  export type OrganisationCreateOrConnectWithoutMcp_tool_invocation_logsInput = {
+    where: OrganisationWhereUniqueInput
+    create: XOR<OrganisationCreateWithoutMcp_tool_invocation_logsInput, OrganisationUncheckedCreateWithoutMcp_tool_invocation_logsInput>
+  }
+
+  export type OrganisationUpsertWithoutMcp_tool_invocation_logsInput = {
+    update: XOR<OrganisationUpdateWithoutMcp_tool_invocation_logsInput, OrganisationUncheckedUpdateWithoutMcp_tool_invocation_logsInput>
+    create: XOR<OrganisationCreateWithoutMcp_tool_invocation_logsInput, OrganisationUncheckedCreateWithoutMcp_tool_invocation_logsInput>
+    where?: OrganisationWhereInput
+  }
+
+  export type OrganisationUpdateToOneWithWhereWithoutMcp_tool_invocation_logsInput = {
+    where?: OrganisationWhereInput
+    data: XOR<OrganisationUpdateWithoutMcp_tool_invocation_logsInput, OrganisationUncheckedUpdateWithoutMcp_tool_invocation_logsInput>
+  }
+
+  export type OrganisationUpdateWithoutMcp_tool_invocation_logsInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_forward_email?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
+    invitations?: OrganisationInvitationUpdateManyWithoutOrganisationNestedInput
+    filters?: FilterUpdateManyWithoutOrganisationNestedInput
+    contacts?: ContactUpdateManyWithoutOrganisationNestedInput
+    outreach_messages?: OutreachMessageUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutOrganisationNestedInput
+    outreach_sequences?: OutreachSequenceUpdateManyWithoutOrganisationNestedInput
+    interactions?: InteractionUpdateManyWithoutOrganisationNestedInput
+    sender_profiles?: SenderProfileUpdateManyWithoutOrganisationNestedInput
+    marketing_campaigns?: MarketingCampaignUpdateManyWithoutOrganisationNestedInput
+    scoring_instructions?: ScoringInstructionUpdateManyWithoutOrganisationNestedInput
+    openai_batch_jobs?: OpenAiBatchJobUpdateManyWithoutOrganisationNestedInput
+    integrations?: IntegrationUpdateManyWithoutOrganisationNestedInput
+    reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
+    forms?: FormUpdateManyWithoutOrganisationNestedInput
+    contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
+    contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
+    ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
+    apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
+    message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
+  }
+
+  export type OrganisationUncheckedUpdateWithoutMcp_tool_invocation_logsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_forward_email?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
+    invitations?: OrganisationInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
+    filters?: FilterUncheckedUpdateManyWithoutOrganisationNestedInput
+    contacts?: ContactUncheckedUpdateManyWithoutOrganisationNestedInput
+    outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutOrganisationNestedInput
+    outreach_sequences?: OutreachSequenceUncheckedUpdateManyWithoutOrganisationNestedInput
+    interactions?: InteractionUncheckedUpdateManyWithoutOrganisationNestedInput
+    sender_profiles?: SenderProfileUncheckedUpdateManyWithoutOrganisationNestedInput
+    marketing_campaigns?: MarketingCampaignUncheckedUpdateManyWithoutOrganisationNestedInput
+    scoring_instructions?: ScoringInstructionUncheckedUpdateManyWithoutOrganisationNestedInput
+    openai_batch_jobs?: OpenAiBatchJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    integrations?: IntegrationUncheckedUpdateManyWithoutOrganisationNestedInput
+    reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
+    forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
+    contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
+    contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
+    ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationMemberCreateManyUserInput = {
@@ -131900,6 +137891,22 @@ export namespace Prisma {
     organisation_role?: $Enums.OrganisationRole
     last_used_at?: Date | string | null
     expires_at?: Date | string | null
+    revoked_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type OAuthConnectionCreateManyGranted_byInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    oauth_client_id: string
+    grant_id: string
+    client_name?: string | null
+    client_uri?: string | null
+    scope: string
+    status?: $Enums.OAuthConnectionStatus
+    last_used_at?: Date | string | null
     revoked_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -132466,6 +138473,53 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type OAuthConnectionUpdateWithoutGranted_byInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    oauth_client_id?: StringFieldUpdateOperationsInput | string
+    grant_id?: StringFieldUpdateOperationsInput | string
+    client_name?: NullableStringFieldUpdateOperationsInput | string | null
+    client_uri?: NullableStringFieldUpdateOperationsInput | string | null
+    scope?: StringFieldUpdateOperationsInput | string
+    status?: EnumOAuthConnectionStatusFieldUpdateOperationsInput | $Enums.OAuthConnectionStatus
+    last_used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revoked_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutOauth_connectionsNestedInput
+  }
+
+  export type OAuthConnectionUncheckedUpdateWithoutGranted_byInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    oauth_client_id?: StringFieldUpdateOperationsInput | string
+    grant_id?: StringFieldUpdateOperationsInput | string
+    client_name?: NullableStringFieldUpdateOperationsInput | string | null
+    client_uri?: NullableStringFieldUpdateOperationsInput | string | null
+    scope?: StringFieldUpdateOperationsInput | string
+    status?: EnumOAuthConnectionStatusFieldUpdateOperationsInput | $Enums.OAuthConnectionStatus
+    last_used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revoked_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OAuthConnectionUncheckedUpdateManyWithoutGranted_byInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    oauth_client_id?: StringFieldUpdateOperationsInput | string
+    grant_id?: StringFieldUpdateOperationsInput | string
+    client_name?: NullableStringFieldUpdateOperationsInput | string | null
+    client_uri?: NullableStringFieldUpdateOperationsInput | string | null
+    scope?: StringFieldUpdateOperationsInput | string
+    status?: EnumOAuthConnectionStatusFieldUpdateOperationsInput | $Enums.OAuthConnectionStatus
+    last_used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revoked_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type OrganisationMemberCreateManyOrganisationInput = {
     id?: number
     uuid?: string
@@ -133012,6 +139066,36 @@ export namespace Prisma {
     revoked_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+  }
+
+  export type OAuthConnectionCreateManyOrganisationInput = {
+    id?: number
+    uuid?: string
+    granted_by_user_uuid: string
+    oauth_client_id: string
+    grant_id: string
+    client_name?: string | null
+    client_uri?: string | null
+    scope: string
+    status?: $Enums.OAuthConnectionStatus
+    last_used_at?: Date | string | null
+    revoked_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type McpToolInvocationLogCreateManyOrganisationInput = {
+    id?: number
+    uuid?: string
+    user_uuid?: string | null
+    oauth_client_id?: string | null
+    tool_name: string
+    http_method: string
+    path: string
+    status_code?: number | null
+    duration_ms?: number | null
+    error_message?: string | null
+    created_at?: Date | string
   }
 
   export type OrganisationMemberUpdateWithoutOrganisationInput = {
@@ -134724,6 +140808,94 @@ export namespace Prisma {
     revoked_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OAuthConnectionUpdateWithoutOrganisationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    oauth_client_id?: StringFieldUpdateOperationsInput | string
+    grant_id?: StringFieldUpdateOperationsInput | string
+    client_name?: NullableStringFieldUpdateOperationsInput | string | null
+    client_uri?: NullableStringFieldUpdateOperationsInput | string | null
+    scope?: StringFieldUpdateOperationsInput | string
+    status?: EnumOAuthConnectionStatusFieldUpdateOperationsInput | $Enums.OAuthConnectionStatus
+    last_used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revoked_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    granted_by?: UserUpdateOneRequiredWithoutOauth_connections_grantedNestedInput
+  }
+
+  export type OAuthConnectionUncheckedUpdateWithoutOrganisationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    granted_by_user_uuid?: StringFieldUpdateOperationsInput | string
+    oauth_client_id?: StringFieldUpdateOperationsInput | string
+    grant_id?: StringFieldUpdateOperationsInput | string
+    client_name?: NullableStringFieldUpdateOperationsInput | string | null
+    client_uri?: NullableStringFieldUpdateOperationsInput | string | null
+    scope?: StringFieldUpdateOperationsInput | string
+    status?: EnumOAuthConnectionStatusFieldUpdateOperationsInput | $Enums.OAuthConnectionStatus
+    last_used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revoked_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OAuthConnectionUncheckedUpdateManyWithoutOrganisationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    granted_by_user_uuid?: StringFieldUpdateOperationsInput | string
+    oauth_client_id?: StringFieldUpdateOperationsInput | string
+    grant_id?: StringFieldUpdateOperationsInput | string
+    client_name?: NullableStringFieldUpdateOperationsInput | string | null
+    client_uri?: NullableStringFieldUpdateOperationsInput | string | null
+    scope?: StringFieldUpdateOperationsInput | string
+    status?: EnumOAuthConnectionStatusFieldUpdateOperationsInput | $Enums.OAuthConnectionStatus
+    last_used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revoked_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type McpToolInvocationLogUpdateWithoutOrganisationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    oauth_client_id?: NullableStringFieldUpdateOperationsInput | string | null
+    tool_name?: StringFieldUpdateOperationsInput | string
+    http_method?: StringFieldUpdateOperationsInput | string
+    path?: StringFieldUpdateOperationsInput | string
+    status_code?: NullableIntFieldUpdateOperationsInput | number | null
+    duration_ms?: NullableIntFieldUpdateOperationsInput | number | null
+    error_message?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type McpToolInvocationLogUncheckedUpdateWithoutOrganisationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    oauth_client_id?: NullableStringFieldUpdateOperationsInput | string | null
+    tool_name?: StringFieldUpdateOperationsInput | string
+    http_method?: StringFieldUpdateOperationsInput | string
+    path?: StringFieldUpdateOperationsInput | string
+    status_code?: NullableIntFieldUpdateOperationsInput | number | null
+    duration_ms?: NullableIntFieldUpdateOperationsInput | number | null
+    error_message?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    oauth_client_id?: NullableStringFieldUpdateOperationsInput | string | null
+    tool_name?: StringFieldUpdateOperationsInput | string
+    http_method?: StringFieldUpdateOperationsInput | string
+    path?: StringFieldUpdateOperationsInput | string
+    status_code?: NullableIntFieldUpdateOperationsInput | number | null
+    duration_ms?: NullableIntFieldUpdateOperationsInput | number | null
+    error_message?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type RawLeadCreateManyFilterInput = {

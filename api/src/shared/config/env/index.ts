@@ -30,4 +30,8 @@ export default () => ({
     BULL_BOARD_PASSWORD: process.env.BULL_BOARD_PASSWORD,
     BULLMQ_PREFIX: process.env.BULLMQ_PREFIX,
     GEMI_API_KEY: process.env.GEMI_API_KEY,
+    OAUTH_ISSUER: process.env.OAUTH_ISSUER,
+    OAUTH_COOKIE_KEYS: process.env.OAUTH_COOKIE_KEYS,
+    OAUTH_JWKS: process.env.OAUTH_JWKS,
+    MCP_RESOURCE_URL: process.env.MCP_RESOURCE_URL,
 });

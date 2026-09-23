@@ -1036,6 +1036,52 @@ exports.Prisma.ActivityLogScalarFieldEnum = {
   created_at: 'created_at'
 };
 
+exports.Prisma.OAuthModelScalarFieldEnum = {
+  id: 'id',
+  model_name: 'model_name',
+  key: 'key',
+  grant_id: 'grant_id',
+  user_code: 'user_code',
+  uid: 'uid',
+  payload: 'payload',
+  expires_at: 'expires_at',
+  consumed_at: 'consumed_at',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.OAuthConnectionScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  organisation_uuid: 'organisation_uuid',
+  granted_by_user_uuid: 'granted_by_user_uuid',
+  oauth_client_id: 'oauth_client_id',
+  grant_id: 'grant_id',
+  client_name: 'client_name',
+  client_uri: 'client_uri',
+  scope: 'scope',
+  status: 'status',
+  last_used_at: 'last_used_at',
+  revoked_at: 'revoked_at',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.McpToolInvocationLogScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  organisation_uuid: 'organisation_uuid',
+  user_uuid: 'user_uuid',
+  oauth_client_id: 'oauth_client_id',
+  tool_name: 'tool_name',
+  http_method: 'http_method',
+  path: 'path',
+  status_code: 'status_code',
+  duration_ms: 'duration_ms',
+  error_message: 'error_message',
+  created_at: 'created_at'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1492,6 +1538,11 @@ exports.GoalAchievementType = exports.$Enums.GoalAchievementType = {
   LEADERBOARD_FIRST: 'LEADERBOARD_FIRST'
 };
 
+exports.OAuthConnectionStatus = exports.$Enums.OAuthConnectionStatus = {
+  ACTIVE: 'ACTIVE',
+  REVOKED: 'REVOKED'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   Organisation: 'Organisation',
@@ -1551,7 +1602,10 @@ exports.Prisma.ModelName = {
   SendingUsageCounter: 'SendingUsageCounter',
   GoalAchievement: 'GoalAchievement',
   GoalPersonalBest: 'GoalPersonalBest',
-  ActivityLog: 'ActivityLog'
+  ActivityLog: 'ActivityLog',
+  OAuthModel: 'OAuthModel',
+  OAuthConnection: 'OAuthConnection',
+  McpToolInvocationLog: 'McpToolInvocationLog'
 };
 
 /**

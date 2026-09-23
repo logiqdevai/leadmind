@@ -383,6 +383,11 @@ export const ApiRoutes = {
         revoke: (uuid: string) => `/api-keys/${uuid}/revoke`,
         remove: (uuid: string) => `/api-keys/${uuid}`,
     },
+    oauth_connections: {
+        prefix: "/oauth/connections",
+        list: "/oauth/connections",
+        revoke: (uuid: string) => `/oauth/connections/${uuid}`,
+    },
     campaign_integrations: {
         list: (campaignUuid: string) => `/marketing-campaigns/${campaignUuid}/integrations`,
         assign: (campaignUuid: string) => `/marketing-campaigns/${campaignUuid}/integrations`,
