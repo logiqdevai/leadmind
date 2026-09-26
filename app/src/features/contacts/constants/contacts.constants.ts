@@ -116,6 +116,7 @@ export const EMAIL_VALIDATION_STATUS_CHIP_COLOR: Record<EmailValidationStatus, C
 
 const EMAIL_VALIDATION_REASON_LABEL: Record<string, string> = {
     invalid_syntax: "Badly formatted address",
+    placeholder_email: "Placeholder / example email",
     disposable_domain: "Disposable email domain",
     no_mx_record: "Domain can't receive mail",
     dns_lookup_failed: "Couldn't verify domain (temporary)",
