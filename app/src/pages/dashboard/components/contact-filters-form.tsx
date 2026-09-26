@@ -472,7 +472,7 @@ function FilterSearchField({ value, onChange, disabled }: FilterSearchFieldProps
         <TextField name="search" className="w-full">
             <Label>Search</Label>
             <Input
-                placeholder="Name, email, company"
+                placeholder="Name, email, company, phone, website"
                 value={draft}
                 onChange={(e) => setDraft(e.target.value)}
                 disabled={disabled}
