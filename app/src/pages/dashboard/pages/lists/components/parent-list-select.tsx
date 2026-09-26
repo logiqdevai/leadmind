@@ -1,7 +1,7 @@
 import { useMemo, useState, type FC } from "react";
 import { Header, Input, Label, ListBox, Select } from "@heroui/react";
 import { Search } from "lucide-react";
-import { useContactLists } from "@/features/contact-lists/hooks/use-contact-lists";
+import { useAllContactLists } from "@/features/contact-lists/hooks/use-contact-lists";
 import { cn } from "@/lib/utils";
 import { collectDescendantUuids, listPathLabel } from "../utils/contact-list-tree";
 
@@ -28,8 +28,8 @@ export const ParentListSelect: FC<ParentListSelectProps> = ({
   includeRoot = true,
   rootLabel = "Top level",
 }) => {
-  const { data: listsPage, isLoading } = useContactLists({ limit: 100 }, enabled);
-  const allLists = listsPage?.data ?? [];
+  const { data: fetchedLists, isLoading } = useAllContactLists(enabled);
+  const allLists = useMemo(() => fetchedLists ?? [], [fetchedLists]);
   const [query, setQuery] = useState("");
 
   const candidates = useMemo(() => {
