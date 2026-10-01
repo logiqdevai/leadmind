@@ -49,6 +49,26 @@ export function useContactLists(query: ListContactListsQuery = {}, enabled = tru
     });
 }
 
+const ALL_LISTS_PAGE_SIZE = 100;
+
+/** Every list in the organisation — the API caps a page at 100, so this walks all pages. */
+export function useAllContactLists(enabled = true) {
+    return useQuery({
+        queryKey: [...contactListQueryKeys.all, "all"] as const,
+        queryFn: async () => {
+            const first = await listContactLists({ page: 1, limit: ALL_LISTS_PAGE_SIZE });
+            const rest = await Promise.all(
+                Array.from({ length: Math.max(first.totalPages - 1, 0) }, (_, i) =>
+                    listContactLists({ page: i + 2, limit: ALL_LISTS_PAGE_SIZE }),
+                ),
+            );
+            return [first, ...rest].flatMap((page) => page.data);
+        },
+        staleTime: 30_000,
+        enabled,
+    });
+}
+
 export function useContactList(uuid: string) {
     return useQuery({
         queryKey: contactListQueryKeys.detail(uuid),

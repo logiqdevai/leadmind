@@ -24,6 +24,24 @@ describe('email-domain-validation.util', () => {
         expect(resolveMx).not.toHaveBeenCalled();
     });
 
+    it.each([
+        'email@example.com',
+        'Test@EXAMPLE.org',
+        'user@mail.example.net',
+        'someone@company.test',
+        'someone@foo.invalid',
+    ])('flags placeholder address %s as invalid without doing a DNS lookup', async (address) => {
+        const result = await validateEmailAddress(address);
+        expect(result).toEqual({ status: EmailValidationStatus.INVALID, reason: 'placeholder_email' });
+        expect(resolveMx).not.toHaveBeenCalled();
+    });
+
+    it('does not treat lookalike domains as placeholders', async () => {
+        resolveMx.mockResolvedValue([{ exchange: 'mx.myexample.com', priority: 10 }]);
+        const result = await validateEmailAddress('person@myexample.com');
+        expect(result).toEqual({ status: EmailValidationStatus.VALID, reason: null });
+    });
+
     it('marks a domain with MX records as valid', async () => {
         resolveMx.mockResolvedValue([{ exchange: 'mx.example-valid-domain.com', priority: 10 }]);
         const result = await validateEmailAddress('person@example-valid-domain.com');

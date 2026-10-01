@@ -38,7 +38,23 @@ async function resolveMxWithTimeout(domain: string) {
     }
 }
 
+// Reserved for documentation/testing (RFC 2606 / RFC 6761) — never real mailboxes,
+// but example.com etc. do publish MX records so the DNS check alone won't catch them.
+const PLACEHOLDER_DOMAINS = new Set(['example.com', 'example.org', 'example.net', 'example.edu']);
+const PLACEHOLDER_TLDS = new Set(['example', 'test', 'invalid', 'localhost']);
+
+function isPlaceholderDomain(domain: string): boolean {
+    const labels = domain.split('.');
+    if (PLACEHOLDER_TLDS.has(labels[labels.length - 1])) return true;
+    // Match the domain itself and any subdomain (mail.example.com).
+    return labels.some((_, i) => PLACEHOLDER_DOMAINS.has(labels.slice(i).join('.')));
+}
+
 async function validateDomain(domain: string): Promise<EmailValidationResult> {
+    if (isPlaceholderDomain(domain)) {
+        return { status: EmailValidationStatus.INVALID, reason: 'placeholder_email' };
+    }
+
     if (DISPOSABLE_DOMAIN_SET.has(domain)) {
         return { status: EmailValidationStatus.INVALID, reason: 'disposable_domain' };
     }
@@ -58,6 +74,7 @@ async function validateDomain(domain: string): Promise<EmailValidationResult> {
 
 const EMAIL_VALIDATION_REASON_MESSAGES: Record<string, string> = {
     invalid_syntax: 'That email address is not formatted correctly.',
+    placeholder_email: 'That looks like a placeholder or example email address (e.g. email@example.com).',
     disposable_domain: 'That email address uses a disposable email provider and cannot be saved.',
     no_mx_record: "That email address's domain doesn't accept mail (no MX record found).",
 };
