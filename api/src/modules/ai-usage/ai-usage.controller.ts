@@ -1,11 +1,12 @@
 import { Controller, Get, Query, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiExcludeController, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtGuard } from '@/shared/guards/jwt.guard';
 import { CurrentUser } from '@/shared/decorators/current-user.decorator';
 import { AiUsageService } from './ai-usage.service';
 import { AiUsageSummaryDto, ListAiUsageDto } from './dto/list-ai-usage.dto';
 
 @ApiTags('ai-usage')
+@ApiExcludeController()
 @ApiBearerAuth()
 @UseGuards(JwtGuard)
 @Controller('ai-usage')

@@ -98,13 +98,18 @@ export function serializeContactFiltersToSearchParams(
 
 export function contactFiltersToListQuery(
     filters: ContactFilters,
-    pagination?: Pick<ListContactsQuery, "page" | "limit" | "exclude_list_uuid">,
+    pagination?: Pick<
+        ListContactsQuery,
+        "page" | "limit" | "exclude_list_uuid" | "sort_by" | "sort_order"
+    >,
 ): ListContactsQuery {
     return {
         ...filters,
         page: pagination?.page,
         limit: pagination?.limit,
         exclude_list_uuid: pagination?.exclude_list_uuid,
+        sort_by: pagination?.sort_by,
+        sort_order: pagination?.sort_order,
     };
 }
 
@@ -183,6 +188,8 @@ export function buildContactListApiParams(
 
     if (query.page !== undefined) params.page = query.page;
     if (query.limit !== undefined) params.limit = query.limit;
+    if (query.sort_by) params.sort_by = query.sort_by;
+    if (query.sort_order) params.sort_order = query.sort_order;
     if (query.search) params.search = query.search;
     if (query.status) params.status = query.status;
     if (query.source_type) params.source_type = query.source_type;

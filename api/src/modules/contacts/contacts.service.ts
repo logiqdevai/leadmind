@@ -53,6 +53,7 @@ import { BulkDeleteContactsDto } from './dto/bulk-delete-contacts.dto';
 import { BulkEnrichContactsDto } from './dto/bulk-enrich-contacts.dto';
 import { BulkScrapeContactEmailsDto } from './dto/bulk-scrape-contact-emails.dto';
 import { ListContactsDto } from './dto/list-contacts.dto';
+import type { ContactSortField, SortOrder } from './constants/contact-sort-fields.constants';
 import { buildContactProfileFieldWhere } from './utils/contact-profile-field-filter.utils';
 import { belowScoreContactFilter } from './utils/contact-score-filter.utils';
 import { mergeContactWhereClauses } from './utils/contact-where-merge.utils';
@@ -277,6 +278,14 @@ export class ContactsService {
         return mergeContactWhereClauses(base, andClauses);
     }
 
+    buildContactOrderBy(
+        sortBy?: ContactSortField,
+        sortOrder?: SortOrder,
+    ): Prisma.ContactOrderByWithRelationInput {
+        if (!sortBy) return { created_at: 'desc' };
+        return { [sortBy]: sortOrder ?? 'asc' };
+    }
+
     applyAudienceFilters(
         where: Prisma.ContactWhereInput,
         query: Pick<
@@ -452,7 +461,7 @@ export class ContactsService {
                         include: { scoring_instruction: { select: { uuid: true, name: true } } },
                     },
                 },
-                orderBy: { created_at: 'desc' },
+                orderBy: this.buildContactOrderBy(query.sort_by, query.sort_order),
                 skip,
                 take: limit,
             }),

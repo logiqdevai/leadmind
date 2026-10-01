@@ -3,6 +3,7 @@ import { toast } from "@/hooks/use-toast";
 import { useAuthStore } from "@/stores/auth";
 import {
     changePassword,
+    deleteAccount,
     getMe,
     updateMe,
 } from "../services/user.services";
@@ -58,6 +59,25 @@ export function useChangePassword() {
         onError: (error) => {
             toast({
                 title: "Could not change password",
+                description: error.message,
+                variant: "error",
+            });
+        },
+    });
+}
+
+export function useDeleteAccount() {
+    const logout = useAuthStore((s) => s.logout);
+
+    return useMutation({
+        mutationFn: () => deleteAccount(),
+        onSuccess: () => {
+            toast({ title: "Account deleted", duration: 1500 });
+            logout();
+        },
+        onError: (error) => {
+            toast({
+                title: "Could not delete account",
                 description: error.message,
                 variant: "error",
             });

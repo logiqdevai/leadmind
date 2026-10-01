@@ -12,6 +12,7 @@ import {
 } from '@nestjs/common';
 import {
     ApiBearerAuth,
+    ApiExcludeEndpoint,
     ApiOperation,
     ApiResponse,
     ApiTags,
@@ -148,6 +149,7 @@ export class MarketingCampaignsController {
     @Delete(':uuid/analyses/:analysisUuid')
     @UseGuards(OrganisationRolesGuard)
     @OrganisationRoles(OrganisationRole.ADMIN)
+    @ApiExcludeEndpoint()
     @ApiOperation({ summary: 'Delete an AI audience analysis for a campaign' })
     @ApiResponse({ status: 200 })
     @ApiResponse({ status: 403, description: 'Forbidden — organisation admin role required' })

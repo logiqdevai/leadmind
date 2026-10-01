@@ -53,6 +53,7 @@ import {
     serializeContactFiltersToSearchParams,
 } from "@/lib/contact-filter-params";
 import type { ContactFilters } from "@/interfaces/contact-filters.interface";
+import type { ContactSortField, SortOrder } from "@/features/contacts/interfaces/contact.interface";
 import { ListDetailSkeleton } from "./components/list-detail-skeleton";
 import { parsePageSize } from "@/lib/page-size";
 
@@ -95,6 +96,12 @@ export default function ListDetailPage() {
     const membersPage = Math.max(1, Number(searchParams.get("page") ?? 1));
     const membersPageSize = parsePageSize(searchParams.get("page_size"));
     const sublistsPage = Math.max(1, Number(searchParams.get("sublists_page") ?? 1));
+    const membersSortBy = (searchParams.get("sort_by") as ContactSortField) || undefined;
+    const membersSortOrder: SortOrder | undefined = membersSortBy
+        ? searchParams.get("sort_order") === "desc"
+            ? "desc"
+            : "asc"
+        : undefined;
     const filters = useMemo(
         () => parseContactFiltersFromSearchParams(searchParams),
         [searchParams],
@@ -106,8 +113,10 @@ export default function ListDetailPage() {
             contactFiltersToListQuery(filters, {
                 page: membersPage,
                 limit: membersPageSize.limit,
+                sort_by: membersSortBy,
+                sort_order: membersSortOrder,
             }),
-        [filters, membersPage, membersPageSize.limit],
+        [filters, membersPage, membersPageSize.limit, membersSortBy, membersSortOrder],
     );
 
     const { data: list, isLoading: listLoading } = useContactList(uuid);
@@ -175,6 +184,14 @@ export default function ListDetailPage() {
         setSelectedKeys(new Set());
     };
 
+    const handleMembersSortChange = (nextSortBy: ContactSortField, nextSortOrder: SortOrder) => {
+        const params = new URLSearchParams(searchParams);
+        params.set("sort_by", nextSortBy);
+        params.set("sort_order", nextSortOrder);
+        params.set("page", "1");
+        setSearchParams(params, { replace: true });
+    };
+
     const updateFilters = (patch: Partial<ContactFilters>, resetPage = true) => {
         const next = { ...filters, ...patch };
         const serialized = serializeContactFiltersToSearchParams(next);
@@ -185,6 +202,10 @@ export default function ListDetailPage() {
         }
         if (savedFilterUuid) params.set(SAVED_FILTER_PARAM, savedFilterUuid);
         if (membersPageSize.key !== "50") params.set("page_size", membersPageSize.key);
+        if (membersSortBy) {
+            params.set("sort_by", membersSortBy);
+            if (membersSortOrder) params.set("sort_order", membersSortOrder);
+        }
         if (resetPage) params.set("page", "1");
         else if (membersPage > 1) params.set("page", String(membersPage));
         startTransition(() => {
@@ -212,6 +233,10 @@ export default function ListDetailPage() {
         }
         if (uuidValue) params.set(SAVED_FILTER_PARAM, uuidValue);
         if (membersPageSize.key !== "50") params.set("page_size", membersPageSize.key);
+        if (membersSortBy) {
+            params.set("sort_by", membersSortBy);
+            if (membersSortOrder) params.set("sort_order", membersSortOrder);
+        }
         params.set("page", "1");
         startTransition(() => {
             setSearchParams(params, { replace: true });
@@ -462,6 +487,9 @@ export default function ListDetailPage() {
                                 onSelectionChange={setSelectedKeys}
                                 onDeleteContact={(contactUuid) => openDeleteDialog([contactUuid])}
                                 deletePending={deletePending}
+                                sortBy={membersSortBy}
+                                sortOrder={membersSortOrder}
+                                onSortChange={handleMembersSortChange}
                             />
                         </section>
                     )}

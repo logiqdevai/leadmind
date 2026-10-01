@@ -24,6 +24,12 @@ import {
     ScoreRulesQueryTransform,
 } from '@/modules/scoring-instructions/dto/contact-score-rule.dto';
 import { QueryBooleanTransform } from '@/shared/transforms/query-boolean.transform';
+import {
+    CONTACT_SORT_FIELD_KEYS,
+    ContactSortField,
+    SORT_ORDER_KEYS,
+    SortOrder,
+} from '../constants/contact-sort-fields.constants';
 
 export class ListContactsDto {
     @ApiPropertyOptional({ enum: LeadStatus })
@@ -138,6 +144,19 @@ export class ListContactsDto {
     @QueryBooleanTransform
     @IsBoolean()
     include_unsubscribed?: boolean;
+
+    @ApiPropertyOptional({
+        enum: CONTACT_SORT_FIELD_KEYS,
+        description: 'Column to sort by (default: created_at)',
+    })
+    @IsOptional()
+    @IsIn(CONTACT_SORT_FIELD_KEYS)
+    sort_by?: ContactSortField;
+
+    @ApiPropertyOptional({ enum: SORT_ORDER_KEYS, default: SortOrder.ASC })
+    @IsOptional()
+    @IsIn(SORT_ORDER_KEYS)
+    sort_order?: SortOrder;
 
     @ApiPropertyOptional({ default: 1, minimum: 1 })
     @IsOptional()

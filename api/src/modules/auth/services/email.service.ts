@@ -36,6 +36,11 @@ export class EmailAuthService {
             });
 
             if (existingUser) {
+                if (dto.invite_token) {
+                    throw new ConflictException(
+                        'An account with this email already exists. Please sign in to join the workspace.',
+                    );
+                }
                 throw new ConflictException('User with this email already exists');
             }
 

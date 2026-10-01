@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import {
   ApiBearerAuth,
+  ApiExcludeEndpoint,
   ApiOperation,
   ApiResponse,
   ApiTags,
@@ -23,6 +24,7 @@ export class MxToolboxController {
   constructor(private readonly mxToolboxService: MxToolboxService) {}
 
   @Get('checks')
+  @ApiExcludeEndpoint()
   @ApiOperation({ summary: 'List recent MxToolbox domain health checks' })
   listChecks(@CurrentUser('organisation_uuid') organisation_uuid: string) {
     return this.mxToolboxService.listChecks(organisation_uuid);

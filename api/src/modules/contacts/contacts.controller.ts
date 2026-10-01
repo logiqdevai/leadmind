@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common';
 import {
     ApiBearerAuth,
+    ApiExcludeEndpoint,
     ApiOperation,
     ApiResponse,
     ApiTags,
@@ -90,6 +91,7 @@ export class ContactsController {
     }
 
     @Get('tags')
+    @ApiExcludeEndpoint()
     @ApiOperation({ summary: 'List all distinct tag strings for the current user contacts' })
     getUserTags(@CurrentUser('organisation_uuid') organisation_uuid: string) {
         return this.contactsService.getUserTags(organisation_uuid);

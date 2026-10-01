@@ -38,3 +38,15 @@ export const changePassword = async (dto: ChangePasswordDto): Promise<{ success:
         throw new Error(Array.isArray(message) ? message.join(", ") : message);
     }
 };
+
+export const deleteAccount = async (): Promise<{ success: boolean }> => {
+    try {
+        const response = await axiosInstance.delete(ApiRoutes.users.delete_me);
+        return response.data;
+    } catch (error: unknown) {
+        const message =
+            (error as { response?: { data?: { message?: string | string[] } } })
+                ?.response?.data?.message ?? "Failed to delete account. Please try again.";
+        throw new Error(Array.isArray(message) ? message.join(", ") : message);
+    }
+};

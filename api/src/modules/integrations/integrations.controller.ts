@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common';
 import {
     ApiBearerAuth,
+    ApiExcludeEndpoint,
     ApiOperation,
     ApiResponse,
     ApiTags,
@@ -55,6 +56,7 @@ export class IntegrationsController {
     @Post(':provider/keys')
     @UseGuards(OrganisationRolesGuard)
     @OrganisationRoles(OrganisationRole.ADMIN)
+    @ApiExcludeEndpoint()
     @ApiOperation({ summary: 'Store a key for an integration provider' })
     @ApiResponse({ status: 201 })
     createKey(
@@ -96,6 +98,7 @@ export class IntegrationsController {
     @Post('accounts/:account_uuid/domains')
     @UseGuards(OrganisationRolesGuard)
     @OrganisationRoles(OrganisationRole.ADMIN)
+    @ApiExcludeEndpoint()
     @ApiOperation({ summary: 'Add another sending domain to an existing Resend account' })
     @ApiResponse({ status: 404, description: 'Integration account not found' })
     addAccountDomain(
@@ -110,6 +113,7 @@ export class IntegrationsController {
     @Patch('domains/:domain_uuid')
     @UseGuards(OrganisationRolesGuard)
     @OrganisationRoles(OrganisationRole.ADMIN)
+    @ApiExcludeEndpoint()
     @ApiOperation({ summary: 'Update a sending domain' })
     @ApiResponse({ status: 404, description: 'Domain not found' })
     updateAccountDomain(
@@ -124,6 +128,7 @@ export class IntegrationsController {
     @Patch('domains/:domain_uuid/default')
     @UseGuards(OrganisationRolesGuard)
     @OrganisationRoles(OrganisationRole.ADMIN)
+    @ApiExcludeEndpoint()
     @ApiOperation({ summary: 'Set a domain as the account default' })
     @ApiResponse({ status: 404, description: 'Domain not found' })
     setDefaultAccountDomain(
@@ -137,6 +142,7 @@ export class IntegrationsController {
     @Delete('domains/:domain_uuid')
     @UseGuards(OrganisationRolesGuard)
     @OrganisationRoles(OrganisationRole.ADMIN)
+    @ApiExcludeEndpoint()
     @ApiOperation({ summary: 'Delete a sending domain' })
     @ApiResponse({ status: 404, description: 'Domain not found' })
     removeAccountDomain(
@@ -150,6 +156,7 @@ export class IntegrationsController {
     @Patch('keys/:uuid')
     @UseGuards(OrganisationRolesGuard)
     @OrganisationRoles(OrganisationRole.ADMIN)
+    @ApiExcludeEndpoint()
     @ApiOperation({ summary: 'Update a stored key secret' })
     @ApiResponse({ status: 404, description: 'Key not found' })
     updateKey(
@@ -164,6 +171,7 @@ export class IntegrationsController {
     @Patch(':provider/default-account')
     @UseGuards(OrganisationRolesGuard)
     @OrganisationRoles(OrganisationRole.ADMIN)
+    @ApiExcludeEndpoint()
     @ApiOperation({ summary: 'Set the default account for a multi-account integration' })
     @ApiResponse({ status: 404, description: 'Integration not found' })
     setDefaultAccount(
@@ -179,6 +187,7 @@ export class IntegrationsController {
     @Patch(':provider/accounts/:account')
     @UseGuards(OrganisationRolesGuard)
     @OrganisationRoles(OrganisationRole.ADMIN)
+    @ApiExcludeEndpoint()
     @ApiOperation({ summary: 'Update the display title for an integration account' })
     @ApiResponse({ status: 404, description: 'Integration not found' })
     updateAccountTitle(
@@ -200,6 +209,7 @@ export class IntegrationsController {
     @Delete('keys/:uuid')
     @UseGuards(OrganisationRolesGuard)
     @OrganisationRoles(OrganisationRole.ADMIN)
+    @ApiExcludeEndpoint()
     @ApiOperation({ summary: 'Delete a stored key' })
     @ApiResponse({ status: 404, description: 'Key not found' })
     removeKey(

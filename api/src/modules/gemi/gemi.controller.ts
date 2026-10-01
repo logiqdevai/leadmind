@@ -1,9 +1,10 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiExcludeController, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtGuard } from '@/shared/guards/jwt.guard';
 import { GemiService } from '@/integrations/gemi/gemi.service';
 
 @ApiTags('gemi')
+@ApiExcludeController()
 @ApiBearerAuth()
 @UseGuards(JwtGuard)
 @Controller('gemi')

@@ -1,5 +1,5 @@
 import { Controller, Delete, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiExcludeEndpoint, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { OrganisationRole } from '@/generated/prisma';
 import { CurrentUser } from '@/shared/decorators/current-user.decorator';
 import { JwtGuard } from '@/shared/guards/jwt.guard';
@@ -60,6 +60,7 @@ export class ContactAudienceStatsController {
     @Delete('analyses/:analysisUuid')
     @UseGuards(OrganisationRolesGuard)
     @OrganisationRoles(OrganisationRole.ADMIN)
+    @ApiExcludeEndpoint()
     @ApiOperation({ summary: 'Delete an AI audience analysis for the whole CRM' })
     @ApiParam({ name: 'analysisUuid', description: 'Audience analysis uuid' })
     @ApiResponse({ status: 200 })

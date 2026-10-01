@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import {
     ApiBearerAuth,
+    ApiExcludeController,
     ApiOperation,
     ApiResponse,
     ApiTags,
@@ -21,6 +22,7 @@ import { CreateSidebarFavoriteDto } from './dto/create-sidebar-favorite.dto';
 import { ReorderSidebarFavoritesDto } from './dto/reorder-sidebar-favorites.dto';
 
 @ApiTags('sidebar-favorites')
+@ApiExcludeController()
 @ApiBearerAuth()
 @UseGuards(JwtGuard)
 @Controller('sidebar-favorites')

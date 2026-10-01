@@ -30,7 +30,9 @@ const InviteAcceptPage: FC = () => {
                 <p className="text-sm text-muted">
                     {isLoggedIn
                         ? "Accept an invitation to join a workspace"
-                        : "Create an account to join this workspace"}
+                        : data?.has_account
+                          ? "Sign in to join this workspace"
+                          : "Create an account to join this workspace"}
                 </p>
             </div>
 
@@ -60,6 +62,22 @@ const InviteAcceptPage: FC = () => {
                         >
                             Accept invitation
                         </Button>
+                    ) : data.has_account ? (
+                        <div className="space-y-4">
+                            <p className="text-sm text-muted">
+                                An account with this email already exists. Sign in to join
+                                this workspace.
+                            </p>
+                            <Button
+                                variant="primary"
+                                className="w-full"
+                                onPress={() =>
+                                    navigate(`${Routes.auth.sign_in}?invite=${token}`)
+                                }
+                            >
+                                Sign in
+                            </Button>
+                        </div>
                     ) : (
                         <div className="space-y-4">
                             <SignUpForm

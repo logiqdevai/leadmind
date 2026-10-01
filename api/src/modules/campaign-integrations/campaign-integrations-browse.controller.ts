@@ -1,6 +1,7 @@
 import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 import {
   ApiBearerAuth,
+  ApiExcludeController,
   ApiOperation,
   ApiQuery,
   ApiResponse,
@@ -11,6 +12,7 @@ import { JwtGuard } from '@/shared/guards/jwt.guard';
 import { CampaignIntegrationsService } from './services/campaign-integrations.service';
 
 @ApiTags('campaign-integrations')
+@ApiExcludeController()
 @ApiBearerAuth()
 @UseGuards(JwtGuard)
 @Controller('campaign-integrations')

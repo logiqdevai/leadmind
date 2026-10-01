@@ -16,6 +16,8 @@ import { ListContactListsDto } from './dto/list-contact-lists.dto';
 import { AddListContactsDto } from './dto/add-list-contacts.dto';
 import { BulkAddListContactsDto } from './dto/bulk-add-list-contacts.dto';
 import { ListContactListMembersDto } from './dto/list-contact-list-members.dto';
+import type { ContactListMemberSortField } from './constants/contact-list-member-sort-fields.constants';
+import type { SortOrder } from '@/modules/contacts/constants/contact-sort-fields.constants';
 
 @Injectable()
 export class ContactListsService {
@@ -145,6 +147,17 @@ export class ContactListsService {
         return { uuid };
     }
 
+    private buildMemberOrderBy(
+        sortBy?: ContactListMemberSortField,
+        sortOrder?: SortOrder,
+    ): Prisma.ContactListMemberOrderByWithRelationInput {
+        if (!sortBy) return { created_at: 'desc' };
+        const order = sortOrder ?? 'asc';
+        if (sortBy === 'added_at') return { created_at: order };
+        if (sortBy === 'list_status') return { status: order };
+        return { contact: { [sortBy]: order } as Prisma.ContactOrderByWithRelationInput };
+    }
+
     async findMembers(organisation_uuid: string, listUuid: string, query: ListContactListMembersDto) {
         await this.ensureListOwned(organisation_uuid, listUuid);
 
@@ -180,7 +193,7 @@ export class ContactListsService {
                         },
                     },
                 },
-                orderBy: { created_at: 'desc' },
+                orderBy: this.buildMemberOrderBy(query.sort_by, query.sort_order),
                 skip,
                 take: limit,
             }),

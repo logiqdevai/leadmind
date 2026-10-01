@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import {
   ApiBearerAuth,
+  ApiExcludeEndpoint,
   ApiOperation,
   ApiResponse,
   ApiTags,
@@ -23,6 +24,7 @@ export class MailTesterController {
   constructor(private readonly mailTesterService: MailTesterService) {}
 
   @Get('tests')
+  @ApiExcludeEndpoint()
   @ApiOperation({ summary: 'List recent Mail-Tester deliverability tests' })
   listTests(@CurrentUser('organisation_uuid') organisation_uuid: string) {
     return this.mailTesterService.listTests(organisation_uuid);

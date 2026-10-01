@@ -463,6 +463,9 @@ export class OrganisationsService {
         const organisation = await this.prisma.organisation.findUnique({
             where: { uuid: invitation.organisation_uuid },
         });
+        const existingUser = await this.prisma.user.findUnique({
+            where: { email: invitation.email },
+        });
 
         return {
             email: invitation.email,
@@ -470,6 +473,7 @@ export class OrganisationsService {
             organisation_name: organisation?.name,
             organisation_uuid: invitation.organisation_uuid,
             expires_at: invitation.expires_at,
+            has_account: !!existingUser,
         };
     }
 

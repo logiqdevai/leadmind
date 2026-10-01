@@ -1,11 +1,12 @@
 import { Controller, Get, Query, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiExcludeController, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtGuard } from '@/shared/guards/jwt.guard';
 import { CurrentUser } from '@/shared/decorators/current-user.decorator';
 import { ApifyUsageService } from './apify-usage.service';
 import { ApifyUsageSummaryDto, ListApifyUsageDto } from './dto/list-apify-usage.dto';
 
 @ApiTags('apify-usage')
+@ApiExcludeController()
 @ApiBearerAuth()
 @UseGuards(JwtGuard)
 @Controller('apify-usage')

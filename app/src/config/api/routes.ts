@@ -15,6 +15,7 @@ export const ApiRoutes = {
         prefix: "/users",
         me: "/users/me",
         change_password: "/users/me/password",
+        delete_me: "/users/me",
     },
     google_maps: {
         timezone: "/google-maps/timezone",

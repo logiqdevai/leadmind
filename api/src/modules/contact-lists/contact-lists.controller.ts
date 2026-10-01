@@ -9,7 +9,7 @@ import {
     Query,
     UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiExcludeEndpoint, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { OrganisationRole } from '@/generated/prisma';
 import { CurrentUser } from '@/shared/decorators/current-user.decorator';
 import { JwtGuard } from '@/shared/guards/jwt.guard';
@@ -299,6 +299,7 @@ export class ContactListsController {
     @Delete(':uuid/analyses/:analysisUuid')
     @UseGuards(OrganisationRolesGuard)
     @OrganisationRoles(OrganisationRole.ADMIN)
+    @ApiExcludeEndpoint()
     @ApiOperation({ summary: 'Delete an AI audience analysis for a contact list' })
     @ApiResponse({ status: 200 })
     @ApiResponse({ status: 403, description: 'Forbidden — organisation admin role required' })
