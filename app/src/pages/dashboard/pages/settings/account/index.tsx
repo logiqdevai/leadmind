@@ -294,7 +294,9 @@ const SettingsAccountPage: FC = () => {
                 cancelLabel="Cancel"
                 variant="danger"
                 isPending={deleteAccountMutation.isPending}
-                onConfirm={() => deleteAccountMutation.mutateAsync()}
+                onConfirm={async () => {
+                    await deleteAccountMutation.mutateAsync();
+                }}
             />
         </div>
     );
