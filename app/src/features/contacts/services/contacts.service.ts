@@ -162,6 +162,15 @@ export const resubscribeContact = async (uuid: string): Promise<Contact> => {
     }
 };
 
+export const clearContactBounce = async (uuid: string): Promise<Contact> => {
+    try {
+        const response = await axiosInstance.post(ApiRoutes.contacts.clear_bounce(uuid));
+        return response.data;
+    } catch (error: any) {
+        throw new Error(error?.response?.data?.message || "Failed to clear bounce status.");
+    }
+};
+
 export const updateContactNotes = async (
     uuid: string,
     notes: string,

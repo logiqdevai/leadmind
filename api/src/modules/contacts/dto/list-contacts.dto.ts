@@ -139,7 +139,10 @@ export class ListContactsDto {
     @IsBoolean()
     never_contacted?: boolean;
 
-    @ApiPropertyOptional({ description: 'Include contacts who have unsubscribed (default false)' })
+    @ApiPropertyOptional({
+        description:
+            'Include contacts who have unsubscribed or whose email bounced (default false)',
+    })
     @IsOptional()
     @QueryBooleanTransform
     @IsBoolean()

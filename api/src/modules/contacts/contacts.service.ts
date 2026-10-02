@@ -340,7 +340,10 @@ export class ContactsService {
             query.last_interaction_before !== undefined;
 
         if (applyUnsubscribedRule && !query.include_unsubscribed) {
-            audienceAnd.push({ unsubscribed_at: null });
+            // Bounced addresses are just as undeliverable as unsubscribed ones, so the
+            // same "include_unsubscribed" toggle keeps both out of a campaign/list
+            // audience by default rather than splitting it into two near-identical flags.
+            audienceAnd.push({ unsubscribed_at: null, bounced_at: null });
         }
 
         if (audienceAnd.length === 0) return;
@@ -679,6 +682,36 @@ export class ContactsService {
                     organisation_uuid,
                     type: InteractionType.NOTE,
                     content: 'Email preference restored to subscribed',
+                },
+            }),
+        ]);
+
+        return this.findOne(organisation_uuid, uuid);
+    }
+
+    /**
+     * Manual override for when an automatic bounce suppression (see
+     * WebhookEventService's 'bounced' handling) turns out wrong - e.g. the address was
+     * only transiently undeliverable, or the user fixed a typo'd email. Separate from
+     * resubscribe/unsubscribe, which track opt-in/opt-out rather than deliverability.
+     */
+    async clearBounce(organisation_uuid: string, uuid: string) {
+        const contact = await this.requireOwnedContact(organisation_uuid, uuid);
+        if (!contact.bounced_at) {
+            return this.findOne(organisation_uuid, uuid);
+        }
+
+        await this.prisma.$transaction([
+            this.prisma.contact.update({
+                where: { uuid: contact.uuid },
+                data: { bounced_at: null, bounce_reason: null },
+            }),
+            this.prisma.interaction.create({
+                data: {
+                    contact_uuid: contact.uuid,
+                    organisation_uuid,
+                    type: InteractionType.NOTE,
+                    content: 'Bounce suppression cleared - email marked deliverable again',
                 },
             }),
         ]);

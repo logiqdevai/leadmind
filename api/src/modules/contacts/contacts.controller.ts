@@ -227,6 +227,17 @@ export class ContactsController {
         return this.contactsService.resubscribe(organisation_uuid, uuid);
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.CONTACT, action: ActivityAction.UPDATED, entityUuidFrom: 'params.uuid' })
+    @Post(':uuid/clear-bounce')
+    @ApiOperation({ summary: 'Undo an automatic bounce suppression and resume sending to this contact' })
+    @ApiResponse({ status: 404, description: 'Contact not found' })
+    clearBounce(
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
+        @Param('uuid') uuid: string,
+    ) {
+        return this.contactsService.clearBounce(organisation_uuid, uuid);
+    }
+
     @ActivityLog({ entityType: ActivityEntityType.CONTACT, action: ActivityAction.DELETED, entityUuidFrom: 'params.uuid' })
     @Delete(':uuid')
     @UseGuards(OrganisationRolesGuard)

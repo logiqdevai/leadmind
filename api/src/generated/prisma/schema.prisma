@@ -356,6 +356,8 @@ model Contact {
   website_validated_at      DateTime?
   unsubscribed_at           DateTime?
   unsubscribe_token         String?                @unique
+  bounced_at                DateTime?
+  bounce_reason             String?
   last_interaction_at       DateTime?
   created_at                DateTime               @default(now())
   updated_at                DateTime               @updatedAt
@@ -383,6 +385,7 @@ model Contact {
   @@index([lead_uuid])
   @@index([email])
   @@index([unsubscribed_at])
+  @@index([bounced_at])
   @@index([last_interaction_at])
 }
 

@@ -609,16 +609,13 @@ describe('WebhookEventService', () => {
         );
     });
 
-    it('cancels the linked sequence enrollment on bounce', async () => {
+    it('suppresses the contact and cancels every active sequence enrollment on bounce', async () => {
         const { service, prisma, sequenceEnrollmentService } = createService({
             message: {
                 status: MsgStatus.SENT,
                 sequence_enrollment_uuid: 'enr-uuid',
             } as any,
             mcc: { uuid: 'mcc-uuid', status: CampaignContactStatus.SENT },
-        });
-        prisma.sequenceEnrollment.findUnique.mockResolvedValue({
-            status: 'ACTIVE',
         });
 
         await service.ingest({
@@ -627,13 +624,24 @@ describe('WebhookEventService', () => {
             metadata: { reason: 'Hard bounce' },
         });
 
-        expect(sequenceEnrollmentService.cancelEnrollment).toHaveBeenCalledWith(
+        // No manual review gate: the contact is suppressed immediately so every future
+        // send (manual, campaign, sequence) is blocked without anyone checking by hand.
+        expect(prisma.contact.update).toHaveBeenCalledWith(
+            expect.objectContaining({
+                where: { uuid: 'contact-uuid' },
+                data: expect.objectContaining({
+                    bounced_at: expect.any(Date),
+                    bounce_reason: 'Hard bounce',
+                }),
+            }),
+        );
+        expect(sequenceEnrollmentService.cancelAllForContact).toHaveBeenCalledWith(
             organisation_uuid,
-            'enr-uuid',
+            'contact-uuid',
         );
     });
 
-    it('does not cancel a sequence enrollment on bounce when none is linked', async () => {
+    it('cancels every active sequence enrollment on bounce even when the bounced message has no linked enrollment', async () => {
         const { service, sequenceEnrollmentService } = createService({
             message: { status: MsgStatus.SENT },
             mcc: { uuid: 'mcc-uuid', status: CampaignContactStatus.SENT },
@@ -645,28 +653,10 @@ describe('WebhookEventService', () => {
             metadata: { reason: 'Hard bounce' },
         });
 
-        expect(sequenceEnrollmentService.cancelEnrollment).not.toHaveBeenCalled();
-    });
-
-    it('does not cancel a sequence enrollment on bounce when it is no longer active', async () => {
-        const { service, prisma, sequenceEnrollmentService } = createService({
-            message: {
-                status: MsgStatus.SENT,
-                sequence_enrollment_uuid: 'enr-uuid',
-            } as any,
-            mcc: { uuid: 'mcc-uuid', status: CampaignContactStatus.SENT },
-        });
-        prisma.sequenceEnrollment.findUnique.mockResolvedValue({
-            status: 'CANCELLED',
-        });
-
-        await service.ingest({
-            kind: 'bounced',
-            provider_message_id,
-            metadata: { reason: 'Hard bounce' },
-        });
-
-        expect(sequenceEnrollmentService.cancelEnrollment).not.toHaveBeenCalled();
+        expect(sequenceEnrollmentService.cancelAllForContact).toHaveBeenCalledWith(
+            organisation_uuid,
+            'contact-uuid',
+        );
     });
 
     it('records email failure with timestamp', async () => {

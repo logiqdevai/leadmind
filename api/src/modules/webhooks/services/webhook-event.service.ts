@@ -284,6 +284,25 @@ export class WebhookEventService {
                 interactionType = InteractionType.EMAIL_BOUNCED;
                 mccStatus = CampaignContactStatus.BOUNCED;
                 counterField = 'bounced_count';
+                // Any bounce (hard or soft) immediately stops all future sends to this
+                // contact - manual, campaign, and sequence alike - via the same
+                // contact.bounced_at gate deliverOutreachMessage/campaign send/outreach
+                // worker already check. No manual review step: the user can't keep up
+                // with checking bounces by hand, so this is intentionally blunt. An org
+                // admin can undo it from the contact page if a bounce turns out wrong
+                // (e.g. after fixing a mistyped address) - see ContactsService.clearBounce.
+                await this.prisma.contact.update({
+                    where: { uuid: message.contact_uuid },
+                    data: {
+                        bounced_at: now,
+                        bounce_reason:
+                            typeof event.metadata?.reason === 'string'
+                                ? event.metadata.reason
+                                : typeof event.metadata?.bounce_type === 'string'
+                                  ? event.metadata.bounce_type
+                                  : null,
+                    },
+                });
                 break;
             case 'failed':
                 updates.status = MsgStatus.FAILED;
@@ -556,33 +575,19 @@ export class WebhookEventService {
         }
 
         if (event.kind === 'bounced') {
-            await this.cancelEnrollmentOnBounce(message);
+            // A bounce means the address is undeliverable, so unlike a reply (which only
+            // closes out the sequence it answered) this cancels every active enrollment
+            // for the contact, not just the one tied to the bounced message.
+            const { cancelled } = await this.sequenceEnrollmentService.cancelAllForContact(
+                message.organisation_uuid,
+                message.contact_uuid,
+            );
+            if (cancelled > 0) {
+                this.logger.log(
+                    `[ingest] Bounce from contact=${message.contact_uuid} cancelled ${cancelled} sequence enrollment(s)`,
+                );
+            }
         }
-    }
-
-    /**
-     * A bounce always cancels the enrollment tied to the bounced message - unlike a
-     * reply there's no per-sequence opt-out for this (a bounce means the address is
-     * undeliverable, so continuing to send further steps is never useful).
-     */
-    private async cancelEnrollmentOnBounce(message: OutreachMessage): Promise<void> {
-        if (!message.sequence_enrollment_uuid) return;
-
-        const enrollment = await this.prisma.sequenceEnrollment.findUnique({
-            where: { uuid: message.sequence_enrollment_uuid },
-            select: { status: true },
-        });
-        if (!enrollment || enrollment.status !== SequenceEnrollmentStatus.ACTIVE) {
-            return;
-        }
-
-        await this.sequenceEnrollmentService.cancelEnrollment(
-            message.organisation_uuid,
-            message.sequence_enrollment_uuid,
-        );
-        this.logger.log(
-            `[ingest] Bounce cancelled sequence enrollment=${message.sequence_enrollment_uuid}`,
-        );
     }
 
     /**

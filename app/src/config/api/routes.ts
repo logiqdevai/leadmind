@@ -44,6 +44,7 @@ export const ApiRoutes = {
         update: (uuid: string) => `/contacts/${uuid}`,
         remove: (uuid: string) => `/contacts/${uuid}`,
         resubscribe: (uuid: string) => `/contacts/${uuid}/resubscribe`,
+        clear_bounce: (uuid: string) => `/contacts/${uuid}/clear-bounce`,
         update_status: (uuid: string) => `/contacts/${uuid}/status`,
         update_tags: (uuid: string) => `/contacts/${uuid}/tags`,
         list_info: (uuid: string) => `/contacts/${uuid}/info`,
