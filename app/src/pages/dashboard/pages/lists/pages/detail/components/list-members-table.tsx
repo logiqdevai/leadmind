@@ -7,7 +7,9 @@ import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "
 import { TablePagination } from "@/components/ui/table-pagination";
 import { isTableNavInteractiveCell, tableNavInteractiveCellClassName, tableNavRowClassName } from "@/components/ui/table-row-link";
 import { LeadStatus } from "@/features/contacts/interfaces/contact.interface";
+import type { ContactSortField, SortOrder } from "@/features/contacts/interfaces/contact.interface";
 import type { ListMember } from "@/features/contact-lists/interfaces/contact-list.interface";
+import { SortableColumnHeader } from "@/components/ui/table-sort-header";
 import { STATUS_OPTIONS } from "@/features/contacts/constants/contacts.constants";
 import { useUpdateContactStatus } from "@/features/contacts/hooks/use-contacts";
 import { useUpdateListMemberStatus } from "@/features/contact-lists/hooks/use-contact-lists";
@@ -23,6 +25,20 @@ import { contactTableColumnClass } from "@/pages/dashboard/components/contact-ta
 import { cn } from "@/lib/utils";
 
 const columnHelper = createColumnHelper<ListMember>();
+
+/** Column ids that support server-side sorting, mapped to the API's sort field. */
+const SORT_FIELD_BY_COLUMN: Record<string, ContactSortField> = {
+    name: "name",
+    company: "company",
+    email: "email",
+    website: "website",
+    status: "status",
+    list_status: "list_status",
+};
+
+const COLUMN_BY_SORT_FIELD: Partial<Record<ContactSortField, string>> = Object.fromEntries(
+    Object.entries(SORT_FIELD_BY_COLUMN).map(([columnId, field]) => [field, columnId]),
+);
 
 interface ListMembersTableProps {
     listUuid: string;
@@ -41,6 +57,9 @@ interface ListMembersTableProps {
     onSelectionChange: (keys: Set<string>) => void;
     onDeleteContact?: (contactUuid: string) => void;
     deletePending?: boolean;
+    sortBy?: ContactSortField;
+    sortOrder?: SortOrder;
+    onSortChange: (sortBy: ContactSortField, sortOrder: SortOrder) => void;
 }
 
 export function ListMembersTable({
@@ -60,6 +79,9 @@ export function ListMembersTable({
     onSelectionChange,
     onDeleteContact,
     deletePending = false,
+    sortBy,
+    sortOrder,
+    onSortChange,
 }: ListMembersTableProps) {
     const updateStatus = useUpdateContactStatus();
     const updateListStatus = useUpdateListMemberStatus();
@@ -289,6 +311,18 @@ export function ListMembersTable({
                         selectionBehavior="toggle"
                         selectedKeys={selectedKeys}
                         onSelectionChange={handleSelectionChange}
+                        sortDescriptor={
+                            sortBy && COLUMN_BY_SORT_FIELD[sortBy]
+                                ? {
+                                      column: COLUMN_BY_SORT_FIELD[sortBy]!,
+                                      direction: sortOrder === "desc" ? "descending" : "ascending",
+                                  }
+                                : undefined
+                        }
+                        onSortChange={(descriptor) => {
+                            const field = SORT_FIELD_BY_COLUMN[String(descriptor.column)];
+                            if (field) onSortChange(field, descriptor.direction === "descending" ? "desc" : "asc");
+                        }}
                     >
                         <Table.Header>
                             <Table.Column className="pr-0 w-10">
@@ -298,16 +332,27 @@ export function ListMembersTable({
                                     </Checkbox.Control>
                                 </Checkbox>
                             </Table.Column>
-                            {table.getHeaderGroups()[0]!.headers.map((header) => (
-                                <Table.Column
-                                    key={header.id}
-                                    id={header.id}
-                                    isRowHeader={header.id === "name"}
-                                    className={contactTableColumnClass(header.id)}
-                                >
-                                    {flexRender(header.column.columnDef.header, header.getContext())}
-                                </Table.Column>
-                            ))}
+                            {table.getHeaderGroups()[0]!.headers.map((header) => {
+                                const isSortable = header.id in SORT_FIELD_BY_COLUMN;
+                                const headerContent = flexRender(header.column.columnDef.header, header.getContext());
+                                return (
+                                    <Table.Column
+                                        key={header.id}
+                                        id={header.id}
+                                        isRowHeader={header.id === "name"}
+                                        allowsSorting={isSortable}
+                                        className={contactTableColumnClass(header.id)}
+                                    >
+                                        {isSortable
+                                            ? ({ sortDirection }) => (
+                                                  <SortableColumnHeader direction={sortDirection}>
+                                                      {headerContent}
+                                                  </SortableColumnHeader>
+                                              )
+                                            : headerContent}
+                                    </Table.Column>
+                                );
+                            })}
                         </Table.Header>
                         <Table.Body
                             renderEmptyState={() =>

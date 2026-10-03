@@ -1,5 +1,5 @@
 import { adminLoginToAccount, refreshAccountToken, signIn, signUp } from "../services/auth";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuthStore } from "@/stores/auth";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import type { SignInUser, SignUpUser } from "../interfaces/auth.interface";
@@ -7,7 +7,10 @@ import { Routes } from "@/routes/routes";
 import type { LoggedInUser } from "@/features/user/interfaces/user.interface";
 import { toast } from "@/hooks/use-toast";
 import { formatAuthUser } from "@/features/auth/utils/auth.utils";
-import { switchOrganisation } from "@/features/organisations/services/organisations.services";
+import {
+    acceptInvitation,
+    switchOrganisation,
+} from "@/features/organisations/services/organisations.services";
 import { getPreferredOrganisationUuid } from "@/lib/preferred-organisation";
 
 function errMessage(err: unknown): string {
@@ -25,10 +28,40 @@ export function useSignin() {
     const { login } = useAuthStore((state) => state);
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
+    const queryClient = useQueryClient();
 
     return useMutation({
         mutationFn: (data: SignInUser) => signIn(data),
         onSuccess: async (data: LoggedInUser) => {
+            const inviteToken = searchParams.get("invite");
+
+            if (inviteToken) {
+                try {
+                    const accepted = await acceptInvitation(inviteToken);
+                    login({
+                        ...formatAuthUser(accepted),
+                        isLoggedIn: true,
+                    });
+                    queryClient.clear();
+                    toast({
+                        title: "Invitation accepted",
+                        description: "You have joined the workspace",
+                        duration: 2000,
+                    });
+                    navigate(Routes.dashboard.root);
+                    return;
+                } catch (error) {
+                    toast({
+                        title: "Signed in, but could not accept invitation",
+                        description: errMessage(error),
+                        duration: 4000,
+                        variant: "error",
+                    });
+                    // Fall through: log the user in normally and land them back on
+                    // the invite page so they can retry accepting manually.
+                }
+            }
+
             const preferredOrganisationUuid = data.user_uuid
                 ? getPreferredOrganisationUuid(data.user_uuid)
                 : null;

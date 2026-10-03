@@ -8,7 +8,7 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiExcludeEndpoint, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { OrganisationRole } from '@/generated/prisma';
 import { CurrentUser } from '@/shared/decorators/current-user.decorator';
 import { OrganisationRoles } from '@/shared/decorators/organisation-roles.decorator';
@@ -130,6 +130,7 @@ export class CampaignIntegrationsController {
   }
 
   @Get('activity')
+  @ApiExcludeEndpoint()
   @ApiOperation({
     summary:
       'Real per-day send counts per campaign integration, for the sending-schedule calendar view',
@@ -148,6 +149,7 @@ export class CampaignIntegrationsController {
   }
 
   @Get(':ci_uuid/capacity')
+  @ApiExcludeEndpoint()
   @ApiOperation({
     summary:
       'Observability: effective capacity, usage, and next eligible send time',

@@ -26,6 +26,7 @@ import {
     bulkScrapeContactEmails,
     triggerDraftMessages,
     resubscribeContact,
+    clearContactBounce,
     updateContact,
     updateContactInfo,
     updateContactNotes,
@@ -373,6 +374,30 @@ export function useResubscribeContact() {
         onError: (error: Error) => {
             toast({
                 title: "Could not restore email preference",
+                description: error.message,
+                variant: "error",
+            });
+        },
+    });
+}
+
+export function useClearContactBounce() {
+    const qc = useQueryClient();
+    return useMutation({
+        mutationFn: (uuid: string) => clearContactBounce(uuid),
+        onSuccess: (data) => {
+            qc.setQueryData(contactsQueryKeys.detail(data.uuid), data);
+            qc.invalidateQueries({ queryKey: contactsQueryKeys.detail(data.uuid) });
+            qc.invalidateQueries({ queryKey: contactsQueryKeys.all });
+            toast({
+                title: "Bounce cleared",
+                description: "This contact can receive emails again.",
+                duration: 2000,
+            });
+        },
+        onError: (error: Error) => {
+            toast({
+                title: "Could not clear bounce status",
                 description: error.message,
                 variant: "error",
             });

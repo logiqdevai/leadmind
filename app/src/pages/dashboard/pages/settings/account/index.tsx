@@ -1,10 +1,16 @@
-import { type FC, useEffect } from "react";
+import { type FC, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { User } from "lucide-react";
 import { Button, Input, Label } from "@heroui/react";
 import { useAuthStore } from "@/stores/auth";
-import { useChangePassword, useGetMe, useUpdateMe } from "@/features/user/hooks/use-user";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
+import {
+    useChangePassword,
+    useDeleteAccount,
+    useGetMe,
+    useUpdateMe,
+} from "@/features/user/hooks/use-user";
 import {
     changePasswordSchema,
     updateProfileSchema,
@@ -21,6 +27,8 @@ const SettingsAccountPage: FC = () => {
     const { data: profile, isLoading, isError } = useGetMe();
     const updateMe = useUpdateMe();
     const changePasswordMutation = useChangePassword();
+    const deleteAccountMutation = useDeleteAccount();
+    const [deleteOpen, setDeleteOpen] = useState(false);
 
     useEffect(() => {
         if (!profile) return;
@@ -259,6 +267,37 @@ const SettingsAccountPage: FC = () => {
                     </Button>
                 </form>
             </div>
+
+            <div className="space-y-3 rounded-xl border border-danger/30 p-4">
+                <div>
+                    <h2 className="text-sm font-medium text-foreground">Danger zone</h2>
+                    <p className="text-xs text-muted mt-1">
+                        Permanently deletes your account. This cannot be undone.
+                    </p>
+                </div>
+                <Button
+                    variant="danger"
+                    size="sm"
+                    isDisabled={deleteAccountMutation.isPending}
+                    onPress={() => setDeleteOpen(true)}
+                >
+                    Delete account
+                </Button>
+            </div>
+
+            <ConfirmDialog
+                isOpen={deleteOpen}
+                onOpenChange={setDeleteOpen}
+                title="Delete your account?"
+                description="This permanently deletes your account. Organisations you solely own will be deleted along with their data; if you own an organisation with other members, transfer ownership or remove them first."
+                confirmLabel="Delete account"
+                cancelLabel="Cancel"
+                variant="danger"
+                isPending={deleteAccountMutation.isPending}
+                onConfirm={async () => {
+                    await deleteAccountMutation.mutateAsync();
+                }}
+            />
         </div>
     );
 };

@@ -1,5 +1,5 @@
-import { Body, Controller, Get, Patch, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Delete, Get, Patch, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiExcludeEndpoint, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from '@/shared/decorators/current-user.decorator';
 import { JwtGuard } from '@/shared/guards/jwt.guard';
 import { ChangePasswordDto } from './dto/change-password.dto';
@@ -32,11 +32,25 @@ export class UsersController {
     }
 
     @Patch('me/password')
+    @ApiExcludeEndpoint()
     @ApiOperation({ summary: 'Change the current user password' })
     @ApiResponse({ status: 200 })
     @ApiResponse({ status: 401, description: 'Unauthorized' })
     @ApiResponse({ status: 404, description: 'User not found' })
     changePassword(@CurrentUser('uuid') userUuid: string, @Body() dto: ChangePasswordDto) {
         return this.usersService.changePassword(userUuid, dto);
+    }
+
+    @Delete('me')
+    @ApiOperation({ summary: 'Delete the current user account' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({
+        status: 400,
+        description: 'Owns an organisation with other members; must transfer or remove them first',
+    })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
+    @ApiResponse({ status: 404, description: 'User not found' })
+    deleteAccount(@CurrentUser('uuid') userUuid: string) {
+        return this.usersService.deleteAccount(userUuid);
     }
 }

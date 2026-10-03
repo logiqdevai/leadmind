@@ -9,7 +9,7 @@ import {
     Query,
     UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiExcludeEndpoint, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { OrganisationRole } from '@/generated/prisma';
 import { JwtGuard } from '@/shared/guards/jwt.guard';
 import { CurrentUser } from '@/shared/decorators/current-user.decorator';
@@ -167,6 +167,7 @@ export class FiltersController {
     @Delete(':uuid/analyses/:analysisUuid')
     @UseGuards(OrganisationRolesGuard)
     @OrganisationRoles(OrganisationRole.ADMIN)
+    @ApiExcludeEndpoint()
     @ApiOperation({ summary: 'Delete an AI audience analysis for a filter' })
     @ApiResponse({ status: 200 })
     @ApiResponse({ status: 401, description: 'Unauthorized' })

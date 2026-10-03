@@ -55,6 +55,7 @@ export interface InvitationPreview {
     organisation_name: string;
     organisation_uuid: string;
     expires_at: string;
+    has_account: boolean;
 }
 
 export const OrganisationCopyCategories = {

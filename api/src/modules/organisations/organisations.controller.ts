@@ -8,7 +8,7 @@ import {
     Post,
     UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiExcludeEndpoint, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtGuard } from '@/shared/guards/jwt.guard';
 import { CurrentUser } from '@/shared/decorators/current-user.decorator';
 import { OrganisationsService } from './organisations.service';
@@ -28,6 +28,7 @@ export class OrganisationsController {
     constructor(private readonly organisationsService: OrganisationsService) {}
 
     @Get('invitations/:token')
+    @ApiExcludeEndpoint()
     @ApiOperation({ summary: 'Preview an organisation invitation' })
     @ApiResponse({ status: 200 })
     @ApiResponse({ status: 404, description: 'Invitation not found or expired' })
@@ -150,6 +151,7 @@ export class OrganisationsController {
     @Patch(':uuid/members/:userUuid')
     @ApiBearerAuth()
     @UseGuards(JwtGuard)
+    @ApiExcludeEndpoint()
     @ApiOperation({ summary: 'Update member role' })
     @ApiResponse({ status: 200 })
     @ApiResponse({ status: 401, description: 'Unauthorized' })
@@ -172,6 +174,7 @@ export class OrganisationsController {
     @Delete(':uuid/members/:userUuid')
     @ApiBearerAuth()
     @UseGuards(JwtGuard)
+    @ApiExcludeEndpoint()
     @ApiOperation({ summary: 'Remove member' })
     @ApiResponse({ status: 200 })
     @ApiResponse({ status: 401, description: 'Unauthorized' })

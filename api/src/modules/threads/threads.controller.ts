@@ -8,7 +8,7 @@ import {
     Query,
     UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiExcludeEndpoint, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from '@/shared/decorators/current-user.decorator';
 import { JwtGuard } from '@/shared/guards/jwt.guard';
 import { ListThreadContactsDto } from './dto/list-thread-contacts.dto';
@@ -52,6 +52,7 @@ export class ThreadsController {
 
     @Post(':uuid/mark-read')
     @HttpCode(200)
+    @ApiExcludeEndpoint()
     @ApiOperation({ summary: 'Mark a thread\'s replies as read (clears the unread-reply flag)' })
     @ApiResponse({ status: 200 })
     @ApiResponse({ status: 401, description: 'Unauthorized' })

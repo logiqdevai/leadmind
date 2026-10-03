@@ -110,6 +110,9 @@ export class MessageSendService {
             if (message.contact.unsubscribed_at) {
                 throw new Error('Contact has unsubscribed');
             }
+            if (message.contact.bounced_at) {
+                throw new Error('Contact email has bounced');
+            }
             const toEmail = normalizeContactEmail(message.contact.email)!;
             let html = sanitizeEmailHtml(rendered.content);
             const token = await this.getOrCreateUnsubscribeToken(message.contact_uuid);

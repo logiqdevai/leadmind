@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
+import { OrganisationRole } from 'generated/prisma';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
@@ -102,6 +103,50 @@ export class UsersService {
         await this.prisma.user.update({
             where: { uuid: userUuid },
             data: { password: hashedPassword },
+        });
+
+        return { success: true };
+    }
+
+    async deleteAccount(userUuid: string) {
+        const user = await this.prisma.user.findUnique({ where: { uuid: userUuid } });
+        if (!user) {
+            throw new NotFoundException('User not found');
+        }
+
+        const memberships = await this.prisma.organisationMember.findMany({
+            where: { user_uuid: userUuid },
+            include: {
+                organisation: {
+                    include: { _count: { select: { members: true } } },
+                },
+            },
+        });
+
+        const organisationsToDelete: string[] = [];
+
+        for (const membership of memberships) {
+            if (membership.role !== OrganisationRole.OWNER) continue;
+
+            const otherMembers = membership.organisation._count.members - 1;
+            if (otherMembers > 0) {
+                throw new BadRequestException(
+                    `Transfer ownership or remove the other members of "${membership.organisation.name}" before deleting your account.`,
+                );
+            }
+
+            organisationsToDelete.push(membership.organisation_uuid);
+        }
+
+        await this.prisma.$transaction(async (tx) => {
+            for (const organisationUuid of organisationsToDelete) {
+                await tx.openAiBatchJob.deleteMany({
+                    where: { organisation_uuid: organisationUuid },
+                });
+                await tx.organisation.delete({ where: { uuid: organisationUuid } });
+            }
+
+            await tx.user.delete({ where: { uuid: userUuid } });
         });
 
         return { success: true };

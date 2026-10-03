@@ -309,6 +309,8 @@ export interface Contact {
     email_validation_reason: string | null;
     email_validated_at: string | null;
     unsubscribed_at: string | null;
+    bounced_at: string | null;
+    bounce_reason: string | null;
     phone: string | null;
     company: string | null;
     website: string | null;
@@ -367,6 +369,21 @@ export interface UpdateContactInfoPayload {
     value?: string;
 }
 
+/** Sortable columns across the contacts list and list-members list (the latter adds added_at/list_status). */
+export type ContactSortField =
+    | "name"
+    | "company"
+    | "email"
+    | "phone"
+    | "website"
+    | "status"
+    | "last_interaction_at"
+    | "created_at"
+    | "added_at"
+    | "list_status";
+
+export type SortOrder = "asc" | "desc";
+
 export interface ListContactsQuery {
     page?: number;
     limit?: number;
@@ -388,6 +405,8 @@ export interface ListContactsQuery {
     last_interaction_before?: string;
     never_contacted?: boolean;
     include_unsubscribed?: boolean;
+    sort_by?: ContactSortField;
+    sort_order?: SortOrder;
 }
 
 export interface PaginatedContacts {

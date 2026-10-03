@@ -34,6 +34,7 @@ import { ContactListFormModal } from "@/pages/dashboard/pages/lists/components/c
 import { Routes } from "@/routes/routes";
 import type { ProfileDraft } from "../types";
 import { profileDraftFromContact, profileFieldPatch, sameUuidSet } from "../utils/profile-draft";
+import { BounceNotice } from "./bounce-notice";
 import { ContactInfosSection } from "./contact-infos-section";
 import { MarketingPreferenceNotice } from "./marketing-opt-out-notice";
 
@@ -233,6 +234,11 @@ function DetailPanel({ contact, onEdit }: { contact: Contact; onEdit: () => void
                         <MarketingPreferenceNotice
                             contactUuid={contact.uuid}
                             unsubscribedAt={contact.unsubscribed_at}
+                        />
+                        <BounceNotice
+                            contactUuid={contact.uuid}
+                            bouncedAt={contact.bounced_at}
+                            bounceReason={contact.bounce_reason}
                         />
                     </div>
                 </Row>

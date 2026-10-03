@@ -103,12 +103,15 @@ export class OutreachSendWorker extends WorkerHost implements OnModuleInit {
       });
       return;
     }
-    if (message.contact.unsubscribed_at) {
+    if (message.contact.unsubscribed_at || message.contact.bounced_at) {
+      const reason = message.contact.unsubscribed_at
+        ? 'Contact has unsubscribed'
+        : 'Contact email has bounced';
       await this.prisma.outreachMessage.update({
         where: { uuid: message.uuid },
         data: {
           status: MsgStatus.SKIPPED,
-          metadata: { error: 'Contact has unsubscribed' },
+          metadata: { error: reason },
         },
       });
       if (message.campaign_integration_uuid) {
@@ -121,9 +124,7 @@ export class OutreachSendWorker extends WorkerHost implements OnModuleInit {
           new Date(),
         );
       }
-      this.logger.warn(
-        `Outreach send skipped message=${message.uuid}: Contact has unsubscribed`,
-      );
+      this.logger.warn(`Outreach send skipped message=${message.uuid}: ${reason}`);
       return;
     }
 

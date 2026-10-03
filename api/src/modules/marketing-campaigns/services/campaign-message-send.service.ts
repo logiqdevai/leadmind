@@ -134,6 +134,10 @@ export class CampaignMessageSendService {
       await this.markSkipped(mcc.uuid, mcc.campaign_uuid, 'unsubscribed');
       return { status: 'skipped', reason: 'unsubscribed' };
     }
+    if (mcc.contact.bounced_at) {
+      await this.markSkipped(mcc.uuid, mcc.campaign_uuid, 'bounced');
+      return { status: 'skipped', reason: 'bounced' };
+    }
 
     const idempotency_key = `campaign:${mcc.campaign_uuid}:${mcc.contact_uuid}:${mcc.channel}`;
 
@@ -391,6 +395,7 @@ export class CampaignMessageSendService {
             email: true,
             phone: true,
             unsubscribed_at: true,
+            bounced_at: true,
             email_validation_status: true,
             email_validation_reason: true,
           },
@@ -435,6 +440,13 @@ export class CampaignMessageSendService {
       throw new ConflictException('Contact has unsubscribed');
     }
 
+    if (
+      mcc.status === CampaignContactStatus.BOUNCED ||
+      message.contact.bounced_at
+    ) {
+      throw new ConflictException('Contact email has bounced');
+    }
+
     if (mcc.status === CampaignContactStatus.QUEUED) {
       throw new ConflictException('Message is already queued for send');
     }
@@ -475,6 +487,7 @@ export class CampaignMessageSendService {
               email: true,
               phone: true,
               unsubscribed_at: true,
+              bounced_at: true,
               email_validation_status: true,
               email_validation_reason: true,
             },
@@ -502,6 +515,7 @@ export class CampaignMessageSendService {
               email: true,
               phone: true,
               unsubscribed_at: true,
+              bounced_at: true,
               email_validation_status: true,
               email_validation_reason: true,
             },
@@ -881,16 +895,16 @@ export class CampaignMessageSendService {
     campaign_uuid: string,
     reason: string,
   ): Promise<void> {
+    const status =
+      reason === 'unsubscribed'
+        ? CampaignContactStatus.UNSUBSCRIBED
+        : reason === 'bounced'
+          ? CampaignContactStatus.BOUNCED
+          : CampaignContactStatus.SKIPPED;
     await this.prisma.$transaction([
       this.prisma.marketingCampaignContact.update({
         where: { uuid: mcc_uuid },
-        data: {
-          status:
-            reason === 'unsubscribed'
-              ? CampaignContactStatus.UNSUBSCRIBED
-              : CampaignContactStatus.SKIPPED,
-          error_message: reason,
-        },
+        data: { status, error_message: reason },
       }),
       this.prisma.marketingCampaign.update({
         where: { uuid: campaign_uuid },
@@ -900,10 +914,15 @@ export class CampaignMessageSendService {
                 unsubscribed_count: { increment: 1 },
                 queued_count: { decrement: 1 },
               }
-            : {
-                skipped_count: { increment: 1 },
-                queued_count: { decrement: 1 },
-              },
+            : reason === 'bounced'
+              ? {
+                  bounced_count: { increment: 1 },
+                  queued_count: { decrement: 1 },
+                }
+              : {
+                  skipped_count: { increment: 1 },
+                  queued_count: { decrement: 1 },
+                },
       }),
     ]);
     await this.checkCompletion(campaign_uuid);
@@ -944,7 +963,8 @@ export class CampaignMessageSendService {
       campaign.sent_count +
       campaign.failed_count +
       campaign.skipped_count +
-      campaign.unsubscribed_count;
+      campaign.unsubscribed_count +
+      campaign.bounced_count;
 
     if (settled >= campaign.total_messages) {
       await this.prisma.marketingCampaign.update({

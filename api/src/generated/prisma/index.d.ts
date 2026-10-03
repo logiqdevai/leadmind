@@ -25461,6 +25461,8 @@ export namespace Prisma {
     website_validated_at: Date | null
     unsubscribed_at: Date | null
     unsubscribe_token: string | null
+    bounced_at: Date | null
+    bounce_reason: string | null
     last_interaction_at: Date | null
     created_at: Date | null
     updated_at: Date | null
@@ -25494,6 +25496,8 @@ export namespace Prisma {
     website_validated_at: Date | null
     unsubscribed_at: Date | null
     unsubscribe_token: string | null
+    bounced_at: Date | null
+    bounce_reason: string | null
     last_interaction_at: Date | null
     created_at: Date | null
     updated_at: Date | null
@@ -25528,6 +25532,8 @@ export namespace Prisma {
     website_validated_at: number
     unsubscribed_at: number
     unsubscribe_token: number
+    bounced_at: number
+    bounce_reason: number
     last_interaction_at: number
     created_at: number
     updated_at: number
@@ -25571,6 +25577,8 @@ export namespace Prisma {
     website_validated_at?: true
     unsubscribed_at?: true
     unsubscribe_token?: true
+    bounced_at?: true
+    bounce_reason?: true
     last_interaction_at?: true
     created_at?: true
     updated_at?: true
@@ -25604,6 +25612,8 @@ export namespace Prisma {
     website_validated_at?: true
     unsubscribed_at?: true
     unsubscribe_token?: true
+    bounced_at?: true
+    bounce_reason?: true
     last_interaction_at?: true
     created_at?: true
     updated_at?: true
@@ -25638,6 +25648,8 @@ export namespace Prisma {
     website_validated_at?: true
     unsubscribed_at?: true
     unsubscribe_token?: true
+    bounced_at?: true
+    bounce_reason?: true
     last_interaction_at?: true
     created_at?: true
     updated_at?: true
@@ -25759,6 +25771,8 @@ export namespace Prisma {
     website_validated_at: Date | null
     unsubscribed_at: Date | null
     unsubscribe_token: string | null
+    bounced_at: Date | null
+    bounce_reason: string | null
     last_interaction_at: Date | null
     created_at: Date
     updated_at: Date
@@ -25812,6 +25826,8 @@ export namespace Prisma {
     website_validated_at?: boolean
     unsubscribed_at?: boolean
     unsubscribe_token?: boolean
+    bounced_at?: boolean
+    bounce_reason?: boolean
     last_interaction_at?: boolean
     created_at?: boolean
     updated_at?: boolean
@@ -25863,6 +25879,8 @@ export namespace Prisma {
     website_validated_at?: boolean
     unsubscribed_at?: boolean
     unsubscribe_token?: boolean
+    bounced_at?: boolean
+    bounce_reason?: boolean
     last_interaction_at?: boolean
     created_at?: boolean
     updated_at?: boolean
@@ -25900,6 +25918,8 @@ export namespace Prisma {
     website_validated_at?: boolean
     unsubscribed_at?: boolean
     unsubscribe_token?: boolean
+    bounced_at?: boolean
+    bounce_reason?: boolean
     last_interaction_at?: boolean
     created_at?: boolean
     updated_at?: boolean
@@ -25937,12 +25957,14 @@ export namespace Prisma {
     website_validated_at?: boolean
     unsubscribed_at?: boolean
     unsubscribe_token?: boolean
+    bounced_at?: boolean
+    bounce_reason?: boolean
     last_interaction_at?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
-  export type ContactOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "lead_uuid" | "filter_uuid" | "status" | "notes" | "name" | "email" | "phone" | "company" | "website" | "google_maps_url" | "linkedin_url" | "title" | "location" | "industry" | "description" | "enrichment_summary" | "enrichment_metadata" | "email_validation_status" | "email_validation_reason" | "email_validated_at" | "website_validation_status" | "website_validation_reason" | "website_validated_at" | "unsubscribed_at" | "unsubscribe_token" | "last_interaction_at" | "created_at" | "updated_at", ExtArgs["result"]["contact"]>
+  export type ContactOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "lead_uuid" | "filter_uuid" | "status" | "notes" | "name" | "email" | "phone" | "company" | "website" | "google_maps_url" | "linkedin_url" | "title" | "location" | "industry" | "description" | "enrichment_summary" | "enrichment_metadata" | "email_validation_status" | "email_validation_reason" | "email_validated_at" | "website_validation_status" | "website_validation_reason" | "website_validated_at" | "unsubscribed_at" | "unsubscribe_token" | "bounced_at" | "bounce_reason" | "last_interaction_at" | "created_at" | "updated_at", ExtArgs["result"]["contact"]>
   export type ContactInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     lead?: boolean | LeadDefaultArgs<ExtArgs>
@@ -26022,6 +26044,8 @@ export namespace Prisma {
       website_validated_at: Date | null
       unsubscribed_at: Date | null
       unsubscribe_token: string | null
+      bounced_at: Date | null
+      bounce_reason: string | null
       last_interaction_at: Date | null
       created_at: Date
       updated_at: Date
@@ -26492,6 +26516,8 @@ export namespace Prisma {
     readonly website_validated_at: FieldRef<"Contact", 'DateTime'>
     readonly unsubscribed_at: FieldRef<"Contact", 'DateTime'>
     readonly unsubscribe_token: FieldRef<"Contact", 'String'>
+    readonly bounced_at: FieldRef<"Contact", 'DateTime'>
+    readonly bounce_reason: FieldRef<"Contact", 'String'>
     readonly last_interaction_at: FieldRef<"Contact", 'DateTime'>
     readonly created_at: FieldRef<"Contact", 'DateTime'>
     readonly updated_at: FieldRef<"Contact", 'DateTime'>
@@ -86484,6 +86510,8 @@ export namespace Prisma {
     website_validated_at: 'website_validated_at',
     unsubscribed_at: 'unsubscribed_at',
     unsubscribe_token: 'unsubscribe_token',
+    bounced_at: 'bounced_at',
+    bounce_reason: 'bounce_reason',
     last_interaction_at: 'last_interaction_at',
     created_at: 'created_at',
     updated_at: 'updated_at'
@@ -89582,6 +89610,8 @@ export namespace Prisma {
     website_validated_at?: DateTimeNullableFilter<"Contact"> | Date | string | null
     unsubscribed_at?: DateTimeNullableFilter<"Contact"> | Date | string | null
     unsubscribe_token?: StringNullableFilter<"Contact"> | string | null
+    bounced_at?: DateTimeNullableFilter<"Contact"> | Date | string | null
+    bounce_reason?: StringNullableFilter<"Contact"> | string | null
     last_interaction_at?: DateTimeNullableFilter<"Contact"> | Date | string | null
     created_at?: DateTimeFilter<"Contact"> | Date | string
     updated_at?: DateTimeFilter<"Contact"> | Date | string
@@ -89632,6 +89662,8 @@ export namespace Prisma {
     website_validated_at?: SortOrderInput | SortOrder
     unsubscribed_at?: SortOrderInput | SortOrder
     unsubscribe_token?: SortOrderInput | SortOrder
+    bounced_at?: SortOrderInput | SortOrder
+    bounce_reason?: SortOrderInput | SortOrder
     last_interaction_at?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -89686,6 +89718,8 @@ export namespace Prisma {
     website_validation_reason?: StringNullableFilter<"Contact"> | string | null
     website_validated_at?: DateTimeNullableFilter<"Contact"> | Date | string | null
     unsubscribed_at?: DateTimeNullableFilter<"Contact"> | Date | string | null
+    bounced_at?: DateTimeNullableFilter<"Contact"> | Date | string | null
+    bounce_reason?: StringNullableFilter<"Contact"> | string | null
     last_interaction_at?: DateTimeNullableFilter<"Contact"> | Date | string | null
     created_at?: DateTimeFilter<"Contact"> | Date | string
     updated_at?: DateTimeFilter<"Contact"> | Date | string
@@ -89736,6 +89770,8 @@ export namespace Prisma {
     website_validated_at?: SortOrderInput | SortOrder
     unsubscribed_at?: SortOrderInput | SortOrder
     unsubscribe_token?: SortOrderInput | SortOrder
+    bounced_at?: SortOrderInput | SortOrder
+    bounce_reason?: SortOrderInput | SortOrder
     last_interaction_at?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -89778,6 +89814,8 @@ export namespace Prisma {
     website_validated_at?: DateTimeNullableWithAggregatesFilter<"Contact"> | Date | string | null
     unsubscribed_at?: DateTimeNullableWithAggregatesFilter<"Contact"> | Date | string | null
     unsubscribe_token?: StringNullableWithAggregatesFilter<"Contact"> | string | null
+    bounced_at?: DateTimeNullableWithAggregatesFilter<"Contact"> | Date | string | null
+    bounce_reason?: StringNullableWithAggregatesFilter<"Contact"> | string | null
     last_interaction_at?: DateTimeNullableWithAggregatesFilter<"Contact"> | Date | string | null
     created_at?: DateTimeWithAggregatesFilter<"Contact"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"Contact"> | Date | string
@@ -96032,6 +96070,8 @@ export namespace Prisma {
     website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
+    bounced_at?: Date | string | null
+    bounce_reason?: string | null
     last_interaction_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -96082,6 +96122,8 @@ export namespace Prisma {
     website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
+    bounced_at?: Date | string | null
+    bounce_reason?: string | null
     last_interaction_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -96125,6 +96167,8 @@ export namespace Prisma {
     website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounce_reason?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -96175,6 +96219,8 @@ export namespace Prisma {
     website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounce_reason?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -96222,6 +96268,8 @@ export namespace Prisma {
     website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
+    bounced_at?: Date | string | null
+    bounce_reason?: string | null
     last_interaction_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -96252,6 +96300,8 @@ export namespace Prisma {
     website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounce_reason?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -96286,6 +96336,8 @@ export namespace Prisma {
     website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounce_reason?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -103154,6 +103206,8 @@ export namespace Prisma {
     website_validated_at?: SortOrder
     unsubscribed_at?: SortOrder
     unsubscribe_token?: SortOrder
+    bounced_at?: SortOrder
+    bounce_reason?: SortOrder
     last_interaction_at?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -103191,6 +103245,8 @@ export namespace Prisma {
     website_validated_at?: SortOrder
     unsubscribed_at?: SortOrder
     unsubscribe_token?: SortOrder
+    bounced_at?: SortOrder
+    bounce_reason?: SortOrder
     last_interaction_at?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -103224,6 +103280,8 @@ export namespace Prisma {
     website_validated_at?: SortOrder
     unsubscribed_at?: SortOrder
     unsubscribe_token?: SortOrder
+    bounced_at?: SortOrder
+    bounce_reason?: SortOrder
     last_interaction_at?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -115769,6 +115827,8 @@ export namespace Prisma {
     website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
+    bounced_at?: Date | string | null
+    bounce_reason?: string | null
     last_interaction_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -115817,6 +115877,8 @@ export namespace Prisma {
     website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
+    bounced_at?: Date | string | null
+    bounce_reason?: string | null
     last_interaction_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -117305,6 +117367,8 @@ export namespace Prisma {
     website_validated_at?: DateTimeNullableFilter<"Contact"> | Date | string | null
     unsubscribed_at?: DateTimeNullableFilter<"Contact"> | Date | string | null
     unsubscribe_token?: StringNullableFilter<"Contact"> | string | null
+    bounced_at?: DateTimeNullableFilter<"Contact"> | Date | string | null
+    bounce_reason?: StringNullableFilter<"Contact"> | string | null
     last_interaction_at?: DateTimeNullableFilter<"Contact"> | Date | string | null
     created_at?: DateTimeFilter<"Contact"> | Date | string
     updated_at?: DateTimeFilter<"Contact"> | Date | string
@@ -119312,6 +119376,8 @@ export namespace Prisma {
     website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
+    bounced_at?: Date | string | null
+    bounce_reason?: string | null
     last_interaction_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -119360,6 +119426,8 @@ export namespace Prisma {
     website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
+    bounced_at?: Date | string | null
+    bounce_reason?: string | null
     last_interaction_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -120833,6 +120901,8 @@ export namespace Prisma {
     website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
+    bounced_at?: Date | string | null
+    bounce_reason?: string | null
     last_interaction_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -120881,6 +120951,8 @@ export namespace Prisma {
     website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
+    bounced_at?: Date | string | null
+    bounce_reason?: string | null
     last_interaction_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -122416,6 +122488,8 @@ export namespace Prisma {
     website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
+    bounced_at?: Date | string | null
+    bounce_reason?: string | null
     last_interaction_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -122465,6 +122539,8 @@ export namespace Prisma {
     website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
+    bounced_at?: Date | string | null
+    bounce_reason?: string | null
     last_interaction_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -122523,6 +122599,8 @@ export namespace Prisma {
     website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounce_reason?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -122572,6 +122650,8 @@ export namespace Prisma {
     website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounce_reason?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -122614,6 +122694,8 @@ export namespace Prisma {
     website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
+    bounced_at?: Date | string | null
+    bounce_reason?: string | null
     last_interaction_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -122663,6 +122745,8 @@ export namespace Prisma {
     website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
+    bounced_at?: Date | string | null
+    bounce_reason?: string | null
     last_interaction_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -122769,6 +122853,8 @@ export namespace Prisma {
     website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounce_reason?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -122818,6 +122904,8 @@ export namespace Prisma {
     website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounce_reason?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -122914,6 +123002,8 @@ export namespace Prisma {
     website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
+    bounced_at?: Date | string | null
+    bounce_reason?: string | null
     last_interaction_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -122963,6 +123053,8 @@ export namespace Prisma {
     website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
+    bounced_at?: Date | string | null
+    bounce_reason?: string | null
     last_interaction_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -123021,6 +123113,8 @@ export namespace Prisma {
     website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounce_reason?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -123070,6 +123164,8 @@ export namespace Prisma {
     website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounce_reason?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -123112,6 +123208,8 @@ export namespace Prisma {
     website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
+    bounced_at?: Date | string | null
+    bounce_reason?: string | null
     last_interaction_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -123161,6 +123259,8 @@ export namespace Prisma {
     website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
+    bounced_at?: Date | string | null
+    bounce_reason?: string | null
     last_interaction_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -123245,6 +123345,8 @@ export namespace Prisma {
     website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounce_reason?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -123294,6 +123396,8 @@ export namespace Prisma {
     website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounce_reason?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -123967,6 +124071,8 @@ export namespace Prisma {
     website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
+    bounced_at?: Date | string | null
+    bounce_reason?: string | null
     last_interaction_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -124016,6 +124122,8 @@ export namespace Prisma {
     website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
+    bounced_at?: Date | string | null
+    bounce_reason?: string | null
     last_interaction_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -124114,6 +124222,8 @@ export namespace Prisma {
     website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounce_reason?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -124163,6 +124273,8 @@ export namespace Prisma {
     website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounce_reason?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -124205,6 +124317,8 @@ export namespace Prisma {
     website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
+    bounced_at?: Date | string | null
+    bounce_reason?: string | null
     last_interaction_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -124254,6 +124368,8 @@ export namespace Prisma {
     website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
+    bounced_at?: Date | string | null
+    bounce_reason?: string | null
     last_interaction_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -124312,6 +124428,8 @@ export namespace Prisma {
     website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounce_reason?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -124361,6 +124479,8 @@ export namespace Prisma {
     website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounce_reason?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -124403,6 +124523,8 @@ export namespace Prisma {
     website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
+    bounced_at?: Date | string | null
+    bounce_reason?: string | null
     last_interaction_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -124452,6 +124574,8 @@ export namespace Prisma {
     website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
+    bounced_at?: Date | string | null
+    bounce_reason?: string | null
     last_interaction_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -124796,6 +124920,8 @@ export namespace Prisma {
     website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounce_reason?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -124845,6 +124971,8 @@ export namespace Prisma {
     website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounce_reason?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -125285,6 +125413,8 @@ export namespace Prisma {
     website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
+    bounced_at?: Date | string | null
+    bounce_reason?: string | null
     last_interaction_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -125334,6 +125464,8 @@ export namespace Prisma {
     website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
+    bounced_at?: Date | string | null
+    bounce_reason?: string | null
     last_interaction_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -125886,6 +126018,8 @@ export namespace Prisma {
     website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounce_reason?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -125935,6 +126069,8 @@ export namespace Prisma {
     website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounce_reason?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -126453,6 +126589,8 @@ export namespace Prisma {
     website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
+    bounced_at?: Date | string | null
+    bounce_reason?: string | null
     last_interaction_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -126502,6 +126640,8 @@ export namespace Prisma {
     website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
+    bounced_at?: Date | string | null
+    bounce_reason?: string | null
     last_interaction_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -126759,6 +126899,8 @@ export namespace Prisma {
     website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounce_reason?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -126808,6 +126950,8 @@ export namespace Prisma {
     website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounce_reason?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -127620,6 +127764,8 @@ export namespace Prisma {
     website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
+    bounced_at?: Date | string | null
+    bounce_reason?: string | null
     last_interaction_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -127669,6 +127815,8 @@ export namespace Prisma {
     website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
+    bounced_at?: Date | string | null
+    bounce_reason?: string | null
     last_interaction_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -127996,6 +128144,8 @@ export namespace Prisma {
     website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounce_reason?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -128045,6 +128195,8 @@ export namespace Prisma {
     website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounce_reason?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -130318,6 +130470,8 @@ export namespace Prisma {
     website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
+    bounced_at?: Date | string | null
+    bounce_reason?: string | null
     last_interaction_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -130367,6 +130521,8 @@ export namespace Prisma {
     website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
+    bounced_at?: Date | string | null
+    bounce_reason?: string | null
     last_interaction_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -130529,6 +130685,8 @@ export namespace Prisma {
     website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounce_reason?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -130578,6 +130736,8 @@ export namespace Prisma {
     website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounce_reason?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -132081,6 +132241,8 @@ export namespace Prisma {
     website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
+    bounced_at?: Date | string | null
+    bounce_reason?: string | null
     last_interaction_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -132130,6 +132292,8 @@ export namespace Prisma {
     website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
+    bounced_at?: Date | string | null
+    bounce_reason?: string | null
     last_interaction_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -132382,6 +132546,8 @@ export namespace Prisma {
     website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounce_reason?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -132431,6 +132597,8 @@ export namespace Prisma {
     website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounce_reason?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -133031,6 +133199,8 @@ export namespace Prisma {
     website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
+    bounced_at?: Date | string | null
+    bounce_reason?: string | null
     last_interaction_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -133080,6 +133250,8 @@ export namespace Prisma {
     website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
+    bounced_at?: Date | string | null
+    bounce_reason?: string | null
     last_interaction_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -133249,6 +133421,8 @@ export namespace Prisma {
     website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounce_reason?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -133298,6 +133472,8 @@ export namespace Prisma {
     website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounce_reason?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -138587,6 +138763,8 @@ export namespace Prisma {
     website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
+    bounced_at?: Date | string | null
+    bounce_reason?: string | null
     last_interaction_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -139249,6 +139427,8 @@ export namespace Prisma {
     website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounce_reason?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -139297,6 +139477,8 @@ export namespace Prisma {
     website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounce_reason?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -139343,6 +139525,8 @@ export namespace Prisma {
     website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounce_reason?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -140936,6 +141120,8 @@ export namespace Prisma {
     website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
+    bounced_at?: Date | string | null
+    bounce_reason?: string | null
     last_interaction_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -141042,6 +141228,8 @@ export namespace Prisma {
     website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounce_reason?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -141090,6 +141278,8 @@ export namespace Prisma {
     website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounce_reason?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -141136,6 +141326,8 @@ export namespace Prisma {
     website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounce_reason?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -141349,6 +141541,8 @@ export namespace Prisma {
     website_validated_at?: Date | string | null
     unsubscribed_at?: Date | string | null
     unsubscribe_token?: string | null
+    bounced_at?: Date | string | null
+    bounce_reason?: string | null
     last_interaction_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -141393,6 +141587,8 @@ export namespace Prisma {
     website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounce_reason?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -141441,6 +141637,8 @@ export namespace Prisma {
     website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounce_reason?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -141487,6 +141685,8 @@ export namespace Prisma {
     website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounce_reason?: NullableStringFieldUpdateOperationsInput | string | null
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string

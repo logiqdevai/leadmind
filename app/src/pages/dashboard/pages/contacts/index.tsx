@@ -39,6 +39,7 @@ import {
   serializeContactFiltersToSearchParams,
 } from "@/lib/contact-filter-params";
 import type { ContactFilters } from "@/interfaces/contact-filters.interface";
+import type { ContactSortField, SortOrder } from "@/features/contacts/interfaces/contact.interface";
 import { Routes } from "@/routes/routes";
 import { useDashboardNavbarTitle } from "@/components/providers/dashboard-navbar-provider";
 import { parsePageSize } from "@/lib/page-size";
@@ -68,6 +69,12 @@ export default function ContactsPage() {
 
   const page = Math.max(1, Number(searchParams.get("page") ?? 1));
   const pageSizeState = parsePageSize(searchParams.get("page_size"));
+  const sortBy = (searchParams.get("sort_by") as ContactSortField) || undefined;
+  const sortOrder: SortOrder | undefined = sortBy
+    ? searchParams.get("sort_order") === "desc"
+      ? "desc"
+      : "asc"
+    : undefined;
   const filters = useMemo(
     () => parseContactFiltersFromSearchParams(searchParams),
     [searchParams],
@@ -99,6 +106,10 @@ export default function ContactsPage() {
     }
     if (savedFilterUuid) params.set(SAVED_FILTER_PARAM, savedFilterUuid);
     if (pageSizeState.key !== "50") params.set("page_size", pageSizeState.key);
+    if (sortBy) {
+      params.set("sort_by", sortBy);
+      if (sortOrder) params.set("sort_order", sortOrder);
+    }
     if (resetPage) params.set("page", "1");
     else if (page > 1) params.set("page", String(page));
     startTransition(() => {
@@ -125,6 +136,10 @@ export default function ContactsPage() {
     }
     if (uuid) params.set(SAVED_FILTER_PARAM, uuid);
     if (pageSizeState.key !== "50") params.set("page_size", pageSizeState.key);
+    if (sortBy) {
+      params.set("sort_by", sortBy);
+      if (sortOrder) params.set("sort_order", sortOrder);
+    }
     params.set("page", "1");
     startTransition(() => {
       setSearchParams(params, { replace: true });
@@ -174,8 +189,10 @@ export default function ContactsPage() {
       contactFiltersToListQuery(filters, {
         page,
         limit: pageSize,
+        sort_by: sortBy,
+        sort_order: sortOrder,
       }),
-    [filters, view, page, pageSize],
+    [filters, view, page, pageSize, sortBy, sortOrder],
   );
 
   const { data, isLoading, isFetching } = useContacts(query);
@@ -204,6 +221,14 @@ export default function ContactsPage() {
     params.set("page", "1");
     setSearchParams(params, { replace: true });
     setSelectedKeys(new Set());
+  };
+
+  const handleSortChange = (nextSortBy: ContactSortField, nextSortOrder: SortOrder) => {
+    const params = new URLSearchParams(searchParams);
+    params.set("sort_by", nextSortBy);
+    params.set("sort_order", nextSortOrder);
+    params.set("page", "1");
+    setSearchParams(params, { replace: true });
   };
 
   const goToDetail = (uuid: string) => navigate(Routes.dashboard.contacts_detail.replace(":uuid", uuid));
@@ -301,6 +326,9 @@ export default function ContactsPage() {
               selectedKeys={selectedKeys}
               onSelectionChange={setSelectedKeys}
               onContactOpen={quickBrowse.openAt}
+              sortBy={sortBy}
+              sortOrder={sortOrder}
+              onSortChange={handleSortChange}
             />
           ) : (
             <PipelineView

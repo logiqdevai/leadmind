@@ -2,13 +2,14 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff } from "lucide-react";
-import { Form, Label, Input, FieldError } from "@heroui/react";
-import { useSearchParams } from "react-router-dom";
+import { Form, Label, Input, FieldError, Button } from "@heroui/react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
 import { SignUpSchema, type SignUpFormValues } from "../../../validation-schemas/auth";
 import { useSignup } from "@/features/auth/hooks/use-auth";
 import { useInvitationPreview } from "@/features/organisations/hooks/use-organisations";
 import { SignUpFormSkeleton } from "./sign-up-form-skeleton";
+import { Routes } from "@/routes/routes";
 
 interface SignUpFormProps {
   defaultEmail?: string;
@@ -22,6 +23,7 @@ export function SignUpForm({
   inviteToken,
 }: SignUpFormProps) {
   const { mutate, isPending } = useSignup();
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const inviteFromQuery = searchParams.get("invite") ?? "";
   const resolvedInviteToken = inviteToken ?? inviteFromQuery;
@@ -69,6 +71,26 @@ export function SignUpForm({
 
   if (resolvedInviteToken && inviteLoading) {
     return <SignUpFormSkeleton />;
+  }
+
+  if (resolvedInviteToken && invitePreview?.has_account) {
+    return (
+      <div className="space-y-4">
+        <p className="text-sm text-muted">
+          An account with this email already exists. Sign in to join this
+          workspace.
+        </p>
+        <Button
+          variant="primary"
+          className="w-full"
+          onPress={() =>
+            navigate(`${Routes.auth.sign_in}?invite=${resolvedInviteToken}`)
+          }
+        >
+          Sign in
+        </Button>
+      </div>
+    );
   }
 
   return (

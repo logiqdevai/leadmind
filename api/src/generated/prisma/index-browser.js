@@ -322,6 +322,8 @@ exports.Prisma.ContactScalarFieldEnum = {
   website_validated_at: 'website_validated_at',
   unsubscribed_at: 'unsubscribed_at',
   unsubscribe_token: 'unsubscribe_token',
+  bounced_at: 'bounced_at',
+  bounce_reason: 'bounce_reason',
   last_interaction_at: 'last_interaction_at',
   created_at: 'created_at',
   updated_at: 'updated_at'

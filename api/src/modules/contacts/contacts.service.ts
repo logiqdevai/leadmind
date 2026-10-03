@@ -53,6 +53,7 @@ import { BulkDeleteContactsDto } from './dto/bulk-delete-contacts.dto';
 import { BulkEnrichContactsDto } from './dto/bulk-enrich-contacts.dto';
 import { BulkScrapeContactEmailsDto } from './dto/bulk-scrape-contact-emails.dto';
 import { ListContactsDto } from './dto/list-contacts.dto';
+import type { ContactSortField, SortOrder } from './constants/contact-sort-fields.constants';
 import { buildContactProfileFieldWhere } from './utils/contact-profile-field-filter.utils';
 import { belowScoreContactFilter } from './utils/contact-score-filter.utils';
 import { mergeContactWhereClauses } from './utils/contact-where-merge.utils';
@@ -279,6 +280,14 @@ export class ContactsService {
         return mergeContactWhereClauses(base, andClauses);
     }
 
+    buildContactOrderBy(
+        sortBy?: ContactSortField,
+        sortOrder?: SortOrder,
+    ): Prisma.ContactOrderByWithRelationInput {
+        if (!sortBy) return { created_at: 'desc' };
+        return { [sortBy]: sortOrder ?? 'asc' };
+    }
+
     applyAudienceFilters(
         where: Prisma.ContactWhereInput,
         query: Pick<
@@ -331,7 +340,10 @@ export class ContactsService {
             query.last_interaction_before !== undefined;
 
         if (applyUnsubscribedRule && !query.include_unsubscribed) {
-            audienceAnd.push({ unsubscribed_at: null });
+            // Bounced addresses are just as undeliverable as unsubscribed ones, so the
+            // same "include_unsubscribed" toggle keeps both out of a campaign/list
+            // audience by default rather than splitting it into two near-identical flags.
+            audienceAnd.push({ unsubscribed_at: null, bounced_at: null });
         }
 
         if (audienceAnd.length === 0) return;
@@ -454,7 +466,7 @@ export class ContactsService {
                         include: { scoring_instruction: { select: { uuid: true, name: true } } },
                     },
                 },
-                orderBy: { created_at: 'desc' },
+                orderBy: this.buildContactOrderBy(query.sort_by, query.sort_order),
                 skip,
                 take: limit,
             }),
@@ -670,6 +682,36 @@ export class ContactsService {
                     organisation_uuid,
                     type: InteractionType.NOTE,
                     content: 'Email preference restored to subscribed',
+                },
+            }),
+        ]);
+
+        return this.findOne(organisation_uuid, uuid);
+    }
+
+    /**
+     * Manual override for when an automatic bounce suppression (see
+     * WebhookEventService's 'bounced' handling) turns out wrong - e.g. the address was
+     * only transiently undeliverable, or the user fixed a typo'd email. Separate from
+     * resubscribe/unsubscribe, which track opt-in/opt-out rather than deliverability.
+     */
+    async clearBounce(organisation_uuid: string, uuid: string) {
+        const contact = await this.requireOwnedContact(organisation_uuid, uuid);
+        if (!contact.bounced_at) {
+            return this.findOne(organisation_uuid, uuid);
+        }
+
+        await this.prisma.$transaction([
+            this.prisma.contact.update({
+                where: { uuid: contact.uuid },
+                data: { bounced_at: null, bounce_reason: null },
+            }),
+            this.prisma.interaction.create({
+                data: {
+                    contact_uuid: contact.uuid,
+                    organisation_uuid,
+                    type: InteractionType.NOTE,
+                    content: 'Bounce suppression cleared - email marked deliverable again',
                 },
             }),
         ]);

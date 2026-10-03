@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common';
 import {
     ApiBearerAuth,
+    ApiExcludeEndpoint,
     ApiOperation,
     ApiResponse,
     ApiTags,
@@ -90,6 +91,7 @@ export class ContactsController {
     }
 
     @Get('tags')
+    @ApiExcludeEndpoint()
     @ApiOperation({ summary: 'List all distinct tag strings for the current user contacts' })
     getUserTags(@CurrentUser('organisation_uuid') organisation_uuid: string) {
         return this.contactsService.getUserTags(organisation_uuid);
@@ -223,6 +225,17 @@ export class ContactsController {
         @Param('uuid') uuid: string,
     ) {
         return this.contactsService.resubscribe(organisation_uuid, uuid);
+    }
+
+    @ActivityLog({ entityType: ActivityEntityType.CONTACT, action: ActivityAction.UPDATED, entityUuidFrom: 'params.uuid' })
+    @Post(':uuid/clear-bounce')
+    @ApiOperation({ summary: 'Undo an automatic bounce suppression and resume sending to this contact' })
+    @ApiResponse({ status: 404, description: 'Contact not found' })
+    clearBounce(
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
+        @Param('uuid') uuid: string,
+    ) {
+        return this.contactsService.clearBounce(organisation_uuid, uuid);
     }
 
     @ActivityLog({ entityType: ActivityEntityType.CONTACT, action: ActivityAction.DELETED, entityUuidFrom: 'params.uuid' })

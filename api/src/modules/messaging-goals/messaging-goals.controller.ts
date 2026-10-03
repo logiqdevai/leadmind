@@ -9,7 +9,7 @@ import {
     Query,
     UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiExcludeEndpoint, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { GoalPeriod, OrganisationRole } from '@/generated/prisma';
 import { CurrentUser } from '@/shared/decorators/current-user.decorator';
 import { JwtGuard } from '@/shared/guards/jwt.guard';
@@ -81,6 +81,7 @@ export class MessagingGoalsController {
     }
 
     @Get('leaderboard')
+    @ApiExcludeEndpoint()
     @ApiOperation({ summary: 'Messaging goals leaderboard for a period' })
     @ApiQuery({ name: 'period', enum: GoalPeriod, required: false, description: 'Defaults to DAY' })
     @ApiResponse({ status: 200 })
@@ -98,6 +99,7 @@ export class MessagingGoalsController {
     }
 
     @Get('achievements')
+    @ApiExcludeEndpoint()
     @ApiOperation({ summary: 'List my goal achievements' })
     @ApiQuery({ name: 'unseen', type: String, required: false, description: '"true" or "1" to filter to unseen achievements only' })
     @ApiResponse({ status: 200 })
@@ -115,6 +117,7 @@ export class MessagingGoalsController {
     }
 
     @Post('achievements/:uuid/seen')
+    @ApiExcludeEndpoint()
     @ApiOperation({ summary: 'Mark an achievement as seen' })
     @ApiResponse({ status: 201 })
     @ApiResponse({ status: 401, description: 'Unauthorized' })

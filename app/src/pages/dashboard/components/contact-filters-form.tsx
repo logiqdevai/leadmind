@@ -380,8 +380,8 @@ export function ContactFiltersForm({
                     />
 
                     <SwitchRow
-                        label="Include unsubscribed"
-                        description="Off by default — keeps unsubscribed contacts safe."
+                        label="Include unsubscribed & bounced"
+                        description="Off by default — keeps unsubscribed and bounced contacts safe."
                         checked={!!value.include_unsubscribed}
                         onChange={(checked) =>
                             onChange({ include_unsubscribed: checked || undefined })
