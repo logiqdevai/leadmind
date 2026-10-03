@@ -10,6 +10,7 @@ import {
     deleteContactsBelowScore,
     deleteContactsBulk,
     enrichContact,
+    exportContacts,
     getContact,
     getContactTags,
     listContactInteractions,
@@ -61,6 +62,7 @@ import type {
 } from "@/features/contact-lists/interfaces/contact-list.interface";
 import type { EnrichmentSource } from "@/features/enrichment/constants/enrichment-sources";
 import { toast } from "@/hooks/use-toast";
+import { downloadBlob, xlsxFilename } from "@/lib/download-file";
 import { contactAwaitingScore, markContactsPendingScore } from "@/lib/pending-contact-scores";
 
 export const contactsQueryKeys = {
@@ -880,6 +882,29 @@ export function useDeleteContactInfo(contactUuid: string) {
                 title: "Could not delete contact info",
                 description: error.message,
                 duration: 3000,
+                variant: "error",
+            });
+        },
+    });
+}
+
+/** Downloads every contact matching the filters as an Excel file. */
+export function useExportContacts() {
+    return useMutation({
+        mutationFn: (query: ListContactsQuery) => exportContacts(query),
+        onSuccess: (blob) => {
+            downloadBlob(blob, xlsxFilename("contacts"));
+            toast({
+                title: "Excel downloaded",
+                description: "Your contacts export is ready.",
+                duration: 3000,
+            });
+        },
+        onError: (error: Error) => {
+            toast({
+                title: "Could not export contacts",
+                description: error.message,
+                duration: 4000,
                 variant: "error",
             });
         },

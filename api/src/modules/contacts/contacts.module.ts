@@ -15,6 +15,7 @@ import { ThreadsModule } from '@/modules/threads/threads.module';
 import { ContactsController } from './contacts.controller';
 import { ContactsService } from './contacts.service';
 import { ContactAiService } from './services/contact-ai.service';
+import { ContactsExportService } from './services/contacts-export.service';
 
 @Module({
     imports: [
@@ -32,7 +33,7 @@ import { ContactAiService } from './services/contact-ai.service';
         ThreadsModule,
     ],
     controllers: [ContactsController],
-    providers: [ContactsService, ContactAiService],
-    exports: [ContactsService, ContactAiService],
+    providers: [ContactsService, ContactAiService, ContactsExportService],
+    exports: [ContactsService, ContactAiService, ContactsExportService],
 })
 export class ContactsModule { }

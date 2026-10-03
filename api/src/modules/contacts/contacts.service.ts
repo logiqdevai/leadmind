@@ -408,6 +408,57 @@ export class ContactsService {
         const limit = query.limit ?? 20;
         const skip = (page - 1) * limit;
 
+        const where = await this.buildFindAllWhere(organisation_uuid, query);
+
+        const [data, total] = await Promise.all([
+            this.prisma.contact.findMany({
+                where,
+                include: {
+                    tags: true,
+                    lead: true,
+                    filter: { select: { uuid: true, name: true } },
+                    contact_filters: {
+                        include: { filter: { select: { uuid: true, name: true } } },
+                    },
+                    contact_scores: {
+                        include: { scoring_instruction: { select: { uuid: true, name: true } } },
+                    },
+                },
+                orderBy: this.buildContactOrderBy(query.sort_by, query.sort_order),
+                skip,
+                take: limit,
+            }),
+            this.prisma.contact.count({ where }),
+        ]);
+
+        return {
+            data: data.map((c) => {
+                const { contact_filters, filter, ...rest } = c;
+                const shaped = shapeContactFilterFields({
+                    ...c,
+                    filter,
+                    contact_filters,
+                });
+                return {
+                    ...rest,
+                    filter: shaped.filter,
+                    also_found_by: shaped.also_found_by,
+                    filters: shaped.filters,
+                    tags: c.tags.map((t) => t.tag),
+                };
+            }),
+            total,
+            page,
+            limit,
+            totalPages: Math.ceil(total / limit),
+        };
+    }
+
+    /** Full where clause for the contacts list (filters, audience, list/campaign scope, exclusions). */
+    async buildFindAllWhere(
+        organisation_uuid: string,
+        query: ListContactsDto,
+    ): Promise<Prisma.ContactWhereInput> {
         const where = this.buildWhereInput(organisation_uuid, query);
         this.applyAudienceFilters(where, query);
 
@@ -452,48 +503,7 @@ export class ContactsService {
             }
         }
 
-        const [data, total] = await Promise.all([
-            this.prisma.contact.findMany({
-                where,
-                include: {
-                    tags: true,
-                    lead: true,
-                    filter: { select: { uuid: true, name: true } },
-                    contact_filters: {
-                        include: { filter: { select: { uuid: true, name: true } } },
-                    },
-                    contact_scores: {
-                        include: { scoring_instruction: { select: { uuid: true, name: true } } },
-                    },
-                },
-                orderBy: this.buildContactOrderBy(query.sort_by, query.sort_order),
-                skip,
-                take: limit,
-            }),
-            this.prisma.contact.count({ where }),
-        ]);
-
-        return {
-            data: data.map((c) => {
-                const { contact_filters, filter, ...rest } = c;
-                const shaped = shapeContactFilterFields({
-                    ...c,
-                    filter,
-                    contact_filters,
-                });
-                return {
-                    ...rest,
-                    filter: shaped.filter,
-                    also_found_by: shaped.also_found_by,
-                    filters: shaped.filters,
-                    tags: c.tags.map((t) => t.tag),
-                };
-            }),
-            total,
-            page,
-            limit,
-            totalPages: Math.ceil(total / limit),
-        };
+        return where;
     }
 
     async findOne(organisation_uuid: string, uuid: string) {

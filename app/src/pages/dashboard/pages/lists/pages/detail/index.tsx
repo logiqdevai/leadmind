@@ -8,8 +8,10 @@ import {
     useContactList,
     useContactListMembers,
     useContactLists,
+    useExportContactListMembers,
     useRemoveListContactsBulk,
 } from "@/features/contact-lists/hooks/use-contact-lists";
+import { ExportExcelButton } from "@/pages/dashboard/components/export-excel-button";
 import {
     useBulkScrapeContactEmails,
     useDeleteContactsBulk,
@@ -89,6 +91,7 @@ export default function ListDetailPage() {
     const scrapeEmailsBulk = useBulkScrapeContactEmails();
     const removeListContactsBulk = useRemoveListContactsBulk();
     const deleteContactsBulk = useDeleteContactsBulk();
+    const exportListMembers = useExportContactListMembers();
 
     const allowedTabIds = new Set<string>(TABS.map((t) => t.id));
     const rawTab = searchParams.get(Routes.dashboard.lists_detail_tab_query);
@@ -341,66 +344,81 @@ export default function ListDetailPage() {
                         backHref={backHref}
                         backLabel={backLabel}
                         actions={
-                            <ListActionsDropdown
-                                showContactsActions={currentTab === ListDetailTabIds.CONTACTS}
-                                onQuickBrowse={
-                                    currentTab === ListDetailTabIds.CONTACTS
-                                        ? quickBrowse.openFirst
-                                        : undefined
-                                }
-                                quickBrowseDisabled={!quickBrowse.hasContacts}
-                                onAddContacts={
-                                    currentTab === ListDetailTabIds.CONTACTS
-                                        ? () => setAddContactsOpen(true)
-                                        : undefined
-                                }
-                                onEditList={() => setEditOpen(true)}
-                                onMoveList={() => setMoveOpen(true)}
-                                onScoreSelected={
-                                    currentTab === ListDetailTabIds.CONTACTS
-                                        ? () => setScoreOpen(true)
-                                        : undefined
-                                }
-                                scoreDisabled={selectedKeys.size === 0}
-                                onEnrichSelected={
-                                    currentTab === ListDetailTabIds.CONTACTS
-                                        ? () => setEnrichOpen(true)
-                                        : undefined
-                                }
-                                enrichDisabled={selectedKeys.size === 0 || enrichBulk.isPending}
-                                onScrapeEmails={
-                                    currentTab === ListDetailTabIds.CONTACTS
-                                        ? () => setScrapeConfirmOpen(true)
-                                        : undefined
-                                }
-                                scrapeEmailsDisabled={!canScrapeEmails}
-                                scrapeEmailsPending={scrapeEmailsBulk.isPending}
-                                onFilterContacts={
-                                    currentTab === ListDetailTabIds.CONTACTS
-                                        ? () => setFilterContactsOpen(true)
-                                        : undefined
-                                }
-                                filterContactsDisabled={total === 0}
-                                onSendToSelected={
-                                    currentTab === ListDetailTabIds.CONTACTS
-                                        ? () => setOutreachChooserOpen(true)
-                                        : undefined
-                                }
-                                sendToSelectedDisabled={selectedKeys.size === 0}
-                                onRemoveDuplicates={
-                                    currentTab === ListDetailTabIds.CONTACTS
-                                        ? () => setRemoveDuplicatesOpen(true)
-                                        : undefined
-                                }
-                                removeDuplicatesDisabled={total === 0}
-                                onDeleteSelected={
-                                    currentTab === ListDetailTabIds.CONTACTS
-                                        ? () => openDeleteDialog([...selectedKeys])
-                                        : undefined
-                                }
-                                deleteDisabled={selectedKeys.size === 0}
-                                deletePending={deletePending}
-                            />
+                            <>
+                                {currentTab === ListDetailTabIds.CONTACTS ? (
+                                    <ExportExcelButton
+                                        onPress={() =>
+                                            exportListMembers.mutate({
+                                                listUuid: uuid,
+                                                listTitle: list.title,
+                                                query: membersQuery,
+                                            })
+                                        }
+                                        isPending={exportListMembers.isPending}
+                                        isDisabled={total === 0}
+                                    />
+                                ) : null}
+                                <ListActionsDropdown
+                                    showContactsActions={currentTab === ListDetailTabIds.CONTACTS}
+                                    onQuickBrowse={
+                                        currentTab === ListDetailTabIds.CONTACTS
+                                            ? quickBrowse.openFirst
+                                            : undefined
+                                    }
+                                    quickBrowseDisabled={!quickBrowse.hasContacts}
+                                    onAddContacts={
+                                        currentTab === ListDetailTabIds.CONTACTS
+                                            ? () => setAddContactsOpen(true)
+                                            : undefined
+                                    }
+                                    onEditList={() => setEditOpen(true)}
+                                    onMoveList={() => setMoveOpen(true)}
+                                    onScoreSelected={
+                                        currentTab === ListDetailTabIds.CONTACTS
+                                            ? () => setScoreOpen(true)
+                                            : undefined
+                                    }
+                                    scoreDisabled={selectedKeys.size === 0}
+                                    onEnrichSelected={
+                                        currentTab === ListDetailTabIds.CONTACTS
+                                            ? () => setEnrichOpen(true)
+                                            : undefined
+                                    }
+                                    enrichDisabled={selectedKeys.size === 0 || enrichBulk.isPending}
+                                    onScrapeEmails={
+                                        currentTab === ListDetailTabIds.CONTACTS
+                                            ? () => setScrapeConfirmOpen(true)
+                                            : undefined
+                                    }
+                                    scrapeEmailsDisabled={!canScrapeEmails}
+                                    scrapeEmailsPending={scrapeEmailsBulk.isPending}
+                                    onFilterContacts={
+                                        currentTab === ListDetailTabIds.CONTACTS
+                                            ? () => setFilterContactsOpen(true)
+                                            : undefined
+                                    }
+                                    filterContactsDisabled={total === 0}
+                                    onSendToSelected={
+                                        currentTab === ListDetailTabIds.CONTACTS
+                                            ? () => setOutreachChooserOpen(true)
+                                            : undefined
+                                    }
+                                    sendToSelectedDisabled={selectedKeys.size === 0}
+                                    onRemoveDuplicates={
+                                        currentTab === ListDetailTabIds.CONTACTS
+                                            ? () => setRemoveDuplicatesOpen(true)
+                                            : undefined
+                                    }
+                                    removeDuplicatesDisabled={total === 0}
+                                    onDeleteSelected={
+                                        currentTab === ListDetailTabIds.CONTACTS
+                                            ? () => openDeleteDialog([...selectedKeys])
+                                            : undefined
+                                    }
+                                    deleteDisabled={selectedKeys.size === 0}
+                                    deletePending={deletePending}
+                                />
+                            </>
                         }
                     />
 

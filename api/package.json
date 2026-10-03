@@ -85,6 +85,7 @@
     "class-validator": "^0.14.2",
     "cron-validator": "^1.4.0",
     "disposable-email-domains": "^1.0.62",
+    "exceljs": "^4.4.0",
     "express-session": "^1.18.1",
     "graphql": "^16.11.0",
     "graphql-fields": "^2.0.3",

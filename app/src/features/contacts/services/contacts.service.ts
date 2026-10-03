@@ -1,6 +1,7 @@
 import axiosInstance from "@/config/api/axios";
 import { ApiRoutes } from "@/config/api/routes";
 import { buildContactListApiParams } from "@/lib/contact-filter-params";
+import { readBlobErrorMessage } from "@/lib/download-file";
 import type { EnrichmentSource } from "@/features/lead-enrichment/constants/enrichment-sources";
 import type {
     AiDraftMessagePayload,
@@ -40,6 +41,19 @@ export const listContacts = async (
         return response.data;
     } catch (error: any) {
         throw new Error(error?.response?.data?.message || "Failed to load contacts.");
+    }
+};
+
+/** Every contact matching the filters as an .xlsx Blob (page/limit are ignored). */
+export const exportContacts = async (query: ListContactsQuery = {}): Promise<Blob> => {
+    try {
+        const response = await axiosInstance.get(ApiRoutes.contacts.export, {
+            params: buildContactListApiParams({ ...query, page: undefined, limit: undefined }),
+            responseType: "blob",
+        });
+        return response.data;
+    } catch (error: any) {
+        throw new Error(await readBlobErrorMessage(error, "Failed to export contacts."));
     }
 };
 

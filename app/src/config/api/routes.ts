@@ -38,6 +38,7 @@ export const ApiRoutes = {
     contacts: {
         prefix: "/contacts",
         list: "/contacts",
+        export: "/contacts/export",
         tags: "/contacts/tags",
         create: "/contacts",
         get: (uuid: string) => `/contacts/${uuid}`,
@@ -281,6 +282,7 @@ export const ApiRoutes = {
         update: (uuid: string) => `/contact-lists/${uuid}`,
         remove: (uuid: string) => `/contact-lists/${uuid}`,
         contacts: (uuid: string) => `/contact-lists/${uuid}/contacts`,
+        export_contacts: (uuid: string) => `/contact-lists/${uuid}/contacts/export`,
         add_contacts: (uuid: string) => `/contact-lists/${uuid}/contacts`,
         bulk_add_contacts: (uuid: string) => `/contact-lists/${uuid}/contacts/bulk`,
         bulk_remove_contacts: (uuid: string) => `/contact-lists/${uuid}/contacts/bulk-remove`,

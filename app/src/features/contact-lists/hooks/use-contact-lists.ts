@@ -1,11 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "@/hooks/use-toast";
+import { downloadBlob, xlsxFilename } from "@/lib/download-file";
 import {
     addListContacts,
     addListContactsBelowScore,
     bulkAddListContacts,
     createContactList,
     deleteContactList,
+    exportContactListMembers,
     getContactList,
     getDuplicateListContacts,
     listContactListMembers,
@@ -442,6 +444,36 @@ export function useRemoveListContactsBulk() {
                 title: "Could not remove contacts",
                 description: error.message,
                 duration: 3000,
+                variant: "error",
+            });
+        },
+    });
+}
+
+/** Downloads every list contact matching the filters as an Excel file named after the list. */
+export function useExportContactListMembers() {
+    return useMutation({
+        mutationFn: ({
+            listUuid,
+            query,
+        }: {
+            listUuid: string;
+            listTitle: string;
+            query: ListContactListMembersQuery;
+        }) => exportContactListMembers(listUuid, query),
+        onSuccess: (blob, { listTitle }) => {
+            downloadBlob(blob, xlsxFilename(`${listTitle}-contacts`));
+            toast({
+                title: "Excel downloaded",
+                description: `Contacts from "${listTitle}" exported.`,
+                duration: 3000,
+            });
+        },
+        onError: (error: Error) => {
+            toast({
+                title: "Could not export list contacts",
+                description: error.message,
+                duration: 4000,
                 variant: "error",
             });
         },

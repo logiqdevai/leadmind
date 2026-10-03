@@ -7,8 +7,11 @@ import {
     Patch,
     Post,
     Query,
+    Res,
+    StreamableFile,
     UseGuards,
 } from '@nestjs/common';
+import type { Response } from 'express';
 import { ApiBearerAuth, ApiExcludeEndpoint, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { OrganisationRole } from '@/generated/prisma';
 import { CurrentUser } from '@/shared/decorators/current-user.decorator';
@@ -16,6 +19,7 @@ import { JwtGuard } from '@/shared/guards/jwt.guard';
 import { OrganisationRoles } from '@/shared/decorators/organisation-roles.decorator';
 import { OrganisationRolesGuard } from '@/shared/guards/organisation-roles.guard';
 import { ContactListsService } from './contact-lists.service';
+import { setXlsxDownloadHeaders } from '@/shared/utils/xlsx-download.util';
 import { CreateContactListDto } from './dto/create-contact-list.dto';
 import { UpdateContactListDto } from './dto/update-contact-list.dto';
 import { ListContactListsDto } from './dto/list-contact-lists.dto';
@@ -107,6 +111,28 @@ export class ContactListsController {
         @Query() query: ListContactListMembersDto,
     ) {
         return this.contactListsService.findMembers(organisation_uuid, uuid, query);
+    }
+
+    @Get(':uuid/contacts/export')
+    @ApiOperation({
+        summary:
+            'Download every list contact matching the given filters as an Excel (.xlsx) file (page/limit are ignored)',
+    })
+    @ApiResponse({ status: 200, description: 'xlsx file' })
+    @ApiResponse({ status: 404, description: 'Contact list not found' })
+    async exportMembers(
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
+        @Param('uuid') uuid: string,
+        @Query() query: ListContactListMembersDto,
+        @Res({ passthrough: true }) res: Response,
+    ): Promise<StreamableFile> {
+        const { buffer, title } = await this.contactListsService.exportMembers(
+            organisation_uuid,
+            uuid,
+            query,
+        );
+        setXlsxDownloadHeaders(res, `${title}-contacts`);
+        return new StreamableFile(buffer);
     }
 
     @ActivityLog({ entityType: ActivityEntityType.CONTACT_LIST, action: ActivityAction.CONTACTS_ADDED, entityUuidFrom: 'params.uuid' })

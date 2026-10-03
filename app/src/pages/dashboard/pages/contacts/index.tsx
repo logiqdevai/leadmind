@@ -30,7 +30,9 @@ import {
   useContacts,
   useBulkScrapeContactEmails,
   useDeleteContactsBulk,
+  useExportContacts,
 } from "@/features/contacts/hooks/use-contacts";
+import { ExportExcelButton } from "@/pages/dashboard/components/export-excel-button";
 import {
   contactFiltersToListQuery,
   contactFiltersToBulkScrapePayload,
@@ -94,6 +96,7 @@ export default function ContactsPage() {
   const enrichBulk = useEnrichContactsBulk();
   const scrapeEmailsBulk = useBulkScrapeContactEmails();
   const deleteContactsBulk = useDeleteContactsBulk();
+  const exportContacts = useExportContacts();
 
   const savedFilterUuid = searchParams.get(SAVED_FILTER_PARAM);
 
@@ -255,6 +258,11 @@ export default function ContactsPage() {
             meta={contactMeta}
             actions={
               <>
+                <ExportExcelButton
+                  onPress={() => exportContacts.mutate(query)}
+                  isPending={exportContacts.isPending}
+                  isDisabled={total === 0}
+                />
                 <ContactsActionsDropdown
                   onAddContact={() => setCreateOpen(true)}
                   onQuickBrowse={view === "table" ? quickBrowse.openFirst : undefined}

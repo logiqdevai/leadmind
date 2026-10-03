@@ -6,6 +6,11 @@ import {
 import { LeadStatus, Prisma } from '@/generated/prisma';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { ContactsService } from '@/modules/contacts/contacts.service';
+import {
+    CONTACT_EXPORT_INCLUDE,
+    ContactsExportService,
+    type ContactExportRow,
+} from '@/modules/contacts/services/contacts-export.service';
 import { shapeContactFilterFields } from '@/modules/contacts/utils/contact-filter-link.utils';
 import { belowScoreContactFilter } from '@/modules/contacts/utils/contact-score-filter.utils';
 import { CampaignContactResolverService } from '@/modules/marketing-campaigns/services/campaign-contact-resolver.service';
@@ -24,6 +29,7 @@ export class ContactListsService {
     constructor(
         private readonly prisma: PrismaService,
         private readonly contactsService: ContactsService,
+        private readonly contactsExportService: ContactsExportService,
         private readonly campaignContactResolver: CampaignContactResolverService,
     ) {}
 
@@ -224,6 +230,50 @@ export class ContactListsService {
             limit,
             totalPages: Math.ceil(total / limit),
         };
+    }
+
+    /** Every list member matching the filters, as an .xlsx buffer, plus the list title for naming. */
+    async exportMembers(
+        organisation_uuid: string,
+        listUuid: string,
+        query: ListContactListMembersDto,
+    ): Promise<{ buffer: Buffer; title: string }> {
+        const list = await this.prisma.contactList.findFirst({
+            where: { uuid: listUuid, organisation_uuid },
+            select: { title: true },
+        });
+        if (!list) throw new NotFoundException('Contact list not found');
+
+        const contactWhere = this.contactsService.buildWhereInput(organisation_uuid, query);
+        this.contactsService.applyAudienceFilters(contactWhere, query);
+        const where: Prisma.ContactListMemberWhereInput = {
+            list_uuid: listUuid,
+            contact: contactWhere,
+        };
+
+        const batchSize = 1000;
+        const rows: ContactExportRow[] = [];
+        for (let skip = 0; ; skip += batchSize) {
+            const batch = await this.prisma.contactListMember.findMany({
+                where,
+                include: { contact: { include: CONTACT_EXPORT_INCLUDE } },
+                orderBy: [this.buildMemberOrderBy(query.sort_by, query.sort_order), { id: 'asc' }],
+                skip,
+                take: batchSize,
+            });
+            rows.push(
+                ...batch.map((m) => ({
+                    contact: m.contact,
+                    membership: { added_at: m.created_at, status: m.status },
+                })),
+            );
+            if (batch.length < batchSize) break;
+        }
+
+        const buffer = await this.contactsExportService.buildWorkbook(rows, {
+            includeListColumns: true,
+        });
+        return { buffer, title: list.title };
     }
 
     async updateMemberStatus(

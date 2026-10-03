@@ -7,8 +7,11 @@ import {
     Post,
     Put,
     Query,
+    Res,
+    StreamableFile,
     UseGuards,
 } from '@nestjs/common';
+import type { Response } from 'express';
 import {
     ApiBearerAuth,
     ApiExcludeEndpoint,
@@ -22,6 +25,8 @@ import { JwtGuard } from '@/shared/guards/jwt.guard';
 import { OrganisationRoles } from '@/shared/decorators/organisation-roles.decorator';
 import { OrganisationRolesGuard } from '@/shared/guards/organisation-roles.guard';
 import { ContactsService } from './contacts.service';
+import { ContactsExportService } from './services/contacts-export.service';
+import { setXlsxDownloadHeaders } from '@/shared/utils/xlsx-download.util';
 import { AddNoteDto } from './dto/add-note.dto';
 import { AiDraftMessageDto } from './dto/ai-draft-message.dto';
 import { BulkAiDraftMessagesDto } from './dto/bulk-ai-draft-messages.dto';
@@ -56,7 +61,10 @@ import {
 @UseGuards(JwtGuard)
 @Controller('contacts')
 export class ContactsController {
-    constructor(private readonly contactsService: ContactsService) { }
+    constructor(
+        private readonly contactsService: ContactsService,
+        private readonly contactsExportService: ContactsExportService,
+    ) { }
 
     @ActivityLog({ entityType: ActivityEntityType.CONTACT, action: ActivityAction.CREATED, includeBodyKeys: ['name'] })
     @Post()
@@ -73,6 +81,22 @@ export class ContactsController {
     @ApiOperation({ summary: 'List contacts for current user' })
     findAll(@CurrentUser('organisation_uuid') organisation_uuid: string, @Query() query: ListContactsDto) {
         return this.contactsService.findAll(organisation_uuid, query);
+    }
+
+    @Get('export')
+    @ApiOperation({
+        summary:
+            'Download every contact matching the given filters as an Excel (.xlsx) file (page/limit are ignored)',
+    })
+    @ApiResponse({ status: 200, description: 'xlsx file' })
+    async export(
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
+        @Query() query: ListContactsDto,
+        @Res({ passthrough: true }) res: Response,
+    ): Promise<StreamableFile> {
+        const buffer = await this.contactsExportService.exportContacts(organisation_uuid, query);
+        setXlsxDownloadHeaders(res, 'contacts');
+        return new StreamableFile(buffer);
     }
 
     @ActivityLog({ entityType: ActivityEntityType.CONTACT, action: ActivityAction.CONVERTED_FROM_LEAD })
