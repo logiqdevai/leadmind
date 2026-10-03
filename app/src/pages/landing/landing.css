@@ -1,376 +1,673 @@
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Syne:wght@600;700;800&display=swap');
 
 /* ─── Animations ──────────────────────────────────────────────────────────── */
 
 @keyframes lf-float {
-  0%, 100% { transform: translateY(0px); }
-  50%       { transform: translateY(-12px); }
+	0%,
+	100% {
+		transform: translateY(0px);
+	}
+	50% {
+		transform: translateY(-12px);
+	}
 }
 @keyframes lf-float-alt {
-  0%, 100% { transform: translateY(0px) rotate(-1deg); }
-  50%       { transform: translateY(-8px) rotate(1deg); }
+	0%,
+	100% {
+		transform: translateY(0px) rotate(-1deg);
+	}
+	50% {
+		transform: translateY(-8px) rotate(1deg);
+	}
 }
 @keyframes lf-scan {
-  0%   { top: -1px; opacity: 0; }
-  4%   { opacity: 1; }
-  96%  { opacity: 1; }
-  100% { top: 100%; opacity: 0; }
+	0% {
+		top: -1px;
+		opacity: 0;
+	}
+	4% {
+		opacity: 1;
+	}
+	96% {
+		opacity: 1;
+	}
+	100% {
+		top: 100%;
+		opacity: 0;
+	}
 }
 @keyframes lf-lead-in {
-  from { opacity: 0; transform: translateX(16px); }
-  to   { opacity: 1; transform: translateX(0); }
+	from {
+		opacity: 0;
+		transform: translateX(16px);
+	}
+	to {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+@keyframes lf-swap {
+	from {
+		opacity: 0;
+		transform: translateY(6px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+@keyframes lf-pop {
+	from {
+		opacity: 0;
+		transform: translateY(8px) scale(0.96);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0) scale(1);
+	}
+}
+@keyframes lf-ping {
+	0% {
+		transform: scale(0.4);
+		opacity: 0.45;
+	}
+	100% {
+		transform: scale(1.6);
+		opacity: 0;
+	}
+}
+@keyframes lf-stream {
+	to {
+		stroke-dashoffset: -17;
+	}
+}
+@keyframes lf-fill {
+	from {
+		transform: scaleX(0);
+	}
+	to {
+		transform: scaleX(1);
+	}
 }
 @keyframes lf-shimmer {
-  0%, 100% { opacity: 0.6; }
-  50%       { opacity: 1; }
+	0%,
+	100% {
+		opacity: 0.6;
+	}
+	50% {
+		opacity: 1;
+	}
 }
 @keyframes lf-pulse-dot {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50%       { opacity: 0.4; transform: scale(0.85); }
+	0%,
+	100% {
+		opacity: 1;
+		transform: scale(1);
+	}
+	50% {
+		opacity: 0.4;
+		transform: scale(0.85);
+	}
 }
 
 /* ─── CSS Custom Properties — dark (default) ─────────────────────────────── */
 
 .lf-root {
-  /* Base */
-  --lf-bg:          oklch(0.064 0.006 192);
-  --lf-sur:         oklch(0.112 0.007 192);
-  --lf-inset:       oklch(0.040 0.004 192);
-  --lf-tx:          oklch(0.932 0.004 192);
-  --lf-mu:          oklch(0.520 0.010 192);
+	/* Base */
+	--lf-bg: oklch(0.064 0.006 192);
+	--lf-sur: oklch(0.112 0.007 192);
+	--lf-inset: oklch(0.04 0.004 192);
+	--lf-tx: oklch(0.985 0.002 192);
+	--lf-mu: oklch(0.84 0.008 192);
 
-  /* Accent — teal */
-  --lf-acc:         oklch(0.720 0.110 192);
-  --lf-acc-h:       oklch(0.760 0.100 192);
-  --lf-acc-lt:      oklch(0.740 0.105 192);
-  --lf-acc-bg:      oklch(0.720 0.110 192 / 0.12);
-  --lf-acc-bd-xs:   oklch(0.720 0.110 192 / 0.08);
-  --lf-acc-bd-sm:   oklch(0.720 0.110 192 / 0.14);
-  --lf-acc-bd:      oklch(0.720 0.110 192 / 0.22);
-  --lf-acc-bd-lg:   oklch(0.720 0.110 192 / 0.40);
-  --lf-acc-wm:      oklch(0.720 0.110 192 / 0.06);
-  --lf-acc-glow:    oklch(0.720 0.110 192 / 0.09);
-  --lf-acc-sh-sm:   0 0 20px oklch(0.720 0.110 192 / 0.28);
-  --lf-acc-sh-md:   0 0 36px oklch(0.720 0.110 192 / 0.30);
-  --lf-acc-sh-lg:   0 0 48px oklch(0.720 0.110 192 / 0.36);
-  --lf-acc-sh-h:    0 0 64px oklch(0.720 0.110 192 / 0.52);
-  --lf-acc-step:    0 0 30px oklch(0.720 0.110 192 / 0.15);
+	/* Accent — teal */
+	--lf-acc: oklch(0.72 0.11 192);
+	--lf-acc-h: oklch(0.76 0.1 192);
+	--lf-acc-lt: oklch(0.74 0.105 192);
+	--lf-acc-bg: oklch(0.72 0.11 192 / 0.12);
+	--lf-acc-bd-xs: oklch(0.72 0.11 192 / 0.08);
+	--lf-acc-bd-sm: oklch(0.72 0.11 192 / 0.14);
+	--lf-acc-bd: oklch(0.72 0.11 192 / 0.22);
+	--lf-acc-bd-lg: oklch(0.72 0.11 192 / 0.4);
+	--lf-acc-wm: oklch(0.72 0.11 192 / 0.06);
+	--lf-acc-glow: oklch(0.72 0.11 192 / 0.09);
+	--lf-acc-sh-sm: 0 0 20px oklch(0.72 0.11 192 / 0.28);
+	--lf-acc-sh-md: 0 0 36px oklch(0.72 0.11 192 / 0.3);
+	--lf-acc-sh-lg: 0 0 48px oklch(0.72 0.11 192 / 0.36);
+	--lf-acc-sh-h: 0 0 64px oklch(0.72 0.11 192 / 0.52);
+	--lf-acc-step: 0 0 30px oklch(0.72 0.11 192 / 0.15);
 
-  /* Violet */
-  --lf-vio:         oklch(0.600 0.220 290);
-  --lf-vio-lt:      oklch(0.720 0.190 290);
-  --lf-vio-bg:      oklch(0.600 0.220 290 / 0.12);
-  --lf-vio-bd:      oklch(0.600 0.220 290 / 0.22);
-  --lf-vio-bd-lg:   oklch(0.600 0.220 290 / 0.28);
-  --lf-vio-wm:      oklch(0.600 0.220 290 / 0.06);
-  --lf-vio-glow:    oklch(0.600 0.220 290 / 0.07);
-  --lf-vio-step:    0 0 30px oklch(0.600 0.220 290 / 0.15);
+	/* Violet */
+	--lf-vio: oklch(0.6 0.22 290);
+	--lf-vio-lt: oklch(0.72 0.19 290);
+	--lf-vio-bg: oklch(0.6 0.22 290 / 0.12);
+	--lf-vio-bd: oklch(0.6 0.22 290 / 0.22);
+	--lf-vio-bd-lg: oklch(0.6 0.22 290 / 0.28);
+	--lf-vio-wm: oklch(0.6 0.22 290 / 0.06);
+	--lf-vio-glow: oklch(0.6 0.22 290 / 0.07);
+	--lf-vio-step: 0 0 30px oklch(0.6 0.22 290 / 0.15);
 
-  /* Green */
-  --lf-grn:         oklch(0.700 0.180 155);
-  --lf-grn-lt:      oklch(0.760 0.175 155);
-  --lf-grn-bg:      oklch(0.700 0.180 155 / 0.12);
-  --lf-grn-bd:      oklch(0.700 0.180 155 / 0.22);
-  --lf-grn-bd-lg:   oklch(0.700 0.180 155 / 0.28);
-  --lf-grn-wm:      oklch(0.700 0.180 155 / 0.06);
-  --lf-grn-step:    0 0 30px oklch(0.700 0.180 155 / 0.15);
+	/* Green */
+	--lf-grn: oklch(0.7 0.18 155);
+	--lf-grn-lt: oklch(0.76 0.175 155);
+	--lf-grn-bg: oklch(0.7 0.18 155 / 0.12);
+	--lf-grn-bd: oklch(0.7 0.18 155 / 0.22);
+	--lf-grn-bd-lg: oklch(0.7 0.18 155 / 0.28);
+	--lf-grn-wm: oklch(0.7 0.18 155 / 0.06);
+	--lf-grn-step: 0 0 30px oklch(0.7 0.18 155 / 0.15);
 
-  /* Yellow */
-  --lf-ylw:         oklch(0.840 0.170 90);
+	/* Yellow */
+	--lf-ylw: oklch(0.84 0.17 90);
 
-  /* Surfaces */
-  --lf-row-bg:      oklch(1 0 0 / 0.028);
-  --lf-row-bd:      oklch(1 0 0 / 0.055);
-  --lf-ghost:       oklch(1 0 0 / 0.04);
-  --lf-ghost-h:     oklch(1 0 0 / 0.08);
-  --lf-ghost-bd:    oklch(1 0 0 / 0.10);
-  --lf-ghost-bd2:   oklch(1 0 0 / 0.12);
-  --lf-shimmer:     oklch(1 0 0 / 0.06);
+	/* Surfaces */
+	--lf-row-bg: oklch(1 0 0 / 0.028);
+	--lf-row-bd: oklch(1 0 0 / 0.055);
+	--lf-ghost: oklch(1 0 0 / 0.04);
+	--lf-ghost-h: oklch(1 0 0 / 0.08);
+	--lf-ghost-bd: oklch(1 0 0 / 0.1);
+	--lf-ghost-bd2: oklch(1 0 0 / 0.12);
+	--lf-shimmer: oklch(1 0 0 / 0.06);
 
-  /* Structure */
-  --lf-nav-bg:      oklch(0.064 0.006 192 / 0.80);
-  --lf-nav-bd:      oklch(0.720 0.110 192 / 0.08);
-  --lf-grid:        oklch(0.720 0.110 192 / 0.04);
-  --lf-hero-glow:   oklch(0.720 0.110 192 / 0.14);
-  --lf-scan:        oklch(0.720 0.110 192 / 0.90);
-  --lf-stats-bg:    oklch(0.112 0.007 192 / 0.85);
-  --lf-stats-bd:    oklch(0.720 0.110 192 / 0.12);
-  --lf-term-sh:     0 32px 80px oklch(0 0 0 / 0.55), 0 1px 0 oklch(1 0 0 / 0.04) inset;
-  --lf-float-sh:    0 12px 40px oklch(0 0 0 / 0.40);
-  --lf-hover-sh:    0 24px 64px oklch(0 0 0 / 0.45), 0 0 40px oklch(0.720 0.110 192 / 0.12);
-  --lf-foot-bd:     oklch(0.720 0.110 192 / 0.08);
+	/* Structure */
+	--lf-nav-bg: oklch(0.064 0.006 192 / 0.8);
+	--lf-nav-bd: oklch(0.72 0.11 192 / 0.08);
+	--lf-grid: oklch(0.72 0.11 192 / 0.04);
+	--lf-hero-glow: oklch(0.72 0.11 192 / 0.14);
+	--lf-scan: oklch(0.72 0.11 192 / 0.9);
+	--lf-stats-bg: oklch(0.112 0.007 192 / 0.85);
+	--lf-stats-bd: oklch(0.72 0.11 192 / 0.12);
+	--lf-term-sh: 0 32px 80px oklch(0 0 0 / 0.55), 0 1px 0 oklch(1 0 0 / 0.04) inset;
+	--lf-float-sh: 0 12px 40px oklch(0 0 0 / 0.4);
+	--lf-hover-sh: 0 24px 64px oklch(0 0 0 / 0.45), 0 0 40px oklch(0.72 0.11 192 / 0.12);
+	--lf-foot-bd: oklch(0.72 0.11 192 / 0.08);
 
-  /* CTA */
-  --lf-cta-from:    oklch(0.112 0.007 192);
-  --lf-cta-mid:     oklch(0.120 0.011 205);
-  --lf-cta-bd:      oklch(0.720 0.110 192 / 0.22);
-  --lf-cta-glow:    oklch(0.720 0.110 192 / 0.18);
+	/* CTA */
+	--lf-cta-from: oklch(0.112 0.007 192);
+	--lf-cta-mid: oklch(0.12 0.011 205);
+	--lf-cta-bd: oklch(0.72 0.11 192 / 0.22);
+	--lf-cta-glow: oklch(0.72 0.11 192 / 0.18);
 
-  /* Source badges — LinkedIn keeps blue (brand color), Google Maps stays amber */
-  --lf-li-c:        oklch(0.660 0.200 240);
-  --lf-li-bg:       oklch(0.400 0.220 234 / 0.18);
-  --lf-li-bd:       oklch(0.400 0.220 234 / 0.30);
-  --lf-gm-c:        oklch(0.700 0.160 52);
-  --lf-gm-bg:       oklch(0.600 0.150 52 / 0.18);
-  --lf-gm-bd:       oklch(0.600 0.150 52 / 0.30);
+	/* Source badges — LinkedIn keeps blue (brand color), Google Maps stays amber */
+	--lf-li-c: oklch(0.66 0.2 240);
+	--lf-li-bg: oklch(0.4 0.22 234 / 0.18);
+	--lf-li-bd: oklch(0.4 0.22 234 / 0.3);
+	--lf-gm-c: oklch(0.7 0.16 52);
+	--lf-gm-bg: oklch(0.6 0.15 52 / 0.18);
+	--lf-gm-bd: oklch(0.6 0.15 52 / 0.3);
 }
 
 /* ─── Light theme overrides ───────────────────────────────────────────────── */
 
 .lf-root.lf-light {
-  /* Base */
-  --lf-bg:          oklch(0.973 0.002 192);
-  --lf-sur:         oklch(0.997 0.001 192);
-  --lf-inset:       oklch(0.948 0.004 192);
-  --lf-tx:          oklch(0.176 0.010 192);
-  --lf-mu:          oklch(0.462 0.012 192);
+	/* Base */
+	--lf-bg: oklch(0.973 0.002 192);
+	--lf-sur: oklch(0.997 0.001 192);
+	--lf-inset: oklch(0.948 0.004 192);
+	--lf-tx: oklch(0.176 0.01 192);
+	--lf-mu: oklch(0.462 0.012 192);
 
-  /* Accent — deeper teal for white bg */
-  --lf-acc:         oklch(0.540 0.120 192);
-  --lf-acc-h:       oklch(0.480 0.120 192);
-  --lf-acc-lt:      oklch(0.540 0.120 192);
-  --lf-acc-bg:      oklch(0.540 0.120 192 / 0.09);
-  --lf-acc-bd-xs:   oklch(0.540 0.120 192 / 0.10);
-  --lf-acc-bd-sm:   oklch(0.540 0.120 192 / 0.17);
-  --lf-acc-bd:      oklch(0.540 0.120 192 / 0.25);
-  --lf-acc-bd-lg:   oklch(0.540 0.120 192 / 0.44);
-  --lf-acc-wm:      oklch(0.540 0.120 192 / 0.07);
-  --lf-acc-glow:    oklch(0.540 0.120 192 / 0.06);
-  --lf-acc-sh-sm:   0 2px 8px oklch(0.540 0.120 192 / 0.18);
-  --lf-acc-sh-md:   0 4px 16px oklch(0.540 0.120 192 / 0.20);
-  --lf-acc-sh-lg:   0 6px 24px oklch(0.540 0.120 192 / 0.26);
-  --lf-acc-sh-h:    0 8px 32px oklch(0.540 0.120 192 / 0.36);
-  --lf-acc-step:    none;
+	/* Accent — deeper teal for white bg */
+	--lf-acc: oklch(0.54 0.12 192);
+	--lf-acc-h: oklch(0.48 0.12 192);
+	--lf-acc-lt: oklch(0.54 0.12 192);
+	--lf-acc-bg: oklch(0.54 0.12 192 / 0.09);
+	--lf-acc-bd-xs: oklch(0.54 0.12 192 / 0.1);
+	--lf-acc-bd-sm: oklch(0.54 0.12 192 / 0.17);
+	--lf-acc-bd: oklch(0.54 0.12 192 / 0.25);
+	--lf-acc-bd-lg: oklch(0.54 0.12 192 / 0.44);
+	--lf-acc-wm: oklch(0.54 0.12 192 / 0.07);
+	--lf-acc-glow: oklch(0.54 0.12 192 / 0.06);
+	--lf-acc-sh-sm: 0 2px 8px oklch(0.54 0.12 192 / 0.18);
+	--lf-acc-sh-md: 0 4px 16px oklch(0.54 0.12 192 / 0.2);
+	--lf-acc-sh-lg: 0 6px 24px oklch(0.54 0.12 192 / 0.26);
+	--lf-acc-sh-h: 0 8px 32px oklch(0.54 0.12 192 / 0.36);
+	--lf-acc-step: none;
 
-  /* Violet */
-  --lf-vio:         oklch(0.456 0.224 290);
-  --lf-vio-lt:      oklch(0.456 0.224 290);
-  --lf-vio-bg:      oklch(0.456 0.224 290 / 0.09);
-  --lf-vio-bd:      oklch(0.456 0.224 290 / 0.22);
-  --lf-vio-bd-lg:   oklch(0.456 0.224 290 / 0.28);
-  --lf-vio-wm:      oklch(0.456 0.224 290 / 0.07);
-  --lf-vio-glow:    oklch(0.456 0.224 290 / 0.04);
-  --lf-vio-step:    none;
+	/* Violet */
+	--lf-vio: oklch(0.456 0.224 290);
+	--lf-vio-lt: oklch(0.456 0.224 290);
+	--lf-vio-bg: oklch(0.456 0.224 290 / 0.09);
+	--lf-vio-bd: oklch(0.456 0.224 290 / 0.22);
+	--lf-vio-bd-lg: oklch(0.456 0.224 290 / 0.28);
+	--lf-vio-wm: oklch(0.456 0.224 290 / 0.07);
+	--lf-vio-glow: oklch(0.456 0.224 290 / 0.04);
+	--lf-vio-step: none;
 
-  /* Green */
-  --lf-grn:         oklch(0.488 0.182 155);
-  --lf-grn-lt:      oklch(0.488 0.182 155);
-  --lf-grn-bg:      oklch(0.488 0.182 155 / 0.09);
-  --lf-grn-bd:      oklch(0.488 0.182 155 / 0.22);
-  --lf-grn-bd-lg:   oklch(0.488 0.182 155 / 0.28);
-  --lf-grn-wm:      oklch(0.488 0.182 155 / 0.07);
-  --lf-grn-step:    none;
+	/* Green */
+	--lf-grn: oklch(0.488 0.182 155);
+	--lf-grn-lt: oklch(0.488 0.182 155);
+	--lf-grn-bg: oklch(0.488 0.182 155 / 0.09);
+	--lf-grn-bd: oklch(0.488 0.182 155 / 0.22);
+	--lf-grn-bd-lg: oklch(0.488 0.182 155 / 0.28);
+	--lf-grn-wm: oklch(0.488 0.182 155 / 0.07);
+	--lf-grn-step: none;
 
-  /* Yellow */
-  --lf-ylw:         oklch(0.560 0.148 88);
+	/* Yellow */
+	--lf-ylw: oklch(0.56 0.148 88);
 
-  /* Surfaces */
-  --lf-row-bg:      oklch(0.966 0.003 192);
-  --lf-row-bd:      oklch(0.886 0.006 192);
-  --lf-ghost:       oklch(0.952 0.004 192);
-  --lf-ghost-h:     oklch(0.938 0.006 192);
-  --lf-ghost-bd:    oklch(0.870 0.007 192);
-  --lf-ghost-bd2:   oklch(0.852 0.008 192);
-  --lf-shimmer:     oklch(0.902 0.005 192);
+	/* Surfaces */
+	--lf-row-bg: oklch(0.966 0.003 192);
+	--lf-row-bd: oklch(0.886 0.006 192);
+	--lf-ghost: oklch(0.952 0.004 192);
+	--lf-ghost-h: oklch(0.938 0.006 192);
+	--lf-ghost-bd: oklch(0.87 0.007 192);
+	--lf-ghost-bd2: oklch(0.852 0.008 192);
+	--lf-shimmer: oklch(0.902 0.005 192);
 
-  /* Structure */
-  --lf-nav-bg:      oklch(0.973 0.002 192 / 0.88);
-  --lf-nav-bd:      oklch(0.870 0.007 192);
-  --lf-grid:        oklch(0.540 0.120 192 / 0.05);
-  --lf-hero-glow:   oklch(0.540 0.120 192 / 0.07);
-  --lf-scan:        oklch(0.540 0.120 192 / 0.50);
-  --lf-stats-bg:    oklch(0.997 0.001 192);
-  --lf-stats-bd:    oklch(0.870 0.007 192);
-  --lf-term-sh:     0 4px 24px oklch(0.300 0.040 192 / 0.10), 0 1px 4px oklch(0.300 0.040 192 / 0.08);
-  --lf-float-sh:    0 4px 16px oklch(0.300 0.040 192 / 0.12), 0 1px 4px oklch(0.300 0.040 192 / 0.06);
-  --lf-hover-sh:    0 8px 32px oklch(0.300 0.040 192 / 0.12), 0 2px 8px oklch(0.300 0.040 192 / 0.06);
-  --lf-foot-bd:     oklch(0.870 0.007 192);
+	/* Structure */
+	--lf-nav-bg: oklch(0.973 0.002 192 / 0.88);
+	--lf-nav-bd: oklch(0.87 0.007 192);
+	--lf-grid: oklch(0.54 0.12 192 / 0.05);
+	--lf-hero-glow: oklch(0.54 0.12 192 / 0.07);
+	--lf-scan: oklch(0.54 0.12 192 / 0.5);
+	--lf-stats-bg: oklch(0.997 0.001 192);
+	--lf-stats-bd: oklch(0.87 0.007 192);
+	--lf-term-sh: 0 4px 24px oklch(0.3 0.04 192 / 0.1), 0 1px 4px oklch(0.3 0.04 192 / 0.08);
+	--lf-float-sh: 0 4px 16px oklch(0.3 0.04 192 / 0.12), 0 1px 4px oklch(0.3 0.04 192 / 0.06);
+	--lf-hover-sh: 0 8px 32px oklch(0.3 0.04 192 / 0.12), 0 2px 8px oklch(0.3 0.04 192 / 0.06);
+	--lf-foot-bd: oklch(0.87 0.007 192);
 
-  /* CTA */
-  --lf-cta-from:    oklch(0.962 0.004 192);
-  --lf-cta-mid:     oklch(0.952 0.008 205);
-  --lf-cta-bd:      oklch(0.540 0.120 192 / 0.22);
-  --lf-cta-glow:    oklch(0.540 0.120 192 / 0.08);
+	/* CTA */
+	--lf-cta-from: oklch(0.962 0.004 192);
+	--lf-cta-mid: oklch(0.952 0.008 205);
+	--lf-cta-bd: oklch(0.54 0.12 192 / 0.22);
+	--lf-cta-glow: oklch(0.54 0.12 192 / 0.08);
 
-  /* Source badges */
-  --lf-li-c:        oklch(0.416 0.240 240);
-  --lf-li-bg:       oklch(0.416 0.200 234 / 0.10);
-  --lf-li-bd:       oklch(0.416 0.200 234 / 0.22);
-  --lf-gm-c:        oklch(0.500 0.148 52);
-  --lf-gm-bg:       oklch(0.500 0.148 52 / 0.10);
-  --lf-gm-bd:       oklch(0.500 0.148 52 / 0.22);
+	/* Source badges */
+	--lf-li-c: oklch(0.416 0.24 240);
+	--lf-li-bg: oklch(0.416 0.2 234 / 0.1);
+	--lf-li-bd: oklch(0.416 0.2 234 / 0.22);
+	--lf-gm-c: oklch(0.5 0.148 52);
+	--lf-gm-bg: oklch(0.5 0.148 52 / 0.1);
+	--lf-gm-bd: oklch(0.5 0.148 52 / 0.22);
 }
 
 /* ─── Grid background ─────────────────────────────────────────────────────── */
 
 .lf-root .lf-grid-bg {
-  background-image:
-    linear-gradient(var(--lf-grid) 1px, transparent 1px),
-    linear-gradient(90deg, var(--lf-grid) 1px, transparent 1px);
-  background-size: 72px 72px;
+	background-image:
+		linear-gradient(var(--lf-grid) 1px, transparent 1px), linear-gradient(90deg, var(--lf-grid) 1px, transparent 1px);
+	background-size: 72px 72px;
 }
 
 /* ─── Scan beam ───────────────────────────────────────────────────────────── */
 
 .lf-scan-beam {
-  position: absolute;
-  left: 0; right: 0;
-  height: 1px;
-  pointer-events: none;
-  z-index: 20;
-  background: linear-gradient(90deg, transparent 0%, var(--lf-scan) 50%, transparent 100%);
-  animation: lf-scan 3.5s linear infinite;
+	position: absolute;
+	left: 0;
+	right: 0;
+	height: 1px;
+	pointer-events: none;
+	z-index: 20;
+	background: linear-gradient(90deg, transparent 0%, var(--lf-scan) 50%, transparent 100%);
+	animation: lf-scan 3.5s linear infinite;
 }
 
 /* ─── Floating animations ─────────────────────────────────────────────────── */
 
-.lf-float     { animation: lf-float     4s ease-in-out infinite; }
-.lf-float-alt { animation: lf-float-alt 5.5s ease-in-out 1.2s infinite; }
+.lf-float {
+	animation: lf-float 4s ease-in-out infinite;
+}
+.lf-float-alt {
+	animation: lf-float-alt 5.5s ease-in-out 1.2s infinite;
+}
 
-/* ─── Lead card stagger ───────────────────────────────────────────────────── */
+/* ─── Hero card: rows, tabs, progress ─────────────────────────────────────── */
 
-.lf-lead-1 { animation: lf-lead-in 0.45s ease 0.25s both; }
-.lf-lead-2 { animation: lf-lead-in 0.45s ease 0.60s both; }
-.lf-lead-3 { animation: lf-lead-in 0.45s ease 0.95s both; }
-.lf-lead-4 { animation: lf-lead-in 0.45s ease 1.30s both; }
+.lf-row {
+	animation: lf-lead-in 0.45s cubic-bezier(0.25, 1, 0.5, 1) both;
+}
+.lf-swap {
+	animation: lf-swap 0.35s cubic-bezier(0.25, 1, 0.5, 1) both;
+}
+.lf-pop {
+	animation: lf-pop 0.4s cubic-bezier(0.25, 1, 0.5, 1) both;
+}
+
+.lf-ping {
+	animation: lf-ping 2s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+}
+/* Rows inside scroll-reveal blocks wait until the block is visible */
+.lf-reveal:not(.lf-in) .lf-row {
+	animation: none;
+	opacity: 0;
+}
+
+.lf-stream {
+	animation: lf-stream 0.9s linear infinite;
+}
+.lf-src:hover {
+	border-color: color-mix(in oklch, var(--lf-src) 45%, transparent) !important;
+}
+
+.lf-skel {
+	width: 44px;
+	height: 8px;
+	border-radius: 9999px;
+	background: var(--lf-shimmer);
+	animation: lf-shimmer 1.2s ease-in-out infinite;
+}
+
+.lf-fill {
+	transform-origin: left;
+	animation: lf-fill var(--lf-stage-ms, 4200ms) linear both;
+}
+
+.lf-tab {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+	padding: 10px 8px;
+	font-size: 12px;
+	font-weight: 600;
+	color: var(--lf-mu);
+	background: none;
+	border: none;
+	cursor: pointer;
+	transition:
+		color 0.2s ease,
+		background 0.2s ease;
+}
+.lf-tab:hover {
+	color: var(--lf-tx);
+}
+.lf-tab-on {
+	color: var(--lf-tx);
+	background: var(--lf-acc-bg);
+}
+.lf-tab:focus-visible {
+	outline: 2px solid var(--lf-acc);
+	outline-offset: -2px;
+}
+.lf-tab-bar {
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	height: 2px;
+	background: var(--lf-acc);
+	transform-origin: left;
+	animation: lf-fill var(--lf-stage-ms, 4200ms) linear both;
+}
+
+/* ─── Hero headline ───────────────────────────────────────────────────────── */
+
+.lf-h1 {
+	font-family: 'Syne', system-ui, sans-serif;
+	font-weight: 800;
+	font-size: clamp(34px, 4.6vw, 58px);
+	line-height: 1.04;
+	letter-spacing: -0.03em;
+	color: var(--lf-tx);
+}
+.lf-clause {
+	display: block;
+	opacity: 0.36;
+	transition: opacity 0.45s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.lf-clause.lf-on {
+	opacity: 1;
+}
+.lf-verb {
+	transition: color 0.45s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.lf-clause.lf-on .lf-verb {
+	color: var(--lf-acc);
+}
+
+/* ─── Scroll reveal ───────────────────────────────────────────────────────── */
+
+.lf-reveal {
+	opacity: 0;
+	transform: translateY(18px);
+	transition:
+		opacity 0.7s cubic-bezier(0.25, 1, 0.5, 1),
+		transform 0.7s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.lf-reveal.lf-in {
+	opacity: 1;
+	transform: none;
+}
+
+.lf-reveal.lf-connector {
+	opacity: 1;
+	transform: scaleX(0);
+	transform-origin: left;
+	transition-duration: 1.2s;
+	transition-delay: 0.2s;
+}
+.lf-reveal.lf-connector.lf-in {
+	transform: scaleX(1);
+}
+
+.lf-bar {
+	transform: scaleX(0);
+	transform-origin: left;
+	transition: transform 1.1s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.lf-in .lf-bar {
+	transform: scaleX(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.lf-float,
+	.lf-float-alt,
+	.lf-scan-beam,
+	.lf-pulse-dot,
+	.lf-skel,
+	.lf-row,
+	.lf-swap,
+	.lf-pop,
+	.lf-ping {
+		animation: none !important;
+	}
+	.lf-ping {
+		display: none;
+	}
+	.lf-stream {
+		animation: none !important;
+	}
+	.lf-reveal:not(.lf-in) .lf-row {
+		opacity: 1;
+	}
+	.lf-fill,
+	.lf-tab-bar {
+		animation: none !important;
+		transform: none;
+	}
+	.lf-reveal,
+	.lf-reveal.lf-connector,
+	.lf-bar {
+		opacity: 1;
+		transform: none;
+		transition: none;
+	}
+}
 
 /* ─── Pulse dot ───────────────────────────────────────────────────────────── */
 
-.lf-pulse-dot { animation: lf-pulse-dot 1.8s ease-in-out infinite; }
+.lf-pulse-dot {
+	animation: lf-pulse-dot 1.8s ease-in-out infinite;
+}
 
 /* ─── Progress shimmer ────────────────────────────────────────────────────── */
 
-.lf-shimmer-bar { animation: lf-shimmer 2s ease-in-out infinite; }
+.lf-shimmer-bar {
+	animation: lf-shimmer 2s ease-in-out infinite;
+}
 
 /* ─── Buttons ─────────────────────────────────────────────────────────────── */
 
 .lf-btn-primary {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 14px 24px;
-  font-size: 14px;
-  font-weight: 600;
-  border-radius: 12px;
-  background: var(--lf-acc);
-  color: oklch(0.98 0 0);
-  box-shadow: var(--lf-acc-sh-md);
-  transition: background 0.18s ease, box-shadow 0.18s ease;
-  cursor: pointer;
-  border: none;
-  text-decoration: none;
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	padding: 14px 24px;
+	font-size: 14px;
+	font-weight: 600;
+	border-radius: 12px;
+	background: var(--lf-acc);
+	color: oklch(0.98 0 0);
+	box-shadow: var(--lf-acc-sh-md);
+	transition:
+		background 0.18s ease,
+		box-shadow 0.18s ease;
+	cursor: pointer;
+	border: none;
+	text-decoration: none;
 }
 .lf-btn-primary:hover {
-  background: var(--lf-acc-h);
-  box-shadow: var(--lf-acc-sh-lg);
+	background: var(--lf-acc-h);
+	box-shadow: var(--lf-acc-sh-lg);
 }
 .lf-btn-primary.lf-sm {
-  padding: 8px 16px;
-  font-size: 13px;
-  border-radius: 8px;
+	padding: 8px 16px;
+	font-size: 13px;
+	border-radius: 8px;
 }
 
 .lf-btn-ghost {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 14px 24px;
-  font-size: 14px;
-  font-weight: 600;
-  border-radius: 12px;
-  background: var(--lf-ghost);
-  color: var(--lf-tx);
-  border: 1px solid var(--lf-ghost-bd);
-  transition: background 0.18s ease;
-  cursor: pointer;
-  text-decoration: none;
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	padding: 14px 24px;
+	font-size: 14px;
+	font-weight: 600;
+	border-radius: 12px;
+	background: var(--lf-ghost);
+	color: var(--lf-tx);
+	transition: background 0.18s ease;
+	cursor: pointer;
+	text-decoration: none;
 }
 .lf-btn-ghost:hover {
-  background: var(--lf-ghost-h);
+	background: var(--lf-ghost-h);
 }
 .lf-btn-ghost.lf-cta-ghost {
-  border-color: var(--lf-ghost-bd2);
-  padding: 16px 32px;
+	border-color: var(--lf-ghost-bd2);
+	padding: 16px 32px;
 }
 
 .lf-btn-text {
-  font-size: 14px;
-  color: var(--lf-mu);
-  background: none;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: color 0.15s ease;
-  text-decoration: none;
+	font-size: 14px;
+	color: var(--lf-tx);
+	background: none;
+	border: none;
+	padding: 8px 16px;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: color 0.15s ease;
+	text-decoration: none;
 }
-.lf-btn-text:hover { color: var(--lf-tx); }
+.lf-btn-text:hover {
+	color: var(--lf-tx);
+}
 
 .lf-theme-btn {
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--lf-ghost);
-  border: 1px solid var(--lf-ghost-bd);
-  color: var(--lf-mu);
-  cursor: pointer;
-  transition: background 0.15s ease, color 0.15s ease;
-  flex-shrink: 0;
+	width: 36px;
+	height: 36px;
+	border-radius: 10px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: var(--lf-ghost);
+	color: var(--lf-mu);
+	cursor: pointer;
+	transition:
+		background 0.15s ease,
+		color 0.15s ease;
+	flex-shrink: 0;
 }
 .lf-theme-btn:hover {
-  background: var(--lf-ghost-h);
-  color: var(--lf-tx);
+	background: var(--lf-ghost-h);
+	color: var(--lf-tx);
 }
 
 /* ─── Section labels ──────────────────────────────────────────────────────── */
 
 .lf-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 12px;
-  border-radius: 9999px;
-  font-size: 12px;
-  font-weight: 600;
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	padding: 6px 12px;
+	border-radius: 9999px;
+	font-size: 12px;
+	font-weight: 600;
 }
-.lf-label-blue   { background: var(--lf-acc-bg); border: 1px solid var(--lf-acc-bd-sm); color: var(--lf-acc-lt); }
-.lf-label-violet { background: var(--lf-vio-bg); border: 1px solid var(--lf-vio-bd);    color: var(--lf-vio-lt); }
-.lf-label-green  { background: var(--lf-grn-bg); border: 1px solid var(--lf-grn-bd);    color: var(--lf-grn-lt); }
+.lf-label-blue {
+	background: var(--lf-acc-bg);
+	color: var(--lf-acc-lt);
+}
+.lf-label-violet {
+	background: var(--lf-vio-bg);
+	color: var(--lf-vio-lt);
+}
+.lf-label-green {
+	background: var(--lf-grn-bg);
+	color: var(--lf-grn-lt);
+}
 
 /* ─── Card hover ──────────────────────────────────────────────────────────── */
 
 .lf-card-hover {
-  transition: transform 0.28s ease, box-shadow 0.28s ease;
+	transition:
+		transform 0.28s ease,
+		box-shadow 0.28s ease;
 }
 .lf-card-hover:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--lf-hover-sh);
+	transform: translateY(-4px);
+	box-shadow: var(--lf-hover-sh);
 }
 
 /* ─── Nav links ───────────────────────────────────────────────────────────── */
 
 .lf-nav-link {
-  font-size: 14px;
-  color: var(--lf-mu);
-  transition: color 0.15s ease;
-  text-decoration: none;
+	font-size: 15px;
+	font-weight: 500;
+	color: var(--lf-tx);
+	transition: color 0.15s ease;
+	text-decoration: none;
 }
-.lf-nav-link:hover { color: var(--lf-tx); }
+.lf-nav-link:hover {
+	color: var(--lf-acc);
+}
 
 /* ─── Footer links ────────────────────────────────────────────────────────── */
 
 .lf-foot-link {
-  display: block;
-  font-size: 14px;
-  color: var(--lf-mu);
-  transition: color 0.15s ease;
-  text-decoration: none;
+	display: block;
+	font-size: 14px;
+	color: var(--lf-mu);
+	transition: color 0.15s ease;
+	text-decoration: none;
 }
-.lf-foot-link:hover { color: var(--lf-tx); }
+.lf-foot-link:hover {
+	color: var(--lf-tx);
+}
 
 /* ─── Accent text ─────────────────────────────────────────────────────────── */
 
-.lf-accent-text { color: var(--lf-acc); }
+.lf-accent-text {
+	color: var(--lf-acc);
+}
+
+/* ─── Page width ──────────────────────────────────────────────────────────── */
+
+.lf-wrap {
+	width: 100%;
+	max-width: 1560px;
+	margin-inline: auto;
+}
+@media (min-width: 1024px) {
+	.lf-wrap {
+		padding-inline: 64px;
+	}
+}
+
+/* Hero fills the first screen (viewport minus the 64px nav) so the next section starts below the fold */
+.lf-hero {
+	min-height: calc(100dvh - 64px);
+	align-content: center;
+}
