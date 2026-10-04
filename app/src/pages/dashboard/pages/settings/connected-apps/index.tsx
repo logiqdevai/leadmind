@@ -14,6 +14,7 @@ import type { CreatedAccessToken } from "@/features/oauth-connections/interfaces
 import type { CreateAccessTokenFormData } from "@/features/oauth-connections/validation-schemas/access-token.schema";
 import { CreateAccessTokenModal } from "./components/create-access-token-modal";
 import { AccessTokenRevealModal } from "./components/access-token-reveal-modal";
+import { ConnectionsTableSkeleton } from "./components/connections-table-skeleton";
 
 const MCP_SERVER_URL = new URL("/mcp", environments.API_URL).href;
 
@@ -180,7 +181,7 @@ const SettingsConnectedAppsPage: FC = () => {
                     Only owners and admins can view and manage connected apps.
                 </p>
             ) : isLoading ? (
-                <p className="text-xs text-muted">Loading…</p>
+                <ConnectionsTableSkeleton />
             ) : connections.length === 0 ? (
                 <div className="rounded-xl border border-dashed border-border bg-surface-secondary/30 p-8 text-center text-sm text-muted">
                     No apps connected yet.
