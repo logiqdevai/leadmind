@@ -1,6 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
-import { OAuthConnectionStatus } from '@/generated/prisma';
+import { OAuthConnectionStatus, OrganisationRole } from '@/generated/prisma';
+import { CreateAccessTokenDto } from '../dto/create-access-token.dto';
 import { OidcProviderService } from './oidc-provider.service';
 
 interface RecordGrantInput {
@@ -70,6 +75,53 @@ export class OAuthConnectionsService {
       select: CONNECTION_SELECT,
       orderBy: { created_at: 'desc' },
     });
+  }
+
+  /**
+   * Mints a personal access token for the caller in this organisation, for
+   * clients that can't run the browser OAuth flow. The role is re-read from
+   * the membership table rather than trusted from the JWT, so a demoted admin
+   * can't mint a new token with stale claims.
+   */
+  async createAccessToken(
+    userUuid: string,
+    organisationUuid: string,
+    dto: CreateAccessTokenDto,
+  ) {
+    const membership = await this.prisma.organisationMember.findUnique({
+      where: {
+        organisation_uuid_user_uuid: {
+          organisation_uuid: organisationUuid,
+          user_uuid: userUuid,
+        },
+      },
+    });
+    if (!membership) {
+      throw new ForbiddenException('You are not a member of this organisation');
+    }
+    if (
+      membership.role !== OrganisationRole.OWNER &&
+      membership.role !== OrganisationRole.ADMIN
+    ) {
+      throw new ForbiddenException(
+        'Only owners and admins can create access tokens',
+      );
+    }
+
+    const { token, expiresAt } = await this.oidc.signPersonalAccessToken({
+      userUuid,
+      organisationUuid,
+      organisationRole: membership.role,
+      scopes: dto.scopes,
+      expiresIn: dto.expires_in,
+    });
+
+    return {
+      token,
+      scope: dto.scopes.join(' '),
+      organisation_uuid: organisationUuid,
+      expires_at: expiresAt?.toISOString() ?? null,
+    };
   }
 
   async revoke(organisationUuid: string, uuid: string) {

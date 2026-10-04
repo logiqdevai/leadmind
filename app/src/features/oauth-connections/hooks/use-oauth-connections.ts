@@ -1,6 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "@/hooks/use-toast";
-import { listOAuthConnections, revokeOAuthConnection } from "../services/oauth-connections.service";
+import {
+    createOAuthAccessToken,
+    listOAuthConnections,
+    revokeOAuthConnection,
+} from "../services/oauth-connections.service";
+import type { CreateAccessTokenDto } from "../interfaces/oauth-connection.interfaces";
 
 export const oauthConnectionQueryKeys = {
     all: ["oauth-connections"] as const,
@@ -27,6 +32,19 @@ export function useRevokeOAuthConnection() {
         onError: (error: Error) => {
             toast({
                 title: "Could not revoke access",
+                description: error.message,
+                variant: "error",
+            });
+        },
+    });
+}
+
+export function useCreateOAuthAccessToken() {
+    return useMutation({
+        mutationFn: (dto: CreateAccessTokenDto) => createOAuthAccessToken(dto),
+        onError: (error: Error) => {
+            toast({
+                title: "Could not create access token",
                 description: error.message,
                 variant: "error",
             });

@@ -390,6 +390,7 @@ export const ApiRoutes = {
     oauth_connections: {
         prefix: "/oauth/connections",
         list: "/oauth/connections",
+        create_access_token: "/oauth/connections/access-tokens",
         revoke: (uuid: string) => `/oauth/connections/${uuid}`,
     },
     oauth_interaction: {

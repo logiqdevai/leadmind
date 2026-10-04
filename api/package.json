@@ -157,8 +157,20 @@
     "rootDir": "src",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
-      "^.+\\.ts$": "ts-jest"
+      "^.+\\.ts$": "ts-jest",
+      "^.+\\.js$": [
+        "ts-jest",
+        {
+          "tsconfig": {
+            "allowJs": true,
+            "module": "commonjs"
+          }
+        }
+      ]
     },
+    "transformIgnorePatterns": [
+      "/node_modules/(?!jose/)"
+    ],
     "moduleNameMapper": {
       "^@/(.*)$": "<rootDir>/$1",
       "^generated/(.*)$": "<rootDir>/generated/$1"
