@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import Provider, { Configuration, JWK, errors } from 'oidc-provider';
-import { generateKeyPair, exportJWK } from 'jose';
+import { generateKeyPair, exportJWK, type JWK as SigningJWK } from 'jose';
 import { randomBytes, randomUUID } from 'crypto';
 import type { IncomingMessage, ServerResponse } from 'http';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
@@ -17,6 +17,10 @@ import {
   SCOPE_WRITE,
   parseAccountId,
 } from '../oauth.constants';
+import {
+  signPersonalAccessToken,
+  type AccessTokenExpiry,
+} from '../utils/personal-access-token';
 
 const ACCESS_TOKEN_TTL_SECONDS = 15 * 60;
 const REFRESH_TOKEN_TTL_SECONDS = 30 * 24 * 60 * 60;
@@ -47,6 +51,9 @@ export class OidcProviderService implements OnModuleInit {
   private readonly logger = new Logger(OidcProviderService.name);
   private _provider?: Provider;
   private _publicJwks?: { keys: JWK[] };
+  // Private RSA key the provider signs access tokens with. Kept only so
+  // Settings can mint personal access tokens with the same key.
+  private _signingJwk?: SigningJWK;
   private _initError?: Error;
   readonly issuer: string;
   readonly mcpResourceUrl: string;
@@ -98,6 +105,9 @@ export class OidcProviderService implements OnModuleInit {
   private async buildProvider() {
     const jwks = await this.loadJwks();
     this._publicJwks = { keys: jwks.keys.map(stripPrivateMaterial) };
+    this._signingJwk = jwks.keys.find(
+      (key) => key.kty === 'RSA' && 'd' in key,
+    ) as SigningJWK | undefined;
     const cookieKeys = this.loadCookieKeys();
     const adapter = (name: string) => new PrismaOidcAdapter(name, this.prisma);
 
@@ -279,6 +289,28 @@ export class OidcProviderService implements OnModuleInit {
       this.logger.warn(
         `grant.error: ${err.error} detail=${err.error_description ?? err.message}`,
       );
+    });
+  }
+
+  /**
+   * Mints a personal access token for one (user, organisation) pair, signed
+   * with the provider's own key and bound to this MCP resource, so it passes
+   * McpAuthGuard exactly like an OAuth-issued token.
+   */
+  async signPersonalAccessToken(input: {
+    userUuid: string;
+    organisationUuid: string;
+    organisationRole: string;
+    scopes: string[];
+    expiresIn: AccessTokenExpiry;
+  }) {
+    if (!this._signingJwk)
+      throw new ServiceUnavailableException(this.unavailableMessage());
+    return signPersonalAccessToken({
+      ...input,
+      issuer: this.issuer,
+      audience: this.mcpResourceUrl,
+      privateJwk: this._signingJwk,
     });
   }
 

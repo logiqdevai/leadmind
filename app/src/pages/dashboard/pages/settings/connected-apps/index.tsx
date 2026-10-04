@@ -1,14 +1,19 @@
 import { type FC, useState } from "react";
-import { Plug } from "lucide-react";
+import { KeyRound, Plug } from "lucide-react";
 import { Button, Chip } from "@heroui/react";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { CopyButton } from "@/components/ui/copy-button";
 import { useOrganisationPermission } from "@/hooks/use-organisation-permission";
 import { environments } from "@/config/environments";
 import {
+    useCreateOAuthAccessToken,
     useOAuthConnections,
     useRevokeOAuthConnection,
 } from "@/features/oauth-connections/hooks/use-oauth-connections";
+import type { CreatedAccessToken } from "@/features/oauth-connections/interfaces/oauth-connection.interfaces";
+import type { CreateAccessTokenFormData } from "@/features/oauth-connections/validation-schemas/access-token.schema";
+import { CreateAccessTokenModal } from "./components/create-access-token-modal";
+import { AccessTokenRevealModal } from "./components/access-token-reveal-modal";
 
 const MCP_SERVER_URL = new URL("/mcp", environments.API_URL).href;
 
@@ -33,9 +38,24 @@ const SettingsConnectedAppsPage: FC = () => {
     const canManage = useOrganisationPermission("org_manage_oauth_connections");
     const { data: connections = [], isLoading } = useOAuthConnections(canManage);
     const revoke = useRevokeOAuthConnection();
+    const createAccessToken = useCreateOAuthAccessToken();
 
     const [tab, setTab] = useState<"claude" | "chatgpt">("claude");
     const [revokeTarget, setRevokeTarget] = useState<{ uuid: string; name: string } | null>(null);
+    const [createTokenOpen, setCreateTokenOpen] = useState(false);
+    const [createdToken, setCreatedToken] = useState<CreatedAccessToken | null>(null);
+
+    const handleCreateToken = (data: CreateAccessTokenFormData) => {
+        createAccessToken.mutate(
+            { expires_in: data.expires_in, scopes: data.scopes },
+            {
+                onSuccess: (created) => {
+                    setCreateTokenOpen(false);
+                    setCreatedToken(created);
+                },
+            },
+        );
+    };
 
     const handleRevoke = async () => {
         if (!revokeTarget) return;
@@ -131,6 +151,29 @@ const SettingsConnectedAppsPage: FC = () => {
                     </ol>
                 )}
             </div>
+
+            {canManage ? (
+                <div className="flex flex-col gap-3 rounded-xl border border-border p-4 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="flex items-start gap-2.5">
+                        <KeyRound className="mt-0.5 size-4 text-muted shrink-0" />
+                        <div>
+                            <p className="text-sm font-medium text-foreground">Access tokens</p>
+                            <p className="text-xs text-muted mt-0.5">
+                                For clients that can't complete the browser sign-in, such as a
+                                bot. A token acts as you, limited to the permissions you choose.
+                            </p>
+                        </div>
+                    </div>
+                    <Button
+                        variant="primary"
+                        size="sm"
+                        className="shrink-0"
+                        onPress={() => setCreateTokenOpen(true)}
+                    >
+                        Create token
+                    </Button>
+                </div>
+            ) : null}
 
             {!canManage ? (
                 <p className="text-xs text-muted">
@@ -230,6 +273,15 @@ const SettingsConnectedAppsPage: FC = () => {
                 isPending={revoke.isPending}
                 onConfirm={handleRevoke}
             />
+
+            <CreateAccessTokenModal
+                isOpen={createTokenOpen}
+                onOpenChange={setCreateTokenOpen}
+                isPending={createAccessToken.isPending}
+                onSubmit={handleCreateToken}
+            />
+
+            <AccessTokenRevealModal token={createdToken} onClose={() => setCreatedToken(null)} />
         </div>
     );
 };
