@@ -47,13 +47,15 @@ export class OAuthInteractionController {
     return this.interactions.login(req, res, uid, dto, userUuid);
   }
 
+  @UseGuards(JwtGuard)
   @Post(':uid/confirm')
   confirm(
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
     @Param('uid') uid: string,
+    @CurrentUser('uuid') userUuid: string,
   ) {
-    return this.interactions.confirm(req, res, uid);
+    return this.interactions.confirm(req, res, uid, userUuid);
   }
 
   @Post(':uid/abort')

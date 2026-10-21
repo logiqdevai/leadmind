@@ -196,6 +196,13 @@ const OAuthAuthorizePage: FC = () => {
                 </div>
             </div>
 
+            {interaction.userEmail ? (
+                <p className="text-xs text-muted">
+                    Connecting as{" "}
+                    <strong className="text-foreground">{interaction.userEmail}</strong>
+                </p>
+            ) : null}
+
             <p className="text-sm text-muted">
                 wants to access your{" "}
                 <strong className="text-foreground">{interaction.organisationName ?? "workspace"}</strong>{" "}

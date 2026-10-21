@@ -5,7 +5,12 @@ import {
   ServiceUnavailableException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import Provider, { Configuration, JWK, errors } from 'oidc-provider';
+import Provider, {
+  Configuration,
+  JWK,
+  errors,
+  interactionPolicy,
+} from 'oidc-provider';
 import { generateKeyPair, exportJWK, type JWK as SigningJWK } from 'jose';
 import { randomBytes, randomUUID } from 'crypto';
 import type { IncomingMessage, ServerResponse } from 'http';
@@ -100,6 +105,34 @@ export class OidcProviderService implements OnModuleInit {
         `OAuth authorization server failed to start - /oauth and /mcp will return 503 until this is fixed: ${this._initError.message}`,
       );
     }
+  }
+
+  /**
+   * oidc-provider keeps its own long-lived session cookie, independent of the
+   * app's JWT session. By default a valid cookie means "already logged in",
+   * so the login step is skipped and whichever account/organisation that
+   * browser authorised last is silently reused - even when someone else is
+   * now signed in to the app. Forcing the login step on every authorization
+   * makes the frontend page re-bind the request to the app user who is
+   * actually signed in and let them pick the organisation. The check is
+   * satisfied once this interaction has submitted its login result, so the
+   * flow doesn't loop.
+   */
+  private buildInteractionPolicy() {
+    const policy = interactionPolicy.base();
+    policy
+      .get('login')
+      ?.checks.push(
+        new interactionPolicy.Check(
+          'force_login',
+          'Each authorization must be confirmed by the signed-in user',
+          (ctx) =>
+            ctx.oidc.result?.login
+              ? interactionPolicy.Check.NO_NEED_TO_PROMPT
+              : interactionPolicy.Check.REQUEST_PROMPT,
+        ),
+      );
+    return policy;
   }
 
   private async buildProvider() {
@@ -202,6 +235,7 @@ export class OidcProviderService implements OnModuleInit {
         Session: SESSION_TTL_SECONDS,
       },
       interactions: {
+        policy: this.buildInteractionPolicy(),
         // Login/consent is a real page in the frontend app, not a
         // server-rendered one here - it already has the design system, and
         // more importantly the user's existing session, so a user who's

@@ -6,6 +6,7 @@ export interface OAuthInteractionDetails {
         uri?: string;
     };
     organisationName?: string;
+    userEmail?: string;
     scopeDescriptions?: string[];
 }
 

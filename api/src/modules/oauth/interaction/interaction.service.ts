@@ -25,6 +25,7 @@ export interface InteractionDetailsResponse {
   prompt: 'login' | 'consent';
   client?: { name: string; uri?: string };
   organisationName?: string;
+  userEmail?: string;
   scopeDescriptions?: string[];
 }
 
@@ -106,6 +107,7 @@ export class OAuthInteractionService {
     req: Request,
     res: Response,
     uid: string,
+    userUuid: string,
   ): Promise<InteractionResultResponse> {
     const interaction = await this.loadInteraction(req, res, uid);
     const { session, params, grantId, prompt } = interaction;
@@ -113,6 +115,13 @@ export class OAuthInteractionService {
     if (!session?.accountId)
       throw new BadRequestException(
         'Your session expired. Please start again.',
+      );
+
+    // The OAuth session cookie is independent of the app login, so make sure
+    // the account being authorised is the one actually signed in right now.
+    if (parseAccountId(session.accountId)?.userUuid !== userUuid)
+      throw new ForbiddenException(
+        'This request was started for a different account. Please start again.',
       );
 
     const grant = grantId
@@ -211,11 +220,16 @@ export class OAuthInteractionService {
       ? parseAccountId(session.accountId)
       : undefined;
 
-    const [client, organisation] = await Promise.all([
+    const [client, organisation, user] = await Promise.all([
       this.oidc.provider.Client.find(params.client_id as string),
       parsedAccount
         ? this.prisma.organisation.findUnique({
             where: { uuid: parsedAccount.organisationUuid },
+          })
+        : Promise.resolve(null),
+      parsedAccount
+        ? this.prisma.user.findUnique({
+            where: { uuid: parsedAccount.userUuid },
           })
         : Promise.resolve(null),
     ]);
@@ -232,6 +246,7 @@ export class OAuthInteractionService {
         uri: client?.clientUri,
       },
       organisationName: organisation?.name,
+      userEmail: user?.email,
       scopeDescriptions: requestedScopes.map(
         (scope) => SCOPE_DESCRIPTIONS[scope],
       ),
