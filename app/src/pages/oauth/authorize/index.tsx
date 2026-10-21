@@ -1,4 +1,4 @@
-import { type FC, useState } from "react";
+import { type FC, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Button, Card, Chip, Label, ListBox, Select } from "@heroui/react";
 import { Check, ShieldCheck } from "lucide-react";
@@ -27,25 +27,45 @@ const OAuthAuthorizePage: FC = () => {
     const currentOrgUuid = useAuthStore((s) => s.organisation_uuid);
 
     const { data: interaction, isLoading, isError, error } = useOAuthInteraction(uid, !!uid);
-    const { data: organisations = [] } = useOrganisations(!!isLoggedIn);
+    const { data: organisations = [], isLoading: isLoadingOrgs } = useOrganisations(!!isLoggedIn);
 
     const submitLogin = useSubmitOAuthLogin(uid);
     const confirmConsent = useConfirmOAuthConsent(uid);
     const abortConsent = useAbortOAuthConsent(uid);
 
-    // Defaults to the app's currently-active workspace until the user
-    // explicitly picks a different one from the dropdown.
+    // Defaults to the app's currently-active workspace (when the user still
+    // belongs to it) until they explicitly pick a different one.
     const [selectedOrgUuidOverride, setSelectedOrgUuidOverride] = useState<string | null>(null);
-    const selectedOrgUuid = selectedOrgUuidOverride ?? currentOrgUuid ?? null;
+    const defaultOrgUuid = organisations.some((org) => org.uuid === currentOrgUuid)
+        ? currentOrgUuid
+        : (organisations[0]?.uuid ?? null);
+    const selectedOrgUuid = selectedOrgUuidOverride ?? defaultOrgUuid;
 
-    const handleContinue = () => {
-        if (!selectedOrgUuid) return;
-        submitLogin.mutate(selectedOrgUuid, {
+    const continueWithOrg = (organisationUuid: string) => {
+        submitLogin.mutate(organisationUuid, {
             onSuccess: (result) => {
                 window.location.href = result.redirect_to;
             },
         });
     };
+
+    const handleContinue = () => {
+        if (!selectedOrgUuid) return;
+        continueWithOrg(selectedOrgUuid);
+    };
+
+    // Nothing to choose when the user only belongs to one workspace, so skip
+    // the picker and go straight to the consent step. The ref keeps this to a
+    // single attempt even if the mutation errors and the component re-renders.
+    const autoSubmitted = useRef(false);
+    const isSingleOrg = organisations.length === 1;
+    const needsLogin = interaction?.prompt === "login" && !!isLoggedIn;
+    useEffect(() => {
+        if (!needsLogin || !isSingleOrg || autoSubmitted.current) return;
+        autoSubmitted.current = true;
+        continueWithOrg(organisations[0].uuid);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [needsLogin, isSingleOrg]);
 
     const handleAllow = () => {
         confirmConsent.mutate(undefined, {
@@ -98,6 +118,16 @@ const OAuthAuthorizePage: FC = () => {
                         </p>
                     </div>
                     <SignInForm />
+                </Card>
+            );
+        }
+
+        // Single-org users are forwarded by the effect above; show a loading
+        // state instead of flashing the picker (or an empty one) meanwhile.
+        if (isLoadingOrgs || (isSingleOrg && !submitLogin.isError)) {
+            return (
+                <Card className="w-full max-w-md mx-auto p-8">
+                    <p className="text-sm text-muted text-center">Loading…</p>
                 </Card>
             );
         }

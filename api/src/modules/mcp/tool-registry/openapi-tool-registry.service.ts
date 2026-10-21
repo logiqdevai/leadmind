@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import type { OpenAPIObject } from '@nestjs/swagger';
 import { OpenApiDocumentRegistry } from '@/core/openapi/openapi-document.registry';
 import { SCOPE_READ, SCOPE_WRITE } from '@/modules/oauth/oauth.constants';
-import { isDeniedPath } from './mcp-tools.config';
+import { isDeniedOperation, isDeniedPath } from './mcp-tools.config';
 import { dereference, JsonSchema } from './json-schema.util';
 import { McpToolDefinition } from './tool-definition.interface';
 
@@ -53,7 +53,7 @@ export class OpenApiToolRegistryService {
 
       for (const method of HTTP_METHODS) {
         const operation = (pathItem as any)[method];
-        if (!operation) continue;
+        if (!operation || isDeniedOperation(method, path)) continue;
 
         const tag = operation.tags?.[0] ?? 'general';
         const name = this.uniqueName(

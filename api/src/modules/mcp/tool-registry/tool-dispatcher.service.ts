@@ -4,6 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import axios from 'axios';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { McpToolDefinition } from './tool-definition.interface';
+import { isOrganisationScopedPath } from './mcp-tools.config';
 
 export interface McpAuthContext {
   userUuid: string;
@@ -46,6 +47,19 @@ export class ToolDispatcherService {
     args: Record<string, unknown>,
     auth: McpAuthContext,
   ): Promise<McpToolResult> {
+    if (
+      isOrganisationScopedPath(tool.pathTemplate) &&
+      args?.uuid !== auth.organisationUuid
+    ) {
+      return {
+        status: 403,
+        body: {
+          message:
+            'This connection is authorised for a different organisation. Reconnect and choose that organisation to manage it.',
+        },
+      };
+    }
+
     let path = tool.pathTemplate;
     for (const param of tool.pathParams) {
       path = path.replace(

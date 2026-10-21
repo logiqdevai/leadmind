@@ -35,3 +35,39 @@ export function isDeniedPath(path: string): boolean {
     (prefix) => path === prefix || path.startsWith(`${prefix}/`),
   );
 }
+
+/**
+ * Individual operations excluded from the MCP tool set even though the rest of
+ * their path prefix is exposed. These act on the user's identity or on
+ * organisations beyond the one the OAuth grant was issued for, which a
+ * workspace-scoped connection must not be able to do:
+ *  - account deletion / password change
+ *  - creating, switching or deleting organisations
+ *  - accepting an invitation (would join the user to another organisation)
+ */
+export const MCP_TOOL_OPERATION_DENYLIST: ReadonlyArray<{
+  method: string;
+  path: string;
+}> = [
+  { method: 'delete', path: '/users/me' },
+  { method: 'patch', path: '/users/me/password' },
+  { method: 'post', path: '/organisations' },
+  { method: 'delete', path: '/organisations/{uuid}' },
+  { method: 'post', path: '/organisations/{uuid}/switch' },
+  { method: 'post', path: '/organisations/invitations/{token}/accept' },
+];
+
+export function isDeniedOperation(method: string, path: string): boolean {
+  return MCP_TOOL_OPERATION_DENYLIST.some(
+    (op) => op.method === method.toLowerCase() && op.path === path,
+  );
+}
+
+/**
+ * Organisation-management routes address an organisation by `{uuid}` in the
+ * path rather than taking it from the caller's token, so a tool call must be
+ * pinned to the organisation the connection was authorised for.
+ */
+export function isOrganisationScopedPath(pathTemplate: string): boolean {
+  return pathTemplate.startsWith('/organisations/{uuid}');
+}
