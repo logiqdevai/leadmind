@@ -14,6 +14,7 @@ import {
     TextArea,
 } from "@heroui/react";
 import type { Key } from "@heroui/react";
+import { TagPicker } from "@/components/tags/tag-picker";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
 import { Channel } from "@/features/contacts/interfaces/contact.interface";
 import { SourceType } from "@/features/leads/interfaces/lead.interface";
@@ -76,6 +77,7 @@ export function FilterForm({
 }: FilterFormProps) {
     const canEditOutreachInstructions = usePermission("filter_outreach_instructions_edit");
     const [siModalOpen, setSiModalOpen] = useState(false);
+    const [tagUuids, setTagUuids] = useState<string[]>(() => (initial?.tags ?? []).map((t) => t.uuid));
 
     const defaults = useMemo(() => buildDefaults(initial), [initial?.uuid]);
 
@@ -131,6 +133,7 @@ export function FilterForm({
                     ? values.scoring_instruction_uuids
                     : undefined,
             contact_list_uuid: values.contact_list_uuid,
+            tag_uuids: tagUuids,
             ...(canEditOutreachInstructions
                 ? {
                       outreach_instructions:
@@ -198,6 +201,8 @@ export function FilterForm({
                         />
                     </div>
                 </div>
+
+                <TagPicker value={tagUuids} onChange={setTagUuids} disabled={isPending} />
 
                 <SectionDivider title="List destination" />
                 <FilterContactListFields

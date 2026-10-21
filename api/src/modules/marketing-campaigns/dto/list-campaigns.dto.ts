@@ -2,8 +2,9 @@ import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
 import { IsArray, IsEnum, IsInt, IsOptional, IsString, Max, Min } from 'class-validator';
 import { CampaignStatus } from '@/generated/prisma';
+import { TagFilterQueryDto } from '@/modules/org-tags/dto/tag-filter-query.dto';
 
-export class ListCampaignsDto {
+export class ListCampaignsDto extends TagFilterQueryDto {
     @ApiPropertyOptional({ enum: CampaignStatus })
     @IsOptional()
     @IsEnum(CampaignStatus)

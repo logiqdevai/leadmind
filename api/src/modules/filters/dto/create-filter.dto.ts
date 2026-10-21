@@ -19,6 +19,16 @@ import { Channel, EnrichmentSource, SourceType } from '@/generated/prisma';
 import { IsCronExpression } from '../validators/is-cron-expression.validator';
 
 export class CreateFilterDto {
+    @ApiPropertyOptional({
+        type: [String],
+        description:
+            'Organisation tag UUIDs to group this filter under. On update this replaces the full set (empty array clears).',
+    })
+    @IsOptional()
+    @IsArray()
+    @IsUUID('all', { each: true })
+    tag_uuids?: string[];
+
     @ApiProperty({ maxLength: 100 })
     @IsString()
     @MaxLength(100)

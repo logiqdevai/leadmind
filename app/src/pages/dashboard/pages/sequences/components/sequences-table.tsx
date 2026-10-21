@@ -2,6 +2,7 @@ import { Button } from "@heroui/react";
 import { Pencil, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { SequenceStatus, type OutreachSequence } from "@/features/sequences/interfaces/sequence.interface";
+import { TagChips } from "@/components/tags/tag-chips";
 import { Routes } from "@/routes/routes";
 import { SequenceStatusBadge } from "./sequence-status-badge";
 
@@ -16,15 +17,19 @@ function formatSequenceDate(iso: string): string {
 interface SequencesTableProps {
     sequences: OutreachSequence[];
     onDelete: (sequence: OutreachSequence) => void;
+    /** True when a search or tag filter is applied, so an empty list means "no matches". */
+    isFiltered?: boolean;
 }
 
-export function SequencesTable({ sequences, onDelete }: SequencesTableProps) {
+export function SequencesTable({ sequences, onDelete, isFiltered }: SequencesTableProps) {
     const navigate = useNavigate();
 
     if (sequences.length === 0) {
         return (
             <div className="rounded-xl border border-dashed border-border bg-surface-secondary/30 p-10 text-center text-sm text-muted">
-                No sequences yet. Create one to start a multi-step Email/SMS drip.
+                {isFiltered
+                    ? "No sequences match your search or tag filter."
+                    : "No sequences yet. Create one to start a multi-step Email/SMS drip."}
             </div>
         );
     }
@@ -35,6 +40,7 @@ export function SequencesTable({ sequences, onDelete }: SequencesTableProps) {
                 <thead className="bg-surface-secondary/40 text-muted">
                     <tr>
                         <th className="min-w-0 max-w-0 overflow-hidden px-4 py-3 text-left font-medium">Name</th>
+                        <th className="hidden lg:table-cell px-4 py-3 text-left font-medium w-48">Tags</th>
                         <th className="px-4 py-3 text-left font-medium w-28">Status</th>
                         <th className="hidden lg:table-cell px-4 py-3 text-left font-medium w-24">Steps</th>
                         <th className="hidden lg:table-cell px-4 py-3 text-left font-medium">Updated</th>
@@ -55,6 +61,9 @@ export function SequencesTable({ sequences, onDelete }: SequencesTableProps) {
                                 {sequence.description ? (
                                     <div className="text-xs text-muted truncate">{sequence.description}</div>
                                 ) : null}
+                            </td>
+                            <td className="hidden lg:table-cell px-4 py-3 align-top">
+                                <TagChips tags={sequence.tags} max={2} />
                             </td>
                             <td className="px-4 py-3 align-top">
                                 <SequenceStatusBadge status={sequence.status} />

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Input, Label, TextArea, TextField } from "@heroui/react";
 import { Button } from "@heroui/react";
+import { TagPicker } from "@/components/tags/tag-picker";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
 import { ChevronLeft, Save } from "lucide-react";
 import { useCreateSequence } from "@/features/sequences/hooks/use-sequences";
@@ -13,6 +14,7 @@ export default function NewSequencePage() {
 
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
+    const [tagUuids, setTagUuids] = useState<string[]>([]);
 
     const canSave = name.trim().length > 0;
 
@@ -22,6 +24,7 @@ export default function NewSequencePage() {
             const sequence = await createMutation.mutateAsync({
                 name: name.trim(),
                 description: description.trim() || undefined,
+                ...(tagUuids.length ? { tag_uuids: tagUuids } : {}),
             });
             navigate(Routes.dashboard.sequences_edit.replace(":uuid", sequence.uuid));
         } catch {
@@ -64,6 +67,7 @@ export default function NewSequencePage() {
                         maxLength={1000}
                     />
                 </TextField>
+                <TagPicker value={tagUuids} onChange={setTagUuids} />
             </div>
 
             <div className="flex items-center justify-end gap-2 border-t border-border pt-4">

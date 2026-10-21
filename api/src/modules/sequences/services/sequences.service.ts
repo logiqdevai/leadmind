@@ -9,6 +9,8 @@ import {
     CampaignStatus,
     OutreachSequence,
     OutreachSequenceStep,
+    OrgTagEntityType,
+    Prisma,
     SequenceEnrollmentStatus,
     SequenceStatus,
 } from '@/generated/prisma';
@@ -17,6 +19,7 @@ import {
     isEmailHtmlEmpty,
     sanitizeEmailHtml,
 } from '@/shared/utils/sanitize-html.util';
+import { OrgTagsService } from '@/modules/org-tags/org-tags.service';
 import { CreateSequenceDto } from '../dto/create-sequence.dto';
 import { UpdateSequenceDto } from '../dto/update-sequence.dto';
 import { CreateSequenceStepDto } from '../dto/create-sequence-step.dto';
@@ -61,13 +64,18 @@ function normalizeStepContent(
 
 @Injectable()
 export class SequencesService {
-    constructor(private readonly prisma: PrismaService) {}
+    constructor(
+        private readonly prisma: PrismaService,
+        private readonly orgTags: OrgTagsService,
+    ) {}
 
     async create(
         organisation_uuid: string,
         dto: CreateSequenceDto,
-    ): Promise<OutreachSequence> {
-        return this.prisma.outreachSequence.create({
+    ) {
+        // Validate tags up front so a bad tag uuid doesn't leave an untagged sequence behind.
+        if (dto.tag_uuids?.length) await this.orgTags.assertTagsOwned(organisation_uuid, dto.tag_uuids);
+        const sequence = await this.prisma.outreachSequence.create({
             data: {
                 organisation_uuid,
                 name: dto.name.trim(),
@@ -76,17 +84,53 @@ export class SequencesService {
                 stop_on_reply: dto.stop_on_reply ?? true,
             },
         });
+        if (dto.tag_uuids?.length) {
+            await this.orgTags.setTags(organisation_uuid, OrgTagEntityType.SEQUENCE, sequence.uuid, dto.tag_uuids);
+        }
+        return this.withTags(organisation_uuid, sequence);
+    }
+
+    private async withTags<T extends { uuid: string }>(organisation_uuid: string, sequence: T) {
+        const [withTags] = await this.orgTags.withTags(organisation_uuid, OrgTagEntityType.SEQUENCE, [sequence]);
+        return withTags;
     }
 
     async findAll(organisation_uuid: string, filters: ListSequencesDto) {
-        return this.prisma.outreachSequence.findMany({
-            where: {
-                organisation_uuid,
-                ...(filters.status && { status: filters.status }),
-            },
-            include: { steps: { orderBy: { order_index: 'asc' } } },
-            orderBy: { created_at: 'desc' },
-        });
+        const page = filters.page ?? 1;
+        const limit = filters.limit ?? 20;
+
+        const where: Prisma.OutreachSequenceWhereInput = {
+            organisation_uuid,
+            ...(filters.status && { status: filters.status }),
+        };
+        if (filters.search?.trim()) {
+            const search = filters.search.trim();
+            where.OR = [
+                { name: { contains: search, mode: 'insensitive' } },
+                { description: { contains: search, mode: 'insensitive' } },
+            ];
+        }
+        const tagWhere = await this.orgTags.buildWhere(organisation_uuid, OrgTagEntityType.SEQUENCE, filters);
+        if (tagWhere) where.uuid = tagWhere.uuid;
+
+        const [data, total] = await Promise.all([
+            this.prisma.outreachSequence.findMany({
+                where,
+                skip: (page - 1) * limit,
+                take: limit,
+                include: { steps: { orderBy: { order_index: 'asc' } } },
+                orderBy: { created_at: 'desc' },
+            }),
+            this.prisma.outreachSequence.count({ where }),
+        ]);
+
+        return {
+            data: await this.orgTags.withTags(organisation_uuid, OrgTagEntityType.SEQUENCE, data),
+            total,
+            page,
+            limit,
+            totalPages: Math.ceil(total / limit),
+        };
     }
 
     async findOne(organisation_uuid: string, uuid: string) {
@@ -96,16 +140,19 @@ export class SequencesService {
         });
         if (!sequence)
             throw new NotFoundException(`Sequence ${uuid} not found`);
-        return sequence;
+        return this.withTags(organisation_uuid, sequence);
     }
 
     async update(
         organisation_uuid: string,
         uuid: string,
         dto: UpdateSequenceDto,
-    ): Promise<OutreachSequence> {
+    ) {
         await this.requireOwned(organisation_uuid, uuid);
-        return this.prisma.outreachSequence.update({
+        if (dto.tag_uuids !== undefined) {
+            await this.orgTags.setTags(organisation_uuid, OrgTagEntityType.SEQUENCE, uuid, dto.tag_uuids);
+        }
+        const sequence = await this.prisma.outreachSequence.update({
             where: { uuid },
             data: {
                 ...(dto.name !== undefined && { name: dto.name.trim() }),
@@ -117,6 +164,7 @@ export class SequencesService {
                 }),
             },
         });
+        return this.withTags(organisation_uuid, sequence);
     }
 
     async activate(
@@ -171,6 +219,7 @@ export class SequencesService {
         }
         await this.assertNoBlockingCampaigns(uuid);
         await this.prisma.outreachSequence.delete({ where: { uuid } });
+        await this.orgTags.deleteForEntities(OrgTagEntityType.SEQUENCE, [uuid]);
         return { uuid };
     }
 

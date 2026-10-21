@@ -275,6 +275,13 @@ export const ApiRoutes = {
             `/forms/${formUuid}/completions/${completionUuid}`,
         contactCompletions: (contactUuid: string) => `/form-completions/contact/${contactUuid}`,
     },
+    org_tags: {
+        list: "/org-tags",
+        create: "/org-tags",
+        bulk: "/org-tags/bulk",
+        update: (uuid: string) => `/org-tags/${uuid}`,
+        remove: (uuid: string) => `/org-tags/${uuid}`,
+    },
     contact_lists: {
         list: "/contact-lists",
         create: "/contact-lists",

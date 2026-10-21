@@ -26,6 +26,7 @@ export const ActivityEntityType = {
   SENDING_POLICY_STAGE: 'sending_policy_stage',
   CAMPAIGN_INTEGRATION: 'campaign_integration',
   API_KEY: 'api_key',
+  ORG_TAG: 'org_tag',
 } as const;
 
 export type ActivityEntityType =

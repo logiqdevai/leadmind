@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
-import { JobStatus, Prisma, Filter, ScoringInstruction, SourceType } from '@/generated/prisma';
+import { JobStatus, OrgTagEntityType, Prisma, Filter, ScoringInstruction, SourceType } from '@/generated/prisma';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import {
     FILTER_SCRAPE_LOCK_DURATION_MS,
@@ -16,9 +16,11 @@ import {
 import { abortFilterScrape, clearFilterScrapeStopRequest } from '@/workers/utils/filter-scrape-cancel.registry';
 import { ScoringInstructionsService } from '@/modules/scoring-instructions/scoring-instructions.service';
 import { ApifyCredentialsService } from '@/integrations/apify/services/apify-credentials.service';
+import { OrgTagsService, type OrgTagSummary } from '@/modules/org-tags/org-tags.service';
 import { CreateFilterDto } from './dto/create-filter.dto';
 import { UpdateFilterDto } from './dto/update-filter.dto';
 import { ListJobsDto } from './dto/list-jobs.dto';
+import { ListFiltersDto } from './dto/list-filters.dto';
 
 interface RepeatableJobMeta {
     queue_job_id: string;
@@ -37,13 +39,15 @@ type FilterWithScoring = Prisma.FilterGetPayload<{ include: typeof filterScoring
 
 export type FilterResponse = Omit<FilterWithScoring, 'filter_scoring_instructions'> & {
     scoring_instructions: ScoringInstruction[];
+    tags: OrgTagSummary[];
 };
 
-function mapFilter(filter: FilterWithScoring): FilterResponse {
+function mapFilter(filter: FilterWithScoring, tags: OrgTagSummary[] = []): FilterResponse {
     const { filter_scoring_instructions, ...rest } = filter;
     return {
         ...rest,
         scoring_instructions: filter_scoring_instructions.map((l) => l.scoring_instruction),
+        tags,
     };
 }
 
@@ -56,6 +60,7 @@ export class FiltersService {
         private readonly scoringInstructionsService: ScoringInstructionsService,
         private readonly apifyCredentials: ApifyCredentialsService,
         @InjectQueue(FILTER_SCRAPE_QUEUE) private readonly scrapeQueue: Queue,
+        private readonly orgTags: OrgTagsService,
     ) {}
 
     async create(organisation_uuid: string, dto: CreateFilterDto): Promise<FilterResponse> {
@@ -64,6 +69,7 @@ export class FiltersService {
         const uuids = dto.scoring_instruction_uuids ?? [];
         await this.scoringInstructionsService.assertAllOwnedByUser(organisation_uuid, uuids);
         await this.assertContactListOwned(organisation_uuid, dto.contact_list_uuid);
+        if (dto.tag_uuids?.length) await this.orgTags.assertTagsOwned(organisation_uuid, dto.tag_uuids);
 
         const filter = await this.prisma.filter.create({
             data: {
@@ -92,16 +98,49 @@ export class FiltersService {
             await this.addRepeatable(filter.uuid, filter.cron_schedule);
         }
 
-        return mapFilter(filter);
+        const tags = dto.tag_uuids?.length
+            ? await this.orgTags.setTags(organisation_uuid, OrgTagEntityType.FILTER, filter.uuid, dto.tag_uuids)
+            : [];
+        return mapFilter(filter, tags);
     }
 
-    async findAll(organisation_uuid: string): Promise<FilterResponse[]> {
-        const rows = await this.prisma.filter.findMany({
-            where: { organisation_uuid },
-            orderBy: { created_at: 'desc' },
-            include: filterScoringInclude,
-        });
-        return rows.map(mapFilter);
+    async findAll(organisation_uuid: string, query: ListFiltersDto = new ListFiltersDto()) {
+        const page = query.page ?? 1;
+        const limit = query.limit ?? 20;
+
+        const where: Prisma.FilterWhereInput = { organisation_uuid };
+        if (query.search?.trim()) {
+            where.name = { contains: query.search.trim(), mode: 'insensitive' };
+        }
+        if (query.source_type) where.source_type = query.source_type;
+        if (query.enabled !== undefined) where.enabled = query.enabled;
+        const tagWhere = await this.orgTags.buildWhere(organisation_uuid, OrgTagEntityType.FILTER, query);
+        if (tagWhere) where.uuid = tagWhere.uuid;
+
+        const [rows, total] = await Promise.all([
+            this.prisma.filter.findMany({
+                where,
+                skip: (page - 1) * limit,
+                take: limit,
+                orderBy: { created_at: 'desc' },
+                include: filterScoringInclude,
+            }),
+            this.prisma.filter.count({ where }),
+        ]);
+
+        const tagsByFilter = await this.orgTags.getTagsForEntities(
+            organisation_uuid,
+            OrgTagEntityType.FILTER,
+            rows.map((r) => r.uuid),
+        );
+
+        return {
+            data: rows.map((row) => mapFilter(row, tagsByFilter.get(row.uuid) ?? [])),
+            total,
+            page,
+            limit,
+            totalPages: Math.ceil(total / limit),
+        };
     }
 
     async findOne(organisation_uuid: string, uuid: string): Promise<FilterResponse> {
@@ -110,7 +149,8 @@ export class FiltersService {
             include: filterScoringInclude,
         });
         if (!filter) throw new NotFoundException(`Filter ${uuid} not found`);
-        return mapFilter(filter);
+        const tags = await this.orgTags.getTagsForEntities(organisation_uuid, OrgTagEntityType.FILTER, [uuid]);
+        return mapFilter(filter, tags.get(uuid) ?? []);
     }
 
     async update(organisation_uuid: string, uuid: string, dto: UpdateFilterDto): Promise<FilterResponse> {
@@ -159,6 +199,10 @@ export class FiltersService {
             }),
         };
 
+        if (dto.tag_uuids !== undefined) {
+            await this.orgTags.setTags(organisation_uuid, OrgTagEntityType.FILTER, uuid, dto.tag_uuids);
+        }
+
         const updated = await this.prisma.filter.update({
             where: { uuid },
             data,
@@ -178,6 +222,7 @@ export class FiltersService {
         }
 
         await this.prisma.filter.delete({ where: { uuid } });
+        await this.orgTags.deleteForEntities(OrgTagEntityType.FILTER, [uuid]);
 
         return { uuid };
     }

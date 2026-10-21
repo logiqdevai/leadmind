@@ -19,6 +19,7 @@ import { FiltersService } from './filters.service';
 import { CreateFilterDto } from './dto/create-filter.dto';
 import { UpdateFilterDto } from './dto/update-filter.dto';
 import { ListJobsDto } from './dto/list-jobs.dto';
+import { ListFiltersDto } from './dto/list-filters.dto';
 import { ContactAudienceStatsService } from '@/modules/contact-audience-stats/contact-audience-stats.service';
 import { ContactAudienceAnalysisService } from '@/modules/contact-audience-stats/contact-audience-analysis.service';
 import { ContactAudienceStatsQueryDto } from '@/modules/contact-audience-stats/dto/contact-audience-stats-query.dto';
@@ -50,11 +51,11 @@ export class FiltersController {
     }
 
     @Get()
-    @ApiOperation({ summary: 'List filters for the current user' })
+    @ApiOperation({ summary: 'List filters for the current user (paginated, searchable, filterable by tag)' })
     @ApiResponse({ status: 200 })
     @ApiResponse({ status: 401, description: 'Unauthorized' })
-    findAll(@CurrentUser('organisation_uuid') organisation_uuid: string) {
-        return this.filtersService.findAll(organisation_uuid);
+    findAll(@CurrentUser('organisation_uuid') organisation_uuid: string, @Query() query: ListFiltersDto) {
+        return this.filtersService.findAll(organisation_uuid, query);
     }
 
     @Get(':uuid')

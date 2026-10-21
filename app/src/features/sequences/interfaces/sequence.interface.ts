@@ -1,3 +1,4 @@
+import type { OrgTagSummary, Paginated, TagFilterQuery } from "@/features/org-tags/interfaces/org-tag.interface";
 import { Channel } from "@/features/contacts/interfaces/contact.interface";
 
 export const SequenceStatus = {
@@ -56,6 +57,7 @@ export interface OutreachSequence {
     status: SequenceStatus;
     stop_on_reply: boolean;
     steps: SequenceStep[];
+    tags?: OrgTagSummary[];
     created_at: string;
     updated_at: string;
 }
@@ -89,6 +91,7 @@ export type CreateSequencePayload = {
     name: string;
     description?: string;
     stop_on_reply?: boolean;
+    tag_uuids?: string[];
 };
 
 export type UpdateSequencePayload = Partial<CreateSequencePayload>;
@@ -108,6 +111,11 @@ export type CreateSequenceStepPayload = {
 
 export type UpdateSequenceStepPayload = Partial<CreateSequenceStepPayload>;
 
-export interface ListSequencesQuery {
+export interface ListSequencesQuery extends TagFilterQuery {
     status?: SequenceStatus;
+    search?: string;
+    page?: number;
+    limit?: number;
 }
+
+export type PaginatedSequences = Paginated<OutreachSequence>;

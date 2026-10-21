@@ -1,18 +1,21 @@
 import axiosInstance from "@/config/api/axios";
 import { ApiRoutes } from "@/config/api/routes";
+import { toTagParams } from "@/features/org-tags/lib/tag-query";
 import type {
     CreateFilterPayload,
     Filter,
     ListFilterJobsQuery,
+    ListFiltersQuery,
     ManualRunResponse,
     PaginatedFilterJobs,
+    PaginatedFilters,
     StopFilterResponse,
     UpdateFilterPayload,
 } from "../interfaces/filter.interface";
 
-export const listFilters = async (): Promise<Filter[]> => {
+export const listFilters = async (query: ListFiltersQuery = {}): Promise<PaginatedFilters> => {
     try {
-        const response = await axiosInstance.get(ApiRoutes.filters.list);
+        const response = await axiosInstance.get(ApiRoutes.filters.list, { params: toTagParams(query) });
         return response.data;
     } catch (error: any) {
         throw new Error(error?.response?.data?.message || "Failed to load filters.");

@@ -23,6 +23,7 @@ export default function NewCampaignPage() {
         channels: [Channel.EMAIL],
         scheduled_at: null,
         use_openai_batch: false,
+        tag_uuids: [],
     });
 
     const canSave = basics.name.trim().length > 0 && basics.channels.length === 1;
@@ -33,6 +34,7 @@ export default function NewCampaignPage() {
             const campaign = await createMutation.mutateAsync({
                 name: basics.name.trim(),
                 description: basics.description.trim() || undefined,
+                ...(basics.tag_uuids.length ? { tag_uuids: basics.tag_uuids } : {}),
                 campaign_type: basics.campaign_type,
                 channels: basics.channels,
                 use_openai_batch:

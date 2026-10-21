@@ -3,6 +3,7 @@ import type {
     LeadStatus,
     ListContactsQuery,
 } from "@/features/contacts/interfaces/contact.interface";
+import type { OrgTagSummary, TagFilterQuery } from "@/features/org-tags/interfaces/org-tag.interface";
 import type { CampaignFilters } from "@/features/marketing-campaigns/interfaces/campaign.interface";
 
 export interface ContactList {
@@ -15,10 +16,11 @@ export interface ContactList {
     updated_at: string;
     contact_count?: number;
     child_count?: number;
+    tags?: OrgTagSummary[];
     _count?: { members: number; children?: number };
 }
 
-export interface ListContactListsQuery {
+export interface ListContactListsQuery extends TagFilterQuery {
     page?: number;
     limit?: number;
     search?: string;
@@ -38,12 +40,14 @@ export interface CreateContactListPayload {
     title: string;
     description?: string;
     parent_list_uuid?: string;
+    tag_uuids?: string[];
 }
 
 export interface UpdateContactListPayload {
     title?: string;
     description?: string | null;
     parent_list_uuid?: string | null;
+    tag_uuids?: string[];
 }
 
 export type ListContactListMembersQuery = Omit<

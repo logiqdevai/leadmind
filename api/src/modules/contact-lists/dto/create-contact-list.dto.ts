@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsOptional, IsString, IsUUID, MaxLength, MinLength } from 'class-validator';
+import { IsArray, IsOptional, IsString, IsUUID, MaxLength, MinLength } from 'class-validator';
 
 export class CreateContactListDto {
     @ApiProperty({ maxLength: 200 })
@@ -18,4 +18,10 @@ export class CreateContactListDto {
     @IsOptional()
     @IsUUID()
     parent_list_uuid?: string;
+
+    @ApiPropertyOptional({ type: [String], description: 'Organisation tag UUIDs to group this list under' })
+    @IsOptional()
+    @IsArray()
+    @IsUUID('all', { each: true })
+    tag_uuids?: string[];
 }

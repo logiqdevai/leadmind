@@ -1,3 +1,4 @@
+import type { OrgTagSummary, TagFilterQuery } from "@/features/org-tags/interfaces/org-tag.interface";
 import type { Channel, Contact } from "@/features/contacts/interfaces/contact.interface";
 import type { ContactFilters } from "@/interfaces/contact-filters.interface";
 
@@ -52,6 +53,7 @@ export interface MarketingCampaign {
     campaign_type: CampaignType;
     channels: Channel[];
     filters_snapshot: CampaignFilters | null;
+    tags?: OrgTagSummary[];
     email_subject: string | null;
     email_content: string | null;
     sms_content: string | null;
@@ -121,8 +123,9 @@ export interface PaginatedCampaignContacts {
     totalPages: number;
 }
 
-export interface ListCampaignsQuery {
+export interface ListCampaignsQuery extends TagFilterQuery {
     status?: CampaignStatuses;
+    /** Contact tags the campaign targeted (not organisation tags; see `tag_uuids`). */
     tags?: string[];
     search?: string;
     page?: number;
@@ -138,6 +141,7 @@ export interface ListCampaignContactsQuery {
 }
 
 export interface CreateCampaignPayload {
+    tag_uuids?: string[];
     name: string;
     description?: string;
     campaign_type?: CampaignType;

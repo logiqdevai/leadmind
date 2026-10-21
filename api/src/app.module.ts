@@ -32,6 +32,7 @@ import { RemindersModule } from './modules/reminders/reminders.module';
 import { BulkJobsModule } from './modules/bulk-jobs/bulk-jobs.module';
 import { FormsModule } from './modules/forms/forms.module';
 import { ContactListsModule } from './modules/contact-lists/contact-lists.module';
+import { OrgTagsModule } from './modules/org-tags/org-tags.module';
 import { SavedContactFiltersModule } from './modules/saved-contact-filters/saved-contact-filters.module';
 import { ContactAudienceStatsModule } from './modules/contact-audience-stats/contact-audience-stats.module';
 import { GatewaysModule } from './gateways/gateways.module';
@@ -106,6 +107,7 @@ import { OidcFallbackModule } from './modules/oauth/oidc-fallback.module';
     OpenAiBatchJobsModule,
     FormsModule,
     ContactListsModule,
+    OrgTagsModule,
     SavedContactFiltersModule,
     SidebarFavoritesModule,
     ContactAudienceStatsModule,

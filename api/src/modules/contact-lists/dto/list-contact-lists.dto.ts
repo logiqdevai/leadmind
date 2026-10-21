@@ -2,8 +2,9 @@ import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsBoolean, IsInt, IsOptional, IsString, IsUUID, Max, Min } from 'class-validator';
 import { QueryBooleanTransform } from '@/shared/transforms/query-boolean.transform';
+import { TagFilterQueryDto } from '@/modules/org-tags/dto/tag-filter-query.dto';
 
-export class ListContactListsDto {
+export class ListContactListsDto extends TagFilterQueryDto {
     @ApiPropertyOptional()
     @IsOptional()
     @IsString()

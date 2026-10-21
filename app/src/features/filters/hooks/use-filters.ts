@@ -14,6 +14,7 @@ import { JobStatus } from "../interfaces/filter.interface";
 import type {
     CreateFilterPayload,
     ListFilterJobsQuery,
+    ListFiltersQuery,
     PaginatedFilterJobs,
     UpdateFilterPayload,
 } from "../interfaces/filter.interface";
@@ -21,17 +22,37 @@ import { toast } from "@/hooks/use-toast";
 
 export const filtersQueryKeys = {
     all: ["filters"] as const,
-    list: () => ["filters", "list"] as const,
+    list: (query: ListFiltersQuery = {}) => ["filters", "list", query] as const,
     detail: (uuid: string) => ["filters", "detail", uuid] as const,
     jobs: (uuid: string, query: ListFilterJobsQuery) =>
         ["filters", uuid, "jobs", query] as const,
     jobsRoot: (uuid: string) => ["filters", uuid, "jobs"] as const,
 };
 
+const ALL_FILTERS_PAGE_SIZE = 200;
+
+/** One page of filters (search, tag filters and pagination run on the server). */
+export function useFiltersPage(query: ListFiltersQuery = {}) {
+    return useQuery({
+        queryKey: filtersQueryKeys.list(query),
+        queryFn: () => listFilters(query),
+        placeholderData: (prev) => prev,
+    });
+}
+
+/** Every filter — for pickers. The API caps a page at 200, so this walks all pages. */
 export function useFilters() {
     return useQuery({
-        queryKey: filtersQueryKeys.list(),
-        queryFn: listFilters,
+        queryKey: [...filtersQueryKeys.all, "all"] as const,
+        queryFn: async () => {
+            const first = await listFilters({ page: 1, limit: ALL_FILTERS_PAGE_SIZE });
+            const rest = await Promise.all(
+                Array.from({ length: Math.max(first.totalPages - 1, 0) }, (_, i) =>
+                    listFilters({ page: i + 2, limit: ALL_FILTERS_PAGE_SIZE }),
+                ),
+            );
+            return [first, ...rest].flatMap((page) => page.data);
+        },
     });
 }
 

@@ -1,3 +1,4 @@
+import type { OrgTagSummary, Paginated, TagFilterQuery } from "@/features/org-tags/interfaces/org-tag.interface";
 import type { Channel } from "@/features/contacts/interfaces/contact.interface";
 import type { SourceType } from "@/features/leads/interfaces/lead.interface";
 import type { EnrichmentSource } from "@/features/lead-enrichment/constants/enrichment-sources";
@@ -75,6 +76,7 @@ export interface Filter {
     }>;
     outreach_instructions: string | null;
     contact_list_uuid: string | null;
+    tags?: OrgTagSummary[];
     created_at: string;
     updated_at: string;
 }
@@ -104,9 +106,20 @@ export interface CreateFilterPayload {
     scoring_instruction_uuids?: string[];
     outreach_instructions?: string | null;
     contact_list_uuid?: string;
+    tag_uuids?: string[];
 }
 
 export type UpdateFilterPayload = Partial<CreateFilterPayload>;
+
+export interface ListFiltersQuery extends TagFilterQuery {
+    search?: string;
+    source_type?: SourceType;
+    enabled?: boolean;
+    page?: number;
+    limit?: number;
+}
+
+export type PaginatedFilters = Paginated<Filter>;
 
 export interface ListFilterJobsQuery {
     page?: number;

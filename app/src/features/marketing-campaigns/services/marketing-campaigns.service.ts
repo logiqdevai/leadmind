@@ -19,6 +19,8 @@ import type {
 import type { CampaignFilters } from "../interfaces/campaign.interface";
 import type { BulkSendResult } from "@/features/outreach/interfaces/send-history.interface";
 
+import { toTagParams } from "@/features/org-tags/lib/tag-query";
+
 function unwrap(error: any, fallback: string): never {
     throw new Error(error?.response?.data?.message || fallback);
 }
@@ -27,7 +29,7 @@ export async function listCampaigns(
     query: ListCampaignsQuery,
 ): Promise<PaginatedCampaigns> {
     try {
-        const params: Record<string, unknown> = { ...query };
+        const params: Record<string, unknown> = toTagParams(query);
         if (Array.isArray(query.tags)) {
             params.tags = query.tags.length > 0 ? query.tags.join(",") : undefined;
         }

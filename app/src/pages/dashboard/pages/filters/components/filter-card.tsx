@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Chip, Switch } from "@heroui/react";
 import { Calendar } from "lucide-react";
+import { TagChips } from "@/components/tags/tag-chips";
 import { SourceBadge } from "@/components/ui/source-badge";
 import { Channel } from "@/features/contacts/interfaces/contact.interface";
 import { JobStatus, type Filter } from "@/features/filters/interfaces/filter.interface";
@@ -85,6 +86,8 @@ export function FilterCard({ filter }: FilterCardProps) {
           </Switch>
         </div>
       </div>
+
+      <TagChips tags={filter.tags} max={4} />
 
       <div className="flex items-center gap-2 text-sm text-muted min-w-0">
         <Calendar className="size-4 shrink-0" />

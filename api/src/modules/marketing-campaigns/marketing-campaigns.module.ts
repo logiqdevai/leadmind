@@ -1,3 +1,4 @@
+import { OrgTagsModule } from '@/modules/org-tags/org-tags.module';
 import { forwardRef, Module } from '@nestjs/common';
 import { BullModule } from '@nestjs/bullmq';
 import { PrismaModule } from '@/core/databases/prisma/prisma.module';
@@ -30,6 +31,7 @@ import { CampaignAiService } from './services/campaign-ai.service';
     SenderProfilesModule,
     AiIntegrationModule,
     SequencesModule,
+    OrgTagsModule,
     SendingCapacityModule,
     ThreadsModule,
     forwardRef(() => ContactListsModule),

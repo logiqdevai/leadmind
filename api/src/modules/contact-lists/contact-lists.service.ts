@@ -3,7 +3,7 @@ import {
     Injectable,
     NotFoundException,
 } from '@nestjs/common';
-import { LeadStatus, Prisma } from '@/generated/prisma';
+import { LeadStatus, OrgTagEntityType, Prisma } from '@/generated/prisma';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { ContactsService } from '@/modules/contacts/contacts.service';
 import {
@@ -15,6 +15,7 @@ import { shapeContactFilterFields } from '@/modules/contacts/utils/contact-filte
 import { belowScoreContactFilter } from '@/modules/contacts/utils/contact-score-filter.utils';
 import { CampaignContactResolverService } from '@/modules/marketing-campaigns/services/campaign-contact-resolver.service';
 import { CampaignFiltersDto } from '@/modules/marketing-campaigns/dto/campaign-filters.dto';
+import { OrgTagsService } from '@/modules/org-tags/org-tags.service';
 import { CreateContactListDto } from './dto/create-contact-list.dto';
 import { UpdateContactListDto } from './dto/update-contact-list.dto';
 import { ListContactListsDto } from './dto/list-contact-lists.dto';
@@ -31,6 +32,7 @@ export class ContactListsService {
         private readonly contactsService: ContactsService,
         private readonly contactsExportService: ContactsExportService,
         private readonly campaignContactResolver: CampaignContactResolverService,
+        private readonly orgTags: OrgTagsService,
     ) {}
 
     private readonly listCountInclude = {
@@ -55,6 +57,8 @@ export class ContactListsService {
             await this.assertValidParent(organisation_uuid, parent_list_uuid);
         }
 
+        if (dto.tag_uuids?.length) await this.orgTags.assertTagsOwned(organisation_uuid, dto.tag_uuids);
+
         const list = await this.prisma.contactList.create({
             data: {
                 organisation_uuid,
@@ -65,7 +69,16 @@ export class ContactListsService {
             include: this.listCountInclude,
         });
 
-        return this.mapListWithCounts(list);
+        if (dto.tag_uuids?.length) {
+            await this.orgTags.setTags(organisation_uuid, OrgTagEntityType.CONTACT_LIST, list.uuid, dto.tag_uuids);
+        }
+
+        return this.withTags(organisation_uuid, this.mapListWithCounts(list));
+    }
+
+    private async withTags<T extends { uuid: string }>(organisation_uuid: string, list: T) {
+        const [withTags] = await this.orgTags.withTags(organisation_uuid, OrgTagEntityType.CONTACT_LIST, [list]);
+        return withTags;
     }
 
     async findAll(organisation_uuid: string, query: ListContactListsDto) {
@@ -89,6 +102,9 @@ export class ContactListsService {
             ];
         }
 
+        const tagWhere = await this.orgTags.buildWhere(organisation_uuid, OrgTagEntityType.CONTACT_LIST, query);
+        if (tagWhere) where.uuid = tagWhere.uuid;
+
         const [data, total] = await Promise.all([
             this.prisma.contactList.findMany({
                 where,
@@ -100,8 +116,14 @@ export class ContactListsService {
             this.prisma.contactList.count({ where }),
         ]);
 
+        const lists = await this.orgTags.withTags(
+            organisation_uuid,
+            OrgTagEntityType.CONTACT_LIST,
+            data.map((list) => this.mapListWithCounts(list)),
+        );
+
         return {
-            data: data.map((list) => this.mapListWithCounts(list)),
+            data: lists,
             total,
             page,
             limit,
@@ -117,7 +139,7 @@ export class ContactListsService {
 
         if (!list) throw new NotFoundException('Contact list not found');
 
-        return this.mapListWithCounts(list);
+        return this.withTags(organisation_uuid, this.mapListWithCounts(list));
     }
 
     async update(organisation_uuid: string, uuid: string, dto: UpdateContactListDto) {
@@ -144,12 +166,26 @@ export class ContactListsService {
             include: this.listCountInclude,
         });
 
-        return this.mapListWithCounts(list);
+        if (dto.tag_uuids !== undefined) {
+            await this.orgTags.setTags(organisation_uuid, OrgTagEntityType.CONTACT_LIST, uuid, dto.tag_uuids);
+        }
+
+        return this.withTags(organisation_uuid, this.mapListWithCounts(list));
     }
 
     async remove(organisation_uuid: string, uuid: string) {
         await this.ensureListOwned(organisation_uuid, uuid);
+        // Sublists cascade-delete with their parent, so clear tag assignments for the whole subtree.
+        const subtree = [uuid];
+        for (let i = 0; i < subtree.length; i++) {
+            const children = await this.prisma.contactList.findMany({
+                where: { parent_list_uuid: subtree[i] },
+                select: { uuid: true },
+            });
+            subtree.push(...children.map((c) => c.uuid));
+        }
         await this.prisma.contactList.delete({ where: { uuid } });
+        await this.orgTags.deleteForEntities(OrgTagEntityType.CONTACT_LIST, subtree);
         return { uuid };
     }
 

@@ -35,10 +35,31 @@ export const sequencesQueryKeys = {
         ["sequences", "enrollments", uuid, query] as const,
 };
 
-export function useSequences(query: ListSequencesQuery = {}) {
+const ALL_SEQUENCES_PAGE_SIZE = 200;
+
+/** One page of sequences (search, tag filters and pagination run on the server). */
+export function useSequencesPage(query: ListSequencesQuery = {}) {
     return useQuery({
         queryKey: sequencesQueryKeys.list(query),
         queryFn: () => listSequences(query),
+        staleTime: 30_000,
+        placeholderData: (prev) => prev,
+    });
+}
+
+/** Every sequence matching `query` — for pickers. The API caps a page at 200, so this walks all pages. */
+export function useSequences(query: ListSequencesQuery = {}) {
+    return useQuery({
+        queryKey: [...sequencesQueryKeys.all, "all", query] as const,
+        queryFn: async () => {
+            const first = await listSequences({ ...query, page: 1, limit: ALL_SEQUENCES_PAGE_SIZE });
+            const rest = await Promise.all(
+                Array.from({ length: Math.max(first.totalPages - 1, 0) }, (_, i) =>
+                    listSequences({ ...query, page: i + 2, limit: ALL_SEQUENCES_PAGE_SIZE }),
+                ),
+            );
+            return [first, ...rest].flatMap((page) => page.data);
+        },
         staleTime: 30_000,
     });
 }

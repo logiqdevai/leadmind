@@ -1,9 +1,9 @@
 import { ApiPropertyOptional, PartialType, OmitType } from '@nestjs/swagger';
-import { IsOptional, IsUUID, ValidateIf } from 'class-validator';
+import { IsArray, IsOptional, IsUUID, ValidateIf } from 'class-validator';
 import { CreateContactListDto } from './create-contact-list.dto';
 
 export class UpdateContactListDto extends PartialType(
-    OmitType(CreateContactListDto, ['parent_list_uuid'] as const),
+    OmitType(CreateContactListDto, ['parent_list_uuid', 'tag_uuids'] as const),
 ) {
     @ApiPropertyOptional({
         description: 'Parent list UUID, or null to move to root',
@@ -13,4 +13,13 @@ export class UpdateContactListDto extends PartialType(
     @ValidateIf((_, value) => value !== null && value !== undefined)
     @IsUUID()
     parent_list_uuid?: string | null;
+
+    @ApiPropertyOptional({
+        type: [String],
+        description: 'Replaces the full set of organisation tags on this list (empty array clears them)',
+    })
+    @IsOptional()
+    @IsArray()
+    @IsUUID('all', { each: true })
+    tag_uuids?: string[];
 }

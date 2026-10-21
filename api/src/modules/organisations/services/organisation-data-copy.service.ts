@@ -8,6 +8,7 @@ import {
     BulkJobType,
     CampaignStatus,
     OrganisationInviteStatus,
+    OrgTagEntityType,
     Prisma,
     ReminderStatus,
 } from '@/generated/prisma';
@@ -43,6 +44,7 @@ interface CopyIdMaps {
     contacts: Map<string, string>;
     lists: Map<string, string>;
     sequences: Map<string, string>;
+    campaigns: Map<string, string>;
     memberUsers: Set<string>;
 }
 
@@ -55,6 +57,7 @@ function emptyIdMaps(): CopyIdMaps {
         contacts: new Map(),
         lists: new Map(),
         sequences: new Map(),
+        campaigns: new Map(),
         memberUsers: new Set(),
     };
 }
@@ -151,6 +154,15 @@ export class OrganisationDataCopyService {
                 errors[category] = message;
                 await this.bulkJobsService.incrementFailure(bulkJobUuid);
             }
+        }
+
+        try {
+            await this.copyOrgTags(sourceOrganisationUuid, targetOrganisationUuid, idMaps);
+        } catch (error) {
+            // Tags are organisational metadata: don't fail an otherwise successful copy over them.
+            this.logger.error(
+                `Copy org tags failed org=${targetOrganisationUuid}: ${error instanceof Error ? error.message : 'Unknown error'}`,
+            );
         }
 
         if (succeeded === 0) {
@@ -583,8 +595,11 @@ export class OrganisationDataCopyService {
         if (!campaigns.length) return;
 
         await this.prisma.marketingCampaign.createMany({
-            data: campaigns.map((c) => ({
-                uuid: randomUUID(),
+            data: campaigns.map((c) => {
+                const newUuid = randomUUID();
+                idMaps.campaigns.set(c.uuid, newUuid);
+                return {
+                uuid: newUuid,
                 organisation_uuid: targetOrgUuid,
                 name: c.name,
                 description: c.description,
@@ -608,7 +623,63 @@ export class OrganisationDataCopyService {
                 started_at: null,
                 completed_at: null,
                 cancelled_at: null,
-            })),
+                };
+            }),
+        });
+    }
+
+    /**
+     * Recreates the org tags used by the entities copied in this run and re-attaches them. Tags are matched by
+     * name so copying into an organisation that already has a "Real estate" tag reuses it.
+     */
+    private async copyOrgTags(
+        sourceOrgUuid: string,
+        targetOrgUuid: string,
+        idMaps: CopyIdMaps,
+    ): Promise<void> {
+        const entityMaps: Array<[OrgTagEntityType, Map<string, string>]> = [
+            [OrgTagEntityType.FILTER, idMaps.filters],
+            [OrgTagEntityType.CONTACT_LIST, idMaps.lists],
+            [OrgTagEntityType.SEQUENCE, idMaps.sequences],
+            [OrgTagEntityType.CAMPAIGN, idMaps.campaigns],
+        ];
+
+        const assignments = await this.prisma.orgTagAssignment.findMany({
+            where: {
+                organisation_uuid: sourceOrgUuid,
+                OR: entityMaps
+                    .filter(([, map]) => map.size > 0)
+                    .map(([entity_type, map]) => ({ entity_type, entity_uuid: { in: [...map.keys()] } })),
+            },
+            include: { tag: true },
+        });
+        if (!assignments.length) return;
+
+        const tagIdMap = new Map<string, string>();
+        for (const tag of new Map(assignments.map((a) => [a.tag_uuid, a.tag])).values()) {
+            const existing = await this.prisma.orgTag.findFirst({
+                where: { organisation_uuid: targetOrgUuid, name: { equals: tag.name, mode: 'insensitive' } },
+                select: { uuid: true },
+            });
+            const targetTag =
+                existing ??
+                (await this.prisma.orgTag.create({
+                    data: { organisation_uuid: targetOrgUuid, name: tag.name, color: tag.color },
+                    select: { uuid: true },
+                }));
+            tagIdMap.set(tag.uuid, targetTag.uuid);
+        }
+
+        const mapFor = new Map(entityMaps);
+        await this.prisma.orgTagAssignment.createMany({
+            data: assignments.flatMap((a) => {
+                const entity_uuid = mapFor.get(a.entity_type)?.get(a.entity_uuid);
+                const tag_uuid = tagIdMap.get(a.tag_uuid);
+                return entity_uuid && tag_uuid
+                    ? [{ tag_uuid, organisation_uuid: targetOrgUuid, entity_type: a.entity_type, entity_uuid }]
+                    : [];
+            }),
+            skipDuplicates: true,
         });
     }
 

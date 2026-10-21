@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Input, Label, Modal, TextArea } from "@heroui/react";
+import { TagPicker } from "@/components/tags/tag-picker";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
 import { useCreateContactList, useUpdateContactList } from "@/features/contact-lists/hooks/use-contact-lists";
 import type { ContactList } from "@/features/contact-lists/interfaces/contact-list.interface";
@@ -31,6 +32,7 @@ export function ContactListFormModal({
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [selectedParentUuid, setSelectedParentUuid] = useState<string | null>(parentListUuid ?? null);
+  const [tagUuids, setTagUuids] = useState<string[]>([]);
   const isSublist = !editing && !!selectedParentUuid;
 
   useEffect(() => {
@@ -39,10 +41,12 @@ export function ContactListFormModal({
       setTitle(editing.title);
       setDescription(editing.description ?? "");
       setSelectedParentUuid(editing.parent_list_uuid);
+      setTagUuids((editing.tags ?? []).map((t) => t.uuid));
     } else {
       setTitle("");
       setDescription("");
       setSelectedParentUuid(parentListUuid ?? null);
+      setTagUuids([]);
     }
   }, [isOpen, editing, parentListUuid]);
 
@@ -51,7 +55,11 @@ export function ContactListFormModal({
       updateList.mutate(
         {
           uuid: editing.uuid,
-          payload: { title: title.trim(), description: emptyToNullOnEdit(description, true) },
+          payload: {
+            title: title.trim(),
+            description: emptyToNullOnEdit(description, true),
+            tag_uuids: tagUuids,
+          },
         },
         { onSuccess: () => onOpenChange(false) },
       );
@@ -60,6 +68,7 @@ export function ContactListFormModal({
         {
           title: title.trim(),
           description: description.trim() || undefined,
+          ...(tagUuids.length ? { tag_uuids: tagUuids } : {}),
           ...(selectedParentUuid ? { parent_list_uuid: selectedParentUuid } : {}),
         },
         {
@@ -108,6 +117,7 @@ export function ContactListFormModal({
                 rows={3}
               />
             </div>
+            <TagPicker value={tagUuids} onChange={setTagUuids} />
             {editing ? null : (
               <ParentListSelect
                 value={selectedParentUuid}

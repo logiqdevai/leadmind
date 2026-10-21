@@ -55,6 +55,7 @@ export function CampaignWizard({ campaign }: CampaignWizardProps) {
                 ? toLocalInputValue(campaign.scheduled_at)
                 : null,
             use_openai_batch: campaign.use_openai_batch ?? false,
+            tag_uuids: (campaign.tags ?? []).map((t) => t.uuid),
         }),
         [campaign],
     );
@@ -149,6 +150,7 @@ export function CampaignWizard({ campaign }: CampaignWizardProps) {
         const payload: Record<string, unknown> = {
             name: basics.name,
             description: basics.description.trim() || null,
+            tag_uuids: basics.tag_uuids,
             campaign_type: basics.campaign_type,
             channels: basics.channels,
             filters,

@@ -17,6 +17,7 @@ import {
   MarketingCampaign,
   MsgStatus,
   OpenAiBatchStatus,
+  OrgTagEntityType,
   Prisma,
 } from '@/generated/prisma';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
@@ -42,6 +43,7 @@ import { ContactAiService } from '@/modules/contacts/services/contact-ai.service
 import { StartCampaignDto } from '../dto/email-provider-campaign.dto';
 import { SendCampaignDraftsDto } from '../dto/email-provider-campaign.dto';
 import { SendExistingMessageDto } from '@/modules/outreach/dto/email-provider.dto';
+import { OrgTagsService } from '@/modules/org-tags/org-tags.service';
 import { SequencesService } from '@/modules/sequences/services/sequences.service';
 import { SequenceEnrollmentService } from '@/modules/sequences/services/sequence-enrollment.service';
 import { SequenceStatus } from '@/generated/prisma';
@@ -64,16 +66,26 @@ export class MarketingCampaignsService {
     private readonly sequencesService: SequencesService,
     private readonly sequenceEnrollmentService: SequenceEnrollmentService,
     private readonly outreachService: OutreachService,
+    private readonly orgTags: OrgTagsService,
     @InjectQueue(MARKETING_CAMPAIGN_DISPATCH_QUEUE)
     private readonly dispatchQueue: Queue,
     @InjectQueue(MARKETING_MESSAGE_SEND_QUEUE)
     private readonly messageSendQueue: Queue,
   ) {}
 
-  async create(
+  private async withTags<T extends { uuid: string }>(
     organisation_uuid: string,
-    dto: CreateCampaignDto,
-  ): Promise<MarketingCampaign> {
+    campaign: T,
+  ) {
+    const [withTags] = await this.orgTags.withTags(
+      organisation_uuid,
+      OrgTagEntityType.CAMPAIGN,
+      [campaign],
+    );
+    return withTags;
+  }
+
+  async create(organisation_uuid: string, dto: CreateCampaignDto) {
     // Drafts are loose: only enforce shape/length. Full content validation runs at start().
     const type = dto.campaign_type ?? CampaignType.STANDARD;
     this.validateContentLoose(
@@ -93,8 +105,11 @@ export class MarketingCampaignsService {
     if (dto.sequence_uuid) {
       await this.assertOwnedSequence(organisation_uuid, dto.sequence_uuid);
     }
+    if (dto.tag_uuids?.length) {
+      await this.orgTags.assertTagsOwned(organisation_uuid, dto.tag_uuids);
+    }
 
-    return this.prisma.marketingCampaign.create({
+    const campaign = await this.prisma.marketingCampaign.create({
       data: {
         organisation_uuid,
         name: dto.name,
@@ -119,16 +134,34 @@ export class MarketingCampaignsService {
           {}) as unknown as Prisma.InputJsonValue,
       },
     });
+    if (dto.tag_uuids?.length) {
+      await this.orgTags.setTags(
+        organisation_uuid,
+        OrgTagEntityType.CAMPAIGN,
+        campaign.uuid,
+        dto.tag_uuids,
+      );
+    }
+    return this.withTags(organisation_uuid, campaign);
   }
 
   async update(
     organisation_uuid: string,
     uuid: string,
     dto: UpdateCampaignDto,
-  ): Promise<MarketingCampaign> {
+  ) {
     const existing = await this.requireOwned(organisation_uuid, uuid);
+    // Tags are organisational metadata, so they stay editable after the campaign has left DRAFT.
+    if (dto.tag_uuids !== undefined) {
+      await this.orgTags.setTags(
+        organisation_uuid,
+        OrgTagEntityType.CAMPAIGN,
+        uuid,
+        dto.tag_uuids,
+      );
+    }
     if (existing.status !== CampaignStatus.DRAFT) {
-      return existing;
+      return this.withTags(organisation_uuid, existing);
     }
 
     const channels = dto.channels ?? existing.channels;
@@ -175,7 +208,7 @@ export class MarketingCampaignsService {
       await this.assertOwnedSequence(organisation_uuid, dto.sequence_uuid);
     }
 
-    return this.prisma.marketingCampaign.update({
+    const updated = await this.prisma.marketingCampaign.update({
       where: { uuid },
       data: {
         ...(dto.name !== undefined && { name: dto.name }),
@@ -215,6 +248,7 @@ export class MarketingCampaignsService {
         }),
       },
     });
+    return this.withTags(organisation_uuid, updated);
   }
 
   async remove(
@@ -234,6 +268,7 @@ export class MarketingCampaignsService {
       );
     }
     await this.prisma.marketingCampaign.delete({ where: { uuid } });
+    await this.orgTags.deleteForEntities(OrgTagEntityType.CAMPAIGN, [uuid]);
     return { uuid };
   }
 
@@ -262,6 +297,13 @@ export class MarketingCampaignsService {
         }),
     };
 
+    const tagWhere = await this.orgTags.buildWhere(
+      organisation_uuid,
+      OrgTagEntityType.CAMPAIGN,
+      query,
+    );
+    if (tagWhere) where.uuid = tagWhere.uuid;
+
     const [data, total] = await Promise.all([
       this.prisma.marketingCampaign.findMany({
         where,
@@ -273,7 +315,11 @@ export class MarketingCampaignsService {
     ]);
 
     return {
-      data,
+      data: await this.orgTags.withTags(
+        organisation_uuid,
+        OrgTagEntityType.CAMPAIGN,
+        data,
+      ),
       total,
       page,
       limit,
@@ -281,11 +327,11 @@ export class MarketingCampaignsService {
     };
   }
 
-  async findOne(
-    organisation_uuid: string,
-    uuid: string,
-  ): Promise<MarketingCampaign> {
-    return this.requireOwned(organisation_uuid, uuid);
+  async findOne(organisation_uuid: string, uuid: string) {
+    return this.withTags(
+      organisation_uuid,
+      await this.requireOwned(organisation_uuid, uuid),
+    );
   }
 
   async listContacts(
@@ -845,12 +891,9 @@ export class MarketingCampaignsService {
     return this.start(organisation_uuid, uuid);
   }
 
-  async duplicate(
-    organisation_uuid: string,
-    uuid: string,
-  ): Promise<MarketingCampaign> {
+  async duplicate(organisation_uuid: string, uuid: string) {
     const campaign = await this.requireOwned(organisation_uuid, uuid);
-    return this.prisma.marketingCampaign.create({
+    const copy = await this.prisma.marketingCampaign.create({
       data: {
         organisation_uuid,
         name: `Copy of ${campaign.name}`,
@@ -868,6 +911,21 @@ export class MarketingCampaignsService {
         filters_snapshot: campaign.filters_snapshot ?? Prisma.JsonNull,
       },
     });
+    const tags = await this.orgTags.getTagsForEntities(
+      organisation_uuid,
+      OrgTagEntityType.CAMPAIGN,
+      [uuid],
+    );
+    const tagUuids = (tags.get(uuid) ?? []).map((t) => t.uuid);
+    if (tagUuids.length) {
+      await this.orgTags.setTags(
+        organisation_uuid,
+        OrgTagEntityType.CAMPAIGN,
+        copy.uuid,
+        tagUuids,
+      );
+    }
+    return this.withTags(organisation_uuid, copy);
   }
 
   async rerun(

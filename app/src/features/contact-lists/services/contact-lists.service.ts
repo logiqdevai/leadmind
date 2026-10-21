@@ -1,6 +1,7 @@
 import axiosInstance from "@/config/api/axios";
 import { ApiRoutes } from "@/config/api/routes";
 import { buildContactListApiParams } from "@/lib/contact-filter-params";
+import { toTagParams } from "@/features/org-tags/lib/tag-query";
 import { readBlobErrorMessage } from "@/lib/download-file";
 import type {
     AddListContactsBelowScoreResult,
@@ -27,7 +28,7 @@ export const listContactLists = async (
     query: ListContactListsQuery = {},
 ): Promise<PaginatedContactLists> => {
     try {
-        const response = await axiosInstance.get(ApiRoutes.contact_lists.list, { params: query });
+        const response = await axiosInstance.get(ApiRoutes.contact_lists.list, { params: toTagParams(query) });
         return response.data;
     } catch (error: any) {
         throw new Error(error?.response?.data?.message || "Failed to load contact lists.");

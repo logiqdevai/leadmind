@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { BullModule } from '@nestjs/bullmq';
 import { PrismaModule } from '@/core/databases/prisma/prisma.module';
 import { ScoringInstructionsModule } from '@/modules/scoring-instructions/scoring-instructions.module';
+import { OrgTagsModule } from '@/modules/org-tags/org-tags.module';
 import { ApifyModule } from '@/integrations/apify/apify.module';
 import { FILTER_SCRAPE_QUEUE } from '@/core/queues/queues.constants';
 import { FiltersService } from './filters.service';
@@ -14,6 +15,7 @@ import { ContactAudienceStatsModule } from '@/modules/contact-audience-stats/con
         ScoringInstructionsModule,
         ContactAudienceStatsModule,
         ApifyModule,
+        OrgTagsModule,
         BullModule.registerQueue({ name: FILTER_SCRAPE_QUEUE }),
     ],
     controllers: [FiltersController],

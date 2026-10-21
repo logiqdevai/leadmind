@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Button, Input } from "@heroui/react";
 import { List, Plus, Search } from "lucide-react";
+import { TagFilterBar } from "@/components/tags/tag-filter-bar";
+import { useTagFilterParams } from "@/components/tags/use-tag-filter-params";
 import { useContactLists } from "@/features/contact-lists/hooks/use-contact-lists";
 import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import { ContactListsTable } from "./components/contact-lists-table";
@@ -26,12 +28,16 @@ export default function ListsPage() {
     };
 
     const debouncedSearch = useDebouncedValue(search, 300);
+    const { state: tagFilter, setState: setTagFilter, query: tagQuery, isActive: tagFilterActive } =
+        useTagFilterParams();
 
     const { data: listsPage, isLoading, isFetching } = useContactLists({
         page,
         limit: PAGE_SIZE,
         search: debouncedSearch || undefined,
-        root_only: true,
+        // Tag filters search the whole tree: a tagged sublist should be findable without opening its parent.
+        root_only: tagFilterActive ? undefined : true,
+        ...tagQuery,
     });
 
     const lists = listsPage?.data ?? [];
@@ -51,15 +57,18 @@ export default function ListsPage() {
                 </Button>
             </div>
 
-            <div className="relative max-w-sm">
-                <Search className="size-4 text-muted absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-                <Input
-                    placeholder="Search lists…"
-                    className="pl-9"
-                    value={search}
-                    onChange={(e) => updateParams({ search: e.target.value, page: "1" })}
-                    fullWidth
-                />
+            <div className="flex flex-wrap items-center gap-2">
+                <div className="relative w-full max-w-sm">
+                    <Search className="size-4 text-muted absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                    <Input
+                        placeholder="Search lists…"
+                        className="pl-9"
+                        value={search}
+                        onChange={(e) => updateParams({ search: e.target.value, page: "1" })}
+                        fullWidth
+                    />
+                </div>
+                <TagFilterBar entityType="CONTACT_LIST" value={tagFilter} onChange={setTagFilter} />
             </div>
 
             <ContactListsTable

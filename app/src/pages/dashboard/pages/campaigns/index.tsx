@@ -15,16 +15,25 @@ import type {
 import { CampaignStatuses } from "@/features/marketing-campaigns/interfaces/campaign.interface";
 import { useContactTags } from "@/features/contacts/hooks/use-contacts";
 import { MultiSelect } from "@/components/ui/multi-select";
+import { TagChips } from "@/components/tags/tag-chips";
+import { TagFilterBar } from "@/components/tags/tag-filter-bar";
+import { useTagFilterParams } from "@/components/tags/use-tag-filter-params";
+import { TablePagination } from "@/components/ui/table-pagination";
 import { Routes } from "@/routes/routes";
 import { CampaignStatusBadge } from "./components/campaign-status-badge";
 import { CampaignActionsDropdown } from "./components/campaign-actions-dropdown";
 import { MobileListFilters } from "@/components/ui/mobile-list-filters";
+
+const PAGE_SIZE = 20;
 
 export default function CampaignsPage() {
     const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
 
     const search = searchParams.get("search") ?? "";
+    const page = Math.max(1, Number(searchParams.get("page") ?? 1));
+    const { state: tagFilter, setState: setTagFilter, query: tagQuery, isActive: tagFilterActive } =
+        useTagFilterParams();
     const tagsParam = searchParams.get("tags") ?? "";
     const tags = useMemo(
         () => tagsParam.split(",").map((t) => t.trim()).filter(Boolean),
@@ -42,10 +51,12 @@ export default function CampaignsPage() {
         setSearchParams(params, { replace: true });
     };
 
-    const { data, isLoading } = useCampaigns({
+    const { data, isLoading, isFetching } = useCampaigns({
         search: search || undefined,
         tags: tags.length > 0 ? tags : undefined,
-        limit: 50,
+        page,
+        limit: PAGE_SIZE,
+        ...tagQuery,
     });
 
     return (
@@ -73,40 +84,63 @@ export default function CampaignsPage() {
                             className="pl-9"
                             placeholder="Search by name or description"
                             value={search}
-                            onChange={(e) => updateParams({ search: e.target.value || null })}
+                            onChange={(e) => updateParams({ search: e.target.value || null, page: null })}
                         />
                     </TextField>
                 </div>
                 }
                 extras={
-                    availableTags.length > 0 ? (
-                    <div className="w-full sm:w-60">
-                        <MultiSelect
-                            options={availableTags}
-                            value={tags}
-                            onChange={(next) =>
-                                updateParams({ tags: next.length > 0 ? next.join(",") : null })
-                            }
-                            placeholder="Filter by tags"
-                            aria-label="Filter campaigns by tags"
-                        />
-                    </div>
-                    ) : null
+                    <>
+                        <TagFilterBar entityType="CAMPAIGN" value={tagFilter} onChange={setTagFilter} />
+                        {availableTags.length > 0 ? (
+                            <div className="w-full sm:w-60">
+                                <MultiSelect
+                                    options={availableTags}
+                                    value={tags}
+                                    onChange={(next) =>
+                                        updateParams({ tags: next.length > 0 ? next.join(",") : null, page: null })
+                                    }
+                                    placeholder="Filter by contact tags"
+                                    aria-label="Filter campaigns by the contact tags they target"
+                                />
+                            </div>
+                        ) : null}
+                    </>
                 }
             />
 
             {isLoading ? (
                 <SkeletonRows />
             ) : !data || data.data.length === 0 ? (
-                <EmptyState onCreate={() => navigate(Routes.dashboard.campaigns_new)} />
+                search || tags.length > 0 || tagFilterActive ? (
+                    <div className="rounded-xl border border-dashed border-border bg-surface-secondary/40 p-10 text-center text-sm text-muted">
+                        No campaigns match your search or filters.
+                    </div>
+                ) : (
+                    <EmptyState onCreate={() => navigate(Routes.dashboard.campaigns_new)} />
+                )
             ) : (
-                <ul className="grid gap-3">
-                    {data.data.map((c) => (
-                        <li key={c.uuid}>
-                            <CampaignRow campaign={c} />
-                        </li>
-                    ))}
-                </ul>
+                <>
+                    <ul className="grid gap-3">
+                        {data.data.map((c) => (
+                            <li key={c.uuid}>
+                                <CampaignRow campaign={c} />
+                            </li>
+                        ))}
+                    </ul>
+                    {data.total > PAGE_SIZE && (
+                        <TablePagination
+                            page={page}
+                            totalPages={data.totalPages}
+                            total={data.total}
+                            pageSize={PAGE_SIZE}
+                            onPageChange={(p) => updateParams({ page: String(p) })}
+                            isFetching={isFetching}
+                            isLoading={isLoading}
+                            label="campaigns"
+                        />
+                    )}
+                </>
             )}
         </div>
     );
@@ -135,6 +169,7 @@ function CampaignRow({ campaign }: { campaign: MarketingCampaign }) {
                             </Chip>
                         ))}
                     </div>
+                    <TagChips tags={campaign.tags} max={4} className="mt-1" />
                     {campaign.description && (
                         <p className="text-xs text-muted truncate mt-0.5">
                             {campaign.description}

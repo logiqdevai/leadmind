@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsBoolean, IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
+import { IsArray, IsBoolean, IsOptional, IsString, IsUUID, MaxLength, MinLength } from 'class-validator';
 
 export class CreateSequenceDto {
     @ApiProperty({ minLength: 1, maxLength: 120 })
@@ -22,4 +22,14 @@ export class CreateSequenceDto {
     @IsOptional()
     @IsBoolean()
     stop_on_reply?: boolean;
+
+    @ApiPropertyOptional({
+        type: [String],
+        description:
+            'Organisation tag UUIDs to group this sequence under. On update this replaces the full set (empty array clears).',
+    })
+    @IsOptional()
+    @IsArray()
+    @IsUUID('all', { each: true })
+    tag_uuids?: string[];
 }

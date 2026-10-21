@@ -19,6 +19,16 @@ import { CampaignFiltersDto } from './campaign-filters.dto';
 
 export class CreateCampaignDto {
   @ApiPropertyOptional({
+    type: [String],
+    description:
+      'Organisation tag UUIDs to group this campaign under. On update this replaces the full set (empty array clears) and works in any status.',
+  })
+  @IsOptional()
+  @IsArray()
+  @IsUUID('all', { each: true })
+  tag_uuids?: string[];
+
+  @ApiPropertyOptional({
     enum: CampaignType,
     description: 'STANDARD (template) or PERSONALIZED (AI draft per contact)',
   })

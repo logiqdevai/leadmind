@@ -333,6 +333,16 @@ export type OAuthConnection = $Result.DefaultSelection<Prisma.$OAuthConnectionPa
  * 
  */
 export type McpToolInvocationLog = $Result.DefaultSelection<Prisma.$McpToolInvocationLogPayload>
+/**
+ * Model OrgTag
+ * 
+ */
+export type OrgTag = $Result.DefaultSelection<Prisma.$OrgTagPayload>
+/**
+ * Model OrgTagAssignment
+ * 
+ */
+export type OrgTagAssignment = $Result.DefaultSelection<Prisma.$OrgTagAssignmentPayload>
 
 /**
  * Enums
@@ -928,6 +938,16 @@ export const OAuthConnectionStatus: {
 
 export type OAuthConnectionStatus = (typeof OAuthConnectionStatus)[keyof typeof OAuthConnectionStatus]
 
+
+export const OrgTagEntityType: {
+  CONTACT_LIST: 'CONTACT_LIST',
+  SEQUENCE: 'SEQUENCE',
+  CAMPAIGN: 'CAMPAIGN',
+  FILTER: 'FILTER'
+};
+
+export type OrgTagEntityType = (typeof OrgTagEntityType)[keyof typeof OrgTagEntityType]
+
 }
 
 export type ThreadOrigin = $Enums.ThreadOrigin
@@ -1141,6 +1161,10 @@ export const SendingUsageScopeType: typeof $Enums.SendingUsageScopeType
 export type OAuthConnectionStatus = $Enums.OAuthConnectionStatus
 
 export const OAuthConnectionStatus: typeof $Enums.OAuthConnectionStatus
+
+export type OrgTagEntityType = $Enums.OrgTagEntityType
+
+export const OrgTagEntityType: typeof $Enums.OrgTagEntityType
 
 /**
  * ##  Prisma Client ʲˢ
@@ -1878,6 +1902,26 @@ export class PrismaClient<
     * ```
     */
   get mcpToolInvocationLog(): Prisma.McpToolInvocationLogDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.orgTag`: Exposes CRUD operations for the **OrgTag** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more OrgTags
+    * const orgTags = await prisma.orgTag.findMany()
+    * ```
+    */
+  get orgTag(): Prisma.OrgTagDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.orgTagAssignment`: Exposes CRUD operations for the **OrgTagAssignment** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more OrgTagAssignments
+    * const orgTagAssignments = await prisma.orgTagAssignment.findMany()
+    * ```
+    */
+  get orgTagAssignment(): Prisma.OrgTagAssignmentDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -2373,7 +2417,9 @@ export namespace Prisma {
     ActivityLog: 'ActivityLog',
     OAuthModel: 'OAuthModel',
     OAuthConnection: 'OAuthConnection',
-    McpToolInvocationLog: 'McpToolInvocationLog'
+    McpToolInvocationLog: 'McpToolInvocationLog',
+    OrgTag: 'OrgTag',
+    OrgTagAssignment: 'OrgTagAssignment'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -2389,7 +2435,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "organisation" | "organisationMember" | "organisationInvitation" | "apiKey" | "filter" | "savedContactFilter" | "sidebarFavorite" | "scoringInstruction" | "filterScoringInstruction" | "rawLead" | "lead" | "leadEnrichment" | "contact" | "contactInfo" | "contactFilter" | "contactEnrichment" | "contactScore" | "contactList" | "contactListMember" | "contactTag" | "interaction" | "outreachMessage" | "messageThread" | "outreachSequence" | "outreachSequenceStep" | "sequenceEnrollment" | "filterJob" | "bulkJob" | "websiteScrapeRequest" | "senderProfile" | "messageTemplate" | "marketingCampaign" | "marketingCampaignContact" | "openAiBatchJob" | "integration" | "integrationAccount" | "integrationKey" | "integrationAccountDomain" | "mailTesterTest" | "mxToolboxCheck" | "reminder" | "form" | "formField" | "formCompletion" | "formCompletionValue" | "contactAudienceAnalysis" | "aiUsageLog" | "apifyUsageLog" | "messagingGoal" | "emailSendLimit" | "sendingPolicy" | "sendingPolicyStage" | "campaignIntegration" | "campaignIntegrationState" | "sendingUsageCounter" | "goalAchievement" | "goalPersonalBest" | "activityLog" | "oAuthModel" | "oAuthConnection" | "mcpToolInvocationLog"
+      modelProps: "user" | "organisation" | "organisationMember" | "organisationInvitation" | "apiKey" | "filter" | "savedContactFilter" | "sidebarFavorite" | "scoringInstruction" | "filterScoringInstruction" | "rawLead" | "lead" | "leadEnrichment" | "contact" | "contactInfo" | "contactFilter" | "contactEnrichment" | "contactScore" | "contactList" | "contactListMember" | "contactTag" | "interaction" | "outreachMessage" | "messageThread" | "outreachSequence" | "outreachSequenceStep" | "sequenceEnrollment" | "filterJob" | "bulkJob" | "websiteScrapeRequest" | "senderProfile" | "messageTemplate" | "marketingCampaign" | "marketingCampaignContact" | "openAiBatchJob" | "integration" | "integrationAccount" | "integrationKey" | "integrationAccountDomain" | "mailTesterTest" | "mxToolboxCheck" | "reminder" | "form" | "formField" | "formCompletion" | "formCompletionValue" | "contactAudienceAnalysis" | "aiUsageLog" | "apifyUsageLog" | "messagingGoal" | "emailSendLimit" | "sendingPolicy" | "sendingPolicyStage" | "campaignIntegration" | "campaignIntegrationState" | "sendingUsageCounter" | "goalAchievement" | "goalPersonalBest" | "activityLog" | "oAuthModel" | "oAuthConnection" | "mcpToolInvocationLog" | "orgTag" | "orgTagAssignment"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -6981,6 +7027,154 @@ export namespace Prisma {
           }
         }
       }
+      OrgTag: {
+        payload: Prisma.$OrgTagPayload<ExtArgs>
+        fields: Prisma.OrgTagFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.OrgTagFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrgTagPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.OrgTagFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrgTagPayload>
+          }
+          findFirst: {
+            args: Prisma.OrgTagFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrgTagPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.OrgTagFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrgTagPayload>
+          }
+          findMany: {
+            args: Prisma.OrgTagFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrgTagPayload>[]
+          }
+          create: {
+            args: Prisma.OrgTagCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrgTagPayload>
+          }
+          createMany: {
+            args: Prisma.OrgTagCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.OrgTagCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrgTagPayload>[]
+          }
+          delete: {
+            args: Prisma.OrgTagDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrgTagPayload>
+          }
+          update: {
+            args: Prisma.OrgTagUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrgTagPayload>
+          }
+          deleteMany: {
+            args: Prisma.OrgTagDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.OrgTagUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.OrgTagUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrgTagPayload>[]
+          }
+          upsert: {
+            args: Prisma.OrgTagUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrgTagPayload>
+          }
+          aggregate: {
+            args: Prisma.OrgTagAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateOrgTag>
+          }
+          groupBy: {
+            args: Prisma.OrgTagGroupByArgs<ExtArgs>
+            result: $Utils.Optional<OrgTagGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.OrgTagCountArgs<ExtArgs>
+            result: $Utils.Optional<OrgTagCountAggregateOutputType> | number
+          }
+        }
+      }
+      OrgTagAssignment: {
+        payload: Prisma.$OrgTagAssignmentPayload<ExtArgs>
+        fields: Prisma.OrgTagAssignmentFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.OrgTagAssignmentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrgTagAssignmentPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.OrgTagAssignmentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrgTagAssignmentPayload>
+          }
+          findFirst: {
+            args: Prisma.OrgTagAssignmentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrgTagAssignmentPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.OrgTagAssignmentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrgTagAssignmentPayload>
+          }
+          findMany: {
+            args: Prisma.OrgTagAssignmentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrgTagAssignmentPayload>[]
+          }
+          create: {
+            args: Prisma.OrgTagAssignmentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrgTagAssignmentPayload>
+          }
+          createMany: {
+            args: Prisma.OrgTagAssignmentCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.OrgTagAssignmentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrgTagAssignmentPayload>[]
+          }
+          delete: {
+            args: Prisma.OrgTagAssignmentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrgTagAssignmentPayload>
+          }
+          update: {
+            args: Prisma.OrgTagAssignmentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrgTagAssignmentPayload>
+          }
+          deleteMany: {
+            args: Prisma.OrgTagAssignmentDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.OrgTagAssignmentUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.OrgTagAssignmentUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrgTagAssignmentPayload>[]
+          }
+          upsert: {
+            args: Prisma.OrgTagAssignmentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrgTagAssignmentPayload>
+          }
+          aggregate: {
+            args: Prisma.OrgTagAssignmentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateOrgTagAssignment>
+          }
+          groupBy: {
+            args: Prisma.OrgTagAssignmentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<OrgTagAssignmentGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.OrgTagAssignmentCountArgs<ExtArgs>
+            result: $Utils.Optional<OrgTagAssignmentCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -7151,6 +7345,8 @@ export namespace Prisma {
     oAuthModel?: OAuthModelOmit
     oAuthConnection?: OAuthConnectionOmit
     mcpToolInvocationLog?: McpToolInvocationLogOmit
+    orgTag?: OrgTagOmit
+    orgTagAssignment?: OrgTagAssignmentOmit
   }
 
   /* Types for Logging */
@@ -7393,6 +7589,7 @@ export namespace Prisma {
     message_templates: number
     activity_logs: number
     messaging_goals: number
+    org_tags: number
     goal_achievements: number
     goal_personal_bests: number
     bulk_jobs: number
@@ -7430,6 +7627,7 @@ export namespace Prisma {
     message_templates?: boolean | OrganisationCountOutputTypeCountMessage_templatesArgs
     activity_logs?: boolean | OrganisationCountOutputTypeCountActivity_logsArgs
     messaging_goals?: boolean | OrganisationCountOutputTypeCountMessaging_goalsArgs
+    org_tags?: boolean | OrganisationCountOutputTypeCountOrg_tagsArgs
     goal_achievements?: boolean | OrganisationCountOutputTypeCountGoal_achievementsArgs
     goal_personal_bests?: boolean | OrganisationCountOutputTypeCountGoal_personal_bestsArgs
     bulk_jobs?: boolean | OrganisationCountOutputTypeCountBulk_jobsArgs
@@ -7613,6 +7811,13 @@ export namespace Prisma {
    */
   export type OrganisationCountOutputTypeCountMessaging_goalsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: MessagingGoalWhereInput
+  }
+
+  /**
+   * OrganisationCountOutputType without action
+   */
+  export type OrganisationCountOutputTypeCountOrg_tagsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OrgTagWhereInput
   }
 
   /**
@@ -8696,6 +8901,37 @@ export namespace Prisma {
    */
   export type CampaignIntegrationCountOutputTypeCountOutreach_messagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: OutreachMessageWhereInput
+  }
+
+
+  /**
+   * Count Type OrgTagCountOutputType
+   */
+
+  export type OrgTagCountOutputType = {
+    assignments: number
+  }
+
+  export type OrgTagCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    assignments?: boolean | OrgTagCountOutputTypeCountAssignmentsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * OrgTagCountOutputType without action
+   */
+  export type OrgTagCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrgTagCountOutputType
+     */
+    select?: OrgTagCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * OrgTagCountOutputType without action
+   */
+  export type OrgTagCountOutputTypeCountAssignmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OrgTagAssignmentWhereInput
   }
 
 
@@ -10448,6 +10684,7 @@ export namespace Prisma {
     message_templates?: boolean | Organisation$message_templatesArgs<ExtArgs>
     activity_logs?: boolean | Organisation$activity_logsArgs<ExtArgs>
     messaging_goals?: boolean | Organisation$messaging_goalsArgs<ExtArgs>
+    org_tags?: boolean | Organisation$org_tagsArgs<ExtArgs>
     goal_achievements?: boolean | Organisation$goal_achievementsArgs<ExtArgs>
     goal_personal_bests?: boolean | Organisation$goal_personal_bestsArgs<ExtArgs>
     bulk_jobs?: boolean | Organisation$bulk_jobsArgs<ExtArgs>
@@ -10523,6 +10760,7 @@ export namespace Prisma {
     message_templates?: boolean | Organisation$message_templatesArgs<ExtArgs>
     activity_logs?: boolean | Organisation$activity_logsArgs<ExtArgs>
     messaging_goals?: boolean | Organisation$messaging_goalsArgs<ExtArgs>
+    org_tags?: boolean | Organisation$org_tagsArgs<ExtArgs>
     goal_achievements?: boolean | Organisation$goal_achievementsArgs<ExtArgs>
     goal_personal_bests?: boolean | Organisation$goal_personal_bestsArgs<ExtArgs>
     bulk_jobs?: boolean | Organisation$bulk_jobsArgs<ExtArgs>
@@ -10565,6 +10803,7 @@ export namespace Prisma {
       message_templates: Prisma.$MessageTemplatePayload<ExtArgs>[]
       activity_logs: Prisma.$ActivityLogPayload<ExtArgs>[]
       messaging_goals: Prisma.$MessagingGoalPayload<ExtArgs>[]
+      org_tags: Prisma.$OrgTagPayload<ExtArgs>[]
       goal_achievements: Prisma.$GoalAchievementPayload<ExtArgs>[]
       goal_personal_bests: Prisma.$GoalPersonalBestPayload<ExtArgs>[]
       bulk_jobs: Prisma.$BulkJobPayload<ExtArgs>[]
@@ -11004,6 +11243,7 @@ export namespace Prisma {
     message_templates<T extends Organisation$message_templatesArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$message_templatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessageTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     activity_logs<T extends Organisation$activity_logsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$activity_logsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ActivityLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     messaging_goals<T extends Organisation$messaging_goalsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$messaging_goalsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessagingGoalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    org_tags<T extends Organisation$org_tagsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$org_tagsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrgTagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     goal_achievements<T extends Organisation$goal_achievementsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$goal_achievementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GoalAchievementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     goal_personal_bests<T extends Organisation$goal_personal_bestsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$goal_personal_bestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GoalPersonalBestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     bulk_jobs<T extends Organisation$bulk_jobsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$bulk_jobsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BulkJobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -11990,6 +12230,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: MessagingGoalScalarFieldEnum | MessagingGoalScalarFieldEnum[]
+  }
+
+  /**
+   * Organisation.org_tags
+   */
+  export type Organisation$org_tagsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrgTag
+     */
+    select?: OrgTagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrgTag
+     */
+    omit?: OrgTagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrgTagInclude<ExtArgs> | null
+    where?: OrgTagWhereInput
+    orderBy?: OrgTagOrderByWithRelationInput | OrgTagOrderByWithRelationInput[]
+    cursor?: OrgTagWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: OrgTagScalarFieldEnum | OrgTagScalarFieldEnum[]
   }
 
   /**
@@ -86256,6 +86520,2259 @@ export namespace Prisma {
 
 
   /**
+   * Model OrgTag
+   */
+
+  export type AggregateOrgTag = {
+    _count: OrgTagCountAggregateOutputType | null
+    _avg: OrgTagAvgAggregateOutputType | null
+    _sum: OrgTagSumAggregateOutputType | null
+    _min: OrgTagMinAggregateOutputType | null
+    _max: OrgTagMaxAggregateOutputType | null
+  }
+
+  export type OrgTagAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type OrgTagSumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type OrgTagMinAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    organisation_uuid: string | null
+    name: string | null
+    color: string | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type OrgTagMaxAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    organisation_uuid: string | null
+    name: string | null
+    color: string | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type OrgTagCountAggregateOutputType = {
+    id: number
+    uuid: number
+    organisation_uuid: number
+    name: number
+    color: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type OrgTagAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type OrgTagSumAggregateInputType = {
+    id?: true
+  }
+
+  export type OrgTagMinAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    name?: true
+    color?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type OrgTagMaxAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    name?: true
+    color?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type OrgTagCountAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    name?: true
+    color?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type OrgTagAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which OrgTag to aggregate.
+     */
+    where?: OrgTagWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OrgTags to fetch.
+     */
+    orderBy?: OrgTagOrderByWithRelationInput | OrgTagOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: OrgTagWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OrgTags from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OrgTags.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned OrgTags
+    **/
+    _count?: true | OrgTagCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: OrgTagAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: OrgTagSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: OrgTagMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: OrgTagMaxAggregateInputType
+  }
+
+  export type GetOrgTagAggregateType<T extends OrgTagAggregateArgs> = {
+        [P in keyof T & keyof AggregateOrgTag]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateOrgTag[P]>
+      : GetScalarType<T[P], AggregateOrgTag[P]>
+  }
+
+
+
+
+  export type OrgTagGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OrgTagWhereInput
+    orderBy?: OrgTagOrderByWithAggregationInput | OrgTagOrderByWithAggregationInput[]
+    by: OrgTagScalarFieldEnum[] | OrgTagScalarFieldEnum
+    having?: OrgTagScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: OrgTagCountAggregateInputType | true
+    _avg?: OrgTagAvgAggregateInputType
+    _sum?: OrgTagSumAggregateInputType
+    _min?: OrgTagMinAggregateInputType
+    _max?: OrgTagMaxAggregateInputType
+  }
+
+  export type OrgTagGroupByOutputType = {
+    id: number
+    uuid: string
+    organisation_uuid: string
+    name: string
+    color: string | null
+    created_at: Date
+    updated_at: Date
+    _count: OrgTagCountAggregateOutputType | null
+    _avg: OrgTagAvgAggregateOutputType | null
+    _sum: OrgTagSumAggregateOutputType | null
+    _min: OrgTagMinAggregateOutputType | null
+    _max: OrgTagMaxAggregateOutputType | null
+  }
+
+  type GetOrgTagGroupByPayload<T extends OrgTagGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<OrgTagGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof OrgTagGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], OrgTagGroupByOutputType[P]>
+            : GetScalarType<T[P], OrgTagGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type OrgTagSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    name?: boolean
+    color?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    assignments?: boolean | OrgTag$assignmentsArgs<ExtArgs>
+    _count?: boolean | OrgTagCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["orgTag"]>
+
+  export type OrgTagSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    name?: boolean
+    color?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["orgTag"]>
+
+  export type OrgTagSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    name?: boolean
+    color?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["orgTag"]>
+
+  export type OrgTagSelectScalar = {
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    name?: boolean
+    color?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type OrgTagOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "name" | "color" | "created_at" | "updated_at", ExtArgs["result"]["orgTag"]>
+  export type OrgTagInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    assignments?: boolean | OrgTag$assignmentsArgs<ExtArgs>
+    _count?: boolean | OrgTagCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type OrgTagIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }
+  export type OrgTagIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }
+
+  export type $OrgTagPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "OrgTag"
+    objects: {
+      organisation: Prisma.$OrganisationPayload<ExtArgs>
+      assignments: Prisma.$OrgTagAssignmentPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      uuid: string
+      organisation_uuid: string
+      name: string
+      color: string | null
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["orgTag"]>
+    composites: {}
+  }
+
+  type OrgTagGetPayload<S extends boolean | null | undefined | OrgTagDefaultArgs> = $Result.GetResult<Prisma.$OrgTagPayload, S>
+
+  type OrgTagCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<OrgTagFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: OrgTagCountAggregateInputType | true
+    }
+
+  export interface OrgTagDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['OrgTag'], meta: { name: 'OrgTag' } }
+    /**
+     * Find zero or one OrgTag that matches the filter.
+     * @param {OrgTagFindUniqueArgs} args - Arguments to find a OrgTag
+     * @example
+     * // Get one OrgTag
+     * const orgTag = await prisma.orgTag.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends OrgTagFindUniqueArgs>(args: SelectSubset<T, OrgTagFindUniqueArgs<ExtArgs>>): Prisma__OrgTagClient<$Result.GetResult<Prisma.$OrgTagPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one OrgTag that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {OrgTagFindUniqueOrThrowArgs} args - Arguments to find a OrgTag
+     * @example
+     * // Get one OrgTag
+     * const orgTag = await prisma.orgTag.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends OrgTagFindUniqueOrThrowArgs>(args: SelectSubset<T, OrgTagFindUniqueOrThrowArgs<ExtArgs>>): Prisma__OrgTagClient<$Result.GetResult<Prisma.$OrgTagPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first OrgTag that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrgTagFindFirstArgs} args - Arguments to find a OrgTag
+     * @example
+     * // Get one OrgTag
+     * const orgTag = await prisma.orgTag.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends OrgTagFindFirstArgs>(args?: SelectSubset<T, OrgTagFindFirstArgs<ExtArgs>>): Prisma__OrgTagClient<$Result.GetResult<Prisma.$OrgTagPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first OrgTag that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrgTagFindFirstOrThrowArgs} args - Arguments to find a OrgTag
+     * @example
+     * // Get one OrgTag
+     * const orgTag = await prisma.orgTag.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends OrgTagFindFirstOrThrowArgs>(args?: SelectSubset<T, OrgTagFindFirstOrThrowArgs<ExtArgs>>): Prisma__OrgTagClient<$Result.GetResult<Prisma.$OrgTagPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more OrgTags that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrgTagFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all OrgTags
+     * const orgTags = await prisma.orgTag.findMany()
+     * 
+     * // Get first 10 OrgTags
+     * const orgTags = await prisma.orgTag.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const orgTagWithIdOnly = await prisma.orgTag.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends OrgTagFindManyArgs>(args?: SelectSubset<T, OrgTagFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrgTagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a OrgTag.
+     * @param {OrgTagCreateArgs} args - Arguments to create a OrgTag.
+     * @example
+     * // Create one OrgTag
+     * const OrgTag = await prisma.orgTag.create({
+     *   data: {
+     *     // ... data to create a OrgTag
+     *   }
+     * })
+     * 
+     */
+    create<T extends OrgTagCreateArgs>(args: SelectSubset<T, OrgTagCreateArgs<ExtArgs>>): Prisma__OrgTagClient<$Result.GetResult<Prisma.$OrgTagPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many OrgTags.
+     * @param {OrgTagCreateManyArgs} args - Arguments to create many OrgTags.
+     * @example
+     * // Create many OrgTags
+     * const orgTag = await prisma.orgTag.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends OrgTagCreateManyArgs>(args?: SelectSubset<T, OrgTagCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many OrgTags and returns the data saved in the database.
+     * @param {OrgTagCreateManyAndReturnArgs} args - Arguments to create many OrgTags.
+     * @example
+     * // Create many OrgTags
+     * const orgTag = await prisma.orgTag.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many OrgTags and only return the `id`
+     * const orgTagWithIdOnly = await prisma.orgTag.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends OrgTagCreateManyAndReturnArgs>(args?: SelectSubset<T, OrgTagCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrgTagPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a OrgTag.
+     * @param {OrgTagDeleteArgs} args - Arguments to delete one OrgTag.
+     * @example
+     * // Delete one OrgTag
+     * const OrgTag = await prisma.orgTag.delete({
+     *   where: {
+     *     // ... filter to delete one OrgTag
+     *   }
+     * })
+     * 
+     */
+    delete<T extends OrgTagDeleteArgs>(args: SelectSubset<T, OrgTagDeleteArgs<ExtArgs>>): Prisma__OrgTagClient<$Result.GetResult<Prisma.$OrgTagPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one OrgTag.
+     * @param {OrgTagUpdateArgs} args - Arguments to update one OrgTag.
+     * @example
+     * // Update one OrgTag
+     * const orgTag = await prisma.orgTag.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends OrgTagUpdateArgs>(args: SelectSubset<T, OrgTagUpdateArgs<ExtArgs>>): Prisma__OrgTagClient<$Result.GetResult<Prisma.$OrgTagPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more OrgTags.
+     * @param {OrgTagDeleteManyArgs} args - Arguments to filter OrgTags to delete.
+     * @example
+     * // Delete a few OrgTags
+     * const { count } = await prisma.orgTag.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends OrgTagDeleteManyArgs>(args?: SelectSubset<T, OrgTagDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more OrgTags.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrgTagUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many OrgTags
+     * const orgTag = await prisma.orgTag.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends OrgTagUpdateManyArgs>(args: SelectSubset<T, OrgTagUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more OrgTags and returns the data updated in the database.
+     * @param {OrgTagUpdateManyAndReturnArgs} args - Arguments to update many OrgTags.
+     * @example
+     * // Update many OrgTags
+     * const orgTag = await prisma.orgTag.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more OrgTags and only return the `id`
+     * const orgTagWithIdOnly = await prisma.orgTag.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends OrgTagUpdateManyAndReturnArgs>(args: SelectSubset<T, OrgTagUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrgTagPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one OrgTag.
+     * @param {OrgTagUpsertArgs} args - Arguments to update or create a OrgTag.
+     * @example
+     * // Update or create a OrgTag
+     * const orgTag = await prisma.orgTag.upsert({
+     *   create: {
+     *     // ... data to create a OrgTag
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the OrgTag we want to update
+     *   }
+     * })
+     */
+    upsert<T extends OrgTagUpsertArgs>(args: SelectSubset<T, OrgTagUpsertArgs<ExtArgs>>): Prisma__OrgTagClient<$Result.GetResult<Prisma.$OrgTagPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of OrgTags.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrgTagCountArgs} args - Arguments to filter OrgTags to count.
+     * @example
+     * // Count the number of OrgTags
+     * const count = await prisma.orgTag.count({
+     *   where: {
+     *     // ... the filter for the OrgTags we want to count
+     *   }
+     * })
+    **/
+    count<T extends OrgTagCountArgs>(
+      args?: Subset<T, OrgTagCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], OrgTagCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a OrgTag.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrgTagAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends OrgTagAggregateArgs>(args: Subset<T, OrgTagAggregateArgs>): Prisma.PrismaPromise<GetOrgTagAggregateType<T>>
+
+    /**
+     * Group by OrgTag.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrgTagGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends OrgTagGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: OrgTagGroupByArgs['orderBy'] }
+        : { orderBy?: OrgTagGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, OrgTagGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetOrgTagGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the OrgTag model
+   */
+  readonly fields: OrgTagFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for OrgTag.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__OrgTagClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    organisation<T extends OrganisationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganisationDefaultArgs<ExtArgs>>): Prisma__OrganisationClient<$Result.GetResult<Prisma.$OrganisationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    assignments<T extends OrgTag$assignmentsArgs<ExtArgs> = {}>(args?: Subset<T, OrgTag$assignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrgTagAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the OrgTag model
+   */
+  interface OrgTagFieldRefs {
+    readonly id: FieldRef<"OrgTag", 'Int'>
+    readonly uuid: FieldRef<"OrgTag", 'String'>
+    readonly organisation_uuid: FieldRef<"OrgTag", 'String'>
+    readonly name: FieldRef<"OrgTag", 'String'>
+    readonly color: FieldRef<"OrgTag", 'String'>
+    readonly created_at: FieldRef<"OrgTag", 'DateTime'>
+    readonly updated_at: FieldRef<"OrgTag", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * OrgTag findUnique
+   */
+  export type OrgTagFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrgTag
+     */
+    select?: OrgTagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrgTag
+     */
+    omit?: OrgTagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrgTagInclude<ExtArgs> | null
+    /**
+     * Filter, which OrgTag to fetch.
+     */
+    where: OrgTagWhereUniqueInput
+  }
+
+  /**
+   * OrgTag findUniqueOrThrow
+   */
+  export type OrgTagFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrgTag
+     */
+    select?: OrgTagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrgTag
+     */
+    omit?: OrgTagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrgTagInclude<ExtArgs> | null
+    /**
+     * Filter, which OrgTag to fetch.
+     */
+    where: OrgTagWhereUniqueInput
+  }
+
+  /**
+   * OrgTag findFirst
+   */
+  export type OrgTagFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrgTag
+     */
+    select?: OrgTagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrgTag
+     */
+    omit?: OrgTagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrgTagInclude<ExtArgs> | null
+    /**
+     * Filter, which OrgTag to fetch.
+     */
+    where?: OrgTagWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OrgTags to fetch.
+     */
+    orderBy?: OrgTagOrderByWithRelationInput | OrgTagOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for OrgTags.
+     */
+    cursor?: OrgTagWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OrgTags from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OrgTags.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of OrgTags.
+     */
+    distinct?: OrgTagScalarFieldEnum | OrgTagScalarFieldEnum[]
+  }
+
+  /**
+   * OrgTag findFirstOrThrow
+   */
+  export type OrgTagFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrgTag
+     */
+    select?: OrgTagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrgTag
+     */
+    omit?: OrgTagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrgTagInclude<ExtArgs> | null
+    /**
+     * Filter, which OrgTag to fetch.
+     */
+    where?: OrgTagWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OrgTags to fetch.
+     */
+    orderBy?: OrgTagOrderByWithRelationInput | OrgTagOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for OrgTags.
+     */
+    cursor?: OrgTagWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OrgTags from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OrgTags.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of OrgTags.
+     */
+    distinct?: OrgTagScalarFieldEnum | OrgTagScalarFieldEnum[]
+  }
+
+  /**
+   * OrgTag findMany
+   */
+  export type OrgTagFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrgTag
+     */
+    select?: OrgTagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrgTag
+     */
+    omit?: OrgTagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrgTagInclude<ExtArgs> | null
+    /**
+     * Filter, which OrgTags to fetch.
+     */
+    where?: OrgTagWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OrgTags to fetch.
+     */
+    orderBy?: OrgTagOrderByWithRelationInput | OrgTagOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing OrgTags.
+     */
+    cursor?: OrgTagWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OrgTags from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OrgTags.
+     */
+    skip?: number
+    distinct?: OrgTagScalarFieldEnum | OrgTagScalarFieldEnum[]
+  }
+
+  /**
+   * OrgTag create
+   */
+  export type OrgTagCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrgTag
+     */
+    select?: OrgTagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrgTag
+     */
+    omit?: OrgTagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrgTagInclude<ExtArgs> | null
+    /**
+     * The data needed to create a OrgTag.
+     */
+    data: XOR<OrgTagCreateInput, OrgTagUncheckedCreateInput>
+  }
+
+  /**
+   * OrgTag createMany
+   */
+  export type OrgTagCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many OrgTags.
+     */
+    data: OrgTagCreateManyInput | OrgTagCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * OrgTag createManyAndReturn
+   */
+  export type OrgTagCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrgTag
+     */
+    select?: OrgTagSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrgTag
+     */
+    omit?: OrgTagOmit<ExtArgs> | null
+    /**
+     * The data used to create many OrgTags.
+     */
+    data: OrgTagCreateManyInput | OrgTagCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrgTagIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * OrgTag update
+   */
+  export type OrgTagUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrgTag
+     */
+    select?: OrgTagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrgTag
+     */
+    omit?: OrgTagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrgTagInclude<ExtArgs> | null
+    /**
+     * The data needed to update a OrgTag.
+     */
+    data: XOR<OrgTagUpdateInput, OrgTagUncheckedUpdateInput>
+    /**
+     * Choose, which OrgTag to update.
+     */
+    where: OrgTagWhereUniqueInput
+  }
+
+  /**
+   * OrgTag updateMany
+   */
+  export type OrgTagUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update OrgTags.
+     */
+    data: XOR<OrgTagUpdateManyMutationInput, OrgTagUncheckedUpdateManyInput>
+    /**
+     * Filter which OrgTags to update
+     */
+    where?: OrgTagWhereInput
+    /**
+     * Limit how many OrgTags to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * OrgTag updateManyAndReturn
+   */
+  export type OrgTagUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrgTag
+     */
+    select?: OrgTagSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrgTag
+     */
+    omit?: OrgTagOmit<ExtArgs> | null
+    /**
+     * The data used to update OrgTags.
+     */
+    data: XOR<OrgTagUpdateManyMutationInput, OrgTagUncheckedUpdateManyInput>
+    /**
+     * Filter which OrgTags to update
+     */
+    where?: OrgTagWhereInput
+    /**
+     * Limit how many OrgTags to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrgTagIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * OrgTag upsert
+   */
+  export type OrgTagUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrgTag
+     */
+    select?: OrgTagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrgTag
+     */
+    omit?: OrgTagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrgTagInclude<ExtArgs> | null
+    /**
+     * The filter to search for the OrgTag to update in case it exists.
+     */
+    where: OrgTagWhereUniqueInput
+    /**
+     * In case the OrgTag found by the `where` argument doesn't exist, create a new OrgTag with this data.
+     */
+    create: XOR<OrgTagCreateInput, OrgTagUncheckedCreateInput>
+    /**
+     * In case the OrgTag was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<OrgTagUpdateInput, OrgTagUncheckedUpdateInput>
+  }
+
+  /**
+   * OrgTag delete
+   */
+  export type OrgTagDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrgTag
+     */
+    select?: OrgTagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrgTag
+     */
+    omit?: OrgTagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrgTagInclude<ExtArgs> | null
+    /**
+     * Filter which OrgTag to delete.
+     */
+    where: OrgTagWhereUniqueInput
+  }
+
+  /**
+   * OrgTag deleteMany
+   */
+  export type OrgTagDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which OrgTags to delete
+     */
+    where?: OrgTagWhereInput
+    /**
+     * Limit how many OrgTags to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * OrgTag.assignments
+   */
+  export type OrgTag$assignmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrgTagAssignment
+     */
+    select?: OrgTagAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrgTagAssignment
+     */
+    omit?: OrgTagAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrgTagAssignmentInclude<ExtArgs> | null
+    where?: OrgTagAssignmentWhereInput
+    orderBy?: OrgTagAssignmentOrderByWithRelationInput | OrgTagAssignmentOrderByWithRelationInput[]
+    cursor?: OrgTagAssignmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: OrgTagAssignmentScalarFieldEnum | OrgTagAssignmentScalarFieldEnum[]
+  }
+
+  /**
+   * OrgTag without action
+   */
+  export type OrgTagDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrgTag
+     */
+    select?: OrgTagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrgTag
+     */
+    omit?: OrgTagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrgTagInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model OrgTagAssignment
+   */
+
+  export type AggregateOrgTagAssignment = {
+    _count: OrgTagAssignmentCountAggregateOutputType | null
+    _avg: OrgTagAssignmentAvgAggregateOutputType | null
+    _sum: OrgTagAssignmentSumAggregateOutputType | null
+    _min: OrgTagAssignmentMinAggregateOutputType | null
+    _max: OrgTagAssignmentMaxAggregateOutputType | null
+  }
+
+  export type OrgTagAssignmentAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type OrgTagAssignmentSumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type OrgTagAssignmentMinAggregateOutputType = {
+    id: number | null
+    tag_uuid: string | null
+    organisation_uuid: string | null
+    entity_type: $Enums.OrgTagEntityType | null
+    entity_uuid: string | null
+    created_at: Date | null
+  }
+
+  export type OrgTagAssignmentMaxAggregateOutputType = {
+    id: number | null
+    tag_uuid: string | null
+    organisation_uuid: string | null
+    entity_type: $Enums.OrgTagEntityType | null
+    entity_uuid: string | null
+    created_at: Date | null
+  }
+
+  export type OrgTagAssignmentCountAggregateOutputType = {
+    id: number
+    tag_uuid: number
+    organisation_uuid: number
+    entity_type: number
+    entity_uuid: number
+    created_at: number
+    _all: number
+  }
+
+
+  export type OrgTagAssignmentAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type OrgTagAssignmentSumAggregateInputType = {
+    id?: true
+  }
+
+  export type OrgTagAssignmentMinAggregateInputType = {
+    id?: true
+    tag_uuid?: true
+    organisation_uuid?: true
+    entity_type?: true
+    entity_uuid?: true
+    created_at?: true
+  }
+
+  export type OrgTagAssignmentMaxAggregateInputType = {
+    id?: true
+    tag_uuid?: true
+    organisation_uuid?: true
+    entity_type?: true
+    entity_uuid?: true
+    created_at?: true
+  }
+
+  export type OrgTagAssignmentCountAggregateInputType = {
+    id?: true
+    tag_uuid?: true
+    organisation_uuid?: true
+    entity_type?: true
+    entity_uuid?: true
+    created_at?: true
+    _all?: true
+  }
+
+  export type OrgTagAssignmentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which OrgTagAssignment to aggregate.
+     */
+    where?: OrgTagAssignmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OrgTagAssignments to fetch.
+     */
+    orderBy?: OrgTagAssignmentOrderByWithRelationInput | OrgTagAssignmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: OrgTagAssignmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OrgTagAssignments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OrgTagAssignments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned OrgTagAssignments
+    **/
+    _count?: true | OrgTagAssignmentCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: OrgTagAssignmentAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: OrgTagAssignmentSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: OrgTagAssignmentMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: OrgTagAssignmentMaxAggregateInputType
+  }
+
+  export type GetOrgTagAssignmentAggregateType<T extends OrgTagAssignmentAggregateArgs> = {
+        [P in keyof T & keyof AggregateOrgTagAssignment]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateOrgTagAssignment[P]>
+      : GetScalarType<T[P], AggregateOrgTagAssignment[P]>
+  }
+
+
+
+
+  export type OrgTagAssignmentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OrgTagAssignmentWhereInput
+    orderBy?: OrgTagAssignmentOrderByWithAggregationInput | OrgTagAssignmentOrderByWithAggregationInput[]
+    by: OrgTagAssignmentScalarFieldEnum[] | OrgTagAssignmentScalarFieldEnum
+    having?: OrgTagAssignmentScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: OrgTagAssignmentCountAggregateInputType | true
+    _avg?: OrgTagAssignmentAvgAggregateInputType
+    _sum?: OrgTagAssignmentSumAggregateInputType
+    _min?: OrgTagAssignmentMinAggregateInputType
+    _max?: OrgTagAssignmentMaxAggregateInputType
+  }
+
+  export type OrgTagAssignmentGroupByOutputType = {
+    id: number
+    tag_uuid: string
+    organisation_uuid: string
+    entity_type: $Enums.OrgTagEntityType
+    entity_uuid: string
+    created_at: Date
+    _count: OrgTagAssignmentCountAggregateOutputType | null
+    _avg: OrgTagAssignmentAvgAggregateOutputType | null
+    _sum: OrgTagAssignmentSumAggregateOutputType | null
+    _min: OrgTagAssignmentMinAggregateOutputType | null
+    _max: OrgTagAssignmentMaxAggregateOutputType | null
+  }
+
+  type GetOrgTagAssignmentGroupByPayload<T extends OrgTagAssignmentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<OrgTagAssignmentGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof OrgTagAssignmentGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], OrgTagAssignmentGroupByOutputType[P]>
+            : GetScalarType<T[P], OrgTagAssignmentGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type OrgTagAssignmentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tag_uuid?: boolean
+    organisation_uuid?: boolean
+    entity_type?: boolean
+    entity_uuid?: boolean
+    created_at?: boolean
+    tag?: boolean | OrgTagDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["orgTagAssignment"]>
+
+  export type OrgTagAssignmentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tag_uuid?: boolean
+    organisation_uuid?: boolean
+    entity_type?: boolean
+    entity_uuid?: boolean
+    created_at?: boolean
+    tag?: boolean | OrgTagDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["orgTagAssignment"]>
+
+  export type OrgTagAssignmentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tag_uuid?: boolean
+    organisation_uuid?: boolean
+    entity_type?: boolean
+    entity_uuid?: boolean
+    created_at?: boolean
+    tag?: boolean | OrgTagDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["orgTagAssignment"]>
+
+  export type OrgTagAssignmentSelectScalar = {
+    id?: boolean
+    tag_uuid?: boolean
+    organisation_uuid?: boolean
+    entity_type?: boolean
+    entity_uuid?: boolean
+    created_at?: boolean
+  }
+
+  export type OrgTagAssignmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tag_uuid" | "organisation_uuid" | "entity_type" | "entity_uuid" | "created_at", ExtArgs["result"]["orgTagAssignment"]>
+  export type OrgTagAssignmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tag?: boolean | OrgTagDefaultArgs<ExtArgs>
+  }
+  export type OrgTagAssignmentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tag?: boolean | OrgTagDefaultArgs<ExtArgs>
+  }
+  export type OrgTagAssignmentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tag?: boolean | OrgTagDefaultArgs<ExtArgs>
+  }
+
+  export type $OrgTagAssignmentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "OrgTagAssignment"
+    objects: {
+      tag: Prisma.$OrgTagPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      tag_uuid: string
+      organisation_uuid: string
+      entity_type: $Enums.OrgTagEntityType
+      entity_uuid: string
+      created_at: Date
+    }, ExtArgs["result"]["orgTagAssignment"]>
+    composites: {}
+  }
+
+  type OrgTagAssignmentGetPayload<S extends boolean | null | undefined | OrgTagAssignmentDefaultArgs> = $Result.GetResult<Prisma.$OrgTagAssignmentPayload, S>
+
+  type OrgTagAssignmentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<OrgTagAssignmentFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: OrgTagAssignmentCountAggregateInputType | true
+    }
+
+  export interface OrgTagAssignmentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['OrgTagAssignment'], meta: { name: 'OrgTagAssignment' } }
+    /**
+     * Find zero or one OrgTagAssignment that matches the filter.
+     * @param {OrgTagAssignmentFindUniqueArgs} args - Arguments to find a OrgTagAssignment
+     * @example
+     * // Get one OrgTagAssignment
+     * const orgTagAssignment = await prisma.orgTagAssignment.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends OrgTagAssignmentFindUniqueArgs>(args: SelectSubset<T, OrgTagAssignmentFindUniqueArgs<ExtArgs>>): Prisma__OrgTagAssignmentClient<$Result.GetResult<Prisma.$OrgTagAssignmentPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one OrgTagAssignment that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {OrgTagAssignmentFindUniqueOrThrowArgs} args - Arguments to find a OrgTagAssignment
+     * @example
+     * // Get one OrgTagAssignment
+     * const orgTagAssignment = await prisma.orgTagAssignment.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends OrgTagAssignmentFindUniqueOrThrowArgs>(args: SelectSubset<T, OrgTagAssignmentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__OrgTagAssignmentClient<$Result.GetResult<Prisma.$OrgTagAssignmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first OrgTagAssignment that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrgTagAssignmentFindFirstArgs} args - Arguments to find a OrgTagAssignment
+     * @example
+     * // Get one OrgTagAssignment
+     * const orgTagAssignment = await prisma.orgTagAssignment.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends OrgTagAssignmentFindFirstArgs>(args?: SelectSubset<T, OrgTagAssignmentFindFirstArgs<ExtArgs>>): Prisma__OrgTagAssignmentClient<$Result.GetResult<Prisma.$OrgTagAssignmentPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first OrgTagAssignment that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrgTagAssignmentFindFirstOrThrowArgs} args - Arguments to find a OrgTagAssignment
+     * @example
+     * // Get one OrgTagAssignment
+     * const orgTagAssignment = await prisma.orgTagAssignment.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends OrgTagAssignmentFindFirstOrThrowArgs>(args?: SelectSubset<T, OrgTagAssignmentFindFirstOrThrowArgs<ExtArgs>>): Prisma__OrgTagAssignmentClient<$Result.GetResult<Prisma.$OrgTagAssignmentPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more OrgTagAssignments that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrgTagAssignmentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all OrgTagAssignments
+     * const orgTagAssignments = await prisma.orgTagAssignment.findMany()
+     * 
+     * // Get first 10 OrgTagAssignments
+     * const orgTagAssignments = await prisma.orgTagAssignment.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const orgTagAssignmentWithIdOnly = await prisma.orgTagAssignment.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends OrgTagAssignmentFindManyArgs>(args?: SelectSubset<T, OrgTagAssignmentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrgTagAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a OrgTagAssignment.
+     * @param {OrgTagAssignmentCreateArgs} args - Arguments to create a OrgTagAssignment.
+     * @example
+     * // Create one OrgTagAssignment
+     * const OrgTagAssignment = await prisma.orgTagAssignment.create({
+     *   data: {
+     *     // ... data to create a OrgTagAssignment
+     *   }
+     * })
+     * 
+     */
+    create<T extends OrgTagAssignmentCreateArgs>(args: SelectSubset<T, OrgTagAssignmentCreateArgs<ExtArgs>>): Prisma__OrgTagAssignmentClient<$Result.GetResult<Prisma.$OrgTagAssignmentPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many OrgTagAssignments.
+     * @param {OrgTagAssignmentCreateManyArgs} args - Arguments to create many OrgTagAssignments.
+     * @example
+     * // Create many OrgTagAssignments
+     * const orgTagAssignment = await prisma.orgTagAssignment.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends OrgTagAssignmentCreateManyArgs>(args?: SelectSubset<T, OrgTagAssignmentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many OrgTagAssignments and returns the data saved in the database.
+     * @param {OrgTagAssignmentCreateManyAndReturnArgs} args - Arguments to create many OrgTagAssignments.
+     * @example
+     * // Create many OrgTagAssignments
+     * const orgTagAssignment = await prisma.orgTagAssignment.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many OrgTagAssignments and only return the `id`
+     * const orgTagAssignmentWithIdOnly = await prisma.orgTagAssignment.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends OrgTagAssignmentCreateManyAndReturnArgs>(args?: SelectSubset<T, OrgTagAssignmentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrgTagAssignmentPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a OrgTagAssignment.
+     * @param {OrgTagAssignmentDeleteArgs} args - Arguments to delete one OrgTagAssignment.
+     * @example
+     * // Delete one OrgTagAssignment
+     * const OrgTagAssignment = await prisma.orgTagAssignment.delete({
+     *   where: {
+     *     // ... filter to delete one OrgTagAssignment
+     *   }
+     * })
+     * 
+     */
+    delete<T extends OrgTagAssignmentDeleteArgs>(args: SelectSubset<T, OrgTagAssignmentDeleteArgs<ExtArgs>>): Prisma__OrgTagAssignmentClient<$Result.GetResult<Prisma.$OrgTagAssignmentPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one OrgTagAssignment.
+     * @param {OrgTagAssignmentUpdateArgs} args - Arguments to update one OrgTagAssignment.
+     * @example
+     * // Update one OrgTagAssignment
+     * const orgTagAssignment = await prisma.orgTagAssignment.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends OrgTagAssignmentUpdateArgs>(args: SelectSubset<T, OrgTagAssignmentUpdateArgs<ExtArgs>>): Prisma__OrgTagAssignmentClient<$Result.GetResult<Prisma.$OrgTagAssignmentPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more OrgTagAssignments.
+     * @param {OrgTagAssignmentDeleteManyArgs} args - Arguments to filter OrgTagAssignments to delete.
+     * @example
+     * // Delete a few OrgTagAssignments
+     * const { count } = await prisma.orgTagAssignment.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends OrgTagAssignmentDeleteManyArgs>(args?: SelectSubset<T, OrgTagAssignmentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more OrgTagAssignments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrgTagAssignmentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many OrgTagAssignments
+     * const orgTagAssignment = await prisma.orgTagAssignment.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends OrgTagAssignmentUpdateManyArgs>(args: SelectSubset<T, OrgTagAssignmentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more OrgTagAssignments and returns the data updated in the database.
+     * @param {OrgTagAssignmentUpdateManyAndReturnArgs} args - Arguments to update many OrgTagAssignments.
+     * @example
+     * // Update many OrgTagAssignments
+     * const orgTagAssignment = await prisma.orgTagAssignment.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more OrgTagAssignments and only return the `id`
+     * const orgTagAssignmentWithIdOnly = await prisma.orgTagAssignment.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends OrgTagAssignmentUpdateManyAndReturnArgs>(args: SelectSubset<T, OrgTagAssignmentUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrgTagAssignmentPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one OrgTagAssignment.
+     * @param {OrgTagAssignmentUpsertArgs} args - Arguments to update or create a OrgTagAssignment.
+     * @example
+     * // Update or create a OrgTagAssignment
+     * const orgTagAssignment = await prisma.orgTagAssignment.upsert({
+     *   create: {
+     *     // ... data to create a OrgTagAssignment
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the OrgTagAssignment we want to update
+     *   }
+     * })
+     */
+    upsert<T extends OrgTagAssignmentUpsertArgs>(args: SelectSubset<T, OrgTagAssignmentUpsertArgs<ExtArgs>>): Prisma__OrgTagAssignmentClient<$Result.GetResult<Prisma.$OrgTagAssignmentPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of OrgTagAssignments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrgTagAssignmentCountArgs} args - Arguments to filter OrgTagAssignments to count.
+     * @example
+     * // Count the number of OrgTagAssignments
+     * const count = await prisma.orgTagAssignment.count({
+     *   where: {
+     *     // ... the filter for the OrgTagAssignments we want to count
+     *   }
+     * })
+    **/
+    count<T extends OrgTagAssignmentCountArgs>(
+      args?: Subset<T, OrgTagAssignmentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], OrgTagAssignmentCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a OrgTagAssignment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrgTagAssignmentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends OrgTagAssignmentAggregateArgs>(args: Subset<T, OrgTagAssignmentAggregateArgs>): Prisma.PrismaPromise<GetOrgTagAssignmentAggregateType<T>>
+
+    /**
+     * Group by OrgTagAssignment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrgTagAssignmentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends OrgTagAssignmentGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: OrgTagAssignmentGroupByArgs['orderBy'] }
+        : { orderBy?: OrgTagAssignmentGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, OrgTagAssignmentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetOrgTagAssignmentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the OrgTagAssignment model
+   */
+  readonly fields: OrgTagAssignmentFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for OrgTagAssignment.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__OrgTagAssignmentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    tag<T extends OrgTagDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrgTagDefaultArgs<ExtArgs>>): Prisma__OrgTagClient<$Result.GetResult<Prisma.$OrgTagPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the OrgTagAssignment model
+   */
+  interface OrgTagAssignmentFieldRefs {
+    readonly id: FieldRef<"OrgTagAssignment", 'Int'>
+    readonly tag_uuid: FieldRef<"OrgTagAssignment", 'String'>
+    readonly organisation_uuid: FieldRef<"OrgTagAssignment", 'String'>
+    readonly entity_type: FieldRef<"OrgTagAssignment", 'OrgTagEntityType'>
+    readonly entity_uuid: FieldRef<"OrgTagAssignment", 'String'>
+    readonly created_at: FieldRef<"OrgTagAssignment", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * OrgTagAssignment findUnique
+   */
+  export type OrgTagAssignmentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrgTagAssignment
+     */
+    select?: OrgTagAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrgTagAssignment
+     */
+    omit?: OrgTagAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrgTagAssignmentInclude<ExtArgs> | null
+    /**
+     * Filter, which OrgTagAssignment to fetch.
+     */
+    where: OrgTagAssignmentWhereUniqueInput
+  }
+
+  /**
+   * OrgTagAssignment findUniqueOrThrow
+   */
+  export type OrgTagAssignmentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrgTagAssignment
+     */
+    select?: OrgTagAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrgTagAssignment
+     */
+    omit?: OrgTagAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrgTagAssignmentInclude<ExtArgs> | null
+    /**
+     * Filter, which OrgTagAssignment to fetch.
+     */
+    where: OrgTagAssignmentWhereUniqueInput
+  }
+
+  /**
+   * OrgTagAssignment findFirst
+   */
+  export type OrgTagAssignmentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrgTagAssignment
+     */
+    select?: OrgTagAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrgTagAssignment
+     */
+    omit?: OrgTagAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrgTagAssignmentInclude<ExtArgs> | null
+    /**
+     * Filter, which OrgTagAssignment to fetch.
+     */
+    where?: OrgTagAssignmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OrgTagAssignments to fetch.
+     */
+    orderBy?: OrgTagAssignmentOrderByWithRelationInput | OrgTagAssignmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for OrgTagAssignments.
+     */
+    cursor?: OrgTagAssignmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OrgTagAssignments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OrgTagAssignments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of OrgTagAssignments.
+     */
+    distinct?: OrgTagAssignmentScalarFieldEnum | OrgTagAssignmentScalarFieldEnum[]
+  }
+
+  /**
+   * OrgTagAssignment findFirstOrThrow
+   */
+  export type OrgTagAssignmentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrgTagAssignment
+     */
+    select?: OrgTagAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrgTagAssignment
+     */
+    omit?: OrgTagAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrgTagAssignmentInclude<ExtArgs> | null
+    /**
+     * Filter, which OrgTagAssignment to fetch.
+     */
+    where?: OrgTagAssignmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OrgTagAssignments to fetch.
+     */
+    orderBy?: OrgTagAssignmentOrderByWithRelationInput | OrgTagAssignmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for OrgTagAssignments.
+     */
+    cursor?: OrgTagAssignmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OrgTagAssignments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OrgTagAssignments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of OrgTagAssignments.
+     */
+    distinct?: OrgTagAssignmentScalarFieldEnum | OrgTagAssignmentScalarFieldEnum[]
+  }
+
+  /**
+   * OrgTagAssignment findMany
+   */
+  export type OrgTagAssignmentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrgTagAssignment
+     */
+    select?: OrgTagAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrgTagAssignment
+     */
+    omit?: OrgTagAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrgTagAssignmentInclude<ExtArgs> | null
+    /**
+     * Filter, which OrgTagAssignments to fetch.
+     */
+    where?: OrgTagAssignmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OrgTagAssignments to fetch.
+     */
+    orderBy?: OrgTagAssignmentOrderByWithRelationInput | OrgTagAssignmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing OrgTagAssignments.
+     */
+    cursor?: OrgTagAssignmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OrgTagAssignments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OrgTagAssignments.
+     */
+    skip?: number
+    distinct?: OrgTagAssignmentScalarFieldEnum | OrgTagAssignmentScalarFieldEnum[]
+  }
+
+  /**
+   * OrgTagAssignment create
+   */
+  export type OrgTagAssignmentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrgTagAssignment
+     */
+    select?: OrgTagAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrgTagAssignment
+     */
+    omit?: OrgTagAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrgTagAssignmentInclude<ExtArgs> | null
+    /**
+     * The data needed to create a OrgTagAssignment.
+     */
+    data: XOR<OrgTagAssignmentCreateInput, OrgTagAssignmentUncheckedCreateInput>
+  }
+
+  /**
+   * OrgTagAssignment createMany
+   */
+  export type OrgTagAssignmentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many OrgTagAssignments.
+     */
+    data: OrgTagAssignmentCreateManyInput | OrgTagAssignmentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * OrgTagAssignment createManyAndReturn
+   */
+  export type OrgTagAssignmentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrgTagAssignment
+     */
+    select?: OrgTagAssignmentSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrgTagAssignment
+     */
+    omit?: OrgTagAssignmentOmit<ExtArgs> | null
+    /**
+     * The data used to create many OrgTagAssignments.
+     */
+    data: OrgTagAssignmentCreateManyInput | OrgTagAssignmentCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrgTagAssignmentIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * OrgTagAssignment update
+   */
+  export type OrgTagAssignmentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrgTagAssignment
+     */
+    select?: OrgTagAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrgTagAssignment
+     */
+    omit?: OrgTagAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrgTagAssignmentInclude<ExtArgs> | null
+    /**
+     * The data needed to update a OrgTagAssignment.
+     */
+    data: XOR<OrgTagAssignmentUpdateInput, OrgTagAssignmentUncheckedUpdateInput>
+    /**
+     * Choose, which OrgTagAssignment to update.
+     */
+    where: OrgTagAssignmentWhereUniqueInput
+  }
+
+  /**
+   * OrgTagAssignment updateMany
+   */
+  export type OrgTagAssignmentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update OrgTagAssignments.
+     */
+    data: XOR<OrgTagAssignmentUpdateManyMutationInput, OrgTagAssignmentUncheckedUpdateManyInput>
+    /**
+     * Filter which OrgTagAssignments to update
+     */
+    where?: OrgTagAssignmentWhereInput
+    /**
+     * Limit how many OrgTagAssignments to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * OrgTagAssignment updateManyAndReturn
+   */
+  export type OrgTagAssignmentUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrgTagAssignment
+     */
+    select?: OrgTagAssignmentSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrgTagAssignment
+     */
+    omit?: OrgTagAssignmentOmit<ExtArgs> | null
+    /**
+     * The data used to update OrgTagAssignments.
+     */
+    data: XOR<OrgTagAssignmentUpdateManyMutationInput, OrgTagAssignmentUncheckedUpdateManyInput>
+    /**
+     * Filter which OrgTagAssignments to update
+     */
+    where?: OrgTagAssignmentWhereInput
+    /**
+     * Limit how many OrgTagAssignments to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrgTagAssignmentIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * OrgTagAssignment upsert
+   */
+  export type OrgTagAssignmentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrgTagAssignment
+     */
+    select?: OrgTagAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrgTagAssignment
+     */
+    omit?: OrgTagAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrgTagAssignmentInclude<ExtArgs> | null
+    /**
+     * The filter to search for the OrgTagAssignment to update in case it exists.
+     */
+    where: OrgTagAssignmentWhereUniqueInput
+    /**
+     * In case the OrgTagAssignment found by the `where` argument doesn't exist, create a new OrgTagAssignment with this data.
+     */
+    create: XOR<OrgTagAssignmentCreateInput, OrgTagAssignmentUncheckedCreateInput>
+    /**
+     * In case the OrgTagAssignment was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<OrgTagAssignmentUpdateInput, OrgTagAssignmentUncheckedUpdateInput>
+  }
+
+  /**
+   * OrgTagAssignment delete
+   */
+  export type OrgTagAssignmentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrgTagAssignment
+     */
+    select?: OrgTagAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrgTagAssignment
+     */
+    omit?: OrgTagAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrgTagAssignmentInclude<ExtArgs> | null
+    /**
+     * Filter which OrgTagAssignment to delete.
+     */
+    where: OrgTagAssignmentWhereUniqueInput
+  }
+
+  /**
+   * OrgTagAssignment deleteMany
+   */
+  export type OrgTagAssignmentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which OrgTagAssignments to delete
+     */
+    where?: OrgTagAssignmentWhereInput
+    /**
+     * Limit how many OrgTagAssignments to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * OrgTagAssignment without action
+   */
+  export type OrgTagAssignmentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrgTagAssignment
+     */
+    select?: OrgTagAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrgTagAssignment
+     */
+    omit?: OrgTagAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrgTagAssignmentInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -87419,6 +89936,31 @@ export namespace Prisma {
   export type McpToolInvocationLogScalarFieldEnum = (typeof McpToolInvocationLogScalarFieldEnum)[keyof typeof McpToolInvocationLogScalarFieldEnum]
 
 
+  export const OrgTagScalarFieldEnum: {
+    id: 'id',
+    uuid: 'uuid',
+    organisation_uuid: 'organisation_uuid',
+    name: 'name',
+    color: 'color',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type OrgTagScalarFieldEnum = (typeof OrgTagScalarFieldEnum)[keyof typeof OrgTagScalarFieldEnum]
+
+
+  export const OrgTagAssignmentScalarFieldEnum: {
+    id: 'id',
+    tag_uuid: 'tag_uuid',
+    organisation_uuid: 'organisation_uuid',
+    entity_type: 'entity_type',
+    entity_uuid: 'entity_uuid',
+    created_at: 'created_at'
+  };
+
+  export type OrgTagAssignmentScalarFieldEnum = (typeof OrgTagAssignmentScalarFieldEnum)[keyof typeof OrgTagAssignmentScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -88303,6 +90845,20 @@ export namespace Prisma {
    */
   export type ListEnumOAuthConnectionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OAuthConnectionStatus[]'>
     
+
+
+  /**
+   * Reference to a field of type 'OrgTagEntityType'
+   */
+  export type EnumOrgTagEntityTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrgTagEntityType'>
+    
+
+
+  /**
+   * Reference to a field of type 'OrgTagEntityType[]'
+   */
+  export type ListEnumOrgTagEntityTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrgTagEntityType[]'>
+    
   /**
    * Deep Input Types
    */
@@ -88457,6 +91013,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateListRelationFilter
     activity_logs?: ActivityLogListRelationFilter
     messaging_goals?: MessagingGoalListRelationFilter
+    org_tags?: OrgTagListRelationFilter
     goal_achievements?: GoalAchievementListRelationFilter
     goal_personal_bests?: GoalPersonalBestListRelationFilter
     bulk_jobs?: BulkJobListRelationFilter
@@ -88503,6 +91060,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateOrderByRelationAggregateInput
     activity_logs?: ActivityLogOrderByRelationAggregateInput
     messaging_goals?: MessagingGoalOrderByRelationAggregateInput
+    org_tags?: OrgTagOrderByRelationAggregateInput
     goal_achievements?: GoalAchievementOrderByRelationAggregateInput
     goal_personal_bests?: GoalPersonalBestOrderByRelationAggregateInput
     bulk_jobs?: BulkJobOrderByRelationAggregateInput
@@ -88552,6 +91110,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateListRelationFilter
     activity_logs?: ActivityLogListRelationFilter
     messaging_goals?: MessagingGoalListRelationFilter
+    org_tags?: OrgTagListRelationFilter
     goal_achievements?: GoalAchievementListRelationFilter
     goal_personal_bests?: GoalPersonalBestListRelationFilter
     bulk_jobs?: BulkJobListRelationFilter
@@ -94654,6 +97213,140 @@ export namespace Prisma {
     created_at?: DateTimeWithAggregatesFilter<"McpToolInvocationLog"> | Date | string
   }
 
+  export type OrgTagWhereInput = {
+    AND?: OrgTagWhereInput | OrgTagWhereInput[]
+    OR?: OrgTagWhereInput[]
+    NOT?: OrgTagWhereInput | OrgTagWhereInput[]
+    id?: IntFilter<"OrgTag"> | number
+    uuid?: StringFilter<"OrgTag"> | string
+    organisation_uuid?: StringFilter<"OrgTag"> | string
+    name?: StringFilter<"OrgTag"> | string
+    color?: StringNullableFilter<"OrgTag"> | string | null
+    created_at?: DateTimeFilter<"OrgTag"> | Date | string
+    updated_at?: DateTimeFilter<"OrgTag"> | Date | string
+    organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+    assignments?: OrgTagAssignmentListRelationFilter
+  }
+
+  export type OrgTagOrderByWithRelationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    name?: SortOrder
+    color?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    organisation?: OrganisationOrderByWithRelationInput
+    assignments?: OrgTagAssignmentOrderByRelationAggregateInput
+  }
+
+  export type OrgTagWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    uuid?: string
+    organisation_uuid_name?: OrgTagOrganisation_uuidNameCompoundUniqueInput
+    AND?: OrgTagWhereInput | OrgTagWhereInput[]
+    OR?: OrgTagWhereInput[]
+    NOT?: OrgTagWhereInput | OrgTagWhereInput[]
+    organisation_uuid?: StringFilter<"OrgTag"> | string
+    name?: StringFilter<"OrgTag"> | string
+    color?: StringNullableFilter<"OrgTag"> | string | null
+    created_at?: DateTimeFilter<"OrgTag"> | Date | string
+    updated_at?: DateTimeFilter<"OrgTag"> | Date | string
+    organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+    assignments?: OrgTagAssignmentListRelationFilter
+  }, "id" | "uuid" | "organisation_uuid_name">
+
+  export type OrgTagOrderByWithAggregationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    name?: SortOrder
+    color?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: OrgTagCountOrderByAggregateInput
+    _avg?: OrgTagAvgOrderByAggregateInput
+    _max?: OrgTagMaxOrderByAggregateInput
+    _min?: OrgTagMinOrderByAggregateInput
+    _sum?: OrgTagSumOrderByAggregateInput
+  }
+
+  export type OrgTagScalarWhereWithAggregatesInput = {
+    AND?: OrgTagScalarWhereWithAggregatesInput | OrgTagScalarWhereWithAggregatesInput[]
+    OR?: OrgTagScalarWhereWithAggregatesInput[]
+    NOT?: OrgTagScalarWhereWithAggregatesInput | OrgTagScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"OrgTag"> | number
+    uuid?: StringWithAggregatesFilter<"OrgTag"> | string
+    organisation_uuid?: StringWithAggregatesFilter<"OrgTag"> | string
+    name?: StringWithAggregatesFilter<"OrgTag"> | string
+    color?: StringNullableWithAggregatesFilter<"OrgTag"> | string | null
+    created_at?: DateTimeWithAggregatesFilter<"OrgTag"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"OrgTag"> | Date | string
+  }
+
+  export type OrgTagAssignmentWhereInput = {
+    AND?: OrgTagAssignmentWhereInput | OrgTagAssignmentWhereInput[]
+    OR?: OrgTagAssignmentWhereInput[]
+    NOT?: OrgTagAssignmentWhereInput | OrgTagAssignmentWhereInput[]
+    id?: IntFilter<"OrgTagAssignment"> | number
+    tag_uuid?: StringFilter<"OrgTagAssignment"> | string
+    organisation_uuid?: StringFilter<"OrgTagAssignment"> | string
+    entity_type?: EnumOrgTagEntityTypeFilter<"OrgTagAssignment"> | $Enums.OrgTagEntityType
+    entity_uuid?: StringFilter<"OrgTagAssignment"> | string
+    created_at?: DateTimeFilter<"OrgTagAssignment"> | Date | string
+    tag?: XOR<OrgTagScalarRelationFilter, OrgTagWhereInput>
+  }
+
+  export type OrgTagAssignmentOrderByWithRelationInput = {
+    id?: SortOrder
+    tag_uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    entity_type?: SortOrder
+    entity_uuid?: SortOrder
+    created_at?: SortOrder
+    tag?: OrgTagOrderByWithRelationInput
+  }
+
+  export type OrgTagAssignmentWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    tag_uuid_entity_type_entity_uuid?: OrgTagAssignmentTag_uuidEntity_typeEntity_uuidCompoundUniqueInput
+    AND?: OrgTagAssignmentWhereInput | OrgTagAssignmentWhereInput[]
+    OR?: OrgTagAssignmentWhereInput[]
+    NOT?: OrgTagAssignmentWhereInput | OrgTagAssignmentWhereInput[]
+    tag_uuid?: StringFilter<"OrgTagAssignment"> | string
+    organisation_uuid?: StringFilter<"OrgTagAssignment"> | string
+    entity_type?: EnumOrgTagEntityTypeFilter<"OrgTagAssignment"> | $Enums.OrgTagEntityType
+    entity_uuid?: StringFilter<"OrgTagAssignment"> | string
+    created_at?: DateTimeFilter<"OrgTagAssignment"> | Date | string
+    tag?: XOR<OrgTagScalarRelationFilter, OrgTagWhereInput>
+  }, "id" | "tag_uuid_entity_type_entity_uuid">
+
+  export type OrgTagAssignmentOrderByWithAggregationInput = {
+    id?: SortOrder
+    tag_uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    entity_type?: SortOrder
+    entity_uuid?: SortOrder
+    created_at?: SortOrder
+    _count?: OrgTagAssignmentCountOrderByAggregateInput
+    _avg?: OrgTagAssignmentAvgOrderByAggregateInput
+    _max?: OrgTagAssignmentMaxOrderByAggregateInput
+    _min?: OrgTagAssignmentMinOrderByAggregateInput
+    _sum?: OrgTagAssignmentSumOrderByAggregateInput
+  }
+
+  export type OrgTagAssignmentScalarWhereWithAggregatesInput = {
+    AND?: OrgTagAssignmentScalarWhereWithAggregatesInput | OrgTagAssignmentScalarWhereWithAggregatesInput[]
+    OR?: OrgTagAssignmentScalarWhereWithAggregatesInput[]
+    NOT?: OrgTagAssignmentScalarWhereWithAggregatesInput | OrgTagAssignmentScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"OrgTagAssignment"> | number
+    tag_uuid?: StringWithAggregatesFilter<"OrgTagAssignment"> | string
+    organisation_uuid?: StringWithAggregatesFilter<"OrgTagAssignment"> | string
+    entity_type?: EnumOrgTagEntityTypeWithAggregatesFilter<"OrgTagAssignment"> | $Enums.OrgTagEntityType
+    entity_uuid?: StringWithAggregatesFilter<"OrgTagAssignment"> | string
+    created_at?: DateTimeWithAggregatesFilter<"OrgTagAssignment"> | Date | string
+  }
+
   export type UserCreateInput = {
     uuid?: string
     email: string
@@ -94819,6 +97512,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
@@ -94865,6 +97559,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
@@ -94910,6 +97605,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
@@ -94956,6 +97652,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -101555,6 +104252,135 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type OrgTagCreateInput = {
+    uuid?: string
+    name: string
+    color?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutOrg_tagsInput
+    assignments?: OrgTagAssignmentCreateNestedManyWithoutTagInput
+  }
+
+  export type OrgTagUncheckedCreateInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    name: string
+    color?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    assignments?: OrgTagAssignmentUncheckedCreateNestedManyWithoutTagInput
+  }
+
+  export type OrgTagUpdateInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutOrg_tagsNestedInput
+    assignments?: OrgTagAssignmentUpdateManyWithoutTagNestedInput
+  }
+
+  export type OrgTagUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    assignments?: OrgTagAssignmentUncheckedUpdateManyWithoutTagNestedInput
+  }
+
+  export type OrgTagCreateManyInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    name: string
+    color?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type OrgTagUpdateManyMutationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OrgTagUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OrgTagAssignmentCreateInput = {
+    organisation_uuid: string
+    entity_type: $Enums.OrgTagEntityType
+    entity_uuid: string
+    created_at?: Date | string
+    tag: OrgTagCreateNestedOneWithoutAssignmentsInput
+  }
+
+  export type OrgTagAssignmentUncheckedCreateInput = {
+    id?: number
+    tag_uuid: string
+    organisation_uuid: string
+    entity_type: $Enums.OrgTagEntityType
+    entity_uuid: string
+    created_at?: Date | string
+  }
+
+  export type OrgTagAssignmentUpdateInput = {
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    entity_type?: EnumOrgTagEntityTypeFieldUpdateOperationsInput | $Enums.OrgTagEntityType
+    entity_uuid?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    tag?: OrgTagUpdateOneRequiredWithoutAssignmentsNestedInput
+  }
+
+  export type OrgTagAssignmentUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    tag_uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    entity_type?: EnumOrgTagEntityTypeFieldUpdateOperationsInput | $Enums.OrgTagEntityType
+    entity_uuid?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OrgTagAssignmentCreateManyInput = {
+    id?: number
+    tag_uuid: string
+    organisation_uuid: string
+    entity_type: $Enums.OrgTagEntityType
+    entity_uuid: string
+    created_at?: Date | string
+  }
+
+  export type OrgTagAssignmentUpdateManyMutationInput = {
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    entity_type?: EnumOrgTagEntityTypeFieldUpdateOperationsInput | $Enums.OrgTagEntityType
+    entity_uuid?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OrgTagAssignmentUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    tag_uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    entity_type?: EnumOrgTagEntityTypeFieldUpdateOperationsInput | $Enums.OrgTagEntityType
+    entity_uuid?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type IntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -101971,6 +104797,12 @@ export namespace Prisma {
     none?: MessageTemplateWhereInput
   }
 
+  export type OrgTagListRelationFilter = {
+    every?: OrgTagWhereInput
+    some?: OrgTagWhereInput
+    none?: OrgTagWhereInput
+  }
+
   export type WebsiteScrapeRequestListRelationFilter = {
     every?: WebsiteScrapeRequestWhereInput
     some?: WebsiteScrapeRequestWhereInput
@@ -102072,6 +104904,10 @@ export namespace Prisma {
   }
 
   export type MessageTemplateOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type OrgTagOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -107121,6 +109957,122 @@ export namespace Prisma {
     duration_ms?: SortOrder
   }
 
+  export type OrgTagAssignmentListRelationFilter = {
+    every?: OrgTagAssignmentWhereInput
+    some?: OrgTagAssignmentWhereInput
+    none?: OrgTagAssignmentWhereInput
+  }
+
+  export type OrgTagAssignmentOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type OrgTagOrganisation_uuidNameCompoundUniqueInput = {
+    organisation_uuid: string
+    name: string
+  }
+
+  export type OrgTagCountOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    name?: SortOrder
+    color?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type OrgTagAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type OrgTagMaxOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    name?: SortOrder
+    color?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type OrgTagMinOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    name?: SortOrder
+    color?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type OrgTagSumOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type EnumOrgTagEntityTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.OrgTagEntityType | EnumOrgTagEntityTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.OrgTagEntityType[] | ListEnumOrgTagEntityTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.OrgTagEntityType[] | ListEnumOrgTagEntityTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumOrgTagEntityTypeFilter<$PrismaModel> | $Enums.OrgTagEntityType
+  }
+
+  export type OrgTagScalarRelationFilter = {
+    is?: OrgTagWhereInput
+    isNot?: OrgTagWhereInput
+  }
+
+  export type OrgTagAssignmentTag_uuidEntity_typeEntity_uuidCompoundUniqueInput = {
+    tag_uuid: string
+    entity_type: $Enums.OrgTagEntityType
+    entity_uuid: string
+  }
+
+  export type OrgTagAssignmentCountOrderByAggregateInput = {
+    id?: SortOrder
+    tag_uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    entity_type?: SortOrder
+    entity_uuid?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type OrgTagAssignmentAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type OrgTagAssignmentMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tag_uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    entity_type?: SortOrder
+    entity_uuid?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type OrgTagAssignmentMinOrderByAggregateInput = {
+    id?: SortOrder
+    tag_uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    entity_type?: SortOrder
+    entity_uuid?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type OrgTagAssignmentSumOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type EnumOrgTagEntityTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.OrgTagEntityType | EnumOrgTagEntityTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.OrgTagEntityType[] | ListEnumOrgTagEntityTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.OrgTagEntityType[] | ListEnumOrgTagEntityTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumOrgTagEntityTypeWithAggregatesFilter<$PrismaModel> | $Enums.OrgTagEntityType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumOrgTagEntityTypeFilter<$PrismaModel>
+    _max?: NestedEnumOrgTagEntityTypeFilter<$PrismaModel>
+  }
+
   export type OrganisationMemberCreateNestedManyWithoutUserInput = {
     create?: XOR<OrganisationMemberCreateWithoutUserInput, OrganisationMemberUncheckedCreateWithoutUserInput> | OrganisationMemberCreateWithoutUserInput[] | OrganisationMemberUncheckedCreateWithoutUserInput[]
     connectOrCreate?: OrganisationMemberCreateOrConnectWithoutUserInput | OrganisationMemberCreateOrConnectWithoutUserInput[]
@@ -107852,6 +110804,13 @@ export namespace Prisma {
     connect?: MessagingGoalWhereUniqueInput | MessagingGoalWhereUniqueInput[]
   }
 
+  export type OrgTagCreateNestedManyWithoutOrganisationInput = {
+    create?: XOR<OrgTagCreateWithoutOrganisationInput, OrgTagUncheckedCreateWithoutOrganisationInput> | OrgTagCreateWithoutOrganisationInput[] | OrgTagUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: OrgTagCreateOrConnectWithoutOrganisationInput | OrgTagCreateOrConnectWithoutOrganisationInput[]
+    createMany?: OrgTagCreateManyOrganisationInputEnvelope
+    connect?: OrgTagWhereUniqueInput | OrgTagWhereUniqueInput[]
+  }
+
   export type GoalAchievementCreateNestedManyWithoutOrganisationInput = {
     create?: XOR<GoalAchievementCreateWithoutOrganisationInput, GoalAchievementUncheckedCreateWithoutOrganisationInput> | GoalAchievementCreateWithoutOrganisationInput[] | GoalAchievementUncheckedCreateWithoutOrganisationInput[]
     connectOrCreate?: GoalAchievementCreateOrConnectWithoutOrganisationInput | GoalAchievementCreateOrConnectWithoutOrganisationInput[]
@@ -108088,6 +111047,13 @@ export namespace Prisma {
     connectOrCreate?: MessagingGoalCreateOrConnectWithoutOrganisationInput | MessagingGoalCreateOrConnectWithoutOrganisationInput[]
     createMany?: MessagingGoalCreateManyOrganisationInputEnvelope
     connect?: MessagingGoalWhereUniqueInput | MessagingGoalWhereUniqueInput[]
+  }
+
+  export type OrgTagUncheckedCreateNestedManyWithoutOrganisationInput = {
+    create?: XOR<OrgTagCreateWithoutOrganisationInput, OrgTagUncheckedCreateWithoutOrganisationInput> | OrgTagCreateWithoutOrganisationInput[] | OrgTagUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: OrgTagCreateOrConnectWithoutOrganisationInput | OrgTagCreateOrConnectWithoutOrganisationInput[]
+    createMany?: OrgTagCreateManyOrganisationInputEnvelope
+    connect?: OrgTagWhereUniqueInput | OrgTagWhereUniqueInput[]
   }
 
   export type GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput = {
@@ -108487,6 +111453,20 @@ export namespace Prisma {
     update?: MessagingGoalUpdateWithWhereUniqueWithoutOrganisationInput | MessagingGoalUpdateWithWhereUniqueWithoutOrganisationInput[]
     updateMany?: MessagingGoalUpdateManyWithWhereWithoutOrganisationInput | MessagingGoalUpdateManyWithWhereWithoutOrganisationInput[]
     deleteMany?: MessagingGoalScalarWhereInput | MessagingGoalScalarWhereInput[]
+  }
+
+  export type OrgTagUpdateManyWithoutOrganisationNestedInput = {
+    create?: XOR<OrgTagCreateWithoutOrganisationInput, OrgTagUncheckedCreateWithoutOrganisationInput> | OrgTagCreateWithoutOrganisationInput[] | OrgTagUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: OrgTagCreateOrConnectWithoutOrganisationInput | OrgTagCreateOrConnectWithoutOrganisationInput[]
+    upsert?: OrgTagUpsertWithWhereUniqueWithoutOrganisationInput | OrgTagUpsertWithWhereUniqueWithoutOrganisationInput[]
+    createMany?: OrgTagCreateManyOrganisationInputEnvelope
+    set?: OrgTagWhereUniqueInput | OrgTagWhereUniqueInput[]
+    disconnect?: OrgTagWhereUniqueInput | OrgTagWhereUniqueInput[]
+    delete?: OrgTagWhereUniqueInput | OrgTagWhereUniqueInput[]
+    connect?: OrgTagWhereUniqueInput | OrgTagWhereUniqueInput[]
+    update?: OrgTagUpdateWithWhereUniqueWithoutOrganisationInput | OrgTagUpdateWithWhereUniqueWithoutOrganisationInput[]
+    updateMany?: OrgTagUpdateManyWithWhereWithoutOrganisationInput | OrgTagUpdateManyWithWhereWithoutOrganisationInput[]
+    deleteMany?: OrgTagScalarWhereInput | OrgTagScalarWhereInput[]
   }
 
   export type GoalAchievementUpdateManyWithoutOrganisationNestedInput = {
@@ -108963,6 +111943,20 @@ export namespace Prisma {
     update?: MessagingGoalUpdateWithWhereUniqueWithoutOrganisationInput | MessagingGoalUpdateWithWhereUniqueWithoutOrganisationInput[]
     updateMany?: MessagingGoalUpdateManyWithWhereWithoutOrganisationInput | MessagingGoalUpdateManyWithWhereWithoutOrganisationInput[]
     deleteMany?: MessagingGoalScalarWhereInput | MessagingGoalScalarWhereInput[]
+  }
+
+  export type OrgTagUncheckedUpdateManyWithoutOrganisationNestedInput = {
+    create?: XOR<OrgTagCreateWithoutOrganisationInput, OrgTagUncheckedCreateWithoutOrganisationInput> | OrgTagCreateWithoutOrganisationInput[] | OrgTagUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: OrgTagCreateOrConnectWithoutOrganisationInput | OrgTagCreateOrConnectWithoutOrganisationInput[]
+    upsert?: OrgTagUpsertWithWhereUniqueWithoutOrganisationInput | OrgTagUpsertWithWhereUniqueWithoutOrganisationInput[]
+    createMany?: OrgTagCreateManyOrganisationInputEnvelope
+    set?: OrgTagWhereUniqueInput | OrgTagWhereUniqueInput[]
+    disconnect?: OrgTagWhereUniqueInput | OrgTagWhereUniqueInput[]
+    delete?: OrgTagWhereUniqueInput | OrgTagWhereUniqueInput[]
+    connect?: OrgTagWhereUniqueInput | OrgTagWhereUniqueInput[]
+    update?: OrgTagUpdateWithWhereUniqueWithoutOrganisationInput | OrgTagUpdateWithWhereUniqueWithoutOrganisationInput[]
+    updateMany?: OrgTagUpdateManyWithWhereWithoutOrganisationInput | OrgTagUpdateManyWithWhereWithoutOrganisationInput[]
+    deleteMany?: OrgTagScalarWhereInput | OrgTagScalarWhereInput[]
   }
 
   export type GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput = {
@@ -113462,6 +116456,80 @@ export namespace Prisma {
     update?: XOR<XOR<OrganisationUpdateToOneWithWhereWithoutMcp_tool_invocation_logsInput, OrganisationUpdateWithoutMcp_tool_invocation_logsInput>, OrganisationUncheckedUpdateWithoutMcp_tool_invocation_logsInput>
   }
 
+  export type OrganisationCreateNestedOneWithoutOrg_tagsInput = {
+    create?: XOR<OrganisationCreateWithoutOrg_tagsInput, OrganisationUncheckedCreateWithoutOrg_tagsInput>
+    connectOrCreate?: OrganisationCreateOrConnectWithoutOrg_tagsInput
+    connect?: OrganisationWhereUniqueInput
+  }
+
+  export type OrgTagAssignmentCreateNestedManyWithoutTagInput = {
+    create?: XOR<OrgTagAssignmentCreateWithoutTagInput, OrgTagAssignmentUncheckedCreateWithoutTagInput> | OrgTagAssignmentCreateWithoutTagInput[] | OrgTagAssignmentUncheckedCreateWithoutTagInput[]
+    connectOrCreate?: OrgTagAssignmentCreateOrConnectWithoutTagInput | OrgTagAssignmentCreateOrConnectWithoutTagInput[]
+    createMany?: OrgTagAssignmentCreateManyTagInputEnvelope
+    connect?: OrgTagAssignmentWhereUniqueInput | OrgTagAssignmentWhereUniqueInput[]
+  }
+
+  export type OrgTagAssignmentUncheckedCreateNestedManyWithoutTagInput = {
+    create?: XOR<OrgTagAssignmentCreateWithoutTagInput, OrgTagAssignmentUncheckedCreateWithoutTagInput> | OrgTagAssignmentCreateWithoutTagInput[] | OrgTagAssignmentUncheckedCreateWithoutTagInput[]
+    connectOrCreate?: OrgTagAssignmentCreateOrConnectWithoutTagInput | OrgTagAssignmentCreateOrConnectWithoutTagInput[]
+    createMany?: OrgTagAssignmentCreateManyTagInputEnvelope
+    connect?: OrgTagAssignmentWhereUniqueInput | OrgTagAssignmentWhereUniqueInput[]
+  }
+
+  export type OrganisationUpdateOneRequiredWithoutOrg_tagsNestedInput = {
+    create?: XOR<OrganisationCreateWithoutOrg_tagsInput, OrganisationUncheckedCreateWithoutOrg_tagsInput>
+    connectOrCreate?: OrganisationCreateOrConnectWithoutOrg_tagsInput
+    upsert?: OrganisationUpsertWithoutOrg_tagsInput
+    connect?: OrganisationWhereUniqueInput
+    update?: XOR<XOR<OrganisationUpdateToOneWithWhereWithoutOrg_tagsInput, OrganisationUpdateWithoutOrg_tagsInput>, OrganisationUncheckedUpdateWithoutOrg_tagsInput>
+  }
+
+  export type OrgTagAssignmentUpdateManyWithoutTagNestedInput = {
+    create?: XOR<OrgTagAssignmentCreateWithoutTagInput, OrgTagAssignmentUncheckedCreateWithoutTagInput> | OrgTagAssignmentCreateWithoutTagInput[] | OrgTagAssignmentUncheckedCreateWithoutTagInput[]
+    connectOrCreate?: OrgTagAssignmentCreateOrConnectWithoutTagInput | OrgTagAssignmentCreateOrConnectWithoutTagInput[]
+    upsert?: OrgTagAssignmentUpsertWithWhereUniqueWithoutTagInput | OrgTagAssignmentUpsertWithWhereUniqueWithoutTagInput[]
+    createMany?: OrgTagAssignmentCreateManyTagInputEnvelope
+    set?: OrgTagAssignmentWhereUniqueInput | OrgTagAssignmentWhereUniqueInput[]
+    disconnect?: OrgTagAssignmentWhereUniqueInput | OrgTagAssignmentWhereUniqueInput[]
+    delete?: OrgTagAssignmentWhereUniqueInput | OrgTagAssignmentWhereUniqueInput[]
+    connect?: OrgTagAssignmentWhereUniqueInput | OrgTagAssignmentWhereUniqueInput[]
+    update?: OrgTagAssignmentUpdateWithWhereUniqueWithoutTagInput | OrgTagAssignmentUpdateWithWhereUniqueWithoutTagInput[]
+    updateMany?: OrgTagAssignmentUpdateManyWithWhereWithoutTagInput | OrgTagAssignmentUpdateManyWithWhereWithoutTagInput[]
+    deleteMany?: OrgTagAssignmentScalarWhereInput | OrgTagAssignmentScalarWhereInput[]
+  }
+
+  export type OrgTagAssignmentUncheckedUpdateManyWithoutTagNestedInput = {
+    create?: XOR<OrgTagAssignmentCreateWithoutTagInput, OrgTagAssignmentUncheckedCreateWithoutTagInput> | OrgTagAssignmentCreateWithoutTagInput[] | OrgTagAssignmentUncheckedCreateWithoutTagInput[]
+    connectOrCreate?: OrgTagAssignmentCreateOrConnectWithoutTagInput | OrgTagAssignmentCreateOrConnectWithoutTagInput[]
+    upsert?: OrgTagAssignmentUpsertWithWhereUniqueWithoutTagInput | OrgTagAssignmentUpsertWithWhereUniqueWithoutTagInput[]
+    createMany?: OrgTagAssignmentCreateManyTagInputEnvelope
+    set?: OrgTagAssignmentWhereUniqueInput | OrgTagAssignmentWhereUniqueInput[]
+    disconnect?: OrgTagAssignmentWhereUniqueInput | OrgTagAssignmentWhereUniqueInput[]
+    delete?: OrgTagAssignmentWhereUniqueInput | OrgTagAssignmentWhereUniqueInput[]
+    connect?: OrgTagAssignmentWhereUniqueInput | OrgTagAssignmentWhereUniqueInput[]
+    update?: OrgTagAssignmentUpdateWithWhereUniqueWithoutTagInput | OrgTagAssignmentUpdateWithWhereUniqueWithoutTagInput[]
+    updateMany?: OrgTagAssignmentUpdateManyWithWhereWithoutTagInput | OrgTagAssignmentUpdateManyWithWhereWithoutTagInput[]
+    deleteMany?: OrgTagAssignmentScalarWhereInput | OrgTagAssignmentScalarWhereInput[]
+  }
+
+  export type OrgTagCreateNestedOneWithoutAssignmentsInput = {
+    create?: XOR<OrgTagCreateWithoutAssignmentsInput, OrgTagUncheckedCreateWithoutAssignmentsInput>
+    connectOrCreate?: OrgTagCreateOrConnectWithoutAssignmentsInput
+    connect?: OrgTagWhereUniqueInput
+  }
+
+  export type EnumOrgTagEntityTypeFieldUpdateOperationsInput = {
+    set?: $Enums.OrgTagEntityType
+  }
+
+  export type OrgTagUpdateOneRequiredWithoutAssignmentsNestedInput = {
+    create?: XOR<OrgTagCreateWithoutAssignmentsInput, OrgTagUncheckedCreateWithoutAssignmentsInput>
+    connectOrCreate?: OrgTagCreateOrConnectWithoutAssignmentsInput
+    upsert?: OrgTagUpsertWithoutAssignmentsInput
+    connect?: OrgTagWhereUniqueInput
+    update?: XOR<XOR<OrgTagUpdateToOneWithWhereWithoutAssignmentsInput, OrgTagUpdateWithoutAssignmentsInput>, OrgTagUncheckedUpdateWithoutAssignmentsInput>
+  }
+
   export type NestedIntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -114685,6 +117753,23 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumOAuthConnectionStatusFilter<$PrismaModel>
     _max?: NestedEnumOAuthConnectionStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumOrgTagEntityTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.OrgTagEntityType | EnumOrgTagEntityTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.OrgTagEntityType[] | ListEnumOrgTagEntityTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.OrgTagEntityType[] | ListEnumOrgTagEntityTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumOrgTagEntityTypeFilter<$PrismaModel> | $Enums.OrgTagEntityType
+  }
+
+  export type NestedEnumOrgTagEntityTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.OrgTagEntityType | EnumOrgTagEntityTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.OrgTagEntityType[] | ListEnumOrgTagEntityTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.OrgTagEntityType[] | ListEnumOrgTagEntityTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumOrgTagEntityTypeWithAggregatesFilter<$PrismaModel> | $Enums.OrgTagEntityType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumOrgTagEntityTypeFilter<$PrismaModel>
+    _max?: NestedEnumOrgTagEntityTypeFilter<$PrismaModel>
   }
 
   export type OrganisationMemberCreateWithoutUserInput = {
@@ -116809,6 +119894,35 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type OrgTagCreateWithoutOrganisationInput = {
+    uuid?: string
+    name: string
+    color?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    assignments?: OrgTagAssignmentCreateNestedManyWithoutTagInput
+  }
+
+  export type OrgTagUncheckedCreateWithoutOrganisationInput = {
+    id?: number
+    uuid?: string
+    name: string
+    color?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    assignments?: OrgTagAssignmentUncheckedCreateNestedManyWithoutTagInput
+  }
+
+  export type OrgTagCreateOrConnectWithoutOrganisationInput = {
+    where: OrgTagWhereUniqueInput
+    create: XOR<OrgTagCreateWithoutOrganisationInput, OrgTagUncheckedCreateWithoutOrganisationInput>
+  }
+
+  export type OrgTagCreateManyOrganisationInputEnvelope = {
+    data: OrgTagCreateManyOrganisationInput | OrgTagCreateManyOrganisationInput[]
+    skipDuplicates?: boolean
+  }
+
   export type GoalAchievementCreateWithoutOrganisationInput = {
     uuid?: string
     type: $Enums.GoalAchievementType
@@ -117990,6 +121104,35 @@ export namespace Prisma {
     data: XOR<MessagingGoalUpdateManyMutationInput, MessagingGoalUncheckedUpdateManyWithoutOrganisationInput>
   }
 
+  export type OrgTagUpsertWithWhereUniqueWithoutOrganisationInput = {
+    where: OrgTagWhereUniqueInput
+    update: XOR<OrgTagUpdateWithoutOrganisationInput, OrgTagUncheckedUpdateWithoutOrganisationInput>
+    create: XOR<OrgTagCreateWithoutOrganisationInput, OrgTagUncheckedCreateWithoutOrganisationInput>
+  }
+
+  export type OrgTagUpdateWithWhereUniqueWithoutOrganisationInput = {
+    where: OrgTagWhereUniqueInput
+    data: XOR<OrgTagUpdateWithoutOrganisationInput, OrgTagUncheckedUpdateWithoutOrganisationInput>
+  }
+
+  export type OrgTagUpdateManyWithWhereWithoutOrganisationInput = {
+    where: OrgTagScalarWhereInput
+    data: XOR<OrgTagUpdateManyMutationInput, OrgTagUncheckedUpdateManyWithoutOrganisationInput>
+  }
+
+  export type OrgTagScalarWhereInput = {
+    AND?: OrgTagScalarWhereInput | OrgTagScalarWhereInput[]
+    OR?: OrgTagScalarWhereInput[]
+    NOT?: OrgTagScalarWhereInput | OrgTagScalarWhereInput[]
+    id?: IntFilter<"OrgTag"> | number
+    uuid?: StringFilter<"OrgTag"> | string
+    organisation_uuid?: StringFilter<"OrgTag"> | string
+    name?: StringFilter<"OrgTag"> | string
+    color?: StringNullableFilter<"OrgTag"> | string | null
+    created_at?: DateTimeFilter<"OrgTag"> | Date | string
+    updated_at?: DateTimeFilter<"OrgTag"> | Date | string
+  }
+
   export type GoalAchievementUpsertWithWhereUniqueWithoutOrganisationInput = {
     where: GoalAchievementWhereUniqueInput
     update: XOR<GoalAchievementUpdateWithoutOrganisationInput, GoalAchievementUncheckedUpdateWithoutOrganisationInput>
@@ -118311,6 +121454,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
@@ -118356,6 +121500,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
@@ -118468,6 +121613,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
@@ -118513,6 +121659,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -118615,6 +121762,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
@@ -118660,6 +121808,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
@@ -118772,6 +121921,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
@@ -118817,6 +121967,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -118920,6 +122071,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
@@ -118965,6 +122117,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
@@ -119077,6 +122230,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
@@ -119122,6 +122276,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -119223,6 +122378,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
@@ -119268,6 +122424,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
@@ -119626,6 +122783,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
@@ -119671,6 +122829,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -119901,6 +123060,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
@@ -119946,6 +123106,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
@@ -120006,6 +123167,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
@@ -120051,6 +123213,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -120205,6 +123368,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
@@ -120250,6 +123414,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
@@ -120353,6 +123518,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
@@ -120398,6 +123564,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -121265,6 +124432,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
@@ -121310,6 +124478,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
@@ -121980,6 +125149,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
@@ -122025,6 +125195,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -123478,6 +126649,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
@@ -123523,6 +126695,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
@@ -123834,6 +127007,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
@@ -123879,6 +127053,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -124629,6 +127804,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
@@ -124674,6 +127850,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
@@ -125032,6 +128209,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
@@ -125077,6 +128255,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -125325,6 +128504,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
@@ -125370,6 +128550,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
@@ -125924,6 +129105,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
@@ -125969,6 +129151,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -126501,6 +129684,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
@@ -126546,6 +129730,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
@@ -126805,6 +129990,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
@@ -126850,6 +130036,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -127016,6 +130203,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
@@ -127061,6 +130249,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
@@ -127320,6 +130509,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
@@ -127365,6 +130555,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -128508,6 +131699,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
@@ -128553,6 +131745,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
@@ -128665,6 +131858,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
@@ -128710,6 +131904,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -128812,6 +132007,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
@@ -128857,6 +132053,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
@@ -128917,6 +132114,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
@@ -128962,6 +132160,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -129005,6 +132204,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
@@ -129050,6 +132250,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
@@ -129213,6 +132414,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
@@ -129258,6 +132460,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -129318,6 +132521,7 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
@@ -129363,6 +132567,7 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
@@ -129470,6 +132675,7 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
@@ -129515,6 +132721,7 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -129575,6 +132782,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
@@ -129620,6 +132828,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
@@ -130076,6 +133285,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
@@ -130121,6 +133331,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -130786,6 +133997,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
@@ -130831,6 +134043,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
@@ -130943,6 +134156,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
@@ -130988,6 +134202,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -131090,6 +134305,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
@@ -131135,6 +134351,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
@@ -131261,6 +134478,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
@@ -131306,6 +134524,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -131766,6 +134985,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
@@ -131811,6 +135031,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
@@ -131871,6 +135092,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
@@ -131916,6 +135138,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -131960,6 +135183,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
@@ -132005,6 +135229,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
@@ -132065,6 +135290,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
@@ -132110,6 +135336,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -132153,6 +135380,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
@@ -132198,6 +135426,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
@@ -132452,6 +135681,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
@@ -132497,6 +135727,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -132747,6 +135978,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
@@ -132792,6 +136024,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
@@ -132924,6 +136157,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
@@ -132969,6 +136203,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -133732,6 +136967,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
@@ -133777,6 +137013,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
@@ -134017,6 +137254,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
@@ -134062,6 +137300,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -134304,6 +137543,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
@@ -134349,6 +137589,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
@@ -134409,6 +137650,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
@@ -134454,6 +137696,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -134498,6 +137741,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
@@ -134543,6 +137787,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
@@ -134603,6 +137848,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
@@ -134648,6 +137894,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -134692,6 +137939,7 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
@@ -134737,6 +137985,7 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
@@ -134882,6 +138131,7 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
@@ -134927,6 +138177,7 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -135046,6 +138297,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
@@ -135091,6 +138343,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
@@ -135151,6 +138404,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
@@ -135196,6 +138450,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -135240,6 +138495,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
@@ -135285,6 +138541,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
@@ -135502,6 +138759,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
@@ -135547,6 +138805,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -136444,6 +139703,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
@@ -136489,6 +139749,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
@@ -136629,6 +139890,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
@@ -136674,6 +139936,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -136810,6 +140073,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
@@ -136855,6 +140119,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
@@ -136967,6 +140232,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
@@ -137012,6 +140278,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
     website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -137113,6 +140380,7 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
@@ -137158,6 +140426,7 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
@@ -137270,6 +140539,7 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
@@ -137315,6 +140585,7 @@ export namespace Prisma {
     apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -137418,6 +140689,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
@@ -137463,6 +140735,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
@@ -137575,6 +140848,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
@@ -137620,6 +140894,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -137722,6 +140997,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
@@ -137767,6 +141043,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
     messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagUncheckedCreateNestedManyWithoutOrganisationInput
     goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
     goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
     bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
@@ -137827,6 +141104,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
@@ -137872,6 +141150,7 @@ export namespace Prisma {
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
     messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
     goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
     bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -137882,6 +141161,311 @@ export namespace Prisma {
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+  }
+
+  export type OrganisationCreateWithoutOrg_tagsInput = {
+    uuid?: string
+    name: string
+    slug: string
+    timezone?: string
+    reply_to_email?: string | null
+    reply_forward_email?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
+    invitations?: OrganisationInvitationCreateNestedManyWithoutOrganisationInput
+    filters?: FilterCreateNestedManyWithoutOrganisationInput
+    contacts?: ContactCreateNestedManyWithoutOrganisationInput
+    outreach_messages?: OutreachMessageCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadCreateNestedManyWithoutOrganisationInput
+    outreach_sequences?: OutreachSequenceCreateNestedManyWithoutOrganisationInput
+    interactions?: InteractionCreateNestedManyWithoutOrganisationInput
+    sender_profiles?: SenderProfileCreateNestedManyWithoutOrganisationInput
+    marketing_campaigns?: MarketingCampaignCreateNestedManyWithoutOrganisationInput
+    scoring_instructions?: ScoringInstructionCreateNestedManyWithoutOrganisationInput
+    openai_batch_jobs?: OpenAiBatchJobCreateNestedManyWithoutOrganisationInput
+    integrations?: IntegrationCreateNestedManyWithoutOrganisationInput
+    reminders?: ReminderCreateNestedManyWithoutOrganisationInput
+    forms?: FormCreateNestedManyWithoutOrganisationInput
+    contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
+    contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
+    ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
+    apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
+    message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
+  }
+
+  export type OrganisationUncheckedCreateWithoutOrg_tagsInput = {
+    id?: number
+    uuid?: string
+    name: string
+    slug: string
+    timezone?: string
+    reply_to_email?: string | null
+    reply_forward_email?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
+    invitations?: OrganisationInvitationUncheckedCreateNestedManyWithoutOrganisationInput
+    filters?: FilterUncheckedCreateNestedManyWithoutOrganisationInput
+    contacts?: ContactUncheckedCreateNestedManyWithoutOrganisationInput
+    outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutOrganisationInput
+    outreach_sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutOrganisationInput
+    interactions?: InteractionUncheckedCreateNestedManyWithoutOrganisationInput
+    sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutOrganisationInput
+    marketing_campaigns?: MarketingCampaignUncheckedCreateNestedManyWithoutOrganisationInput
+    scoring_instructions?: ScoringInstructionUncheckedCreateNestedManyWithoutOrganisationInput
+    openai_batch_jobs?: OpenAiBatchJobUncheckedCreateNestedManyWithoutOrganisationInput
+    integrations?: IntegrationUncheckedCreateNestedManyWithoutOrganisationInput
+    reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
+    forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
+    contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
+    contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
+    ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
+    apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
+    message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
+  }
+
+  export type OrganisationCreateOrConnectWithoutOrg_tagsInput = {
+    where: OrganisationWhereUniqueInput
+    create: XOR<OrganisationCreateWithoutOrg_tagsInput, OrganisationUncheckedCreateWithoutOrg_tagsInput>
+  }
+
+  export type OrgTagAssignmentCreateWithoutTagInput = {
+    organisation_uuid: string
+    entity_type: $Enums.OrgTagEntityType
+    entity_uuid: string
+    created_at?: Date | string
+  }
+
+  export type OrgTagAssignmentUncheckedCreateWithoutTagInput = {
+    id?: number
+    organisation_uuid: string
+    entity_type: $Enums.OrgTagEntityType
+    entity_uuid: string
+    created_at?: Date | string
+  }
+
+  export type OrgTagAssignmentCreateOrConnectWithoutTagInput = {
+    where: OrgTagAssignmentWhereUniqueInput
+    create: XOR<OrgTagAssignmentCreateWithoutTagInput, OrgTagAssignmentUncheckedCreateWithoutTagInput>
+  }
+
+  export type OrgTagAssignmentCreateManyTagInputEnvelope = {
+    data: OrgTagAssignmentCreateManyTagInput | OrgTagAssignmentCreateManyTagInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type OrganisationUpsertWithoutOrg_tagsInput = {
+    update: XOR<OrganisationUpdateWithoutOrg_tagsInput, OrganisationUncheckedUpdateWithoutOrg_tagsInput>
+    create: XOR<OrganisationCreateWithoutOrg_tagsInput, OrganisationUncheckedCreateWithoutOrg_tagsInput>
+    where?: OrganisationWhereInput
+  }
+
+  export type OrganisationUpdateToOneWithWhereWithoutOrg_tagsInput = {
+    where?: OrganisationWhereInput
+    data: XOR<OrganisationUpdateWithoutOrg_tagsInput, OrganisationUncheckedUpdateWithoutOrg_tagsInput>
+  }
+
+  export type OrganisationUpdateWithoutOrg_tagsInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_forward_email?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
+    invitations?: OrganisationInvitationUpdateManyWithoutOrganisationNestedInput
+    filters?: FilterUpdateManyWithoutOrganisationNestedInput
+    contacts?: ContactUpdateManyWithoutOrganisationNestedInput
+    outreach_messages?: OutreachMessageUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutOrganisationNestedInput
+    outreach_sequences?: OutreachSequenceUpdateManyWithoutOrganisationNestedInput
+    interactions?: InteractionUpdateManyWithoutOrganisationNestedInput
+    sender_profiles?: SenderProfileUpdateManyWithoutOrganisationNestedInput
+    marketing_campaigns?: MarketingCampaignUpdateManyWithoutOrganisationNestedInput
+    scoring_instructions?: ScoringInstructionUpdateManyWithoutOrganisationNestedInput
+    openai_batch_jobs?: OpenAiBatchJobUpdateManyWithoutOrganisationNestedInput
+    integrations?: IntegrationUpdateManyWithoutOrganisationNestedInput
+    reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
+    forms?: FormUpdateManyWithoutOrganisationNestedInput
+    contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
+    contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
+    ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
+    apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
+    message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
+  }
+
+  export type OrganisationUncheckedUpdateWithoutOrg_tagsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_forward_email?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
+    invitations?: OrganisationInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
+    filters?: FilterUncheckedUpdateManyWithoutOrganisationNestedInput
+    contacts?: ContactUncheckedUpdateManyWithoutOrganisationNestedInput
+    outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutOrganisationNestedInput
+    outreach_sequences?: OutreachSequenceUncheckedUpdateManyWithoutOrganisationNestedInput
+    interactions?: InteractionUncheckedUpdateManyWithoutOrganisationNestedInput
+    sender_profiles?: SenderProfileUncheckedUpdateManyWithoutOrganisationNestedInput
+    marketing_campaigns?: MarketingCampaignUncheckedUpdateManyWithoutOrganisationNestedInput
+    scoring_instructions?: ScoringInstructionUncheckedUpdateManyWithoutOrganisationNestedInput
+    openai_batch_jobs?: OpenAiBatchJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    integrations?: IntegrationUncheckedUpdateManyWithoutOrganisationNestedInput
+    reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
+    forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
+    contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
+    contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
+    ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
+  }
+
+  export type OrgTagAssignmentUpsertWithWhereUniqueWithoutTagInput = {
+    where: OrgTagAssignmentWhereUniqueInput
+    update: XOR<OrgTagAssignmentUpdateWithoutTagInput, OrgTagAssignmentUncheckedUpdateWithoutTagInput>
+    create: XOR<OrgTagAssignmentCreateWithoutTagInput, OrgTagAssignmentUncheckedCreateWithoutTagInput>
+  }
+
+  export type OrgTagAssignmentUpdateWithWhereUniqueWithoutTagInput = {
+    where: OrgTagAssignmentWhereUniqueInput
+    data: XOR<OrgTagAssignmentUpdateWithoutTagInput, OrgTagAssignmentUncheckedUpdateWithoutTagInput>
+  }
+
+  export type OrgTagAssignmentUpdateManyWithWhereWithoutTagInput = {
+    where: OrgTagAssignmentScalarWhereInput
+    data: XOR<OrgTagAssignmentUpdateManyMutationInput, OrgTagAssignmentUncheckedUpdateManyWithoutTagInput>
+  }
+
+  export type OrgTagAssignmentScalarWhereInput = {
+    AND?: OrgTagAssignmentScalarWhereInput | OrgTagAssignmentScalarWhereInput[]
+    OR?: OrgTagAssignmentScalarWhereInput[]
+    NOT?: OrgTagAssignmentScalarWhereInput | OrgTagAssignmentScalarWhereInput[]
+    id?: IntFilter<"OrgTagAssignment"> | number
+    tag_uuid?: StringFilter<"OrgTagAssignment"> | string
+    organisation_uuid?: StringFilter<"OrgTagAssignment"> | string
+    entity_type?: EnumOrgTagEntityTypeFilter<"OrgTagAssignment"> | $Enums.OrgTagEntityType
+    entity_uuid?: StringFilter<"OrgTagAssignment"> | string
+    created_at?: DateTimeFilter<"OrgTagAssignment"> | Date | string
+  }
+
+  export type OrgTagCreateWithoutAssignmentsInput = {
+    uuid?: string
+    name: string
+    color?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutOrg_tagsInput
+  }
+
+  export type OrgTagUncheckedCreateWithoutAssignmentsInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    name: string
+    color?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type OrgTagCreateOrConnectWithoutAssignmentsInput = {
+    where: OrgTagWhereUniqueInput
+    create: XOR<OrgTagCreateWithoutAssignmentsInput, OrgTagUncheckedCreateWithoutAssignmentsInput>
+  }
+
+  export type OrgTagUpsertWithoutAssignmentsInput = {
+    update: XOR<OrgTagUpdateWithoutAssignmentsInput, OrgTagUncheckedUpdateWithoutAssignmentsInput>
+    create: XOR<OrgTagCreateWithoutAssignmentsInput, OrgTagUncheckedCreateWithoutAssignmentsInput>
+    where?: OrgTagWhereInput
+  }
+
+  export type OrgTagUpdateToOneWithWhereWithoutAssignmentsInput = {
+    where?: OrgTagWhereInput
+    data: XOR<OrgTagUpdateWithoutAssignmentsInput, OrgTagUncheckedUpdateWithoutAssignmentsInput>
+  }
+
+  export type OrgTagUpdateWithoutAssignmentsInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutOrg_tagsNestedInput
+  }
+
+  export type OrgTagUncheckedUpdateWithoutAssignmentsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type OrganisationMemberCreateManyUserInput = {
@@ -139104,6 +142688,15 @@ export namespace Prisma {
     period: $Enums.GoalPeriod
     target_count: number
     is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type OrgTagCreateManyOrganisationInput = {
+    id?: number
+    uuid?: string
+    name: string
+    color?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -140578,6 +144171,34 @@ export namespace Prisma {
     period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
     target_count?: IntFieldUpdateOperationsInput | number
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OrgTagUpdateWithoutOrganisationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    assignments?: OrgTagAssignmentUpdateManyWithoutTagNestedInput
+  }
+
+  export type OrgTagUncheckedUpdateWithoutOrganisationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    assignments?: OrgTagAssignmentUncheckedUpdateManyWithoutTagNestedInput
+  }
+
+  export type OrgTagUncheckedUpdateManyWithoutOrganisationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -145274,6 +148895,37 @@ export namespace Prisma {
     sequence_step_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OrgTagAssignmentCreateManyTagInput = {
+    id?: number
+    organisation_uuid: string
+    entity_type: $Enums.OrgTagEntityType
+    entity_uuid: string
+    created_at?: Date | string
+  }
+
+  export type OrgTagAssignmentUpdateWithoutTagInput = {
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    entity_type?: EnumOrgTagEntityTypeFieldUpdateOperationsInput | $Enums.OrgTagEntityType
+    entity_uuid?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OrgTagAssignmentUncheckedUpdateWithoutTagInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    entity_type?: EnumOrgTagEntityTypeFieldUpdateOperationsInput | $Enums.OrgTagEntityType
+    entity_uuid?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OrgTagAssignmentUncheckedUpdateManyWithoutTagInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    entity_type?: EnumOrgTagEntityTypeFieldUpdateOperationsInput | $Enums.OrgTagEntityType
+    entity_uuid?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

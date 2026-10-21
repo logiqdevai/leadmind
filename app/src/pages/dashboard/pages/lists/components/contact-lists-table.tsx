@@ -4,6 +4,7 @@ import { FolderInput, Pencil, Trash2 } from "lucide-react";
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { Routes } from "@/routes/routes";
 import { extraListColumnClass } from "@/components/ui/mobile-list-filters";
+import { TagChips } from "@/components/tags/tag-chips";
 import { TablePagination } from "@/components/ui/table-pagination";
 import { isTableNavInteractiveCell, renderTableNavCellContent, tableNavInteractiveCellClassName, tableNavRowClassName } from "@/components/ui/table-row-link";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
@@ -130,6 +131,11 @@ export function ContactListsTable({
                     );
                 },
             }),
+            columnHelper.display({
+                id: "tags",
+                header: "Tags",
+                cell: (info) => <TagChips tags={info.row.original.tags} />,
+            }),
             columnHelper.accessor(
                 (row) => row.child_count ?? row._count?.children ?? 0,
                 {
@@ -191,7 +197,7 @@ export function ContactListsTable({
                                     key={header.id}
                                     id={header.id}
                                     isRowHeader={header.id === "title"}
-                                    className={extraListColumnClass(header.id, ["description", "sublists", "contacts", "updated_at"])}
+                                    className={extraListColumnClass(header.id, ["description", "tags", "sublists", "contacts", "updated_at"])}
                                 >
                                     {flexRender(header.column.columnDef.header, header.getContext())}
                                 </Table.Column>
@@ -231,6 +237,7 @@ export function ContactListsTable({
                                               const isInteractive = isTableNavInteractiveCell(cell.column.id);
                                               const columnClass = extraListColumnClass(cell.column.id, [
                                                   "description",
+                                                  "tags",
                                                   "sublists",
                                                   "contacts",
                                                   "updated_at",

@@ -1084,6 +1084,25 @@ exports.Prisma.McpToolInvocationLogScalarFieldEnum = {
   created_at: 'created_at'
 };
 
+exports.Prisma.OrgTagScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  organisation_uuid: 'organisation_uuid',
+  name: 'name',
+  color: 'color',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.OrgTagAssignmentScalarFieldEnum = {
+  id: 'id',
+  tag_uuid: 'tag_uuid',
+  organisation_uuid: 'organisation_uuid',
+  entity_type: 'entity_type',
+  entity_uuid: 'entity_uuid',
+  created_at: 'created_at'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1545,6 +1564,13 @@ exports.OAuthConnectionStatus = exports.$Enums.OAuthConnectionStatus = {
   REVOKED: 'REVOKED'
 };
 
+exports.OrgTagEntityType = exports.$Enums.OrgTagEntityType = {
+  CONTACT_LIST: 'CONTACT_LIST',
+  SEQUENCE: 'SEQUENCE',
+  CAMPAIGN: 'CAMPAIGN',
+  FILTER: 'FILTER'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   Organisation: 'Organisation',
@@ -1607,7 +1633,9 @@ exports.Prisma.ModelName = {
   ActivityLog: 'ActivityLog',
   OAuthModel: 'OAuthModel',
   OAuthConnection: 'OAuthConnection',
-  McpToolInvocationLog: 'McpToolInvocationLog'
+  McpToolInvocationLog: 'McpToolInvocationLog',
+  OrgTag: 'OrgTag',
+  OrgTagAssignment: 'OrgTagAssignment'
 };
 
 /**

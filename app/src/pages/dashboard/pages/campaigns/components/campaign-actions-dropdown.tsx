@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Dropdown } from "@heroui/react";
-import { Copy, MoreHorizontal, RefreshCw, Trash2, X } from "lucide-react";
+import { Copy, MoreHorizontal, RefreshCw, Tag, Trash2, X } from "lucide-react";
+import { EditTagsModal } from "@/components/tags/edit-tags-modal";
 import {
     useCancelCampaign,
     useDeleteCampaign,
@@ -24,6 +25,7 @@ export function CampaignActionsDropdown({ campaign, onDeleted }: CampaignActions
     const [confirmCancel, setConfirmCancel] = useState(false);
     const [confirmRerun, setConfirmRerun] = useState(false);
     const [confirmDelete, setConfirmDelete] = useState(false);
+    const [editTagsOpen, setEditTagsOpen] = useState(false);
 
     const batchDraftsQueued =
         campaign.status === CampaignStatuses.DRAFT && !!campaign.draft_batch_id;
@@ -57,6 +59,7 @@ export function CampaignActionsDropdown({ campaign, onDeleted }: CampaignActions
                     <Dropdown.Menu
                         onAction={(key) => {
                             if (key === "duplicate") duplicateMutation.mutate(campaign.uuid);
+                            if (key === "tags") setEditTagsOpen(true);
                             if (key === "rerun") setConfirmRerun(true);
                             if (key === "cancel") setConfirmCancel(true);
                             if (key === "delete") setConfirmDelete(true);
@@ -65,6 +68,10 @@ export function CampaignActionsDropdown({ campaign, onDeleted }: CampaignActions
                         <Dropdown.Item id="duplicate" textValue="Duplicate">
                             <Copy className="size-4" />
                             Duplicate
+                        </Dropdown.Item>
+                        <Dropdown.Item id="tags" textValue="Edit tags">
+                            <Tag className="size-4" />
+                            Edit tags
                         </Dropdown.Item>
                         {canRerun ? (
                             <Dropdown.Item id="rerun" textValue="Re-run">
@@ -90,6 +97,15 @@ export function CampaignActionsDropdown({ campaign, onDeleted }: CampaignActions
                     </Dropdown.Menu>
                 </Dropdown.Popover>
             </Dropdown>
+
+            <EditTagsModal
+                isOpen={editTagsOpen}
+                onOpenChange={setEditTagsOpen}
+                entityType="CAMPAIGN"
+                entityUuid={campaign.uuid}
+                entityName={campaign.name}
+                currentTags={campaign.tags}
+            />
 
             <ConfirmDialog
                 isOpen={confirmCancel}

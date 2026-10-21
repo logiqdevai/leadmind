@@ -1,11 +1,13 @@
 import axiosInstance from "@/config/api/axios";
 import { ApiRoutes } from "@/config/api/routes";
+import { toTagParams } from "@/features/org-tags/lib/tag-query";
 import type {
     CreateSequencePayload,
     CreateSequenceStepPayload,
     ListSequencesQuery,
     OutreachSequence,
     PaginatedSequenceEnrollments,
+    PaginatedSequences,
     SequenceEnrollment,
     SequenceStep,
     UpdateSequencePayload,
@@ -13,10 +15,10 @@ import type {
 } from "../interfaces/sequence.interface";
 import type { EmailProviderTarget } from "@/features/integrations/interfaces/integrations.interface";
 
-export const listSequences = async (query: ListSequencesQuery = {}): Promise<OutreachSequence[]> => {
+export const listSequences = async (query: ListSequencesQuery = {}): Promise<PaginatedSequences> => {
     try {
-        const response = await axiosInstance.get<OutreachSequence[]>(ApiRoutes.sequences.list, {
-            params: query,
+        const response = await axiosInstance.get<PaginatedSequences>(ApiRoutes.sequences.list, {
+            params: toTagParams(query),
         });
         return response.data;
     } catch {

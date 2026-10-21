@@ -78,6 +78,7 @@ model Organisation {
   message_templates         MessageTemplate[]
   activity_logs             ActivityLog[]
   messaging_goals           MessagingGoal[]
+  org_tags                  OrgTag[]
   goal_achievements         GoalAchievement[]
   goal_personal_bests       GoalPersonalBest[]
   bulk_jobs                 BulkJob[]
@@ -2021,4 +2022,44 @@ model McpToolInvocationLog {
 enum OAuthConnectionStatus {
   ACTIVE
   REVOKED
+}
+
+enum OrgTagEntityType {
+  CONTACT_LIST
+  SEQUENCE
+  CAMPAIGN
+  FILTER
+}
+
+model OrgTag {
+  id                Int      @id @default(autoincrement())
+  uuid              String   @unique @default(uuid())
+  organisation_uuid String
+  name              String
+  color             String?
+  created_at        DateTime @default(now())
+  updated_at        DateTime @updatedAt
+
+  organisation Organisation       @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  assignments  OrgTagAssignment[]
+
+  @@unique([organisation_uuid, name])
+  @@index([organisation_uuid])
+  @@map("org_tags")
+}
+
+model OrgTagAssignment {
+  id                Int              @id @default(autoincrement())
+  tag_uuid          String
+  organisation_uuid String
+  entity_type       OrgTagEntityType
+  entity_uuid       String
+  created_at        DateTime         @default(now())
+
+  tag OrgTag @relation(fields: [tag_uuid], references: [uuid], onDelete: Cascade)
+
+  @@unique([tag_uuid, entity_type, entity_uuid])
+  @@index([organisation_uuid, entity_type, entity_uuid])
+  @@index([entity_type, entity_uuid])
+  @@map("org_tag_assignments")
 }

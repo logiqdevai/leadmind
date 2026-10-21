@@ -4,6 +4,7 @@ import { PrismaModule } from '@/core/databases/prisma/prisma.module';
 import { OUTREACH_SEND_QUEUE } from '@/core/queues/queues.constants';
 import { ThreadsModule } from '@/modules/threads/threads.module';
 import { IntegrationsModule } from '@/modules/integrations/integrations.module';
+import { OrgTagsModule } from '@/modules/org-tags/org-tags.module';
 import { SequencesController } from './sequences.controller';
 import { SequencesService } from './services/sequences.service';
 import { SequenceEnrollmentService } from './services/sequence-enrollment.service';
@@ -13,6 +14,7 @@ import { SequenceEnrollmentService } from './services/sequence-enrollment.servic
         PrismaModule,
         ThreadsModule,
         IntegrationsModule,
+        OrgTagsModule,
         BullModule.registerQueue({ name: OUTREACH_SEND_QUEUE }),
     ],
     controllers: [SequencesController],

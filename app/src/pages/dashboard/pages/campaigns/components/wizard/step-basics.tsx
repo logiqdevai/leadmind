@@ -1,4 +1,5 @@
 import { Checkbox, Input, Label, TextArea, TextField } from "@heroui/react";
+import { TagPicker } from "@/components/tags/tag-picker";
 import { Channel } from "@/features/contacts/interfaces/contact.interface";
 import { CampaignType } from "@/features/marketing-campaigns/interfaces/campaign.interface";
 import { cn } from "@/lib/utils";
@@ -11,6 +12,7 @@ export interface BasicsValues {
     channels: Channel[];
     scheduled_at: string | null;
     use_openai_batch: boolean;
+    tag_uuids: string[];
 }
 
 interface StepBasicsProps {
@@ -58,6 +60,8 @@ export function StepBasics({ value, onChange }: StepBasicsProps) {
                     maxLength={1000}
                 />
             </TextField>
+
+            <TagPicker value={value.tag_uuids} onChange={(tag_uuids) => onChange({ tag_uuids })} />
 
             <div role="radiogroup" aria-label="Campaign type">
                 <Label>Campaign type</Label>

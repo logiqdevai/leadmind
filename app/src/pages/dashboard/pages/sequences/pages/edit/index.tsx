@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Button, Input, Label, Switch, TextArea, TextField } from "@heroui/react";
+import { TagPicker } from "@/components/tags/tag-picker";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
 import { ChevronLeft, Plus } from "lucide-react";
 import {
@@ -32,6 +33,7 @@ export default function EditSequencePage() {
     const [name, setName] = useState<string | null>(null);
     const [description, setDescription] = useState<string | null>(null);
     const [stopOnReply, setStopOnReply] = useState<boolean | null>(null);
+    const [tagUuids, setTagUuids] = useState<string[] | null>(null);
     const [stepModalOpen, setStepModalOpen] = useState(false);
     const [editingStep, setEditingStep] = useState<SequenceStep | null>(null);
     const [deleteTarget, setDeleteTarget] = useState<SequenceStep | null>(null);
@@ -58,6 +60,11 @@ export default function EditSequencePage() {
     const nameDirty = name !== null && name !== sequence.name;
     const descriptionDirty = description !== null && description !== (sequence.description ?? "");
     const stopOnReplyDirty = stopOnReply !== null && stopOnReply !== sequence.stop_on_reply;
+    const savedTagUuids = (sequence.tags ?? []).map((t) => t.uuid);
+    const currentTagUuids = tagUuids ?? savedTagUuids;
+    const tagsDirty =
+        tagUuids !== null &&
+        (tagUuids.length !== savedTagUuids.length || tagUuids.some((u) => !savedTagUuids.includes(u)));
     const firstEnabledStepUuid = [...sequence.steps]
         .filter((s) => s.enabled)
         .sort((a, b) => a.order_index - b.order_index)[0]?.uuid;
@@ -66,15 +73,17 @@ export default function EditSequencePage() {
         : sequence.steps.filter((s) => s.enabled).length === 0;
 
     const saveBasics = async () => {
-        if (!nameDirty && !descriptionDirty && !stopOnReplyDirty) return;
+        if (!nameDirty && !descriptionDirty && !stopOnReplyDirty && !tagsDirty) return;
         await updateSequenceMut.mutateAsync({
             uuid: sequence.uuid,
             payload: {
                 ...(nameDirty ? { name: currentName.trim() } : {}),
                 ...(descriptionDirty ? { description: currentDescription.trim() } : {}),
                 ...(stopOnReplyDirty ? { stop_on_reply: currentStopOnReply } : {}),
+                ...(tagsDirty ? { tag_uuids: currentTagUuids } : {}),
             },
         });
+        setTagUuids(null);
         setName(null);
         setDescription(null);
         setStopOnReply(null);
@@ -129,7 +138,8 @@ export default function EditSequencePage() {
                         </Switch.Control>
                     </Switch>
                 </div>
-                {(nameDirty || descriptionDirty || stopOnReplyDirty) && (
+                <TagPicker value={currentTagUuids} onChange={setTagUuids} />
+                {(nameDirty || descriptionDirty || stopOnReplyDirty || tagsDirty) && (
                     <div>
                         <ActionButtonWithPending
                             size="sm"
