@@ -146,6 +146,10 @@ const MEETING_OUTCOME_LABEL: Record<MeetingOutcome, string> = {
     [MeetingOutcome.COMPLETED]: "Completed",
     [MeetingOutcome.NO_SHOW]: "No show",
     [MeetingOutcome.CANCELLED]: "Cancelled",
+    [MeetingOutcome.RESCHEDULED]: "Rescheduled",
+    [MeetingOutcome.FOLLOW_UP_NEEDED]: "Follow-up needed",
+    [MeetingOutcome.PROPOSAL_SENT]: "Proposal sent",
+    [MeetingOutcome.NOT_INTERESTED]: "Not interested",
     [MeetingOutcome.CLOSED_WON]: "Closed won",
     [MeetingOutcome.CLOSED_LOST]: "Closed lost",
 };
@@ -155,6 +159,10 @@ const MEETING_OUTCOME_COLOR: Record<MeetingOutcome, "default" | "success" | "war
     [MeetingOutcome.COMPLETED]: "success",
     [MeetingOutcome.NO_SHOW]: "warning",
     [MeetingOutcome.CANCELLED]: "default",
+    [MeetingOutcome.RESCHEDULED]: "warning",
+    [MeetingOutcome.FOLLOW_UP_NEEDED]: "warning",
+    [MeetingOutcome.PROPOSAL_SENT]: "default",
+    [MeetingOutcome.NOT_INTERESTED]: "danger",
     [MeetingOutcome.CLOSED_WON]: "success",
     [MeetingOutcome.CLOSED_LOST]: "danger",
 };

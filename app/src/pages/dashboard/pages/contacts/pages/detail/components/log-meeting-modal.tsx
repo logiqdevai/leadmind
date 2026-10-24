@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button, Input, Label, Modal, TextArea } from "@heroui/react";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
+import { QuickNoteSelect } from "./quick-note-select";
 import { useLogMeeting } from "@/features/contacts/hooks/use-contacts";
 import { MeetingOutcome, type LogMeetingPayload } from "@/features/contacts/interfaces/contact.interface";
 import { cn } from "@/lib/utils";
@@ -34,8 +35,23 @@ const MEETING_OUTCOME_OPTIONS: { id: MeetingOutcome; label: string }[] = [
   { id: MeetingOutcome.COMPLETED, label: "Completed" },
   { id: MeetingOutcome.NO_SHOW, label: "No show" },
   { id: MeetingOutcome.CANCELLED, label: "Cancelled" },
+  { id: MeetingOutcome.RESCHEDULED, label: "Rescheduled" },
+  { id: MeetingOutcome.FOLLOW_UP_NEEDED, label: "Follow-up needed" },
+  { id: MeetingOutcome.PROPOSAL_SENT, label: "Proposal sent" },
+  { id: MeetingOutcome.NOT_INTERESTED, label: "Not interested" },
   { id: MeetingOutcome.CLOSED_WON, label: "Closed won" },
   { id: MeetingOutcome.CLOSED_LOST, label: "Closed lost" },
+];
+
+/** Ready-made meeting notes; picking one fills the Notes field, which stays editable. */
+const QUICK_NOTES: { id: string; label: string }[] = [
+  { id: "demo_done", label: "Demo completed" },
+  { id: "needs_team", label: "Needs to check with their team" },
+  { id: "send_proposal", label: "Send proposal" },
+  { id: "reschedule", label: "Asked to reschedule" },
+  { id: "follow_up", label: "Follow up next week" },
+  { id: "budget", label: "Budget not approved" },
+  { id: "not_interested", label: "Not interested" },
 ];
 
 export function LogMeetingModal({ contactUuid, isOpen, onOpenChange }: LogMeetingModalProps) {
@@ -45,9 +61,24 @@ export function LogMeetingModal({ contactUuid, isOpen, onOpenChange }: LogMeetin
   const [duration, setDuration] = useState<string>("30");
   const [location, setLocation] = useState<string>("");
   const [notes, setNotes] = useState<string>("");
+  const [quickNote, setQuickNote] = useState<string | null>(null);
+
+  const handleQuickNote = (id: string) => {
+    const preset = QUICK_NOTES.find((n) => n.id === id);
+    if (!preset) return;
+    const previous = QUICK_NOTES.find((n) => n.id === quickNote);
+    setQuickNote(preset.id);
+    // Replace an untouched preset; otherwise keep what the user typed and add below it.
+    setNotes((current) =>
+      !current.trim() || current.trim() === previous?.label
+        ? preset.label
+        : `${current.trimEnd()}\n${preset.label}`,
+    );
+  };
 
   useEffect(() => {
     if (isOpen) {
+      setQuickNote(null);
       setOutcome(MeetingOutcome.SCHEDULED);
       setOccurredAt(toLocalDatetimeValue(nextHalfHour()));
       setDuration("30");
@@ -149,6 +180,8 @@ export function LogMeetingModal({ contactUuid, isOpen, onOpenChange }: LogMeetin
                 onChange={(e) => setLocation(e.target.value)}
               />
             </div>
+
+            <QuickNoteSelect options={QUICK_NOTES} value={quickNote} onChange={handleQuickNote} />
 
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="log-meeting-notes">Notes</Label>

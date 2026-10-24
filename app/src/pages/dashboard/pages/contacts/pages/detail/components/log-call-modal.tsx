@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button, Input, Label, Modal, TextArea } from "@heroui/react";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
+import { QuickNoteSelect } from "./quick-note-select";
 import {
   CallDirection,
   CallOutcome,
@@ -22,6 +23,16 @@ const OUTCOMES: { id: CallOutcome; label: string }[] = [
   { id: CallOutcome.BUSY, label: "Busy" },
 ];
 
+/** Ready-made call notes; picking one fills the Notes field, which stays editable. */
+const QUICK_NOTES: { id: string; label: string }[] = [
+  { id: "not_available", label: "Not available" },
+  { id: "not_interested", label: "Not interested" },
+  { id: "call_later", label: "Call later" },
+  { id: "send_info", label: "Asked to send more info" },
+  { id: "wrong_number", label: "Wrong number" },
+  { id: "do_not_call", label: "Don't call me again" },
+];
+
 const DIRECTIONS: { id: CallDirection; label: string }[] = [
   { id: CallDirection.OUTBOUND, label: "Outbound" },
   { id: CallDirection.INBOUND, label: "Inbound" },
@@ -39,9 +50,24 @@ export function LogCallModal({ contactUuid, isOpen, onOpenChange }: LogCallModal
   const [duration, setDuration] = useState<string>("");
   const [occurredAt, setOccurredAt] = useState<string>(() => toLocalDatetimeValue(new Date()));
   const [notes, setNotes] = useState<string>("");
+  const [quickNote, setQuickNote] = useState<string | null>(null);
+
+  const handleQuickNote = (id: string) => {
+    const preset = QUICK_NOTES.find((n) => n.id === id);
+    if (!preset) return;
+    const previous = QUICK_NOTES.find((n) => n.id === quickNote);
+    setQuickNote(preset.id);
+    // Replace an untouched preset; otherwise keep what the user typed and add below it.
+    setNotes((current) =>
+      !current.trim() || current.trim() === previous?.label
+        ? preset.label
+        : `${current.trimEnd()}\n${preset.label}`,
+    );
+  };
 
   useEffect(() => {
     if (isOpen) {
+      setQuickNote(null);
       setOutcome(CallOutcome.CONNECTED);
       setDirection(CallDirection.OUTBOUND);
       setDuration("");
@@ -153,6 +179,8 @@ export function LogCallModal({ contactUuid, isOpen, onOpenChange }: LogCallModal
                 />
               </div>
             </div>
+
+            <QuickNoteSelect options={QUICK_NOTES} value={quickNote} onChange={handleQuickNote} />
 
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="log-call-notes">Notes</Label>

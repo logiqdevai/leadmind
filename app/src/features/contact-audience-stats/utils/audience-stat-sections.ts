@@ -19,6 +19,10 @@ export const MEETING_OUTCOME_LABELS: Record<MeetingOutcome, string> = {
     [MeetingOutcome.COMPLETED]: "Completed",
     [MeetingOutcome.NO_SHOW]: "No show",
     [MeetingOutcome.CANCELLED]: "Cancelled",
+    [MeetingOutcome.RESCHEDULED]: "Rescheduled",
+    [MeetingOutcome.FOLLOW_UP_NEEDED]: "Follow-up needed",
+    [MeetingOutcome.PROPOSAL_SENT]: "Proposal sent",
+    [MeetingOutcome.NOT_INTERESTED]: "Not interested",
     [MeetingOutcome.CLOSED_WON]: "Closed won",
     [MeetingOutcome.CLOSED_LOST]: "Closed lost",
 };
