@@ -222,6 +222,24 @@ export class MessageSendService {
         throw new Error(`Channel ${message.channel} not implemented`);
     }
 
+    /**
+     * Replies go to the org's main reply address AND the mailbox the email was sent from,
+     * so a reply lands in both. Clicking Reply addresses every Reply-To entry.
+     */
+    private withSenderReplyTo(replyTo: string | string[], fromEmail: string | null | undefined): string | string[] {
+        const addresses = [...(Array.isArray(replyTo) ? replyTo : [replyTo])];
+        const sender = fromEmail?.match(/<([^>]+)>/)?.[1] ?? fromEmail;
+        if (sender?.trim()) addresses.push(sender.trim());
+        const seen = new Set<string>();
+        const unique = addresses.filter((a) => {
+            const key = a.trim().toLowerCase();
+            if (!key || seen.has(key)) return false;
+            seen.add(key);
+            return true;
+        });
+        return unique.length === 1 ? unique[0] : unique;
+    }
+
     private async sendEmailWithProvider(
         organisation_uuid: string,
         createEmail: {
@@ -229,7 +247,7 @@ export class MessageSendService {
             subject: string;
             html: string;
             headers: Record<string, string>;
-            replyTo: string;
+            replyTo: string | string[];
         },
         target: EmailProviderTarget | null,
     ): Promise<{ result: any; deliveryTarget: EmailProviderTarget; fromEmail: string | null }> {
@@ -243,7 +261,11 @@ export class MessageSendService {
                 smtpConfig.fromName,
             );
             const result = await this.smtpMailService.sendEmail(
-                { ...createEmail, from },
+                {
+                    ...createEmail,
+                    from,
+                    replyTo: this.withSenderReplyTo(createEmail.replyTo, smtpConfig.fromEmail),
+                },
                 smtpConfig,
             );
             return { result, deliveryTarget: target, fromEmail: smtpConfig.fromEmail };
@@ -258,7 +280,11 @@ export class MessageSendService {
                 this.emailCredentialsService.getResendFromEmail(organisation_uuid, target.account, target.domain_uuid),
             ]);
             const result = await this.resendMailService.sendEmail(
-                { ...createEmail, from: fromEmail },
+                {
+                    ...createEmail,
+                    from: fromEmail,
+                    replyTo: this.withSenderReplyTo(createEmail.replyTo, fromEmail),
+                },
                 apiKey,
             );
             return { result, deliveryTarget: target, fromEmail };

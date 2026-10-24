@@ -7,7 +7,7 @@ export interface CreateEmail {
     attachments?: any[];
     cc?: string[];
     bcc?: string[];
-    replyTo?: string;
+    replyTo?: string | string[];
     headers?: Record<string, string>;
     template_id?: string;
     dynamic_template_data?: Record<string, any>;

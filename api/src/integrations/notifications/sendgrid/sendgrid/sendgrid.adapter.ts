@@ -28,7 +28,8 @@ export class SendGridAdapter {
                 html: create_email.html,
                 cc: create_email.cc,
                 bcc: create_email.bcc,
-                replyTo: create_email.replyTo,
+                // SendGrid takes a single Reply-To address.
+                replyTo: Array.isArray(create_email.replyTo) ? create_email.replyTo[0] : create_email.replyTo,
                 headers: create_email.headers,
                 template_id: create_email.template_id,
                 dynamic_template_data: create_email.dynamic_template_data,

@@ -128,7 +128,7 @@ export class RemindersService {
             this.prisma.reminder.findMany({
                 where,
                 include: { contact: { select: CONTACT_SELECT } },
-                orderBy: { remind_at: 'asc' },
+                orderBy: { remind_at: 'desc' },
                 skip,
                 take: limit,
             }),

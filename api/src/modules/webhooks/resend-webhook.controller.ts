@@ -156,7 +156,21 @@ export class ResendWebhookController {
                 where: { reply_to_email: { in: toAddresses, mode: 'insensitive' } },
                 select: { uuid: true },
             });
-            return organisation?.uuid ?? null;
+            if (organisation) {
+                return organisation.uuid;
+            }
+
+            // Mail forwarded from another of the org's own sending addresses (e.g. a
+            // sender profile on a different domain) still shows that address in `To`.
+            // Those addresses are configured by the org, so trust them too - but only
+            // when they point to exactly one organisation, otherwise stay ambiguous-safe.
+            const profiles = await this.prisma.senderProfile.findMany({
+                where: { email: { in: toAddresses, mode: 'insensitive' } },
+                select: { organisation_uuid: true },
+                distinct: ['organisation_uuid'],
+                take: 2,
+            });
+            return profiles.length === 1 ? profiles[0].organisation_uuid : null;
         }
 
         const providerMessageId = body.data?.email_id;
