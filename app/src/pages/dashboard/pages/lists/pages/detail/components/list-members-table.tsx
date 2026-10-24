@@ -1,6 +1,7 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import type { Selection } from "@heroui/react";
 import { Button, Checkbox, ListBox, Select, Table } from "@heroui/react";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { PageSizeSelect } from "@/components/ui/page-size-select";
 import { Trash2 } from "lucide-react";
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
@@ -23,6 +24,13 @@ import { ContactAlsoFoundByHint } from "@/pages/dashboard/components/contact-als
 import { ContactScoresCompact } from "@/pages/dashboard/pages/leads/components/badges";
 import { contactTableColumnClass } from "@/pages/dashboard/components/contact-table-column-classes";
 import { cn } from "@/lib/utils";
+
+interface PendingStatusSync {
+    contactUuid: string;
+    /** Which status the user just changed; the other one is offered for syncing. */
+    source: "crm" | "list";
+    status: LeadStatus;
+}
 
 const columnHelper = createColumnHelper<ListMember>();
 
@@ -85,6 +93,7 @@ export function ListMembersTable({
 }: ListMembersTableProps) {
     const updateStatus = useUpdateContactStatus();
     const updateListStatus = useUpdateListMemberStatus();
+    const [pendingSync, setPendingSync] = useState<PendingStatusSync | null>(null);
 
     const columns = useMemo(
         () => [
@@ -169,12 +178,14 @@ export function ListMembersTable({
                             <Select
                                 aria-label="CRM status"
                                 value={contact.status}
-                                onChange={(v) =>
-                                    updateStatus.mutate({
-                                        uuid: contact.uuid,
-                                        status: v as LeadStatus,
-                                    })
-                                }
+                                onChange={(v) => {
+                                    const status = v as LeadStatus;
+                                    if (status === contact.status) return;
+                                    updateStatus.mutate({ uuid: contact.uuid, status });
+                                    if (contact.list_status !== status) {
+                                        setPendingSync({ contactUuid: contact.uuid, source: "crm", status });
+                                    }
+                                }}
                             >
                                 <Select.Trigger className="w-full min-w-0 max-w-36">
                                     <Select.Value />
@@ -206,13 +217,14 @@ export function ListMembersTable({
                                 aria-label="List status"
                                 placeholder="Not set"
                                 value={member.list_status || null}
-                                onChange={(v) =>
-                                    updateListStatus.mutate({
-                                        listUuid,
-                                        contactUuid: member.uuid,
-                                        status: v as LeadStatus,
-                                    })
-                                }
+                                onChange={(v) => {
+                                    const status = v as LeadStatus;
+                                    if (status === member.list_status) return;
+                                    updateListStatus.mutate({ listUuid, contactUuid: member.uuid, status });
+                                    if (member.status !== status) {
+                                        setPendingSync({ contactUuid: member.uuid, source: "list", status });
+                                    }
+                                }}
                             >
                                 <Select.Trigger className="w-full min-w-0 max-w-36">
                                     <Select.Value />
@@ -300,8 +312,36 @@ export function ListMembersTable({
         }
     };
 
+    const statusLabel = (status: LeadStatus) =>
+        STATUS_OPTIONS.find((opt) => opt.id === status)?.label ?? status;
+
+    const handleSyncConfirm = () => {
+        if (!pendingSync) return;
+        const { contactUuid, source, status } = pendingSync;
+        if (source === "crm") {
+            updateListStatus.mutate({ listUuid, contactUuid, status });
+        } else {
+            updateStatus.mutate({ uuid: contactUuid, status });
+        }
+    };
+
     return (
         <div className="bg-surface rounded-xl overflow-hidden min-w-0 w-full">
+            <ConfirmDialog
+                isOpen={pendingSync !== null}
+                onOpenChange={(open) => {
+                    if (!open) setPendingSync(null);
+                }}
+                title={pendingSync?.source === "crm" ? "Change the list status too?" : "Change the CRM status too?"}
+                description={
+                    pendingSync
+                        ? `Do you also want to set the ${pendingSync.source === "crm" ? "list" : "CRM"} status to "${statusLabel(pendingSync.status)}"?`
+                        : undefined
+                }
+                confirmLabel="Change both"
+                cancelLabel="Only this one"
+                onConfirm={handleSyncConfirm}
+            />
             <Table>
                 <Table.ScrollContainer className="w-full max-w-full overflow-x-hidden">
                     <Table.Content
