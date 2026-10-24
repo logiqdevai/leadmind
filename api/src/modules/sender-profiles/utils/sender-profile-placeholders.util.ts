@@ -1,5 +1,5 @@
 import { SenderProfile } from '@/generated/prisma';
-import type { PlaceholderVars } from '@/shared/utils/placeholder-render.util';
+import { renderPlaceholders, type PlaceholderVars } from '@/shared/utils/placeholder-render.util';
 import {
     appendUtmParams,
     mergeOutboundUtmParams,
@@ -65,7 +65,7 @@ export function senderProfileToPlaceholders(
     const websiteWithUtm = appendUtmParams(ensureProtocol(rawWebsite), websiteUtm);
     const bookingWithUtm = appendUtmParams(ensureProtocol(rawBookingUrl), bookingUtm);
 
-    return {
+    const vars: PlaceholderVars = {
         first_name: first,
         last_name: last,
         full_name: full,
@@ -83,4 +83,8 @@ export function senderProfileToPlaceholders(
         signature: profile.signature ?? '',
         sender_id: profile.sender_id ?? '',
     };
+
+    // The signature can itself contain placeholders ({{full_name}}, {{email}}, ...).
+    vars.signature = renderPlaceholders(vars.signature, { ...vars, signature: '' });
+    return vars;
 }

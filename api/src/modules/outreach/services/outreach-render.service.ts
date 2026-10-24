@@ -87,7 +87,11 @@ export class OutreachRenderService {
             message.metadata,
         );
         const vars = contact ? { ...senderVars, ...contactToPlaceholders(contact) } : senderVars;
-        return this.render(message, vars);
+        const rendered = this.render(message, vars);
+        if (vars.signature && !/\{\{\s*signature\s*\}\}/.test(message.content)) {
+            rendered.content = `${rendered.content}<p></p>${vars.signature}`;
+        }
+        return rendered;
     }
 
     async renderForCampaignDraft(

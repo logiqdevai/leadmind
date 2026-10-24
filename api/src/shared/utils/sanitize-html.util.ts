@@ -14,7 +14,36 @@ const ALLOWED_TAGS = [
     'h1',
     'h2',
     'h3',
+    'table',
+    'tbody',
+    'tr',
+    'td',
+    'span',
 ];
+
+const TEXT_STYLES: Record<string, RegExp[]> = {
+    color: [/^#[0-9a-fA-F]{3,8}$/],
+    'font-size': [/^\d{1,2}px$/],
+    'font-weight': [/^[1-9]00$/, /^bold$/, /^normal$/],
+    'font-family': [/^[\w\s,'"-]+$/],
+    'line-height': [/^\d{1,2}px$/],
+    'letter-spacing': [/^-?[\d.]+(px|em)$/],
+    'text-decoration': [/^none$/],
+    'text-transform': [/^uppercase$/],
+    'white-space': [/^nowrap$/],
+};
+
+const CELL_STYLES: Record<string, RegExp[]> = {
+    ...TEXT_STYLES,
+    padding: [/^(\d{1,2}px ?){1,4}$/],
+    margin: [/^(\d{1,2}px ?){1,4}$/],
+    width: [/^\d{1,3}px$/],
+    'vertical-align': [/^(top|middle|bottom)$/],
+    'text-align': [/^(left|center|right)$/],
+    'background-color': [/^#[0-9a-fA-F]{3,8}$/],
+    'border-collapse': [/^collapse$/],
+    'border-left': [/^\d{1,2}px solid #[0-9a-fA-F]{3,8}$/],
+};
 
 const ALLOWED_SCHEMES = ['http', 'https', 'mailto'];
 
@@ -28,8 +57,11 @@ export const EMAIL_FOOTER_LOGO_STYLE =
 const SANITIZE_OPTIONS: sanitizeHtml.IOptions = {
     allowedTags: ALLOWED_TAGS,
     allowedAttributes: {
-        a: ['href'],
+        a: ['href', 'style'],
         img: ['src', 'alt', 'width', 'height', 'style'],
+        table: ['cellpadding', 'cellspacing', 'border', 'style'],
+        td: ['valign', 'width', 'style'],
+        span: ['style'],
     },
     allowedSchemes: ALLOWED_SCHEMES,
     allowedSchemesAppliedToAttributes: ['href', 'src'],
@@ -44,21 +76,32 @@ const SANITIZE_OPTIONS: sanitizeHtml.IOptions = {
             border: [/^0$/, /^none$/],
             outline: [/^none$/],
         },
+        a: TEXT_STYLES,
+        span: TEXT_STYLES,
+        table: CELL_STYLES,
+        td: CELL_STYLES,
     },
     transformTags: {
         a: sanitizeHtml.simpleTransform('a', {
             target: '_blank',
             rel: 'noopener noreferrer',
         }),
-        img: (_tagName, attribs) => ({
-            tagName: 'img',
-            attribs: {
-                src: attribs.src ?? '',
-                alt: attribs.alt || 'Logo',
-                width: String(EMAIL_FOOTER_LOGO_WIDTH),
-                style: EMAIL_FOOTER_LOGO_STYLE,
-            },
-        }),
+        img: (_tagName, attribs) => {
+            const requested = Number.parseInt(attribs.width ?? '', 10);
+            const width =
+                requested > 0 && requested < EMAIL_FOOTER_LOGO_WIDTH
+                    ? requested
+                    : EMAIL_FOOTER_LOGO_WIDTH;
+            return {
+                tagName: 'img',
+                attribs: {
+                    src: attribs.src ?? '',
+                    alt: attribs.alt || 'Logo',
+                    width: String(width),
+                    style: EMAIL_FOOTER_LOGO_STYLE.replace(/96px/g, `${width}px`),
+                },
+            };
+        },
     },
 };
 
