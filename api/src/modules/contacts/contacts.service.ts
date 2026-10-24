@@ -18,6 +18,7 @@ import {
     EmailValidationStatus,
     ExternalIntegrationProvider,
     Interaction,
+    GoalMetric,
     InteractionType,
     LeadStatus,
     MsgStatus,
@@ -43,6 +44,7 @@ import {
 import { resolveWebsiteFieldsForWrite } from '@/shared/utils/website-domain-validation.util';
 import { generateMessageId } from '@/shared/utils/email-message-id.util';
 import { ThreadsService } from '@/modules/threads/threads.service';
+import { MessagingGoalsService } from '@/modules/messaging-goals/messaging-goals.service';
 import { AddNoteDto } from './dto/add-note.dto';
 import { AiDraftMessageDto } from './dto/ai-draft-message.dto';
 import { BulkTriggerScoreDto } from './dto/bulk-trigger-score.dto';
@@ -132,6 +134,7 @@ export class ContactsService {
         private readonly scrapioScrapeRequestService: ScrapioScrapeRequestService,
         private readonly bulkJobsService: BulkJobsService,
         private readonly threadsService: ThreadsService,
+        private readonly messagingGoalsService: MessagingGoalsService,
         @InjectQueue(AI_PROCESS_QUEUE) private readonly aiProcessQueue: Queue,
     ) { }
 
@@ -1103,6 +1106,7 @@ export class ContactsService {
         organisation_uuid: string,
         uuid: string,
         dto: LogCallDto,
+        user_uuid?: string,
     ): Promise<Interaction> {
         await this.requireOwnedContact(organisation_uuid, uuid);
         const metadata: Prisma.InputJsonValue = {
@@ -1111,15 +1115,24 @@ export class ContactsService {
             ...(dto.duration_minutes !== undefined && { duration_minutes: dto.duration_minutes }),
             ...(dto.occurred_at && { occurred_at: dto.occurred_at }),
         };
-        return this.prisma.interaction.create({
+        const interaction = await this.prisma.interaction.create({
             data: {
                 contact_uuid: uuid,
                 organisation_uuid,
                 type: InteractionType.CALL,
                 content: dto.content?.trim() || null,
                 metadata,
+                created_by_user_uuid: user_uuid ?? null,
             },
         });
+        if (user_uuid) {
+            void this.messagingGoalsService.onActivity({
+                metric: GoalMetric.CALL,
+                organisation_uuid,
+                user_uuid,
+            });
+        }
+        return interaction;
     }
 
     async logMeeting(

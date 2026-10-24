@@ -10,7 +10,9 @@ import {
     useUpsertMessagingGoal,
 } from "@/features/messaging-goals/hooks/use-messaging-goals";
 import {
+    GoalMetrics,
     GoalPeriods,
+    type GoalMetric,
     type GoalPeriod,
     type MessagingGoalProgress,
 } from "@/features/messaging-goals/interfaces/messaging-goals.interfaces";
@@ -18,12 +20,17 @@ import {
     useCurrentOrganisation,
     useOrganisationMembers,
 } from "@/features/organisations/hooks/use-organisations";
-import { PERIOD_LABELS } from "../utils/goals-copy";
+import { METRIC_LABELS, PERIOD_LABELS } from "../utils/goals-copy";
 
 const PERIOD_OPTIONS = [
     { id: GoalPeriods.DAY, label: PERIOD_LABELS.DAY },
     { id: GoalPeriods.WEEK, label: PERIOD_LABELS.WEEK },
     { id: GoalPeriods.MONTH, label: PERIOD_LABELS.MONTH },
+];
+
+const METRIC_OPTIONS = [
+    { id: GoalMetrics.EMAIL, label: METRIC_LABELS.EMAIL },
+    { id: GoalMetrics.CALL, label: METRIC_LABELS.CALL },
 ];
 
 function memberLabel(member: {
@@ -33,8 +40,8 @@ function memberLabel(member: {
     return member.full_name?.trim() || member.email;
 }
 
-function goalKey(userUuid: string, period: GoalPeriod) {
-    return `${userUuid}:${period}`;
+function goalKey(userUuid: string, period: GoalPeriod, metric: GoalMetric) {
+    return `${userUuid}:${period}:${metric}`;
 }
 
 export function GoalsManagePanel() {
@@ -51,22 +58,24 @@ export function GoalsManagePanel() {
     const [assignTab, setAssignTab] = useState("individual");
     const [selectedUserUuid, setSelectedUserUuid] = useState("");
     const [period, setPeriod] = useState<GoalPeriod>(GoalPeriods.DAY);
+    const [metric, setMetric] = useState<GoalMetric>(GoalMetrics.EMAIL);
     const [targetCount, setTargetCount] = useState("20");
     const [editingUuid, setEditingUuid] = useState<string | null>(null);
     const [bulkPeriod, setBulkPeriod] = useState<GoalPeriod>(GoalPeriods.DAY);
+    const [bulkMetric, setBulkMetric] = useState<GoalMetric>(GoalMetrics.EMAIL);
     const [bulkTarget, setBulkTarget] = useState("20");
 
     const goalsByKey = useMemo(() => {
         const map = new Map<string, MessagingGoalProgress>();
         for (const goal of goals) {
-            map.set(goalKey(goal.user_uuid, goal.period), goal);
+            map.set(goalKey(goal.user_uuid, goal.period, goal.metric), goal);
         }
         return map;
     }, [goals]);
 
-    const applySelection = (userUuid: string, nextPeriod: GoalPeriod) => {
+    const applySelection = (userUuid: string, nextPeriod: GoalPeriod, nextMetric: GoalMetric) => {
         const existing = userUuid
-            ? goalsByKey.get(goalKey(userUuid, nextPeriod))
+            ? goalsByKey.get(goalKey(userUuid, nextPeriod, nextMetric))
             : undefined;
         if (existing) {
             setEditingUuid(existing.uuid);
@@ -79,19 +88,26 @@ export function GoalsManagePanel() {
     const handleUserChange = (key: Key | null) => {
         const userUuid = String(key ?? "");
         setSelectedUserUuid(userUuid);
-        applySelection(userUuid, period);
+        applySelection(userUuid, period, metric);
     };
 
     const handlePeriodChange = (key: Key | null) => {
         const nextPeriod = String(key) as GoalPeriod;
         setPeriod(nextPeriod);
-        applySelection(selectedUserUuid, nextPeriod);
+        applySelection(selectedUserUuid, nextPeriod, metric);
+    };
+
+    const handleMetricChange = (key: Key | null) => {
+        const nextMetric = String(key) as GoalMetric;
+        setMetric(nextMetric);
+        applySelection(selectedUserUuid, period, nextMetric);
     };
 
     const handleEdit = (goal: MessagingGoalProgress) => {
         setAssignTab("individual");
         setSelectedUserUuid(goal.user_uuid);
         setPeriod(goal.period);
+        setMetric(goal.metric);
         setTargetCount(String(goal.target_count));
         setEditingUuid(goal.uuid);
     };
@@ -100,6 +116,7 @@ export function GoalsManagePanel() {
         setEditingUuid(null);
         setSelectedUserUuid("");
         setPeriod(GoalPeriods.DAY);
+        setMetric(GoalMetrics.EMAIL);
         setTargetCount("20");
     };
 
@@ -125,6 +142,7 @@ export function GoalsManagePanel() {
         upsert.mutate({
             user_uuid: selectedUserUuid,
             period,
+            metric,
             target_count: count,
         });
     };
@@ -136,6 +154,7 @@ export function GoalsManagePanel() {
             goals: members.map((m) => ({
                 user_uuid: m.user_uuid,
                 period: bulkPeriod,
+                metric: bulkMetric,
                 target_count: count,
             })),
         });
@@ -160,8 +179,8 @@ export function GoalsManagePanel() {
                             {assignTab === "bulk"
                                 ? "Set the same target for every organisation member."
                                 : isEditing
-                                  ? "Update the message target for this teammate and period."
-                                  : "Assign a daily, weekly, or monthly message target to one teammate."}
+                                  ? "Update the target for this teammate, metric and period."
+                                  : "Assign a daily, weekly, or monthly email or call target to one teammate."}
                         </p>
                     </div>
                     <ScrollableTabs
@@ -181,7 +200,7 @@ export function GoalsManagePanel() {
 
                 {assignTab === "individual" ? (
                     <>
-                        <div className="grid gap-3 sm:grid-cols-3">
+                        <div className="grid gap-3 sm:grid-cols-4">
                             <Select
                                 aria-label="Team member"
                                 placeholder="Select member"
@@ -202,6 +221,30 @@ export function GoalsManagePanel() {
                                                 textValue={memberLabel(m)}
                                             >
                                                 {memberLabel(m)}
+                                                <ListBox.ItemIndicator />
+                                            </ListBox.Item>
+                                        ))}
+                                    </ListBox>
+                                </Select.Popover>
+                            </Select>
+                            <Select
+                                aria-label="Metric"
+                                value={metric}
+                                onChange={handleMetricChange}
+                            >
+                                <Select.Trigger className="w-full">
+                                    <Select.Value />
+                                    <Select.Indicator />
+                                </Select.Trigger>
+                                <Select.Popover>
+                                    <ListBox>
+                                        {METRIC_OPTIONS.map((opt) => (
+                                            <ListBox.Item
+                                                key={opt.id}
+                                                id={opt.id}
+                                                textValue={opt.label}
+                                            >
+                                                {opt.label}
                                                 <ListBox.ItemIndicator />
                                             </ListBox.Item>
                                         ))}
@@ -263,7 +306,31 @@ export function GoalsManagePanel() {
                     </>
                 ) : (
                     <>
-                        <div className="grid gap-3 sm:grid-cols-2">
+                        <div className="grid gap-3 sm:grid-cols-3">
+                            <Select
+                                aria-label="Bulk metric"
+                                value={bulkMetric}
+                                onChange={(key) => setBulkMetric(String(key) as GoalMetric)}
+                            >
+                                <Select.Trigger className="w-full">
+                                    <Select.Value />
+                                    <Select.Indicator />
+                                </Select.Trigger>
+                                <Select.Popover>
+                                    <ListBox>
+                                        {METRIC_OPTIONS.map((opt) => (
+                                            <ListBox.Item
+                                                key={opt.id}
+                                                id={opt.id}
+                                                textValue={opt.label}
+                                            >
+                                                {opt.label}
+                                                <ListBox.ItemIndicator />
+                                            </ListBox.Item>
+                                        ))}
+                                    </ListBox>
+                                </Select.Popover>
+                            </Select>
                             <Select
                                 aria-label="Bulk period"
                                 value={bulkPeriod}
@@ -334,7 +401,7 @@ export function GoalsManagePanel() {
                                         {goal.user.full_name?.trim() || goal.user.email}
                                     </p>
                                     <p className="text-xs text-muted">
-                                        {PERIOD_LABELS[goal.period]} · {goal.current_count}/
+                                        {METRIC_LABELS[goal.metric]} · {PERIOD_LABELS[goal.period]} · {goal.current_count}/
                                         {goal.target_count} ({goal.percent}%)
                                     </p>
                                 </div>

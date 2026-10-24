@@ -6,6 +6,13 @@ export const GoalPeriods = {
 
 export type GoalPeriod = (typeof GoalPeriods)[keyof typeof GoalPeriods];
 
+export const GoalMetrics = {
+    EMAIL: "EMAIL",
+    CALL: "CALL",
+} as const;
+
+export type GoalMetric = (typeof GoalMetrics)[keyof typeof GoalMetrics];
+
 export const GoalAchievementTypes = {
     MILESTONE_25: "MILESTONE_25",
     MILESTONE_50: "MILESTONE_50",
@@ -29,6 +36,7 @@ export interface MessagingGoalProgress {
     organisation_uuid: string;
     user_uuid: string;
     period: GoalPeriod;
+    metric: GoalMetric;
     target_count: number;
     is_active: boolean;
     current_count: number;
@@ -43,6 +51,7 @@ export interface LeaderboardRow {
     user: GoalUser;
     goal_uuid: string;
     period: GoalPeriod;
+    metric: GoalMetric;
     target_count: number;
     current_count: number;
     percent: number;
@@ -71,6 +80,7 @@ export interface GoalAchievement {
     goal?: {
         uuid: string;
         period: GoalPeriod;
+        metric: GoalMetric;
         target_count: number;
     };
 }
@@ -78,6 +88,7 @@ export interface GoalAchievement {
 export interface UpsertMessagingGoalPayload {
     user_uuid: string;
     period: GoalPeriod;
+    metric: GoalMetric;
     target_count: number;
 }
 

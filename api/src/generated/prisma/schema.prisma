@@ -519,6 +519,8 @@ model Interaction {
   metadata              Json?
   status_change         Json?
   outreach_message_uuid String?
+  // Who logged it; lets logged calls count toward a user's call goal.
+  created_by_user_uuid  String?
   created_at            DateTime        @default(now())
   updated_at            DateTime        @updatedAt
 
@@ -533,6 +535,7 @@ model Interaction {
   @@index([type])
   @@index([created_at])
   @@index([outreach_message_uuid])
+  @@index([created_by_user_uuid, type, created_at])
 }
 
 model OutreachMessage {
@@ -1694,6 +1697,12 @@ enum GoalPeriod {
   MONTH
 }
 
+// What a messaging goal counts: emails sent, or calls logged.
+enum GoalMetric {
+  EMAIL
+  CALL
+}
+
 enum GoalAchievementType {
   MILESTONE_25
   MILESTONE_50
@@ -1709,6 +1718,7 @@ model MessagingGoal {
   organisation_uuid String
   user_uuid         String
   period            GoalPeriod
+  metric            GoalMetric @default(EMAIL)
   target_count      Int
   is_active         Boolean    @default(true)
   created_at        DateTime   @default(now())
@@ -1718,7 +1728,7 @@ model MessagingGoal {
   user         User              @relation(fields: [user_uuid], references: [uuid], onDelete: Cascade)
   achievements GoalAchievement[]
 
-  @@unique([organisation_uuid, user_uuid, period])
+  @@unique([organisation_uuid, user_uuid, period, metric])
   @@index([organisation_uuid, is_active])
   @@index([user_uuid, is_active])
   @@map("messaging_goals")
@@ -1901,6 +1911,7 @@ model GoalPersonalBest {
   organisation_uuid String
   user_uuid         String
   period            GoalPeriod
+  metric            GoalMetric @default(EMAIL)
   best_count        Int        @default(0)
   achieved_at       DateTime   @default(now())
   updated_at        DateTime   @updatedAt
@@ -1908,7 +1919,7 @@ model GoalPersonalBest {
   organisation Organisation @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
   user         User         @relation(fields: [user_uuid], references: [uuid], onDelete: Cascade)
 
-  @@unique([organisation_uuid, user_uuid, period])
+  @@unique([organisation_uuid, user_uuid, period, metric])
   @@index([organisation_uuid, user_uuid])
   @@map("goal_personal_bests")
 }

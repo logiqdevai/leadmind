@@ -6,8 +6,11 @@ import {
     NotFoundException,
 } from '@nestjs/common';
 import {
+    Channel,
     GoalAchievementType,
+    GoalMetric,
     GoalPeriod,
+    InteractionType,
     MsgStatus,
     OrganisationRole,
     Prisma,
@@ -39,6 +42,7 @@ type GoalWithProgress = {
     organisation_uuid: string;
     user_uuid: string;
     period: GoalPeriod;
+    metric: GoalMetric;
     target_count: number;
     is_active: boolean;
     current_count: number;
@@ -68,16 +72,18 @@ export class MessagingGoalsService {
 
         const goal = await this.prisma.messagingGoal.upsert({
             where: {
-                organisation_uuid_user_uuid_period: {
+                organisation_uuid_user_uuid_period_metric: {
                     organisation_uuid: organisationUuid,
                     user_uuid: dto.user_uuid,
                     period: dto.period,
+                    metric: dto.metric ?? GoalMetric.EMAIL,
                 },
             },
             create: {
                 organisation_uuid: organisationUuid,
                 user_uuid: dto.user_uuid,
                 period: dto.period,
+                metric: dto.metric ?? GoalMetric.EMAIL,
                 target_count: dto.target_count,
                 is_active: true,
             },
@@ -120,16 +126,18 @@ export class MessagingGoalsService {
             dto.goals.map((item) =>
                 this.prisma.messagingGoal.upsert({
                     where: {
-                        organisation_uuid_user_uuid_period: {
+                        organisation_uuid_user_uuid_period_metric: {
                             organisation_uuid: organisationUuid,
                             user_uuid: item.user_uuid,
                             period: item.period,
+                            metric: item.metric ?? GoalMetric.EMAIL,
                         },
                     },
                     create: {
                         organisation_uuid: organisationUuid,
                         user_uuid: item.user_uuid,
                         period: item.period,
+                        metric: item.metric ?? GoalMetric.EMAIL,
                         target_count: item.target_count,
                         is_active: true,
                     },
@@ -197,7 +205,7 @@ export class MessagingGoalsService {
             include: {
                 user: { select: { uuid: true, email: true, full_name: true } },
             },
-            orderBy: { period: 'asc' },
+            orderBy: [{ metric: 'asc' }, { period: 'asc' }],
         });
         return Promise.all(goals.map((goal) => this.toGoalWithProgress(goal, timezone)));
     }
@@ -213,7 +221,7 @@ export class MessagingGoalsService {
             include: {
                 user: { select: { uuid: true, email: true, full_name: true } },
             },
-            orderBy: [{ user: { full_name: 'asc' } }, { period: 'asc' }],
+            orderBy: [{ user: { full_name: 'asc' } }, { metric: 'asc' }, { period: 'asc' }],
         });
         return Promise.all(goals.map((goal) => this.toGoalWithProgress(goal, timezone)));
     }
@@ -222,6 +230,7 @@ export class MessagingGoalsService {
         organisationUuid: string,
         userUuid: string,
         period: GoalPeriod,
+        metric: GoalMetric = GoalMetric.EMAIL,
     ) {
         await this.requireMembership(organisationUuid, userUuid);
         const timezone = await this.getOrgTimezone(organisationUuid);
@@ -231,6 +240,7 @@ export class MessagingGoalsService {
             where: {
                 organisation_uuid: organisationUuid,
                 period,
+                metric,
                 is_active: true,
             },
             include: {
@@ -240,7 +250,8 @@ export class MessagingGoalsService {
 
         const rows = await Promise.all(
             goals.map(async (goal) => {
-                const current_count = await this.countSentMessages(
+                const current_count = await this.countActivity(
+                    metric,
                     organisationUuid,
                     goal.user_uuid,
                     window.starts_at,
@@ -254,6 +265,7 @@ export class MessagingGoalsService {
                     user: goal.user,
                     goal_uuid: goal.uuid,
                     period: goal.period,
+                    metric: goal.metric,
                     target_count: goal.target_count,
                     current_count,
                     percent,
@@ -292,6 +304,7 @@ export class MessagingGoalsService {
                     select: {
                         uuid: true,
                         period: true,
+                        metric: true,
                         target_count: true,
                     },
                 },
@@ -326,12 +339,14 @@ export class MessagingGoalsService {
         });
     }
 
-    async onMessageSent(params: {
+    /** Call after a user sends an email (EMAIL) or logs a call (CALL). */
+    async onActivity(params: {
+        metric: GoalMetric;
         organisation_uuid: string;
         user_uuid: string;
-        sent_at?: Date;
+        occurred_at?: Date;
     }): Promise<void> {
-        const { organisation_uuid, user_uuid } = params;
+        const { metric, organisation_uuid, user_uuid } = params;
         if (!user_uuid) return;
 
         try {
@@ -340,6 +355,7 @@ export class MessagingGoalsService {
                 where: {
                     organisation_uuid,
                     user_uuid,
+                    metric,
                     is_active: true,
                 },
                 include: {
@@ -348,7 +364,7 @@ export class MessagingGoalsService {
             });
             if (goals.length === 0) return;
 
-            const at = params.sent_at ?? new Date();
+            const at = params.occurred_at ?? new Date();
             const newAchievements: Array<{
                 uuid: string;
                 type: GoalAchievementType;
@@ -360,7 +376,8 @@ export class MessagingGoalsService {
 
             for (const goal of goals) {
                 const window = getPeriodWindow(goal.period, timezone, at);
-                const current_count = await this.countSentMessages(
+                const current_count = await this.countActivity(
+                    metric,
                     organisation_uuid,
                     user_uuid,
                     window.starts_at,
@@ -376,6 +393,7 @@ export class MessagingGoalsService {
                     organisation_uuid: goal.organisation_uuid,
                     user_uuid: goal.user_uuid,
                     period: goal.period,
+                    metric: goal.metric,
                     target_count: goal.target_count,
                     is_active: goal.is_active,
                     current_count,
@@ -415,10 +433,11 @@ export class MessagingGoalsService {
 
                 const personalBest = await this.prisma.goalPersonalBest.findUnique({
                     where: {
-                        organisation_uuid_user_uuid_period: {
+                        organisation_uuid_user_uuid_period_metric: {
                             organisation_uuid,
                             user_uuid,
                             period: goal.period,
+                            metric,
                         },
                     },
                 });
@@ -426,16 +445,18 @@ export class MessagingGoalsService {
                 if (current_count > previousBest) {
                     await this.prisma.goalPersonalBest.upsert({
                         where: {
-                            organisation_uuid_user_uuid_period: {
+                            organisation_uuid_user_uuid_period_metric: {
                                 organisation_uuid,
                                 user_uuid,
                                 period: goal.period,
+                                metric,
                             },
                         },
                         create: {
                             organisation_uuid,
                             user_uuid,
                             period: goal.period,
+                            metric,
                             best_count: current_count,
                             achieved_at: at,
                         },
@@ -463,6 +484,7 @@ export class MessagingGoalsService {
                 const board = await this.leaderboardRanks(
                     organisation_uuid,
                     goal.period,
+                    metric,
                     timezone,
                 );
                 const top = board[0];
@@ -502,6 +524,7 @@ export class MessagingGoalsService {
                 if (member.user_uuid === user_uuid) continue;
                 this.gateway.emitToUser(member.user_uuid, 'goal.leaderboard_updated', {
                     organisation_uuid,
+                    metric,
                 });
             }
         } catch (error) {
@@ -515,6 +538,7 @@ export class MessagingGoalsService {
     private async leaderboardRanks(
         organisationUuid: string,
         period: GoalPeriod,
+        metric: GoalMetric,
         timezone: string,
     ) {
         const window = getPeriodWindow(period, timezone);
@@ -522,12 +546,14 @@ export class MessagingGoalsService {
             where: {
                 organisation_uuid: organisationUuid,
                 period,
+                metric,
                 is_active: true,
             },
         });
         const rows = await Promise.all(
             goals.map(async (goal) => {
-                const current_count = await this.countSentMessages(
+                const current_count = await this.countActivity(
+                    metric,
                     organisationUuid,
                     goal.user_uuid,
                     window.starts_at,
@@ -594,6 +620,7 @@ export class MessagingGoalsService {
             organisation_uuid: string;
             user_uuid: string;
             period: GoalPeriod;
+            metric: GoalMetric;
             target_count: number;
             is_active: boolean;
             user: GoalUser;
@@ -601,7 +628,8 @@ export class MessagingGoalsService {
         timezone: string,
     ): Promise<GoalWithProgress> {
         const window = getPeriodWindow(goal.period, timezone);
-        const current_count = await this.countSentMessages(
+        const current_count = await this.countActivity(
+            goal.metric,
             goal.organisation_uuid,
             goal.user_uuid,
             window.starts_at,
@@ -616,6 +644,7 @@ export class MessagingGoalsService {
             organisation_uuid: goal.organisation_uuid,
             user_uuid: goal.user_uuid,
             period: goal.period,
+            metric: goal.metric,
             target_count: goal.target_count,
             is_active: goal.is_active,
             current_count,
@@ -627,16 +656,28 @@ export class MessagingGoalsService {
         };
     }
 
-    private async countSentMessages(
+    private async countActivity(
+        metric: GoalMetric,
         organisationUuid: string,
         userUuid: string,
         startsAt: Date,
         endsAt: Date,
     ): Promise<number> {
+        if (metric === GoalMetric.CALL) {
+            return this.prisma.interaction.count({
+                where: {
+                    organisation_uuid: organisationUuid,
+                    created_by_user_uuid: userUuid,
+                    type: InteractionType.CALL,
+                    created_at: { gte: startsAt, lte: endsAt },
+                },
+            });
+        }
         return this.prisma.outreachMessage.count({
             where: {
                 organisation_uuid: organisationUuid,
                 sent_by_user_uuid: userUuid,
+                channel: Channel.EMAIL,
                 campaign_uuid: null,
                 status: { in: [...SENT_MESSAGE_STATUSES] as MsgStatus[] },
                 sent_at: {

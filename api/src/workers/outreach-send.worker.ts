@@ -3,6 +3,7 @@ import { Logger, OnModuleInit } from '@nestjs/common';
 import { Job } from 'bullmq';
 import {
   Channel,
+  GoalMetric,
   InteractionType,
   LeadStatus,
   MsgStatus,
@@ -118,10 +119,11 @@ export class OutreachSendWorker extends WorkerHost implements OnModuleInit {
         await this.sendingCapacityService.releaseSlot(message.uuid);
       }
       if (message.sequence_enrollment_uuid && message.sequence_step_uuid) {
-        await this.sequenceEnrollmentService.advanceEnrollment(
-          message.sequence_enrollment_uuid,
-          message.sequence_step_uuid,
-          new Date(),
+        // Undeliverable / opted-out contact: stop the sequence instead of walking it
+        // through every remaining step only to skip each one.
+        await this.sequenceEnrollmentService.cancelAllForContact(
+          message.organisation_uuid,
+          message.contact_uuid,
         );
       }
       this.logger.warn(`Outreach send skipped message=${message.uuid}: ${reason}`);
@@ -240,10 +242,11 @@ export class OutreachSendWorker extends WorkerHost implements OnModuleInit {
 
       if (message.sent_by_user_uuid) {
         setImmediate(() => {
-          void this.messagingGoalsService.onMessageSent({
+          void this.messagingGoalsService.onActivity({
+            metric: GoalMetric.EMAIL,
             organisation_uuid: message.organisation_uuid,
             user_uuid: message.sent_by_user_uuid!,
-            sent_at: new Date(),
+            occurred_at: new Date(),
           });
         });
       }

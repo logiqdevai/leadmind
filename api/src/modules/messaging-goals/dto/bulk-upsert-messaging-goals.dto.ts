@@ -1,15 +1,16 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
     ArrayMinSize,
     IsArray,
     IsEnum,
     IsInt,
+    IsOptional,
     IsUUID,
     Min,
     ValidateNested,
 } from 'class-validator';
-import { GoalPeriod } from '@/generated/prisma';
+import { GoalMetric, GoalPeriod } from '@/generated/prisma';
 
 class BulkGoalItemDto {
     @ApiProperty({ format: 'uuid' })
@@ -19,6 +20,11 @@ class BulkGoalItemDto {
     @ApiProperty({ enum: GoalPeriod })
     @IsEnum(GoalPeriod)
     period: GoalPeriod;
+
+    @ApiPropertyOptional({ enum: GoalMetric, default: GoalMetric.EMAIL })
+    @IsOptional()
+    @IsEnum(GoalMetric)
+    metric?: GoalMetric;
 
     @ApiProperty({ minimum: 1 })
     @IsInt()

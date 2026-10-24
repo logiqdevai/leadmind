@@ -7,7 +7,9 @@ import {
     useMyMessagingGoals,
 } from "@/features/messaging-goals/hooks/use-messaging-goals";
 import {
+    GoalMetrics,
     GoalPeriods,
+    type GoalMetric,
     type GoalPeriod,
 } from "@/features/messaging-goals/interfaces/messaging-goals.interfaces";
 import { useOrganisationPermission } from "@/hooks/use-organisation-permission";
@@ -16,7 +18,7 @@ import { GoalProgressCard } from "./components/goal-progress-card";
 import { GoalsLeaderboard } from "./components/goals-leaderboard";
 import { GoalsManagePanel } from "./components/goals-manage-panel";
 import { EmailSendLimitsPanel } from "./components/email-send-limits-panel";
-import { PERIOD_LABELS } from "./utils/goals-copy";
+import { METRIC_LABELS, PERIOD_LABELS } from "./utils/goals-copy";
 
 const GoalsPage: FC = () => {
     const canManage = useOrganisationPermission("org_manage_goals");
@@ -25,8 +27,9 @@ const GoalsPage: FC = () => {
     const [leaderboardPeriod, setLeaderboardPeriod] = useState<GoalPeriod>(GoalPeriods.DAY);
 
     const { data: myGoals = [], isLoading: myLoading } = useMyMessagingGoals();
+    const [leaderboardMetric, setLeaderboardMetric] = useState<GoalMetric>(GoalMetrics.EMAIL);
     const { data: leaderboard = [], isLoading: boardLoading } =
-        useMessagingGoalsLeaderboard(leaderboardPeriod);
+        useMessagingGoalsLeaderboard(leaderboardPeriod, leaderboardMetric);
 
     const tabs = [
         { id: "progress", label: "My Progress" },
@@ -59,8 +62,8 @@ const GoalsPage: FC = () => {
             {tab === "progress" && (
                 <div className="flex flex-col gap-4">
                     <p className="text-sm text-muted">
-                        Track your messaging targets in real time. Counts include 1:1 outreach you
-                        send.
+                        Track your email and call targets in real time. Emails count 1:1 outreach you
+                        send; calls count the calls you log on contacts.
                     </p>
                     {myLoading ? (
                         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -94,8 +97,30 @@ const GoalsPage: FC = () => {
                 <div className="flex flex-col gap-4">
                     <div className="flex flex-wrap items-center justify-between gap-3">
                         <p className="text-sm text-muted">
-                            See how the team stacks up for the selected period.
+                            See how the team stacks up for the selected metric and period.
                         </p>
+                        <div className="flex items-center gap-2">
+                        <Select
+                            aria-label="Leaderboard metric"
+                            value={leaderboardMetric}
+                            onChange={(key) => setLeaderboardMetric(String(key) as GoalMetric)}
+                            className="w-32"
+                        >
+                            <Select.Trigger>
+                                <Select.Value />
+                                <Select.Indicator />
+                            </Select.Trigger>
+                            <Select.Popover>
+                                <ListBox>
+                                    {(Object.values(GoalMetrics) as GoalMetric[]).map((m) => (
+                                        <ListBox.Item key={m} id={m} textValue={METRIC_LABELS[m]}>
+                                            {METRIC_LABELS[m]}
+                                            <ListBox.ItemIndicator />
+                                        </ListBox.Item>
+                                    ))}
+                                </ListBox>
+                            </Select.Popover>
+                        </Select>
                         <Select
                             aria-label="Leaderboard period"
                             value={leaderboardPeriod}
@@ -125,6 +150,7 @@ const GoalsPage: FC = () => {
                                 </ListBox>
                             </Select.Popover>
                         </Select>
+                        </div>
                     </div>
                     <GoalsLeaderboard
                         rows={leaderboard}

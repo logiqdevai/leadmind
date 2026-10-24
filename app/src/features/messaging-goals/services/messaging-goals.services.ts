@@ -3,6 +3,7 @@ import { ApiRoutes } from "@/config/api/routes";
 import type {
     BulkUpsertMessagingGoalsPayload,
     GoalAchievement,
+    GoalMetric,
     GoalPeriod,
     LeaderboardRow,
     MessagingGoalProgress,
@@ -30,10 +31,11 @@ export const listMessagingGoals = async (): Promise<MessagingGoalProgress[]> => 
 
 export const getMessagingGoalsLeaderboard = async (
     period: GoalPeriod,
+    metric: GoalMetric,
 ): Promise<LeaderboardRow[]> => {
     try {
         const response = await axiosInstance.get(ApiRoutes.messaging_goals.leaderboard, {
-            params: { period },
+            params: { period, metric },
         });
         return response.data;
     } catch {

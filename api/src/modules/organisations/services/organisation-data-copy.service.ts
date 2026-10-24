@@ -847,6 +847,7 @@ export class OrganisationDataCopyService {
                 organisation_uuid: targetOrgUuid,
                 user_uuid: g.user_uuid,
                 period: g.period,
+                metric: g.metric,
                 target_count: g.target_count,
                 is_active: g.is_active,
             })),

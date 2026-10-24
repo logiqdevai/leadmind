@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "@/hooks/use-toast";
 import type {
     BulkUpsertMessagingGoalsPayload,
+    GoalMetric,
     GoalPeriod,
     UpdateMessagingGoalPayload,
     UpsertMessagingGoalPayload,
@@ -22,8 +23,8 @@ export const messagingGoalsQueryKeys = {
     all: ["messaging-goals"] as const,
     me: ["messaging-goals", "me"] as const,
     list: ["messaging-goals", "list"] as const,
-    leaderboard: (period: GoalPeriod) =>
-        ["messaging-goals", "leaderboard", period] as const,
+    leaderboard: (period: GoalPeriod, metric: GoalMetric) =>
+        ["messaging-goals", "leaderboard", period, metric] as const,
     achievements: (unseen?: boolean) =>
         ["messaging-goals", "achievements", unseen ?? false] as const,
 };
@@ -44,10 +45,10 @@ export function useMessagingGoalsList() {
     });
 }
 
-export function useMessagingGoalsLeaderboard(period: GoalPeriod) {
+export function useMessagingGoalsLeaderboard(period: GoalPeriod, metric: GoalMetric) {
     return useQuery({
-        queryKey: messagingGoalsQueryKeys.leaderboard(period),
-        queryFn: () => getMessagingGoalsLeaderboard(period),
+        queryKey: messagingGoalsQueryKeys.leaderboard(period, metric),
+        queryFn: () => getMessagingGoalsLeaderboard(period, metric),
         staleTime: 15_000,
     });
 }

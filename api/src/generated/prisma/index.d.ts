@@ -892,6 +892,14 @@ export const GoalPeriod: {
 export type GoalPeriod = (typeof GoalPeriod)[keyof typeof GoalPeriod]
 
 
+export const GoalMetric: {
+  EMAIL: 'EMAIL',
+  CALL: 'CALL'
+};
+
+export type GoalMetric = (typeof GoalMetric)[keyof typeof GoalMetric]
+
+
 export const GoalAchievementType: {
   MILESTONE_25: 'MILESTONE_25',
   MILESTONE_50: 'MILESTONE_50',
@@ -1141,6 +1149,10 @@ export const ApifyUsageStatus: typeof $Enums.ApifyUsageStatus
 export type GoalPeriod = $Enums.GoalPeriod
 
 export const GoalPeriod: typeof $Enums.GoalPeriod
+
+export type GoalMetric = $Enums.GoalMetric
+
+export const GoalMetric: typeof $Enums.GoalMetric
 
 export type GoalAchievementType = $Enums.GoalAchievementType
 
@@ -35500,6 +35512,7 @@ export namespace Prisma {
     type: $Enums.InteractionType | null
     content: string | null
     outreach_message_uuid: string | null
+    created_by_user_uuid: string | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -35513,6 +35526,7 @@ export namespace Prisma {
     type: $Enums.InteractionType | null
     content: string | null
     outreach_message_uuid: string | null
+    created_by_user_uuid: string | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -35528,6 +35542,7 @@ export namespace Prisma {
     metadata: number
     status_change: number
     outreach_message_uuid: number
+    created_by_user_uuid: number
     created_at: number
     updated_at: number
     _all: number
@@ -35551,6 +35566,7 @@ export namespace Prisma {
     type?: true
     content?: true
     outreach_message_uuid?: true
+    created_by_user_uuid?: true
     created_at?: true
     updated_at?: true
   }
@@ -35564,6 +35580,7 @@ export namespace Prisma {
     type?: true
     content?: true
     outreach_message_uuid?: true
+    created_by_user_uuid?: true
     created_at?: true
     updated_at?: true
   }
@@ -35579,6 +35596,7 @@ export namespace Prisma {
     metadata?: true
     status_change?: true
     outreach_message_uuid?: true
+    created_by_user_uuid?: true
     created_at?: true
     updated_at?: true
     _all?: true
@@ -35681,6 +35699,7 @@ export namespace Prisma {
     metadata: JsonValue | null
     status_change: JsonValue | null
     outreach_message_uuid: string | null
+    created_by_user_uuid: string | null
     created_at: Date
     updated_at: Date
     _count: InteractionCountAggregateOutputType | null
@@ -35715,6 +35734,7 @@ export namespace Prisma {
     metadata?: boolean
     status_change?: boolean
     outreach_message_uuid?: boolean
+    created_by_user_uuid?: boolean
     created_at?: boolean
     updated_at?: boolean
     contact?: boolean | ContactDefaultArgs<ExtArgs>
@@ -35734,6 +35754,7 @@ export namespace Prisma {
     metadata?: boolean
     status_change?: boolean
     outreach_message_uuid?: boolean
+    created_by_user_uuid?: boolean
     created_at?: boolean
     updated_at?: boolean
     contact?: boolean | ContactDefaultArgs<ExtArgs>
@@ -35753,6 +35774,7 @@ export namespace Prisma {
     metadata?: boolean
     status_change?: boolean
     outreach_message_uuid?: boolean
+    created_by_user_uuid?: boolean
     created_at?: boolean
     updated_at?: boolean
     contact?: boolean | ContactDefaultArgs<ExtArgs>
@@ -35772,11 +35794,12 @@ export namespace Prisma {
     metadata?: boolean
     status_change?: boolean
     outreach_message_uuid?: boolean
+    created_by_user_uuid?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
-  export type InteractionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "contact_uuid" | "organisation_uuid" | "campaign_uuid" | "type" | "content" | "metadata" | "status_change" | "outreach_message_uuid" | "created_at" | "updated_at", ExtArgs["result"]["interaction"]>
+  export type InteractionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "contact_uuid" | "organisation_uuid" | "campaign_uuid" | "type" | "content" | "metadata" | "status_change" | "outreach_message_uuid" | "created_by_user_uuid" | "created_at" | "updated_at", ExtArgs["result"]["interaction"]>
   export type InteractionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     contact?: boolean | ContactDefaultArgs<ExtArgs>
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
@@ -35815,6 +35838,7 @@ export namespace Prisma {
       metadata: Prisma.JsonValue | null
       status_change: Prisma.JsonValue | null
       outreach_message_uuid: string | null
+      created_by_user_uuid: string | null
       created_at: Date
       updated_at: Date
     }, ExtArgs["result"]["interaction"]>
@@ -36254,6 +36278,7 @@ export namespace Prisma {
     readonly metadata: FieldRef<"Interaction", 'Json'>
     readonly status_change: FieldRef<"Interaction", 'Json'>
     readonly outreach_message_uuid: FieldRef<"Interaction", 'String'>
+    readonly created_by_user_uuid: FieldRef<"Interaction", 'String'>
     readonly created_at: FieldRef<"Interaction", 'DateTime'>
     readonly updated_at: FieldRef<"Interaction", 'DateTime'>
   }
@@ -71247,6 +71272,7 @@ export namespace Prisma {
     organisation_uuid: string | null
     user_uuid: string | null
     period: $Enums.GoalPeriod | null
+    metric: $Enums.GoalMetric | null
     target_count: number | null
     is_active: boolean | null
     created_at: Date | null
@@ -71259,6 +71285,7 @@ export namespace Prisma {
     organisation_uuid: string | null
     user_uuid: string | null
     period: $Enums.GoalPeriod | null
+    metric: $Enums.GoalMetric | null
     target_count: number | null
     is_active: boolean | null
     created_at: Date | null
@@ -71271,6 +71298,7 @@ export namespace Prisma {
     organisation_uuid: number
     user_uuid: number
     period: number
+    metric: number
     target_count: number
     is_active: number
     created_at: number
@@ -71295,6 +71323,7 @@ export namespace Prisma {
     organisation_uuid?: true
     user_uuid?: true
     period?: true
+    metric?: true
     target_count?: true
     is_active?: true
     created_at?: true
@@ -71307,6 +71336,7 @@ export namespace Prisma {
     organisation_uuid?: true
     user_uuid?: true
     period?: true
+    metric?: true
     target_count?: true
     is_active?: true
     created_at?: true
@@ -71319,6 +71349,7 @@ export namespace Prisma {
     organisation_uuid?: true
     user_uuid?: true
     period?: true
+    metric?: true
     target_count?: true
     is_active?: true
     created_at?: true
@@ -71418,6 +71449,7 @@ export namespace Prisma {
     organisation_uuid: string
     user_uuid: string
     period: $Enums.GoalPeriod
+    metric: $Enums.GoalMetric
     target_count: number
     is_active: boolean
     created_at: Date
@@ -71449,6 +71481,7 @@ export namespace Prisma {
     organisation_uuid?: boolean
     user_uuid?: boolean
     period?: boolean
+    metric?: boolean
     target_count?: boolean
     is_active?: boolean
     created_at?: boolean
@@ -71465,6 +71498,7 @@ export namespace Prisma {
     organisation_uuid?: boolean
     user_uuid?: boolean
     period?: boolean
+    metric?: boolean
     target_count?: boolean
     is_active?: boolean
     created_at?: boolean
@@ -71479,6 +71513,7 @@ export namespace Prisma {
     organisation_uuid?: boolean
     user_uuid?: boolean
     period?: boolean
+    metric?: boolean
     target_count?: boolean
     is_active?: boolean
     created_at?: boolean
@@ -71493,13 +71528,14 @@ export namespace Prisma {
     organisation_uuid?: boolean
     user_uuid?: boolean
     period?: boolean
+    metric?: boolean
     target_count?: boolean
     is_active?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
-  export type MessagingGoalOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "user_uuid" | "period" | "target_count" | "is_active" | "created_at" | "updated_at", ExtArgs["result"]["messagingGoal"]>
+  export type MessagingGoalOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "user_uuid" | "period" | "metric" | "target_count" | "is_active" | "created_at" | "updated_at", ExtArgs["result"]["messagingGoal"]>
   export type MessagingGoalInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -71528,6 +71564,7 @@ export namespace Prisma {
       organisation_uuid: string
       user_uuid: string
       period: $Enums.GoalPeriod
+      metric: $Enums.GoalMetric
       target_count: number
       is_active: boolean
       created_at: Date
@@ -71963,6 +72000,7 @@ export namespace Prisma {
     readonly organisation_uuid: FieldRef<"MessagingGoal", 'String'>
     readonly user_uuid: FieldRef<"MessagingGoal", 'String'>
     readonly period: FieldRef<"MessagingGoal", 'GoalPeriod'>
+    readonly metric: FieldRef<"MessagingGoal", 'GoalMetric'>
     readonly target_count: FieldRef<"MessagingGoal", 'Int'>
     readonly is_active: FieldRef<"MessagingGoal", 'Boolean'>
     readonly created_at: FieldRef<"MessagingGoal", 'DateTime'>
@@ -80704,6 +80742,7 @@ export namespace Prisma {
     organisation_uuid: string | null
     user_uuid: string | null
     period: $Enums.GoalPeriod | null
+    metric: $Enums.GoalMetric | null
     best_count: number | null
     achieved_at: Date | null
     updated_at: Date | null
@@ -80715,6 +80754,7 @@ export namespace Prisma {
     organisation_uuid: string | null
     user_uuid: string | null
     period: $Enums.GoalPeriod | null
+    metric: $Enums.GoalMetric | null
     best_count: number | null
     achieved_at: Date | null
     updated_at: Date | null
@@ -80726,6 +80766,7 @@ export namespace Prisma {
     organisation_uuid: number
     user_uuid: number
     period: number
+    metric: number
     best_count: number
     achieved_at: number
     updated_at: number
@@ -80749,6 +80790,7 @@ export namespace Prisma {
     organisation_uuid?: true
     user_uuid?: true
     period?: true
+    metric?: true
     best_count?: true
     achieved_at?: true
     updated_at?: true
@@ -80760,6 +80802,7 @@ export namespace Prisma {
     organisation_uuid?: true
     user_uuid?: true
     period?: true
+    metric?: true
     best_count?: true
     achieved_at?: true
     updated_at?: true
@@ -80771,6 +80814,7 @@ export namespace Prisma {
     organisation_uuid?: true
     user_uuid?: true
     period?: true
+    metric?: true
     best_count?: true
     achieved_at?: true
     updated_at?: true
@@ -80869,6 +80913,7 @@ export namespace Prisma {
     organisation_uuid: string
     user_uuid: string
     period: $Enums.GoalPeriod
+    metric: $Enums.GoalMetric
     best_count: number
     achieved_at: Date
     updated_at: Date
@@ -80899,6 +80944,7 @@ export namespace Prisma {
     organisation_uuid?: boolean
     user_uuid?: boolean
     period?: boolean
+    metric?: boolean
     best_count?: boolean
     achieved_at?: boolean
     updated_at?: boolean
@@ -80912,6 +80958,7 @@ export namespace Prisma {
     organisation_uuid?: boolean
     user_uuid?: boolean
     period?: boolean
+    metric?: boolean
     best_count?: boolean
     achieved_at?: boolean
     updated_at?: boolean
@@ -80925,6 +80972,7 @@ export namespace Prisma {
     organisation_uuid?: boolean
     user_uuid?: boolean
     period?: boolean
+    metric?: boolean
     best_count?: boolean
     achieved_at?: boolean
     updated_at?: boolean
@@ -80938,12 +80986,13 @@ export namespace Prisma {
     organisation_uuid?: boolean
     user_uuid?: boolean
     period?: boolean
+    metric?: boolean
     best_count?: boolean
     achieved_at?: boolean
     updated_at?: boolean
   }
 
-  export type GoalPersonalBestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "user_uuid" | "period" | "best_count" | "achieved_at" | "updated_at", ExtArgs["result"]["goalPersonalBest"]>
+  export type GoalPersonalBestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "user_uuid" | "period" | "metric" | "best_count" | "achieved_at" | "updated_at", ExtArgs["result"]["goalPersonalBest"]>
   export type GoalPersonalBestInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -80969,6 +81018,7 @@ export namespace Prisma {
       organisation_uuid: string
       user_uuid: string
       period: $Enums.GoalPeriod
+      metric: $Enums.GoalMetric
       best_count: number
       achieved_at: Date
       updated_at: Date
@@ -81402,6 +81452,7 @@ export namespace Prisma {
     readonly organisation_uuid: FieldRef<"GoalPersonalBest", 'String'>
     readonly user_uuid: FieldRef<"GoalPersonalBest", 'String'>
     readonly period: FieldRef<"GoalPersonalBest", 'GoalPeriod'>
+    readonly metric: FieldRef<"GoalPersonalBest", 'GoalMetric'>
     readonly best_count: FieldRef<"GoalPersonalBest", 'Int'>
     readonly achieved_at: FieldRef<"GoalPersonalBest", 'DateTime'>
     readonly updated_at: FieldRef<"GoalPersonalBest", 'DateTime'>
@@ -89135,6 +89186,7 @@ export namespace Prisma {
     metadata: 'metadata',
     status_change: 'status_change',
     outreach_message_uuid: 'outreach_message_uuid',
+    created_by_user_uuid: 'created_by_user_uuid',
     created_at: 'created_at',
     updated_at: 'updated_at'
   };
@@ -89731,6 +89783,7 @@ export namespace Prisma {
     organisation_uuid: 'organisation_uuid',
     user_uuid: 'user_uuid',
     period: 'period',
+    metric: 'metric',
     target_count: 'target_count',
     is_active: 'is_active',
     created_at: 'created_at',
@@ -89856,6 +89909,7 @@ export namespace Prisma {
     organisation_uuid: 'organisation_uuid',
     user_uuid: 'user_uuid',
     period: 'period',
+    metric: 'metric',
     best_count: 'best_count',
     achieved_at: 'achieved_at',
     updated_at: 'updated_at'
@@ -90788,6 +90842,20 @@ export namespace Prisma {
    * Reference to a field of type 'GoalPeriod[]'
    */
   export type ListEnumGoalPeriodFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GoalPeriod[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'GoalMetric'
+   */
+  export type EnumGoalMetricFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GoalMetric'>
+    
+
+
+  /**
+   * Reference to a field of type 'GoalMetric[]'
+   */
+  export type ListEnumGoalMetricFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GoalMetric[]'>
     
 
 
@@ -92872,6 +92940,7 @@ export namespace Prisma {
     metadata?: JsonNullableFilter<"Interaction">
     status_change?: JsonNullableFilter<"Interaction">
     outreach_message_uuid?: StringNullableFilter<"Interaction"> | string | null
+    created_by_user_uuid?: StringNullableFilter<"Interaction"> | string | null
     created_at?: DateTimeFilter<"Interaction"> | Date | string
     updated_at?: DateTimeFilter<"Interaction"> | Date | string
     contact?: XOR<ContactScalarRelationFilter, ContactWhereInput>
@@ -92891,6 +92960,7 @@ export namespace Prisma {
     metadata?: SortOrderInput | SortOrder
     status_change?: SortOrderInput | SortOrder
     outreach_message_uuid?: SortOrderInput | SortOrder
+    created_by_user_uuid?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     contact?: ContactOrderByWithRelationInput
@@ -92913,6 +92983,7 @@ export namespace Prisma {
     metadata?: JsonNullableFilter<"Interaction">
     status_change?: JsonNullableFilter<"Interaction">
     outreach_message_uuid?: StringNullableFilter<"Interaction"> | string | null
+    created_by_user_uuid?: StringNullableFilter<"Interaction"> | string | null
     created_at?: DateTimeFilter<"Interaction"> | Date | string
     updated_at?: DateTimeFilter<"Interaction"> | Date | string
     contact?: XOR<ContactScalarRelationFilter, ContactWhereInput>
@@ -92932,6 +93003,7 @@ export namespace Prisma {
     metadata?: SortOrderInput | SortOrder
     status_change?: SortOrderInput | SortOrder
     outreach_message_uuid?: SortOrderInput | SortOrder
+    created_by_user_uuid?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     _count?: InteractionCountOrderByAggregateInput
@@ -92955,6 +93027,7 @@ export namespace Prisma {
     metadata?: JsonNullableWithAggregatesFilter<"Interaction">
     status_change?: JsonNullableWithAggregatesFilter<"Interaction">
     outreach_message_uuid?: StringNullableWithAggregatesFilter<"Interaction"> | string | null
+    created_by_user_uuid?: StringNullableWithAggregatesFilter<"Interaction"> | string | null
     created_at?: DateTimeWithAggregatesFilter<"Interaction"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"Interaction"> | Date | string
   }
@@ -96091,6 +96164,7 @@ export namespace Prisma {
     organisation_uuid?: StringFilter<"MessagingGoal"> | string
     user_uuid?: StringFilter<"MessagingGoal"> | string
     period?: EnumGoalPeriodFilter<"MessagingGoal"> | $Enums.GoalPeriod
+    metric?: EnumGoalMetricFilter<"MessagingGoal"> | $Enums.GoalMetric
     target_count?: IntFilter<"MessagingGoal"> | number
     is_active?: BoolFilter<"MessagingGoal"> | boolean
     created_at?: DateTimeFilter<"MessagingGoal"> | Date | string
@@ -96106,6 +96180,7 @@ export namespace Prisma {
     organisation_uuid?: SortOrder
     user_uuid?: SortOrder
     period?: SortOrder
+    metric?: SortOrder
     target_count?: SortOrder
     is_active?: SortOrder
     created_at?: SortOrder
@@ -96118,13 +96193,14 @@ export namespace Prisma {
   export type MessagingGoalWhereUniqueInput = Prisma.AtLeast<{
     id?: number
     uuid?: string
-    organisation_uuid_user_uuid_period?: MessagingGoalOrganisation_uuidUser_uuidPeriodCompoundUniqueInput
+    organisation_uuid_user_uuid_period_metric?: MessagingGoalOrganisation_uuidUser_uuidPeriodMetricCompoundUniqueInput
     AND?: MessagingGoalWhereInput | MessagingGoalWhereInput[]
     OR?: MessagingGoalWhereInput[]
     NOT?: MessagingGoalWhereInput | MessagingGoalWhereInput[]
     organisation_uuid?: StringFilter<"MessagingGoal"> | string
     user_uuid?: StringFilter<"MessagingGoal"> | string
     period?: EnumGoalPeriodFilter<"MessagingGoal"> | $Enums.GoalPeriod
+    metric?: EnumGoalMetricFilter<"MessagingGoal"> | $Enums.GoalMetric
     target_count?: IntFilter<"MessagingGoal"> | number
     is_active?: BoolFilter<"MessagingGoal"> | boolean
     created_at?: DateTimeFilter<"MessagingGoal"> | Date | string
@@ -96132,7 +96208,7 @@ export namespace Prisma {
     organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     achievements?: GoalAchievementListRelationFilter
-  }, "id" | "uuid" | "organisation_uuid_user_uuid_period">
+  }, "id" | "uuid" | "organisation_uuid_user_uuid_period_metric">
 
   export type MessagingGoalOrderByWithAggregationInput = {
     id?: SortOrder
@@ -96140,6 +96216,7 @@ export namespace Prisma {
     organisation_uuid?: SortOrder
     user_uuid?: SortOrder
     period?: SortOrder
+    metric?: SortOrder
     target_count?: SortOrder
     is_active?: SortOrder
     created_at?: SortOrder
@@ -96160,6 +96237,7 @@ export namespace Prisma {
     organisation_uuid?: StringWithAggregatesFilter<"MessagingGoal"> | string
     user_uuid?: StringWithAggregatesFilter<"MessagingGoal"> | string
     period?: EnumGoalPeriodWithAggregatesFilter<"MessagingGoal"> | $Enums.GoalPeriod
+    metric?: EnumGoalMetricWithAggregatesFilter<"MessagingGoal"> | $Enums.GoalMetric
     target_count?: IntWithAggregatesFilter<"MessagingGoal"> | number
     is_active?: BoolWithAggregatesFilter<"MessagingGoal"> | boolean
     created_at?: DateTimeWithAggregatesFilter<"MessagingGoal"> | Date | string
@@ -96774,6 +96852,7 @@ export namespace Prisma {
     organisation_uuid?: StringFilter<"GoalPersonalBest"> | string
     user_uuid?: StringFilter<"GoalPersonalBest"> | string
     period?: EnumGoalPeriodFilter<"GoalPersonalBest"> | $Enums.GoalPeriod
+    metric?: EnumGoalMetricFilter<"GoalPersonalBest"> | $Enums.GoalMetric
     best_count?: IntFilter<"GoalPersonalBest"> | number
     achieved_at?: DateTimeFilter<"GoalPersonalBest"> | Date | string
     updated_at?: DateTimeFilter<"GoalPersonalBest"> | Date | string
@@ -96787,6 +96866,7 @@ export namespace Prisma {
     organisation_uuid?: SortOrder
     user_uuid?: SortOrder
     period?: SortOrder
+    metric?: SortOrder
     best_count?: SortOrder
     achieved_at?: SortOrder
     updated_at?: SortOrder
@@ -96797,19 +96877,20 @@ export namespace Prisma {
   export type GoalPersonalBestWhereUniqueInput = Prisma.AtLeast<{
     id?: number
     uuid?: string
-    organisation_uuid_user_uuid_period?: GoalPersonalBestOrganisation_uuidUser_uuidPeriodCompoundUniqueInput
+    organisation_uuid_user_uuid_period_metric?: GoalPersonalBestOrganisation_uuidUser_uuidPeriodMetricCompoundUniqueInput
     AND?: GoalPersonalBestWhereInput | GoalPersonalBestWhereInput[]
     OR?: GoalPersonalBestWhereInput[]
     NOT?: GoalPersonalBestWhereInput | GoalPersonalBestWhereInput[]
     organisation_uuid?: StringFilter<"GoalPersonalBest"> | string
     user_uuid?: StringFilter<"GoalPersonalBest"> | string
     period?: EnumGoalPeriodFilter<"GoalPersonalBest"> | $Enums.GoalPeriod
+    metric?: EnumGoalMetricFilter<"GoalPersonalBest"> | $Enums.GoalMetric
     best_count?: IntFilter<"GoalPersonalBest"> | number
     achieved_at?: DateTimeFilter<"GoalPersonalBest"> | Date | string
     updated_at?: DateTimeFilter<"GoalPersonalBest"> | Date | string
     organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
-  }, "id" | "uuid" | "organisation_uuid_user_uuid_period">
+  }, "id" | "uuid" | "organisation_uuid_user_uuid_period_metric">
 
   export type GoalPersonalBestOrderByWithAggregationInput = {
     id?: SortOrder
@@ -96817,6 +96898,7 @@ export namespace Prisma {
     organisation_uuid?: SortOrder
     user_uuid?: SortOrder
     period?: SortOrder
+    metric?: SortOrder
     best_count?: SortOrder
     achieved_at?: SortOrder
     updated_at?: SortOrder
@@ -96836,6 +96918,7 @@ export namespace Prisma {
     organisation_uuid?: StringWithAggregatesFilter<"GoalPersonalBest"> | string
     user_uuid?: StringWithAggregatesFilter<"GoalPersonalBest"> | string
     period?: EnumGoalPeriodWithAggregatesFilter<"GoalPersonalBest"> | $Enums.GoalPeriod
+    metric?: EnumGoalMetricWithAggregatesFilter<"GoalPersonalBest"> | $Enums.GoalMetric
     best_count?: IntWithAggregatesFilter<"GoalPersonalBest"> | number
     achieved_at?: DateTimeWithAggregatesFilter<"GoalPersonalBest"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"GoalPersonalBest"> | Date | string
@@ -99499,6 +99582,7 @@ export namespace Prisma {
     content?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status_change?: NullableJsonNullValueInput | InputJsonValue
+    created_by_user_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     contact: ContactCreateNestedOneWithoutInteractionsInput
@@ -99518,6 +99602,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status_change?: NullableJsonNullValueInput | InputJsonValue
     outreach_message_uuid?: string | null
+    created_by_user_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -99528,6 +99613,7 @@ export namespace Prisma {
     content?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status_change?: NullableJsonNullValueInput | InputJsonValue
+    created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     contact?: ContactUpdateOneRequiredWithoutInteractionsNestedInput
@@ -99547,6 +99633,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status_change?: NullableJsonNullValueInput | InputJsonValue
     outreach_message_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -99562,6 +99649,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status_change?: NullableJsonNullValueInput | InputJsonValue
     outreach_message_uuid?: string | null
+    created_by_user_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -99572,6 +99660,7 @@ export namespace Prisma {
     content?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status_change?: NullableJsonNullValueInput | InputJsonValue
+    created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -99587,6 +99676,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status_change?: NullableJsonNullValueInput | InputJsonValue
     outreach_message_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -103087,6 +103177,7 @@ export namespace Prisma {
   export type MessagingGoalCreateInput = {
     uuid?: string
     period: $Enums.GoalPeriod
+    metric?: $Enums.GoalMetric
     target_count: number
     is_active?: boolean
     created_at?: Date | string
@@ -103102,6 +103193,7 @@ export namespace Prisma {
     organisation_uuid: string
     user_uuid: string
     period: $Enums.GoalPeriod
+    metric?: $Enums.GoalMetric
     target_count: number
     is_active?: boolean
     created_at?: Date | string
@@ -103112,6 +103204,7 @@ export namespace Prisma {
   export type MessagingGoalUpdateInput = {
     uuid?: StringFieldUpdateOperationsInput | string
     period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    metric?: EnumGoalMetricFieldUpdateOperationsInput | $Enums.GoalMetric
     target_count?: IntFieldUpdateOperationsInput | number
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -103127,6 +103220,7 @@ export namespace Prisma {
     organisation_uuid?: StringFieldUpdateOperationsInput | string
     user_uuid?: StringFieldUpdateOperationsInput | string
     period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    metric?: EnumGoalMetricFieldUpdateOperationsInput | $Enums.GoalMetric
     target_count?: IntFieldUpdateOperationsInput | number
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -103140,6 +103234,7 @@ export namespace Prisma {
     organisation_uuid: string
     user_uuid: string
     period: $Enums.GoalPeriod
+    metric?: $Enums.GoalMetric
     target_count: number
     is_active?: boolean
     created_at?: Date | string
@@ -103149,6 +103244,7 @@ export namespace Prisma {
   export type MessagingGoalUpdateManyMutationInput = {
     uuid?: StringFieldUpdateOperationsInput | string
     period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    metric?: EnumGoalMetricFieldUpdateOperationsInput | $Enums.GoalMetric
     target_count?: IntFieldUpdateOperationsInput | number
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -103161,6 +103257,7 @@ export namespace Prisma {
     organisation_uuid?: StringFieldUpdateOperationsInput | string
     user_uuid?: StringFieldUpdateOperationsInput | string
     period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    metric?: EnumGoalMetricFieldUpdateOperationsInput | $Enums.GoalMetric
     target_count?: IntFieldUpdateOperationsInput | number
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -103780,6 +103877,7 @@ export namespace Prisma {
   export type GoalPersonalBestCreateInput = {
     uuid?: string
     period: $Enums.GoalPeriod
+    metric?: $Enums.GoalMetric
     best_count?: number
     achieved_at?: Date | string
     updated_at?: Date | string
@@ -103793,6 +103891,7 @@ export namespace Prisma {
     organisation_uuid: string
     user_uuid: string
     period: $Enums.GoalPeriod
+    metric?: $Enums.GoalMetric
     best_count?: number
     achieved_at?: Date | string
     updated_at?: Date | string
@@ -103801,6 +103900,7 @@ export namespace Prisma {
   export type GoalPersonalBestUpdateInput = {
     uuid?: StringFieldUpdateOperationsInput | string
     period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    metric?: EnumGoalMetricFieldUpdateOperationsInput | $Enums.GoalMetric
     best_count?: IntFieldUpdateOperationsInput | number
     achieved_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -103814,6 +103914,7 @@ export namespace Prisma {
     organisation_uuid?: StringFieldUpdateOperationsInput | string
     user_uuid?: StringFieldUpdateOperationsInput | string
     period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    metric?: EnumGoalMetricFieldUpdateOperationsInput | $Enums.GoalMetric
     best_count?: IntFieldUpdateOperationsInput | number
     achieved_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -103825,6 +103926,7 @@ export namespace Prisma {
     organisation_uuid: string
     user_uuid: string
     period: $Enums.GoalPeriod
+    metric?: $Enums.GoalMetric
     best_count?: number
     achieved_at?: Date | string
     updated_at?: Date | string
@@ -103833,6 +103935,7 @@ export namespace Prisma {
   export type GoalPersonalBestUpdateManyMutationInput = {
     uuid?: StringFieldUpdateOperationsInput | string
     period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    metric?: EnumGoalMetricFieldUpdateOperationsInput | $Enums.GoalMetric
     best_count?: IntFieldUpdateOperationsInput | number
     achieved_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -103844,6 +103947,7 @@ export namespace Prisma {
     organisation_uuid?: StringFieldUpdateOperationsInput | string
     user_uuid?: StringFieldUpdateOperationsInput | string
     period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    metric?: EnumGoalMetricFieldUpdateOperationsInput | $Enums.GoalMetric
     best_count?: IntFieldUpdateOperationsInput | number
     achieved_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -106462,6 +106566,7 @@ export namespace Prisma {
     metadata?: SortOrder
     status_change?: SortOrder
     outreach_message_uuid?: SortOrder
+    created_by_user_uuid?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -106479,6 +106584,7 @@ export namespace Prisma {
     type?: SortOrder
     content?: SortOrder
     outreach_message_uuid?: SortOrder
+    created_by_user_uuid?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -106492,6 +106598,7 @@ export namespace Prisma {
     type?: SortOrder
     content?: SortOrder
     outreach_message_uuid?: SortOrder
+    created_by_user_uuid?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -109136,10 +109243,18 @@ export namespace Prisma {
     not?: NestedEnumGoalPeriodFilter<$PrismaModel> | $Enums.GoalPeriod
   }
 
-  export type MessagingGoalOrganisation_uuidUser_uuidPeriodCompoundUniqueInput = {
+  export type EnumGoalMetricFilter<$PrismaModel = never> = {
+    equals?: $Enums.GoalMetric | EnumGoalMetricFieldRefInput<$PrismaModel>
+    in?: $Enums.GoalMetric[] | ListEnumGoalMetricFieldRefInput<$PrismaModel>
+    notIn?: $Enums.GoalMetric[] | ListEnumGoalMetricFieldRefInput<$PrismaModel>
+    not?: NestedEnumGoalMetricFilter<$PrismaModel> | $Enums.GoalMetric
+  }
+
+  export type MessagingGoalOrganisation_uuidUser_uuidPeriodMetricCompoundUniqueInput = {
     organisation_uuid: string
     user_uuid: string
     period: $Enums.GoalPeriod
+    metric: $Enums.GoalMetric
   }
 
   export type MessagingGoalCountOrderByAggregateInput = {
@@ -109148,6 +109263,7 @@ export namespace Prisma {
     organisation_uuid?: SortOrder
     user_uuid?: SortOrder
     period?: SortOrder
+    metric?: SortOrder
     target_count?: SortOrder
     is_active?: SortOrder
     created_at?: SortOrder
@@ -109165,6 +109281,7 @@ export namespace Prisma {
     organisation_uuid?: SortOrder
     user_uuid?: SortOrder
     period?: SortOrder
+    metric?: SortOrder
     target_count?: SortOrder
     is_active?: SortOrder
     created_at?: SortOrder
@@ -109177,6 +109294,7 @@ export namespace Prisma {
     organisation_uuid?: SortOrder
     user_uuid?: SortOrder
     period?: SortOrder
+    metric?: SortOrder
     target_count?: SortOrder
     is_active?: SortOrder
     created_at?: SortOrder
@@ -109196,6 +109314,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumGoalPeriodFilter<$PrismaModel>
     _max?: NestedEnumGoalPeriodFilter<$PrismaModel>
+  }
+
+  export type EnumGoalMetricWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.GoalMetric | EnumGoalMetricFieldRefInput<$PrismaModel>
+    in?: $Enums.GoalMetric[] | ListEnumGoalMetricFieldRefInput<$PrismaModel>
+    notIn?: $Enums.GoalMetric[] | ListEnumGoalMetricFieldRefInput<$PrismaModel>
+    not?: NestedEnumGoalMetricWithAggregatesFilter<$PrismaModel> | $Enums.GoalMetric
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumGoalMetricFilter<$PrismaModel>
+    _max?: NestedEnumGoalMetricFilter<$PrismaModel>
   }
 
   export type EmailSendLimitOrganisation_uuidProviderPeriodCompoundUniqueInput = {
@@ -109676,10 +109804,11 @@ export namespace Prisma {
     _max?: NestedEnumGoalAchievementTypeFilter<$PrismaModel>
   }
 
-  export type GoalPersonalBestOrganisation_uuidUser_uuidPeriodCompoundUniqueInput = {
+  export type GoalPersonalBestOrganisation_uuidUser_uuidPeriodMetricCompoundUniqueInput = {
     organisation_uuid: string
     user_uuid: string
     period: $Enums.GoalPeriod
+    metric: $Enums.GoalMetric
   }
 
   export type GoalPersonalBestCountOrderByAggregateInput = {
@@ -109688,6 +109817,7 @@ export namespace Prisma {
     organisation_uuid?: SortOrder
     user_uuid?: SortOrder
     period?: SortOrder
+    metric?: SortOrder
     best_count?: SortOrder
     achieved_at?: SortOrder
     updated_at?: SortOrder
@@ -109704,6 +109834,7 @@ export namespace Prisma {
     organisation_uuid?: SortOrder
     user_uuid?: SortOrder
     period?: SortOrder
+    metric?: SortOrder
     best_count?: SortOrder
     achieved_at?: SortOrder
     updated_at?: SortOrder
@@ -109715,6 +109846,7 @@ export namespace Prisma {
     organisation_uuid?: SortOrder
     user_uuid?: SortOrder
     period?: SortOrder
+    metric?: SortOrder
     best_count?: SortOrder
     achieved_at?: SortOrder
     updated_at?: SortOrder
@@ -115920,6 +116052,10 @@ export namespace Prisma {
     set?: $Enums.GoalPeriod
   }
 
+  export type EnumGoalMetricFieldUpdateOperationsInput = {
+    set?: $Enums.GoalMetric
+  }
+
   export type OrganisationUpdateOneRequiredWithoutMessaging_goalsNestedInput = {
     create?: XOR<OrganisationCreateWithoutMessaging_goalsInput, OrganisationUncheckedCreateWithoutMessaging_goalsInput>
     connectOrCreate?: OrganisationCreateOrConnectWithoutMessaging_goalsInput
@@ -117660,6 +117796,13 @@ export namespace Prisma {
     not?: NestedEnumGoalPeriodFilter<$PrismaModel> | $Enums.GoalPeriod
   }
 
+  export type NestedEnumGoalMetricFilter<$PrismaModel = never> = {
+    equals?: $Enums.GoalMetric | EnumGoalMetricFieldRefInput<$PrismaModel>
+    in?: $Enums.GoalMetric[] | ListEnumGoalMetricFieldRefInput<$PrismaModel>
+    notIn?: $Enums.GoalMetric[] | ListEnumGoalMetricFieldRefInput<$PrismaModel>
+    not?: NestedEnumGoalMetricFilter<$PrismaModel> | $Enums.GoalMetric
+  }
+
   export type NestedEnumGoalPeriodWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.GoalPeriod | EnumGoalPeriodFieldRefInput<$PrismaModel>
     in?: $Enums.GoalPeriod[] | ListEnumGoalPeriodFieldRefInput<$PrismaModel>
@@ -117668,6 +117811,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumGoalPeriodFilter<$PrismaModel>
     _max?: NestedEnumGoalPeriodFilter<$PrismaModel>
+  }
+
+  export type NestedEnumGoalMetricWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.GoalMetric | EnumGoalMetricFieldRefInput<$PrismaModel>
+    in?: $Enums.GoalMetric[] | ListEnumGoalMetricFieldRefInput<$PrismaModel>
+    notIn?: $Enums.GoalMetric[] | ListEnumGoalMetricFieldRefInput<$PrismaModel>
+    not?: NestedEnumGoalMetricWithAggregatesFilter<$PrismaModel> | $Enums.GoalMetric
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumGoalMetricFilter<$PrismaModel>
+    _max?: NestedEnumGoalMetricFilter<$PrismaModel>
   }
 
   export type NestedEnumSendingPeriodUnitFilter<$PrismaModel = never> = {
@@ -118002,6 +118155,7 @@ export namespace Prisma {
   export type MessagingGoalCreateWithoutUserInput = {
     uuid?: string
     period: $Enums.GoalPeriod
+    metric?: $Enums.GoalMetric
     target_count: number
     is_active?: boolean
     created_at?: Date | string
@@ -118015,6 +118169,7 @@ export namespace Prisma {
     uuid?: string
     organisation_uuid: string
     period: $Enums.GoalPeriod
+    metric?: $Enums.GoalMetric
     target_count: number
     is_active?: boolean
     created_at?: Date | string
@@ -118068,6 +118223,7 @@ export namespace Prisma {
   export type GoalPersonalBestCreateWithoutUserInput = {
     uuid?: string
     period: $Enums.GoalPeriod
+    metric?: $Enums.GoalMetric
     best_count?: number
     achieved_at?: Date | string
     updated_at?: Date | string
@@ -118079,6 +118235,7 @@ export namespace Prisma {
     uuid?: string
     organisation_uuid: string
     period: $Enums.GoalPeriod
+    metric?: $Enums.GoalMetric
     best_count?: number
     achieved_at?: Date | string
     updated_at?: Date | string
@@ -118519,6 +118676,7 @@ export namespace Prisma {
     organisation_uuid?: StringFilter<"MessagingGoal"> | string
     user_uuid?: StringFilter<"MessagingGoal"> | string
     period?: EnumGoalPeriodFilter<"MessagingGoal"> | $Enums.GoalPeriod
+    metric?: EnumGoalMetricFilter<"MessagingGoal"> | $Enums.GoalMetric
     target_count?: IntFilter<"MessagingGoal"> | number
     is_active?: BoolFilter<"MessagingGoal"> | boolean
     created_at?: DateTimeFilter<"MessagingGoal"> | Date | string
@@ -118582,6 +118740,7 @@ export namespace Prisma {
     organisation_uuid?: StringFilter<"GoalPersonalBest"> | string
     user_uuid?: StringFilter<"GoalPersonalBest"> | string
     period?: EnumGoalPeriodFilter<"GoalPersonalBest"> | $Enums.GoalPeriod
+    metric?: EnumGoalMetricFilter<"GoalPersonalBest"> | $Enums.GoalMetric
     best_count?: IntFilter<"GoalPersonalBest"> | number
     achieved_at?: DateTimeFilter<"GoalPersonalBest"> | Date | string
     updated_at?: DateTimeFilter<"GoalPersonalBest"> | Date | string
@@ -119187,6 +119346,7 @@ export namespace Prisma {
     content?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status_change?: NullableJsonNullValueInput | InputJsonValue
+    created_by_user_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     contact: ContactCreateNestedOneWithoutInteractionsInput
@@ -119204,6 +119364,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status_change?: NullableJsonNullValueInput | InputJsonValue
     outreach_message_uuid?: string | null
+    created_by_user_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -119864,6 +120025,7 @@ export namespace Prisma {
   export type MessagingGoalCreateWithoutOrganisationInput = {
     uuid?: string
     period: $Enums.GoalPeriod
+    metric?: $Enums.GoalMetric
     target_count: number
     is_active?: boolean
     created_at?: Date | string
@@ -119877,6 +120039,7 @@ export namespace Prisma {
     uuid?: string
     user_uuid: string
     period: $Enums.GoalPeriod
+    metric?: $Enums.GoalMetric
     target_count: number
     is_active?: boolean
     created_at?: Date | string
@@ -119959,6 +120122,7 @@ export namespace Prisma {
   export type GoalPersonalBestCreateWithoutOrganisationInput = {
     uuid?: string
     period: $Enums.GoalPeriod
+    metric?: $Enums.GoalMetric
     best_count?: number
     achieved_at?: Date | string
     updated_at?: Date | string
@@ -119970,6 +120134,7 @@ export namespace Prisma {
     uuid?: string
     user_uuid: string
     period: $Enums.GoalPeriod
+    metric?: $Enums.GoalMetric
     best_count?: number
     achieved_at?: Date | string
     updated_at?: Date | string
@@ -120606,6 +120771,7 @@ export namespace Prisma {
     metadata?: JsonNullableFilter<"Interaction">
     status_change?: JsonNullableFilter<"Interaction">
     outreach_message_uuid?: StringNullableFilter<"Interaction"> | string | null
+    created_by_user_uuid?: StringNullableFilter<"Interaction"> | string | null
     created_at?: DateTimeFilter<"Interaction"> | Date | string
     updated_at?: DateTimeFilter<"Interaction"> | Date | string
   }
@@ -124683,6 +124849,7 @@ export namespace Prisma {
     content?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status_change?: NullableJsonNullValueInput | InputJsonValue
+    created_by_user_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutInteractionsInput
@@ -124700,6 +124867,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status_change?: NullableJsonNullValueInput | InputJsonValue
     outreach_message_uuid?: string | null
+    created_by_user_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -128825,6 +128993,7 @@ export namespace Prisma {
     content?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status_change?: NullableJsonNullValueInput | InputJsonValue
+    created_by_user_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     contact: ContactCreateNestedOneWithoutInteractionsInput
@@ -128842,6 +129011,7 @@ export namespace Prisma {
     content?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status_change?: NullableJsonNullValueInput | InputJsonValue
+    created_by_user_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -133077,6 +133247,7 @@ export namespace Prisma {
     content?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status_change?: NullableJsonNullValueInput | InputJsonValue
+    created_by_user_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     contact: ContactCreateNestedOneWithoutInteractionsInput
@@ -133094,6 +133265,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status_change?: NullableJsonNullValueInput | InputJsonValue
     outreach_message_uuid?: string | null
+    created_by_user_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -139822,6 +139994,7 @@ export namespace Prisma {
   export type MessagingGoalCreateWithoutAchievementsInput = {
     uuid?: string
     period: $Enums.GoalPeriod
+    metric?: $Enums.GoalMetric
     target_count: number
     is_active?: boolean
     created_at?: Date | string
@@ -139836,6 +140009,7 @@ export namespace Prisma {
     organisation_uuid: string
     user_uuid: string
     period: $Enums.GoalPeriod
+    metric?: $Enums.GoalMetric
     target_count: number
     is_active?: boolean
     created_at?: Date | string
@@ -140021,6 +140195,7 @@ export namespace Prisma {
   export type MessagingGoalUpdateWithoutAchievementsInput = {
     uuid?: StringFieldUpdateOperationsInput | string
     period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    metric?: EnumGoalMetricFieldUpdateOperationsInput | $Enums.GoalMetric
     target_count?: IntFieldUpdateOperationsInput | number
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -140035,6 +140210,7 @@ export namespace Prisma {
     organisation_uuid?: StringFieldUpdateOperationsInput | string
     user_uuid?: StringFieldUpdateOperationsInput | string
     period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    metric?: EnumGoalMetricFieldUpdateOperationsInput | $Enums.GoalMetric
     target_count?: IntFieldUpdateOperationsInput | number
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -141561,6 +141737,7 @@ export namespace Prisma {
     uuid?: string
     organisation_uuid: string
     period: $Enums.GoalPeriod
+    metric?: $Enums.GoalMetric
     target_count: number
     is_active?: boolean
     created_at?: Date | string
@@ -141584,6 +141761,7 @@ export namespace Prisma {
     uuid?: string
     organisation_uuid: string
     period: $Enums.GoalPeriod
+    metric?: $Enums.GoalMetric
     best_count?: number
     achieved_at?: Date | string
     updated_at?: Date | string
@@ -141940,6 +142118,7 @@ export namespace Prisma {
   export type MessagingGoalUpdateWithoutUserInput = {
     uuid?: StringFieldUpdateOperationsInput | string
     period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    metric?: EnumGoalMetricFieldUpdateOperationsInput | $Enums.GoalMetric
     target_count?: IntFieldUpdateOperationsInput | number
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -141953,6 +142132,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     organisation_uuid?: StringFieldUpdateOperationsInput | string
     period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    metric?: EnumGoalMetricFieldUpdateOperationsInput | $Enums.GoalMetric
     target_count?: IntFieldUpdateOperationsInput | number
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -141965,6 +142145,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     organisation_uuid?: StringFieldUpdateOperationsInput | string
     period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    metric?: EnumGoalMetricFieldUpdateOperationsInput | $Enums.GoalMetric
     target_count?: IntFieldUpdateOperationsInput | number
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -142009,6 +142190,7 @@ export namespace Prisma {
   export type GoalPersonalBestUpdateWithoutUserInput = {
     uuid?: StringFieldUpdateOperationsInput | string
     period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    metric?: EnumGoalMetricFieldUpdateOperationsInput | $Enums.GoalMetric
     best_count?: IntFieldUpdateOperationsInput | number
     achieved_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -142020,6 +142202,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     organisation_uuid?: StringFieldUpdateOperationsInput | string
     period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    metric?: EnumGoalMetricFieldUpdateOperationsInput | $Enums.GoalMetric
     best_count?: IntFieldUpdateOperationsInput | number
     achieved_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -142030,6 +142213,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     organisation_uuid?: StringFieldUpdateOperationsInput | string
     period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    metric?: EnumGoalMetricFieldUpdateOperationsInput | $Enums.GoalMetric
     best_count?: IntFieldUpdateOperationsInput | number
     achieved_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -142439,6 +142623,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status_change?: NullableJsonNullValueInput | InputJsonValue
     outreach_message_uuid?: string | null
+    created_by_user_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -142686,6 +142871,7 @@ export namespace Prisma {
     uuid?: string
     user_uuid: string
     period: $Enums.GoalPeriod
+    metric?: $Enums.GoalMetric
     target_count: number
     is_active?: boolean
     created_at?: Date | string
@@ -142718,6 +142904,7 @@ export namespace Prisma {
     uuid?: string
     user_uuid: string
     period: $Enums.GoalPeriod
+    metric?: $Enums.GoalMetric
     best_count?: number
     achieved_at?: Date | string
     updated_at?: Date | string
@@ -143365,6 +143552,7 @@ export namespace Prisma {
     content?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status_change?: NullableJsonNullValueInput | InputJsonValue
+    created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     contact?: ContactUpdateOneRequiredWithoutInteractionsNestedInput
@@ -143382,6 +143570,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status_change?: NullableJsonNullValueInput | InputJsonValue
     outreach_message_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -143396,6 +143585,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status_change?: NullableJsonNullValueInput | InputJsonValue
     outreach_message_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -144144,6 +144334,7 @@ export namespace Prisma {
   export type MessagingGoalUpdateWithoutOrganisationInput = {
     uuid?: StringFieldUpdateOperationsInput | string
     period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    metric?: EnumGoalMetricFieldUpdateOperationsInput | $Enums.GoalMetric
     target_count?: IntFieldUpdateOperationsInput | number
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -144157,6 +144348,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     user_uuid?: StringFieldUpdateOperationsInput | string
     period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    metric?: EnumGoalMetricFieldUpdateOperationsInput | $Enums.GoalMetric
     target_count?: IntFieldUpdateOperationsInput | number
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -144169,6 +144361,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     user_uuid?: StringFieldUpdateOperationsInput | string
     period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    metric?: EnumGoalMetricFieldUpdateOperationsInput | $Enums.GoalMetric
     target_count?: IntFieldUpdateOperationsInput | number
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -144241,6 +144434,7 @@ export namespace Prisma {
   export type GoalPersonalBestUpdateWithoutOrganisationInput = {
     uuid?: StringFieldUpdateOperationsInput | string
     period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    metric?: EnumGoalMetricFieldUpdateOperationsInput | $Enums.GoalMetric
     best_count?: IntFieldUpdateOperationsInput | number
     achieved_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -144252,6 +144446,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     user_uuid?: StringFieldUpdateOperationsInput | string
     period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    metric?: EnumGoalMetricFieldUpdateOperationsInput | $Enums.GoalMetric
     best_count?: IntFieldUpdateOperationsInput | number
     achieved_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -144262,6 +144457,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     user_uuid?: StringFieldUpdateOperationsInput | string
     period?: EnumGoalPeriodFieldUpdateOperationsInput | $Enums.GoalPeriod
+    metric?: EnumGoalMetricFieldUpdateOperationsInput | $Enums.GoalMetric
     best_count?: IntFieldUpdateOperationsInput | number
     achieved_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -145384,6 +145580,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status_change?: NullableJsonNullValueInput | InputJsonValue
     outreach_message_uuid?: string | null
+    created_by_user_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -145603,6 +145800,7 @@ export namespace Prisma {
     content?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status_change?: NullableJsonNullValueInput | InputJsonValue
+    created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutInteractionsNestedInput
@@ -145620,6 +145818,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status_change?: NullableJsonNullValueInput | InputJsonValue
     outreach_message_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -145634,6 +145833,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status_change?: NullableJsonNullValueInput | InputJsonValue
     outreach_message_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -146417,6 +146617,7 @@ export namespace Prisma {
     content?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status_change?: NullableJsonNullValueInput | InputJsonValue
+    created_by_user_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -146444,6 +146645,7 @@ export namespace Prisma {
     content?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status_change?: NullableJsonNullValueInput | InputJsonValue
+    created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     contact?: ContactUpdateOneRequiredWithoutInteractionsNestedInput
@@ -146461,6 +146663,7 @@ export namespace Prisma {
     content?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status_change?: NullableJsonNullValueInput | InputJsonValue
+    created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -146475,6 +146678,7 @@ export namespace Prisma {
     content?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status_change?: NullableJsonNullValueInput | InputJsonValue
+    created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -147693,6 +147897,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status_change?: NullableJsonNullValueInput | InputJsonValue
     outreach_message_uuid?: string | null
+    created_by_user_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -147924,6 +148129,7 @@ export namespace Prisma {
     content?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status_change?: NullableJsonNullValueInput | InputJsonValue
+    created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     contact?: ContactUpdateOneRequiredWithoutInteractionsNestedInput
@@ -147941,6 +148147,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status_change?: NullableJsonNullValueInput | InputJsonValue
     outreach_message_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -147955,6 +148162,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status_change?: NullableJsonNullValueInput | InputJsonValue
     outreach_message_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }

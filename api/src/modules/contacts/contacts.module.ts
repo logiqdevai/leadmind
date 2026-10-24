@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { BullModule } from '@nestjs/bullmq';
 import { PrismaModule } from '@/core/databases/prisma/prisma.module';
+import { MessagingGoalsModule } from '@/modules/messaging-goals/messaging-goals.module';
 import { AiIntegrationModule } from '@/integrations/ai/ai.module';
 import { ApifyModule } from '@/integrations/apify/apify.module';
 import { WebsiteScraperModule } from '@/integrations/website-scraper/website-scraper.module';
@@ -20,6 +21,7 @@ import { ContactsExportService } from './services/contacts-export.service';
 @Module({
     imports: [
         PrismaModule,
+        MessagingGoalsModule,
         AiIntegrationModule,
         ApifyModule,
         WebsiteScraperModule,

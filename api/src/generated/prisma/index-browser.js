@@ -406,6 +406,7 @@ exports.Prisma.InteractionScalarFieldEnum = {
   metadata: 'metadata',
   status_change: 'status_change',
   outreach_message_uuid: 'outreach_message_uuid',
+  created_by_user_uuid: 'created_by_user_uuid',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };
@@ -918,6 +919,7 @@ exports.Prisma.MessagingGoalScalarFieldEnum = {
   organisation_uuid: 'organisation_uuid',
   user_uuid: 'user_uuid',
   period: 'period',
+  metric: 'metric',
   target_count: 'target_count',
   is_active: 'is_active',
   created_at: 'created_at',
@@ -1019,6 +1021,7 @@ exports.Prisma.GoalPersonalBestScalarFieldEnum = {
   organisation_uuid: 'organisation_uuid',
   user_uuid: 'user_uuid',
   period: 'period',
+  metric: 'metric',
   best_count: 'best_count',
   achieved_at: 'achieved_at',
   updated_at: 'updated_at'
@@ -1536,6 +1539,11 @@ exports.GoalPeriod = exports.$Enums.GoalPeriod = {
   DAY: 'DAY',
   WEEK: 'WEEK',
   MONTH: 'MONTH'
+};
+
+exports.GoalMetric = exports.$Enums.GoalMetric = {
+  EMAIL: 'EMAIL',
+  CALL: 'CALL'
 };
 
 exports.CampaignIntegrationStatus = exports.$Enums.CampaignIntegrationStatus = {

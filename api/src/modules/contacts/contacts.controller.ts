@@ -365,10 +365,11 @@ export class ContactsController {
     @ApiResponse({ status: 201 })
     logCall(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
+        @CurrentUser('uuid') user_uuid: string,
         @Param('uuid') uuid: string,
         @Body() dto: LogCallDto,
     ) {
-        return this.contactsService.logCall(organisation_uuid, uuid, dto);
+        return this.contactsService.logCall(organisation_uuid, uuid, dto, user_uuid);
     }
 
     @ActivityLog({ entityType: ActivityEntityType.CONTACT, action: ActivityAction.MEETING_LOGGED, entityUuidFrom: 'params.uuid' })

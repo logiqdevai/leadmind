@@ -1,6 +1,6 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsInt, IsUUID, Min } from 'class-validator';
-import { GoalPeriod } from '@/generated/prisma';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsEnum, IsInt, IsOptional, IsUUID, Min } from 'class-validator';
+import { GoalMetric, GoalPeriod } from '@/generated/prisma';
 
 export class CreateMessagingGoalDto {
     @ApiProperty({ format: 'uuid' })
@@ -10,6 +10,11 @@ export class CreateMessagingGoalDto {
     @ApiProperty({ enum: GoalPeriod })
     @IsEnum(GoalPeriod)
     period: GoalPeriod;
+
+    @ApiPropertyOptional({ enum: GoalMetric, default: GoalMetric.EMAIL })
+    @IsOptional()
+    @IsEnum(GoalMetric)
+    metric?: GoalMetric;
 
     @ApiProperty({ minimum: 1 })
     @IsInt()

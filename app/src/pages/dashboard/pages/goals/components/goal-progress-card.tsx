@@ -1,7 +1,7 @@
-import { Calendar, CalendarDays, CalendarRange } from "lucide-react";
+import { Calendar, CalendarDays, CalendarRange, Mail, Phone } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { MessagingGoalProgress } from "@/features/messaging-goals/interfaces/messaging-goals.interfaces";
-import { PERIOD_LABELS } from "../utils/goals-copy";
+import { METRIC_LABELS, METRIC_UNIT_LABELS, PERIOD_LABELS } from "../utils/goals-copy";
 
 const PERIOD_ICONS = {
     DAY: Calendar,
@@ -9,12 +9,18 @@ const PERIOD_ICONS = {
     MONTH: CalendarRange,
 } as const;
 
+const METRIC_ICONS = {
+    EMAIL: Mail,
+    CALL: Phone,
+} as const;
+
 interface GoalProgressCardProps {
     goal: MessagingGoalProgress;
 }
 
 export function GoalProgressCard({ goal }: GoalProgressCardProps) {
-    const Icon = PERIOD_ICONS[goal.period];
+    const Icon = METRIC_ICONS[goal.metric];
+    const PeriodIcon = PERIOD_ICONS[goal.period];
     const complete = goal.percent >= 100;
 
     return (
@@ -26,9 +32,12 @@ export function GoalProgressCard({ goal }: GoalProgressCardProps) {
                     </span>
                     <div className="min-w-0">
                         <p className="text-sm font-semibold text-foreground">
-                            {PERIOD_LABELS[goal.period]} goal
+                            {PERIOD_LABELS[goal.period]} {METRIC_LABELS[goal.metric].toLowerCase()} goal
                         </p>
-                        <p className="text-xs text-muted truncate">{goal.period_key}</p>
+                        <p className="text-xs text-muted truncate flex items-center gap-1">
+                            <PeriodIcon className="size-3 shrink-0" />
+                            {goal.period_key}
+                        </p>
                     </div>
                 </div>
                 <span
@@ -48,7 +57,7 @@ export function GoalProgressCard({ goal }: GoalProgressCardProps) {
                     {goal.current_count}
                     <span className="text-sm font-medium text-muted"> / {goal.target_count}</span>
                 </p>
-                <p className="text-xs text-muted">messages sent</p>
+                <p className="text-xs text-muted">{METRIC_UNIT_LABELS[goal.metric]}</p>
             </div>
 
             <div className="h-2 w-full rounded-full bg-surface-secondary overflow-hidden">

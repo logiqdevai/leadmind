@@ -10,7 +10,7 @@ import {
     UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiExcludeEndpoint, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { GoalPeriod, OrganisationRole } from '@/generated/prisma';
+import { GoalMetric, GoalPeriod, OrganisationRole } from '@/generated/prisma';
 import { CurrentUser } from '@/shared/decorators/current-user.decorator';
 import { JwtGuard } from '@/shared/guards/jwt.guard';
 import { OrganisationRoles } from '@/shared/decorators/organisation-roles.decorator';
@@ -84,6 +84,7 @@ export class MessagingGoalsController {
     @ApiExcludeEndpoint()
     @ApiOperation({ summary: 'Messaging goals leaderboard for a period' })
     @ApiQuery({ name: 'period', enum: GoalPeriod, required: false, description: 'Defaults to DAY' })
+    @ApiQuery({ name: 'metric', enum: GoalMetric, required: false, description: 'Defaults to EMAIL' })
     @ApiResponse({ status: 200 })
     @ApiResponse({ status: 401, description: 'Unauthorized' })
     leaderboard(
@@ -95,6 +96,7 @@ export class MessagingGoalsController {
             organisationUuid,
             userUuid,
             query.period ?? GoalPeriod.DAY,
+            query.metric ?? GoalMetric.EMAIL,
         );
     }
 

@@ -4,6 +4,17 @@ export const PERIOD_LABELS = {
     MONTH: "Monthly",
 } as const;
 
+export const METRIC_LABELS = {
+    EMAIL: "Email",
+    CALL: "Call",
+} as const;
+
+/** What a goal's count measures, shown next to the progress number. */
+export const METRIC_UNIT_LABELS = {
+    EMAIL: "emails sent",
+    CALL: "calls logged",
+} as const;
+
 export const ACHIEVEMENT_COPY: Record<
     string,
     { title: string; description: string }
@@ -22,7 +33,7 @@ export const ACHIEVEMENT_COPY: Record<
     },
     GOAL_COMPLETE: {
         title: "Goal crushed",
-        description: "You hit your messaging target. Outstanding.",
+        description: "You hit your target. Outstanding.",
     },
     PERSONAL_RECORD: {
         title: "New personal best",

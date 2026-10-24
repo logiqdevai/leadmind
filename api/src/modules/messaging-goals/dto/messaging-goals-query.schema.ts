@@ -1,8 +1,9 @@
 import { z } from 'zod';
-import { GoalPeriod } from '@/generated/prisma';
+import { GoalMetric, GoalPeriod } from '@/generated/prisma';
 
 export const LeaderboardQuerySchema = z.object({
     period: z.nativeEnum(GoalPeriod).default(GoalPeriod.DAY),
+    metric: z.nativeEnum(GoalMetric).default(GoalMetric.EMAIL),
 });
 
 export type LeaderboardQueryType = z.infer<typeof LeaderboardQuerySchema>;
