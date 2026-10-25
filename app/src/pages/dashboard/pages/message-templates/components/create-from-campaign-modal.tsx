@@ -1,9 +1,10 @@
 import { useEffect, useState, type FC } from "react";
-import { Button, FieldError, Input, Label, ListBox, Modal, Select } from "@heroui/react";
+import { Button, FieldError, Input, Label, Modal } from "@heroui/react";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
 import { useCampaigns } from "@/features/marketing-campaigns/hooks/use-marketing-campaigns";
 import type { MessageComposerValue } from "@/features/messaging/components/message-composer";
 import { loadCampaignTemplatePrefill } from "@/features/message-templates/utils/campaign-template-prefill";
+import { SearchSelect } from "@/components/ui/search-select";
 
 export interface CampaignTemplatePrefillReady {
     prefill: MessageComposerValue;
@@ -74,28 +75,16 @@ export const CreateFromCampaignModal: FC<CreateFromCampaignModalProps> = ({
                         </p>
                         <div className="flex flex-col gap-1.5">
                             <Label>Campaign</Label>
-                            <Select
+                            <SearchSelect
                                 aria-label="Campaign"
                                 placeholder="Select campaign"
-                                value={campaignUuid ?? undefined}
-                                onChange={(v) => setCampaignUuid(typeof v === "string" ? v : null)}
+                                searchPlaceholder="Search campaigns…"
+                                options={campaigns.map((c) => ({ id: c.uuid, label: c.name }))}
+                                value={campaignUuid}
+                                onChange={setCampaignUuid}
                                 isDisabled={isLoading || !!preselectedCampaignUuid}
-                            >
-                                <Select.Trigger>
-                                    <Select.Value />
-                                    <Select.Indicator />
-                                </Select.Trigger>
-                                <Select.Popover>
-                                    <ListBox>
-                                        {campaigns.map((c) => (
-                                            <ListBox.Item key={c.uuid} id={c.uuid} textValue={c.name}>
-                                                {c.name}
-                                                <ListBox.ItemIndicator />
-                                            </ListBox.Item>
-                                        ))}
-                                    </ListBox>
-                                </Select.Popover>
-                            </Select>
+                                fullWidth
+                            />
                             {error ? <FieldError>{error}</FieldError> : null}
                         </div>
                         <div className="flex flex-col gap-1.5">

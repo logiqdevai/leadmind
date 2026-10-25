@@ -54,6 +54,8 @@ interface StepEditorModalProps {
     isFirstStep?: boolean;
     isSaving: boolean;
     onSave: (payload: CreateSequenceStepPayload) => Promise<void>;
+    /** Called with a template's default sender profile when one is applied. */
+    onTemplateSenderProfile?: (uuid: string) => void;
 }
 
 export const StepEditorModal: FC<StepEditorModalProps> = ({
@@ -63,6 +65,7 @@ export const StepEditorModal: FC<StepEditorModalProps> = ({
     isFirstStep = false,
     isSaving,
     onSave,
+    onTemplateSenderProfile,
 }) => {
     const [channel, setChannel] = useState<Channel>(Channel.EMAIL);
     const [composerValue, setComposerValue] = useState<MessageComposerValue>(EMPTY_MESSAGE_COMPOSER_VALUE);
@@ -112,6 +115,7 @@ export const StepEditorModal: FC<StepEditorModalProps> = ({
     const handleTemplateSelect = (template: MessageTemplate) => {
         setComposerValue((prev) => mergeTemplateIntoComposer(prev, template));
         setMessageTemplateUuid(template.uuid);
+        if (template.sender_profile_uuid) onTemplateSenderProfile?.(template.sender_profile_uuid);
         setComposerKey((k) => k + 1);
     };
 

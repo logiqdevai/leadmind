@@ -485,6 +485,7 @@ exports.Prisma.OutreachSequenceScalarFieldEnum = {
   description: 'description',
   status: 'status',
   stop_on_reply: 'stop_on_reply',
+  sender_profile_uuid: 'sender_profile_uuid',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };
@@ -622,6 +623,7 @@ exports.Prisma.MessageTemplateScalarFieldEnum = {
   sms_content: 'sms_content',
   source_campaign_uuid: 'source_campaign_uuid',
   source_message_uuid: 'source_message_uuid',
+  sender_profile_uuid: 'sender_profile_uuid',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };

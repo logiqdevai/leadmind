@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Input, Label, TextArea, TextField } from "@heroui/react";
 import { Button } from "@heroui/react";
 import { TagPicker } from "@/components/tags/tag-picker";
+import { SenderProfileSelect } from "@/features/messaging/components/sender-profile-select";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
 import { ChevronLeft, Save } from "lucide-react";
 import { useCreateSequence } from "@/features/sequences/hooks/use-sequences";
@@ -15,6 +16,7 @@ export default function NewSequencePage() {
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
     const [tagUuids, setTagUuids] = useState<string[]>([]);
+    const [senderProfileUuid, setSenderProfileUuid] = useState<string | null>(null);
 
     const canSave = name.trim().length > 0;
 
@@ -25,6 +27,7 @@ export default function NewSequencePage() {
                 name: name.trim(),
                 description: description.trim() || undefined,
                 ...(tagUuids.length ? { tag_uuids: tagUuids } : {}),
+                ...(senderProfileUuid ? { sender_profile_uuid: senderProfileUuid } : {}),
             });
             navigate(Routes.dashboard.sequences_edit.replace(":uuid", sequence.uuid));
         } catch {
@@ -67,6 +70,13 @@ export default function NewSequencePage() {
                         maxLength={1000}
                     />
                 </TextField>
+                <SenderProfileSelect
+                    value={senderProfileUuid}
+                    onChange={setSenderProfileUuid}
+                    onClear={() => setSenderProfileUuid(null)}
+                    clearLabel="None (use the default profile)"
+                    description="Used for messages sent by this sequence. Applying a template that has a sender profile fills this in."
+                />
                 <TagPicker value={tagUuids} onChange={setTagUuids} />
             </div>
 

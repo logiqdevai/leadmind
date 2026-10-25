@@ -87,6 +87,19 @@ export class SequencesController {
         return this.sequencesService.findAll(organisation_uuid, query);
     }
 
+    @Get('contacts/:contact_uuid/enrollments')
+    @ApiOperation({ summary: "List a contact's active sequence enrollments" })
+    @ApiResponse({ status: 200 })
+    listActiveForContact(
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
+        @Param('contact_uuid', ParseUUIDPipe) contact_uuid: string,
+    ) {
+        return this.enrollmentService.listActiveForContact(
+            organisation_uuid,
+            contact_uuid,
+        );
+    }
+
     @Get(':uuid')
     @ApiOperation({ summary: 'Get a sequence with its steps' })
     @ApiResponse({ status: 200 })

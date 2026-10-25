@@ -41,6 +41,7 @@ import {
   Star,
   GripVertical,
   KeyRound,
+  Smartphone,
 } from "lucide-react";
 import { Routes } from "@/routes/routes";
 import { usePermission } from "@/hooks/use-permission";
@@ -117,6 +118,7 @@ const navGroups: NavGroup[] = [
       { label: "Integrations", icon: Plug, href: Routes.dashboard.integrations, end: false },
       { label: "API Keys", icon: KeyRound, href: Routes.dashboard.settings_api_keys, end: false },
       { label: "Connected Apps", icon: Plug, href: Routes.dashboard.settings_connected_apps, end: false },
+      { label: "Get the app", icon: Smartphone, href: Routes.download, end: false },
     ],
   },
 ];

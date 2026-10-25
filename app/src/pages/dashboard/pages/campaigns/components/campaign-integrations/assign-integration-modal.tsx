@@ -1,6 +1,6 @@
 import { useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Pencil } from "lucide-react";
-import { Button, Checkbox, Label, ListBox, Modal, Select } from "@heroui/react";
+import { Button, Checkbox, Label, Modal } from "@heroui/react";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
 import { toast } from "@/hooks/use-toast";
 import { useIntegrations } from "@/features/integrations/hooks/use-integrations";
@@ -18,6 +18,7 @@ import { assignCampaignIntegration } from "@/features/campaign-integrations/serv
 import { useQueryClient } from "@tanstack/react-query";
 import { SendingPolicyFields } from "../sending-policy/sending-policy-fields";
 import { EditSendingPolicyModal } from "../sending-policy/edit-sending-policy-modal";
+import { SearchSelect } from "@/components/ui/search-select";
 
 interface AssignIntegrationModalProps {
     isOpen: boolean;
@@ -312,35 +313,16 @@ export function AssignIntegrationModal({
                                     ) : (
                                         <div className="space-y-4">
                                             <div className="flex items-center gap-2">
-                                                <Select
+                                                <SearchSelect
                                                     aria-label="Sending policy"
-                                                    value={policyUuid ?? undefined}
-                                                    onChange={(v) => {
-                                                        if (typeof v === "string") setPolicyUuid(v);
-                                                    }}
                                                     placeholder="Choose a policy…"
+                                                    searchPlaceholder="Search policies…"
+                                                    options={templates.map((policy) => ({ id: policy.uuid, label: policy.name }))}
+                                                    value={policyUuid}
+                                                    onChange={setPolicyUuid}
                                                     isDisabled={isSaving}
                                                     className="flex-1"
-                                                >
-                                                    <Select.Trigger>
-                                                        <Select.Value />
-                                                        <Select.Indicator />
-                                                    </Select.Trigger>
-                                                    <Select.Popover>
-                                                        <ListBox>
-                                                            {templates.map((policy) => (
-                                                                <ListBox.Item
-                                                                    key={policy.uuid}
-                                                                    id={policy.uuid}
-                                                                    textValue={policy.name}
-                                                                >
-                                                                    {policy.name}
-                                                                    <ListBox.ItemIndicator />
-                                                                </ListBox.Item>
-                                                            ))}
-                                                        </ListBox>
-                                                    </Select.Popover>
-                                                </Select>
+                                                />
                                                 <Button
                                                     size="sm"
                                                     variant="tertiary"
@@ -373,11 +355,16 @@ export function AssignIntegrationModal({
                                             </p>
                                         ) : (
                                             <>
-                                                <Select
+                                                <SearchSelect
                                                     aria-label="Copy sending schedule from campaign"
-                                                    value={sourceCampaignUuid ?? undefined}
+                                                    placeholder="Choose a campaign…"
+                                                    searchPlaceholder="Search campaigns…"
+                                                    options={sourceCampaigns.map((campaign) => ({
+                                                        id: campaign.uuid,
+                                                        label: `${campaign.name} · ${campaign.count} account${campaign.count === 1 ? "" : "s"}`,
+                                                    }))}
+                                                    value={sourceCampaignUuid}
                                                     onChange={(v) => {
-                                                        if (typeof v !== "string") return;
                                                         setSourceCampaignUuid(v);
                                                         setSelectedCopyCiUuids(
                                                             new Set(
@@ -385,37 +372,14 @@ export function AssignIntegrationModal({
                                                                     .filter(
                                                                         (ci) =>
                                                                             ci.campaign.uuid === v &&
-                                                                            !assignedAccountUuids.has(
-                                                                                ci.integration_account_uuid,
-                                                                            ),
+                                                                            !assignedAccountUuids.has(ci.integration_account_uuid),
                                                                     )
                                                                     .map((ci) => ci.uuid),
                                                             ),
                                                         );
                                                     }}
-                                                    placeholder="Choose a campaign…"
                                                     isDisabled={isSaving}
-                                                >
-                                                    <Select.Trigger>
-                                                        <Select.Value />
-                                                        <Select.Indicator />
-                                                    </Select.Trigger>
-                                                    <Select.Popover>
-                                                        <ListBox>
-                                                            {sourceCampaigns.map((campaign) => (
-                                                                <ListBox.Item
-                                                                    key={campaign.uuid}
-                                                                    id={campaign.uuid}
-                                                                    textValue={campaign.name}
-                                                                >
-                                                                    {campaign.name}
-                                                                    <span className="text-muted"> · {campaign.count} account{campaign.count === 1 ? "" : "s"}</span>
-                                                                    <ListBox.ItemIndicator />
-                                                                </ListBox.Item>
-                                                            ))}
-                                                        </ListBox>
-                                                    </Select.Popover>
-                                                </Select>
+                                                />
 
                                                 {sourceCampaignUuid ? (
                                                     <CopySourceChecklist
@@ -451,38 +415,23 @@ export function AssignIntegrationModal({
                                             {availableAccounts.length === 0 ? (
                                                 <p className="text-xs text-muted">No unassigned, ready email accounts found.</p>
                                             ) : (
-                                                <Select
+                                                <SearchSelect
                                                     aria-label="Email account"
+                                                    placeholder="Choose an account…"
+                                                    searchPlaceholder="Search accounts…"
+                                                    options={availableAccounts.map((row) => ({
+                                                        id: rowKey(row),
+                                                        label: row.detail ? `${row.label} — ${row.detail}` : row.label,
+                                                    }))}
                                                     value={selectedRowKey}
                                                     onChange={(v) => {
-                                                        if (typeof v !== "string") return;
                                                         const row = availableAccounts.find((item) => rowKey(item) === v);
                                                         if (!row) return;
                                                         setAccountUuid(row.uuid);
                                                         setDomainUuid(row.domain_uuid);
                                                     }}
-                                                    placeholder="Choose an account…"
                                                     isDisabled={isSaving}
-                                                >
-                                                    <Select.Trigger>
-                                                        <Select.Value />
-                                                        <Select.Indicator />
-                                                    </Select.Trigger>
-                                                    <Select.Popover>
-                                                        <ListBox>
-                                                            {availableAccounts.map((row) => (
-                                                                <ListBox.Item
-                                                                    key={rowKey(row)}
-                                                                    id={rowKey(row)}
-                                                                    textValue={row.label}
-                                                                >
-                                                                    {row.detail ? `${row.label} — ${row.detail}` : row.label}
-                                                                    <ListBox.ItemIndicator />
-                                                                </ListBox.Item>
-                                                            ))}
-                                                        </ListBox>
-                                                    </Select.Popover>
-                                                </Select>
+                                                />
                                             )}
                                         </div>
                                         <div className="rounded-xl border border-border bg-surface-secondary/30 p-3">

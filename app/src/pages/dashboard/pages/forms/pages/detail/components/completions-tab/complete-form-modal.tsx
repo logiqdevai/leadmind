@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { Button, Checkbox, Input, Label, ListBox, Modal, Select, TextArea } from "@heroui/react";
-import { ChevronDown, Filter, Search, User } from "lucide-react";
+import { Button, Checkbox, Input, Label, Modal, TextArea } from "@heroui/react";
+import { Search, User } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
 import { useCreateFormCompletion } from "@/features/forms/hooks/use-form-completions";
@@ -12,6 +12,7 @@ import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import { FIELD_TYPES_DISPLAY_ONLY } from "@/features/forms/interfaces/form.interface";
 import type { FormField } from "@/features/forms/interfaces/form.interface";
 import type { FormCompletion } from "@/features/forms/interfaces/form-completion.interface";
+import { SearchSelect } from "@/components/ui/search-select";
 
 interface ContactInfo {
     uuid: string;
@@ -214,35 +215,18 @@ export function CompleteFormModal({
                                     </div>
                                 ) : (
                                     <div className="flex flex-col gap-2">
-                                        <Select
+                                        <SearchSelect
                                             aria-label="Select a filter"
                                             placeholder="Select a filter list…"
+                                            searchPlaceholder="Search filters…"
+                                            options={filters.map((f) => ({ id: f.uuid, label: f.name }))}
                                             value={selectedFilterUuid}
                                             onChange={(v) => {
-                                                setSelectedFilterUuid((v as string) ?? "");
+                                                setSelectedFilterUuid(v);
                                                 setContactSearch("");
                                             }}
-                                        >
-                                            <Select.Trigger className="w-full">
-                                                <span className="flex items-center gap-2 text-sm">
-                                                    <Filter className="size-3.5 text-muted shrink-0" />
-                                                    <Select.Value />
-                                                </span>
-                                                <Select.Indicator>
-                                                    <ChevronDown className="size-3.5" />
-                                                </Select.Indicator>
-                                            </Select.Trigger>
-                                            <Select.Popover>
-                                                <ListBox>
-                                                    {filters.map((f) => (
-                                                        <ListBox.Item key={f.uuid} id={f.uuid} textValue={f.name}>
-                                                            {f.name}
-                                                            <ListBox.ItemIndicator />
-                                                        </ListBox.Item>
-                                                    ))}
-                                                </ListBox>
-                                            </Select.Popover>
-                                        </Select>
+                                            fullWidth
+                                        />
 
                                         {selectedFilterUuid && (
                                             <div className="relative">

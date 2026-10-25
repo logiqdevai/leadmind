@@ -1,4 +1,5 @@
 import { Button, ListBox, Select } from "@heroui/react";
+import { SearchSelect } from "@/components/ui/search-select";
 import { X } from "lucide-react";
 import { AppDatePicker } from "@/components/ui/date-picker";
 
@@ -115,6 +116,7 @@ export function SendHistoryFiltersForm({
             />
             <FilterSelect
                 label="Email"
+                searchable
                 value={emailAccount}
                 options={emailAccountOptions}
                 onChange={onEmailAccountChange}
@@ -122,6 +124,7 @@ export function SendHistoryFiltersForm({
             />
             <FilterSelect
                 label="Campaign"
+                searchable
                 value={campaignUuid}
                 options={campaignOptions}
                 onChange={onCampaignChange}
@@ -129,6 +132,7 @@ export function SendHistoryFiltersForm({
             />
             <FilterSelect
                 label="Sequence"
+                searchable
                 value={sequenceUuid}
                 options={sequenceOptions}
                 onChange={onSequenceChange}
@@ -136,6 +140,7 @@ export function SendHistoryFiltersForm({
             />
             <FilterSelect
                 label="Sent by"
+                searchable
                 value={sentByUserUuid}
                 options={userOptions}
                 onChange={onSentByUserChange}
@@ -182,14 +187,35 @@ export function FilterSelect({
     options,
     onChange,
     className,
+    searchable = false,
 }: {
     label: string;
     value: string;
     options: SendHistoryFilterOption[];
     onChange: (value: string) => void;
     className?: string;
+    /** Adds a search box to the dropdown; use for long or user-created option lists. */
+    searchable?: boolean;
 }) {
     const selected = options.find((option) => option.id === value) ?? options[0];
+
+    if (searchable) {
+        // The first entry is the "all" option (empty id); the rest are searchable.
+        const [first, ...rest] = options;
+        const hasAll = first?.id === "";
+        return (
+            <SearchSelect
+                className={className}
+                aria-label={label}
+                emptyLabel={hasAll ? first.label : undefined}
+                searchPlaceholder={`Search ${label.toLowerCase()}…`}
+                options={hasAll ? rest : options}
+                value={value}
+                onChange={onChange}
+                fullWidth
+            />
+        );
+    }
 
     return (
         <Select

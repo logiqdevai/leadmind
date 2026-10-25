@@ -38,6 +38,7 @@ import {
     type CreateOrganisationFormData,
     type UpdateOrganisationFormData,
 } from "@/features/organisations/validation-schemas/organisation.schema";
+import { SearchSelect } from "@/components/ui/search-select";
 
 const COPY_CATEGORY_ENTRIES = Object.entries(OrganisationCopyCategoryLabels) as [
     OrganisationCopyCategory,
@@ -231,38 +232,19 @@ const SettingsOrganisationPage: FC = () => {
                 </div>
                 <div className="space-y-1.5">
                     <Label>Timezone</Label>
-                    <Select
+                    <SearchSelect
                         aria-label="Timezone"
+                        searchPlaceholder="Search timezones…"
+                        options={TimezoneOptions.map((option) => ({ id: option.value, label: option.label }))}
                         value={timezoneValue}
-                        onChange={(v) => {
-                            if (!v) return;
-                            settingsForm.setValue(
-                                "timezone",
-                                v as UpdateOrganisationFormData["timezone"],
-                                { shouldDirty: true },
-                            );
-                        }}
+                        onChange={(v) =>
+                            settingsForm.setValue("timezone", v as UpdateOrganisationFormData["timezone"], {
+                                shouldDirty: true,
+                            })
+                        }
                         isDisabled={!canEdit || updateOrganisation.isPending}
-                    >
-                        <Select.Trigger className="w-full">
-                            <Select.Value />
-                            <Select.Indicator />
-                        </Select.Trigger>
-                        <Select.Popover>
-                            <ListBox>
-                                {TimezoneOptions.map((option) => (
-                                    <ListBox.Item
-                                        key={option.value}
-                                        id={option.value}
-                                        textValue={option.label}
-                                    >
-                                        {option.label}
-                                        <ListBox.ItemIndicator />
-                                    </ListBox.Item>
-                                ))}
-                            </ListBox>
-                        </Select.Popover>
-                    </Select>
+                        fullWidth
+                    />
                     {settingsForm.formState.errors.timezone ? (
                         <p className="text-xs text-danger">
                             {settingsForm.formState.errors.timezone.message}
@@ -572,37 +554,17 @@ const SettingsOrganisationPage: FC = () => {
                                             <div className="space-y-3 rounded-lg border border-border p-3">
                                                 <div className="flex flex-col gap-1.5">
                                                     <Label>Source organisation</Label>
-                                                    <Select
+                                                    <SearchSelect
                                                         aria-label="Source organisation"
-                                                        value={sourceOrganisationUuid || undefined}
                                                         placeholder="Select an organisation"
+                                                        searchPlaceholder="Search organisations…"
+                                                        options={organisations.map((org) => ({ id: org.uuid, label: org.name }))}
+                                                        value={sourceOrganisationUuid}
                                                         onChange={(v) =>
-                                                            createForm.setValue(
-                                                                "source_organisation_uuid",
-                                                                (v as string) ?? "",
-                                                                { shouldValidate: true },
-                                                            )
+                                                            createForm.setValue("source_organisation_uuid", v, { shouldValidate: true })
                                                         }
-                                                    >
-                                                        <Select.Trigger className="w-full">
-                                                            <Select.Value />
-                                                            <Select.Indicator />
-                                                        </Select.Trigger>
-                                                        <Select.Popover>
-                                                            <ListBox>
-                                                                {organisations.map((org) => (
-                                                                    <ListBox.Item
-                                                                        key={org.uuid}
-                                                                        id={org.uuid}
-                                                                        textValue={org.name}
-                                                                    >
-                                                                        {org.name}
-                                                                        <ListBox.ItemIndicator />
-                                                                    </ListBox.Item>
-                                                                ))}
-                                                            </ListBox>
-                                                        </Select.Popover>
-                                                    </Select>
+                                                        fullWidth
+                                                    />
                                                 </div>
 
                                                 <div className="flex flex-col gap-1.5">

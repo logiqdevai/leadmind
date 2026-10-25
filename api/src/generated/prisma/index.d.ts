@@ -8460,10 +8460,14 @@ export namespace Prisma {
 
   export type SenderProfileCountOutputType = {
     marketing_campaigns: number
+    message_templates: number
+    sequences: number
   }
 
   export type SenderProfileCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     marketing_campaigns?: boolean | SenderProfileCountOutputTypeCountMarketing_campaignsArgs
+    message_templates?: boolean | SenderProfileCountOutputTypeCountMessage_templatesArgs
+    sequences?: boolean | SenderProfileCountOutputTypeCountSequencesArgs
   }
 
   // Custom InputTypes
@@ -8482,6 +8486,20 @@ export namespace Prisma {
    */
   export type SenderProfileCountOutputTypeCountMarketing_campaignsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: MarketingCampaignWhereInput
+  }
+
+  /**
+   * SenderProfileCountOutputType without action
+   */
+  export type SenderProfileCountOutputTypeCountMessage_templatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MessageTemplateWhereInput
+  }
+
+  /**
+   * SenderProfileCountOutputType without action
+   */
+  export type SenderProfileCountOutputTypeCountSequencesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OutreachSequenceWhereInput
   }
 
 
@@ -39861,6 +39879,7 @@ export namespace Prisma {
     description: string | null
     status: $Enums.SequenceStatus | null
     stop_on_reply: boolean | null
+    sender_profile_uuid: string | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -39873,6 +39892,7 @@ export namespace Prisma {
     description: string | null
     status: $Enums.SequenceStatus | null
     stop_on_reply: boolean | null
+    sender_profile_uuid: string | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -39885,6 +39905,7 @@ export namespace Prisma {
     description: number
     status: number
     stop_on_reply: number
+    sender_profile_uuid: number
     created_at: number
     updated_at: number
     _all: number
@@ -39907,6 +39928,7 @@ export namespace Prisma {
     description?: true
     status?: true
     stop_on_reply?: true
+    sender_profile_uuid?: true
     created_at?: true
     updated_at?: true
   }
@@ -39919,6 +39941,7 @@ export namespace Prisma {
     description?: true
     status?: true
     stop_on_reply?: true
+    sender_profile_uuid?: true
     created_at?: true
     updated_at?: true
   }
@@ -39931,6 +39954,7 @@ export namespace Prisma {
     description?: true
     status?: true
     stop_on_reply?: true
+    sender_profile_uuid?: true
     created_at?: true
     updated_at?: true
     _all?: true
@@ -40030,6 +40054,7 @@ export namespace Prisma {
     description: string | null
     status: $Enums.SequenceStatus
     stop_on_reply: boolean
+    sender_profile_uuid: string | null
     created_at: Date
     updated_at: Date
     _count: OutreachSequenceCountAggregateOutputType | null
@@ -40061,9 +40086,11 @@ export namespace Prisma {
     description?: boolean
     status?: boolean
     stop_on_reply?: boolean
+    sender_profile_uuid?: boolean
     created_at?: boolean
     updated_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    sender_profile?: boolean | OutreachSequence$sender_profileArgs<ExtArgs>
     steps?: boolean | OutreachSequence$stepsArgs<ExtArgs>
     enrollments?: boolean | OutreachSequence$enrollmentsArgs<ExtArgs>
     campaigns?: boolean | OutreachSequence$campaignsArgs<ExtArgs>
@@ -40078,9 +40105,11 @@ export namespace Prisma {
     description?: boolean
     status?: boolean
     stop_on_reply?: boolean
+    sender_profile_uuid?: boolean
     created_at?: boolean
     updated_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    sender_profile?: boolean | OutreachSequence$sender_profileArgs<ExtArgs>
   }, ExtArgs["result"]["outreachSequence"]>
 
   export type OutreachSequenceSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -40091,9 +40120,11 @@ export namespace Prisma {
     description?: boolean
     status?: boolean
     stop_on_reply?: boolean
+    sender_profile_uuid?: boolean
     created_at?: boolean
     updated_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    sender_profile?: boolean | OutreachSequence$sender_profileArgs<ExtArgs>
   }, ExtArgs["result"]["outreachSequence"]>
 
   export type OutreachSequenceSelectScalar = {
@@ -40104,13 +40135,15 @@ export namespace Prisma {
     description?: boolean
     status?: boolean
     stop_on_reply?: boolean
+    sender_profile_uuid?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
-  export type OutreachSequenceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "name" | "description" | "status" | "stop_on_reply" | "created_at" | "updated_at", ExtArgs["result"]["outreachSequence"]>
+  export type OutreachSequenceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "name" | "description" | "status" | "stop_on_reply" | "sender_profile_uuid" | "created_at" | "updated_at", ExtArgs["result"]["outreachSequence"]>
   export type OutreachSequenceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    sender_profile?: boolean | OutreachSequence$sender_profileArgs<ExtArgs>
     steps?: boolean | OutreachSequence$stepsArgs<ExtArgs>
     enrollments?: boolean | OutreachSequence$enrollmentsArgs<ExtArgs>
     campaigns?: boolean | OutreachSequence$campaignsArgs<ExtArgs>
@@ -40118,15 +40151,18 @@ export namespace Prisma {
   }
   export type OutreachSequenceIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    sender_profile?: boolean | OutreachSequence$sender_profileArgs<ExtArgs>
   }
   export type OutreachSequenceIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    sender_profile?: boolean | OutreachSequence$sender_profileArgs<ExtArgs>
   }
 
   export type $OutreachSequencePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "OutreachSequence"
     objects: {
       organisation: Prisma.$OrganisationPayload<ExtArgs>
+      sender_profile: Prisma.$SenderProfilePayload<ExtArgs> | null
       steps: Prisma.$OutreachSequenceStepPayload<ExtArgs>[]
       enrollments: Prisma.$SequenceEnrollmentPayload<ExtArgs>[]
       campaigns: Prisma.$MarketingCampaignPayload<ExtArgs>[]
@@ -40139,6 +40175,7 @@ export namespace Prisma {
       description: string | null
       status: $Enums.SequenceStatus
       stop_on_reply: boolean
+      sender_profile_uuid: string | null
       created_at: Date
       updated_at: Date
     }, ExtArgs["result"]["outreachSequence"]>
@@ -40536,6 +40573,7 @@ export namespace Prisma {
   export interface Prisma__OutreachSequenceClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     organisation<T extends OrganisationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganisationDefaultArgs<ExtArgs>>): Prisma__OrganisationClient<$Result.GetResult<Prisma.$OrganisationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    sender_profile<T extends OutreachSequence$sender_profileArgs<ExtArgs> = {}>(args?: Subset<T, OutreachSequence$sender_profileArgs<ExtArgs>>): Prisma__SenderProfileClient<$Result.GetResult<Prisma.$SenderProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     steps<T extends OutreachSequence$stepsArgs<ExtArgs> = {}>(args?: Subset<T, OutreachSequence$stepsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OutreachSequenceStepPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     enrollments<T extends OutreachSequence$enrollmentsArgs<ExtArgs> = {}>(args?: Subset<T, OutreachSequence$enrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SequenceEnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     campaigns<T extends OutreachSequence$campaignsArgs<ExtArgs> = {}>(args?: Subset<T, OutreachSequence$campaignsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MarketingCampaignPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -40575,6 +40613,7 @@ export namespace Prisma {
     readonly description: FieldRef<"OutreachSequence", 'String'>
     readonly status: FieldRef<"OutreachSequence", 'SequenceStatus'>
     readonly stop_on_reply: FieldRef<"OutreachSequence", 'Boolean'>
+    readonly sender_profile_uuid: FieldRef<"OutreachSequence", 'String'>
     readonly created_at: FieldRef<"OutreachSequence", 'DateTime'>
     readonly updated_at: FieldRef<"OutreachSequence", 'DateTime'>
   }
@@ -40970,6 +41009,25 @@ export namespace Prisma {
      * Limit how many OutreachSequences to delete.
      */
     limit?: number
+  }
+
+  /**
+   * OutreachSequence.sender_profile
+   */
+  export type OutreachSequence$sender_profileArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SenderProfile
+     */
+    select?: SenderProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SenderProfile
+     */
+    omit?: SenderProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SenderProfileInclude<ExtArgs> | null
+    where?: SenderProfileWhereInput
   }
 
   /**
@@ -47756,6 +47814,8 @@ export namespace Prisma {
     updated_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     marketing_campaigns?: boolean | SenderProfile$marketing_campaignsArgs<ExtArgs>
+    message_templates?: boolean | SenderProfile$message_templatesArgs<ExtArgs>
+    sequences?: boolean | SenderProfile$sequencesArgs<ExtArgs>
     _count?: boolean | SenderProfileCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["senderProfile"]>
 
@@ -47846,6 +47906,8 @@ export namespace Prisma {
   export type SenderProfileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     marketing_campaigns?: boolean | SenderProfile$marketing_campaignsArgs<ExtArgs>
+    message_templates?: boolean | SenderProfile$message_templatesArgs<ExtArgs>
+    sequences?: boolean | SenderProfile$sequencesArgs<ExtArgs>
     _count?: boolean | SenderProfileCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type SenderProfileIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -47860,6 +47922,8 @@ export namespace Prisma {
     objects: {
       organisation: Prisma.$OrganisationPayload<ExtArgs>
       marketing_campaigns: Prisma.$MarketingCampaignPayload<ExtArgs>[]
+      message_templates: Prisma.$MessageTemplatePayload<ExtArgs>[]
+      sequences: Prisma.$OutreachSequencePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -48282,6 +48346,8 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     organisation<T extends OrganisationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganisationDefaultArgs<ExtArgs>>): Prisma__OrganisationClient<$Result.GetResult<Prisma.$OrganisationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     marketing_campaigns<T extends SenderProfile$marketing_campaignsArgs<ExtArgs> = {}>(args?: Subset<T, SenderProfile$marketing_campaignsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MarketingCampaignPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    message_templates<T extends SenderProfile$message_templatesArgs<ExtArgs> = {}>(args?: Subset<T, SenderProfile$message_templatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessageTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    sequences<T extends SenderProfile$sequencesArgs<ExtArgs> = {}>(args?: Subset<T, SenderProfile$sequencesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OutreachSequencePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -48755,6 +48821,54 @@ export namespace Prisma {
   }
 
   /**
+   * SenderProfile.message_templates
+   */
+  export type SenderProfile$message_templatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessageTemplate
+     */
+    select?: MessageTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MessageTemplate
+     */
+    omit?: MessageTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessageTemplateInclude<ExtArgs> | null
+    where?: MessageTemplateWhereInput
+    orderBy?: MessageTemplateOrderByWithRelationInput | MessageTemplateOrderByWithRelationInput[]
+    cursor?: MessageTemplateWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MessageTemplateScalarFieldEnum | MessageTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * SenderProfile.sequences
+   */
+  export type SenderProfile$sequencesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OutreachSequence
+     */
+    select?: OutreachSequenceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OutreachSequence
+     */
+    omit?: OutreachSequenceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OutreachSequenceInclude<ExtArgs> | null
+    where?: OutreachSequenceWhereInput
+    orderBy?: OutreachSequenceOrderByWithRelationInput | OutreachSequenceOrderByWithRelationInput[]
+    cursor?: OutreachSequenceWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: OutreachSequenceScalarFieldEnum | OutreachSequenceScalarFieldEnum[]
+  }
+
+  /**
    * SenderProfile without action
    */
   export type SenderProfileDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -48803,6 +48917,7 @@ export namespace Prisma {
     sms_content: string | null
     source_campaign_uuid: string | null
     source_message_uuid: string | null
+    sender_profile_uuid: string | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -48817,6 +48932,7 @@ export namespace Prisma {
     sms_content: string | null
     source_campaign_uuid: string | null
     source_message_uuid: string | null
+    sender_profile_uuid: string | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -48832,6 +48948,7 @@ export namespace Prisma {
     sms_content: number
     source_campaign_uuid: number
     source_message_uuid: number
+    sender_profile_uuid: number
     created_at: number
     updated_at: number
     _all: number
@@ -48856,6 +48973,7 @@ export namespace Prisma {
     sms_content?: true
     source_campaign_uuid?: true
     source_message_uuid?: true
+    sender_profile_uuid?: true
     created_at?: true
     updated_at?: true
   }
@@ -48870,6 +48988,7 @@ export namespace Prisma {
     sms_content?: true
     source_campaign_uuid?: true
     source_message_uuid?: true
+    sender_profile_uuid?: true
     created_at?: true
     updated_at?: true
   }
@@ -48885,6 +49004,7 @@ export namespace Prisma {
     sms_content?: true
     source_campaign_uuid?: true
     source_message_uuid?: true
+    sender_profile_uuid?: true
     created_at?: true
     updated_at?: true
     _all?: true
@@ -48987,6 +49107,7 @@ export namespace Prisma {
     sms_content: string | null
     source_campaign_uuid: string | null
     source_message_uuid: string | null
+    sender_profile_uuid: string | null
     created_at: Date
     updated_at: Date
     _count: MessageTemplateCountAggregateOutputType | null
@@ -49021,9 +49142,11 @@ export namespace Prisma {
     sms_content?: boolean
     source_campaign_uuid?: boolean
     source_message_uuid?: boolean
+    sender_profile_uuid?: boolean
     created_at?: boolean
     updated_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    sender_profile?: boolean | MessageTemplate$sender_profileArgs<ExtArgs>
     sequence_steps?: boolean | MessageTemplate$sequence_stepsArgs<ExtArgs>
     _count?: boolean | MessageTemplateCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["messageTemplate"]>
@@ -49039,9 +49162,11 @@ export namespace Prisma {
     sms_content?: boolean
     source_campaign_uuid?: boolean
     source_message_uuid?: boolean
+    sender_profile_uuid?: boolean
     created_at?: boolean
     updated_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    sender_profile?: boolean | MessageTemplate$sender_profileArgs<ExtArgs>
   }, ExtArgs["result"]["messageTemplate"]>
 
   export type MessageTemplateSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -49055,9 +49180,11 @@ export namespace Prisma {
     sms_content?: boolean
     source_campaign_uuid?: boolean
     source_message_uuid?: boolean
+    sender_profile_uuid?: boolean
     created_at?: boolean
     updated_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    sender_profile?: boolean | MessageTemplate$sender_profileArgs<ExtArgs>
   }, ExtArgs["result"]["messageTemplate"]>
 
   export type MessageTemplateSelectScalar = {
@@ -49071,27 +49198,32 @@ export namespace Prisma {
     sms_content?: boolean
     source_campaign_uuid?: boolean
     source_message_uuid?: boolean
+    sender_profile_uuid?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
-  export type MessageTemplateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "name" | "channels" | "email_subject" | "email_content" | "sms_content" | "source_campaign_uuid" | "source_message_uuid" | "created_at" | "updated_at", ExtArgs["result"]["messageTemplate"]>
+  export type MessageTemplateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "name" | "channels" | "email_subject" | "email_content" | "sms_content" | "source_campaign_uuid" | "source_message_uuid" | "sender_profile_uuid" | "created_at" | "updated_at", ExtArgs["result"]["messageTemplate"]>
   export type MessageTemplateInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    sender_profile?: boolean | MessageTemplate$sender_profileArgs<ExtArgs>
     sequence_steps?: boolean | MessageTemplate$sequence_stepsArgs<ExtArgs>
     _count?: boolean | MessageTemplateCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type MessageTemplateIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    sender_profile?: boolean | MessageTemplate$sender_profileArgs<ExtArgs>
   }
   export type MessageTemplateIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    sender_profile?: boolean | MessageTemplate$sender_profileArgs<ExtArgs>
   }
 
   export type $MessageTemplatePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "MessageTemplate"
     objects: {
       organisation: Prisma.$OrganisationPayload<ExtArgs>
+      sender_profile: Prisma.$SenderProfilePayload<ExtArgs> | null
       sequence_steps: Prisma.$OutreachSequenceStepPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -49105,6 +49237,7 @@ export namespace Prisma {
       sms_content: string | null
       source_campaign_uuid: string | null
       source_message_uuid: string | null
+      sender_profile_uuid: string | null
       created_at: Date
       updated_at: Date
     }, ExtArgs["result"]["messageTemplate"]>
@@ -49502,6 +49635,7 @@ export namespace Prisma {
   export interface Prisma__MessageTemplateClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     organisation<T extends OrganisationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganisationDefaultArgs<ExtArgs>>): Prisma__OrganisationClient<$Result.GetResult<Prisma.$OrganisationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    sender_profile<T extends MessageTemplate$sender_profileArgs<ExtArgs> = {}>(args?: Subset<T, MessageTemplate$sender_profileArgs<ExtArgs>>): Prisma__SenderProfileClient<$Result.GetResult<Prisma.$SenderProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     sequence_steps<T extends MessageTemplate$sequence_stepsArgs<ExtArgs> = {}>(args?: Subset<T, MessageTemplate$sequence_stepsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OutreachSequenceStepPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -49542,6 +49676,7 @@ export namespace Prisma {
     readonly sms_content: FieldRef<"MessageTemplate", 'String'>
     readonly source_campaign_uuid: FieldRef<"MessageTemplate", 'String'>
     readonly source_message_uuid: FieldRef<"MessageTemplate", 'String'>
+    readonly sender_profile_uuid: FieldRef<"MessageTemplate", 'String'>
     readonly created_at: FieldRef<"MessageTemplate", 'DateTime'>
     readonly updated_at: FieldRef<"MessageTemplate", 'DateTime'>
   }
@@ -49937,6 +50072,25 @@ export namespace Prisma {
      * Limit how many MessageTemplates to delete.
      */
     limit?: number
+  }
+
+  /**
+   * MessageTemplate.sender_profile
+   */
+  export type MessageTemplate$sender_profileArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SenderProfile
+     */
+    select?: SenderProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SenderProfile
+     */
+    omit?: SenderProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SenderProfileInclude<ExtArgs> | null
+    where?: SenderProfileWhereInput
   }
 
   /**
@@ -89274,6 +89428,7 @@ export namespace Prisma {
     description: 'description',
     status: 'status',
     stop_on_reply: 'stop_on_reply',
+    sender_profile_uuid: 'sender_profile_uuid',
     created_at: 'created_at',
     updated_at: 'updated_at'
   };
@@ -89432,6 +89587,7 @@ export namespace Prisma {
     sms_content: 'sms_content',
     source_campaign_uuid: 'source_campaign_uuid',
     source_message_uuid: 'source_message_uuid',
+    sender_profile_uuid: 'sender_profile_uuid',
     created_at: 'created_at',
     updated_at: 'updated_at'
   };
@@ -93440,9 +93596,11 @@ export namespace Prisma {
     description?: StringNullableFilter<"OutreachSequence"> | string | null
     status?: EnumSequenceStatusFilter<"OutreachSequence"> | $Enums.SequenceStatus
     stop_on_reply?: BoolFilter<"OutreachSequence"> | boolean
+    sender_profile_uuid?: StringNullableFilter<"OutreachSequence"> | string | null
     created_at?: DateTimeFilter<"OutreachSequence"> | Date | string
     updated_at?: DateTimeFilter<"OutreachSequence"> | Date | string
     organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+    sender_profile?: XOR<SenderProfileNullableScalarRelationFilter, SenderProfileWhereInput> | null
     steps?: OutreachSequenceStepListRelationFilter
     enrollments?: SequenceEnrollmentListRelationFilter
     campaigns?: MarketingCampaignListRelationFilter
@@ -93456,9 +93614,11 @@ export namespace Prisma {
     description?: SortOrderInput | SortOrder
     status?: SortOrder
     stop_on_reply?: SortOrder
+    sender_profile_uuid?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     organisation?: OrganisationOrderByWithRelationInput
+    sender_profile?: SenderProfileOrderByWithRelationInput
     steps?: OutreachSequenceStepOrderByRelationAggregateInput
     enrollments?: SequenceEnrollmentOrderByRelationAggregateInput
     campaigns?: MarketingCampaignOrderByRelationAggregateInput
@@ -93475,9 +93635,11 @@ export namespace Prisma {
     description?: StringNullableFilter<"OutreachSequence"> | string | null
     status?: EnumSequenceStatusFilter<"OutreachSequence"> | $Enums.SequenceStatus
     stop_on_reply?: BoolFilter<"OutreachSequence"> | boolean
+    sender_profile_uuid?: StringNullableFilter<"OutreachSequence"> | string | null
     created_at?: DateTimeFilter<"OutreachSequence"> | Date | string
     updated_at?: DateTimeFilter<"OutreachSequence"> | Date | string
     organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+    sender_profile?: XOR<SenderProfileNullableScalarRelationFilter, SenderProfileWhereInput> | null
     steps?: OutreachSequenceStepListRelationFilter
     enrollments?: SequenceEnrollmentListRelationFilter
     campaigns?: MarketingCampaignListRelationFilter
@@ -93491,6 +93653,7 @@ export namespace Prisma {
     description?: SortOrderInput | SortOrder
     status?: SortOrder
     stop_on_reply?: SortOrder
+    sender_profile_uuid?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     _count?: OutreachSequenceCountOrderByAggregateInput
@@ -93511,6 +93674,7 @@ export namespace Prisma {
     description?: StringNullableWithAggregatesFilter<"OutreachSequence"> | string | null
     status?: EnumSequenceStatusWithAggregatesFilter<"OutreachSequence"> | $Enums.SequenceStatus
     stop_on_reply?: BoolWithAggregatesFilter<"OutreachSequence"> | boolean
+    sender_profile_uuid?: StringNullableWithAggregatesFilter<"OutreachSequence"> | string | null
     created_at?: DateTimeWithAggregatesFilter<"OutreachSequence"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"OutreachSequence"> | Date | string
   }
@@ -94125,6 +94289,8 @@ export namespace Prisma {
     updated_at?: DateTimeFilter<"SenderProfile"> | Date | string
     organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
     marketing_campaigns?: MarketingCampaignListRelationFilter
+    message_templates?: MessageTemplateListRelationFilter
+    sequences?: OutreachSequenceListRelationFilter
   }
 
   export type SenderProfileOrderByWithRelationInput = {
@@ -94154,6 +94320,8 @@ export namespace Prisma {
     updated_at?: SortOrder
     organisation?: OrganisationOrderByWithRelationInput
     marketing_campaigns?: MarketingCampaignOrderByRelationAggregateInput
+    message_templates?: MessageTemplateOrderByRelationAggregateInput
+    sequences?: OutreachSequenceOrderByRelationAggregateInput
   }
 
   export type SenderProfileWhereUniqueInput = Prisma.AtLeast<{
@@ -94186,6 +94354,8 @@ export namespace Prisma {
     updated_at?: DateTimeFilter<"SenderProfile"> | Date | string
     organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
     marketing_campaigns?: MarketingCampaignListRelationFilter
+    message_templates?: MessageTemplateListRelationFilter
+    sequences?: OutreachSequenceListRelationFilter
   }, "id" | "uuid">
 
   export type SenderProfileOrderByWithAggregationInput = {
@@ -94264,9 +94434,11 @@ export namespace Prisma {
     sms_content?: StringNullableFilter<"MessageTemplate"> | string | null
     source_campaign_uuid?: StringNullableFilter<"MessageTemplate"> | string | null
     source_message_uuid?: StringNullableFilter<"MessageTemplate"> | string | null
+    sender_profile_uuid?: StringNullableFilter<"MessageTemplate"> | string | null
     created_at?: DateTimeFilter<"MessageTemplate"> | Date | string
     updated_at?: DateTimeFilter<"MessageTemplate"> | Date | string
     organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+    sender_profile?: XOR<SenderProfileNullableScalarRelationFilter, SenderProfileWhereInput> | null
     sequence_steps?: OutreachSequenceStepListRelationFilter
   }
 
@@ -94281,9 +94453,11 @@ export namespace Prisma {
     sms_content?: SortOrderInput | SortOrder
     source_campaign_uuid?: SortOrderInput | SortOrder
     source_message_uuid?: SortOrderInput | SortOrder
+    sender_profile_uuid?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     organisation?: OrganisationOrderByWithRelationInput
+    sender_profile?: SenderProfileOrderByWithRelationInput
     sequence_steps?: OutreachSequenceStepOrderByRelationAggregateInput
   }
 
@@ -94301,9 +94475,11 @@ export namespace Prisma {
     sms_content?: StringNullableFilter<"MessageTemplate"> | string | null
     source_campaign_uuid?: StringNullableFilter<"MessageTemplate"> | string | null
     source_message_uuid?: StringNullableFilter<"MessageTemplate"> | string | null
+    sender_profile_uuid?: StringNullableFilter<"MessageTemplate"> | string | null
     created_at?: DateTimeFilter<"MessageTemplate"> | Date | string
     updated_at?: DateTimeFilter<"MessageTemplate"> | Date | string
     organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+    sender_profile?: XOR<SenderProfileNullableScalarRelationFilter, SenderProfileWhereInput> | null
     sequence_steps?: OutreachSequenceStepListRelationFilter
   }, "id" | "uuid">
 
@@ -94318,6 +94494,7 @@ export namespace Prisma {
     sms_content?: SortOrderInput | SortOrder
     source_campaign_uuid?: SortOrderInput | SortOrder
     source_message_uuid?: SortOrderInput | SortOrder
+    sender_profile_uuid?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     _count?: MessageTemplateCountOrderByAggregateInput
@@ -94341,6 +94518,7 @@ export namespace Prisma {
     sms_content?: StringNullableWithAggregatesFilter<"MessageTemplate"> | string | null
     source_campaign_uuid?: StringNullableWithAggregatesFilter<"MessageTemplate"> | string | null
     source_message_uuid?: StringNullableWithAggregatesFilter<"MessageTemplate"> | string | null
+    sender_profile_uuid?: StringNullableWithAggregatesFilter<"MessageTemplate"> | string | null
     created_at?: DateTimeWithAggregatesFilter<"MessageTemplate"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"MessageTemplate"> | Date | string
   }
@@ -100148,6 +100326,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutOutreach_sequencesInput
+    sender_profile?: SenderProfileCreateNestedOneWithoutSequencesInput
     steps?: OutreachSequenceStepCreateNestedManyWithoutSequenceInput
     enrollments?: SequenceEnrollmentCreateNestedManyWithoutSequenceInput
     campaigns?: MarketingCampaignCreateNestedManyWithoutSequenceInput
@@ -100161,6 +100340,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.SequenceStatus
     stop_on_reply?: boolean
+    sender_profile_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     steps?: OutreachSequenceStepUncheckedCreateNestedManyWithoutSequenceInput
@@ -100177,6 +100357,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutOutreach_sequencesNestedInput
+    sender_profile?: SenderProfileUpdateOneWithoutSequencesNestedInput
     steps?: OutreachSequenceStepUpdateManyWithoutSequenceNestedInput
     enrollments?: SequenceEnrollmentUpdateManyWithoutSequenceNestedInput
     campaigns?: MarketingCampaignUpdateManyWithoutSequenceNestedInput
@@ -100190,6 +100371,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSequenceStatusFieldUpdateOperationsInput | $Enums.SequenceStatus
     stop_on_reply?: BoolFieldUpdateOperationsInput | boolean
+    sender_profile_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     steps?: OutreachSequenceStepUncheckedUpdateManyWithoutSequenceNestedInput
@@ -100205,6 +100387,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.SequenceStatus
     stop_on_reply?: boolean
+    sender_profile_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -100227,6 +100410,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSequenceStatusFieldUpdateOperationsInput | $Enums.SequenceStatus
     stop_on_reply?: BoolFieldUpdateOperationsInput | boolean
+    sender_profile_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -100907,6 +101091,8 @@ export namespace Prisma {
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutSender_profilesInput
     marketing_campaigns?: MarketingCampaignCreateNestedManyWithoutSender_profileInput
+    message_templates?: MessageTemplateCreateNestedManyWithoutSender_profileInput
+    sequences?: OutreachSequenceCreateNestedManyWithoutSender_profileInput
   }
 
   export type SenderProfileUncheckedCreateInput = {
@@ -100935,6 +101121,8 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     marketing_campaigns?: MarketingCampaignUncheckedCreateNestedManyWithoutSender_profileInput
+    message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutSender_profileInput
+    sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutSender_profileInput
   }
 
   export type SenderProfileUpdateInput = {
@@ -100962,6 +101150,8 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutSender_profilesNestedInput
     marketing_campaigns?: MarketingCampaignUpdateManyWithoutSender_profileNestedInput
+    message_templates?: MessageTemplateUpdateManyWithoutSender_profileNestedInput
+    sequences?: OutreachSequenceUpdateManyWithoutSender_profileNestedInput
   }
 
   export type SenderProfileUncheckedUpdateInput = {
@@ -100990,6 +101180,8 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     marketing_campaigns?: MarketingCampaignUncheckedUpdateManyWithoutSender_profileNestedInput
+    message_templates?: MessageTemplateUncheckedUpdateManyWithoutSender_profileNestedInput
+    sequences?: OutreachSequenceUncheckedUpdateManyWithoutSender_profileNestedInput
   }
 
   export type SenderProfileCreateManyInput = {
@@ -101083,6 +101275,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutMessage_templatesInput
+    sender_profile?: SenderProfileCreateNestedOneWithoutMessage_templatesInput
     sequence_steps?: OutreachSequenceStepCreateNestedManyWithoutMessage_templateInput
   }
 
@@ -101097,6 +101290,7 @@ export namespace Prisma {
     sms_content?: string | null
     source_campaign_uuid?: string | null
     source_message_uuid?: string | null
+    sender_profile_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     sequence_steps?: OutreachSequenceStepUncheckedCreateNestedManyWithoutMessage_templateInput
@@ -101114,6 +101308,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutMessage_templatesNestedInput
+    sender_profile?: SenderProfileUpdateOneWithoutMessage_templatesNestedInput
     sequence_steps?: OutreachSequenceStepUpdateManyWithoutMessage_templateNestedInput
   }
 
@@ -101128,6 +101323,7 @@ export namespace Prisma {
     sms_content?: NullableStringFieldUpdateOperationsInput | string | null
     source_campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     source_message_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    sender_profile_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     sequence_steps?: OutreachSequenceStepUncheckedUpdateManyWithoutMessage_templateNestedInput
@@ -101144,6 +101340,7 @@ export namespace Prisma {
     sms_content?: string | null
     source_campaign_uuid?: string | null
     source_message_uuid?: string | null
+    sender_profile_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -101172,6 +101369,7 @@ export namespace Prisma {
     sms_content?: NullableStringFieldUpdateOperationsInput | string | null
     source_campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     source_message_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    sender_profile_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -106965,6 +107163,11 @@ export namespace Prisma {
     not?: NestedEnumSequenceStatusFilter<$PrismaModel> | $Enums.SequenceStatus
   }
 
+  export type SenderProfileNullableScalarRelationFilter = {
+    is?: SenderProfileWhereInput | null
+    isNot?: SenderProfileWhereInput | null
+  }
+
   export type OutreachSequenceStepListRelationFilter = {
     every?: OutreachSequenceStepWhereInput
     some?: OutreachSequenceStepWhereInput
@@ -106983,6 +107186,7 @@ export namespace Prisma {
     description?: SortOrder
     status?: SortOrder
     stop_on_reply?: SortOrder
+    sender_profile_uuid?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -106999,6 +107203,7 @@ export namespace Prisma {
     description?: SortOrder
     status?: SortOrder
     stop_on_reply?: SortOrder
+    sender_profile_uuid?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -107011,6 +107216,7 @@ export namespace Prisma {
     description?: SortOrder
     status?: SortOrder
     stop_on_reply?: SortOrder
+    sender_profile_uuid?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -107644,6 +107850,7 @@ export namespace Prisma {
     sms_content?: SortOrder
     source_campaign_uuid?: SortOrder
     source_message_uuid?: SortOrder
+    sender_profile_uuid?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -107662,6 +107869,7 @@ export namespace Prisma {
     sms_content?: SortOrder
     source_campaign_uuid?: SortOrder
     source_message_uuid?: SortOrder
+    sender_profile_uuid?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -107676,6 +107884,7 @@ export namespace Prisma {
     sms_content?: SortOrder
     source_campaign_uuid?: SortOrder
     source_message_uuid?: SortOrder
+    sender_profile_uuid?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -107696,11 +107905,6 @@ export namespace Prisma {
     in?: $Enums.CampaignType[] | ListEnumCampaignTypeFieldRefInput<$PrismaModel>
     notIn?: $Enums.CampaignType[] | ListEnumCampaignTypeFieldRefInput<$PrismaModel>
     not?: NestedEnumCampaignTypeFilter<$PrismaModel> | $Enums.CampaignType
-  }
-
-  export type SenderProfileNullableScalarRelationFilter = {
-    is?: SenderProfileWhereInput | null
-    isNot?: SenderProfileWhereInput | null
   }
 
   export type OutreachSequenceNullableScalarRelationFilter = {
@@ -114331,6 +114535,12 @@ export namespace Prisma {
     connect?: OrganisationWhereUniqueInput
   }
 
+  export type SenderProfileCreateNestedOneWithoutSequencesInput = {
+    create?: XOR<SenderProfileCreateWithoutSequencesInput, SenderProfileUncheckedCreateWithoutSequencesInput>
+    connectOrCreate?: SenderProfileCreateOrConnectWithoutSequencesInput
+    connect?: SenderProfileWhereUniqueInput
+  }
+
   export type OutreachSequenceStepCreateNestedManyWithoutSequenceInput = {
     create?: XOR<OutreachSequenceStepCreateWithoutSequenceInput, OutreachSequenceStepUncheckedCreateWithoutSequenceInput> | OutreachSequenceStepCreateWithoutSequenceInput[] | OutreachSequenceStepUncheckedCreateWithoutSequenceInput[]
     connectOrCreate?: OutreachSequenceStepCreateOrConnectWithoutSequenceInput | OutreachSequenceStepCreateOrConnectWithoutSequenceInput[]
@@ -114383,6 +114593,16 @@ export namespace Prisma {
     upsert?: OrganisationUpsertWithoutOutreach_sequencesInput
     connect?: OrganisationWhereUniqueInput
     update?: XOR<XOR<OrganisationUpdateToOneWithWhereWithoutOutreach_sequencesInput, OrganisationUpdateWithoutOutreach_sequencesInput>, OrganisationUncheckedUpdateWithoutOutreach_sequencesInput>
+  }
+
+  export type SenderProfileUpdateOneWithoutSequencesNestedInput = {
+    create?: XOR<SenderProfileCreateWithoutSequencesInput, SenderProfileUncheckedCreateWithoutSequencesInput>
+    connectOrCreate?: SenderProfileCreateOrConnectWithoutSequencesInput
+    upsert?: SenderProfileUpsertWithoutSequencesInput
+    disconnect?: SenderProfileWhereInput | boolean
+    delete?: SenderProfileWhereInput | boolean
+    connect?: SenderProfileWhereUniqueInput
+    update?: XOR<XOR<SenderProfileUpdateToOneWithWhereWithoutSequencesInput, SenderProfileUpdateWithoutSequencesInput>, SenderProfileUncheckedUpdateWithoutSequencesInput>
   }
 
   export type OutreachSequenceStepUpdateManyWithoutSequenceNestedInput = {
@@ -114754,11 +114974,39 @@ export namespace Prisma {
     connect?: MarketingCampaignWhereUniqueInput | MarketingCampaignWhereUniqueInput[]
   }
 
+  export type MessageTemplateCreateNestedManyWithoutSender_profileInput = {
+    create?: XOR<MessageTemplateCreateWithoutSender_profileInput, MessageTemplateUncheckedCreateWithoutSender_profileInput> | MessageTemplateCreateWithoutSender_profileInput[] | MessageTemplateUncheckedCreateWithoutSender_profileInput[]
+    connectOrCreate?: MessageTemplateCreateOrConnectWithoutSender_profileInput | MessageTemplateCreateOrConnectWithoutSender_profileInput[]
+    createMany?: MessageTemplateCreateManySender_profileInputEnvelope
+    connect?: MessageTemplateWhereUniqueInput | MessageTemplateWhereUniqueInput[]
+  }
+
+  export type OutreachSequenceCreateNestedManyWithoutSender_profileInput = {
+    create?: XOR<OutreachSequenceCreateWithoutSender_profileInput, OutreachSequenceUncheckedCreateWithoutSender_profileInput> | OutreachSequenceCreateWithoutSender_profileInput[] | OutreachSequenceUncheckedCreateWithoutSender_profileInput[]
+    connectOrCreate?: OutreachSequenceCreateOrConnectWithoutSender_profileInput | OutreachSequenceCreateOrConnectWithoutSender_profileInput[]
+    createMany?: OutreachSequenceCreateManySender_profileInputEnvelope
+    connect?: OutreachSequenceWhereUniqueInput | OutreachSequenceWhereUniqueInput[]
+  }
+
   export type MarketingCampaignUncheckedCreateNestedManyWithoutSender_profileInput = {
     create?: XOR<MarketingCampaignCreateWithoutSender_profileInput, MarketingCampaignUncheckedCreateWithoutSender_profileInput> | MarketingCampaignCreateWithoutSender_profileInput[] | MarketingCampaignUncheckedCreateWithoutSender_profileInput[]
     connectOrCreate?: MarketingCampaignCreateOrConnectWithoutSender_profileInput | MarketingCampaignCreateOrConnectWithoutSender_profileInput[]
     createMany?: MarketingCampaignCreateManySender_profileInputEnvelope
     connect?: MarketingCampaignWhereUniqueInput | MarketingCampaignWhereUniqueInput[]
+  }
+
+  export type MessageTemplateUncheckedCreateNestedManyWithoutSender_profileInput = {
+    create?: XOR<MessageTemplateCreateWithoutSender_profileInput, MessageTemplateUncheckedCreateWithoutSender_profileInput> | MessageTemplateCreateWithoutSender_profileInput[] | MessageTemplateUncheckedCreateWithoutSender_profileInput[]
+    connectOrCreate?: MessageTemplateCreateOrConnectWithoutSender_profileInput | MessageTemplateCreateOrConnectWithoutSender_profileInput[]
+    createMany?: MessageTemplateCreateManySender_profileInputEnvelope
+    connect?: MessageTemplateWhereUniqueInput | MessageTemplateWhereUniqueInput[]
+  }
+
+  export type OutreachSequenceUncheckedCreateNestedManyWithoutSender_profileInput = {
+    create?: XOR<OutreachSequenceCreateWithoutSender_profileInput, OutreachSequenceUncheckedCreateWithoutSender_profileInput> | OutreachSequenceCreateWithoutSender_profileInput[] | OutreachSequenceUncheckedCreateWithoutSender_profileInput[]
+    connectOrCreate?: OutreachSequenceCreateOrConnectWithoutSender_profileInput | OutreachSequenceCreateOrConnectWithoutSender_profileInput[]
+    createMany?: OutreachSequenceCreateManySender_profileInputEnvelope
+    connect?: OutreachSequenceWhereUniqueInput | OutreachSequenceWhereUniqueInput[]
   }
 
   export type OrganisationUpdateOneRequiredWithoutSender_profilesNestedInput = {
@@ -114783,6 +115031,34 @@ export namespace Prisma {
     deleteMany?: MarketingCampaignScalarWhereInput | MarketingCampaignScalarWhereInput[]
   }
 
+  export type MessageTemplateUpdateManyWithoutSender_profileNestedInput = {
+    create?: XOR<MessageTemplateCreateWithoutSender_profileInput, MessageTemplateUncheckedCreateWithoutSender_profileInput> | MessageTemplateCreateWithoutSender_profileInput[] | MessageTemplateUncheckedCreateWithoutSender_profileInput[]
+    connectOrCreate?: MessageTemplateCreateOrConnectWithoutSender_profileInput | MessageTemplateCreateOrConnectWithoutSender_profileInput[]
+    upsert?: MessageTemplateUpsertWithWhereUniqueWithoutSender_profileInput | MessageTemplateUpsertWithWhereUniqueWithoutSender_profileInput[]
+    createMany?: MessageTemplateCreateManySender_profileInputEnvelope
+    set?: MessageTemplateWhereUniqueInput | MessageTemplateWhereUniqueInput[]
+    disconnect?: MessageTemplateWhereUniqueInput | MessageTemplateWhereUniqueInput[]
+    delete?: MessageTemplateWhereUniqueInput | MessageTemplateWhereUniqueInput[]
+    connect?: MessageTemplateWhereUniqueInput | MessageTemplateWhereUniqueInput[]
+    update?: MessageTemplateUpdateWithWhereUniqueWithoutSender_profileInput | MessageTemplateUpdateWithWhereUniqueWithoutSender_profileInput[]
+    updateMany?: MessageTemplateUpdateManyWithWhereWithoutSender_profileInput | MessageTemplateUpdateManyWithWhereWithoutSender_profileInput[]
+    deleteMany?: MessageTemplateScalarWhereInput | MessageTemplateScalarWhereInput[]
+  }
+
+  export type OutreachSequenceUpdateManyWithoutSender_profileNestedInput = {
+    create?: XOR<OutreachSequenceCreateWithoutSender_profileInput, OutreachSequenceUncheckedCreateWithoutSender_profileInput> | OutreachSequenceCreateWithoutSender_profileInput[] | OutreachSequenceUncheckedCreateWithoutSender_profileInput[]
+    connectOrCreate?: OutreachSequenceCreateOrConnectWithoutSender_profileInput | OutreachSequenceCreateOrConnectWithoutSender_profileInput[]
+    upsert?: OutreachSequenceUpsertWithWhereUniqueWithoutSender_profileInput | OutreachSequenceUpsertWithWhereUniqueWithoutSender_profileInput[]
+    createMany?: OutreachSequenceCreateManySender_profileInputEnvelope
+    set?: OutreachSequenceWhereUniqueInput | OutreachSequenceWhereUniqueInput[]
+    disconnect?: OutreachSequenceWhereUniqueInput | OutreachSequenceWhereUniqueInput[]
+    delete?: OutreachSequenceWhereUniqueInput | OutreachSequenceWhereUniqueInput[]
+    connect?: OutreachSequenceWhereUniqueInput | OutreachSequenceWhereUniqueInput[]
+    update?: OutreachSequenceUpdateWithWhereUniqueWithoutSender_profileInput | OutreachSequenceUpdateWithWhereUniqueWithoutSender_profileInput[]
+    updateMany?: OutreachSequenceUpdateManyWithWhereWithoutSender_profileInput | OutreachSequenceUpdateManyWithWhereWithoutSender_profileInput[]
+    deleteMany?: OutreachSequenceScalarWhereInput | OutreachSequenceScalarWhereInput[]
+  }
+
   export type MarketingCampaignUncheckedUpdateManyWithoutSender_profileNestedInput = {
     create?: XOR<MarketingCampaignCreateWithoutSender_profileInput, MarketingCampaignUncheckedCreateWithoutSender_profileInput> | MarketingCampaignCreateWithoutSender_profileInput[] | MarketingCampaignUncheckedCreateWithoutSender_profileInput[]
     connectOrCreate?: MarketingCampaignCreateOrConnectWithoutSender_profileInput | MarketingCampaignCreateOrConnectWithoutSender_profileInput[]
@@ -114797,6 +115073,34 @@ export namespace Prisma {
     deleteMany?: MarketingCampaignScalarWhereInput | MarketingCampaignScalarWhereInput[]
   }
 
+  export type MessageTemplateUncheckedUpdateManyWithoutSender_profileNestedInput = {
+    create?: XOR<MessageTemplateCreateWithoutSender_profileInput, MessageTemplateUncheckedCreateWithoutSender_profileInput> | MessageTemplateCreateWithoutSender_profileInput[] | MessageTemplateUncheckedCreateWithoutSender_profileInput[]
+    connectOrCreate?: MessageTemplateCreateOrConnectWithoutSender_profileInput | MessageTemplateCreateOrConnectWithoutSender_profileInput[]
+    upsert?: MessageTemplateUpsertWithWhereUniqueWithoutSender_profileInput | MessageTemplateUpsertWithWhereUniqueWithoutSender_profileInput[]
+    createMany?: MessageTemplateCreateManySender_profileInputEnvelope
+    set?: MessageTemplateWhereUniqueInput | MessageTemplateWhereUniqueInput[]
+    disconnect?: MessageTemplateWhereUniqueInput | MessageTemplateWhereUniqueInput[]
+    delete?: MessageTemplateWhereUniqueInput | MessageTemplateWhereUniqueInput[]
+    connect?: MessageTemplateWhereUniqueInput | MessageTemplateWhereUniqueInput[]
+    update?: MessageTemplateUpdateWithWhereUniqueWithoutSender_profileInput | MessageTemplateUpdateWithWhereUniqueWithoutSender_profileInput[]
+    updateMany?: MessageTemplateUpdateManyWithWhereWithoutSender_profileInput | MessageTemplateUpdateManyWithWhereWithoutSender_profileInput[]
+    deleteMany?: MessageTemplateScalarWhereInput | MessageTemplateScalarWhereInput[]
+  }
+
+  export type OutreachSequenceUncheckedUpdateManyWithoutSender_profileNestedInput = {
+    create?: XOR<OutreachSequenceCreateWithoutSender_profileInput, OutreachSequenceUncheckedCreateWithoutSender_profileInput> | OutreachSequenceCreateWithoutSender_profileInput[] | OutreachSequenceUncheckedCreateWithoutSender_profileInput[]
+    connectOrCreate?: OutreachSequenceCreateOrConnectWithoutSender_profileInput | OutreachSequenceCreateOrConnectWithoutSender_profileInput[]
+    upsert?: OutreachSequenceUpsertWithWhereUniqueWithoutSender_profileInput | OutreachSequenceUpsertWithWhereUniqueWithoutSender_profileInput[]
+    createMany?: OutreachSequenceCreateManySender_profileInputEnvelope
+    set?: OutreachSequenceWhereUniqueInput | OutreachSequenceWhereUniqueInput[]
+    disconnect?: OutreachSequenceWhereUniqueInput | OutreachSequenceWhereUniqueInput[]
+    delete?: OutreachSequenceWhereUniqueInput | OutreachSequenceWhereUniqueInput[]
+    connect?: OutreachSequenceWhereUniqueInput | OutreachSequenceWhereUniqueInput[]
+    update?: OutreachSequenceUpdateWithWhereUniqueWithoutSender_profileInput | OutreachSequenceUpdateWithWhereUniqueWithoutSender_profileInput[]
+    updateMany?: OutreachSequenceUpdateManyWithWhereWithoutSender_profileInput | OutreachSequenceUpdateManyWithWhereWithoutSender_profileInput[]
+    deleteMany?: OutreachSequenceScalarWhereInput | OutreachSequenceScalarWhereInput[]
+  }
+
   export type MessageTemplateCreatechannelsInput = {
     set: $Enums.Channel[]
   }
@@ -114805,6 +115109,12 @@ export namespace Prisma {
     create?: XOR<OrganisationCreateWithoutMessage_templatesInput, OrganisationUncheckedCreateWithoutMessage_templatesInput>
     connectOrCreate?: OrganisationCreateOrConnectWithoutMessage_templatesInput
     connect?: OrganisationWhereUniqueInput
+  }
+
+  export type SenderProfileCreateNestedOneWithoutMessage_templatesInput = {
+    create?: XOR<SenderProfileCreateWithoutMessage_templatesInput, SenderProfileUncheckedCreateWithoutMessage_templatesInput>
+    connectOrCreate?: SenderProfileCreateOrConnectWithoutMessage_templatesInput
+    connect?: SenderProfileWhereUniqueInput
   }
 
   export type OutreachSequenceStepCreateNestedManyWithoutMessage_templateInput = {
@@ -114832,6 +115142,16 @@ export namespace Prisma {
     upsert?: OrganisationUpsertWithoutMessage_templatesInput
     connect?: OrganisationWhereUniqueInput
     update?: XOR<XOR<OrganisationUpdateToOneWithWhereWithoutMessage_templatesInput, OrganisationUpdateWithoutMessage_templatesInput>, OrganisationUncheckedUpdateWithoutMessage_templatesInput>
+  }
+
+  export type SenderProfileUpdateOneWithoutMessage_templatesNestedInput = {
+    create?: XOR<SenderProfileCreateWithoutMessage_templatesInput, SenderProfileUncheckedCreateWithoutMessage_templatesInput>
+    connectOrCreate?: SenderProfileCreateOrConnectWithoutMessage_templatesInput
+    upsert?: SenderProfileUpsertWithoutMessage_templatesInput
+    disconnect?: SenderProfileWhereInput | boolean
+    delete?: SenderProfileWhereInput | boolean
+    connect?: SenderProfileWhereUniqueInput
+    update?: XOR<XOR<SenderProfileUpdateToOneWithWhereWithoutMessage_templatesInput, SenderProfileUpdateWithoutMessage_templatesInput>, SenderProfileUncheckedUpdateWithoutMessage_templatesInput>
   }
 
   export type OutreachSequenceStepUpdateManyWithoutMessage_templateNestedInput = {
@@ -119311,6 +119631,7 @@ export namespace Prisma {
     stop_on_reply?: boolean
     created_at?: Date | string
     updated_at?: Date | string
+    sender_profile?: SenderProfileCreateNestedOneWithoutSequencesInput
     steps?: OutreachSequenceStepCreateNestedManyWithoutSequenceInput
     enrollments?: SequenceEnrollmentCreateNestedManyWithoutSequenceInput
     campaigns?: MarketingCampaignCreateNestedManyWithoutSequenceInput
@@ -119323,6 +119644,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.SequenceStatus
     stop_on_reply?: boolean
+    sender_profile_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     steps?: OutreachSequenceStepUncheckedCreateNestedManyWithoutSequenceInput
@@ -119403,6 +119725,8 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     marketing_campaigns?: MarketingCampaignCreateNestedManyWithoutSender_profileInput
+    message_templates?: MessageTemplateCreateNestedManyWithoutSender_profileInput
+    sequences?: OutreachSequenceCreateNestedManyWithoutSender_profileInput
   }
 
   export type SenderProfileUncheckedCreateWithoutOrganisationInput = {
@@ -119430,6 +119754,8 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     marketing_campaigns?: MarketingCampaignUncheckedCreateNestedManyWithoutSender_profileInput
+    message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutSender_profileInput
+    sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutSender_profileInput
   }
 
   export type SenderProfileCreateOrConnectWithoutOrganisationInput = {
@@ -119959,6 +120285,7 @@ export namespace Prisma {
     source_message_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
+    sender_profile?: SenderProfileCreateNestedOneWithoutMessage_templatesInput
     sequence_steps?: OutreachSequenceStepCreateNestedManyWithoutMessage_templateInput
   }
 
@@ -119972,6 +120299,7 @@ export namespace Prisma {
     sms_content?: string | null
     source_campaign_uuid?: string | null
     source_message_uuid?: string | null
+    sender_profile_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     sequence_steps?: OutreachSequenceStepUncheckedCreateNestedManyWithoutMessage_templateInput
@@ -120737,6 +121065,7 @@ export namespace Prisma {
     description?: StringNullableFilter<"OutreachSequence"> | string | null
     status?: EnumSequenceStatusFilter<"OutreachSequence"> | $Enums.SequenceStatus
     stop_on_reply?: BoolFilter<"OutreachSequence"> | boolean
+    sender_profile_uuid?: StringNullableFilter<"OutreachSequence"> | string | null
     created_at?: DateTimeFilter<"OutreachSequence"> | Date | string
     updated_at?: DateTimeFilter<"OutreachSequence"> | Date | string
   }
@@ -121234,6 +121563,7 @@ export namespace Prisma {
     sms_content?: StringNullableFilter<"MessageTemplate"> | string | null
     source_campaign_uuid?: StringNullableFilter<"MessageTemplate"> | string | null
     source_message_uuid?: StringNullableFilter<"MessageTemplate"> | string | null
+    sender_profile_uuid?: StringNullableFilter<"MessageTemplate"> | string | null
     created_at?: DateTimeFilter<"MessageTemplate"> | Date | string
     updated_at?: DateTimeFilter<"MessageTemplate"> | Date | string
   }
@@ -130438,6 +130768,68 @@ export namespace Prisma {
     create: XOR<OrganisationCreateWithoutOutreach_sequencesInput, OrganisationUncheckedCreateWithoutOutreach_sequencesInput>
   }
 
+  export type SenderProfileCreateWithoutSequencesInput = {
+    uuid?: string
+    name: string
+    company_name?: string | null
+    title?: string | null
+    first_name?: string | null
+    last_name?: string | null
+    email?: string | null
+    phone?: string | null
+    website?: string | null
+    website_utm?: NullableJsonNullValueInput | InputJsonValue
+    address?: string | null
+    city?: string | null
+    country?: string | null
+    logo_url?: string | null
+    booking_url?: string | null
+    booking_utm?: NullableJsonNullValueInput | InputJsonValue
+    sender_id?: string | null
+    signature?: string | null
+    business_description?: string | null
+    is_default?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutSender_profilesInput
+    marketing_campaigns?: MarketingCampaignCreateNestedManyWithoutSender_profileInput
+    message_templates?: MessageTemplateCreateNestedManyWithoutSender_profileInput
+  }
+
+  export type SenderProfileUncheckedCreateWithoutSequencesInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    name: string
+    company_name?: string | null
+    title?: string | null
+    first_name?: string | null
+    last_name?: string | null
+    email?: string | null
+    phone?: string | null
+    website?: string | null
+    website_utm?: NullableJsonNullValueInput | InputJsonValue
+    address?: string | null
+    city?: string | null
+    country?: string | null
+    logo_url?: string | null
+    booking_url?: string | null
+    booking_utm?: NullableJsonNullValueInput | InputJsonValue
+    sender_id?: string | null
+    signature?: string | null
+    business_description?: string | null
+    is_default?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    marketing_campaigns?: MarketingCampaignUncheckedCreateNestedManyWithoutSender_profileInput
+    message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutSender_profileInput
+  }
+
+  export type SenderProfileCreateOrConnectWithoutSequencesInput = {
+    where: SenderProfileWhereUniqueInput
+    create: XOR<SenderProfileCreateWithoutSequencesInput, SenderProfileUncheckedCreateWithoutSequencesInput>
+  }
+
   export type OutreachSequenceStepCreateWithoutSequenceInput = {
     uuid?: string
     order_index: number
@@ -130739,6 +131131,74 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
+  export type SenderProfileUpsertWithoutSequencesInput = {
+    update: XOR<SenderProfileUpdateWithoutSequencesInput, SenderProfileUncheckedUpdateWithoutSequencesInput>
+    create: XOR<SenderProfileCreateWithoutSequencesInput, SenderProfileUncheckedCreateWithoutSequencesInput>
+    where?: SenderProfileWhereInput
+  }
+
+  export type SenderProfileUpdateToOneWithWhereWithoutSequencesInput = {
+    where?: SenderProfileWhereInput
+    data: XOR<SenderProfileUpdateWithoutSequencesInput, SenderProfileUncheckedUpdateWithoutSequencesInput>
+  }
+
+  export type SenderProfileUpdateWithoutSequencesInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    company_name?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    first_name?: NullableStringFieldUpdateOperationsInput | string | null
+    last_name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    website_utm?: NullableJsonNullValueInput | InputJsonValue
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    logo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    booking_url?: NullableStringFieldUpdateOperationsInput | string | null
+    booking_utm?: NullableJsonNullValueInput | InputJsonValue
+    sender_id?: NullableStringFieldUpdateOperationsInput | string | null
+    signature?: NullableStringFieldUpdateOperationsInput | string | null
+    business_description?: NullableStringFieldUpdateOperationsInput | string | null
+    is_default?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutSender_profilesNestedInput
+    marketing_campaigns?: MarketingCampaignUpdateManyWithoutSender_profileNestedInput
+    message_templates?: MessageTemplateUpdateManyWithoutSender_profileNestedInput
+  }
+
+  export type SenderProfileUncheckedUpdateWithoutSequencesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    company_name?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    first_name?: NullableStringFieldUpdateOperationsInput | string | null
+    last_name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    website_utm?: NullableJsonNullValueInput | InputJsonValue
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    logo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    booking_url?: NullableStringFieldUpdateOperationsInput | string | null
+    booking_utm?: NullableJsonNullValueInput | InputJsonValue
+    sender_id?: NullableStringFieldUpdateOperationsInput | string | null
+    signature?: NullableStringFieldUpdateOperationsInput | string | null
+    business_description?: NullableStringFieldUpdateOperationsInput | string | null
+    is_default?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    marketing_campaigns?: MarketingCampaignUncheckedUpdateManyWithoutSender_profileNestedInput
+    message_templates?: MessageTemplateUncheckedUpdateManyWithoutSender_profileNestedInput
+  }
+
   export type OutreachSequenceStepUpsertWithWhereUniqueWithoutSequenceInput = {
     where: OutreachSequenceStepWhereUniqueInput
     update: XOR<OutreachSequenceStepUpdateWithoutSequenceInput, OutreachSequenceStepUncheckedUpdateWithoutSequenceInput>
@@ -130818,6 +131278,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutOutreach_sequencesInput
+    sender_profile?: SenderProfileCreateNestedOneWithoutSequencesInput
     enrollments?: SequenceEnrollmentCreateNestedManyWithoutSequenceInput
     campaigns?: MarketingCampaignCreateNestedManyWithoutSequenceInput
   }
@@ -130830,6 +131291,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.SequenceStatus
     stop_on_reply?: boolean
+    sender_profile_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutSequenceInput
@@ -130853,6 +131315,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutMessage_templatesInput
+    sender_profile?: SenderProfileCreateNestedOneWithoutMessage_templatesInput
   }
 
   export type MessageTemplateUncheckedCreateWithoutSequence_stepsInput = {
@@ -130866,6 +131329,7 @@ export namespace Prisma {
     sms_content?: string | null
     source_campaign_uuid?: string | null
     source_message_uuid?: string | null
+    sender_profile_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -130994,6 +131458,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutOutreach_sequencesNestedInput
+    sender_profile?: SenderProfileUpdateOneWithoutSequencesNestedInput
     enrollments?: SequenceEnrollmentUpdateManyWithoutSequenceNestedInput
     campaigns?: MarketingCampaignUpdateManyWithoutSequenceNestedInput
   }
@@ -131006,6 +131471,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSequenceStatusFieldUpdateOperationsInput | $Enums.SequenceStatus
     stop_on_reply?: BoolFieldUpdateOperationsInput | boolean
+    sender_profile_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutSequenceNestedInput
@@ -131035,6 +131501,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutMessage_templatesNestedInput
+    sender_profile?: SenderProfileUpdateOneWithoutMessage_templatesNestedInput
   }
 
   export type MessageTemplateUncheckedUpdateWithoutSequence_stepsInput = {
@@ -131048,6 +131515,7 @@ export namespace Prisma {
     sms_content?: NullableStringFieldUpdateOperationsInput | string | null
     source_campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     source_message_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    sender_profile_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -131077,6 +131545,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutOutreach_sequencesInput
+    sender_profile?: SenderProfileCreateNestedOneWithoutSequencesInput
     steps?: OutreachSequenceStepCreateNestedManyWithoutSequenceInput
     campaigns?: MarketingCampaignCreateNestedManyWithoutSequenceInput
   }
@@ -131089,6 +131558,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.SequenceStatus
     stop_on_reply?: boolean
+    sender_profile_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     steps?: OutreachSequenceStepUncheckedCreateNestedManyWithoutSequenceInput
@@ -131451,6 +131921,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutOutreach_sequencesNestedInput
+    sender_profile?: SenderProfileUpdateOneWithoutSequencesNestedInput
     steps?: OutreachSequenceStepUpdateManyWithoutSequenceNestedInput
     campaigns?: MarketingCampaignUpdateManyWithoutSequenceNestedInput
   }
@@ -131463,6 +131934,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSequenceStatusFieldUpdateOperationsInput | $Enums.SequenceStatus
     stop_on_reply?: BoolFieldUpdateOperationsInput | boolean
+    sender_profile_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     steps?: OutreachSequenceStepUncheckedUpdateManyWithoutSequenceNestedInput
@@ -132542,6 +133014,86 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type MessageTemplateCreateWithoutSender_profileInput = {
+    uuid?: string
+    name: string
+    channels?: MessageTemplateCreatechannelsInput | $Enums.Channel[]
+    email_subject?: string | null
+    email_content?: string | null
+    sms_content?: string | null
+    source_campaign_uuid?: string | null
+    source_message_uuid?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutMessage_templatesInput
+    sequence_steps?: OutreachSequenceStepCreateNestedManyWithoutMessage_templateInput
+  }
+
+  export type MessageTemplateUncheckedCreateWithoutSender_profileInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    name: string
+    channels?: MessageTemplateCreatechannelsInput | $Enums.Channel[]
+    email_subject?: string | null
+    email_content?: string | null
+    sms_content?: string | null
+    source_campaign_uuid?: string | null
+    source_message_uuid?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    sequence_steps?: OutreachSequenceStepUncheckedCreateNestedManyWithoutMessage_templateInput
+  }
+
+  export type MessageTemplateCreateOrConnectWithoutSender_profileInput = {
+    where: MessageTemplateWhereUniqueInput
+    create: XOR<MessageTemplateCreateWithoutSender_profileInput, MessageTemplateUncheckedCreateWithoutSender_profileInput>
+  }
+
+  export type MessageTemplateCreateManySender_profileInputEnvelope = {
+    data: MessageTemplateCreateManySender_profileInput | MessageTemplateCreateManySender_profileInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type OutreachSequenceCreateWithoutSender_profileInput = {
+    uuid?: string
+    name: string
+    description?: string | null
+    status?: $Enums.SequenceStatus
+    stop_on_reply?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutOutreach_sequencesInput
+    steps?: OutreachSequenceStepCreateNestedManyWithoutSequenceInput
+    enrollments?: SequenceEnrollmentCreateNestedManyWithoutSequenceInput
+    campaigns?: MarketingCampaignCreateNestedManyWithoutSequenceInput
+  }
+
+  export type OutreachSequenceUncheckedCreateWithoutSender_profileInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    name: string
+    description?: string | null
+    status?: $Enums.SequenceStatus
+    stop_on_reply?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    steps?: OutreachSequenceStepUncheckedCreateNestedManyWithoutSequenceInput
+    enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutSequenceInput
+    campaigns?: MarketingCampaignUncheckedCreateNestedManyWithoutSequenceInput
+  }
+
+  export type OutreachSequenceCreateOrConnectWithoutSender_profileInput = {
+    where: OutreachSequenceWhereUniqueInput
+    create: XOR<OutreachSequenceCreateWithoutSender_profileInput, OutreachSequenceUncheckedCreateWithoutSender_profileInput>
+  }
+
+  export type OutreachSequenceCreateManySender_profileInputEnvelope = {
+    data: OutreachSequenceCreateManySender_profileInput | OutreachSequenceCreateManySender_profileInput[]
+    skipDuplicates?: boolean
+  }
+
   export type OrganisationUpsertWithoutSender_profilesInput = {
     update: XOR<OrganisationUpdateWithoutSender_profilesInput, OrganisationUncheckedUpdateWithoutSender_profilesInput>
     create: XOR<OrganisationCreateWithoutSender_profilesInput, OrganisationUncheckedCreateWithoutSender_profilesInput>
@@ -132660,6 +133212,38 @@ export namespace Prisma {
     data: XOR<MarketingCampaignUpdateManyMutationInput, MarketingCampaignUncheckedUpdateManyWithoutSender_profileInput>
   }
 
+  export type MessageTemplateUpsertWithWhereUniqueWithoutSender_profileInput = {
+    where: MessageTemplateWhereUniqueInput
+    update: XOR<MessageTemplateUpdateWithoutSender_profileInput, MessageTemplateUncheckedUpdateWithoutSender_profileInput>
+    create: XOR<MessageTemplateCreateWithoutSender_profileInput, MessageTemplateUncheckedCreateWithoutSender_profileInput>
+  }
+
+  export type MessageTemplateUpdateWithWhereUniqueWithoutSender_profileInput = {
+    where: MessageTemplateWhereUniqueInput
+    data: XOR<MessageTemplateUpdateWithoutSender_profileInput, MessageTemplateUncheckedUpdateWithoutSender_profileInput>
+  }
+
+  export type MessageTemplateUpdateManyWithWhereWithoutSender_profileInput = {
+    where: MessageTemplateScalarWhereInput
+    data: XOR<MessageTemplateUpdateManyMutationInput, MessageTemplateUncheckedUpdateManyWithoutSender_profileInput>
+  }
+
+  export type OutreachSequenceUpsertWithWhereUniqueWithoutSender_profileInput = {
+    where: OutreachSequenceWhereUniqueInput
+    update: XOR<OutreachSequenceUpdateWithoutSender_profileInput, OutreachSequenceUncheckedUpdateWithoutSender_profileInput>
+    create: XOR<OutreachSequenceCreateWithoutSender_profileInput, OutreachSequenceUncheckedCreateWithoutSender_profileInput>
+  }
+
+  export type OutreachSequenceUpdateWithWhereUniqueWithoutSender_profileInput = {
+    where: OutreachSequenceWhereUniqueInput
+    data: XOR<OutreachSequenceUpdateWithoutSender_profileInput, OutreachSequenceUncheckedUpdateWithoutSender_profileInput>
+  }
+
+  export type OutreachSequenceUpdateManyWithWhereWithoutSender_profileInput = {
+    where: OutreachSequenceScalarWhereInput
+    data: XOR<OutreachSequenceUpdateManyMutationInput, OutreachSequenceUncheckedUpdateManyWithoutSender_profileInput>
+  }
+
   export type OrganisationCreateWithoutMessage_templatesInput = {
     uuid?: string
     name: string
@@ -132754,6 +133338,68 @@ export namespace Prisma {
   export type OrganisationCreateOrConnectWithoutMessage_templatesInput = {
     where: OrganisationWhereUniqueInput
     create: XOR<OrganisationCreateWithoutMessage_templatesInput, OrganisationUncheckedCreateWithoutMessage_templatesInput>
+  }
+
+  export type SenderProfileCreateWithoutMessage_templatesInput = {
+    uuid?: string
+    name: string
+    company_name?: string | null
+    title?: string | null
+    first_name?: string | null
+    last_name?: string | null
+    email?: string | null
+    phone?: string | null
+    website?: string | null
+    website_utm?: NullableJsonNullValueInput | InputJsonValue
+    address?: string | null
+    city?: string | null
+    country?: string | null
+    logo_url?: string | null
+    booking_url?: string | null
+    booking_utm?: NullableJsonNullValueInput | InputJsonValue
+    sender_id?: string | null
+    signature?: string | null
+    business_description?: string | null
+    is_default?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutSender_profilesInput
+    marketing_campaigns?: MarketingCampaignCreateNestedManyWithoutSender_profileInput
+    sequences?: OutreachSequenceCreateNestedManyWithoutSender_profileInput
+  }
+
+  export type SenderProfileUncheckedCreateWithoutMessage_templatesInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    name: string
+    company_name?: string | null
+    title?: string | null
+    first_name?: string | null
+    last_name?: string | null
+    email?: string | null
+    phone?: string | null
+    website?: string | null
+    website_utm?: NullableJsonNullValueInput | InputJsonValue
+    address?: string | null
+    city?: string | null
+    country?: string | null
+    logo_url?: string | null
+    booking_url?: string | null
+    booking_utm?: NullableJsonNullValueInput | InputJsonValue
+    sender_id?: string | null
+    signature?: string | null
+    business_description?: string | null
+    is_default?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    marketing_campaigns?: MarketingCampaignUncheckedCreateNestedManyWithoutSender_profileInput
+    sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutSender_profileInput
+  }
+
+  export type SenderProfileCreateOrConnectWithoutMessage_templatesInput = {
+    where: SenderProfileWhereUniqueInput
+    create: XOR<SenderProfileCreateWithoutMessage_templatesInput, SenderProfileUncheckedCreateWithoutMessage_templatesInput>
   }
 
   export type OutreachSequenceStepCreateWithoutMessage_templateInput = {
@@ -132905,6 +133551,74 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
+  export type SenderProfileUpsertWithoutMessage_templatesInput = {
+    update: XOR<SenderProfileUpdateWithoutMessage_templatesInput, SenderProfileUncheckedUpdateWithoutMessage_templatesInput>
+    create: XOR<SenderProfileCreateWithoutMessage_templatesInput, SenderProfileUncheckedCreateWithoutMessage_templatesInput>
+    where?: SenderProfileWhereInput
+  }
+
+  export type SenderProfileUpdateToOneWithWhereWithoutMessage_templatesInput = {
+    where?: SenderProfileWhereInput
+    data: XOR<SenderProfileUpdateWithoutMessage_templatesInput, SenderProfileUncheckedUpdateWithoutMessage_templatesInput>
+  }
+
+  export type SenderProfileUpdateWithoutMessage_templatesInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    company_name?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    first_name?: NullableStringFieldUpdateOperationsInput | string | null
+    last_name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    website_utm?: NullableJsonNullValueInput | InputJsonValue
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    logo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    booking_url?: NullableStringFieldUpdateOperationsInput | string | null
+    booking_utm?: NullableJsonNullValueInput | InputJsonValue
+    sender_id?: NullableStringFieldUpdateOperationsInput | string | null
+    signature?: NullableStringFieldUpdateOperationsInput | string | null
+    business_description?: NullableStringFieldUpdateOperationsInput | string | null
+    is_default?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutSender_profilesNestedInput
+    marketing_campaigns?: MarketingCampaignUpdateManyWithoutSender_profileNestedInput
+    sequences?: OutreachSequenceUpdateManyWithoutSender_profileNestedInput
+  }
+
+  export type SenderProfileUncheckedUpdateWithoutMessage_templatesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    company_name?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    first_name?: NullableStringFieldUpdateOperationsInput | string | null
+    last_name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    website_utm?: NullableJsonNullValueInput | InputJsonValue
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    logo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    booking_url?: NullableStringFieldUpdateOperationsInput | string | null
+    booking_utm?: NullableJsonNullValueInput | InputJsonValue
+    sender_id?: NullableStringFieldUpdateOperationsInput | string | null
+    signature?: NullableStringFieldUpdateOperationsInput | string | null
+    business_description?: NullableStringFieldUpdateOperationsInput | string | null
+    is_default?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    marketing_campaigns?: MarketingCampaignUncheckedUpdateManyWithoutSender_profileNestedInput
+    sequences?: OutreachSequenceUncheckedUpdateManyWithoutSender_profileNestedInput
+  }
+
   export type OutreachSequenceStepUpsertWithWhereUniqueWithoutMessage_templateInput = {
     where: OutreachSequenceStepWhereUniqueInput
     update: XOR<OutreachSequenceStepUpdateWithoutMessage_templateInput, OutreachSequenceStepUncheckedUpdateWithoutMessage_templateInput>
@@ -133041,6 +133755,8 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutSender_profilesInput
+    message_templates?: MessageTemplateCreateNestedManyWithoutSender_profileInput
+    sequences?: OutreachSequenceCreateNestedManyWithoutSender_profileInput
   }
 
   export type SenderProfileUncheckedCreateWithoutMarketing_campaignsInput = {
@@ -133068,6 +133784,8 @@ export namespace Prisma {
     is_default?: boolean
     created_at?: Date | string
     updated_at?: Date | string
+    message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutSender_profileInput
+    sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutSender_profileInput
   }
 
   export type SenderProfileCreateOrConnectWithoutMarketing_campaignsInput = {
@@ -133084,6 +133802,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutOutreach_sequencesInput
+    sender_profile?: SenderProfileCreateNestedOneWithoutSequencesInput
     steps?: OutreachSequenceStepCreateNestedManyWithoutSequenceInput
     enrollments?: SequenceEnrollmentCreateNestedManyWithoutSequenceInput
   }
@@ -133096,6 +133815,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.SequenceStatus
     stop_on_reply?: boolean
+    sender_profile_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     steps?: OutreachSequenceStepUncheckedCreateNestedManyWithoutSequenceInput
@@ -133552,6 +134272,8 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutSender_profilesNestedInput
+    message_templates?: MessageTemplateUpdateManyWithoutSender_profileNestedInput
+    sequences?: OutreachSequenceUpdateManyWithoutSender_profileNestedInput
   }
 
   export type SenderProfileUncheckedUpdateWithoutMarketing_campaignsInput = {
@@ -133579,6 +134301,8 @@ export namespace Prisma {
     is_default?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    message_templates?: MessageTemplateUncheckedUpdateManyWithoutSender_profileNestedInput
+    sequences?: OutreachSequenceUncheckedUpdateManyWithoutSender_profileNestedInput
   }
 
   export type OutreachSequenceUpsertWithoutCampaignsInput = {
@@ -133601,6 +134325,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutOutreach_sequencesNestedInput
+    sender_profile?: SenderProfileUpdateOneWithoutSequencesNestedInput
     steps?: OutreachSequenceStepUpdateManyWithoutSequenceNestedInput
     enrollments?: SequenceEnrollmentUpdateManyWithoutSequenceNestedInput
   }
@@ -133613,6 +134338,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSequenceStatusFieldUpdateOperationsInput | $Enums.SequenceStatus
     stop_on_reply?: BoolFieldUpdateOperationsInput | boolean
+    sender_profile_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     steps?: OutreachSequenceStepUncheckedUpdateManyWithoutSequenceNestedInput
@@ -142609,6 +143335,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.SequenceStatus
     stop_on_reply?: boolean
+    sender_profile_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -142849,6 +143576,7 @@ export namespace Prisma {
     sms_content?: string | null
     source_campaign_uuid?: string | null
     source_message_uuid?: string | null
+    sender_profile_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -143516,6 +144244,7 @@ export namespace Prisma {
     stop_on_reply?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    sender_profile?: SenderProfileUpdateOneWithoutSequencesNestedInput
     steps?: OutreachSequenceStepUpdateManyWithoutSequenceNestedInput
     enrollments?: SequenceEnrollmentUpdateManyWithoutSequenceNestedInput
     campaigns?: MarketingCampaignUpdateManyWithoutSequenceNestedInput
@@ -143528,6 +144257,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSequenceStatusFieldUpdateOperationsInput | $Enums.SequenceStatus
     stop_on_reply?: BoolFieldUpdateOperationsInput | boolean
+    sender_profile_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     steps?: OutreachSequenceStepUncheckedUpdateManyWithoutSequenceNestedInput
@@ -143542,6 +144272,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSequenceStatusFieldUpdateOperationsInput | $Enums.SequenceStatus
     stop_on_reply?: BoolFieldUpdateOperationsInput | boolean
+    sender_profile_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -143614,6 +144345,8 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     marketing_campaigns?: MarketingCampaignUpdateManyWithoutSender_profileNestedInput
+    message_templates?: MessageTemplateUpdateManyWithoutSender_profileNestedInput
+    sequences?: OutreachSequenceUpdateManyWithoutSender_profileNestedInput
   }
 
   export type SenderProfileUncheckedUpdateWithoutOrganisationInput = {
@@ -143641,6 +144374,8 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     marketing_campaigns?: MarketingCampaignUncheckedUpdateManyWithoutSender_profileNestedInput
+    message_templates?: MessageTemplateUncheckedUpdateManyWithoutSender_profileNestedInput
+    sequences?: OutreachSequenceUncheckedUpdateManyWithoutSender_profileNestedInput
   }
 
   export type SenderProfileUncheckedUpdateManyWithoutOrganisationInput = {
@@ -144261,6 +144996,7 @@ export namespace Prisma {
     source_message_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    sender_profile?: SenderProfileUpdateOneWithoutMessage_templatesNestedInput
     sequence_steps?: OutreachSequenceStepUpdateManyWithoutMessage_templateNestedInput
   }
 
@@ -144274,6 +145010,7 @@ export namespace Prisma {
     sms_content?: NullableStringFieldUpdateOperationsInput | string | null
     source_campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     source_message_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    sender_profile_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     sequence_steps?: OutreachSequenceStepUncheckedUpdateManyWithoutMessage_templateNestedInput
@@ -144289,6 +145026,7 @@ export namespace Prisma {
     sms_content?: NullableStringFieldUpdateOperationsInput | string | null
     source_campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     source_message_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    sender_profile_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -147624,6 +148362,33 @@ export namespace Prisma {
     updated_at?: Date | string
   }
 
+  export type MessageTemplateCreateManySender_profileInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    name: string
+    channels?: MessageTemplateCreatechannelsInput | $Enums.Channel[]
+    email_subject?: string | null
+    email_content?: string | null
+    sms_content?: string | null
+    source_campaign_uuid?: string | null
+    source_message_uuid?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type OutreachSequenceCreateManySender_profileInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    name: string
+    description?: string | null
+    status?: $Enums.SequenceStatus
+    stop_on_reply?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
   export type MarketingCampaignUpdateWithoutSender_profileInput = {
     uuid?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -147754,6 +148519,93 @@ export namespace Prisma {
     booking_visit_count?: IntFieldUpdateOperationsInput | number
     bounced_count?: IntFieldUpdateOperationsInput | number
     unsubscribed_count?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MessageTemplateUpdateWithoutSender_profileInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    channels?: MessageTemplateUpdatechannelsInput | $Enums.Channel[]
+    email_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    email_content?: NullableStringFieldUpdateOperationsInput | string | null
+    sms_content?: NullableStringFieldUpdateOperationsInput | string | null
+    source_campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    source_message_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutMessage_templatesNestedInput
+    sequence_steps?: OutreachSequenceStepUpdateManyWithoutMessage_templateNestedInput
+  }
+
+  export type MessageTemplateUncheckedUpdateWithoutSender_profileInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    channels?: MessageTemplateUpdatechannelsInput | $Enums.Channel[]
+    email_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    email_content?: NullableStringFieldUpdateOperationsInput | string | null
+    sms_content?: NullableStringFieldUpdateOperationsInput | string | null
+    source_campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    source_message_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    sequence_steps?: OutreachSequenceStepUncheckedUpdateManyWithoutMessage_templateNestedInput
+  }
+
+  export type MessageTemplateUncheckedUpdateManyWithoutSender_profileInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    channels?: MessageTemplateUpdatechannelsInput | $Enums.Channel[]
+    email_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    email_content?: NullableStringFieldUpdateOperationsInput | string | null
+    sms_content?: NullableStringFieldUpdateOperationsInput | string | null
+    source_campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    source_message_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OutreachSequenceUpdateWithoutSender_profileInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSequenceStatusFieldUpdateOperationsInput | $Enums.SequenceStatus
+    stop_on_reply?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutOutreach_sequencesNestedInput
+    steps?: OutreachSequenceStepUpdateManyWithoutSequenceNestedInput
+    enrollments?: SequenceEnrollmentUpdateManyWithoutSequenceNestedInput
+    campaigns?: MarketingCampaignUpdateManyWithoutSequenceNestedInput
+  }
+
+  export type OutreachSequenceUncheckedUpdateWithoutSender_profileInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSequenceStatusFieldUpdateOperationsInput | $Enums.SequenceStatus
+    stop_on_reply?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    steps?: OutreachSequenceStepUncheckedUpdateManyWithoutSequenceNestedInput
+    enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutSequenceNestedInput
+    campaigns?: MarketingCampaignUncheckedUpdateManyWithoutSequenceNestedInput
+  }
+
+  export type OutreachSequenceUncheckedUpdateManyWithoutSender_profileInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSequenceStatusFieldUpdateOperationsInput | $Enums.SequenceStatus
+    stop_on_reply?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }

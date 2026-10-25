@@ -2,6 +2,7 @@ import { useLayoutEffect, useRef, useState, type FC } from "react";
 import { Button, FieldError, Input, Label, Modal } from "@heroui/react";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
 import { Channel } from "@/features/contacts/interfaces/contact.interface";
+import { SenderProfileSelect } from "@/features/messaging/components/sender-profile-select";
 import {
     MessageComposer,
     type MessageComposerValue,
@@ -57,6 +58,7 @@ export const MessageTemplateModal: FC<MessageTemplateModalProps> = ({
     const [name, setName] = useState("");
     const [composerValue, setComposerValue] = useState<MessageComposerValue>(EMPTY_MESSAGE_COMPOSER_VALUE);
     const [activeChannel, setActiveChannel] = useState<Channel>(Channel.EMAIL);
+    const [senderProfileUuid, setSenderProfileUuid] = useState<string | null>(null);
     const [nameError, setNameError] = useState<string | null>(null);
     const [contentError, setContentError] = useState<string | null>(null);
     const [composerKey, setComposerKey] = useState(0);
@@ -73,6 +75,7 @@ export const MessageTemplateModal: FC<MessageTemplateModalProps> = ({
         if (!wasOpenRef.current) {
             if (initial) {
                 setName(initial.name);
+                setSenderProfileUuid(initial.sender_profile_uuid ?? null);
                 setComposerValue(templateToComposerValue(initial));
                 const channels = initial.channels.filter(
                     (c) => c === Channel.EMAIL || c === Channel.SMS,
@@ -80,12 +83,14 @@ export const MessageTemplateModal: FC<MessageTemplateModalProps> = ({
                 setActiveChannel(channels[0] ?? Channel.EMAIL);
             } else if (prefill) {
                 setName(defaultName);
+                setSenderProfileUuid(null);
                 setComposerValue(prefill);
                 setActiveChannel(
                     !isComposerContentEmpty(Channel.EMAIL, prefill) ? Channel.EMAIL : Channel.SMS,
                 );
             } else {
                 setName("");
+                setSenderProfileUuid(null);
                 setComposerValue(EMPTY_MESSAGE_COMPOSER_VALUE);
                 setActiveChannel(Channel.EMAIL);
             }
@@ -126,6 +131,8 @@ export const MessageTemplateModal: FC<MessageTemplateModalProps> = ({
                 : undefined,
             email_content: channels.includes(Channel.EMAIL) ? composerValue.emailContent : undefined,
             sms_content: channels.includes(Channel.SMS) ? composerValue.smsContent : undefined,
+            // null clears the profile on update; omitted on create when none is chosen.
+            sender_profile_uuid: initial ? senderProfileUuid : (senderProfileUuid ?? undefined),
         };
         if (initial) {
             await updateMut.mutateAsync({ uuid: initial.uuid, payload });
@@ -176,6 +183,15 @@ export const MessageTemplateModal: FC<MessageTemplateModalProps> = ({
                             />
                             {nameError ? <FieldError>{nameError}</FieldError> : null}
                         </div>
+
+                        <SenderProfileSelect
+                            value={senderProfileUuid}
+                            onChange={setSenderProfileUuid}
+                            onClear={() => setSenderProfileUuid(null)}
+                            clearLabel="None (use the default profile)"
+                            description="Pre-selected when this template is used. You can still pick another profile in a campaign or message."
+                            disabled={pending}
+                        />
 
                         {composerReady ? (
                             <MessageComposer

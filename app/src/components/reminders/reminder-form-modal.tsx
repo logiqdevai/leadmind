@@ -1,18 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-    Button,
-    Calendar,
-    DateField,
-    DatePicker,
-    Input,
-    Label,
-    ListBox,
-    Modal,
-    Select,
-    TextArea,
-    TimeField,
-    type TimeValue,
-} from "@heroui/react";
+import { Button, Calendar, DateField, DatePicker, Input, Label, Modal, TextArea, TimeField, type TimeValue } from "@heroui/react";
 import {
     fromDate,
     getLocalTimeZone,
@@ -20,7 +7,7 @@ import {
     type DateValue,
     type ZonedDateTime,
 } from "@internationalized/date";
-import { ChevronDown, Filter, Search, User } from "lucide-react";
+import { Search, User } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
 import { useCreateReminder, useUpdateReminder } from "@/features/reminders/hooks/use-reminders";
@@ -30,6 +17,7 @@ import { contactsQueryKeys } from "@/features/contacts/hooks/use-contacts";
 import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import type { Reminder, ReminderContact } from "@/features/reminders/interfaces/reminder.interface";
 import { emptyToNullOnEdit } from "@/lib/profile";
+import { SearchSelect } from "@/components/ui/search-select";
 
 interface ReminderFormModalProps {
     contactUuid?: string;
@@ -182,35 +170,18 @@ export function ReminderFormModal({
                                 ) : (
                                     <div className="flex flex-col gap-2">
                                         {/* Filter selector */}
-                                        <Select
+                                        <SearchSelect
                                             aria-label="Select a filter"
                                             placeholder="Select a filter list…"
+                                            searchPlaceholder="Search filters…"
+                                            options={filters.map((f) => ({ id: f.uuid, label: f.name }))}
                                             value={selectedFilterUuid}
                                             onChange={(v) => {
-                                                setSelectedFilterUuid((v as string) ?? "");
+                                                setSelectedFilterUuid(v);
                                                 setContactSearch("");
                                             }}
-                                        >
-                                            <Select.Trigger className="w-full">
-                                                <span className="flex items-center gap-2 text-sm">
-                                                    <Filter className="size-3.5 text-muted shrink-0" />
-                                                    <Select.Value />
-                                                </span>
-                                                <Select.Indicator>
-                                                    <ChevronDown className="size-3.5" />
-                                                </Select.Indicator>
-                                            </Select.Trigger>
-                                            <Select.Popover>
-                                                <ListBox>
-                                                    {filters.map((f) => (
-                                                        <ListBox.Item key={f.uuid} id={f.uuid} textValue={f.name}>
-                                                            {f.name}
-                                                            <ListBox.ItemIndicator />
-                                                        </ListBox.Item>
-                                                    ))}
-                                                </ListBox>
-                                            </Select.Popover>
-                                        </Select>
+                                            fullWidth
+                                        />
 
                                         {/* Contacts from selected filter */}
                                         {selectedFilterUuid && (

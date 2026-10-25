@@ -50,6 +50,8 @@ const InviteAcceptPage = lazy(() => import("@/pages/auth/pages/invite"));
 const OAuthAuthorizePage = lazy(() => import("@/pages/oauth/authorize"));
 const UnsubscribePage = lazy(() => import("@/pages/unsubscribe"));
 const UnsubscribeLayout = lazy(() => import("@/pages/unsubscribe/layout"));
+const DownloadPage = lazy(() => import("@/pages/download"));
+const DownloadLayout = lazy(() => import("@/pages/download/layout"));
 
 const DashboardFiltersLayout = lazy(() => import("@/pages/dashboard/pages/filters/layout"));
 const FiltersPage = lazy(() => import("@/pages/dashboard/pages/filters"));
@@ -526,6 +528,24 @@ export default function AppRoutes() {
           element={
             <Lazy>
               <UnsubscribePage />
+            </Lazy>
+          }
+        />
+      </Route>
+
+      <Route
+        path={Routes.download}
+        element={
+          <Lazy>
+            <DownloadLayout />
+          </Lazy>
+        }
+      >
+        <Route
+          index
+          element={
+            <Lazy>
+              <DownloadPage />
             </Lazy>
           }
         />

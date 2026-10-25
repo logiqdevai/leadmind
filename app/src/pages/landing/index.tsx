@@ -10,6 +10,7 @@ import {
 	Layers,
 	Moon,
 	Search,
+	Smartphone,
 	Sparkles,
 	Sun,
 	TrendingUp,
@@ -303,6 +304,10 @@ function HeroSection({ isLoggedIn }: { isLoggedIn: boolean }) {
 					<a href="#how-it-works" className="lf-btn-ghost">
 						See how it works
 					</a>
+					<Link to={Routes.download} className="lf-btn-ghost">
+						<Smartphone className="w-4 h-4" />
+						Get the app
+					</Link>
 				</div>
 			</div>
 
@@ -670,6 +675,7 @@ function LandingFooter() {
 				{ label: 'How it works', href: '#how-it-works' },
 				{ label: 'Features', href: '#features' },
 				{ label: 'Integrations', href: '#integrations' },
+				{ label: 'Get the app', to: Routes.download },
 			],
 		},
 		{

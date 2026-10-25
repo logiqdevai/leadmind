@@ -1,12 +1,12 @@
 import { useMemo, useState } from "react";
 import type { Key } from "@react-types/shared";
-import { Label, ListBox, Select } from "@heroui/react";
+import { Label } from "@heroui/react";
 import { FileText } from "lucide-react";
 import { Channel } from "@/features/contacts/interfaces/contact.interface";
 import { useMessageTemplates } from "@/features/message-templates/hooks/use-message-templates";
 import type { MessageTemplate } from "@/features/message-templates/interfaces/message-template.interface";
 import { filterTemplatesForChannels } from "@/features/message-templates/utils/message-template-composer.utils";
-import { cn } from "@/lib/utils";
+import { SearchSelect } from "@/components/ui/search-select";
 
 interface MessageTemplateSelectProps {
     allowedChannels: Channel[];
@@ -47,38 +47,16 @@ export function MessageTemplateSelect({
                 <FileText className="size-3.5 text-muted" />
                 Use template
             </Label>
-            <Select
+            <SearchSelect
                 aria-label="Message template"
                 placeholder={placeholder}
-                value={selectedUuid ?? undefined}
+                searchPlaceholder="Search templates…"
+                options={options.map((template) => ({ id: template.uuid, label: template.name }))}
+                value={selectedUuid}
                 onChange={handleChange}
                 isDisabled={disabled || isLoading || options.length === 0}
                 fullWidth
-            >
-                <Select.Trigger
-                    className={cn(
-                        "rounded-md border border-border bg-surface-primary",
-                        "focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/40",
-                    )}
-                >
-                    <Select.Value />
-                    <Select.Indicator />
-                </Select.Trigger>
-                <Select.Popover>
-                    <ListBox>
-                        {options.map((template) => (
-                            <ListBox.Item
-                                key={template.uuid}
-                                id={template.uuid}
-                                textValue={template.name}
-                            >
-                                {template.name}
-                                <ListBox.ItemIndicator />
-                            </ListBox.Item>
-                        ))}
-                    </ListBox>
-                </Select.Popover>
-            </Select>
+            />
         </div>
     );
 }

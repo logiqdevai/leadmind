@@ -12,17 +12,27 @@ import { cn } from "@/lib/utils";
 export interface SenderProfileSelectProps {
     value: string | null;
     onChange: (uuid: string) => void;
+    /** When set, the profile is optional: no default is auto-picked and a "none" entry clears it. */
+    onClear?: () => void;
+    clearLabel?: string;
+    description?: string;
     disabled?: boolean;
 }
+
+const NONE_KEY = "__none__";
 
 export function SenderProfileSelect({
     value,
     onChange,
+    onClear,
+    clearLabel = "None",
+    description = "Fills in your signature, company, and contact details in the message.",
     disabled = false,
 }: SenderProfileSelectProps) {
     const { data: profiles, isLoading } = useSenderProfiles();
 
     useEffect(() => {
+        if (onClear) return;
         if (isLoading || !profiles?.length) return;
         if (value && profiles.some((profile) => profile.uuid === value)) {
             return;
@@ -31,7 +41,7 @@ export function SenderProfileSelect({
         if (defaultUuid) {
             onChange(defaultUuid);
         }
-    }, [isLoading, onChange, profiles, value]);
+    }, [isLoading, onChange, onClear, profiles, value]);
 
     if (isLoading) {
         return <p className="text-sm text-muted">Loading sender profiles…</p>;
@@ -57,9 +67,11 @@ export function SenderProfileSelect({
             <Label className="text-sm text-foreground">Sender profile</Label>
             <Select
                 aria-label="Sender profile"
-                selectedKey={value}
+                selectedKey={value ?? (onClear ? NONE_KEY : null)}
                 onSelectionChange={(key) => {
-                    if (typeof key === "string" && key) {
+                    if (key === NONE_KEY) {
+                        onClear?.();
+                    } else if (typeof key === "string" && key) {
                         onChange(key);
                     }
                 }}
@@ -77,6 +89,12 @@ export function SenderProfileSelect({
                 </Select.Trigger>
                 <Select.Popover>
                     <ListBox>
+                        {onClear ? (
+                            <ListBox.Item id={NONE_KEY} textValue={clearLabel}>
+                                {clearLabel}
+                                <ListBox.ItemIndicator />
+                            </ListBox.Item>
+                        ) : null}
                         {profiles.map((profile) => {
                             const label = formatSenderProfileLabel(profile);
                             const textValue = profile.is_default ? `${label} (Default)` : label;
@@ -100,9 +118,7 @@ export function SenderProfileSelect({
                     </ListBox>
                 </Select.Popover>
             </Select>
-            <p className="text-xs text-muted">
-                Fills in your signature, company, and contact details in the message.
-            </p>
+            <p className="text-xs text-muted">{description}</p>
         </div>
     );
 }

@@ -1,5 +1,6 @@
 export const Routes = {
     root: "/",
+    download: "/download",
     unsubscribe: "/unsubscribe/:token",
     auth: {
         sign_in: "/auth/sign-in",

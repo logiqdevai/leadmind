@@ -56,6 +56,7 @@ export interface OutreachSequence {
     description: string | null;
     status: SequenceStatus;
     stop_on_reply: boolean;
+    sender_profile_uuid: string | null;
     steps: SequenceStep[];
     tags?: OrgTagSummary[];
     created_at: string;
@@ -79,6 +80,10 @@ export interface SequenceEnrollment {
     };
 }
 
+export interface ContactSequenceEnrollment extends SequenceEnrollment {
+    sequence: { uuid: string; name: string };
+}
+
 export interface PaginatedSequenceEnrollments {
     data: SequenceEnrollment[];
     total: number;
@@ -92,6 +97,7 @@ export type CreateSequencePayload = {
     description?: string;
     stop_on_reply?: boolean;
     tag_uuids?: string[];
+    sender_profile_uuid?: string | null;
 };
 
 export type UpdateSequencePayload = Partial<CreateSequencePayload>;

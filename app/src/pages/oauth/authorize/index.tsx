@@ -1,6 +1,6 @@
 import { type FC, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Button, Card, Chip, Label, ListBox, Select } from "@heroui/react";
+import { Button, Card, Chip, Label } from "@heroui/react";
 import { Check, ShieldCheck } from "lucide-react";
 import { useAuthStore } from "@/stores/auth";
 import { useOrganisations } from "@/features/organisations/hooks/use-organisations";
@@ -11,6 +11,7 @@ import {
     useOAuthInteraction,
     useSubmitOAuthLogin,
 } from "@/features/oauth-interaction/hooks/use-oauth-interaction";
+import { SearchSelect } from "@/components/ui/search-select";
 
 function ErrorCard({ message }: { message: string }) {
     return (
@@ -143,26 +144,14 @@ const OAuthAuthorizePage: FC = () => {
 
                 <div className="flex flex-col gap-1.5">
                     <Label>Workspace</Label>
-                    <Select
+                    <SearchSelect
                         aria-label="Workspace"
-                        value={selectedOrgUuid ?? undefined}
-                        onChange={(value) => setSelectedOrgUuidOverride(value ? String(value) : null)}
-                    >
-                        <Select.Trigger className="w-full">
-                            <Select.Value />
-                            <Select.Indicator />
-                        </Select.Trigger>
-                        <Select.Popover>
-                            <ListBox>
-                                {organisations.map((org) => (
-                                    <ListBox.Item key={org.uuid} id={org.uuid} textValue={org.name}>
-                                        {org.name}
-                                        <ListBox.ItemIndicator />
-                                    </ListBox.Item>
-                                ))}
-                            </ListBox>
-                        </Select.Popover>
-                    </Select>
+                        searchPlaceholder="Search workspaces…"
+                        options={organisations.map((org) => ({ id: org.uuid, label: org.name }))}
+                        value={selectedOrgUuid}
+                        onChange={(value) => setSelectedOrgUuidOverride(value || null)}
+                        fullWidth
+                    />
                 </div>
 
                 <Button

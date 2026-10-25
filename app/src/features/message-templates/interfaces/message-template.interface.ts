@@ -10,6 +10,7 @@ export interface MessageTemplate {
     sms_content: string | null;
     source_campaign_uuid: string | null;
     source_message_uuid: string | null;
+    sender_profile_uuid: string | null;
     created_at: string;
     updated_at: string;
 }
@@ -20,6 +21,7 @@ export type CreateMessageTemplatePayload = {
     email_subject?: string;
     email_content?: string;
     sms_content?: string;
+    sender_profile_uuid?: string | null;
 };
 
 export type UpdateMessageTemplatePayload = Partial<CreateMessageTemplatePayload>;

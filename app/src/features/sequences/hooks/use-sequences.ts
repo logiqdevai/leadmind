@@ -10,6 +10,7 @@ import {
     deleteSequenceStep,
     enrollContactInSequence,
     getSequence,
+    listContactActiveEnrollments,
     listSequenceEnrollments,
     listSequences,
     reorderSequenceSteps,
@@ -33,6 +34,7 @@ export const sequencesQueryKeys = {
     detail: (uuid: string) => ["sequences", "detail", uuid] as const,
     enrollments: (uuid: string, query: { page?: number; limit?: number } = {}) =>
         ["sequences", "enrollments", uuid, query] as const,
+    contactActive: (contactUuid: string) => ["sequences", "contact-active", contactUuid] as const,
 };
 
 const ALL_SEQUENCES_PAGE_SIZE = 200;
@@ -81,6 +83,14 @@ export function useSequenceEnrollments(
         queryFn: () => listSequenceEnrollments(uuid as string, query),
         enabled: !!uuid,
         placeholderData: (prev) => prev,
+    });
+}
+
+export function useContactActiveEnrollments(contactUuid: string | null | undefined) {
+    return useQuery({
+        queryKey: contactUuid ? sequencesQueryKeys.contactActive(contactUuid) : ["sequences", "contact-active", "none"],
+        queryFn: () => listContactActiveEnrollments(contactUuid as string),
+        enabled: !!contactUuid,
     });
 }
 
@@ -267,6 +277,7 @@ export function useEnrollContact() {
             enrollContactInSequence(vars.uuid, vars.contact_uuid, vars.emailProvider),
         onSuccess: (_data, vars) => {
             qc.invalidateQueries({ queryKey: sequencesQueryKeys.enrollments(vars.uuid) });
+            qc.invalidateQueries({ queryKey: sequencesQueryKeys.contactActive(vars.contact_uuid) });
             qc.invalidateQueries({ queryKey: contactsQueryKeys.detail(vars.contact_uuid) });
             toast({ title: "Contact enrolled", duration: 2000 });
         },
@@ -320,6 +331,8 @@ export function useCancelEnrollment() {
             cancelSequenceEnrollment(vars.uuid, vars.enrollmentUuid),
         onSuccess: (_data, vars) => {
             qc.invalidateQueries({ queryKey: sequencesQueryKeys.enrollments(vars.uuid) });
+            qc.invalidateQueries({ queryKey: [...sequencesQueryKeys.all, "contact-active"] });
+            qc.invalidateQueries({ queryKey: contactsQueryKeys.all });
             toast({ title: "Enrollment cancelled", duration: 2000 });
         },
         onError: (error: Error) => {

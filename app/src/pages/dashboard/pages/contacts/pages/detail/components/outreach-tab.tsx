@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Button, Chip } from "@heroui/react";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
-import { MessageCircleReply, Pencil, Plus, RefreshCcw, Send, Trash, Workflow } from "lucide-react";
+import { Ban, MessageCircleReply, Pencil, Plus, RefreshCcw, Send, Trash, Workflow } from "lucide-react";
 import { Channel, ThreadOrigin, type Contact, type ConversationThread } from "@/features/contacts/interfaces/contact.interface";
 import { MsgStatus, type OutreachMessage } from "@/features/contacts/interfaces/contact.interface";
 import { useDeleteOutreachMessage, useSendOutreachMessage } from "@/features/outreach/hooks/use-outreach";
@@ -14,6 +14,8 @@ import { OriginIcon } from "@/features/messaging/components/thread-origin";
 import { EnrollInSequenceModal } from "@/features/sequences/components/enroll-in-sequence-modal";
 import { ResendSequenceDialog } from "@/features/outreach/components/resend-sequence-dialog";
 import { SequenceEnrollmentStatus } from "@/features/sequences/interfaces/sequence.interface";
+import { useCancelEnrollment, useContactActiveEnrollments } from "@/features/sequences/hooks/use-sequences";
+import type { ContactSequenceEnrollment } from "@/features/sequences/interfaces/sequence.interface";
 import { useIntegrations } from "@/features/integrations/hooks/use-integrations";
 import { resolveDefaultEmailTarget } from "@/features/integrations/utils/email-provider-utils";
 import { useEmailProviderSendLimitStatus } from "@/features/email-send-limits/hooks/use-email-provider-send-limit-status";
@@ -59,6 +61,9 @@ export function OutreachTab({ contact, listUuid, highlightUuid, onHighlightConsu
   const sendMessage = useSendOutreachMessage();
   const deleteMessage = useDeleteOutreachMessage();
   const { data: threads = [] } = useContactThreads(contact.uuid);
+  const { data: activeEnrollments = [] } = useContactActiveEnrollments(contact.uuid);
+  const cancelEnrollment = useCancelEnrollment();
+  const [enrollmentPendingCancel, setEnrollmentPendingCancel] = useState<ContactSequenceEnrollment | null>(null);
   const { data: integrations = [] } = useIntegrations();
   const defaultEmailTarget = useMemo(
     () => resolveDefaultEmailTarget(integrations),
@@ -104,9 +109,10 @@ export function OutreachTab({ contact, listUuid, highlightUuid, onHighlightConsu
       enrollOpen ||
       editingMessage !== null ||
       draftPendingDelete !== null ||
-      draftPendingSend !== null;
+      draftPendingSend !== null ||
+      enrollmentPendingCancel !== null;
     onNavigationLockChange?.(locked);
-  }, [composeOpen, enrollOpen, draftPendingDelete, draftPendingSend, editingMessage, onNavigationLockChange]);
+  }, [composeOpen, enrollOpen, draftPendingDelete, draftPendingSend, editingMessage, enrollmentPendingCancel, onNavigationLockChange]);
 
   const setCardRef = (uuid: string) => (el: HTMLDivElement | null) => {
     if (el) cardRefs.current.set(uuid, el);
@@ -156,6 +162,38 @@ export function OutreachTab({ contact, listUuid, highlightUuid, onHighlightConsu
 
   return (
     <div className="flex flex-col gap-8">
+      <Section title={`Active sequences (${activeEnrollments.length})`} emptyText="This contact is not in any active sequence.">
+        <div className="flex flex-col gap-3">
+          {activeEnrollments.map((e) => (
+            <article
+              key={e.uuid}
+              className="flex flex-col gap-3 rounded-2xl border border-border/80 bg-surface/80 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5"
+            >
+              <div className="flex min-w-0 items-start gap-2.5">
+                <Workflow className="mt-0.5 size-4 shrink-0 text-muted" />
+                <div className="min-w-0 flex flex-col gap-1">
+                  <h4 className="truncate text-sm font-medium leading-snug text-foreground">{e.sequence.name}</h4>
+                  <span className="text-xs text-muted">
+                    Enrolled {new Date(e.enrolled_at).toLocaleDateString()}
+                    {e.campaign_uuid ? " · via campaign" : ""}
+                  </span>
+                </div>
+              </div>
+              <Button
+                size="sm"
+                variant="tertiary"
+                className="w-full justify-center sm:w-auto"
+                isDisabled={cancelEnrollment.isPending}
+                onPress={() => setEnrollmentPendingCancel(e)}
+              >
+                <Ban className="size-3.5 text-red-400" />
+                Cancel sequence
+              </Button>
+            </article>
+          ))}
+        </div>
+      </Section>
+
       <Section
         title={`Drafted outreach (${drafts.length})`}
         action={
@@ -409,6 +447,35 @@ export function OutreachTab({ contact, listUuid, highlightUuid, onHighlightConsu
               contact_uuid: contact.uuid,
             });
             setDraftPendingDelete(null);
+          } catch {
+            return;
+          }
+        }}
+      />
+
+      <ConfirmDialog
+        isOpen={enrollmentPendingCancel !== null}
+        onOpenChange={(open) => {
+          if (!open) setEnrollmentPendingCancel(null);
+        }}
+        title="Cancel this sequence?"
+        description={
+          enrollmentPendingCancel
+            ? `${contact.name ?? "This contact"} will stop receiving "${enrollmentPendingCancel.sequence.name}". Unsent steps are removed; messages already sent are kept.`
+            : undefined
+        }
+        confirmLabel="Cancel sequence"
+        cancelLabel="Keep running"
+        variant="danger"
+        isPending={cancelEnrollment.isPending}
+        onConfirm={async () => {
+          if (!enrollmentPendingCancel) return;
+          try {
+            await cancelEnrollment.mutateAsync({
+              uuid: enrollmentPendingCancel.sequence_uuid,
+              enrollmentUuid: enrollmentPendingCancel.uuid,
+            });
+            setEnrollmentPendingCancel(null);
           } catch {
             return;
           }

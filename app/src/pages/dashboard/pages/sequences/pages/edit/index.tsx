@@ -17,6 +17,7 @@ import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { Routes } from "@/routes/routes";
 import { SequenceStatusBadge } from "../../components/sequence-status-badge";
 import { SequenceActionsDropdown } from "../../components/sequence-actions-dropdown";
+import { SenderProfileSelect } from "@/features/messaging/components/sender-profile-select";
 import { StepList } from "../../components/step-list";
 import { StepEditorModal } from "../../components/step-editor-modal";
 
@@ -34,6 +35,7 @@ export default function EditSequencePage() {
     const [description, setDescription] = useState<string | null>(null);
     const [stopOnReply, setStopOnReply] = useState<boolean | null>(null);
     const [tagUuids, setTagUuids] = useState<string[] | null>(null);
+    const [senderProfileUuid, setSenderProfileUuid] = useState<string | null | undefined>(undefined);
     const [stepModalOpen, setStepModalOpen] = useState(false);
     const [editingStep, setEditingStep] = useState<SequenceStep | null>(null);
     const [deleteTarget, setDeleteTarget] = useState<SequenceStep | null>(null);
@@ -60,6 +62,10 @@ export default function EditSequencePage() {
     const nameDirty = name !== null && name !== sequence.name;
     const descriptionDirty = description !== null && description !== (sequence.description ?? "");
     const stopOnReplyDirty = stopOnReply !== null && stopOnReply !== sequence.stop_on_reply;
+    const currentSenderProfileUuid =
+        senderProfileUuid === undefined ? sequence.sender_profile_uuid : senderProfileUuid;
+    const senderProfileDirty =
+        senderProfileUuid !== undefined && senderProfileUuid !== sequence.sender_profile_uuid;
     const savedTagUuids = (sequence.tags ?? []).map((t) => t.uuid);
     const currentTagUuids = tagUuids ?? savedTagUuids;
     const tagsDirty =
@@ -73,7 +79,7 @@ export default function EditSequencePage() {
         : sequence.steps.filter((s) => s.enabled).length === 0;
 
     const saveBasics = async () => {
-        if (!nameDirty && !descriptionDirty && !stopOnReplyDirty && !tagsDirty) return;
+        if (!nameDirty && !descriptionDirty && !stopOnReplyDirty && !tagsDirty && !senderProfileDirty) return;
         await updateSequenceMut.mutateAsync({
             uuid: sequence.uuid,
             payload: {
@@ -81,8 +87,10 @@ export default function EditSequencePage() {
                 ...(descriptionDirty ? { description: currentDescription.trim() } : {}),
                 ...(stopOnReplyDirty ? { stop_on_reply: currentStopOnReply } : {}),
                 ...(tagsDirty ? { tag_uuids: currentTagUuids } : {}),
+                ...(senderProfileDirty ? { sender_profile_uuid: currentSenderProfileUuid } : {}),
             },
         });
+        setSenderProfileUuid(undefined);
         setTagUuids(null);
         setName(null);
         setDescription(null);
@@ -138,8 +146,15 @@ export default function EditSequencePage() {
                         </Switch.Control>
                     </Switch>
                 </div>
+                <SenderProfileSelect
+                    value={currentSenderProfileUuid}
+                    onChange={setSenderProfileUuid}
+                    onClear={() => setSenderProfileUuid(null)}
+                    clearLabel="None (use the default profile)"
+                    description="Used for messages sent by this sequence. Applying a template that has a sender profile fills this in."
+                />
                 <TagPicker value={currentTagUuids} onChange={setTagUuids} />
-                {(nameDirty || descriptionDirty || stopOnReplyDirty || tagsDirty) && (
+                {(nameDirty || descriptionDirty || stopOnReplyDirty || tagsDirty || senderProfileDirty) && (
                     <div>
                         <ActionButtonWithPending
                             size="sm"
@@ -188,6 +203,10 @@ export default function EditSequencePage() {
                     if (!open) setEditingStep(null);
                 }}
                 initial={editingStep}
+                onTemplateSenderProfile={(uuid) => {
+                    // A template's profile fills the sequence's, but never overrides one already chosen.
+                    if (!currentSenderProfileUuid) setSenderProfileUuid(uuid);
+                }}
                 isFirstStep={isEditingFirstStep}
                 isSaving={addStepMut.isPending || updateStepMut.isPending}
                 onSave={async (payload) => {

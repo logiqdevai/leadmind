@@ -224,6 +224,7 @@ export const ApiRoutes = {
         enroll: (uuid: string) => `/sequences/${uuid}/enroll`,
         enroll_bulk: (uuid: string) => `/sequences/${uuid}/enroll-bulk`,
         enrollments: (uuid: string) => `/sequences/${uuid}/enrollments`,
+        contact_enrollments: (contactUuid: string) => `/sequences/contacts/${contactUuid}/enrollments`,
         cancel_enrollment: (uuid: string, enrollmentUuid: string) =>
             `/sequences/${uuid}/enrollments/${enrollmentUuid}/cancel`,
     },

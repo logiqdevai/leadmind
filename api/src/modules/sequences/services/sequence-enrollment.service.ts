@@ -27,6 +27,7 @@ import { ThreadsService } from '@/modules/threads/threads.service';
 import { EmailCredentialsService } from '@/modules/integrations/services/email-credentials.service';
 import { EmailProviderTarget } from '@/modules/integrations/interfaces/email-credentials.interface';
 import { buildEmailProviderMetadata } from '@/modules/outreach/utils/email-provider-allocation.util';
+import { buildSenderProfileMetadata } from '@/modules/outreach/utils/sender-profile-metadata.util';
 
 const BULK_ENROLL_CHUNK_SIZE = 200;
 
@@ -510,6 +511,18 @@ export class SequenceEnrollmentService {
     return { cancelled: enrollments.length };
   }
 
+  async listActiveForContact(organisation_uuid: string, contact_uuid: string) {
+    return this.prisma.sequenceEnrollment.findMany({
+      where: {
+        contact_uuid,
+        status: SequenceEnrollmentStatus.ACTIVE,
+        sequence: { organisation_uuid },
+      },
+      include: { sequence: { select: { uuid: true, name: true } } },
+      orderBy: { enrolled_at: 'desc' },
+    });
+  }
+
   async listEnrollments(
     organisation_uuid: string,
     sequence_uuid: string,
@@ -567,6 +580,17 @@ export class SequenceEnrollmentService {
   ): Promise<number> {
     let prevAt = previousStepAt;
 
+    // Campaign-linked enrollments use the campaign's sender profile; standalone ones use
+    // the sequence's own (when set), otherwise the org default applies at send time.
+    const sequenceSenderProfileUuid = enrollment.campaign_uuid
+      ? null
+      : ((
+          await tx.sequenceEnrollment.findUnique({
+            where: { uuid: enrollment.uuid },
+            select: { sequence: { select: { sender_profile_uuid: true } } },
+          })
+        )?.sequence.sender_profile_uuid ?? null);
+
     for (let i = startIndex; i < enabledSteps.length; i++) {
       const step = enabledSteps[i];
       // Step 0 is never re-derived from its own delay/time here - firstStepAt is
@@ -616,13 +640,19 @@ export class SequenceEnrollmentService {
             sequence_step_uuid: step.uuid,
             message_id: step.channel === Channel.EMAIL ? generateMessageId() : null,
             thread_uuid,
-            ...(step.channel === Channel.EMAIL && emailProviderTarget
-              ? {
-                  metadata: buildEmailProviderMetadata(
-                    emailProviderTarget,
-                  ) as Prisma.InputJsonValue,
-                }
-              : {}),
+            ...(() => {
+              const metadata = {
+                ...(step.channel === Channel.EMAIL && emailProviderTarget
+                  ? buildEmailProviderMetadata(emailProviderTarget)
+                  : {}),
+                ...(sequenceSenderProfileUuid
+                  ? buildSenderProfileMetadata(sequenceSenderProfileUuid)
+                  : {}),
+              };
+              return Object.keys(metadata).length
+                ? { metadata: metadata as Prisma.InputJsonValue }
+                : {};
+            })(),
           },
         });
         await this.threadsService.recordMessageOnThread(thread_uuid, tx);

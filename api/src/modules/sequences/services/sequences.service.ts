@@ -75,6 +75,7 @@ export class SequencesService {
     ) {
         // Validate tags up front so a bad tag uuid doesn't leave an untagged sequence behind.
         if (dto.tag_uuids?.length) await this.orgTags.assertTagsOwned(organisation_uuid, dto.tag_uuids);
+        if (dto.sender_profile_uuid) await this.assertSenderProfileOwned(organisation_uuid, dto.sender_profile_uuid);
         const sequence = await this.prisma.outreachSequence.create({
             data: {
                 organisation_uuid,
@@ -82,12 +83,21 @@ export class SequencesService {
                 description: dto.description?.trim() || null,
                 status: SequenceStatus.ACTIVE,
                 stop_on_reply: dto.stop_on_reply ?? true,
+                sender_profile_uuid: dto.sender_profile_uuid ?? null,
             },
         });
         if (dto.tag_uuids?.length) {
             await this.orgTags.setTags(organisation_uuid, OrgTagEntityType.SEQUENCE, sequence.uuid, dto.tag_uuids);
         }
         return this.withTags(organisation_uuid, sequence);
+    }
+
+    private async assertSenderProfileOwned(organisation_uuid: string, sender_profile_uuid: string) {
+        const profile = await this.prisma.senderProfile.findFirst({
+            where: { uuid: sender_profile_uuid, organisation_uuid },
+            select: { uuid: true },
+        });
+        if (!profile) throw new NotFoundException('Sender profile not found');
     }
 
     private async withTags<T extends { uuid: string }>(organisation_uuid: string, sequence: T) {
@@ -149,6 +159,7 @@ export class SequencesService {
         dto: UpdateSequenceDto,
     ) {
         await this.requireOwned(organisation_uuid, uuid);
+        if (dto.sender_profile_uuid) await this.assertSenderProfileOwned(organisation_uuid, dto.sender_profile_uuid);
         if (dto.tag_uuids !== undefined) {
             await this.orgTags.setTags(organisation_uuid, OrgTagEntityType.SEQUENCE, uuid, dto.tag_uuids);
         }
@@ -161,6 +172,9 @@ export class SequencesService {
                 }),
                 ...(dto.stop_on_reply !== undefined && {
                     stop_on_reply: dto.stop_on_reply,
+                }),
+                ...(dto.sender_profile_uuid !== undefined && {
+                    sender_profile_uuid: dto.sender_profile_uuid,
                 }),
             },
         });

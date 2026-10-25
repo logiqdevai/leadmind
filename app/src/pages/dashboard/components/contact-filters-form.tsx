@@ -11,7 +11,7 @@ import type { LeadStatus } from "@/features/contacts/interfaces/contact.interfac
 import { STATUS_OPTIONS } from "@/features/contacts/constants/contacts.constants";
 import { useFilters } from "@/features/filters/hooks/use-filters";
 import { useContactTags } from "@/features/contacts/hooks/use-contacts";
-import { useContactLists } from "@/features/contact-lists/hooks/use-contact-lists";
+import { useAllContactLists } from "@/features/contact-lists/hooks/use-contact-lists";
 import { AppDatePicker } from "@/components/ui/date-picker";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { ScoreRulesFilter } from "@/pages/dashboard/components/score-rules-filter";
@@ -19,6 +19,7 @@ import { SOURCE_OPTIONS } from "@/features/filters/constants/source-options";
 import type { SourceType } from "@/features/leads/interfaces/lead.interface";
 import { hasActiveContactFilters, toFullContactFiltersPatch } from "@/lib/contact-filter-params";
 import { cn } from "@/lib/utils";
+import { SearchSelect } from "@/components/ui/search-select";
 
 interface ContactFiltersFormProps {
     value: ContactFilters;
@@ -68,11 +69,10 @@ export function ContactFiltersForm({
     const sections = { ...DEFAULT_SECTIONS, ...sectionsProp };
     const { data: filters, isLoading: filtersLoading } = useFilters();
     const { data: availableTags = [] } = useContactTags();
-    const { data: contactListsPage, isLoading: contactListsLoading } = useContactLists(
-        { limit: 100 },
+    const { data: contactListsData, isLoading: contactListsLoading } = useAllContactLists(
         showContactListFilter,
     );
-    const contactLists = contactListsPage?.data ?? [];
+    const contactLists = contactListsData ?? [];
     const contactListUuid = value.contact_list_uuid;
     const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen);
     const isControlled = openProp !== undefined;
@@ -133,34 +133,16 @@ export function ContactFiltersForm({
                 {showSourceFilter ? (
                 <div>
                     <Label>Source filter</Label>
-                    <Select
+                    <SearchSelect
                         aria-label="Source filter"
-                        value={value.filter_uuid ?? ""}
-                        onChange={(v) => {
-                            if (typeof v !== "string") return;
-                            onChange({ filter_uuid: v === "" ? undefined : v });
-                        }}
+                        emptyLabel="Any filter"
+                        searchPlaceholder="Search filters…"
+                        options={(filters ?? []).map((f) => ({ id: f.uuid, label: f.name }))}
+                        value={value.filter_uuid}
+                        onChange={(v) => onChange({ filter_uuid: v === "" ? undefined : v })}
                         isDisabled={disabled || filtersLoading}
-                    >
-                        <Select.Trigger>
-                            <Select.Value />
-                            <Select.Indicator />
-                        </Select.Trigger>
-                        <Select.Popover className="max-h-72">
-                            <ListBox>
-                                <ListBox.Item id="" textValue="Any filter">
-                                    Any filter
-                                    <ListBox.ItemIndicator />
-                                </ListBox.Item>
-                                {(filters ?? []).map((f) => (
-                                    <ListBox.Item key={f.uuid} id={f.uuid} textValue={f.name}>
-                                        {f.name}
-                                        <ListBox.ItemIndicator />
-                                    </ListBox.Item>
-                                ))}
-                            </ListBox>
-                        </Select.Popover>
-                    </Select>
+                        fullWidth
+                    />
                     <p className="text-xs text-muted mt-1">
                         Restrict to contacts linked to a specific filter (primary source or also found by).
                     </p>
@@ -170,40 +152,16 @@ export function ContactFiltersForm({
                 {showContactListFilter ? (
                     <div>
                         <Label>Contact list</Label>
-                        <Select
+                        <SearchSelect
                             aria-label="Contact list"
-                            value={contactListUuid ?? ""}
-                            onChange={(v) => {
-                                if (typeof v !== "string") return;
-                                onChange({
-                                    contact_list_uuid: v === "" ? undefined : v,
-                                });
-                            }}
+                            emptyLabel="Any list"
+                            searchPlaceholder="Search lists…"
+                            options={contactLists.map((list) => ({ id: list.uuid, label: list.title }))}
+                            value={contactListUuid}
+                            onChange={(v) => onChange({ contact_list_uuid: v === "" ? undefined : v })}
                             isDisabled={disabled || contactListsLoading}
-                        >
-                            <Select.Trigger>
-                                <Select.Value />
-                                <Select.Indicator />
-                            </Select.Trigger>
-                            <Select.Popover>
-                                <ListBox>
-                                    <ListBox.Item id="" textValue="Any list">
-                                        Any list
-                                        <ListBox.ItemIndicator />
-                                    </ListBox.Item>
-                                    {contactLists.map((list) => (
-                                        <ListBox.Item
-                                            key={list.uuid}
-                                            id={list.uuid}
-                                            textValue={list.title}
-                                        >
-                                            {list.title}
-                                            <ListBox.ItemIndicator />
-                                        </ListBox.Item>
-                                    ))}
-                                </ListBox>
-                            </Select.Popover>
-                        </Select>
+                            fullWidth
+                        />
                         <p className="text-xs text-muted mt-1">
                             Only include contacts that belong to the selected list.
                         </p>

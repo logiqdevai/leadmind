@@ -281,6 +281,7 @@ export function CampaignWizard({ campaign }: CampaignWizardProps) {
                             onChange={setMessage}
                             aiPrompt={aiPrompt}
                             onAiPromptChange={setAiPrompt}
+                            onTemplateSenderProfile={setSenderProfileUuid}
                         />
                     )
                 )}

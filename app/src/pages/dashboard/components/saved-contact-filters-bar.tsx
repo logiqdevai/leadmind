@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Label, ListBox, Select } from "@heroui/react";
+import { Button, Label } from "@heroui/react";
 import { Pencil, Save, Trash2 } from "lucide-react";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import {
@@ -18,6 +18,7 @@ import {
     SaveContactFilterModal,
     type SaveContactFilterModalMode,
 } from "@/pages/dashboard/pages/contacts/components/save-contact-filter-modal";
+import { SearchSelect } from "@/components/ui/search-select";
 
 function serialize(filters: ContactFilters): string {
     return JSON.stringify(serializeContactFiltersToSearchParams(filters));
@@ -103,34 +104,16 @@ export function SavedContactFiltersBar({
         <div className="flex flex-wrap items-center gap-3 rounded-xl border border-border bg-surface p-3">
             <div className="min-w-56">
                 <Label className="sr-only">Saved filters</Label>
-                <Select
+                <SearchSelect
                     aria-label="Saved filters"
-                    value={appliedUuid ?? ""}
-                    onChange={(v) => {
-                        if (typeof v !== "string") return;
-                        handleSelect(v);
-                    }}
+                    emptyLabel="No saved filter"
+                    searchPlaceholder="Search saved filters…"
+                    options={filters.map((f) => ({ id: f.uuid, label: f.name }))}
+                    value={appliedUuid}
+                    onChange={handleSelect}
                     isDisabled={disabled || isLoading}
-                >
-                    <Select.Trigger>
-                        <Select.Value />
-                        <Select.Indicator />
-                    </Select.Trigger>
-                    <Select.Popover className="max-h-72">
-                        <ListBox>
-                            <ListBox.Item id="" textValue="No saved filter">
-                                No saved filter
-                                <ListBox.ItemIndicator />
-                            </ListBox.Item>
-                            {filters.map((f) => (
-                                <ListBox.Item key={f.uuid} id={f.uuid} textValue={f.name}>
-                                    {f.name}
-                                    <ListBox.ItemIndicator />
-                                </ListBox.Item>
-                            ))}
-                        </ListBox>
-                    </Select.Popover>
-                </Select>
+                    fullWidth
+                />
                 {isError ? (
                     <p className="text-xs text-danger mt-1">Couldn't load saved filters.</p>
                 ) : null}

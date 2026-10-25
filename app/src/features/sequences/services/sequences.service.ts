@@ -3,6 +3,7 @@ import { ApiRoutes } from "@/config/api/routes";
 import { toTagParams } from "@/features/org-tags/lib/tag-query";
 import type {
     CreateSequencePayload,
+    ContactSequenceEnrollment,
     CreateSequenceStepPayload,
     ListSequencesQuery,
     OutreachSequence,
@@ -186,6 +187,19 @@ export const listSequenceEnrollments = async (
         return response.data;
     } catch {
         throw new Error("Failed to load enrollments. Please try again.");
+    }
+};
+
+export const listContactActiveEnrollments = async (
+    contactUuid: string,
+): Promise<ContactSequenceEnrollment[]> => {
+    try {
+        const response = await axiosInstance.get<ContactSequenceEnrollment[]>(
+            ApiRoutes.sequences.contact_enrollments(contactUuid),
+        );
+        return response.data;
+    } catch {
+        throw new Error("Failed to load active sequences. Please try again.");
     }
 };
 

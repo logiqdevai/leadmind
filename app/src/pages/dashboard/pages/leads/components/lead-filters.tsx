@@ -11,6 +11,7 @@ import { STATUS_OPTIONS } from "@/features/contacts/constants/contacts.constants
 import type { ContactProfileField } from "@/features/contacts/constants/contact-profile-fields.constants";
 import { ProfileFieldFilter } from "@/pages/dashboard/components/profile-field-filter";
 import { ScoreRulesFilter } from "@/pages/dashboard/components/score-rules-filter";
+import { SearchSelect } from "@/components/ui/search-select";
 
 interface LeadFiltersProps {
     search: string;
@@ -130,32 +131,16 @@ export function LeadFilters({
             </div>
 
             <div>
-                <Select
-                    className="w-full"
-                    placeholder="All filters"
-                    value={filterUuid ?? null}
-                    onChange={(v) => onFilterUuidChange((v as string) || undefined)}
-                >
-                    <Label>Source filter</Label>
-                    <Select.Trigger>
-                        <Select.Value />
-                        <Select.Indicator />
-                    </Select.Trigger>
-                    <Select.Popover className="max-h-72">
-                        <ListBox>
-                            <ListBox.Item id="" textValue="All filters">
-                                All filters
-                                <ListBox.ItemIndicator />
-                            </ListBox.Item>
-                            {filters.map((f) => (
-                                <ListBox.Item key={f.uuid} id={f.uuid} textValue={f.name}>
-                                    {f.name}
-                                    <ListBox.ItemIndicator />
-                                </ListBox.Item>
-                            ))}
-                        </ListBox>
-                    </Select.Popover>
-                </Select>
+                <Label className="mb-1 block">Source filter</Label>
+                <SearchSelect
+                    aria-label="Source filter"
+                    emptyLabel="All filters"
+                    searchPlaceholder="Search filters…"
+                    options={filters.map((f) => ({ id: f.uuid, label: f.name }))}
+                    value={filterUuid}
+                    onChange={(v) => onFilterUuidChange(v || undefined)}
+                    fullWidth
+                />
             </div>
 
             <div className="lg:col-span-6">

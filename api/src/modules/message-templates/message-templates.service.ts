@@ -43,8 +43,19 @@ export class MessageTemplatesService {
         private readonly templateAiService: TemplateAiService,
     ) {}
 
+    private async assertSenderProfileInOrg(organisation_uuid: string, sender_profile_uuid: string) {
+        const profile = await this.prisma.senderProfile.findFirst({
+            where: { uuid: sender_profile_uuid, organisation_uuid },
+            select: { uuid: true },
+        });
+        if (!profile) throw new NotFoundException(`Sender profile ${sender_profile_uuid} not found`);
+    }
+
     async create(organisation_uuid: string, dto: CreateMessageTemplateDto) {
         const { emailSubject, emailContent, smsContent } = normalizeTemplateData(dto);
+        if (dto.sender_profile_uuid) {
+            await this.assertSenderProfileInOrg(organisation_uuid, dto.sender_profile_uuid);
+        }
         return this.prisma.messageTemplate.create({
             data: {
                 organisation_uuid,
@@ -53,6 +64,7 @@ export class MessageTemplatesService {
                 email_subject: emailSubject,
                 email_content: emailContent,
                 sms_content: smsContent,
+                sender_profile_uuid: dto.sender_profile_uuid ?? null,
             },
         });
     }
@@ -82,6 +94,9 @@ export class MessageTemplatesService {
             sms_content: dto.sms_content ?? existing.sms_content ?? undefined,
         };
         const { emailSubject, emailContent, smsContent } = normalizeTemplateData(merged);
+        if (dto.sender_profile_uuid) {
+            await this.assertSenderProfileInOrg(organisation_uuid, dto.sender_profile_uuid);
+        }
 
         return this.prisma.messageTemplate.update({
             where: { uuid },
@@ -91,6 +106,7 @@ export class MessageTemplatesService {
                 ...(dto.email_subject !== undefined && { email_subject: emailSubject }),
                 ...(dto.email_content !== undefined && { email_content: emailContent }),
                 ...(dto.sms_content !== undefined && { sms_content: smsContent }),
+                ...(dto.sender_profile_uuid !== undefined && { sender_profile_uuid: dto.sender_profile_uuid }),
             },
         });
     }
@@ -187,6 +203,7 @@ export class MessageTemplatesService {
                 email_content: emailContent,
                 sms_content: smsContent,
                 source_campaign_uuid: campaign.uuid,
+                sender_profile_uuid: campaign.sender_profile_uuid,
             },
         });
     }

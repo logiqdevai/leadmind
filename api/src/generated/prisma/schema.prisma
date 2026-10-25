@@ -657,23 +657,27 @@ model MessageThread {
 }
 
 model OutreachSequence {
-  id                Int            @id @default(autoincrement())
-  uuid              String         @unique @default(uuid())
-  organisation_uuid String
-  name              String
-  description       String?
-  status            SequenceStatus @default(DRAFT)
-  stop_on_reply     Boolean        @default(true)
-  created_at        DateTime       @default(now())
-  updated_at        DateTime       @updatedAt
+  id                  Int            @id @default(autoincrement())
+  uuid                String         @unique @default(uuid())
+  organisation_uuid   String
+  name                String
+  description         String?
+  status              SequenceStatus @default(DRAFT)
+  stop_on_reply       Boolean        @default(true)
+  // Sender profile used for messages of standalone (non-campaign) enrollments.
+  sender_profile_uuid String?
+  created_at          DateTime       @default(now())
+  updated_at          DateTime       @updatedAt
 
-  organisation Organisation           @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
-  steps        OutreachSequenceStep[]
-  enrollments  SequenceEnrollment[]
-  campaigns    MarketingCampaign[]
+  organisation   Organisation           @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  sender_profile SenderProfile?         @relation(fields: [sender_profile_uuid], references: [uuid], onDelete: SetNull)
+  steps          OutreachSequenceStep[]
+  enrollments    SequenceEnrollment[]
+  campaigns      MarketingCampaign[]
 
   @@index([organisation_uuid])
   @@index([organisation_uuid, status])
+  @@index([sender_profile_uuid])
 }
 
 model OutreachSequenceStep {
@@ -864,6 +868,8 @@ model SenderProfile {
 
   organisation        Organisation        @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
   marketing_campaigns MarketingCampaign[]
+  message_templates   MessageTemplate[]
+  sequences           OutreachSequence[]
 
   @@index([organisation_uuid])
   @@map("sender_profiles")
@@ -880,13 +886,17 @@ model MessageTemplate {
   sms_content          String?   @db.Text
   source_campaign_uuid String?
   source_message_uuid  String?
+  // Pre-selected when the template is applied; the user can still pick another one.
+  sender_profile_uuid  String?
   created_at           DateTime  @default(now())
   updated_at           DateTime  @updatedAt
 
   organisation   Organisation           @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  sender_profile SenderProfile?         @relation(fields: [sender_profile_uuid], references: [uuid], onDelete: SetNull)
   sequence_steps OutreachSequenceStep[]
 
   @@index([organisation_uuid])
+  @@index([sender_profile_uuid])
   @@map("message_templates")
 }
 

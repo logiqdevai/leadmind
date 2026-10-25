@@ -147,6 +147,7 @@ export function ComposeMessageForm({
 
     const handleTemplateSelect = (template: MessageTemplate) => {
         setValue((prev) => mergeTemplateIntoComposer(prev, template));
+        if (template.sender_profile_uuid) setSenderProfileUuid(template.sender_profile_uuid);
         const nextChannel = preferredChannelAfterTemplateApply(template);
         if (nextChannel && (BULK_CHANNELS as readonly Channel[]).includes(nextChannel)) {
             setActiveChannel(nextChannel);

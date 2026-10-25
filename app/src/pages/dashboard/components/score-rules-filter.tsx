@@ -1,7 +1,8 @@
-import { Button, Label, ListBox, Select, Slider } from "@heroui/react";
+import { Button, Label, Slider } from "@heroui/react";
 import { Plus, Trash2 } from "lucide-react";
 import type { ContactScoreRule } from "@/features/contacts/interfaces/contact.interface";
 import { useScoringInstructions } from "@/features/scoring-instructions/hooks/use-scoring-instructions";
+import { SearchSelect } from "@/components/ui/search-select";
 
 interface ScoreRulesFilterProps {
     value: ContactScoreRule[];
@@ -54,33 +55,18 @@ export function ScoreRulesFilter({ value, onChange, disabled }: ScoreRulesFilter
                             className="flex flex-wrap items-end gap-3 rounded-lg border border-border bg-surface-secondary/30 p-3"
                         >
                             <div className="min-w-[200px] flex-1">
-                                <Select
-                                    className="w-full"
-                                    aria-label="Scoring instruction"
-                                    value={rule.scoring_instruction_uuid}
-                                    onChange={(v) =>
-                                        updateRow(index, {
-                                            scoring_instruction_uuid: typeof v === "string" ? v : rule.scoring_instruction_uuid,
-                                        })
-                                    }
-                                    isDisabled={disabled || isLoading}
-                                >
+                                <div className="flex w-full flex-col gap-1.5">
                                     <Label className="text-xs">Instruction</Label>
-                                    <Select.Trigger>
-                                        <Select.Value />
-                                        <Select.Indicator />
-                                    </Select.Trigger>
-                                    <Select.Popover>
-                                        <ListBox>
-                                            {instructions.map((i) => (
-                                                <ListBox.Item key={i.uuid} id={i.uuid} textValue={i.name}>
-                                                    {i.name}
-                                                    <ListBox.ItemIndicator />
-                                                </ListBox.Item>
-                                            ))}
-                                        </ListBox>
-                                    </Select.Popover>
-                                </Select>
+                                    <SearchSelect
+                                        aria-label="Scoring instruction"
+                                        searchPlaceholder="Search instructions…"
+                                        options={instructions.map((i) => ({ id: i.uuid, label: i.name }))}
+                                        value={rule.scoring_instruction_uuid}
+                                        onChange={(v) => updateRow(index, { scoring_instruction_uuid: v })}
+                                        isDisabled={disabled || isLoading}
+                                        fullWidth
+                                    />
+                                </div>
                             </div>
                             <div className="w-full sm:w-48">
                                 <Slider

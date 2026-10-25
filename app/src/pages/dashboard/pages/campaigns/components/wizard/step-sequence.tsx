@@ -1,5 +1,5 @@
 import type { Key } from "@react-types/shared";
-import { Chip, Label, ListBox, Select } from "@heroui/react";
+import { Chip, Label } from "@heroui/react";
 import { Mail, MessageSquare, Workflow } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Channel } from "@/features/contacts/interfaces/contact.interface";
@@ -7,6 +7,7 @@ import { useSequences } from "@/features/sequences/hooks/use-sequences";
 import { SequenceStatus } from "@/features/sequences/interfaces/sequence.interface";
 import { formatStepDelay } from "@/features/sequences/utils/sequence-delay.utils";
 import { Routes } from "@/routes/routes";
+import { SearchSelect } from "@/components/ui/search-select";
 
 interface StepSequenceProps {
     value: string | null;
@@ -51,29 +52,16 @@ export function StepSequence({ value, onChange, campaignScheduledAt }: StepSeque
 
             <div className="flex flex-col gap-1.5">
                 <Label>Sequence</Label>
-                <Select
+                <SearchSelect
                     aria-label="Sequence"
                     placeholder={placeholder}
-                    value={value ?? undefined}
+                    searchPlaceholder="Search sequences…"
+                    options={sequences.map((sequence) => ({ id: sequence.uuid, label: sequence.name }))}
+                    value={value}
                     onChange={handleChange}
                     isDisabled={isLoading || sequences.length === 0}
                     fullWidth
-                >
-                    <Select.Trigger>
-                        <Select.Value />
-                        <Select.Indicator />
-                    </Select.Trigger>
-                    <Select.Popover>
-                        <ListBox>
-                            {sequences.map((sequence) => (
-                                <ListBox.Item key={sequence.uuid} id={sequence.uuid} textValue={sequence.name}>
-                                    {sequence.name}
-                                    <ListBox.ItemIndicator />
-                                </ListBox.Item>
-                            ))}
-                        </ListBox>
-                    </Select.Popover>
-                </Select>
+                />
             </div>
 
             {selected && (

@@ -1,12 +1,13 @@
 import { useState, type FC } from "react";
 import type { Key } from "@react-types/shared";
-import { Label, ListBox, Modal, Select } from "@heroui/react";
+import { Label, Modal } from "@heroui/react";
 import { Button } from "@heroui/react";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
 import { useSequences, useEnrollContact } from "@/features/sequences/hooks/use-sequences";
 import { SequenceStatus } from "@/features/sequences/interfaces/sequence.interface";
 import { EmailProviderSelect } from "@/features/messaging/components/email-provider-select";
 import type { EmailProviderTarget } from "@/features/integrations/interfaces/integrations.interface";
+import { SearchSelect } from "@/components/ui/search-select";
 
 interface EnrollInSequenceModalProps {
     isOpen: boolean;
@@ -53,29 +54,16 @@ export const EnrollInSequenceModal: FC<EnrollInSequenceModalProps> = ({
                     <Modal.Body className="space-y-3">
                         <div className="flex flex-col gap-1.5">
                             <Label>Sequence</Label>
-                            <Select
+                            <SearchSelect
                                 aria-label="Sequence"
                                 placeholder={placeholder}
-                                value={selectedUuid ?? undefined}
+                                searchPlaceholder="Search sequences…"
+                                options={sequences.map((sequence) => ({ id: sequence.uuid, label: sequence.name }))}
+                                value={selectedUuid}
                                 onChange={handleChange}
                                 isDisabled={isLoading || sequences.length === 0}
                                 fullWidth
-                            >
-                                <Select.Trigger>
-                                    <Select.Value />
-                                    <Select.Indicator />
-                                </Select.Trigger>
-                                <Select.Popover>
-                                    <ListBox>
-                                        {sequences.map((sequence) => (
-                                            <ListBox.Item key={sequence.uuid} id={sequence.uuid} textValue={sequence.name}>
-                                                {sequence.name}
-                                                <ListBox.ItemIndicator />
-                                            </ListBox.Item>
-                                        ))}
-                                    </ListBox>
-                                </Select.Popover>
-                            </Select>
+                            />
                         </div>
                         <EmailProviderSelect value={emailProvider} onChange={setEmailProvider} />
                         <p className="text-xs text-muted">

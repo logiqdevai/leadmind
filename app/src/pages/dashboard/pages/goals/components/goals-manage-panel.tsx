@@ -21,6 +21,7 @@ import {
     useOrganisationMembers,
 } from "@/features/organisations/hooks/use-organisations";
 import { METRIC_LABELS, PERIOD_LABELS } from "../utils/goals-copy";
+import { SearchSelect } from "@/components/ui/search-select";
 
 const PERIOD_OPTIONS = [
     { id: GoalPeriods.DAY, label: PERIOD_LABELS.DAY },
@@ -201,32 +202,16 @@ export function GoalsManagePanel() {
                 {assignTab === "individual" ? (
                     <>
                         <div className="grid gap-3 sm:grid-cols-4">
-                            <Select
+                            <SearchSelect
                                 aria-label="Team member"
                                 placeholder="Select member"
-                                value={selectedUserUuid || null}
+                                searchPlaceholder="Search members…"
+                                options={members.map((m) => ({ id: m.user_uuid, label: memberLabel(m) }))}
+                                value={selectedUserUuid}
                                 onChange={handleUserChange}
                                 isDisabled={membersLoading}
-                            >
-                                <Select.Trigger className="w-full">
-                                    <Select.Value />
-                                    <Select.Indicator />
-                                </Select.Trigger>
-                                <Select.Popover>
-                                    <ListBox>
-                                        {members.map((m) => (
-                                            <ListBox.Item
-                                                key={m.user_uuid}
-                                                id={m.user_uuid}
-                                                textValue={memberLabel(m)}
-                                            >
-                                                {memberLabel(m)}
-                                                <ListBox.ItemIndicator />
-                                            </ListBox.Item>
-                                        ))}
-                                    </ListBox>
-                                </Select.Popover>
-                            </Select>
+                                fullWidth
+                            />
                             <Select
                                 aria-label="Metric"
                                 value={metric}

@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Channel } from '@/generated/prisma';
-import { ArrayMinSize, IsArray, IsEnum, IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
+import { ArrayMinSize, IsArray, IsEnum, IsOptional, IsString, IsUUID, MaxLength, MinLength } from 'class-validator';
 
 const TEMPLATE_CHANNELS = [Channel.EMAIL, Channel.SMS] as const;
 
@@ -32,4 +32,9 @@ export class CreateMessageTemplateDto {
     @IsOptional()
     @IsString()
     sms_content?: string;
+
+    @ApiPropertyOptional({ format: 'uuid', nullable: true, description: 'Default sender profile for this template' })
+    @IsOptional()
+    @IsUUID()
+    sender_profile_uuid?: string | null;
 }

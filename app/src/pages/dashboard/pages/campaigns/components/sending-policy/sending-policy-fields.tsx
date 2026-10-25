@@ -1,7 +1,8 @@
 import { AlertTriangle } from "lucide-react";
-import { Button, Input, Label, ListBox, Select, TextField } from "@heroui/react";
+import { Button, Input, Label, TextField } from "@heroui/react";
 import type { SendingPolicyFormState } from "@/features/sending-policy/hooks/use-sending-policy-form";
 import { StageRow } from "./stage-row";
+import { SearchSelect } from "@/components/ui/search-select";
 
 interface SendingPolicyFieldsProps {
     form: SendingPolicyFormState;
@@ -56,29 +57,15 @@ export function SendingPolicyFields({ form, disabled = false }: SendingPolicyFie
                 ) : null}
                 <div className="flex flex-col gap-1.5">
                     <Label>Timezone</Label>
-                    <Select
+                    <SearchSelect
                         aria-label="Timezone"
+                        searchPlaceholder="Search timezones…"
+                        options={form.timezoneOptions.map((opt) => ({ id: opt.value, label: opt.label }))}
                         value={form.timezone}
-                        onChange={(v) => {
-                            if (typeof v === "string") form.setTimezone(v);
-                        }}
+                        onChange={form.setTimezone}
                         isDisabled={disabled}
-                    >
-                        <Select.Trigger>
-                            <Select.Value />
-                            <Select.Indicator />
-                        </Select.Trigger>
-                        <Select.Popover>
-                            <ListBox>
-                                {form.timezoneOptions.map((opt) => (
-                                    <ListBox.Item key={opt.value} id={opt.value} textValue={opt.label}>
-                                        {opt.label}
-                                        <ListBox.ItemIndicator />
-                                    </ListBox.Item>
-                                ))}
-                            </ListBox>
-                        </Select.Popover>
-                    </Select>
+                        fullWidth
+                    />
                 </div>
                 <TextField>
                     <Label>Minimum interval between sends (minutes)</Label>

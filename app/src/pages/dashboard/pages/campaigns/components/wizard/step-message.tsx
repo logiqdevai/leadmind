@@ -20,6 +20,8 @@ interface StepMessageProps {
   onChange: (value: MessageComposerValue) => void;
   aiPrompt: string;
   onAiPromptChange: (v: string) => void;
+  /** Called with a template's default sender profile when one is applied. */
+  onTemplateSenderProfile?: (uuid: string) => void;
 }
 
 export function StepMessage({
@@ -30,6 +32,7 @@ export function StepMessage({
   onChange,
   aiPrompt,
   onAiPromptChange,
+  onTemplateSenderProfile,
 }: StepMessageProps) {
   const aiGenerate = useCampaignAiGenerate();
   const defaultChannel = channels[0] ?? Channel.EMAIL;
@@ -64,6 +67,7 @@ export function StepMessage({
 
   const handleTemplateSelect = (template: MessageTemplate) => {
     onChange(mergeTemplateIntoComposer(value, template));
+    if (template.sender_profile_uuid) onTemplateSenderProfile?.(template.sender_profile_uuid);
     const nextChannel = preferredChannelAfterTemplateApply(template);
     if (nextChannel && (composerChannels as readonly Channel[]).includes(nextChannel)) {
       setActiveChannel(nextChannel);

@@ -32,4 +32,13 @@ export class CreateSequenceDto {
     @IsArray()
     @IsUUID('all', { each: true })
     tag_uuids?: string[];
+
+    @ApiPropertyOptional({
+        format: 'uuid',
+        nullable: true,
+        description: 'Sender profile for messages of standalone enrollments (campaigns use their own). Null clears it.',
+    })
+    @IsOptional()
+    @IsUUID()
+    sender_profile_uuid?: string | null;
 }
