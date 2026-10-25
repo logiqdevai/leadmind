@@ -89,7 +89,7 @@ export class OutreachRenderService {
         const vars = contact ? { ...senderVars, ...contactToPlaceholders(contact) } : senderVars;
         const rendered = this.render(message, vars);
         if (vars.signature && !/\{\{\s*signature\s*\}\}/.test(message.content)) {
-            rendered.content = `${rendered.content}<p></p>${vars.signature}`;
+            rendered.content = `${rendered.content}<p>&nbsp;</p><p>&nbsp;</p>${vars.signature}`;
         }
         return rendered;
     }
