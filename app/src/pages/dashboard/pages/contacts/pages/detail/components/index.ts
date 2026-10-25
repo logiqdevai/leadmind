@@ -1,3 +1,4 @@
+export { BookingsTab } from "./bookings-tab";
 export { ChangeStatusModal } from "./change-status-modal";
 export { ContactEnrichmentTab } from "./enrichment-tab";
 export { ContactDetailHeader } from "./contact-detail-header";

@@ -466,7 +466,7 @@ export default function ListDetailPage() {
                     ) : null}
 
                     <ScrollableTabs selectedKey={currentTab} onSelectionChange={handleTabChange}>
-                        <ScrollableTabsList>
+                        <ScrollableTabsList mobileColumns={3}>
                             {TABS.map((t) => (
                                 <Tabs.Tab
                                     key={t.id}

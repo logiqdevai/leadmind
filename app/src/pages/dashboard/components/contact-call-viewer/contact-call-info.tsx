@@ -37,6 +37,28 @@ const CopyableValue: FC<{ value: string | null | undefined; href?: string; label
     );
 };
 
+// Dialers want digits (and a leading +) only; spaces/parens/dashes can break tel: links on some devices.
+const toTelHref = (phone: string) => `tel:${phone.trim().replace(/(?!^\+)[^\d]/g, "")}`;
+
+const PhoneValue: FC<{ value: string | null | undefined }> = ({ value }) => {
+    const text = value?.trim();
+    if (!text) return <ProfileValue value={value} />;
+    return (
+        <div className="flex items-center gap-2 min-w-0">
+            {/* No target="_blank": it would open a blank tab instead of the dialer on mobile. */}
+            <a
+                href={toTelHref(text)}
+                className="inline-flex items-center gap-1.5 rounded-lg bg-accent/10 px-2.5 py-1.5 text-sm font-semibold text-accent hover:bg-accent/15 active:bg-accent/20 transition-colors break-all"
+                aria-label={`Call ${text}`}
+            >
+                <Phone className="size-3.5 shrink-0" aria-hidden />
+                {text}
+            </a>
+            <CopyButton value={text} label="phone" />
+        </div>
+    );
+};
+
 const extraValues = (contact: Contact, type: ContactInfoType, primary: string | null | undefined) => {
     const seen = new Set([primary?.trim().toLowerCase()]);
     return (contact.contact_infos ?? [])
@@ -64,13 +86,9 @@ export const ContactCallInfo: FC<ContactCallInfoProps> = ({ contact }) => {
             <section className="rounded-2xl border border-border/80 bg-surface/80 p-4 flex flex-col gap-3.5">
                 <InfoRow icon={Phone} label="Phone">
                     <div className="flex flex-col gap-1">
-                        <CopyableValue
-                            value={contact.phone}
-                            href={contact.phone?.trim() ? `tel:${contact.phone.trim()}` : undefined}
-                            label="phone"
-                        />
+                        <PhoneValue value={contact.phone} />
                         {extraPhones.map((phone) => (
-                            <CopyableValue key={phone} value={phone} href={`tel:${phone}`} label="phone" />
+                            <PhoneValue key={phone} value={phone} />
                         ))}
                     </div>
                 </InfoRow>

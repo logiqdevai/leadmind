@@ -9,6 +9,7 @@ export const IntegrationProviders = {
     HUBSPOT: "HUBSPOT",
     MAILTESTER: "MAILTESTER",
     MXTOOLBOX: "MXTOOLBOX",
+    TYPESAFE: "TYPESAFE",
 } as const;
 
 export type IntegrationProvider =

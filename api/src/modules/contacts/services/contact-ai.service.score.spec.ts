@@ -39,6 +39,7 @@ describe('ContactAiService.scoreContact (Jev)', () => {
             {} as never,
             {} as never,
             jevClient as never,
+            { getTypesafeApiKey: jest.fn().mockResolvedValue('ts-key') } as never,
         );
         return { service, prisma, jevClient, aiUsageService };
     }

@@ -7,6 +7,7 @@ import {
     deleteIntegrationKey,
     listIntegrations,
     removeAccountDomain,
+    removeIntegrationAccount,
     setDefaultAccountDomain,
     setDefaultIntegrationAccount,
     updateAccountDomain,
@@ -89,6 +90,26 @@ export function useDeleteIntegrationKey() {
         onError: (error: Error) => {
             toast({
                 title: "Could not delete key",
+                description: error.message,
+                variant: "error",
+                duration: 4000,
+            });
+        },
+    });
+}
+
+export function useRemoveIntegrationAccount() {
+    const qc = useQueryClient();
+    return useMutation({
+        mutationFn: (vars: { provider: IntegrationProvider; account: string }) =>
+            removeIntegrationAccount(vars.provider, vars.account),
+        onSuccess: () => {
+            qc.invalidateQueries({ queryKey: integrationsQueryKeys.all });
+            toast({ title: "Account deleted", duration: 1500 });
+        },
+        onError: (error: Error) => {
+            toast({
+                title: "Could not delete account",
                 description: error.message,
                 variant: "error",
                 duration: 4000,

@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { Contact, SenderProfile } from '@/generated/prisma';
+import { Channel, Contact, SenderProfile } from '@/generated/prisma';
+import { BookingLinksService } from '@/modules/booking-links/booking-links.service';
+import { parseBookingPageMetadata } from '@/modules/booking-links/utils/booking-page-metadata.util';
 import { contactToPlaceholders } from '@/modules/contacts/utils/contact-placeholders.util';
 import {
     renderPlaceholders,
@@ -21,7 +23,10 @@ export interface RenderedMessage {
 
 @Injectable()
 export class OutreachRenderService {
-    constructor(private readonly senderProfilesService: SenderProfilesService) { }
+    constructor(
+        private readonly senderProfilesService: SenderProfilesService,
+        private readonly bookingLinksService: BookingLinksService,
+    ) { }
 
     async buildVarsForUser(organisation_uuid: string): Promise<PlaceholderVars> {
         const profile = await this.senderProfilesService.findDefault(organisation_uuid);
@@ -59,9 +64,15 @@ export class OutreachRenderService {
         organisation_uuid: string,
         campaign_uuid: string,
         contact: Contact,
+        content = '',
     ): Promise<PlaceholderVars> {
         const senderVars = await this.buildVarsForOutreachMessage(organisation_uuid, campaign_uuid);
-        return { ...senderVars, ...contactToPlaceholders(contact) };
+        const vars: PlaceholderVars = { ...senderVars, ...contactToPlaceholders(contact) };
+        const booking = await this.bookingLinksService.resolveForOutgoingEmail(organisation_uuid, contact.uuid, content, {
+            allow_cta: false,
+        });
+        if (booking.booking_link) vars.booking_link = booking.booking_link;
+        return vars;
     }
 
     render(message: RenderableMessage, vars: PlaceholderVars): RenderedMessage {
@@ -78,7 +89,12 @@ export class OutreachRenderService {
 
     async renderForOutreachMessage(
         organisation_uuid: string,
-        message: RenderableMessage & { campaign_uuid?: string | null; metadata?: unknown },
+        message: RenderableMessage & {
+            campaign_uuid?: string | null;
+            metadata?: unknown;
+            sequence_step_uuid?: string | null;
+            channel?: Channel;
+        },
         contact?: Contact | null,
     ): Promise<RenderedMessage> {
         const senderVars = await this.buildVarsForOutreachMessage(
@@ -87,6 +103,21 @@ export class OutreachRenderService {
             message.metadata,
         );
         const vars = contact ? { ...senderVars, ...contactToPlaceholders(contact) } : senderVars;
+        if (contact) {
+            // Each recipient gets their own contact-specific link (reused across emails, never shared).
+            const booking = await this.bookingLinksService.resolveForOutgoingEmail(
+                organisation_uuid,
+                contact.uuid,
+                message.content,
+                {
+                    sequence_step_uuid: message.sequence_step_uuid,
+                    booking_page_uuid: parseBookingPageMetadata(message.metadata),
+                    allow_cta: message.channel !== Channel.SMS,
+                },
+            );
+            message = { ...message, content: booking.content };
+            if (booking.booking_link) vars.booking_link = booking.booking_link;
+        }
         const rendered = this.render(message, vars);
         if (vars.signature && !/\{\{\s*signature\s*\}\}/.test(message.content)) {
             rendered.content = `${rendered.content}<p>&nbsp;</p><p>&nbsp;</p>${vars.signature}`;
@@ -100,7 +131,7 @@ export class OutreachRenderService {
         contact: Contact,
         message: RenderableMessage,
     ): Promise<RenderedMessage> {
-        const vars = await this.buildVarsForCampaignDraft(organisation_uuid, campaign_uuid, contact);
+        const vars = await this.buildVarsForCampaignDraft(organisation_uuid, campaign_uuid, contact, message.content);
         return this.render(message, vars);
     }
 }

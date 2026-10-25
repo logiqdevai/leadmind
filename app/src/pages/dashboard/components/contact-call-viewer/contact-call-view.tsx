@@ -10,7 +10,6 @@ import {
     useUpdateContactStatus,
 } from "@/features/contacts/hooks/use-contacts";
 import type { Contact, LeadStatus } from "@/features/contacts/interfaces/contact.interface";
-import { cn } from "@/lib/utils";
 import { InteractionTimeline } from "@/pages/dashboard/pages/contacts/components/interaction-timeline";
 import { LogCallModal } from "@/pages/dashboard/pages/contacts/pages/detail/components/log-call-modal";
 import { LogEmailModal } from "@/pages/dashboard/pages/contacts/pages/detail/components/log-email-modal";
@@ -184,12 +183,12 @@ export const ContactCallView: FC<ContactCallViewProps> = ({ contactUuid }) => {
                 selectedKey={activeTab}
                 onSelectionChange={(key) => setActiveTab(String(key))}
             >
-                <ScrollableTabsList fullWidth>
+                <ScrollableTabsList>
                     {CALL_TABS.map((t) => (
                         <Tabs.Tab
                             key={t.id}
                             id={t.id}
-                            className={cn(tabTriggerClassName, "flex w-auto min-w-0 flex-1 shrink justify-center")}
+                            className={tabTriggerClassName}
                         >
                             {t.label}
                         </Tabs.Tab>

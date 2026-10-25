@@ -45,6 +45,10 @@ export interface SequenceStep {
     delay_unit: SequenceDelayUnit;
     delay_reference: SequenceDelayReference;
     send_time: string | null;
+    /** Booking page `{{booking_link}}` resolves to (null = template's page, then organisation default). */
+    booking_page_uuid: string | null;
+    /** Append a booking button when the email has no `{{booking_link}}`. */
+    append_booking_cta: boolean;
     created_at: string;
     updated_at: string;
 }
@@ -115,6 +119,8 @@ export type CreateSequenceStepPayload = {
     delay_reference: SequenceDelayReference;
     send_time?: string | null;
     enabled?: boolean;
+    booking_page_uuid?: string | null;
+    append_booking_cta?: boolean;
 };
 
 export type UpdateSequenceStepPayload = Partial<CreateSequenceStepPayload>;

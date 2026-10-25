@@ -5,7 +5,6 @@ import {
   ServiceUnavailableException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import axios, { AxiosInstance } from 'axios';
 import {
   JEV_BASE_URL,
@@ -25,16 +24,17 @@ import {
  * Thin wrapper around TypeSafe's System One API (https://docs.typesafe.ai/api/system-one),
  * which serves the Jev decision model. One request carries a `state` and a map of typed
  * questions (noul / choice / score); all are judged independently against the same state.
- * The API key is a TypeSafe key: pass one per call, or fall back to TYPESAFE_API_KEY.
+ * The TypeSafe API key is supplied per call from the organisation's TYPESAFE integration;
+ * there is no server-level key.
  */
 @Injectable()
 export class JevClient {
   private readonly logger = new Logger(JevClient.name);
   private readonly http: AxiosInstance;
 
-  constructor(private readonly configService: ConfigService) {
+  constructor() {
     this.http = axios.create({
-      baseURL: this.configService.get<string>('TYPESAFE_BASE_URL') ?? JEV_BASE_URL,
+      baseURL: JEV_BASE_URL,
       timeout: JEV_REQUEST_TIMEOUT_MS,
     });
   }
@@ -42,11 +42,11 @@ export class JevClient {
   async decide<Q extends Record<string, JevQuestion>>(
     state: JevState,
     questions: Q,
-    options: { apiKey?: string; model?: string } = {},
+    options: { apiKey: string; model?: string },
   ): Promise<JevDecisionResponse<Q>> {
-    const apiKey = options.apiKey ?? this.configService.get<string>('TYPESAFE_API_KEY');
+    const { apiKey } = options;
     if (!apiKey) {
-      throw new ServiceUnavailableException('Jev is not configured.');
+      throw new BadRequestException('Jev is not configured. Add your TypeSafe API key under Integrations.');
     }
     this.validateQuestions(questions);
 
@@ -54,10 +54,7 @@ export class JevClient {
       const { data } = await this.http.post<JevDecisionResponse<Q>>(
         JEV_ENDPOINT,
         {
-          model:
-            options.model ??
-            this.configService.get<string>('JEV_MODEL') ??
-            JEV_DEFAULT_MODEL,
+          model: options.model ?? JEV_DEFAULT_MODEL,
           state,
           questions,
         },

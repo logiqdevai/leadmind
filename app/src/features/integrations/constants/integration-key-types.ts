@@ -17,6 +17,7 @@ export const PROVIDER_KEY_TYPES: Record<IntegrationProvider, IntegrationKeyType[
         HUBSPOT: ["ACCESS_TOKEN"],
         MAILTESTER: ["USERNAME"],
         MXTOOLBOX: ["API_KEY"],
+        TYPESAFE: ["API_KEY"],
     };
 
 export const DISABLED_INTEGRATION_PROVIDERS: IntegrationProvider[] = [

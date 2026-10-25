@@ -2,6 +2,7 @@ import { ExternalIntegrationProvider } from '@/generated/prisma';
 
 export const INTEGRATION_PROVIDERS: ExternalIntegrationProvider[] = [
   ExternalIntegrationProvider.OPENAI,
+  ExternalIntegrationProvider.TYPESAFE,
   ExternalIntegrationProvider.RESEND,
   ExternalIntegrationProvider.SMTP,
   ExternalIntegrationProvider.TWILIO,
@@ -49,6 +50,7 @@ export const INTEGRATION_PROVIDER_LABELS: Record<
   [ExternalIntegrationProvider.HUBSPOT]: 'HubSpot',
   [ExternalIntegrationProvider.MAILTESTER]: 'Mail-Tester',
   [ExternalIntegrationProvider.MXTOOLBOX]: 'MxToolbox',
+  [ExternalIntegrationProvider.TYPESAFE]: 'TypeSafe (Jev)',
 };
 
 export const INTEGRATION_PROVIDER_DESCRIPTIONS: Record<
@@ -72,4 +74,6 @@ export const INTEGRATION_PROVIDER_DESCRIPTIONS: Record<
     'Email deliverability testing. Add your Mail-Tester username, then send a test email from one of your configured Resend or SMTP accounts to check spam score, authentication, and blacklist status.',
   [ExternalIntegrationProvider.MXTOOLBOX]:
     'Domain health monitoring. Add your MxToolbox API key, then run DNS, email authentication (SPF/DKIM/DMARC/BIMI/MTA-STS), and blacklist checks against any domain - no email needs to be sent.',
+  [ExternalIntegrationProvider.TYPESAFE]:
+    'Jev decision model by TypeSafe, used for contact scoring. Add your TypeSafe API key.',
 };

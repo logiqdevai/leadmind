@@ -52,6 +52,14 @@ const UnsubscribePage = lazy(() => import("@/pages/unsubscribe"));
 const UnsubscribeLayout = lazy(() => import("@/pages/unsubscribe/layout"));
 const DownloadPage = lazy(() => import("@/pages/download"));
 const DownloadLayout = lazy(() => import("@/pages/download/layout"));
+const CalendarPage = lazy(() => import("@/pages/dashboard/pages/calendar"));
+const BookingPagesPage = lazy(() => import("@/pages/dashboard/pages/booking-pages"));
+const BookingPageDetailPage = lazy(() => import("@/pages/dashboard/pages/booking-pages/pages/detail"));
+const AvailabilityPage = lazy(() => import("@/pages/dashboard/pages/availability"));
+const CalendarIntegrationsPage = lazy(() => import("@/pages/dashboard/pages/calendar-integrations"));
+const PublicBookingLayout = lazy(() => import("@/pages/booking/layout"));
+const PublicBookingPage = lazy(() => import("@/pages/booking"));
+const ManageBookingPage = lazy(() => import("@/pages/booking/pages/manage"));
 
 const DashboardFiltersLayout = lazy(() => import("@/pages/dashboard/pages/filters/layout"));
 const FiltersPage = lazy(() => import("@/pages/dashboard/pages/filters"));
@@ -240,6 +248,46 @@ export default function AppRoutes() {
           element={
             <Lazy>
               <RemindersPage />
+            </Lazy>
+          }
+        />
+        <Route
+          path="calendar"
+          element={
+            <Lazy>
+              <CalendarPage />
+            </Lazy>
+          }
+        />
+        <Route
+          path="booking-pages"
+          element={
+            <Lazy>
+              <BookingPagesPage />
+            </Lazy>
+          }
+        />
+        <Route
+          path="booking-pages/:uuid"
+          element={
+            <Lazy>
+              <BookingPageDetailPage />
+            </Lazy>
+          }
+        />
+        <Route
+          path="availability"
+          element={
+            <Lazy>
+              <AvailabilityPage />
+            </Lazy>
+          }
+        />
+        <Route
+          path="calendar-integrations"
+          element={
+            <Lazy>
+              <CalendarIntegrationsPage />
             </Lazy>
           }
         />
@@ -528,6 +576,32 @@ export default function AppRoutes() {
           element={
             <Lazy>
               <UnsubscribePage />
+            </Lazy>
+          }
+        />
+      </Route>
+
+      {/* Public booking pages (no account needed). manage is more specific than page, so order doesn't matter. */}
+      <Route
+        element={
+          <Lazy>
+            <PublicBookingLayout />
+          </Lazy>
+        }
+      >
+        <Route
+          path={Routes.booking.manage}
+          element={
+            <Lazy>
+              <ManageBookingPage />
+            </Lazy>
+          }
+        />
+        <Route
+          path={Routes.booking.page}
+          element={
+            <Lazy>
+              <PublicBookingPage />
             </Lazy>
           }
         />

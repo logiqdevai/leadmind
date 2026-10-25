@@ -35,3 +35,9 @@ export const SENDING_ENGINE_TICK_INTERVAL_MS = 30_000;
 export const WEBSITE_SCRAPE_TIMEOUT_QUEUE = 'website-scrape-timeout';
 
 export const REPLY_ANALYSIS_QUEUE = 'reply-analysis';
+
+/** Booking emails: immediate sends (with retries) and delayed reminders. */
+export const BOOKING_NOTIFICATION_QUEUE = 'booking-notification';
+
+/** Google Calendar create/update/delete for bookings, retried with backoff. */
+export const BOOKING_CALENDAR_SYNC_QUEUE = 'booking-calendar-sync';

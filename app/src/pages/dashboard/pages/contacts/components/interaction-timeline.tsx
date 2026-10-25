@@ -16,6 +16,8 @@ import {
     XCircle,
     Globe,
     CalendarClock,
+    CalendarCheck,
+    CalendarX,
 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import {
@@ -54,6 +56,8 @@ const ICONS: Record<InteractionType, React.ComponentType<{ className?: string }>
     [InteractionType.EMAIL_FAILED]: XCircle,
     [InteractionType.SMS_FAILED]: XCircle,
     [InteractionType.UNSUBSCRIBED]: UserMinus,
+    [InteractionType.BOOKING_SCHEDULED]: CalendarCheck,
+    [InteractionType.BOOKING_CANCELLED]: CalendarX,
 };
 
 const ICON_TONE: Record<InteractionType, string> = {
@@ -76,6 +80,8 @@ const ICON_TONE: Record<InteractionType, string> = {
     [InteractionType.EMAIL_FAILED]: "text-danger bg-danger/10 border-danger/30",
     [InteractionType.SMS_FAILED]: "text-danger bg-danger/10 border-danger/30",
     [InteractionType.UNSUBSCRIBED]: "text-warning bg-warning-soft/40 border-warning/30",
+    [InteractionType.BOOKING_SCHEDULED]: "text-emerald-600 bg-emerald-500/15 border-emerald-500/30",
+    [InteractionType.BOOKING_CANCELLED]: "text-danger bg-danger/10 border-danger/30",
 };
 
 const BADGE_COLOR: Record<InteractionType, "default" | "success" | "warning" | "danger"> = {
@@ -98,6 +104,8 @@ const BADGE_COLOR: Record<InteractionType, "default" | "success" | "warning" | "
     [InteractionType.EMAIL_FAILED]: "danger",
     [InteractionType.SMS_FAILED]: "danger",
     [InteractionType.UNSUBSCRIBED]: "warning",
+    [InteractionType.BOOKING_SCHEDULED]: "success",
+    [InteractionType.BOOKING_CANCELLED]: "danger",
 };
 
 const BADGE_LABEL: Record<InteractionType, string> = {
@@ -120,6 +128,8 @@ const BADGE_LABEL: Record<InteractionType, string> = {
     [InteractionType.EMAIL_FAILED]: "Email failed",
     [InteractionType.SMS_FAILED]: "SMS failed",
     [InteractionType.UNSUBSCRIBED]: "Unsubscribed",
+    [InteractionType.BOOKING_SCHEDULED]: "Booking scheduled",
+    [InteractionType.BOOKING_CANCELLED]: "Booking cancelled",
 };
 
 const CALL_OUTCOME_LABEL: Record<CallOutcome, string> = {

@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Channel } from '@/generated/prisma';
-import { ArrayMinSize, IsArray, IsEnum, IsOptional, IsString, IsUUID, MaxLength, MinLength } from 'class-validator';
+import { ArrayMinSize, IsArray, IsBoolean, IsEnum, IsOptional, IsString, IsUUID, MaxLength, MinLength } from 'class-validator';
 
 const TEMPLATE_CHANNELS = [Channel.EMAIL, Channel.SMS] as const;
 
@@ -37,4 +37,18 @@ export class CreateMessageTemplateDto {
     @IsOptional()
     @IsUUID()
     sender_profile_uuid?: string | null;
+
+    @ApiPropertyOptional({
+        format: 'uuid',
+        nullable: true,
+        description: 'Booking page {{booking_link}} resolves to (a per-recipient link); default page when empty',
+    })
+    @IsOptional()
+    @IsUUID()
+    booking_page_uuid?: string | null;
+
+    @ApiPropertyOptional({ description: 'Append a booking button when the email has no {{booking_link}}' })
+    @IsOptional()
+    @IsBoolean()
+    append_booking_cta?: boolean;
 }

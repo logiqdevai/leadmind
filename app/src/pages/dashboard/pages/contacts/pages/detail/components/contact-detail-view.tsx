@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/contact-delete-scope-dialog";
 import { EnrichmentRunModal } from "@/components/ui/enrichment-action-popover";
 import { CONTACT_DETAIL_TABS } from "../constants/detail-tabs";
-import { ContactDetailHeader, ContactEnrichmentTab, CrmTab, FormsTab, OverviewTab, OutreachTab, RemindersTab } from "./index";
+import { BookingsTab, ContactDetailHeader, ContactEnrichmentTab, CrmTab, FormsTab, OverviewTab, OutreachTab, RemindersTab } from "./index";
 
 interface ContactDetailViewProps {
     contactUuid: string;
@@ -206,6 +206,8 @@ export const ContactDetailView: FC<ContactDetailViewProps> = ({
                     />
                 ) : activeTab === "reminders" ? (
                     <RemindersTab contactUuid={contact.uuid} />
+                ) : activeTab === "bookings" ? (
+                    <BookingsTab contact={contact} />
                 ) : activeTab === "forms" ? (
                     <FormsTab contactUuid={contact.uuid} contactName={contact.name} />
                 ) : (

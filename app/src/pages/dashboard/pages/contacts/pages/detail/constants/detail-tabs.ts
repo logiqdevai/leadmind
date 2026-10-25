@@ -4,5 +4,6 @@ export const CONTACT_DETAIL_TABS = [
   { id: "outreach", label: "Outreach" },
   { id: "crm", label: "CRM" },
   { id: "reminders", label: "Reminders" },
+  { id: "bookings", label: "Bookings" },
   { id: "forms", label: "Forms" },
 ] as const;

@@ -2,6 +2,11 @@ export const Routes = {
     root: "/",
     download: "/download",
     unsubscribe: "/unsubscribe/:token",
+    booking: {
+        page: "/book/:code",
+        manage: "/book/manage/:token",
+        manage_action_query: "action",
+    },
     auth: {
         sign_in: "/auth/sign-in",
         sign_up: "/auth/sign-up",
@@ -49,6 +54,12 @@ export const Routes = {
         sequences_new: "/dashboard/sequences/new",
         sequences_edit: "/dashboard/sequences/:uuid/edit",
         reminders: "/dashboard/reminders",
+        calendar: "/dashboard/calendar",
+        booking_pages: "/dashboard/booking-pages",
+        booking_pages_detail: "/dashboard/booking-pages/:uuid",
+        booking_pages_detail_tab_query: "tab",
+        availability: "/dashboard/availability",
+        calendar_integrations: "/dashboard/calendar-integrations",
         jobs: "/dashboard/jobs",
         batch_jobs: "/dashboard/batch-jobs",
         goals: "/dashboard/goals",
@@ -67,6 +78,16 @@ export const FilterDetailTabIds = {
     CONTACTS: "contacts",
     JOBS: "jobs",
     ANALYTICS: "analytics",
+} as const;
+
+export const BookingPageTabIds = {
+    GENERAL: "general",
+    SCHEDULING: "scheduling",
+    TEAM: "team",
+    NOTIFICATIONS: "notifications",
+    BRANDING: "branding",
+    LINKS: "links",
+    PREVIEW: "preview",
 } as const;
 
 export const ListDetailTabIds = {

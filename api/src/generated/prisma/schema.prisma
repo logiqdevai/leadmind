@@ -37,6 +37,16 @@ model User {
   sidebar_favorites         SidebarFavorite[]
   api_keys_created          ApiKey[]                 @relation("ApiKeyCreatedBy")
   oauth_connections_granted OAuthConnection[]        @relation("OAuthConnectionGrantedBy")
+  availability_schedules    AvailabilitySchedule[]
+  booking_blocks            BookingBlock[]           @relation("BookingBlockMember")
+  booking_blocks_created    BookingBlock[]           @relation("BookingBlockCreatedBy")
+  booking_pages_created     BookingPage[]            @relation("BookingPageCreatedBy")
+  booking_page_memberships  BookingPageMember[]
+  booking_links_created     BookingLink[]            @relation("BookingLinkCreatedBy")
+  bookings_assigned         Booking[]                @relation("BookingAssignee")
+  bookings_created          Booking[]                @relation("BookingCreatedBy")
+  booking_events            BookingEvent[]           @relation("BookingEventActor")
+  calendar_connections      CalendarConnection[]
 
   @@index([email])
   @@index([phone])
@@ -90,6 +100,13 @@ model Organisation {
   api_keys                  ApiKey[]
   oauth_connections         OAuthConnection[]
   mcp_tool_invocation_logs  McpToolInvocationLog[]
+  availability_schedules    AvailabilitySchedule[]
+  booking_blocks            BookingBlock[]
+  booking_pages             BookingPage[]
+  booking_links             BookingLink[]
+  bookings                  Booking[]
+  booking_events            BookingEvent[]
+  calendar_connections      CalendarConnection[]
 
   @@index([uuid])
   @@index([slug])
@@ -379,6 +396,8 @@ model Contact {
   list_memberships     ContactListMember[]
   enrichments          ContactEnrichment[]
   sequence_enrollments SequenceEnrollment[]
+  bookings             Booking[]
+  booking_links        BookingLink[]
 
   @@unique([organisation_uuid, lead_uuid])
   @@index([organisation_uuid])
@@ -698,16 +717,22 @@ model OutreachSequenceStep {
   delay_unit            SequenceDelayUnit      @default(HOURS)
   delay_reference       SequenceDelayReference @default(PREVIOUS_STEP)
   send_time             String?                @db.VarChar(5)
+  // Booking page whose contact-specific link `{{booking_link}}` resolves to for this step's recipients.
+  booking_page_uuid     String?
+  // Append a booking call-to-action block when the content has no `{{booking_link}}` of its own.
+  append_booking_cta    Boolean                @default(false)
   created_at            DateTime               @default(now())
   updated_at            DateTime               @updatedAt
 
   sequence          OutreachSequence  @relation(fields: [sequence_uuid], references: [uuid], onDelete: Cascade)
   message_template  MessageTemplate?  @relation(fields: [message_template_uuid], references: [uuid], onDelete: SetNull)
+  booking_page      BookingPage?      @relation(fields: [booking_page_uuid], references: [uuid], onDelete: SetNull)
   outreach_messages OutreachMessage[]
 
   @@index([sequence_uuid])
   @@index([sequence_uuid, order_index])
   @@index([message_template_uuid])
+  @@index([booking_page_uuid])
   @@map("outreach_sequence_steps")
 }
 
@@ -891,15 +916,26 @@ model MessageTemplate {
   source_message_uuid  String?
   // Pre-selected when the template is applied; the user can still pick another one.
   sender_profile_uuid  String?
+  // Booking page whose contact-specific link `{{booking_link}}` resolves to when this template is sent.
+  booking_page_uuid    String?
+  // Append a booking call-to-action block when the content has no `{{booking_link}}` of its own.
+  append_booking_cta   Boolean   @default(false)
   created_at           DateTime  @default(now())
   updated_at           DateTime  @updatedAt
 
   organisation   Organisation           @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
   sender_profile SenderProfile?         @relation(fields: [sender_profile_uuid], references: [uuid], onDelete: SetNull)
+  booking_page   BookingPage?           @relation("MessageTemplateBookingPage", fields: [booking_page_uuid], references: [uuid], onDelete: SetNull)
   sequence_steps OutreachSequenceStep[]
+
+  booking_pages_confirmation BookingPage[] @relation("BookingPageConfirmationTemplate")
+  booking_pages_reminder     BookingPage[] @relation("BookingPageReminderTemplate")
+  booking_pages_cancellation BookingPage[] @relation("BookingPageCancellationTemplate")
+  booking_pages_reschedule   BookingPage[] @relation("BookingPageRescheduleTemplate")
 
   @@index([organisation_uuid])
   @@index([sender_profile_uuid])
+  @@index([booking_page_uuid])
   @@map("message_templates")
 }
 
@@ -1152,6 +1188,8 @@ enum InteractionType {
   EMAIL_FAILED
   SMS_FAILED
   UNSUBSCRIBED
+  BOOKING_SCHEDULED
+  BOOKING_CANCELLED
 }
 
 enum CampaignType {
@@ -1258,6 +1296,7 @@ enum ExternalIntegrationProvider {
   SCRAPIO
   MAILTESTER
   MXTOOLBOX
+  TYPESAFE
 }
 
 enum IntegrationKeyType {
@@ -2088,4 +2127,445 @@ model OrgTagAssignment {
   @@index([organisation_uuid, entity_type, entity_uuid])
   @@index([entity_type, entity_uuid])
   @@map("org_tag_assignments")
+}
+
+// ─── Appointment booking ────────────────────────────────────────────────────
+// All instants are stored in UTC. Wall-clock rules (weekly hours, date overrides) are
+// interpreted in the schedule's own IANA timezone, so DST shifts are handled at slot time.
+
+enum BookingStatus {
+  /// Booked by an invitee on a page that requires internal confirmation.
+  PENDING
+  CONFIRMED
+  CANCELLED
+  /// Still active - the time was moved at least once (see reschedule_count).
+  RESCHEDULED
+  COMPLETED
+  NO_SHOW
+}
+
+enum BookingSource {
+  PUBLIC
+  MANUAL
+}
+
+enum BookingLocationType {
+  NONE
+  GOOGLE_MEET
+  PHONE
+  IN_PERSON
+  CUSTOM
+}
+
+enum BookingAssignmentMode {
+  /// Rotate between eligible members, least recently assigned first.
+  ROUND_ROBIN
+  /// The available member with the fewest bookings that day (ties: page priority).
+  LEAST_BUSY
+}
+
+enum BookingUnavailableSlotsMode {
+  /// Booked / blocked times are simply not offered.
+  HIDE
+  /// Times inside working hours stay visible but disabled when they can't be booked.
+  SHOW_DISABLED
+}
+
+enum BookingActorType {
+  USER
+  INVITEE
+  SYSTEM
+}
+
+enum BookingEventType {
+  CREATED
+  CONFIRMED
+  ASSIGNED
+  RESCHEDULED
+  CANCELLED
+  STATUS_CHANGED
+  UPDATED
+  NOTE_UPDATED
+  NOTIFICATION_SENT
+  NOTIFICATION_FAILED
+  CALENDAR_SYNCED
+  CALENDAR_SYNC_FAILED
+}
+
+enum BookingNotificationKind {
+  CONFIRMATION
+  REMINDER
+  CANCELLATION
+  RESCHEDULE
+}
+
+enum BookingNotificationStatus {
+  SENT
+  FAILED
+  SKIPPED
+}
+
+enum CalendarSyncStatus {
+  NOT_SYNCED
+  PENDING
+  SYNCED
+  FAILED
+}
+
+enum CalendarProvider {
+  GOOGLE
+}
+
+enum CalendarConnectionStatus {
+  INITIATED
+  ACTIVE
+  EXPIRED
+  FAILED
+  DISCONNECTED
+}
+
+/// Weekly working hours of one team member within an organisation.
+model AvailabilitySchedule {
+  id                Int      @id @default(autoincrement())
+  uuid              String   @unique @default(uuid())
+  organisation_uuid String
+  user_uuid         String
+  timezone          String   @default("UTC")
+  /// ISO weekday ("1"=Mon .. "7"=Sun) -> [{ start: "HH:MM", end: "HH:MM" }]. Gaps between periods are breaks.
+  weekly_hours      Json
+  created_at        DateTime @default(now())
+  updated_at        DateTime @updatedAt
+
+  organisation Organisation           @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  user         User                   @relation(fields: [user_uuid], references: [uuid], onDelete: Cascade)
+  overrides    AvailabilityOverride[]
+
+  @@unique([organisation_uuid, user_uuid])
+  @@index([user_uuid])
+  @@map("availability_schedules")
+}
+
+/// Replaces the weekly hours for one calendar date (in the schedule timezone). Empty intervals = unavailable all day.
+model AvailabilityOverride {
+  id            Int      @id @default(autoincrement())
+  uuid          String   @unique @default(uuid())
+  schedule_uuid String
+  date          String   @db.VarChar(10)
+  intervals     Json
+  reason        String?
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+
+  schedule AvailabilitySchedule @relation(fields: [schedule_uuid], references: [uuid], onDelete: Cascade)
+
+  @@unique([schedule_uuid, date])
+  @@map("availability_overrides")
+}
+
+/// Unavailable period (holiday, vacation, blocked slot). user_uuid null = blocks every member of the organisation.
+model BookingBlock {
+  id                   Int      @id @default(autoincrement())
+  uuid                 String   @unique @default(uuid())
+  organisation_uuid    String
+  user_uuid            String?
+  start_at             DateTime
+  end_at               DateTime
+  reason               String?
+  created_by_user_uuid String?
+  created_at           DateTime @default(now())
+  updated_at           DateTime @updatedAt
+
+  organisation Organisation @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  user         User?        @relation("BookingBlockMember", fields: [user_uuid], references: [uuid], onDelete: Cascade)
+  created_by   User?        @relation("BookingBlockCreatedBy", fields: [created_by_user_uuid], references: [uuid], onDelete: SetNull)
+
+  @@index([organisation_uuid, start_at])
+  @@index([user_uuid, start_at])
+  @@map("booking_blocks")
+}
+
+/// A bookable appointment type (sales call, demo, onboarding...) with its own scheduling, team and notification rules.
+model BookingPage {
+  id                   Int     @id @default(autoincrement())
+  uuid                 String  @unique @default(uuid())
+  organisation_uuid    String
+  created_by_user_uuid String?
+  name                 String
+  slug                 String
+  is_active            Boolean @default(true)
+  /// Used for `{{booking_link}}` when a template/step does not pick a page.
+  is_default           Boolean @default(false)
+
+  // Public page content & branding
+  title                String?
+  description          String? @db.Text
+  intro_text           String? @db.Text
+  brand_name           String?
+  logo_url             String?
+  primary_color        String? @db.VarChar(9)
+  confirmation_message String? @db.Text
+  redirect_url         String?
+  cta_label            String?
+  show_team_member     Boolean @default(true)
+  show_timezone        Boolean @default(true)
+  /// [{ id, label, type: TEXT|TEXTAREA|SELECT|CHECKBOX, required, options? }]
+  questions            Json?
+  require_phone        Boolean @default(false)
+
+  // Scheduling rules
+  duration_minutes            Int                         @default(30)
+  /// Extra durations the invitee may choose from (duration_minutes is always offered).
+  duration_options            Int[]                       @default([])
+  /// Step between offered start times; null = duration_minutes.
+  slot_interval_minutes       Int?
+  min_notice_minutes          Int                         @default(240)
+  max_advance_days            Int                         @default(60)
+  buffer_before_minutes       Int                         @default(0)
+  buffer_after_minutes        Int                         @default(0)
+  /// Minimum free time between this booking and any other booking of the member.
+  min_gap_minutes             Int                         @default(0)
+  /// When set and the member already has bookings that day, new slots must start/end within this many minutes of one.
+  max_gap_minutes             Int?
+  max_bookings_per_day        Int?
+  /// Invitees that can share the same slot with the same member (group sessions).
+  seats_per_slot              Int                         @default(1)
+  assignment_mode             BookingAssignmentMode       @default(ROUND_ROBIN)
+  /// Off by default: assignment is internal. Only when enabled may invitees pick a member.
+  allow_invitee_member_choice Boolean                     @default(false)
+  requires_confirmation       Boolean                     @default(false)
+  /// How public pages show start times that are inside working hours but not bookable.
+  unavailable_slots_mode      BookingUnavailableSlotsMode @default(HIDE)
+
+  // Location
+  location_type  BookingLocationType @default(GOOGLE_MEET)
+  location_value String?
+
+  // Cancellation & rescheduling policy
+  allow_cancellation            Boolean @default(true)
+  allow_reschedule              Boolean @default(true)
+  cancellation_deadline_minutes Int     @default(0)
+  reschedule_deadline_minutes   Int     @default(0)
+  require_cancellation_reason   Boolean @default(false)
+
+  // Notifications
+  send_confirmation_email    Boolean  @default(true)
+  send_reminder_emails       Boolean  @default(true)
+  reminder_offsets_minutes   Int[]    @default([1440, 60])
+  send_cancellation_email    Boolean  @default(true)
+  send_reschedule_email      Boolean  @default(true)
+  notify_assignee            Boolean  @default(true)
+  additional_recipients      String[] @default([])
+  include_meeting_link       Boolean  @default(true)
+  include_calendar_details   Boolean  @default(true)
+  confirmation_template_uuid String?
+  reminder_template_uuid     String?
+  cancellation_template_uuid String?
+  reschedule_template_uuid   String?
+
+  // Google Calendar event content (supports booking variables)
+  calendar_event_title       String?
+  calendar_event_description String? @db.Text
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  organisation          Organisation           @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  created_by            User?                  @relation("BookingPageCreatedBy", fields: [created_by_user_uuid], references: [uuid], onDelete: SetNull)
+  confirmation_template MessageTemplate?       @relation("BookingPageConfirmationTemplate", fields: [confirmation_template_uuid], references: [uuid], onDelete: SetNull)
+  reminder_template     MessageTemplate?       @relation("BookingPageReminderTemplate", fields: [reminder_template_uuid], references: [uuid], onDelete: SetNull)
+  cancellation_template MessageTemplate?       @relation("BookingPageCancellationTemplate", fields: [cancellation_template_uuid], references: [uuid], onDelete: SetNull)
+  reschedule_template   MessageTemplate?       @relation("BookingPageRescheduleTemplate", fields: [reschedule_template_uuid], references: [uuid], onDelete: SetNull)
+  members               BookingPageMember[]
+  links                 BookingLink[]
+  bookings              Booking[]
+  message_templates     MessageTemplate[]      @relation("MessageTemplateBookingPage")
+  sequence_steps        OutreachSequenceStep[]
+
+  @@unique([organisation_uuid, slug])
+  @@index([organisation_uuid])
+  @@map("booking_pages")
+}
+
+/// Team member eligible to be assigned bookings of a page.
+model BookingPageMember {
+  id                Int       @id @default(autoincrement())
+  booking_page_uuid String
+  user_uuid         String
+  priority          Int       @default(0)
+  last_assigned_at  DateTime?
+  created_at        DateTime  @default(now())
+
+  booking_page BookingPage @relation(fields: [booking_page_uuid], references: [uuid], onDelete: Cascade)
+  user         User        @relation(fields: [user_uuid], references: [uuid], onDelete: Cascade)
+
+  @@unique([booking_page_uuid, user_uuid])
+  @@index([user_uuid])
+  @@map("booking_page_members")
+}
+
+/// Public entry point to a booking page, addressed by a short random code. contact_uuid set = contact-specific link.
+model BookingLink {
+  id                   Int       @id @default(autoincrement())
+  uuid                 String    @unique @default(uuid())
+  code                 String    @unique @db.VarChar(16)
+  organisation_uuid    String
+  booking_page_uuid    String
+  contact_uuid         String?
+  label                String?
+  /// Generic links only: create (or match) a Contact from the invitee's details.
+  auto_create_contact  Boolean   @default(false)
+  is_active            Boolean   @default(true)
+  created_by_user_uuid String?
+  deactivated_at       DateTime?
+  last_used_at         DateTime?
+  created_at           DateTime  @default(now())
+  updated_at           DateTime  @updatedAt
+
+  organisation Organisation @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  booking_page BookingPage  @relation(fields: [booking_page_uuid], references: [uuid], onDelete: Cascade)
+  contact      Contact?     @relation(fields: [contact_uuid], references: [uuid], onDelete: Cascade)
+  created_by   User?        @relation("BookingLinkCreatedBy", fields: [created_by_user_uuid], references: [uuid], onDelete: SetNull)
+  bookings     Booking[]
+
+  @@index([organisation_uuid])
+  @@index([booking_page_uuid, contact_uuid, is_active])
+  @@index([contact_uuid])
+  @@map("booking_links")
+}
+
+model Booking {
+  id                   Int           @id @default(autoincrement())
+  uuid                 String        @unique @default(uuid())
+  organisation_uuid    String
+  booking_page_uuid    String?
+  booking_link_uuid    String?
+  contact_uuid         String?
+  assigned_user_uuid   String?
+  created_by_user_uuid String?
+  source               BookingSource
+  status               BookingStatus @default(CONFIRMED)
+
+  start_at         DateTime
+  end_at           DateTime
+  duration_minutes Int
+  invitee_timezone String?
+
+  // Invitee details as submitted (kept even when a Contact is linked, so history survives contact edits).
+  invitee_name   String
+  invitee_email  String
+  invitee_phone  String?
+  invitee_notes  String? @db.Text
+  /// { [question_id]: answer }
+  answers        Json?
+  internal_notes String? @db.Text
+
+  location_type  BookingLocationType @default(NONE)
+  location_value String?
+  meeting_url    String?
+
+  calendar_connection_uuid String?
+  calendar_event_id        String?
+  calendar_html_link       String?
+  calendar_sync_status     CalendarSyncStatus @default(NOT_SYNCED)
+  calendar_sync_error      String?
+  calendar_synced_at       DateTime?
+
+  /// Secret for the invitee's cancel/reschedule links.
+  manage_token        String            @unique
+  confirmed_at        DateTime?
+  cancelled_at        DateTime?
+  cancellation_reason String?           @db.Text
+  cancelled_by        BookingActorType?
+  reschedule_count    Int               @default(0)
+  completed_at        DateTime?
+  created_at          DateTime          @default(now())
+  updated_at          DateTime          @updatedAt
+
+  organisation        Organisation          @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  booking_page        BookingPage?          @relation(fields: [booking_page_uuid], references: [uuid], onDelete: SetNull)
+  booking_link        BookingLink?          @relation(fields: [booking_link_uuid], references: [uuid], onDelete: SetNull)
+  contact             Contact?              @relation(fields: [contact_uuid], references: [uuid], onDelete: SetNull)
+  assigned_user       User?                 @relation("BookingAssignee", fields: [assigned_user_uuid], references: [uuid], onDelete: SetNull)
+  created_by          User?                 @relation("BookingCreatedBy", fields: [created_by_user_uuid], references: [uuid], onDelete: SetNull)
+  calendar_connection CalendarConnection?   @relation(fields: [calendar_connection_uuid], references: [uuid], onDelete: SetNull)
+  events              BookingEvent[]
+  notifications       BookingNotification[]
+
+  @@index([organisation_uuid, start_at])
+  @@index([organisation_uuid, status])
+  @@index([assigned_user_uuid, start_at])
+  @@index([booking_page_uuid, start_at])
+  @@index([contact_uuid])
+  @@map("bookings")
+}
+
+/// Audit trail of a booking: lifecycle changes, notifications and calendar sync results.
+model BookingEvent {
+  id                Int              @id @default(autoincrement())
+  uuid              String           @unique @default(uuid())
+  organisation_uuid String
+  booking_uuid      String
+  type              BookingEventType
+  actor_type        BookingActorType
+  actor_user_uuid   String?
+  summary           String?
+  metadata          Json?
+  created_at        DateTime         @default(now())
+
+  organisation Organisation @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  booking      Booking      @relation(fields: [booking_uuid], references: [uuid], onDelete: Cascade)
+  actor        User?        @relation("BookingEventActor", fields: [actor_user_uuid], references: [uuid], onDelete: SetNull)
+
+  @@index([booking_uuid, created_at])
+  @@index([organisation_uuid, created_at])
+  @@map("booking_events")
+}
+
+/// One row per email attempt; dedupe_key makes retries and duplicate jobs idempotent.
+model BookingNotification {
+  id              Int                       @id @default(autoincrement())
+  uuid            String                    @unique @default(uuid())
+  booking_uuid    String
+  kind            BookingNotificationKind
+  recipient_email String
+  dedupe_key      String                    @unique
+  status          BookingNotificationStatus
+  error           String?                   @db.Text
+  sent_at         DateTime?
+  created_at      DateTime                  @default(now())
+
+  booking Booking @relation(fields: [booking_uuid], references: [uuid], onDelete: Cascade)
+
+  @@index([booking_uuid])
+  @@map("booking_notifications")
+}
+
+/// A team member's Google Calendar, connected through Composio (one connected account per member per organisation).
+model CalendarConnection {
+  id                            Int                      @id @default(autoincrement())
+  uuid                          String                   @unique @default(uuid())
+  organisation_uuid             String
+  user_uuid                     String
+  provider                      CalendarProvider         @default(GOOGLE)
+  composio_connected_account_id String?                  @unique
+  /// Account created by the last connect attempt; the OAuth callback must present this id to activate it.
+  pending_connected_account_id  String?
+  status                        CalendarConnectionStatus @default(INITIATED)
+  account_email                 String?
+  calendar_id                   String                   @default("primary")
+  calendar_name                 String?
+  /// Treat busy times in the connected calendar as unavailable.
+  check_conflicts               Boolean                  @default(true)
+  last_error                    String?                  @db.Text
+  connected_at                  DateTime?
+  created_at                    DateTime                 @default(now())
+  updated_at                    DateTime                 @updatedAt
+
+  organisation Organisation @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  user         User         @relation(fields: [user_uuid], references: [uuid], onDelete: Cascade)
+  bookings     Booking[]
+
+  @@unique([organisation_uuid, user_uuid, provider])
+  @@index([user_uuid])
+  @@map("calendar_connections")
 }

@@ -22,6 +22,7 @@ import { AiDraftMessageDto } from '../dto/ai-draft-message.dto';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { AiService } from '@/integrations/ai/services/ai.service';
 import { OpenAiBatchService } from '@/integrations/ai/services/openai-batch.service';
+import { AiCredentialsService } from '@/integrations/ai/services/ai-credentials.service';
 import { AiModels, AiProviders } from '@/integrations/ai/interfaces/ai.interface';
 import { OpenAiBatchRequest } from '@/integrations/ai/interfaces/openai-batch.interface';
 import { ElasticsearchService } from '@/integrations/elasticsearch/elasticsearch.service';
@@ -71,6 +72,7 @@ export class ContactAiService {
         private readonly bulkJobsService: BulkJobsService,
         private readonly threadsService: ThreadsService,
         private readonly jevClient: JevClient,
+        private readonly aiCredentialsService: AiCredentialsService,
     ) { }
 
     async scoreContact(
@@ -129,7 +131,8 @@ export class ContactAiService {
             const started = Date.now();
             let result: Awaited<ReturnType<JevClient['decide']>>;
             try {
-                result = await this.jevClient.decide(buildContactJevState(contact, lead), questions);
+                const apiKey = await this.aiCredentialsService.getTypesafeApiKey(contact.organisation_uuid);
+                result = await this.jevClient.decide(buildContactJevState(contact, lead), questions, { apiKey });
             } catch (error) {
                 this.aiUsageService.log({
                     organisation_uuid: contact.organisation_uuid,

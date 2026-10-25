@@ -627,6 +627,59 @@ export class IntegrationsService {
     return { uuid: key_uuid };
   }
 
+  /**
+   * Removes an account and everything attached to it: all of its keys, plus
+   * the account row, whose domains and campaign assignments cascade.
+   */
+  async removeAccount(
+    organisation_uuid: string,
+    provider: ExternalIntegrationProvider,
+    account: string,
+  ): Promise<IntegrationResponse> {
+    if (!providerAllowsMultipleAccounts(provider)) {
+      throw new BadRequestException(
+        `${INTEGRATION_PROVIDER_LABELS[provider]} does not support multiple accounts`,
+      );
+    }
+
+    const trimmedAccount = account.trim();
+    const integration = await this.prisma.integration.findUnique({
+      where: { organisation_uuid_provider: { organisation_uuid, provider } },
+      include: { keys: true, accounts: true },
+    });
+    const exists =
+      integration?.keys.some((key) => key.account === trimmedAccount) ||
+      integration?.accounts.some((row) => row.account === trimmedAccount);
+    if (!integration || !exists) {
+      throw new NotFoundException(
+        `Account "${trimmedAccount}" not found for ${INTEGRATION_PROVIDER_LABELS[provider]}`,
+      );
+    }
+
+    await this.prisma.$transaction([
+      this.prisma.integrationKey.deleteMany({
+        where: { integration_uuid: integration.uuid, account: trimmedAccount },
+      }),
+      this.prisma.integrationAccount.deleteMany({
+        where: { integration_uuid: integration.uuid, account: trimmedAccount },
+      }),
+    ]);
+
+    await this.ensureDefaultAccountAfterKeyChange(integration.uuid, provider);
+
+    const refreshed = await this.prisma.integration.findUnique({
+      where: { uuid: integration.uuid },
+      include: {
+        keys: {
+          orderBy: [{ account: 'asc' }, { key_type: 'asc' }],
+        },
+        accounts: ACCOUNTS_INCLUDE,
+      },
+    });
+
+    return this.toIntegrationResponse(provider, refreshed ?? undefined);
+  }
+
   async setDefaultAccount(
     organisation_uuid: string,
     provider: ExternalIntegrationProvider,

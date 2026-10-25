@@ -27,6 +27,12 @@ export const ActivityEntityType = {
   CAMPAIGN_INTEGRATION: 'campaign_integration',
   API_KEY: 'api_key',
   ORG_TAG: 'org_tag',
+  BOOKING: 'booking',
+  BOOKING_PAGE: 'booking_page',
+  BOOKING_LINK: 'booking_link',
+  BOOKING_BLOCK: 'booking_block',
+  AVAILABILITY_SCHEDULE: 'availability_schedule',
+  CALENDAR_CONNECTION: 'calendar_connection',
 } as const;
 
 export type ActivityEntityType =
@@ -95,6 +101,7 @@ export const ActivityAction = {
   DEFAULT_DOMAIN_SET: 'default_domain_set',
   DEFAULT_ACCOUNT_SET: 'default_account_set',
   ACCOUNT_TITLE_UPDATED: 'account_title_updated',
+  ACCOUNT_DELETED: 'account_deleted',
   COMPLETED: 'completed',
   REORDERED: 'reordered',
   CREATED_FROM_CAMPAIGN: 'created_from_campaign',
@@ -105,6 +112,10 @@ export const ActivityAction = {
   REMOVED: 'removed',
   MAIL_TEST_STARTED: 'mail_test_started',
   MXTOOLBOX_CHECK_STARTED: 'mxtoolbox_check_started',
+  RESCHEDULED: 'rescheduled',
+  REGENERATED: 'regenerated',
+  CONNECTED: 'connected',
+  DISCONNECTED: 'disconnected',
 } as const;
 
 export type ActivityAction =

@@ -11,6 +11,10 @@ export interface MessageTemplate {
     source_campaign_uuid: string | null;
     source_message_uuid: string | null;
     sender_profile_uuid: string | null;
+    /** Booking page `{{booking_link}}` resolves to (null = organisation default page). */
+    booking_page_uuid: string | null;
+    /** Append a booking button when the email has no `{{booking_link}}`. */
+    append_booking_cta: boolean;
     created_at: string;
     updated_at: string;
 }
@@ -22,6 +26,8 @@ export type CreateMessageTemplatePayload = {
     email_content?: string;
     sms_content?: string;
     sender_profile_uuid?: string | null;
+    booking_page_uuid?: string | null;
+    append_booking_cta?: boolean;
 };
 
 export type UpdateMessageTemplatePayload = Partial<CreateMessageTemplatePayload>;

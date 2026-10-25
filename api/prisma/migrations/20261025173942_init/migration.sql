@@ -1,0 +1,2 @@
+-- RenameIndex
+ALTER INDEX "goal_personal_bests_organisation_uuid_user_uuid_period_metric_k" RENAME TO "goal_personal_bests_organisation_uuid_user_uuid_period_metr_key";

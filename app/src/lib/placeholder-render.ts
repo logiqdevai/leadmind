@@ -32,6 +32,11 @@ export const PLACEHOLDER_OPTIONS: readonly PlaceholderOption[] = [
         copyValue: EMAIL_FOOTER_LOGO_IMG_HTML,
     },
     { key: "booking_url", label: "Booking URL", description: "Calendar booking link" },
+    {
+        key: "booking_link",
+        label: "Booking link (per recipient)",
+        description: "Each contact's own booking page link",
+    },
     { key: "signature", label: "Signature", description: "Email signature block" },
     { key: "sender_id", label: "Sender ID", description: "SMS sender ID" },
 ] as const;

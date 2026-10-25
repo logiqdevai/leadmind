@@ -51,10 +51,21 @@ export class MessageTemplatesService {
         if (!profile) throw new NotFoundException(`Sender profile ${sender_profile_uuid} not found`);
     }
 
+    private async assertBookingPageInOrg(organisation_uuid: string, booking_page_uuid: string) {
+        const page = await this.prisma.bookingPage.findFirst({
+            where: { uuid: booking_page_uuid, organisation_uuid },
+            select: { uuid: true },
+        });
+        if (!page) throw new NotFoundException(`Booking page ${booking_page_uuid} not found`);
+    }
+
     async create(organisation_uuid: string, dto: CreateMessageTemplateDto) {
         const { emailSubject, emailContent, smsContent } = normalizeTemplateData(dto);
         if (dto.sender_profile_uuid) {
             await this.assertSenderProfileInOrg(organisation_uuid, dto.sender_profile_uuid);
+        }
+        if (dto.booking_page_uuid) {
+            await this.assertBookingPageInOrg(organisation_uuid, dto.booking_page_uuid);
         }
         return this.prisma.messageTemplate.create({
             data: {
@@ -65,6 +76,8 @@ export class MessageTemplatesService {
                 email_content: emailContent,
                 sms_content: smsContent,
                 sender_profile_uuid: dto.sender_profile_uuid ?? null,
+                booking_page_uuid: dto.booking_page_uuid ?? null,
+                append_booking_cta: dto.append_booking_cta ?? false,
             },
         });
     }
@@ -97,6 +110,9 @@ export class MessageTemplatesService {
         if (dto.sender_profile_uuid) {
             await this.assertSenderProfileInOrg(organisation_uuid, dto.sender_profile_uuid);
         }
+        if (dto.booking_page_uuid) {
+            await this.assertBookingPageInOrg(organisation_uuid, dto.booking_page_uuid);
+        }
 
         return this.prisma.messageTemplate.update({
             where: { uuid },
@@ -107,6 +123,8 @@ export class MessageTemplatesService {
                 ...(dto.email_content !== undefined && { email_content: emailContent }),
                 ...(dto.sms_content !== undefined && { sms_content: smsContent }),
                 ...(dto.sender_profile_uuid !== undefined && { sender_profile_uuid: dto.sender_profile_uuid }),
+                ...(dto.booking_page_uuid !== undefined && { booking_page_uuid: dto.booking_page_uuid }),
+                ...(dto.append_booking_cta !== undefined && { append_booking_cta: dto.append_booking_cta }),
             },
         });
     }

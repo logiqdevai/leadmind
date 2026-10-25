@@ -7,6 +7,7 @@ import {
     type MessageComposerValue,
 } from "@/features/messaging/components/message-composer";
 import { MessageTemplateSelect } from "@/features/messaging/components/message-template-select";
+import { BookingLinkSettings } from "@/components/bookings/booking-link-settings";
 import { DEFAULT_CAMPAIGN_ACTIONS } from "@/features/messaging/constants/ai-actions";
 import {
     EMPTY_MESSAGE_COMPOSER_VALUE,
@@ -76,6 +77,8 @@ export const StepEditorModal: FC<StepEditorModalProps> = ({
         SequenceDelayReference.PREVIOUS_STEP,
     );
     const [sendTime, setSendTime] = useState("");
+    const [bookingPageUuid, setBookingPageUuid] = useState<string | null>(null);
+    const [appendBookingCta, setAppendBookingCta] = useState(false);
     const [contentError, setContentError] = useState<string | null>(null);
     const [composerKey, setComposerKey] = useState(0);
     const [composerReady, setComposerReady] = useState(false);
@@ -96,6 +99,8 @@ export const StepEditorModal: FC<StepEditorModalProps> = ({
                 setDelayUnit(initial.delay_unit);
                 setDelayReference(initial.delay_reference);
                 setSendTime(initial.send_time ?? "");
+                setBookingPageUuid(initial.booking_page_uuid ?? null);
+                setAppendBookingCta(initial.append_booking_cta ?? false);
             } else {
                 setChannel(Channel.EMAIL);
                 setComposerValue(EMPTY_MESSAGE_COMPOSER_VALUE);
@@ -104,6 +109,8 @@ export const StepEditorModal: FC<StepEditorModalProps> = ({
                 setDelayUnit(SequenceDelayUnit.DAYS);
                 setDelayReference(SequenceDelayReference.PREVIOUS_STEP);
                 setSendTime("");
+                setBookingPageUuid(null);
+                setAppendBookingCta(false);
             }
             setComposerKey((k) => k + 1);
             setContentError(null);
@@ -115,6 +122,9 @@ export const StepEditorModal: FC<StepEditorModalProps> = ({
     const handleTemplateSelect = (template: MessageTemplate) => {
         setComposerValue((prev) => mergeTemplateIntoComposer(prev, template));
         setMessageTemplateUuid(template.uuid);
+        // Carry the template's booking link settings over (the step keeps its own copy).
+        setBookingPageUuid(template.booking_page_uuid ?? null);
+        setAppendBookingCta(template.append_booking_cta ?? false);
         if (template.sender_profile_uuid) onTemplateSenderProfile?.(template.sender_profile_uuid);
         setComposerKey((k) => k + 1);
     };
@@ -137,6 +147,8 @@ export const StepEditorModal: FC<StepEditorModalProps> = ({
             delay_unit: delayUnit,
             delay_reference: delayReference,
             send_time: sendTime || null,
+            booking_page_uuid: bookingPageUuid,
+            append_booking_cta: channel === Channel.EMAIL && appendBookingCta,
         };
         await onSave(payload);
     };
@@ -168,6 +180,14 @@ export const StepEditorModal: FC<StepEditorModalProps> = ({
                                     disabled={isSaving}
                                 />
                                 {contentError ? <FieldError>{contentError}</FieldError> : null}
+
+                                <BookingLinkSettings
+                                    bookingPageUuid={bookingPageUuid}
+                                    onBookingPageChange={setBookingPageUuid}
+                                    appendCta={appendBookingCta}
+                                    onAppendCtaChange={setAppendBookingCta}
+                                    disabled={isSaving}
+                                />
 
                                 <div className="rounded-lg border border-border bg-surface-secondary/40 p-3 flex flex-col gap-3">
                                     <Label className="text-sm font-medium text-foreground">Timing</Label>

@@ -39,6 +39,37 @@ export class AiCredentialsService {
         );
     }
 
+    async hasTypesafeApiKey(organisation_uuid: string): Promise<boolean> {
+        const key = await this.prisma.integrationKey.findFirst({
+            where: {
+                key_type: IntegrationKeyType.API_KEY,
+                account: OPENAI_ACCOUNT,
+                integration: {
+                    organisation_uuid,
+                    provider: ExternalIntegrationProvider.TYPESAFE,
+                },
+            },
+            select: { uuid: true },
+        });
+        return Boolean(key);
+    }
+
+    /** TypeSafe key backing Jev; stored per organisation under Integrations. */
+    async getTypesafeApiKey(organisation_uuid: string): Promise<string> {
+        const configured = await this.hasTypesafeApiKey(organisation_uuid);
+        if (!configured) {
+            throw new BadRequestException(
+                'Jev is not configured. Add your TypeSafe API key under Integrations.',
+            );
+        }
+        return this.integrationsService.getDecryptedSecret(
+            organisation_uuid,
+            ExternalIntegrationProvider.TYPESAFE,
+            IntegrationKeyType.API_KEY,
+            OPENAI_ACCOUNT,
+        );
+    }
+
     async getOpenAiWebhookSecret(organisation_uuid: string): Promise<string> {
         return this.integrationsService.getDecryptedSecret(
             organisation_uuid,

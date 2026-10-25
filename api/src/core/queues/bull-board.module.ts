@@ -6,6 +6,8 @@ import { Queue } from 'bullmq';
 import { BullModule, getQueueToken } from '@nestjs/bullmq';
 import {
     AI_PROCESS_QUEUE,
+    BOOKING_CALENDAR_SYNC_QUEUE,
+    BOOKING_NOTIFICATION_QUEUE,
     BULL_BOARD_ADAPTER,
     FILTER_SCRAPE_QUEUE,
     MARKETING_CAMPAIGN_DISPATCH_QUEUE,
@@ -24,6 +26,8 @@ import {
             { name: MARKETING_CAMPAIGN_DISPATCH_QUEUE },
             { name: MARKETING_MESSAGE_SEND_QUEUE },
             { name: REMINDER_TRIGGER_QUEUE },
+            { name: BOOKING_NOTIFICATION_QUEUE },
+            { name: BOOKING_CALENDAR_SYNC_QUEUE },
         ),
     ],
     providers: [
@@ -36,6 +40,8 @@ import {
                 getQueueToken(MARKETING_CAMPAIGN_DISPATCH_QUEUE),
                 getQueueToken(MARKETING_MESSAGE_SEND_QUEUE),
                 getQueueToken(REMINDER_TRIGGER_QUEUE),
+                getQueueToken(BOOKING_NOTIFICATION_QUEUE),
+                getQueueToken(BOOKING_CALENDAR_SYNC_QUEUE),
             ],
             useFactory: (
                 filterScrapeQueue: Queue,
@@ -44,6 +50,8 @@ import {
                 marketingCampaignDispatchQueue: Queue,
                 marketingMessageSendQueue: Queue,
                 reminderTriggerQueue: Queue,
+                bookingNotificationQueue: Queue,
+                bookingCalendarSyncQueue: Queue,
             ) => {
                 const serverAdapter = new ExpressAdapter();
                 serverAdapter.setBasePath('/admin/queues');
@@ -56,6 +64,8 @@ import {
                         new BullMQAdapter(marketingCampaignDispatchQueue),
                         new BullMQAdapter(marketingMessageSendQueue),
                         new BullMQAdapter(reminderTriggerQueue),
+                        new BullMQAdapter(bookingNotificationQueue),
+                        new BullMQAdapter(bookingCalendarSyncQueue),
                     ],
                     serverAdapter,
                 });

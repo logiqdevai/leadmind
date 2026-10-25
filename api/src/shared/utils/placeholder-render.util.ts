@@ -1,4 +1,5 @@
-const PLACEHOLDER_PATTERN = /\{\{\s*([a-zA-Z0-9_]+)\s*\}\}/g;
+// Keys may be namespaced with dots (e.g. booking emails use `{{contact.first_name}}`, `{{booking.date}}`).
+const PLACEHOLDER_PATTERN = /\{\{\s*([a-zA-Z0-9_]+(?:\.[a-zA-Z0-9_]+)*)\s*\}\}/g;
 
 export type PlaceholderVars = Record<string, string>;
 

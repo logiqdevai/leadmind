@@ -37,6 +37,7 @@ const providerIcons: Record<string, ComponentType<{ className?: string }>> = {
     HUBSPOT: Plug,
     MAILTESTER: Gauge,
     MXTOOLBOX: Shield,
+    TYPESAFE: Sparkles,
 };
 
 const FALLBACK_PROVIDERS: IntegrationProviderView[] = [
@@ -192,6 +193,17 @@ const FALLBACK_PROVIDERS: IntegrationProviderView[] = [
         keyTypes: [
             { key_type: "API_KEY", label: "API key", placeholder: "00000000-0000-0000-0000-000000000000" },
         ],
+        keys: [],
+    },
+    {
+        provider: "TYPESAFE",
+        uuid: null,
+        label: "TypeSafe (Jev)",
+        description:
+            "Jev decision model by TypeSafe, used for contact scoring. Add your TypeSafe API key.",
+        default_account: null,
+        accounts: [],
+        keyTypes: [{ key_type: "API_KEY", label: "API key", placeholder: "Your TypeSafe API key" }],
         keys: [],
     },
 ];

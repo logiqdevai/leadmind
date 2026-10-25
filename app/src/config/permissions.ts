@@ -23,6 +23,8 @@ export const OrganisationPermissions = {
   org_manage_oauth_connections: [OrganisationRoles.OWNER, OrganisationRoles.ADMIN],
   org_manage_integrations: [OrganisationRoles.OWNER, OrganisationRoles.ADMIN],
   org_manage_goals: [OrganisationRoles.OWNER, OrganisationRoles.ADMIN],
+  // Booking pages (incl. notification settings), reassigning bookings, other members' availability/calendars.
+  org_manage_bookings: [OrganisationRoles.OWNER, OrganisationRoles.ADMIN],
   org_delete: [OrganisationRoles.OWNER],
 } as const satisfies Record<string, OrganisationRole[]>;
 

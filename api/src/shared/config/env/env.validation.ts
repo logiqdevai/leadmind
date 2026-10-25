@@ -40,6 +40,8 @@ const EnvSchema = z.object({
     OAUTH_COOKIE_KEYS: z.string().optional(),
     OAUTH_JWKS: z.string().optional(),
     MCP_RESOURCE_URL: z.string().url().optional(),
+    COMPOSIO_API_KEY: z.string().optional(),
+    COMPOSIO_GOOGLE_CALENDAR_AUTH_CONFIG_ID: z.string().optional(),
 });
 
 export function validateEnv(config: Record<string, unknown>) {

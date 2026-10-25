@@ -19,6 +19,12 @@ const ENTITY_LABELS: Record<string, string> = {
     contact_list: "List",
     scoring_instruction: "Scoring rule",
     audience_analysis: "Audience analysis",
+    booking: "Booking",
+    booking_page: "Booking page",
+    booking_link: "Booking link",
+    booking_block: "Blocked time",
+    availability_schedule: "Availability",
+    calendar_connection: "Google Calendar",
 };
 
 const ACTION_LABELS: Record<string, string> = {
@@ -45,6 +51,10 @@ const ACTION_LABELS: Record<string, string> = {
     started: "Started",
     scheduled: "Scheduled",
     cancelled: "Cancelled",
+    rescheduled: "Rescheduled",
+    regenerated: "Regenerated",
+    connected: "Connected",
+    disconnected: "Disconnected",
     rerun: "Rerun",
     drafts_sent: "Drafts sent",
     draft_message_sent: "Draft sent",

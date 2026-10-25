@@ -506,6 +506,8 @@ exports.Prisma.OutreachSequenceStepScalarFieldEnum = {
   delay_unit: 'delay_unit',
   delay_reference: 'delay_reference',
   send_time: 'send_time',
+  booking_page_uuid: 'booking_page_uuid',
+  append_booking_cta: 'append_booking_cta',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };
@@ -625,6 +627,8 @@ exports.Prisma.MessageTemplateScalarFieldEnum = {
   source_campaign_uuid: 'source_campaign_uuid',
   source_message_uuid: 'source_message_uuid',
   sender_profile_uuid: 'sender_profile_uuid',
+  booking_page_uuid: 'booking_page_uuid',
+  append_booking_cta: 'append_booking_cta',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };
@@ -1110,6 +1114,216 @@ exports.Prisma.OrgTagAssignmentScalarFieldEnum = {
   created_at: 'created_at'
 };
 
+exports.Prisma.AvailabilityScheduleScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  organisation_uuid: 'organisation_uuid',
+  user_uuid: 'user_uuid',
+  timezone: 'timezone',
+  weekly_hours: 'weekly_hours',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.AvailabilityOverrideScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  schedule_uuid: 'schedule_uuid',
+  date: 'date',
+  intervals: 'intervals',
+  reason: 'reason',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.BookingBlockScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  organisation_uuid: 'organisation_uuid',
+  user_uuid: 'user_uuid',
+  start_at: 'start_at',
+  end_at: 'end_at',
+  reason: 'reason',
+  created_by_user_uuid: 'created_by_user_uuid',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.BookingPageScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  organisation_uuid: 'organisation_uuid',
+  created_by_user_uuid: 'created_by_user_uuid',
+  name: 'name',
+  slug: 'slug',
+  is_active: 'is_active',
+  is_default: 'is_default',
+  title: 'title',
+  description: 'description',
+  intro_text: 'intro_text',
+  brand_name: 'brand_name',
+  logo_url: 'logo_url',
+  primary_color: 'primary_color',
+  confirmation_message: 'confirmation_message',
+  redirect_url: 'redirect_url',
+  cta_label: 'cta_label',
+  show_team_member: 'show_team_member',
+  show_timezone: 'show_timezone',
+  questions: 'questions',
+  require_phone: 'require_phone',
+  duration_minutes: 'duration_minutes',
+  duration_options: 'duration_options',
+  slot_interval_minutes: 'slot_interval_minutes',
+  min_notice_minutes: 'min_notice_minutes',
+  max_advance_days: 'max_advance_days',
+  buffer_before_minutes: 'buffer_before_minutes',
+  buffer_after_minutes: 'buffer_after_minutes',
+  min_gap_minutes: 'min_gap_minutes',
+  max_gap_minutes: 'max_gap_minutes',
+  max_bookings_per_day: 'max_bookings_per_day',
+  seats_per_slot: 'seats_per_slot',
+  assignment_mode: 'assignment_mode',
+  allow_invitee_member_choice: 'allow_invitee_member_choice',
+  requires_confirmation: 'requires_confirmation',
+  unavailable_slots_mode: 'unavailable_slots_mode',
+  location_type: 'location_type',
+  location_value: 'location_value',
+  allow_cancellation: 'allow_cancellation',
+  allow_reschedule: 'allow_reschedule',
+  cancellation_deadline_minutes: 'cancellation_deadline_minutes',
+  reschedule_deadline_minutes: 'reschedule_deadline_minutes',
+  require_cancellation_reason: 'require_cancellation_reason',
+  send_confirmation_email: 'send_confirmation_email',
+  send_reminder_emails: 'send_reminder_emails',
+  reminder_offsets_minutes: 'reminder_offsets_minutes',
+  send_cancellation_email: 'send_cancellation_email',
+  send_reschedule_email: 'send_reschedule_email',
+  notify_assignee: 'notify_assignee',
+  additional_recipients: 'additional_recipients',
+  include_meeting_link: 'include_meeting_link',
+  include_calendar_details: 'include_calendar_details',
+  confirmation_template_uuid: 'confirmation_template_uuid',
+  reminder_template_uuid: 'reminder_template_uuid',
+  cancellation_template_uuid: 'cancellation_template_uuid',
+  reschedule_template_uuid: 'reschedule_template_uuid',
+  calendar_event_title: 'calendar_event_title',
+  calendar_event_description: 'calendar_event_description',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.BookingPageMemberScalarFieldEnum = {
+  id: 'id',
+  booking_page_uuid: 'booking_page_uuid',
+  user_uuid: 'user_uuid',
+  priority: 'priority',
+  last_assigned_at: 'last_assigned_at',
+  created_at: 'created_at'
+};
+
+exports.Prisma.BookingLinkScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  code: 'code',
+  organisation_uuid: 'organisation_uuid',
+  booking_page_uuid: 'booking_page_uuid',
+  contact_uuid: 'contact_uuid',
+  label: 'label',
+  auto_create_contact: 'auto_create_contact',
+  is_active: 'is_active',
+  created_by_user_uuid: 'created_by_user_uuid',
+  deactivated_at: 'deactivated_at',
+  last_used_at: 'last_used_at',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.BookingScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  organisation_uuid: 'organisation_uuid',
+  booking_page_uuid: 'booking_page_uuid',
+  booking_link_uuid: 'booking_link_uuid',
+  contact_uuid: 'contact_uuid',
+  assigned_user_uuid: 'assigned_user_uuid',
+  created_by_user_uuid: 'created_by_user_uuid',
+  source: 'source',
+  status: 'status',
+  start_at: 'start_at',
+  end_at: 'end_at',
+  duration_minutes: 'duration_minutes',
+  invitee_timezone: 'invitee_timezone',
+  invitee_name: 'invitee_name',
+  invitee_email: 'invitee_email',
+  invitee_phone: 'invitee_phone',
+  invitee_notes: 'invitee_notes',
+  answers: 'answers',
+  internal_notes: 'internal_notes',
+  location_type: 'location_type',
+  location_value: 'location_value',
+  meeting_url: 'meeting_url',
+  calendar_connection_uuid: 'calendar_connection_uuid',
+  calendar_event_id: 'calendar_event_id',
+  calendar_html_link: 'calendar_html_link',
+  calendar_sync_status: 'calendar_sync_status',
+  calendar_sync_error: 'calendar_sync_error',
+  calendar_synced_at: 'calendar_synced_at',
+  manage_token: 'manage_token',
+  confirmed_at: 'confirmed_at',
+  cancelled_at: 'cancelled_at',
+  cancellation_reason: 'cancellation_reason',
+  cancelled_by: 'cancelled_by',
+  reschedule_count: 'reschedule_count',
+  completed_at: 'completed_at',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.BookingEventScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  organisation_uuid: 'organisation_uuid',
+  booking_uuid: 'booking_uuid',
+  type: 'type',
+  actor_type: 'actor_type',
+  actor_user_uuid: 'actor_user_uuid',
+  summary: 'summary',
+  metadata: 'metadata',
+  created_at: 'created_at'
+};
+
+exports.Prisma.BookingNotificationScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  booking_uuid: 'booking_uuid',
+  kind: 'kind',
+  recipient_email: 'recipient_email',
+  dedupe_key: 'dedupe_key',
+  status: 'status',
+  error: 'error',
+  sent_at: 'sent_at',
+  created_at: 'created_at'
+};
+
+exports.Prisma.CalendarConnectionScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  organisation_uuid: 'organisation_uuid',
+  user_uuid: 'user_uuid',
+  provider: 'provider',
+  composio_connected_account_id: 'composio_connected_account_id',
+  pending_connected_account_id: 'pending_connected_account_id',
+  status: 'status',
+  account_email: 'account_email',
+  calendar_id: 'calendar_id',
+  calendar_name: 'calendar_name',
+  check_conflicts: 'check_conflicts',
+  last_error: 'last_error',
+  connected_at: 'connected_at',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1248,7 +1462,9 @@ exports.InteractionType = exports.$Enums.InteractionType = {
   EMAIL_BOUNCED: 'EMAIL_BOUNCED',
   EMAIL_FAILED: 'EMAIL_FAILED',
   SMS_FAILED: 'SMS_FAILED',
-  UNSUBSCRIBED: 'UNSUBSCRIBED'
+  UNSUBSCRIBED: 'UNSUBSCRIBED',
+  BOOKING_SCHEDULED: 'BOOKING_SCHEDULED',
+  BOOKING_CANCELLED: 'BOOKING_CANCELLED'
 };
 
 exports.MsgDirection = exports.$Enums.MsgDirection = {
@@ -1280,7 +1496,8 @@ exports.ExternalIntegrationProvider = exports.$Enums.ExternalIntegrationProvider
   HUBSPOT: 'HUBSPOT',
   SCRAPIO: 'SCRAPIO',
   MAILTESTER: 'MAILTESTER',
-  MXTOOLBOX: 'MXTOOLBOX'
+  MXTOOLBOX: 'MXTOOLBOX',
+  TYPESAFE: 'TYPESAFE'
 };
 
 exports.ThreadOrigin = exports.$Enums.ThreadOrigin = {
@@ -1583,6 +1800,91 @@ exports.OrgTagEntityType = exports.$Enums.OrgTagEntityType = {
   FILTER: 'FILTER'
 };
 
+exports.BookingAssignmentMode = exports.$Enums.BookingAssignmentMode = {
+  ROUND_ROBIN: 'ROUND_ROBIN',
+  LEAST_BUSY: 'LEAST_BUSY'
+};
+
+exports.BookingUnavailableSlotsMode = exports.$Enums.BookingUnavailableSlotsMode = {
+  HIDE: 'HIDE',
+  SHOW_DISABLED: 'SHOW_DISABLED'
+};
+
+exports.BookingLocationType = exports.$Enums.BookingLocationType = {
+  NONE: 'NONE',
+  GOOGLE_MEET: 'GOOGLE_MEET',
+  PHONE: 'PHONE',
+  IN_PERSON: 'IN_PERSON',
+  CUSTOM: 'CUSTOM'
+};
+
+exports.BookingSource = exports.$Enums.BookingSource = {
+  PUBLIC: 'PUBLIC',
+  MANUAL: 'MANUAL'
+};
+
+exports.BookingStatus = exports.$Enums.BookingStatus = {
+  PENDING: 'PENDING',
+  CONFIRMED: 'CONFIRMED',
+  CANCELLED: 'CANCELLED',
+  RESCHEDULED: 'RESCHEDULED',
+  COMPLETED: 'COMPLETED',
+  NO_SHOW: 'NO_SHOW'
+};
+
+exports.CalendarSyncStatus = exports.$Enums.CalendarSyncStatus = {
+  NOT_SYNCED: 'NOT_SYNCED',
+  PENDING: 'PENDING',
+  SYNCED: 'SYNCED',
+  FAILED: 'FAILED'
+};
+
+exports.BookingActorType = exports.$Enums.BookingActorType = {
+  USER: 'USER',
+  INVITEE: 'INVITEE',
+  SYSTEM: 'SYSTEM'
+};
+
+exports.BookingEventType = exports.$Enums.BookingEventType = {
+  CREATED: 'CREATED',
+  CONFIRMED: 'CONFIRMED',
+  ASSIGNED: 'ASSIGNED',
+  RESCHEDULED: 'RESCHEDULED',
+  CANCELLED: 'CANCELLED',
+  STATUS_CHANGED: 'STATUS_CHANGED',
+  UPDATED: 'UPDATED',
+  NOTE_UPDATED: 'NOTE_UPDATED',
+  NOTIFICATION_SENT: 'NOTIFICATION_SENT',
+  NOTIFICATION_FAILED: 'NOTIFICATION_FAILED',
+  CALENDAR_SYNCED: 'CALENDAR_SYNCED',
+  CALENDAR_SYNC_FAILED: 'CALENDAR_SYNC_FAILED'
+};
+
+exports.BookingNotificationKind = exports.$Enums.BookingNotificationKind = {
+  CONFIRMATION: 'CONFIRMATION',
+  REMINDER: 'REMINDER',
+  CANCELLATION: 'CANCELLATION',
+  RESCHEDULE: 'RESCHEDULE'
+};
+
+exports.BookingNotificationStatus = exports.$Enums.BookingNotificationStatus = {
+  SENT: 'SENT',
+  FAILED: 'FAILED',
+  SKIPPED: 'SKIPPED'
+};
+
+exports.CalendarProvider = exports.$Enums.CalendarProvider = {
+  GOOGLE: 'GOOGLE'
+};
+
+exports.CalendarConnectionStatus = exports.$Enums.CalendarConnectionStatus = {
+  INITIATED: 'INITIATED',
+  ACTIVE: 'ACTIVE',
+  EXPIRED: 'EXPIRED',
+  FAILED: 'FAILED',
+  DISCONNECTED: 'DISCONNECTED'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   Organisation: 'Organisation',
@@ -1647,7 +1949,17 @@ exports.Prisma.ModelName = {
   OAuthConnection: 'OAuthConnection',
   McpToolInvocationLog: 'McpToolInvocationLog',
   OrgTag: 'OrgTag',
-  OrgTagAssignment: 'OrgTagAssignment'
+  OrgTagAssignment: 'OrgTagAssignment',
+  AvailabilitySchedule: 'AvailabilitySchedule',
+  AvailabilityOverride: 'AvailabilityOverride',
+  BookingBlock: 'BookingBlock',
+  BookingPage: 'BookingPage',
+  BookingPageMember: 'BookingPageMember',
+  BookingLink: 'BookingLink',
+  Booking: 'Booking',
+  BookingEvent: 'BookingEvent',
+  BookingNotification: 'BookingNotification',
+  CalendarConnection: 'CalendarConnection'
 };
 
 /**

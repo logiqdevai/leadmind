@@ -166,6 +166,20 @@ export const deleteIntegrationKey = async (
     }
 };
 
+export const removeIntegrationAccount = async (
+    provider: IntegrationProvider,
+    account: string,
+): Promise<IntegrationProviderView> => {
+    try {
+        const response = await axiosInstance.delete(
+            ApiRoutes.integrations.removeAccount(provider, account),
+        );
+        return response.data;
+    } catch (error) {
+        throw new Error(apiErrorMessage(error, "Failed to delete account."));
+    }
+};
+
 export const setDefaultIntegrationAccount = async (
     provider: IntegrationProvider,
     payload: SetDefaultIntegrationAccountPayload,

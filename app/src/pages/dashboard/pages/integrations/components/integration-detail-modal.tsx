@@ -16,6 +16,7 @@ import { ActionButtonWithPending } from "@/components/ui/action-button-with-pend
 import {
     useDeleteIntegrationKey,
     useRemoveAccountDomain,
+    useRemoveIntegrationAccount,
     useSetDefaultAccountDomain,
     useSetDefaultIntegrationAccount,
     useUpdateIntegrationAccount,
@@ -66,7 +67,9 @@ export function IntegrationDetailModal({
     const updateAccount = useUpdateIntegrationAccount();
     const setDefaultDomain = useSetDefaultAccountDomain();
     const removeDomain = useRemoveAccountDomain();
+    const removeAccount = useRemoveIntegrationAccount();
 
+    const [accountToDelete, setAccountToDelete] = useState<string | null>(null);
     const [formOpen, setFormOpen] = useState(false);
     const [smtpFormOpen, setSmtpFormOpen] = useState(false);
     const [resendFormOpen, setResendFormOpen] = useState(false);
@@ -106,6 +109,7 @@ export function IntegrationDetailModal({
         setDomainFormAccountUuid(null);
         setEditingDomain(null);
         setDomainToDelete(null);
+        setAccountToDelete(null);
     }, [isOpen]);
 
     if (!providerView) {
@@ -166,6 +170,18 @@ export function IntegrationDetailModal({
         try {
             await deleteKey.mutateAsync(keyToDelete.uuid);
             setKeyToDelete(null);
+        } catch {
+        }
+    };
+
+    const handleDeleteAccount = async () => {
+        if (!providerView || !accountToDelete) return;
+        try {
+            await removeAccount.mutateAsync({
+                provider: providerView.provider,
+                account: accountToDelete,
+            });
+            setAccountToDelete(null);
         } catch {
         }
     };
@@ -519,6 +535,18 @@ export function IntegrationDetailModal({
                                                                         ) : null}
                                                                     </>
                                                                 )}
+                                                                <Button
+                                                                    size="sm"
+                                                                    variant="ghost"
+                                                                    aria-label="Delete account"
+                                                                    onPress={() =>
+                                                                        setAccountToDelete(
+                                                                            group.account,
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    <Trash2 className="size-3.5" />
+                                                                </Button>
                                                             </div>
                                                         </div>
                                                     )}
@@ -764,6 +792,36 @@ export function IntegrationDetailModal({
                 variant="danger"
                 isPending={deleteKey.isPending}
                 onConfirm={handleDelete}
+            />
+
+            <ConfirmDialog
+                isOpen={!!accountToDelete}
+                onOpenChange={(open) => {
+                    if (!open) setAccountToDelete(null);
+                }}
+                title="Delete account?"
+                description={
+                    accountToDelete ? (
+                        <>
+                            Remove{" "}
+                            <span className="font-medium text-foreground">
+                                {providerView.accounts?.find(
+                                    (row) => row.account === accountToDelete,
+                                )?.title ?? accountToDelete}
+                            </span>{" "}
+                            along with all of its keys
+                            {providerView.provider === "RESEND"
+                                ? " and sending domains"
+                                : ""}
+                            ? Campaigns using this account will stop sending
+                            from it. This cannot be undone.
+                        </>
+                    ) : null
+                }
+                confirmLabel="Delete account"
+                variant="danger"
+                isPending={removeAccount.isPending}
+                onConfirm={handleDeleteAccount}
             />
 
             <ConfirmDialog

@@ -39,9 +39,11 @@ interface ScrollableTabsListProps {
     children: ReactNode;
     className?: string;
     fullWidth?: boolean;
+    /** Mobile grid columns; defaults to 3 when fullWidth, otherwise 2. */
+    mobileColumns?: 2 | 3;
 }
 
-export const ScrollableTabsList: FC<ScrollableTabsListProps> = ({ children, className, fullWidth }) => {
+export const ScrollableTabsList: FC<ScrollableTabsListProps> = ({ children, className, fullWidth, mobileColumns }) => {
     const nav = useContext(TabNavContext);
     const items = useMemo(() => collectTabItems(children), [children]);
 
@@ -50,7 +52,7 @@ export const ScrollableTabsList: FC<ScrollableTabsListProps> = ({ children, clas
             <div
                 className={cn(
                     "grid w-full max-w-full gap-1.5 lg:hidden",
-                    fullWidth ? "grid-cols-3" : "grid-cols-2",
+                    (mobileColumns ?? (fullWidth ? 3 : 2)) === 3 ? "grid-cols-3" : "grid-cols-2",
                 )}
                 role="tablist"
                 aria-orientation="vertical"

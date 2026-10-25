@@ -3,6 +3,7 @@ import { Button, FieldError, Input, Label, Modal } from "@heroui/react";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
 import { Channel } from "@/features/contacts/interfaces/contact.interface";
 import { SenderProfileSelect } from "@/features/messaging/components/sender-profile-select";
+import { BookingLinkSettings } from "@/components/bookings/booking-link-settings";
 import {
     MessageComposer,
     type MessageComposerValue,
@@ -59,6 +60,8 @@ export const MessageTemplateModal: FC<MessageTemplateModalProps> = ({
     const [composerValue, setComposerValue] = useState<MessageComposerValue>(EMPTY_MESSAGE_COMPOSER_VALUE);
     const [activeChannel, setActiveChannel] = useState<Channel>(Channel.EMAIL);
     const [senderProfileUuid, setSenderProfileUuid] = useState<string | null>(null);
+    const [bookingPageUuid, setBookingPageUuid] = useState<string | null>(null);
+    const [appendBookingCta, setAppendBookingCta] = useState(false);
     const [nameError, setNameError] = useState<string | null>(null);
     const [contentError, setContentError] = useState<string | null>(null);
     const [composerKey, setComposerKey] = useState(0);
@@ -76,6 +79,8 @@ export const MessageTemplateModal: FC<MessageTemplateModalProps> = ({
             if (initial) {
                 setName(initial.name);
                 setSenderProfileUuid(initial.sender_profile_uuid ?? null);
+                setBookingPageUuid(initial.booking_page_uuid ?? null);
+                setAppendBookingCta(initial.append_booking_cta ?? false);
                 setComposerValue(templateToComposerValue(initial));
                 const channels = initial.channels.filter(
                     (c) => c === Channel.EMAIL || c === Channel.SMS,
@@ -84,6 +89,8 @@ export const MessageTemplateModal: FC<MessageTemplateModalProps> = ({
             } else if (prefill) {
                 setName(defaultName);
                 setSenderProfileUuid(null);
+                setBookingPageUuid(null);
+                setAppendBookingCta(false);
                 setComposerValue(prefill);
                 setActiveChannel(
                     !isComposerContentEmpty(Channel.EMAIL, prefill) ? Channel.EMAIL : Channel.SMS,
@@ -91,6 +98,8 @@ export const MessageTemplateModal: FC<MessageTemplateModalProps> = ({
             } else {
                 setName("");
                 setSenderProfileUuid(null);
+                setBookingPageUuid(null);
+                setAppendBookingCta(false);
                 setComposerValue(EMPTY_MESSAGE_COMPOSER_VALUE);
                 setActiveChannel(Channel.EMAIL);
             }
@@ -133,6 +142,8 @@ export const MessageTemplateModal: FC<MessageTemplateModalProps> = ({
             sms_content: channels.includes(Channel.SMS) ? composerValue.smsContent : undefined,
             // null clears the profile on update; omitted on create when none is chosen.
             sender_profile_uuid: initial ? senderProfileUuid : (senderProfileUuid ?? undefined),
+            booking_page_uuid: bookingPageUuid,
+            append_booking_cta: appendBookingCta,
         };
         if (initial) {
             await updateMut.mutateAsync({ uuid: initial.uuid, payload });
@@ -190,6 +201,14 @@ export const MessageTemplateModal: FC<MessageTemplateModalProps> = ({
                             onClear={() => setSenderProfileUuid(null)}
                             clearLabel="None (use the default profile)"
                             description="Pre-selected when this template is used. You can still pick another profile in a campaign or message."
+                            disabled={pending}
+                        />
+
+                        <BookingLinkSettings
+                            bookingPageUuid={bookingPageUuid}
+                            onBookingPageChange={setBookingPageUuid}
+                            appendCta={appendBookingCta}
+                            onAppendCtaChange={setAppendBookingCta}
                             disabled={pending}
                         />
 

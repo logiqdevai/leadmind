@@ -72,6 +72,8 @@ export const InteractionType = {
     EMAIL_FAILED: "EMAIL_FAILED",
     SMS_FAILED: "SMS_FAILED",
     UNSUBSCRIBED: "UNSUBSCRIBED",
+    BOOKING_SCHEDULED: "BOOKING_SCHEDULED",
+    BOOKING_CANCELLED: "BOOKING_CANCELLED",
 } as const;
 
 export type InteractionType = (typeof InteractionType)[keyof typeof InteractionType];

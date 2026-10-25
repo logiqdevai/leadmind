@@ -102,6 +102,8 @@ export class MessageSendService {
                 content: message.content,
                 campaign_uuid: message.campaign_uuid,
                 metadata: message.metadata,
+                sequence_step_uuid: message.sequence_step_uuid,
+                channel: message.channel,
             },
             message.contact,
         );
@@ -220,6 +222,34 @@ export class MessageSendService {
         }
 
         throw new Error(`Channel ${message.channel} not implemented`);
+    }
+
+    /**
+     * One-off transactional email (booking confirmations, reminders...) through the organisation's
+     * default sending account. No OutreachMessage row, tracking or unsubscribe footer - it isn't marketing.
+     */
+    async sendTransactionalEmail(
+        organisation_uuid: string,
+        email: { to: string; subject: string; html: string; replyTo?: string | null },
+    ): Promise<{ provider_message_id: string | null }> {
+        const target = await this.emailCredentialsService.resolveDefaultTarget(organisation_uuid);
+        const { result } = await this.sendEmailWithProvider(
+            organisation_uuid,
+            {
+                to: email.to,
+                subject: email.subject,
+                html: sanitizeEmailHtml(email.html),
+                headers: {},
+                replyTo: email.replyTo ? [email.replyTo] : [],
+            },
+            target,
+        );
+        const provider_message_id = result?.data?.id ?? result?.id ?? null;
+        if (!provider_message_id) {
+            // Resend reports failures in the result instead of throwing.
+            throw new Error(result?.error?.message ?? 'Email provider did not confirm delivery');
+        }
+        return { provider_message_id };
     }
 
     /**

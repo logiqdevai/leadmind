@@ -42,6 +42,10 @@ import {
   GripVertical,
   KeyRound,
   Smartphone,
+  CalendarDays,
+  CalendarCheck,
+  CalendarSync,
+  Clock,
 } from "lucide-react";
 import { Routes } from "@/routes/routes";
 import { usePermission } from "@/hooks/use-permission";
@@ -87,6 +91,14 @@ const navGroups: NavGroup[] = [
     ],
   },
   {
+    label: "Scheduling",
+    items: [
+      { label: "Calendar", icon: CalendarDays, href: Routes.dashboard.calendar, end: false },
+      { label: "Booking Pages", icon: CalendarCheck, href: Routes.dashboard.booking_pages, end: false },
+      { label: "Availability", icon: Clock, href: Routes.dashboard.availability, end: false },
+    ],
+  },
+  {
     label: "Find leads",
     items: [
       { label: "Filters", icon: Filter, href: Routes.dashboard.filters, end: false },
@@ -116,6 +128,7 @@ const navGroups: NavGroup[] = [
     label: "Connect",
     items: [
       { label: "Integrations", icon: Plug, href: Routes.dashboard.integrations, end: false },
+      { label: "Google Calendar", icon: CalendarSync, href: Routes.dashboard.calendar_integrations, end: false },
       { label: "API Keys", icon: KeyRound, href: Routes.dashboard.settings_api_keys, end: false },
       { label: "Connected Apps", icon: Plug, href: Routes.dashboard.settings_connected_apps, end: false },
       { label: "Get the app", icon: Smartphone, href: Routes.download, end: false },

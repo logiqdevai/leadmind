@@ -205,6 +205,26 @@ export class IntegrationsController {
         );
     }
 
+    @ActivityLog({ entityType: ActivityEntityType.INTEGRATION, action: ActivityAction.ACCOUNT_DELETED, entityUuidFrom: 'none' })
+    @Delete(':provider/accounts/:account')
+    @UseGuards(OrganisationRolesGuard)
+    @OrganisationRoles(OrganisationRole.ADMIN)
+    @ApiExcludeEndpoint()
+    @ApiOperation({ summary: 'Delete an integration account with all its keys and domains' })
+    @ApiResponse({ status: 404, description: 'Integration account not found' })
+    removeAccount(
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
+        @Param('provider', new ParseEnumPipe(ExternalIntegrationProvider))
+        provider: ExternalIntegrationProvider,
+        @Param('account') account: string,
+    ) {
+        return this.integrationsService.removeAccount(
+            organisation_uuid,
+            provider,
+            account,
+        );
+    }
+
     @ActivityLog({ entityType: ActivityEntityType.INTEGRATION, action: ActivityAction.KEY_DELETED, entityUuidFrom: 'params.uuid' })
     @Delete('keys/:uuid')
     @UseGuards(OrganisationRolesGuard)

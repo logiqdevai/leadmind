@@ -25,7 +25,7 @@ export const ListDetailToolbar: FC<ListDetailToolbarProps> = ({
     <DashboardSubnav>
         <div
             className={cn(
-                "flex items-center gap-3 px-0.5 py-1.5",
+                "flex flex-wrap items-center gap-x-2 gap-y-1.5 sm:flex-nowrap sm:gap-3 px-0.5 py-1.5",
                 className,
             )}
         >
@@ -42,7 +42,7 @@ export const ListDetailToolbar: FC<ListDetailToolbarProps> = ({
                 <ArrowLeft className="size-4" strokeWidth={2} />
             </Link>
 
-            <div className="min-w-0 flex-1">
+            <div className="min-w-0 flex-1 basis-40">
                 <h1 className="text-lg font-semibold tracking-tight text-foreground truncate leading-snug">
                     {title}
                 </h1>
@@ -51,7 +51,7 @@ export const ListDetailToolbar: FC<ListDetailToolbarProps> = ({
                 ) : null}
             </div>
 
-            {actions ? <div className="shrink-0 flex items-center gap-2">{actions}</div> : null}
+            {actions ? <div className="flex w-full items-center justify-end gap-1.5 sm:w-auto sm:shrink-0 sm:gap-2">{actions}</div> : null}
         </div>
     </DashboardSubnav>
 );

@@ -263,6 +263,9 @@ export class SequencesService {
                 dto.message_template_uuid,
             );
         }
+        if (dto.booking_page_uuid) {
+            await this.assertOwnedBookingPage(organisation_uuid, dto.booking_page_uuid);
+        }
 
         const last = await this.prisma.outreachSequenceStep.findFirst({
             where: { sequence_uuid },
@@ -284,6 +287,8 @@ export class SequencesService {
                 delay_unit: dto.delay_unit,
                 delay_reference: dto.delay_reference,
                 send_time: dto.send_time ?? null,
+                booking_page_uuid: dto.booking_page_uuid ?? null,
+                append_booking_cta: dto.append_booking_cta ?? false,
             },
         });
     }
@@ -317,6 +322,9 @@ export class SequencesService {
                 dto.message_template_uuid,
             );
         }
+        if (dto.booking_page_uuid) {
+            await this.assertOwnedBookingPage(organisation_uuid, dto.booking_page_uuid);
+        }
 
         return this.prisma.outreachSequenceStep.update({
             where: { uuid: step_uuid },
@@ -341,6 +349,8 @@ export class SequencesService {
                     send_time: dto.send_time,
                 }),
                 ...(dto.enabled !== undefined && { enabled: dto.enabled }),
+                ...(dto.booking_page_uuid !== undefined && { booking_page_uuid: dto.booking_page_uuid }),
+                ...(dto.append_booking_cta !== undefined && { append_booking_cta: dto.append_booking_cta }),
             },
         });
     }
@@ -439,6 +449,17 @@ export class SequencesService {
         });
         if (!template)
             throw new NotFoundException(`Message template ${uuid} not found`);
+    }
+
+    private async assertOwnedBookingPage(
+        organisation_uuid: string,
+        uuid: string,
+    ): Promise<void> {
+        const page = await this.prisma.bookingPage.findFirst({
+            where: { uuid, organisation_uuid },
+            select: { uuid: true },
+        });
+        if (!page) throw new NotFoundException(`Booking page ${uuid} not found`);
     }
 
     private async assertNoBlockingCampaigns(

@@ -82,4 +82,18 @@ export class CreateSequenceStepDto {
     @IsOptional()
     @IsBoolean()
     enabled?: boolean;
+
+    @ApiPropertyOptional({
+        format: 'uuid',
+        nullable: true,
+        description: 'Booking page {{booking_link}} resolves to for each enrolled contact; template/default page when empty',
+    })
+    @IsOptional()
+    @IsUUID()
+    booking_page_uuid?: string | null;
+
+    @ApiPropertyOptional({ description: 'Append a booking button when the email has no {{booking_link}}' })
+    @IsOptional()
+    @IsBoolean()
+    append_booking_cta?: boolean;
 }

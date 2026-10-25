@@ -58,6 +58,7 @@ export const ContactTableQuickViewButton: FC<ContactTableQuickViewButtonProps> =
         <Button
             size="sm"
             variant="tertiary"
+            className="hidden sm:inline-flex"
             onPress={() => onOpen(contactUuid)}
             aria-label={`Quick view ${contactName ?? "contact"}`}
         >
