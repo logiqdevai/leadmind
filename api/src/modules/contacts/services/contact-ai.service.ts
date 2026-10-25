@@ -26,11 +26,9 @@ import { AiModels, AiProviders } from '@/integrations/ai/interfaces/ai.interface
 import { OpenAiBatchRequest } from '@/integrations/ai/interfaces/openai-batch.interface';
 import { ElasticsearchService } from '@/integrations/elasticsearch/elasticsearch.service';
 import {
-    AiScoringSystemPrompt,
     buildEmailPrompt,
     buildLinkedInPrompt,
     buildPhoneCallPrompt,
-    buildScorePrompt,
     buildSmsPrompt,
 } from '../constants/contact-ai-prompts';
 import {
@@ -39,7 +37,11 @@ import {
     sanitizeAiDraftContent,
 } from '@/shared/utils/outreach-ai-generate.util';
 import { fetchRecentEmailTranscript } from '@/shared/utils/email-thread-transcript.util';
-import { CONTACT_AI_SCORE_SCHEMA, type ContactAiScoreResult } from '../schemas/contact-ai-score.schema';
+import { JevClient } from '@/integrations/jev/jev.client';
+import { JEV_DEFAULT_MODEL, JEV_INPUT_COST_USD_PER_TOKEN } from '@/integrations/jev/jev.constants';
+import { JevScoreQuestion } from '@/integrations/jev/interfaces/jev.interface';
+import { JEV_CONTACT_SCORE_LEVELS } from '../constants/contact-score-levels';
+import { buildContactJevState, jevScoreToContactScore } from '../utils/contact-jev-state.utils';
 import { OutreachRenderService } from '@/modules/outreach/services/outreach-render.service';
 import { AiUsageService } from '@/modules/ai-usage/ai-usage.service';
 import { BulkJobsService } from '@/modules/bulk-jobs/bulk-jobs.service';
@@ -47,16 +49,13 @@ import { generateMessageId } from '@/shared/utils/email-message-id.util';
 import { ThreadsService } from '@/modules/threads/threads.service';
 import { calculateAiCost } from '@/integrations/ai/utils/ai-cost';
 
+const JEV_USAGE_PROVIDER = 'typesafe';
+
 const filterForScoreInclude = {
     filter_scoring_instructions: { include: { scoring_instruction: true } },
 } satisfies Prisma.FilterInclude;
 
 export type FilterForScore = Prisma.FilterGetPayload<{ include: typeof filterForScoreInclude }>;
-
-export interface ContactBatchScoringItem {
-    contact_uuid: string;
-    instruction_uuids: string[];
-}
 
 @Injectable()
 export class ContactAiService {
@@ -71,6 +70,7 @@ export class ContactAiService {
         private readonly aiUsageService: AiUsageService,
         private readonly bulkJobsService: BulkJobsService,
         private readonly threadsService: ThreadsService,
+        private readonly jevClient: JevClient,
     ) { }
 
     async scoreContact(
@@ -112,43 +112,85 @@ export class ContactAiService {
         const done = new Set(existingRows.map((r) => r.scoring_instruction_uuid));
         let scored = 0;
 
-        for (const instr of instructions) {
-            if (done.has(instr.uuid)) continue;
+        const pending = instructions.filter((instr) => !done.has(instr.uuid));
+        if (pending.length > 0) {
+            // One Jev request judges every pending instruction against the same contact profile.
+            const questions: Record<string, JevScoreQuestion> = Object.fromEntries(
+                pending.map((instr) => [
+                    instr.uuid,
+                    {
+                        type: 'score',
+                        instructions: instr.instructions,
+                        criteria: JEV_CONTACT_SCORE_LEVELS,
+                    } satisfies JevScoreQuestion,
+                ]),
+            );
 
-            const { response, usage } = await this.aiService.generateObjectWithSchema<ContactAiScoreResult>({
-                organisation_uuid: contact.organisation_uuid,
-                provider: AiProviders.openai,
-                model: AiModels.openai.gpt4oMini,
-                schema: CONTACT_AI_SCORE_SCHEMA,
-                prompt: buildScorePrompt(contact, lead, instr.instructions),
-                system: AiScoringSystemPrompt,
-                usage: {
-                    operation: 'CONTACT_SCORE',
+            const started = Date.now();
+            let result: Awaited<ReturnType<JevClient['decide']>>;
+            try {
+                result = await this.jevClient.decide(buildContactJevState(contact, lead), questions);
+            } catch (error) {
+                this.aiUsageService.log({
+                    organisation_uuid: contact.organisation_uuid,
+                    provider: JEV_USAGE_PROVIDER,
+                    model: JEV_DEFAULT_MODEL,
+                    operation: AiUsageOperation.CONTACT_SCORE,
+                    status: AiUsageStatus.ERROR,
+                    duration_ms: Date.now() - started,
                     reference_type: 'contact',
                     reference_uuid: contact.uuid,
-                },
+                    error_message: error instanceof Error ? error.message : String(error),
+                });
+                throw error;
+            }
+
+            this.aiUsageService.log({
+                organisation_uuid: contact.organisation_uuid,
+                provider: JEV_USAGE_PROVIDER,
+                model: result.model,
+                operation: AiUsageOperation.CONTACT_SCORE,
+                status: AiUsageStatus.SUCCESS,
+                input_tokens: result.usage?.input_tokens ?? null,
+                output_tokens: result.usage?.output_tokens ?? null,
+                total_tokens:
+                    result.usage != null ? result.usage.input_tokens + result.usage.output_tokens : null,
+                total_cost_usd:
+                    result.usage != null ? result.usage.input_tokens * JEV_INPUT_COST_USD_PER_TOKEN : null,
+                duration_ms: Date.now() - started,
+                reference_type: 'contact',
+                reference_uuid: contact.uuid,
             });
 
-            await this.prisma.contactScore.upsert({
-                where: {
-                    contact_uuid_scoring_instruction_uuid: {
+            for (const instr of pending) {
+                const answer = result.answers?.[instr.uuid];
+                if (!answer || answer.type !== 'score' || !Number.isFinite(answer.score)) {
+                    this.logger.warn(`Contact ${contact.uuid} / ${instr.uuid}: Jev returned no score`);
+                    continue;
+                }
+                const score = jevScoreToContactScore(answer.score);
+
+                await this.prisma.contactScore.upsert({
+                    where: {
+                        contact_uuid_scoring_instruction_uuid: {
+                            contact_uuid: contact.uuid,
+                            scoring_instruction_uuid: instr.uuid,
+                        },
+                    },
+                    create: {
                         contact_uuid: contact.uuid,
                         scoring_instruction_uuid: instr.uuid,
+                        score,
                     },
-                },
-                create: {
-                    contact_uuid: contact.uuid,
-                    scoring_instruction_uuid: instr.uuid,
-                    score: response.score,
-                },
-                update: { score: response.score },
-            });
-            done.add(instr.uuid);
-            scored += 1;
+                    update: { score },
+                });
+                done.add(instr.uuid);
+                scored += 1;
 
-            this.logger.log(
-                `Contact ${contact.uuid} / ${instr.uuid}: scored ${response.score}/10 (${usage.totalTokens} tokens, $${usage.totalCost.toFixed(5)})`,
-            );
+                this.logger.log(
+                    `Contact ${contact.uuid} / ${instr.uuid}: scored ${score}/10 (jev ${answer.score.toFixed(2)}, confidence ${answer.confidence?.toFixed?.(2) ?? 'n/a'})`,
+                );
+            }
         }
 
         const fresh = await this.prisma.contact.findUnique({
@@ -167,201 +209,8 @@ export class ContactAiService {
         return { scored };
     }
 
-    async submitBatchScore(
-        organisation_uuid: string,
-        plan: ContactBatchScoringItem[],
-        user_uuid?: string | null,
-    ): Promise<{ batch_id: string; queued: number }> {
-        const allInstrUuids = [...new Set(plan.flatMap((p) => p.instruction_uuids))];
-        const contactUuids = plan.map((p) => p.contact_uuid);
-
-        const [instructions, contacts, existingScores] = await Promise.all([
-            this.prisma.scoringInstruction.findMany({
-                where: { uuid: { in: allInstrUuids } },
-                select: { uuid: true, instructions: true },
-            }),
-            this.prisma.contact.findMany({
-                where: { uuid: { in: contactUuids } },
-                include: { lead: true },
-            }),
-            this.prisma.contactScore.findMany({
-                where: { contact_uuid: { in: contactUuids } },
-                select: { contact_uuid: true, scoring_instruction_uuid: true },
-            }),
-        ]);
-
-        const instrMap = new Map(instructions.map((i) => [i.uuid, i.instructions]));
-        const contactMap = new Map(contacts.map((c) => [c.uuid, c]));
-        const scoredPairs = new Set(
-            existingScores.map((s) => `${s.contact_uuid}|${s.scoring_instruction_uuid}`),
-        );
-
-        const requests: OpenAiBatchRequest[] = [];
-        for (const item of plan) {
-            const contact = contactMap.get(item.contact_uuid);
-            if (!contact) continue;
-
-            for (const instrUuid of item.instruction_uuids) {
-                if (scoredPairs.has(`${item.contact_uuid}|${instrUuid}`)) continue;
-                const instrText = instrMap.get(instrUuid);
-                if (!instrText) continue;
-
-                requests.push({
-                    custom_id: `contact_score|${item.contact_uuid}|${instrUuid}`,
-                    model: AiModels.openai.gpt4oMini,
-                    messages: [
-                        { role: 'system', content: AiScoringSystemPrompt },
-                        { role: 'user', content: buildScorePrompt(contact, contact.lead, instrText) },
-                    ],
-                    response_format: { type: 'json_object' },
-                });
-            }
-        }
-
-        if (requests.length === 0) {
-            throw new BadRequestException('All selected contacts are already scored for the chosen rules.');
-        }
-
-        const result = await this.openAiBatchService.createBatch(organisation_uuid, requests);
-
-        await this.prisma.openAiBatchJob.create({
-            data: {
-                batch_id: result.batch_id,
-                organisation_uuid,
-                user_uuid: user_uuid ?? null,
-                type: OpenAiBatchJobType.CONTACT_SCORE,
-                status: OpenAiBatchStatus.IN_PROGRESS,
-                total_requests: requests.length,
-                input_file_id: result.input_file_id,
-                expires_at: result.expires_at,
-            },
-        });
-        await this.bulkJobsService.createOpenAiMirror({
-            organisation_uuid,
-            created_by_user_uuid: user_uuid,
-            batch_id: result.batch_id,
-            title: `OpenAI batch score (${requests.length})`,
-            total_requests: requests.length,
-        });
-
-        this.logger.log(`Batch scoring submitted: ${result.batch_id} (${requests.length} requests)`);
-        return { batch_id: result.batch_id, queued: requests.length };
-    }
-
     async findBatchJob(batchId: string) {
         return this.prisma.openAiBatchJob.findUnique({ where: { batch_id: batchId } });
-    }
-
-    async processBatchScoreResults(batchId: string): Promise<void> {
-        const job = await this.prisma.openAiBatchJob.findUnique({ where: { batch_id: batchId } });
-        if (!job) {
-            this.logger.warn(`No OpenAiBatchJob found for batch_id: ${batchId}`);
-            return;
-        }
-
-        const batchStatus = await this.openAiBatchService.getBatchStatus(job.organisation_uuid, batchId);
-        if (!batchStatus.output_file_id) {
-            this.logger.warn(`Batch ${batchId} has no output file yet`);
-            return;
-        }
-
-        const results = await this.openAiBatchService.getBatchResults(job.organisation_uuid, batchStatus.output_file_id);
-        const updatedContactUuids = new Set<string>();
-
-        for (const result of results) {
-            const model = result.model ?? AiModels.openai.gpt4oMini;
-            const cost =
-                result.input_tokens != null && result.output_tokens != null
-                    ? calculateAiCost({
-                          provider: AiProviders.openai,
-                          model,
-                          inputTokens: result.input_tokens,
-                          outputTokens: result.output_tokens,
-                      })
-                    : null;
-
-            if (!result.content || result.error) {
-                this.logger.warn(`Batch result ${result.custom_id} failed: ${result.error}`);
-                this.aiUsageService.logBatchResult({
-                    organisation_uuid: job.organisation_uuid,
-                    model,
-                    operation: AiUsageOperation.CONTACT_SCORE,
-                    input_tokens: result.input_tokens,
-                    output_tokens: result.output_tokens,
-                    total_tokens: result.total_tokens,
-                    total_cost_usd: cost?.totalCost ?? null,
-                    batch_id: batchId,
-                    custom_id: result.custom_id,
-                    status: AiUsageStatus.ERROR,
-                    error_message: result.error ?? 'Empty batch response',
-                });
-                continue;
-            }
-
-            const parts = result.custom_id.split('|');
-            if (parts.length !== 3 || parts[0] !== 'contact_score') continue;
-            const [, contact_uuid, scoring_instruction_uuid] = parts;
-
-            try {
-                const parsed = JSON.parse(result.content);
-                const score = Number(parsed.score);
-                if (!Number.isFinite(score)) continue;
-
-                await this.prisma.contactScore.upsert({
-                    where: { contact_uuid_scoring_instruction_uuid: { contact_uuid, scoring_instruction_uuid } },
-                    create: { contact_uuid, scoring_instruction_uuid, score },
-                    update: { score },
-                });
-                updatedContactUuids.add(contact_uuid);
-                this.aiUsageService.logBatchResult({
-                    organisation_uuid: job.organisation_uuid,
-                    model,
-                    operation: AiUsageOperation.CONTACT_SCORE,
-                    input_tokens: result.input_tokens,
-                    output_tokens: result.output_tokens,
-                    total_tokens: result.total_tokens,
-                    total_cost_usd: cost?.totalCost ?? null,
-                    batch_id: batchId,
-                    custom_id: result.custom_id,
-                    status: AiUsageStatus.SUCCESS,
-                    reference_type: 'contact',
-                    reference_uuid: contact_uuid,
-                });
-            } catch {
-                this.logger.warn(`Failed to parse batch result for ${result.custom_id}`);
-            }
-        }
-
-        await this.prisma.openAiBatchJob.update({
-            where: { batch_id: batchId },
-            data: {
-                status: OpenAiBatchStatus.COMPLETED,
-                finished_at: new Date(),
-                output_file_id: batchStatus.output_file_id,
-                error_file_id: batchStatus.error_file_id,
-                completed_requests: batchStatus.completed_requests,
-                failed_requests: batchStatus.failed_requests,
-                total_requests: batchStatus.total_requests,
-            },
-        });
-
-        for (const contact_uuid of updatedContactUuids) {
-            const fresh = await this.prisma.contact.findUnique({
-                where: { uuid: contact_uuid },
-                include: {
-                    lead: true,
-                    tags: true,
-                    contact_scores: {
-                        include: { scoring_instruction: { select: { uuid: true, name: true } } },
-                    },
-                },
-            });
-            if (fresh) {
-                await this.elasticsearchService.indexContact(fresh);
-            }
-        }
-
-        this.logger.log(`Batch ${batchId} processed: ${updatedContactUuids.size} contacts updated`);
     }
 
     async draftOutreachMessages(

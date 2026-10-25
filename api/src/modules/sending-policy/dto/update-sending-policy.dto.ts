@@ -8,6 +8,7 @@ export class UpdateSendingPolicyDto extends PartialType(
     'timezone',
     'window_start_minute',
     'window_end_minute',
+    'allowed_weekdays',
     'min_interval_seconds',
     'min_interval_jitter_seconds',
   ] as const),

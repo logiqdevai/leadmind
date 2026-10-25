@@ -117,15 +117,30 @@ export class SequencesController {
         entityUuidFrom: 'params.uuid',
     })
     @Put(':uuid')
-    @ApiOperation({ summary: 'Update sequence name/description' })
+    @ApiOperation({
+        summary: 'Update sequence name/description/settings',
+        description:
+            'Changing allowed_weekdays also shifts already-scheduled (pending) step messages that now fall on a disallowed day to the next allowed day.',
+    })
     @ApiResponse({ status: 200 })
     @ApiResponse({ status: 404, description: 'Sequence not found' })
-    update(
+    async update(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
         @Param('uuid', ParseUUIDPipe) uuid: string,
         @Body() dto: UpdateSequenceDto,
     ) {
-        return this.sequencesService.update(organisation_uuid, uuid, dto);
+        const sequence = await this.sequencesService.update(
+            organisation_uuid,
+            uuid,
+            dto,
+        );
+        if (dto.allowed_weekdays !== undefined) {
+            await this.enrollmentService.rescheduleForSequence(
+                organisation_uuid,
+                uuid,
+            );
+        }
+        return sequence;
     }
 
     @ActivityLog({

@@ -1,4 +1,5 @@
 import { SequenceDelayUnit } from '@/generated/prisma';
+import { shiftToAllowedWeekday } from './weekdays.util';
 
 const MS_PER_HOUR = 60 * 60 * 1000;
 const MS_PER_DAY = 24 * MS_PER_HOUR;
@@ -49,12 +50,28 @@ export function applySendTime(
     return pinned;
 }
 
-/** addDelay + applySendTime composed - the function callers should use for step scheduling. */
+export interface WeekdayRestriction {
+    allowed_weekdays?: number[] | null;
+    timezone: string;
+}
+
+/**
+ * addDelay + applySendTime (+ optional weekday shift) composed - the function callers
+ * should use for step scheduling. When `restriction` disallows the resulting day, the
+ * step moves to the next allowed day at the same time of day.
+ */
 export function resolveStepScheduledAt(
     base: Date,
     value: number,
     unit: SequenceDelayUnit,
     send_time?: string | null,
+    restriction?: WeekdayRestriction,
 ): Date {
-    return applySendTime(addDelay(base, value, unit), base, send_time);
+    const scheduled = applySendTime(addDelay(base, value, unit), base, send_time);
+    if (!restriction) return scheduled;
+    return shiftToAllowedWeekday(
+        scheduled,
+        restriction.timezone,
+        restriction.allowed_weekdays,
+    );
 }

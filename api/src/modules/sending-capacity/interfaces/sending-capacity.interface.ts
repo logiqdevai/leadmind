@@ -40,6 +40,7 @@ export interface CapacityObservability {
   sending_window: {
     start_minute: number | null;
     end_minute: number | null;
+    allowed_weekdays: number[];
     timezone: string;
   };
   next_eligible_at: Date;

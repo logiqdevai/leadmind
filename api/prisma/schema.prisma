@@ -139,20 +139,20 @@ model OrganisationInvitation {
 }
 
 model ApiKey {
-  id                    Int              @id @default(autoincrement())
-  uuid                  String           @unique @default(uuid())
-  organisation_uuid     String
-  created_by_user_uuid  String
-  name                  String
-  key_prefix            String
-  last4                 String
-  key_hash              String           @unique
-  organisation_role     OrganisationRole @default(MEMBER)
-  last_used_at          DateTime?
-  expires_at            DateTime?
-  revoked_at            DateTime?
-  created_at            DateTime         @default(now())
-  updated_at            DateTime         @updatedAt
+  id                   Int              @id @default(autoincrement())
+  uuid                 String           @unique @default(uuid())
+  organisation_uuid    String
+  created_by_user_uuid String
+  name                 String
+  key_prefix           String
+  last4                String
+  key_hash             String           @unique
+  organisation_role    OrganisationRole @default(MEMBER)
+  last_used_at         DateTime?
+  expires_at           DateTime?
+  revoked_at           DateTime?
+  created_at           DateTime         @default(now())
+  updated_at           DateTime         @updatedAt
 
   organisation Organisation @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
   created_by   User         @relation("ApiKeyCreatedBy", fields: [created_by_user_uuid], references: [uuid], onDelete: Cascade)
@@ -466,12 +466,12 @@ model ContactList {
   created_at        DateTime @default(now())
   updated_at        DateTime @updatedAt
 
-  organisation      Organisation              @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
-  parent            ContactList?              @relation("ContactListHierarchy", fields: [parent_list_uuid], references: [uuid], onDelete: Cascade)
-  children          ContactList[]             @relation("ContactListHierarchy")
-  members             ContactListMember[]
-  audience_analyses   ContactAudienceAnalysis[]
-  filters             Filter[]
+  organisation         Organisation              @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  parent               ContactList?              @relation("ContactListHierarchy", fields: [parent_list_uuid], references: [uuid], onDelete: Cascade)
+  children             ContactList[]             @relation("ContactListHierarchy")
+  members              ContactListMember[]
+  audience_analyses    ContactAudienceAnalysis[]
+  filters              Filter[]
   sequence_enrollments SequenceEnrollment[]
 
   @@index([organisation_uuid])
@@ -480,12 +480,12 @@ model ContactList {
 }
 
 model ContactListMember {
-  id           Int      @id @default(autoincrement())
-  uuid         String   @unique @default(uuid())
+  id           Int        @id @default(autoincrement())
+  uuid         String     @unique @default(uuid())
   list_uuid    String
   contact_uuid String
   status       LeadStatus @default(NEW)
-  created_at   DateTime @default(now())
+  created_at   DateTime   @default(now())
 
   list    ContactList @relation(fields: [list_uuid], references: [uuid], onDelete: Cascade)
   contact Contact     @relation(fields: [contact_uuid], references: [uuid], onDelete: Cascade)
@@ -657,17 +657,20 @@ model MessageThread {
 }
 
 model OutreachSequence {
-  id                Int            @id @default(autoincrement())
-  uuid              String         @unique @default(uuid())
-  organisation_uuid String
-  name              String
-  description       String?
-  status            SequenceStatus @default(DRAFT)
-  stop_on_reply     Boolean        @default(true)
+  id                  Int            @id @default(autoincrement())
+  uuid                String         @unique @default(uuid())
+  organisation_uuid   String
+  name                String
+  description         String?
+  status              SequenceStatus @default(DRAFT)
+  stop_on_reply       Boolean        @default(true)
   // Sender profile used for messages of standalone (non-campaign) enrollments.
   sender_profile_uuid String?
-  created_at        DateTime       @default(now())
-  updated_at        DateTime       @updatedAt
+  /// ISO weekdays (1=Mon..7=Sun) steps may be scheduled on, evaluated in the organisation timezone.
+  /// A step landing on a disallowed day is shifted to the next allowed day (same time of day).
+  allowed_weekdays    Int[]          @default([1, 2, 3, 4, 5, 6, 7])
+  created_at          DateTime       @default(now())
+  updated_at          DateTime       @updatedAt
 
   organisation   Organisation           @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
   sender_profile SenderProfile?         @relation(fields: [sender_profile_uuid], references: [uuid], onDelete: SetNull)
@@ -709,23 +712,23 @@ model OutreachSequenceStep {
 }
 
 model SequenceEnrollment {
-  id                       Int                      @id @default(autoincrement())
-  uuid                     String                   @unique @default(uuid())
+  id                       Int                          @id @default(autoincrement())
+  uuid                     String                       @unique @default(uuid())
   sequence_uuid            String
   contact_uuid             String
   campaign_uuid            String?
   list_uuid                String?
-  status                   SequenceEnrollmentStatus @default(ACTIVE)
-  enrolled_at              DateTime                 @default(now())
-  current_step_order_index Int                      @default(0)
+  status                   SequenceEnrollmentStatus     @default(ACTIVE)
+  enrolled_at              DateTime                     @default(now())
+  current_step_order_index Int                          @default(0)
   first_step_sent_at       DateTime?
   cancelled_at             DateTime?
   completed_at             DateTime?
   email_provider           ExternalIntegrationProvider?
   email_account            String?
   email_domain_uuid        String?
-  created_at               DateTime                 @default(now())
-  updated_at               DateTime                 @updatedAt
+  created_at               DateTime                     @default(now())
+  updated_at               DateTime                     @updatedAt
 
   sequence          OutreachSequence   @relation(fields: [sequence_uuid], references: [uuid], onDelete: Cascade)
   contact           Contact            @relation(fields: [contact_uuid], references: [uuid], onDelete: Cascade)
@@ -1588,9 +1591,9 @@ model ContactAudienceAnalysis {
   created_at        DateTime                      @default(now())
   updated_at        DateTime                      @updatedAt
 
-  organisation Organisation @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
-  filter       Filter?      @relation(fields: [filter_uuid], references: [uuid], onDelete: Cascade)
-  contactList  ContactList? @relation(fields: [contact_list_uuid], references: [uuid], onDelete: Cascade)
+  organisation Organisation       @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  filter       Filter?            @relation(fields: [filter_uuid], references: [uuid], onDelete: Cascade)
+  contactList  ContactList?       @relation(fields: [contact_list_uuid], references: [uuid], onDelete: Cascade)
   campaign     MarketingCampaign? @relation(fields: [campaign_uuid], references: [uuid], onDelete: Cascade)
 
   @@index([organisation_uuid])
@@ -1796,6 +1799,8 @@ model SendingPolicy {
   timezone                    String   @default("UTC")
   window_start_minute         Int?
   window_end_minute           Int?
+  /// ISO weekdays (1=Mon..7=Sun) sending is allowed on, evaluated in `timezone`.
+  allowed_weekdays            Int[]    @default([1, 2, 3, 4, 5, 6, 7])
   min_interval_seconds        Int      @default(0)
   min_interval_jitter_seconds Int      @default(0)
   created_at                  DateTime @default(now())
@@ -1991,20 +1996,20 @@ model OAuthModel {
 // can list/revoke connected apps without reaching into oidc-provider's
 // internal storage format.
 model OAuthConnection {
-  id                    Int                    @id @default(autoincrement())
-  uuid                  String                 @unique @default(uuid())
-  organisation_uuid     String
-  granted_by_user_uuid  String
-  oauth_client_id       String
-  grant_id              String
-  client_name           String?
-  client_uri            String?
-  scope                 String
-  status                OAuthConnectionStatus  @default(ACTIVE)
-  last_used_at          DateTime?
-  revoked_at            DateTime?
-  created_at            DateTime               @default(now())
-  updated_at            DateTime               @updatedAt
+  id                   Int                   @id @default(autoincrement())
+  uuid                 String                @unique @default(uuid())
+  organisation_uuid    String
+  granted_by_user_uuid String
+  oauth_client_id      String
+  grant_id             String
+  client_name          String?
+  client_uri           String?
+  scope                String
+  status               OAuthConnectionStatus @default(ACTIVE)
+  last_used_at         DateTime?
+  revoked_at           DateTime?
+  created_at           DateTime              @default(now())
+  updated_at           DateTime              @updatedAt
 
   organisation Organisation @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
   granted_by   User         @relation("OAuthConnectionGrantedBy", fields: [granted_by_user_uuid], references: [uuid], onDelete: Cascade)
@@ -2061,7 +2066,7 @@ model OrgTag {
   created_at        DateTime @default(now())
   updated_at        DateTime @updatedAt
 
-  organisation Organisation        @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  organisation Organisation       @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
   assignments  OrgTagAssignment[]
 
   @@unique([organisation_uuid, name])

@@ -39865,10 +39865,12 @@ export namespace Prisma {
 
   export type OutreachSequenceAvgAggregateOutputType = {
     id: number | null
+    allowed_weekdays: number | null
   }
 
   export type OutreachSequenceSumAggregateOutputType = {
     id: number | null
+    allowed_weekdays: number[]
   }
 
   export type OutreachSequenceMinAggregateOutputType = {
@@ -39906,6 +39908,7 @@ export namespace Prisma {
     status: number
     stop_on_reply: number
     sender_profile_uuid: number
+    allowed_weekdays: number
     created_at: number
     updated_at: number
     _all: number
@@ -39914,10 +39917,12 @@ export namespace Prisma {
 
   export type OutreachSequenceAvgAggregateInputType = {
     id?: true
+    allowed_weekdays?: true
   }
 
   export type OutreachSequenceSumAggregateInputType = {
     id?: true
+    allowed_weekdays?: true
   }
 
   export type OutreachSequenceMinAggregateInputType = {
@@ -39955,6 +39960,7 @@ export namespace Prisma {
     status?: true
     stop_on_reply?: true
     sender_profile_uuid?: true
+    allowed_weekdays?: true
     created_at?: true
     updated_at?: true
     _all?: true
@@ -40055,6 +40061,7 @@ export namespace Prisma {
     status: $Enums.SequenceStatus
     stop_on_reply: boolean
     sender_profile_uuid: string | null
+    allowed_weekdays: number[]
     created_at: Date
     updated_at: Date
     _count: OutreachSequenceCountAggregateOutputType | null
@@ -40087,6 +40094,7 @@ export namespace Prisma {
     status?: boolean
     stop_on_reply?: boolean
     sender_profile_uuid?: boolean
+    allowed_weekdays?: boolean
     created_at?: boolean
     updated_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
@@ -40106,6 +40114,7 @@ export namespace Prisma {
     status?: boolean
     stop_on_reply?: boolean
     sender_profile_uuid?: boolean
+    allowed_weekdays?: boolean
     created_at?: boolean
     updated_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
@@ -40121,6 +40130,7 @@ export namespace Prisma {
     status?: boolean
     stop_on_reply?: boolean
     sender_profile_uuid?: boolean
+    allowed_weekdays?: boolean
     created_at?: boolean
     updated_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
@@ -40136,11 +40146,12 @@ export namespace Prisma {
     status?: boolean
     stop_on_reply?: boolean
     sender_profile_uuid?: boolean
+    allowed_weekdays?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
-  export type OutreachSequenceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "name" | "description" | "status" | "stop_on_reply" | "sender_profile_uuid" | "created_at" | "updated_at", ExtArgs["result"]["outreachSequence"]>
+  export type OutreachSequenceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "name" | "description" | "status" | "stop_on_reply" | "sender_profile_uuid" | "allowed_weekdays" | "created_at" | "updated_at", ExtArgs["result"]["outreachSequence"]>
   export type OutreachSequenceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     sender_profile?: boolean | OutreachSequence$sender_profileArgs<ExtArgs>
@@ -40176,6 +40187,11 @@ export namespace Prisma {
       status: $Enums.SequenceStatus
       stop_on_reply: boolean
       sender_profile_uuid: string | null
+      /**
+       * ISO weekdays (1=Mon..7=Sun) steps may be scheduled on, evaluated in the organisation timezone.
+       * A step landing on a disallowed day is shifted to the next allowed day (same time of day).
+       */
+      allowed_weekdays: number[]
       created_at: Date
       updated_at: Date
     }, ExtArgs["result"]["outreachSequence"]>
@@ -40614,6 +40630,7 @@ export namespace Prisma {
     readonly status: FieldRef<"OutreachSequence", 'SequenceStatus'>
     readonly stop_on_reply: FieldRef<"OutreachSequence", 'Boolean'>
     readonly sender_profile_uuid: FieldRef<"OutreachSequence", 'String'>
+    readonly allowed_weekdays: FieldRef<"OutreachSequence", 'Int[]'>
     readonly created_at: FieldRef<"OutreachSequence", 'DateTime'>
     readonly updated_at: FieldRef<"OutreachSequence", 'DateTime'>
   }
@@ -73761,6 +73778,7 @@ export namespace Prisma {
     id: number | null
     window_start_minute: number | null
     window_end_minute: number | null
+    allowed_weekdays: number | null
     min_interval_seconds: number | null
     min_interval_jitter_seconds: number | null
   }
@@ -73769,6 +73787,7 @@ export namespace Prisma {
     id: number | null
     window_start_minute: number | null
     window_end_minute: number | null
+    allowed_weekdays: number[]
     min_interval_seconds: number | null
     min_interval_jitter_seconds: number | null
   }
@@ -73818,6 +73837,7 @@ export namespace Prisma {
     timezone: number
     window_start_minute: number
     window_end_minute: number
+    allowed_weekdays: number
     min_interval_seconds: number
     min_interval_jitter_seconds: number
     created_at: number
@@ -73830,6 +73850,7 @@ export namespace Prisma {
     id?: true
     window_start_minute?: true
     window_end_minute?: true
+    allowed_weekdays?: true
     min_interval_seconds?: true
     min_interval_jitter_seconds?: true
   }
@@ -73838,6 +73859,7 @@ export namespace Prisma {
     id?: true
     window_start_minute?: true
     window_end_minute?: true
+    allowed_weekdays?: true
     min_interval_seconds?: true
     min_interval_jitter_seconds?: true
   }
@@ -73887,6 +73909,7 @@ export namespace Prisma {
     timezone?: true
     window_start_minute?: true
     window_end_minute?: true
+    allowed_weekdays?: true
     min_interval_seconds?: true
     min_interval_jitter_seconds?: true
     created_at?: true
@@ -73991,6 +74014,7 @@ export namespace Prisma {
     timezone: string
     window_start_minute: number | null
     window_end_minute: number | null
+    allowed_weekdays: number[]
     min_interval_seconds: number
     min_interval_jitter_seconds: number
     created_at: Date
@@ -74027,6 +74051,7 @@ export namespace Prisma {
     timezone?: boolean
     window_start_minute?: boolean
     window_end_minute?: boolean
+    allowed_weekdays?: boolean
     min_interval_seconds?: boolean
     min_interval_jitter_seconds?: boolean
     created_at?: boolean
@@ -74050,6 +74075,7 @@ export namespace Prisma {
     timezone?: boolean
     window_start_minute?: boolean
     window_end_minute?: boolean
+    allowed_weekdays?: boolean
     min_interval_seconds?: boolean
     min_interval_jitter_seconds?: boolean
     created_at?: boolean
@@ -74069,6 +74095,7 @@ export namespace Prisma {
     timezone?: boolean
     window_start_minute?: boolean
     window_end_minute?: boolean
+    allowed_weekdays?: boolean
     min_interval_seconds?: boolean
     min_interval_jitter_seconds?: boolean
     created_at?: boolean
@@ -74088,13 +74115,14 @@ export namespace Prisma {
     timezone?: boolean
     window_start_minute?: boolean
     window_end_minute?: boolean
+    allowed_weekdays?: boolean
     min_interval_seconds?: boolean
     min_interval_jitter_seconds?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
-  export type SendingPolicyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "name" | "description" | "is_template" | "source_policy_uuid" | "timezone" | "window_start_minute" | "window_end_minute" | "min_interval_seconds" | "min_interval_jitter_seconds" | "created_at" | "updated_at", ExtArgs["result"]["sendingPolicy"]>
+  export type SendingPolicyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "name" | "description" | "is_template" | "source_policy_uuid" | "timezone" | "window_start_minute" | "window_end_minute" | "allowed_weekdays" | "min_interval_seconds" | "min_interval_jitter_seconds" | "created_at" | "updated_at", ExtArgs["result"]["sendingPolicy"]>
   export type SendingPolicyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     source_policy?: boolean | SendingPolicy$source_policyArgs<ExtArgs>
@@ -74132,6 +74160,10 @@ export namespace Prisma {
       timezone: string
       window_start_minute: number | null
       window_end_minute: number | null
+      /**
+       * ISO weekdays (1=Mon..7=Sun) sending is allowed on, evaluated in `timezone`.
+       */
+      allowed_weekdays: number[]
       min_interval_seconds: number
       min_interval_jitter_seconds: number
       created_at: Date
@@ -74574,6 +74606,7 @@ export namespace Prisma {
     readonly timezone: FieldRef<"SendingPolicy", 'String'>
     readonly window_start_minute: FieldRef<"SendingPolicy", 'Int'>
     readonly window_end_minute: FieldRef<"SendingPolicy", 'Int'>
+    readonly allowed_weekdays: FieldRef<"SendingPolicy", 'Int[]'>
     readonly min_interval_seconds: FieldRef<"SendingPolicy", 'Int'>
     readonly min_interval_jitter_seconds: FieldRef<"SendingPolicy", 'Int'>
     readonly created_at: FieldRef<"SendingPolicy", 'DateTime'>
@@ -89429,6 +89462,7 @@ export namespace Prisma {
     status: 'status',
     stop_on_reply: 'stop_on_reply',
     sender_profile_uuid: 'sender_profile_uuid',
+    allowed_weekdays: 'allowed_weekdays',
     created_at: 'created_at',
     updated_at: 'updated_at'
   };
@@ -89975,6 +90009,7 @@ export namespace Prisma {
     timezone: 'timezone',
     window_start_minute: 'window_start_minute',
     window_end_minute: 'window_end_minute',
+    allowed_weekdays: 'allowed_weekdays',
     min_interval_seconds: 'min_interval_seconds',
     min_interval_jitter_seconds: 'min_interval_jitter_seconds',
     created_at: 'created_at',
@@ -93597,6 +93632,7 @@ export namespace Prisma {
     status?: EnumSequenceStatusFilter<"OutreachSequence"> | $Enums.SequenceStatus
     stop_on_reply?: BoolFilter<"OutreachSequence"> | boolean
     sender_profile_uuid?: StringNullableFilter<"OutreachSequence"> | string | null
+    allowed_weekdays?: IntNullableListFilter<"OutreachSequence">
     created_at?: DateTimeFilter<"OutreachSequence"> | Date | string
     updated_at?: DateTimeFilter<"OutreachSequence"> | Date | string
     organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
@@ -93615,6 +93651,7 @@ export namespace Prisma {
     status?: SortOrder
     stop_on_reply?: SortOrder
     sender_profile_uuid?: SortOrderInput | SortOrder
+    allowed_weekdays?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     organisation?: OrganisationOrderByWithRelationInput
@@ -93636,6 +93673,7 @@ export namespace Prisma {
     status?: EnumSequenceStatusFilter<"OutreachSequence"> | $Enums.SequenceStatus
     stop_on_reply?: BoolFilter<"OutreachSequence"> | boolean
     sender_profile_uuid?: StringNullableFilter<"OutreachSequence"> | string | null
+    allowed_weekdays?: IntNullableListFilter<"OutreachSequence">
     created_at?: DateTimeFilter<"OutreachSequence"> | Date | string
     updated_at?: DateTimeFilter<"OutreachSequence"> | Date | string
     organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
@@ -93654,6 +93692,7 @@ export namespace Prisma {
     status?: SortOrder
     stop_on_reply?: SortOrder
     sender_profile_uuid?: SortOrderInput | SortOrder
+    allowed_weekdays?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     _count?: OutreachSequenceCountOrderByAggregateInput
@@ -93675,6 +93714,7 @@ export namespace Prisma {
     status?: EnumSequenceStatusWithAggregatesFilter<"OutreachSequence"> | $Enums.SequenceStatus
     stop_on_reply?: BoolWithAggregatesFilter<"OutreachSequence"> | boolean
     sender_profile_uuid?: StringNullableWithAggregatesFilter<"OutreachSequence"> | string | null
+    allowed_weekdays?: IntNullableListFilter<"OutreachSequence">
     created_at?: DateTimeWithAggregatesFilter<"OutreachSequence"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"OutreachSequence"> | Date | string
   }
@@ -96514,6 +96554,7 @@ export namespace Prisma {
     timezone?: StringFilter<"SendingPolicy"> | string
     window_start_minute?: IntNullableFilter<"SendingPolicy"> | number | null
     window_end_minute?: IntNullableFilter<"SendingPolicy"> | number | null
+    allowed_weekdays?: IntNullableListFilter<"SendingPolicy">
     min_interval_seconds?: IntFilter<"SendingPolicy"> | number
     min_interval_jitter_seconds?: IntFilter<"SendingPolicy"> | number
     created_at?: DateTimeFilter<"SendingPolicy"> | Date | string
@@ -96536,6 +96577,7 @@ export namespace Prisma {
     timezone?: SortOrder
     window_start_minute?: SortOrderInput | SortOrder
     window_end_minute?: SortOrderInput | SortOrder
+    allowed_weekdays?: SortOrder
     min_interval_seconds?: SortOrder
     min_interval_jitter_seconds?: SortOrder
     created_at?: SortOrder
@@ -96561,6 +96603,7 @@ export namespace Prisma {
     timezone?: StringFilter<"SendingPolicy"> | string
     window_start_minute?: IntNullableFilter<"SendingPolicy"> | number | null
     window_end_minute?: IntNullableFilter<"SendingPolicy"> | number | null
+    allowed_weekdays?: IntNullableListFilter<"SendingPolicy">
     min_interval_seconds?: IntFilter<"SendingPolicy"> | number
     min_interval_jitter_seconds?: IntFilter<"SendingPolicy"> | number
     created_at?: DateTimeFilter<"SendingPolicy"> | Date | string
@@ -96583,6 +96626,7 @@ export namespace Prisma {
     timezone?: SortOrder
     window_start_minute?: SortOrderInput | SortOrder
     window_end_minute?: SortOrderInput | SortOrder
+    allowed_weekdays?: SortOrder
     min_interval_seconds?: SortOrder
     min_interval_jitter_seconds?: SortOrder
     created_at?: SortOrder
@@ -96608,6 +96652,7 @@ export namespace Prisma {
     timezone?: StringWithAggregatesFilter<"SendingPolicy"> | string
     window_start_minute?: IntNullableWithAggregatesFilter<"SendingPolicy"> | number | null
     window_end_minute?: IntNullableWithAggregatesFilter<"SendingPolicy"> | number | null
+    allowed_weekdays?: IntNullableListFilter<"SendingPolicy">
     min_interval_seconds?: IntWithAggregatesFilter<"SendingPolicy"> | number
     min_interval_jitter_seconds?: IntWithAggregatesFilter<"SendingPolicy"> | number
     created_at?: DateTimeWithAggregatesFilter<"SendingPolicy"> | Date | string
@@ -100323,6 +100368,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.SequenceStatus
     stop_on_reply?: boolean
+    allowed_weekdays?: OutreachSequenceCreateallowed_weekdaysInput | number[]
     created_at?: Date | string
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutOutreach_sequencesInput
@@ -100341,6 +100387,7 @@ export namespace Prisma {
     status?: $Enums.SequenceStatus
     stop_on_reply?: boolean
     sender_profile_uuid?: string | null
+    allowed_weekdays?: OutreachSequenceCreateallowed_weekdaysInput | number[]
     created_at?: Date | string
     updated_at?: Date | string
     steps?: OutreachSequenceStepUncheckedCreateNestedManyWithoutSequenceInput
@@ -100354,6 +100401,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSequenceStatusFieldUpdateOperationsInput | $Enums.SequenceStatus
     stop_on_reply?: BoolFieldUpdateOperationsInput | boolean
+    allowed_weekdays?: OutreachSequenceUpdateallowed_weekdaysInput | number[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutOutreach_sequencesNestedInput
@@ -100372,6 +100420,7 @@ export namespace Prisma {
     status?: EnumSequenceStatusFieldUpdateOperationsInput | $Enums.SequenceStatus
     stop_on_reply?: BoolFieldUpdateOperationsInput | boolean
     sender_profile_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    allowed_weekdays?: OutreachSequenceUpdateallowed_weekdaysInput | number[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     steps?: OutreachSequenceStepUncheckedUpdateManyWithoutSequenceNestedInput
@@ -100388,6 +100437,7 @@ export namespace Prisma {
     status?: $Enums.SequenceStatus
     stop_on_reply?: boolean
     sender_profile_uuid?: string | null
+    allowed_weekdays?: OutreachSequenceCreateallowed_weekdaysInput | number[]
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -100398,6 +100448,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSequenceStatusFieldUpdateOperationsInput | $Enums.SequenceStatus
     stop_on_reply?: BoolFieldUpdateOperationsInput | boolean
+    allowed_weekdays?: OutreachSequenceUpdateallowed_weekdaysInput | number[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -100411,6 +100462,7 @@ export namespace Prisma {
     status?: EnumSequenceStatusFieldUpdateOperationsInput | $Enums.SequenceStatus
     stop_on_reply?: BoolFieldUpdateOperationsInput | boolean
     sender_profile_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    allowed_weekdays?: OutreachSequenceUpdateallowed_weekdaysInput | number[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -103550,6 +103602,7 @@ export namespace Prisma {
     timezone?: string
     window_start_minute?: number | null
     window_end_minute?: number | null
+    allowed_weekdays?: SendingPolicyCreateallowed_weekdaysInput | number[]
     min_interval_seconds?: number
     min_interval_jitter_seconds?: number
     created_at?: Date | string
@@ -103572,6 +103625,7 @@ export namespace Prisma {
     timezone?: string
     window_start_minute?: number | null
     window_end_minute?: number | null
+    allowed_weekdays?: SendingPolicyCreateallowed_weekdaysInput | number[]
     min_interval_seconds?: number
     min_interval_jitter_seconds?: number
     created_at?: Date | string
@@ -103589,6 +103643,7 @@ export namespace Prisma {
     timezone?: StringFieldUpdateOperationsInput | string
     window_start_minute?: NullableIntFieldUpdateOperationsInput | number | null
     window_end_minute?: NullableIntFieldUpdateOperationsInput | number | null
+    allowed_weekdays?: SendingPolicyUpdateallowed_weekdaysInput | number[]
     min_interval_seconds?: IntFieldUpdateOperationsInput | number
     min_interval_jitter_seconds?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -103611,6 +103666,7 @@ export namespace Prisma {
     timezone?: StringFieldUpdateOperationsInput | string
     window_start_minute?: NullableIntFieldUpdateOperationsInput | number | null
     window_end_minute?: NullableIntFieldUpdateOperationsInput | number | null
+    allowed_weekdays?: SendingPolicyUpdateallowed_weekdaysInput | number[]
     min_interval_seconds?: IntFieldUpdateOperationsInput | number
     min_interval_jitter_seconds?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -103631,6 +103687,7 @@ export namespace Prisma {
     timezone?: string
     window_start_minute?: number | null
     window_end_minute?: number | null
+    allowed_weekdays?: SendingPolicyCreateallowed_weekdaysInput | number[]
     min_interval_seconds?: number
     min_interval_jitter_seconds?: number
     created_at?: Date | string
@@ -103645,6 +103702,7 @@ export namespace Prisma {
     timezone?: StringFieldUpdateOperationsInput | string
     window_start_minute?: NullableIntFieldUpdateOperationsInput | number | null
     window_end_minute?: NullableIntFieldUpdateOperationsInput | number | null
+    allowed_weekdays?: SendingPolicyUpdateallowed_weekdaysInput | number[]
     min_interval_seconds?: IntFieldUpdateOperationsInput | number
     min_interval_jitter_seconds?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -103662,6 +103720,7 @@ export namespace Prisma {
     timezone?: StringFieldUpdateOperationsInput | string
     window_start_minute?: NullableIntFieldUpdateOperationsInput | number | null
     window_end_minute?: NullableIntFieldUpdateOperationsInput | number | null
+    allowed_weekdays?: SendingPolicyUpdateallowed_weekdaysInput | number[]
     min_interval_seconds?: IntFieldUpdateOperationsInput | number
     min_interval_jitter_seconds?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -107163,6 +107222,14 @@ export namespace Prisma {
     not?: NestedEnumSequenceStatusFilter<$PrismaModel> | $Enums.SequenceStatus
   }
 
+  export type IntNullableListFilter<$PrismaModel = never> = {
+    equals?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    has?: number | IntFieldRefInput<$PrismaModel> | null
+    hasEvery?: number[] | ListIntFieldRefInput<$PrismaModel>
+    hasSome?: number[] | ListIntFieldRefInput<$PrismaModel>
+    isEmpty?: boolean
+  }
+
   export type SenderProfileNullableScalarRelationFilter = {
     is?: SenderProfileWhereInput | null
     isNot?: SenderProfileWhereInput | null
@@ -107187,12 +107254,14 @@ export namespace Prisma {
     status?: SortOrder
     stop_on_reply?: SortOrder
     sender_profile_uuid?: SortOrder
+    allowed_weekdays?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
 
   export type OutreachSequenceAvgOrderByAggregateInput = {
     id?: SortOrder
+    allowed_weekdays?: SortOrder
   }
 
   export type OutreachSequenceMaxOrderByAggregateInput = {
@@ -107223,6 +107292,7 @@ export namespace Prisma {
 
   export type OutreachSequenceSumOrderByAggregateInput = {
     id?: SortOrder
+    allowed_weekdays?: SortOrder
   }
 
   export type EnumSequenceStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -109608,6 +109678,7 @@ export namespace Prisma {
     timezone?: SortOrder
     window_start_minute?: SortOrder
     window_end_minute?: SortOrder
+    allowed_weekdays?: SortOrder
     min_interval_seconds?: SortOrder
     min_interval_jitter_seconds?: SortOrder
     created_at?: SortOrder
@@ -109618,6 +109689,7 @@ export namespace Prisma {
     id?: SortOrder
     window_start_minute?: SortOrder
     window_end_minute?: SortOrder
+    allowed_weekdays?: SortOrder
     min_interval_seconds?: SortOrder
     min_interval_jitter_seconds?: SortOrder
   }
@@ -109660,6 +109732,7 @@ export namespace Prisma {
     id?: SortOrder
     window_start_minute?: SortOrder
     window_end_minute?: SortOrder
+    allowed_weekdays?: SortOrder
     min_interval_seconds?: SortOrder
     min_interval_jitter_seconds?: SortOrder
   }
@@ -114529,6 +114602,10 @@ export namespace Prisma {
     deleteMany?: OutreachMessageScalarWhereInput | OutreachMessageScalarWhereInput[]
   }
 
+  export type OutreachSequenceCreateallowed_weekdaysInput = {
+    set: number[]
+  }
+
   export type OrganisationCreateNestedOneWithoutOutreach_sequencesInput = {
     create?: XOR<OrganisationCreateWithoutOutreach_sequencesInput, OrganisationUncheckedCreateWithoutOutreach_sequencesInput>
     connectOrCreate?: OrganisationCreateOrConnectWithoutOutreach_sequencesInput
@@ -114585,6 +114662,11 @@ export namespace Prisma {
 
   export type EnumSequenceStatusFieldUpdateOperationsInput = {
     set?: $Enums.SequenceStatus
+  }
+
+  export type OutreachSequenceUpdateallowed_weekdaysInput = {
+    set?: number[]
+    push?: number | number[]
   }
 
   export type OrganisationUpdateOneRequiredWithoutOutreach_sequencesNestedInput = {
@@ -116434,6 +116516,10 @@ export namespace Prisma {
     update?: XOR<XOR<OrganisationUpdateToOneWithWhereWithoutEmail_send_limitsInput, OrganisationUpdateWithoutEmail_send_limitsInput>, OrganisationUncheckedUpdateWithoutEmail_send_limitsInput>
   }
 
+  export type SendingPolicyCreateallowed_weekdaysInput = {
+    set: number[]
+  }
+
   export type OrganisationCreateNestedOneWithoutSending_policiesInput = {
     create?: XOR<OrganisationCreateWithoutSending_policiesInput, OrganisationUncheckedCreateWithoutSending_policiesInput>
     connectOrCreate?: OrganisationCreateOrConnectWithoutSending_policiesInput
@@ -116486,6 +116572,11 @@ export namespace Prisma {
     connectOrCreate?: CampaignIntegrationCreateOrConnectWithoutSending_policyInput | CampaignIntegrationCreateOrConnectWithoutSending_policyInput[]
     createMany?: CampaignIntegrationCreateManySending_policyInputEnvelope
     connect?: CampaignIntegrationWhereUniqueInput | CampaignIntegrationWhereUniqueInput[]
+  }
+
+  export type SendingPolicyUpdateallowed_weekdaysInput = {
+    set?: number[]
+    push?: number | number[]
   }
 
   export type OrganisationUpdateOneRequiredWithoutSending_policiesNestedInput = {
@@ -119629,6 +119720,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.SequenceStatus
     stop_on_reply?: boolean
+    allowed_weekdays?: OutreachSequenceCreateallowed_weekdaysInput | number[]
     created_at?: Date | string
     updated_at?: Date | string
     sender_profile?: SenderProfileCreateNestedOneWithoutSequencesInput
@@ -119645,6 +119737,7 @@ export namespace Prisma {
     status?: $Enums.SequenceStatus
     stop_on_reply?: boolean
     sender_profile_uuid?: string | null
+    allowed_weekdays?: OutreachSequenceCreateallowed_weekdaysInput | number[]
     created_at?: Date | string
     updated_at?: Date | string
     steps?: OutreachSequenceStepUncheckedCreateNestedManyWithoutSequenceInput
@@ -120614,6 +120707,7 @@ export namespace Prisma {
     timezone?: string
     window_start_minute?: number | null
     window_end_minute?: number | null
+    allowed_weekdays?: SendingPolicyCreateallowed_weekdaysInput | number[]
     min_interval_seconds?: number
     min_interval_jitter_seconds?: number
     created_at?: Date | string
@@ -120634,6 +120728,7 @@ export namespace Prisma {
     timezone?: string
     window_start_minute?: number | null
     window_end_minute?: number | null
+    allowed_weekdays?: SendingPolicyCreateallowed_weekdaysInput | number[]
     min_interval_seconds?: number
     min_interval_jitter_seconds?: number
     created_at?: Date | string
@@ -121066,6 +121161,7 @@ export namespace Prisma {
     status?: EnumSequenceStatusFilter<"OutreachSequence"> | $Enums.SequenceStatus
     stop_on_reply?: BoolFilter<"OutreachSequence"> | boolean
     sender_profile_uuid?: StringNullableFilter<"OutreachSequence"> | string | null
+    allowed_weekdays?: IntNullableListFilter<"OutreachSequence">
     created_at?: DateTimeFilter<"OutreachSequence"> | Date | string
     updated_at?: DateTimeFilter<"OutreachSequence"> | Date | string
   }
@@ -121773,6 +121869,7 @@ export namespace Prisma {
     timezone?: StringFilter<"SendingPolicy"> | string
     window_start_minute?: IntNullableFilter<"SendingPolicy"> | number | null
     window_end_minute?: IntNullableFilter<"SendingPolicy"> | number | null
+    allowed_weekdays?: IntNullableListFilter<"SendingPolicy">
     min_interval_seconds?: IntFilter<"SendingPolicy"> | number
     min_interval_jitter_seconds?: IntFilter<"SendingPolicy"> | number
     created_at?: DateTimeFilter<"SendingPolicy"> | Date | string
@@ -131275,6 +131372,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.SequenceStatus
     stop_on_reply?: boolean
+    allowed_weekdays?: OutreachSequenceCreateallowed_weekdaysInput | number[]
     created_at?: Date | string
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutOutreach_sequencesInput
@@ -131292,6 +131390,7 @@ export namespace Prisma {
     status?: $Enums.SequenceStatus
     stop_on_reply?: boolean
     sender_profile_uuid?: string | null
+    allowed_weekdays?: OutreachSequenceCreateallowed_weekdaysInput | number[]
     created_at?: Date | string
     updated_at?: Date | string
     enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutSequenceInput
@@ -131455,6 +131554,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSequenceStatusFieldUpdateOperationsInput | $Enums.SequenceStatus
     stop_on_reply?: BoolFieldUpdateOperationsInput | boolean
+    allowed_weekdays?: OutreachSequenceUpdateallowed_weekdaysInput | number[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutOutreach_sequencesNestedInput
@@ -131472,6 +131572,7 @@ export namespace Prisma {
     status?: EnumSequenceStatusFieldUpdateOperationsInput | $Enums.SequenceStatus
     stop_on_reply?: BoolFieldUpdateOperationsInput | boolean
     sender_profile_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    allowed_weekdays?: OutreachSequenceUpdateallowed_weekdaysInput | number[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutSequenceNestedInput
@@ -131542,6 +131643,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.SequenceStatus
     stop_on_reply?: boolean
+    allowed_weekdays?: OutreachSequenceCreateallowed_weekdaysInput | number[]
     created_at?: Date | string
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutOutreach_sequencesInput
@@ -131559,6 +131661,7 @@ export namespace Prisma {
     status?: $Enums.SequenceStatus
     stop_on_reply?: boolean
     sender_profile_uuid?: string | null
+    allowed_weekdays?: OutreachSequenceCreateallowed_weekdaysInput | number[]
     created_at?: Date | string
     updated_at?: Date | string
     steps?: OutreachSequenceStepUncheckedCreateNestedManyWithoutSequenceInput
@@ -131918,6 +132021,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSequenceStatusFieldUpdateOperationsInput | $Enums.SequenceStatus
     stop_on_reply?: BoolFieldUpdateOperationsInput | boolean
+    allowed_weekdays?: OutreachSequenceUpdateallowed_weekdaysInput | number[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutOutreach_sequencesNestedInput
@@ -131935,6 +132039,7 @@ export namespace Prisma {
     status?: EnumSequenceStatusFieldUpdateOperationsInput | $Enums.SequenceStatus
     stop_on_reply?: BoolFieldUpdateOperationsInput | boolean
     sender_profile_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    allowed_weekdays?: OutreachSequenceUpdateallowed_weekdaysInput | number[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     steps?: OutreachSequenceStepUncheckedUpdateManyWithoutSequenceNestedInput
@@ -133061,6 +133166,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.SequenceStatus
     stop_on_reply?: boolean
+    allowed_weekdays?: OutreachSequenceCreateallowed_weekdaysInput | number[]
     created_at?: Date | string
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutOutreach_sequencesInput
@@ -133077,6 +133183,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.SequenceStatus
     stop_on_reply?: boolean
+    allowed_weekdays?: OutreachSequenceCreateallowed_weekdaysInput | number[]
     created_at?: Date | string
     updated_at?: Date | string
     steps?: OutreachSequenceStepUncheckedCreateNestedManyWithoutSequenceInput
@@ -133799,6 +133906,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.SequenceStatus
     stop_on_reply?: boolean
+    allowed_weekdays?: OutreachSequenceCreateallowed_weekdaysInput | number[]
     created_at?: Date | string
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutOutreach_sequencesInput
@@ -133816,6 +133924,7 @@ export namespace Prisma {
     status?: $Enums.SequenceStatus
     stop_on_reply?: boolean
     sender_profile_uuid?: string | null
+    allowed_weekdays?: OutreachSequenceCreateallowed_weekdaysInput | number[]
     created_at?: Date | string
     updated_at?: Date | string
     steps?: OutreachSequenceStepUncheckedCreateNestedManyWithoutSequenceInput
@@ -134322,6 +134431,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSequenceStatusFieldUpdateOperationsInput | $Enums.SequenceStatus
     stop_on_reply?: BoolFieldUpdateOperationsInput | boolean
+    allowed_weekdays?: OutreachSequenceUpdateallowed_weekdaysInput | number[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutOutreach_sequencesNestedInput
@@ -134339,6 +134449,7 @@ export namespace Prisma {
     status?: EnumSequenceStatusFieldUpdateOperationsInput | $Enums.SequenceStatus
     stop_on_reply?: BoolFieldUpdateOperationsInput | boolean
     sender_profile_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    allowed_weekdays?: OutreachSequenceUpdateallowed_weekdaysInput | number[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     steps?: OutreachSequenceStepUncheckedUpdateManyWithoutSequenceNestedInput
@@ -139465,6 +139576,7 @@ export namespace Prisma {
     timezone?: string
     window_start_minute?: number | null
     window_end_minute?: number | null
+    allowed_weekdays?: SendingPolicyCreateallowed_weekdaysInput | number[]
     min_interval_seconds?: number
     min_interval_jitter_seconds?: number
     created_at?: Date | string
@@ -139486,6 +139598,7 @@ export namespace Prisma {
     timezone?: string
     window_start_minute?: number | null
     window_end_minute?: number | null
+    allowed_weekdays?: SendingPolicyCreateallowed_weekdaysInput | number[]
     min_interval_seconds?: number
     min_interval_jitter_seconds?: number
     created_at?: Date | string
@@ -139507,6 +139620,7 @@ export namespace Prisma {
     timezone?: string
     window_start_minute?: number | null
     window_end_minute?: number | null
+    allowed_weekdays?: SendingPolicyCreateallowed_weekdaysInput | number[]
     min_interval_seconds?: number
     min_interval_jitter_seconds?: number
     created_at?: Date | string
@@ -139527,6 +139641,7 @@ export namespace Prisma {
     timezone?: string
     window_start_minute?: number | null
     window_end_minute?: number | null
+    allowed_weekdays?: SendingPolicyCreateallowed_weekdaysInput | number[]
     min_interval_seconds?: number
     min_interval_jitter_seconds?: number
     created_at?: Date | string
@@ -139735,6 +139850,7 @@ export namespace Prisma {
     timezone?: StringFieldUpdateOperationsInput | string
     window_start_minute?: NullableIntFieldUpdateOperationsInput | number | null
     window_end_minute?: NullableIntFieldUpdateOperationsInput | number | null
+    allowed_weekdays?: SendingPolicyUpdateallowed_weekdaysInput | number[]
     min_interval_seconds?: IntFieldUpdateOperationsInput | number
     min_interval_jitter_seconds?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -139756,6 +139872,7 @@ export namespace Prisma {
     timezone?: StringFieldUpdateOperationsInput | string
     window_start_minute?: NullableIntFieldUpdateOperationsInput | number | null
     window_end_minute?: NullableIntFieldUpdateOperationsInput | number | null
+    allowed_weekdays?: SendingPolicyUpdateallowed_weekdaysInput | number[]
     min_interval_seconds?: IntFieldUpdateOperationsInput | number
     min_interval_jitter_seconds?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -139836,6 +139953,7 @@ export namespace Prisma {
     timezone?: string
     window_start_minute?: number | null
     window_end_minute?: number | null
+    allowed_weekdays?: SendingPolicyCreateallowed_weekdaysInput | number[]
     min_interval_seconds?: number
     min_interval_jitter_seconds?: number
     created_at?: Date | string
@@ -139857,6 +139975,7 @@ export namespace Prisma {
     timezone?: string
     window_start_minute?: number | null
     window_end_minute?: number | null
+    allowed_weekdays?: SendingPolicyCreateallowed_weekdaysInput | number[]
     min_interval_seconds?: number
     min_interval_jitter_seconds?: number
     created_at?: Date | string
@@ -139889,6 +140008,7 @@ export namespace Prisma {
     timezone?: StringFieldUpdateOperationsInput | string
     window_start_minute?: NullableIntFieldUpdateOperationsInput | number | null
     window_end_minute?: NullableIntFieldUpdateOperationsInput | number | null
+    allowed_weekdays?: SendingPolicyUpdateallowed_weekdaysInput | number[]
     min_interval_seconds?: IntFieldUpdateOperationsInput | number
     min_interval_jitter_seconds?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -139910,6 +140030,7 @@ export namespace Prisma {
     timezone?: StringFieldUpdateOperationsInput | string
     window_start_minute?: NullableIntFieldUpdateOperationsInput | number | null
     window_end_minute?: NullableIntFieldUpdateOperationsInput | number | null
+    allowed_weekdays?: SendingPolicyUpdateallowed_weekdaysInput | number[]
     min_interval_seconds?: IntFieldUpdateOperationsInput | number
     min_interval_jitter_seconds?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -140080,6 +140201,7 @@ export namespace Prisma {
     timezone?: string
     window_start_minute?: number | null
     window_end_minute?: number | null
+    allowed_weekdays?: SendingPolicyCreateallowed_weekdaysInput | number[]
     min_interval_seconds?: number
     min_interval_jitter_seconds?: number
     created_at?: Date | string
@@ -140101,6 +140223,7 @@ export namespace Prisma {
     timezone?: string
     window_start_minute?: number | null
     window_end_minute?: number | null
+    allowed_weekdays?: SendingPolicyCreateallowed_weekdaysInput | number[]
     min_interval_seconds?: number
     min_interval_jitter_seconds?: number
     created_at?: Date | string
@@ -140428,6 +140551,7 @@ export namespace Prisma {
     timezone?: StringFieldUpdateOperationsInput | string
     window_start_minute?: NullableIntFieldUpdateOperationsInput | number | null
     window_end_minute?: NullableIntFieldUpdateOperationsInput | number | null
+    allowed_weekdays?: SendingPolicyUpdateallowed_weekdaysInput | number[]
     min_interval_seconds?: IntFieldUpdateOperationsInput | number
     min_interval_jitter_seconds?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -140449,6 +140573,7 @@ export namespace Prisma {
     timezone?: StringFieldUpdateOperationsInput | string
     window_start_minute?: NullableIntFieldUpdateOperationsInput | number | null
     window_end_minute?: NullableIntFieldUpdateOperationsInput | number | null
+    allowed_weekdays?: SendingPolicyUpdateallowed_weekdaysInput | number[]
     min_interval_seconds?: IntFieldUpdateOperationsInput | number
     min_interval_jitter_seconds?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -143336,6 +143461,7 @@ export namespace Prisma {
     status?: $Enums.SequenceStatus
     stop_on_reply?: boolean
     sender_profile_uuid?: string | null
+    allowed_weekdays?: OutreachSequenceCreateallowed_weekdaysInput | number[]
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -143698,6 +143824,7 @@ export namespace Prisma {
     timezone?: string
     window_start_minute?: number | null
     window_end_minute?: number | null
+    allowed_weekdays?: SendingPolicyCreateallowed_weekdaysInput | number[]
     min_interval_seconds?: number
     min_interval_jitter_seconds?: number
     created_at?: Date | string
@@ -144242,6 +144369,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSequenceStatusFieldUpdateOperationsInput | $Enums.SequenceStatus
     stop_on_reply?: BoolFieldUpdateOperationsInput | boolean
+    allowed_weekdays?: OutreachSequenceUpdateallowed_weekdaysInput | number[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     sender_profile?: SenderProfileUpdateOneWithoutSequencesNestedInput
@@ -144258,6 +144386,7 @@ export namespace Prisma {
     status?: EnumSequenceStatusFieldUpdateOperationsInput | $Enums.SequenceStatus
     stop_on_reply?: BoolFieldUpdateOperationsInput | boolean
     sender_profile_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    allowed_weekdays?: OutreachSequenceUpdateallowed_weekdaysInput | number[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     steps?: OutreachSequenceStepUncheckedUpdateManyWithoutSequenceNestedInput
@@ -144273,6 +144402,7 @@ export namespace Prisma {
     status?: EnumSequenceStatusFieldUpdateOperationsInput | $Enums.SequenceStatus
     stop_on_reply?: BoolFieldUpdateOperationsInput | boolean
     sender_profile_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    allowed_weekdays?: OutreachSequenceUpdateallowed_weekdaysInput | number[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -145357,6 +145487,7 @@ export namespace Prisma {
     timezone?: StringFieldUpdateOperationsInput | string
     window_start_minute?: NullableIntFieldUpdateOperationsInput | number | null
     window_end_minute?: NullableIntFieldUpdateOperationsInput | number | null
+    allowed_weekdays?: SendingPolicyUpdateallowed_weekdaysInput | number[]
     min_interval_seconds?: IntFieldUpdateOperationsInput | number
     min_interval_jitter_seconds?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -145377,6 +145508,7 @@ export namespace Prisma {
     timezone?: StringFieldUpdateOperationsInput | string
     window_start_minute?: NullableIntFieldUpdateOperationsInput | number | null
     window_end_minute?: NullableIntFieldUpdateOperationsInput | number | null
+    allowed_weekdays?: SendingPolicyUpdateallowed_weekdaysInput | number[]
     min_interval_seconds?: IntFieldUpdateOperationsInput | number
     min_interval_jitter_seconds?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -145396,6 +145528,7 @@ export namespace Prisma {
     timezone?: StringFieldUpdateOperationsInput | string
     window_start_minute?: NullableIntFieldUpdateOperationsInput | number | null
     window_end_minute?: NullableIntFieldUpdateOperationsInput | number | null
+    allowed_weekdays?: SendingPolicyUpdateallowed_weekdaysInput | number[]
     min_interval_seconds?: IntFieldUpdateOperationsInput | number
     min_interval_jitter_seconds?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -148385,6 +148518,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.SequenceStatus
     stop_on_reply?: boolean
+    allowed_weekdays?: OutreachSequenceCreateallowed_weekdaysInput | number[]
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -148575,6 +148709,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSequenceStatusFieldUpdateOperationsInput | $Enums.SequenceStatus
     stop_on_reply?: BoolFieldUpdateOperationsInput | boolean
+    allowed_weekdays?: OutreachSequenceUpdateallowed_weekdaysInput | number[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutOutreach_sequencesNestedInput
@@ -148591,6 +148726,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSequenceStatusFieldUpdateOperationsInput | $Enums.SequenceStatus
     stop_on_reply?: BoolFieldUpdateOperationsInput | boolean
+    allowed_weekdays?: OutreachSequenceUpdateallowed_weekdaysInput | number[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     steps?: OutreachSequenceStepUncheckedUpdateManyWithoutSequenceNestedInput
@@ -148606,6 +148742,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSequenceStatusFieldUpdateOperationsInput | $Enums.SequenceStatus
     stop_on_reply?: BoolFieldUpdateOperationsInput | boolean
+    allowed_weekdays?: OutreachSequenceUpdateallowed_weekdaysInput | number[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -149629,6 +149766,7 @@ export namespace Prisma {
     timezone?: string
     window_start_minute?: number | null
     window_end_minute?: number | null
+    allowed_weekdays?: SendingPolicyCreateallowed_weekdaysInput | number[]
     min_interval_seconds?: number
     min_interval_jitter_seconds?: number
     created_at?: Date | string
@@ -149666,6 +149804,7 @@ export namespace Prisma {
     timezone?: StringFieldUpdateOperationsInput | string
     window_start_minute?: NullableIntFieldUpdateOperationsInput | number | null
     window_end_minute?: NullableIntFieldUpdateOperationsInput | number | null
+    allowed_weekdays?: SendingPolicyUpdateallowed_weekdaysInput | number[]
     min_interval_seconds?: IntFieldUpdateOperationsInput | number
     min_interval_jitter_seconds?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -149686,6 +149825,7 @@ export namespace Prisma {
     timezone?: StringFieldUpdateOperationsInput | string
     window_start_minute?: NullableIntFieldUpdateOperationsInput | number | null
     window_end_minute?: NullableIntFieldUpdateOperationsInput | number | null
+    allowed_weekdays?: SendingPolicyUpdateallowed_weekdaysInput | number[]
     min_interval_seconds?: IntFieldUpdateOperationsInput | number
     min_interval_jitter_seconds?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -149705,6 +149845,7 @@ export namespace Prisma {
     timezone?: StringFieldUpdateOperationsInput | string
     window_start_minute?: NullableIntFieldUpdateOperationsInput | number | null
     window_end_minute?: NullableIntFieldUpdateOperationsInput | number | null
+    allowed_weekdays?: SendingPolicyUpdateallowed_weekdaysInput | number[]
     min_interval_seconds?: IntFieldUpdateOperationsInput | number
     min_interval_jitter_seconds?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string

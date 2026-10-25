@@ -486,6 +486,7 @@ exports.Prisma.OutreachSequenceScalarFieldEnum = {
   status: 'status',
   stop_on_reply: 'stop_on_reply',
   sender_profile_uuid: 'sender_profile_uuid',
+  allowed_weekdays: 'allowed_weekdays',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };
@@ -951,6 +952,7 @@ exports.Prisma.SendingPolicyScalarFieldEnum = {
   timezone: 'timezone',
   window_start_minute: 'window_start_minute',
   window_end_minute: 'window_end_minute',
+  allowed_weekdays: 'allowed_weekdays',
   min_interval_seconds: 'min_interval_seconds',
   min_interval_jitter_seconds: 'min_interval_jitter_seconds',
   created_at: 'created_at',

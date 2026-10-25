@@ -666,6 +666,9 @@ model OutreachSequence {
   stop_on_reply       Boolean        @default(true)
   // Sender profile used for messages of standalone (non-campaign) enrollments.
   sender_profile_uuid String?
+  /// ISO weekdays (1=Mon..7=Sun) steps may be scheduled on, evaluated in the organisation timezone.
+  /// A step landing on a disallowed day is shifted to the next allowed day (same time of day).
+  allowed_weekdays    Int[]          @default([1, 2, 3, 4, 5, 6, 7])
   created_at          DateTime       @default(now())
   updated_at          DateTime       @updatedAt
 
@@ -1796,6 +1799,8 @@ model SendingPolicy {
   timezone                    String   @default("UTC")
   window_start_minute         Int?
   window_end_minute           Int?
+  /// ISO weekdays (1=Mon..7=Sun) sending is allowed on, evaluated in `timezone`.
+  allowed_weekdays            Int[]    @default([1, 2, 3, 4, 5, 6, 7])
   min_interval_seconds        Int      @default(0)
   min_interval_jitter_seconds Int      @default(0)
   created_at                  DateTime @default(now())

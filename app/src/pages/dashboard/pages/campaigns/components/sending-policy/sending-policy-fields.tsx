@@ -1,6 +1,7 @@
 import { AlertTriangle } from "lucide-react";
 import { Button, Input, Label, TextField } from "@heroui/react";
 import type { SendingPolicyFormState } from "@/features/sending-policy/hooks/use-sending-policy-form";
+import { WeekdaysPicker } from "@/components/ui/weekdays-picker";
 import { StageRow } from "./stage-row";
 import { SearchSelect } from "@/components/ui/search-select";
 
@@ -65,6 +66,14 @@ export function SendingPolicyFields({ form, disabled = false }: SendingPolicyFie
                         onChange={form.setTimezone}
                         isDisabled={disabled}
                         fullWidth
+                    />
+                </div>
+                <div className="sm:col-span-2">
+                    <WeekdaysPicker
+                        value={form.allowedWeekdays}
+                        onChange={form.setAllowedWeekdays}
+                        disabled={disabled}
+                        description="Sending pauses on other days (in the timezone above) and resumes on the next allowed day. Nothing is dropped, and daily caps still apply."
                     />
                 </div>
                 <TextField>

@@ -14,7 +14,10 @@ export class BulkTriggerScoreDto {
     @IsUUID('4', { each: true })
     scoring_instruction_uuids: string[];
 
-    @ApiPropertyOptional()
+    @ApiPropertyOptional({
+        deprecated: true,
+        description: 'Deprecated and ignored: scoring always runs as direct jobs.',
+    })
     @IsOptional()
     @IsBoolean()
     use_batch?: boolean;

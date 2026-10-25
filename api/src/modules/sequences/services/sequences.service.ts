@@ -19,6 +19,7 @@ import {
     isEmailHtmlEmpty,
     sanitizeEmailHtml,
 } from '@/shared/utils/sanitize-html.util';
+import { normalizeWeekdays } from '@/shared/utils/weekdays.util';
 import { OrgTagsService } from '@/modules/org-tags/org-tags.service';
 import { CreateSequenceDto } from '../dto/create-sequence.dto';
 import { UpdateSequenceDto } from '../dto/update-sequence.dto';
@@ -84,6 +85,9 @@ export class SequencesService {
                 status: SequenceStatus.ACTIVE,
                 stop_on_reply: dto.stop_on_reply ?? true,
                 sender_profile_uuid: dto.sender_profile_uuid ?? null,
+                ...(dto.allowed_weekdays && {
+                    allowed_weekdays: normalizeWeekdays(dto.allowed_weekdays),
+                }),
             },
         });
         if (dto.tag_uuids?.length) {
@@ -175,6 +179,9 @@ export class SequencesService {
                 }),
                 ...(dto.sender_profile_uuid !== undefined && {
                     sender_profile_uuid: dto.sender_profile_uuid,
+                }),
+                ...(dto.allowed_weekdays !== undefined && {
+                    allowed_weekdays: normalizeWeekdays(dto.allowed_weekdays),
                 }),
             },
         });

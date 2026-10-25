@@ -60,7 +60,8 @@ export class OpenAiBatchDispatchService {
                 await this.contactAiService.processBatchMessageCreateResults(batchId);
                 break;
             case OpenAiBatchJobType.CONTACT_SCORE:
-                await this.contactAiService.processBatchScoreResults(batchId);
+                // Legacy: contact scoring now runs through Jev; no new CONTACT_SCORE batches are created.
+                this.logger.warn(`Ignoring legacy CONTACT_SCORE batch ${batchId}`);
                 break;
             default:
                 this.logger.warn(`Unknown batch job type for ${batchId}: ${job.type}`);

@@ -1,5 +1,6 @@
 import { useLayoutEffect, useMemo, useRef, useState } from "react";
 import { TimezoneOptions } from "@/config/constants/dropdowns/timezone.options";
+import { ALL_WEEKDAYS } from "@/components/ui/weekdays-picker";
 import {
     SendingPeriodUnit,
     type SendingPolicy,
@@ -36,6 +37,7 @@ export interface SendingPolicyMeta {
     timezone: string;
     window_start_minute?: number;
     window_end_minute?: number;
+    allowed_weekdays: number[];
     min_interval_seconds: number;
 }
 
@@ -53,6 +55,7 @@ export function useSendingPolicyForm(initial: SendingPolicy | null | undefined, 
     const [timezone, setTimezone] = useState("UTC");
     const [windowStart, setWindowStart] = useState("");
     const [windowEnd, setWindowEnd] = useState("");
+    const [allowedWeekdays, setAllowedWeekdays] = useState<number[]>(ALL_WEEKDAYS);
     const [minIntervalMinutes, setMinIntervalMinutes] = useState("0");
     const [stages, setStages] = useState<UpsertSendingPolicyStagePayload[]>([DEFAULT_STAGE]);
     const wasOpenRef = useRef(false);
@@ -74,6 +77,7 @@ export function useSendingPolicyForm(initial: SendingPolicy | null | undefined, 
             setTimezone(initial.timezone);
             setWindowStart(minutesToTime(initial.window_start_minute));
             setWindowEnd(minutesToTime(initial.window_end_minute));
+            setAllowedWeekdays(initial.allowed_weekdays?.length ? initial.allowed_weekdays : ALL_WEEKDAYS);
             setMinIntervalMinutes(String(Math.round(initial.min_interval_seconds / 60)));
             setStages(
                 [...initial.stages]
@@ -92,6 +96,7 @@ export function useSendingPolicyForm(initial: SendingPolicy | null | undefined, 
             setTimezone(browserTimezone && KNOWN_TIMEZONES.has(browserTimezone) ? browserTimezone : "UTC");
             setWindowStart("");
             setWindowEnd("");
+            setAllowedWeekdays(ALL_WEEKDAYS);
             setMinIntervalMinutes("0");
             setStages([DEFAULT_STAGE]);
         }
@@ -133,7 +138,8 @@ export function useSendingPolicyForm(initial: SendingPolicy | null | undefined, 
         [timezone],
     );
 
-    const isValid = name.trim().length > 0 && stages.length > 0 && !windowOrderError;
+    const isValid =
+        name.trim().length > 0 && stages.length > 0 && !windowOrderError && allowedWeekdays.length > 0;
 
     const toMeta = (): SendingPolicyMeta => ({
         name: name.trim(),
@@ -141,6 +147,7 @@ export function useSendingPolicyForm(initial: SendingPolicy | null | undefined, 
         timezone: timezone.trim() || "UTC",
         window_start_minute: windowStartMinute,
         window_end_minute: windowEndMinute,
+        allowed_weekdays: allowedWeekdays,
         min_interval_seconds: minIntervalSeconds,
     });
 
@@ -155,6 +162,8 @@ export function useSendingPolicyForm(initial: SendingPolicy | null | undefined, 
         setWindowStart,
         windowEnd,
         setWindowEnd,
+        allowedWeekdays,
+        setAllowedWeekdays,
         minIntervalMinutes,
         setMinIntervalMinutes,
         stages,

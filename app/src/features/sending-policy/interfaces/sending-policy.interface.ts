@@ -25,6 +25,7 @@ export interface SendingPolicy {
     timezone: string;
     window_start_minute: number | null;
     window_end_minute: number | null;
+    allowed_weekdays: number[];
     min_interval_seconds: number;
     min_interval_jitter_seconds: number;
     stages: SendingPolicyStage[];
@@ -45,6 +46,7 @@ export interface CreateSendingPolicyPayload {
     timezone?: string;
     window_start_minute?: number;
     window_end_minute?: number;
+    allowed_weekdays?: number[];
     min_interval_seconds?: number;
     min_interval_jitter_seconds?: number;
     stages: UpsertSendingPolicyStagePayload[];

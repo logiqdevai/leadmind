@@ -2,10 +2,12 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
   ArrayMinSize,
+  ArrayUnique,
   IsArray,
   IsInt,
   IsOptional,
   IsString,
+  Max,
   MaxLength,
   Min,
   ValidateNested,
@@ -47,6 +49,21 @@ export class CreateSendingPolicyDto {
   @IsInt()
   @Min(0)
   window_end_minute?: number;
+
+  @ApiPropertyOptional({
+    type: [Number],
+    example: [1, 2, 3, 4, 5],
+    description:
+      'ISO weekdays (1=Mon ... 7=Sun) sending is allowed on, in the policy timezone. Defaults to all days; use [1,2,3,4,5] for weekdays only. Sends that would fall on another day are deferred (not dropped) to the next allowed day, still subject to the stage caps.',
+  })
+  @IsOptional()
+  @IsArray()
+  @ArrayMinSize(1)
+  @ArrayUnique()
+  @IsInt({ each: true })
+  @Min(1, { each: true })
+  @Max(7, { each: true })
+  allowed_weekdays?: number[];
 
   @ApiPropertyOptional({ minimum: 0, default: 0 })
   @IsOptional()

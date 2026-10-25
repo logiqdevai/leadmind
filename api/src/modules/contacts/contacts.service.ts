@@ -1414,10 +1414,7 @@ export class ContactsService {
         organisation_uuid: string,
         dto: BulkTriggerScoreDto,
         user_uuid?: string | null,
-    ): Promise<
-        | { jobIds: string[]; queued: number; skipped_contacts: number; is_batch: false }
-        | { batch_id: string; queued: number; skipped_contacts: number; is_batch: true }
-    > {
+    ): Promise<{ jobIds: string[]; queued: number; skipped_contacts: number; is_batch: false }> {
         const contactUuids = [...new Set(dto.contact_uuids)];
         const ruleUuids = [...new Set(dto.scoring_instruction_uuids)];
 
@@ -1440,77 +1437,48 @@ export class ContactsService {
             throw new NotFoundException(`Contact(s) not found: ${missing.join(', ')}`);
         }
 
-        const jobIds: string[] = [];
-        const batchPlan: Array<{ contact_uuid: string; instruction_uuids: string[] }> = [];
-        let skipped_contacts = 0;
-        const scoreBulkJob = dto.use_batch
-            ? null
-            : await this.bulkJobsService.create({
-                  organisation_uuid,
-                  created_by_user_uuid: user_uuid,
-                  title: `Score contacts (${contacts.length})`,
-                  type: BulkJobType.CONTACT_SCORE,
-                  status: BulkJobStatus.QUEUED,
-                  progress_total: contacts.length,
-                  queue_name: AI_PROCESS_QUEUE,
-                  reference_type: 'contacts',
-                  metadata: {
-                      contact_uuids: contactUuids,
-                      scoring_instruction_uuids: ruleUuids,
-                  },
-              });
+        const skipped_contacts = 0;
+        const scoreBulkJob = await this.bulkJobsService.create({
+            organisation_uuid,
+            created_by_user_uuid: user_uuid,
+            title: `Score contacts (${contacts.length})`,
+            type: BulkJobType.CONTACT_SCORE,
+            status: BulkJobStatus.QUEUED,
+            progress_total: contacts.length,
+            queue_name: AI_PROCESS_QUEUE,
+            reference_type: 'contacts',
+            metadata: {
+                contact_uuids: contactUuids,
+                scoring_instruction_uuids: ruleUuids,
+            },
+        });
 
-        if (dto.use_batch) {
-            for (const c of contacts) {
-                batchPlan.push({ contact_uuid: c.uuid, instruction_uuids: ruleUuids });
-            }
-        } else {
-            const { jobIds: queuedJobIds } = await enqueueContactScoreJobs(
-                this.aiProcessQueue,
-                this.prisma,
-                contacts.map((c) => ({
-                    contactUuid: c.uuid,
-                    allowed: ruleUuids,
-                    scoringInstructionUuidsRequested: ruleUuids,
-                })),
-                scoreBulkJob?.uuid,
-            );
-            jobIds.push(...queuedJobIds);
-        }
-
-        if (dto.use_batch) {
-            if (batchPlan.length === 0) {
-                throw new BadRequestException(
-                    'No contacts to score with the chosen scoring rules.',
-                );
-            }
-            const { batch_id, queued } = await this.contactAiService.submitBatchScore(
-                organisation_uuid,
-                batchPlan,
-                user_uuid,
-            );
-            return { batch_id, queued, skipped_contacts, is_batch: true as const };
-        }
+        const { jobIds } = await enqueueContactScoreJobs(
+            this.aiProcessQueue,
+            this.prisma,
+            contacts.map((c) => ({
+                contactUuid: c.uuid,
+                allowed: ruleUuids,
+                scoringInstructionUuidsRequested: ruleUuids,
+            })),
+            scoreBulkJob.uuid,
+        );
 
         if (jobIds.length === 0) {
-            if (scoreBulkJob) {
-                await this.bulkJobsService.cancel(scoreBulkJob.uuid, 'No eligible contacts to score');
-            }
+            await this.bulkJobsService.cancel(scoreBulkJob.uuid, 'No eligible contacts to score');
             throw new BadRequestException(
                 'No contacts to score with the chosen scoring rules.',
             );
         }
 
-        if (scoreBulkJob) {
-            await this.prisma.bulkJob.update({
-                where: { uuid: scoreBulkJob.uuid },
-                data: { progress_total: jobIds.length > 0 ? contacts.length : 0 },
-            });
-            await this.bulkJobsService.markRunning(scoreBulkJob.uuid, {
-                queue_job_id: jobIds[0] ?? null,
-                queue_job_ids: jobIds,
-            });
-        }
+        await this.prisma.bulkJob.update({
+            where: { uuid: scoreBulkJob.uuid },
+            data: { progress_total: contacts.length },
+        });
+        await this.bulkJobsService.markRunning(scoreBulkJob.uuid, {
+            queue_job_id: jobIds[0] ?? null,
+            queue_job_ids: jobIds,
+        });
 
         return { jobIds, queued: jobIds.length, skipped_contacts, is_batch: false as const };
     }

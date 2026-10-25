@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { SendingPolicy } from '@/generated/prisma';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
+import { normalizeWeekdays } from '@/shared/utils/weekdays.util';
 import { CreateSendingPolicyDto } from '../dto/create-sending-policy.dto';
 import { UpdateSendingPolicyDto } from '../dto/update-sending-policy.dto';
 import { UpsertSendingPolicyStageDto } from '../dto/upsert-sending-policy-stage.dto';
@@ -34,6 +35,9 @@ export class SendingPolicyService {
         timezone: dto.timezone ?? 'UTC',
         window_start_minute: dto.window_start_minute,
         window_end_minute: dto.window_end_minute,
+        ...(dto.allowed_weekdays && {
+          allowed_weekdays: normalizeWeekdays(dto.allowed_weekdays),
+        }),
         min_interval_seconds: dto.min_interval_seconds ?? 0,
         min_interval_jitter_seconds: dto.min_interval_jitter_seconds ?? 0,
         stages: {
@@ -78,6 +82,9 @@ export class SendingPolicyService {
         timezone: dto.timezone,
         window_start_minute: dto.window_start_minute,
         window_end_minute: dto.window_end_minute,
+        ...(dto.allowed_weekdays !== undefined && {
+          allowed_weekdays: normalizeWeekdays(dto.allowed_weekdays),
+        }),
         min_interval_seconds: dto.min_interval_seconds,
         min_interval_jitter_seconds: dto.min_interval_jitter_seconds,
       },
@@ -237,6 +244,7 @@ export class SendingPolicyService {
         timezone: source.timezone,
         window_start_minute: source.window_start_minute,
         window_end_minute: source.window_end_minute,
+        allowed_weekdays: source.allowed_weekdays,
         min_interval_seconds: source.min_interval_seconds,
         min_interval_jitter_seconds: source.min_interval_jitter_seconds,
         stages: {

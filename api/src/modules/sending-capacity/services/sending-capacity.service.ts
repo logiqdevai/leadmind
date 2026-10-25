@@ -8,6 +8,7 @@ import {
 } from '@/generated/prisma';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { getPeriodWindow } from '@/modules/messaging-goals/utils/messaging-goals.utils';
+import { isRestricted } from '@/shared/utils/weekdays.util';
 import { SendingStageResolverService } from '@/modules/sending-policy/services/sending-stage-resolver.service';
 import {
   CapacityObservability,
@@ -403,6 +404,7 @@ export class SendingCapacityService {
       sending_window: {
         start_minute: policy.window_start_minute,
         end_minute: policy.window_end_minute,
+        allowed_weekdays: policy.allowed_weekdays,
         timezone: policy.timezone,
       },
       next_eligible_at: eligibility.next_eligible_at,
@@ -471,18 +473,25 @@ export class SendingCapacityService {
     return candidates;
   }
 
+  /**
+   * Whether sending is open at `now`, combining the daily time window with the allowed
+   * weekdays. When closed, `opens_at` is the next moment sending can resume - work is
+   * deferred to then, never dropped.
+   */
   private resolveWindowOpen(
     policy: {
       window_start_minute: number | null;
       window_end_minute: number | null;
+      allowed_weekdays: number[];
       timezone: string;
     },
     now: Date,
   ): { is_open: boolean; opens_at: Date; closes_at: Date } {
-    if (
-      policy.window_start_minute == null ||
-      policy.window_end_minute == null
-    ) {
+    const hasWindow =
+      policy.window_start_minute != null && policy.window_end_minute != null;
+    const restricted = isRestricted(policy.allowed_weekdays);
+
+    if (!hasWindow && !restricted) {
       return {
         is_open: true,
         opens_at: now,
@@ -492,31 +501,54 @@ export class SendingCapacityService {
 
     const zone = policy.timezone || 'UTC';
     const nowZoned = DateTime.fromJSDate(now, { zone });
-    const todayStart = nowZoned.startOf('day');
-    const opensToday = todayStart.plus({ minutes: policy.window_start_minute });
-    const closesToday = todayStart.plus({ minutes: policy.window_end_minute });
 
-    if (nowZoned < opensToday) {
+    const windowFor = (day: DateTime) => {
+      const dayStart = day.startOf('day');
       return {
-        is_open: false,
-        opens_at: opensToday.toUTC().toJSDate(),
-        closes_at: closesToday.toUTC().toJSDate(),
+        opens: dayStart.plus({ minutes: policy.window_start_minute ?? 0 }),
+        closes: hasWindow
+          ? dayStart.plus({ minutes: policy.window_end_minute as number })
+          : day.endOf('day'),
       };
-    }
-    if (nowZoned > closesToday) {
-      const opensTomorrow = opensToday.plus({ days: 1 });
-      const closesTomorrow = closesToday.plus({ days: 1 });
-      return {
-        is_open: false,
-        opens_at: opensTomorrow.toUTC().toJSDate(),
-        closes_at: closesTomorrow.toUTC().toJSDate(),
-      };
-    }
-    return {
-      is_open: true,
-      opens_at: opensToday.toUTC().toJSDate(),
-      closes_at: closesToday.toUTC().toJSDate(),
     };
+    const nextAllowedDayAfter = (day: DateTime) => {
+      let next = day.plus({ days: 1 });
+      for (
+        let i = 0;
+        restricted && i < 7 && !policy.allowed_weekdays.includes(next.weekday);
+        i++
+      ) {
+        next = next.plus({ days: 1 });
+      }
+      return next;
+    };
+    const toResult = (
+      is_open: boolean,
+      w: { opens: DateTime; closes: DateTime },
+    ) => ({
+      is_open,
+      opens_at: w.opens.toUTC().toJSDate(),
+      closes_at: w.closes.toUTC().toJSDate(),
+    });
+
+    if (restricted && !policy.allowed_weekdays.includes(nowZoned.weekday)) {
+      return toResult(false, windowFor(nextAllowedDayAfter(nowZoned)));
+    }
+
+    const today = windowFor(nowZoned);
+    if (nowZoned < today.opens) return toResult(false, today);
+    if (hasWindow && nowZoned > today.closes) {
+      return toResult(false, windowFor(nextAllowedDayAfter(nowZoned)));
+    }
+    if (!hasWindow) {
+      // Allowed weekday, no time window: open for the rest of the day, same horizon as before.
+      return {
+        is_open: true,
+        opens_at: now,
+        closes_at: DateTime.fromJSDate(now).plus({ years: 1 }).toJSDate(),
+      };
+    }
+    return toResult(true, today);
   }
 
   private async readUsage(

@@ -57,6 +57,7 @@ export interface OutreachSequence {
     status: SequenceStatus;
     stop_on_reply: boolean;
     sender_profile_uuid: string | null;
+    allowed_weekdays: number[];
     steps: SequenceStep[];
     tags?: OrgTagSummary[];
     created_at: string;
@@ -96,6 +97,7 @@ export type CreateSequencePayload = {
     name: string;
     description?: string;
     stop_on_reply?: boolean;
+    allowed_weekdays?: number[];
     tag_uuids?: string[];
     sender_profile_uuid?: string | null;
 };

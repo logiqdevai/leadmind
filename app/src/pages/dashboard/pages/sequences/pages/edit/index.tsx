@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { Button, Input, Label, Switch, TextArea, TextField } from "@heroui/react";
 import { TagPicker } from "@/components/tags/tag-picker";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
+import { ALL_WEEKDAYS, sameWeekdays, WeekdaysPicker } from "@/components/ui/weekdays-picker";
 import { ChevronLeft, Plus } from "lucide-react";
 import {
     useAddSequenceStep,
@@ -34,6 +35,7 @@ export default function EditSequencePage() {
     const [name, setName] = useState<string | null>(null);
     const [description, setDescription] = useState<string | null>(null);
     const [stopOnReply, setStopOnReply] = useState<boolean | null>(null);
+    const [allowedWeekdays, setAllowedWeekdays] = useState<number[] | null>(null);
     const [tagUuids, setTagUuids] = useState<string[] | null>(null);
     const [senderProfileUuid, setSenderProfileUuid] = useState<string | null | undefined>(undefined);
     const [stepModalOpen, setStepModalOpen] = useState(false);
@@ -66,6 +68,9 @@ export default function EditSequencePage() {
         senderProfileUuid === undefined ? sequence.sender_profile_uuid : senderProfileUuid;
     const senderProfileDirty =
         senderProfileUuid !== undefined && senderProfileUuid !== sequence.sender_profile_uuid;
+    const savedWeekdays = sequence.allowed_weekdays?.length ? sequence.allowed_weekdays : ALL_WEEKDAYS;
+    const currentWeekdays = allowedWeekdays ?? savedWeekdays;
+    const weekdaysDirty = allowedWeekdays !== null && !sameWeekdays(allowedWeekdays, savedWeekdays);
     const savedTagUuids = (sequence.tags ?? []).map((t) => t.uuid);
     const currentTagUuids = tagUuids ?? savedTagUuids;
     const tagsDirty =
@@ -79,18 +84,21 @@ export default function EditSequencePage() {
         : sequence.steps.filter((s) => s.enabled).length === 0;
 
     const saveBasics = async () => {
-        if (!nameDirty && !descriptionDirty && !stopOnReplyDirty && !tagsDirty && !senderProfileDirty) return;
+        if (!nameDirty && !descriptionDirty && !stopOnReplyDirty && !weekdaysDirty && !tagsDirty && !senderProfileDirty) return;
+        if (weekdaysDirty && currentWeekdays.length === 0) return;
         await updateSequenceMut.mutateAsync({
             uuid: sequence.uuid,
             payload: {
                 ...(nameDirty ? { name: currentName.trim() } : {}),
                 ...(descriptionDirty ? { description: currentDescription.trim() } : {}),
                 ...(stopOnReplyDirty ? { stop_on_reply: currentStopOnReply } : {}),
+                ...(weekdaysDirty ? { allowed_weekdays: currentWeekdays } : {}),
                 ...(tagsDirty ? { tag_uuids: currentTagUuids } : {}),
                 ...(senderProfileDirty ? { sender_profile_uuid: currentSenderProfileUuid } : {}),
             },
         });
         setSenderProfileUuid(undefined);
+        setAllowedWeekdays(null);
         setTagUuids(null);
         setName(null);
         setDescription(null);
@@ -153,8 +161,16 @@ export default function EditSequencePage() {
                     clearLabel="None (use the default profile)"
                     description="Used for messages sent by this sequence. Applying a template that has a sender profile fills this in."
                 />
+                <div className="rounded-lg border border-border p-3">
+                    <WeekdaysPicker
+                        label="Send on"
+                        value={currentWeekdays}
+                        onChange={setAllowedWeekdays}
+                        description="A step that would land on another day (in your organisation's timezone) is moved to the next allowed day at the same time. Already-scheduled steps are shifted when you save."
+                    />
+                </div>
                 <TagPicker value={currentTagUuids} onChange={setTagUuids} />
-                {(nameDirty || descriptionDirty || stopOnReplyDirty || tagsDirty || senderProfileDirty) && (
+                {(nameDirty || descriptionDirty || stopOnReplyDirty || weekdaysDirty || tagsDirty || senderProfileDirty) && (
                     <div>
                         <ActionButtonWithPending
                             size="sm"

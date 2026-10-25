@@ -140,26 +140,6 @@ SIGN-OFF RULES — STRICT:
 `.trim();
 }
 
-export function buildScorePrompt(contact: Contact, lead: Lead, scoring_instructions: string): string {
-    return `
-You are scoring a sales lead from 1 (poor fit) to 10 (excellent fit) for a user with these targeting criteria:
-
-USER SCORING / TARGETING CRITERIA:
-"""
-${scoring_instructions}
-"""
-
-LEAD PROFILE:
-"""
-${formatContactForAi(contact, lead)}
-"""
-
-Return a JSON object with:
-- score: integer 1-10
-- reasoning: 1-2 sentences explaining the rating, referencing the targeting criteria
-`.trim();
-}
-
 export function buildEmailPrompt(
     contact: Contact,
     lead: Lead,
@@ -334,8 +314,3 @@ SCRIPT RULES — STRICT:
 Output: only the call script body. No commentary.
 `.trim();
 }
-
-export const AiScoringSystemPrompt = `
-You are a sales-qualification assistant scoring leads against targeting criteria.
-Always respond with a JSON object containing integer "score" (1-10) and string "reasoning".
-`;

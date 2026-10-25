@@ -21,7 +21,11 @@ import {
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { OUTREACH_SEND_QUEUE } from '@/core/queues/queues.constants';
 import { hasUsableContactEmail } from '@/shared/utils/contact-email.util';
-import { resolveStepScheduledAt } from '@/shared/utils/sequence-delay.util';
+import {
+  resolveStepScheduledAt,
+  WeekdayRestriction,
+} from '@/shared/utils/sequence-delay.util';
+import { shiftToAllowedWeekday } from '@/shared/utils/weekdays.util';
 import { generateMessageId } from '@/shared/utils/email-message-id.util';
 import { ThreadsService } from '@/modules/threads/threads.service';
 import { EmailCredentialsService } from '@/modules/integrations/services/email-credentials.service';
@@ -105,9 +109,14 @@ export class SequenceEnrollmentService {
       throw new BadRequestException('Sequence has no enabled steps');
     }
 
+    const restriction = await this.loadWeekdayRestriction(
+      organisation_uuid,
+      sequence.allowed_weekdays,
+    );
     const enrolled_at = new Date();
     // Campaign-linked enrollments bypass the first step's own delay/time entirely -
     // the campaign's actual dispatch moment (== enrolled_at here) is the send time.
+    // The sending policy's own weekday gate (SendingCapacityService) covers that send.
     const firstStepAt = campaign_uuid
       ? enrolled_at
       : resolveStepScheduledAt(
@@ -115,6 +124,7 @@ export class SequenceEnrollmentService {
           enabledSteps[0].delay_value,
           enabledSteps[0].delay_unit,
           enabledSteps[0].send_time,
+          restriction,
         );
 
     const { enrollment, materializedIndex } = await this.prisma.$transaction(
@@ -148,6 +158,7 @@ export class SequenceEnrollmentService {
           0,
           enrolled_at,
           firstStepAt,
+          restriction,
           emailProviderTarget,
         );
 
@@ -233,6 +244,10 @@ export class SequenceEnrollmentService {
           }
         : undefined;
 
+    const restriction = await this.loadWeekdayRestriction(
+      contact.organisation_uuid,
+      sequence.allowed_weekdays,
+    );
     const materializedIndex = await this.prisma.$transaction((tx) =>
       this.materializeFromIndex(
         tx,
@@ -242,6 +257,7 @@ export class SequenceEnrollmentService {
         completedIndex + 1,
         completed_at,
         firstStepAt,
+        restriction,
         emailProviderTarget,
       ),
     );
@@ -576,6 +592,7 @@ export class SequenceEnrollmentService {
     startIndex: number,
     previousStepAt: Date,
     firstStepAt: Date,
+    restriction: WeekdayRestriction,
     emailProviderTarget?: EmailProviderTarget,
   ): Promise<number> {
     let prevAt = previousStepAt;
@@ -608,6 +625,7 @@ export class SequenceEnrollmentService {
               step.delay_value,
               step.delay_unit,
               step.send_time,
+              restriction,
             );
 
       if (this.contactCanReceiveChannel(contact, step.channel)) {
@@ -695,6 +713,83 @@ export class SequenceEnrollmentService {
         message.scheduled_at ?? undefined,
       );
     }
+  }
+
+  /**
+   * Re-applies the sequence's weekday restriction to step messages that are already
+   * scheduled (PENDING). Only ever moves a message later, to the next allowed day, so
+   * it is safe to call after every weekday change. Standalone enrollments are re-queued
+   * with the new delay; campaign-linked ones are picked up by the sending-engine tick
+   * from scheduled_at, which also keeps them subject to the policy's caps.
+   */
+  async rescheduleForSequence(
+    organisation_uuid: string,
+    sequence_uuid: string,
+  ): Promise<{ rescheduled: number }> {
+    const sequence = await this.requireOwnedSequenceWithWeekdays(
+      organisation_uuid,
+      sequence_uuid,
+    );
+    const restriction = await this.loadWeekdayRestriction(
+      organisation_uuid,
+      sequence.allowed_weekdays,
+    );
+
+    const pending = await this.prisma.outreachMessage.findMany({
+      where: {
+        status: MsgStatus.PENDING,
+        scheduled_at: { not: null },
+        sequence_step_uuid: { not: null },
+        sequence_enrollment: { sequence_uuid },
+      },
+      select: { uuid: true, scheduled_at: true, campaign_uuid: true },
+    });
+
+    let rescheduled = 0;
+    for (const message of pending) {
+      const current = message.scheduled_at as Date;
+      const shifted = shiftToAllowedWeekday(
+        current,
+        restriction.timezone,
+        restriction.allowed_weekdays,
+      );
+      if (shifted.getTime() === current.getTime()) continue;
+
+      await this.prisma.outreachMessage.update({
+        where: { uuid: message.uuid },
+        data: { scheduled_at: shifted },
+      });
+      if (!message.campaign_uuid) {
+        await this.enqueueMessage(message.uuid, shifted);
+      }
+      rescheduled += 1;
+    }
+    return { rescheduled };
+  }
+
+  private async requireOwnedSequenceWithWeekdays(
+    organisation_uuid: string,
+    sequence_uuid: string,
+  ) {
+    const sequence = await this.prisma.outreachSequence.findFirst({
+      where: { uuid: sequence_uuid, organisation_uuid },
+      select: { uuid: true, allowed_weekdays: true },
+    });
+    if (!sequence)
+      throw new NotFoundException(`Sequence ${sequence_uuid} not found`);
+    return sequence;
+  }
+
+  /** Sequences have no timezone of their own - weekdays are evaluated in the organisation's. */
+  private async loadWeekdayRestriction(
+    organisation_uuid: string,
+    allowed_weekdays: number[],
+  ): Promise<WeekdayRestriction> {
+    const org = await this.prisma.organisation.findUnique({
+      where: { uuid: organisation_uuid },
+      select: { timezone: true },
+    });
+    return { allowed_weekdays, timezone: org?.timezone || 'UTC' };
   }
 
   private sortEnabledSteps(
