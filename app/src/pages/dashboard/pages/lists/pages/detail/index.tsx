@@ -1,6 +1,6 @@
 import { startTransition, useMemo, useState, type Key } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
-import { Button, Tabs } from "@heroui/react";
+import { Button, Switch, Tabs } from "@heroui/react";
 import { ScrollableTabs, ScrollableTabsList, tabTriggerClassName } from "@/components/ui/scrollable-tabs";
 import { Plus } from "lucide-react";
 import { Routes, ListDetailTabIds } from "@/routes/routes";
@@ -68,9 +68,29 @@ const TABS = [
     { id: ListDetailTabIds.ANALYTICS, label: "Analytics" },
 ] as const;
 
+const CALL_MODE_STORAGE_KEY = "leadmind:list-call-mode";
+
+const readCallMode = () => {
+    try {
+        return window.localStorage.getItem(CALL_MODE_STORAGE_KEY) === "1";
+    } catch {
+        return false;
+    }
+};
+
 export default function ListDetailPage() {
     const { uuid = "" } = useParams<{ uuid: string }>();
     const [searchParams, setSearchParams] = useSearchParams();
+    const [callMode, setCallMode] = useState(readCallMode);
+
+    const handleCallModeChange = (next: boolean) => {
+        setCallMode(next);
+        try {
+            window.localStorage.setItem(CALL_MODE_STORAGE_KEY, next ? "1" : "0");
+        } catch {
+            // Preference just won't persist.
+        }
+    };
     const [editOpen, setEditOpen] = useState(false);
     const [moveOpen, setMoveOpen] = useState(false);
     const [createSublistOpen, setCreateSublistOpen] = useState(false);
@@ -330,6 +350,7 @@ export default function ListDetailPage() {
         <ContactStackViewerScope
             contactUuids={memberUuids}
             listUuid={uuid}
+            variant={callMode ? "call" : "full"}
             page={membersPage}
             totalPages={totalPages}
             pageSize={membersPageSize.limit}
@@ -345,6 +366,22 @@ export default function ListDetailPage() {
                         backLabel={backLabel}
                         actions={
                             <>
+                                {currentTab === ListDetailTabIds.CONTACTS ? (
+                                    <Switch
+                                        isSelected={callMode}
+                                        onChange={(v) =>
+                                            handleCallModeChange(typeof v === "boolean" ? v : !callMode)
+                                        }
+                                        aria-label="Call mode"
+                                    >
+                                        <Switch.Control>
+                                            <Switch.Thumb />
+                                        </Switch.Control>
+                                        <Switch.Content>
+                                            <span className="text-sm font-medium text-foreground">Call mode</span>
+                                        </Switch.Content>
+                                    </Switch>
+                                ) : null}
                                 {currentTab === ListDetailTabIds.CONTACTS ? (
                                     <ExportExcelButton
                                         onPress={() =>
@@ -486,7 +523,9 @@ export default function ListDetailPage() {
                                 sections={{ engagement: true, outreach: true }}
                             />
                             <p className="text-xs text-muted">
-                                Click a name or use the up/down icon to open quick browse. Use arrow keys to move between contacts.
+                                {callMode
+                                    ? "Call mode is on: click a name to open the compact call view. Use arrow keys to move between contacts."
+                                    : "Click a name or use the up/down icon to open quick browse. Use arrow keys to move between contacts."}
                             </p>
                             <ListMembersTable
                                 listUuid={uuid}

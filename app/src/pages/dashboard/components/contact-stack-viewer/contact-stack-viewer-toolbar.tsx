@@ -8,6 +8,7 @@ import type { ContactStackNavigationState } from "./types";
 
 interface ContactStackViewerToolbarProps {
     contactUuid: string;
+    listUuid?: string;
     navigation: ContactStackNavigationState;
     navigationLocked?: boolean;
     onClose: () => void;
@@ -18,6 +19,7 @@ interface ContactStackViewerToolbarProps {
 
 export const ContactStackViewerToolbar: FC<ContactStackViewerToolbarProps> = ({
     contactUuid,
+    listUuid,
     navigation,
     navigationLocked = false,
     onClose,
@@ -25,7 +27,8 @@ export const ContactStackViewerToolbar: FC<ContactStackViewerToolbarProps> = ({
     onNext,
     className,
 }) => {
-    const detailHref = Routes.dashboard.contacts_detail.replace(":uuid", contactUuid);
+    const detailPath = Routes.dashboard.contacts_detail.replace(":uuid", contactUuid);
+    const detailHref = listUuid ? `${detailPath}?list_uuid=${encodeURIComponent(listUuid)}` : detailPath;
 
     return (
         <div
