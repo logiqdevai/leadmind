@@ -51,7 +51,18 @@ export const MobileNavDrawer: FC<MobileNavDrawerProps> = ({ isOpen, onClose, chi
         </button>
       </div>
       <div className="min-h-0 flex-1 overflow-y-auto">
-        <div className="px-4 pt-2.5 pb-2 flex flex-col gap-0">{children}</div>
+        {/* Touch sizing: the shared sidebar items are desktop-sized, so scale them up for the drawer. */}
+        <div
+          className={[
+            "px-4 pt-2.5 pb-6 flex flex-col gap-0",
+            "[&_a]:!py-3 [&_a]:!gap-3.5 [&_a_span]:!text-[16px] [&_a_svg]:!size-5",
+            "[&_button[aria-expanded]]:!py-3 [&_button[aria-expanded]_span]:!text-[16px] [&_button[aria-expanded]_svg]:!size-5",
+            "[&_li>button]:!p-2.5 [&_li>button_svg]:!size-4",
+            "[&_ul>li]:!mb-1.5 [&_p]:!text-[13px] [&_p]:!pb-2",
+          ].join(" ")}
+        >
+          {children}
+        </div>
       </div>
     </div>,
     document.body,
