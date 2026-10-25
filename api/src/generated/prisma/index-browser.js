@@ -809,6 +809,12 @@ exports.Prisma.ReminderScalarFieldEnum = {
   updated_at: 'updated_at'
 };
 
+exports.Prisma.ReminderAssigneeScalarFieldEnum = {
+  reminder_uuid: 'reminder_uuid',
+  user_uuid: 'user_uuid',
+  created_at: 'created_at'
+};
+
 exports.Prisma.FormScalarFieldEnum = {
   id: 'id',
   uuid: 'uuid',
@@ -1202,6 +1208,8 @@ exports.Prisma.BookingPageScalarFieldEnum = {
   additional_recipients: 'additional_recipients',
   include_meeting_link: 'include_meeting_link',
   include_calendar_details: 'include_calendar_details',
+  create_team_reminder: 'create_team_reminder',
+  team_reminder_offset_minutes: 'team_reminder_offset_minutes',
   confirmation_template_uuid: 'confirmation_template_uuid',
   reminder_template_uuid: 'reminder_template_uuid',
   cancellation_template_uuid: 'cancellation_template_uuid',
@@ -1262,6 +1270,7 @@ exports.Prisma.BookingScalarFieldEnum = {
   location_type: 'location_type',
   location_value: 'location_value',
   meeting_url: 'meeting_url',
+  reminder_uuid: 'reminder_uuid',
   calendar_connection_uuid: 'calendar_connection_uuid',
   calendar_event_id: 'calendar_event_id',
   calendar_html_link: 'calendar_html_link',
@@ -1928,6 +1937,7 @@ exports.Prisma.ModelName = {
   MailTesterTest: 'MailTesterTest',
   MxToolboxCheck: 'MxToolboxCheck',
   Reminder: 'Reminder',
+  ReminderAssignee: 'ReminderAssignee',
   Form: 'Form',
   FormField: 'FormField',
   FormCompletion: 'FormCompletion',

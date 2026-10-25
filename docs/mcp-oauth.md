@@ -65,10 +65,18 @@ excludes:
 | `/public-api` | Same functionality already exists as ordinary tools (contacts, forms, ...); this surface is for third-party `X-API-Key` integrations, not agents. |
 | `/webhooks`, `/t`, `/unsubscribe` | Inbound provider callbacks / public tracking pixels, not organisation-facing functionality. |
 | `/oauth`, `/mcp`, `/.well-known` | The OAuth/MCP infrastructure itself. |
+| `/public` | Unauthenticated visitor endpoints (public booking pages, invitee cancel/reschedule links). They act as an anonymous visitor outside any organisation's permissions; the organisation-facing equivalents are the `/bookings` tools. |
+
+Individual operations are also excluded (`MCP_TOOL_OPERATION_DENYLIST`): account deletion,
+password change, creating/switching/deleting organisations, accepting an invitation, and the
+Google Calendar OAuth handshake (`POST /calendar-connections/connect` and `/{uuid}/verify`),
+which is a browser redirect the member completes themselves.
 
 Everything else documented in the OpenAPI spec - contacts, contact lists, leads, sequences,
-campaigns, message templates, threads, sender profiles, forms, reminders, filters, search,
-dashboard, organisations, users, integrations, and so on - is exposed as a tool.
+campaigns, message templates, threads, sender profiles, forms, reminders, bookings, booking
+pages, booking links, availability, calendar connections, filters, search, dashboard,
+organisations, users, integrations, and so on - is exposed as a tool. New documented routes
+become tools automatically, so the booking and reminder-assignee features need no per-tool code.
 
 ## Database
 

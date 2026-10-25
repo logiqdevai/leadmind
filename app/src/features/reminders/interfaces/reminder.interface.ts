@@ -11,6 +11,13 @@ export interface ReminderContact {
     email: string | null;
 }
 
+/** A member who receives the reminder. */
+export interface ReminderAssignee {
+    uuid: string;
+    full_name: string | null;
+    email: string;
+}
+
 export interface ReminderAiDraft {
     subject: string;
     body: string;
@@ -31,6 +38,8 @@ export interface Reminder {
     outreach_message_uuid?: string | null;
     metadata?: { ai_draft?: ReminderAiDraft } | null;
     contact: ReminderContact;
+    /** Members who get this reminder; empty means every member of the organisation. */
+    assignees: ReminderAssignee[];
     created_at: string;
     updated_at: string;
 }
@@ -48,6 +57,8 @@ export interface CreateReminderPayload {
     notes?: string;
     remind_at: string;
     status?: ReminderStatus;
+    /** Omitted: you. Empty array: everyone in the organisation. */
+    assignee_user_uuids?: string[];
 }
 
 export interface UpdateReminderPayload {
@@ -55,10 +66,14 @@ export interface UpdateReminderPayload {
     notes?: string | null;
     remind_at?: string;
     status?: ReminderStatus;
+    /** Replaces the assignees; empty array means everyone. */
+    assignee_user_uuids?: string[];
 }
 
 export interface ListRemindersQuery {
     contact_uuid?: string;
+    /** Reminders this member receives: assigned to them or to everyone. */
+    for_user_uuid?: string;
     status?: ReminderStatus;
     range?: "today" | "week" | "month" | "all" | "overdue";
     search?: string;

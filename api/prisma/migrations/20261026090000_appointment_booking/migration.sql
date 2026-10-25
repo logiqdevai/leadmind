@@ -154,6 +154,8 @@ CREATE TABLE "booking_pages" (
     "additional_recipients" TEXT[] DEFAULT ARRAY[]::TEXT[],
     "include_meeting_link" BOOLEAN NOT NULL DEFAULT true,
     "include_calendar_details" BOOLEAN NOT NULL DEFAULT true,
+    "create_team_reminder" BOOLEAN NOT NULL DEFAULT false,
+    "team_reminder_offset_minutes" INTEGER NOT NULL DEFAULT 60,
     "confirmation_template_uuid" TEXT,
     "reminder_template_uuid" TEXT,
     "cancellation_template_uuid" TEXT,
@@ -223,6 +225,7 @@ CREATE TABLE "bookings" (
     "location_type" "BookingLocationType" NOT NULL DEFAULT 'NONE',
     "location_value" TEXT,
     "meeting_url" TEXT,
+    "reminder_uuid" TEXT,
     "calendar_connection_uuid" TEXT,
     "calendar_event_id" TEXT,
     "calendar_html_link" TEXT,
@@ -352,6 +355,9 @@ CREATE INDEX "booking_links_contact_uuid_idx" ON "booking_links"("contact_uuid")
 
 -- CreateIndex
 CREATE UNIQUE INDEX "bookings_uuid_key" ON "bookings"("uuid");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "bookings_reminder_uuid_key" ON "bookings"("reminder_uuid");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "bookings_manage_token_key" ON "bookings"("manage_token");
@@ -487,6 +493,9 @@ ALTER TABLE "bookings" ADD CONSTRAINT "bookings_created_by_user_uuid_fkey" FOREI
 
 -- AddForeignKey
 ALTER TABLE "bookings" ADD CONSTRAINT "bookings_calendar_connection_uuid_fkey" FOREIGN KEY ("calendar_connection_uuid") REFERENCES "calendar_connections"("uuid") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "bookings" ADD CONSTRAINT "bookings_reminder_uuid_fkey" FOREIGN KEY ("reminder_uuid") REFERENCES "reminders"("uuid") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "booking_events" ADD CONSTRAINT "booking_events_organisation_uuid_fkey" FOREIGN KEY ("organisation_uuid") REFERENCES "organisations"("uuid") ON DELETE CASCADE ON UPDATE CASCADE;

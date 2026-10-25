@@ -34,6 +34,7 @@ import {
 import { BookingSlotService } from './services/booking-slot.service';
 import { BookingEventActor, BookingEventsService, userActor } from './services/booking-events.service';
 import { BookingNotificationsService } from './services/booking-notifications.service';
+import { BookingTeamReminderService } from './services/booking-team-reminder.service';
 import { BookingCalendarSyncService } from './services/booking-calendar-sync.service';
 import { CalendarConnectionsService } from './services/calendar-connections.service';
 import { bookingsToCsv } from './utils/booking-csv.util';
@@ -89,6 +90,7 @@ export class BookingsService {
         private readonly calendarSync: BookingCalendarSyncService,
         private readonly calendarConnections: CalendarConnectionsService,
         private readonly gateway: NotificationsGateway,
+        private readonly teamReminders: BookingTeamReminderService,
     ) {}
 
     // --- Queries ---
@@ -264,6 +266,7 @@ export class BookingsService {
             { fields: Object.keys(dto) },
         );
         await this.safely(() => this.calendarSync.enqueue(updated), 'calendar sync');
+        await this.teamReminders.syncSafely(uuid, 'updated');
         return this.findOne(actor.organisation_uuid, uuid);
     }
 
@@ -306,6 +309,7 @@ export class BookingsService {
             });
             await this.events.record(booking, BookingEventType.CONFIRMED, userActor(actor.uuid), 'Booking confirmed');
             await this.sendConfirmationAndSync(confirmed, true);
+            await this.teamReminders.syncSafely(uuid, 'confirmed');
             return this.findOne(actor.organisation_uuid, uuid);
         }
 
@@ -323,6 +327,8 @@ export class BookingsService {
             from: booking.status,
             to: dto.status,
         });
+        // A finished meeting no longer needs its pending reminder.
+        await this.teamReminders.syncSafely(uuid, 'status');
         return this.findOne(actor.organisation_uuid, uuid);
     }
 
@@ -355,6 +361,7 @@ export class BookingsService {
             return result;
         });
         await this.safely(() => this.calendarSync.enqueue(updated), 'calendar sync');
+        await this.teamReminders.syncSafely(uuid, 'updated');
         this.emit(updated.assigned_user_uuid, 'booking.assigned', updated);
         return this.findOne(actor.organisation_uuid, uuid);
     }
@@ -539,6 +546,8 @@ export class BookingsService {
                         await this.calendarSync.enqueue(moved);
                     }
                 }, 'reschedule side effects');
+                // Independent of email notifications: the team reminder follows the new time either way.
+                await this.teamReminders.syncSafely(moved.uuid, 'rescheduled');
                 this.emit(moved.assigned_user_uuid, 'booking.rescheduled', moved);
                 return moved;
             } catch (error) {
@@ -576,6 +585,7 @@ export class BookingsService {
                 await this.logContactInteraction(cancelled, InteractionType.BOOKING_CANCELLED, 'Booking cancelled', options.actor);
             }
         }, 'cancellation side effects');
+        await this.teamReminders.syncSafely(cancelled.uuid, 'cancelled');
         this.emit(cancelled.assigned_user_uuid, 'booking.cancelled', cancelled);
         return cancelled;
     }
@@ -591,6 +601,8 @@ export class BookingsService {
             }
             if (booking.status !== BookingStatus.PENDING) await this.sendConfirmationAndSync(booking, options.notify);
         }, 'booking side effects');
+        // Pending requests get their reminder once confirmed (setStatus); this is a no-op for them.
+        await this.teamReminders.syncSafely(booking.uuid, 'created');
         this.emit(booking.assigned_user_uuid, booking.status === BookingStatus.PENDING ? 'booking.requested' : 'booking.created', booking);
     }
 

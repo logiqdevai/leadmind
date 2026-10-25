@@ -7,6 +7,7 @@ import { GatewaysModule } from '@/gateways/gateways.module';
 import { ContactsModule } from '@/modules/contacts/contacts.module';
 import { OutreachModule } from '@/modules/outreach/outreach.module';
 import { BookingLinksModule } from '@/modules/booking-links/booking-links.module';
+import { RemindersModule } from '@/modules/reminders/reminders.module';
 import { RateLimitGuard } from '@/shared/guards/rate-limit.guard';
 import { BookingsController } from './bookings.controller';
 import { BookingsService } from './bookings.service';
@@ -20,6 +21,7 @@ import { BookingSlotService } from './services/booking-slot.service';
 import { BookingEventsService } from './services/booking-events.service';
 import { BookingNotificationsService } from './services/booking-notifications.service';
 import { BookingCalendarSyncService } from './services/booking-calendar-sync.service';
+import { BookingTeamReminderService } from './services/booking-team-reminder.service';
 import { CalendarConnectionsService } from './services/calendar-connections.service';
 import { PublicBookingService } from './services/public-booking.service';
 
@@ -31,6 +33,7 @@ import { PublicBookingService } from './services/public-booking.service';
         ContactsModule,
         OutreachModule,
         BookingLinksModule,
+        RemindersModule,
         BullModule.registerQueue({ name: BOOKING_NOTIFICATION_QUEUE }, { name: BOOKING_CALENDAR_SYNC_QUEUE }),
     ],
     controllers: [
@@ -48,6 +51,7 @@ import { PublicBookingService } from './services/public-booking.service';
         BookingEventsService,
         BookingNotificationsService,
         BookingCalendarSyncService,
+        BookingTeamReminderService,
         CalendarConnectionsService,
         PublicBookingService,
         RateLimitGuard,

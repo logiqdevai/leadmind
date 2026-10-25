@@ -346,6 +346,9 @@ export interface BookingPage {
     additional_recipients: string[];
     include_meeting_link: boolean;
     include_calendar_details: boolean;
+    /** Create a Meeting reminder on the contact's Reminders for confirmed bookings. */
+    create_team_reminder: boolean;
+    team_reminder_offset_minutes: number;
     confirmation_template_uuid: string | null;
     reminder_template_uuid: string | null;
     cancellation_template_uuid: string | null;

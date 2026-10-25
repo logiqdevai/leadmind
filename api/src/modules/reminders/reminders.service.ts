@@ -20,6 +20,22 @@ const CONTACT_SELECT = {
     email: true,
 } satisfies Prisma.ContactSelect;
 
+const REMINDER_INCLUDE = {
+    contact: { select: CONTACT_SELECT },
+    assignees: { include: { user: { select: { uuid: true, full_name: true, email: true } } } },
+} satisfies Prisma.ReminderInclude;
+
+type ReminderWithRelations = Prisma.ReminderGetPayload<{ include: typeof REMINDER_INCLUDE }>;
+
+/** API shape: `assignees` is the list of members (empty = every member of the organisation). */
+export type ReminderView = Omit<ReminderWithRelations, 'assignees'> & {
+    assignees: { uuid: string; full_name: string | null; email: string }[];
+};
+
+function toView(reminder: ReminderWithRelations): ReminderView {
+    return { ...reminder, assignees: reminder.assignees.map((a) => a.user) };
+}
+
 @Injectable()
 export class RemindersService {
     constructor(
@@ -35,8 +51,11 @@ export class RemindersService {
             source?: ReminderSource;
             type?: ReminderType;
             outreach_message_uuid?: string;
+            metadata?: Prisma.InputJsonValue;
+            /** The member creating it; becomes the sole assignee unless `dto.assignee_user_uuids` says otherwise. */
+            created_by_user_uuid?: string;
         },
-    ) {
+    ): Promise<ReminderView> {
         const contact = await this.prisma.contact.findFirst({
             where: { uuid: dto.contact_uuid, organisation_uuid },
         });
@@ -47,7 +66,12 @@ export class RemindersService {
             throw new BadRequestException('Reminder date must be in the future');
         }
 
-        const reminder = await this.prisma.reminder.create({
+        const assigneeUuids = await this.resolveAssignees(
+            organisation_uuid,
+            dto.assignee_user_uuids ?? (opts?.created_by_user_uuid ? [opts.created_by_user_uuid] : []),
+        );
+
+        const created = await this.prisma.reminder.create({
             data: {
                 organisation_uuid,
                 contact_uuid: dto.contact_uuid,
@@ -58,9 +82,12 @@ export class RemindersService {
                 source: opts?.source ?? ReminderSource.MANUAL,
                 type: opts?.type ?? ReminderType.GENERAL,
                 outreach_message_uuid: opts?.outreach_message_uuid,
+                metadata: opts?.metadata,
+                assignees: { create: assigneeUuids.map((user_uuid) => ({ user_uuid })) },
             },
-            include: { contact: { select: CONTACT_SELECT } },
+            include: REMINDER_INCLUDE,
         });
+        const reminder = toView(created);
 
         const jobId = `reminder-${reminder.uuid}`;
         await this.reminderQueue.add(
@@ -80,7 +107,7 @@ export class RemindersService {
             data: { job_id: jobId },
         });
 
-        this.gateway.emitToUser(organisation_uuid, 'reminder.created', reminder);
+        await this.emitToRecipients(reminder, 'reminder.created');
         return reminder;
     }
 
@@ -90,6 +117,17 @@ export class RemindersService {
 
         if (query.contact_uuid) where.contact_uuid = query.contact_uuid;
         if (query.status) where.status = query.status;
+        if (query.for_user_uuid) {
+            // What this member receives: reminders assigned to them plus the ones for everyone.
+            where.AND = [
+                {
+                    OR: [
+                        { assignees: { some: { user_uuid: query.for_user_uuid } } },
+                        { assignees: { none: {} } },
+                    ],
+                },
+            ];
+        }
 
         if (query.range === 'today') {
             const end = new Date(now);
@@ -127,7 +165,7 @@ export class RemindersService {
         const [data, total] = await Promise.all([
             this.prisma.reminder.findMany({
                 where,
-                include: { contact: { select: CONTACT_SELECT } },
+                include: REMINDER_INCLUDE,
                 orderBy: { remind_at: 'desc' },
                 skip,
                 take: limit,
@@ -135,19 +173,53 @@ export class RemindersService {
             this.prisma.reminder.count({ where }),
         ]);
 
-        return { data, total, page, limit, totalPages: Math.ceil(total / limit) };
+        return { data: data.map(toView), total, page, limit, totalPages: Math.ceil(total / limit) };
     }
 
-    async findOne(organisation_uuid: string, uuid: string) {
+    async findOne(organisation_uuid: string, uuid: string): Promise<ReminderView> {
         const reminder = await this.prisma.reminder.findFirst({
             where: { uuid, organisation_uuid },
-            include: { contact: { select: CONTACT_SELECT } },
+            include: REMINDER_INCLUDE,
         });
         if (!reminder) throw new NotFoundException('Reminder not found');
-        return reminder;
+        return toView(reminder);
     }
 
-    async update(organisation_uuid: string, uuid: string, dto: UpdateReminderDto) {
+    /**
+     * Members who should get this reminder: its assignees that are still in the organisation, or every
+     * member when it has none (or when all of its assignees have since left).
+     */
+    async getRecipientUserUuids(reminder: { organisation_uuid: string; assignees: { uuid?: string; user_uuid?: string }[] }) {
+        const members = await this.prisma.organisationMember.findMany({
+            where: { organisation_uuid: reminder.organisation_uuid },
+            select: { user_uuid: true },
+        });
+        const everyone = members.map((m) => m.user_uuid);
+        const assigned = new Set(reminder.assignees.map((a) => a.uuid ?? a.user_uuid));
+        if (assigned.size === 0) return everyone;
+        const stillMembers = everyone.filter((uuid) => assigned.has(uuid));
+        return stillMembers.length ? stillMembers : everyone;
+    }
+
+    private async emitToRecipients(reminder: ReminderView, event: string) {
+        const recipients = await this.getRecipientUserUuids(reminder);
+        this.gateway.emitToUsers(recipients, event, reminder);
+    }
+
+    /** Every assignee must belong to the organisation; duplicates collapse. Empty = everyone. */
+    private async resolveAssignees(organisation_uuid: string, user_uuids: string[]): Promise<string[]> {
+        const unique = [...new Set(user_uuids)];
+        if (unique.length === 0) return [];
+        const count = await this.prisma.organisationMember.count({
+            where: { organisation_uuid, user_uuid: { in: unique } },
+        });
+        if (count !== unique.length) {
+            throw new BadRequestException('Every assignee must be a member of this organisation');
+        }
+        return unique;
+    }
+
+    async update(organisation_uuid: string, uuid: string, dto: UpdateReminderDto): Promise<ReminderView> {
         const existing = await this.prisma.reminder.findFirst({
             where: { uuid, organisation_uuid },
         });
@@ -181,7 +253,12 @@ export class RemindersService {
             );
         }
 
-        const reminder = await this.prisma.reminder.update({
+        const assigneeUuids =
+            dto.assignee_user_uuids !== undefined
+                ? await this.resolveAssignees(organisation_uuid, dto.assignee_user_uuids)
+                : undefined;
+
+        const updated = await this.prisma.reminder.update({
             where: { uuid },
             data: {
                 title: dto.title,
@@ -190,15 +267,19 @@ export class RemindersService {
                 status: dto.status,
                 ...(newJobId !== undefined && { job_id: newJobId }),
                 ...(isStatusChange && { job_id: null }),
+                ...(assigneeUuids !== undefined && {
+                    assignees: { deleteMany: {}, create: assigneeUuids.map((user_uuid) => ({ user_uuid })) },
+                }),
             },
-            include: { contact: { select: CONTACT_SELECT } },
+            include: REMINDER_INCLUDE,
         });
+        const reminder = toView(updated);
 
         const event =
             dto.status === ReminderStatus.COMPLETED
                 ? 'reminder.completed'
                 : 'reminder.updated';
-        this.gateway.emitToUser(organisation_uuid, event, reminder);
+        await this.emitToRecipients(reminder, event);
         return reminder;
     }
 
@@ -209,12 +290,15 @@ export class RemindersService {
     async remove(organisation_uuid: string, uuid: string) {
         const existing = await this.prisma.reminder.findFirst({
             where: { uuid, organisation_uuid },
+            include: { assignees: { select: { user_uuid: true } } },
         });
         if (!existing) throw new NotFoundException('Reminder not found');
 
+        // Resolve who to tell before the assignment rows are deleted along with the reminder.
+        const recipients = await this.getRecipientUserUuids(existing);
         await this.cancelJob(existing.job_id);
         await this.prisma.reminder.delete({ where: { uuid } });
-        this.gateway.emitToUser(organisation_uuid, 'reminder.deleted', { uuid });
+        this.gateway.emitToUsers(recipients, 'reminder.deleted', { uuid });
         return { uuid };
     }
 

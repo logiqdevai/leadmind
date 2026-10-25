@@ -43,8 +43,13 @@ export class RemindersController {
     @ApiResponse({ status: 201 })
     @ApiResponse({ status: 401, description: 'Unauthorized' })
     @ApiResponse({ status: 404, description: 'Contact not found' })
-    create(@CurrentUser('organisation_uuid') organisation_uuid: string, @Body() dto: CreateReminderDto) {
-        return this.remindersService.create(organisation_uuid, dto);
+    create(
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
+        @CurrentUser('uuid') user_uuid: string,
+        @Body() dto: CreateReminderDto,
+    ) {
+        // Without explicit assignees the creating member is the one who gets the reminder.
+        return this.remindersService.create(organisation_uuid, dto, { created_by_user_uuid: user_uuid });
     }
 
     @Get()

@@ -16,11 +16,16 @@
  *                        organisation-facing functionality.
  *  - /oauth, /mcp,
  *    /.well-known      - the OAuth/MCP infrastructure itself.
+ *  - /public           - unauthenticated visitor endpoints (public booking pages and
+ *                        invitee cancel/reschedule links). They act as an anonymous
+ *                        visitor, outside any organisation's permissions; the
+ *                        organisation-facing equivalents are the /bookings tools.
  */
 export const MCP_TOOL_PATH_DENYLIST = [
   '/',
   '/auth',
   '/api-keys',
+  '/public',
   '/public-api',
   '/webhooks',
   '/t',
@@ -44,6 +49,9 @@ export function isDeniedPath(path: string): boolean {
  *  - account deletion / password change
  *  - creating, switching or deleting organisations
  *  - accepting an invitation (would join the user to another organisation)
+ *  - the Google Calendar OAuth handshake (connect / verify): a browser redirect to
+ *    Google's consent screen that the member completes themselves, so an agent has
+ *    nothing useful to do with it (listing, choosing a calendar and disconnecting stay)
  */
 export const MCP_TOOL_OPERATION_DENYLIST: ReadonlyArray<{
   method: string;
@@ -55,6 +63,8 @@ export const MCP_TOOL_OPERATION_DENYLIST: ReadonlyArray<{
   { method: 'delete', path: '/organisations/{uuid}' },
   { method: 'post', path: '/organisations/{uuid}/switch' },
   { method: 'post', path: '/organisations/invitations/{token}/accept' },
+  { method: 'post', path: '/calendar-connections/connect' },
+  { method: 'post', path: '/calendar-connections/{uuid}/verify' },
 ];
 
 export function isDeniedOperation(method: string, path: string): boolean {

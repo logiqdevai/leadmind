@@ -258,6 +258,19 @@ export class CreateBookingPageDto {
     @ApiPropertyOptional() @IsOptional() @IsBoolean() include_meeting_link?: boolean;
     @ApiPropertyOptional() @IsOptional() @IsBoolean() include_calendar_details?: boolean;
 
+    @ApiPropertyOptional({ description: "Create a Meeting reminder on the contact's Reminders for confirmed bookings" })
+    @IsOptional()
+    @IsBoolean()
+    create_team_reminder?: boolean;
+
+    @ApiPropertyOptional({ description: 'Minutes before the start the team reminder is due', default: 60 })
+    @IsOptional()
+    @Type(() => Number)
+    @IsInt()
+    @Min(5)
+    @Max(60 * 24 * 14)
+    team_reminder_offset_minutes?: number;
+
     @ApiPropertyOptional({ format: 'uuid', nullable: true }) @IsOptional() @IsUUID() confirmation_template_uuid?: string | null;
     @ApiPropertyOptional({ format: 'uuid', nullable: true }) @IsOptional() @IsUUID() reminder_template_uuid?: string | null;
     @ApiPropertyOptional({ format: 'uuid', nullable: true }) @IsOptional() @IsUUID() cancellation_template_uuid?: string | null;

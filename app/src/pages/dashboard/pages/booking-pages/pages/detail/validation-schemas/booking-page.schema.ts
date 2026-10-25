@@ -95,6 +95,8 @@ export const bookingPageFormSchema = z
         additional_recipients: z.array(z.email("Invalid email address")),
         include_meeting_link: z.boolean(),
         include_calendar_details: z.boolean(),
+        create_team_reminder: z.boolean(),
+        team_reminder_offset_minutes: int(5, 20160),
         /** "" = default template. */
         confirmation_template_uuid: z.string(),
         reminder_template_uuid: z.string(),

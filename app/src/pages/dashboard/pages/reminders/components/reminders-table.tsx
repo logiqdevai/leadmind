@@ -8,7 +8,7 @@ import { extraListColumnClass } from "@/components/ui/mobile-list-filters";
 import { isTableNavInteractiveCell, renderTableNavCellContent, tableNavInteractiveCellClassName, tableNavRowClassName } from "@/components/ui/table-row-link";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { TablePagination } from "@/components/ui/table-pagination";
-import { ReminderStatusBadge, ReminderFormModal, ReminderTypeBadge } from "@/components/reminders";
+import { ReminderAssignees, ReminderStatusBadge, ReminderFormModal, ReminderTypeBadge } from "@/components/reminders";
 import { useCompleteReminder, useDeleteReminder } from "@/features/reminders/hooks/use-reminders";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
 import type { Reminder } from "@/features/reminders/interfaces/reminder.interface";
@@ -146,6 +146,11 @@ export function RemindersTable({
                     );
                 },
             }),
+            columnHelper.accessor((row) => row.assignees, {
+                id: "assignees",
+                header: "Assigned to",
+                cell: (info) => <ReminderAssignees assignees={info.getValue()} />,
+            }),
             columnHelper.accessor("remind_at", {
                 id: "remind_at",
                 header: "Reminder Date",
@@ -189,7 +194,7 @@ export function RemindersTable({
                                     key={header.id}
                                     id={header.id}
                                     isRowHeader={header.id === "title"}
-                                    className={extraListColumnClass(header.id, ["contact", "remind_at"])}
+                                    className={extraListColumnClass(header.id, ["contact", "assignees", "remind_at"])}
                                 >
                                     {flexRender(header.column.columnDef.header, header.getContext())}
                                 </Table.Column>
@@ -232,8 +237,8 @@ export function RemindersTable({
                                                   key={cell.id}
                                                   className={
                                                       isInteractive
-                                                          ? `${extraListColumnClass(cell.column.id, ["contact", "remind_at"])} ${tableNavInteractiveCellClassName}`
-                                                          : extraListColumnClass(cell.column.id, ["contact", "remind_at"])
+                                                          ? `${extraListColumnClass(cell.column.id, ["contact", "assignees", "remind_at"])} ${tableNavInteractiveCellClassName}`
+                                                          : extraListColumnClass(cell.column.id, ["contact", "assignees", "remind_at"])
                                                   }
                                               >
                                                   {renderTableNavCellContent(cell.column.id, rowHref, content, {

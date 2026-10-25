@@ -40,6 +40,7 @@ export class ReminderTriggerWorker extends WorkerHost {
                 outreach_message: {
                     select: { thread_uuid: true },
                 },
+                assignees: { include: { user: { select: { uuid: true, full_name: true, email: true } } } },
             },
         });
 
@@ -91,14 +92,12 @@ export class ReminderTriggerWorker extends WorkerHost {
             }
         }
 
-        const members = await this.prisma.organisationMember.findMany({
-            where: { organisation_uuid: reminder.organisation_uuid },
-            select: { user_uuid: true },
-        });
-
-        for (const member of members) {
-            this.gateway.emitToUser(member.user_uuid, 'reminder.triggered', reminder);
-        }
-        this.logger.log(`Reminder triggered: ${reminder.uuid} for organisation ${reminder.organisation_uuid}`);
+        // Only the assigned members are notified; a reminder with no assignees goes to everyone.
+        const recipients = await this.remindersService.getRecipientUserUuids(reminder);
+        const payload = { ...reminder, assignees: reminder.assignees.map((a) => a.user) };
+        this.gateway.emitToUsers(recipients, 'reminder.triggered', payload);
+        this.logger.log(
+            `Reminder triggered: ${reminder.uuid} for organisation ${reminder.organisation_uuid} (${recipients.length} recipient${recipients.length === 1 ? '' : 's'})`,
+        );
     }
 }

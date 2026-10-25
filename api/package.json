@@ -174,7 +174,8 @@
     ],
     "moduleNameMapper": {
       "^@/(.*)$": "<rootDir>/$1",
-      "^generated/(.*)$": "<rootDir>/generated/$1"
+      "^generated/(.*)$": "<rootDir>/generated/$1",
+      "^@composio/core$": "<rootDir>/../test/stubs/composio-core.stub.ts"
     },
     "collectCoverageFrom": [
       "**/*.(t|j)s"

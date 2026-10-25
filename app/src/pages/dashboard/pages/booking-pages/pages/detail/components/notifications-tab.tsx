@@ -11,10 +11,16 @@ import { useMessageTemplates } from "@/features/message-templates/hooks/use-mess
 import type { BookingPageFormValues } from "@/pages/dashboard/pages/booking-pages/pages/detail/validation-schemas/booking-page.schema";
 import { firstErrorMessage } from "@/pages/dashboard/pages/booking-pages/pages/detail/utils/booking-page-form";
 import { Field, SettingSwitch, SettingsSection } from "./form-fields";
-import { PresetMultiPicker } from "./preset-pickers";
+import { PresetMultiPicker, PresetSinglePicker } from "./preset-pickers";
 
 const REMINDER_PRESETS = BOOKING_REMINDER_PRESETS.map((p) => ({ value: p.minutes, label: p.label }));
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const TEAM_REMINDER_PRESETS = [
+    { value: 15, label: "15 minutes before" },
+    { value: 30, label: "30 minutes before" },
+    { value: 60, label: "1 hour before" },
+    { value: 1440, label: "1 day before" },
+];
+const EMAIL_PATTERN =/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 type TemplateField =
     | "confirmation_template_uuid"
@@ -106,6 +112,7 @@ export const NotificationsTab: FC<NotificationsTabProps> = ({ readOnly }) => {
     const { control, register, watch, formState } = useFormContext<BookingPageFormValues>();
     const { errors } = formState;
     const sendReminders = watch("send_reminder_emails");
+    const createTeamReminder = watch("create_team_reminder");
     const { data: templates = [], isLoading: templatesLoading } = useMessageTemplates();
 
     const templateOptions = useMemo(
@@ -175,6 +182,31 @@ export const NotificationsTab: FC<NotificationsTabProps> = ({ readOnly }) => {
                         render={({ field }) => <RecipientsEditor value={field.value} onChange={field.onChange} readOnly={readOnly} />}
                     />
                 </Field>
+                {renderSwitch(
+                    "create_team_reminder",
+                    "Add a reminder to Reminders",
+                    "Creates a Meeting reminder on the contact for each confirmed booking and assigns it to the member who has the meeting, so only they are notified. It moves with rescheduled or reassigned bookings and is cancelled with cancelled, completed or no-show ones. Bookings without a contact don't get one, and bookings made before you turn this on aren't added.",
+                )}
+                {createTeamReminder ? (
+                    <Field label="Remind the team" error={errors.team_reminder_offset_minutes?.message}>
+                        <Controller
+                            control={control}
+                            name="team_reminder_offset_minutes"
+                            render={({ field }) => (
+                                <PresetSinglePicker
+                                    aria-label="Team reminder lead time"
+                                    presets={TEAM_REMINDER_PRESETS}
+                                    value={field.value}
+                                    onChange={field.onChange}
+                                    minValue={5}
+                                    maxValue={20160}
+                                    suffix="minutes before"
+                                    isDisabled={readOnly}
+                                />
+                            )}
+                        />
+                    </Field>
+                ) : null}
             </SettingsSection>
 
             <SettingsSection

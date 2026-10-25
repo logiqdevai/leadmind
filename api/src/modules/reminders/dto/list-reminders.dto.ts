@@ -9,6 +9,14 @@ export class ListRemindersDto {
     @IsUUID()
     contact_uuid?: string;
 
+    @ApiPropertyOptional({
+        format: 'uuid',
+        description: 'Reminders this member receives: assigned to them, or to everyone',
+    })
+    @IsOptional()
+    @IsUUID()
+    for_user_uuid?: string;
+
     @ApiPropertyOptional({ enum: ReminderStatus })
     @IsOptional()
     @IsEnum(ReminderStatus)

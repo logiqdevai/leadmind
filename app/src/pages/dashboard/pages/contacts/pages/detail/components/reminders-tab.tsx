@@ -13,6 +13,7 @@ import type { Reminder } from "@/features/reminders/interfaces/reminder.interfac
 import { cn } from "@/lib/utils";
 import {
     ReminderAiBadge,
+    ReminderAssignees,
     ReminderFormModal,
     ReminderStatusBadge,
     ReminderSuggestedReply,
@@ -94,6 +95,8 @@ function ReminderRow({ reminder }: { reminder: Reminder }) {
                                 <ReminderCountdown dateStr={reminder.remind_at} />
                             </>
                         )}
+                        <span>·</span>
+                        <ReminderAssignees assignees={reminder.assignees} />
                     </div>
                     {reminder.notes && (
                         <p className="text-xs text-muted mt-1 line-clamp-2">{reminder.notes}</p>

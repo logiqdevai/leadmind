@@ -47,6 +47,7 @@ model User {
   bookings_created          Booking[]                @relation("BookingCreatedBy")
   booking_events            BookingEvent[]           @relation("BookingEventActor")
   calendar_connections      CalendarConnection[]
+  reminder_assignments      ReminderAssignee[]       @relation("ReminderAssignee")
 
   @@index([email])
   @@index([phone])
@@ -1486,9 +1487,12 @@ model Reminder {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  organisation     Organisation     @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
-  contact          Contact          @relation(fields: [contact_uuid], references: [uuid], onDelete: Cascade)
-  outreach_message OutreachMessage? @relation(fields: [outreach_message_uuid], references: [uuid], onDelete: SetNull)
+  organisation     Organisation       @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  contact          Contact            @relation(fields: [contact_uuid], references: [uuid], onDelete: Cascade)
+  outreach_message OutreachMessage?   @relation(fields: [outreach_message_uuid], references: [uuid], onDelete: SetNull)
+  booking          Booking?
+  /// Members who get the reminder. Empty = every member of the organisation.
+  assignees        ReminderAssignee[]
 
   @@index([organisation_uuid])
   @@index([contact_uuid])
@@ -1498,6 +1502,19 @@ model Reminder {
   @@index([organisation_uuid, remind_at])
   @@index([outreach_message_uuid])
   @@map("reminders")
+}
+
+model ReminderAssignee {
+  reminder_uuid String
+  user_uuid     String
+  created_at    DateTime @default(now())
+
+  reminder Reminder @relation(fields: [reminder_uuid], references: [uuid], onDelete: Cascade)
+  user     User     @relation("ReminderAssignee", fields: [user_uuid], references: [uuid], onDelete: Cascade)
+
+  @@id([reminder_uuid, user_uuid])
+  @@index([user_uuid])
+  @@map("reminder_assignees")
 }
 
 enum FieldType {
@@ -2348,19 +2365,23 @@ model BookingPage {
   require_cancellation_reason   Boolean @default(false)
 
   // Notifications
-  send_confirmation_email    Boolean  @default(true)
-  send_reminder_emails       Boolean  @default(true)
-  reminder_offsets_minutes   Int[]    @default([1440, 60])
-  send_cancellation_email    Boolean  @default(true)
-  send_reschedule_email      Boolean  @default(true)
-  notify_assignee            Boolean  @default(true)
-  additional_recipients      String[] @default([])
-  include_meeting_link       Boolean  @default(true)
-  include_calendar_details   Boolean  @default(true)
-  confirmation_template_uuid String?
-  reminder_template_uuid     String?
-  cancellation_template_uuid String?
-  reschedule_template_uuid   String?
+  send_confirmation_email      Boolean  @default(true)
+  send_reminder_emails         Boolean  @default(true)
+  reminder_offsets_minutes     Int[]    @default([1440, 60])
+  send_cancellation_email      Boolean  @default(true)
+  send_reschedule_email        Boolean  @default(true)
+  notify_assignee              Boolean  @default(true)
+  additional_recipients        String[] @default([])
+  include_meeting_link         Boolean  @default(true)
+  include_calendar_details     Boolean  @default(true)
+  /// Create a Meeting reminder on the contact's Reminders for confirmed bookings (kept in sync on changes).
+  create_team_reminder         Boolean  @default(false)
+  /// How long before the start the team reminder is due.
+  team_reminder_offset_minutes Int      @default(60)
+  confirmation_template_uuid   String?
+  reminder_template_uuid       String?
+  cancellation_template_uuid   String?
+  reschedule_template_uuid     String?
 
   // Google Calendar event content (supports booking variables)
   calendar_event_title       String?
@@ -2463,6 +2484,8 @@ model Booking {
   location_value String?
   meeting_url    String?
 
+  /// Team reminder created for this booking (see BookingPage.create_team_reminder); cleared if the reminder is deleted.
+  reminder_uuid            String?            @unique
   calendar_connection_uuid String?
   calendar_event_id        String?
   calendar_html_link       String?
@@ -2488,6 +2511,7 @@ model Booking {
   assigned_user       User?                 @relation("BookingAssignee", fields: [assigned_user_uuid], references: [uuid], onDelete: SetNull)
   created_by          User?                 @relation("BookingCreatedBy", fields: [created_by_user_uuid], references: [uuid], onDelete: SetNull)
   calendar_connection CalendarConnection?   @relation(fields: [calendar_connection_uuid], references: [uuid], onDelete: SetNull)
+  reminder            Reminder?             @relation(fields: [reminder_uuid], references: [uuid], onDelete: SetNull)
   events              BookingEvent[]
   notifications       BookingNotification[]
 

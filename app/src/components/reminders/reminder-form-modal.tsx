@@ -18,6 +18,9 @@ import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import type { Reminder, ReminderContact } from "@/features/reminders/interfaces/reminder.interface";
 import { emptyToNullOnEdit } from "@/lib/profile";
 import { SearchSelect } from "@/components/ui/search-select";
+import { MultiSelect } from "@/components/ui/multi-select";
+import { useOrganisationMembers } from "@/features/organisations/hooks/use-organisations";
+import { useAuthStore } from "@/stores/auth";
 
 interface ReminderFormModalProps {
     contactUuid?: string;
@@ -55,6 +58,13 @@ export function ReminderFormModal({
     const [notes, setNotes] = useState("");
     const [remindAt, setRemindAt] = useState<DateValue | null>(defaultRemindAt);
 
+    // Who gets the reminder. New reminders default to the member creating them; empty = everyone.
+    const organisationUuid = useAuthStore((s) => s.organisation_uuid) ?? "";
+    const currentUserUuid = useAuthStore((s) => s.user_uuid);
+    const { data: members = [] } = useOrganisationMembers(organisationUuid);
+    const memberOptions = members.map((m) => ({ value: m.user_uuid, label: m.full_name?.trim() || m.email }));
+    const [assigneeUuids, setAssigneeUuids] = useState<string[]>([]);
+
     const [selectedContact, setSelectedContact] = useState<ReminderContact | null>(null);
     const [selectedFilterUuid, setSelectedFilterUuid] = useState<string>("");
     const [contactSearch, setContactSearch] = useState("");
@@ -84,15 +94,17 @@ export function ReminderFormModal({
             setTitle(editing.title ?? "");
             setNotes(editing.notes ?? "");
             setRemindAt(toDateValue(new Date(editing.remind_at)));
+            setAssigneeUuids((editing.assignees ?? []).map((a) => a.uuid));
         } else {
             setTitle("");
             setNotes("");
             setRemindAt(defaultRemindAt());
+            setAssigneeUuids(currentUserUuid ? [currentUserUuid] : []);
             setSelectedContact(null);
             setSelectedFilterUuid("");
             setContactSearch("");
         }
-    }, [isOpen, editing]);
+    }, [isOpen, editing, currentUserUuid]);
 
     const resolvedContactUuid = contactUuid ?? selectedContact?.uuid;
     const canSubmit = !!remindAt && !!resolvedContactUuid && !isPending;
@@ -110,6 +122,7 @@ export function ReminderFormModal({
                         title: emptyToNullOnEdit(title, true),
                         notes: emptyToNullOnEdit(notes, true),
                         remind_at: dt.toISOString(),
+                        assignee_user_uuids: assigneeUuids,
                     },
                 },
                 { onSuccess: () => onOpenChange(false) },
@@ -121,6 +134,7 @@ export function ReminderFormModal({
                     title: title.trim() || undefined,
                     notes: notes.trim() || undefined,
                     remind_at: dt.toISOString(),
+                    assignee_user_uuids: assigneeUuids,
                 },
                 { onSuccess: () => onOpenChange(false) },
             );
@@ -321,6 +335,24 @@ export function ReminderFormModal({
                                 </>
                             )}
                         </DatePicker>
+
+                        <div className="flex flex-col gap-1.5">
+                            <Label htmlFor="reminder-assignees">Assigned to</Label>
+                            <MultiSelect
+                                id="reminder-assignees"
+                                aria-label="Assigned to"
+                                options={memberOptions}
+                                value={assigneeUuids}
+                                onChange={setAssigneeUuids}
+                                placeholder="Everyone in the organisation"
+                                searchPlaceholder="Search members…"
+                            />
+                            <p className="text-xs text-muted">
+                                {assigneeUuids.length === 0
+                                    ? "No one selected: every member of the organisation is notified."
+                                    : "Only the selected members are notified."}
+                            </p>
+                        </div>
 
                         <div className="flex flex-col gap-1.5">
                             <Label htmlFor="reminder-notes">Notes</Label>

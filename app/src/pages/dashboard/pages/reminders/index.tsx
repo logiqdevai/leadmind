@@ -7,6 +7,7 @@ import { NotificationPermissionBanner } from "@/components/ui/notification-permi
 import { useReminders, useReminderStats } from "@/features/reminders/hooks/use-reminders";
 import { useReminderNotifications } from "@/features/reminders/hooks/use-reminder-notifications";
 import { useDebouncedValue } from "@/hooks/use-debounced-value";
+import { useAuthStore } from "@/stores/auth";
 import type { ReminderStatus } from "@/features/reminders/interfaces/reminder.interface";
 import { ReminderStatsCards } from "./components/reminder-stats-cards";
 import { RemindersTable } from "./components/reminders-table";
@@ -29,6 +30,13 @@ const RANGE_OPTIONS = [
     { id: "overdue", label: "Overdue" },
 ];
 
+const ASSIGNED_ME = "me";
+
+const ASSIGNED_OPTIONS = [
+    { id: "", label: "All reminders" },
+    { id: ASSIGNED_ME, label: "Assigned to me" },
+];
+
 export default function RemindersPage() {
     const [searchParams, setSearchParams] = useSearchParams();
     const [createOpen, setCreateOpen] = useState(false);
@@ -39,6 +47,8 @@ export default function RemindersPage() {
     const search = searchParams.get("search") ?? "";
     const statusParam = searchParams.get("status") ?? "";
     const rangeParam = searchParams.get("range") ?? "";
+    const assignedParam = searchParams.get("assigned") ?? "";
+    const currentUserUuid = useAuthStore((s) => s.user_uuid);
 
     const updateParams = (next: Record<string, string | undefined | null>) => {
         const params = new URLSearchParams(searchParams);
@@ -60,6 +70,8 @@ export default function RemindersPage() {
         search: debouncedSearch || undefined,
         status,
         range,
+        // "Assigned to me" also includes reminders that go to everyone.
+        for_user_uuid: assignedParam === ASSIGNED_ME && currentUserUuid ? currentUserUuid : undefined,
     });
 
     const { data: stats, isLoading: statsLoading } = useReminderStats();
@@ -142,6 +154,29 @@ export default function RemindersPage() {
                     <Select.Popover>
                         <ListBox>
                             {RANGE_OPTIONS.map((opt) => (
+                                <ListBox.Item key={opt.id} id={opt.id} textValue={opt.label}>
+                                    {opt.label}
+                                    <ListBox.ItemIndicator />
+                                </ListBox.Item>
+                            ))}
+                        </ListBox>
+                    </Select.Popover>
+                </Select>
+
+                <Select
+                    aria-label="Filter by assignee"
+                    placeholder="All reminders"
+                    value={assignedParam}
+                    onChange={(v) => updateParams({ assigned: (v as string) || null, page: "1" })}
+                    className="w-44"
+                >
+                    <Select.Trigger>
+                        <Select.Value />
+                        <Select.Indicator />
+                    </Select.Trigger>
+                    <Select.Popover>
+                        <ListBox>
+                            {ASSIGNED_OPTIONS.map((opt) => (
                                 <ListBox.Item key={opt.id} id={opt.id} textValue={opt.label}>
                                     {opt.label}
                                     <ListBox.ItemIndicator />

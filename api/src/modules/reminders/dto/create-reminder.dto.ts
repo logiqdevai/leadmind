@@ -1,5 +1,15 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsDateString, IsEnum, IsOptional, IsString, IsUUID, MaxLength } from 'class-validator';
+import {
+    ArrayMaxSize,
+    ArrayUnique,
+    IsArray,
+    IsDateString,
+    IsEnum,
+    IsOptional,
+    IsString,
+    IsUUID,
+    MaxLength,
+} from 'class-validator';
 import { ReminderStatus } from '@/generated/prisma';
 
 export class CreateReminderDto {
@@ -27,4 +37,18 @@ export class CreateReminderDto {
     @IsOptional()
     @IsEnum(ReminderStatus)
     status?: ReminderStatus;
+
+    @ApiPropertyOptional({
+        type: [String],
+        format: 'uuid',
+        description:
+            'Organisation members who get this reminder; only they are notified. ' +
+            'Omitted: the member creating it. Empty array: every member of the organisation.',
+    })
+    @IsOptional()
+    @IsArray()
+    @ArrayUnique()
+    @ArrayMaxSize(100)
+    @IsUUID('4', { each: true })
+    assignee_user_uuids?: string[];
 }
