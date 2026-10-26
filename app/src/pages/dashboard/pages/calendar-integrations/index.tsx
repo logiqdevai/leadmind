@@ -33,6 +33,14 @@ const CalendarIntegrationsPage: FC = () => {
         const status = searchParams.get(CALLBACK_PARAMS.status);
         return !!status && status.toLowerCase() !== "success";
     });
+    // Tracked here rather than via `verify.isPending`: the call is started from an effect, and under React
+    // StrictMode (dev) the mutation observer is detached by the simulated remount, so its pending flag can
+    // stay true after the request has finished. The promise below always settles.
+    const [finishing, setFinishing] = useState(() => {
+        const status = searchParams.get(CALLBACK_PARAMS.status);
+        const succeeded = !status || status.toLowerCase() === "success";
+        return succeeded && !!searchParams.get(CALLBACK_PARAMS.connection) && !!searchParams.get(CALLBACK_PARAMS.connectedAccountId);
+    });
 
     // Finish the OAuth round trip once, then clean the URL.
     useEffect(() => {
@@ -45,7 +53,11 @@ const CalendarIntegrationsPage: FC = () => {
 
         const failed = !!status && status.toLowerCase() !== "success";
         if (!failed && connectionUuid && connectedAccountId) {
-            verify.mutate({ uuid: connectionUuid, connectedAccountId });
+            verify
+                .mutateAsync({ uuid: connectionUuid, connectedAccountId })
+                // The hook already reports success and failure with a toast.
+                .catch(() => undefined)
+                .finally(() => setFinishing(false));
         }
 
         const next = new URLSearchParams(searchParams);
@@ -82,7 +94,7 @@ const CalendarIntegrationsPage: FC = () => {
                 </Alert>
             ) : null}
 
-            {verify.isPending ? (
+            {finishing ? (
                 <div className="flex items-center gap-2 rounded-xl border border-border/80 bg-surface px-4 py-3 text-sm text-muted">
                     <Spinner size="sm" /> Finishing the Google Calendar connection…
                 </div>

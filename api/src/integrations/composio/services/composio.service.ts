@@ -1,4 +1,10 @@
-import { Injectable, Logger, ServiceUnavailableException } from '@nestjs/common';
+import {
+    BadGatewayException,
+    HttpException,
+    Injectable,
+    Logger,
+    ServiceUnavailableException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Composio } from '@composio/core';
 import {
@@ -14,6 +20,10 @@ import {
     ComposioRequestError,
 } from '../interfaces/composio.interface';
 
+const API_KEY_REJECTED_MESSAGE =
+    'Google Calendar is unavailable: the server\'s Composio API key was rejected. ' +
+    'Ask an administrator to check COMPOSIO_API_KEY.';
+
 /**
  * The only place that talks to the Composio SDK. Composio holds the OAuth tokens of each team
  * member's Google account; we keep only the connected-account id (see CalendarConnection).
@@ -28,22 +38,31 @@ export class ComposioService {
 
     /** Only the API key is required; the Google Calendar auth config is resolved (or created) on demand. */
     isConfigured(): boolean {
-        return !!this.configService.get<string>('COMPOSIO_API_KEY');
+        return !!this.apiKey();
     }
 
     /** Starts the hosted OAuth flow; the member is sent to `redirect_url` and comes back to `callback_url`. */
     async linkGoogleCalendar(composio_user_id: string, callback_url: string): Promise<ComposioConnectionRequest> {
-        const authConfigId = await this.googleCalendarAuthConfigId();
-        const request = await this.getClient().connectedAccounts.link(composio_user_id, authConfigId, {
-            callbackUrl: callback_url,
-            // A member reconnecting (expired token, different Google account) gets a fresh connected account.
-            allowMultiple: true,
-        });
-        return { connected_account_id: request.id, redirect_url: request.redirectUrl ?? null };
+        try {
+            const authConfigId = await this.googleCalendarAuthConfigId();
+            const request = await this.getClient().connectedAccounts.link(composio_user_id, authConfigId, {
+                callbackUrl: callback_url,
+                // A member reconnecting (expired token, different Google account) gets a fresh connected account.
+                allowMultiple: true,
+            });
+            return { connected_account_id: request.id, redirect_url: request.redirectUrl ?? null };
+        } catch (error) {
+            throw this.toHttpException(error);
+        }
     }
 
     async getConnectedAccount(connected_account_id: string): Promise<ComposioConnectedAccount> {
-        const account = await this.getClient().connectedAccounts.get(connected_account_id);
+        let account: Awaited<ReturnType<Composio['connectedAccounts']['get']>>;
+        try {
+            account = await this.getClient().connectedAccounts.get(connected_account_id);
+        } catch (error) {
+            throw this.toHttpException(error);
+        }
         return {
             id: account.id,
             status: account.status,
@@ -77,6 +96,10 @@ export class ComposioService {
                 ...(parameters.length ? { parameters } : {}),
             })) as { status?: number; data?: unknown };
         } catch (error) {
+            if (this.isApiKeyRejected(error)) {
+                // A server-side configuration problem, not this member's connection: never ask them to reconnect.
+                throw new ComposioRequestError(API_KEY_REJECTED_MESSAGE, 401, false);
+            }
             const message = (error as Error).message ?? 'Composio request failed';
             throw new ComposioRequestError(message, null, this.looksLikeAuthFailure(message));
         }
@@ -98,9 +121,38 @@ export class ComposioService {
             throw new ServiceUnavailableException('Google Calendar integration is not configured (Composio).');
         }
         if (!this.client) {
-            this.client = new Composio({ apiKey: this.configService.get<string>('COMPOSIO_API_KEY') });
+            this.client = new Composio({ apiKey: this.apiKey() });
         }
         return this.client;
+    }
+
+    /** The configured key, without the stray whitespace or quotes that env files and dashboards often add. */
+    private apiKey(): string | undefined {
+        const raw = this.configService.get<string>('COMPOSIO_API_KEY');
+        const key = raw?.trim().replace(/^(['"])(.*)\1$/, '$2').trim();
+        return key || undefined;
+    }
+
+    /** Composio answers 401 when the project API key itself is invalid, revoked or from another project. */
+    private isApiKeyRejected(error: unknown): boolean {
+        const e = error as { status?: number; details?: { slug?: string } } | undefined;
+        return e?.status === 401 || e?.details?.slug === 'APIKey_InvalidAPIKey';
+    }
+
+    /** Clear, concise errors for callers instead of a raw SDK error and stack trace. */
+    private toHttpException(error: unknown): Error {
+        if (error instanceof HttpException) return error;
+        if (this.isApiKeyRejected(error)) {
+            const requestId = (error as { requestId?: string }).requestId;
+            this.logger.error(
+                `Composio rejected the configured API key (401)${requestId ? `, request ${requestId}` : ''}. ` +
+                    'Check COMPOSIO_API_KEY: it must be a valid key for your Composio project.',
+            );
+            return new ServiceUnavailableException(API_KEY_REJECTED_MESSAGE);
+        }
+        const message = (error as Error)?.message ?? 'unknown error';
+        this.logger.error(`Composio request failed: ${message}`);
+        return new BadGatewayException(`Composio request failed: ${message}`.slice(0, 300));
     }
 
     /**

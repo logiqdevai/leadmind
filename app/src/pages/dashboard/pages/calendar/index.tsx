@@ -1,6 +1,6 @@
 import { useMemo, useState, type FC } from "react";
 import { Button } from "@heroui/react";
-import { Plus } from "lucide-react";
+import { ChevronDown, Plus, SlidersHorizontal } from "lucide-react";
 import { useDashboardNavbarTitle } from "@/components/providers/dashboard-navbar-provider";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { BookingDetailsDrawer } from "@/components/bookings/booking-details-drawer";
@@ -39,6 +39,7 @@ const CalendarPage: FC = () => {
     const [selectedBookingUuid, setSelectedBookingUuid] = useState<string | null>(null);
     const [createState, setCreateState] = useState<{ open: boolean; start: string | null }>({ open: false, start: null });
     const [blockOpen, setBlockOpen] = useState(false);
+    const [filtersOpen, setFiltersOpen] = useState(false);
     const [blockToDelete, setBlockToDelete] = useState<BookingBlock | null>(null);
     const deleteBlock = useDeleteBookingBlock();
     const exportBookings = useExportBookings();
@@ -133,9 +134,27 @@ const CalendarPage: FC = () => {
                 isExporting={exportBookings.isPending}
             />
 
-            <CalendarFilters params={params} update={update} hasFilters={hasFilters} />
+            <div className="flex flex-col gap-4">
+                <Button
+                    size="sm"
+                    variant="secondary"
+                    className="self-start"
+                    aria-expanded={filtersOpen}
+                    onPress={() => setFiltersOpen((open) => !open)}
+                >
+                    <SlidersHorizontal className="size-3.5" />
+                    Filters
+                    {hasFilters && <span className="size-1.5 rounded-full bg-accent" aria-label="Filters active" />}
+                    <ChevronDown className={`size-3.5 transition-transform ${filtersOpen ? "rotate-180" : ""}`} />
+                </Button>
 
-            <CalendarStatsRow stats={stats} isLoading={statsLoading} />
+                {filtersOpen && (
+                    <>
+                        <CalendarFilters params={params} update={update} hasFilters={hasFilters} />
+                        <CalendarStatsRow stats={stats} isLoading={statsLoading} />
+                    </>
+                )}
+            </div>
 
             {isList ? (
                 <CalendarListView
