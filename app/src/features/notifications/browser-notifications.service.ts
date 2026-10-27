@@ -37,3 +37,24 @@ export const showReminderNotification = (reminder: Reminder): void => {
         notification.close();
     };
 };
+
+export const showAppNotification = (opts: {
+    tag: string;
+    title: string;
+    body?: string;
+    onClick?: () => void;
+}): void => {
+    if (!("Notification" in window) || Notification.permission !== "granted") return;
+
+    const notification = new Notification(opts.title, {
+        body: opts.body,
+        icon: "/favicon.ico",
+        tag: opts.tag,
+    });
+
+    notification.onclick = () => {
+        window.focus();
+        opts.onClick?.();
+        notification.close();
+    };
+};

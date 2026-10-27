@@ -21,6 +21,7 @@ const ContactDetailPage = lazy(() => import("@/pages/dashboard/pages/contacts/pa
 const ListsPage = lazy(() => import("@/pages/dashboard/pages/lists"));
 const ListDetailPage = lazy(() => import("@/pages/dashboard/pages/lists/pages/detail"));
 const RemindersPage = lazy(() => import("@/pages/dashboard/pages/reminders"));
+const NotificationsPage = lazy(() => import("@/pages/dashboard/pages/notifications"));
 const JobsPage = lazy(() => import("@/pages/dashboard/pages/jobs"));
 const BatchJobsPage = lazy(() => import("@/pages/dashboard/pages/batch-jobs"));
 const GoalsPage = lazy(() => import("@/pages/dashboard/pages/goals"));
@@ -248,6 +249,14 @@ export default function AppRoutes() {
           element={
             <Lazy>
               <RemindersPage />
+            </Lazy>
+          }
+        />
+        <Route
+          path="notifications"
+          element={
+            <Lazy>
+              <NotificationsPage />
             </Lazy>
           }
         />

@@ -18,6 +18,7 @@ import type {
     Interaction,
     ListContactsQuery,
     LogCallPayload,
+    UpdateInteractionPayload,
     LogEmailPayload,
     LogMeetingPayload,
     LogSmsPayload,
@@ -309,6 +310,28 @@ export const listContactInteractions = async (uuid: string): Promise<Interaction
         return response.data;
     } catch (error: any) {
         throw new Error(error?.response?.data?.message || "Failed to load interactions.");
+    }
+};
+
+export const updateInteraction = async (
+    uuid: string,
+    interactionUuid: string,
+    payload: UpdateInteractionPayload,
+): Promise<Interaction> => {
+    try {
+        const response = await axiosInstance.put(ApiRoutes.contacts.interaction(uuid, interactionUuid), payload);
+        return response.data;
+    } catch (error: any) {
+        throw new Error(error?.response?.data?.message || "Failed to update activity.");
+    }
+};
+
+export const deleteInteraction = async (uuid: string, interactionUuid: string): Promise<{ uuid: string }> => {
+    try {
+        const response = await axiosInstance.delete(ApiRoutes.contacts.interaction(uuid, interactionUuid));
+        return response.data;
+    } catch (error: any) {
+        throw new Error(error?.response?.data?.message || "Failed to delete activity.");
     }
 };
 

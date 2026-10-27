@@ -2,6 +2,7 @@ import { useLocation } from "react-router-dom";
 import { Menu, Sun, Moon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Routes } from "@/routes/routes";
+import { NotificationBell } from "@/components/notifications/notification-bell";
 import UserMenuPopover from "@/components/layout/user-menu-popover";
 import { useThemeContext } from "@/components/providers/theme-provider";
 import { useDashboardNavbarSlots } from "@/components/providers/dashboard-navbar-provider";
@@ -28,6 +29,7 @@ const pageTitles: Record<string, string> = {
   [Routes.dashboard.campaigns]: "Campaigns",
   [Routes.dashboard.message_templates]: "Templates",
   [Routes.dashboard.reminders]: "Reminders",
+  [Routes.dashboard.notifications]: "Notifications",
   [Routes.dashboard.forms]: "Forms",
   [Routes.dashboard.integrations]: "Integrations",
   [Routes.dashboard.sender_profiles]: "Sender Profiles",
@@ -84,6 +86,7 @@ export default function DashboardNavbar({ onMenuClick }: DashboardNavbarProps) {
 
       <div className="flex items-center gap-1 shrink-0">
         <div ref={setTrailingEl} className="flex items-center gap-1 empty:hidden" />
+        <NotificationBell />
         <button
           onClick={toggleTheme}
           aria-label="Toggle theme"

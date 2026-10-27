@@ -398,6 +398,11 @@ export type BookingNotification = $Result.DefaultSelection<Prisma.$BookingNotifi
  * A team member's Google Calendar, connected through Composio (one connected account per member per organisation).
  */
 export type CalendarConnection = $Result.DefaultSelection<Prisma.$CalendarConnectionPayload>
+/**
+ * Model Notification
+ * In-app notification for one member (a reminder coming due, a booking changing). Pushed live over the websocket.
+ */
+export type Notification = $Result.DefaultSelection<Prisma.$NotificationPayload>
 
 /**
  * Enums
@@ -1135,6 +1140,18 @@ export const CalendarConnectionStatus: {
 
 export type CalendarConnectionStatus = (typeof CalendarConnectionStatus)[keyof typeof CalendarConnectionStatus]
 
+
+export const NotificationType: {
+  REMINDER_DUE: 'REMINDER_DUE',
+  BOOKING_CREATED: 'BOOKING_CREATED',
+  BOOKING_REQUESTED: 'BOOKING_REQUESTED',
+  BOOKING_RESCHEDULED: 'BOOKING_RESCHEDULED',
+  BOOKING_CANCELLED: 'BOOKING_CANCELLED',
+  BOOKING_ASSIGNED: 'BOOKING_ASSIGNED'
+};
+
+export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]
+
 }
 
 export type ThreadOrigin = $Enums.ThreadOrigin
@@ -1404,6 +1421,10 @@ export const CalendarProvider: typeof $Enums.CalendarProvider
 export type CalendarConnectionStatus = $Enums.CalendarConnectionStatus
 
 export const CalendarConnectionStatus: typeof $Enums.CalendarConnectionStatus
+
+export type NotificationType = $Enums.NotificationType
+
+export const NotificationType: typeof $Enums.NotificationType
 
 /**
  * ##  Prisma Client ʲˢ
@@ -2271,6 +2292,16 @@ export class PrismaClient<
     * ```
     */
   get calendarConnection(): Prisma.CalendarConnectionDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.notification`: Exposes CRUD operations for the **Notification** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Notifications
+    * const notifications = await prisma.notification.findMany()
+    * ```
+    */
+  get notification(): Prisma.NotificationDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -2779,7 +2810,8 @@ export namespace Prisma {
     Booking: 'Booking',
     BookingEvent: 'BookingEvent',
     BookingNotification: 'BookingNotification',
-    CalendarConnection: 'CalendarConnection'
+    CalendarConnection: 'CalendarConnection',
+    Notification: 'Notification'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -2795,7 +2827,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "organisation" | "organisationMember" | "organisationInvitation" | "apiKey" | "filter" | "savedContactFilter" | "sidebarFavorite" | "scoringInstruction" | "filterScoringInstruction" | "rawLead" | "lead" | "leadEnrichment" | "contact" | "contactInfo" | "contactFilter" | "contactEnrichment" | "contactScore" | "contactList" | "contactListMember" | "contactTag" | "interaction" | "outreachMessage" | "messageThread" | "outreachSequence" | "outreachSequenceStep" | "sequenceEnrollment" | "filterJob" | "bulkJob" | "websiteScrapeRequest" | "senderProfile" | "messageTemplate" | "marketingCampaign" | "marketingCampaignContact" | "openAiBatchJob" | "integration" | "integrationAccount" | "integrationKey" | "integrationAccountDomain" | "mailTesterTest" | "mxToolboxCheck" | "reminder" | "reminderAssignee" | "form" | "formField" | "formCompletion" | "formCompletionValue" | "contactAudienceAnalysis" | "aiUsageLog" | "apifyUsageLog" | "messagingGoal" | "emailSendLimit" | "sendingPolicy" | "sendingPolicyStage" | "campaignIntegration" | "campaignIntegrationState" | "sendingUsageCounter" | "goalAchievement" | "goalPersonalBest" | "activityLog" | "oAuthModel" | "oAuthConnection" | "mcpToolInvocationLog" | "orgTag" | "orgTagAssignment" | "availabilitySchedule" | "availabilityOverride" | "bookingBlock" | "bookingPage" | "bookingPageMember" | "bookingLink" | "booking" | "bookingEvent" | "bookingNotification" | "calendarConnection"
+      modelProps: "user" | "organisation" | "organisationMember" | "organisationInvitation" | "apiKey" | "filter" | "savedContactFilter" | "sidebarFavorite" | "scoringInstruction" | "filterScoringInstruction" | "rawLead" | "lead" | "leadEnrichment" | "contact" | "contactInfo" | "contactFilter" | "contactEnrichment" | "contactScore" | "contactList" | "contactListMember" | "contactTag" | "interaction" | "outreachMessage" | "messageThread" | "outreachSequence" | "outreachSequenceStep" | "sequenceEnrollment" | "filterJob" | "bulkJob" | "websiteScrapeRequest" | "senderProfile" | "messageTemplate" | "marketingCampaign" | "marketingCampaignContact" | "openAiBatchJob" | "integration" | "integrationAccount" | "integrationKey" | "integrationAccountDomain" | "mailTesterTest" | "mxToolboxCheck" | "reminder" | "reminderAssignee" | "form" | "formField" | "formCompletion" | "formCompletionValue" | "contactAudienceAnalysis" | "aiUsageLog" | "apifyUsageLog" | "messagingGoal" | "emailSendLimit" | "sendingPolicy" | "sendingPolicyStage" | "campaignIntegration" | "campaignIntegrationState" | "sendingUsageCounter" | "goalAchievement" | "goalPersonalBest" | "activityLog" | "oAuthModel" | "oAuthConnection" | "mcpToolInvocationLog" | "orgTag" | "orgTagAssignment" | "availabilitySchedule" | "availabilityOverride" | "bookingBlock" | "bookingPage" | "bookingPageMember" | "bookingLink" | "booking" | "bookingEvent" | "bookingNotification" | "calendarConnection" | "notification"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -8349,6 +8381,80 @@ export namespace Prisma {
           }
         }
       }
+      Notification: {
+        payload: Prisma.$NotificationPayload<ExtArgs>
+        fields: Prisma.NotificationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.NotificationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.NotificationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>
+          }
+          findFirst: {
+            args: Prisma.NotificationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.NotificationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>
+          }
+          findMany: {
+            args: Prisma.NotificationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>[]
+          }
+          create: {
+            args: Prisma.NotificationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>
+          }
+          createMany: {
+            args: Prisma.NotificationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.NotificationCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>[]
+          }
+          delete: {
+            args: Prisma.NotificationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>
+          }
+          update: {
+            args: Prisma.NotificationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>
+          }
+          deleteMany: {
+            args: Prisma.NotificationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.NotificationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.NotificationUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>[]
+          }
+          upsert: {
+            args: Prisma.NotificationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>
+          }
+          aggregate: {
+            args: Prisma.NotificationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateNotification>
+          }
+          groupBy: {
+            args: Prisma.NotificationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<NotificationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.NotificationCountArgs<ExtArgs>
+            result: $Utils.Optional<NotificationCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -8532,6 +8638,7 @@ export namespace Prisma {
     bookingEvent?: BookingEventOmit
     bookingNotification?: BookingNotificationOmit
     calendarConnection?: CalendarConnectionOmit
+    notification?: NotificationOmit
   }
 
   /* Types for Logging */
@@ -8636,6 +8743,7 @@ export namespace Prisma {
     booking_events: number
     calendar_connections: number
     reminder_assignments: number
+    notifications: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8663,6 +8771,7 @@ export namespace Prisma {
     booking_events?: boolean | UserCountOutputTypeCountBooking_eventsArgs
     calendar_connections?: boolean | UserCountOutputTypeCountCalendar_connectionsArgs
     reminder_assignments?: boolean | UserCountOutputTypeCountReminder_assignmentsArgs
+    notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
   }
 
   // Custom InputTypes
@@ -8844,6 +8953,13 @@ export namespace Prisma {
     where?: ReminderAssigneeWhereInput
   }
 
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountNotificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: NotificationWhereInput
+  }
+
 
   /**
    * Count Type OrganisationCountOutputType
@@ -8892,6 +9008,7 @@ export namespace Prisma {
     bookings: number
     booking_events: number
     calendar_connections: number
+    notifications: number
   }
 
   export type OrganisationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8937,6 +9054,7 @@ export namespace Prisma {
     bookings?: boolean | OrganisationCountOutputTypeCountBookingsArgs
     booking_events?: boolean | OrganisationCountOutputTypeCountBooking_eventsArgs
     calendar_connections?: boolean | OrganisationCountOutputTypeCountCalendar_connectionsArgs
+    notifications?: boolean | OrganisationCountOutputTypeCountNotificationsArgs
   }
 
   // Custom InputTypes
@@ -9242,6 +9360,13 @@ export namespace Prisma {
    */
   export type OrganisationCountOutputTypeCountCalendar_connectionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CalendarConnectionWhereInput
+  }
+
+  /**
+   * OrganisationCountOutputType without action
+   */
+  export type OrganisationCountOutputTypeCountNotificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: NotificationWhereInput
   }
 
 
@@ -10843,6 +10968,7 @@ export namespace Prisma {
     booking_events?: boolean | User$booking_eventsArgs<ExtArgs>
     calendar_connections?: boolean | User$calendar_connectionsArgs<ExtArgs>
     reminder_assignments?: boolean | User$reminder_assignmentsArgs<ExtArgs>
+    notifications?: boolean | User$notificationsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -10908,6 +11034,7 @@ export namespace Prisma {
     booking_events?: boolean | User$booking_eventsArgs<ExtArgs>
     calendar_connections?: boolean | User$calendar_connectionsArgs<ExtArgs>
     reminder_assignments?: boolean | User$reminder_assignmentsArgs<ExtArgs>
+    notifications?: boolean | User$notificationsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -10940,6 +11067,7 @@ export namespace Prisma {
       booking_events: Prisma.$BookingEventPayload<ExtArgs>[]
       calendar_connections: Prisma.$CalendarConnectionPayload<ExtArgs>[]
       reminder_assignments: Prisma.$ReminderAssigneePayload<ExtArgs>[]
+      notifications: Prisma.$NotificationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -11369,6 +11497,7 @@ export namespace Prisma {
     booking_events<T extends User$booking_eventsArgs<ExtArgs> = {}>(args?: Subset<T, User$booking_eventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     calendar_connections<T extends User$calendar_connectionsArgs<ExtArgs> = {}>(args?: Subset<T, User$calendar_connectionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CalendarConnectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     reminder_assignments<T extends User$reminder_assignmentsArgs<ExtArgs> = {}>(args?: Subset<T, User$reminder_assignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReminderAssigneePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    notifications<T extends User$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -12371,6 +12500,30 @@ export namespace Prisma {
   }
 
   /**
+   * User.notifications
+   */
+  export type User$notificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    where?: NotificationWhereInput
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[]
+    cursor?: NotificationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[]
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -12661,6 +12814,7 @@ export namespace Prisma {
     bookings?: boolean | Organisation$bookingsArgs<ExtArgs>
     booking_events?: boolean | Organisation$booking_eventsArgs<ExtArgs>
     calendar_connections?: boolean | Organisation$calendar_connectionsArgs<ExtArgs>
+    notifications?: boolean | Organisation$notificationsArgs<ExtArgs>
     _count?: boolean | OrganisationCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["organisation"]>
 
@@ -12744,6 +12898,7 @@ export namespace Prisma {
     bookings?: boolean | Organisation$bookingsArgs<ExtArgs>
     booking_events?: boolean | Organisation$booking_eventsArgs<ExtArgs>
     calendar_connections?: boolean | Organisation$calendar_connectionsArgs<ExtArgs>
+    notifications?: boolean | Organisation$notificationsArgs<ExtArgs>
     _count?: boolean | OrganisationCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type OrganisationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -12794,6 +12949,7 @@ export namespace Prisma {
       bookings: Prisma.$BookingPayload<ExtArgs>[]
       booking_events: Prisma.$BookingEventPayload<ExtArgs>[]
       calendar_connections: Prisma.$CalendarConnectionPayload<ExtArgs>[]
+      notifications: Prisma.$NotificationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -13241,6 +13397,7 @@ export namespace Prisma {
     bookings<T extends Organisation$bookingsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$bookingsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     booking_events<T extends Organisation$booking_eventsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$booking_eventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     calendar_connections<T extends Organisation$calendar_connectionsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$calendar_connectionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CalendarConnectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    notifications<T extends Organisation$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -14672,6 +14829,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: CalendarConnectionScalarFieldEnum | CalendarConnectionScalarFieldEnum[]
+  }
+
+  /**
+   * Organisation.notifications
+   */
+  export type Organisation$notificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    where?: NotificationWhereInput
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[]
+    cursor?: NotificationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[]
   }
 
   /**
@@ -106037,6 +106218,1196 @@ export namespace Prisma {
 
 
   /**
+   * Model Notification
+   */
+
+  export type AggregateNotification = {
+    _count: NotificationCountAggregateOutputType | null
+    _avg: NotificationAvgAggregateOutputType | null
+    _sum: NotificationSumAggregateOutputType | null
+    _min: NotificationMinAggregateOutputType | null
+    _max: NotificationMaxAggregateOutputType | null
+  }
+
+  export type NotificationAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type NotificationSumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type NotificationMinAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    organisation_uuid: string | null
+    user_uuid: string | null
+    type: $Enums.NotificationType | null
+    title: string | null
+    body: string | null
+    entity_type: string | null
+    entity_uuid: string | null
+    read_at: Date | null
+    created_at: Date | null
+  }
+
+  export type NotificationMaxAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    organisation_uuid: string | null
+    user_uuid: string | null
+    type: $Enums.NotificationType | null
+    title: string | null
+    body: string | null
+    entity_type: string | null
+    entity_uuid: string | null
+    read_at: Date | null
+    created_at: Date | null
+  }
+
+  export type NotificationCountAggregateOutputType = {
+    id: number
+    uuid: number
+    organisation_uuid: number
+    user_uuid: number
+    type: number
+    title: number
+    body: number
+    entity_type: number
+    entity_uuid: number
+    data: number
+    read_at: number
+    created_at: number
+    _all: number
+  }
+
+
+  export type NotificationAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type NotificationSumAggregateInputType = {
+    id?: true
+  }
+
+  export type NotificationMinAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    user_uuid?: true
+    type?: true
+    title?: true
+    body?: true
+    entity_type?: true
+    entity_uuid?: true
+    read_at?: true
+    created_at?: true
+  }
+
+  export type NotificationMaxAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    user_uuid?: true
+    type?: true
+    title?: true
+    body?: true
+    entity_type?: true
+    entity_uuid?: true
+    read_at?: true
+    created_at?: true
+  }
+
+  export type NotificationCountAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    user_uuid?: true
+    type?: true
+    title?: true
+    body?: true
+    entity_type?: true
+    entity_uuid?: true
+    data?: true
+    read_at?: true
+    created_at?: true
+    _all?: true
+  }
+
+  export type NotificationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Notification to aggregate.
+     */
+    where?: NotificationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Notifications to fetch.
+     */
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: NotificationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Notifications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Notifications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Notifications
+    **/
+    _count?: true | NotificationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: NotificationAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: NotificationSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: NotificationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: NotificationMaxAggregateInputType
+  }
+
+  export type GetNotificationAggregateType<T extends NotificationAggregateArgs> = {
+        [P in keyof T & keyof AggregateNotification]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateNotification[P]>
+      : GetScalarType<T[P], AggregateNotification[P]>
+  }
+
+
+
+
+  export type NotificationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: NotificationWhereInput
+    orderBy?: NotificationOrderByWithAggregationInput | NotificationOrderByWithAggregationInput[]
+    by: NotificationScalarFieldEnum[] | NotificationScalarFieldEnum
+    having?: NotificationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: NotificationCountAggregateInputType | true
+    _avg?: NotificationAvgAggregateInputType
+    _sum?: NotificationSumAggregateInputType
+    _min?: NotificationMinAggregateInputType
+    _max?: NotificationMaxAggregateInputType
+  }
+
+  export type NotificationGroupByOutputType = {
+    id: number
+    uuid: string
+    organisation_uuid: string
+    user_uuid: string
+    type: $Enums.NotificationType
+    title: string
+    body: string | null
+    entity_type: string | null
+    entity_uuid: string | null
+    data: JsonValue | null
+    read_at: Date | null
+    created_at: Date
+    _count: NotificationCountAggregateOutputType | null
+    _avg: NotificationAvgAggregateOutputType | null
+    _sum: NotificationSumAggregateOutputType | null
+    _min: NotificationMinAggregateOutputType | null
+    _max: NotificationMaxAggregateOutputType | null
+  }
+
+  type GetNotificationGroupByPayload<T extends NotificationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<NotificationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof NotificationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], NotificationGroupByOutputType[P]>
+            : GetScalarType<T[P], NotificationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type NotificationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    user_uuid?: boolean
+    type?: boolean
+    title?: boolean
+    body?: boolean
+    entity_type?: boolean
+    entity_uuid?: boolean
+    data?: boolean
+    read_at?: boolean
+    created_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["notification"]>
+
+  export type NotificationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    user_uuid?: boolean
+    type?: boolean
+    title?: boolean
+    body?: boolean
+    entity_type?: boolean
+    entity_uuid?: boolean
+    data?: boolean
+    read_at?: boolean
+    created_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["notification"]>
+
+  export type NotificationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    user_uuid?: boolean
+    type?: boolean
+    title?: boolean
+    body?: boolean
+    entity_type?: boolean
+    entity_uuid?: boolean
+    data?: boolean
+    read_at?: boolean
+    created_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["notification"]>
+
+  export type NotificationSelectScalar = {
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    user_uuid?: boolean
+    type?: boolean
+    title?: boolean
+    body?: boolean
+    entity_type?: boolean
+    entity_uuid?: boolean
+    data?: boolean
+    read_at?: boolean
+    created_at?: boolean
+  }
+
+  export type NotificationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "user_uuid" | "type" | "title" | "body" | "entity_type" | "entity_uuid" | "data" | "read_at" | "created_at", ExtArgs["result"]["notification"]>
+  export type NotificationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type NotificationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type NotificationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $NotificationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Notification"
+    objects: {
+      organisation: Prisma.$OrganisationPayload<ExtArgs>
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      uuid: string
+      organisation_uuid: string
+      user_uuid: string
+      type: $Enums.NotificationType
+      title: string
+      body: string | null
+      entity_type: string | null
+      entity_uuid: string | null
+      /**
+       * Type-specific details shown in the notification modal.
+       */
+      data: Prisma.JsonValue | null
+      read_at: Date | null
+      created_at: Date
+    }, ExtArgs["result"]["notification"]>
+    composites: {}
+  }
+
+  type NotificationGetPayload<S extends boolean | null | undefined | NotificationDefaultArgs> = $Result.GetResult<Prisma.$NotificationPayload, S>
+
+  type NotificationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<NotificationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: NotificationCountAggregateInputType | true
+    }
+
+  export interface NotificationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Notification'], meta: { name: 'Notification' } }
+    /**
+     * Find zero or one Notification that matches the filter.
+     * @param {NotificationFindUniqueArgs} args - Arguments to find a Notification
+     * @example
+     * // Get one Notification
+     * const notification = await prisma.notification.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends NotificationFindUniqueArgs>(args: SelectSubset<T, NotificationFindUniqueArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Notification that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {NotificationFindUniqueOrThrowArgs} args - Arguments to find a Notification
+     * @example
+     * // Get one Notification
+     * const notification = await prisma.notification.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends NotificationFindUniqueOrThrowArgs>(args: SelectSubset<T, NotificationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Notification that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationFindFirstArgs} args - Arguments to find a Notification
+     * @example
+     * // Get one Notification
+     * const notification = await prisma.notification.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends NotificationFindFirstArgs>(args?: SelectSubset<T, NotificationFindFirstArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Notification that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationFindFirstOrThrowArgs} args - Arguments to find a Notification
+     * @example
+     * // Get one Notification
+     * const notification = await prisma.notification.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends NotificationFindFirstOrThrowArgs>(args?: SelectSubset<T, NotificationFindFirstOrThrowArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Notifications that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Notifications
+     * const notifications = await prisma.notification.findMany()
+     * 
+     * // Get first 10 Notifications
+     * const notifications = await prisma.notification.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const notificationWithIdOnly = await prisma.notification.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends NotificationFindManyArgs>(args?: SelectSubset<T, NotificationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Notification.
+     * @param {NotificationCreateArgs} args - Arguments to create a Notification.
+     * @example
+     * // Create one Notification
+     * const Notification = await prisma.notification.create({
+     *   data: {
+     *     // ... data to create a Notification
+     *   }
+     * })
+     * 
+     */
+    create<T extends NotificationCreateArgs>(args: SelectSubset<T, NotificationCreateArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Notifications.
+     * @param {NotificationCreateManyArgs} args - Arguments to create many Notifications.
+     * @example
+     * // Create many Notifications
+     * const notification = await prisma.notification.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends NotificationCreateManyArgs>(args?: SelectSubset<T, NotificationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Notifications and returns the data saved in the database.
+     * @param {NotificationCreateManyAndReturnArgs} args - Arguments to create many Notifications.
+     * @example
+     * // Create many Notifications
+     * const notification = await prisma.notification.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Notifications and only return the `id`
+     * const notificationWithIdOnly = await prisma.notification.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends NotificationCreateManyAndReturnArgs>(args?: SelectSubset<T, NotificationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Notification.
+     * @param {NotificationDeleteArgs} args - Arguments to delete one Notification.
+     * @example
+     * // Delete one Notification
+     * const Notification = await prisma.notification.delete({
+     *   where: {
+     *     // ... filter to delete one Notification
+     *   }
+     * })
+     * 
+     */
+    delete<T extends NotificationDeleteArgs>(args: SelectSubset<T, NotificationDeleteArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Notification.
+     * @param {NotificationUpdateArgs} args - Arguments to update one Notification.
+     * @example
+     * // Update one Notification
+     * const notification = await prisma.notification.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends NotificationUpdateArgs>(args: SelectSubset<T, NotificationUpdateArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Notifications.
+     * @param {NotificationDeleteManyArgs} args - Arguments to filter Notifications to delete.
+     * @example
+     * // Delete a few Notifications
+     * const { count } = await prisma.notification.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends NotificationDeleteManyArgs>(args?: SelectSubset<T, NotificationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Notifications.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Notifications
+     * const notification = await prisma.notification.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends NotificationUpdateManyArgs>(args: SelectSubset<T, NotificationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Notifications and returns the data updated in the database.
+     * @param {NotificationUpdateManyAndReturnArgs} args - Arguments to update many Notifications.
+     * @example
+     * // Update many Notifications
+     * const notification = await prisma.notification.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Notifications and only return the `id`
+     * const notificationWithIdOnly = await prisma.notification.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends NotificationUpdateManyAndReturnArgs>(args: SelectSubset<T, NotificationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Notification.
+     * @param {NotificationUpsertArgs} args - Arguments to update or create a Notification.
+     * @example
+     * // Update or create a Notification
+     * const notification = await prisma.notification.upsert({
+     *   create: {
+     *     // ... data to create a Notification
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Notification we want to update
+     *   }
+     * })
+     */
+    upsert<T extends NotificationUpsertArgs>(args: SelectSubset<T, NotificationUpsertArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Notifications.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationCountArgs} args - Arguments to filter Notifications to count.
+     * @example
+     * // Count the number of Notifications
+     * const count = await prisma.notification.count({
+     *   where: {
+     *     // ... the filter for the Notifications we want to count
+     *   }
+     * })
+    **/
+    count<T extends NotificationCountArgs>(
+      args?: Subset<T, NotificationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], NotificationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Notification.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends NotificationAggregateArgs>(args: Subset<T, NotificationAggregateArgs>): Prisma.PrismaPromise<GetNotificationAggregateType<T>>
+
+    /**
+     * Group by Notification.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends NotificationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: NotificationGroupByArgs['orderBy'] }
+        : { orderBy?: NotificationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, NotificationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetNotificationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Notification model
+   */
+  readonly fields: NotificationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Notification.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__NotificationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    organisation<T extends OrganisationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganisationDefaultArgs<ExtArgs>>): Prisma__OrganisationClient<$Result.GetResult<Prisma.$OrganisationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Notification model
+   */
+  interface NotificationFieldRefs {
+    readonly id: FieldRef<"Notification", 'Int'>
+    readonly uuid: FieldRef<"Notification", 'String'>
+    readonly organisation_uuid: FieldRef<"Notification", 'String'>
+    readonly user_uuid: FieldRef<"Notification", 'String'>
+    readonly type: FieldRef<"Notification", 'NotificationType'>
+    readonly title: FieldRef<"Notification", 'String'>
+    readonly body: FieldRef<"Notification", 'String'>
+    readonly entity_type: FieldRef<"Notification", 'String'>
+    readonly entity_uuid: FieldRef<"Notification", 'String'>
+    readonly data: FieldRef<"Notification", 'Json'>
+    readonly read_at: FieldRef<"Notification", 'DateTime'>
+    readonly created_at: FieldRef<"Notification", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Notification findUnique
+   */
+  export type NotificationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * Filter, which Notification to fetch.
+     */
+    where: NotificationWhereUniqueInput
+  }
+
+  /**
+   * Notification findUniqueOrThrow
+   */
+  export type NotificationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * Filter, which Notification to fetch.
+     */
+    where: NotificationWhereUniqueInput
+  }
+
+  /**
+   * Notification findFirst
+   */
+  export type NotificationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * Filter, which Notification to fetch.
+     */
+    where?: NotificationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Notifications to fetch.
+     */
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Notifications.
+     */
+    cursor?: NotificationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Notifications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Notifications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Notifications.
+     */
+    distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[]
+  }
+
+  /**
+   * Notification findFirstOrThrow
+   */
+  export type NotificationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * Filter, which Notification to fetch.
+     */
+    where?: NotificationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Notifications to fetch.
+     */
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Notifications.
+     */
+    cursor?: NotificationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Notifications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Notifications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Notifications.
+     */
+    distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[]
+  }
+
+  /**
+   * Notification findMany
+   */
+  export type NotificationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * Filter, which Notifications to fetch.
+     */
+    where?: NotificationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Notifications to fetch.
+     */
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Notifications.
+     */
+    cursor?: NotificationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Notifications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Notifications.
+     */
+    skip?: number
+    distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[]
+  }
+
+  /**
+   * Notification create
+   */
+  export type NotificationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Notification.
+     */
+    data: XOR<NotificationCreateInput, NotificationUncheckedCreateInput>
+  }
+
+  /**
+   * Notification createMany
+   */
+  export type NotificationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Notifications.
+     */
+    data: NotificationCreateManyInput | NotificationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Notification createManyAndReturn
+   */
+  export type NotificationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * The data used to create many Notifications.
+     */
+    data: NotificationCreateManyInput | NotificationCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Notification update
+   */
+  export type NotificationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Notification.
+     */
+    data: XOR<NotificationUpdateInput, NotificationUncheckedUpdateInput>
+    /**
+     * Choose, which Notification to update.
+     */
+    where: NotificationWhereUniqueInput
+  }
+
+  /**
+   * Notification updateMany
+   */
+  export type NotificationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Notifications.
+     */
+    data: XOR<NotificationUpdateManyMutationInput, NotificationUncheckedUpdateManyInput>
+    /**
+     * Filter which Notifications to update
+     */
+    where?: NotificationWhereInput
+    /**
+     * Limit how many Notifications to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Notification updateManyAndReturn
+   */
+  export type NotificationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * The data used to update Notifications.
+     */
+    data: XOR<NotificationUpdateManyMutationInput, NotificationUncheckedUpdateManyInput>
+    /**
+     * Filter which Notifications to update
+     */
+    where?: NotificationWhereInput
+    /**
+     * Limit how many Notifications to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Notification upsert
+   */
+  export type NotificationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Notification to update in case it exists.
+     */
+    where: NotificationWhereUniqueInput
+    /**
+     * In case the Notification found by the `where` argument doesn't exist, create a new Notification with this data.
+     */
+    create: XOR<NotificationCreateInput, NotificationUncheckedCreateInput>
+    /**
+     * In case the Notification was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<NotificationUpdateInput, NotificationUncheckedUpdateInput>
+  }
+
+  /**
+   * Notification delete
+   */
+  export type NotificationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * Filter which Notification to delete.
+     */
+    where: NotificationWhereUniqueInput
+  }
+
+  /**
+   * Notification deleteMany
+   */
+  export type NotificationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Notifications to delete
+     */
+    where?: NotificationWhereInput
+    /**
+     * Limit how many Notifications to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Notification without action
+   */
+  export type NotificationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -107488,6 +108859,24 @@ export namespace Prisma {
   export type CalendarConnectionScalarFieldEnum = (typeof CalendarConnectionScalarFieldEnum)[keyof typeof CalendarConnectionScalarFieldEnum]
 
 
+  export const NotificationScalarFieldEnum: {
+    id: 'id',
+    uuid: 'uuid',
+    organisation_uuid: 'organisation_uuid',
+    user_uuid: 'user_uuid',
+    type: 'type',
+    title: 'title',
+    body: 'body',
+    entity_type: 'entity_type',
+    entity_uuid: 'entity_uuid',
+    data: 'data',
+    read_at: 'read_at',
+    created_at: 'created_at'
+  };
+
+  export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -108568,6 +109957,20 @@ export namespace Prisma {
    */
   export type ListEnumCalendarConnectionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CalendarConnectionStatus[]'>
     
+
+
+  /**
+   * Reference to a field of type 'NotificationType'
+   */
+  export type EnumNotificationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NotificationType'>
+    
+
+
+  /**
+   * Reference to a field of type 'NotificationType[]'
+   */
+  export type ListEnumNotificationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NotificationType[]'>
+    
   /**
    * Deep Input Types
    */
@@ -108610,6 +110013,7 @@ export namespace Prisma {
     booking_events?: BookingEventListRelationFilter
     calendar_connections?: CalendarConnectionListRelationFilter
     reminder_assignments?: ReminderAssigneeListRelationFilter
+    notifications?: NotificationListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -108646,6 +110050,7 @@ export namespace Prisma {
     booking_events?: BookingEventOrderByRelationAggregateInput
     calendar_connections?: CalendarConnectionOrderByRelationAggregateInput
     reminder_assignments?: ReminderAssigneeOrderByRelationAggregateInput
+    notifications?: NotificationOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -108685,6 +110090,7 @@ export namespace Prisma {
     booking_events?: BookingEventListRelationFilter
     calendar_connections?: CalendarConnectionListRelationFilter
     reminder_assignments?: ReminderAssigneeListRelationFilter
+    notifications?: NotificationListRelationFilter
   }, "id" | "uuid" | "email" | "phone">
 
   export type UserOrderByWithAggregationInput = {
@@ -108774,6 +110180,7 @@ export namespace Prisma {
     bookings?: BookingListRelationFilter
     booking_events?: BookingEventListRelationFilter
     calendar_connections?: CalendarConnectionListRelationFilter
+    notifications?: NotificationListRelationFilter
   }
 
   export type OrganisationOrderByWithRelationInput = {
@@ -108828,6 +110235,7 @@ export namespace Prisma {
     bookings?: BookingOrderByRelationAggregateInput
     booking_events?: BookingEventOrderByRelationAggregateInput
     calendar_connections?: CalendarConnectionOrderByRelationAggregateInput
+    notifications?: NotificationOrderByRelationAggregateInput
   }
 
   export type OrganisationWhereUniqueInput = Prisma.AtLeast<{
@@ -108885,6 +110293,7 @@ export namespace Prisma {
     bookings?: BookingListRelationFilter
     booking_events?: BookingEventListRelationFilter
     calendar_connections?: CalendarConnectionListRelationFilter
+    notifications?: NotificationListRelationFilter
   }, "id" | "uuid" | "slug" | "reply_to_email">
 
   export type OrganisationOrderByWithAggregationInput = {
@@ -116592,6 +118001,101 @@ export namespace Prisma {
     updated_at?: DateTimeWithAggregatesFilter<"CalendarConnection"> | Date | string
   }
 
+  export type NotificationWhereInput = {
+    AND?: NotificationWhereInput | NotificationWhereInput[]
+    OR?: NotificationWhereInput[]
+    NOT?: NotificationWhereInput | NotificationWhereInput[]
+    id?: IntFilter<"Notification"> | number
+    uuid?: StringFilter<"Notification"> | string
+    organisation_uuid?: StringFilter<"Notification"> | string
+    user_uuid?: StringFilter<"Notification"> | string
+    type?: EnumNotificationTypeFilter<"Notification"> | $Enums.NotificationType
+    title?: StringFilter<"Notification"> | string
+    body?: StringNullableFilter<"Notification"> | string | null
+    entity_type?: StringNullableFilter<"Notification"> | string | null
+    entity_uuid?: StringNullableFilter<"Notification"> | string | null
+    data?: JsonNullableFilter<"Notification">
+    read_at?: DateTimeNullableFilter<"Notification"> | Date | string | null
+    created_at?: DateTimeFilter<"Notification"> | Date | string
+    organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type NotificationOrderByWithRelationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    user_uuid?: SortOrder
+    type?: SortOrder
+    title?: SortOrder
+    body?: SortOrderInput | SortOrder
+    entity_type?: SortOrderInput | SortOrder
+    entity_uuid?: SortOrderInput | SortOrder
+    data?: SortOrderInput | SortOrder
+    read_at?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    organisation?: OrganisationOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type NotificationWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    uuid?: string
+    AND?: NotificationWhereInput | NotificationWhereInput[]
+    OR?: NotificationWhereInput[]
+    NOT?: NotificationWhereInput | NotificationWhereInput[]
+    organisation_uuid?: StringFilter<"Notification"> | string
+    user_uuid?: StringFilter<"Notification"> | string
+    type?: EnumNotificationTypeFilter<"Notification"> | $Enums.NotificationType
+    title?: StringFilter<"Notification"> | string
+    body?: StringNullableFilter<"Notification"> | string | null
+    entity_type?: StringNullableFilter<"Notification"> | string | null
+    entity_uuid?: StringNullableFilter<"Notification"> | string | null
+    data?: JsonNullableFilter<"Notification">
+    read_at?: DateTimeNullableFilter<"Notification"> | Date | string | null
+    created_at?: DateTimeFilter<"Notification"> | Date | string
+    organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "uuid">
+
+  export type NotificationOrderByWithAggregationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    user_uuid?: SortOrder
+    type?: SortOrder
+    title?: SortOrder
+    body?: SortOrderInput | SortOrder
+    entity_type?: SortOrderInput | SortOrder
+    entity_uuid?: SortOrderInput | SortOrder
+    data?: SortOrderInput | SortOrder
+    read_at?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    _count?: NotificationCountOrderByAggregateInput
+    _avg?: NotificationAvgOrderByAggregateInput
+    _max?: NotificationMaxOrderByAggregateInput
+    _min?: NotificationMinOrderByAggregateInput
+    _sum?: NotificationSumOrderByAggregateInput
+  }
+
+  export type NotificationScalarWhereWithAggregatesInput = {
+    AND?: NotificationScalarWhereWithAggregatesInput | NotificationScalarWhereWithAggregatesInput[]
+    OR?: NotificationScalarWhereWithAggregatesInput[]
+    NOT?: NotificationScalarWhereWithAggregatesInput | NotificationScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"Notification"> | number
+    uuid?: StringWithAggregatesFilter<"Notification"> | string
+    organisation_uuid?: StringWithAggregatesFilter<"Notification"> | string
+    user_uuid?: StringWithAggregatesFilter<"Notification"> | string
+    type?: EnumNotificationTypeWithAggregatesFilter<"Notification"> | $Enums.NotificationType
+    title?: StringWithAggregatesFilter<"Notification"> | string
+    body?: StringNullableWithAggregatesFilter<"Notification"> | string | null
+    entity_type?: StringNullableWithAggregatesFilter<"Notification"> | string | null
+    entity_uuid?: StringNullableWithAggregatesFilter<"Notification"> | string | null
+    data?: JsonNullableWithAggregatesFilter<"Notification">
+    read_at?: DateTimeNullableWithAggregatesFilter<"Notification"> | Date | string | null
+    created_at?: DateTimeWithAggregatesFilter<"Notification"> | Date | string
+  }
+
   export type UserCreateInput = {
     uuid?: string
     email: string
@@ -116625,6 +118129,7 @@ export namespace Prisma {
     booking_events?: BookingEventCreateNestedManyWithoutActorInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -116661,6 +118166,7 @@ export namespace Prisma {
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutActorInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -116696,6 +118202,7 @@ export namespace Prisma {
     booking_events?: BookingEventUpdateManyWithoutActorNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -116732,6 +118239,7 @@ export namespace Prisma {
     booking_events?: BookingEventUncheckedUpdateManyWithoutActorNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -116820,6 +118328,7 @@ export namespace Prisma {
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateInput = {
@@ -116874,6 +118383,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUpdateInput = {
@@ -116927,6 +118437,7 @@ export namespace Prisma {
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateInput = {
@@ -116981,6 +118492,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateManyInput = {
@@ -125320,6 +126832,106 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type NotificationCreateInput = {
+    uuid?: string
+    type: $Enums.NotificationType
+    title: string
+    body?: string | null
+    entity_type?: string | null
+    entity_uuid?: string | null
+    data?: NullableJsonNullValueInput | InputJsonValue
+    read_at?: Date | string | null
+    created_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutNotificationsInput
+    user: UserCreateNestedOneWithoutNotificationsInput
+  }
+
+  export type NotificationUncheckedCreateInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    user_uuid: string
+    type: $Enums.NotificationType
+    title: string
+    body?: string | null
+    entity_type?: string | null
+    entity_uuid?: string | null
+    data?: NullableJsonNullValueInput | InputJsonValue
+    read_at?: Date | string | null
+    created_at?: Date | string
+  }
+
+  export type NotificationUpdateInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
+    title?: StringFieldUpdateOperationsInput | string
+    body?: NullableStringFieldUpdateOperationsInput | string | null
+    entity_type?: NullableStringFieldUpdateOperationsInput | string | null
+    entity_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    data?: NullableJsonNullValueInput | InputJsonValue
+    read_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutNotificationsNestedInput
+    user?: UserUpdateOneRequiredWithoutNotificationsNestedInput
+  }
+
+  export type NotificationUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    user_uuid?: StringFieldUpdateOperationsInput | string
+    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
+    title?: StringFieldUpdateOperationsInput | string
+    body?: NullableStringFieldUpdateOperationsInput | string | null
+    entity_type?: NullableStringFieldUpdateOperationsInput | string | null
+    entity_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    data?: NullableJsonNullValueInput | InputJsonValue
+    read_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificationCreateManyInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    user_uuid: string
+    type: $Enums.NotificationType
+    title: string
+    body?: string | null
+    entity_type?: string | null
+    entity_uuid?: string | null
+    data?: NullableJsonNullValueInput | InputJsonValue
+    read_at?: Date | string | null
+    created_at?: Date | string
+  }
+
+  export type NotificationUpdateManyMutationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
+    title?: StringFieldUpdateOperationsInput | string
+    body?: NullableStringFieldUpdateOperationsInput | string | null
+    entity_type?: NullableStringFieldUpdateOperationsInput | string | null
+    entity_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    data?: NullableJsonNullValueInput | InputJsonValue
+    read_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificationUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    user_uuid?: StringFieldUpdateOperationsInput | string
+    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
+    title?: StringFieldUpdateOperationsInput | string
+    body?: NullableStringFieldUpdateOperationsInput | string | null
+    entity_type?: NullableStringFieldUpdateOperationsInput | string | null
+    entity_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    data?: NullableJsonNullValueInput | InputJsonValue
+    read_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type IntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -125511,6 +127123,12 @@ export namespace Prisma {
     none?: ReminderAssigneeWhereInput
   }
 
+  export type NotificationListRelationFilter = {
+    every?: NotificationWhereInput
+    some?: NotificationWhereInput
+    none?: NotificationWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -125601,6 +127219,10 @@ export namespace Prisma {
   }
 
   export type ReminderAssigneeOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type NotificationOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -132241,6 +133863,74 @@ export namespace Prisma {
     _max?: NestedEnumCalendarConnectionStatusFilter<$PrismaModel>
   }
 
+  export type EnumNotificationTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.NotificationType | EnumNotificationTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.NotificationType[] | ListEnumNotificationTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.NotificationType[] | ListEnumNotificationTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumNotificationTypeFilter<$PrismaModel> | $Enums.NotificationType
+  }
+
+  export type NotificationCountOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    user_uuid?: SortOrder
+    type?: SortOrder
+    title?: SortOrder
+    body?: SortOrder
+    entity_type?: SortOrder
+    entity_uuid?: SortOrder
+    data?: SortOrder
+    read_at?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type NotificationAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type NotificationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    user_uuid?: SortOrder
+    type?: SortOrder
+    title?: SortOrder
+    body?: SortOrder
+    entity_type?: SortOrder
+    entity_uuid?: SortOrder
+    read_at?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type NotificationMinOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    user_uuid?: SortOrder
+    type?: SortOrder
+    title?: SortOrder
+    body?: SortOrder
+    entity_type?: SortOrder
+    entity_uuid?: SortOrder
+    read_at?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type NotificationSumOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type EnumNotificationTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.NotificationType | EnumNotificationTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.NotificationType[] | ListEnumNotificationTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.NotificationType[] | ListEnumNotificationTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumNotificationTypeWithAggregatesFilter<$PrismaModel> | $Enums.NotificationType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumNotificationTypeFilter<$PrismaModel>
+    _max?: NestedEnumNotificationTypeFilter<$PrismaModel>
+  }
+
   export type OrganisationMemberCreateNestedManyWithoutUserInput = {
     create?: XOR<OrganisationMemberCreateWithoutUserInput, OrganisationMemberUncheckedCreateWithoutUserInput> | OrganisationMemberCreateWithoutUserInput[] | OrganisationMemberUncheckedCreateWithoutUserInput[]
     connectOrCreate?: OrganisationMemberCreateOrConnectWithoutUserInput | OrganisationMemberCreateOrConnectWithoutUserInput[]
@@ -132409,6 +134099,13 @@ export namespace Prisma {
     connect?: ReminderAssigneeWhereUniqueInput | ReminderAssigneeWhereUniqueInput[]
   }
 
+  export type NotificationCreateNestedManyWithoutUserInput = {
+    create?: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput> | NotificationCreateWithoutUserInput[] | NotificationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: NotificationCreateOrConnectWithoutUserInput | NotificationCreateOrConnectWithoutUserInput[]
+    createMany?: NotificationCreateManyUserInputEnvelope
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+  }
+
   export type OrganisationMemberUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<OrganisationMemberCreateWithoutUserInput, OrganisationMemberUncheckedCreateWithoutUserInput> | OrganisationMemberCreateWithoutUserInput[] | OrganisationMemberUncheckedCreateWithoutUserInput[]
     connectOrCreate?: OrganisationMemberCreateOrConnectWithoutUserInput | OrganisationMemberCreateOrConnectWithoutUserInput[]
@@ -132575,6 +134272,13 @@ export namespace Prisma {
     connectOrCreate?: ReminderAssigneeCreateOrConnectWithoutUserInput | ReminderAssigneeCreateOrConnectWithoutUserInput[]
     createMany?: ReminderAssigneeCreateManyUserInputEnvelope
     connect?: ReminderAssigneeWhereUniqueInput | ReminderAssigneeWhereUniqueInput[]
+  }
+
+  export type NotificationUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput> | NotificationCreateWithoutUserInput[] | NotificationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: NotificationCreateOrConnectWithoutUserInput | NotificationCreateOrConnectWithoutUserInput[]
+    createMany?: NotificationCreateManyUserInputEnvelope
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -132929,6 +134633,20 @@ export namespace Prisma {
     deleteMany?: ReminderAssigneeScalarWhereInput | ReminderAssigneeScalarWhereInput[]
   }
 
+  export type NotificationUpdateManyWithoutUserNestedInput = {
+    create?: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput> | NotificationCreateWithoutUserInput[] | NotificationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: NotificationCreateOrConnectWithoutUserInput | NotificationCreateOrConnectWithoutUserInput[]
+    upsert?: NotificationUpsertWithWhereUniqueWithoutUserInput | NotificationUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: NotificationCreateManyUserInputEnvelope
+    set?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    disconnect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    delete?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    update?: NotificationUpdateWithWhereUniqueWithoutUserInput | NotificationUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: NotificationUpdateManyWithWhereWithoutUserInput | NotificationUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
+  }
+
   export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
@@ -133273,6 +134991,20 @@ export namespace Prisma {
     deleteMany?: ReminderAssigneeScalarWhereInput | ReminderAssigneeScalarWhereInput[]
   }
 
+  export type NotificationUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput> | NotificationCreateWithoutUserInput[] | NotificationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: NotificationCreateOrConnectWithoutUserInput | NotificationCreateOrConnectWithoutUserInput[]
+    upsert?: NotificationUpsertWithWhereUniqueWithoutUserInput | NotificationUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: NotificationCreateManyUserInputEnvelope
+    set?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    disconnect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    delete?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    update?: NotificationUpdateWithWhereUniqueWithoutUserInput | NotificationUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: NotificationUpdateManyWithWhereWithoutUserInput | NotificationUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
+  }
+
   export type OrganisationMemberCreateNestedManyWithoutOrganisationInput = {
     create?: XOR<OrganisationMemberCreateWithoutOrganisationInput, OrganisationMemberUncheckedCreateWithoutOrganisationInput> | OrganisationMemberCreateWithoutOrganisationInput[] | OrganisationMemberUncheckedCreateWithoutOrganisationInput[]
     connectOrCreate?: OrganisationMemberCreateOrConnectWithoutOrganisationInput | OrganisationMemberCreateOrConnectWithoutOrganisationInput[]
@@ -133567,6 +135299,13 @@ export namespace Prisma {
     connect?: CalendarConnectionWhereUniqueInput | CalendarConnectionWhereUniqueInput[]
   }
 
+  export type NotificationCreateNestedManyWithoutOrganisationInput = {
+    create?: XOR<NotificationCreateWithoutOrganisationInput, NotificationUncheckedCreateWithoutOrganisationInput> | NotificationCreateWithoutOrganisationInput[] | NotificationUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: NotificationCreateOrConnectWithoutOrganisationInput | NotificationCreateOrConnectWithoutOrganisationInput[]
+    createMany?: NotificationCreateManyOrganisationInputEnvelope
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+  }
+
   export type OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput = {
     create?: XOR<OrganisationMemberCreateWithoutOrganisationInput, OrganisationMemberUncheckedCreateWithoutOrganisationInput> | OrganisationMemberCreateWithoutOrganisationInput[] | OrganisationMemberUncheckedCreateWithoutOrganisationInput[]
     connectOrCreate?: OrganisationMemberCreateOrConnectWithoutOrganisationInput | OrganisationMemberCreateOrConnectWithoutOrganisationInput[]
@@ -133859,6 +135598,13 @@ export namespace Prisma {
     connectOrCreate?: CalendarConnectionCreateOrConnectWithoutOrganisationInput | CalendarConnectionCreateOrConnectWithoutOrganisationInput[]
     createMany?: CalendarConnectionCreateManyOrganisationInputEnvelope
     connect?: CalendarConnectionWhereUniqueInput | CalendarConnectionWhereUniqueInput[]
+  }
+
+  export type NotificationUncheckedCreateNestedManyWithoutOrganisationInput = {
+    create?: XOR<NotificationCreateWithoutOrganisationInput, NotificationUncheckedCreateWithoutOrganisationInput> | NotificationCreateWithoutOrganisationInput[] | NotificationUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: NotificationCreateOrConnectWithoutOrganisationInput | NotificationCreateOrConnectWithoutOrganisationInput[]
+    createMany?: NotificationCreateManyOrganisationInputEnvelope
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
   }
 
   export type OrganisationMemberUpdateManyWithoutOrganisationNestedInput = {
@@ -134449,6 +136195,20 @@ export namespace Prisma {
     deleteMany?: CalendarConnectionScalarWhereInput | CalendarConnectionScalarWhereInput[]
   }
 
+  export type NotificationUpdateManyWithoutOrganisationNestedInput = {
+    create?: XOR<NotificationCreateWithoutOrganisationInput, NotificationUncheckedCreateWithoutOrganisationInput> | NotificationCreateWithoutOrganisationInput[] | NotificationUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: NotificationCreateOrConnectWithoutOrganisationInput | NotificationCreateOrConnectWithoutOrganisationInput[]
+    upsert?: NotificationUpsertWithWhereUniqueWithoutOrganisationInput | NotificationUpsertWithWhereUniqueWithoutOrganisationInput[]
+    createMany?: NotificationCreateManyOrganisationInputEnvelope
+    set?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    disconnect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    delete?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    update?: NotificationUpdateWithWhereUniqueWithoutOrganisationInput | NotificationUpdateWithWhereUniqueWithoutOrganisationInput[]
+    updateMany?: NotificationUpdateManyWithWhereWithoutOrganisationInput | NotificationUpdateManyWithWhereWithoutOrganisationInput[]
+    deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
+  }
+
   export type OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput = {
     create?: XOR<OrganisationMemberCreateWithoutOrganisationInput, OrganisationMemberUncheckedCreateWithoutOrganisationInput> | OrganisationMemberCreateWithoutOrganisationInput[] | OrganisationMemberUncheckedCreateWithoutOrganisationInput[]
     connectOrCreate?: OrganisationMemberCreateOrConnectWithoutOrganisationInput | OrganisationMemberCreateOrConnectWithoutOrganisationInput[]
@@ -135035,6 +136795,20 @@ export namespace Prisma {
     update?: CalendarConnectionUpdateWithWhereUniqueWithoutOrganisationInput | CalendarConnectionUpdateWithWhereUniqueWithoutOrganisationInput[]
     updateMany?: CalendarConnectionUpdateManyWithWhereWithoutOrganisationInput | CalendarConnectionUpdateManyWithWhereWithoutOrganisationInput[]
     deleteMany?: CalendarConnectionScalarWhereInput | CalendarConnectionScalarWhereInput[]
+  }
+
+  export type NotificationUncheckedUpdateManyWithoutOrganisationNestedInput = {
+    create?: XOR<NotificationCreateWithoutOrganisationInput, NotificationUncheckedCreateWithoutOrganisationInput> | NotificationCreateWithoutOrganisationInput[] | NotificationUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: NotificationCreateOrConnectWithoutOrganisationInput | NotificationCreateOrConnectWithoutOrganisationInput[]
+    upsert?: NotificationUpsertWithWhereUniqueWithoutOrganisationInput | NotificationUpsertWithWhereUniqueWithoutOrganisationInput[]
+    createMany?: NotificationCreateManyOrganisationInputEnvelope
+    set?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    disconnect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    delete?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    update?: NotificationUpdateWithWhereUniqueWithoutOrganisationInput | NotificationUpdateWithWhereUniqueWithoutOrganisationInput[]
+    updateMany?: NotificationUpdateManyWithWhereWithoutOrganisationInput | NotificationUpdateManyWithWhereWithoutOrganisationInput[]
+    deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
   }
 
   export type OrganisationCreateNestedOneWithoutMembersInput = {
@@ -140959,6 +142733,38 @@ export namespace Prisma {
     deleteMany?: BookingScalarWhereInput | BookingScalarWhereInput[]
   }
 
+  export type OrganisationCreateNestedOneWithoutNotificationsInput = {
+    create?: XOR<OrganisationCreateWithoutNotificationsInput, OrganisationUncheckedCreateWithoutNotificationsInput>
+    connectOrCreate?: OrganisationCreateOrConnectWithoutNotificationsInput
+    connect?: OrganisationWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutNotificationsInput = {
+    create?: XOR<UserCreateWithoutNotificationsInput, UserUncheckedCreateWithoutNotificationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutNotificationsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type EnumNotificationTypeFieldUpdateOperationsInput = {
+    set?: $Enums.NotificationType
+  }
+
+  export type OrganisationUpdateOneRequiredWithoutNotificationsNestedInput = {
+    create?: XOR<OrganisationCreateWithoutNotificationsInput, OrganisationUncheckedCreateWithoutNotificationsInput>
+    connectOrCreate?: OrganisationCreateOrConnectWithoutNotificationsInput
+    upsert?: OrganisationUpsertWithoutNotificationsInput
+    connect?: OrganisationWhereUniqueInput
+    update?: XOR<XOR<OrganisationUpdateToOneWithWhereWithoutNotificationsInput, OrganisationUpdateWithoutNotificationsInput>, OrganisationUncheckedUpdateWithoutNotificationsInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutNotificationsNestedInput = {
+    create?: XOR<UserCreateWithoutNotificationsInput, UserUncheckedCreateWithoutNotificationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutNotificationsInput
+    upsert?: UserUpsertWithoutNotificationsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutNotificationsInput, UserUpdateWithoutNotificationsInput>, UserUncheckedUpdateWithoutNotificationsInput>
+  }
+
   export type NestedIntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -142439,6 +144245,23 @@ export namespace Prisma {
     _max?: NestedEnumCalendarConnectionStatusFilter<$PrismaModel>
   }
 
+  export type NestedEnumNotificationTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.NotificationType | EnumNotificationTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.NotificationType[] | ListEnumNotificationTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.NotificationType[] | ListEnumNotificationTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumNotificationTypeFilter<$PrismaModel> | $Enums.NotificationType
+  }
+
+  export type NestedEnumNotificationTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.NotificationType | EnumNotificationTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.NotificationType[] | ListEnumNotificationTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.NotificationType[] | ListEnumNotificationTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumNotificationTypeWithAggregatesFilter<$PrismaModel> | $Enums.NotificationType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumNotificationTypeFilter<$PrismaModel>
+    _max?: NestedEnumNotificationTypeFilter<$PrismaModel>
+  }
+
   export type OrganisationMemberCreateWithoutUserInput = {
     uuid?: string
     role?: $Enums.OrganisationRole
@@ -143579,6 +145402,43 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type NotificationCreateWithoutUserInput = {
+    uuid?: string
+    type: $Enums.NotificationType
+    title: string
+    body?: string | null
+    entity_type?: string | null
+    entity_uuid?: string | null
+    data?: NullableJsonNullValueInput | InputJsonValue
+    read_at?: Date | string | null
+    created_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutNotificationsInput
+  }
+
+  export type NotificationUncheckedCreateWithoutUserInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    type: $Enums.NotificationType
+    title: string
+    body?: string | null
+    entity_type?: string | null
+    entity_uuid?: string | null
+    data?: NullableJsonNullValueInput | InputJsonValue
+    read_at?: Date | string | null
+    created_at?: Date | string
+  }
+
+  export type NotificationCreateOrConnectWithoutUserInput = {
+    where: NotificationWhereUniqueInput
+    create: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput>
+  }
+
+  export type NotificationCreateManyUserInputEnvelope = {
+    data: NotificationCreateManyUserInput | NotificationCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type OrganisationMemberUpsertWithWhereUniqueWithoutUserInput = {
     where: OrganisationMemberWhereUniqueInput
     update: XOR<OrganisationMemberUpdateWithoutUserInput, OrganisationMemberUncheckedUpdateWithoutUserInput>
@@ -144441,6 +146301,40 @@ export namespace Prisma {
     reminder_uuid?: StringFilter<"ReminderAssignee"> | string
     user_uuid?: StringFilter<"ReminderAssignee"> | string
     created_at?: DateTimeFilter<"ReminderAssignee"> | Date | string
+  }
+
+  export type NotificationUpsertWithWhereUniqueWithoutUserInput = {
+    where: NotificationWhereUniqueInput
+    update: XOR<NotificationUpdateWithoutUserInput, NotificationUncheckedUpdateWithoutUserInput>
+    create: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput>
+  }
+
+  export type NotificationUpdateWithWhereUniqueWithoutUserInput = {
+    where: NotificationWhereUniqueInput
+    data: XOR<NotificationUpdateWithoutUserInput, NotificationUncheckedUpdateWithoutUserInput>
+  }
+
+  export type NotificationUpdateManyWithWhereWithoutUserInput = {
+    where: NotificationScalarWhereInput
+    data: XOR<NotificationUpdateManyMutationInput, NotificationUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type NotificationScalarWhereInput = {
+    AND?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
+    OR?: NotificationScalarWhereInput[]
+    NOT?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
+    id?: IntFilter<"Notification"> | number
+    uuid?: StringFilter<"Notification"> | string
+    organisation_uuid?: StringFilter<"Notification"> | string
+    user_uuid?: StringFilter<"Notification"> | string
+    type?: EnumNotificationTypeFilter<"Notification"> | $Enums.NotificationType
+    title?: StringFilter<"Notification"> | string
+    body?: StringNullableFilter<"Notification"> | string | null
+    entity_type?: StringNullableFilter<"Notification"> | string | null
+    entity_uuid?: StringNullableFilter<"Notification"> | string | null
+    data?: JsonNullableFilter<"Notification">
+    read_at?: DateTimeNullableFilter<"Notification"> | Date | string | null
+    created_at?: DateTimeFilter<"Notification"> | Date | string
   }
 
   export type OrganisationMemberCreateWithoutOrganisationInput = {
@@ -146505,6 +148399,43 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type NotificationCreateWithoutOrganisationInput = {
+    uuid?: string
+    type: $Enums.NotificationType
+    title: string
+    body?: string | null
+    entity_type?: string | null
+    entity_uuid?: string | null
+    data?: NullableJsonNullValueInput | InputJsonValue
+    read_at?: Date | string | null
+    created_at?: Date | string
+    user: UserCreateNestedOneWithoutNotificationsInput
+  }
+
+  export type NotificationUncheckedCreateWithoutOrganisationInput = {
+    id?: number
+    uuid?: string
+    user_uuid: string
+    type: $Enums.NotificationType
+    title: string
+    body?: string | null
+    entity_type?: string | null
+    entity_uuid?: string | null
+    data?: NullableJsonNullValueInput | InputJsonValue
+    read_at?: Date | string | null
+    created_at?: Date | string
+  }
+
+  export type NotificationCreateOrConnectWithoutOrganisationInput = {
+    where: NotificationWhereUniqueInput
+    create: XOR<NotificationCreateWithoutOrganisationInput, NotificationUncheckedCreateWithoutOrganisationInput>
+  }
+
+  export type NotificationCreateManyOrganisationInputEnvelope = {
+    data: NotificationCreateManyOrganisationInput | NotificationCreateManyOrganisationInput[]
+    skipDuplicates?: boolean
+  }
+
   export type OrganisationMemberUpsertWithWhereUniqueWithoutOrganisationInput = {
     where: OrganisationMemberWhereUniqueInput
     update: XOR<OrganisationMemberUpdateWithoutOrganisationInput, OrganisationMemberUncheckedUpdateWithoutOrganisationInput>
@@ -147682,6 +149613,22 @@ export namespace Prisma {
     data: XOR<CalendarConnectionUpdateManyMutationInput, CalendarConnectionUncheckedUpdateManyWithoutOrganisationInput>
   }
 
+  export type NotificationUpsertWithWhereUniqueWithoutOrganisationInput = {
+    where: NotificationWhereUniqueInput
+    update: XOR<NotificationUpdateWithoutOrganisationInput, NotificationUncheckedUpdateWithoutOrganisationInput>
+    create: XOR<NotificationCreateWithoutOrganisationInput, NotificationUncheckedCreateWithoutOrganisationInput>
+  }
+
+  export type NotificationUpdateWithWhereUniqueWithoutOrganisationInput = {
+    where: NotificationWhereUniqueInput
+    data: XOR<NotificationUpdateWithoutOrganisationInput, NotificationUncheckedUpdateWithoutOrganisationInput>
+  }
+
+  export type NotificationUpdateManyWithWhereWithoutOrganisationInput = {
+    where: NotificationScalarWhereInput
+    data: XOR<NotificationUpdateManyMutationInput, NotificationUncheckedUpdateManyWithoutOrganisationInput>
+  }
+
   export type OrganisationCreateWithoutMembersInput = {
     uuid?: string
     name: string
@@ -147732,6 +149679,7 @@ export namespace Prisma {
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutMembersInput = {
@@ -147785,6 +149733,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutMembersInput = {
@@ -147824,6 +149773,7 @@ export namespace Prisma {
     booking_events?: BookingEventCreateNestedManyWithoutActorInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutMembershipsInput = {
@@ -147859,6 +149809,7 @@ export namespace Prisma {
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutActorInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutMembershipsInput = {
@@ -147927,6 +149878,7 @@ export namespace Prisma {
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutMembersInput = {
@@ -147980,6 +149932,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutMembershipsInput = {
@@ -148025,6 +149978,7 @@ export namespace Prisma {
     booking_events?: BookingEventUpdateManyWithoutActorNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMembershipsInput = {
@@ -148060,6 +150014,7 @@ export namespace Prisma {
     booking_events?: BookingEventUncheckedUpdateManyWithoutActorNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganisationCreateWithoutInvitationsInput = {
@@ -148112,6 +150067,7 @@ export namespace Prisma {
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutInvitationsInput = {
@@ -148165,6 +150121,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutInvitationsInput = {
@@ -148204,6 +150161,7 @@ export namespace Prisma {
     booking_events?: BookingEventCreateNestedManyWithoutActorInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutInvitations_sentInput = {
@@ -148239,6 +150197,7 @@ export namespace Prisma {
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutActorInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutInvitations_sentInput = {
@@ -148307,6 +150266,7 @@ export namespace Prisma {
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutInvitationsInput = {
@@ -148360,6 +150320,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutInvitations_sentInput = {
@@ -148405,6 +150366,7 @@ export namespace Prisma {
     booking_events?: BookingEventUpdateManyWithoutActorNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInvitations_sentInput = {
@@ -148440,6 +150402,7 @@ export namespace Prisma {
     booking_events?: BookingEventUncheckedUpdateManyWithoutActorNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganisationCreateWithoutApi_keysInput = {
@@ -148492,6 +150455,7 @@ export namespace Prisma {
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutApi_keysInput = {
@@ -148545,6 +150509,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutApi_keysInput = {
@@ -148584,6 +150549,7 @@ export namespace Prisma {
     booking_events?: BookingEventCreateNestedManyWithoutActorInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutApi_keys_createdInput = {
@@ -148619,6 +150585,7 @@ export namespace Prisma {
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutActorInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutApi_keys_createdInput = {
@@ -148687,6 +150654,7 @@ export namespace Prisma {
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutApi_keysInput = {
@@ -148740,6 +150708,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutApi_keys_createdInput = {
@@ -148785,6 +150754,7 @@ export namespace Prisma {
     booking_events?: BookingEventUpdateManyWithoutActorNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApi_keys_createdInput = {
@@ -148820,6 +150790,7 @@ export namespace Prisma {
     booking_events?: BookingEventUncheckedUpdateManyWithoutActorNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganisationCreateWithoutFiltersInput = {
@@ -148872,6 +150843,7 @@ export namespace Prisma {
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutFiltersInput = {
@@ -148925,6 +150897,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutFiltersInput = {
@@ -149295,6 +151268,7 @@ export namespace Prisma {
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutFiltersInput = {
@@ -149348,6 +151322,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type ContactListUpsertWithoutFiltersInput = {
@@ -149586,6 +151561,7 @@ export namespace Prisma {
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutSaved_contact_filtersInput = {
@@ -149639,6 +151615,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutSaved_contact_filtersInput = {
@@ -149707,6 +151684,7 @@ export namespace Prisma {
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutSaved_contact_filtersInput = {
@@ -149760,6 +151738,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserCreateWithoutSidebar_favoritesInput = {
@@ -149794,6 +151773,7 @@ export namespace Prisma {
     booking_events?: BookingEventCreateNestedManyWithoutActorInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSidebar_favoritesInput = {
@@ -149829,6 +151809,7 @@ export namespace Prisma {
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutActorInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSidebar_favoritesInput = {
@@ -149879,6 +151860,7 @@ export namespace Prisma {
     booking_events?: BookingEventUpdateManyWithoutActorNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSidebar_favoritesInput = {
@@ -149914,6 +151896,7 @@ export namespace Prisma {
     booking_events?: BookingEventUncheckedUpdateManyWithoutActorNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganisationCreateWithoutScoring_instructionsInput = {
@@ -149966,6 +151949,7 @@ export namespace Prisma {
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutScoring_instructionsInput = {
@@ -150019,6 +152003,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutScoring_instructionsInput = {
@@ -150130,6 +152115,7 @@ export namespace Prisma {
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutScoring_instructionsInput = {
@@ -150183,6 +152169,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type FilterScoringInstructionUpsertWithWhereUniqueWithoutScoring_instructionInput = {
@@ -151062,6 +153049,7 @@ export namespace Prisma {
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutContactsInput = {
@@ -151115,6 +153103,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutContactsInput = {
@@ -151937,6 +153926,7 @@ export namespace Prisma {
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutContactsInput = {
@@ -151990,6 +153980,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type LeadUpsertWithoutContactsInput = {
@@ -153515,6 +155506,7 @@ export namespace Prisma {
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutContact_listsInput = {
@@ -153568,6 +155560,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutContact_listsInput = {
@@ -153887,6 +155880,7 @@ export namespace Prisma {
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutContact_listsInput = {
@@ -153940,6 +155934,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type ContactListUpsertWithoutChildrenInput = {
@@ -154718,6 +156713,7 @@ export namespace Prisma {
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutInteractionsInput = {
@@ -154771,6 +156767,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutInteractionsInput = {
@@ -155141,6 +157138,7 @@ export namespace Prisma {
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutInteractionsInput = {
@@ -155194,6 +157192,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OutreachMessageUpsertWithoutInteractionsInput = {
@@ -155450,6 +157449,7 @@ export namespace Prisma {
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutOutreach_messagesInput = {
@@ -155503,6 +157503,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutOutreach_messagesInput = {
@@ -155744,6 +157745,7 @@ export namespace Prisma {
     booking_events?: BookingEventCreateNestedManyWithoutActorInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutOutreach_messages_sentInput = {
@@ -155779,6 +157781,7 @@ export namespace Prisma {
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutActorInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutOutreach_messages_sentInput = {
@@ -156101,6 +158104,7 @@ export namespace Prisma {
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutOutreach_messagesInput = {
@@ -156154,6 +158158,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type ContactUpsertWithoutOutreach_messagesInput = {
@@ -156413,6 +158418,7 @@ export namespace Prisma {
     booking_events?: BookingEventUpdateManyWithoutActorNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOutreach_messages_sentInput = {
@@ -156448,6 +158454,7 @@ export namespace Prisma {
     booking_events?: BookingEventUncheckedUpdateManyWithoutActorNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type InteractionUpsertWithWhereUniqueWithoutOutreach_messageInput = {
@@ -156724,6 +158731,7 @@ export namespace Prisma {
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutMessage_threadsInput = {
@@ -156777,6 +158785,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutMessage_threadsInput = {
@@ -157048,6 +159057,7 @@ export namespace Prisma {
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutMessage_threadsInput = {
@@ -157101,6 +159111,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type ContactUpsertWithoutMessage_threadsInput = {
@@ -157279,6 +159290,7 @@ export namespace Prisma {
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutOutreach_sequencesInput = {
@@ -157332,6 +159344,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutOutreach_sequencesInput = {
@@ -157665,6 +159678,7 @@ export namespace Prisma {
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutOutreach_sequencesInput = {
@@ -157718,6 +159732,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type SenderProfileUpsertWithoutSequencesInput = {
@@ -159280,6 +161295,7 @@ export namespace Prisma {
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutBulk_jobsInput = {
@@ -159333,6 +161349,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutBulk_jobsInput = {
@@ -159372,6 +161389,7 @@ export namespace Prisma {
     booking_events?: BookingEventCreateNestedManyWithoutActorInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBulk_jobs_createdInput = {
@@ -159407,6 +161425,7 @@ export namespace Prisma {
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutActorInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBulk_jobs_createdInput = {
@@ -159475,6 +161494,7 @@ export namespace Prisma {
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutBulk_jobsInput = {
@@ -159528,6 +161548,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutBulk_jobs_createdInput = {
@@ -159573,6 +161594,7 @@ export namespace Prisma {
     booking_events?: BookingEventUpdateManyWithoutActorNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBulk_jobs_createdInput = {
@@ -159608,6 +161630,7 @@ export namespace Prisma {
     booking_events?: BookingEventUncheckedUpdateManyWithoutActorNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganisationCreateWithoutWebsite_scrape_requestsInput = {
@@ -159660,6 +161683,7 @@ export namespace Prisma {
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutWebsite_scrape_requestsInput = {
@@ -159713,6 +161737,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutWebsite_scrape_requestsInput = {
@@ -159781,6 +161806,7 @@ export namespace Prisma {
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutWebsite_scrape_requestsInput = {
@@ -159834,6 +161860,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutSender_profilesInput = {
@@ -159886,6 +161913,7 @@ export namespace Prisma {
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutSender_profilesInput = {
@@ -159939,6 +161967,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutSender_profilesInput = {
@@ -160204,6 +162233,7 @@ export namespace Prisma {
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutSender_profilesInput = {
@@ -160257,6 +162287,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type MarketingCampaignUpsertWithWhereUniqueWithoutSender_profileInput = {
@@ -160357,6 +162388,7 @@ export namespace Prisma {
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutMessage_templatesInput = {
@@ -160410,6 +162442,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutMessage_templatesInput = {
@@ -161321,6 +163354,7 @@ export namespace Prisma {
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutMessage_templatesInput = {
@@ -161374,6 +163408,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type SenderProfileUpsertWithoutMessage_templatesInput = {
@@ -161722,6 +163757,7 @@ export namespace Prisma {
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutMarketing_campaignsInput = {
@@ -161775,6 +163811,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutMarketing_campaignsInput = {
@@ -162249,6 +164286,7 @@ export namespace Prisma {
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutMarketing_campaignsInput = {
@@ -162302,6 +164340,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type SenderProfileUpsertWithoutMarketing_campaignsInput = {
@@ -162991,6 +165030,7 @@ export namespace Prisma {
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutOpenai_batch_jobsInput = {
@@ -163044,6 +165084,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutOpenai_batch_jobsInput = {
@@ -163083,6 +165124,7 @@ export namespace Prisma {
     booking_events?: BookingEventCreateNestedManyWithoutActorInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutOpenai_batch_jobs_createdInput = {
@@ -163118,6 +165160,7 @@ export namespace Prisma {
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutActorInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutOpenai_batch_jobs_createdInput = {
@@ -163186,6 +165229,7 @@ export namespace Prisma {
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutOpenai_batch_jobsInput = {
@@ -163239,6 +165283,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutOpenai_batch_jobs_createdInput = {
@@ -163284,6 +165329,7 @@ export namespace Prisma {
     booking_events?: BookingEventUpdateManyWithoutActorNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOpenai_batch_jobs_createdInput = {
@@ -163319,6 +165365,7 @@ export namespace Prisma {
     booking_events?: BookingEventUncheckedUpdateManyWithoutActorNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganisationCreateWithoutIntegrationsInput = {
@@ -163371,6 +165418,7 @@ export namespace Prisma {
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutIntegrationsInput = {
@@ -163424,6 +165472,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutIntegrationsInput = {
@@ -163558,6 +165607,7 @@ export namespace Prisma {
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutIntegrationsInput = {
@@ -163611,6 +165661,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type IntegrationKeyUpsertWithWhereUniqueWithoutIntegrationInput = {
@@ -164078,6 +166129,7 @@ export namespace Prisma {
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutMail_tester_testsInput = {
@@ -164131,6 +166183,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutMail_tester_testsInput = {
@@ -164199,6 +166252,7 @@ export namespace Prisma {
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutMail_tester_testsInput = {
@@ -164252,6 +166306,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutMxtoolbox_checksInput = {
@@ -164304,6 +166359,7 @@ export namespace Prisma {
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutMxtoolbox_checksInput = {
@@ -164357,6 +166413,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutMxtoolbox_checksInput = {
@@ -164425,6 +166482,7 @@ export namespace Prisma {
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutMxtoolbox_checksInput = {
@@ -164478,6 +166536,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutRemindersInput = {
@@ -164530,6 +166589,7 @@ export namespace Prisma {
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutRemindersInput = {
@@ -164583,6 +166643,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutRemindersInput = {
@@ -164959,6 +167020,7 @@ export namespace Prisma {
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutRemindersInput = {
@@ -165012,6 +167074,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type ContactUpsertWithoutRemindersInput = {
@@ -165410,6 +167473,7 @@ export namespace Prisma {
     bookings_created?: BookingCreateNestedManyWithoutCreated_byInput
     booking_events?: BookingEventCreateNestedManyWithoutActorInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReminder_assignmentsInput = {
@@ -165445,6 +167509,7 @@ export namespace Prisma {
     bookings_created?: BookingUncheckedCreateNestedManyWithoutCreated_byInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutActorInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReminder_assignmentsInput = {
@@ -165543,6 +167608,7 @@ export namespace Prisma {
     bookings_created?: BookingUpdateManyWithoutCreated_byNestedInput
     booking_events?: BookingEventUpdateManyWithoutActorNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReminder_assignmentsInput = {
@@ -165578,6 +167644,7 @@ export namespace Prisma {
     bookings_created?: BookingUncheckedUpdateManyWithoutCreated_byNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutActorNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganisationCreateWithoutFormsInput = {
@@ -165630,6 +167697,7 @@ export namespace Prisma {
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutFormsInput = {
@@ -165683,6 +167751,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutFormsInput = {
@@ -165823,6 +167892,7 @@ export namespace Prisma {
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutFormsInput = {
@@ -165876,6 +167946,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type FormFieldUpsertWithWhereUniqueWithoutFormInput = {
@@ -166206,6 +168277,7 @@ export namespace Prisma {
     booking_events?: BookingEventCreateNestedManyWithoutActorInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutForm_completionsInput = {
@@ -166241,6 +168313,7 @@ export namespace Prisma {
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutActorInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutForm_completionsInput = {
@@ -166460,6 +168533,7 @@ export namespace Prisma {
     booking_events?: BookingEventUpdateManyWithoutActorNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutForm_completionsInput = {
@@ -166495,6 +168569,7 @@ export namespace Prisma {
     booking_events?: BookingEventUncheckedUpdateManyWithoutActorNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type FormCompletionValueUpsertWithWhereUniqueWithoutCompletionInput = {
@@ -166699,6 +168774,7 @@ export namespace Prisma {
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutContact_audience_analysesInput = {
@@ -166752,6 +168828,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutContact_audience_analysesInput = {
@@ -167000,6 +169077,7 @@ export namespace Prisma {
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutContact_audience_analysesInput = {
@@ -167053,6 +169131,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type FilterUpsertWithoutAudience_analysesInput = {
@@ -167303,6 +169382,7 @@ export namespace Prisma {
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutAi_usage_logsInput = {
@@ -167356,6 +169436,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutAi_usage_logsInput = {
@@ -167424,6 +169505,7 @@ export namespace Prisma {
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutAi_usage_logsInput = {
@@ -167477,6 +169559,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutApify_usage_logsInput = {
@@ -167529,6 +169612,7 @@ export namespace Prisma {
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutApify_usage_logsInput = {
@@ -167582,6 +169666,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutApify_usage_logsInput = {
@@ -167650,6 +169735,7 @@ export namespace Prisma {
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutApify_usage_logsInput = {
@@ -167703,6 +169789,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutMessaging_goalsInput = {
@@ -167755,6 +169842,7 @@ export namespace Prisma {
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutMessaging_goalsInput = {
@@ -167808,6 +169896,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutMessaging_goalsInput = {
@@ -167847,6 +169936,7 @@ export namespace Prisma {
     booking_events?: BookingEventCreateNestedManyWithoutActorInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutMessaging_goalsInput = {
@@ -167882,6 +169972,7 @@ export namespace Prisma {
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutActorInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutMessaging_goalsInput = {
@@ -167983,6 +170074,7 @@ export namespace Prisma {
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutMessaging_goalsInput = {
@@ -168036,6 +170128,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutMessaging_goalsInput = {
@@ -168081,6 +170174,7 @@ export namespace Prisma {
     booking_events?: BookingEventUpdateManyWithoutActorNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMessaging_goalsInput = {
@@ -168116,6 +170210,7 @@ export namespace Prisma {
     booking_events?: BookingEventUncheckedUpdateManyWithoutActorNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type GoalAchievementUpsertWithWhereUniqueWithoutGoalInput = {
@@ -168184,6 +170279,7 @@ export namespace Prisma {
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutEmail_send_limitsInput = {
@@ -168237,6 +170333,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutEmail_send_limitsInput = {
@@ -168305,6 +170402,7 @@ export namespace Prisma {
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutEmail_send_limitsInput = {
@@ -168358,6 +170456,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutSending_policiesInput = {
@@ -168410,6 +170509,7 @@ export namespace Prisma {
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutSending_policiesInput = {
@@ -168463,6 +170563,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutSending_policiesInput = {
@@ -168692,6 +170793,7 @@ export namespace Prisma {
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutSending_policiesInput = {
@@ -168745,6 +170847,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type SendingPolicyUpsertWithoutCloned_instancesInput = {
@@ -169660,6 +171763,7 @@ export namespace Prisma {
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutGoal_achievementsInput = {
@@ -169713,6 +171817,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutGoal_achievementsInput = {
@@ -169752,6 +171857,7 @@ export namespace Prisma {
     booking_events?: BookingEventCreateNestedManyWithoutActorInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutGoal_achievementsInput = {
@@ -169787,6 +171893,7 @@ export namespace Prisma {
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutActorInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutGoal_achievementsInput = {
@@ -169885,6 +171992,7 @@ export namespace Prisma {
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutGoal_achievementsInput = {
@@ -169938,6 +172046,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutGoal_achievementsInput = {
@@ -169983,6 +172092,7 @@ export namespace Prisma {
     booking_events?: BookingEventUpdateManyWithoutActorNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutGoal_achievementsInput = {
@@ -170018,6 +172128,7 @@ export namespace Prisma {
     booking_events?: BookingEventUncheckedUpdateManyWithoutActorNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type MessagingGoalUpsertWithoutAchievementsInput = {
@@ -170106,6 +172217,7 @@ export namespace Prisma {
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutGoal_personal_bestsInput = {
@@ -170159,6 +172271,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutGoal_personal_bestsInput = {
@@ -170198,6 +172311,7 @@ export namespace Prisma {
     booking_events?: BookingEventCreateNestedManyWithoutActorInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutGoal_personal_bestsInput = {
@@ -170233,6 +172347,7 @@ export namespace Prisma {
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutActorInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutGoal_personal_bestsInput = {
@@ -170301,6 +172416,7 @@ export namespace Prisma {
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutGoal_personal_bestsInput = {
@@ -170354,6 +172470,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutGoal_personal_bestsInput = {
@@ -170399,6 +172516,7 @@ export namespace Prisma {
     booking_events?: BookingEventUpdateManyWithoutActorNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutGoal_personal_bestsInput = {
@@ -170434,6 +172552,7 @@ export namespace Prisma {
     booking_events?: BookingEventUncheckedUpdateManyWithoutActorNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganisationCreateWithoutActivity_logsInput = {
@@ -170486,6 +172605,7 @@ export namespace Prisma {
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutActivity_logsInput = {
@@ -170539,6 +172659,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutActivity_logsInput = {
@@ -170578,6 +172699,7 @@ export namespace Prisma {
     booking_events?: BookingEventCreateNestedManyWithoutActorInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutActivity_logsInput = {
@@ -170613,6 +172735,7 @@ export namespace Prisma {
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutActorInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutActivity_logsInput = {
@@ -170681,6 +172804,7 @@ export namespace Prisma {
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutActivity_logsInput = {
@@ -170734,6 +172858,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutActivity_logsInput = {
@@ -170779,6 +172904,7 @@ export namespace Prisma {
     booking_events?: BookingEventUpdateManyWithoutActorNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutActivity_logsInput = {
@@ -170814,6 +172940,7 @@ export namespace Prisma {
     booking_events?: BookingEventUncheckedUpdateManyWithoutActorNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganisationCreateWithoutOauth_connectionsInput = {
@@ -170866,6 +172993,7 @@ export namespace Prisma {
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutOauth_connectionsInput = {
@@ -170919,6 +173047,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutOauth_connectionsInput = {
@@ -170958,6 +173087,7 @@ export namespace Prisma {
     booking_events?: BookingEventCreateNestedManyWithoutActorInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutOauth_connections_grantedInput = {
@@ -170993,6 +173123,7 @@ export namespace Prisma {
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutActorInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutOauth_connections_grantedInput = {
@@ -171061,6 +173192,7 @@ export namespace Prisma {
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutOauth_connectionsInput = {
@@ -171114,6 +173246,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutOauth_connections_grantedInput = {
@@ -171159,6 +173292,7 @@ export namespace Prisma {
     booking_events?: BookingEventUpdateManyWithoutActorNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOauth_connections_grantedInput = {
@@ -171194,6 +173328,7 @@ export namespace Prisma {
     booking_events?: BookingEventUncheckedUpdateManyWithoutActorNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganisationCreateWithoutMcp_tool_invocation_logsInput = {
@@ -171246,6 +173381,7 @@ export namespace Prisma {
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutMcp_tool_invocation_logsInput = {
@@ -171299,6 +173435,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutMcp_tool_invocation_logsInput = {
@@ -171367,6 +173504,7 @@ export namespace Prisma {
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutMcp_tool_invocation_logsInput = {
@@ -171420,6 +173558,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationCreateWithoutOrg_tagsInput = {
@@ -171472,6 +173611,7 @@ export namespace Prisma {
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutOrg_tagsInput = {
@@ -171525,6 +173665,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutOrg_tagsInput = {
@@ -171618,6 +173759,7 @@ export namespace Prisma {
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutOrg_tagsInput = {
@@ -171671,6 +173813,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrgTagAssignmentUpsertWithWhereUniqueWithoutTagInput = {
@@ -171805,6 +173948,7 @@ export namespace Prisma {
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutAvailability_schedulesInput = {
@@ -171858,6 +174002,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutAvailability_schedulesInput = {
@@ -171897,6 +174042,7 @@ export namespace Prisma {
     booking_events?: BookingEventCreateNestedManyWithoutActorInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAvailability_schedulesInput = {
@@ -171932,6 +174078,7 @@ export namespace Prisma {
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutActorInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAvailability_schedulesInput = {
@@ -172029,6 +174176,7 @@ export namespace Prisma {
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutAvailability_schedulesInput = {
@@ -172082,6 +174230,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutAvailability_schedulesInput = {
@@ -172127,6 +174276,7 @@ export namespace Prisma {
     booking_events?: BookingEventUpdateManyWithoutActorNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAvailability_schedulesInput = {
@@ -172162,6 +174312,7 @@ export namespace Prisma {
     booking_events?: BookingEventUncheckedUpdateManyWithoutActorNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type AvailabilityOverrideUpsertWithWhereUniqueWithoutScheduleInput = {
@@ -172302,6 +174453,7 @@ export namespace Prisma {
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutBooking_blocksInput = {
@@ -172355,6 +174507,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutBooking_blocksInput = {
@@ -172394,6 +174547,7 @@ export namespace Prisma {
     booking_events?: BookingEventCreateNestedManyWithoutActorInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBooking_blocksInput = {
@@ -172429,6 +174583,7 @@ export namespace Prisma {
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutActorInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBooking_blocksInput = {
@@ -172468,6 +174623,7 @@ export namespace Prisma {
     booking_events?: BookingEventCreateNestedManyWithoutActorInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBooking_blocks_createdInput = {
@@ -172503,6 +174659,7 @@ export namespace Prisma {
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutActorInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBooking_blocks_createdInput = {
@@ -172571,6 +174728,7 @@ export namespace Prisma {
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutBooking_blocksInput = {
@@ -172624,6 +174782,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutBooking_blocksInput = {
@@ -172669,6 +174828,7 @@ export namespace Prisma {
     booking_events?: BookingEventUpdateManyWithoutActorNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBooking_blocksInput = {
@@ -172704,6 +174864,7 @@ export namespace Prisma {
     booking_events?: BookingEventUncheckedUpdateManyWithoutActorNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutBooking_blocks_createdInput = {
@@ -172749,6 +174910,7 @@ export namespace Prisma {
     booking_events?: BookingEventUpdateManyWithoutActorNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBooking_blocks_createdInput = {
@@ -172784,6 +174946,7 @@ export namespace Prisma {
     booking_events?: BookingEventUncheckedUpdateManyWithoutActorNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganisationCreateWithoutBooking_pagesInput = {
@@ -172836,6 +174999,7 @@ export namespace Prisma {
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutBooking_pagesInput = {
@@ -172889,6 +175053,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutBooking_pagesInput = {
@@ -172928,6 +175093,7 @@ export namespace Prisma {
     booking_events?: BookingEventCreateNestedManyWithoutActorInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBooking_pages_createdInput = {
@@ -172963,6 +175129,7 @@ export namespace Prisma {
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutActorInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBooking_pages_createdInput = {
@@ -173490,6 +175657,7 @@ export namespace Prisma {
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutBooking_pagesInput = {
@@ -173543,6 +175711,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutBooking_pages_createdInput = {
@@ -173588,6 +175757,7 @@ export namespace Prisma {
     booking_events?: BookingEventUpdateManyWithoutActorNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBooking_pages_createdInput = {
@@ -173623,6 +175793,7 @@ export namespace Prisma {
     booking_events?: BookingEventUncheckedUpdateManyWithoutActorNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type MessageTemplateUpsertWithoutBooking_pages_confirmationInput = {
@@ -174095,6 +176266,7 @@ export namespace Prisma {
     booking_events?: BookingEventCreateNestedManyWithoutActorInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBooking_page_membershipsInput = {
@@ -174130,6 +176302,7 @@ export namespace Prisma {
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutActorInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBooking_page_membershipsInput = {
@@ -174328,6 +176501,7 @@ export namespace Prisma {
     booking_events?: BookingEventUpdateManyWithoutActorNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBooking_page_membershipsInput = {
@@ -174363,6 +176537,7 @@ export namespace Prisma {
     booking_events?: BookingEventUncheckedUpdateManyWithoutActorNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganisationCreateWithoutBooking_linksInput = {
@@ -174415,6 +176590,7 @@ export namespace Prisma {
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutBooking_linksInput = {
@@ -174468,6 +176644,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutBooking_linksInput = {
@@ -174753,6 +176930,7 @@ export namespace Prisma {
     booking_events?: BookingEventCreateNestedManyWithoutActorInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBooking_links_createdInput = {
@@ -174788,6 +176966,7 @@ export namespace Prisma {
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutActorInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBooking_links_createdInput = {
@@ -174951,6 +177130,7 @@ export namespace Prisma {
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutBooking_linksInput = {
@@ -175004,6 +177184,7 @@ export namespace Prisma {
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type BookingPageUpsertWithoutLinksInput = {
@@ -175307,6 +177488,7 @@ export namespace Prisma {
     booking_events?: BookingEventUpdateManyWithoutActorNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBooking_links_createdInput = {
@@ -175342,6 +177524,7 @@ export namespace Prisma {
     booking_events?: BookingEventUncheckedUpdateManyWithoutActorNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BookingUpsertWithWhereUniqueWithoutBooking_linkInput = {
@@ -175410,6 +177593,7 @@ export namespace Prisma {
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutBookingsInput = {
@@ -175463,6 +177647,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutBookingsInput = {
@@ -175786,6 +177971,7 @@ export namespace Prisma {
     booking_events?: BookingEventCreateNestedManyWithoutActorInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBookings_assignedInput = {
@@ -175821,6 +178007,7 @@ export namespace Prisma {
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutActorInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBookings_assignedInput = {
@@ -175860,6 +178047,7 @@ export namespace Prisma {
     booking_events?: BookingEventCreateNestedManyWithoutActorInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBookings_createdInput = {
@@ -175895,6 +178083,7 @@ export namespace Prisma {
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutActorInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBookings_createdInput = {
@@ -176113,6 +178302,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutBookingsInput = {
@@ -176166,6 +178356,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type BookingPageUpsertWithoutBookingsInput = {
@@ -176513,6 +178704,7 @@ export namespace Prisma {
     booking_events?: BookingEventUpdateManyWithoutActorNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBookings_assignedInput = {
@@ -176548,6 +178740,7 @@ export namespace Prisma {
     booking_events?: BookingEventUncheckedUpdateManyWithoutActorNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutBookings_createdInput = {
@@ -176593,6 +178786,7 @@ export namespace Prisma {
     booking_events?: BookingEventUpdateManyWithoutActorNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBookings_createdInput = {
@@ -176628,6 +178822,7 @@ export namespace Prisma {
     booking_events?: BookingEventUncheckedUpdateManyWithoutActorNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CalendarConnectionUpsertWithoutBookingsInput = {
@@ -176824,6 +179019,7 @@ export namespace Prisma {
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutBooking_eventsInput = {
@@ -176877,6 +179073,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutBooking_eventsInput = {
@@ -177006,6 +179203,7 @@ export namespace Prisma {
     bookings_created?: BookingCreateNestedManyWithoutCreated_byInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBooking_eventsInput = {
@@ -177041,6 +179239,7 @@ export namespace Prisma {
     bookings_created?: BookingUncheckedCreateNestedManyWithoutCreated_byInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBooking_eventsInput = {
@@ -177109,6 +179308,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutBooking_eventsInput = {
@@ -177162,6 +179362,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type BookingUpsertWithoutEventsInput = {
@@ -177303,6 +179504,7 @@ export namespace Prisma {
     bookings_created?: BookingUpdateManyWithoutCreated_byNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBooking_eventsInput = {
@@ -177338,6 +179540,7 @@ export namespace Prisma {
     bookings_created?: BookingUncheckedUpdateManyWithoutCreated_byNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BookingCreateWithoutNotificationsInput = {
@@ -177576,6 +179779,7 @@ export namespace Prisma {
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationUncheckedCreateWithoutCalendar_connectionsInput = {
@@ -177629,6 +179833,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganisationInput
   }
 
   export type OrganisationCreateOrConnectWithoutCalendar_connectionsInput = {
@@ -177668,6 +179873,7 @@ export namespace Prisma {
     bookings_created?: BookingCreateNestedManyWithoutCreated_byInput
     booking_events?: BookingEventCreateNestedManyWithoutActorInput
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCalendar_connectionsInput = {
@@ -177703,6 +179909,7 @@ export namespace Prisma {
     bookings_created?: BookingUncheckedCreateNestedManyWithoutCreated_byInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutActorInput
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCalendar_connectionsInput = {
@@ -177866,6 +180073,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganisationNestedInput
   }
 
   export type OrganisationUncheckedUpdateWithoutCalendar_connectionsInput = {
@@ -177919,6 +180127,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
   export type UserUpsertWithoutCalendar_connectionsInput = {
@@ -177964,6 +180173,7 @@ export namespace Prisma {
     bookings_created?: BookingUpdateManyWithoutCreated_byNestedInput
     booking_events?: BookingEventUpdateManyWithoutActorNestedInput
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCalendar_connectionsInput = {
@@ -177999,6 +180209,7 @@ export namespace Prisma {
     bookings_created?: BookingUncheckedUpdateManyWithoutCreated_byNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutActorNestedInput
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BookingUpsertWithWhereUniqueWithoutCalendar_connectionInput = {
@@ -178015,6 +180226,394 @@ export namespace Prisma {
   export type BookingUpdateManyWithWhereWithoutCalendar_connectionInput = {
     where: BookingScalarWhereInput
     data: XOR<BookingUpdateManyMutationInput, BookingUncheckedUpdateManyWithoutCalendar_connectionInput>
+  }
+
+  export type OrganisationCreateWithoutNotificationsInput = {
+    uuid?: string
+    name: string
+    slug: string
+    timezone?: string
+    reply_to_email?: string | null
+    reply_forward_email?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
+    invitations?: OrganisationInvitationCreateNestedManyWithoutOrganisationInput
+    filters?: FilterCreateNestedManyWithoutOrganisationInput
+    contacts?: ContactCreateNestedManyWithoutOrganisationInput
+    outreach_messages?: OutreachMessageCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadCreateNestedManyWithoutOrganisationInput
+    outreach_sequences?: OutreachSequenceCreateNestedManyWithoutOrganisationInput
+    interactions?: InteractionCreateNestedManyWithoutOrganisationInput
+    sender_profiles?: SenderProfileCreateNestedManyWithoutOrganisationInput
+    marketing_campaigns?: MarketingCampaignCreateNestedManyWithoutOrganisationInput
+    scoring_instructions?: ScoringInstructionCreateNestedManyWithoutOrganisationInput
+    openai_batch_jobs?: OpenAiBatchJobCreateNestedManyWithoutOrganisationInput
+    integrations?: IntegrationCreateNestedManyWithoutOrganisationInput
+    reminders?: ReminderCreateNestedManyWithoutOrganisationInput
+    forms?: FormCreateNestedManyWithoutOrganisationInput
+    contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
+    contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
+    ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
+    apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
+    message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
+    availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutOrganisationInput
+    booking_blocks?: BookingBlockCreateNestedManyWithoutOrganisationInput
+    booking_pages?: BookingPageCreateNestedManyWithoutOrganisationInput
+    booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
+    bookings?: BookingCreateNestedManyWithoutOrganisationInput
+    booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
+    calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
+  }
+
+  export type OrganisationUncheckedCreateWithoutNotificationsInput = {
+    id?: number
+    uuid?: string
+    name: string
+    slug: string
+    timezone?: string
+    reply_to_email?: string | null
+    reply_forward_email?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
+    invitations?: OrganisationInvitationUncheckedCreateNestedManyWithoutOrganisationInput
+    filters?: FilterUncheckedCreateNestedManyWithoutOrganisationInput
+    contacts?: ContactUncheckedCreateNestedManyWithoutOrganisationInput
+    outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutOrganisationInput
+    outreach_sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutOrganisationInput
+    interactions?: InteractionUncheckedCreateNestedManyWithoutOrganisationInput
+    sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutOrganisationInput
+    marketing_campaigns?: MarketingCampaignUncheckedCreateNestedManyWithoutOrganisationInput
+    scoring_instructions?: ScoringInstructionUncheckedCreateNestedManyWithoutOrganisationInput
+    openai_batch_jobs?: OpenAiBatchJobUncheckedCreateNestedManyWithoutOrganisationInput
+    integrations?: IntegrationUncheckedCreateNestedManyWithoutOrganisationInput
+    reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
+    forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
+    contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
+    contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
+    ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
+    apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
+    message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
+    availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_pages?: BookingPageUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
+    bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
+    calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+  }
+
+  export type OrganisationCreateOrConnectWithoutNotificationsInput = {
+    where: OrganisationWhereUniqueInput
+    create: XOR<OrganisationCreateWithoutNotificationsInput, OrganisationUncheckedCreateWithoutNotificationsInput>
+  }
+
+  export type UserCreateWithoutNotificationsInput = {
+    uuid?: string
+    email: string
+    phone?: string | null
+    full_name?: string | null
+    password: string
+    role?: $Enums.AuthRole
+    created_at?: Date | string
+    updated_at?: Date | string
+    memberships?: OrganisationMemberCreateNestedManyWithoutUserInput
+    invitations_sent?: OrganisationInvitationCreateNestedManyWithoutInvited_byInput
+    form_completions?: FormCompletionCreateNestedManyWithoutCompleted_byInput
+    outreach_messages_sent?: OutreachMessageCreateNestedManyWithoutSent_byInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutActorInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutUserInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutUserInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
+    bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
+    openai_batch_jobs_created?: OpenAiBatchJobCreateNestedManyWithoutUserInput
+    sidebar_favorites?: SidebarFavoriteCreateNestedManyWithoutUserInput
+    api_keys_created?: ApiKeyCreateNestedManyWithoutCreated_byInput
+    oauth_connections_granted?: OAuthConnectionCreateNestedManyWithoutGranted_byInput
+    availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutUserInput
+    booking_blocks?: BookingBlockCreateNestedManyWithoutUserInput
+    booking_blocks_created?: BookingBlockCreateNestedManyWithoutCreated_byInput
+    booking_pages_created?: BookingPageCreateNestedManyWithoutCreated_byInput
+    booking_page_memberships?: BookingPageMemberCreateNestedManyWithoutUserInput
+    booking_links_created?: BookingLinkCreateNestedManyWithoutCreated_byInput
+    bookings_assigned?: BookingCreateNestedManyWithoutAssigned_userInput
+    bookings_created?: BookingCreateNestedManyWithoutCreated_byInput
+    booking_events?: BookingEventCreateNestedManyWithoutActorInput
+    calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
+    reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutNotificationsInput = {
+    id?: number
+    uuid?: string
+    email: string
+    phone?: string | null
+    full_name?: string | null
+    password: string
+    role?: $Enums.AuthRole
+    created_at?: Date | string
+    updated_at?: Date | string
+    memberships?: OrganisationMemberUncheckedCreateNestedManyWithoutUserInput
+    invitations_sent?: OrganisationInvitationUncheckedCreateNestedManyWithoutInvited_byInput
+    form_completions?: FormCompletionUncheckedCreateNestedManyWithoutCompleted_byInput
+    outreach_messages_sent?: OutreachMessageUncheckedCreateNestedManyWithoutSent_byInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutActorInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutUserInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutUserInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
+    bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
+    openai_batch_jobs_created?: OpenAiBatchJobUncheckedCreateNestedManyWithoutUserInput
+    sidebar_favorites?: SidebarFavoriteUncheckedCreateNestedManyWithoutUserInput
+    api_keys_created?: ApiKeyUncheckedCreateNestedManyWithoutCreated_byInput
+    oauth_connections_granted?: OAuthConnectionUncheckedCreateNestedManyWithoutGranted_byInput
+    availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutUserInput
+    booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutUserInput
+    booking_blocks_created?: BookingBlockUncheckedCreateNestedManyWithoutCreated_byInput
+    booking_pages_created?: BookingPageUncheckedCreateNestedManyWithoutCreated_byInput
+    booking_page_memberships?: BookingPageMemberUncheckedCreateNestedManyWithoutUserInput
+    booking_links_created?: BookingLinkUncheckedCreateNestedManyWithoutCreated_byInput
+    bookings_assigned?: BookingUncheckedCreateNestedManyWithoutAssigned_userInput
+    bookings_created?: BookingUncheckedCreateNestedManyWithoutCreated_byInput
+    booking_events?: BookingEventUncheckedCreateNestedManyWithoutActorInput
+    calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
+    reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutNotificationsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutNotificationsInput, UserUncheckedCreateWithoutNotificationsInput>
+  }
+
+  export type OrganisationUpsertWithoutNotificationsInput = {
+    update: XOR<OrganisationUpdateWithoutNotificationsInput, OrganisationUncheckedUpdateWithoutNotificationsInput>
+    create: XOR<OrganisationCreateWithoutNotificationsInput, OrganisationUncheckedCreateWithoutNotificationsInput>
+    where?: OrganisationWhereInput
+  }
+
+  export type OrganisationUpdateToOneWithWhereWithoutNotificationsInput = {
+    where?: OrganisationWhereInput
+    data: XOR<OrganisationUpdateWithoutNotificationsInput, OrganisationUncheckedUpdateWithoutNotificationsInput>
+  }
+
+  export type OrganisationUpdateWithoutNotificationsInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_forward_email?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
+    invitations?: OrganisationInvitationUpdateManyWithoutOrganisationNestedInput
+    filters?: FilterUpdateManyWithoutOrganisationNestedInput
+    contacts?: ContactUpdateManyWithoutOrganisationNestedInput
+    outreach_messages?: OutreachMessageUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutOrganisationNestedInput
+    outreach_sequences?: OutreachSequenceUpdateManyWithoutOrganisationNestedInput
+    interactions?: InteractionUpdateManyWithoutOrganisationNestedInput
+    sender_profiles?: SenderProfileUpdateManyWithoutOrganisationNestedInput
+    marketing_campaigns?: MarketingCampaignUpdateManyWithoutOrganisationNestedInput
+    scoring_instructions?: ScoringInstructionUpdateManyWithoutOrganisationNestedInput
+    openai_batch_jobs?: OpenAiBatchJobUpdateManyWithoutOrganisationNestedInput
+    integrations?: IntegrationUpdateManyWithoutOrganisationNestedInput
+    reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
+    forms?: FormUpdateManyWithoutOrganisationNestedInput
+    contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
+    contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
+    ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
+    apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
+    message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
+    availability_schedules?: AvailabilityScheduleUpdateManyWithoutOrganisationNestedInput
+    booking_blocks?: BookingBlockUpdateManyWithoutOrganisationNestedInput
+    booking_pages?: BookingPageUpdateManyWithoutOrganisationNestedInput
+    booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
+    bookings?: BookingUpdateManyWithoutOrganisationNestedInput
+    booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
+    calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
+  }
+
+  export type OrganisationUncheckedUpdateWithoutNotificationsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_forward_email?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
+    invitations?: OrganisationInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
+    filters?: FilterUncheckedUpdateManyWithoutOrganisationNestedInput
+    contacts?: ContactUncheckedUpdateManyWithoutOrganisationNestedInput
+    outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutOrganisationNestedInput
+    outreach_sequences?: OutreachSequenceUncheckedUpdateManyWithoutOrganisationNestedInput
+    interactions?: InteractionUncheckedUpdateManyWithoutOrganisationNestedInput
+    sender_profiles?: SenderProfileUncheckedUpdateManyWithoutOrganisationNestedInput
+    marketing_campaigns?: MarketingCampaignUncheckedUpdateManyWithoutOrganisationNestedInput
+    scoring_instructions?: ScoringInstructionUncheckedUpdateManyWithoutOrganisationNestedInput
+    openai_batch_jobs?: OpenAiBatchJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    integrations?: IntegrationUncheckedUpdateManyWithoutOrganisationNestedInput
+    reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
+    forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
+    contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
+    contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
+    ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_blocks?: BookingBlockUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_pages?: BookingPageUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
+    bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
+    calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+  }
+
+  export type UserUpsertWithoutNotificationsInput = {
+    update: XOR<UserUpdateWithoutNotificationsInput, UserUncheckedUpdateWithoutNotificationsInput>
+    create: XOR<UserCreateWithoutNotificationsInput, UserUncheckedCreateWithoutNotificationsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutNotificationsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutNotificationsInput, UserUncheckedUpdateWithoutNotificationsInput>
+  }
+
+  export type UserUpdateWithoutNotificationsInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    full_name?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumAuthRoleFieldUpdateOperationsInput | $Enums.AuthRole
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: OrganisationMemberUpdateManyWithoutUserNestedInput
+    invitations_sent?: OrganisationInvitationUpdateManyWithoutInvited_byNestedInput
+    form_completions?: FormCompletionUpdateManyWithoutCompleted_byNestedInput
+    outreach_messages_sent?: OutreachMessageUpdateManyWithoutSent_byNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutActorNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutUserNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutUserNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
+    bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
+    openai_batch_jobs_created?: OpenAiBatchJobUpdateManyWithoutUserNestedInput
+    sidebar_favorites?: SidebarFavoriteUpdateManyWithoutUserNestedInput
+    api_keys_created?: ApiKeyUpdateManyWithoutCreated_byNestedInput
+    oauth_connections_granted?: OAuthConnectionUpdateManyWithoutGranted_byNestedInput
+    availability_schedules?: AvailabilityScheduleUpdateManyWithoutUserNestedInput
+    booking_blocks?: BookingBlockUpdateManyWithoutUserNestedInput
+    booking_blocks_created?: BookingBlockUpdateManyWithoutCreated_byNestedInput
+    booking_pages_created?: BookingPageUpdateManyWithoutCreated_byNestedInput
+    booking_page_memberships?: BookingPageMemberUpdateManyWithoutUserNestedInput
+    booking_links_created?: BookingLinkUpdateManyWithoutCreated_byNestedInput
+    bookings_assigned?: BookingUpdateManyWithoutAssigned_userNestedInput
+    bookings_created?: BookingUpdateManyWithoutCreated_byNestedInput
+    booking_events?: BookingEventUpdateManyWithoutActorNestedInput
+    calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
+    reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutNotificationsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    full_name?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumAuthRoleFieldUpdateOperationsInput | $Enums.AuthRole
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: OrganisationMemberUncheckedUpdateManyWithoutUserNestedInput
+    invitations_sent?: OrganisationInvitationUncheckedUpdateManyWithoutInvited_byNestedInput
+    form_completions?: FormCompletionUncheckedUpdateManyWithoutCompleted_byNestedInput
+    outreach_messages_sent?: OutreachMessageUncheckedUpdateManyWithoutSent_byNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutActorNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutUserNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutUserNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
+    bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
+    openai_batch_jobs_created?: OpenAiBatchJobUncheckedUpdateManyWithoutUserNestedInput
+    sidebar_favorites?: SidebarFavoriteUncheckedUpdateManyWithoutUserNestedInput
+    api_keys_created?: ApiKeyUncheckedUpdateManyWithoutCreated_byNestedInput
+    oauth_connections_granted?: OAuthConnectionUncheckedUpdateManyWithoutGranted_byNestedInput
+    availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutUserNestedInput
+    booking_blocks?: BookingBlockUncheckedUpdateManyWithoutUserNestedInput
+    booking_blocks_created?: BookingBlockUncheckedUpdateManyWithoutCreated_byNestedInput
+    booking_pages_created?: BookingPageUncheckedUpdateManyWithoutCreated_byNestedInput
+    booking_page_memberships?: BookingPageMemberUncheckedUpdateManyWithoutUserNestedInput
+    booking_links_created?: BookingLinkUncheckedUpdateManyWithoutCreated_byNestedInput
+    bookings_assigned?: BookingUncheckedUpdateManyWithoutAssigned_userNestedInput
+    bookings_created?: BookingUncheckedUpdateManyWithoutCreated_byNestedInput
+    booking_events?: BookingEventUncheckedUpdateManyWithoutActorNestedInput
+    calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
+    reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganisationMemberCreateManyUserInput = {
@@ -178459,6 +181058,20 @@ export namespace Prisma {
 
   export type ReminderAssigneeCreateManyUserInput = {
     reminder_uuid: string
+    created_at?: Date | string
+  }
+
+  export type NotificationCreateManyUserInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    type: $Enums.NotificationType
+    title: string
+    body?: string | null
+    entity_type?: string | null
+    entity_uuid?: string | null
+    data?: NullableJsonNullValueInput | InputJsonValue
+    read_at?: Date | string | null
     created_at?: Date | string
   }
 
@@ -179807,6 +182420,47 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type NotificationUpdateWithoutUserInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
+    title?: StringFieldUpdateOperationsInput | string
+    body?: NullableStringFieldUpdateOperationsInput | string | null
+    entity_type?: NullableStringFieldUpdateOperationsInput | string | null
+    entity_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    data?: NullableJsonNullValueInput | InputJsonValue
+    read_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutNotificationsNestedInput
+  }
+
+  export type NotificationUncheckedUpdateWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
+    title?: StringFieldUpdateOperationsInput | string
+    body?: NullableStringFieldUpdateOperationsInput | string | null
+    entity_type?: NullableStringFieldUpdateOperationsInput | string | null
+    entity_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    data?: NullableJsonNullValueInput | InputJsonValue
+    read_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificationUncheckedUpdateManyWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
+    title?: StringFieldUpdateOperationsInput | string
+    body?: NullableStringFieldUpdateOperationsInput | string | null
+    entity_type?: NullableStringFieldUpdateOperationsInput | string | null
+    entity_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    data?: NullableJsonNullValueInput | InputJsonValue
+    read_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type OrganisationMemberCreateManyOrganisationInput = {
     id?: number
     uuid?: string
@@ -180576,6 +183230,20 @@ export namespace Prisma {
     connected_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+  }
+
+  export type NotificationCreateManyOrganisationInput = {
+    id?: number
+    uuid?: string
+    user_uuid: string
+    type: $Enums.NotificationType
+    title: string
+    body?: string | null
+    entity_type?: string | null
+    entity_uuid?: string | null
+    data?: NullableJsonNullValueInput | InputJsonValue
+    read_at?: Date | string | null
+    created_at?: Date | string
   }
 
   export type OrganisationMemberUpdateWithoutOrganisationInput = {
@@ -182989,6 +185657,47 @@ export namespace Prisma {
     connected_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificationUpdateWithoutOrganisationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
+    title?: StringFieldUpdateOperationsInput | string
+    body?: NullableStringFieldUpdateOperationsInput | string | null
+    entity_type?: NullableStringFieldUpdateOperationsInput | string | null
+    entity_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    data?: NullableJsonNullValueInput | InputJsonValue
+    read_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutNotificationsNestedInput
+  }
+
+  export type NotificationUncheckedUpdateWithoutOrganisationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    user_uuid?: StringFieldUpdateOperationsInput | string
+    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
+    title?: StringFieldUpdateOperationsInput | string
+    body?: NullableStringFieldUpdateOperationsInput | string | null
+    entity_type?: NullableStringFieldUpdateOperationsInput | string | null
+    entity_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    data?: NullableJsonNullValueInput | InputJsonValue
+    read_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificationUncheckedUpdateManyWithoutOrganisationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    user_uuid?: StringFieldUpdateOperationsInput | string
+    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
+    title?: StringFieldUpdateOperationsInput | string
+    body?: NullableStringFieldUpdateOperationsInput | string | null
+    entity_type?: NullableStringFieldUpdateOperationsInput | string | null
+    entity_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    data?: NullableJsonNullValueInput | InputJsonValue
+    read_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type RawLeadCreateManyFilterInput = {

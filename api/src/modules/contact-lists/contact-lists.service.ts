@@ -3,7 +3,7 @@ import {
     Injectable,
     NotFoundException,
 } from '@nestjs/common';
-import { LeadStatus, OrgTagEntityType, Prisma } from '@/generated/prisma';
+import { InteractionType, LeadStatus, OrgTagEntityType, Prisma } from '@/generated/prisma';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { ContactsService } from '@/modules/contacts/contacts.service';
 import {
@@ -200,7 +200,8 @@ export class ContactListsService {
         return { contact: { [sortBy]: order } as Prisma.ContactOrderByWithRelationInput };
     }
 
-    async findMembers(organisation_uuid: string, listUuid: string, query: ListContactListMembersDto) {
+    /** `callerUuid` scopes the `call_count`/`last_called_at` fields to calls that member logged; without it any logged call counts. */
+    async findMembers(organisation_uuid: string, listUuid: string, query: ListContactListMembersDto, callerUuid?: string) {
         await this.ensureListOwned(organisation_uuid, listUuid);
 
         const page = query.page ?? 1;
@@ -242,9 +243,23 @@ export class ContactListsService {
             this.prisma.contactListMember.count({ where }),
         ]);
 
+        const calls = await this.prisma.interaction.groupBy({
+            by: ['contact_uuid'],
+            where: {
+                organisation_uuid,
+                type: InteractionType.CALL,
+                contact_uuid: { in: members.map((m) => m.contact_uuid) },
+                ...(callerUuid ? { created_by_user_uuid: callerUuid } : {}),
+            },
+            _count: { _all: true },
+            _max: { created_at: true },
+        });
+        const callsByContact = new Map(calls.map((c) => [c.contact_uuid, c]));
+
         return {
             data: members.map((m) => {
                 const { contact_filters, filter, tags, ...rest } = m.contact;
+                const call = callsByContact.get(m.contact_uuid);
                 const shaped = shapeContactFilterFields({
                     ...m.contact,
                     filter,
@@ -259,6 +274,8 @@ export class ContactListsService {
                     member_uuid: m.uuid,
                     added_at: m.created_at,
                     list_status: m.status,
+                    call_count: call?._count._all ?? 0,
+                    last_called_at: call?._max.created_at ?? null,
                 };
             }),
             total,

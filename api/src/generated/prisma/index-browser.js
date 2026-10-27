@@ -1333,6 +1333,21 @@ exports.Prisma.CalendarConnectionScalarFieldEnum = {
   updated_at: 'updated_at'
 };
 
+exports.Prisma.NotificationScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  organisation_uuid: 'organisation_uuid',
+  user_uuid: 'user_uuid',
+  type: 'type',
+  title: 'title',
+  body: 'body',
+  entity_type: 'entity_type',
+  entity_uuid: 'entity_uuid',
+  data: 'data',
+  read_at: 'read_at',
+  created_at: 'created_at'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1894,6 +1909,15 @@ exports.CalendarConnectionStatus = exports.$Enums.CalendarConnectionStatus = {
   DISCONNECTED: 'DISCONNECTED'
 };
 
+exports.NotificationType = exports.$Enums.NotificationType = {
+  REMINDER_DUE: 'REMINDER_DUE',
+  BOOKING_CREATED: 'BOOKING_CREATED',
+  BOOKING_REQUESTED: 'BOOKING_REQUESTED',
+  BOOKING_RESCHEDULED: 'BOOKING_RESCHEDULED',
+  BOOKING_CANCELLED: 'BOOKING_CANCELLED',
+  BOOKING_ASSIGNED: 'BOOKING_ASSIGNED'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   Organisation: 'Organisation',
@@ -1969,7 +1993,8 @@ exports.Prisma.ModelName = {
   Booking: 'Booking',
   BookingEvent: 'BookingEvent',
   BookingNotification: 'BookingNotification',
-  CalendarConnection: 'CalendarConnection'
+  CalendarConnection: 'CalendarConnection',
+  Notification: 'Notification'
 };
 
 /**

@@ -1,12 +1,13 @@
 import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { Logger } from '@nestjs/common';
 import { Job } from 'bullmq';
-import { ReminderStatus, ReminderType, ThreadReplyState } from '@/generated/prisma';
+import { NotificationType, ReminderStatus, ReminderType, ThreadReplyState } from '@/generated/prisma';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { NotificationsGateway } from '@/gateways/notifications.gateway';
 import { REMINDER_TRIGGER_QUEUE } from '@/core/queues/queues.constants';
 import { RemindersService } from '@/modules/reminders/reminders.service';
 import { FollowUpDraftService } from '@/modules/reminders/services/follow-up-draft.service';
+import { NotificationsService } from '@/modules/notifications/notifications.service';
 
 interface ReminderTriggerJobData {
     reminder_uuid: string;
@@ -21,6 +22,7 @@ export class ReminderTriggerWorker extends WorkerHost {
         private readonly gateway: NotificationsGateway,
         private readonly remindersService: RemindersService,
         private readonly followUpDraftService: FollowUpDraftService,
+        private readonly notifications: NotificationsService,
     ) {
         super();
     }
@@ -96,6 +98,22 @@ export class ReminderTriggerWorker extends WorkerHost {
         const recipients = await this.remindersService.getRecipientUserUuids(reminder);
         const payload = { ...reminder, assignees: reminder.assignees.map((a) => a.user) };
         this.gateway.emitToUsers(recipients, 'reminder.triggered', payload);
+        await this.notifications.notifyUsersSafely(recipients, {
+            organisation_uuid: reminder.organisation_uuid,
+            type: NotificationType.REMINDER_DUE,
+            title: reminder.title ?? 'Reminder',
+            body: reminder.notes,
+            entity_type: 'reminder',
+            entity_uuid: reminder.uuid,
+            data: {
+                reminder_type: reminder.type,
+                remind_at: reminder.remind_at.toISOString(),
+                contact_uuid: reminder.contact_uuid,
+                contact_name: reminder.contact?.name ?? null,
+                contact_company: reminder.contact?.company ?? null,
+                contact_email: reminder.contact?.email ?? null,
+            },
+        });
         this.logger.log(
             `Reminder triggered: ${reminder.uuid} for organisation ${reminder.organisation_uuid} (${recipients.length} recipient${recipients.length === 1 ? '' : 's'})`,
         );

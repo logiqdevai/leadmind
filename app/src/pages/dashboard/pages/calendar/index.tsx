@@ -1,4 +1,5 @@
-import { useMemo, useState, type FC } from "react";
+import { useEffect, useMemo, useState, type FC } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Button } from "@heroui/react";
 import { ChevronDown, Plus, SlidersHorizontal } from "lucide-react";
 import { useDashboardNavbarTitle } from "@/components/providers/dashboard-navbar-provider";
@@ -36,7 +37,16 @@ const CalendarPage: FC = () => {
     const { params, update, hasFilters } = useCalendarSearchParams(todayKey);
     const debouncedSearch = useDebouncedValue(params.search.trim(), 300);
 
-    const [selectedBookingUuid, setSelectedBookingUuid] = useState<string | null>(null);
+    // Notifications link here with ?booking=<uuid>; open that booking once, then drop the param.
+    const [linkParams, setLinkParams] = useSearchParams();
+    const [selectedBookingUuid, setSelectedBookingUuid] = useState<string | null>(() => linkParams.get("booking"));
+    useEffect(() => {
+        if (!linkParams.has("booking")) return;
+        const next = new URLSearchParams(linkParams);
+        next.delete("booking");
+        setLinkParams(next, { replace: true });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
     const [createState, setCreateState] = useState<{ open: boolean; start: string | null }>({ open: false, start: null });
     const [blockOpen, setBlockOpen] = useState(false);
     const [filtersOpen, setFiltersOpen] = useState(false);

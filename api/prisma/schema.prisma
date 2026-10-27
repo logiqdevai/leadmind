@@ -48,6 +48,7 @@ model User {
   booking_events            BookingEvent[]           @relation("BookingEventActor")
   calendar_connections      CalendarConnection[]
   reminder_assignments      ReminderAssignee[]       @relation("ReminderAssignee")
+  notifications             Notification[]
 
   @@index([email])
   @@index([phone])
@@ -108,6 +109,7 @@ model Organisation {
   bookings                  Booking[]
   booking_events            BookingEvent[]
   calendar_connections      CalendarConnection[]
+  notifications             Notification[]
 
   @@index([uuid])
   @@index([slug])
@@ -2592,4 +2594,37 @@ model CalendarConnection {
   @@unique([organisation_uuid, user_uuid, provider])
   @@index([user_uuid])
   @@map("calendar_connections")
+}
+
+enum NotificationType {
+  REMINDER_DUE
+  BOOKING_CREATED
+  BOOKING_REQUESTED
+  BOOKING_RESCHEDULED
+  BOOKING_CANCELLED
+  BOOKING_ASSIGNED
+}
+
+/// In-app notification for one member (a reminder coming due, a booking changing). Pushed live over the websocket.
+model Notification {
+  id                Int              @id @default(autoincrement())
+  uuid              String           @unique @default(uuid())
+  organisation_uuid String
+  user_uuid         String
+  type              NotificationType
+  title             String
+  body              String?          @db.Text
+  entity_type       String?
+  entity_uuid       String?
+  /// Type-specific details shown in the notification modal.
+  data              Json?
+  read_at           DateTime?
+  created_at        DateTime         @default(now())
+
+  organisation Organisation @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  user         User         @relation(fields: [user_uuid], references: [uuid], onDelete: Cascade)
+
+  @@index([user_uuid, organisation_uuid, created_at])
+  @@index([user_uuid, organisation_uuid, read_at])
+  @@map("notifications")
 }

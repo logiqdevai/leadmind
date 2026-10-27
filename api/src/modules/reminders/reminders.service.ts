@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
+import { DateTime } from 'luxon';
 import { Prisma, ReminderSource, ReminderStatus, ReminderType } from '@/generated/prisma';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { REMINDER_TRIGGER_QUEUE } from '@/core/queues/queues.constants';
@@ -114,6 +115,7 @@ export class RemindersService {
     async findAll(organisation_uuid: string, query: ListRemindersDto) {
         const now = new Date();
         const where: Prisma.ReminderWhereInput = { organisation_uuid };
+        const timezone = await this.resolveTimezone(organisation_uuid, query.timezone);
 
         if (query.contact_uuid) where.contact_uuid = query.contact_uuid;
         if (query.status) where.status = query.status;
@@ -130,8 +132,8 @@ export class RemindersService {
         }
 
         if (query.range === 'today') {
-            const end = new Date(now);
-            end.setHours(23, 59, 59, 999);
+            // End of the day in the caller's timezone, not the server's.
+            const end = DateTime.fromJSDate(now, { zone: timezone }).endOf('day').toJSDate();
             where.remind_at = { gte: now, lte: end };
             if (!query.status) where.status = ReminderStatus.PENDING;
         } else if (query.range === 'week') {
@@ -162,18 +164,53 @@ export class RemindersService {
         const limit = query.limit ?? 20;
         const skip = (page - 1) * limit;
 
-        const [data, total] = await Promise.all([
-            this.prisma.reminder.findMany({
+        const sort = query.sort ?? 'remind_at_desc';
+        let data;
+        const total = await this.prisma.reminder.count({ where });
+
+        if (sort === 'closest') {
+            // Pending reminders that need action come first, ordered by how near their time is to now
+            // (overdue and upcoming alike); finished ones follow in the same order.
+            const candidates = await this.prisma.reminder.findMany({
+                where,
+                select: { uuid: true, remind_at: true, status: true },
+            });
+            const nowMs = now.getTime();
+            const pageUuids = candidates
+                .sort(
+                    (a, b) =>
+                        Number(a.status !== ReminderStatus.PENDING) - Number(b.status !== ReminderStatus.PENDING) ||
+                        Math.abs(a.remind_at.getTime() - nowMs) - Math.abs(b.remind_at.getTime() - nowMs),
+                )
+                .slice(skip, skip + limit)
+                .map((row) => row.uuid);
+            const rows = await this.prisma.reminder.findMany({
+                where: { uuid: { in: pageUuids } },
+                include: REMINDER_INCLUDE,
+            });
+            const order = new Map(pageUuids.map((uuid, index) => [uuid, index]));
+            data = rows.sort((a, b) => (order.get(a.uuid) ?? 0) - (order.get(b.uuid) ?? 0));
+        } else {
+            data = await this.prisma.reminder.findMany({
                 where,
                 include: REMINDER_INCLUDE,
-                orderBy: { remind_at: 'desc' },
+                orderBy: { remind_at: sort === 'remind_at_asc' ? 'asc' : 'desc' },
                 skip,
                 take: limit,
-            }),
-            this.prisma.reminder.count({ where }),
-        ]);
+            });
+        }
 
         return { data: data.map(toView), total, page, limit, totalPages: Math.ceil(total / limit) };
+    }
+
+    /** The caller's IANA timezone when valid, otherwise the organisation's. */
+    private async resolveTimezone(organisation_uuid: string, requested?: string): Promise<string> {
+        if (requested && DateTime.now().setZone(requested).isValid) return requested;
+        const org = await this.prisma.organisation.findUnique({
+            where: { uuid: organisation_uuid },
+            select: { timezone: true },
+        });
+        return org?.timezone ?? 'UTC';
     }
 
     async findOne(organisation_uuid: string, uuid: string): Promise<ReminderView> {

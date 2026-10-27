@@ -76,6 +76,9 @@ export interface ListRemindersQuery {
     for_user_uuid?: string;
     status?: ReminderStatus;
     range?: "today" | "week" | "month" | "all" | "overdue";
+    sort?: "closest" | "remind_at_asc" | "remind_at_desc";
+    /** IANA timezone for the "today" range. */
+    timezone?: string;
     search?: string;
     page?: number;
     limit?: number;

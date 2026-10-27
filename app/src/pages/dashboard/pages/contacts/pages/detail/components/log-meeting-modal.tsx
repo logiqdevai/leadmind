@@ -2,12 +2,15 @@ import { useEffect, useState } from "react";
 import { Button, Input, Label, Modal, TextArea } from "@heroui/react";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
 import { QuickNoteSelect } from "./quick-note-select";
-import { useLogMeeting } from "@/features/contacts/hooks/use-contacts";
+import { useLogMeeting, useUpdateInteraction } from "@/features/contacts/hooks/use-contacts";
 import { MeetingOutcome, type LogMeetingPayload } from "@/features/contacts/interfaces/contact.interface";
 import { cn } from "@/lib/utils";
+import type { Interaction } from "@/features/contacts/interfaces/contact.interface";
 
 interface LogMeetingModalProps {
   contactUuid: string;
+  /** When set, the modal edits this logged entry instead of creating a new one. */
+  interaction?: Interaction | null;
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
 }
@@ -54,7 +57,10 @@ const QUICK_NOTES: { id: string; label: string }[] = [
   { id: "not_interested", label: "Not interested" },
 ];
 
-export function LogMeetingModal({ contactUuid, isOpen, onOpenChange }: LogMeetingModalProps) {
+export function LogMeetingModal({ contactUuid, interaction, isOpen, onOpenChange }: LogMeetingModalProps) {
+  const updateInteraction = useUpdateInteraction();
+  const isEditing = !!interaction;
+  const meta = (interaction?.metadata ?? {}) as Record<string, unknown>;
   const logMeeting = useLogMeeting();
   const [outcome, setOutcome] = useState<MeetingOutcome>(MeetingOutcome.SCHEDULED);
   const [occurredAt, setOccurredAt] = useState<string>(() => toLocalDatetimeValue(nextHalfHour()));
@@ -79,13 +85,16 @@ export function LogMeetingModal({ contactUuid, isOpen, onOpenChange }: LogMeetin
   useEffect(() => {
     if (isOpen) {
       setQuickNote(null);
-      setOutcome(MeetingOutcome.SCHEDULED);
-      setOccurredAt(toLocalDatetimeValue(nextHalfHour()));
-      setDuration("30");
-      setLocation("");
-      setNotes("");
+      setOutcome((meta.outcome as MeetingOutcome) ?? MeetingOutcome.SCHEDULED);
+      setOccurredAt(
+        toLocalDatetimeValue(interaction ? new Date((meta.occurred_at as string) ?? interaction.created_at) : nextHalfHour()),
+      );
+      setDuration(interaction ? (typeof meta.duration_minutes === "number" ? String(meta.duration_minutes) : "") : "30");
+      setLocation((meta.location as string) ?? "");
+      setNotes(interaction?.content ?? "");
     }
-  }, [isOpen]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen, interaction?.uuid]);
 
   const occurredAtValid = (() => {
     if (!occurredAt) return false;
@@ -107,8 +116,16 @@ export function LogMeetingModal({ contactUuid, isOpen, onOpenChange }: LogMeetin
     const trimmedLocation = location.trim();
     if (trimmedLocation) payload.location = trimmedLocation;
     const trimmedNotes = notes.trim();
-    if (trimmedNotes) payload.content = trimmedNotes;
+    if (trimmedNotes || isEditing) payload.content = trimmedNotes;
+    if (isEditing) payload.location = trimmedLocation;
 
+    if (interaction) {
+      updateInteraction.mutate(
+        { uuid: contactUuid, interactionUuid: interaction.uuid, payload },
+        { onSuccess: () => onOpenChange(false) },
+      );
+      return;
+    }
     logMeeting.mutate(
       { uuid: contactUuid, payload },
       {
@@ -123,7 +140,7 @@ export function LogMeetingModal({ contactUuid, isOpen, onOpenChange }: LogMeetin
         <Modal.Dialog className="sm:max-w-md">
           <Modal.CloseTrigger />
           <Modal.Header>
-            <Modal.Heading>Log meeting</Modal.Heading>
+            <Modal.Heading>{isEditing ? "Edit meeting" : "Log meeting"}</Modal.Heading>
           </Modal.Header>
           <Modal.Body className="space-y-4">
             <div className="flex flex-col gap-1.5">
@@ -202,10 +219,10 @@ export function LogMeetingModal({ contactUuid, isOpen, onOpenChange }: LogMeetin
               size="sm"
               variant="secondary"
               isDisabled={!occurredAtValid}
-              isPending={logMeeting.isPending}
+              isPending={logMeeting.isPending || updateInteraction.isPending}
               onPress={handleConfirm}
             >
-              Save meeting
+              {isEditing ? "Save changes" : "Save meeting"}
             </ActionButtonWithPending>
           </Modal.Footer>
         </Modal.Dialog>

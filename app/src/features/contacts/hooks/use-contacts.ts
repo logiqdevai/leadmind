@@ -18,6 +18,8 @@ import {
     listContactThreads,
     listContacts,
     logCall,
+    updateInteraction,
+    deleteInteraction,
     logEmail,
     logMeeting,
     logSms,
@@ -46,6 +48,7 @@ import type {
     LeadStatus,
     ListContactsQuery,
     LogCallPayload,
+    UpdateInteractionPayload,
     LogEmailPayload,
     LogMeetingPayload,
     LogSmsPayload,
@@ -637,6 +640,40 @@ export function useAiDraftMessage() {
                 duration: 3000,
                 variant: "error",
             });
+        },
+    });
+}
+
+export function useUpdateInteraction() {
+    const qc = useQueryClient();
+    return useMutation({
+        mutationFn: (vars: { uuid: string; interactionUuid: string; payload: UpdateInteractionPayload }) =>
+            updateInteraction(vars.uuid, vars.interactionUuid, vars.payload),
+        onSuccess: (_data, vars) => {
+            qc.invalidateQueries({ queryKey: contactsQueryKeys.interactions(vars.uuid) });
+            qc.invalidateQueries({ queryKey: contactsQueryKeys.detail(vars.uuid) });
+            qc.invalidateQueries({ queryKey: contactListQueryKeys.all });
+            toast({ title: "Activity updated", duration: 1500 });
+        },
+        onError: (error: Error) => {
+            toast({ title: "Could not update activity", description: error.message, duration: 3000, variant: "error" });
+        },
+    });
+}
+
+export function useDeleteInteraction() {
+    const qc = useQueryClient();
+    return useMutation({
+        mutationFn: (vars: { uuid: string; interactionUuid: string }) =>
+            deleteInteraction(vars.uuid, vars.interactionUuid),
+        onSuccess: (_data, vars) => {
+            qc.invalidateQueries({ queryKey: contactsQueryKeys.interactions(vars.uuid) });
+            qc.invalidateQueries({ queryKey: contactsQueryKeys.detail(vars.uuid) });
+            qc.invalidateQueries({ queryKey: contactListQueryKeys.all });
+            toast({ title: "Activity deleted", duration: 1500 });
+        },
+        onError: (error: Error) => {
+            toast({ title: "Could not delete activity", description: error.message, duration: 3000, variant: "error" });
         },
     });
 }

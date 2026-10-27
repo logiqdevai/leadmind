@@ -1,5 +1,5 @@
-import React, { useMemo } from "react";
-import { Chip } from "@heroui/react";
+import React, { useMemo, useState } from "react";
+import { Chip, Dropdown } from "@heroui/react";
 import {
     ArrowRight,
     CalendarDays,
@@ -18,6 +18,9 @@ import {
     CalendarClock,
     CalendarCheck,
     CalendarX,
+    MoreHorizontal,
+    Pencil,
+    Trash2,
 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import {
@@ -32,7 +35,12 @@ import {
     type MessageMetadata,
 } from "@/features/contacts/interfaces/contact.interface";
 import { isLeadStatus } from "@/features/contacts/constants/contacts.constants";
-import { useContactInteractions } from "@/features/contacts/hooks/use-contacts";
+import { useContactInteractions, useDeleteInteraction } from "@/features/contacts/hooks/use-contacts";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
+import { LogCallModal } from "@/pages/dashboard/pages/contacts/pages/detail/components/log-call-modal";
+import { LogEmailModal } from "@/pages/dashboard/pages/contacts/pages/detail/components/log-email-modal";
+import { LogMeetingModal } from "@/pages/dashboard/pages/contacts/pages/detail/components/log-meeting-modal";
+import { LogSmsModal } from "@/pages/dashboard/pages/contacts/pages/detail/components/log-sms-modal";
 import { StatusChip } from "@/pages/dashboard/pages/leads/components/badges";
 import { cn } from "@/lib/utils";
 
@@ -243,6 +251,16 @@ function parseStatusChange(raw: Interaction["status_change"]): InteractionStatus
     return { from, to };
 }
 
+const EDITABLE_TYPES: InteractionType[] = [
+    InteractionType.CALL,
+    InteractionType.MEETING,
+    InteractionType.EMAIL,
+    InteractionType.SMS,
+];
+
+/** Only entries logged by hand can be changed; system events and sent messages are a record of what happened. */
+const isEditable = (i: Interaction): boolean => EDITABLE_TYPES.includes(i.type) && !i.outreach_message_uuid;
+
 interface InteractionTimelineProps {
     contactUuid: string;
     onNavigateToOutreach?: (outreachUuid: string) => void;
@@ -250,6 +268,12 @@ interface InteractionTimelineProps {
 
 export function InteractionTimeline({ contactUuid, onNavigateToOutreach }: InteractionTimelineProps) {
     const { data: interactions, isLoading } = useContactInteractions(contactUuid);
+    const deleteInteraction = useDeleteInteraction();
+    const [editing, setEditing] = useState<Interaction | null>(null);
+    const [deleting, setDeleting] = useState<Interaction | null>(null);
+    const closeEditor = (open: boolean) => {
+        if (!open) setEditing(null);
+    };
 
     const sorted = useMemo(() => {
         if (!interactions) return [];
@@ -281,6 +305,7 @@ export function InteractionTimeline({ contactUuid, onNavigateToOutreach }: Inter
     }
 
     return (
+        <>
         <ol className="flex flex-col">
             {sorted.map((interaction, idx) => {
                 const Icon = ICONS[interaction.type] ?? StickyNote;
@@ -342,6 +367,33 @@ export function InteractionTimeline({ contactUuid, onNavigateToOutreach }: Inter
                                         addSuffix: true,
                                     })}
                                 </span>
+                                {isEditable(interaction) ? (
+                                    <Dropdown>
+                                        <Dropdown.Trigger
+                                            aria-label="Activity actions"
+                                            className="ml-auto rounded-md p-1 text-muted outline-none transition-colors hover:bg-surface-secondary hover:text-foreground"
+                                        >
+                                            <MoreHorizontal className="size-4" />
+                                        </Dropdown.Trigger>
+                                        <Dropdown.Popover placement="bottom end">
+                                            <Dropdown.Menu
+                                                onAction={(key) => {
+                                                    if (key === "edit") setEditing(interaction);
+                                                    if (key === "delete") setDeleting(interaction);
+                                                }}
+                                            >
+                                                <Dropdown.Item id="edit" textValue="Edit">
+                                                    <Pencil className="size-4" />
+                                                    Edit
+                                                </Dropdown.Item>
+                                                <Dropdown.Item id="delete" textValue="Delete" className="text-danger">
+                                                    <Trash2 className="size-4" />
+                                                    Delete
+                                                </Dropdown.Item>
+                                            </Dropdown.Menu>
+                                        </Dropdown.Popover>
+                                    </Dropdown>
+                                ) : null}
                             </div>
                             {interaction.type === InteractionType.STATUS_CHANGE ? (
                                 <>
@@ -475,5 +527,45 @@ export function InteractionTimeline({ contactUuid, onNavigateToOutreach }: Inter
                 );
             })}
         </ol>
+
+        <LogCallModal
+            contactUuid={contactUuid}
+            interaction={editing?.type === InteractionType.CALL ? editing : null}
+            isOpen={editing?.type === InteractionType.CALL}
+            onOpenChange={closeEditor}
+        />
+        <LogMeetingModal
+            contactUuid={contactUuid}
+            interaction={editing?.type === InteractionType.MEETING ? editing : null}
+            isOpen={editing?.type === InteractionType.MEETING}
+            onOpenChange={closeEditor}
+        />
+        <LogEmailModal
+            contactUuid={contactUuid}
+            interaction={editing?.type === InteractionType.EMAIL ? editing : null}
+            isOpen={editing?.type === InteractionType.EMAIL}
+            onOpenChange={closeEditor}
+        />
+        <LogSmsModal
+            contactUuid={contactUuid}
+            interaction={editing?.type === InteractionType.SMS ? editing : null}
+            isOpen={editing?.type === InteractionType.SMS}
+            onOpenChange={closeEditor}
+        />
+        <ConfirmDialog
+            isOpen={!!deleting}
+            onOpenChange={(open) => !open && setDeleting(null)}
+            title={`Delete this ${deleting ? BADGE_LABEL[deleting.type].toLowerCase() : "activity"}?`}
+            description="It will be removed from the contact's activity. This can't be undone."
+            confirmLabel="Delete"
+            variant="danger"
+            isPending={deleteInteraction.isPending}
+            onConfirm={async () => {
+                if (!deleting) return;
+                await deleteInteraction.mutateAsync({ uuid: contactUuid, interactionUuid: deleting.uuid }).catch(() => undefined);
+                setDeleting(null);
+            }}
+        />
+        </>
     );
 }

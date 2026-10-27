@@ -15,10 +15,12 @@ import {
     BookingSource,
     BookingStatus,
     InteractionType,
+    NotificationType,
     Prisma,
 } from '@/generated/prisma';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { NotificationsGateway } from '@/gateways/notifications.gateway';
+import { NotificationsService } from '@/modules/notifications/notifications.service';
 import { generateManageToken } from '@/modules/booking-links/utils/booking-url.util';
 import { BookingActor, isOrganisationAdmin } from './interfaces/booking.interface';
 import { ACTIVE_BOOKING_STATUSES, BookingErrorCodes } from './constants/booking.constants';
@@ -91,6 +93,7 @@ export class BookingsService {
         private readonly calendarConnections: CalendarConnectionsService,
         private readonly gateway: NotificationsGateway,
         private readonly teamReminders: BookingTeamReminderService,
+        private readonly inAppNotifications: NotificationsService,
     ) {}
 
     // --- Queries ---
@@ -363,6 +366,7 @@ export class BookingsService {
         await this.safely(() => this.calendarSync.enqueue(updated), 'calendar sync');
         await this.teamReminders.syncSafely(uuid, 'updated');
         this.emit(updated.assigned_user_uuid, 'booking.assigned', updated);
+        await this.notifyAssignee(updated, 'ASSIGNED', actor.uuid);
         return this.findOne(actor.organisation_uuid, uuid);
     }
 
@@ -549,6 +553,7 @@ export class BookingsService {
                 // Independent of email notifications: the team reminder follows the new time either way.
                 await this.teamReminders.syncSafely(moved.uuid, 'rescheduled');
                 this.emit(moved.assigned_user_uuid, 'booking.rescheduled', moved);
+                await this.notifyAssignee(moved, 'RESCHEDULED', options.actor.user_uuid);
                 return moved;
             } catch (error) {
                 if (error instanceof SlotTakenError) continue;
@@ -587,6 +592,7 @@ export class BookingsService {
         }, 'cancellation side effects');
         await this.teamReminders.syncSafely(cancelled.uuid, 'cancelled');
         this.emit(cancelled.assigned_user_uuid, 'booking.cancelled', cancelled);
+        await this.notifyAssignee(cancelled, 'CANCELLED', options.actor.user_uuid);
         return cancelled;
     }
 
@@ -604,6 +610,7 @@ export class BookingsService {
         // Pending requests get their reminder once confirmed (setStatus); this is a no-op for them.
         await this.teamReminders.syncSafely(booking.uuid, 'created');
         this.emit(booking.assigned_user_uuid, booking.status === BookingStatus.PENDING ? 'booking.requested' : 'booking.created', booking);
+        await this.notifyAssignee(booking, booking.status === BookingStatus.PENDING ? 'REQUESTED' : 'CREATED', booking.created_by_user_uuid);
     }
 
     /**
@@ -729,7 +736,46 @@ export class BookingsService {
         const { manage_token: _secret, ...payload } = booking;
         this.gateway.emitToUser(user_uuid, event, payload);
     }
+
+    /** Persistent in-app alert for the assignee; skipped when they made the change themselves. */
+    private async notifyAssignee(booking: Booking, kind: BookingNotificationKind, actor_user_uuid?: string | null) {
+        const user_uuid = booking.assigned_user_uuid;
+        if (!user_uuid || user_uuid === actor_user_uuid) return;
+        const copy = BOOKING_NOTIFICATION_COPY[kind];
+        await this.inAppNotifications.notifyUsersSafely([user_uuid], {
+            organisation_uuid: booking.organisation_uuid,
+            type: copy.type,
+            title: `${copy.title}: ${booking.invitee_name}`,
+            body: booking.cancellation_reason && kind === 'CANCELLED' ? booking.cancellation_reason : null,
+            entity_type: 'booking',
+            entity_uuid: booking.uuid,
+            data: {
+                booking_status: booking.status,
+                start_at: booking.start_at.toISOString(),
+                end_at: booking.end_at.toISOString(),
+                duration_minutes: booking.duration_minutes,
+                invitee_name: booking.invitee_name,
+                invitee_email: booking.invitee_email,
+                invitee_phone: booking.invitee_phone,
+                invitee_notes: booking.invitee_notes,
+                location_type: booking.location_type,
+                location_value: booking.location_value,
+                meeting_url: booking.meeting_url,
+                contact_uuid: booking.contact_uuid,
+            },
+        });
+    }
 }
+
+type BookingNotificationKind = 'CREATED' | 'REQUESTED' | 'RESCHEDULED' | 'CANCELLED' | 'ASSIGNED';
+
+const BOOKING_NOTIFICATION_COPY: Record<BookingNotificationKind, { type: NotificationType; title: string }> = {
+    CREATED: { type: NotificationType.BOOKING_CREATED, title: 'New booking' },
+    REQUESTED: { type: NotificationType.BOOKING_REQUESTED, title: 'Booking request' },
+    RESCHEDULED: { type: NotificationType.BOOKING_RESCHEDULED, title: 'Booking rescheduled' },
+    CANCELLED: { type: NotificationType.BOOKING_CANCELLED, title: 'Booking cancelled' },
+    ASSIGNED: { type: NotificationType.BOOKING_ASSIGNED, title: 'Booking assigned to you' },
+};
 
 function creationSummary(input: PlaceBookingInput): string {
     if (input.source === BookingSource.MANUAL) return 'Booking created by a team member';

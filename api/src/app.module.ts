@@ -29,6 +29,7 @@ import { WorkersModule } from './workers/workers.module';
 import { AdminModule } from './modules/admin/admin.module';
 import { IntegrationsModule } from './modules/integrations/integrations.module';
 import { RemindersModule } from './modules/reminders/reminders.module';
+import { NotificationsModule } from './modules/notifications/notifications.module';
 import { BulkJobsModule } from './modules/bulk-jobs/bulk-jobs.module';
 import { FormsModule } from './modules/forms/forms.module';
 import { ContactListsModule } from './modules/contact-lists/contact-lists.module';
@@ -105,6 +106,7 @@ import { BookingsModule } from './modules/bookings/bookings.module';
     AdminModule,
     IntegrationsModule,
     RemindersModule,
+    NotificationsModule,
     BulkJobsModule,
     OpenAiBatchJobsModule,
     FormsModule,

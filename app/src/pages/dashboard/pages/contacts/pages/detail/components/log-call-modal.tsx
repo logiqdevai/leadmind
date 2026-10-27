@@ -7,11 +7,14 @@ import {
   CallOutcome,
   type LogCallPayload,
 } from "@/features/contacts/interfaces/contact.interface";
-import { useLogCall } from "@/features/contacts/hooks/use-contacts";
+import { useLogCall, useUpdateInteraction } from "@/features/contacts/hooks/use-contacts";
 import { cn } from "@/lib/utils";
+import type { Interaction } from "@/features/contacts/interfaces/contact.interface";
 
 interface LogCallModalProps {
   contactUuid: string;
+  /** When set, the modal edits this logged entry instead of creating a new one. */
+  interaction?: Interaction | null;
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
 }
@@ -43,7 +46,10 @@ function toLocalDatetimeValue(d: Date): string {
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
 
-export function LogCallModal({ contactUuid, isOpen, onOpenChange }: LogCallModalProps) {
+export function LogCallModal({ contactUuid, interaction, isOpen, onOpenChange }: LogCallModalProps) {
+  const updateInteraction = useUpdateInteraction();
+  const isEditing = !!interaction;
+  const meta = (interaction?.metadata ?? {}) as Record<string, unknown>;
   const logCall = useLogCall();
   const [outcome, setOutcome] = useState<CallOutcome>(CallOutcome.CONNECTED);
   const [direction, setDirection] = useState<CallDirection>(CallDirection.OUTBOUND);
@@ -68,13 +74,14 @@ export function LogCallModal({ contactUuid, isOpen, onOpenChange }: LogCallModal
   useEffect(() => {
     if (isOpen) {
       setQuickNote(null);
-      setOutcome(CallOutcome.CONNECTED);
-      setDirection(CallDirection.OUTBOUND);
-      setDuration("");
-      setOccurredAt(toLocalDatetimeValue(new Date()));
-      setNotes("");
+      setOutcome((meta.outcome as CallOutcome) ?? CallOutcome.CONNECTED);
+      setDirection((meta.direction as CallDirection) ?? CallDirection.OUTBOUND);
+      setDuration(typeof meta.duration_minutes === "number" ? String(meta.duration_minutes) : "");
+      setOccurredAt(toLocalDatetimeValue(new Date((meta.occurred_at as string) ?? interaction?.created_at ?? Date.now())));
+      setNotes(interaction?.content ?? "");
     }
-  }, [isOpen]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen, interaction?.uuid]);
 
   const handleConfirm = () => {
     const payload: LogCallPayload = {
@@ -92,8 +99,15 @@ export function LogCallModal({ contactUuid, isOpen, onOpenChange }: LogCallModal
       }
     }
     const trimmedNotes = notes.trim();
-    if (trimmedNotes) payload.content = trimmedNotes;
+    if (trimmedNotes || isEditing) payload.content = trimmedNotes;
 
+    if (interaction) {
+      updateInteraction.mutate(
+        { uuid: contactUuid, interactionUuid: interaction.uuid, payload },
+        { onSuccess: () => onOpenChange(false) },
+      );
+      return;
+    }
     logCall.mutate(
       { uuid: contactUuid, payload },
       {
@@ -110,7 +124,7 @@ export function LogCallModal({ contactUuid, isOpen, onOpenChange }: LogCallModal
         <Modal.Dialog className="sm:max-w-md">
           <Modal.CloseTrigger />
           <Modal.Header>
-            <Modal.Heading>Log call</Modal.Heading>
+            <Modal.Heading>{isEditing ? "Edit call" : "Log call"}</Modal.Heading>
           </Modal.Header>
           <Modal.Body className="space-y-4">
             <div className="flex flex-col gap-1.5">
@@ -200,11 +214,11 @@ export function LogCallModal({ contactUuid, isOpen, onOpenChange }: LogCallModal
             <ActionButtonWithPending
               size="sm"
               variant="secondary"
-              isDisabled={logCall.isPending}
-              isPending={logCall.isPending}
+              isDisabled={logCall.isPending || updateInteraction.isPending}
+              isPending={logCall.isPending || updateInteraction.isPending}
               onPress={handleConfirm}
             >
-              Save call
+              {isEditing ? "Save changes" : "Save call"}
             </ActionButtonWithPending>
           </Modal.Footer>
         </Modal.Dialog>

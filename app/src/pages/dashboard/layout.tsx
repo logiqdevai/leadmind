@@ -11,12 +11,15 @@ import {
   useDashboardNavbarSlots,
 } from "@/components/providers/dashboard-navbar-provider";
 import { useReminderNotifications } from "@/features/reminders/hooks/use-reminder-notifications";
+import { useNotificationRealtime } from "@/features/notifications/hooks/use-notification-realtime";
+import { NotificationDetailModal } from "@/components/notifications/notification-detail-modal";
 import { GoalCelebrationsHost } from "@/pages/dashboard/components/goal-celebrations-host";
 
 function DashboardShell() {
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const { setSubnavEl } = useDashboardNavbarSlots();
   useReminderNotifications();
+  useNotificationRealtime();
   const closeMobileNav = useCallback(() => setIsMobileNavOpen(false), []);
 
   return (
@@ -32,6 +35,7 @@ function DashboardShell() {
       </div>
 
       <GoalCelebrationsHost />
+      <NotificationDetailModal />
       <MobileNavDrawer isOpen={isMobileNavOpen} onClose={closeMobileNav}>
         <SidebarContent collapsed={false} onNavigate={closeMobileNav} />
         <div className="mt-4 pt-2 border-t border-border">

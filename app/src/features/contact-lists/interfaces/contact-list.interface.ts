@@ -59,6 +59,9 @@ export interface ListMember extends Contact {
     member_uuid: string;
     added_at: string;
     list_status: LeadStatus | null;
+    /** Calls you logged for this contact. */
+    call_count: number;
+    last_called_at: string | null;
 }
 
 export interface PaginatedListMembers {

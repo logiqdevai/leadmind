@@ -24,6 +24,9 @@ export const WEBSOCKET_EVENTS = {
         DELETED: 'reminder.deleted',
         TRIGGERED: 'reminder.triggered',
     },
+    NOTIFICATION: {
+        CREATED: 'notification.created',
+    },
     FORM: {
         CREATED: 'form.created',
         UPDATED: 'form.updated',

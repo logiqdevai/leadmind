@@ -18,6 +18,7 @@ import { SendingEngineModule } from '@/modules/sending-engine/sending-engine.mod
 import { SendingCapacityModule } from '@/modules/sending-capacity/sending-capacity.module';
 import { OrganisationsModule } from '@/modules/organisations/organisations.module';
 import { RemindersModule } from '@/modules/reminders/reminders.module';
+import { NotificationsModule } from '@/modules/notifications/notifications.module';
 import { ContactListsModule } from '@/modules/contact-lists/contact-lists.module';
 import { BookingsModule } from '@/modules/bookings/bookings.module';
 import {
@@ -64,6 +65,7 @@ import { BookingCalendarSyncWorker } from './booking-calendar-sync.worker';
     SendingCapacityModule,
     OrganisationsModule,
     RemindersModule,
+    NotificationsModule,
     ContactListsModule,
     BookingsModule,
     BullModule.registerQueue(

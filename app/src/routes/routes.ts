@@ -54,6 +54,7 @@ export const Routes = {
         sequences_new: "/dashboard/sequences/new",
         sequences_edit: "/dashboard/sequences/:uuid/edit",
         reminders: "/dashboard/reminders",
+        notifications: "/dashboard/notifications",
         calendar: "/dashboard/calendar",
         booking_pages: "/dashboard/booking-pages",
         booking_pages_detail: "/dashboard/booking-pages/:uuid",

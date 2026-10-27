@@ -107,10 +107,11 @@ export class ContactListsController {
     @ApiResponse({ status: 404, description: 'Contact list not found' })
     findMembers(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
+        @CurrentUser('uuid') user_uuid: string,
         @Param('uuid') uuid: string,
         @Query() query: ListContactListMembersDto,
     ) {
-        return this.contactListsService.findMembers(organisation_uuid, uuid, query);
+        return this.contactListsService.findMembers(organisation_uuid, uuid, query, user_uuid);
     }
 
     @Get(':uuid/contacts/export')

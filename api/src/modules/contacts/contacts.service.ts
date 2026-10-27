@@ -72,9 +72,10 @@ export type ContactListFilterParams = Pick<
     | 'profile_field'
     | 'has_profile_field'
 >;
-import { LogCallDto } from './dto/log-call.dto';
+import { CallOutcome, LogCallDto } from './dto/log-call.dto';
+import { UpdateInteractionDto } from './dto/update-interaction.dto';
 import { LogEmailDto } from './dto/log-email.dto';
-import { LogMeetingDto } from './dto/log-meeting.dto';
+import { LogMeetingDto, MeetingOutcome } from './dto/log-meeting.dto';
 import { LogSmsDto } from './dto/log-sms.dto';
 import { ReplyToContactDto } from './dto/reply-to-contact.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
@@ -1201,6 +1202,79 @@ export class ContactsService {
                 metadata,
             },
         });
+    }
+
+    /** Only entries a member logged by hand can be edited or deleted; system-recorded events and sent messages can't. */
+    private async requireManualInteraction(organisation_uuid: string, contact_uuid: string, interaction_uuid: string) {
+        const interaction = await this.prisma.interaction.findFirst({
+            where: { uuid: interaction_uuid, contact_uuid, organisation_uuid },
+        });
+        if (!interaction) throw new NotFoundException(`Interaction ${interaction_uuid} not found`);
+        const manualTypes: InteractionType[] = [
+            InteractionType.CALL,
+            InteractionType.MEETING,
+            InteractionType.EMAIL,
+            InteractionType.SMS,
+            InteractionType.NOTE,
+        ];
+        if (!manualTypes.includes(interaction.type) || interaction.outreach_message_uuid) {
+            throw new BadRequestException('Only manually logged activity can be changed');
+        }
+        return interaction;
+    }
+
+    async updateInteraction(
+        organisation_uuid: string,
+        contact_uuid: string,
+        interaction_uuid: string,
+        dto: UpdateInteractionDto,
+    ): Promise<Interaction> {
+        const interaction = await this.requireManualInteraction(organisation_uuid, contact_uuid, interaction_uuid);
+        const type = interaction.type;
+
+        const allowed: Record<string, (keyof UpdateInteractionDto)[]> = {
+            [InteractionType.CALL]: ['outcome', 'direction', 'duration_minutes', 'occurred_at', 'content'],
+            [InteractionType.MEETING]: ['outcome', 'duration_minutes', 'occurred_at', 'location', 'content'],
+            [InteractionType.EMAIL]: ['direction', 'subject', 'occurred_at', 'content'],
+            [InteractionType.SMS]: ['direction', 'occurred_at', 'content'],
+            [InteractionType.NOTE]: ['content'],
+        };
+        const rejected = (Object.keys(dto) as (keyof UpdateInteractionDto)[]).filter(
+            (key) => dto[key] !== undefined && !allowed[type].includes(key),
+        );
+        if (rejected.length) {
+            throw new BadRequestException(`${rejected.join(', ')} cannot be set on a ${type.toLowerCase()}`);
+        }
+        if (dto.outcome !== undefined) {
+            const valid = type === InteractionType.CALL ? CallOutcome : MeetingOutcome;
+            if (!(Object.values(valid) as string[]).includes(dto.outcome)) {
+                throw new BadRequestException(`Invalid ${type.toLowerCase()} outcome`);
+            }
+        }
+
+        const current = (interaction.metadata as Record<string, unknown> | null) ?? {};
+        const metadata: Record<string, unknown> = { ...current };
+        if (dto.outcome !== undefined) metadata.outcome = dto.outcome;
+        if (dto.direction !== undefined) metadata.direction = dto.direction;
+        if (dto.duration_minutes !== undefined) metadata.duration_minutes = dto.duration_minutes;
+        if (dto.occurred_at !== undefined) metadata.occurred_at = dto.occurred_at;
+        for (const key of ['location', 'subject'] as const) {
+            if (dto[key] === undefined) continue;
+            const value = dto[key]!.trim();
+            if (value) metadata[key] = value;
+            else delete metadata[key];
+        }
+
+        const data: Prisma.InteractionUpdateInput = {};
+        if (type !== InteractionType.NOTE) data.metadata = metadata as Prisma.InputJsonValue;
+        if (dto.content !== undefined) data.content = dto.content.trim() || null;
+        return this.prisma.interaction.update({ where: { uuid: interaction_uuid }, data });
+    }
+
+    async removeInteraction(organisation_uuid: string, contact_uuid: string, interaction_uuid: string) {
+        await this.requireManualInteraction(organisation_uuid, contact_uuid, interaction_uuid);
+        await this.prisma.interaction.delete({ where: { uuid: interaction_uuid } });
+        return { uuid: interaction_uuid };
     }
 
     /**

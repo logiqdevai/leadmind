@@ -59,6 +59,7 @@ export const ApiRoutes = {
         reply: (uuid: string) => `/contacts/${uuid}/reply`,
         log_sms: (uuid: string) => `/contacts/${uuid}/sms`,
         interactions: (uuid: string) => `/contacts/${uuid}/interactions`,
+        interaction: (uuid: string, interactionUuid: string) => `/contacts/${uuid}/interactions/${interactionUuid}`,
         score: (uuid: string) => `/contacts/${uuid}/score`,
         draft_messages: (uuid: string) => `/contacts/${uuid}/draft-messages`,
         ai_draft_message: "/contacts/ai-draft-message",
@@ -177,6 +178,14 @@ export const ApiRoutes = {
         system_status: "/admin/system-status",
         email_validation_backfill: "/admin/email-validation-backfill",
         website_validation_backfill: "/admin/website-validation-backfill",
+    },
+    notifications: {
+        prefix: "/notifications",
+        list: "/notifications",
+        unread_count: "/notifications/unread-count",
+        read_all: "/notifications/read-all",
+        read: (uuid: string) => `/notifications/${uuid}/read`,
+        remove: (uuid: string) => `/notifications/${uuid}`,
     },
     reminders: {
         prefix: "/reminders",

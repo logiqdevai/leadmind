@@ -38,6 +38,7 @@ import { BulkTriggerScoreDto } from './dto/bulk-trigger-score.dto';
 import { CreateContactDto } from './dto/create-contact.dto';
 import { ListContactsDto } from './dto/list-contacts.dto';
 import { LogCallDto } from './dto/log-call.dto';
+import { UpdateInteractionDto } from './dto/update-interaction.dto';
 import { LogEmailDto } from './dto/log-email.dto';
 import { LogMeetingDto } from './dto/log-meeting.dto';
 import { LogSmsDto } from './dto/log-sms.dto';
@@ -394,6 +395,35 @@ export class ContactsController {
         @Body() dto: LogEmailDto,
     ) {
         return this.contactsService.logEmail(organisation_uuid, uuid, dto);
+    }
+
+    @ActivityLog({ entityType: ActivityEntityType.CONTACT, action: ActivityAction.UPDATED, entityUuidFrom: 'params.uuid' })
+    @Put(':uuid/interactions/:interactionUuid')
+    @ApiOperation({ summary: 'Edit a manually logged call, meeting, email or SMS' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 400, description: 'Not a manually logged interaction' })
+    @ApiResponse({ status: 404, description: 'Interaction not found' })
+    updateInteraction(
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
+        @Param('uuid') uuid: string,
+        @Param('interactionUuid') interactionUuid: string,
+        @Body() dto: UpdateInteractionDto,
+    ) {
+        return this.contactsService.updateInteraction(organisation_uuid, uuid, interactionUuid, dto);
+    }
+
+    @ActivityLog({ entityType: ActivityEntityType.CONTACT, action: ActivityAction.UPDATED, entityUuidFrom: 'params.uuid' })
+    @Delete(':uuid/interactions/:interactionUuid')
+    @ApiOperation({ summary: 'Delete a manually logged call, meeting, email or SMS' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 400, description: 'Not a manually logged interaction' })
+    @ApiResponse({ status: 404, description: 'Interaction not found' })
+    removeInteraction(
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
+        @Param('uuid') uuid: string,
+        @Param('interactionUuid') interactionUuid: string,
+    ) {
+        return this.contactsService.removeInteraction(organisation_uuid, uuid, interactionUuid);
     }
 
     @ActivityLog({ entityType: ActivityEntityType.OUTREACH_MESSAGE, action: ActivityAction.MESSAGE_SENT, entityUuidFrom: 'params.uuid' })

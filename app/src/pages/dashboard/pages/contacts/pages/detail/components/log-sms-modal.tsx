@@ -5,11 +5,14 @@ import {
   CallDirection,
   type LogSmsPayload,
 } from "@/features/contacts/interfaces/contact.interface";
-import { useLogSms } from "@/features/contacts/hooks/use-contacts";
+import { useLogSms, useUpdateInteraction } from "@/features/contacts/hooks/use-contacts";
 import { cn } from "@/lib/utils";
+import type { Interaction } from "@/features/contacts/interfaces/contact.interface";
 
 interface LogSmsModalProps {
   contactUuid: string;
+  /** When set, the modal edits this logged entry instead of creating a new one. */
+  interaction?: Interaction | null;
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
 }
@@ -24,7 +27,10 @@ function toLocalDatetimeValue(d: Date): string {
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
 
-export function LogSmsModal({ contactUuid, isOpen, onOpenChange }: LogSmsModalProps) {
+export function LogSmsModal({ contactUuid, interaction, isOpen, onOpenChange }: LogSmsModalProps) {
+  const updateInteraction = useUpdateInteraction();
+  const isEditing = !!interaction;
+  const meta = (interaction?.metadata ?? {}) as Record<string, unknown>;
   const logSms = useLogSms();
   const [direction, setDirection] = useState<CallDirection>(CallDirection.OUTBOUND);
   const [occurredAt, setOccurredAt] = useState<string>(() => toLocalDatetimeValue(new Date()));
@@ -32,11 +38,12 @@ export function LogSmsModal({ contactUuid, isOpen, onOpenChange }: LogSmsModalPr
 
   useEffect(() => {
     if (isOpen) {
-      setDirection(CallDirection.OUTBOUND);
-      setOccurredAt(toLocalDatetimeValue(new Date()));
-      setContent("");
+      setDirection((meta.direction as CallDirection) ?? CallDirection.OUTBOUND);
+      setOccurredAt(toLocalDatetimeValue(new Date((meta.occurred_at as string) ?? interaction?.created_at ?? Date.now())));
+      setContent(interaction?.content ?? "");
     }
-  }, [isOpen]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen, interaction?.uuid]);
 
   const handleConfirm = () => {
     const payload: LogSmsPayload = { direction };
@@ -47,8 +54,15 @@ export function LogSmsModal({ contactUuid, isOpen, onOpenChange }: LogSmsModalPr
       }
     }
     const trimmedContent = content.trim();
-    if (trimmedContent) payload.content = trimmedContent;
+    if (trimmedContent || isEditing) payload.content = trimmedContent;
 
+    if (interaction) {
+      updateInteraction.mutate(
+        { uuid: contactUuid, interactionUuid: interaction.uuid, payload },
+        { onSuccess: () => onOpenChange(false) },
+      );
+      return;
+    }
     logSms.mutate(
       { uuid: contactUuid, payload },
       {
@@ -63,7 +77,7 @@ export function LogSmsModal({ contactUuid, isOpen, onOpenChange }: LogSmsModalPr
         <Modal.Dialog className="sm:max-w-md">
           <Modal.CloseTrigger />
           <Modal.Header>
-            <Modal.Heading>Log SMS</Modal.Heading>
+            <Modal.Heading>{isEditing ? "Edit SMS" : "Log SMS"}</Modal.Heading>
           </Modal.Header>
           <Modal.Body className="space-y-4">
             <div className="flex flex-col gap-1.5">
@@ -115,11 +129,11 @@ export function LogSmsModal({ contactUuid, isOpen, onOpenChange }: LogSmsModalPr
             <ActionButtonWithPending
               size="sm"
               variant="secondary"
-              isDisabled={logSms.isPending}
-              isPending={logSms.isPending}
+              isDisabled={logSms.isPending || updateInteraction.isPending}
+              isPending={logSms.isPending || updateInteraction.isPending}
               onPress={handleConfirm}
             >
-              Save SMS
+              {isEditing ? "Save changes" : "Save SMS"}
             </ActionButtonWithPending>
           </Modal.Footer>
         </Modal.Dialog>

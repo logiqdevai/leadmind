@@ -8,6 +8,7 @@ import { ContactsModule } from '@/modules/contacts/contacts.module';
 import { OutreachModule } from '@/modules/outreach/outreach.module';
 import { BookingLinksModule } from '@/modules/booking-links/booking-links.module';
 import { RemindersModule } from '@/modules/reminders/reminders.module';
+import { NotificationsModule } from '@/modules/notifications/notifications.module';
 import { RateLimitGuard } from '@/shared/guards/rate-limit.guard';
 import { BookingsController } from './bookings.controller';
 import { BookingsService } from './bookings.service';
@@ -34,6 +35,7 @@ import { PublicBookingService } from './services/public-booking.service';
         OutreachModule,
         BookingLinksModule,
         RemindersModule,
+        NotificationsModule,
         BullModule.registerQueue({ name: BOOKING_NOTIFICATION_QUEUE }, { name: BOOKING_CALENDAR_SYNC_QUEUE }),
     ],
     controllers: [

@@ -3,7 +3,7 @@ import type { Selection } from "@heroui/react";
 import { Button, Checkbox, ListBox, Select, Table } from "@heroui/react";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { PageSizeSelect } from "@/components/ui/page-size-select";
-import { Trash2 } from "lucide-react";
+import { PhoneCall, Trash2 } from "lucide-react";
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { TablePagination } from "@/components/ui/table-pagination";
 import { isTableNavInteractiveCell, tableNavInteractiveCellClassName, tableNavRowClassName } from "@/components/ui/table-row-link";
@@ -103,11 +103,26 @@ export function ListMembersTable({
                 cell: (info) => {
                     const contact = info.row.original;
                     return (
-                        <ContactTableNameCell
-                            contactUuid={contact.uuid}
-                            name={info.getValue()}
-                            onOpen={onContactOpen}
-                        />
+                        <div className="flex items-center gap-2">
+                            <ContactTableNameCell
+                                contactUuid={contact.uuid}
+                                name={info.getValue()}
+                                onOpen={onContactOpen}
+                            />
+                            {contact.call_count > 0 ? (
+                                <span
+                                    className="inline-flex shrink-0 items-center gap-1 rounded-full bg-success/10 px-1.5 py-0.5 text-[11px] font-medium text-success"
+                                    title={
+                                        contact.last_called_at
+                                            ? `Last called ${new Date(contact.last_called_at).toLocaleString()}`
+                                            : undefined
+                                    }
+                                >
+                                    <PhoneCall className="size-3" />
+                                    Called{contact.call_count > 1 ? ` ×${contact.call_count}` : ""}
+                                </span>
+                            ) : null}
+                        </div>
                     );
                 },
             }),

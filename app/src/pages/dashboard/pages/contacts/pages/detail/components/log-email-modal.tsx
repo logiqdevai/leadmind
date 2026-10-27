@@ -5,11 +5,14 @@ import {
   CallDirection,
   type LogEmailPayload,
 } from "@/features/contacts/interfaces/contact.interface";
-import { useLogEmail } from "@/features/contacts/hooks/use-contacts";
+import { useLogEmail, useUpdateInteraction } from "@/features/contacts/hooks/use-contacts";
 import { cn } from "@/lib/utils";
+import type { Interaction } from "@/features/contacts/interfaces/contact.interface";
 
 interface LogEmailModalProps {
   contactUuid: string;
+  /** When set, the modal edits this logged entry instead of creating a new one. */
+  interaction?: Interaction | null;
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
 }
@@ -24,7 +27,10 @@ function toLocalDatetimeValue(d: Date): string {
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
 
-export function LogEmailModal({ contactUuid, isOpen, onOpenChange }: LogEmailModalProps) {
+export function LogEmailModal({ contactUuid, interaction, isOpen, onOpenChange }: LogEmailModalProps) {
+  const updateInteraction = useUpdateInteraction();
+  const isEditing = !!interaction;
+  const meta = (interaction?.metadata ?? {}) as Record<string, unknown>;
   const logEmail = useLogEmail();
   const [direction, setDirection] = useState<CallDirection>(CallDirection.OUTBOUND);
   const [subject, setSubject] = useState<string>("");
@@ -33,17 +39,18 @@ export function LogEmailModal({ contactUuid, isOpen, onOpenChange }: LogEmailMod
 
   useEffect(() => {
     if (isOpen) {
-      setDirection(CallDirection.OUTBOUND);
-      setSubject("");
-      setOccurredAt(toLocalDatetimeValue(new Date()));
-      setContent("");
+      setDirection((meta.direction as CallDirection) ?? CallDirection.OUTBOUND);
+      setSubject((meta.subject as string) ?? "");
+      setOccurredAt(toLocalDatetimeValue(new Date((meta.occurred_at as string) ?? interaction?.created_at ?? Date.now())));
+      setContent(interaction?.content ?? "");
     }
-  }, [isOpen]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen, interaction?.uuid]);
 
   const handleConfirm = () => {
     const payload: LogEmailPayload = { direction };
     const trimmedSubject = subject.trim();
-    if (trimmedSubject) payload.subject = trimmedSubject;
+    if (trimmedSubject || isEditing) payload.subject = trimmedSubject;
     if (occurredAt) {
       const dt = new Date(occurredAt);
       if (!isNaN(dt.getTime())) {
@@ -51,8 +58,15 @@ export function LogEmailModal({ contactUuid, isOpen, onOpenChange }: LogEmailMod
       }
     }
     const trimmedContent = content.trim();
-    if (trimmedContent) payload.content = trimmedContent;
+    if (trimmedContent || isEditing) payload.content = trimmedContent;
 
+    if (interaction) {
+      updateInteraction.mutate(
+        { uuid: contactUuid, interactionUuid: interaction.uuid, payload },
+        { onSuccess: () => onOpenChange(false) },
+      );
+      return;
+    }
     logEmail.mutate(
       { uuid: contactUuid, payload },
       {
@@ -67,7 +81,7 @@ export function LogEmailModal({ contactUuid, isOpen, onOpenChange }: LogEmailMod
         <Modal.Dialog className="sm:max-w-md">
           <Modal.CloseTrigger />
           <Modal.Header>
-            <Modal.Heading>Log email</Modal.Heading>
+            <Modal.Heading>{isEditing ? "Edit email" : "Log email"}</Modal.Heading>
           </Modal.Header>
           <Modal.Body className="space-y-4">
             <div className="flex flex-col gap-1.5">
@@ -130,11 +144,11 @@ export function LogEmailModal({ contactUuid, isOpen, onOpenChange }: LogEmailMod
             <ActionButtonWithPending
               size="sm"
               variant="secondary"
-              isDisabled={logEmail.isPending}
-              isPending={logEmail.isPending}
+              isDisabled={logEmail.isPending || updateInteraction.isPending}
+              isPending={logEmail.isPending || updateInteraction.isPending}
               onPress={handleConfirm}
             >
-              Save email
+              {isEditing ? "Save changes" : "Save email"}
             </ActionButtonWithPending>
           </Modal.Footer>
         </Modal.Dialog>

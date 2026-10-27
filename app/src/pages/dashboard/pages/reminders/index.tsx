@@ -70,6 +70,8 @@ export default function RemindersPage() {
         search: debouncedSearch || undefined,
         status,
         range,
+        sort: "closest",
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
         // "Assigned to me" also includes reminders that go to everyone.
         for_user_uuid: assignedParam === ASSIGNED_ME && currentUserUuid ? currentUserUuid : undefined,
     });

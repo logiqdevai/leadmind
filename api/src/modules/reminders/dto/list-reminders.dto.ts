@@ -27,6 +27,24 @@ export class ListRemindersDto {
     @IsIn(['today', 'week', 'month', 'all', 'overdue'])
     range?: 'today' | 'week' | 'month' | 'all' | 'overdue';
 
+    @ApiPropertyOptional({
+        enum: ['closest', 'remind_at_asc', 'remind_at_desc'],
+        default: 'remind_at_desc',
+        description:
+            "'closest' puts pending reminders nearest to the current time first (overdue or upcoming), then finished ones; otherwise ordered by remind_at.",
+    })
+    @IsOptional()
+    @IsIn(['closest', 'remind_at_asc', 'remind_at_desc'])
+    sort?: 'closest' | 'remind_at_asc' | 'remind_at_desc';
+
+    @ApiPropertyOptional({
+        example: 'Europe/Athens',
+        description: "IANA timezone used for the 'today' range. Defaults to the organisation timezone.",
+    })
+    @IsOptional()
+    @IsString()
+    timezone?: string;
+
     @ApiPropertyOptional({ default: 1, minimum: 1 })
     @IsOptional()
     @Type(() => Number)

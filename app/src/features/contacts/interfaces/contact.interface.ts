@@ -131,6 +131,17 @@ export interface LogCallPayload {
     content?: string;
 }
 
+/** Edit of a manually logged call, meeting, email or SMS; send only what applies to its type. */
+export interface UpdateInteractionPayload {
+    outcome?: CallOutcome | MeetingOutcome;
+    direction?: CallDirection;
+    duration_minutes?: number;
+    occurred_at?: string;
+    location?: string;
+    subject?: string;
+    content?: string;
+}
+
 export interface LogMeetingPayload {
     outcome: MeetingOutcome;
     occurred_at: string;
